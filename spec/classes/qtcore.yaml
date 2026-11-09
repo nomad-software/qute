@@ -4,7 +4,11 @@
 #   subclass: true     generate a shim so Go types can override virtuals
 #   notify-dtor: true  shim destructor tells Go when a non-QObject dies
 #   no-construct: true hide constructors
-#   reviewed: true     every default ownership rule on the class was checked
+#   skip-virtuals: [x] virtuals Go may not override
+#   raw-pointers: true pass pointer-to-number arguments as unsafe.Pointer (GL)
+#   enums-only: true   emit the enums but no wrapper (QChar is a rune in Go)
+#   reviewed: true     every default rule on the class was checked; avoid it,
+#                      it hides methods nobody looked at (review per method)
 module: QtCore
 package: qtcore
 classes:

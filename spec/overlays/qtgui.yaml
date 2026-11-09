@@ -397,6 +397,9 @@ QTextDocument:
 QFont:
   QFont(const QFont&, const QPaintDevice*): { name: NewQFontFor, reviewed: true }
 
+QGlyphRun:
+  setRawData: { skip: "on purpose: low-level font internals" }
+
 QFontMetrics:
   boundingRect(const QString&, const QTextOption&): { name: BoundingRectWithOption }
   QFontMetrics(const QFont&, const QPaintDevice*): { name: NewQFontMetricsFor, reviewed: true }

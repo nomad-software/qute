@@ -123,9 +123,6 @@ func (h *Handle) State() State {
 // Class is the C++ class name the handle was created with.
 func (h *Handle) Class() string { return h.class }
 
-// Key is the registry key (QObject* for QObjects).
-func (h *Handle) Key() unsafe.Pointer { return h.ptr }
-
 // Alive reports whether the C++ object still exists.
 func (h *Handle) Alive() bool { return h != nil && h.State() != Dead }
 
@@ -161,17 +158,10 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 		return nil
 	}
 	if mode == NewScoped {
-		h := newHandle(key, class, KindPlain, Borrowed, deleter)
-		return h
+		return newHandle(key, class, KindPlain, Borrowed, deleter)
 	}
 	if kind == KindPlain || kind == KindValue {
-		st := Borrowed
-		switch mode {
-		case TakeOwned:
-			st = Owned
-		case TakeParented:
-			st = Parented
-		}
+		st := mode.state()
 		if kind == KindPlain && st == Owned && deleter == nil {
 			st = Borrowed
 		}
@@ -187,22 +177,11 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 	if e != nil {
 		if h := e.w.Value(); h != nil && h.State() != Dead {
 			regMu.Unlock()
-			switch mode {
-			case TakeOwned:
-				h.TransferToGo()
-			case TakeParented:
-				h.TransferToCpp()
-			}
+			h.retake(mode)
 			return h
 		}
 	}
-	st := Borrowed
-	switch mode {
-	case TakeOwned:
-		st = Owned
-	case TakeParented:
-		st = Parented
-	}
+	st := mode.state()
 	h := newHandle(key, class, kind, st, deleter)
 	needWatch := kind == KindQObject
 	if e != nil {
@@ -221,6 +200,27 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 		h.attachCleanup()
 	}
 	return h
+}
+
+// state is the state a new handle gets for mode.
+func (mode WrapMode) state() State {
+	switch mode {
+	case TakeOwned:
+		return Owned
+	case TakeParented:
+		return Parented
+	}
+	return Borrowed
+}
+
+// retake applies a forcing mode to an existing handle.
+func (h *Handle) retake(mode WrapMode) {
+	switch mode {
+	case TakeOwned:
+		h.TransferToGo()
+	case TakeParented:
+		h.TransferToCpp()
+	}
 }
 
 func newHandle(key unsafe.Pointer, class string, kind Kind, st State, deleter func(unsafe.Pointer)) *Handle {
@@ -430,13 +430,6 @@ func Destroyed(key unsafe.Pointer, why string) {
 	}
 }
 
-// Kill marks an unregistered handle Dead (scoped arguments, plain deletes).
-func (h *Handle) Kill(why string) {
-	if h != nil {
-		h.markDead(why)
-	}
-}
-
 func (h *Handle) markDead(why string) {
 	old := State(h.state.Swap(uint32(Dead)))
 	if old == Dead {
@@ -539,18 +532,19 @@ func deadMessage(h *Handle, method string) string {
 	h.mu.Lock()
 	why, site, created := h.deathNote, h.died, h.created
 	h.mu.Unlock()
-	if why == "" {
-		why = "destroyed"
-	}
-	if site != "" {
-		why += " at " + site
-	}
-	msg := fmt.Sprintf("%s: object destroyed (%s); ", method, why)
-	if h.deathNote == scopedNote {
+	var msg string
+	if why == scopedNote {
 		msg = fmt.Sprintf("%s: %s argument used after its callback returned (rule 6); "+
 			"copy the values you need inside the handler", method, h.class)
 	} else {
-		msg += "keep its owner alive while you use it, or check Alive() first"
+		if why == "" {
+			why = "destroyed"
+		}
+		if site != "" {
+			why += " at " + site
+		}
+		msg = fmt.Sprintf("%s: object destroyed (%s); keep its owner alive while you use it, "+
+			"or check Alive() first", method, why)
 	}
 	if created != "" {
 		msg += fmt.Sprintf(" [created at %s]", created)
@@ -565,17 +559,6 @@ func (h *Handle) Expire() {
 	if h != nil {
 		h.markDead(scopedNote)
 	}
-}
-
-// Stats reports registry and pin counts (for tests and DumpTree).
-func Stats() (registered, pinned int) {
-	regMu.Lock()
-	registered = len(registry)
-	regMu.Unlock()
-	strongMu.Lock()
-	pinned = len(strong)
-	strongMu.Unlock()
-	return
 }
 
 // Constructor modes: the pointer is fresh from a Go constructor.
@@ -617,12 +600,7 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 		// Only objects built by our shim constructors report their death, so
 		// only those may be registered. Others get a fresh plain handle.
 		if h := Lookup(p); h != nil {
-			switch mode {
-			case TakeOwned:
-				h.TransferToGo()
-			case TakeParented:
-				h.TransferToCpp()
-			}
+			h.retake(mode)
 			return h
 		}
 		kind = KindPlain

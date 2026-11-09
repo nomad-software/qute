@@ -3,7 +3,9 @@
 qute: Qt 6 bindings for Go, module `github.com/nomad-software/qute`. This file
 is the source of truth for the design and for how to work in the repo. If code
 and this file disagree, fix one of them; don't leave them diverged. The README
-is the user-facing introduction.
+is the user-facing introduction, including why to use qute and how it suits
+agent-driven development; keep its claims (numbers, flags, function names)
+true when the code changes.
 
 ## Goals
 
@@ -52,6 +54,12 @@ needs only QtCore and QtGui), because each shim may only include headers its
 pkg-config entry provides. The root package
 `qute` holds `Main`, `Post`, `PostSync`, `Screenshot`, `DumpTree`,
 `Click`/`Type`/`Key` and the test harness. `cmd/qute` is the companion tool.
+
+Adding a module touches more than the generator. Every list of the generated
+packages must include it: `mods` in `cmd/qutegen/main.go`, `libraryPkgs` in
+`internal/rt/site.go` (debug call sites), `qtPkgs` in `cmd/qute/vet.go`
+(otherwise `qute vet` silently ignores the package), `goKeywords` in
+`cmd/qutegen/model.go`, and the package lists in CI, the README and below.
 
 ## Ownership model
 
@@ -242,9 +250,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 
   Arg rules: `transfer-to-cpp`, `transfer-to-go`, `transfer-this`,
   `borrowed`, `scoped` (keyed by name or index). Return rules:
-  `transfer-to-go`, `parented`, `borrowed`. Other keys: `name`, `skip`,
-  `keep-defaults`, `full`, `error`, `error-string`, `reviewed`, `doc`, `test`,
-  `cpp` (a custom C++ call: `$self`, `$0`, `$1`…) and `created: true` (the
+  `transfer-to-go`, `parented`, `borrowed`. An unknown rule, or a return
+  rule on a result that is not an object pointer, is a generator warning.
+  Other keys: `name`, `skip`, `keep-defaults`, `full`, `error`,
+  `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…) and `created: true` (the
   result is built by the binding, so it is registered and its death seen).
   `QGraphicsScene::addRect` and friends use `cpp` + `created` to build
   qute's notifying item subclasses instead of Qt's, so those items report
@@ -272,10 +281,6 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   by type, and skipped on purpose), rules without a test, and results whose
   death qute can't observe. Signal emitters count as reviewed, since emitting
   never changes ownership.
-- Naming conventions for overloads: the version taking a Qt struct is
-  primary; plain-number twins (`setPos(x, y)`) and `QStringView` twins are
-  skipped; other versions get a suffix saying what differs (`ItemsInPath`,
-  `DisplayInt`, `MapToItemRect`).
 - **Escape hatches**: `.Ptr()`, `XFromPtr(p, qtcore.Borrowed)`, `XCast(obj)`
   (`qobject_cast`), and hand-written `*_manual.{go,cpp,h}` files the
   generator never touches.
@@ -351,13 +356,16 @@ distributed binaries. Could miqt's IR or overlays save review time?
 go test ./...                                   # all tests, headless
 go test -tags qute_debug ./...                  # debug runtime checks
 LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
-GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtopengl
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
 go generate ./qtcore                            # = go run ./cmd/qutegen -root .
 go vet ./... && gofmt -l .
 go run ./examples/hello -screenshot out.png     # render offscreen, then Read the PNG
 python3 tools/irgen/irgen.py                    # only for a new Qt version (needs python3-clang)
 ```
 
+- Go 1.26 is the minimum: `golang.org/x/tools` (used by `qute vet`) needs it,
+  and `go mod tidy` raises the `go` line back if it is lowered. Keep CI's
+  `go-version` and the `go.mod` that `qute new` writes in step.
 - A cold build of qtwidgets compiles ~14k lines of C++; `go test ./qtwidgets`
   takes 1–2 minutes cold. Use long timeouts.
 - To debug a C++ crash: `go test -c -o x.test ./pkg`, then
@@ -366,7 +374,8 @@ python3 tools/irgen/irgen.py                    # only for a new Qt version (nee
 
 Layout:
 
-- Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, `testing.go`, tests.
+- Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, `testing.go`, tests
+  (`tools_test.go` covers every input and inspection helper).
 - `internal/rt`: runtime (hand-written).
 - `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`: **generated**. Never edit `*_gen.*`,
   `qute_common.h`, `ownership_gen_test.go` or `export_gen_test.go`; change
@@ -385,7 +394,7 @@ Invariants:
   embed their primary base first), and code reinterprets wrapper pointers as
   `*rt.Ref`.
 - Only C types cross cgo. Each generated package exports its own
-  `qute_<pkg>_signal/release/virtual/dead` callbacks; C code never calls a
+  `qute_<pkg>_signal/release/virtual/dead/call` callbacks; C code never calls a
   function exported by another Go package.
 - All Qt calls happen on the GUI thread; only `rt.Drain` deletes for GC.
 - Generation is idempotent and warning-free. Unmatched overlay keys warn.
@@ -396,7 +405,14 @@ Conventions:
   `go generate ./qtcore`, run that module's tests. The generated tests have
   caught wrong rules (e.g. `QDateTimeEdit::setCalendarWidget` does not take
   ownership).
+- Per-method decisions (ownership, names, skips) go in overlays, never in
+  generator code; `deliberate` in `cmd/qutegen/types.go` holds only
+  type-wide reasons for leaving something out. A `skip:` string is the reason
+  shown in `COVERAGE.md`.
 - Panic messages name the method, what happened and the fix; keep that style.
+- A new exported helper in the root package or a `*_manual.go` file gets a
+  test (generated code is covered by `ownership_gen_test.go` and
+  `features_test.go`).
 - After generator changes: regenerate, `go vet ./...`, `gofmt -l .`, and the
   affected tests.
 - Ask before committing. Commit messages end with the attribution line the

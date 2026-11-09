@@ -43,17 +43,11 @@ func IsGUIThread() bool { return bool(C.qute_rt_is_gui_thread()) }
 // AppExists reports whether a Q*Application object exists.
 func AppExists() bool { return bool(C.qute_rt_app_exists()) }
 
-// ClassName returns the most-derived class name of a live QObject.
-func ClassName(obj unsafe.Pointer) string { return C.GoString(C.qute_rt_class_name(obj)) }
-
 // HasParent reports whether a live QObject has a parent.
 func HasParent(obj unsafe.Pointer) bool { return bool(C.qute_rt_has_parent(obj)) }
 
 // DeleteQObject is the deleter used for every QObject-derived handle.
 func DeleteQObject(obj unsafe.Pointer) { C.qute_rt_delete_qobject(obj) }
-
-// Free releases memory allocated with malloc by a shim.
-func Free(p unsafe.Pointer) { C.qute_rt_free(p) }
 
 func watch(obj unsafe.Pointer)            { C.qute_rt_watch(obj) }
 func postC(id uintptr) bool               { return bool(C.qute_rt_post(C.uintptr_t(id))) }

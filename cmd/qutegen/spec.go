@@ -91,12 +91,6 @@ func loadYAML(path string, into any) error {
 	return nil
 }
 
-// normSig normalises a C++ type list for matching overlay signatures.
-func normType(s string) string {
-	s = strings.ReplaceAll(s, " ", "")
-	return s
-}
-
 // overlayFor returns the merged overlay for a method: bare-name entries first,
 // then a matching signature entry on top.
 func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) {
@@ -220,7 +214,7 @@ func typeMatches(want string, t irType) bool {
 		if wc != hc || wp != hp || wr != hr {
 			continue
 		}
-		wb, hb := normType(wb), normType(hb)
+		wb, hb := strings.ReplaceAll(wb, " ", ""), strings.ReplaceAll(hb, " ", "")
 		if wb == hb || strings.HasSuffix(wb, "::"+hb) {
 			return true
 		}

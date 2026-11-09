@@ -14,8 +14,10 @@ import (
 
 const modPath = "github.com/nomad-software/qute/"
 
+// qtPkgs are the generated binding packages.
 var qtPkgs = map[string]bool{
 	modPath + "qtcore": true, modPath + "qtgui": true, modPath + "qtwidgets": true,
+	modPath + "qtopengl": true, modPath + "qtopenglwidgets": true,
 }
 
 type finding struct {

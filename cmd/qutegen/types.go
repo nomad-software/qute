@@ -94,10 +94,9 @@ type conv struct {
 	twoFlags bool    // QUrlTwoFlags
 	qptr     bool    // QPointer<T> list element
 	pairs    bool    // QList<std::pair<A, B>>: a kMap shaped as a slice of pairs
-	reason   string
 }
 
-func (g *Gen) unsupported(t irType, why string) (*conv, error) {
+func unsupported(t irType, why string) (*conv, error) {
 	return nil, fmt.Errorf("unsupported type %q (%s)", t.Canonical, why)
 }
 
@@ -152,40 +151,59 @@ var deliberateBases = map[string]string{
 	"QTextFrame::iterator":        "iterator; use ChildFrames",
 }
 
+// deliberate returns why a type is left out by design, or "" if it is not.
+func deliberate(can, base string, ptr, ref, rref, ret bool) string {
+	has := func(p string) bool { return strings.HasPrefix(base, p) }
+	switch {
+	case rref:
+		return "C++ move overload; the copying overload does the same in Go"
+	case has("QBindable<"):
+		return "Qt's property-binding system; use the getters, setters and change signals"
+	case strings.Contains(can, "(*)"):
+		return "C function pointer; a Go closure cannot become one"
+	case has("std::initializer_list<"):
+		return "std::initializer_list cannot be built at run time; use the list overload"
+	case has("std::reverse_iterator<"), has("QList<QRect>::const_iterator"):
+		return "iterator; use the method that returns a list"
+	case has("QPlatform"):
+		return "private platform API"
+	case strings.HasSuffix(base, "Private"):
+		return "private API"
+	case has("QGenericMatrix<"):
+		return "a template class; use QMatrix4x4"
+	case has("QQuaternion::EulerAngles<"), base == "QQuaternion::Axes":
+		return "a nested template or array struct; use the angle and vector overloads"
+	case has("QtPrivate::"):
+		return "Qt's private internals"
+	case has("QRgbaFloat<"):
+		return "a template class; use QColor or QRgba64"
+	case has("QMap<QFont::Tag"):
+		return "a map keyed by a value class; use the single-tag methods"
+	case strings.Contains(can, "["):
+		return "a fixed-size C array; use the string or byte-array form"
+	case base == "char" && ptr && ref:
+		return "returns memory allocated with new[]; use the QByteArray overload"
+	case has("QMap<") && strings.Contains(base, "QDate,"):
+		return "a map keyed by a value class; use the single-key getter"
+	case base == "QTransform::Affine":
+		return "internal matrix access; use M11() … M33()"
+	case has("std::function<") && ret:
+		return "a C++ function cannot be turned back into a Go func"
+	}
+	return deliberateBases[base]
+}
+
 // special handles types that need more than the base-name lookup.
 func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 	can := strings.TrimSpace(t.Canonical)
 	base, cnst, ptr, ref, rref := parseCpp(can)
+	if why := deliberate(can, base, ptr, ref, rref, ret); why != "" {
+		c, err := onPurpose(why)
+		return c, err, true
+	}
 	c := &conv{cpp: can, base: base, ptr: ptr, ref: ref, cnst: cnst}
 	has := func(p string) bool { return strings.HasPrefix(base, p) }
 	switch {
-	case rref:
-		c, err := onPurpose("C++ move overload; the copying overload does the same in Go")
-		return c, err, true
-	case has("QBindable<"):
-		c, err := onPurpose("Qt's property-binding system; use the getters, setters and change signals")
-		return c, err, true
-	case strings.Contains(can, "(*)"):
-		c, err := onPurpose("C function pointer; a Go closure cannot become one")
-		return c, err, true
-	case has("std::initializer_list<"):
-		c, err := onPurpose("std::initializer_list cannot be built at run time; use the list overload")
-		return c, err, true
-	case has("std::reverse_iterator<"), has("QList<QRect>::const_iterator"):
-		c, err := onPurpose("iterator; use the method that returns a list")
-		return c, err, true
-	case strings.HasPrefix(base, "QPlatform"):
-		c, err := onPurpose("private platform API")
-		return c, err, true
-	case strings.HasSuffix(base, "Private"):
-		c, err := onPurpose("private API")
-		return c, err, true
-	case has("QGenericMatrix<"):
-		c, err := onPurpose("a template class; use QMatrix4x4")
-		return c, err, true
-	case has("QQuaternion::EulerAngles<"), base == "QQuaternion::Axes":
-		c, err := onPurpose("a nested template or array struct; use the angle and vector overloads")
-		return c, err, true
 	case base == "__GLsync" && ptr:
 		c.k = kRaw // an opaque GL sync handle
 		return c, nil, true
@@ -195,38 +213,13 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 	case has("QSet<") && ret:
 		e, err := g.resolve(irType{Canonical: base[len("QSet<") : len(base)-1]}, true)
 		if err != nil || !(e.k == kString || e.k == kBytes || e.k == kPrim || e.k == kEnum) {
-			c, err := g.unsupported(t, "set element")
+			c, err := unsupported(t, "set element")
 			return c, err, true
 		}
 		c.k, c.elem = kList, e // iterated into a slice
 		return c, nil, true
-	case strings.HasPrefix(base, "QtPrivate::"):
-		c, err := onPurpose("Qt's private internals")
-		return c, err, true
-	case has("QRgbaFloat<"):
-		c, err := onPurpose("a template class; use QColor or QRgba64")
-		return c, err, true
-	case has("QMap<QFont::Tag"):
-		c, err := onPurpose("a map keyed by a value class; use the single-tag methods")
-		return c, err, true
-	case strings.Contains(can, "["):
-		c, err := onPurpose("a fixed-size C array; use the string or byte-array form")
-		return c, err, true
-	case base == "char" && ptr && ref:
-		c, err := onPurpose("returns memory allocated with new[]; use the QByteArray overload")
-		return c, err, true
-	}
-	if why, ok := deliberateBases[base]; ok {
-		c, err := onPurpose(why)
-		return c, err, true
 	}
 	switch {
-	case has("QMap<") && strings.Contains(base, "QDate,"):
-		c, err := onPurpose("a map keyed by a value class; use the single-key getter")
-		return c, err, true
-	case base == "QTransform::Affine":
-		c, err := onPurpose("internal matrix access; use M11() … M33()")
-		return c, err, true
 	case has("std::chrono::duration<"):
 		c.k = kDur
 	case has("std::chrono::time_point<std::chrono::system_clock"):
@@ -236,7 +229,7 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 	case has("std::optional<") && ret:
 		e, err := g.resolve(irType{Canonical: base[len("std::optional<") : len(base)-1]}, true)
 		if err != nil || e.k != kValue {
-			c, err := g.unsupported(t, "optional of non-value class")
+			c, err := unsupported(t, "optional of non-value class")
 			return c, err, true
 		}
 		c.k, c.elem = kOpt, e
@@ -245,7 +238,7 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		i := strings.Index(sig, "(")
 		r, err := g.resolve(irType{Canonical: strings.TrimSpace(sig[:i])}, true)
 		if err != nil || !virtRetSupported(r) {
-			c, err := g.unsupported(t, "callback result")
+			c, err := unsupported(t, "callback result")
 			return c, err, true
 		}
 		c.k, c.elem = kFunc, r
@@ -254,15 +247,12 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 			for _, a := range splitTopLevel(inner) {
 				pc, err := g.resolve(irType{Canonical: a}, true)
 				if err != nil {
-					c, err := g.unsupported(t, "callback argument")
+					c, err := unsupported(t, "callback argument")
 					return c, err, true
 				}
 				c.fparams = append(c.fparams, pc)
 			}
 		}
-	case has("std::function<") && ret:
-		c, err := onPurpose("a C++ function cannot be turned back into a Go func")
-		return c, err, true
 	case can == "const char *const[]" || can == "const char *const *":
 		if ret {
 			return nil, nil, false
@@ -279,7 +269,7 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		args := splitTopLevel(base[len("QUrlTwoFlags<") : len(base)-1])
 		en := g.enums[args[0]]
 		if en == nil || !en.emitted {
-			c, err := g.unsupported(t, "flags of unbound enum")
+			c, err := unsupported(t, "flags of unbound enum")
 			return c, err, true
 		}
 		c.k, c.enum, c.twoFlags = kFlags, en, true
@@ -295,7 +285,7 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		default:
 			e, err := g.resolve(irType{Canonical: inner}, ret)
 			if err != nil || e.k != kStruct {
-				c, err := g.unsupported(t, "span element")
+				c, err := unsupported(t, "span element")
 				return c, err, true
 			}
 			c.k, c.elem, c.span = kList, e, true
@@ -310,7 +300,7 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		v, err2 := g.resolve(irType{Canonical: kv[1]}, ret)
 		if err1 != nil || err2 != nil || !(k.k == kString || k.k == kPrim && k.prim.goT == "int") ||
 			!(v.k == kValue || v.k == kBytes || v.k == kString || v.k == kPrim || v.k == kStruct) {
-			c, err := g.unsupported(t, "map key or value")
+			c, err := unsupported(t, "map key or value")
 			return c, err, true
 		}
 		c.k, c.key, c.elem = kMap, k, v
@@ -358,7 +348,7 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 	can := t.Canonical
 	base, cnst, ptr, ref, rref := parseCpp(can)
 	if rref {
-		return g.unsupported(t, "rvalue reference")
+		return unsupported(t, "rvalue reference")
 	}
 	c := &conv{cpp: can, base: base, ptr: ptr, ref: ref, cnst: cnst}
 	if base == "void" && !ptr {
@@ -375,7 +365,7 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 			return c, nil
 		}
 		if ptr || (ref && !cnst) {
-			return g.unsupported(t, "pointer or out-parameter to primitive")
+			return unsupported(t, "pointer or out-parameter to primitive")
 		}
 		if base == "long long" && strings.Contains(t.Spelling, "qsizetype") {
 			p = qsizetypePrim
@@ -386,27 +376,18 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 	}
 	if ptr || (ref && !cnst) {
 		// only object pointers (and object references) from here on
-		if cls := g.classes[base]; cls != nil && cls.Kind != KindValue && !ref {
-			c.k = kObj
-			c.cls = cls
-			return c, nil
+		cls := g.classes[base]
+		switch {
+		case cls != nil && cls.Kind != KindValue:
+			c.k, c.cls = kObj, cls
+		case cls != nil && ptr && !ref:
+			c.k, c.cls = kValue, cls // T* of a value class: may be nil; a result is copied
+		case cls != nil && ref && ret:
+			c.k, c.cls = kValue, cls // a non-const reference result is copied
+		default:
+			return unsupported(t, "pointer or out-parameter")
 		}
-		if cls := g.classes[base]; cls != nil && cls.Kind != KindValue && ref {
-			c.k = kObj
-			c.cls = cls
-			return c, nil
-		}
-		if cls := g.classes[base]; cls != nil && cls.Kind == KindValue && ptr && !ref {
-			c.k = kValue // T* of a value class: may be nil; a result is copied
-			c.cls = cls
-			return c, nil
-		}
-		if cls := g.classes[base]; cls != nil && cls.Kind == KindValue && ref && ret {
-			c.k = kValue // a non-const reference result is copied
-			c.cls = cls
-			return c, nil
-		}
-		return g.unsupported(t, "pointer or out-parameter")
+		return c, nil
 	}
 	switch base {
 	case "QString":
@@ -414,7 +395,7 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 		return c, nil
 	case "QStringView", "QAnyStringView":
 		if ret {
-			return g.unsupported(t, "string view result")
+			return unsupported(t, "string view result")
 		}
 		c.k = kString // a temporary QString converts implicitly for the call
 		return c, nil
@@ -442,7 +423,7 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 	if strings.HasPrefix(base, "QFlags<") && strings.HasSuffix(base, ">") {
 		en := g.enums[base[len("QFlags<"):len(base)-1]]
 		if en == nil || !en.emitted {
-			return g.unsupported(t, "flags of unbound enum")
+			return unsupported(t, "flags of unbound enum")
 		}
 		c.k = kFlags
 		c.enum = en
@@ -450,7 +431,7 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 	}
 	if en := g.enums[base]; en != nil {
 		if !en.emitted {
-			return g.unsupported(t, "unbound enum")
+			return unsupported(t, "unbound enum")
 		}
 		c.k = kEnum
 		c.enum = en
@@ -480,7 +461,7 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 				return c, nil
 			}
 		}
-		return g.unsupported(t, "pair list element")
+		return unsupported(t, "pair list element")
 	}
 	if strings.HasPrefix(base, "QList<") && strings.HasSuffix(base, ">") {
 		inner := base[len("QList<") : len(base)-1]
@@ -492,13 +473,13 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 		case kPrim, kEnum, kFlags, kStruct, kObj, kValue, kString, kBytes:
 		case kList:
 			if !ret || e.elem.k != kStruct {
-				return g.unsupported(t, "list element")
+				return unsupported(t, "list element")
 			}
 		default:
-			return g.unsupported(t, "list element")
+			return unsupported(t, "list element")
 		}
 		if e.k == kObj && e.cls.Kind == KindValue {
-			return g.unsupported(t, "list element")
+			return unsupported(t, "list element")
 		}
 		c.k = kList
 		c.elem = e
@@ -515,9 +496,9 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 			c.cls = cls
 			return c, nil
 		}
-		return g.unsupported(t, "object class by value")
+		return unsupported(t, "object class by value")
 	}
-	return g.unsupported(t, "unknown")
+	return unsupported(t, "unknown")
 }
 
 // ---- Go side ----------------------------------------------------------------
@@ -529,7 +510,7 @@ func (g *Gen) goType(c *conv, ctx *Module, param bool) string {
 	case kPrim:
 		return c.prim.goT
 	case kEnum, kFlags:
-		return g.qual(c.enum.module, ctx, c.enum.goTypeFor(c.k == kFlags))
+		return g.qual(c.enum.module, ctx, c.enum.goType())
 	case kString, kCStr:
 		return "string"
 	case kBytes:
@@ -1097,11 +1078,6 @@ func virtRetSupported(c *conv) bool {
 		return !(c.k == kObj && c.ref) && !c.span && !c.bytes
 	}
 	return false
-}
-
-// cppDefault is the value a pure virtual returns when Go does not override it.
-func cppDefault(c *conv) string {
-	return "{}"
 }
 
 // elemArg converts one Go element for a C array (map keys and values).

@@ -75,10 +75,9 @@ type Enum struct {
 	anon      bool
 }
 
-func (e *Enum) goTypeFor(flags bool) string {
-	if flags && e.flagsName != "" {
-		return e.flagsName
-	}
+// goType is the Go type of the enum's values. An enum with a QFlags type
+// is an alias of it, so the flags name is used for both.
+func (e *Enum) goType() string {
 	if e.flagsName != "" {
 		return e.flagsName
 	}
@@ -138,7 +137,7 @@ var goKeywords = map[string]bool{
 	// identifiers the generated code uses
 	"C": true, "rt": true, "unsafe": true, "this": true, "qtcore": true, "qtgui": true, "qtwidgets": true,
 	"runtime": true, "fmt": true, "self": true, "args": true, "ret": true, "string": true, "len": true,
-	"error": true, "bool": true, "int": true, "f": true, "e": true, "i": true, "v": true, "r": true, "p": true, "h": true,
+	"qtopengl": true, "qtopenglwidgets": true, "error": true, "bool": true, "int": true, "f": true, "e": true, "i": true, "v": true, "r": true, "p": true, "h": true,
 	"new": true, "nil": true, "true": true, "false": true, "id": true, "mask": true, "b": true, "s": true, "a": true,
 }
 
@@ -458,11 +457,8 @@ func (g *Gen) buildMembers(c *Class) {
 	inherited := map[string]bool{} // names whose inherited binding must stay visible
 	for i := range c.IR.Methods {
 		im := &c.IR.Methods[i]
-		if im.Access != "public" && !(im.Access == "protected" && im.Kind == "ctor") {
-			continue
-		}
-		if im.Kind == "ctor" && im.Access != "public" {
-			continue
+		if im.Access != "public" {
+			continue // protected members are bound on the Base type by buildShim
 		}
 		if globalSkip[im.Name] || strings.HasPrefix(im.Name, "operator") || strings.HasPrefix(im.Name, "~") {
 			continue
@@ -477,10 +473,6 @@ func (g *Gen) buildMembers(c *Class) {
 		}
 		if stringSlot(im) {
 			g.skip(c, im, "string-based SLOT() connection; use the On* signal methods instead")
-			continue
-		}
-		if c.Cpp == "QGlyphRun" && im.Name == "setRawData" {
-			g.skip(c, im, "on purpose: low-level font internals")
 			continue
 		}
 		if iteratorNames[im.Name] && returnsIterator(im) {
@@ -552,9 +544,6 @@ func (g *Gen) buildMembers(c *Class) {
 				}
 			}
 		}
-	}
-	if c.Kind == KindValue {
-		// value classes keep their copy constructor internally only
 	}
 	fields := g.fieldMethods(c)
 	if !hasCtor(c.IR) && !c.Abstract && !c.Opts.NoConstruct && !c.Event && c.HasDtor {
@@ -697,7 +686,14 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 			if ov != nil && ov.Return != "" {
 				mm.RetRule = ov.Return
 				mm.RetRuled = true
+				switch ov.Return {
+				case "transfer-to-go", "parented", "borrowed":
+				default:
+					g.report.warn("%s: unknown return rule %q", mm.Sig, ov.Return)
+				}
 			}
+		} else if ov != nil && ov.Return != "" {
+			g.report.warn("%s: return rule on a result that is not an object pointer", mm.Sig)
 		}
 	}
 	return mm
@@ -765,7 +761,7 @@ func (g *Gen) newSignal(c *Class, im *irMethod, ov *overlay) *Method {
 	return mm
 }
 
-// overloadSig is the Go-visible parameter list used to spot exact duplicates.
+// goSig is the Go-visible parameter list used to spot exact duplicates.
 func goSig(m *Method) string {
 	var ps []string
 	for _, p := range m.Params {
@@ -797,7 +793,6 @@ func (g *Gen) nameMethods(c *Class, ms []*Method, prefix string, taken []*Method
 		used["As"+s.Name] = true
 	}
 	seen := map[string]bool{}
-	var out []*Method
 	// named by overlay first
 	for _, m := range ms {
 		if m.Overlay != nil && m.Overlay.Name != "" && !m.Full {
@@ -849,9 +844,8 @@ func (g *Gen) nameMethods(c *Class, ms []*Method, prefix string, taken []*Method
 		func(n string) bool { return used[n] }, func(n string) { used[n] = true })
 	for _, m := range kept2 {
 		m.CName = c.cName(m.IR.Name)
-		out = append(out, m)
 	}
-	return out
+	return kept2
 }
 
 func (c *Class) cName(n string) string {
@@ -984,9 +978,8 @@ func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
 				firstWith[base] = mm
 			}
 			if name == "" || !m.claim(name, mm.Sig) {
-				b2 := base
 				for n := 2; ; n++ {
-					name = fmt.Sprintf("%s%d", b2, n)
+					name = fmt.Sprintf("%s%d", base, n)
 					if m.claim(name, mm.Sig) {
 						break
 					}
@@ -1049,7 +1042,7 @@ func (g *Gen) buildShim(c *Class) {
 				continue
 			}
 			if !im.Virtual {
-				if im.Access == "protected" && !im.Static && x != c || (im.Access == "protected" && !im.Static) {
+				if im.Access == "protected" && !im.Static {
 					if !seen["p:"+key] && !globalSkip[im.Name] && !strings.HasPrefix(im.Name, "operator") && !im.Deprecated {
 						seen["p:"+key] = true
 						if h, ok := hidden[im.Name]; ok && h != x {
@@ -1292,9 +1285,7 @@ func (g *Gen) fieldMethods(c *Class) []*Method {
 			gm.RetRule, gm.RetRuled = "borrowed", true
 		}
 		out = append(out, gm)
-		base, cnst, _, _, _ := parseCpp(f.Type.Canonical)
-		_ = base
-		if cnst && !t.ptr {
+		if _, cnst, _, _, _ := parseCpp(f.Type.Canonical); cnst && !t.ptr {
 			continue
 		}
 		at, err := g.resolve(f.Type, false)
@@ -1328,7 +1319,7 @@ func goKey(c *conv) string {
 	case kPrim:
 		return c.prim.goT
 	case kEnum, kFlags:
-		return c.enum.goTypeFor(true)
+		return c.enum.goType()
 	case kStruct:
 		return c.st.name
 	case kValue, kObj, kOpt:

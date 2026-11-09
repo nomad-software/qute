@@ -5,8 +5,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QThread>
 
-#include <atomic>
-#include <cstdlib>
 #include <thread>
 
 extern "C" {
@@ -62,9 +60,3 @@ extern "C" void qute_rt_disconnect(void *conn) {
 }
 
 extern "C" void qute_rt_free_connection(void *conn) { delete static_cast<QMetaObject::Connection *>(conn); }
-
-extern "C" const char *qute_rt_class_name(void *obj) {
-    return static_cast<QObject *>(obj)->metaObject()->className();
-}
-
-extern "C" void qute_rt_free(void *p) { std::free(p); }

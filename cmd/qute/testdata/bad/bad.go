@@ -4,6 +4,7 @@ package bad
 import (
 	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtgui"
+	"github.com/nomad-software/qute/qtopengl"
 	"github.com/nomad-software/qute/qtwidgets"
 )
 
@@ -39,5 +40,11 @@ func Goroutine(lbl *qtwidgets.QLabel) {
 	go func() {
 		lbl.SetText("x") // want gui-goroutine
 		qute.Post(func() { lbl.SetText("fine") })
+	}()
+}
+
+func GLGoroutine(buf *qtopengl.QOpenGLBuffer) {
+	go func() {
+		buf.Bind() // want gui-goroutine
 	}()
 }

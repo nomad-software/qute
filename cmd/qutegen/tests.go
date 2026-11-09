@@ -17,7 +17,6 @@ type testCtx struct {
 	g       *Gen
 	m       *Module
 	imports map[string]bool
-	n       int
 }
 
 func (t *testCtx) q(m *Module, name string) string {
@@ -25,7 +24,7 @@ func (t *testCtx) q(m *Module, name string) string {
 	return m.Pkg + "." + name
 }
 
-// subclasses returns bound concrete classes derived from c (c first).
+// concreteFor returns the bound classes derived from c (c first, then by depth).
 func (g *Gen) concreteFor(c *Class) []*Class {
 	var out []*Class
 	for _, m := range g.modules {
@@ -83,7 +82,7 @@ func (t *testCtx) zeroArg(p *Param) (string, bool) {
 				break
 			}
 		}
-		return fmt.Sprintf("%s(%d)", t.q(p.T.enum.module, p.T.enum.goTypeFor(p.T.k == kFlags)), v), true
+		return fmt.Sprintf("%s(%d)", t.q(p.T.enum.module, p.T.enum.goType()), v), true
 	case kString, kCStr:
 		return `"x"`, true
 	case kBytes, kStrList:
@@ -210,7 +209,7 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 			}
 			rootExpr, rootCls, ok := t.construct(tp.T.cls, "nil")
 			if !ok {
-				g.report.untested(c, ctor, "cannot construct a parent")
+				g.report.untested(ctor, "cannot construct a parent")
 				continue
 			}
 			var args, argsNil []string
@@ -229,7 +228,7 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 				args, argsNil = append(args, a), append(argsNil, a)
 			}
 			if !good || !registered(c) || !registered(rootCls) {
-				g.report.untested(c, ctor, "arguments or lifetime not observable")
+				g.report.untested(ctor, "arguments or lifetime not observable")
 				continue
 			}
 			b.p("// %s: a non-nil parent makes the object Parented, nil makes it Owned.", ctor.Sig)
@@ -243,7 +242,6 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 			b.p("\t\tif got := y.Ownership(); got != %s {\n\t\t\tt.Errorf(\"without parent: %%v, want Owned\", got)\n\t\t}", owned)
 			b.p("\t\ty.Delete()\n\t\tif y.Alive() {\n\t\t\tt.Error(\"alive after Delete\")\n\t\t}")
 			b.p("\t})\n}\n")
-			t.n++
 		}
 		for _, mm := range c.Methods {
 			g.emitMethodTest(t, c, mm, b)
@@ -286,24 +284,21 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 
 // emitSnippet writes a test from an overlay's test: field.
 func (g *Gen) emitSnippet(t *testCtx, c *Class, mm *Method, b *buf) {
-	{
-		if why, ok := strings.CutPrefix(strings.TrimSpace(mm.Overlay.Test), "skip"); ok {
-			g.report.untested(c, mm, "skipped in overlay"+why)
-			return
-		}
-		for _, md := range g.modules {
-			if strings.Contains(mm.Overlay.Test, md.Pkg+".") {
-				t.imports[md.ImportPath] = true
-			}
-		}
-		b.p("// %s (test from the overlay)", mm.Sig)
-		b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tqute.Run(t, func() {", c.Name, mm.GoName)
-		for _, l := range strings.Split(strings.TrimRight(mm.Overlay.Test, "\n"), "\n") {
-			b.p("\t\t%s", l)
-		}
-		b.p("\t})\n}\n")
-		t.n++
+	if why, ok := strings.CutPrefix(strings.TrimSpace(mm.Overlay.Test), "skip"); ok {
+		g.report.untested(mm, "skipped in overlay"+why)
+		return
 	}
+	for _, md := range g.modules {
+		if strings.Contains(mm.Overlay.Test, md.Pkg+".") {
+			t.imports[md.ImportPath] = true
+		}
+	}
+	b.p("// %s (test from the overlay)", mm.Sig)
+	b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tqute.Run(t, func() {", c.Name, mm.GoName)
+	for _, l := range strings.Split(strings.TrimRight(mm.Overlay.Test, "\n"), "\n") {
+		b.p("\t\t%s", l)
+	}
+	b.p("\t})\n}\n")
 }
 
 func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
@@ -319,7 +314,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		case "transfer-this":
 			thisRule = true
 		case "transfer-to-go":
-			g.report.untested(c, mm, "transfer-to-go argument needs a test snippet")
+			g.report.untested(mm, "transfer-to-go argument needs a test snippet")
 			return
 		}
 	}
@@ -341,7 +336,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	}
 	recvExpr, recvCls, ok := t.constructPref(c, parentForRecv, true)
 	if !ok {
-		g.report.untested(c, mm, "cannot construct the receiver")
+		g.report.untested(mm, "cannot construct the receiver")
 		return
 	}
 	if strings.Contains(recvExpr, "root") {
@@ -350,7 +345,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		rootVar = "root"
 	}
 	if !registered(recvCls) && recvCls.Kind != KindPlain {
-		g.report.untested(c, mm, "receiver lifetime not observable")
+		g.report.untested(mm, "receiver lifetime not observable")
 		return
 	}
 	pre = append(pre, "recv := "+recvExpr)
@@ -363,10 +358,9 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		}
 		switch {
 		case p.T.k == kObj && (p.Rule == "transfer-to-cpp" || p.Rule == "transfer-this"):
-			parent := "nil"
-			ex, ac, ok := t.construct(p.T.cls, parent)
+			ex, ac, ok := t.construct(p.T.cls, "nil")
 			if !ok {
-				g.report.untested(c, mm, "cannot construct argument "+p.GoName)
+				g.report.untested(mm, "cannot construct argument "+p.GoName)
 				return
 			}
 			if p.Rule == "transfer-this" {
@@ -386,7 +380,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		case p.T.k == kList && p.T.elem.k == kObj && p.Rule == "transfer-to-cpp":
 			ex, ac, ok := t.construct(p.T.elem.cls, "nil")
 			if !ok {
-				g.report.untested(c, mm, "cannot construct argument "+p.GoName)
+				g.report.untested(mm, "cannot construct argument "+p.GoName)
 				return
 			}
 			pre = append(pre, fmt.Sprintf("%s := %s", v, ex))
@@ -396,12 +390,12 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 				checks = append(checks, "DEAD:"+v)
 			}
 		case p.T.k == kObj && p.Rule != "borrowed":
-			g.report.untested(c, mm, "has another object argument ("+p.GoName+")")
+			g.report.untested(mm, "has another object argument ("+p.GoName+")")
 			return
 		default:
 			a, ok := t.zeroArg(p)
 			if !ok {
-				g.report.untested(c, mm, "cannot build argument "+p.GoName)
+				g.report.untested(mm, "cannot build argument "+p.GoName)
 				return
 			}
 			args = append(args, a)
@@ -440,7 +434,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		} else if mm.Ret.cls.QObject || mm.Overlay != nil && mm.Overlay.Created {
 			checks = append(checks, "DEAD:"+res)
 		} else {
-			g.report.unobservable(c, mm)
+			g.report.unobservable(mm)
 		}
 	}
 	var dead []string
@@ -459,7 +453,6 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		b.p("\t\tif recv.Alive() {\n\t\t\trecv.Delete()\n\t\t}")
 	}
 	b.p("\t})\n}\n")
-	t.n++
 }
 
 // acceptsWidget reports whether a QWidget can be passed where cls is expected.

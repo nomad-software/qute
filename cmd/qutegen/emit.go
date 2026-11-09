@@ -93,7 +93,7 @@ func (g *Gen) emitModule(m *Module) error {
 
 // ---- header -------------------------------------------------------------
 
-func (g *Gen) cDecl(ret string, name string, params []string) string {
+func cDecl(ret string, name string, params []string) string {
 	if len(params) == 0 {
 		params = []string{"void"}
 	}
@@ -206,7 +206,7 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	}
 	for _, mm := range c.Ctors {
 		pre, args, _ := g.cppCall(mm.Params)
-		add(g.cDecl("void *", mm.CName, methodCParams(mm, false)),
+		add(cDecl("void *", mm.CName, methodCParams(mm, false)),
 			strings.Join(append(pre, fmt.Sprintf("return static_cast<%s *>(new %s(%s));", cpp, ctorClass, strings.Join(args, ", "))), "\n\t"))
 	}
 	if c.Opts.Subclass && c.Shim {
@@ -215,10 +215,10 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			for _, p := range pc.Params {
 				args = append(args, g.cppArg(p.T, p.CName))
 			}
-			add(g.cDecl("void *", "qute_"+cls+"_new_shim", methodCParams(pc, false)),
+			add(cDecl("void *", "qute_"+cls+"_new_shim", methodCParams(pc, false)),
 				fmt.Sprintf("return static_cast<%s *>(new qute_%s(%s));", cpp, cls, strings.Join(args, ", ")))
 		}
-		add(g.cDecl("void", "qute_"+cls+"_shim_init", []string{"void *self", "uintptr_t id", "const uint64_t *mask"}),
+		add(cDecl("void", "qute_"+cls+"_shim_init", []string{"void *self", "uintptr_t id", "const uint64_t *mask"}),
 			fmt.Sprintf("auto s = static_cast<qute_%s *>(static_cast<%s *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));", cls, cpp))
 		for _, v := range c.Virtuals {
 			if v.IR.Pure {
@@ -233,7 +233,7 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			if v.Ret.k != kVoid {
 				body = "return " + g.cppRet(v.Ret, call) + ";"
 			}
-			add(g.cDecl(cType(v.Ret), v.CName, methodCParams(v, true)), body)
+			add(cDecl(cType(v.Ret), v.CName, methodCParams(v, true)), body)
 		}
 		for _, v := range c.Protected {
 			var args []string
@@ -245,29 +245,29 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			if v.Ret.k != kVoid {
 				body = "return " + g.cppRet(v.Ret, call) + ";"
 			}
-			add(g.cDecl(retCType(v), v.CName, methodCParams(v, true)), body)
+			add(cDecl(retCType(v), v.CName, methodCParams(v, true)), body)
 		}
 	}
 	if c.Kind != KindObject && c.HasDtor && (c.IR.Dtor == nil || c.IR.Dtor.Access == "public") {
-		add(g.cDecl("void", "qute_"+cls+"_delete", []string{"void *self"}), fmt.Sprintf("delete %s;", self))
+		add(cDecl("void", "qute_"+cls+"_delete", []string{"void *self"}), fmt.Sprintf("delete %s;", self))
 	}
 	if c.QObject {
-		add(g.cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
+		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(qobject_cast<%s *>(static_cast<QObject *>(obj)));", cpp))
 	}
 	for _, s := range c.Secondary {
-		add(g.cDecl("void *", fmt.Sprintf("qute_%s_as_%s", cls, s.Name), []string{"void *self"}),
+		add(cDecl("void *", fmt.Sprintf("qute_%s_as_%s", cls, s.Name), []string{"void *self"}),
 			fmt.Sprintf("return static_cast<void *>(static_cast<%s *>(%s));", s.Cpp, self))
 	}
 	for _, mm := range append(append([]*Method{}, c.Methods...), c.Statics...) {
 		pre, args, post := g.cppCall(mm.Params)
 		var call string
 		if mm.Field == "get" {
-			add(g.cDecl(retCType(mm), mm.CName, methodCParams(mm, true)), "return "+g.cppRet(mm.Ret, self+"->"+mm.IR.Name)+";")
+			add(cDecl(retCType(mm), mm.CName, methodCParams(mm, true)), "return "+g.cppRet(mm.Ret, self+"->"+mm.IR.Name)+";")
 			continue
 		}
 		if mm.Field == "set" {
-			add(g.cDecl("void", mm.CName, methodCParams(mm, true)), fmt.Sprintf("%s->%s = %s;", self, mm.IR.Name, args[0]))
+			add(cDecl("void", mm.CName, methodCParams(mm, true)), fmt.Sprintf("%s->%s = %s;", self, mm.IR.Name, args[0]))
 			continue
 		}
 		if mm.Overlay != nil && mm.Overlay.Cpp != "" {
@@ -281,10 +281,10 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			body := strings.Join(append(pre, "auto &&r = "+call+";",
 				"*r0_out = "+g.cppRet(mm.PairRet[0], "r.first")+";",
 				"*r1_out = "+g.cppRet(mm.PairRet[1], "r.second")+";"), "\n\t")
-			add(g.cDecl("void", mm.CName, methodCParams(mm, !mm.IR.Static)), body)
+			add(cDecl("void", mm.CName, methodCParams(mm, !mm.IR.Static)), body)
 			continue
 		}
-		add(g.cDecl(retCType(mm), mm.CName, methodCParams(mm, !mm.IR.Static)), g.cppBody(mm.Ret, call, pre, post))
+		add(cDecl(retCType(mm), mm.CName, methodCParams(mm, !mm.IR.Static)), g.cppBody(mm.Ret, call, pre, post))
 	}
 	for _, sg := range c.Signals {
 		out = append(out, g.signalCFunc(c, sg))
@@ -343,12 +343,12 @@ func (g *Gen) signalCFunc(c *Class, sg *Method) cFunc {
 	body := fmt.Sprintf("auto s = std::make_shared<GoSlot>(id);\n\tauto obj = static_cast<%s *>(self);\n"+
 		"\treturn new QMetaObject::Connection(QObject::connect(obj, %s, obj, [s](%s) {%s%s qute_%s_signal(s->id, %s); }));",
 		cls, ptr, strings.Join(lparams, ", "), " "+strings.Join(conv, " "), argDecl, c.Module.Pkg, args)
-	return cFunc{decl: g.cDecl("void *", sg.CName, []string{"void *self", "uintptr_t id"}), body: body}
+	return cFunc{decl: cDecl("void *", sg.CName, []string{"void *self", "uintptr_t id"}), body: body}
 }
 
 func (g *Gen) emitHeader(m *Module, b *buf) {
 	guard := "QUTE_" + strings.ToUpper(m.Pkg) + "_GEN_H"
-	b.p("%s", strings.TrimSuffix(strings.ReplaceAll(genHeader, "//", "//"), "\n"))
+	b.p("%s", strings.TrimSuffix(genHeader, "\n"))
 	b.p("#ifndef %s\n#define %s\n", guard, guard)
 	b.p("#include \"qute_common.h\"\n")
 	b.p("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
@@ -475,14 +475,10 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		if v.Ret.k == kVoid {
 			b.p("\t\t\tqute_%s_virtual(qute_id, %d, %s, nullptr);\n\t\t\treturn;", c.Module.Pkg, v.VIndex, args)
 		} else {
-			init := "{}"
 			if v.Ret.k == kValue || v.Ret.k == kObj {
-				init = " = nullptr"
-			}
-			if init == "{}" {
-				b.p("\t\t\t%s r{};", cType(v.Ret))
+				b.p("\t\t\t%s r = nullptr;", cType(v.Ret))
 			} else {
-				b.p("\t\t\t%s r%s;", cType(v.Ret), init)
+				b.p("\t\t\t%s r{};", cType(v.Ret))
 			}
 			b.p("\t\t\tqute_%s_virtual(qute_id, %d, %s, &r);", c.Module.Pkg, v.VIndex, args)
 			b.p("\t\t\treturn %s;", g.cppVirtRet(v.Ret, "r"))
@@ -892,14 +888,12 @@ func (g *Gen) emitRootMethods(c *Class, b *buf) {
 	b.p("// Delete destroys the C++ object now. It is idempotent and works on Owned and")
 	b.p("// Parented objects; on Borrowed objects it panics. Inside a signal or event")
 	b.p("// handler use DeleteLater() instead.")
-	b.p("func (this *%s) Delete() {\n\tif this == nil {\n\t\treturn\n\t}\n\trt.CheckThread(%q)\n\tthis.quteRef.H.Delete(%q)\n}\n", cls, cls+".Delete", rt0(c)+".Delete")
+	b.p("func (this *%s) Delete() {\n\tif this == nil {\n\t\treturn\n\t}\n\trt.CheckThread(%q)\n\tthis.quteRef.H.Delete(%q)\n}\n", cls, cls+".Delete", cls+".Delete")
 	b.p("// Keep pins the object so GC never frees it, until Unkeep.")
 	b.p("func (this *%s) Keep() {\n\tif this != nil {\n\t\tthis.quteRef.H.Keep()\n\t}\n}\n", cls)
 	b.p("// Unkeep releases one Keep.")
 	b.p("func (this *%s) Unkeep() {\n\tif this != nil {\n\t\tthis.quteRef.H.Unkeep()\n\t}\n}\n", cls)
 }
-
-func rt0(c *Class) string { return c.Name }
 
 func (g *Gen) docLines(c *Class, mm *Method, b *buf, what string) {
 	b.p("// %s wraps %s.", mm.GoName, what)
@@ -919,7 +913,7 @@ func (g *Gen) docLines(c *Class, mm *Method, b *buf, what string) {
 		rules = append(rules, fmt.Sprintf("%s %s", p.GoName, desc))
 	}
 	switch mm.RetRule {
-	case "transfer-to-go", "owned":
+	case "transfer-to-go":
 		rules = append(rules, "the result is Owned: Go frees it")
 	case "parented":
 		rules = append(rules, "the result is Parented: its Qt parent frees it")
@@ -1028,7 +1022,7 @@ func retMode(mm *Method) string {
 		return "rt.NewOwned"
 	}
 	switch mm.RetRule {
-	case "transfer-to-go", "owned":
+	case "transfer-to-go":
 		return "rt.TakeOwned"
 	case "parented":
 		return "rt.TakeParented"

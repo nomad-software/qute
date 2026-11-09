@@ -5,7 +5,6 @@ import (
 	"runtime/cgo"
 	"sync"
 	"sync/atomic"
-	"unsafe"
 )
 
 // Cleanups never call delete directly: GC cleanups run on a GC goroutine, and
@@ -157,5 +156,3 @@ func checkThread(method string) {
 			"wrap the call in qute.Post(func() { ... })", method))
 	}
 }
-
-var _ = unsafe.Pointer(nil)

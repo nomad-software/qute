@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+	"unicode"
+	"unicode/utf8"
 )
 
 // newApp writes a known-good starter: main.go, a window, a behaviour test and
@@ -31,7 +33,7 @@ func newApp(dir, module string) error {
 	if !insideModule(abs) {
 		files["go.mod"] = modTmpl
 	}
-	data := struct{ Module, Title string }{module, strings.Title(strings.ReplaceAll(name, "-", " "))}
+	data := struct{ Module, Title string }{module, title(name)}
 	for fn, src := range files {
 		t := template.Must(template.New(fn).Parse(src))
 		f, err := os.Create(filepath.Join(dir, fn))
@@ -55,6 +57,16 @@ func newApp(dir, module string) error {
 	return nil
 }
 
+// title turns a directory name such as "my-app" into a window title, "My App".
+func title(name string) string {
+	words := strings.FieldsFunc(name, func(r rune) bool { return r == '-' || r == '_' || r == ' ' })
+	for i, w := range words {
+		r, n := utf8.DecodeRuneInString(w)
+		words[i] = string(unicode.ToUpper(r)) + w[n:]
+	}
+	return strings.Join(words, " ")
+}
+
 func insideModule(dir string) bool {
 	for d := dir; ; d = filepath.Dir(d) {
 		if _, err := os.Stat(filepath.Join(d, "go.mod")); err == nil {
@@ -68,7 +80,7 @@ func insideModule(dir string) bool {
 
 const modTmpl = `module {{.Module}}
 
-go 1.24
+go 1.26
 `
 
 const mainTmpl = `package main

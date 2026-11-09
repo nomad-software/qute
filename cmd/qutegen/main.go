@@ -1,4 +1,5 @@
-// Command qutegen generates the qtcore, qtgui and qtwidgets packages from the
+// Command qutegen generates the binding packages (qtcore, qtgui, qtwidgets,
+// qtopengl, qtopenglwidgets), their ownership tests and COVERAGE.md from the
 // checked-in IR (spec/ir) and the class and ownership specs (spec/classes,
 // spec/overlays). It needs neither Qt nor libclang.
 //

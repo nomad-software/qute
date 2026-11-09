@@ -173,7 +173,7 @@ These bind once the generator learns the type. Counts by type:
 
 - `QRawFont QGlyphRun::rawFont() const`: return: on purpose: low-level font internals
 - `void QGlyphRun::setRawFont(const QRawFont & rawFont)`: on purpose: low-level font internals
-- `void QGlyphRun::setRawData(const quint32 * glyphIndexArray, const QPointF * glyphPositionArray, int size)`: on purpose: low-level font internals
+- `void QGlyphRun::setRawData(const quint32 * glyphIndexArray, const QPointF * glyphPositionArray, int size)`: skipped by overlay (on purpose: low-level font internals)
 
 ### QGraphicsDropShadowEffect
 

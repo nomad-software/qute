@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"strings"
 )
@@ -15,11 +14,11 @@ type Report struct {
 
 // unobservable records a Parented result that Qt itself created from a
 // non-QObject class: nothing tells Go when its owner frees it.
-func (r *Report) unobservable(c *Class, m *Method) {
+func (r *Report) unobservable(m *Method) {
 	r.blind = append(r.blind, fmt.Sprintf("- `%s`", m.Sig))
 }
 
-func (r *Report) untested(c *Class, m *Method, why string) {
+func (r *Report) untested(m *Method, why string) {
 	r.noTest = append(r.noTest, fmt.Sprintf("- `%s`: %s", m.Sig, why))
 }
 
@@ -187,5 +186,3 @@ func (g *Gen) writeReport(path string) error {
 	}
 	return writeFile(path, []byte(strings.Replace(b.String(), "{{SUMMARY}}\n", sum.String(), 1)))
 }
-
-var _ = os.Stdout

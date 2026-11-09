@@ -24,8 +24,6 @@ bool qute_rt_has_parent(void *obj);
 void qute_rt_delete_qobject(void *obj);
 void qute_rt_disconnect(void *conn);
 void qute_rt_free_connection(void *conn);
-const char *qute_rt_class_name(void *obj);
-void qute_rt_free(void *p);
 
 #ifdef __cplusplus
 }
