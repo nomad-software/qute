@@ -1,0 +1,51 @@
+module: QtGui
+package: qtgui
+classes:
+  QGuiApplication: { no-construct: true }
+  QPaintDevice: { no-construct: true }
+  QImage: { kind: value }
+  QPixmap: { kind: value }
+  QIcon: { kind: value }
+  QFont: { kind: value }
+  QFontMetrics: { kind: value }
+  QPalette: { kind: value }
+  QKeySequence: { kind: value }
+  QBrush: { kind: value }
+  QPen: { kind: value }
+  QCursor: { kind: value }
+  QPainterPath: { kind: value }
+  QTransform: { kind: value }
+  QRegion: { kind: value }
+  QEventPoint: { kind: value }
+  QPainter: {}
+  QAction: {}
+  QActionGroup: {}
+  QShortcut: {}
+  QClipboard: { no-construct: true }
+  QScreen: { no-construct: true }
+  QStandardItemModel: {}
+  QStandardItem: { notify-dtor: true }
+  QValidator: {}
+  QIntValidator: {}
+  QDoubleValidator: {}
+  QTextDocument: {}
+  QInputEvent: { kind: event }
+  QPointerEvent: { kind: event }
+  QSinglePointEvent: { kind: event }
+  QMouseEvent: { kind: event }
+  QWheelEvent: { kind: event }
+  QHoverEvent: { kind: event }
+  QKeyEvent: { kind: event }
+  QPaintEvent: { kind: event }
+  QResizeEvent: { kind: event }
+  QMoveEvent: { kind: event }
+  QCloseEvent: { kind: event }
+  QShowEvent: { kind: event }
+  QHideEvent: { kind: event }
+  QFocusEvent: { kind: event }
+  QEnterEvent: { kind: event }
+  QContextMenuEvent: { kind: event }
+  QDropEvent: { kind: event }
+  QDragMoveEvent: { kind: event }
+  QDragEnterEvent: { kind: event }
+  QDragLeaveEvent: { kind: event }

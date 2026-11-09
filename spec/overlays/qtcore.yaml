@@ -1,0 +1,14 @@
+# Ownership overlays for qtcore. Rules: transfer-to-cpp, transfer-to-go,
+# transfer-this, borrowed, scoped. Keys are method names or signatures.
+QIODevice:
+  seek: { name: SeekTo, doc: "Named SeekTo so it does not clash with io.Seeker's signature." }
+QCoreApplication:
+  exit: { keep-defaults: true }
+QObject:
+  setParent: { args: { parent: transfer-this } }
+  deleteLater: { doc: "Safe inside signal and event handlers; the object is deleted when control returns to the event loop." }
+  children: { return: borrowed }
+  parent: { return: borrowed }
+QTimer:
+  QTimer(QObject*): { args: { parent: transfer-this } }
+  start: { keep-defaults: false }

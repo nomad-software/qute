@@ -1,0 +1,274 @@
+# Ownership overlays for qtgui. See spec/overlays/qtwidgets.yaml for the rules.
+
+QGuiApplication:
+  clipboard: { return: borrowed }
+  primaryScreen: { return: borrowed }
+  screens: { return: borrowed }
+  screenAt: { return: borrowed }
+  focusObject: { return: borrowed }
+
+QPainter:
+  QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: borrowed }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
+  begin: { reviewed: true }
+  device: { return: borrowed }
+  setPen(const QColor&): { name: SetPenColor }
+  setPen(const QPen&): { name: SetPen }
+  setPen(Qt::PenStyle): { name: SetPenStyle }
+  setBrush(const QBrush&): { name: SetBrush }
+  setBrush(Qt::BrushStyle): { name: SetBrushStyle }
+  setBrush(QColor): { name: SetBrushColor }
+  setBrush(Qt::GlobalColor): { skip: "use SetBrushColor" }
+  setBrushOrigin(int, int): { skip: "use SetBrushOrigin" }
+  setBrushOrigin(const QPoint&): { name: SetBrushOrigin }
+  setBrushOrigin(const QPointF&): { name: SetBrushOriginF }
+  setClipRect(const QRectF&, Qt::ClipOperation): { name: SetClipRectF }
+  setClipRect(const QRect&, Qt::ClipOperation): { name: SetClipRect }
+  setClipRect(int, int, int, int, Qt::ClipOperation): { skip: "use SetClipRect" }
+  translate(const QPointF&): { name: TranslateF }
+  translate(const QPoint&): { name: TranslatePoint }
+  translate(qreal, qreal): { name: Translate }
+  setWindow(const QRect&): { name: SetWindow }
+  setWindow(int, int, int, int): { skip: "use SetWindow" }
+  setViewport(const QRect&): { name: SetViewport }
+  setViewport(int, int, int, int): { skip: "use SetViewport" }
+  drawPoint(const QPointF&): { name: DrawPointF }
+  drawPoint(const QPoint&): { name: DrawPoint }
+  drawPoint(int, int): { skip: "use DrawPoint" }
+  drawPoints(const QPolygonF&): { name: DrawPointsF }
+  drawPoints(const QPolygon&): { name: DrawPoints }
+  drawLine(const QLineF&): { skip: "QLineF is not bound" }
+  drawLine(const QLine&): { skip: "QLine is not bound" }
+  drawLine(int, int, int, int): { name: DrawLine }
+  drawLine(const QPoint&, const QPoint&): { name: DrawLinePoints }
+  drawLine(const QPointF&, const QPointF&): { name: DrawLineF }
+  drawLines(const QList<QPointF>&): { name: DrawLinesF }
+  drawLines(const QList<QPoint>&): { name: DrawLines }
+  drawRect(const QRectF&): { name: DrawRectF }
+  drawRect(int, int, int, int): { skip: "use DrawRect" }
+  drawRect(const QRect&): { name: DrawRect }
+  drawRects(const QList<QRectF>&): { name: DrawRectsF }
+  drawRects(const QList<QRect>&): { name: DrawRects }
+  drawEllipse(const QRectF&): { name: DrawEllipseF }
+  drawEllipse(const QRect&): { name: DrawEllipse }
+  drawEllipse(int, int, int, int): { skip: "use DrawEllipse" }
+  drawEllipse(const QPointF&, qreal, qreal): { name: DrawEllipseAtF }
+  drawEllipse(const QPoint&, int, int): { name: DrawEllipseAt }
+  drawPolyline(const QPolygonF&): { name: DrawPolylineF }
+  drawPolyline(const QPolygon&): { name: DrawPolyline }
+  drawPolygon(const QPolygonF&, Qt::FillRule): { name: DrawPolygonF }
+  drawPolygon(const QPolygon&, Qt::FillRule): { name: DrawPolygon }
+  drawConvexPolygon(const QPolygonF&): { name: DrawConvexPolygonF }
+  drawConvexPolygon(const QPolygon&): { name: DrawConvexPolygon }
+  drawArc(const QRectF&, int, int): { name: DrawArcF }
+  drawArc(const QRect&, int, int): { name: DrawArc }
+  drawArc(int, int, int, int, int, int): { skip: "use DrawArc" }
+  drawPie(const QRectF&, int, int): { name: DrawPieF }
+  drawPie(const QRect&, int, int): { name: DrawPie }
+  drawPie(int, int, int, int, int, int): { skip: "use DrawPie" }
+  drawChord(const QRectF&, int, int): { name: DrawChordF }
+  drawChord(const QRect&, int, int): { name: DrawChord }
+  drawChord(int, int, int, int, int, int): { skip: "use DrawChord" }
+  drawRoundedRect(const QRectF&, qreal, qreal, Qt::SizeMode): { name: DrawRoundedRectF }
+  drawRoundedRect(const QRect&, qreal, qreal, Qt::SizeMode): { name: DrawRoundedRect }
+  drawRoundedRect(int, int, int, int, qreal, qreal, Qt::SizeMode): { skip: "use DrawRoundedRect" }
+  drawTiledPixmap(const QRectF&, const QPixmap&, const QPointF&): { name: DrawTiledPixmapF }
+  drawTiledPixmap(const QRect&, const QPixmap&, const QPoint&): { name: DrawTiledPixmap }
+  drawTiledPixmap(int, int, int, int, const QPixmap&, int, int): { skip: "use DrawTiledPixmap" }
+  drawPixmap(const QRectF&, const QPixmap&, const QRectF&): { name: DrawPixmapPartF }
+  drawPixmap(const QRect&, const QPixmap&, const QRect&): { name: DrawPixmapPart }
+  drawPixmap(const QPointF&, const QPixmap&, const QRectF&): { skip: "use DrawPixmapPartF" }
+  drawPixmap(const QPoint&, const QPixmap&, const QRect&): { skip: "use DrawPixmapPart" }
+  drawPixmap(const QPointF&, const QPixmap&): { name: DrawPixmapF }
+  drawPixmap(const QPoint&, const QPixmap&): { name: DrawPixmap }
+  drawPixmap(const QRect&, const QPixmap&): { name: DrawPixmapIn }
+  drawPixmap(int, int, const QPixmap&): { skip: "use DrawPixmap" }
+  drawPixmap(int, int, int, int, const QPixmap&): { skip: "use DrawPixmapIn" }
+  drawPixmap(int, int, int, int, const QPixmap&, int, int, int, int): { skip: "use DrawPixmapPart" }
+  drawPixmap(int, int, const QPixmap&, int, int, int, int): { skip: "use DrawPixmapPart" }
+  drawImage(const QRectF&, const QImage&, const QRectF&, Qt::ImageConversionFlags): { name: DrawImagePartF }
+  drawImage(const QRect&, const QImage&, const QRect&, Qt::ImageConversionFlags): { name: DrawImagePart }
+  drawImage(const QPointF&, const QImage&, const QRectF&, Qt::ImageConversionFlags): { skip: "use DrawImagePartF" }
+  drawImage(const QPoint&, const QImage&, const QRect&, Qt::ImageConversionFlags): { skip: "use DrawImagePart" }
+  drawImage(const QRectF&, const QImage&): { name: DrawImageInF }
+  drawImage(const QRect&, const QImage&): { name: DrawImageIn }
+  drawImage(const QPointF&, const QImage&): { name: DrawImageF }
+  drawImage(const QPoint&, const QImage&): { name: DrawImage }
+  drawImage(int, int, const QImage&, int, int, int, int, Qt::ImageConversionFlags): { skip: "use DrawImage" }
+  drawText(const QPointF&, const QString&): { name: DrawTextF }
+  drawText(const QPoint&, const QString&): { name: DrawText }
+  drawText(int, int, const QString&): { skip: "use DrawText" }
+  drawText(const QPointF&, const QString&, int, int): { skip: "internal overload" }
+  drawText(const QRectF&, int, const QString&, QRectF*): { name: DrawTextInF }
+  drawText(const QRect&, int, const QString&, QRect*): { name: DrawTextIn }
+  drawText(int, int, int, int, int, const QString&, QRect*): { skip: "use DrawTextIn" }
+  drawText(const QRectF&, const QString&, const QTextOption&): { skip: "QTextOption is not bound" }
+  boundingRect(const QRectF&, int, const QString&): { name: BoundingRectF }
+  boundingRect(const QRect&, int, const QString&): { name: BoundingRect }
+  boundingRect(int, int, int, int, int, const QString&): { skip: "use BoundingRect" }
+  fillRect(const QRectF&, const QBrush&): { name: FillRectBrushF }
+  fillRect(const QRect&, const QBrush&): { name: FillRectBrush }
+  fillRect(int, int, int, int, const QBrush&): { skip: "use FillRectBrush" }
+  fillRect(const QRectF&, const QColor&): { name: FillRectF }
+  fillRect(const QRect&, const QColor&): { name: FillRect }
+  fillRect(int, int, int, int, const QColor&): { skip: "use FillRect" }
+  fillRect(int, int, int, int, Qt::GlobalColor): { skip: "use FillRect" }
+  fillRect(const QRect&, Qt::GlobalColor): { skip: "use FillRect" }
+  fillRect(const QRectF&, Qt::GlobalColor): { skip: "use FillRectF" }
+  fillRect(int, int, int, int, Qt::BrushStyle): { skip: "use FillRectBrush" }
+  fillRect(const QRect&, Qt::BrushStyle): { skip: "use FillRectBrush" }
+  fillRect(const QRectF&, Qt::BrushStyle): { skip: "use FillRectBrushF" }
+  eraseRect(const QRectF&): { name: EraseRectF }
+  eraseRect(const QRect&): { name: EraseRect }
+  eraseRect(int, int, int, int): { skip: "use EraseRect" }
+
+QPen:
+  QPen(Qt::PenStyle): { name: NewQPenWithStyle }
+  QPen(const QColor&): { name: NewQPenWithColor }
+
+QBrush:
+  QBrush(Qt::BrushStyle): { name: NewQBrushWithStyle }
+  QBrush(const QColor&, Qt::BrushStyle): { name: NewQBrushWithColor }
+  QBrush(Qt::GlobalColor, Qt::BrushStyle): { skip: "use NewQBrushWithColor" }
+  QBrush(const QColor&, const QPixmap&): { name: NewQBrushWithColorPixmap }
+  QBrush(Qt::GlobalColor, const QPixmap&): { skip: "use NewQBrushWithColorPixmap" }
+  setColor(Qt::GlobalColor): { skip: "use SetColor" }
+
+QImage:
+  load(const QString&, const char*): { name: Load, error: true }
+  load(QIODevice*, const char*): { name: LoadFrom, error: true, reviewed: true }
+  save(const QString&, const char*, int): { name: Save, error: true }
+  save(QIODevice*, const char*, int): { name: SaveTo, error: true, reviewed: true }
+  copy(int, int, int, int): { skip: "use Copy(rect)" }
+  valid(const QPoint&): { skip: "use Valid(x, y)" }
+  pixelIndex(const QPoint&): { skip: "use PixelIndex(x, y)" }
+  pixel(const QPoint&): { skip: "use Pixel(x, y)" }
+  setPixel(const QPoint&, uint): { skip: "use SetPixel(x, y, v)" }
+  pixelColor(const QPoint&): { skip: "use PixelColor(x, y)" }
+  setPixelColor(const QPoint&, const QColor&): { skip: "use SetPixelColor(x, y, c)" }
+  fill(const QColor&): { name: FillColor }
+  fill(Qt::GlobalColor): { skip: "use FillColor" }
+  scaled(int, int, Qt::AspectRatioMode, Qt::TransformationMode): { name: Scaled }
+  scaled(const QSize&, Qt::AspectRatioMode, Qt::TransformationMode): { skip: "use Scaled(w, h)" }
+
+QPixmap:
+  QPixmap(const QSize&): { skip: "use NewQPixmapWithW(w, h)" }
+  load: { error: true }
+  save(const QString&, const char*, int): { name: Save, error: true }
+  save(QIODevice*, const char*, int): { name: SaveTo, error: true, reviewed: true }
+  scaled(int, int, Qt::AspectRatioMode, Qt::TransformationMode): { name: Scaled }
+  scaled(const QSize&, Qt::AspectRatioMode, Qt::TransformationMode): { skip: "use Scaled(w, h)" }
+  copy(int, int, int, int): { skip: "use Copy(rect)" }
+  scroll(int, int, int, int, int, int, QRegion*): { skip: "out parameter" }
+  scroll(int, int, const QRect&, QRegion*): { name: Scroll }
+
+QIcon:
+  pixmap(const QSize&, QIcon::Mode, QIcon::State): { name: Pixmap }
+  pixmap(int, int, QIcon::Mode, QIcon::State): { skip: "use Pixmap(size)" }
+  pixmap(int, QIcon::Mode, QIcon::State): { name: PixmapExtent }
+  pixmap(const QSize&, qreal, QIcon::Mode, QIcon::State): { name: PixmapScaled }
+  paint(QPainter*, const QRect&, Qt::Alignment, QIcon::Mode, QIcon::State): { name: Paint, reviewed: true }
+  paint(QPainter*, int, int, int, int, Qt::Alignment, QIcon::Mode, QIcon::State): { skip: "use Paint(painter, rect)" }
+  fromTheme(const QString&): { name: QIconFromTheme }
+  fromTheme(const QString&, const QIcon&): { name: QIconFromThemeOr }
+  fromTheme(QIcon::ThemeIcon): { name: QIconFromThemeIcon }
+  fromTheme(QIcon::ThemeIcon, const QIcon&): { name: QIconFromThemeIconOr }
+  hasThemeIcon(const QString&): { name: QIconHasThemeIcon }
+  hasThemeIcon(QIcon::ThemeIcon): { name: QIconHasThemeIconEnum }
+
+QKeySequence:
+  QKeySequence(QKeySequence::StandardKey): { name: NewQKeySequenceStandard }
+
+QAction:
+  setActionGroup: { reviewed: true }
+  actionGroup: { return: borrowed }
+  setShortcuts(QKeySequence::StandardKey): { name: SetStandardShortcuts }
+  associatedObjects: { return: borrowed }
+
+QActionGroup:
+  addAction(QAction*): { args: { a: borrowed }, return: borrowed, doc: "The group does not take ownership of the action." }
+  addAction(const QString&): { name: AddActionText, return: parented }
+  addAction(const QIcon&, const QString&): { name: AddActionIcon, return: parented }
+  removeAction: { reviewed: true }
+  checkedAction: { return: borrowed }
+  actions: { return: borrowed }
+
+QShortcut:
+  QShortcut(QKeySequence::StandardKey, QObject*, const char*, const char*, Qt::ShortcutContext): { name: NewQShortcutStandard }
+  setKeys(QKeySequence::StandardKey): { name: SetStandardKeys }
+  setKeys(const QList<QKeySequence>&): { name: SetKeys }
+
+QClipboard:
+  setMimeData: { args: { data: transfer-to-cpp }, doc: "The clipboard takes ownership of data." }
+  mimeData: { return: borrowed }
+
+QStandardItemModel:
+  appendRow(const QList<QStandardItem*>&): { name: AppendRowItems, args: { items: transfer-to-cpp } }
+  appendRow(QStandardItem*): { name: AppendRow, args: { item: transfer-to-cpp } }
+  appendColumn: { args: { items: transfer-to-cpp } }
+  insertRow(int, const QList<QStandardItem*>&): { name: InsertRowItems, args: { items: transfer-to-cpp } }
+  insertRow(int, QStandardItem*): { name: InsertRowItem, args: { item: transfer-to-cpp } }
+  insertColumn(int, const QList<QStandardItem*>&): { name: InsertColumnItems, args: { items: transfer-to-cpp } }
+  setItem(int, int, QStandardItem*): { name: SetItem, args: { item: transfer-to-cpp } }
+  setItem(int, QStandardItem*): { name: SetItemRow, args: { item: transfer-to-cpp } }
+  setHorizontalHeaderItem: { args: { item: transfer-to-cpp } }
+  setVerticalHeaderItem: { args: { item: transfer-to-cpp } }
+  takeItem: { return: transfer-to-go }
+  takeRow: { return: transfer-to-go }
+  takeColumn: { return: transfer-to-go }
+  takeHorizontalHeaderItem: { return: transfer-to-go }
+  takeVerticalHeaderItem: { return: transfer-to-go }
+  setItemPrototype: { args: { item: transfer-to-cpp } }
+  itemPrototype: { return: borrowed }
+  item: { return: borrowed }
+  invisibleRootItem: { return: borrowed }
+  itemFromIndex: { return: borrowed }
+  horizontalHeaderItem: { return: borrowed }
+  verticalHeaderItem: { return: borrowed }
+  findItems: { return: borrowed }
+  indexFromItem: { reviewed: true }
+
+QStandardItem:
+  appendRow(const QList<QStandardItem*>&): { name: AppendRowItems, args: { items: transfer-to-cpp } }
+  appendRow(QStandardItem*): { name: AppendRow, args: { item: transfer-to-cpp } }
+  appendRows: { args: { items: transfer-to-cpp } }
+  appendColumn: { args: { items: transfer-to-cpp } }
+  insertRow(int, const QList<QStandardItem*>&): { name: InsertRowItems, args: { items: transfer-to-cpp } }
+  insertRow(int, QStandardItem*): { name: InsertRowItem, args: { item: transfer-to-cpp } }
+  insertRows(int, const QList<QStandardItem*>&): { name: InsertRowsItems, args: { items: transfer-to-cpp } }
+  insertRows(int, int): { name: InsertRows }
+  insertColumn: { args: { items: transfer-to-cpp } }
+  setChild(int, int, QStandardItem*): { name: SetChild, args: { item: transfer-to-cpp } }
+  setChild(int, QStandardItem*): { name: SetChildRow, args: { item: transfer-to-cpp } }
+  takeChild: { return: transfer-to-go }
+  takeRow: { return: transfer-to-go }
+  takeColumn: { return: transfer-to-go }
+  child: { return: borrowed }
+  parent: { return: borrowed }
+  model: { return: borrowed }
+  clone: { return: transfer-to-go }
+
+QTextDocument:
+  clone: { return: transfer-to-go }
+  documentLayout: { skip: "QAbstractTextDocumentLayout is not bound" }
+
+QFont:
+  QFont(const QFont&, const QPaintDevice*): { name: NewQFontFor, reviewed: true }
+
+QFontMetrics:
+  QFontMetrics(const QFont&, const QPaintDevice*): { name: NewQFontMetricsFor, reviewed: true }
+  horizontalAdvance(QChar): { name: HorizontalAdvanceChar }
+  boundingRect(QChar): { name: BoundingRectChar }
+  boundingRect(const QString&): { name: BoundingRect }
+  boundingRect(const QRect&, int, const QString&, int, int*): { name: BoundingRectIn }
+  boundingRect(int, int, int, int, int, const QString&, int, int*): { skip: "use BoundingRectIn" }
+
+QCursor:
+  pos(const QScreen*): { name: QCursorPosOn, reviewed: true }
+  setPos(QScreen*, int, int): { skip: "use QCursorSetPosOn" }
+  setPos(QScreen*, const QPoint&): { name: QCursorSetPosOn, reviewed: true }
+  setPos(int, int): { skip: "use QCursorSetPos(point)" }
+  setPos(const QPoint&): { name: QCursorSetPos }
+
+QScreen:
+  virtualSiblings: { return: borrowed }
+  virtualSiblingAt: { return: borrowed }

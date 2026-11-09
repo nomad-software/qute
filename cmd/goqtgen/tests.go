@@ -1,0 +1,407 @@
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+	"sort"
+	"strings"
+)
+
+// Every ownership annotation ships with a generated test: create, transfer,
+// delete the owner, assert the handle is Dead. Run under -asan the sanitizer
+// also proves nothing was freed twice. Rules the generator cannot exercise on
+// its own take a `test:` snippet in the overlay, or are listed in
+// UNREVIEWED.md as untested.
+
+type testCtx struct {
+	g       *Gen
+	m       *Module
+	imports map[string]bool
+	n       int
+}
+
+func (t *testCtx) q(m *Module, name string) string {
+	t.imports[m.ImportPath] = true
+	return m.Pkg + "." + name
+}
+
+// subclasses returns bound concrete classes derived from c (c first).
+func (g *Gen) concreteFor(c *Class) []*Class {
+	var out []*Class
+	for _, m := range g.modules {
+		for _, x := range m.Classes {
+			for b := x; b != nil; b = b.Base {
+				if b == c {
+					out = append(out, x)
+					break
+				}
+			}
+		}
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		if out[i] == c {
+			return true
+		}
+		if out[j] == c {
+			return false
+		}
+		return depth(out[i]) < depth(out[j]) || depth(out[i]) == depth(out[j]) && out[i].Name < out[j].Name
+	})
+	return out
+}
+
+func depth(c *Class) int {
+	n := 0
+	for ; c.Base != nil; c = c.Base {
+		n++
+	}
+	return n
+}
+
+// zeroArg returns a Go expression usable as a harmless argument of type p.
+func (t *testCtx) zeroArg(p *Param) (string, bool) {
+	switch p.T.k {
+	case kPrim:
+		if p.T.prim.goT == "bool" {
+			return "false", true
+		}
+		switch strings.ToLower(p.Name) {
+		case "index", "row", "column", "pos", "i", "position", "idx":
+			return "0", true
+		}
+		return "1", true // zero is not always harmless (digit counts, sizes)
+	case kEnum, kFlags:
+		v := int64(0)
+		if p.T.k == kEnum {
+			// zero is often a "none" value (NoToolBarArea); prefer the first real one
+			for _, x := range p.T.enum.ir.Values {
+				n := x.Name
+				if strings.HasPrefix(n, "No") || strings.HasPrefix(n, "Invalid") || n == "None" || strings.HasPrefix(n, "Unknown") {
+					continue
+				}
+				v = x.Value
+				break
+			}
+		}
+		return fmt.Sprintf("%s(%d)", t.q(p.T.enum.module, p.T.enum.goTypeFor(p.T.k == kFlags)), v), true
+	case kString, kCStr:
+		return `"x"`, true
+	case kBytes, kStrList:
+		return "nil", true
+	case kChar:
+		return "'x'", true
+	case kStruct:
+		return t.q(p.T.st.module, p.T.st.name) + "{}", true
+	case kValue:
+		if p.T.cls.DefCtor {
+			return "nil", true
+		}
+	case kList:
+		return "nil", true
+	}
+	return "", false
+}
+
+// construct returns an expression that builds an object assignable to cls
+// (with parent expression for a transfer-this argument), and the concrete
+// class it builds.
+func (t *testCtx) construct(cls *Class, parent string) (string, *Class, bool) {
+	return t.constructPref(cls, parent, false)
+}
+
+// constructPref can prefer the constructor with the most arguments, which
+// gives receivers such as QTableWidget(rows, columns) a usable size.
+func (t *testCtx) constructPref(cls *Class, parent string, longest bool) (string, *Class, bool) {
+	for _, cc := range t.g.concreteFor(cls) {
+		ctors := append([]*Method{}, cc.Ctors...)
+		if longest {
+			sort.SliceStable(ctors, func(i, j int) bool { return len(ctors[i].Params) > len(ctors[j].Params) })
+		}
+		for _, ctor := range ctors {
+			var args []string
+			ok := true
+			for _, p := range ctor.Params {
+				if p.Rule == "transfer-this" && p.T.k == kObj {
+					args = append(args, parent)
+					continue
+				}
+				a, good := t.zeroArg(p)
+				if !good {
+					ok = false
+					break
+				}
+				args = append(args, a)
+			}
+			if ok {
+				return fmt.Sprintf("%s(%s)", t.q(cc.Module, ctor.GoName), strings.Join(args, ", ")), cc, true
+			}
+		}
+	}
+	return "", nil, false
+}
+
+// path returns the embedded-field selector from concrete down to declaring.
+func path(concrete, declaring *Class) string {
+	var parts []string
+	for c := concrete; c != nil && c != declaring; c = c.Base {
+		if c.Base == nil {
+			return ""
+		}
+		parts = append(parts, c.Base.Name)
+	}
+	if len(parts) == 0 {
+		return ""
+	}
+	return "." + strings.Join(parts, ".")
+}
+
+func isWidget(c *Class) bool {
+	for ; c != nil; c = c.Base {
+		if c.Name == "QWidget" {
+			return true
+		}
+	}
+	return false
+}
+
+func registered(c *Class) bool { return c.QObject || c.Shim && c.Kind != KindValue }
+
+func (g *Gen) emitTests(m *Module, dir string) error {
+	t := &testCtx{g: g, m: m, imports: map[string]bool{}}
+	var body buf
+	b := &body
+	core := g.byName["QtCore"]
+	owned, parented := t.q(core, "Owned"), t.q(core, "Parented")
+
+	b.p("func TestMain(m *testing.M) { goqt.TestMain(m) }\n")
+	b.p("// TestLayout checks the runtime's assumption that every primary base sits at")
+	b.p("// offset 0, so one pointer serves the whole embedding chain.")
+	b.p("func TestLayout(t *testing.T) {\n\tif c := %s.CheckLayout(); c != \"\" {\n\t\tt.Fatalf(\"%%s: primary base is not at offset 0\", c)\n\t}\n}\n", m.Pkg)
+
+	for _, c := range m.Classes {
+		// constructors with a transfer-this parent
+		for _, ctor := range c.Ctors {
+			var tp *Param
+			for _, p := range ctor.Params {
+				if p.Rule == "transfer-this" && p.T.k == kObj {
+					tp = p
+				}
+			}
+			if tp == nil {
+				continue
+			}
+			rootExpr, rootCls, ok := t.construct(tp.T.cls, "nil")
+			if !ok {
+				g.report.untested(c, ctor, "cannot construct a parent")
+				continue
+			}
+			var args, argsNil []string
+			good := true
+			for _, p := range ctor.Params {
+				if p == tp {
+					args = append(args, "root")
+					argsNil = append(argsNil, "nil")
+					continue
+				}
+				a, ok := t.zeroArg(p)
+				if !ok {
+					good = false
+					break
+				}
+				args, argsNil = append(args, a), append(argsNil, a)
+			}
+			if !good || !registered(c) || !registered(rootCls) {
+				g.report.untested(c, ctor, "arguments or lifetime not observable")
+				continue
+			}
+			b.p("// %s: a non-nil parent makes the object Parented, nil makes it Owned.", ctor.Sig)
+			b.p("func TestOwnership_%s(t *testing.T) {\n\tgoqt.Run(t, func() {", ctor.GoName)
+			b.p("\t\troot := %s", rootExpr)
+			b.p("\t\tx := %s(%s)", t.q(m, ctor.GoName), strings.Join(args, ", "))
+			b.p("\t\tif got := x.Ownership(); got != %s {\n\t\t\tt.Errorf(\"with parent: %%v, want Parented\", got)\n\t\t}", parented)
+			b.p("\t\troot.Delete()")
+			b.p("\t\tif x.Alive() {\n\t\t\tt.Error(\"still alive after its parent was deleted\")\n\t\t}")
+			b.p("\t\ty := %s(%s)", t.q(m, ctor.GoName), strings.Join(argsNil, ", "))
+			b.p("\t\tif got := y.Ownership(); got != %s {\n\t\t\tt.Errorf(\"without parent: %%v, want Owned\", got)\n\t\t}", owned)
+			b.p("\t\ty.Delete()\n\t\tif y.Alive() {\n\t\t\tt.Error(\"alive after Delete\")\n\t\t}")
+			b.p("\t})\n}\n")
+			t.n++
+		}
+		for _, mm := range c.Methods {
+			g.emitMethodTest(t, c, mm, b)
+		}
+	}
+	var out buf
+	out.p("%s", strings.TrimSuffix(genHeader, "\n"))
+	out.p("package %s_test\n", m.Pkg)
+	out.p("import (\n\t\"testing\"\n")
+	out.p("\t\"%s/goqt\"", modulePath)
+	t.imports[m.ImportPath] = true
+	var ims []string
+	for k := range t.imports {
+		ims = append(ims, k)
+	}
+	sort.Strings(ims)
+	for _, k := range ims {
+		out.p("\t%q", k)
+	}
+	out.p(")\n")
+	out.WriteString(body.String())
+	if err := writeGo(filepath.Join(dir, "ownership_gen_test.go"), out.Bytes()); err != nil {
+		return err
+	}
+	var ex buf
+	ex.p("%s", strings.TrimSuffix(genHeader, "\n"))
+	ex.p("package %s\n", m.Pkg)
+	ex.p("// CheckLayout exposes the C++ layout check to the external test package.")
+	ex.p("var CheckLayout = checkLayout")
+	return writeGo(filepath.Join(dir, "export_gen_test.go"), ex.Bytes())
+}
+
+func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
+	if mm.Overlay != nil && mm.Overlay.Test != "" {
+		if strings.TrimSpace(mm.Overlay.Test) == "skip" {
+			g.report.untested(c, mm, "test skipped in overlay")
+			return
+		}
+		for _, md := range g.modules {
+			if strings.Contains(mm.Overlay.Test, md.Pkg+".") {
+				t.imports[md.ImportPath] = true
+			}
+		}
+		b.p("// %s (test from the overlay)", mm.Sig)
+		b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tgoqt.Run(t, func() {", c.Name, mm.GoName)
+		for _, l := range strings.Split(strings.TrimRight(mm.Overlay.Test, "\n"), "\n") {
+			b.p("\t\t%s", l)
+		}
+		b.p("\t})\n}\n")
+		t.n++
+		return
+	}
+	var transfers []*Param
+	thisRule := false
+	for _, p := range mm.Params {
+		if !p.Ruled {
+			continue
+		}
+		switch p.Rule {
+		case "transfer-to-cpp":
+			transfers = append(transfers, p)
+		case "transfer-this":
+			thisRule = true
+		case "transfer-to-go":
+			g.report.untested(c, mm, "transfer-to-go argument needs a test snippet")
+			return
+		}
+	}
+	if mm.RetRuled && (mm.RetRule == "transfer-to-go" || mm.RetRule == "parented") {
+		if len(transfers) == 0 && !thisRule {
+			g.report.untested(c, mm, mm.RetRule+" result needs a test snippet")
+			return
+		}
+	}
+	if len(transfers) == 0 && !thisRule {
+		return
+	}
+	core := g.byName["QtCore"]
+	// receiver: a non-widget QObject (layout, model) gets a root widget as
+	// parent so deleting the root shows what the receiver owned.
+	var pre []string
+	rootVar := "recv"
+	parentForRecv := "nil"
+	if !thisRule && c.QObject && !isWidget(c) {
+		parentForRecv = "root"
+	}
+	recvExpr, recvCls, ok := t.constructPref(c, parentForRecv, true)
+	if !ok {
+		g.report.untested(c, mm, "cannot construct the receiver")
+		return
+	}
+	if strings.Contains(recvExpr, "root") {
+		rx, _, _ := t.construct(g.classes["QWidget"], "nil")
+		pre = append(pre, "root := "+rx)
+		rootVar = "root"
+	}
+	if !registered(recvCls) && recvCls.Kind != KindPlain {
+		g.report.untested(c, mm, "receiver lifetime not observable")
+		return
+	}
+	pre = append(pre, "recv := "+recvExpr)
+	var args []string
+	var checks []string
+	for i, p := range mm.Params {
+		v := fmt.Sprintf("a%d", i)
+		switch {
+		case p.T.k == kObj && (p.Rule == "transfer-to-cpp" || p.Rule == "transfer-this"):
+			parent := "nil"
+			ex, ac, ok := t.construct(p.T.cls, parent)
+			if !ok {
+				g.report.untested(c, mm, "cannot construct argument "+p.GoName)
+				return
+			}
+			if p.Rule == "transfer-this" {
+				// the receiver is the child; the argument is its new parent
+				pre = append(pre, fmt.Sprintf("%s := %s", v, ex))
+				args = append(args, v)
+				checks = append(checks, fmt.Sprintf("if got := recv.Ownership(); got != %s {\n\t\t\tt.Errorf(\"receiver: %%v, want Parented\", got)\n\t\t}", t.q(core, "Parented")))
+				rootVar = v
+				continue
+			}
+			pre = append(pre, fmt.Sprintf("%s := %s", v, ex))
+			args = append(args, v)
+			checks = append(checks, fmt.Sprintf("if got := %s.Ownership(); got != %s {\n\t\t\tt.Errorf(\"%s: %%v, want Parented\", got)\n\t\t}", v, t.q(core, "Parented"), p.GoName))
+			if registered(ac) {
+				checks = append(checks, "DEAD:"+v)
+			}
+		case p.T.k == kList && p.T.elem.k == kObj && p.Rule == "transfer-to-cpp":
+			ex, ac, ok := t.construct(p.T.elem.cls, "nil")
+			if !ok {
+				g.report.untested(c, mm, "cannot construct argument "+p.GoName)
+				return
+			}
+			pre = append(pre, fmt.Sprintf("%s := %s", v, ex))
+			args = append(args, fmt.Sprintf("[]*%s{%s}", t.q(p.T.elem.cls.Module, p.T.elem.cls.Name), v))
+			checks = append(checks, fmt.Sprintf("if got := %s.Ownership(); got != %s {\n\t\t\tt.Errorf(\"%s: %%v, want Parented\", got)\n\t\t}", v, t.q(core, "Parented"), p.GoName))
+			if registered(ac) {
+				checks = append(checks, "DEAD:"+v)
+			}
+		case p.T.k == kObj:
+			g.report.untested(c, mm, "has another object argument ("+p.GoName+")")
+			return
+		default:
+			a, ok := t.zeroArg(p)
+			if !ok {
+				g.report.untested(c, mm, "cannot build argument "+p.GoName)
+				return
+			}
+			args = append(args, a)
+		}
+	}
+	b.p("// %s", mm.Sig)
+	b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tgoqt.Run(t, func() {", c.Name, mm.GoName)
+	for _, l := range pre {
+		b.p("\t\t%s", l)
+	}
+	call := fmt.Sprintf("recv%s.%s(%s)", path(recvCls, c), mm.GoName, strings.Join(args, ", "))
+	if mm.Ret != nil && mm.Ret.k != kVoid {
+		call = "_ = " + call
+	}
+	b.p("\t\t%s", call)
+	var dead []string
+	for _, ch := range checks {
+		if strings.HasPrefix(ch, "DEAD:") {
+			dead = append(dead, strings.TrimPrefix(ch, "DEAD:"))
+			continue
+		}
+		b.p("\t\t%s", ch)
+	}
+	b.p("\t\t%s.Delete()", rootVar)
+	for _, d := range dead {
+		b.p("\t\tif %s.Alive() {\n\t\t\tt.Errorf(\"%s alive after its owner was deleted\")\n\t\t}", d, d)
+	}
+	if rootVar != "recv" && registered(recvCls) && !thisRule {
+		b.p("\t\tif recv.Alive() {\n\t\t\trecv.Delete()\n\t\t}")
+	}
+	b.p("\t})\n}\n")
+	t.n++
+}

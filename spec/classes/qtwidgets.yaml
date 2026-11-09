@@ -1,0 +1,99 @@
+module: QtWidgets
+package: qtwidgets
+classes:
+  QApplication: { no-construct: true }
+  QWidget: { subclass: true }
+  QFrame: { subclass: true }
+  QLabel: { subclass: true }
+  QAbstractButton: {}
+  QPushButton: { subclass: true }
+  QCheckBox: {}
+  QRadioButton: {}
+  QToolButton: {}
+  QCommandLinkButton: {}
+  QButtonGroup: {}
+  QLineEdit: {}
+  QTextEdit: {}
+  QPlainTextEdit: {}
+  QTextBrowser: {}
+  QAbstractScrollArea: { subclass: true }
+  QScrollArea: {}
+  QAbstractSlider: {}
+  QSlider: {}
+  QScrollBar: {}
+  QDial: {}
+  QAbstractSpinBox: {}
+  QSpinBox: {}
+  QDoubleSpinBox: {}
+  QDateTimeEdit: {}
+  QDateEdit: {}
+  QTimeEdit: {}
+  QComboBox: {}
+  QFontComboBox: {}
+  QProgressBar: {}
+  QGroupBox: {}
+  QTabWidget: {}
+  QTabBar: {}
+  QStackedWidget: {}
+  QSplitter: {}
+  QToolBox: {}
+  QMainWindow: { subclass: true }
+  QMenuBar: {}
+  QMenu: {}
+  QToolBar: {}
+  QStatusBar: {}
+  QDockWidget: {}
+  QDialog: { subclass: true }
+  QMessageBox: {}
+  QFileDialog: {}
+  QInputDialog: {}
+  QColorDialog: {}
+  QFontDialog: {}
+  QProgressDialog: {}
+  QDialogButtonBox: {}
+  QLayoutItem: { no-construct: true }
+  QSpacerItem: {}
+  QWidgetItem: {}
+  QLayout: {}
+  QBoxLayout: {}
+  QHBoxLayout: {}
+  QVBoxLayout: {}
+  QGridLayout: {}
+  QFormLayout: {}
+  QStackedLayout: {}
+  QSizePolicy: { kind: value }
+  QAbstractItemView: {}
+  QListView: {}
+  QTreeView: {}
+  QTableView: {}
+  QHeaderView: {}
+  QListWidget: {}
+  QListWidgetItem: { notify-dtor: true }
+  QTreeWidget: {}
+  QTreeWidgetItem: { notify-dtor: true }
+  QTableWidget: {}
+  QTableWidgetItem: { notify-dtor: true }
+  QAbstractItemDelegate: {}
+  QStyledItemDelegate: {}
+  QCompleter: {}
+  QCalendarWidget: {}
+  QLCDNumber: {}
+  QKeySequenceEdit: {}
+  QStyle: { no-construct: true }
+  QSystemTrayIcon: {}
+  QWidgetAction: {}
+  QRubberBand: {}
+  QSizeGrip: {}
+  QMdiArea: {}
+  QMdiSubWindow: {}
+  QGraphicsScene: {}
+  QGraphicsView: {}
+  QGraphicsItem: { notify-dtor: true, no-construct: true }
+  QAbstractGraphicsShapeItem: { no-construct: true }
+  QGraphicsRectItem: { notify-dtor: true }
+  QGraphicsEllipseItem: { notify-dtor: true }
+  QGraphicsSimpleTextItem: { notify-dtor: true }
+  QGraphicsPixmapItem: { notify-dtor: true }
+  QGraphicsObject: { no-construct: true }
+  QGraphicsTextItem: {}
+  QToolTip: { no-construct: true }

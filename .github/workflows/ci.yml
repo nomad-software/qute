@@ -1,0 +1,55 @@
+name: ci
+
+on: [push, pull_request]
+
+env:
+  QT_QPA_PLATFORM: offscreen
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        mode: [test, debug, asan, cgocheck2, generate]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.24" }
+      - name: Qt 6
+        run: sudo apt-get update && sudo apt-get install -y qt6-base-dev libqt6opengl6-dev pkg-config
+      - name: test
+        if: matrix.mode == 'test'
+        run: go vet ./... && go test ./...
+      - name: debug build (thread checks, call sites)
+        if: matrix.mode == 'debug'
+        run: go test -tags goqt_debug ./...
+      - name: AddressSanitizer and LeakSanitizer
+        if: matrix.mode == 'asan'
+        run: go test -asan ./goqt ./qtcore ./qtgui ./qtwidgets
+      - name: strict cgo pointer checks
+        if: matrix.mode == 'cgocheck2'
+        run: GOEXPERIMENT=cgocheck2 go test ./goqt ./qtcore ./qtgui ./qtwidgets
+      - name: generated code is up to date
+        if: matrix.mode == 'generate'
+        run: go generate ./qtcore && git diff --exit-code
+
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.24" }
+      - run: brew install qt pkg-config
+      - run: go test ./...
+
+  windows:
+    runs-on: windows-2022
+    defaults:
+      run: { shell: "msys2 {0}" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          install: mingw-w64-ucrt-x86_64-go mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-qt6-base mingw-w64-ucrt-x86_64-pkgconf
+      - run: go test ./...
