@@ -398,6 +398,17 @@ func (this *QImageReader) SupportsAnimation() bool {
 	return bool(r)
 }
 
+// Transformation wraps QImageReader::transformation.
+//
+//	C++: QImageIOHandler::Transformations QImageReader::transformation() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qimagereader.html#transformation
+func (this *QImageReader) Transformation() QImageIOHandlerTransformations {
+	self := rt.Use(unsafe.Pointer(this), "QImageReader.Transformation")
+	r := C.qute_QImageReader_transformation(self)
+	return QImageIOHandlerTransformations(r)
+}
+
 // SetAutoTransform wraps QImageReader::setAutoTransform.
 //
 //	C++: void QImageReader::setAutoTransform(bool enabled)
@@ -573,6 +584,17 @@ func (this *QImageReader) ErrorString() string {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ErrorString")
 	r := C.qute_QImageReader_errorString(self)
 	return quteStr(r)
+}
+
+// SupportsOption wraps QImageReader::supportsOption.
+//
+//	C++: bool QImageReader::supportsOption(QImageIOHandler::ImageOption option) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qimagereader.html#supportsOption
+func (this *QImageReader) SupportsOption(option QImageIOHandlerImageOption) bool {
+	self := rt.Use(unsafe.Pointer(this), "QImageReader.SupportsOption")
+	r := C.qute_QImageReader_supportsOption(self, C.int64_t(option))
+	return bool(r)
 }
 
 // QImageReaderImageFormat wraps QImageReader::imageFormat.

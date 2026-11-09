@@ -1,0 +1,13 @@
+# LeakSanitizer suppressions for go test -asan: allocations GL drivers keep
+# until process exit. Only driver libraries are listed, so qute's own memory
+# is still checked. Use with LSAN_OPTIONS=suppressions=$PWD/lsan.supp.
+leak:libnvidia-glcore.so
+leak:libnvidia-glsi.so
+leak:libnvidia-eglcore.so
+leak:libGLX_nvidia.so
+leak:libEGL_nvidia.so
+leak:libgallium
+leak:libEGL_mesa.so
+leak:libGLX_mesa.so
+leak:libglapi.so
+leak:libdrm.so

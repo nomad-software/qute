@@ -143,6 +143,36 @@ func (this *QGradient) SetColorAt(pos float64, color QColor) {
 	C.qute_QGradient_setColorAt(self, C.double(pos), cQColor(color))
 }
 
+// SetStops wraps QGradient::setStops.
+//
+//	C++: void QGradient::setStops(const QGradientStops & stops)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgradient.html#setStops
+func (this *QGradient) SetStops(stops []qtcore.Pair[float64, QColor]) {
+	self := rt.Use(unsafe.Pointer(this), "QGradient.SetStops")
+	stopsK := make([]C.double, 0, len(stops))
+	stopsV := make([]C.qute_color, 0, len(stops))
+	for _, kv := range stops {
+		k, x := kv.First, kv.Second
+		stopsK = append(stopsK, C.double(k))
+		stopsV = append(stopsV, cQColor(x))
+	}
+	C.qute_QGradient_setStops(self, unsafe.Pointer(unsafe.SliceData(stopsK)), unsafe.Pointer(unsafe.SliceData(stopsV)), C.ptrdiff_t(len(stops)))
+}
+
+// Stops wraps QGradient::stops.
+//
+//	C++: QGradientStops QGradient::stops() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qgradient.html#stops
+func (this *QGradient) Stops() []qtcore.Pair[float64, QColor] {
+	self := rt.Use(unsafe.Pointer(this), "QGradient.Stops")
+	r := C.qute_QGradient_stops(self)
+	return qutePairs(r, func(k C.double) float64 { return float64(k) }, func(v C.qute_color) QColor { return goQColor(v) }, func(a float64, b QColor) qtcore.Pair[float64, QColor] {
+		return qtcore.Pair[float64, QColor]{First: a, Second: b}
+	})
+}
+
 // CoordinateMode wraps QGradient::coordinateMode.
 //
 //	C++: CoordinateMode QGradient::coordinateMode() const

@@ -375,6 +375,52 @@ func TestOwnership_NewQMovieWithFileName(t *testing.T) {
 	})
 }
 
+// QOffscreenSurface::QOffscreenSurface(QScreen * screen = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQOffscreenSurfaceWithScreen(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQOffscreenSurfaceWithScreen(nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QOpenGLContext::QOpenGLContext(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQOpenGLContext(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQOpenGLContext(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQOpenGLContext(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QPointingDevice::QPointingDevice(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQPointingDevice(t *testing.T) {
 	qute.Run(t, func() {
@@ -1060,6 +1106,120 @@ func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 	})
 }
 
+// QTextList * QTextCursor::insertList(const QTextListFormat & format) (test from the overlay)
+func TestOwnership_QTextCursor_InsertList(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		x := cur.InsertList(qtgui.NewQTextListFormat())
+		if x == nil {
+			t.Fatal("returned nil")
+		}
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		doc.Delete()
+		if x.Alive() {
+			t.Error("result alive after its document was deleted")
+		}
+	})
+}
+
+// QTextList * QTextCursor::insertList(QTextListFormat::Style style) (test from the overlay)
+func TestOwnership_QTextCursor_InsertListStyle(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		x := cur.InsertListStyle(qtgui.QTextListFormatListDisc)
+		if x == nil {
+			t.Fatal("returned nil")
+		}
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		doc.Delete()
+		if x.Alive() {
+			t.Error("result alive after its document was deleted")
+		}
+	})
+}
+
+// QTextList * QTextCursor::createList(const QTextListFormat & format) (test from the overlay)
+func TestOwnership_QTextCursor_CreateList(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		x := cur.CreateList(qtgui.NewQTextListFormat())
+		if x == nil {
+			t.Fatal("returned nil")
+		}
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		doc.Delete()
+		if x.Alive() {
+			t.Error("result alive after its document was deleted")
+		}
+	})
+}
+
+// QTextList * QTextCursor::createList(QTextListFormat::Style style) (test from the overlay)
+func TestOwnership_QTextCursor_CreateListStyle(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		x := cur.CreateListStyle(qtgui.QTextListFormatListDisc)
+		if x == nil {
+			t.Fatal("returned nil")
+		}
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		doc.Delete()
+		if x.Alive() {
+			t.Error("result alive after its document was deleted")
+		}
+	})
+}
+
+// QTextTable * QTextCursor::insertTable(int rows, int cols, const QTextTableFormat & format) (test from the overlay)
+func TestOwnership_QTextCursor_InsertTableWithFormat(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		x := cur.InsertTableWithFormat(2, 2, qtgui.NewQTextTableFormat())
+		if x == nil {
+			t.Fatal("returned nil")
+		}
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		doc.Delete()
+		if x.Alive() {
+			t.Error("result alive after its document was deleted")
+		}
+	})
+}
+
+// QTextTable * QTextCursor::insertTable(int rows, int cols) (test from the overlay)
+func TestOwnership_QTextCursor_InsertTable(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		x := cur.InsertTable(2, 2)
+		if x == nil {
+			t.Fatal("returned nil")
+		}
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		doc.Delete()
+		if x.Alive() {
+			t.Error("result alive after its document was deleted")
+		}
+	})
+}
+
 // QTextFrame * QTextCursor::insertFrame(const QTextFrameFormat & format) (test from the overlay)
 func TestOwnership_QTextCursor_InsertFrame(t *testing.T) {
 	qute.Run(t, func() {
@@ -1184,5 +1344,18 @@ func TestOwnership_NewQWindow(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QWindow::setParent(QWindow * parent)
+func TestOwnership_QWindow_SetParent(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQWindow(nil)
+		a0 := qtgui.NewQWindow(nil)
+		recv.SetParent(a0)
+		if got := recv.Ownership(); got != qtcore.Parented {
+			t.Errorf("receiver: %v, want Parented", got)
+		}
+		a0.Delete()
 	})
 }

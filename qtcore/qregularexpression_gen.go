@@ -223,6 +223,32 @@ func (this *QRegularExpression) MatchView(subjectView string) *QRegularExpressio
 	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
 }
 
+// GlobalMatch wraps QRegularExpression::globalMatch.
+//
+//	C++: QRegularExpressionMatchIterator QRegularExpression::globalMatch(const QString & subject, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#globalMatch
+func (this *QRegularExpression) GlobalMatch(subject string) *QRegularExpressionMatchIterator {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatch")
+	r := C.qute_QRegularExpression_globalMatch(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subject))), C.ptrdiff_t(len(subject)))
+	return rt.View[QRegularExpressionMatchIterator](rt.WrapClass(r, "QRegularExpressionMatchIterator", rt.TakeOwned), r)
+}
+
+// GlobalMatchView wraps QRegularExpression::globalMatchView.
+//
+//	C++: QRegularExpressionMatchIterator QRegularExpression::globalMatchView(QStringView subjectView, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#globalMatchView
+func (this *QRegularExpression) GlobalMatchView(subjectView string) *QRegularExpressionMatchIterator {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatchView")
+	r := C.qute_QRegularExpression_globalMatchView(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subjectView))), C.ptrdiff_t(len(subjectView)))
+	return rt.View[QRegularExpressionMatchIterator](rt.WrapClass(r, "QRegularExpressionMatchIterator", rt.TakeOwned), r)
+}
+
 // Optimize wraps QRegularExpression::optimize.
 //
 //	C++: void QRegularExpression::optimize() const

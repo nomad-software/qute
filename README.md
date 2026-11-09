@@ -75,7 +75,7 @@ Names follow the Qt docs, so Qt C++ knowledge carries over:
   Pass `nil` for "no parent".
 - Overloads get readable names from the overlays (`DrawRect`, `DrawRectF`,
   `AddTabIcon`). Where no name has been chosen yet, a numbered fallback
-  (`Resize2`) is used and listed in `UNREVIEWED.md`.
+  (`Resize2`) is used and listed in `COVERAGE.md`.
 - An argument of type `QWidgetLike` accepts any widget (`*QLabel`,
   `*QPushButton`, your own subclass). Pass untyped `nil`, not a typed nil.
 - `QString`, `QByteArray` and `QStringList` are `string`, `[]byte` and
@@ -118,6 +118,34 @@ way: embed `qtcore.QAbstractListModelBase` and define `RowCount` and `Data`.
 All Qt calls happen on the GUI thread (the main goroutine inside
 `qute.Main`). From other goroutines use `qute.Post(f)` or `qute.PostSync(f)`.
 
+## OpenGL
+
+`QOpenGLWidget` is subclassed the same way. GL calls go through the context's
+function table, with the `GL_*` constants in `qtgui`, and the helpers
+(`QOpenGLShaderProgram`, `QOpenGLBuffer`, `QOpenGLVertexArrayObject`,
+`QOpenGLTexture`, framebuffer objects) are in `qtopengl`:
+
+```go
+type Canvas struct{ qtopenglwidgets.QOpenGLWidgetBase }
+
+func (c *Canvas) InitializeGL() { /* build shaders and buffers */ }
+
+func (c *Canvas) PaintGL() {
+	gl := c.Context().Functions()
+	gl.GlClearColor(0, 0.5, 1, 1)
+	gl.GlClear(qtgui.GL_COLOR_BUFFER_BIT)
+}
+
+w := qtopenglwidgets.NewQOpenGLWidgetWith(&Canvas{}, nil)
+img := w.GrabFramebuffer() // works headlessly with the offscreen platform
+```
+
+GL pointer arguments (`glBufferData`, `glGenBuffers`, …) are `unsafe.Pointer`,
+because GL decides from other arguments how much memory it reads or writes;
+keep that memory alive for the call. Uniforms use the location-based setters:
+`p.SetUniformMatrix4x4(p.UniformLocation("mvp"), m)`. `opengl_test.go` draws
+a triangle with a shader program, a vertex buffer and a VAO.
+
 ## Checking an app without a screen
 
 ```go
@@ -150,8 +178,8 @@ Try the example: `go run ./examples/hello`, or render it headless with
 
 ```
 Qt headers --libclang--> spec/ir/*.json --+
-                         spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/
-                         spec/overlays/ --+                    UNREVIEWED.md, ownership tests
+                         spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/ qtopengl/ qtopenglwidgets/
+                         spec/overlays/ --+                    COVERAGE.md, ownership tests
 ```
 
 - `tools/irgen/irgen.py` parses the Qt headers into the IR. It is checked
@@ -174,9 +202,10 @@ Qt headers --libclang--> spec/ir/*.json --+
   Owned copies.
 - `go generate ./qtcore` regenerates everything. Hand-written `*_manual.*`
   files are never overwritten.
-- `UNREVIEWED.md` lists every pointer method still on a default rule, every
-  numbered overload name, every skipped method, and every rule without a
-  generated test.
+- `COVERAGE.md` records what is bound, every method skipped on purpose with
+  its reason, and anything still open: default ownership rules, numbered
+  overload names, types the generator cannot map yet, and rules without a
+  generated test. A summary table at the top shows the counts.
 - Each transfer rule gets a generated test (`*/ownership_gen_test.go`): create,
   transfer, delete the owner, check the handle is Dead. CI runs them under
   `-asan` and `GOEXPERIMENT=cgocheck2`. A wrong rule is usually a one-line
@@ -187,7 +216,7 @@ Qt headers --libclang--> spec/ir/*.json --+
 | Path               | What                                                     |
 | ------------------ | -------------------------------------------------------- |
 | `internal/rt`      | runtime: handles, registry, pins, cleanup queue, threads |
-| `qtcore`, `qtgui`, `qtwidgets` | generated packages (+ `*_manual` files)  |
+| `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets` | generated packages (+ `*_manual` files) |
 | `.` (package `qute`) | `Main`, `Post`, `Screenshot`, `DumpTree`, `Click`, tests |
 | `cmd/qutegen`      | the generator                                            |
 | `cmd/qute`         | `qute vet`, `qute new app`                               |
@@ -199,11 +228,14 @@ Qt headers --libclang--> spec/ir/*.json --+
 ```sh
 go test ./...                          # everything, headless (offscreen)
 go test -tags qute_debug ./...         # with thread checks and call sites
-go test -asan . ./qtcore ./qtgui ./qtwidgets
-GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets
-go generate ./qtcore                   # regenerate packages, tests, UNREVIEWED.md
+LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+go generate ./qtcore                   # regenerate packages, tests, COVERAGE.md
 python3 tools/irgen/irgen.py           # re-parse headers (new Qt version only; needs python3-clang)
 ```
+
+`lsan.supp` silences memory that GL drivers keep until exit; only driver
+libraries are listed, so qute's own allocations are still checked.
 
 To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 ./qtcore`, then run that module's tests. To bind a new class, add it to
@@ -211,23 +243,21 @@ To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 
 ## Status
 
-Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, 263 classes
-across QtCore, QtGui and QtWidgets (about 6,800 constructors, methods and
-functions), and Go subclassing (virtual overrides, item models). Every binding
-has a reviewed ownership rule and a proper name, and every ownership rule but
-`QEvent::clone` has a generated test (about 430 tests in all).
+Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, about 300
+classes across QtCore, QtGui, QtWidgets, QtOpenGL and QtOpenGLWidgets (about
+8,200 constructors, methods and functions, plus the GL constants), and Go
+subclassing (virtual overrides, item models, `QOpenGLWidget`). No method is
+waiting for type support, every binding has a reviewed ownership rule and a
+proper name, and every ownership rule but `QEvent::clone` has a generated test
+(about 460 tests in all).
 
 Not done yet:
 
-- About 150 methods, mostly on recently added classes, wait for types the
-  generator doesn't handle yet (`QVector3D`, `char32_t`, `QTextLength`,
-  `QFileInfo`, ...). `UNREVIEWED.md` counts them by type. About 430 more are
-  skipped on purpose, each with its reason (C++ move overloads, `QBindable`,
-  iterators, platform internals, `QStringView` and plain-number twins).
-- Items that `QGraphicsScene` creates itself (`addRect`, `addLine`, ...) are
-  not QObjects, so qute can't see when the scene frees them; don't use them
-  after deleting the scene.
+- About 600 methods are skipped on purpose, each with its reason in
+  `COVERAGE.md`: C++ move overloads, `QBindable`, iterators, Qt's private
+  and platform internals, `QStringView` and plain-number twins, printing page
+  setup, accessibility, Vulkan, and interfaces that need C++ subclassing.
 - `QThread` affinity, QtQuick/QML and other modules.
 - Doc comments link to the Qt docs but don't include Qt's summary text.
-- The Linux CI checks have been run locally; the macOS and Windows jobs in
-  `.github/workflows/ci.yml` are written but not yet verified.
+- Linux is the priority for now; macOS and Windows support comes later. Their
+  jobs in `.github/workflows/ci.yml` are kept, unverified and non-blocking.

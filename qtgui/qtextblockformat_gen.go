@@ -298,6 +298,33 @@ func (this *QTextBlockFormat) PageBreakPolicy() QTextFormatPageBreakFlags {
 	return QTextFormatPageBreakFlags(r)
 }
 
+// SetTabPositions wraps QTextBlockFormat::setTabPositions.
+//
+//	C++: void QTextBlockFormat::setTabPositions(const QList<QTextOption::Tab> & tabs)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextblockformat.html#setTabPositions
+func (this *QTextBlockFormat) SetTabPositions(tabs []*QTextOptionTab) {
+	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetTabPositions")
+	tabsC := make([]unsafe.Pointer, len(tabs))
+	for i := range tabs {
+		tabsC[i] = rt.UseArg(unsafe.Pointer(tabs[i]), "QTextBlockFormat.SetTabPositions")
+	}
+	C.qute_QTextBlockFormat_setTabPositions(self, unsafe.Pointer(unsafe.SliceData(tabsC)), C.ptrdiff_t(len(tabs)))
+}
+
+// TabPositions wraps QTextBlockFormat::tabPositions.
+//
+//	C++: QList<QTextOption::Tab> QTextBlockFormat::tabPositions() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextblockformat.html#tabPositions
+func (this *QTextBlockFormat) TabPositions() []*QTextOptionTab {
+	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.TabPositions")
+	r := C.qute_QTextBlockFormat_tabPositions(self)
+	return quteList(r, func(e unsafe.Pointer) *QTextOptionTab {
+		return rt.View[QTextOptionTab](rt.WrapClass(e, "QTextOptionTab", rt.TakeOwned), e)
+	})
+}
+
 // SetMarker wraps QTextBlockFormat::setMarker.
 //
 //	C++: void QTextBlockFormat::setMarker(MarkerType marker)

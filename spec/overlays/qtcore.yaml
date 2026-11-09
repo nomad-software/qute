@@ -125,6 +125,14 @@ QVariant:
   QVariant(const QPersistentModelIndex&): { name: NewQVariantWithPersistentIndex }
 
 QLocale:
+  toString(int, int, char32_t): { name: ToStringPadded }
+  toString(long, int, char32_t): { name: ToStringLongPadded }
+  toString(qlonglong, int, char32_t): { name: ToStringInt64Padded }
+  toString(qulonglong, int, char32_t): { name: ToStringUint64Padded }
+  toString(short, int, char32_t): { name: ToStringInt16Padded }
+  toString(uint, int, char32_t): { name: ToStringUintPadded }
+  toString(ulong, int, char32_t): { name: ToStringUlongPadded }
+  toString(ushort, int, char32_t): { name: ToStringUint16Padded }
   toString(qulonglong): { name: ToStringUint64 }
   toString(int): { name: ToString }
   toString(qlonglong): { name: ToStringInt64 }
@@ -132,5 +140,26 @@ QLocale:
   QLocale(QLocale::Language, QLocale::Script, QLocale::Territory): { name: NewQLocaleWithLanguage }
 
 QItemSelectionRange:
+  model: { return: borrowed }
   QItemSelectionRange(const QModelIndex&): { name: NewQItemSelectionRangeOf }
   QItemSelectionRange(const QModelIndex&, const QModelIndex&): { name: NewQItemSelectionRangeSpan }
+
+QFileInfo:
+  QFileInfo(const QFileDevice&): { name: NewQFileInfoFor, reviewed: true }
+  setFile(const QFileDevice&): { name: SetFileFor, reviewed: true }
+
+QBasicTimer:
+  start: { reviewed: true }
+
+QDataStream:
+  QDataStream(QIODevice*): { reviewed: true }
+  device: { return: borrowed }
+  setDevice: { reviewed: true }
+  writeBytes: { return: borrowed }
+
+QMetaType:
+  save: { reviewed: true }
+  load: { reviewed: true }
+
+QTimerEvent:
+  matches: { reviewed: true }

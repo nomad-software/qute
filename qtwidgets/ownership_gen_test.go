@@ -1781,6 +1781,74 @@ func TestOwnership_NewQGraphicsEllipseItemWithRectF(t *testing.T) {
 	})
 }
 
+// QGraphicsGridLayout::QGraphicsGridLayout(QGraphicsLayoutItem * parent = …) (test from the overlay)
+func TestOwnership_QGraphicsGridLayout_NewQGraphicsGridLayout(t *testing.T) {
+	qute.Run(t, func() {
+		w := qtwidgets.NewQGraphicsWidget(nil)
+		lay := qtwidgets.NewQGraphicsGridLayout(w)
+		if got := lay.Ownership(); got != qtcore.Parented {
+			t.Errorf("with a widget parent: %v, want Parented", got)
+		}
+		w.Delete()
+		if lay.Alive() {
+			t.Error("layout alive after its widget was deleted")
+		}
+	})
+}
+
+// void QGraphicsGridLayout::addItem(QGraphicsLayoutItem * item, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = …)
+func TestOwnership_QGraphicsGridLayout_AddItemWithRowSpan(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsGridLayout(nil)
+		a0 := qtwidgets.NewQGraphicsGridLayout(nil)
+		recv.AddItemWithRowSpan(a0, 0, 0, 1, 1)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("item: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
+// void QGraphicsGridLayout::addItem(QGraphicsLayoutItem * item, int row, int column, Qt::Alignment alignment = …)
+func TestOwnership_QGraphicsGridLayout_AddItem(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsGridLayout(nil)
+		a0 := qtwidgets.NewQGraphicsGridLayout(nil)
+		recv.AddItem(a0, 0, 0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("item: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
+// void QGraphicsGridLayout::removeItem(QGraphicsLayoutItem * item) (test from the overlay)
+func TestOwnership_QGraphicsGridLayout_RemoveItem(t *testing.T) {
+	qute.Run(t, func() {
+		lay := qtwidgets.NewQGraphicsGridLayout(nil)
+		w := qtwidgets.NewQGraphicsWidget(nil)
+		lay.AddItem(w, 0, 0)
+		if got := w.Ownership(); got != qtcore.Parented {
+			t.Errorf("after AddItem: %v, want Parented", got)
+		}
+		lay.RemoveItem(w)
+		if got := w.Ownership(); got != qtcore.Owned {
+			t.Errorf("after RemoveItem: %v, want Owned", got)
+		}
+		lay.Delete()
+		if !w.Alive() {
+			t.Error("removed item died with the layout")
+		}
+		w.Delete()
+	})
+}
+
 // void QGraphicsItem::setParentItem(QGraphicsItem * parent)
 func TestOwnership_QGraphicsItem_SetParentItem(t *testing.T) {
 	qute.Run(t, func() {
@@ -1905,6 +1973,89 @@ func TestOwnership_NewQGraphicsLineItemWithLineF(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// QGraphicsLinearLayout::QGraphicsLinearLayout(QGraphicsLayoutItem * parent = …) (test from the overlay)
+func TestOwnership_QGraphicsLinearLayout_NewQGraphicsLinearLayout(t *testing.T) {
+	qute.Run(t, func() {
+		w := qtwidgets.NewQGraphicsWidget(nil)
+		lay := qtwidgets.NewQGraphicsLinearLayout(w)
+		if got := lay.Ownership(); got != qtcore.Parented {
+			t.Errorf("with a widget parent: %v, want Parented", got)
+		}
+		w.Delete()
+		if lay.Alive() {
+			t.Error("layout alive after its widget was deleted")
+		}
+	})
+}
+
+// QGraphicsLinearLayout::QGraphicsLinearLayout(Qt::Orientation orientation, QGraphicsLayoutItem * parent = …) (test from the overlay)
+func TestOwnership_QGraphicsLinearLayout_NewQGraphicsLinearLayoutWithOrientation(t *testing.T) {
+	qute.Run(t, func() {
+		w := qtwidgets.NewQGraphicsWidget(nil)
+		lay := qtwidgets.NewQGraphicsLinearLayoutWithOrientation(qtcore.Horizontal, w)
+		if got := lay.Ownership(); got != qtcore.Parented {
+			t.Errorf("with a widget parent: %v, want Parented", got)
+		}
+		w.Delete()
+		if lay.Alive() {
+			t.Error("layout alive after its widget was deleted")
+		}
+	})
+}
+
+// void QGraphicsLinearLayout::addItem(QGraphicsLayoutItem * item)
+func TestOwnership_QGraphicsLinearLayout_AddItem(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsLinearLayoutWithOrientation(qtcore.Orientations(1), nil)
+		a0 := qtwidgets.NewQGraphicsGridLayout(nil)
+		recv.AddItem(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("item: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
+// void QGraphicsLinearLayout::insertItem(int index, QGraphicsLayoutItem * item)
+func TestOwnership_QGraphicsLinearLayout_InsertItem(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsLinearLayoutWithOrientation(qtcore.Orientations(1), nil)
+		a1 := qtwidgets.NewQGraphicsGridLayout(nil)
+		recv.InsertItem(0, a1)
+		if got := a1.Ownership(); got != qtcore.Parented {
+			t.Errorf("item: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a1.Alive() {
+			t.Errorf("a1 alive after its owner was deleted")
+		}
+	})
+}
+
+// void QGraphicsLinearLayout::removeItem(QGraphicsLayoutItem * item) (test from the overlay)
+func TestOwnership_QGraphicsLinearLayout_RemoveItem(t *testing.T) {
+	qute.Run(t, func() {
+		lay := qtwidgets.NewQGraphicsLinearLayout(nil)
+		w := qtwidgets.NewQGraphicsWidget(nil)
+		lay.AddItem(w)
+		if got := w.Ownership(); got != qtcore.Parented {
+			t.Errorf("after AddItem: %v, want Parented", got)
+		}
+		lay.RemoveItem(w)
+		if got := w.Ownership(); got != qtcore.Owned {
+			t.Errorf("after RemoveItem: %v, want Owned", got)
+		}
+		lay.Delete()
+		if !w.Alive() {
+			t.Error("removed item died with the layout")
+		}
+		w.Delete()
 	})
 }
 
@@ -2301,6 +2452,9 @@ func TestOwnership_QGraphicsScene_AddEllipse(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2321,6 +2475,9 @@ func TestOwnership_QGraphicsScene_AddLine(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2341,6 +2498,9 @@ func TestOwnership_QGraphicsScene_AddPath(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2361,6 +2521,9 @@ func TestOwnership_QGraphicsScene_AddPixmap(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2381,6 +2544,9 @@ func TestOwnership_QGraphicsScene_AddPolygon(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2401,6 +2567,9 @@ func TestOwnership_QGraphicsScene_AddRect(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2444,6 +2613,9 @@ func TestOwnership_QGraphicsScene_AddSimpleText(t *testing.T) {
 			t.Errorf("result: %v, want Parented", got)
 		}
 		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -2658,6 +2830,22 @@ func TestOwnership_NewQGraphicsWidget(t *testing.T) {
 		y.Delete()
 		if y.Alive() {
 			t.Error("alive after Delete")
+		}
+	})
+}
+
+// void QGraphicsWidget::setLayout(QGraphicsLayout * layout)
+func TestOwnership_QGraphicsWidget_SetLayout(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsWidget(nil)
+		a0 := qtwidgets.NewQGraphicsGridLayout(nil)
+		recv.SetLayout(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("layout: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
 		}
 	})
 }

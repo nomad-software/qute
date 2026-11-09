@@ -93,6 +93,7 @@ type conv struct {
 	bytes    bool    // QByteArrayView instead of QByteArray
 	twoFlags bool    // QUrlTwoFlags
 	qptr     bool    // QPointer<T> list element
+	pairs    bool    // QList<std::pair<A, B>>: a kMap shaped as a slice of pairs
 	reason   string
 }
 
@@ -120,6 +121,35 @@ var deliberateBases = map[string]string{
 	"QPermission":                 "a templated API",
 	"QLatin1String":               "use the string overload",
 	"QFunctionPointer":            "C function pointer",
+	"QAccessibilityHints":         "the accessibility API is not bound",
+	"QAccessibleInterface":        "the accessibility API is not bound",
+	"QDebug":                      "debug streams; use fmt with the Go values",
+	"QGraphicsEffectSource":       "custom graphics effects need C++ subclassing",
+	"QItemEditorCreatorBase":      "custom editor creators need C++ subclassing",
+	"QTextBlockUserData":          "per-block user data needs C++ subclassing",
+	"QTextFrameLayoutData":        "text layout internals",
+	"QTextCursorPrivate":          "private API",
+	"QTextDocumentPrivate":        "private API",
+	"QVulkanInstance":             "Vulkan is not bound",
+	"QRawFont":                    "low-level font internals",
+	"QFontVariableAxis":           "low-level font internals",
+	"QTextLayout":                 "low-level text layout; use QTextDocument and QTextCursor",
+	"QTextLayout::FormatRange":    "low-level text layout; use QTextDocument and QTextCursor",
+	"QPageLayout":                 "printing page setup is not bound yet",
+	"QPageSize":                   "printing page setup is not bound yet",
+	"QPageRanges":                 "printing page setup is not bound yet",
+	"QPdfOutputIntent":            "printing page setup is not bound yet",
+	"QPageLayout::Orientation":    "printing page setup is not bound yet",
+	"QUuid::Id128Bytes":           "a C union; use the string and byte-array forms",
+	"Qt::partial_ordering":        "C++20 comparison types; use the comparison methods",
+	"Qt::weak_ordering":           "C++20 comparison types; use the comparison methods",
+	"Qt::strong_ordering":         "C++20 comparison types; use the comparison methods",
+	"QJsonObject::iterator":       "iterator; use Keys and Value",
+	"QJsonObject::const_iterator": "iterator; use Keys and Value",
+	"QJsonArray::iterator":        "iterator; use At and Insert",
+	"QJsonArray::const_iterator":  "iterator; use At and Insert",
+	"QTextBlock::iterator":        "iterator; use the block and fragment methods",
+	"QTextFrame::iterator":        "iterator; use ChildFrames",
 }
 
 // special handles types that need more than the base-name lookup.
@@ -146,6 +176,44 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		return c, err, true
 	case strings.HasPrefix(base, "QPlatform"):
 		c, err := onPurpose("private platform API")
+		return c, err, true
+	case strings.HasSuffix(base, "Private"):
+		c, err := onPurpose("private API")
+		return c, err, true
+	case has("QGenericMatrix<"):
+		c, err := onPurpose("a template class; use QMatrix4x4")
+		return c, err, true
+	case has("QQuaternion::EulerAngles<"), base == "QQuaternion::Axes":
+		c, err := onPurpose("a nested template or array struct; use the angle and vector overloads")
+		return c, err, true
+	case base == "__GLsync" && ptr:
+		c.k = kRaw // an opaque GL sync handle
+		return c, nil, true
+	case base == "void *" && ptr:
+		c.k = kRaw // void **: a GL out-pointer
+		return c, nil, true
+	case has("QSet<") && ret:
+		e, err := g.resolve(irType{Canonical: base[len("QSet<") : len(base)-1]}, true)
+		if err != nil || !(e.k == kString || e.k == kBytes || e.k == kPrim || e.k == kEnum) {
+			c, err := g.unsupported(t, "set element")
+			return c, err, true
+		}
+		c.k, c.elem = kList, e // iterated into a slice
+		return c, nil, true
+	case strings.HasPrefix(base, "QtPrivate::"):
+		c, err := onPurpose("Qt's private internals")
+		return c, err, true
+	case has("QRgbaFloat<"):
+		c, err := onPurpose("a template class; use QColor or QRgba64")
+		return c, err, true
+	case has("QMap<QFont::Tag"):
+		c, err := onPurpose("a map keyed by a value class; use the single-tag methods")
+		return c, err, true
+	case strings.Contains(can, "["):
+		c, err := onPurpose("a fixed-size C array; use the string or byte-array form")
+		return c, err, true
+	case base == "char" && ptr && ref:
+		c, err := onPurpose("returns memory allocated with new[]; use the QByteArray overload")
 		return c, err, true
 	}
 	if why, ok := deliberateBases[base]; ok {
@@ -202,6 +270,11 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		c.k = kStrArray
 	case base == "QByteArrayView" && !ptr:
 		c.k, c.bytes = kBytes, true
+	case (base == "QStringView" || base == "QAnyStringView") && ret && !ptr:
+		c.k, c.bytes = kString, true // copied out with toString()
+	case (base == "char32_t" || base == "char16_t") && !ptr && !ref:
+		c.k = kChar
+		c.wrap = base
 	case has("QUrlTwoFlags<"):
 		args := splitTopLevel(base[len("QUrlTwoFlags<") : len(base)-1])
 		en := g.enums[args[0]]
@@ -236,7 +309,7 @@ func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 		k, err1 := g.resolve(irType{Canonical: kv[0]}, ret)
 		v, err2 := g.resolve(irType{Canonical: kv[1]}, ret)
 		if err1 != nil || err2 != nil || !(k.k == kString || k.k == kPrim && k.prim.goT == "int") ||
-			!(v.k == kValue || v.k == kBytes || v.k == kString || v.k == kPrim) {
+			!(v.k == kValue || v.k == kBytes || v.k == kString || v.k == kPrim || v.k == kStruct) {
 			c, err := g.unsupported(t, "map key or value")
 			return c, err, true
 		}
@@ -295,6 +368,10 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 	if p, ok := prims[base]; ok {
 		if ptr && base == "char" && cnst && !ref {
 			c.k = kCStr
+			return c, nil
+		}
+		if ptr && !ref && (cnst || ret) && base != "char" {
+			c.k = kRaw // a raw array of numbers, such as QMatrix4x4::data()
 			return c, nil
 		}
 		if ptr || (ref && !cnst) {
@@ -390,6 +467,21 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 			return c, nil
 		}
 	}
+	if strings.HasPrefix(base, "QList<std::pair<") && strings.HasSuffix(base, ">>") {
+		ab := splitTopLevel(base[len("QList<std::pair<") : len(base)-2])
+		if len(ab) == 2 {
+			a, err1 := g.resolve(irType{Canonical: ab[0]}, ret)
+			b, err2 := g.resolve(irType{Canonical: ab[1]}, ret)
+			okKind := func(x *conv) bool {
+				return x.k == kString || x.k == kPrim || x.k == kStruct || x.k == kValue || x.k == kBytes
+			}
+			if err1 == nil && err2 == nil && okKind(a) && okKind(b) {
+				c.k, c.key, c.elem, c.pairs = kMap, a, b, true
+				return c, nil
+			}
+		}
+		return g.unsupported(t, "pair list element")
+	}
 	if strings.HasPrefix(base, "QList<") && strings.HasSuffix(base, ">") {
 		inner := base[len("QList<") : len(base)-1]
 		e, err := g.resolve(irType{Spelling: inner, Canonical: inner}, ret)
@@ -473,6 +565,9 @@ func (g *Gen) goType(c *conv, ctx *Module, param bool) string {
 	case kOpt:
 		return "*" + g.qual(c.elem.cls.Module, ctx, c.elem.cls.Name)
 	case kMap:
+		if c.pairs {
+			return "[]" + g.pairType(c, ctx)
+		}
 		return "map[" + g.goType(c.key, ctx, false) + "]" + g.goType(c.elem, ctx, false)
 	case kStrArray:
 		return "[]string"
@@ -659,7 +754,10 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 			fmt.Sprintf("%s := make([]%s, 0, len(%s))", vc, g.cgoType(c.elem), v),
 			fmt.Sprintf("for k, x := range %s {\n\t\t%s = append(%s, %s)\n\t\t%s = append(%s, %s)\n\t}", v, kc, kc, kconv, vc, vc, vconv),
 		}
-		if c.key.k == kString {
+		if c.pairs {
+			pre[2] = fmt.Sprintf("for _, kv := range %s {\n\t\tk, x := kv.First, kv.Second\n\t\t%s = append(%s, %s)\n\t\t%s = append(%s, %s)\n\t}", v, kc, kc, kconv, vc, vc, vconv)
+		}
+		if c.key.k == kString || c.key.k == kBytes {
 			pre = append(pre, fmt.Sprintf("defer quteFreeStrs(%s)", kc))
 		}
 		if c.elem.k == kString || c.elem.k == kBytes {
@@ -739,6 +837,11 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 	case kMap:
 		kt, vt := g.goType(c.key, ctx, false), g.goType(c.elem, ctx, false)
 		kin, vin := g.goRet(c.key, "k", mode, ctx), g.goRet(c.elem, "v", "rt.TakeOwned", ctx)
+		if c.pairs {
+			pt := g.pairType(c, ctx)
+			return fmt.Sprintf("qutePairs(%s, func(k %s) %s { return %s }, func(v %s) %s { return %s }, func(a %s, b %s) %s { return %s{First: a, Second: b} })",
+				r, g.cgoType(c.key), kt, kin, g.cgoType(c.elem), vt, vin, kt, vt, pt, pt)
+		}
 		return fmt.Sprintf("quteMap(%s, func(k %s) %s { return %s }, func(v %s) %s { return %s })",
 			r, g.cgoType(c.key), kt, kin, g.cgoType(c.elem), vt, vin)
 	}
@@ -799,6 +902,9 @@ func (g *Gen) cppArg(c *conv, n string) string {
 	case kStrList:
 		return fmt.Sprintf("qute_qstrlist(%s, %s_lens, %s_n)", n, n, n)
 	case kChar:
+		if c.wrap != "" {
+			return fmt.Sprintf("static_cast<%s>(%s)", c.wrap, n)
+		}
 		return fmt.Sprintf("QChar(static_cast<char32_t>(%s))", n)
 	case kStruct:
 		return fmt.Sprintf("qute_to_%s(%s)", c.st.name, n)
@@ -832,7 +938,11 @@ func (g *Gen) cppArg(c *conv, n string) string {
 		return fmt.Sprintf("static_cast<const char *const *>(%s)", n)
 	case kMap:
 		kd, vd := g.mapElemCpp(c.key, "kd[i]"), g.mapElemCpp(c.elem, "vd[i]")
-		return fmt.Sprintf("[&] { %s m; auto kd = static_cast<%s const *>(%s); auto vd = static_cast<%s const *>(%s_v); for (ptrdiff_t i = 0; i < %s_n; i++) m.insert(%s, %s); return m; }()",
+		op := "m.insert(%s, %s)"
+		if c.pairs {
+			op = "m.append({%s, %s})"
+		}
+		return fmt.Sprintf("[&] { %s m; auto kd = static_cast<%s const *>(%s); auto vd = static_cast<%s const *>(%s_v); for (ptrdiff_t i = 0; i < %s_n; i++) "+op+"; return m; }()",
 			c.base, elemCType(c.key), n, elemCType(c.elem), n, n, kd, vd)
 	case kFunc:
 		var decl, conv, refs []string
@@ -908,6 +1018,9 @@ func (g *Gen) cppRet(c *conv, e string) string {
 		}
 		return fmt.Sprintf("static_cast<int64_t>((%s).toInt())", e)
 	case kString:
+		if c.bytes {
+			return fmt.Sprintf("qute_ret_str((%s).toString())", e)
+		}
 		return fmt.Sprintf("qute_ret_str(%s)", e)
 	case kBytes:
 		if c.bytes {
@@ -917,6 +1030,9 @@ func (g *Gen) cppRet(c *conv, e string) string {
 	case kStrList:
 		return fmt.Sprintf("qute_ret_strlist(%s)", e)
 	case kChar:
+		if c.wrap != "" {
+			return fmt.Sprintf("static_cast<unsigned int>(%s)", e)
+		}
 		return fmt.Sprintf("static_cast<unsigned int>((%s).unicode())", e)
 	case kStruct:
 		return fmt.Sprintf("qute_from_%s(%s)", c.st.name, e)
@@ -946,6 +1062,10 @@ func (g *Gen) cppRet(c *conv, e string) string {
 	case kOpt:
 		return fmt.Sprintf("[&]() -> void * { auto o = %s; return o ? static_cast<void *>(new %s(*o)) : nullptr; }()", e, c.elem.cls.Cpp)
 	case kMap:
+		if c.pairs {
+			return fmt.Sprintf("qute_ret_pairs<%s, %s>(%s, [](const auto &v) { return %s; }, [](const auto &v) { return %s; })",
+				elemCType(c.key), elemCType(c.elem), e, g.cppRet(c.key, "v"), g.cppRet(c.elem, "v"))
+		}
 		return fmt.Sprintf("qute_ret_map<%s, %s>(%s, [](const auto &v) { return %s; }, [](const auto &v) { return %s; })",
 			elemCType(c.key), elemCType(c.elem), e, g.cppRet(c.key, "v"), g.cppRet(c.elem, "v"))
 	case kList:
@@ -1017,4 +1137,9 @@ func (g *Gen) mapElemCpp(c *conv, e string) string {
 		return fmt.Sprintf("QByteArray(%s.data, %s.len)", e, e)
 	}
 	return g.cppArg(c, e)
+}
+
+// pairType is the Go type of one std::pair element: qtcore.Pair[A, B].
+func (g *Gen) pairType(c *conv, ctx *Module) string {
+	return g.qual(g.byName["QtCore"], ctx, "Pair") + "[" + g.goType(c.key, ctx, false) + ", " + g.goType(c.elem, ctx, false) + "]"
 }

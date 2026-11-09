@@ -112,6 +112,18 @@ func NewQCalendarWithName(name string) *QCalendar {
 	return rt.View[QCalendar](h, p)
 }
 
+// NewQCalendarWithCalendarSystemId wraps the QCalendar constructor.
+//
+//	C++: QCalendar::QCalendar(SystemId id)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#QCalendar
+func NewQCalendarWithCalendarSystemId(idArg *QCalendarSystemId) *QCalendar {
+	rt.CheckThread("NewQCalendarWithCalendarSystemId")
+	p := C.qute_QCalendar_new_3(rt.UseArg(unsafe.Pointer(idArg), "NewQCalendarWithCalendarSystemId"))
+	h := rt.WrapClass(p, "QCalendar", rt.NewOwned)
+	return rt.View[QCalendar](h, p)
+}
+
 // IsValid wraps QCalendar::isValid.
 //
 //	C++: bool QCalendar::isValid() const
@@ -288,17 +300,56 @@ func (this *QCalendar) Name() string {
 	return quteStr(r)
 }
 
-// DateFromParts wraps QCalendar::dateFromParts.
+// DateFromPartsYear wraps QCalendar::dateFromParts.
 //
 //	C++: QDate QCalendar::dateFromParts(int year, int month, int day) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcalendar.html#dateFromParts
-func (this *QCalendar) DateFromParts(year int, month int, day int) *QDate {
-	self := rt.Use(unsafe.Pointer(this), "QCalendar.DateFromParts")
+func (this *QCalendar) DateFromPartsYear(year int, month int, day int) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.DateFromPartsYear")
 	r := C.qute_QCalendar_dateFromParts(self, C.int(year), C.int(month), C.int(day))
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// DateFromParts wraps QCalendar::dateFromParts.
+//
+//	C++: QDate QCalendar::dateFromParts(const YearMonthDay & parts) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#dateFromParts
+func (this *QCalendar) DateFromParts(parts *QCalendarYearMonthDay) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.DateFromParts")
+	r := C.qute_QCalendar_dateFromParts_1(self, rt.UseArg(unsafe.Pointer(parts), "QCalendar.DateFromParts"))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// MatchCenturyToWeekday wraps QCalendar::matchCenturyToWeekday.
+//
+//	C++: QDate QCalendar::matchCenturyToWeekday(const YearMonthDay & parts, int dow) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#matchCenturyToWeekday
+func (this *QCalendar) MatchCenturyToWeekday(parts *QCalendarYearMonthDay, dow int) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.MatchCenturyToWeekday")
+	r := C.qute_QCalendar_matchCenturyToWeekday(self, rt.UseArg(unsafe.Pointer(parts), "QCalendar.MatchCenturyToWeekday"), C.int(dow))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// PartsFromDate wraps QCalendar::partsFromDate.
+//
+//	C++: YearMonthDay QCalendar::partsFromDate(QDate date) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#partsFromDate
+func (this *QCalendar) PartsFromDate(date *QDate) *QCalendarYearMonthDay {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.PartsFromDate")
+	r := C.qute_QCalendar_partsFromDate(self, rt.UseArg(unsafe.Pointer(date), "QCalendar.PartsFromDate"))
+	return rt.View[QCalendarYearMonthDay](rt.WrapClass(r, "QCalendarYearMonthDay", rt.TakeOwned), r)
 }
 
 // DayOfWeek wraps QCalendar::dayOfWeek.

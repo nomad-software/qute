@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QGraphicsScale wraps Qt's QGraphicsScale.
@@ -67,6 +68,29 @@ func NewQGraphicsScale(parent qtcore.QObjectLike) *QGraphicsScale {
 	}
 	h := rt.WrapClass(p, "QGraphicsScale", mode)
 	return rt.View[QGraphicsScale](h, p)
+}
+
+// Origin wraps QGraphicsScale::origin.
+//
+//	C++: QVector3D QGraphicsScale::origin() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscale.html#origin
+func (this *QGraphicsScale) Origin() *qtgui.QVector3D {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.Origin")
+	r := C.qute_QGraphicsScale_origin(self)
+	return rt.View[qtgui.QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
+}
+
+// SetOrigin wraps QGraphicsScale::setOrigin.
+//
+//	C++: void QGraphicsScale::setOrigin(const QVector3D & point)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscale.html#setOrigin
+func (this *QGraphicsScale) SetOrigin(point *qtgui.QVector3D) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.SetOrigin")
+	C.qute_QGraphicsScale_setOrigin(self, rt.UseArg(unsafe.Pointer(point), "QGraphicsScale.SetOrigin"))
 }
 
 // XScale wraps QGraphicsScale::xScale.

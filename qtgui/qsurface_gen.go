@@ -87,6 +87,19 @@ func (this *QSurface) SurfaceClass() QSurfaceSurfaceClass {
 	return QSurfaceSurfaceClass(r)
 }
 
+// Format wraps QSurface::format.
+//
+//	C++: QSurfaceFormat QSurface::format() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsurface.html#format
+func (this *QSurface) Format() *QSurfaceFormat {
+	self := rt.Use(unsafe.Pointer(this), "QSurface.Format")
+	r := C.qute_QSurface_format(self)
+	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
+}
+
 // SurfaceType wraps QSurface::surfaceType.
 //
 //	C++: SurfaceType QSurface::surfaceType() const

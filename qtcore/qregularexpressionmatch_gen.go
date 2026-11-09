@@ -204,6 +204,17 @@ func (this *QRegularExpressionMatch) Captured() string {
 	return quteStr(r)
 }
 
+// CapturedView wraps QRegularExpressionMatch::capturedView.
+//
+//	C++: QStringView QRegularExpressionMatch::capturedView(int nth = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedView
+func (this *QRegularExpressionMatch) CapturedView() string {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedView")
+	r := C.qute_QRegularExpressionMatch_capturedView(self)
+	return quteStr(r)
+}
+
 // CapturedWithName wraps QRegularExpressionMatch::captured.
 //
 //	C++: QString QRegularExpressionMatch::captured(QAnyStringView name) const
@@ -212,6 +223,17 @@ func (this *QRegularExpressionMatch) Captured() string {
 func (this *QRegularExpressionMatch) CapturedWithName(name string) string {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedWithName")
 	r := C.qute_QRegularExpressionMatch_captured_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	return quteStr(r)
+}
+
+// CapturedViewWithName wraps QRegularExpressionMatch::capturedView.
+//
+//	C++: QStringView QRegularExpressionMatch::capturedView(QAnyStringView name) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedView
+func (this *QRegularExpressionMatch) CapturedViewWithName(name string) string {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedViewWithName")
+	r := C.qute_QRegularExpressionMatch_capturedView_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
 	return quteStr(r)
 }
 

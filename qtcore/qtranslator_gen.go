@@ -138,13 +138,13 @@ func (this *QTranslator) LoadLocale(locale *QLocale, filename string) bool {
 	return bool(r)
 }
 
-// LoadData wraps QTranslator::load.
+// LoadBytes wraps QTranslator::load.
 //
 //	C++: bool QTranslator::load(const uchar * data, int len, const QString & directory = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
-func (this *QTranslator) LoadData(data []byte) bool {
-	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadData")
+func (this *QTranslator) LoadBytes(data []byte) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadBytes")
 	r := C.qute_QTranslator_load_2(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
 	return bool(r)
 }

@@ -105,6 +105,30 @@ func (this *QAbstractFileIconProvider) Icon(arg0 QAbstractFileIconProviderIconTy
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
+// IconFileInfo wraps QAbstractFileIconProvider::icon.
+//
+//	C++: QIcon QAbstractFileIconProvider::icon(const QFileInfo &) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractfileiconprovider.html#icon
+func (this *QAbstractFileIconProvider) IconFileInfo(fileInfo *qtcore.QFileInfo) *QIcon {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.IconFileInfo")
+	r := C.qute_QAbstractFileIconProvider_icon_1(self, rt.UseArg(unsafe.Pointer(fileInfo), "QAbstractFileIconProvider.IconFileInfo"))
+	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
+}
+
+// Type wraps QAbstractFileIconProvider::type.
+//
+//	C++: QString QAbstractFileIconProvider::type(const QFileInfo &) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractfileiconprovider.html#type
+func (this *QAbstractFileIconProvider) Type(fileInfo *qtcore.QFileInfo) string {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.Type")
+	r := C.qute_QAbstractFileIconProvider_type(self, rt.UseArg(unsafe.Pointer(fileInfo), "QAbstractFileIconProvider.Type"))
+	return quteStr(r)
+}
+
 // SetOptions wraps QAbstractFileIconProvider::setOptions.
 //
 //	C++: void QAbstractFileIconProvider::setOptions(Options)

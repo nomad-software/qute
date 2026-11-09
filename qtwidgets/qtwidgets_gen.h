@@ -1184,6 +1184,50 @@ void qute_QGraphicsEllipseItem_setStartAngle(void *self, int a0);
 int qute_QGraphicsEllipseItem_spanAngle(void *self);
 void qute_QGraphicsEllipseItem_setSpanAngle(void *self, int a0);
 
+// QGraphicsGridLayout
+void * qute_QGraphicsGridLayout_new(void * a0);
+void qute_QGraphicsGridLayout_delete(void *self);
+void qute_QGraphicsGridLayout_addItem(void *self, void * a0, int a1, int a2, int a3, int a4);
+void qute_QGraphicsGridLayout_addItem_1(void *self, void * a0, int a1, int a2);
+void qute_QGraphicsGridLayout_setHorizontalSpacing(void *self, double a0);
+double qute_QGraphicsGridLayout_horizontalSpacing(void *self);
+void qute_QGraphicsGridLayout_setVerticalSpacing(void *self, double a0);
+double qute_QGraphicsGridLayout_verticalSpacing(void *self);
+void qute_QGraphicsGridLayout_setSpacing(void *self, double a0);
+void qute_QGraphicsGridLayout_setRowSpacing(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_rowSpacing(void *self, int a0);
+void qute_QGraphicsGridLayout_setColumnSpacing(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_columnSpacing(void *self, int a0);
+void qute_QGraphicsGridLayout_setRowStretchFactor(void *self, int a0, int a1);
+int qute_QGraphicsGridLayout_rowStretchFactor(void *self, int a0);
+void qute_QGraphicsGridLayout_setColumnStretchFactor(void *self, int a0, int a1);
+int qute_QGraphicsGridLayout_columnStretchFactor(void *self, int a0);
+void qute_QGraphicsGridLayout_setRowMinimumHeight(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_rowMinimumHeight(void *self, int a0);
+void qute_QGraphicsGridLayout_setRowPreferredHeight(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_rowPreferredHeight(void *self, int a0);
+void qute_QGraphicsGridLayout_setRowMaximumHeight(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_rowMaximumHeight(void *self, int a0);
+void qute_QGraphicsGridLayout_setRowFixedHeight(void *self, int a0, double a1);
+void qute_QGraphicsGridLayout_setColumnMinimumWidth(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_columnMinimumWidth(void *self, int a0);
+void qute_QGraphicsGridLayout_setColumnPreferredWidth(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_columnPreferredWidth(void *self, int a0);
+void qute_QGraphicsGridLayout_setColumnMaximumWidth(void *self, int a0, double a1);
+double qute_QGraphicsGridLayout_columnMaximumWidth(void *self, int a0);
+void qute_QGraphicsGridLayout_setColumnFixedWidth(void *self, int a0, double a1);
+void qute_QGraphicsGridLayout_setRowAlignment(void *self, int a0, int64_t a1);
+int64_t qute_QGraphicsGridLayout_rowAlignment(void *self, int a0);
+void qute_QGraphicsGridLayout_setColumnAlignment(void *self, int a0, int64_t a1);
+int64_t qute_QGraphicsGridLayout_columnAlignment(void *self, int a0);
+void qute_QGraphicsGridLayout_setAlignment(void *self, void * a0, int64_t a1);
+int64_t qute_QGraphicsGridLayout_alignment(void *self, void * a0);
+int qute_QGraphicsGridLayout_rowCount(void *self);
+int qute_QGraphicsGridLayout_columnCount(void *self);
+void * qute_QGraphicsGridLayout_itemAt(void *self, int a0, int a1);
+void qute_QGraphicsGridLayout_removeItem(void *self, void * a0);
+qute_sizef qute_QGraphicsGridLayout_sizeHint(void *self, int64_t a0);
+
 // QGraphicsItem
 void qute_QGraphicsItem_delete(void *self);
 void * qute_QGraphicsItem_scene(void *self);
@@ -1349,6 +1393,19 @@ void qute_QGraphicsItemGroup_delete(void *self);
 void qute_QGraphicsItemGroup_addToGroup(void *self, void * a0);
 void qute_QGraphicsItemGroup_removeFromGroup(void *self, void * a0);
 
+// QGraphicsLayout
+void qute_QGraphicsLayout_delete(void *self);
+void qute_QGraphicsLayout_setContentsMargins(void *self, double a0, double a1, double a2, double a3);
+void qute_QGraphicsLayout_activate(void *self);
+bool qute_QGraphicsLayout_isActivated(void *self);
+void qute_QGraphicsLayout_invalidate(void *self);
+void qute_QGraphicsLayout_widgetEvent(void *self, void * a0);
+int qute_QGraphicsLayout_count(void *self);
+void * qute_QGraphicsLayout_itemAt(void *self, int a0);
+void qute_QGraphicsLayout_removeAt(void *self, int a0);
+void qute_QGraphicsLayout_setInstantInvalidatePropagation(bool a0);
+bool qute_QGraphicsLayout_instantInvalidatePropagation(void);
+
 // QGraphicsLayoutItem
 void qute_QGraphicsLayoutItem_delete(void *self);
 void qute_QGraphicsLayoutItem_setSizePolicy(void *self, void * a0);
@@ -1393,6 +1450,28 @@ void * qute_QGraphicsLineItem_pen(void *self);
 void qute_QGraphicsLineItem_setPen(void *self, void * a0);
 void * qute_QGraphicsLineItem_line(void *self);
 void qute_QGraphicsLineItem_setLine(void *self, void * a0);
+
+// QGraphicsLinearLayout
+void * qute_QGraphicsLinearLayout_new(void * a0);
+void * qute_QGraphicsLinearLayout_new_1(int64_t a0, void * a1);
+void qute_QGraphicsLinearLayout_delete(void *self);
+void qute_QGraphicsLinearLayout_setOrientation(void *self, int64_t a0);
+int64_t qute_QGraphicsLinearLayout_orientation(void *self);
+void qute_QGraphicsLinearLayout_addItem(void *self, void * a0);
+void qute_QGraphicsLinearLayout_addStretch(void *self);
+void qute_QGraphicsLinearLayout_insertItem(void *self, int a0, void * a1);
+void qute_QGraphicsLinearLayout_insertStretch(void *self, int a0);
+void qute_QGraphicsLinearLayout_removeItem(void *self, void * a0);
+void qute_QGraphicsLinearLayout_setSpacing(void *self, double a0);
+double qute_QGraphicsLinearLayout_spacing(void *self);
+void qute_QGraphicsLinearLayout_setItemSpacing(void *self, int a0, double a1);
+double qute_QGraphicsLinearLayout_itemSpacing(void *self, int a0);
+void qute_QGraphicsLinearLayout_setStretchFactor(void *self, void * a0, int a1);
+int qute_QGraphicsLinearLayout_stretchFactor(void *self, void * a0);
+void qute_QGraphicsLinearLayout_setAlignment(void *self, void * a0, int64_t a1);
+int64_t qute_QGraphicsLinearLayout_alignment(void *self, void * a0);
+qute_sizef qute_QGraphicsLinearLayout_sizeHint(void *self, int64_t a0);
+void qute_QGraphicsLinearLayout_dump(void *self);
 
 // QGraphicsObject
 void * qute_QGraphicsObject_cast(void *obj);
@@ -1483,9 +1562,13 @@ void qute_QGraphicsRectItem_setRect(void *self, qute_rectf a0);
 // QGraphicsRotation
 void * qute_QGraphicsRotation_new(void * a0);
 void * qute_QGraphicsRotation_cast(void *obj);
+void * qute_QGraphicsRotation_origin(void *self);
+void qute_QGraphicsRotation_setOrigin(void *self, void * a0);
 double qute_QGraphicsRotation_angle(void *self);
 void qute_QGraphicsRotation_setAngle(void *self, double a0);
-void qute_QGraphicsRotation_setAxis(void *self, int64_t a0);
+void * qute_QGraphicsRotation_axis(void *self);
+void qute_QGraphicsRotation_setAxis(void *self, void * a0);
+void qute_QGraphicsRotation_setAxis_1(void *self, int64_t a0);
 void qute_QGraphicsRotation_originChanged_1(void *self);
 void qute_QGraphicsRotation_angleChanged_1(void *self);
 void qute_QGraphicsRotation_axisChanged_1(void *self);
@@ -1496,6 +1579,8 @@ void * qute_QGraphicsRotation_axisChanged(void *self, uintptr_t id);
 // QGraphicsScale
 void * qute_QGraphicsScale_new(void * a0);
 void * qute_QGraphicsScale_cast(void *obj);
+void * qute_QGraphicsScale_origin(void *self);
+void qute_QGraphicsScale_setOrigin(void *self, void * a0);
 double qute_QGraphicsScale_xScale(void *self);
 void qute_QGraphicsScale_setXScale(void *self, double a0);
 double qute_QGraphicsScale_yScale(void *self);
@@ -1642,6 +1727,7 @@ void * qute_QGraphicsTextItem_linkHovered(void *self, uintptr_t id);
 
 // QGraphicsTransform
 void * qute_QGraphicsTransform_cast(void *obj);
+void qute_QGraphicsTransform_applyTo(void *self, void * a0);
 
 // QGraphicsView
 void * qute_QGraphicsView_new(void * a0);
@@ -1719,6 +1805,8 @@ void * qute_QGraphicsView_rubberBandChanged(void *self, uintptr_t id);
 void * qute_QGraphicsWidget_new(void * a0);
 void * qute_QGraphicsWidget_cast(void *obj);
 void * qute_QGraphicsWidget_as_QGraphicsLayoutItem(void *self);
+void * qute_QGraphicsWidget_layout(void *self);
+void qute_QGraphicsWidget_setLayout(void *self, void * a0);
 void qute_QGraphicsWidget_adjustSize(void *self);
 int64_t qute_QGraphicsWidget_layoutDirection(void *self);
 void qute_QGraphicsWidget_setLayoutDirection(void *self, int64_t a0);
@@ -1736,8 +1824,10 @@ qute_sizef qute_QGraphicsWidget_size(void *self);
 void qute_QGraphicsWidget_setGeometry(void *self, qute_rectf a0);
 qute_rectf qute_QGraphicsWidget_rect(void *self);
 void qute_QGraphicsWidget_setContentsMargins(void *self, double a0, double a1, double a2, double a3);
+void qute_QGraphicsWidget_setContentsMargins_1(void *self, qute_marginsf a0);
 void qute_QGraphicsWidget_getContentsMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out);
 void qute_QGraphicsWidget_setWindowFrameMargins(void *self, double a0, double a1, double a2, double a3);
+void qute_QGraphicsWidget_setWindowFrameMargins_1(void *self, qute_marginsf a0);
 void qute_QGraphicsWidget_getWindowFrameMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out);
 void qute_QGraphicsWidget_unsetWindowFrameMargins(void *self);
 qute_rectf qute_QGraphicsWidget_windowFrameGeometry(void *self);

@@ -232,13 +232,13 @@ func NewQVariantWithBitArray(bitarray *QBitArray) *QVariant {
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithBytearray wraps the QVariant constructor.
+// NewQVariantWithBytes wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(const QByteArray & bytearray)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithBytearray(bytearray []byte) *QVariant {
-	rt.CheckThread("NewQVariantWithBytearray")
+func NewQVariantWithBytes(bytearray []byte) *QVariant {
+	rt.CheckThread("NewQVariantWithBytes")
 	p := C.qute_QVariant_new_13((*C.char)(unsafe.Pointer(unsafe.SliceData(bytearray))), C.ptrdiff_t(len(bytearray)))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)

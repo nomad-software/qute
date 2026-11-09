@@ -349,6 +349,33 @@ func (this *QDir) EntryListWithNameFilters(nameFilters []string) []string {
 	return quteStrList(r)
 }
 
+// EntryInfoList wraps QDir::entryInfoList.
+//
+//	C++: QFileInfoList QDir::entryInfoList(Filters filters = …, SortFlags sort = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#entryInfoList
+func (this *QDir) EntryInfoList() []*QFileInfo {
+	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoList")
+	r := C.qute_QDir_entryInfoList(self)
+	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
+		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
+	})
+}
+
+// EntryInfoListWithNameFilters wraps QDir::entryInfoList.
+//
+//	C++: QFileInfoList QDir::entryInfoList(const QStringList & nameFilters, Filters filters = …, SortFlags sort = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#entryInfoList
+func (this *QDir) EntryInfoListWithNameFilters(nameFilters []string) []*QFileInfo {
+	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoListWithNameFilters")
+	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
+	r := C.qute_QDir_entryInfoList_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)))
+	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
+		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
+	})
+}
+
 // Mkdir wraps QDir::mkdir.
 //
 //	C++: bool QDir::mkdir(const QString & dirName, std::optional<QFile::Permissions> p = …) const
@@ -598,6 +625,19 @@ func QDirIsAbsolutePath(path string) bool {
 	rt.CheckThread("QDirIsAbsolutePath")
 	r := C.qute_QDir_isAbsolutePath((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
 	return bool(r)
+}
+
+// QDirDrives wraps QDir::drives.
+//
+//	C++: QFileInfoList QDir::drives()
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#drives
+func QDirDrives() []*QFileInfo {
+	rt.CheckThread("QDirDrives")
+	r := C.qute_QDir_drives()
+	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
+		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
+	})
 }
 
 // QDirListSeparator wraps QDir::listSeparator.

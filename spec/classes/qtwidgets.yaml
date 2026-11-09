@@ -99,9 +99,9 @@ classes:
   QToolTip: { no-construct: true }
   "QTextEdit::ExtraSelection": { kind: value }
   "QFormLayout::TakeRowResult": { kind: value }
-  QGraphicsLayoutItem: { no-construct: true, reviewed: true }
-  QGraphicsWidget: { reviewed: true }
-  QGraphicsProxyWidget: { reviewed: true }
+  QGraphicsLayoutItem: { no-construct: true }
+  QGraphicsWidget: {}
+  QGraphicsProxyWidget: {}
   QGraphicsEffect: { no-construct: true }
   QGraphicsBlurEffect: {}
   QGraphicsColorizeEffect: {}
@@ -114,7 +114,7 @@ classes:
   QGraphicsLineItem: { notify-dtor: true }
   QGraphicsPathItem: { notify-dtor: true }
   QGraphicsPolygonItem: { notify-dtor: true }
-  QStyleOption: { kind: value, reviewed: true }
+  QStyleOption: { kind: value }
   QStyleOptionViewItem: { kind: value }
   QStyleOptionComplex: { kind: value }
   QStyleOptionButton: { kind: value }
@@ -122,3 +122,6 @@ classes:
   QItemEditorFactory: {}
   QTableWidgetSelectionRange: { kind: value }
   QFileIconProvider: {}
+  QGraphicsLayout: { no-construct: true }
+  QGraphicsLinearLayout: { notify-dtor: true }
+  QGraphicsGridLayout: { notify-dtor: true }

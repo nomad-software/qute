@@ -26,6 +26,9 @@ func writeFile(path string, data []byte) error {
 
 func writeGo(path string, src []byte) error {
 	out, err := format.Source(src)
+	if err == nil {
+		out, err = format.Source(out) // gofmt is not always idempotent in one pass
+	}
 	if err != nil {
 		_ = os.WriteFile(path+".broken", src, 0o644)
 		return fmt.Errorf("%s: %w", path, err)
@@ -64,7 +67,13 @@ func (g *Gen) emitModule(m *Module) error {
 	files := map[string][]byte{}
 	files["qute_gen.go"] = g.emitHelpers(m)
 	files["enums_gen.go"] = g.emitEnums(m)
+	if len(m.IR.GLConstants) > 0 {
+		files["gl_gen.go"] = g.emitGLConstants(m)
+	}
 	for _, c := range m.Classes {
+		if c.Opts.EnumsOnly {
+			continue
+		}
 		files[strings.ToLower(c.Name)+"_gen.go"] = g.emitClass(c)
 	}
 	for name, src := range files {
@@ -106,6 +115,9 @@ func methodCParams(mm *Method, self bool) []string {
 		default:
 			ps = append(ps, cParams(p.T, p.CName)...)
 		}
+	}
+	for i, t := range mm.PairRet {
+		ps = append(ps, fmt.Sprintf("%s *r%d_out", outCType(t), i))
 	}
 	return ps
 }
@@ -182,6 +194,9 @@ type cFunc struct {
 
 func (g *Gen) classCFuncs(c *Class) []cFunc {
 	var out []cFunc
+	if c.Opts.EnumsOnly {
+		return nil
+	}
 	add := func(decl, body string) { out = append(out, cFunc{decl, body}) }
 	cls, cpp := c.Name, c.Cpp
 	self := fmt.Sprintf("static_cast<%s *>(self)", cpp)
@@ -255,10 +270,19 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			add(g.cDecl("void", mm.CName, methodCParams(mm, true)), fmt.Sprintf("%s->%s = %s;", self, mm.IR.Name, args[0]))
 			continue
 		}
-		if mm.IR.Static {
+		if mm.Overlay != nil && mm.Overlay.Cpp != "" {
+			call = expandCpp(mm.Overlay.Cpp, self, args)
+		} else if mm.IR.Static {
 			call = fmt.Sprintf("%s::%s(%s)", cpp, mm.IR.Name, strings.Join(args, ", "))
 		} else {
 			call = fmt.Sprintf("%s->%s(%s)", self, mm.IR.Name, strings.Join(args, ", "))
+		}
+		if len(mm.PairRet) == 2 {
+			body := strings.Join(append(pre, "auto &&r = "+call+";",
+				"*r0_out = "+g.cppRet(mm.PairRet[0], "r.first")+";",
+				"*r1_out = "+g.cppRet(mm.PairRet[1], "r.second")+";"), "\n\t")
+			add(g.cDecl("void", mm.CName, methodCParams(mm, !mm.IR.Static)), body)
+			continue
 		}
 		add(g.cDecl(retCType(mm), mm.CName, methodCParams(mm, !mm.IR.Static)), g.cppBody(mm.Ret, call, pre, post))
 	}
@@ -389,7 +413,7 @@ func (g *Gen) emitCpp(m *Module, b *buf) {
 	// layout check: the runtime relies on every primary base sitting at offset 0
 	b.p("const char *qute_%s_check_layout(void) {", m.Pkg)
 	for _, c := range m.Classes {
-		if c.Base == nil {
+		if c.Base == nil || c.Opts.EnumsOnly {
 			continue
 		}
 		b.p("\t{ %s *d = reinterpret_cast<%s *>(uintptr_t(0x10000)); %s *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return %q; }", c.Cpp, c.Cpp, c.Base.Cpp, c.Name)
@@ -587,6 +611,7 @@ var (
 )
 
 var _ = quteMap[C.int, C.int, int, int]
+var _ = qutePairs[C.int, C.int, int, int, int]
 
 // quteStr copies a malloc'd UTF-8 buffer into a Go string and frees it.
 func quteStr(s C.qute_str) string {
@@ -627,6 +652,16 @@ func quteMap[CK comparable, CV any, K comparable, V any](m C.qute_map, kf func(C
 	out := make(map[K]V, len(ks))
 	for i, k := range ks {
 		out[k] = vs[i]
+	}
+	return out
+}
+
+func qutePairs[CK any, CV any, K any, V any, P any](m C.qute_map, kf func(CK) K, vf func(CV) V, mk func(K, V) P) []P {
+	ks := quteList(m.keys, kf)
+	vs := quteList(m.values, vf)
+	out := make([]P, len(ks))
+	for i := range ks {
+		out[i] = mk(ks[i], vs[i])
 	}
 	return out
 }
@@ -976,7 +1011,22 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 	return gc
 }
 
+// expandCpp fills an overlay's C++ call template.
+func expandCpp(tmpl, self string, args []string) string {
+	out := strings.ReplaceAll(tmpl, "$self", self)
+	for i := len(args) - 1; i >= 0; i-- {
+		out = strings.ReplaceAll(out, fmt.Sprintf("$%d", i), args[i])
+	}
+	return out
+}
+
 func retMode(mm *Method) string {
+	if mm.Overlay != nil && mm.Overlay.Created {
+		if mm.RetRule == "parented" {
+			return "rt.NewParented"
+		}
+		return "rt.NewOwned"
+	}
 	switch mm.RetRule {
 	case "transfer-to-go", "owned":
 		return "rt.TakeOwned"
@@ -1021,6 +1071,17 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 		method = mm.GoName
 	}
 	gc := g.prepCall(c, mm, method, false)
+	for i, t := range mm.PairRet {
+		o := fmt.Sprintf("pair%dOut", i)
+		ct := g.cgoType(t)
+		if t.k == kValue {
+			ct = "unsafe.Pointer"
+		}
+		gc.pre = append(gc.pre, fmt.Sprintf("var %s %s", o, ct))
+		gc.args = append(gc.args, "&"+o)
+		gc.outT = append(gc.outT, g.goType(t, m, false))
+		gc.outExpr = append(gc.outExpr, g.goRet(t, o, "rt.TakeOwned", m))
+	}
 	ret := g.goType(mm.Ret, m, false)
 	if mm.Ret.k == kSelf {
 		ret = "*" + c.Name
@@ -1285,4 +1346,28 @@ func lastName(cpp string) string {
 		return cpp[i+2:]
 	}
 	return cpp
+}
+
+// emitGLConstants writes the GL_* macros as untyped Go constants, named as in
+// the GL documentation so GL examples translate directly.
+func (g *Gen) emitGLConstants(m *Module) []byte {
+	var b buf
+	b.p("%s", strings.TrimSuffix(genHeader, "\n"))
+	b.p("package %s\n", m.Pkg)
+	b.p("// OpenGL constants from the GL headers Qt uses, for QOpenGLFunctions and")
+	b.p("// QOpenGLExtraFunctions calls: gl.GlClear(GL_COLOR_BUFFER_BIT).")
+	b.p("const (")
+	names := make([]string, 0, len(m.IR.GLConstants))
+	for n := range m.IR.GLConstants {
+		names = append(names, n)
+	}
+	sort.Strings(names)
+	for _, n := range names {
+		if !m.claim(n, "GL constant") {
+			continue
+		}
+		b.p("\t%s = 0x%X", n, m.IR.GLConstants[n])
+	}
+	b.p(")")
+	return b.Bytes()
 }

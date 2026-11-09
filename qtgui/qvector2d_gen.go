@@ -125,6 +125,30 @@ func NewQVector2DWithPointF(point qtcore.QPointF) *QVector2D {
 	return rt.View[QVector2D](h, p)
 }
 
+// NewQVector2DWithVector3D wraps the QVector2D constructor.
+//
+//	C++: QVector2D::QVector2D(QVector3D vector)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvector2d.html#QVector2D
+func NewQVector2DWithVector3D(vector *QVector3D) *QVector2D {
+	rt.CheckThread("NewQVector2DWithVector3D")
+	p := C.qute_QVector2D_new_4(rt.UseArg(unsafe.Pointer(vector), "NewQVector2DWithVector3D"))
+	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	return rt.View[QVector2D](h, p)
+}
+
+// NewQVector2DWithVector4D wraps the QVector2D constructor.
+//
+//	C++: QVector2D::QVector2D(QVector4D vector)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvector2d.html#QVector2D
+func NewQVector2DWithVector4D(vector *QVector4D) *QVector2D {
+	rt.CheckThread("NewQVector2DWithVector4D")
+	p := C.qute_QVector2D_new_5(rt.UseArg(unsafe.Pointer(vector), "NewQVector2DWithVector4D"))
+	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	return rt.View[QVector2D](h, p)
+}
+
 // IsNull wraps QVector2D::isNull.
 //
 //	C++: bool QVector2D::isNull() const
@@ -243,6 +267,32 @@ func (this *QVector2D) DistanceToLine(point *QVector2D, direction *QVector2D) fl
 	self := rt.Use(unsafe.Pointer(this), "QVector2D.DistanceToLine")
 	r := C.qute_QVector2D_distanceToLine(self, rt.UseArg(unsafe.Pointer(point), "QVector2D.DistanceToLine"), rt.UseArg(unsafe.Pointer(direction), "QVector2D.DistanceToLine"))
 	return float32(r)
+}
+
+// ToVector3D wraps QVector2D::toVector3D.
+//
+//	C++: QVector3D QVector2D::toVector3D() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvector2d.html#toVector3D
+func (this *QVector2D) ToVector3D() *QVector3D {
+	self := rt.Use(unsafe.Pointer(this), "QVector2D.ToVector3D")
+	r := C.qute_QVector2D_toVector3D(self)
+	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
+}
+
+// ToVector4D wraps QVector2D::toVector4D.
+//
+//	C++: QVector4D QVector2D::toVector4D() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvector2d.html#toVector4D
+func (this *QVector2D) ToVector4D() *QVector4D {
+	self := rt.Use(unsafe.Pointer(this), "QVector2D.ToVector4D")
+	r := C.qute_QVector2D_toVector4D(self)
+	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
 // ToPoint wraps QVector2D::toPoint.

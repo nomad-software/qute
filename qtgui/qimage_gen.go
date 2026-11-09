@@ -95,27 +95,6 @@ func NewQImageWithPtrBytesPerLine(data unsafe.Pointer, width int, height int, by
 	return rt.View[QImage](h, p)
 }
 
-// NewQImageWithXpm wraps the QImage constructor.
-//
-//	C++: QImage::QImage(const char *const[] xpm)
-//
-// Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
-func NewQImageWithXpm(xpm []string) *QImage {
-	rt.CheckThread("NewQImageWithXpm")
-	xpmArr := make([]*C.char, len(xpm)+1)
-	for i, x := range xpm {
-		xpmArr[i] = C.CString(x)
-	}
-	defer func() {
-		for _, x := range xpmArr {
-			C.free(unsafe.Pointer(x))
-		}
-	}()
-	p := C.qute_QImage_new_5(unsafe.Pointer(&xpmArr[0]))
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
-	return rt.View[QImage](h, p)
-}
-
 // NewQImageWithFileName wraps the QImage constructor.
 //
 //	C++: QImage::QImage(const QString & fileName, const char * format = …)
@@ -123,7 +102,7 @@ func NewQImageWithXpm(xpm []string) *QImage {
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
 func NewQImageWithFileName(fileName string) *QImage {
 	rt.CheckThread("NewQImageWithFileName")
-	p := C.qute_QImage_new_6((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	p := C.qute_QImage_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }

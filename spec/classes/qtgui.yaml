@@ -16,7 +16,7 @@ classes:
   QPainterPath: { kind: value }
   QTransform: { kind: value }
   QRegion: { kind: value }
-  QEventPoint: { kind: value, reviewed: true }
+  QEventPoint: { kind: value }
   QPainter: {}
   QAction: {}
   QActionGroup: {}
@@ -29,8 +29,8 @@ classes:
   QIntValidator: {}
   QDoubleValidator: {}
   QTextDocument: {}
-  QInputEvent: { kind: event, reviewed: true }
-  QPointerEvent: { kind: event, reviewed: true }
+  QInputEvent: { kind: event }
+  QPointerEvent: { kind: event }
   QSinglePointEvent: { kind: event }
   QMouseEvent: { kind: event }
   QWheelEvent: { kind: event }
@@ -49,23 +49,23 @@ classes:
   QDragMoveEvent: { kind: event }
   QDragEnterEvent: { kind: event }
   QDragLeaveEvent: { kind: event }
-  QTextCursor: { kind: value, reviewed: true }
+  QTextCursor: { kind: value }
   QTextFormat: { kind: value }
   QTextCharFormat: { kind: value }
   QTextBlockFormat: { kind: value }
   QTextFrameFormat: { kind: value }
-  QTextBlock: { kind: value, reviewed: true }
+  QTextBlock: { kind: value }
   QTextOption: { kind: value }
-  QTextObject: { no-construct: true, reviewed: true }
+  QTextObject: { no-construct: true }
   QTextFrame: {}
-  QTextDocumentFragment: { kind: value, reviewed: true }
+  QTextDocumentFragment: { kind: value }
   QBitmap: { kind: value }
   QColorSpace: { kind: value }
   QColorTransform: { kind: value }
-  QPicture: { kind: value, reviewed: true }
+  QPicture: { kind: value }
   "QFont::Tag": { kind: value }
   QSurface: { no-construct: true }
-  QWindow: { reviewed: true }
+  QWindow: {}
   QSessionManager: { no-construct: true }
   QPixelFormat: { kind: value }
   QStaticText: { kind: value }
@@ -76,18 +76,42 @@ classes:
   QConicalGradient: { kind: value }
   QFontInfo: { kind: value }
   QFontDatabase: { no-construct: true }
-  QMovie: { reviewed: true }
-  QInputDevice: { reviewed: true }
-  QPointingDevice: { reviewed: true }
+  QMovie: {}
+  QInputDevice: {}
+  QPointingDevice: {}
   QPointingDeviceUniqueId: { kind: value }
   QStyleHints: { no-construct: true }
   QInputMethod: { no-construct: true }
   QVector2D: { kind: value }
-  QImageReader: { reviewed: true }
+  QImageReader: {}
   QGlyphRun: { kind: value }
   "QPainter::PixmapFragment": { kind: value }
   "QPainterPath::Element": { kind: value }
   QAbstractFileIconProvider: {}
   QHelpEvent: { kind: event }
   QPagedPaintDevice: { no-construct: true }
-  QPdfWriter: { reviewed: true }
+  QPdfWriter: {}
+  QVector3D: { kind: value }
+  QVector4D: { kind: value }
+  QMatrix4x4: { kind: value }
+  QQuaternion: { kind: value }
+  QSurfaceFormat: { kind: value }
+  QTextLength: { kind: value }
+  QTextListFormat: { kind: value }
+  QTextTableFormat: { kind: value }
+  QTextTableCellFormat: { kind: value }
+  QTextImageFormat: { kind: value }
+  QTextBlockGroup: { no-construct: true }
+  QTextList: { no-construct: true }
+  QTextTable: { no-construct: true }
+  QTextTableCell: { kind: value }
+  "QTextOption::Tab": { kind: value }
+  "QColorSpace::PrimaryPoints": { kind: value }
+  QRgba64: { kind: value }
+  QImageIOHandler: { enums-only: true }
+  QOpenGLContext: {}
+  QOpenGLContextGroup: { no-construct: true }
+  QOpenGLFunctions: { raw-pointers: true }
+  QOpenGLExtraFunctions: { raw-pointers: true }
+  QOffscreenSurface: {}
+  QPaintDeviceWindow: { no-construct: true }

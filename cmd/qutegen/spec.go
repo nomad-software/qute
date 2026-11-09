@@ -34,6 +34,11 @@ type classOpts struct {
 	SkipVirtuals []string `yaml:"skip-virtuals"`
 	// Reviewed marks every default rule on the class as reviewed.
 	Reviewed bool `yaml:"reviewed"`
+	// RawPointers passes every pointer to a number as unsafe.Pointer instead of
+	// an out-parameter or slice (OpenGL function tables, where GL decides the size).
+	RawPointers bool `yaml:"raw-pointers"`
+	// EnumsOnly emits the class's enums but no wrapper (QChar is a rune in Go).
+	EnumsOnly bool `yaml:"enums-only"`
 }
 
 type classSpec struct {
@@ -51,6 +56,8 @@ type overlay struct {
 	Skip     any               `yaml:"skip"`
 	Error    bool              `yaml:"error"`
 	ErrorMsg string            `yaml:"error-string"`
+	Cpp      string            `yaml:"cpp"`     // C++ call expression: $self, $0, $1 ... for the arguments
+	Created  bool              `yaml:"created"` // the result is built by the binding, so its death is tracked
 	Reviewed bool              `yaml:"reviewed"`
 	Test     string            `yaml:"test"`
 	Doc      string            `yaml:"doc"`
@@ -135,6 +142,12 @@ func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) 
 		}
 		if o.ErrorMsg != "" {
 			out.ErrorMsg = o.ErrorMsg
+		}
+		if o.Cpp != "" {
+			out.Cpp = o.Cpp
+		}
+		if o.Created {
+			out.Created = true
 		}
 		if o.Reviewed {
 			out.Reviewed = true

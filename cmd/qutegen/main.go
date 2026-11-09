@@ -24,12 +24,16 @@ func main() {
 func run(root string) error {
 	g := &Gen{root: root, byName: map[string]*Module{}, classes: map[string]*Class{},
 		enums: map[string]*Enum{}, structs: map[string]*structDef{}, report: &Report{}}
-	mods := []struct{ name, pkg, pc string }{
-		{"QtCore", "qtcore", "Qt6Core"},
-		{"QtGui", "qtgui", "Qt6Gui"},
-		{"QtWidgets", "qtwidgets", "Qt6Widgets"},
+	mods := []struct {
+		name, pkg, pc string
+		deps          []string
+	}{
+		{"QtCore", "qtcore", "Qt6Core", nil},
+		{"QtGui", "qtgui", "Qt6Gui", []string{"QtCore"}},
+		{"QtWidgets", "qtwidgets", "Qt6Widgets", []string{"QtCore", "QtGui"}},
+		{"QtOpenGL", "qtopengl", "Qt6OpenGL", []string{"QtCore", "QtGui"}},
+		{"QtOpenGLWidgets", "qtopenglwidgets", "Qt6OpenGLWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtOpenGL"}},
 	}
-	var prev []*Module
 	for _, md := range mods {
 		ir, err := loadIR(filepath.Join(root, "spec", "ir", md.pkg+".json"))
 		if err != nil {
@@ -44,11 +48,10 @@ func run(root string) error {
 			return err
 		}
 		m := &Module{Name: md.name, Pkg: md.pkg, ImportPath: modulePath + "/" + md.pkg, PkgConfig: md.pc,
-			IR: ir, Spec: spec, Overlays: ov, Deps: append([]*Module{}, prev...),
+			IR: ir, Spec: spec, Overlays: ov, Deps: depsOf(g, md.deps),
 			imports: map[string]bool{}, pkgNames: map[string]string{}, usedOver: map[string]bool{}}
 		g.modules = append(g.modules, m)
 		g.byName[md.name] = m
-		prev = append(prev, m)
 	}
 	g.initStructs()
 	if err := g.build(); err != nil {
@@ -59,7 +62,7 @@ func run(root string) error {
 			return err
 		}
 	}
-	if err := g.writeReport(filepath.Join(root, "UNREVIEWED.md")); err != nil {
+	if err := g.writeReport(filepath.Join(root, "COVERAGE.md")); err != nil {
 		return err
 	}
 	for _, w := range g.report.warnings {
@@ -71,4 +74,12 @@ func run(root string) error {
 	}
 	fmt.Printf("qutegen: %d classes in %d packages\n", n, len(g.modules))
 	return nil
+}
+
+func depsOf(g *Gen, names []string) []*Module {
+	var out []*Module
+	for _, n := range names {
+		out = append(out, g.byName[n])
+	}
+	return out
 }

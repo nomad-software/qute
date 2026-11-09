@@ -109,3 +109,13 @@ func roundInt(f float64) int {
 	}
 	return int(f + 0.5)
 }
+
+// QMarginsF is Qt's QMarginsF.
+type QMarginsF struct{ Left, Top, Right, Bottom float64 }
+
+// Pair is a std::pair from Qt: gradient stops, URL query items, and other
+// lists of two-part entries.
+type Pair[A, B any] struct {
+	First  A
+	Second B
+}

@@ -8,6 +8,7 @@
 #include <QBasicTimer>
 #include <QBitArray>
 #include <QCalendar>
+#include <QChar>
 #include <QChildEvent>
 #include <QCoreApplication>
 #include <QDataStream>
@@ -20,6 +21,7 @@
 #include <QEventLoop>
 #include <QFile>
 #include <QFileDevice>
+#include <QFileInfo>
 #include <QIODevice>
 #include <QIODeviceBase>
 #include <QItemSelection>
@@ -41,9 +43,11 @@
 #include <QPersistentModelIndex>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QRegularExpressionMatchIterator>
 #include <QSettings>
 #include <QSortFilterProxyModel>
 #include <QStringListModel>
+#include <QSysInfo>
 #include <QTime>
 #include <QTimeZone>
 #include <QTimer>
@@ -2927,6 +2931,9 @@ void qute_QBitArray_truncate(void *self, long long a0) {
 const char * qute_QBitArray_bits(void *self) {
 	return static_cast<QBitArray *>(self)->bits();
 }
+unsigned int qute_QBitArray_toUInt32(void *self, int64_t a0) {
+	return static_cast<unsigned int>(static_cast<QBitArray *>(self)->toUInt32(static_cast<QSysInfo::Endian>(a0)));
+}
 void * qute_QBitArray_fromBits(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QBitArray(QBitArray::fromBits(reinterpret_cast<const char *>(a0), a0_len)));
 }
@@ -2940,6 +2947,9 @@ void * qute_QCalendar_new_1(int64_t a0) {
 }
 void * qute_QCalendar_new_2(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<QCalendar *>(new QCalendar(QString::fromUtf8(a0, a0_len)));
+}
+void * qute_QCalendar_new_3(void * a0) {
+	return static_cast<QCalendar *>(new QCalendar((a0 ? *static_cast<QCalendar::SystemId *>(a0) : QCalendar::SystemId())));
 }
 void qute_QCalendar_delete(void *self) {
 	delete static_cast<QCalendar *>(self);
@@ -2995,6 +3005,15 @@ qute_str qute_QCalendar_name(void *self) {
 void * qute_QCalendar_dateFromParts(void *self, int a0, int a1, int a2) {
 	return static_cast<void *>(new QDate(static_cast<QCalendar *>(self)->dateFromParts(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2))));
 }
+void * qute_QCalendar_dateFromParts_1(void *self, void * a0) {
+	return static_cast<void *>(new QDate(static_cast<QCalendar *>(self)->dateFromParts((a0 ? *static_cast<QCalendar::YearMonthDay *>(a0) : QCalendar::YearMonthDay()))));
+}
+void * qute_QCalendar_matchCenturyToWeekday(void *self, void * a0, int a1) {
+	return static_cast<void *>(new QDate(static_cast<QCalendar *>(self)->matchCenturyToWeekday((a0 ? *static_cast<QCalendar::YearMonthDay *>(a0) : QCalendar::YearMonthDay()), static_cast<int>(a1))));
+}
+void * qute_QCalendar_partsFromDate(void *self, void * a0) {
+	return static_cast<void *>(new QCalendar::YearMonthDay(static_cast<QCalendar *>(self)->partsFromDate((a0 ? *static_cast<QDate *>(a0) : QDate()))));
+}
 int qute_QCalendar_dayOfWeek(void *self, void * a0) {
 	return static_cast<int>(static_cast<QCalendar *>(self)->dayOfWeek((a0 ? *static_cast<QDate *>(a0) : QDate())));
 }
@@ -3016,6 +3035,54 @@ qute_str qute_QCalendar_dateTimeToString(void *self, const char *a0, ptrdiff_t a
 qute_list qute_QCalendar_availableCalendars(void) {
 	return qute_ret_strlist(QCalendar::availableCalendars());
 }
+
+// ---- QCalendarSystemId
+void * qute_QCalendarSystemId_new(void) {
+	return static_cast<QCalendar::SystemId *>(new QCalendar::SystemId());
+}
+void qute_QCalendarSystemId_delete(void *self) {
+	delete static_cast<QCalendar::SystemId *>(self);
+}
+unsigned long qute_QCalendarSystemId_index(void *self) {
+	return static_cast<unsigned long>(static_cast<QCalendar::SystemId *>(self)->index());
+}
+bool qute_QCalendarSystemId_isValid(void *self) {
+	return static_cast<bool>(static_cast<QCalendar::SystemId *>(self)->isValid());
+}
+
+// ---- QCalendarYearMonthDay
+void * qute_QCalendarYearMonthDay_new(void) {
+	return static_cast<QCalendar::YearMonthDay *>(new QCalendar::YearMonthDay());
+}
+void * qute_QCalendarYearMonthDay_new_1(int a0) {
+	return static_cast<QCalendar::YearMonthDay *>(new QCalendar::YearMonthDay(static_cast<int>(a0)));
+}
+void qute_QCalendarYearMonthDay_delete(void *self) {
+	delete static_cast<QCalendar::YearMonthDay *>(self);
+}
+bool qute_QCalendarYearMonthDay_isValid(void *self) {
+	return static_cast<bool>(static_cast<QCalendar::YearMonthDay *>(self)->isValid());
+}
+int qute_QCalendarYearMonthDay_get_year(void *self) {
+	return static_cast<int>(static_cast<QCalendar::YearMonthDay *>(self)->year);
+}
+void qute_QCalendarYearMonthDay_set_year(void *self, int a0) {
+	static_cast<QCalendar::YearMonthDay *>(self)->year = static_cast<int>(a0);
+}
+int qute_QCalendarYearMonthDay_get_month(void *self) {
+	return static_cast<int>(static_cast<QCalendar::YearMonthDay *>(self)->month);
+}
+void qute_QCalendarYearMonthDay_set_month(void *self, int a0) {
+	static_cast<QCalendar::YearMonthDay *>(self)->month = static_cast<int>(a0);
+}
+int qute_QCalendarYearMonthDay_get_day(void *self) {
+	return static_cast<int>(static_cast<QCalendar::YearMonthDay *>(self)->day);
+}
+void qute_QCalendarYearMonthDay_set_day(void *self, int a0) {
+	static_cast<QCalendar::YearMonthDay *>(self)->day = static_cast<int>(a0);
+}
+
+// ---- QChar
 
 // ---- QChildEvent
 void qute_QChildEvent_delete(void *self) {
@@ -3719,6 +3786,12 @@ qute_list qute_QDir_entryList(void *self) {
 qute_list qute_QDir_entryList_1(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
 	return qute_ret_strlist(static_cast<QDir *>(self)->entryList(qute_qstrlist(a0, a0_lens, a0_n)));
 }
+qute_list qute_QDir_entryInfoList(void *self) {
+	return qute_ret_list<void *>(static_cast<QDir *>(self)->entryInfoList(), [](const auto &v) { return static_cast<void *>(new QFileInfo(v)); });
+}
+qute_list qute_QDir_entryInfoList_1(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	return qute_ret_list<void *>(static_cast<QDir *>(self)->entryInfoList(qute_qstrlist(a0, a0_lens, a0_n)), [](const auto &v) { return static_cast<void *>(new QFileInfo(v)); });
+}
 bool qute_QDir_mkdir(void *self, const char *a0, ptrdiff_t a0_len) {
 	return static_cast<bool>(static_cast<QDir *>(self)->mkdir(QString::fromUtf8(a0, a0_len)));
 }
@@ -3787,6 +3860,9 @@ bool qute_QDir_isRelativePath(const char *a0, ptrdiff_t a0_len) {
 }
 bool qute_QDir_isAbsolutePath(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<bool>(QDir::isAbsolutePath(QString::fromUtf8(a0, a0_len)));
+}
+qute_list qute_QDir_drives(void) {
+	return qute_ret_list<void *>(QDir::drives(), [](const auto &v) { return static_cast<void *>(new QFileInfo(v)); });
 }
 unsigned int qute_QDir_listSeparator(void) {
 	return static_cast<unsigned int>((QDir::listSeparator()).unicode());
@@ -4073,6 +4149,233 @@ void * qute_QFileDevice_fileTime(void *self, int64_t a0) {
 }
 bool qute_QFileDevice_setFileTime(void *self, void * a0, int64_t a1) {
 	return static_cast<bool>(static_cast<QFileDevice *>(self)->setFileTime((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), static_cast<QFileDevice::FileTime>(a1)));
+}
+
+// ---- QFileInfo
+void * qute_QFileInfo_new(void) {
+	return static_cast<QFileInfo *>(new QFileInfo());
+}
+void * qute_QFileInfo_new_1(const char *a0, ptrdiff_t a0_len) {
+	return static_cast<QFileInfo *>(new QFileInfo(QString::fromUtf8(a0, a0_len)));
+}
+void * qute_QFileInfo_new_2(void * a0) {
+	return static_cast<QFileInfo *>(new QFileInfo(*static_cast<QFileDevice *>(a0)));
+}
+void * qute_QFileInfo_new_3(void * a0, const char *a1, ptrdiff_t a1_len) {
+	return static_cast<QFileInfo *>(new QFileInfo((a0 ? *static_cast<QDir *>(a0) : QDir()), QString::fromUtf8(a1, a1_len)));
+}
+void qute_QFileInfo_delete(void *self) {
+	delete static_cast<QFileInfo *>(self);
+}
+void qute_QFileInfo_setFile(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QFileInfo *>(self)->setFile(QString::fromUtf8(a0, a0_len));
+}
+void qute_QFileInfo_setFile_1(void *self, void * a0) {
+	static_cast<QFileInfo *>(self)->setFile(*static_cast<QFileDevice *>(a0));
+}
+void qute_QFileInfo_setFile_2(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	static_cast<QFileInfo *>(self)->setFile((a0 ? *static_cast<QDir *>(a0) : QDir()), QString::fromUtf8(a1, a1_len));
+}
+bool qute_QFileInfo_exists(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->exists());
+}
+void qute_QFileInfo_refresh(void *self) {
+	static_cast<QFileInfo *>(self)->refresh();
+}
+qute_str qute_QFileInfo_filePath(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->filePath());
+}
+qute_str qute_QFileInfo_absoluteFilePath(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->absoluteFilePath());
+}
+qute_str qute_QFileInfo_canonicalFilePath(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->canonicalFilePath());
+}
+qute_str qute_QFileInfo_filesystemFilePath(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemFilePath()).string()));
+}
+qute_str qute_QFileInfo_filesystemAbsoluteFilePath(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemAbsoluteFilePath()).string()));
+}
+qute_str qute_QFileInfo_filesystemCanonicalFilePath(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemCanonicalFilePath()).string()));
+}
+qute_str qute_QFileInfo_fileName(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->fileName());
+}
+qute_str qute_QFileInfo_baseName(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->baseName());
+}
+qute_str qute_QFileInfo_completeBaseName(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->completeBaseName());
+}
+qute_str qute_QFileInfo_suffix(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->suffix());
+}
+qute_str qute_QFileInfo_bundleName(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->bundleName());
+}
+qute_str qute_QFileInfo_completeSuffix(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->completeSuffix());
+}
+qute_str qute_QFileInfo_path(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->path());
+}
+qute_str qute_QFileInfo_absolutePath(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->absolutePath());
+}
+qute_str qute_QFileInfo_canonicalPath(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->canonicalPath());
+}
+qute_str qute_QFileInfo_filesystemPath(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemPath()).string()));
+}
+qute_str qute_QFileInfo_filesystemAbsolutePath(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemAbsolutePath()).string()));
+}
+qute_str qute_QFileInfo_filesystemCanonicalPath(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemCanonicalPath()).string()));
+}
+void * qute_QFileInfo_dir(void *self) {
+	return static_cast<void *>(new QDir(static_cast<QFileInfo *>(self)->dir()));
+}
+void * qute_QFileInfo_absoluteDir(void *self) {
+	return static_cast<void *>(new QDir(static_cast<QFileInfo *>(self)->absoluteDir()));
+}
+bool qute_QFileInfo_isReadable(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isReadable());
+}
+bool qute_QFileInfo_isWritable(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isWritable());
+}
+bool qute_QFileInfo_isExecutable(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isExecutable());
+}
+bool qute_QFileInfo_isHidden(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isHidden());
+}
+bool qute_QFileInfo_isNativePath(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isNativePath());
+}
+bool qute_QFileInfo_isRelative(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isRelative());
+}
+bool qute_QFileInfo_isAbsolute(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isAbsolute());
+}
+bool qute_QFileInfo_makeAbsolute(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->makeAbsolute());
+}
+bool qute_QFileInfo_isFile(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isFile());
+}
+bool qute_QFileInfo_isDir(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isDir());
+}
+bool qute_QFileInfo_isSymLink(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isSymLink());
+}
+bool qute_QFileInfo_isSymbolicLink(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isSymbolicLink());
+}
+bool qute_QFileInfo_isOther(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isOther());
+}
+bool qute_QFileInfo_isShortcut(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isShortcut());
+}
+bool qute_QFileInfo_isAlias(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isAlias());
+}
+bool qute_QFileInfo_isJunction(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isJunction());
+}
+bool qute_QFileInfo_isRoot(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isRoot());
+}
+bool qute_QFileInfo_isBundle(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->isBundle());
+}
+qute_str qute_QFileInfo_symLinkTarget(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->symLinkTarget());
+}
+qute_str qute_QFileInfo_readSymLink(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->readSymLink());
+}
+qute_str qute_QFileInfo_junctionTarget(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->junctionTarget());
+}
+qute_str qute_QFileInfo_filesystemSymLinkTarget(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemSymLinkTarget()).string()));
+}
+qute_str qute_QFileInfo_filesystemReadSymLink(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemReadSymLink()).string()));
+}
+qute_str qute_QFileInfo_filesystemJunctionTarget(void *self) {
+	return qute_ret_bytes(QByteArray::fromStdString((static_cast<QFileInfo *>(self)->filesystemJunctionTarget()).string()));
+}
+qute_str qute_QFileInfo_owner(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->owner());
+}
+unsigned int qute_QFileInfo_ownerId(void *self) {
+	return static_cast<unsigned int>(static_cast<QFileInfo *>(self)->ownerId());
+}
+qute_str qute_QFileInfo_group(void *self) {
+	return qute_ret_str(static_cast<QFileInfo *>(self)->group());
+}
+unsigned int qute_QFileInfo_groupId(void *self) {
+	return static_cast<unsigned int>(static_cast<QFileInfo *>(self)->groupId());
+}
+bool qute_QFileInfo_permission(void *self, int64_t a0) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->permission(QFlags<QFileDevice::Permission>::fromInt(static_cast<QFlags<QFileDevice::Permission>::Int>(a0))));
+}
+int64_t qute_QFileInfo_permissions(void *self) {
+	return static_cast<int64_t>((static_cast<QFileInfo *>(self)->permissions()).toInt());
+}
+long long qute_QFileInfo_size(void *self) {
+	return static_cast<long long>(static_cast<QFileInfo *>(self)->size());
+}
+void * qute_QFileInfo_birthTime(void *self) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->birthTime()));
+}
+void * qute_QFileInfo_metadataChangeTime(void *self) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->metadataChangeTime()));
+}
+void * qute_QFileInfo_lastModified(void *self) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->lastModified()));
+}
+void * qute_QFileInfo_lastRead(void *self) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->lastRead()));
+}
+void * qute_QFileInfo_fileTime(void *self, int64_t a0) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->fileTime(static_cast<QFileDevice::FileTime>(a0))));
+}
+void * qute_QFileInfo_birthTime_1(void *self, void * a0) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->birthTime((a0 ? *static_cast<QTimeZone *>(a0) : QTimeZone()))));
+}
+void * qute_QFileInfo_metadataChangeTime_1(void *self, void * a0) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->metadataChangeTime((a0 ? *static_cast<QTimeZone *>(a0) : QTimeZone()))));
+}
+void * qute_QFileInfo_lastModified_1(void *self, void * a0) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->lastModified((a0 ? *static_cast<QTimeZone *>(a0) : QTimeZone()))));
+}
+void * qute_QFileInfo_lastRead_1(void *self, void * a0) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->lastRead((a0 ? *static_cast<QTimeZone *>(a0) : QTimeZone()))));
+}
+void * qute_QFileInfo_fileTime_1(void *self, int64_t a0, void * a1) {
+	return static_cast<void *>(new QDateTime(static_cast<QFileInfo *>(self)->fileTime(static_cast<QFileDevice::FileTime>(a0), (a1 ? *static_cast<QTimeZone *>(a1) : QTimeZone()))));
+}
+bool qute_QFileInfo_caching(void *self) {
+	return static_cast<bool>(static_cast<QFileInfo *>(self)->caching());
+}
+void qute_QFileInfo_setCaching(void *self, bool a0) {
+	static_cast<QFileInfo *>(self)->setCaching(static_cast<bool>(a0));
+}
+void qute_QFileInfo_stat(void *self) {
+	static_cast<QFileInfo *>(self)->stat();
+}
+bool qute_QFileInfo_exists_1(const char *a0, ptrdiff_t a0_len) {
+	return static_cast<bool>(QFileInfo::exists(QString::fromUtf8(a0, a0_len)));
 }
 
 // ---- QIODevice
@@ -4726,6 +5029,9 @@ qute_str qute_QJsonValue_toString(void *self) {
 qute_str qute_QJsonValue_toString_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_str(static_cast<QJsonValue *>(self)->toString(QString::fromUtf8(a0, a0_len)));
 }
+qute_str qute_QJsonValue_toStringView(void *self) {
+	return qute_ret_str((static_cast<QJsonValue *>(self)->toStringView()).toString());
+}
 void * qute_QJsonValue_toArray(void *self) {
 	return static_cast<void *>(new QJsonArray(static_cast<QJsonValue *>(self)->toArray()));
 }
@@ -5016,40 +5322,64 @@ qute_str qute_QLocale_toString_4(void *self, int a0) {
 qute_str qute_QLocale_toString_5(void *self, unsigned int a0) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<unsigned int>(a0)));
 }
-qute_str qute_QLocale_toString_6(void *self, double a0) {
+qute_str qute_QLocale_toString_6(void *self, long long a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<long long>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_7(void *self, unsigned long long a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<unsigned long long>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_8(void *self, int a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<int>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_9(void *self, unsigned int a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_10(void *self, long a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<long>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_11(void *self, unsigned long a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<unsigned long>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_12(void *self, short a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<short>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_13(void *self, unsigned short a0, int a1, unsigned int a2) {
+	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<unsigned short>(a0), static_cast<int>(a1), static_cast<char32_t>(a2)));
+}
+qute_str qute_QLocale_toString_14(void *self, double a0) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<double>(a0)));
 }
-qute_str qute_QLocale_toString_7(void *self, float a0) {
+qute_str qute_QLocale_toString_15(void *self, float a0) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString(static_cast<float>(a0)));
 }
-qute_str qute_QLocale_toString_8(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+qute_str qute_QLocale_toString_16(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDate *>(a0) : QDate()), QString::fromUtf8(a1, a1_len)));
 }
-qute_str qute_QLocale_toString_9(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+qute_str qute_QLocale_toString_17(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QTime *>(a0) : QTime()), QString::fromUtf8(a1, a1_len)));
 }
-qute_str qute_QLocale_toString_10(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+qute_str qute_QLocale_toString_18(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), QString::fromUtf8(a1, a1_len)));
 }
-qute_str qute_QLocale_toString_11(void *self, void * a0) {
+qute_str qute_QLocale_toString_19(void *self, void * a0) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDate *>(a0) : QDate())));
 }
-qute_str qute_QLocale_toString_12(void *self, void * a0) {
+qute_str qute_QLocale_toString_20(void *self, void * a0) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QTime *>(a0) : QTime())));
 }
-qute_str qute_QLocale_toString_13(void *self, void * a0) {
+qute_str qute_QLocale_toString_21(void *self, void * a0) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDateTime *>(a0) : QDateTime())));
 }
-qute_str qute_QLocale_toString_14(void *self, void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+qute_str qute_QLocale_toString_22(void *self, void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDate *>(a0) : QDate()), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QCalendar *>(a2) : QCalendar())));
 }
-qute_str qute_QLocale_toString_15(void *self, void * a0, int64_t a1, void * a2) {
+qute_str qute_QLocale_toString_23(void *self, void * a0, int64_t a1, void * a2) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDate *>(a0) : QDate()), static_cast<QLocale::FormatType>(a1), (a2 ? *static_cast<QCalendar *>(a2) : QCalendar())));
 }
-qute_str qute_QLocale_toString_16(void *self, void * a0, int64_t a1, void * a2) {
+qute_str qute_QLocale_toString_24(void *self, void * a0, int64_t a1, void * a2) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), static_cast<QLocale::FormatType>(a1), (a2 ? *static_cast<QCalendar *>(a2) : QCalendar())));
 }
-qute_str qute_QLocale_toString_17(void *self, void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+qute_str qute_QLocale_toString_25(void *self, void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
 	return qute_ret_str(static_cast<QLocale *>(self)->toString((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QCalendar *>(a2) : QCalendar())));
 }
 qute_str qute_QLocale_dateFormat(void *self) {
@@ -5691,6 +6021,12 @@ void * qute_QRegularExpression_match(void *self, const char *a0, ptrdiff_t a0_le
 void * qute_QRegularExpression_matchView(void *self, const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpression *>(self)->matchView(QString::fromUtf8(a0, a0_len))));
 }
+void * qute_QRegularExpression_globalMatch(void *self, const char *a0, ptrdiff_t a0_len) {
+	return static_cast<void *>(new QRegularExpressionMatchIterator(static_cast<QRegularExpression *>(self)->globalMatch(QString::fromUtf8(a0, a0_len))));
+}
+void * qute_QRegularExpression_globalMatchView(void *self, const char *a0, ptrdiff_t a0_len) {
+	return static_cast<void *>(new QRegularExpressionMatchIterator(static_cast<QRegularExpression *>(self)->globalMatchView(QString::fromUtf8(a0, a0_len))));
+}
 void qute_QRegularExpression_optimize(void *self) {
 	static_cast<QRegularExpression *>(self)->optimize();
 }
@@ -5744,8 +6080,14 @@ bool qute_QRegularExpressionMatch_hasCaptured_1(void *self, int a0) {
 qute_str qute_QRegularExpressionMatch_captured(void *self) {
 	return qute_ret_str(static_cast<QRegularExpressionMatch *>(self)->captured());
 }
+qute_str qute_QRegularExpressionMatch_capturedView(void *self) {
+	return qute_ret_str((static_cast<QRegularExpressionMatch *>(self)->capturedView()).toString());
+}
 qute_str qute_QRegularExpressionMatch_captured_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_str(static_cast<QRegularExpressionMatch *>(self)->captured(QString::fromUtf8(a0, a0_len)));
+}
+qute_str qute_QRegularExpressionMatch_capturedView_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	return qute_ret_str((static_cast<QRegularExpressionMatch *>(self)->capturedView(QString::fromUtf8(a0, a0_len))).toString());
 }
 qute_list qute_QRegularExpressionMatch_capturedTexts(void *self) {
 	return qute_ret_strlist(static_cast<QRegularExpressionMatch *>(self)->capturedTexts());
@@ -5767,6 +6109,35 @@ long long qute_QRegularExpressionMatch_capturedLength_1(void *self, const char *
 }
 long long qute_QRegularExpressionMatch_capturedEnd_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedEnd(QString::fromUtf8(a0, a0_len)));
+}
+
+// ---- QRegularExpressionMatchIterator
+void * qute_QRegularExpressionMatchIterator_new(void) {
+	return static_cast<QRegularExpressionMatchIterator *>(new QRegularExpressionMatchIterator());
+}
+void qute_QRegularExpressionMatchIterator_delete(void *self) {
+	delete static_cast<QRegularExpressionMatchIterator *>(self);
+}
+bool qute_QRegularExpressionMatchIterator_isValid(void *self) {
+	return static_cast<bool>(static_cast<QRegularExpressionMatchIterator *>(self)->isValid());
+}
+bool qute_QRegularExpressionMatchIterator_hasNext(void *self) {
+	return static_cast<bool>(static_cast<QRegularExpressionMatchIterator *>(self)->hasNext());
+}
+void * qute_QRegularExpressionMatchIterator_next(void *self) {
+	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpressionMatchIterator *>(self)->next()));
+}
+void * qute_QRegularExpressionMatchIterator_peekNext(void *self) {
+	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpressionMatchIterator *>(self)->peekNext()));
+}
+void * qute_QRegularExpressionMatchIterator_regularExpression(void *self) {
+	return static_cast<void *>(new QRegularExpression(static_cast<QRegularExpressionMatchIterator *>(self)->regularExpression()));
+}
+int64_t qute_QRegularExpressionMatchIterator_matchType(void *self) {
+	return static_cast<int64_t>(static_cast<QRegularExpressionMatchIterator *>(self)->matchType());
+}
+int64_t qute_QRegularExpressionMatchIterator_matchOptions(void *self) {
+	return static_cast<int64_t>((static_cast<QRegularExpressionMatchIterator *>(self)->matchOptions()).toInt());
 }
 
 // ---- QSettings
@@ -6271,6 +6642,44 @@ void qute_QStringListModel_setStringList(void *self, const char *a0, const ptrdi
 	static_cast<QStringListModel *>(self)->setStringList(qute_qstrlist(a0, a0_lens, a0_n));
 }
 
+// ---- QSysInfo
+void qute_QSysInfo_delete(void *self) {
+	delete static_cast<QSysInfo *>(self);
+}
+qute_str qute_QSysInfo_buildCpuArchitecture(void) {
+	return qute_ret_str(QSysInfo::buildCpuArchitecture());
+}
+qute_str qute_QSysInfo_currentCpuArchitecture(void) {
+	return qute_ret_str(QSysInfo::currentCpuArchitecture());
+}
+qute_str qute_QSysInfo_buildAbi(void) {
+	return qute_ret_str(QSysInfo::buildAbi());
+}
+qute_str qute_QSysInfo_kernelType(void) {
+	return qute_ret_str(QSysInfo::kernelType());
+}
+qute_str qute_QSysInfo_kernelVersion(void) {
+	return qute_ret_str(QSysInfo::kernelVersion());
+}
+qute_str qute_QSysInfo_productType(void) {
+	return qute_ret_str(QSysInfo::productType());
+}
+qute_str qute_QSysInfo_productVersion(void) {
+	return qute_ret_str(QSysInfo::productVersion());
+}
+qute_str qute_QSysInfo_prettyProductName(void) {
+	return qute_ret_str(QSysInfo::prettyProductName());
+}
+qute_str qute_QSysInfo_machineHostName(void) {
+	return qute_ret_str(QSysInfo::machineHostName());
+}
+qute_str qute_QSysInfo_machineUniqueId(void) {
+	return qute_ret_bytes(QSysInfo::machineUniqueId());
+}
+qute_str qute_QSysInfo_bootUniqueId(void) {
+	return qute_ret_bytes(QSysInfo::bootUniqueId());
+}
+
 // ---- QTime
 void * qute_QTime_new(void) {
 	return static_cast<QTime *>(new QTime());
@@ -6409,8 +6818,20 @@ bool qute_QTimeZone_hasDaylightTime(void *self) {
 bool qute_QTimeZone_isDaylightTime(void *self, void * a0) {
 	return static_cast<bool>(static_cast<QTimeZone *>(self)->isDaylightTime((a0 ? *static_cast<QDateTime *>(a0) : QDateTime())));
 }
+void * qute_QTimeZone_offsetData(void *self, void * a0) {
+	return static_cast<void *>(new QTimeZone::OffsetData(static_cast<QTimeZone *>(self)->offsetData((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()))));
+}
 bool qute_QTimeZone_hasTransitions(void *self) {
 	return static_cast<bool>(static_cast<QTimeZone *>(self)->hasTransitions());
+}
+void * qute_QTimeZone_nextTransition(void *self, void * a0) {
+	return static_cast<void *>(new QTimeZone::OffsetData(static_cast<QTimeZone *>(self)->nextTransition((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()))));
+}
+void * qute_QTimeZone_previousTransition(void *self, void * a0) {
+	return static_cast<void *>(new QTimeZone::OffsetData(static_cast<QTimeZone *>(self)->previousTransition((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()))));
+}
+qute_list qute_QTimeZone_transitions(void *self, void * a0, void * a1) {
+	return qute_ret_list<void *>(static_cast<QTimeZone *>(self)->transitions((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), (a1 ? *static_cast<QDateTime *>(a1) : QDateTime())), [](const auto &v) { return static_cast<void *>(new QTimeZone::OffsetData(v)); });
 }
 void * qute_QTimeZone_fromDurationAheadOfUtc(int64_t a0) {
 	return static_cast<void *>(new QTimeZone(QTimeZone::fromDurationAheadOfUtc(std::chrono::duration_cast<std::chrono::duration<long>>(std::chrono::nanoseconds(a0)))));
@@ -6456,6 +6877,44 @@ qute_list qute_QTimeZone_windowsIdToIanaIds(const char *a0, ptrdiff_t a0_len) {
 }
 qute_list qute_QTimeZone_windowsIdToIanaIds_1(const char *a0, ptrdiff_t a0_len, int64_t a1) {
 	return qute_ret_list<qute_str>(QTimeZone::windowsIdToIanaIds(QByteArray(a0, a0_len), static_cast<QLocale::Country>(a1)), [](const auto &v) { return qute_ret_bytes(v); });
+}
+
+// ---- QTimeZoneOffsetData
+void * qute_QTimeZoneOffsetData_new(void) {
+	return static_cast<QTimeZone::OffsetData *>(new QTimeZone::OffsetData());
+}
+void qute_QTimeZoneOffsetData_delete(void *self) {
+	delete static_cast<QTimeZone::OffsetData *>(self);
+}
+qute_str qute_QTimeZoneOffsetData_get_abbreviation(void *self) {
+	return qute_ret_str(static_cast<QTimeZone::OffsetData *>(self)->abbreviation);
+}
+void qute_QTimeZoneOffsetData_set_abbreviation(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QTimeZone::OffsetData *>(self)->abbreviation = QString::fromUtf8(a0, a0_len);
+}
+void * qute_QTimeZoneOffsetData_get_atUtc(void *self) {
+	return static_cast<void *>(new QDateTime(static_cast<QTimeZone::OffsetData *>(self)->atUtc));
+}
+void qute_QTimeZoneOffsetData_set_atUtc(void *self, void * a0) {
+	static_cast<QTimeZone::OffsetData *>(self)->atUtc = (a0 ? *static_cast<QDateTime *>(a0) : QDateTime());
+}
+int qute_QTimeZoneOffsetData_get_offsetFromUtc(void *self) {
+	return static_cast<int>(static_cast<QTimeZone::OffsetData *>(self)->offsetFromUtc);
+}
+void qute_QTimeZoneOffsetData_set_offsetFromUtc(void *self, int a0) {
+	static_cast<QTimeZone::OffsetData *>(self)->offsetFromUtc = static_cast<int>(a0);
+}
+int qute_QTimeZoneOffsetData_get_standardTimeOffset(void *self) {
+	return static_cast<int>(static_cast<QTimeZone::OffsetData *>(self)->standardTimeOffset);
+}
+void qute_QTimeZoneOffsetData_set_standardTimeOffset(void *self, int a0) {
+	static_cast<QTimeZone::OffsetData *>(self)->standardTimeOffset = static_cast<int>(a0);
+}
+int qute_QTimeZoneOffsetData_get_daylightTimeOffset(void *self) {
+	return static_cast<int>(static_cast<QTimeZone::OffsetData *>(self)->daylightTimeOffset);
+}
+void qute_QTimeZoneOffsetData_set_daylightTimeOffset(void *self, int a0) {
+	static_cast<QTimeZone::OffsetData *>(self)->daylightTimeOffset = static_cast<int>(a0);
 }
 
 // ---- QTimer
@@ -6766,6 +7225,12 @@ unsigned int qute_QUrlQuery_queryValueDelimiter(void *self) {
 unsigned int qute_QUrlQuery_queryPairDelimiter(void *self) {
 	return static_cast<unsigned int>((static_cast<QUrlQuery *>(self)->queryPairDelimiter()).unicode());
 }
+void qute_QUrlQuery_setQueryItems(void *self, const void *a0, const void *a0_v, ptrdiff_t a0_n) {
+	static_cast<QUrlQuery *>(self)->setQueryItems([&] { QList<std::pair<QString, QString>> m; auto kd = static_cast<qute_str const *>(a0); auto vd = static_cast<qute_str const *>(a0_v); for (ptrdiff_t i = 0; i < a0_n; i++) m.append({QString::fromUtf8(kd[i].data, kd[i].len), QString::fromUtf8(vd[i].data, vd[i].len)}); return m; }());
+}
+qute_map qute_QUrlQuery_queryItems(void *self) {
+	return qute_ret_pairs<qute_str, qute_str>(static_cast<QUrlQuery *>(self)->queryItems(), [](const auto &v) { return qute_ret_str(v); }, [](const auto &v) { return qute_ret_str(v); });
+}
 bool qute_QUrlQuery_hasQueryItem(void *self, const char *a0, ptrdiff_t a0_len) {
 	return static_cast<bool>(static_cast<QUrlQuery *>(self)->hasQueryItem(QString::fromUtf8(a0, a0_len)));
 }
@@ -6783,6 +7248,12 @@ qute_list qute_QUrlQuery_allQueryItemValues(void *self, const char *a0, ptrdiff_
 }
 void qute_QUrlQuery_removeAllQueryItems(void *self, const char *a0, ptrdiff_t a0_len) {
 	static_cast<QUrlQuery *>(self)->removeAllQueryItems(QString::fromUtf8(a0, a0_len));
+}
+unsigned int qute_QUrlQuery_defaultQueryValueDelimiter(void) {
+	return static_cast<unsigned int>(QUrlQuery::defaultQueryValueDelimiter());
+}
+unsigned int qute_QUrlQuery_defaultQueryPairDelimiter(void) {
+	return static_cast<unsigned int>(QUrlQuery::defaultQueryPairDelimiter());
 }
 
 // ---- QUuid

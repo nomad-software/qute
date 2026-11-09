@@ -113,25 +113,25 @@ func NewQTimeZoneWithOffsetSeconds(offsetSeconds int) *QTimeZone {
 	return rt.View[QTimeZone](h, p)
 }
 
-// NewQTimeZoneWithIanaId wraps the QTimeZone constructor.
+// NewQTimeZoneWithBytes wraps the QTimeZone constructor.
 //
 //	C++: QTimeZone::QTimeZone(const QByteArray & ianaId)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtimezone.html#QTimeZone
-func NewQTimeZoneWithIanaId(ianaId []byte) *QTimeZone {
-	rt.CheckThread("NewQTimeZoneWithIanaId")
+func NewQTimeZoneWithBytes(ianaId []byte) *QTimeZone {
+	rt.CheckThread("NewQTimeZoneWithBytes")
 	p := C.qute_QTimeZone_new_3((*C.char)(unsafe.Pointer(unsafe.SliceData(ianaId))), C.ptrdiff_t(len(ianaId)))
 	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 
-// NewQTimeZoneWithZoneId wraps the QTimeZone constructor.
+// NewQTimeZoneWithBytesOffsetSeconds wraps the QTimeZone constructor.
 //
 //	C++: QTimeZone::QTimeZone(const QByteArray & zoneId, int offsetSeconds, const QString & name, const QString & abbreviation, QLocale::Territory territory = …, const QString & comment = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtimezone.html#QTimeZone
-func NewQTimeZoneWithZoneId(zoneId []byte, offsetSeconds int, name string, abbreviation string) *QTimeZone {
-	rt.CheckThread("NewQTimeZoneWithZoneId")
+func NewQTimeZoneWithBytesOffsetSeconds(zoneId []byte, offsetSeconds int, name string, abbreviation string) *QTimeZone {
+	rt.CheckThread("NewQTimeZoneWithBytesOffsetSeconds")
 	p := C.qute_QTimeZone_new_4((*C.char)(unsafe.Pointer(unsafe.SliceData(zoneId))), C.ptrdiff_t(len(zoneId)), C.int(offsetSeconds), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(abbreviation))), C.ptrdiff_t(len(abbreviation)))
 	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
@@ -326,6 +326,19 @@ func (this *QTimeZone) IsDaylightTime(atDateTime *QDateTime) bool {
 	return bool(r)
 }
 
+// OffsetData wraps QTimeZone::offsetData.
+//
+//	C++: OffsetData QTimeZone::offsetData(const QDateTime & forDateTime) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#offsetData
+func (this *QTimeZone) OffsetData(forDateTime *QDateTime) *QTimeZoneOffsetData {
+	self := rt.Use(unsafe.Pointer(this), "QTimeZone.OffsetData")
+	r := C.qute_QTimeZone_offsetData(self, rt.UseArg(unsafe.Pointer(forDateTime), "QTimeZone.OffsetData"))
+	return rt.View[QTimeZoneOffsetData](rt.WrapClass(r, "QTimeZoneOffsetData", rt.TakeOwned), r)
+}
+
 // HasTransitions wraps QTimeZone::hasTransitions.
 //
 //	C++: bool QTimeZone::hasTransitions() const
@@ -335,6 +348,45 @@ func (this *QTimeZone) HasTransitions() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.HasTransitions")
 	r := C.qute_QTimeZone_hasTransitions(self)
 	return bool(r)
+}
+
+// NextTransition wraps QTimeZone::nextTransition.
+//
+//	C++: OffsetData QTimeZone::nextTransition(const QDateTime & afterDateTime) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#nextTransition
+func (this *QTimeZone) NextTransition(afterDateTime *QDateTime) *QTimeZoneOffsetData {
+	self := rt.Use(unsafe.Pointer(this), "QTimeZone.NextTransition")
+	r := C.qute_QTimeZone_nextTransition(self, rt.UseArg(unsafe.Pointer(afterDateTime), "QTimeZone.NextTransition"))
+	return rt.View[QTimeZoneOffsetData](rt.WrapClass(r, "QTimeZoneOffsetData", rt.TakeOwned), r)
+}
+
+// PreviousTransition wraps QTimeZone::previousTransition.
+//
+//	C++: OffsetData QTimeZone::previousTransition(const QDateTime & beforeDateTime) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#previousTransition
+func (this *QTimeZone) PreviousTransition(beforeDateTime *QDateTime) *QTimeZoneOffsetData {
+	self := rt.Use(unsafe.Pointer(this), "QTimeZone.PreviousTransition")
+	r := C.qute_QTimeZone_previousTransition(self, rt.UseArg(unsafe.Pointer(beforeDateTime), "QTimeZone.PreviousTransition"))
+	return rt.View[QTimeZoneOffsetData](rt.WrapClass(r, "QTimeZoneOffsetData", rt.TakeOwned), r)
+}
+
+// Transitions wraps QTimeZone::transitions.
+//
+//	C++: OffsetDataList QTimeZone::transitions(const QDateTime & fromDateTime, const QDateTime & toDateTime) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#transitions
+func (this *QTimeZone) Transitions(fromDateTime *QDateTime, toDateTime *QDateTime) []*QTimeZoneOffsetData {
+	self := rt.Use(unsafe.Pointer(this), "QTimeZone.Transitions")
+	r := C.qute_QTimeZone_transitions(self, rt.UseArg(unsafe.Pointer(fromDateTime), "QTimeZone.Transitions"), rt.UseArg(unsafe.Pointer(toDateTime), "QTimeZone.Transitions"))
+	return quteList(r, func(e unsafe.Pointer) *QTimeZoneOffsetData {
+		return rt.View[QTimeZoneOffsetData](rt.WrapClass(e, "QTimeZoneOffsetData", rt.TakeOwned), e)
+	})
 }
 
 // QTimeZoneFromDurationAheadOfUtc wraps QTimeZone::fromDurationAheadOfUtc.

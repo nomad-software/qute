@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QGraphicsRotation wraps Qt's QGraphicsRotation.
@@ -69,6 +70,29 @@ func NewQGraphicsRotation(parent qtcore.QObjectLike) *QGraphicsRotation {
 	return rt.View[QGraphicsRotation](h, p)
 }
 
+// Origin wraps QGraphicsRotation::origin.
+//
+//	C++: QVector3D QGraphicsRotation::origin() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsrotation.html#origin
+func (this *QGraphicsRotation) Origin() *qtgui.QVector3D {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Origin")
+	r := C.qute_QGraphicsRotation_origin(self)
+	return rt.View[qtgui.QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
+}
+
+// SetOrigin wraps QGraphicsRotation::setOrigin.
+//
+//	C++: void QGraphicsRotation::setOrigin(const QVector3D & point)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsrotation.html#setOrigin
+func (this *QGraphicsRotation) SetOrigin(point *qtgui.QVector3D) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetOrigin")
+	C.qute_QGraphicsRotation_setOrigin(self, rt.UseArg(unsafe.Pointer(point), "QGraphicsRotation.SetOrigin"))
+}
+
 // Angle wraps QGraphicsRotation::angle.
 //
 //	C++: qreal QGraphicsRotation::angle() const
@@ -90,14 +114,37 @@ func (this *QGraphicsRotation) SetAngle(angle float64) {
 	C.qute_QGraphicsRotation_setAngle(self, C.double(angle))
 }
 
+// Axis wraps QGraphicsRotation::axis.
+//
+//	C++: QVector3D QGraphicsRotation::axis() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsrotation.html#axis
+func (this *QGraphicsRotation) Axis() *qtgui.QVector3D {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Axis")
+	r := C.qute_QGraphicsRotation_axis(self)
+	return rt.View[qtgui.QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
+}
+
 // SetAxis wraps QGraphicsRotation::setAxis.
+//
+//	C++: void QGraphicsRotation::setAxis(const QVector3D & axis)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsrotation.html#setAxis
+func (this *QGraphicsRotation) SetAxis(axis *qtgui.QVector3D) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetAxis")
+	C.qute_QGraphicsRotation_setAxis(self, rt.UseArg(unsafe.Pointer(axis), "QGraphicsRotation.SetAxis"))
+}
+
+// SetAxisAxis wraps QGraphicsRotation::setAxis.
 //
 //	C++: void QGraphicsRotation::setAxis(Qt::Axis axis)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsrotation.html#setAxis
-func (this *QGraphicsRotation) SetAxis(axis qtcore.Axis) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetAxis")
-	C.qute_QGraphicsRotation_setAxis(self, C.int64_t(axis))
+func (this *QGraphicsRotation) SetAxisAxis(axis qtcore.Axis) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetAxisAxis")
+	C.qute_QGraphicsRotation_setAxis_1(self, C.int64_t(axis))
 }
 
 // EmitOriginChanged wraps emitting the originChanged signal.

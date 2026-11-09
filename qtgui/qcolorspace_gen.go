@@ -181,6 +181,18 @@ func NewQColorSpaceWithPointFPointF(whitePoint qtcore.QPointF, redPoint qtcore.Q
 	return rt.View[QColorSpace](h, p)
 }
 
+// NewQColorSpaceWithColorSpacePrimaryPoints wraps the QColorSpace constructor.
+//
+//	C++: QColorSpace::QColorSpace(const PrimaryPoints & primaryPoints, TransferFunction transferFunction, float gamma = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
+func NewQColorSpaceWithColorSpacePrimaryPoints(primaryPoints *QColorSpacePrimaryPoints, transferFunction QColorSpaceTransferFunction) *QColorSpace {
+	rt.CheckThread("NewQColorSpaceWithColorSpacePrimaryPoints")
+	p := C.qute_QColorSpace_new_8(rt.UseArg(unsafe.Pointer(primaryPoints), "NewQColorSpaceWithColorSpacePrimaryPoints"), C.int64_t(transferFunction))
+	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	return rt.View[QColorSpace](h, p)
+}
+
 // NewQColorSpaceWithPointFPointFPointF wraps the QColorSpace constructor.
 //
 //	C++: QColorSpace::QColorSpace(const QPointF & whitePoint, const QPointF & redPoint, const QPointF & greenPoint, const QPointF & bluePoint, const QList<uint16_t> & transferFunctionTable)
@@ -192,7 +204,7 @@ func NewQColorSpaceWithPointFPointFPointF(whitePoint qtcore.QPointF, redPoint qt
 	for i := range transferFunctionTable {
 		transferFunctionTableC[i] = C.ushort(transferFunctionTable[i])
 	}
-	p := C.qute_QColorSpace_new_8(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
+	p := C.qute_QColorSpace_new_9(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
 	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
@@ -216,7 +228,7 @@ func NewQColorSpaceWithPointFPointFPointFPointF(whitePoint qtcore.QPointF, redPo
 	for i := range blueTransferFunctionTable {
 		blueTransferFunctionTableC[i] = C.ushort(blueTransferFunctionTable[i])
 	}
-	p := C.qute_QColorSpace_new_9(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(redTransferFunctionTableC)), C.ptrdiff_t(len(redTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(greenTransferFunctionTableC)), C.ptrdiff_t(len(greenTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(blueTransferFunctionTableC)), C.ptrdiff_t(len(blueTransferFunctionTable)))
+	p := C.qute_QColorSpace_new_10(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(redTransferFunctionTableC)), C.ptrdiff_t(len(redTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(greenTransferFunctionTableC)), C.ptrdiff_t(len(greenTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(blueTransferFunctionTableC)), C.ptrdiff_t(len(blueTransferFunctionTable)))
 	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
@@ -415,6 +427,29 @@ func (this *QColorSpace) WhitePoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.WhitePoint")
 	r := C.qute_QColorSpace_whitePoint(self)
 	return goQPointF(r)
+}
+
+// SetPrimaryPoints wraps QColorSpace::setPrimaryPoints.
+//
+//	C++: void QColorSpace::setPrimaryPoints(const PrimaryPoints & primaryPoints)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#setPrimaryPoints
+func (this *QColorSpace) SetPrimaryPoints(primaryPoints *QColorSpacePrimaryPoints) {
+	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetPrimaryPoints")
+	C.qute_QColorSpace_setPrimaryPoints(self, rt.UseArg(unsafe.Pointer(primaryPoints), "QColorSpace.SetPrimaryPoints"))
+}
+
+// PrimaryPoints wraps QColorSpace::primaryPoints.
+//
+//	C++: PrimaryPoints QColorSpace::primaryPoints() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#primaryPoints
+func (this *QColorSpace) PrimaryPoints() *QColorSpacePrimaryPoints {
+	self := rt.Use(unsafe.Pointer(this), "QColorSpace.PrimaryPoints")
+	r := C.qute_QColorSpace_primaryPoints(self)
+	return rt.View[QColorSpacePrimaryPoints](rt.WrapClass(r, "QColorSpacePrimaryPoints", rt.TakeOwned), r)
 }
 
 // TransformModel wraps QColorSpace::transformModel.

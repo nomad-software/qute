@@ -13,6 +13,7 @@
 #include <QBitmap>
 #include <QBrush>
 #include <QCalendar>
+#include <QChar>
 #include <QChildEvent>
 #include <QClipboard>
 #include <QCloseEvent>
@@ -39,6 +40,7 @@
 #include <QEventPoint>
 #include <QFile>
 #include <QFileDevice>
+#include <QFileInfo>
 #include <QFocusEvent>
 #include <QFont>
 #include <QFontDatabase>
@@ -54,6 +56,7 @@
 #include <QIODeviceBase>
 #include <QIcon>
 #include <QImage>
+#include <QImageIOHandler>
 #include <QImageReader>
 #include <QInputDevice>
 #include <QInputEvent>
@@ -73,6 +76,7 @@
 #include <QLineF>
 #include <QLinearGradient>
 #include <QLocale>
+#include <QMatrix4x4>
 #include <QMetaType>
 #include <QMimeData>
 #include <QModelIndex>
@@ -80,8 +84,14 @@
 #include <QMoveEvent>
 #include <QMovie>
 #include <QObject>
+#include <QOffscreenSurface>
+#include <QOpenGLContext>
+#include <QOpenGLContextGroup>
+#include <QOpenGLExtraFunctions>
+#include <QOpenGLFunctions>
 #include <QPagedPaintDevice>
 #include <QPaintDevice>
+#include <QPaintDeviceWindow>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -96,11 +106,14 @@
 #include <QPointerEvent>
 #include <QPointingDevice>
 #include <QPointingDeviceUniqueId>
+#include <QQuaternion>
 #include <QRadialGradient>
 #include <QRegion>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QRegularExpressionMatchIterator>
 #include <QResizeEvent>
+#include <QRgba64>
 #include <QScreen>
 #include <QSessionManager>
 #include <QSettings>
@@ -114,8 +127,11 @@
 #include <QStringListModel>
 #include <QStyleHints>
 #include <QSurface>
+#include <QSurfaceFormat>
+#include <QSysInfo>
 #include <QTextBlock>
 #include <QTextBlockFormat>
+#include <QTextBlockGroup>
 #include <QTextCharFormat>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -123,9 +139,17 @@
 #include <QTextFormat>
 #include <QTextFrame>
 #include <QTextFrameFormat>
+#include <QTextImageFormat>
 #include <QTextItem>
+#include <QTextLength>
+#include <QTextList>
+#include <QTextListFormat>
 #include <QTextObject>
 #include <QTextOption>
+#include <QTextTable>
+#include <QTextTableCell>
+#include <QTextTableCellFormat>
+#include <QTextTableFormat>
 #include <QTime>
 #include <QTimeZone>
 #include <QTimer>
@@ -138,6 +162,8 @@
 #include <QValidator>
 #include <QVariant>
 #include <QVector2D>
+#include <QVector3D>
+#include <QVector4D>
 #include <QWheelEvent>
 #include <QWindow>
 
@@ -204,7 +230,12 @@ const char *qute_qtgui_check_layout(void) {
 	{ QMouseEvent *d = reinterpret_cast<QMouseEvent *>(uintptr_t(0x10000)); QSinglePointEvent *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QMouseEvent"; }
 	{ QMoveEvent *d = reinterpret_cast<QMoveEvent *>(uintptr_t(0x10000)); QEvent *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QMoveEvent"; }
 	{ QMovie *d = reinterpret_cast<QMovie *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QMovie"; }
+	{ QOffscreenSurface *d = reinterpret_cast<QOffscreenSurface *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QOffscreenSurface"; }
+	{ QOpenGLContext *d = reinterpret_cast<QOpenGLContext *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QOpenGLContext"; }
+	{ QOpenGLContextGroup *d = reinterpret_cast<QOpenGLContextGroup *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QOpenGLContextGroup"; }
+	{ QOpenGLExtraFunctions *d = reinterpret_cast<QOpenGLExtraFunctions *>(uintptr_t(0x10000)); QOpenGLFunctions *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QOpenGLExtraFunctions"; }
 	{ QPagedPaintDevice *d = reinterpret_cast<QPagedPaintDevice *>(uintptr_t(0x10000)); QPaintDevice *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QPagedPaintDevice"; }
+	{ QPaintDeviceWindow *d = reinterpret_cast<QPaintDeviceWindow *>(uintptr_t(0x10000)); QWindow *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QPaintDeviceWindow"; }
 	{ QPaintEvent *d = reinterpret_cast<QPaintEvent *>(uintptr_t(0x10000)); QEvent *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QPaintEvent"; }
 	{ QPdfWriter *d = reinterpret_cast<QPdfWriter *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QPdfWriter"; }
 	{ QPicture *d = reinterpret_cast<QPicture *>(uintptr_t(0x10000)); QPaintDevice *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QPicture"; }
@@ -221,11 +252,18 @@ const char *qute_qtgui_check_layout(void) {
 	{ QStandardItemModel *d = reinterpret_cast<QStandardItemModel *>(uintptr_t(0x10000)); QAbstractItemModel *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QStandardItemModel"; }
 	{ QStyleHints *d = reinterpret_cast<QStyleHints *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QStyleHints"; }
 	{ QTextBlockFormat *d = reinterpret_cast<QTextBlockFormat *>(uintptr_t(0x10000)); QTextFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextBlockFormat"; }
+	{ QTextBlockGroup *d = reinterpret_cast<QTextBlockGroup *>(uintptr_t(0x10000)); QTextObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextBlockGroup"; }
 	{ QTextCharFormat *d = reinterpret_cast<QTextCharFormat *>(uintptr_t(0x10000)); QTextFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextCharFormat"; }
 	{ QTextDocument *d = reinterpret_cast<QTextDocument *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextDocument"; }
 	{ QTextFrame *d = reinterpret_cast<QTextFrame *>(uintptr_t(0x10000)); QTextObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextFrame"; }
 	{ QTextFrameFormat *d = reinterpret_cast<QTextFrameFormat *>(uintptr_t(0x10000)); QTextFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextFrameFormat"; }
+	{ QTextImageFormat *d = reinterpret_cast<QTextImageFormat *>(uintptr_t(0x10000)); QTextCharFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextImageFormat"; }
+	{ QTextList *d = reinterpret_cast<QTextList *>(uintptr_t(0x10000)); QTextBlockGroup *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextList"; }
+	{ QTextListFormat *d = reinterpret_cast<QTextListFormat *>(uintptr_t(0x10000)); QTextFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextListFormat"; }
 	{ QTextObject *d = reinterpret_cast<QTextObject *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextObject"; }
+	{ QTextTable *d = reinterpret_cast<QTextTable *>(uintptr_t(0x10000)); QTextFrame *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextTable"; }
+	{ QTextTableCellFormat *d = reinterpret_cast<QTextTableCellFormat *>(uintptr_t(0x10000)); QTextCharFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextTableCellFormat"; }
+	{ QTextTableFormat *d = reinterpret_cast<QTextTableFormat *>(uintptr_t(0x10000)); QTextFrameFormat *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QTextTableFormat"; }
 	{ QValidator *d = reinterpret_cast<QValidator *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QValidator"; }
 	{ QWheelEvent *d = reinterpret_cast<QWheelEvent *>(uintptr_t(0x10000)); QSinglePointEvent *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QWheelEvent"; }
 	{ QWindow *d = reinterpret_cast<QWindow *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QWindow"; }
@@ -241,6 +279,12 @@ void qute_QAbstractFileIconProvider_delete(void *self) {
 }
 void * qute_QAbstractFileIconProvider_icon(void *self, int64_t a0) {
 	return static_cast<void *>(new QIcon(static_cast<QAbstractFileIconProvider *>(self)->icon(static_cast<QAbstractFileIconProvider::IconType>(a0))));
+}
+void * qute_QAbstractFileIconProvider_icon_1(void *self, void * a0) {
+	return static_cast<void *>(new QIcon(static_cast<QAbstractFileIconProvider *>(self)->icon((a0 ? *static_cast<QFileInfo *>(a0) : QFileInfo()))));
+}
+qute_str qute_QAbstractFileIconProvider_type(void *self, void * a0) {
+	return qute_ret_str(static_cast<QAbstractFileIconProvider *>(self)->type((a0 ? *static_cast<QFileInfo *>(a0) : QFileInfo())));
 }
 void qute_QAbstractFileIconProvider_setOptions(void *self, int64_t a0) {
 	static_cast<QAbstractFileIconProvider *>(self)->setOptions(QFlags<QAbstractFileIconProvider::Option>::fromInt(static_cast<QFlags<QAbstractFileIconProvider::Option>::Int>(a0)));
@@ -753,10 +797,13 @@ void * qute_QColorSpace_new_6(int64_t a0, const void *a1, ptrdiff_t a1_n) {
 void * qute_QColorSpace_new_7(qute_pointf a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, int64_t a4) {
 	return static_cast<QColorSpace *>(new QColorSpace(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), static_cast<QColorSpace::TransferFunction>(a4)));
 }
-void * qute_QColorSpace_new_8(qute_pointf a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, const void *a4, ptrdiff_t a4_n) {
+void * qute_QColorSpace_new_8(void * a0, int64_t a1) {
+	return static_cast<QColorSpace *>(new QColorSpace((a0 ? *static_cast<QColorSpace::PrimaryPoints *>(a0) : QColorSpace::PrimaryPoints()), static_cast<QColorSpace::TransferFunction>(a1)));
+}
+void * qute_QColorSpace_new_9(qute_pointf a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, const void *a4, ptrdiff_t a4_n) {
 	return static_cast<QColorSpace *>(new QColorSpace(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), [&] { QList<unsigned short> l; auto d = static_cast<unsigned short const *>(a4); l.reserve(a4_n); for (ptrdiff_t i = 0; i < a4_n; i++) l.append(static_cast<unsigned short>(d[i])); return l; }()));
 }
-void * qute_QColorSpace_new_9(qute_pointf a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, const void *a4, ptrdiff_t a4_n, const void *a5, ptrdiff_t a5_n, const void *a6, ptrdiff_t a6_n) {
+void * qute_QColorSpace_new_10(qute_pointf a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, const void *a4, ptrdiff_t a4_n, const void *a5, ptrdiff_t a5_n, const void *a6, ptrdiff_t a6_n) {
 	return static_cast<QColorSpace *>(new QColorSpace(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), [&] { QList<unsigned short> l; auto d = static_cast<unsigned short const *>(a4); l.reserve(a4_n); for (ptrdiff_t i = 0; i < a4_n; i++) l.append(static_cast<unsigned short>(d[i])); return l; }(), [&] { QList<unsigned short> l; auto d = static_cast<unsigned short const *>(a5); l.reserve(a5_n); for (ptrdiff_t i = 0; i < a5_n; i++) l.append(static_cast<unsigned short>(d[i])); return l; }(), [&] { QList<unsigned short> l; auto d = static_cast<unsigned short const *>(a6); l.reserve(a6_n); for (ptrdiff_t i = 0; i < a6_n; i++) l.append(static_cast<unsigned short>(d[i])); return l; }()));
 }
 void qute_QColorSpace_delete(void *self) {
@@ -807,6 +854,12 @@ void qute_QColorSpace_setWhitePoint(void *self, qute_pointf a0) {
 qute_pointf qute_QColorSpace_whitePoint(void *self) {
 	return qute_from_QPointF(static_cast<QColorSpace *>(self)->whitePoint());
 }
+void qute_QColorSpace_setPrimaryPoints(void *self, void * a0) {
+	static_cast<QColorSpace *>(self)->setPrimaryPoints((a0 ? *static_cast<QColorSpace::PrimaryPoints *>(a0) : QColorSpace::PrimaryPoints()));
+}
+void * qute_QColorSpace_primaryPoints(void *self) {
+	return static_cast<void *>(new QColorSpace::PrimaryPoints(static_cast<QColorSpace *>(self)->primaryPoints()));
+}
 int64_t qute_QColorSpace_transformModel(void *self) {
 	return static_cast<int64_t>(static_cast<QColorSpace *>(self)->transformModel());
 }
@@ -829,6 +882,44 @@ void * qute_QColorSpace_fromIccProfile(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QColorSpace(QColorSpace::fromIccProfile(QByteArray(a0, a0_len))));
 }
 
+// ---- QColorSpacePrimaryPoints
+void * qute_QColorSpacePrimaryPoints_new(void) {
+	return static_cast<QColorSpace::PrimaryPoints *>(new QColorSpace::PrimaryPoints());
+}
+void qute_QColorSpacePrimaryPoints_delete(void *self) {
+	delete static_cast<QColorSpace::PrimaryPoints *>(self);
+}
+bool qute_QColorSpacePrimaryPoints_isValid(void *self) {
+	return static_cast<bool>(static_cast<QColorSpace::PrimaryPoints *>(self)->isValid());
+}
+qute_pointf qute_QColorSpacePrimaryPoints_get_whitePoint(void *self) {
+	return qute_from_QPointF(static_cast<QColorSpace::PrimaryPoints *>(self)->whitePoint);
+}
+void qute_QColorSpacePrimaryPoints_set_whitePoint(void *self, qute_pointf a0) {
+	static_cast<QColorSpace::PrimaryPoints *>(self)->whitePoint = qute_to_QPointF(a0);
+}
+qute_pointf qute_QColorSpacePrimaryPoints_get_redPoint(void *self) {
+	return qute_from_QPointF(static_cast<QColorSpace::PrimaryPoints *>(self)->redPoint);
+}
+void qute_QColorSpacePrimaryPoints_set_redPoint(void *self, qute_pointf a0) {
+	static_cast<QColorSpace::PrimaryPoints *>(self)->redPoint = qute_to_QPointF(a0);
+}
+qute_pointf qute_QColorSpacePrimaryPoints_get_greenPoint(void *self) {
+	return qute_from_QPointF(static_cast<QColorSpace::PrimaryPoints *>(self)->greenPoint);
+}
+void qute_QColorSpacePrimaryPoints_set_greenPoint(void *self, qute_pointf a0) {
+	static_cast<QColorSpace::PrimaryPoints *>(self)->greenPoint = qute_to_QPointF(a0);
+}
+qute_pointf qute_QColorSpacePrimaryPoints_get_bluePoint(void *self) {
+	return qute_from_QPointF(static_cast<QColorSpace::PrimaryPoints *>(self)->bluePoint);
+}
+void qute_QColorSpacePrimaryPoints_set_bluePoint(void *self, qute_pointf a0) {
+	static_cast<QColorSpace::PrimaryPoints *>(self)->bluePoint = qute_to_QPointF(a0);
+}
+void * qute_QColorSpacePrimaryPoints_fromPrimaries(int64_t a0) {
+	return static_cast<void *>(new QColorSpace::PrimaryPoints(QColorSpace::PrimaryPoints::fromPrimaries(static_cast<QColorSpace::Primaries>(a0))));
+}
+
 // ---- QColorTransform
 void * qute_QColorTransform_new(void) {
 	return static_cast<QColorTransform *>(new QColorTransform());
@@ -842,7 +933,10 @@ bool qute_QColorTransform_isIdentity(void *self) {
 unsigned int qute_QColorTransform_map(void *self, unsigned int a0) {
 	return static_cast<unsigned int>(static_cast<QColorTransform *>(self)->map(static_cast<unsigned int>(a0)));
 }
-qute_color qute_QColorTransform_map_1(void *self, qute_color a0) {
+void * qute_QColorTransform_map_1(void *self, void * a0) {
+	return static_cast<void *>(new QRgba64(static_cast<QColorTransform *>(self)->map((a0 ? *static_cast<QRgba64 *>(a0) : QRgba64()))));
+}
+qute_color qute_QColorTransform_map_2(void *self, qute_color a0) {
 	return qute_from_QColor(static_cast<QColorTransform *>(self)->map(qute_to_QColor(a0)));
 }
 
@@ -1532,6 +1626,18 @@ bool qute_QFontDatabase_removeApplicationFont(int a0) {
 bool qute_QFontDatabase_removeAllApplicationFonts(void) {
 	return static_cast<bool>(QFontDatabase::removeAllApplicationFonts());
 }
+void qute_QFontDatabase_addApplicationFallbackFontFamily(int64_t a0, const char *a1, ptrdiff_t a1_len) {
+	QFontDatabase::addApplicationFallbackFontFamily(static_cast<QChar::Script>(a0), QString::fromUtf8(a1, a1_len));
+}
+bool qute_QFontDatabase_removeApplicationFallbackFontFamily(int64_t a0, const char *a1, ptrdiff_t a1_len) {
+	return static_cast<bool>(QFontDatabase::removeApplicationFallbackFontFamily(static_cast<QChar::Script>(a0), QString::fromUtf8(a1, a1_len)));
+}
+void qute_QFontDatabase_setApplicationFallbackFontFamilies(int64_t a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n) {
+	QFontDatabase::setApplicationFallbackFontFamilies(static_cast<QChar::Script>(a0), qute_qstrlist(a1, a1_lens, a1_n));
+}
+qute_list qute_QFontDatabase_applicationFallbackFontFamilies(int64_t a0) {
+	return qute_ret_strlist(QFontDatabase::applicationFallbackFontFamilies(static_cast<QChar::Script>(a0)));
+}
 void qute_QFontDatabase_addApplicationEmojiFontFamily(const char *a0, ptrdiff_t a0_len) {
 	QFontDatabase::addApplicationEmojiFontFamily(QString::fromUtf8(a0, a0_len));
 }
@@ -1803,6 +1909,12 @@ int64_t qute_QGradient_spread(void *self) {
 }
 void qute_QGradient_setColorAt(void *self, double a0, qute_color a1) {
 	static_cast<QGradient *>(self)->setColorAt(static_cast<double>(a0), qute_to_QColor(a1));
+}
+void qute_QGradient_setStops(void *self, const void *a0, const void *a0_v, ptrdiff_t a0_n) {
+	static_cast<QGradient *>(self)->setStops([&] { QList<std::pair<double, QColor>> m; auto kd = static_cast<double const *>(a0); auto vd = static_cast<qute_color const *>(a0_v); for (ptrdiff_t i = 0; i < a0_n; i++) m.append({static_cast<double>(kd[i]), qute_to_QColor(vd[i])}); return m; }());
+}
+qute_map qute_QGradient_stops(void *self) {
+	return qute_ret_pairs<double, qute_color>(static_cast<QGradient *>(self)->stops(), [](const auto &v) { return static_cast<double>(v); }, [](const auto &v) { return qute_from_QColor(v); });
 }
 int64_t qute_QGradient_coordinateMode(void *self) {
 	return static_cast<int64_t>(static_cast<QGradient *>(self)->coordinateMode());
@@ -2216,10 +2328,7 @@ void * qute_QImage_new_3(unsigned char *a0_out, int a1, int a2, long long a3, in
 void * qute_QImage_new_4(void * a0, int a1, int a2, long long a3, int64_t a4) {
 	return static_cast<QImage *>(new QImage((const unsigned char *)(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<long long>(a3), static_cast<QImage::Format>(a4)));
 }
-void * qute_QImage_new_5(const void * a0) {
-	return static_cast<QImage *>(new QImage(static_cast<const char *const *>(a0)));
-}
-void * qute_QImage_new_6(const char *a0, ptrdiff_t a0_len) {
+void * qute_QImage_new_5(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<QImage *>(new QImage(QString::fromUtf8(a0, a0_len)));
 }
 void qute_QImage_delete(void *self) {
@@ -2460,6 +2569,8 @@ int64_t qute_QImage_toImageFormat(void * a0) {
 	return static_cast<int64_t>(QImage::toImageFormat((a0 ? *static_cast<QPixelFormat *>(a0) : QPixelFormat())));
 }
 
+// ---- QImageIOHandler
+
 // ---- QImageReader
 void * qute_QImageReader_new(void) {
 	return static_cast<QImageReader *>(new QImageReader());
@@ -2551,6 +2662,9 @@ qute_color qute_QImageReader_backgroundColor(void *self) {
 bool qute_QImageReader_supportsAnimation(void *self) {
 	return static_cast<bool>(static_cast<QImageReader *>(self)->supportsAnimation());
 }
+int64_t qute_QImageReader_transformation(void *self) {
+	return static_cast<int64_t>((static_cast<QImageReader *>(self)->transformation()).toInt());
+}
 void qute_QImageReader_setAutoTransform(void *self, bool a0) {
 	static_cast<QImageReader *>(self)->setAutoTransform(static_cast<bool>(a0));
 }
@@ -2598,6 +2712,9 @@ int64_t qute_QImageReader_error(void *self) {
 }
 qute_str qute_QImageReader_errorString(void *self) {
 	return qute_ret_str(static_cast<QImageReader *>(self)->errorString());
+}
+bool qute_QImageReader_supportsOption(void *self, int64_t a0) {
+	return static_cast<bool>(static_cast<QImageReader *>(self)->supportsOption(static_cast<QImageIOHandler::ImageOption>(a0)));
 }
 qute_str qute_QImageReader_imageFormat_1(const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_bytes(QImageReader::imageFormat(QString::fromUtf8(a0, a0_len)));
@@ -2977,6 +3094,166 @@ void qute_QLinearGradient_setFinalStop(void *self, qute_pointf a0) {
 	static_cast<QLinearGradient *>(self)->setFinalStop(qute_to_QPointF(a0));
 }
 
+// ---- QMatrix4x4
+void * qute_QMatrix4x4_new(void) {
+	return static_cast<QMatrix4x4 *>(new QMatrix4x4());
+}
+void * qute_QMatrix4x4_new_1(int64_t a0) {
+	return static_cast<QMatrix4x4 *>(new QMatrix4x4(static_cast<Qt::Initialization>(a0)));
+}
+void * qute_QMatrix4x4_new_2(void * a0) {
+	return static_cast<QMatrix4x4 *>(new QMatrix4x4((const float *)(a0)));
+}
+void * qute_QMatrix4x4_new_3(float a0, float a1, float a2, float a3, float a4, float a5, float a6, float a7, float a8, float a9, float a10, float a11, float a12, float a13, float a14, float a15) {
+	return static_cast<QMatrix4x4 *>(new QMatrix4x4(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a5), static_cast<float>(a6), static_cast<float>(a7), static_cast<float>(a8), static_cast<float>(a9), static_cast<float>(a10), static_cast<float>(a11), static_cast<float>(a12), static_cast<float>(a13), static_cast<float>(a14), static_cast<float>(a15)));
+}
+void * qute_QMatrix4x4_new_4(void * a0, int a1, int a2) {
+	return static_cast<QMatrix4x4 *>(new QMatrix4x4((const float *)(a0), static_cast<int>(a1), static_cast<int>(a2)));
+}
+void * qute_QMatrix4x4_new_5(void * a0) {
+	return static_cast<QMatrix4x4 *>(new QMatrix4x4((a0 ? *static_cast<QTransform *>(a0) : QTransform())));
+}
+void qute_QMatrix4x4_delete(void *self) {
+	delete static_cast<QMatrix4x4 *>(self);
+}
+void * qute_QMatrix4x4_column(void *self, int a0) {
+	return static_cast<void *>(new QVector4D(static_cast<QMatrix4x4 *>(self)->column(static_cast<int>(a0))));
+}
+void qute_QMatrix4x4_setColumn(void *self, int a0, void * a1) {
+	static_cast<QMatrix4x4 *>(self)->setColumn(static_cast<int>(a0), (a1 ? *static_cast<QVector4D *>(a1) : QVector4D()));
+}
+void * qute_QMatrix4x4_row(void *self, int a0) {
+	return static_cast<void *>(new QVector4D(static_cast<QMatrix4x4 *>(self)->row(static_cast<int>(a0))));
+}
+void qute_QMatrix4x4_setRow(void *self, int a0, void * a1) {
+	static_cast<QMatrix4x4 *>(self)->setRow(static_cast<int>(a0), (a1 ? *static_cast<QVector4D *>(a1) : QVector4D()));
+}
+bool qute_QMatrix4x4_isAffine(void *self) {
+	return static_cast<bool>(static_cast<QMatrix4x4 *>(self)->isAffine());
+}
+bool qute_QMatrix4x4_isIdentity(void *self) {
+	return static_cast<bool>(static_cast<QMatrix4x4 *>(self)->isIdentity());
+}
+void qute_QMatrix4x4_setToIdentity(void *self) {
+	static_cast<QMatrix4x4 *>(self)->setToIdentity();
+}
+void qute_QMatrix4x4_fill(void *self, float a0) {
+	static_cast<QMatrix4x4 *>(self)->fill(static_cast<float>(a0));
+}
+double qute_QMatrix4x4_determinant(void *self) {
+	return static_cast<double>(static_cast<QMatrix4x4 *>(self)->determinant());
+}
+void * qute_QMatrix4x4_inverted(void *self) {
+	return static_cast<void *>(new QMatrix4x4(static_cast<QMatrix4x4 *>(self)->inverted()));
+}
+void * qute_QMatrix4x4_transposed(void *self) {
+	return static_cast<void *>(new QMatrix4x4(static_cast<QMatrix4x4 *>(self)->transposed()));
+}
+void qute_QMatrix4x4_scale(void *self, void * a0) {
+	static_cast<QMatrix4x4 *>(self)->scale((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
+}
+void qute_QMatrix4x4_translate(void *self, void * a0) {
+	static_cast<QMatrix4x4 *>(self)->translate((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
+}
+void qute_QMatrix4x4_rotate(void *self, float a0, void * a1) {
+	static_cast<QMatrix4x4 *>(self)->rotate(static_cast<float>(a0), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()));
+}
+void qute_QMatrix4x4_scale_1(void *self, float a0, float a1) {
+	static_cast<QMatrix4x4 *>(self)->scale(static_cast<float>(a0), static_cast<float>(a1));
+}
+void qute_QMatrix4x4_scale_2(void *self, float a0, float a1, float a2) {
+	static_cast<QMatrix4x4 *>(self)->scale(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2));
+}
+void qute_QMatrix4x4_scale_3(void *self, float a0) {
+	static_cast<QMatrix4x4 *>(self)->scale(static_cast<float>(a0));
+}
+void qute_QMatrix4x4_translate_1(void *self, float a0, float a1) {
+	static_cast<QMatrix4x4 *>(self)->translate(static_cast<float>(a0), static_cast<float>(a1));
+}
+void qute_QMatrix4x4_translate_2(void *self, float a0, float a1, float a2) {
+	static_cast<QMatrix4x4 *>(self)->translate(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2));
+}
+void qute_QMatrix4x4_rotate_1(void *self, float a0, float a1, float a2) {
+	static_cast<QMatrix4x4 *>(self)->rotate(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2));
+}
+void qute_QMatrix4x4_rotate_2(void *self, void * a0) {
+	static_cast<QMatrix4x4 *>(self)->rotate((a0 ? *static_cast<QQuaternion *>(a0) : QQuaternion()));
+}
+void qute_QMatrix4x4_ortho(void *self, qute_rect a0) {
+	static_cast<QMatrix4x4 *>(self)->ortho(qute_to_QRect(a0));
+}
+void qute_QMatrix4x4_ortho_1(void *self, qute_rectf a0) {
+	static_cast<QMatrix4x4 *>(self)->ortho(qute_to_QRectF(a0));
+}
+void qute_QMatrix4x4_ortho_2(void *self, float a0, float a1, float a2, float a3, float a4, float a5) {
+	static_cast<QMatrix4x4 *>(self)->ortho(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a5));
+}
+void qute_QMatrix4x4_frustum(void *self, float a0, float a1, float a2, float a3, float a4, float a5) {
+	static_cast<QMatrix4x4 *>(self)->frustum(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a5));
+}
+void qute_QMatrix4x4_perspective(void *self, float a0, float a1, float a2, float a3) {
+	static_cast<QMatrix4x4 *>(self)->perspective(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+void qute_QMatrix4x4_lookAt(void *self, void * a0, void * a1, void * a2) {
+	static_cast<QMatrix4x4 *>(self)->lookAt((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()), (a2 ? *static_cast<QVector3D *>(a2) : QVector3D()));
+}
+void qute_QMatrix4x4_viewport(void *self, qute_rectf a0) {
+	static_cast<QMatrix4x4 *>(self)->viewport(qute_to_QRectF(a0));
+}
+void qute_QMatrix4x4_flipCoordinates(void *self) {
+	static_cast<QMatrix4x4 *>(self)->flipCoordinates();
+}
+void qute_QMatrix4x4_copyDataTo(void *self, float *a0_out) {
+	float t0{};
+	static_cast<QMatrix4x4 *>(self)->copyDataTo(&t0);
+	*a0_out = static_cast<float>(t0);
+}
+void * qute_QMatrix4x4_toTransform(void *self) {
+	return static_cast<void *>(new QTransform(static_cast<QMatrix4x4 *>(self)->toTransform()));
+}
+void * qute_QMatrix4x4_toTransform_1(void *self, float a0) {
+	return static_cast<void *>(new QTransform(static_cast<QMatrix4x4 *>(self)->toTransform(static_cast<float>(a0))));
+}
+qute_point qute_QMatrix4x4_map(void *self, qute_point a0) {
+	return qute_from_QPoint(static_cast<QMatrix4x4 *>(self)->map(qute_to_QPoint(a0)));
+}
+qute_pointf qute_QMatrix4x4_map_1(void *self, qute_pointf a0) {
+	return qute_from_QPointF(static_cast<QMatrix4x4 *>(self)->map(qute_to_QPointF(a0)));
+}
+void * qute_QMatrix4x4_map_2(void *self, void * a0) {
+	return static_cast<void *>(new QVector3D(static_cast<QMatrix4x4 *>(self)->map((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()))));
+}
+void * qute_QMatrix4x4_mapVector(void *self, void * a0) {
+	return static_cast<void *>(new QVector3D(static_cast<QMatrix4x4 *>(self)->mapVector((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()))));
+}
+void * qute_QMatrix4x4_map_3(void *self, void * a0) {
+	return static_cast<void *>(new QVector4D(static_cast<QMatrix4x4 *>(self)->map((a0 ? *static_cast<QVector4D *>(a0) : QVector4D()))));
+}
+qute_rect qute_QMatrix4x4_mapRect(void *self, qute_rect a0) {
+	return qute_from_QRect(static_cast<QMatrix4x4 *>(self)->mapRect(qute_to_QRect(a0)));
+}
+qute_rectf qute_QMatrix4x4_mapRect_1(void *self, qute_rectf a0) {
+	return qute_from_QRectF(static_cast<QMatrix4x4 *>(self)->mapRect(qute_to_QRectF(a0)));
+}
+void * qute_QMatrix4x4_data(void *self) {
+	return (void *)(static_cast<QMatrix4x4 *>(self)->data());
+}
+void * qute_QMatrix4x4_constData(void *self) {
+	return (void *)(static_cast<QMatrix4x4 *>(self)->constData());
+}
+void qute_QMatrix4x4_optimize(void *self) {
+	static_cast<QMatrix4x4 *>(self)->optimize();
+}
+void qute_QMatrix4x4_projectedRotate(void *self, float a0, float a1, float a2, float a3, float a4) {
+	static_cast<QMatrix4x4 *>(self)->projectedRotate(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4));
+}
+void qute_QMatrix4x4_projectedRotate_1(void *self, float a0, float a1, float a2, float a3) {
+	static_cast<QMatrix4x4 *>(self)->projectedRotate(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+int64_t qute_QMatrix4x4_flags(void *self) {
+	return static_cast<int64_t>((static_cast<QMatrix4x4 *>(self)->flags()).toInt());
+}
+
 // ---- QMouseEvent
 void qute_QMouseEvent_delete(void *self) {
 	delete static_cast<QMouseEvent *>(self);
@@ -3165,12 +3442,1265 @@ void * qute_QMovie_frameChanged(void *self, uintptr_t id) {
 	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::frameChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
 }
 
+// ---- QOffscreenSurface
+void * qute_QOffscreenSurface_new(void * a0, void * a1) {
+	return static_cast<QOffscreenSurface *>(new QOffscreenSurface(static_cast<QScreen *>(a0), static_cast<QObject *>(a1)));
+}
+void * qute_QOffscreenSurface_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QOffscreenSurface *>(static_cast<QObject *>(obj)));
+}
+void * qute_QOffscreenSurface_as_QSurface(void *self) {
+	return static_cast<void *>(static_cast<QSurface *>(static_cast<QOffscreenSurface *>(self)));
+}
+int64_t qute_QOffscreenSurface_surfaceType(void *self) {
+	return static_cast<int64_t>(static_cast<QOffscreenSurface *>(self)->surfaceType());
+}
+void qute_QOffscreenSurface_create(void *self) {
+	static_cast<QOffscreenSurface *>(self)->create();
+}
+void qute_QOffscreenSurface_destroy(void *self) {
+	static_cast<QOffscreenSurface *>(self)->destroy();
+}
+bool qute_QOffscreenSurface_isValid(void *self) {
+	return static_cast<bool>(static_cast<QOffscreenSurface *>(self)->isValid());
+}
+void qute_QOffscreenSurface_setFormat(void *self, void * a0) {
+	static_cast<QOffscreenSurface *>(self)->setFormat((a0 ? *static_cast<QSurfaceFormat *>(a0) : QSurfaceFormat()));
+}
+void * qute_QOffscreenSurface_format(void *self) {
+	return static_cast<void *>(new QSurfaceFormat(static_cast<QOffscreenSurface *>(self)->format()));
+}
+void * qute_QOffscreenSurface_requestedFormat(void *self) {
+	return static_cast<void *>(new QSurfaceFormat(static_cast<QOffscreenSurface *>(self)->requestedFormat()));
+}
+qute_size qute_QOffscreenSurface_size(void *self) {
+	return qute_from_QSize(static_cast<QOffscreenSurface *>(self)->size());
+}
+void * qute_QOffscreenSurface_screen(void *self) {
+	return (void *)(static_cast<QOffscreenSurface *>(self)->screen());
+}
+void qute_QOffscreenSurface_setScreen(void *self, void * a0) {
+	static_cast<QOffscreenSurface *>(self)->setScreen(static_cast<QScreen *>(a0));
+}
+void qute_QOffscreenSurface_screenChanged_1(void *self, void * a0) {
+	static_cast<QOffscreenSurface *>(self)->screenChanged(static_cast<QScreen *>(a0));
+}
+void * qute_QOffscreenSurface_screenChanged(void *self, uintptr_t id) {
+	auto s = std::make_shared<GoSlot>(id);
+	auto obj = static_cast<QOffscreenSurface *>(self);
+	return new QMetaObject::Connection(QObject::connect(obj, &QOffscreenSurface::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+}
+
+// ---- QOpenGLContext
+void * qute_QOpenGLContext_new(void * a0) {
+	return static_cast<QOpenGLContext *>(new QOpenGLContext(static_cast<QObject *>(a0)));
+}
+void * qute_QOpenGLContext_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QOpenGLContext *>(static_cast<QObject *>(obj)));
+}
+void qute_QOpenGLContext_setFormat(void *self, void * a0) {
+	static_cast<QOpenGLContext *>(self)->setFormat((a0 ? *static_cast<QSurfaceFormat *>(a0) : QSurfaceFormat()));
+}
+void qute_QOpenGLContext_setShareContext(void *self, void * a0) {
+	static_cast<QOpenGLContext *>(self)->setShareContext(static_cast<QOpenGLContext *>(a0));
+}
+void qute_QOpenGLContext_setScreen(void *self, void * a0) {
+	static_cast<QOpenGLContext *>(self)->setScreen(static_cast<QScreen *>(a0));
+}
+bool qute_QOpenGLContext_create(void *self) {
+	return static_cast<bool>(static_cast<QOpenGLContext *>(self)->create());
+}
+bool qute_QOpenGLContext_isValid(void *self) {
+	return static_cast<bool>(static_cast<QOpenGLContext *>(self)->isValid());
+}
+void * qute_QOpenGLContext_format(void *self) {
+	return static_cast<void *>(new QSurfaceFormat(static_cast<QOpenGLContext *>(self)->format()));
+}
+void * qute_QOpenGLContext_shareContext(void *self) {
+	return (void *)(static_cast<QOpenGLContext *>(self)->shareContext());
+}
+void * qute_QOpenGLContext_shareGroup(void *self) {
+	return (void *)(static_cast<QOpenGLContext *>(self)->shareGroup());
+}
+void * qute_QOpenGLContext_screen(void *self) {
+	return (void *)(static_cast<QOpenGLContext *>(self)->screen());
+}
+unsigned int qute_QOpenGLContext_defaultFramebufferObject(void *self) {
+	return static_cast<unsigned int>(static_cast<QOpenGLContext *>(self)->defaultFramebufferObject());
+}
+bool qute_QOpenGLContext_makeCurrent(void *self, void * a0) {
+	return static_cast<bool>(static_cast<QOpenGLContext *>(self)->makeCurrent(static_cast<QSurface *>(a0)));
+}
+void qute_QOpenGLContext_doneCurrent(void *self) {
+	static_cast<QOpenGLContext *>(self)->doneCurrent();
+}
+void qute_QOpenGLContext_swapBuffers(void *self, void * a0) {
+	static_cast<QOpenGLContext *>(self)->swapBuffers(static_cast<QSurface *>(a0));
+}
+void * qute_QOpenGLContext_surface(void *self) {
+	return (void *)(static_cast<QOpenGLContext *>(self)->surface());
+}
+void * qute_QOpenGLContext_functions(void *self) {
+	return (void *)(static_cast<QOpenGLContext *>(self)->functions());
+}
+void * qute_QOpenGLContext_extraFunctions(void *self) {
+	return (void *)(static_cast<QOpenGLContext *>(self)->extraFunctions());
+}
+qute_list qute_QOpenGLContext_extensions(void *self) {
+	return qute_ret_list<qute_str>(static_cast<QOpenGLContext *>(self)->extensions(), [](const auto &v) { return qute_ret_bytes(v); });
+}
+bool qute_QOpenGLContext_hasExtension(void *self, const char *a0, ptrdiff_t a0_len) {
+	return static_cast<bool>(static_cast<QOpenGLContext *>(self)->hasExtension(QByteArray(a0, a0_len)));
+}
+bool qute_QOpenGLContext_isOpenGLES(void *self) {
+	return static_cast<bool>(static_cast<QOpenGLContext *>(self)->isOpenGLES());
+}
+void qute_QOpenGLContext_aboutToBeDestroyed_1(void *self) {
+	static_cast<QOpenGLContext *>(self)->aboutToBeDestroyed();
+}
+void * qute_QOpenGLContext_currentContext(void) {
+	return (void *)(QOpenGLContext::currentContext());
+}
+bool qute_QOpenGLContext_areSharing(void * a0, void * a1) {
+	return static_cast<bool>(QOpenGLContext::areSharing(static_cast<QOpenGLContext *>(a0), static_cast<QOpenGLContext *>(a1)));
+}
+int64_t qute_QOpenGLContext_openGLModuleType(void) {
+	return static_cast<int64_t>(QOpenGLContext::openGLModuleType());
+}
+bool qute_QOpenGLContext_supportsThreadedOpenGL(void) {
+	return static_cast<bool>(QOpenGLContext::supportsThreadedOpenGL());
+}
+void * qute_QOpenGLContext_globalShareContext(void) {
+	return (void *)(QOpenGLContext::globalShareContext());
+}
+void * qute_QOpenGLContext_aboutToBeDestroyed(void *self, uintptr_t id) {
+	auto s = std::make_shared<GoSlot>(id);
+	auto obj = static_cast<QOpenGLContext *>(self);
+	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLContext::aboutToBeDestroyed, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+}
+
+// ---- QOpenGLContextGroup
+void * qute_QOpenGLContextGroup_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QOpenGLContextGroup *>(static_cast<QObject *>(obj)));
+}
+qute_list qute_QOpenGLContextGroup_shares(void *self) {
+	return qute_ret_list<void *>(static_cast<QOpenGLContextGroup *>(self)->shares(), [](const auto &v) { return (void *)(v); });
+}
+void * qute_QOpenGLContextGroup_currentContextGroup(void) {
+	return (void *)(QOpenGLContextGroup::currentContextGroup());
+}
+
+// ---- QOpenGLExtraFunctions
+void * qute_QOpenGLExtraFunctions_new(void) {
+	return static_cast<QOpenGLExtraFunctions *>(new QOpenGLExtraFunctions());
+}
+void * qute_QOpenGLExtraFunctions_new_1(void * a0) {
+	return static_cast<QOpenGLExtraFunctions *>(new QOpenGLExtraFunctions(static_cast<QOpenGLContext *>(a0)));
+}
+void qute_QOpenGLExtraFunctions_delete(void *self) {
+	delete static_cast<QOpenGLExtraFunctions *>(self);
+}
+void qute_QOpenGLExtraFunctions_glReadBuffer(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glReadBuffer(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glDrawRangeElements(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, unsigned int a4, void * a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawRangeElements(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<unsigned int>(a4), (const void *)(a5));
+}
+void qute_QOpenGLExtraFunctions_glTexImage3D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, int a6, unsigned int a7, unsigned int a8, void * a9) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexImage3D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<unsigned int>(a7), static_cast<unsigned int>(a8), (const void *)(a9));
+}
+void qute_QOpenGLExtraFunctions_glTexSubImage3D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, unsigned int a8, unsigned int a9, void * a10) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexSubImage3D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7), static_cast<unsigned int>(a8), static_cast<unsigned int>(a9), (const void *)(a10));
+}
+void qute_QOpenGLExtraFunctions_glCopyTexSubImage3D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glCopyTexSubImage3D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7), static_cast<int>(a8));
+}
+void qute_QOpenGLExtraFunctions_glCompressedTexImage3D(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4, int a5, int a6, int a7, void * a8) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glCompressedTexImage3D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7), (const void *)(a8));
+}
+void qute_QOpenGLExtraFunctions_glCompressedTexSubImage3D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, unsigned int a8, int a9, void * a10) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glCompressedTexSubImage3D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7), static_cast<unsigned int>(a8), static_cast<int>(a9), (const void *)(a10));
+}
+void qute_QOpenGLExtraFunctions_glGenQueries(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGenQueries(static_cast<int>(a0), (unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glDeleteQueries(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDeleteQueries(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsQuery(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsQuery(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLExtraFunctions_glBeginQuery(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBeginQuery(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glEndQuery(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glEndQuery(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glGetQueryiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetQueryiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetQueryObjectuiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetQueryObjectuiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (unsigned int *)(a2));
+}
+unsigned char qute_QOpenGLExtraFunctions_glUnmapBuffer(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glUnmapBuffer(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLExtraFunctions_glGetBufferPointerv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetBufferPointerv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (void **)(a2));
+}
+void qute_QOpenGLExtraFunctions_glDrawBuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawBuffers(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glUniformMatrix2x3fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformMatrix2x3fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glUniformMatrix3x2fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformMatrix3x2fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glUniformMatrix2x4fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformMatrix2x4fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glUniformMatrix4x2fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformMatrix4x2fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glUniformMatrix3x4fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformMatrix3x4fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glUniformMatrix4x3fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformMatrix4x3fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glBlitFramebuffer(void *self, int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, unsigned int a8, unsigned int a9) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBlitFramebuffer(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7), static_cast<unsigned int>(a8), static_cast<unsigned int>(a9));
+}
+void qute_QOpenGLExtraFunctions_glRenderbufferStorageMultisample(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glRenderbufferStorageMultisample(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glFramebufferTextureLayer(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glFramebufferTextureLayer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void * qute_QOpenGLExtraFunctions_glMapBufferRange(void *self, unsigned int a0, long a1, long a2, unsigned int a3) {
+	return (void *)(static_cast<QOpenGLExtraFunctions *>(self)->glMapBufferRange(static_cast<unsigned int>(a0), static_cast<long>(a1), static_cast<long>(a2), static_cast<unsigned int>(a3)));
+}
+void qute_QOpenGLExtraFunctions_glFlushMappedBufferRange(void *self, unsigned int a0, long a1, long a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glFlushMappedBufferRange(static_cast<unsigned int>(a0), static_cast<long>(a1), static_cast<long>(a2));
+}
+void qute_QOpenGLExtraFunctions_glBindVertexArray(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindVertexArray(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glDeleteVertexArrays(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDeleteVertexArrays(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glGenVertexArrays(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGenVertexArrays(static_cast<int>(a0), (unsigned int *)(a1));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsVertexArray(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsVertexArray(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLExtraFunctions_glGetIntegeri_v(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetIntegeri_v(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glBeginTransformFeedback(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBeginTransformFeedback(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glEndTransformFeedback(void *self) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glEndTransformFeedback();
+}
+void qute_QOpenGLExtraFunctions_glBindBufferRange(void *self, unsigned int a0, unsigned int a1, unsigned int a2, long a3, long a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindBufferRange(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<long>(a3), static_cast<long>(a4));
+}
+void qute_QOpenGLExtraFunctions_glBindBufferBase(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindBufferBase(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glTransformFeedbackVaryings(void *self, unsigned int a0, int a1, void * a2, unsigned int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTransformFeedbackVaryings(static_cast<unsigned int>(a0), static_cast<int>(a1), (const char *const *)(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetTransformFeedbackVarying(void *self, unsigned int a0, unsigned int a1, int a2, void * a3, void * a4, void * a5, void * a6) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetTransformFeedbackVarying(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (int *)(a3), (int *)(a4), (unsigned int *)(a5), (char *)(a6));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribIPointer(void *self, unsigned int a0, int a1, unsigned int a2, int a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribIPointer(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), (const void *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glGetVertexAttribIiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetVertexAttribIiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetVertexAttribIuiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetVertexAttribIuiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribI4i(void *self, unsigned int a0, int a1, int a2, int a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribI4i(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribI4ui(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3, unsigned int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribI4ui(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribI4iv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribI4iv(static_cast<unsigned int>(a0), (const int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribI4uiv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribI4uiv(static_cast<unsigned int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glGetUniformuiv(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetUniformuiv(static_cast<unsigned int>(a0), static_cast<int>(a1), (unsigned int *)(a2));
+}
+int qute_QOpenGLExtraFunctions_glGetFragDataLocation(void *self, unsigned int a0, void * a1) {
+	return static_cast<int>(static_cast<QOpenGLExtraFunctions *>(self)->glGetFragDataLocation(static_cast<unsigned int>(a0), (const char *)(a1)));
+}
+void qute_QOpenGLExtraFunctions_glUniform1ui(void *self, int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform1ui(static_cast<int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glUniform2ui(void *self, int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform2ui(static_cast<int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glUniform3ui(void *self, int a0, unsigned int a1, unsigned int a2, unsigned int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform3ui(static_cast<int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glUniform4ui(void *self, int a0, unsigned int a1, unsigned int a2, unsigned int a3, unsigned int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform4ui(static_cast<int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glUniform1uiv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform1uiv(static_cast<int>(a0), static_cast<int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glUniform2uiv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform2uiv(static_cast<int>(a0), static_cast<int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glUniform3uiv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform3uiv(static_cast<int>(a0), static_cast<int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glUniform4uiv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniform4uiv(static_cast<int>(a0), static_cast<int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glClearBufferiv(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glClearBufferiv(static_cast<unsigned int>(a0), static_cast<int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glClearBufferuiv(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glClearBufferuiv(static_cast<unsigned int>(a0), static_cast<int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glClearBufferfv(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glClearBufferfv(static_cast<unsigned int>(a0), static_cast<int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glClearBufferfi(void *self, unsigned int a0, int a1, float a2, int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glClearBufferfi(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<float>(a2), static_cast<int>(a3));
+}
+void * qute_QOpenGLExtraFunctions_glGetStringi(void *self, unsigned int a0, unsigned int a1) {
+	return (void *)(static_cast<QOpenGLExtraFunctions *>(self)->glGetStringi(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1)));
+}
+void qute_QOpenGLExtraFunctions_glCopyBufferSubData(void *self, unsigned int a0, unsigned int a1, long a2, long a3, long a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glCopyBufferSubData(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<long>(a2), static_cast<long>(a3), static_cast<long>(a4));
+}
+void qute_QOpenGLExtraFunctions_glGetUniformIndices(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetUniformIndices(static_cast<unsigned int>(a0), static_cast<int>(a1), (const char *const *)(a2), (unsigned int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetActiveUniformsiv(void *self, unsigned int a0, int a1, void * a2, unsigned int a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetActiveUniformsiv(static_cast<unsigned int>(a0), static_cast<int>(a1), (const unsigned int *)(a2), static_cast<unsigned int>(a3), (int *)(a4));
+}
+unsigned int qute_QOpenGLExtraFunctions_glGetUniformBlockIndex(void *self, unsigned int a0, void * a1) {
+	return static_cast<unsigned int>(static_cast<QOpenGLExtraFunctions *>(self)->glGetUniformBlockIndex(static_cast<unsigned int>(a0), (const char *)(a1)));
+}
+void qute_QOpenGLExtraFunctions_glGetActiveUniformBlockiv(void *self, unsigned int a0, unsigned int a1, unsigned int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetActiveUniformBlockiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), (int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetActiveUniformBlockName(void *self, unsigned int a0, unsigned int a1, int a2, void * a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetActiveUniformBlockName(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (int *)(a3), (char *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glUniformBlockBinding(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUniformBlockBinding(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glDrawArraysInstanced(void *self, unsigned int a0, int a1, int a2, int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawArraysInstanced(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glDrawElementsInstanced(void *self, unsigned int a0, int a1, unsigned int a2, void * a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawElementsInstanced(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), (const void *)(a3), static_cast<int>(a4));
+}
+void * qute_QOpenGLExtraFunctions_glFenceSync(void *self, unsigned int a0, unsigned int a1) {
+	return (void *)(static_cast<QOpenGLExtraFunctions *>(self)->glFenceSync(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1)));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsSync(void *self, void * a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsSync((__GLsync *)(a0)));
+}
+void qute_QOpenGLExtraFunctions_glDeleteSync(void *self, void * a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDeleteSync((__GLsync *)(a0));
+}
+unsigned int qute_QOpenGLExtraFunctions_glClientWaitSync(void *self, void * a0, unsigned int a1, unsigned long a2) {
+	return static_cast<unsigned int>(static_cast<QOpenGLExtraFunctions *>(self)->glClientWaitSync((__GLsync *)(a0), static_cast<unsigned int>(a1), static_cast<unsigned long>(a2)));
+}
+void qute_QOpenGLExtraFunctions_glWaitSync(void *self, void * a0, unsigned int a1, unsigned long a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glWaitSync((__GLsync *)(a0), static_cast<unsigned int>(a1), static_cast<unsigned long>(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetInteger64v(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetInteger64v(static_cast<unsigned int>(a0), (long *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glGetSynciv(void *self, void * a0, unsigned int a1, int a2, void * a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetSynciv((__GLsync *)(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (int *)(a3), (int *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glGetInteger64i_v(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetInteger64i_v(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (long *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetBufferParameteri64v(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetBufferParameteri64v(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (long *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGenSamplers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGenSamplers(static_cast<int>(a0), (unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glDeleteSamplers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDeleteSamplers(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsSampler(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsSampler(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLExtraFunctions_glBindSampler(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindSampler(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glSamplerParameteri(void *self, unsigned int a0, unsigned int a1, int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSamplerParameteri(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glSamplerParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSamplerParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glSamplerParameterf(void *self, unsigned int a0, unsigned int a1, float a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSamplerParameterf(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<float>(a2));
+}
+void qute_QOpenGLExtraFunctions_glSamplerParameterfv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSamplerParameterfv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetSamplerParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetSamplerParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetSamplerParameterfv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetSamplerParameterfv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (float *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribDivisor(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribDivisor(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glBindTransformFeedback(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindTransformFeedback(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glDeleteTransformFeedbacks(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDeleteTransformFeedbacks(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glGenTransformFeedbacks(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGenTransformFeedbacks(static_cast<int>(a0), (unsigned int *)(a1));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsTransformFeedback(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsTransformFeedback(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLExtraFunctions_glPauseTransformFeedback(void *self) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glPauseTransformFeedback();
+}
+void qute_QOpenGLExtraFunctions_glResumeTransformFeedback(void *self) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glResumeTransformFeedback();
+}
+void qute_QOpenGLExtraFunctions_glGetProgramBinary(void *self, unsigned int a0, int a1, void * a2, void * a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramBinary(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2), (unsigned int *)(a3), (void *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramBinary(void *self, unsigned int a0, unsigned int a1, void * a2, int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramBinary(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const void *)(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramParameteri(void *self, unsigned int a0, unsigned int a1, int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramParameteri(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glInvalidateFramebuffer(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glInvalidateFramebuffer(static_cast<unsigned int>(a0), static_cast<int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glInvalidateSubFramebuffer(void *self, unsigned int a0, int a1, void * a2, int a3, int a4, int a5, int a6) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glInvalidateSubFramebuffer(static_cast<unsigned int>(a0), static_cast<int>(a1), (const unsigned int *)(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6));
+}
+void qute_QOpenGLExtraFunctions_glTexStorage2D(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexStorage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glTexStorage3D(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4, int a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexStorage3D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5));
+}
+void qute_QOpenGLExtraFunctions_glGetInternalformativ(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetInternalformativ(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), (int *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glDispatchCompute(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDispatchCompute(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glDispatchComputeIndirect(void *self, long a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDispatchComputeIndirect(static_cast<long>(a0));
+}
+void qute_QOpenGLExtraFunctions_glDrawArraysIndirect(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawArraysIndirect(static_cast<unsigned int>(a0), (const void *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glDrawElementsIndirect(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawElementsIndirect(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const void *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glFramebufferParameteri(void *self, unsigned int a0, unsigned int a1, int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glFramebufferParameteri(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetFramebufferParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetFramebufferParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetProgramInterfaceiv(void *self, unsigned int a0, unsigned int a1, unsigned int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramInterfaceiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), (int *)(a3));
+}
+unsigned int qute_QOpenGLExtraFunctions_glGetProgramResourceIndex(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	return static_cast<unsigned int>(static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramResourceIndex(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const char *)(a2)));
+}
+void qute_QOpenGLExtraFunctions_glGetProgramResourceName(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, void * a4, void * a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramResourceName(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), (int *)(a4), (char *)(a5));
+}
+void qute_QOpenGLExtraFunctions_glGetProgramResourceiv(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, void * a4, int a5, void * a6, void * a7) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramResourceiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), (const unsigned int *)(a4), static_cast<int>(a5), (int *)(a6), (int *)(a7));
+}
+int qute_QOpenGLExtraFunctions_glGetProgramResourceLocation(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	return static_cast<int>(static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramResourceLocation(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const char *)(a2)));
+}
+void qute_QOpenGLExtraFunctions_glUseProgramStages(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glUseProgramStages(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glActiveShaderProgram(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glActiveShaderProgram(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+unsigned int qute_QOpenGLExtraFunctions_glCreateShaderProgramv(void *self, unsigned int a0, int a1, void * a2) {
+	return static_cast<unsigned int>(static_cast<QOpenGLExtraFunctions *>(self)->glCreateShaderProgramv(static_cast<unsigned int>(a0), static_cast<int>(a1), (const char *const *)(a2)));
+}
+void qute_QOpenGLExtraFunctions_glBindProgramPipeline(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindProgramPipeline(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glDeleteProgramPipelines(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDeleteProgramPipelines(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLExtraFunctions_glGenProgramPipelines(void *self, int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGenProgramPipelines(static_cast<int>(a0), (unsigned int *)(a1));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsProgramPipeline(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsProgramPipeline(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLExtraFunctions_glGetProgramPipelineiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramPipelineiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform1i(void *self, unsigned int a0, int a1, int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform1i(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform2i(void *self, unsigned int a0, int a1, int a2, int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform2i(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform3i(void *self, unsigned int a0, int a1, int a2, int a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform3i(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform4i(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform4i(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform1ui(void *self, unsigned int a0, int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform1ui(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform2ui(void *self, unsigned int a0, int a1, unsigned int a2, unsigned int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform2ui(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform3ui(void *self, unsigned int a0, int a1, unsigned int a2, unsigned int a3, unsigned int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform3ui(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform4ui(void *self, unsigned int a0, int a1, unsigned int a2, unsigned int a3, unsigned int a4, unsigned int a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform4ui(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4), static_cast<unsigned int>(a5));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform1f(void *self, unsigned int a0, int a1, float a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform1f(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<float>(a2));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform2f(void *self, unsigned int a0, int a1, float a2, float a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform2f(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform3f(void *self, unsigned int a0, int a1, float a2, float a3, float a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform3f(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform4f(void *self, unsigned int a0, int a1, float a2, float a3, float a4, float a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform4f(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a5));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform1iv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform1iv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform2iv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform2iv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform3iv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform3iv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform4iv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform4iv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform1uiv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform1uiv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const unsigned int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform2uiv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform2uiv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const unsigned int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform3uiv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform3uiv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const unsigned int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform4uiv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform4uiv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const unsigned int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform1fv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform1fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform2fv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform2fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform3fv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform3fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniform4fv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniform4fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (const float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix2fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix2fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix3fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix3fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix4fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix4fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix2x3fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix2x3fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix3x2fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix3x2fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix2x4fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix2x4fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix4x2fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix4x2fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix3x4fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix3x4fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glProgramUniformMatrix4x3fv(void *self, unsigned int a0, int a1, int a2, unsigned char a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glProgramUniformMatrix4x3fv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), (const float *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glValidateProgramPipeline(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glValidateProgramPipeline(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glGetProgramPipelineInfoLog(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetProgramPipelineInfoLog(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2), (char *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glBindImageTexture(void *self, unsigned int a0, unsigned int a1, int a2, unsigned char a3, int a4, unsigned int a5, unsigned int a6) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindImageTexture(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), static_cast<unsigned char>(a3), static_cast<int>(a4), static_cast<unsigned int>(a5), static_cast<unsigned int>(a6));
+}
+void qute_QOpenGLExtraFunctions_glGetBooleani_v(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetBooleani_v(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (unsigned char *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glMemoryBarrier(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glMemoryBarrier(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glMemoryBarrierByRegion(void *self, unsigned int a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glMemoryBarrierByRegion(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLExtraFunctions_glTexStorage2DMultisample(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4, unsigned char a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexStorage2DMultisample(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<unsigned char>(a5));
+}
+void qute_QOpenGLExtraFunctions_glGetMultisamplefv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetMultisamplefv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (float *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glSampleMaski(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSampleMaski(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glGetTexLevelParameteriv(void *self, unsigned int a0, int a1, unsigned int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetTexLevelParameteriv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), (int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetTexLevelParameterfv(void *self, unsigned int a0, int a1, unsigned int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetTexLevelParameterfv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), (float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glBindVertexBuffer(void *self, unsigned int a0, unsigned int a1, long a2, int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBindVertexBuffer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<long>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribFormat(void *self, unsigned int a0, int a1, unsigned int a2, unsigned char a3, unsigned int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribFormat(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned char>(a3), static_cast<unsigned int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribIFormat(void *self, unsigned int a0, int a1, unsigned int a2, unsigned int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribIFormat(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glVertexAttribBinding(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexAttribBinding(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glVertexBindingDivisor(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glVertexBindingDivisor(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glBlendBarrier(void *self) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBlendBarrier();
+}
+void qute_QOpenGLExtraFunctions_glCopyImageSubData(void *self, unsigned int a0, unsigned int a1, int a2, int a3, int a4, int a5, unsigned int a6, unsigned int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glCopyImageSubData(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<unsigned int>(a6), static_cast<unsigned int>(a7), static_cast<int>(a8), static_cast<int>(a9), static_cast<int>(a10), static_cast<int>(a11), static_cast<int>(a12), static_cast<int>(a13), static_cast<int>(a14));
+}
+void qute_QOpenGLExtraFunctions_glDebugMessageControl(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, void * a4, unsigned char a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDebugMessageControl(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), (const unsigned int *)(a4), static_cast<unsigned char>(a5));
+}
+void qute_QOpenGLExtraFunctions_glDebugMessageInsert(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3, int a4, void * a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDebugMessageInsert(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<int>(a4), (const char *)(a5));
+}
+unsigned int qute_QOpenGLExtraFunctions_glGetDebugMessageLog(void *self, unsigned int a0, int a1, void * a2, void * a3, void * a4, void * a5, void * a6, void * a7) {
+	return static_cast<unsigned int>(static_cast<QOpenGLExtraFunctions *>(self)->glGetDebugMessageLog(static_cast<unsigned int>(a0), static_cast<int>(a1), (unsigned int *)(a2), (unsigned int *)(a3), (unsigned int *)(a4), (unsigned int *)(a5), (int *)(a6), (char *)(a7)));
+}
+void qute_QOpenGLExtraFunctions_glPushDebugGroup(void *self, unsigned int a0, unsigned int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glPushDebugGroup(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (const char *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glPopDebugGroup(void *self) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glPopDebugGroup();
+}
+void qute_QOpenGLExtraFunctions_glObjectLabel(void *self, unsigned int a0, unsigned int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glObjectLabel(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (const char *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetObjectLabel(void *self, unsigned int a0, unsigned int a1, int a2, void * a3, void * a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetObjectLabel(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (int *)(a3), (char *)(a4));
+}
+void qute_QOpenGLExtraFunctions_glObjectPtrLabel(void *self, void * a0, int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glObjectPtrLabel((const void *)(a0), static_cast<int>(a1), (const char *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetObjectPtrLabel(void *self, void * a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetObjectPtrLabel((const void *)(a0), static_cast<int>(a1), (int *)(a2), (char *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetPointerv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetPointerv(static_cast<unsigned int>(a0), (void **)(a1));
+}
+void qute_QOpenGLExtraFunctions_glEnablei(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glEnablei(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glDisablei(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDisablei(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glBlendEquationi(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBlendEquationi(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glBlendEquationSeparatei(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBlendEquationSeparatei(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glBlendFunci(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBlendFunci(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glBlendFuncSeparatei(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3, unsigned int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glBlendFuncSeparatei(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glColorMaski(void *self, unsigned int a0, unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glColorMaski(static_cast<unsigned int>(a0), static_cast<unsigned char>(a1), static_cast<unsigned char>(a2), static_cast<unsigned char>(a3), static_cast<unsigned char>(a4));
+}
+unsigned char qute_QOpenGLExtraFunctions_glIsEnabledi(void *self, unsigned int a0, unsigned int a1) {
+	return static_cast<unsigned char>(static_cast<QOpenGLExtraFunctions *>(self)->glIsEnabledi(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1)));
+}
+void qute_QOpenGLExtraFunctions_glDrawElementsBaseVertex(void *self, unsigned int a0, int a1, unsigned int a2, void * a3, int a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawElementsBaseVertex(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), (const void *)(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLExtraFunctions_glDrawRangeElementsBaseVertex(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3, unsigned int a4, void * a5, int a6) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawRangeElementsBaseVertex(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<unsigned int>(a4), (const void *)(a5), static_cast<int>(a6));
+}
+void qute_QOpenGLExtraFunctions_glDrawElementsInstancedBaseVertex(void *self, unsigned int a0, int a1, unsigned int a2, void * a3, int a4, int a5) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glDrawElementsInstancedBaseVertex(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), (const void *)(a3), static_cast<int>(a4), static_cast<int>(a5));
+}
+void qute_QOpenGLExtraFunctions_glFramebufferTexture(void *self, unsigned int a0, unsigned int a1, unsigned int a2, int a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glFramebufferTexture(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLExtraFunctions_glPrimitiveBoundingBox(void *self, float a0, float a1, float a2, float a3, float a4, float a5, float a6, float a7) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glPrimitiveBoundingBox(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4), static_cast<float>(a5), static_cast<float>(a6), static_cast<float>(a7));
+}
+unsigned int qute_QOpenGLExtraFunctions_glGetGraphicsResetStatus(void *self) {
+	return static_cast<unsigned int>(static_cast<QOpenGLExtraFunctions *>(self)->glGetGraphicsResetStatus());
+}
+void qute_QOpenGLExtraFunctions_glReadnPixels(void *self, int a0, int a1, int a2, int a3, unsigned int a4, unsigned int a5, int a6, void * a7) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glReadnPixels(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<unsigned int>(a4), static_cast<unsigned int>(a5), static_cast<int>(a6), (void *)(a7));
+}
+void qute_QOpenGLExtraFunctions_glGetnUniformfv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetnUniformfv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (float *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetnUniformiv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetnUniformiv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glGetnUniformuiv(void *self, unsigned int a0, int a1, int a2, void * a3) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetnUniformuiv(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), (unsigned int *)(a3));
+}
+void qute_QOpenGLExtraFunctions_glMinSampleShading(void *self, float a0) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glMinSampleShading(static_cast<float>(a0));
+}
+void qute_QOpenGLExtraFunctions_glPatchParameteri(void *self, unsigned int a0, int a1) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glPatchParameteri(static_cast<unsigned int>(a0), static_cast<int>(a1));
+}
+void qute_QOpenGLExtraFunctions_glTexParameterIiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexParameterIiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glTexParameterIuiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexParameterIuiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetTexParameterIiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetTexParameterIiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetTexParameterIuiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetTexParameterIuiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glSamplerParameterIiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSamplerParameterIiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glSamplerParameterIuiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glSamplerParameterIuiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetSamplerParameterIiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetSamplerParameterIiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glGetSamplerParameterIuiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glGetSamplerParameterIuiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (unsigned int *)(a2));
+}
+void qute_QOpenGLExtraFunctions_glTexBuffer(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexBuffer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLExtraFunctions_glTexBufferRange(void *self, unsigned int a0, unsigned int a1, unsigned int a2, long a3, long a4) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexBufferRange(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<long>(a3), static_cast<long>(a4));
+}
+void qute_QOpenGLExtraFunctions_glTexStorage3DMultisample(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4, int a5, unsigned char a6) {
+	static_cast<QOpenGLExtraFunctions *>(self)->glTexStorage3DMultisample(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<unsigned char>(a6));
+}
+
+// ---- QOpenGLFunctions
+void * qute_QOpenGLFunctions_new(void) {
+	return static_cast<QOpenGLFunctions *>(new QOpenGLFunctions());
+}
+void * qute_QOpenGLFunctions_new_1(void * a0) {
+	return static_cast<QOpenGLFunctions *>(new QOpenGLFunctions(static_cast<QOpenGLContext *>(a0)));
+}
+void qute_QOpenGLFunctions_delete(void *self) {
+	delete static_cast<QOpenGLFunctions *>(self);
+}
+int64_t qute_QOpenGLFunctions_openGLFeatures(void *self) {
+	return static_cast<int64_t>((static_cast<QOpenGLFunctions *>(self)->openGLFeatures()).toInt());
+}
+bool qute_QOpenGLFunctions_hasOpenGLFeature(void *self, int64_t a0) {
+	return static_cast<bool>(static_cast<QOpenGLFunctions *>(self)->hasOpenGLFeature(static_cast<QOpenGLFunctions::OpenGLFeature>(a0)));
+}
+void qute_QOpenGLFunctions_initializeOpenGLFunctions(void *self) {
+	static_cast<QOpenGLFunctions *>(self)->initializeOpenGLFunctions();
+}
+void qute_QOpenGLFunctions_glBindTexture(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glBindTexture(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glBlendFunc(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glBlendFunc(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glClear(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glClear(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glClearColor(void *self, float a0, float a1, float a2, float a3) {
+	static_cast<QOpenGLFunctions *>(self)->glClearColor(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+void qute_QOpenGLFunctions_glClearStencil(void *self, int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glClearStencil(static_cast<int>(a0));
+}
+void qute_QOpenGLFunctions_glColorMask(void *self, unsigned char a0, unsigned char a1, unsigned char a2, unsigned char a3) {
+	static_cast<QOpenGLFunctions *>(self)->glColorMask(static_cast<unsigned char>(a0), static_cast<unsigned char>(a1), static_cast<unsigned char>(a2), static_cast<unsigned char>(a3));
+}
+void qute_QOpenGLFunctions_glCopyTexImage2D(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4, int a5, int a6, int a7) {
+	static_cast<QOpenGLFunctions *>(self)->glCopyTexImage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7));
+}
+void qute_QOpenGLFunctions_glCopyTexSubImage2D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
+	static_cast<QOpenGLFunctions *>(self)->glCopyTexSubImage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), static_cast<int>(a7));
+}
+void qute_QOpenGLFunctions_glCullFace(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glCullFace(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glDeleteTextures(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glDeleteTextures(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glDepthFunc(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glDepthFunc(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glDepthMask(void *self, unsigned char a0) {
+	static_cast<QOpenGLFunctions *>(self)->glDepthMask(static_cast<unsigned char>(a0));
+}
+void qute_QOpenGLFunctions_glDisable(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glDisable(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glDrawArrays(void *self, unsigned int a0, int a1, int a2) {
+	static_cast<QOpenGLFunctions *>(self)->glDrawArrays(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLFunctions_glDrawElements(void *self, unsigned int a0, int a1, unsigned int a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glDrawElements(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), (const void *)(a3));
+}
+void qute_QOpenGLFunctions_glEnable(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glEnable(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glFinish(void *self) {
+	static_cast<QOpenGLFunctions *>(self)->glFinish();
+}
+void qute_QOpenGLFunctions_glFlush(void *self) {
+	static_cast<QOpenGLFunctions *>(self)->glFlush();
+}
+void qute_QOpenGLFunctions_glFrontFace(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glFrontFace(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glGenTextures(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGenTextures(static_cast<int>(a0), (unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glGetBooleanv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGetBooleanv(static_cast<unsigned int>(a0), (unsigned char *)(a1));
+}
+unsigned int qute_QOpenGLFunctions_glGetError(void *self) {
+	return static_cast<unsigned int>(static_cast<QOpenGLFunctions *>(self)->glGetError());
+}
+void qute_QOpenGLFunctions_glGetFloatv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGetFloatv(static_cast<unsigned int>(a0), (float *)(a1));
+}
+void qute_QOpenGLFunctions_glGetIntegerv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGetIntegerv(static_cast<unsigned int>(a0), (int *)(a1));
+}
+void * qute_QOpenGLFunctions_glGetString(void *self, unsigned int a0) {
+	return (void *)(static_cast<QOpenGLFunctions *>(self)->glGetString(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLFunctions_glGetTexParameterfv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetTexParameterfv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (float *)(a2));
+}
+void qute_QOpenGLFunctions_glGetTexParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetTexParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLFunctions_glHint(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glHint(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+unsigned char qute_QOpenGLFunctions_glIsEnabled(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsEnabled(static_cast<unsigned int>(a0)));
+}
+unsigned char qute_QOpenGLFunctions_glIsTexture(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsTexture(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLFunctions_glLineWidth(void *self, float a0) {
+	static_cast<QOpenGLFunctions *>(self)->glLineWidth(static_cast<float>(a0));
+}
+void qute_QOpenGLFunctions_glPixelStorei(void *self, unsigned int a0, int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glPixelStorei(static_cast<unsigned int>(a0), static_cast<int>(a1));
+}
+void qute_QOpenGLFunctions_glPolygonOffset(void *self, float a0, float a1) {
+	static_cast<QOpenGLFunctions *>(self)->glPolygonOffset(static_cast<float>(a0), static_cast<float>(a1));
+}
+void qute_QOpenGLFunctions_glReadPixels(void *self, int a0, int a1, int a2, int a3, unsigned int a4, unsigned int a5, void * a6) {
+	static_cast<QOpenGLFunctions *>(self)->glReadPixels(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<unsigned int>(a4), static_cast<unsigned int>(a5), (void *)(a6));
+}
+void qute_QOpenGLFunctions_glScissor(void *self, int a0, int a1, int a2, int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glScissor(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLFunctions_glStencilFunc(void *self, unsigned int a0, int a1, unsigned int a2) {
+	static_cast<QOpenGLFunctions *>(self)->glStencilFunc(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLFunctions_glStencilMask(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glStencilMask(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glStencilOp(void *self, unsigned int a0, unsigned int a1, unsigned int a2) {
+	static_cast<QOpenGLFunctions *>(self)->glStencilOp(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2));
+}
+void qute_QOpenGLFunctions_glTexImage2D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, unsigned int a6, unsigned int a7, void * a8) {
+	static_cast<QOpenGLFunctions *>(self)->glTexImage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<unsigned int>(a6), static_cast<unsigned int>(a7), (const void *)(a8));
+}
+void qute_QOpenGLFunctions_glTexParameterf(void *self, unsigned int a0, unsigned int a1, float a2) {
+	static_cast<QOpenGLFunctions *>(self)->glTexParameterf(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<float>(a2));
+}
+void qute_QOpenGLFunctions_glTexParameterfv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glTexParameterfv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLFunctions_glTexParameteri(void *self, unsigned int a0, unsigned int a1, int a2) {
+	static_cast<QOpenGLFunctions *>(self)->glTexParameteri(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLFunctions_glTexParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glTexParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLFunctions_glTexSubImage2D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, unsigned int a6, unsigned int a7, void * a8) {
+	static_cast<QOpenGLFunctions *>(self)->glTexSubImage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<unsigned int>(a6), static_cast<unsigned int>(a7), (const void *)(a8));
+}
+void qute_QOpenGLFunctions_glViewport(void *self, int a0, int a1, int a2, int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glViewport(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLFunctions_glActiveTexture(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glActiveTexture(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glAttachShader(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glAttachShader(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glBindAttribLocation(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glBindAttribLocation(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (const char *)(a2));
+}
+void qute_QOpenGLFunctions_glBindBuffer(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glBindBuffer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glBindFramebuffer(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glBindFramebuffer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glBindRenderbuffer(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glBindRenderbuffer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glBlendColor(void *self, float a0, float a1, float a2, float a3) {
+	static_cast<QOpenGLFunctions *>(self)->glBlendColor(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+void qute_QOpenGLFunctions_glBlendEquation(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glBlendEquation(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glBlendEquationSeparate(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glBlendEquationSeparate(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glBlendFuncSeparate(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glBlendFuncSeparate(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLFunctions_glBufferData(void *self, unsigned int a0, long a1, void * a2, unsigned int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glBufferData(static_cast<unsigned int>(a0), static_cast<long>(a1), (const void *)(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLFunctions_glBufferSubData(void *self, unsigned int a0, long a1, long a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glBufferSubData(static_cast<unsigned int>(a0), static_cast<long>(a1), static_cast<long>(a2), (const void *)(a3));
+}
+unsigned int qute_QOpenGLFunctions_glCheckFramebufferStatus(void *self, unsigned int a0) {
+	return static_cast<unsigned int>(static_cast<QOpenGLFunctions *>(self)->glCheckFramebufferStatus(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLFunctions_glClearDepthf(void *self, float a0) {
+	static_cast<QOpenGLFunctions *>(self)->glClearDepthf(static_cast<float>(a0));
+}
+void qute_QOpenGLFunctions_glCompileShader(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glCompileShader(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glCompressedTexImage2D(void *self, unsigned int a0, int a1, unsigned int a2, int a3, int a4, int a5, int a6, void * a7) {
+	static_cast<QOpenGLFunctions *>(self)->glCompressedTexImage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<int>(a6), (const void *)(a7));
+}
+void qute_QOpenGLFunctions_glCompressedTexSubImage2D(void *self, unsigned int a0, int a1, int a2, int a3, int a4, int a5, unsigned int a6, int a7, void * a8) {
+	static_cast<QOpenGLFunctions *>(self)->glCompressedTexSubImage2D(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), static_cast<int>(a5), static_cast<unsigned int>(a6), static_cast<int>(a7), (const void *)(a8));
+}
+unsigned int qute_QOpenGLFunctions_glCreateProgram(void *self) {
+	return static_cast<unsigned int>(static_cast<QOpenGLFunctions *>(self)->glCreateProgram());
+}
+unsigned int qute_QOpenGLFunctions_glCreateShader(void *self, unsigned int a0) {
+	return static_cast<unsigned int>(static_cast<QOpenGLFunctions *>(self)->glCreateShader(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLFunctions_glDeleteBuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glDeleteBuffers(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glDeleteFramebuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glDeleteFramebuffers(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glDeleteProgram(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glDeleteProgram(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glDeleteRenderbuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glDeleteRenderbuffers(static_cast<int>(a0), (const unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glDeleteShader(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glDeleteShader(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glDepthRangef(void *self, float a0, float a1) {
+	static_cast<QOpenGLFunctions *>(self)->glDepthRangef(static_cast<float>(a0), static_cast<float>(a1));
+}
+void qute_QOpenGLFunctions_glDetachShader(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glDetachShader(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glDisableVertexAttribArray(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glDisableVertexAttribArray(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glEnableVertexAttribArray(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glEnableVertexAttribArray(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glFramebufferRenderbuffer(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glFramebufferRenderbuffer(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLFunctions_glFramebufferTexture2D(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3, int a4) {
+	static_cast<QOpenGLFunctions *>(self)->glFramebufferTexture2D(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLFunctions_glGenBuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGenBuffers(static_cast<int>(a0), (unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glGenerateMipmap(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glGenerateMipmap(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glGenFramebuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGenFramebuffers(static_cast<int>(a0), (unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glGenRenderbuffers(void *self, int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glGenRenderbuffers(static_cast<int>(a0), (unsigned int *)(a1));
+}
+void qute_QOpenGLFunctions_glGetActiveAttrib(void *self, unsigned int a0, unsigned int a1, int a2, void * a3, void * a4, void * a5, void * a6) {
+	static_cast<QOpenGLFunctions *>(self)->glGetActiveAttrib(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (int *)(a3), (int *)(a4), (unsigned int *)(a5), (char *)(a6));
+}
+void qute_QOpenGLFunctions_glGetActiveUniform(void *self, unsigned int a0, unsigned int a1, int a2, void * a3, void * a4, void * a5, void * a6) {
+	static_cast<QOpenGLFunctions *>(self)->glGetActiveUniform(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), (int *)(a3), (int *)(a4), (unsigned int *)(a5), (char *)(a6));
+}
+void qute_QOpenGLFunctions_glGetAttachedShaders(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glGetAttachedShaders(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2), (unsigned int *)(a3));
+}
+int qute_QOpenGLFunctions_glGetAttribLocation(void *self, unsigned int a0, void * a1) {
+	return static_cast<int>(static_cast<QOpenGLFunctions *>(self)->glGetAttribLocation(static_cast<unsigned int>(a0), (const char *)(a1)));
+}
+void qute_QOpenGLFunctions_glGetBufferParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetBufferParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLFunctions_glGetFramebufferAttachmentParameteriv(void *self, unsigned int a0, unsigned int a1, unsigned int a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glGetFramebufferAttachmentParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), (int *)(a3));
+}
+void qute_QOpenGLFunctions_glGetProgramiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetProgramiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLFunctions_glGetProgramInfoLog(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glGetProgramInfoLog(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2), (char *)(a3));
+}
+void qute_QOpenGLFunctions_glGetRenderbufferParameteriv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetRenderbufferParameteriv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLFunctions_glGetShaderiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetShaderiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLFunctions_glGetShaderInfoLog(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glGetShaderInfoLog(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2), (char *)(a3));
+}
+void qute_QOpenGLFunctions_glGetShaderPrecisionFormat(void *self, unsigned int a0, unsigned int a1, void * a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glGetShaderPrecisionFormat(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2), (int *)(a3));
+}
+void qute_QOpenGLFunctions_glGetShaderSource(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glGetShaderSource(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2), (char *)(a3));
+}
+void qute_QOpenGLFunctions_glGetUniformfv(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetUniformfv(static_cast<unsigned int>(a0), static_cast<int>(a1), (float *)(a2));
+}
+void qute_QOpenGLFunctions_glGetUniformiv(void *self, unsigned int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetUniformiv(static_cast<unsigned int>(a0), static_cast<int>(a1), (int *)(a2));
+}
+int qute_QOpenGLFunctions_glGetUniformLocation(void *self, unsigned int a0, void * a1) {
+	return static_cast<int>(static_cast<QOpenGLFunctions *>(self)->glGetUniformLocation(static_cast<unsigned int>(a0), (const char *)(a1)));
+}
+void qute_QOpenGLFunctions_glGetVertexAttribfv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetVertexAttribfv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (float *)(a2));
+}
+void qute_QOpenGLFunctions_glGetVertexAttribiv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetVertexAttribiv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (int *)(a2));
+}
+void qute_QOpenGLFunctions_glGetVertexAttribPointerv(void *self, unsigned int a0, unsigned int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glGetVertexAttribPointerv(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), (void **)(a2));
+}
+unsigned char qute_QOpenGLFunctions_glIsBuffer(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsBuffer(static_cast<unsigned int>(a0)));
+}
+unsigned char qute_QOpenGLFunctions_glIsFramebuffer(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsFramebuffer(static_cast<unsigned int>(a0)));
+}
+unsigned char qute_QOpenGLFunctions_glIsProgram(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsProgram(static_cast<unsigned int>(a0)));
+}
+unsigned char qute_QOpenGLFunctions_glIsRenderbuffer(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsRenderbuffer(static_cast<unsigned int>(a0)));
+}
+unsigned char qute_QOpenGLFunctions_glIsShader(void *self, unsigned int a0) {
+	return static_cast<unsigned char>(static_cast<QOpenGLFunctions *>(self)->glIsShader(static_cast<unsigned int>(a0)));
+}
+void qute_QOpenGLFunctions_glLinkProgram(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glLinkProgram(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glReleaseShaderCompiler(void *self) {
+	static_cast<QOpenGLFunctions *>(self)->glReleaseShaderCompiler();
+}
+void qute_QOpenGLFunctions_glRenderbufferStorage(void *self, unsigned int a0, unsigned int a1, int a2, int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glRenderbufferStorage(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLFunctions_glSampleCoverage(void *self, float a0, unsigned char a1) {
+	static_cast<QOpenGLFunctions *>(self)->glSampleCoverage(static_cast<float>(a0), static_cast<unsigned char>(a1));
+}
+void qute_QOpenGLFunctions_glShaderBinary(void *self, int a0, void * a1, unsigned int a2, void * a3, int a4) {
+	static_cast<QOpenGLFunctions *>(self)->glShaderBinary(static_cast<int>(a0), (const unsigned int *)(a1), static_cast<unsigned int>(a2), (const void *)(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLFunctions_glShaderSource(void *self, unsigned int a0, int a1, void * a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glShaderSource(static_cast<unsigned int>(a0), static_cast<int>(a1), (const char **)(a2), (const int *)(a3));
+}
+void qute_QOpenGLFunctions_glStencilFuncSeparate(void *self, unsigned int a0, unsigned int a1, int a2, unsigned int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glStencilFuncSeparate(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLFunctions_glStencilMaskSeparate(void *self, unsigned int a0, unsigned int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glStencilMaskSeparate(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1));
+}
+void qute_QOpenGLFunctions_glStencilOpSeparate(void *self, unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glStencilOpSeparate(static_cast<unsigned int>(a0), static_cast<unsigned int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned int>(a3));
+}
+void qute_QOpenGLFunctions_glUniform1f(void *self, int a0, float a1) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform1f(static_cast<int>(a0), static_cast<float>(a1));
+}
+void qute_QOpenGLFunctions_glUniform1fv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform1fv(static_cast<int>(a0), static_cast<int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform1i(void *self, int a0, int a1) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform1i(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QOpenGLFunctions_glUniform1iv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform1iv(static_cast<int>(a0), static_cast<int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform2f(void *self, int a0, float a1, float a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform2f(static_cast<int>(a0), static_cast<float>(a1), static_cast<float>(a2));
+}
+void qute_QOpenGLFunctions_glUniform2fv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform2fv(static_cast<int>(a0), static_cast<int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform2i(void *self, int a0, int a1, int a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform2i(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QOpenGLFunctions_glUniform2iv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform2iv(static_cast<int>(a0), static_cast<int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform3f(void *self, int a0, float a1, float a2, float a3) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform3f(static_cast<int>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+void qute_QOpenGLFunctions_glUniform3fv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform3fv(static_cast<int>(a0), static_cast<int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform3i(void *self, int a0, int a1, int a2, int a3) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform3i(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QOpenGLFunctions_glUniform3iv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform3iv(static_cast<int>(a0), static_cast<int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform4f(void *self, int a0, float a1, float a2, float a3, float a4) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform4f(static_cast<int>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4));
+}
+void qute_QOpenGLFunctions_glUniform4fv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform4fv(static_cast<int>(a0), static_cast<int>(a1), (const float *)(a2));
+}
+void qute_QOpenGLFunctions_glUniform4i(void *self, int a0, int a1, int a2, int a3, int a4) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform4i(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void qute_QOpenGLFunctions_glUniform4iv(void *self, int a0, int a1, void * a2) {
+	static_cast<QOpenGLFunctions *>(self)->glUniform4iv(static_cast<int>(a0), static_cast<int>(a1), (const int *)(a2));
+}
+void qute_QOpenGLFunctions_glUniformMatrix2fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glUniformMatrix2fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLFunctions_glUniformMatrix3fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glUniformMatrix3fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLFunctions_glUniformMatrix4fv(void *self, int a0, int a1, unsigned char a2, void * a3) {
+	static_cast<QOpenGLFunctions *>(self)->glUniformMatrix4fv(static_cast<int>(a0), static_cast<int>(a1), static_cast<unsigned char>(a2), (const float *)(a3));
+}
+void qute_QOpenGLFunctions_glUseProgram(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glUseProgram(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glValidateProgram(void *self, unsigned int a0) {
+	static_cast<QOpenGLFunctions *>(self)->glValidateProgram(static_cast<unsigned int>(a0));
+}
+void qute_QOpenGLFunctions_glVertexAttrib1f(void *self, unsigned int a0, float a1) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib1f(static_cast<unsigned int>(a0), static_cast<float>(a1));
+}
+void qute_QOpenGLFunctions_glVertexAttrib1fv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib1fv(static_cast<unsigned int>(a0), (const float *)(a1));
+}
+void qute_QOpenGLFunctions_glVertexAttrib2f(void *self, unsigned int a0, float a1, float a2) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib2f(static_cast<unsigned int>(a0), static_cast<float>(a1), static_cast<float>(a2));
+}
+void qute_QOpenGLFunctions_glVertexAttrib2fv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib2fv(static_cast<unsigned int>(a0), (const float *)(a1));
+}
+void qute_QOpenGLFunctions_glVertexAttrib3f(void *self, unsigned int a0, float a1, float a2, float a3) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib3f(static_cast<unsigned int>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
+}
+void qute_QOpenGLFunctions_glVertexAttrib3fv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib3fv(static_cast<unsigned int>(a0), (const float *)(a1));
+}
+void qute_QOpenGLFunctions_glVertexAttrib4f(void *self, unsigned int a0, float a1, float a2, float a3, float a4) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib4f(static_cast<unsigned int>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3), static_cast<float>(a4));
+}
+void qute_QOpenGLFunctions_glVertexAttrib4fv(void *self, unsigned int a0, void * a1) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttrib4fv(static_cast<unsigned int>(a0), (const float *)(a1));
+}
+void qute_QOpenGLFunctions_glVertexAttribPointer(void *self, unsigned int a0, int a1, unsigned int a2, unsigned char a3, int a4, void * a5) {
+	static_cast<QOpenGLFunctions *>(self)->glVertexAttribPointer(static_cast<unsigned int>(a0), static_cast<int>(a1), static_cast<unsigned int>(a2), static_cast<unsigned char>(a3), static_cast<int>(a4), (const void *)(a5));
+}
+
 // ---- QPagedPaintDevice
 void qute_QPagedPaintDevice_delete(void *self) {
 	delete static_cast<QPagedPaintDevice *>(self);
 }
 bool qute_QPagedPaintDevice_newPage(void *self) {
 	return static_cast<bool>(static_cast<QPagedPaintDevice *>(self)->newPage());
+}
+bool qute_QPagedPaintDevice_setPageMargins(void *self, qute_marginsf a0) {
+	return static_cast<bool>(static_cast<QPagedPaintDevice *>(self)->setPageMargins(qute_to_QMarginsF(a0)));
 }
 
 // ---- QPaintDevice
@@ -3221,6 +4751,23 @@ double qute_QPaintDevice_devicePixelRatioFScale(void) {
 }
 int qute_QPaintDevice_encodeMetricF(int64_t a0, double a1) {
 	return static_cast<int>(QPaintDevice::encodeMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<double>(a1)));
+}
+
+// ---- QPaintDeviceWindow
+void * qute_QPaintDeviceWindow_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QPaintDeviceWindow *>(static_cast<QObject *>(obj)));
+}
+void * qute_QPaintDeviceWindow_as_QPaintDevice(void *self) {
+	return static_cast<void *>(static_cast<QPaintDevice *>(static_cast<QPaintDeviceWindow *>(self)));
+}
+void qute_QPaintDeviceWindow_update(void *self, qute_rect a0) {
+	static_cast<QPaintDeviceWindow *>(self)->update(qute_to_QRect(a0));
+}
+void qute_QPaintDeviceWindow_update_1(void *self, void * a0) {
+	static_cast<QPaintDeviceWindow *>(self)->update((a0 ? *static_cast<QRegion *>(a0) : QRegion()));
+}
+void qute_QPaintDeviceWindow_update_2(void *self) {
+	static_cast<QPaintDeviceWindow *>(self)->update();
 }
 
 // ---- QPaintEvent
@@ -4355,9 +5902,6 @@ void * qute_QPixmap_new_1(int a0, int a1) {
 void * qute_QPixmap_new_2(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<QPixmap *>(new QPixmap(QString::fromUtf8(a0, a0_len)));
 }
-void * qute_QPixmap_new_3(const void * a0) {
-	return static_cast<QPixmap *>(new QPixmap(static_cast<const char *const *>(a0)));
-}
 void qute_QPixmap_delete(void *self) {
 	delete static_cast<QPixmap *>(self);
 }
@@ -4559,6 +6103,139 @@ void * qute_QPointingDeviceUniqueId_fromNumericId(long long a0) {
 	return static_cast<void *>(new QPointingDeviceUniqueId(QPointingDeviceUniqueId::fromNumericId(static_cast<long long>(a0))));
 }
 
+// ---- QQuaternion
+void * qute_QQuaternion_new(void) {
+	return static_cast<QQuaternion *>(new QQuaternion());
+}
+void * qute_QQuaternion_new_1(int64_t a0) {
+	return static_cast<QQuaternion *>(new QQuaternion(static_cast<Qt::Initialization>(a0)));
+}
+void * qute_QQuaternion_new_2(float a0, float a1, float a2, float a3) {
+	return static_cast<QQuaternion *>(new QQuaternion(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3)));
+}
+void * qute_QQuaternion_new_3(float a0, void * a1) {
+	return static_cast<QQuaternion *>(new QQuaternion(static_cast<float>(a0), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D())));
+}
+void * qute_QQuaternion_new_4(void * a0) {
+	return static_cast<QQuaternion *>(new QQuaternion((a0 ? *static_cast<QVector4D *>(a0) : QVector4D())));
+}
+void qute_QQuaternion_delete(void *self) {
+	delete static_cast<QQuaternion *>(self);
+}
+bool qute_QQuaternion_isNull(void *self) {
+	return static_cast<bool>(static_cast<QQuaternion *>(self)->isNull());
+}
+bool qute_QQuaternion_isIdentity(void *self) {
+	return static_cast<bool>(static_cast<QQuaternion *>(self)->isIdentity());
+}
+void * qute_QQuaternion_vector(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QQuaternion *>(self)->vector()));
+}
+void qute_QQuaternion_setVector(void *self, void * a0) {
+	static_cast<QQuaternion *>(self)->setVector((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
+}
+void qute_QQuaternion_setVector_1(void *self, float a0, float a1, float a2) {
+	static_cast<QQuaternion *>(self)->setVector(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2));
+}
+float qute_QQuaternion_x(void *self) {
+	return static_cast<float>(static_cast<QQuaternion *>(self)->x());
+}
+float qute_QQuaternion_y(void *self) {
+	return static_cast<float>(static_cast<QQuaternion *>(self)->y());
+}
+float qute_QQuaternion_z(void *self) {
+	return static_cast<float>(static_cast<QQuaternion *>(self)->z());
+}
+float qute_QQuaternion_scalar(void *self) {
+	return static_cast<float>(static_cast<QQuaternion *>(self)->scalar());
+}
+void qute_QQuaternion_setX(void *self, float a0) {
+	static_cast<QQuaternion *>(self)->setX(static_cast<float>(a0));
+}
+void qute_QQuaternion_setY(void *self, float a0) {
+	static_cast<QQuaternion *>(self)->setY(static_cast<float>(a0));
+}
+void qute_QQuaternion_setZ(void *self, float a0) {
+	static_cast<QQuaternion *>(self)->setZ(static_cast<float>(a0));
+}
+void qute_QQuaternion_setScalar(void *self, float a0) {
+	static_cast<QQuaternion *>(self)->setScalar(static_cast<float>(a0));
+}
+float qute_QQuaternion_length(void *self) {
+	return static_cast<float>(static_cast<QQuaternion *>(self)->length());
+}
+float qute_QQuaternion_lengthSquared(void *self) {
+	return static_cast<float>(static_cast<QQuaternion *>(self)->lengthSquared());
+}
+void * qute_QQuaternion_normalized(void *self) {
+	return static_cast<void *>(new QQuaternion(static_cast<QQuaternion *>(self)->normalized()));
+}
+void qute_QQuaternion_normalize(void *self) {
+	static_cast<QQuaternion *>(self)->normalize();
+}
+void * qute_QQuaternion_inverted(void *self) {
+	return static_cast<void *>(new QQuaternion(static_cast<QQuaternion *>(self)->inverted()));
+}
+void * qute_QQuaternion_conjugated(void *self) {
+	return static_cast<void *>(new QQuaternion(static_cast<QQuaternion *>(self)->conjugated()));
+}
+void * qute_QQuaternion_rotatedVector(void *self, void * a0) {
+	return static_cast<void *>(new QVector3D(static_cast<QQuaternion *>(self)->rotatedVector((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()))));
+}
+void * qute_QQuaternion_toVector4D(void *self) {
+	return static_cast<void *>(new QVector4D(static_cast<QQuaternion *>(self)->toVector4D()));
+}
+void qute_QQuaternion_getAxisAndAngle(void *self, float *a0_out, float *a1_out, float *a2_out, float *a3_out) {
+	float t0{};
+	float t1{};
+	float t2{};
+	float t3{};
+	static_cast<QQuaternion *>(self)->getAxisAndAngle(&t0, &t1, &t2, &t3);
+	*a0_out = static_cast<float>(t0);
+	*a1_out = static_cast<float>(t1);
+	*a2_out = static_cast<float>(t2);
+	*a3_out = static_cast<float>(t3);
+}
+void * qute_QQuaternion_toEulerAngles(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QQuaternion *>(self)->toEulerAngles()));
+}
+void qute_QQuaternion_getEulerAngles(void *self, float *a0_out, float *a1_out, float *a2_out) {
+	float t0{};
+	float t1{};
+	float t2{};
+	static_cast<QQuaternion *>(self)->getEulerAngles(&t0, &t1, &t2);
+	*a0_out = static_cast<float>(t0);
+	*a1_out = static_cast<float>(t1);
+	*a2_out = static_cast<float>(t2);
+}
+float qute_QQuaternion_dotProduct(void * a0, void * a1) {
+	return static_cast<float>(QQuaternion::dotProduct((a0 ? *static_cast<QQuaternion *>(a0) : QQuaternion()), (a1 ? *static_cast<QQuaternion *>(a1) : QQuaternion())));
+}
+void * qute_QQuaternion_fromAxisAndAngle(void * a0, float a1) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::fromAxisAndAngle((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), static_cast<float>(a1))));
+}
+void * qute_QQuaternion_fromAxisAndAngle_1(float a0, float a1, float a2, float a3) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::fromAxisAndAngle(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3))));
+}
+void * qute_QQuaternion_fromEulerAngles(float a0, float a1, float a2) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::fromEulerAngles(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2))));
+}
+void * qute_QQuaternion_fromAxes(void * a0, void * a1, void * a2) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::fromAxes((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()), (a2 ? *static_cast<QVector3D *>(a2) : QVector3D()))));
+}
+void * qute_QQuaternion_fromDirection(void * a0, void * a1) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::fromDirection((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()))));
+}
+void * qute_QQuaternion_rotationTo(void * a0, void * a1) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::rotationTo((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()))));
+}
+void * qute_QQuaternion_slerp(void * a0, void * a1, float a2) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::slerp((a0 ? *static_cast<QQuaternion *>(a0) : QQuaternion()), (a1 ? *static_cast<QQuaternion *>(a1) : QQuaternion()), static_cast<float>(a2))));
+}
+void * qute_QQuaternion_nlerp(void * a0, void * a1, float a2) {
+	return static_cast<void *>(new QQuaternion(QQuaternion::nlerp((a0 ? *static_cast<QQuaternion *>(a0) : QQuaternion()), (a1 ? *static_cast<QQuaternion *>(a1) : QQuaternion()), static_cast<float>(a2))));
+}
+
 // ---- QRadialGradient
 void * qute_QRadialGradient_new(void) {
 	return static_cast<QRadialGradient *>(new QRadialGradient());
@@ -4693,6 +6370,80 @@ qute_size qute_QResizeEvent_size(void *self) {
 }
 qute_size qute_QResizeEvent_oldSize(void *self) {
 	return qute_from_QSize(static_cast<QResizeEvent *>(self)->oldSize());
+}
+
+// ---- QRgba64
+void * qute_QRgba64_new(void) {
+	return static_cast<QRgba64 *>(new QRgba64());
+}
+void qute_QRgba64_delete(void *self) {
+	delete static_cast<QRgba64 *>(self);
+}
+bool qute_QRgba64_isOpaque(void *self) {
+	return static_cast<bool>(static_cast<QRgba64 *>(self)->isOpaque());
+}
+bool qute_QRgba64_isTransparent(void *self) {
+	return static_cast<bool>(static_cast<QRgba64 *>(self)->isTransparent());
+}
+unsigned short qute_QRgba64_red(void *self) {
+	return static_cast<unsigned short>(static_cast<QRgba64 *>(self)->red());
+}
+unsigned short qute_QRgba64_green(void *self) {
+	return static_cast<unsigned short>(static_cast<QRgba64 *>(self)->green());
+}
+unsigned short qute_QRgba64_blue(void *self) {
+	return static_cast<unsigned short>(static_cast<QRgba64 *>(self)->blue());
+}
+unsigned short qute_QRgba64_alpha(void *self) {
+	return static_cast<unsigned short>(static_cast<QRgba64 *>(self)->alpha());
+}
+void qute_QRgba64_setRed(void *self, unsigned short a0) {
+	static_cast<QRgba64 *>(self)->setRed(static_cast<unsigned short>(a0));
+}
+void qute_QRgba64_setGreen(void *self, unsigned short a0) {
+	static_cast<QRgba64 *>(self)->setGreen(static_cast<unsigned short>(a0));
+}
+void qute_QRgba64_setBlue(void *self, unsigned short a0) {
+	static_cast<QRgba64 *>(self)->setBlue(static_cast<unsigned short>(a0));
+}
+void qute_QRgba64_setAlpha(void *self, unsigned short a0) {
+	static_cast<QRgba64 *>(self)->setAlpha(static_cast<unsigned short>(a0));
+}
+unsigned char qute_QRgba64_red8(void *self) {
+	return static_cast<unsigned char>(static_cast<QRgba64 *>(self)->red8());
+}
+unsigned char qute_QRgba64_green8(void *self) {
+	return static_cast<unsigned char>(static_cast<QRgba64 *>(self)->green8());
+}
+unsigned char qute_QRgba64_blue8(void *self) {
+	return static_cast<unsigned char>(static_cast<QRgba64 *>(self)->blue8());
+}
+unsigned char qute_QRgba64_alpha8(void *self) {
+	return static_cast<unsigned char>(static_cast<QRgba64 *>(self)->alpha8());
+}
+unsigned int qute_QRgba64_toArgb32(void *self) {
+	return static_cast<unsigned int>(static_cast<QRgba64 *>(self)->toArgb32());
+}
+unsigned short qute_QRgba64_toRgb16(void *self) {
+	return static_cast<unsigned short>(static_cast<QRgba64 *>(self)->toRgb16());
+}
+void * qute_QRgba64_premultiplied(void *self) {
+	return static_cast<void *>(new QRgba64(static_cast<QRgba64 *>(self)->premultiplied()));
+}
+void * qute_QRgba64_unpremultiplied(void *self) {
+	return static_cast<void *>(new QRgba64(static_cast<QRgba64 *>(self)->unpremultiplied()));
+}
+void * qute_QRgba64_fromRgba64(unsigned long long a0) {
+	return static_cast<void *>(new QRgba64(QRgba64::fromRgba64(static_cast<unsigned long long>(a0))));
+}
+void * qute_QRgba64_fromRgba64_1(unsigned short a0, unsigned short a1, unsigned short a2, unsigned short a3) {
+	return static_cast<void *>(new QRgba64(QRgba64::fromRgba64(static_cast<unsigned short>(a0), static_cast<unsigned short>(a1), static_cast<unsigned short>(a2), static_cast<unsigned short>(a3))));
+}
+void * qute_QRgba64_fromRgba(unsigned char a0, unsigned char a1, unsigned char a2, unsigned char a3) {
+	return static_cast<void *>(new QRgba64(QRgba64::fromRgba(static_cast<unsigned char>(a0), static_cast<unsigned char>(a1), static_cast<unsigned char>(a2), static_cast<unsigned char>(a3))));
+}
+void * qute_QRgba64_fromArgb32(unsigned int a0) {
+	return static_cast<void *>(new QRgba64(QRgba64::fromArgb32(static_cast<unsigned int>(a0))));
 }
 
 // ---- QScreen
@@ -5710,6 +7461,9 @@ void qute_QSurface_delete(void *self) {
 int64_t qute_QSurface_surfaceClass(void *self) {
 	return static_cast<int64_t>(static_cast<QSurface *>(self)->surfaceClass());
 }
+void * qute_QSurface_format(void *self) {
+	return static_cast<void *>(new QSurfaceFormat(static_cast<QSurface *>(self)->format()));
+}
 int64_t qute_QSurface_surfaceType(void *self) {
 	return static_cast<int64_t>(static_cast<QSurface *>(self)->surfaceType());
 }
@@ -5718,6 +7472,136 @@ bool qute_QSurface_supportsOpenGL(void *self) {
 }
 qute_size qute_QSurface_size(void *self) {
 	return qute_from_QSize(static_cast<QSurface *>(self)->size());
+}
+
+// ---- QSurfaceFormat
+void * qute_QSurfaceFormat_new(void) {
+	return static_cast<QSurfaceFormat *>(new QSurfaceFormat());
+}
+void * qute_QSurfaceFormat_new_1(int64_t a0) {
+	return static_cast<QSurfaceFormat *>(new QSurfaceFormat(QFlags<QSurfaceFormat::FormatOption>::fromInt(static_cast<QFlags<QSurfaceFormat::FormatOption>::Int>(a0))));
+}
+void qute_QSurfaceFormat_delete(void *self) {
+	delete static_cast<QSurfaceFormat *>(self);
+}
+void qute_QSurfaceFormat_setDepthBufferSize(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setDepthBufferSize(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_depthBufferSize(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->depthBufferSize());
+}
+void qute_QSurfaceFormat_setStencilBufferSize(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setStencilBufferSize(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_stencilBufferSize(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->stencilBufferSize());
+}
+void qute_QSurfaceFormat_setRedBufferSize(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setRedBufferSize(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_redBufferSize(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->redBufferSize());
+}
+void qute_QSurfaceFormat_setGreenBufferSize(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setGreenBufferSize(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_greenBufferSize(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->greenBufferSize());
+}
+void qute_QSurfaceFormat_setBlueBufferSize(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setBlueBufferSize(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_blueBufferSize(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->blueBufferSize());
+}
+void qute_QSurfaceFormat_setAlphaBufferSize(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setAlphaBufferSize(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_alphaBufferSize(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->alphaBufferSize());
+}
+void qute_QSurfaceFormat_setSamples(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setSamples(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_samples(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->samples());
+}
+void qute_QSurfaceFormat_setSwapBehavior(void *self, int64_t a0) {
+	static_cast<QSurfaceFormat *>(self)->setSwapBehavior(static_cast<QSurfaceFormat::SwapBehavior>(a0));
+}
+int64_t qute_QSurfaceFormat_swapBehavior(void *self) {
+	return static_cast<int64_t>(static_cast<QSurfaceFormat *>(self)->swapBehavior());
+}
+bool qute_QSurfaceFormat_hasAlpha(void *self) {
+	return static_cast<bool>(static_cast<QSurfaceFormat *>(self)->hasAlpha());
+}
+void qute_QSurfaceFormat_setProfile(void *self, int64_t a0) {
+	static_cast<QSurfaceFormat *>(self)->setProfile(static_cast<QSurfaceFormat::OpenGLContextProfile>(a0));
+}
+int64_t qute_QSurfaceFormat_profile(void *self) {
+	return static_cast<int64_t>(static_cast<QSurfaceFormat *>(self)->profile());
+}
+void qute_QSurfaceFormat_setRenderableType(void *self, int64_t a0) {
+	static_cast<QSurfaceFormat *>(self)->setRenderableType(static_cast<QSurfaceFormat::RenderableType>(a0));
+}
+int64_t qute_QSurfaceFormat_renderableType(void *self) {
+	return static_cast<int64_t>(static_cast<QSurfaceFormat *>(self)->renderableType());
+}
+void qute_QSurfaceFormat_setMajorVersion(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setMajorVersion(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_majorVersion(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->majorVersion());
+}
+void qute_QSurfaceFormat_setMinorVersion(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setMinorVersion(static_cast<int>(a0));
+}
+int qute_QSurfaceFormat_minorVersion(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->minorVersion());
+}
+void qute_QSurfaceFormat_version(void *self, int *r0_out, int *r1_out) {
+	auto &&r = static_cast<QSurfaceFormat *>(self)->version();
+	*r0_out = static_cast<int>(r.first);
+	*r1_out = static_cast<int>(r.second);
+}
+void qute_QSurfaceFormat_setVersion(void *self, int a0, int a1) {
+	static_cast<QSurfaceFormat *>(self)->setVersion(static_cast<int>(a0), static_cast<int>(a1));
+}
+bool qute_QSurfaceFormat_stereo(void *self) {
+	return static_cast<bool>(static_cast<QSurfaceFormat *>(self)->stereo());
+}
+void qute_QSurfaceFormat_setStereo(void *self, bool a0) {
+	static_cast<QSurfaceFormat *>(self)->setStereo(static_cast<bool>(a0));
+}
+void qute_QSurfaceFormat_setOptions(void *self, int64_t a0) {
+	static_cast<QSurfaceFormat *>(self)->setOptions(QFlags<QSurfaceFormat::FormatOption>::fromInt(static_cast<QFlags<QSurfaceFormat::FormatOption>::Int>(a0)));
+}
+void qute_QSurfaceFormat_setOption(void *self, int64_t a0) {
+	static_cast<QSurfaceFormat *>(self)->setOption(static_cast<QSurfaceFormat::FormatOption>(a0));
+}
+bool qute_QSurfaceFormat_testOption(void *self, int64_t a0) {
+	return static_cast<bool>(static_cast<QSurfaceFormat *>(self)->testOption(static_cast<QSurfaceFormat::FormatOption>(a0)));
+}
+int64_t qute_QSurfaceFormat_options(void *self) {
+	return static_cast<int64_t>((static_cast<QSurfaceFormat *>(self)->options()).toInt());
+}
+int qute_QSurfaceFormat_swapInterval(void *self) {
+	return static_cast<int>(static_cast<QSurfaceFormat *>(self)->swapInterval());
+}
+void qute_QSurfaceFormat_setSwapInterval(void *self, int a0) {
+	static_cast<QSurfaceFormat *>(self)->setSwapInterval(static_cast<int>(a0));
+}
+void * qute_QSurfaceFormat_colorSpace(void *self) {
+	return static_cast<void *>(new QColorSpace(static_cast<QSurfaceFormat *>(self)->colorSpace()));
+}
+void qute_QSurfaceFormat_setColorSpace(void *self, void * a0) {
+	static_cast<QSurfaceFormat *>(self)->setColorSpace((a0 ? *static_cast<QColorSpace *>(a0) : QColorSpace()));
+}
+void qute_QSurfaceFormat_setDefaultFormat(void * a0) {
+	QSurfaceFormat::setDefaultFormat((a0 ? *static_cast<QSurfaceFormat *>(a0) : QSurfaceFormat()));
+}
+void * qute_QSurfaceFormat_defaultFormat(void) {
+	return static_cast<void *>(new QSurfaceFormat(QSurfaceFormat::defaultFormat()));
 }
 
 // ---- QTextBlock
@@ -5762,6 +7646,9 @@ qute_str qute_QTextBlock_text(void *self) {
 }
 void * qute_QTextBlock_document(void *self) {
 	return (void *)(static_cast<QTextBlock *>(self)->document());
+}
+void * qute_QTextBlock_textList(void *self) {
+	return (void *)(static_cast<QTextBlock *>(self)->textList());
 }
 int qute_QTextBlock_userState(void *self) {
 	return static_cast<int>(static_cast<QTextBlock *>(self)->userState());
@@ -5882,11 +7769,22 @@ void qute_QTextBlockFormat_setPageBreakPolicy(void *self, int64_t a0) {
 int64_t qute_QTextBlockFormat_pageBreakPolicy(void *self) {
 	return static_cast<int64_t>((static_cast<QTextBlockFormat *>(self)->pageBreakPolicy()).toInt());
 }
+void qute_QTextBlockFormat_setTabPositions(void *self, const void *a0, ptrdiff_t a0_n) {
+	static_cast<QTextBlockFormat *>(self)->setTabPositions([&] { QList<QTextOption::Tab> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QTextOption::Tab *>(d[i]) : QTextOption::Tab())); return l; }());
+}
+qute_list qute_QTextBlockFormat_tabPositions(void *self) {
+	return qute_ret_list<void *>(static_cast<QTextBlockFormat *>(self)->tabPositions(), [](const auto &v) { return static_cast<void *>(new QTextOption::Tab(v)); });
+}
 void qute_QTextBlockFormat_setMarker(void *self, int64_t a0) {
 	static_cast<QTextBlockFormat *>(self)->setMarker(static_cast<QTextBlockFormat::MarkerType>(a0));
 }
 int64_t qute_QTextBlockFormat_marker(void *self) {
 	return static_cast<int64_t>(static_cast<QTextBlockFormat *>(self)->marker());
+}
+
+// ---- QTextBlockGroup
+void * qute_QTextBlockGroup_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QTextBlockGroup *>(static_cast<QObject *>(obj)));
 }
 
 // ---- QTextCharFormat
@@ -6242,6 +8140,30 @@ void qute_QTextCursor_insertBlock_1(void *self, void * a0) {
 void qute_QTextCursor_insertBlock_2(void *self, void * a0, void * a1) {
 	static_cast<QTextCursor *>(self)->insertBlock((a0 ? *static_cast<QTextBlockFormat *>(a0) : QTextBlockFormat()), (a1 ? *static_cast<QTextCharFormat *>(a1) : QTextCharFormat()));
 }
+void * qute_QTextCursor_insertList(void *self, void * a0) {
+	return (void *)(static_cast<QTextCursor *>(self)->insertList((a0 ? *static_cast<QTextListFormat *>(a0) : QTextListFormat())));
+}
+void * qute_QTextCursor_insertList_1(void *self, int64_t a0) {
+	return (void *)(static_cast<QTextCursor *>(self)->insertList(static_cast<QTextListFormat::Style>(a0)));
+}
+void * qute_QTextCursor_createList(void *self, void * a0) {
+	return (void *)(static_cast<QTextCursor *>(self)->createList((a0 ? *static_cast<QTextListFormat *>(a0) : QTextListFormat())));
+}
+void * qute_QTextCursor_createList_1(void *self, int64_t a0) {
+	return (void *)(static_cast<QTextCursor *>(self)->createList(static_cast<QTextListFormat::Style>(a0)));
+}
+void * qute_QTextCursor_currentList(void *self) {
+	return (void *)(static_cast<QTextCursor *>(self)->currentList());
+}
+void * qute_QTextCursor_insertTable(void *self, int a0, int a1, void * a2) {
+	return (void *)(static_cast<QTextCursor *>(self)->insertTable(static_cast<int>(a0), static_cast<int>(a1), (a2 ? *static_cast<QTextTableFormat *>(a2) : QTextTableFormat())));
+}
+void * qute_QTextCursor_insertTable_1(void *self, int a0, int a1) {
+	return (void *)(static_cast<QTextCursor *>(self)->insertTable(static_cast<int>(a0), static_cast<int>(a1)));
+}
+void * qute_QTextCursor_currentTable(void *self) {
+	return (void *)(static_cast<QTextCursor *>(self)->currentTable());
+}
 void * qute_QTextCursor_insertFrame(void *self, void * a0) {
 	return (void *)(static_cast<QTextCursor *>(self)->insertFrame((a0 ? *static_cast<QTextFrameFormat *>(a0) : QTextFrameFormat())));
 }
@@ -6257,10 +8179,16 @@ void qute_QTextCursor_insertHtml(void *self, const char *a0, ptrdiff_t a0_len) {
 void qute_QTextCursor_insertMarkdown(void *self, const char *a0, ptrdiff_t a0_len) {
 	static_cast<QTextCursor *>(self)->insertMarkdown(QString::fromUtf8(a0, a0_len));
 }
-void qute_QTextCursor_insertImage(void *self, const char *a0, ptrdiff_t a0_len) {
-	static_cast<QTextCursor *>(self)->insertImage(QString::fromUtf8(a0, a0_len));
+void qute_QTextCursor_insertImage(void *self, void * a0, int64_t a1) {
+	static_cast<QTextCursor *>(self)->insertImage((a0 ? *static_cast<QTextImageFormat *>(a0) : QTextImageFormat()), static_cast<QTextFrameFormat::Position>(a1));
 }
 void qute_QTextCursor_insertImage_1(void *self, void * a0) {
+	static_cast<QTextCursor *>(self)->insertImage((a0 ? *static_cast<QTextImageFormat *>(a0) : QTextImageFormat()));
+}
+void qute_QTextCursor_insertImage_2(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QTextCursor *>(self)->insertImage(QString::fromUtf8(a0, a0_len));
+}
+void qute_QTextCursor_insertImage_3(void *self, void * a0) {
 	static_cast<QTextCursor *>(self)->insertImage((a0 ? *static_cast<QImage *>(a0) : QImage()));
 }
 void qute_QTextCursor_beginEditBlock(void *self) {
@@ -6736,6 +8664,15 @@ void * qute_QTextFormat_penProperty(void *self, int a0) {
 void * qute_QTextFormat_brushProperty(void *self, int a0) {
 	return static_cast<void *>(new QBrush(static_cast<QTextFormat *>(self)->brushProperty(static_cast<int>(a0))));
 }
+void * qute_QTextFormat_lengthProperty(void *self, int a0) {
+	return static_cast<void *>(new QTextLength(static_cast<QTextFormat *>(self)->lengthProperty(static_cast<int>(a0))));
+}
+qute_list qute_QTextFormat_lengthVectorProperty(void *self, int a0) {
+	return qute_ret_list<void *>(static_cast<QTextFormat *>(self)->lengthVectorProperty(static_cast<int>(a0)), [](const auto &v) { return static_cast<void *>(new QTextLength(v)); });
+}
+void qute_QTextFormat_setProperty_1(void *self, int a0, const void *a1, ptrdiff_t a1_n) {
+	static_cast<QTextFormat *>(self)->setProperty(static_cast<int>(a0), [&] { QList<QTextLength> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append((d[i] ? *static_cast<QTextLength *>(d[i]) : QTextLength())); return l; }());
+}
 qute_map qute_QTextFormat_properties(void *self) {
 	return qute_ret_map<int, void *>(static_cast<QTextFormat *>(self)->properties(), [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 }
@@ -6775,8 +8712,20 @@ void * qute_QTextFormat_toBlockFormat(void *self) {
 void * qute_QTextFormat_toCharFormat(void *self) {
 	return static_cast<void *>(new QTextCharFormat(static_cast<QTextFormat *>(self)->toCharFormat()));
 }
+void * qute_QTextFormat_toListFormat(void *self) {
+	return static_cast<void *>(new QTextListFormat(static_cast<QTextFormat *>(self)->toListFormat()));
+}
+void * qute_QTextFormat_toTableFormat(void *self) {
+	return static_cast<void *>(new QTextTableFormat(static_cast<QTextFormat *>(self)->toTableFormat()));
+}
 void * qute_QTextFormat_toFrameFormat(void *self) {
 	return static_cast<void *>(new QTextFrameFormat(static_cast<QTextFormat *>(self)->toFrameFormat()));
+}
+void * qute_QTextFormat_toImageFormat(void *self) {
+	return static_cast<void *>(new QTextImageFormat(static_cast<QTextFormat *>(self)->toImageFormat()));
+}
+void * qute_QTextFormat_toTableCellFormat(void *self) {
+	return static_cast<void *>(new QTextTableCellFormat(static_cast<QTextFormat *>(self)->toTableCellFormat()));
 }
 void qute_QTextFormat_setLayoutDirection(void *self, int64_t a0) {
 	static_cast<QTextFormat *>(self)->setLayoutDirection(static_cast<Qt::LayoutDirection>(a0));
@@ -6905,14 +8854,64 @@ double qute_QTextFrameFormat_padding(void *self) {
 void qute_QTextFrameFormat_setWidth(void *self, double a0) {
 	static_cast<QTextFrameFormat *>(self)->setWidth(static_cast<double>(a0));
 }
+void qute_QTextFrameFormat_setWidth_1(void *self, void * a0) {
+	static_cast<QTextFrameFormat *>(self)->setWidth((a0 ? *static_cast<QTextLength *>(a0) : QTextLength()));
+}
+void * qute_QTextFrameFormat_width(void *self) {
+	return static_cast<void *>(new QTextLength(static_cast<QTextFrameFormat *>(self)->width()));
+}
 void qute_QTextFrameFormat_setHeight(void *self, double a0) {
 	static_cast<QTextFrameFormat *>(self)->setHeight(static_cast<double>(a0));
+}
+void qute_QTextFrameFormat_setHeight_1(void *self, void * a0) {
+	static_cast<QTextFrameFormat *>(self)->setHeight((a0 ? *static_cast<QTextLength *>(a0) : QTextLength()));
+}
+void * qute_QTextFrameFormat_height(void *self) {
+	return static_cast<void *>(new QTextLength(static_cast<QTextFrameFormat *>(self)->height()));
 }
 void qute_QTextFrameFormat_setPageBreakPolicy(void *self, int64_t a0) {
 	static_cast<QTextFrameFormat *>(self)->setPageBreakPolicy(QFlags<QTextFormat::PageBreakFlag>::fromInt(static_cast<QFlags<QTextFormat::PageBreakFlag>::Int>(a0)));
 }
 int64_t qute_QTextFrameFormat_pageBreakPolicy(void *self) {
 	return static_cast<int64_t>((static_cast<QTextFrameFormat *>(self)->pageBreakPolicy()).toInt());
+}
+
+// ---- QTextImageFormat
+void * qute_QTextImageFormat_new(void) {
+	return static_cast<QTextImageFormat *>(new QTextImageFormat());
+}
+void qute_QTextImageFormat_delete(void *self) {
+	delete static_cast<QTextImageFormat *>(self);
+}
+void qute_QTextImageFormat_setName(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QTextImageFormat *>(self)->setName(QString::fromUtf8(a0, a0_len));
+}
+qute_str qute_QTextImageFormat_name(void *self) {
+	return qute_ret_str(static_cast<QTextImageFormat *>(self)->name());
+}
+void qute_QTextImageFormat_setWidth(void *self, double a0) {
+	static_cast<QTextImageFormat *>(self)->setWidth(static_cast<double>(a0));
+}
+double qute_QTextImageFormat_width(void *self) {
+	return static_cast<double>(static_cast<QTextImageFormat *>(self)->width());
+}
+void qute_QTextImageFormat_setMaximumWidth(void *self, void * a0) {
+	static_cast<QTextImageFormat *>(self)->setMaximumWidth((a0 ? *static_cast<QTextLength *>(a0) : QTextLength()));
+}
+void * qute_QTextImageFormat_maximumWidth(void *self) {
+	return static_cast<void *>(new QTextLength(static_cast<QTextImageFormat *>(self)->maximumWidth()));
+}
+void qute_QTextImageFormat_setHeight(void *self, double a0) {
+	static_cast<QTextImageFormat *>(self)->setHeight(static_cast<double>(a0));
+}
+double qute_QTextImageFormat_height(void *self) {
+	return static_cast<double>(static_cast<QTextImageFormat *>(self)->height());
+}
+void qute_QTextImageFormat_setQuality(void *self, int a0) {
+	static_cast<QTextImageFormat *>(self)->setQuality(static_cast<int>(a0));
+}
+int qute_QTextImageFormat_quality(void *self) {
+	return static_cast<int>(static_cast<QTextImageFormat *>(self)->quality());
 }
 
 // ---- QTextItem
@@ -6936,6 +8935,93 @@ qute_str qute_QTextItem_text(void *self) {
 }
 void * qute_QTextItem_font(void *self) {
 	return static_cast<void *>(new QFont(static_cast<QTextItem *>(self)->font()));
+}
+
+// ---- QTextLength
+void * qute_QTextLength_new(void) {
+	return static_cast<QTextLength *>(new QTextLength());
+}
+void * qute_QTextLength_new_1(int64_t a0, double a1) {
+	return static_cast<QTextLength *>(new QTextLength(static_cast<QTextLength::Type>(a0), static_cast<double>(a1)));
+}
+void qute_QTextLength_delete(void *self) {
+	delete static_cast<QTextLength *>(self);
+}
+int64_t qute_QTextLength_type(void *self) {
+	return static_cast<int64_t>(static_cast<QTextLength *>(self)->type());
+}
+double qute_QTextLength_value(void *self, double a0) {
+	return static_cast<double>(static_cast<QTextLength *>(self)->value(static_cast<double>(a0)));
+}
+double qute_QTextLength_rawValue(void *self) {
+	return static_cast<double>(static_cast<QTextLength *>(self)->rawValue());
+}
+
+// ---- QTextList
+void * qute_QTextList_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QTextList *>(static_cast<QObject *>(obj)));
+}
+int qute_QTextList_count(void *self) {
+	return static_cast<int>(static_cast<QTextList *>(self)->count());
+}
+void * qute_QTextList_item(void *self, int a0) {
+	return static_cast<void *>(new QTextBlock(static_cast<QTextList *>(self)->item(static_cast<int>(a0))));
+}
+int qute_QTextList_itemNumber(void *self, void * a0) {
+	return static_cast<int>(static_cast<QTextList *>(self)->itemNumber((a0 ? *static_cast<QTextBlock *>(a0) : QTextBlock())));
+}
+qute_str qute_QTextList_itemText(void *self, void * a0) {
+	return qute_ret_str(static_cast<QTextList *>(self)->itemText((a0 ? *static_cast<QTextBlock *>(a0) : QTextBlock())));
+}
+void qute_QTextList_removeItem(void *self, int a0) {
+	static_cast<QTextList *>(self)->removeItem(static_cast<int>(a0));
+}
+void qute_QTextList_remove(void *self, void * a0) {
+	static_cast<QTextList *>(self)->remove((a0 ? *static_cast<QTextBlock *>(a0) : QTextBlock()));
+}
+void qute_QTextList_add(void *self, void * a0) {
+	static_cast<QTextList *>(self)->add((a0 ? *static_cast<QTextBlock *>(a0) : QTextBlock()));
+}
+void qute_QTextList_setFormat(void *self, void * a0) {
+	static_cast<QTextList *>(self)->setFormat((a0 ? *static_cast<QTextListFormat *>(a0) : QTextListFormat()));
+}
+
+// ---- QTextListFormat
+void * qute_QTextListFormat_new(void) {
+	return static_cast<QTextListFormat *>(new QTextListFormat());
+}
+void qute_QTextListFormat_delete(void *self) {
+	delete static_cast<QTextListFormat *>(self);
+}
+void qute_QTextListFormat_setStyle(void *self, int64_t a0) {
+	static_cast<QTextListFormat *>(self)->setStyle(static_cast<QTextListFormat::Style>(a0));
+}
+int64_t qute_QTextListFormat_style(void *self) {
+	return static_cast<int64_t>(static_cast<QTextListFormat *>(self)->style());
+}
+void qute_QTextListFormat_setIndent(void *self, int a0) {
+	static_cast<QTextListFormat *>(self)->setIndent(static_cast<int>(a0));
+}
+int qute_QTextListFormat_indent(void *self) {
+	return static_cast<int>(static_cast<QTextListFormat *>(self)->indent());
+}
+void qute_QTextListFormat_setNumberPrefix(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QTextListFormat *>(self)->setNumberPrefix(QString::fromUtf8(a0, a0_len));
+}
+qute_str qute_QTextListFormat_numberPrefix(void *self) {
+	return qute_ret_str(static_cast<QTextListFormat *>(self)->numberPrefix());
+}
+void qute_QTextListFormat_setNumberSuffix(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QTextListFormat *>(self)->setNumberSuffix(QString::fromUtf8(a0, a0_len));
+}
+qute_str qute_QTextListFormat_numberSuffix(void *self) {
+	return qute_ret_str(static_cast<QTextListFormat *>(self)->numberSuffix());
+}
+void qute_QTextListFormat_setStart(void *self, int a0) {
+	static_cast<QTextListFormat *>(self)->setStart(static_cast<int>(a0));
+}
+int qute_QTextListFormat_start(void *self) {
+	return static_cast<int>(static_cast<QTextListFormat *>(self)->start());
 }
 
 // ---- QTextObject
@@ -7001,11 +9087,318 @@ void qute_QTextOption_setTabArray(void *self, const void *a0, ptrdiff_t a0_n) {
 qute_list qute_QTextOption_tabArray(void *self) {
 	return qute_ret_list<double>(static_cast<QTextOption *>(self)->tabArray(), [](const auto &v) { return static_cast<double>(v); });
 }
+void qute_QTextOption_setTabs(void *self, const void *a0, ptrdiff_t a0_n) {
+	static_cast<QTextOption *>(self)->setTabs([&] { QList<QTextOption::Tab> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QTextOption::Tab *>(d[i]) : QTextOption::Tab())); return l; }());
+}
+qute_list qute_QTextOption_tabs(void *self) {
+	return qute_ret_list<void *>(static_cast<QTextOption *>(self)->tabs(), [](const auto &v) { return static_cast<void *>(new QTextOption::Tab(v)); });
+}
 void qute_QTextOption_setUseDesignMetrics(void *self, bool a0) {
 	static_cast<QTextOption *>(self)->setUseDesignMetrics(static_cast<bool>(a0));
 }
 bool qute_QTextOption_useDesignMetrics(void *self) {
 	return static_cast<bool>(static_cast<QTextOption *>(self)->useDesignMetrics());
+}
+
+// ---- QTextOptionTab
+void * qute_QTextOptionTab_new(void) {
+	return static_cast<QTextOption::Tab *>(new QTextOption::Tab());
+}
+void * qute_QTextOptionTab_new_1(double a0, int64_t a1) {
+	return static_cast<QTextOption::Tab *>(new QTextOption::Tab(static_cast<double>(a0), static_cast<QTextOption::TabType>(a1)));
+}
+void qute_QTextOptionTab_delete(void *self) {
+	delete static_cast<QTextOption::Tab *>(self);
+}
+double qute_QTextOptionTab_get_position(void *self) {
+	return static_cast<double>(static_cast<QTextOption::Tab *>(self)->position);
+}
+void qute_QTextOptionTab_set_position(void *self, double a0) {
+	static_cast<QTextOption::Tab *>(self)->position = static_cast<double>(a0);
+}
+int64_t qute_QTextOptionTab_get_type(void *self) {
+	return static_cast<int64_t>(static_cast<QTextOption::Tab *>(self)->type);
+}
+void qute_QTextOptionTab_set_type(void *self, int64_t a0) {
+	static_cast<QTextOption::Tab *>(self)->type = static_cast<QTextOption::TabType>(a0);
+}
+unsigned int qute_QTextOptionTab_get_delimiter(void *self) {
+	return static_cast<unsigned int>((static_cast<QTextOption::Tab *>(self)->delimiter).unicode());
+}
+void qute_QTextOptionTab_set_delimiter(void *self, unsigned int a0) {
+	static_cast<QTextOption::Tab *>(self)->delimiter = QChar(static_cast<char32_t>(a0));
+}
+
+// ---- QTextTable
+void * qute_QTextTable_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QTextTable *>(static_cast<QObject *>(obj)));
+}
+void qute_QTextTable_resize(void *self, int a0, int a1) {
+	static_cast<QTextTable *>(self)->resize(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QTextTable_insertRows(void *self, int a0, int a1) {
+	static_cast<QTextTable *>(self)->insertRows(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QTextTable_insertColumns(void *self, int a0, int a1) {
+	static_cast<QTextTable *>(self)->insertColumns(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QTextTable_appendRows(void *self, int a0) {
+	static_cast<QTextTable *>(self)->appendRows(static_cast<int>(a0));
+}
+void qute_QTextTable_appendColumns(void *self, int a0) {
+	static_cast<QTextTable *>(self)->appendColumns(static_cast<int>(a0));
+}
+void qute_QTextTable_removeRows(void *self, int a0, int a1) {
+	static_cast<QTextTable *>(self)->removeRows(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QTextTable_removeColumns(void *self, int a0, int a1) {
+	static_cast<QTextTable *>(self)->removeColumns(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QTextTable_mergeCells(void *self, int a0, int a1, int a2, int a3) {
+	static_cast<QTextTable *>(self)->mergeCells(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QTextTable_mergeCells_1(void *self, void * a0) {
+	static_cast<QTextTable *>(self)->mergeCells((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()));
+}
+void qute_QTextTable_splitCell(void *self, int a0, int a1, int a2, int a3) {
+	static_cast<QTextTable *>(self)->splitCell(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+int qute_QTextTable_rows(void *self) {
+	return static_cast<int>(static_cast<QTextTable *>(self)->rows());
+}
+int qute_QTextTable_columns(void *self) {
+	return static_cast<int>(static_cast<QTextTable *>(self)->columns());
+}
+void * qute_QTextTable_cellAt(void *self, int a0, int a1) {
+	return static_cast<void *>(new QTextTableCell(static_cast<QTextTable *>(self)->cellAt(static_cast<int>(a0), static_cast<int>(a1))));
+}
+void * qute_QTextTable_cellAt_1(void *self, int a0) {
+	return static_cast<void *>(new QTextTableCell(static_cast<QTextTable *>(self)->cellAt(static_cast<int>(a0))));
+}
+void * qute_QTextTable_cellAt_2(void *self, void * a0) {
+	return static_cast<void *>(new QTextTableCell(static_cast<QTextTable *>(self)->cellAt((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()))));
+}
+void * qute_QTextTable_rowStart(void *self, void * a0) {
+	return static_cast<void *>(new QTextCursor(static_cast<QTextTable *>(self)->rowStart((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()))));
+}
+void * qute_QTextTable_rowEnd(void *self, void * a0) {
+	return static_cast<void *>(new QTextCursor(static_cast<QTextTable *>(self)->rowEnd((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()))));
+}
+void qute_QTextTable_setFormat(void *self, void * a0) {
+	static_cast<QTextTable *>(self)->setFormat((a0 ? *static_cast<QTextTableFormat *>(a0) : QTextTableFormat()));
+}
+
+// ---- QTextTableCell
+void * qute_QTextTableCell_new(void) {
+	return static_cast<QTextTableCell *>(new QTextTableCell());
+}
+void qute_QTextTableCell_delete(void *self) {
+	delete static_cast<QTextTableCell *>(self);
+}
+void qute_QTextTableCell_setFormat(void *self, void * a0) {
+	static_cast<QTextTableCell *>(self)->setFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
+}
+void * qute_QTextTableCell_format(void *self) {
+	return static_cast<void *>(new QTextCharFormat(static_cast<QTextTableCell *>(self)->format()));
+}
+int qute_QTextTableCell_row(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->row());
+}
+int qute_QTextTableCell_column(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->column());
+}
+int qute_QTextTableCell_rowSpan(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->rowSpan());
+}
+int qute_QTextTableCell_columnSpan(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->columnSpan());
+}
+bool qute_QTextTableCell_isValid(void *self) {
+	return static_cast<bool>(static_cast<QTextTableCell *>(self)->isValid());
+}
+void * qute_QTextTableCell_firstCursorPosition(void *self) {
+	return static_cast<void *>(new QTextCursor(static_cast<QTextTableCell *>(self)->firstCursorPosition()));
+}
+void * qute_QTextTableCell_lastCursorPosition(void *self) {
+	return static_cast<void *>(new QTextCursor(static_cast<QTextTableCell *>(self)->lastCursorPosition()));
+}
+int qute_QTextTableCell_firstPosition(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->firstPosition());
+}
+int qute_QTextTableCell_lastPosition(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->lastPosition());
+}
+int qute_QTextTableCell_tableCellFormatIndex(void *self) {
+	return static_cast<int>(static_cast<QTextTableCell *>(self)->tableCellFormatIndex());
+}
+
+// ---- QTextTableCellFormat
+void * qute_QTextTableCellFormat_new(void) {
+	return static_cast<QTextTableCellFormat *>(new QTextTableCellFormat());
+}
+void qute_QTextTableCellFormat_delete(void *self) {
+	delete static_cast<QTextTableCellFormat *>(self);
+}
+void qute_QTextTableCellFormat_setTopPadding(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setTopPadding(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_topPadding(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->topPadding());
+}
+void qute_QTextTableCellFormat_setBottomPadding(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBottomPadding(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_bottomPadding(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->bottomPadding());
+}
+void qute_QTextTableCellFormat_setLeftPadding(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setLeftPadding(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_leftPadding(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->leftPadding());
+}
+void qute_QTextTableCellFormat_setRightPadding(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setRightPadding(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_rightPadding(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->rightPadding());
+}
+void qute_QTextTableCellFormat_setPadding(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setPadding(static_cast<double>(a0));
+}
+void qute_QTextTableCellFormat_setTopBorder(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setTopBorder(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_topBorder(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->topBorder());
+}
+void qute_QTextTableCellFormat_setBottomBorder(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBottomBorder(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_bottomBorder(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->bottomBorder());
+}
+void qute_QTextTableCellFormat_setLeftBorder(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setLeftBorder(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_leftBorder(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->leftBorder());
+}
+void qute_QTextTableCellFormat_setRightBorder(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setRightBorder(static_cast<double>(a0));
+}
+double qute_QTextTableCellFormat_rightBorder(void *self) {
+	return static_cast<double>(static_cast<QTextTableCellFormat *>(self)->rightBorder());
+}
+void qute_QTextTableCellFormat_setBorder(void *self, double a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBorder(static_cast<double>(a0));
+}
+void qute_QTextTableCellFormat_setTopBorderStyle(void *self, int64_t a0) {
+	static_cast<QTextTableCellFormat *>(self)->setTopBorderStyle(static_cast<QTextFrameFormat::BorderStyle>(a0));
+}
+int64_t qute_QTextTableCellFormat_topBorderStyle(void *self) {
+	return static_cast<int64_t>(static_cast<QTextTableCellFormat *>(self)->topBorderStyle());
+}
+void qute_QTextTableCellFormat_setBottomBorderStyle(void *self, int64_t a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBottomBorderStyle(static_cast<QTextFrameFormat::BorderStyle>(a0));
+}
+int64_t qute_QTextTableCellFormat_bottomBorderStyle(void *self) {
+	return static_cast<int64_t>(static_cast<QTextTableCellFormat *>(self)->bottomBorderStyle());
+}
+void qute_QTextTableCellFormat_setLeftBorderStyle(void *self, int64_t a0) {
+	static_cast<QTextTableCellFormat *>(self)->setLeftBorderStyle(static_cast<QTextFrameFormat::BorderStyle>(a0));
+}
+int64_t qute_QTextTableCellFormat_leftBorderStyle(void *self) {
+	return static_cast<int64_t>(static_cast<QTextTableCellFormat *>(self)->leftBorderStyle());
+}
+void qute_QTextTableCellFormat_setRightBorderStyle(void *self, int64_t a0) {
+	static_cast<QTextTableCellFormat *>(self)->setRightBorderStyle(static_cast<QTextFrameFormat::BorderStyle>(a0));
+}
+int64_t qute_QTextTableCellFormat_rightBorderStyle(void *self) {
+	return static_cast<int64_t>(static_cast<QTextTableCellFormat *>(self)->rightBorderStyle());
+}
+void qute_QTextTableCellFormat_setBorderStyle(void *self, int64_t a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBorderStyle(static_cast<QTextFrameFormat::BorderStyle>(a0));
+}
+void qute_QTextTableCellFormat_setTopBorderBrush(void *self, void * a0) {
+	static_cast<QTextTableCellFormat *>(self)->setTopBorderBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
+}
+void * qute_QTextTableCellFormat_topBorderBrush(void *self) {
+	return static_cast<void *>(new QBrush(static_cast<QTextTableCellFormat *>(self)->topBorderBrush()));
+}
+void qute_QTextTableCellFormat_setBottomBorderBrush(void *self, void * a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBottomBorderBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
+}
+void * qute_QTextTableCellFormat_bottomBorderBrush(void *self) {
+	return static_cast<void *>(new QBrush(static_cast<QTextTableCellFormat *>(self)->bottomBorderBrush()));
+}
+void qute_QTextTableCellFormat_setLeftBorderBrush(void *self, void * a0) {
+	static_cast<QTextTableCellFormat *>(self)->setLeftBorderBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
+}
+void * qute_QTextTableCellFormat_leftBorderBrush(void *self) {
+	return static_cast<void *>(new QBrush(static_cast<QTextTableCellFormat *>(self)->leftBorderBrush()));
+}
+void qute_QTextTableCellFormat_setRightBorderBrush(void *self, void * a0) {
+	static_cast<QTextTableCellFormat *>(self)->setRightBorderBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
+}
+void * qute_QTextTableCellFormat_rightBorderBrush(void *self) {
+	return static_cast<void *>(new QBrush(static_cast<QTextTableCellFormat *>(self)->rightBorderBrush()));
+}
+void qute_QTextTableCellFormat_setBorderBrush(void *self, void * a0) {
+	static_cast<QTextTableCellFormat *>(self)->setBorderBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
+}
+
+// ---- QTextTableFormat
+void * qute_QTextTableFormat_new(void) {
+	return static_cast<QTextTableFormat *>(new QTextTableFormat());
+}
+void qute_QTextTableFormat_delete(void *self) {
+	delete static_cast<QTextTableFormat *>(self);
+}
+int qute_QTextTableFormat_columns(void *self) {
+	return static_cast<int>(static_cast<QTextTableFormat *>(self)->columns());
+}
+void qute_QTextTableFormat_setColumns(void *self, int a0) {
+	static_cast<QTextTableFormat *>(self)->setColumns(static_cast<int>(a0));
+}
+void qute_QTextTableFormat_setColumnWidthConstraints(void *self, const void *a0, ptrdiff_t a0_n) {
+	static_cast<QTextTableFormat *>(self)->setColumnWidthConstraints([&] { QList<QTextLength> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QTextLength *>(d[i]) : QTextLength())); return l; }());
+}
+qute_list qute_QTextTableFormat_columnWidthConstraints(void *self) {
+	return qute_ret_list<void *>(static_cast<QTextTableFormat *>(self)->columnWidthConstraints(), [](const auto &v) { return static_cast<void *>(new QTextLength(v)); });
+}
+void qute_QTextTableFormat_clearColumnWidthConstraints(void *self) {
+	static_cast<QTextTableFormat *>(self)->clearColumnWidthConstraints();
+}
+double qute_QTextTableFormat_cellSpacing(void *self) {
+	return static_cast<double>(static_cast<QTextTableFormat *>(self)->cellSpacing());
+}
+void qute_QTextTableFormat_setCellSpacing(void *self, double a0) {
+	static_cast<QTextTableFormat *>(self)->setCellSpacing(static_cast<double>(a0));
+}
+double qute_QTextTableFormat_cellPadding(void *self) {
+	return static_cast<double>(static_cast<QTextTableFormat *>(self)->cellPadding());
+}
+void qute_QTextTableFormat_setCellPadding(void *self, double a0) {
+	static_cast<QTextTableFormat *>(self)->setCellPadding(static_cast<double>(a0));
+}
+void qute_QTextTableFormat_setAlignment(void *self, int64_t a0) {
+	static_cast<QTextTableFormat *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
+}
+int64_t qute_QTextTableFormat_alignment(void *self) {
+	return static_cast<int64_t>((static_cast<QTextTableFormat *>(self)->alignment()).toInt());
+}
+void qute_QTextTableFormat_setHeaderRowCount(void *self, int a0) {
+	static_cast<QTextTableFormat *>(self)->setHeaderRowCount(static_cast<int>(a0));
+}
+int qute_QTextTableFormat_headerRowCount(void *self) {
+	return static_cast<int>(static_cast<QTextTableFormat *>(self)->headerRowCount());
+}
+void qute_QTextTableFormat_setBorderCollapse(void *self, bool a0) {
+	static_cast<QTextTableFormat *>(self)->setBorderCollapse(static_cast<bool>(a0));
+}
+bool qute_QTextTableFormat_borderCollapse(void *self) {
+	return static_cast<bool>(static_cast<QTextTableFormat *>(self)->borderCollapse());
 }
 
 // ---- QTransform
@@ -7217,6 +9610,12 @@ void * qute_QVector2D_new_2(qute_point a0) {
 void * qute_QVector2D_new_3(qute_pointf a0) {
 	return static_cast<QVector2D *>(new QVector2D(qute_to_QPointF(a0)));
 }
+void * qute_QVector2D_new_4(void * a0) {
+	return static_cast<QVector2D *>(new QVector2D((a0 ? *static_cast<QVector3D *>(a0) : QVector3D())));
+}
+void * qute_QVector2D_new_5(void * a0) {
+	return static_cast<QVector2D *>(new QVector2D((a0 ? *static_cast<QVector4D *>(a0) : QVector4D())));
+}
 void qute_QVector2D_delete(void *self) {
 	delete static_cast<QVector2D *>(self);
 }
@@ -7253,6 +9652,12 @@ float qute_QVector2D_distanceToPoint(void *self, void * a0) {
 float qute_QVector2D_distanceToLine(void *self, void * a0, void * a1) {
 	return static_cast<float>(static_cast<QVector2D *>(self)->distanceToLine((a0 ? *static_cast<QVector2D *>(a0) : QVector2D()), (a1 ? *static_cast<QVector2D *>(a1) : QVector2D())));
 }
+void * qute_QVector2D_toVector3D(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QVector2D *>(self)->toVector3D()));
+}
+void * qute_QVector2D_toVector4D(void *self) {
+	return static_cast<void *>(new QVector4D(static_cast<QVector2D *>(self)->toVector4D()));
+}
 qute_point qute_QVector2D_toPoint(void *self) {
 	return qute_from_QPoint(static_cast<QVector2D *>(self)->toPoint());
 }
@@ -7261,6 +9666,202 @@ qute_pointf qute_QVector2D_toPointF(void *self) {
 }
 float qute_QVector2D_dotProduct(void * a0, void * a1) {
 	return static_cast<float>(QVector2D::dotProduct((a0 ? *static_cast<QVector2D *>(a0) : QVector2D()), (a1 ? *static_cast<QVector2D *>(a1) : QVector2D())));
+}
+
+// ---- QVector3D
+void * qute_QVector3D_new(void) {
+	return static_cast<QVector3D *>(new QVector3D());
+}
+void * qute_QVector3D_new_1(int64_t a0) {
+	return static_cast<QVector3D *>(new QVector3D(static_cast<Qt::Initialization>(a0)));
+}
+void * qute_QVector3D_new_2(float a0, float a1, float a2) {
+	return static_cast<QVector3D *>(new QVector3D(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2)));
+}
+void * qute_QVector3D_new_3(qute_point a0) {
+	return static_cast<QVector3D *>(new QVector3D(qute_to_QPoint(a0)));
+}
+void * qute_QVector3D_new_4(qute_pointf a0) {
+	return static_cast<QVector3D *>(new QVector3D(qute_to_QPointF(a0)));
+}
+void * qute_QVector3D_new_5(void * a0) {
+	return static_cast<QVector3D *>(new QVector3D((a0 ? *static_cast<QVector2D *>(a0) : QVector2D())));
+}
+void * qute_QVector3D_new_6(void * a0, float a1) {
+	return static_cast<QVector3D *>(new QVector3D((a0 ? *static_cast<QVector2D *>(a0) : QVector2D()), static_cast<float>(a1)));
+}
+void * qute_QVector3D_new_7(void * a0) {
+	return static_cast<QVector3D *>(new QVector3D((a0 ? *static_cast<QVector4D *>(a0) : QVector4D())));
+}
+void qute_QVector3D_delete(void *self) {
+	delete static_cast<QVector3D *>(self);
+}
+bool qute_QVector3D_isNull(void *self) {
+	return static_cast<bool>(static_cast<QVector3D *>(self)->isNull());
+}
+float qute_QVector3D_x(void *self) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->x());
+}
+float qute_QVector3D_y(void *self) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->y());
+}
+float qute_QVector3D_z(void *self) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->z());
+}
+void qute_QVector3D_setX(void *self, float a0) {
+	static_cast<QVector3D *>(self)->setX(static_cast<float>(a0));
+}
+void qute_QVector3D_setY(void *self, float a0) {
+	static_cast<QVector3D *>(self)->setY(static_cast<float>(a0));
+}
+void qute_QVector3D_setZ(void *self, float a0) {
+	static_cast<QVector3D *>(self)->setZ(static_cast<float>(a0));
+}
+float qute_QVector3D_length(void *self) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->length());
+}
+float qute_QVector3D_lengthSquared(void *self) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->lengthSquared());
+}
+void * qute_QVector3D_normalized(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QVector3D *>(self)->normalized()));
+}
+void qute_QVector3D_normalize(void *self) {
+	static_cast<QVector3D *>(self)->normalize();
+}
+void * qute_QVector3D_project(void *self, void * a0, void * a1, qute_rect a2) {
+	return static_cast<void *>(new QVector3D(static_cast<QVector3D *>(self)->project((a0 ? *static_cast<QMatrix4x4 *>(a0) : QMatrix4x4()), (a1 ? *static_cast<QMatrix4x4 *>(a1) : QMatrix4x4()), qute_to_QRect(a2))));
+}
+void * qute_QVector3D_unproject(void *self, void * a0, void * a1, qute_rect a2) {
+	return static_cast<void *>(new QVector3D(static_cast<QVector3D *>(self)->unproject((a0 ? *static_cast<QMatrix4x4 *>(a0) : QMatrix4x4()), (a1 ? *static_cast<QMatrix4x4 *>(a1) : QMatrix4x4()), qute_to_QRect(a2))));
+}
+float qute_QVector3D_distanceToPoint(void *self, void * a0) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->distanceToPoint((a0 ? *static_cast<QVector3D *>(a0) : QVector3D())));
+}
+float qute_QVector3D_distanceToPlane(void *self, void * a0, void * a1) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->distanceToPlane((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D())));
+}
+float qute_QVector3D_distanceToPlane_1(void *self, void * a0, void * a1, void * a2) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->distanceToPlane((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()), (a2 ? *static_cast<QVector3D *>(a2) : QVector3D())));
+}
+float qute_QVector3D_distanceToLine(void *self, void * a0, void * a1) {
+	return static_cast<float>(static_cast<QVector3D *>(self)->distanceToLine((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D())));
+}
+void * qute_QVector3D_toVector2D(void *self) {
+	return static_cast<void *>(new QVector2D(static_cast<QVector3D *>(self)->toVector2D()));
+}
+void * qute_QVector3D_toVector4D(void *self) {
+	return static_cast<void *>(new QVector4D(static_cast<QVector3D *>(self)->toVector4D()));
+}
+qute_point qute_QVector3D_toPoint(void *self) {
+	return qute_from_QPoint(static_cast<QVector3D *>(self)->toPoint());
+}
+qute_pointf qute_QVector3D_toPointF(void *self) {
+	return qute_from_QPointF(static_cast<QVector3D *>(self)->toPointF());
+}
+float qute_QVector3D_dotProduct(void * a0, void * a1) {
+	return static_cast<float>(QVector3D::dotProduct((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D())));
+}
+void * qute_QVector3D_crossProduct(void * a0, void * a1) {
+	return static_cast<void *>(new QVector3D(QVector3D::crossProduct((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()))));
+}
+void * qute_QVector3D_normal(void * a0, void * a1) {
+	return static_cast<void *>(new QVector3D(QVector3D::normal((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()))));
+}
+void * qute_QVector3D_normal_1(void * a0, void * a1, void * a2) {
+	return static_cast<void *>(new QVector3D(QVector3D::normal((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), (a1 ? *static_cast<QVector3D *>(a1) : QVector3D()), (a2 ? *static_cast<QVector3D *>(a2) : QVector3D()))));
+}
+
+// ---- QVector4D
+void * qute_QVector4D_new(void) {
+	return static_cast<QVector4D *>(new QVector4D());
+}
+void * qute_QVector4D_new_1(int64_t a0) {
+	return static_cast<QVector4D *>(new QVector4D(static_cast<Qt::Initialization>(a0)));
+}
+void * qute_QVector4D_new_2(float a0, float a1, float a2, float a3) {
+	return static_cast<QVector4D *>(new QVector4D(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3)));
+}
+void * qute_QVector4D_new_3(qute_point a0) {
+	return static_cast<QVector4D *>(new QVector4D(qute_to_QPoint(a0)));
+}
+void * qute_QVector4D_new_4(qute_pointf a0) {
+	return static_cast<QVector4D *>(new QVector4D(qute_to_QPointF(a0)));
+}
+void * qute_QVector4D_new_5(void * a0) {
+	return static_cast<QVector4D *>(new QVector4D((a0 ? *static_cast<QVector2D *>(a0) : QVector2D())));
+}
+void * qute_QVector4D_new_6(void * a0, float a1, float a2) {
+	return static_cast<QVector4D *>(new QVector4D((a0 ? *static_cast<QVector2D *>(a0) : QVector2D()), static_cast<float>(a1), static_cast<float>(a2)));
+}
+void * qute_QVector4D_new_7(void * a0) {
+	return static_cast<QVector4D *>(new QVector4D((a0 ? *static_cast<QVector3D *>(a0) : QVector3D())));
+}
+void * qute_QVector4D_new_8(void * a0, float a1) {
+	return static_cast<QVector4D *>(new QVector4D((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()), static_cast<float>(a1)));
+}
+void qute_QVector4D_delete(void *self) {
+	delete static_cast<QVector4D *>(self);
+}
+bool qute_QVector4D_isNull(void *self) {
+	return static_cast<bool>(static_cast<QVector4D *>(self)->isNull());
+}
+float qute_QVector4D_x(void *self) {
+	return static_cast<float>(static_cast<QVector4D *>(self)->x());
+}
+float qute_QVector4D_y(void *self) {
+	return static_cast<float>(static_cast<QVector4D *>(self)->y());
+}
+float qute_QVector4D_z(void *self) {
+	return static_cast<float>(static_cast<QVector4D *>(self)->z());
+}
+float qute_QVector4D_w(void *self) {
+	return static_cast<float>(static_cast<QVector4D *>(self)->w());
+}
+void qute_QVector4D_setX(void *self, float a0) {
+	static_cast<QVector4D *>(self)->setX(static_cast<float>(a0));
+}
+void qute_QVector4D_setY(void *self, float a0) {
+	static_cast<QVector4D *>(self)->setY(static_cast<float>(a0));
+}
+void qute_QVector4D_setZ(void *self, float a0) {
+	static_cast<QVector4D *>(self)->setZ(static_cast<float>(a0));
+}
+void qute_QVector4D_setW(void *self, float a0) {
+	static_cast<QVector4D *>(self)->setW(static_cast<float>(a0));
+}
+float qute_QVector4D_length(void *self) {
+	return static_cast<float>(static_cast<QVector4D *>(self)->length());
+}
+float qute_QVector4D_lengthSquared(void *self) {
+	return static_cast<float>(static_cast<QVector4D *>(self)->lengthSquared());
+}
+void * qute_QVector4D_normalized(void *self) {
+	return static_cast<void *>(new QVector4D(static_cast<QVector4D *>(self)->normalized()));
+}
+void qute_QVector4D_normalize(void *self) {
+	static_cast<QVector4D *>(self)->normalize();
+}
+void * qute_QVector4D_toVector2D(void *self) {
+	return static_cast<void *>(new QVector2D(static_cast<QVector4D *>(self)->toVector2D()));
+}
+void * qute_QVector4D_toVector2DAffine(void *self) {
+	return static_cast<void *>(new QVector2D(static_cast<QVector4D *>(self)->toVector2DAffine()));
+}
+void * qute_QVector4D_toVector3D(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QVector4D *>(self)->toVector3D()));
+}
+void * qute_QVector4D_toVector3DAffine(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QVector4D *>(self)->toVector3DAffine()));
+}
+qute_point qute_QVector4D_toPoint(void *self) {
+	return qute_from_QPoint(static_cast<QVector4D *>(self)->toPoint());
+}
+qute_pointf qute_QVector4D_toPointF(void *self) {
+	return qute_from_QPointF(static_cast<QVector4D *>(self)->toPointF());
+}
+float qute_QVector4D_dotProduct(void * a0, void * a1) {
+	return static_cast<float>(QVector4D::dotProduct((a0 ? *static_cast<QVector4D *>(a0) : QVector4D()), (a1 ? *static_cast<QVector4D *>(a1) : QVector4D())));
 }
 
 // ---- QWheelEvent
@@ -7337,6 +9938,15 @@ int64_t qute_QWindow_modality(void *self) {
 }
 void qute_QWindow_setModality(void *self, int64_t a0) {
 	static_cast<QWindow *>(self)->setModality(static_cast<Qt::WindowModality>(a0));
+}
+void qute_QWindow_setFormat(void *self, void * a0) {
+	static_cast<QWindow *>(self)->setFormat((a0 ? *static_cast<QSurfaceFormat *>(a0) : QSurfaceFormat()));
+}
+void * qute_QWindow_format(void *self) {
+	return static_cast<void *>(new QSurfaceFormat(static_cast<QWindow *>(self)->format()));
+}
+void * qute_QWindow_requestedFormat(void *self) {
+	return static_cast<void *>(new QSurfaceFormat(static_cast<QWindow *>(self)->requestedFormat()));
 }
 void qute_QWindow_setFlags(void *self, int64_t a0) {
 	static_cast<QWindow *>(self)->setFlags(QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a0)));

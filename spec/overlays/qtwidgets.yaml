@@ -997,9 +997,36 @@ QMdiSubWindow:
   systemMenu: { return: borrowed }
 
 QGraphicsScene:
-  addLine: { return: parented }
-  addPath: { return: parented }
-  addPolygon: { return: parented }
+  addRect(const QRectF&, const QPen&, const QBrush&):
+    name: AddRect
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsRectItem($0); $self->addItem(i); return i; }()"
+  addEllipse(const QRectF&, const QPen&, const QBrush&):
+    name: AddEllipse
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsEllipseItem($0); $self->addItem(i); return i; }()"
+  addLine(const QLineF&, const QPen&):
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsLineItem($0); $self->addItem(i); return i; }()"
+  addPath(const QPainterPath&, const QPen&, const QBrush&):
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsPathItem($0); $self->addItem(i); return i; }()"
+  addPolygon(const QPolygonF&, const QPen&, const QBrush&):
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsPolygonItem($0); $self->addItem(i); return i; }()"
+  addPixmap(const QPixmap&):
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsPixmapItem($0); $self->addItem(i); return i; }()"
+  addSimpleText(const QString&, const QFont&):
+    return: parented
+    created: true
+    cpp: "[&] { auto i = new qute_QGraphicsSimpleTextItem($0); $self->addItem(i); return i; }()"
   addWidget: { args: { widget: transfer-to-cpp }, return: parented, doc: "The scene owns the proxy, and the proxy owns the widget." }
   activeWindow: { return: borrowed }
   setActiveWindow: { reviewed: true }
@@ -1040,14 +1067,8 @@ QGraphicsScene:
       	t.Error("removed item died with the scene")
       }
       r.Delete()
-  addRect: { return: parented }
-  addRect(const QRectF&, const QPen&, const QBrush&): { name: AddRect }
   addRect(qreal, qreal, qreal, qreal, const QPen&, const QBrush&): { skip: "use the QRectF overload" }
-  addEllipse: { return: parented }
-  addEllipse(const QRectF&, const QPen&, const QBrush&): { name: AddEllipse }
   addEllipse(qreal, qreal, qreal, qreal, const QPen&, const QBrush&): { skip: "use the QRectF overload" }
-  addSimpleText: { return: parented }
-  addPixmap: { return: parented }
   addText: { return: parented }
   itemAt: { return: borrowed }
   items: { return: borrowed }
@@ -1324,7 +1345,9 @@ QGraphicsItemGroup:
   removeFromGroup: { reviewed: true, doc: "The item is reparented to the group's parent, which keeps owning it." }
 
 QGraphicsProxyWidget:
+  subWidgetRect: { reviewed: true }
   createProxyForChildWidget:
+    reviewed: true
     return: parented
     doc: "child must be a child of the proxied widget."
     test: |
@@ -1345,3 +1368,122 @@ QGraphicsProxyWidget:
       }
   setWidget: { args: { widget: transfer-to-cpp }, doc: "The proxy takes ownership of the widget." }
   widget: { return: borrowed }
+
+QGraphicsLinearLayout:
+  QGraphicsLinearLayout(QGraphicsLayoutItem*):
+    args: { parent: transfer-this }
+    doc: "A QGraphicsWidget parent installs and owns the layout; a layout parent does not."
+    test: |
+      w := qtwidgets.NewQGraphicsWidget(nil)
+      lay := qtwidgets.NewQGraphicsLinearLayout(w)
+      if got := lay.Ownership(); got != qtcore.Parented {
+      	t.Errorf("with a widget parent: %v, want Parented", got)
+      }
+      w.Delete()
+      if lay.Alive() {
+      	t.Error("layout alive after its widget was deleted")
+      }
+  QGraphicsLinearLayout(Qt::Orientation, QGraphicsLayoutItem*):
+    args: { parent: transfer-this }
+    doc: "A QGraphicsWidget parent installs and owns the layout; a layout parent does not."
+    test: |
+      w := qtwidgets.NewQGraphicsWidget(nil)
+      lay := qtwidgets.NewQGraphicsLinearLayoutWithOrientation(qtcore.Horizontal, w)
+      if got := lay.Ownership(); got != qtcore.Parented {
+      	t.Errorf("with a widget parent: %v, want Parented", got)
+      }
+      w.Delete()
+      if lay.Alive() {
+      	t.Error("layout alive after its widget was deleted")
+      }
+  insertItem: { args: { item: transfer-to-cpp } }
+  setStretchFactor: { reviewed: true }
+  stretchFactor: { reviewed: true }
+  addItem: { args: { item: transfer-to-cpp }, doc: "The layout takes ownership of the item." }
+  removeItem:
+    args: { item: transfer-to-go }
+    doc: "The item is not destroyed; ownership passes to the caller (Qt docs)."
+    test: |
+      lay := qtwidgets.NewQGraphicsLinearLayout(nil)
+      w := qtwidgets.NewQGraphicsWidget(nil)
+      lay.AddItem(w)
+      if got := w.Ownership(); got != qtcore.Parented {
+      	t.Errorf("after AddItem: %v, want Parented", got)
+      }
+      lay.RemoveItem(w)
+      if got := w.Ownership(); got != qtcore.Owned {
+      	t.Errorf("after RemoveItem: %v, want Owned", got)
+      }
+      lay.Delete()
+      if !w.Alive() {
+      	t.Error("removed item died with the layout")
+      }
+      w.Delete()
+  setAlignment: { reviewed: true }
+  alignment: { reviewed: true }
+
+QGraphicsGridLayout:
+  QGraphicsGridLayout(QGraphicsLayoutItem*):
+    args: { parent: transfer-this }
+    doc: "A QGraphicsWidget parent installs and owns the layout; a layout parent does not."
+    test: |
+      w := qtwidgets.NewQGraphicsWidget(nil)
+      lay := qtwidgets.NewQGraphicsGridLayout(w)
+      if got := lay.Ownership(); got != qtcore.Parented {
+      	t.Errorf("with a widget parent: %v, want Parented", got)
+      }
+      w.Delete()
+      if lay.Alive() {
+      	t.Error("layout alive after its widget was deleted")
+      }
+  itemAt(int, int): { name: ItemAtCell, return: borrowed }
+  addItem: { args: { item: transfer-to-cpp }, doc: "The layout takes ownership of the item." }
+  removeItem:
+    args: { item: transfer-to-go }
+    doc: "The item is not destroyed; ownership passes to the caller (Qt docs)."
+    test: |
+      lay := qtwidgets.NewQGraphicsGridLayout(nil)
+      w := qtwidgets.NewQGraphicsWidget(nil)
+      lay.AddItem(w, 0, 0)
+      if got := w.Ownership(); got != qtcore.Parented {
+      	t.Errorf("after AddItem: %v, want Parented", got)
+      }
+      lay.RemoveItem(w)
+      if got := w.Ownership(); got != qtcore.Owned {
+      	t.Errorf("after RemoveItem: %v, want Owned", got)
+      }
+      lay.Delete()
+      if !w.Alive() {
+      	t.Error("removed item died with the layout")
+      }
+      w.Delete()
+  setAlignment: { reviewed: true }
+  alignment: { reviewed: true }
+
+QGraphicsLayout:
+  widgetEvent: { reviewed: true }
+  itemAt: { return: borrowed }
+
+QGraphicsWidget:
+  style: { return: borrowed }
+  setStyle: { reviewed: true }
+  focusWidget: { return: borrowed }
+  addAction: { reviewed: true }
+  addActions: { reviewed: true }
+  insertActions: { reviewed: true }
+  insertAction: { reviewed: true }
+  removeAction: { reviewed: true }
+  actions: { return: borrowed }
+  paint: { reviewed: true }
+  paintWindowFrame: { reviewed: true }
+  setTabOrder: { reviewed: true }
+  setLayout: { args: { layout: transfer-to-cpp }, doc: "The widget takes ownership of the layout." }
+  layout: { return: borrowed }
+
+QGraphicsLayoutItem:
+  parentLayoutItem: { return: borrowed }
+  setParentLayoutItem: { reviewed: true }
+  graphicsItem: { return: borrowed }
+
+QStyleOption:
+  initFrom: { reviewed: true }

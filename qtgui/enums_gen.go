@@ -814,6 +814,51 @@ const (
 	QImageNImageFormats                   QImageFormat = 37
 )
 
+// QImageIOHandlerImageOption wraps the enum QImageIOHandler::ImageOption.
+type QImageIOHandlerImageOption int64
+
+const (
+	QImageIOHandlerSize                 QImageIOHandlerImageOption = 0
+	QImageIOHandlerClipRect             QImageIOHandlerImageOption = 1
+	QImageIOHandlerDescription          QImageIOHandlerImageOption = 2
+	QImageIOHandlerScaledClipRect       QImageIOHandlerImageOption = 3
+	QImageIOHandlerScaledSize           QImageIOHandlerImageOption = 4
+	QImageIOHandlerCompressionRatio     QImageIOHandlerImageOption = 5
+	QImageIOHandlerGamma                QImageIOHandlerImageOption = 6
+	QImageIOHandlerQuality              QImageIOHandlerImageOption = 7
+	QImageIOHandlerName                 QImageIOHandlerImageOption = 8
+	QImageIOHandlerSubType              QImageIOHandlerImageOption = 9
+	QImageIOHandlerIncrementalReading   QImageIOHandlerImageOption = 10
+	QImageIOHandlerEndianness           QImageIOHandlerImageOption = 11
+	QImageIOHandlerAnimation            QImageIOHandlerImageOption = 12
+	QImageIOHandlerBackgroundColor      QImageIOHandlerImageOption = 13
+	QImageIOHandlerImageFormat          QImageIOHandlerImageOption = 14
+	QImageIOHandlerSupportedSubTypes    QImageIOHandlerImageOption = 15
+	QImageIOHandlerOptimizedWrite       QImageIOHandlerImageOption = 16
+	QImageIOHandlerProgressiveScanWrite QImageIOHandlerImageOption = 17
+	QImageIOHandlerImageTransformation  QImageIOHandlerImageOption = 18
+)
+
+// QImageIOHandlerTransformations is the flags type for QImageIOHandler::Transformation (QFlags<QImageIOHandler::Transformation>).
+type QImageIOHandlerTransformations int64
+
+// Has reports whether every bit of x is set in f.
+func (f QImageIOHandlerTransformations) Has(x QImageIOHandlerTransformations) bool { return f&x == x }
+
+// QImageIOHandlerTransformation wraps the enum QImageIOHandler::Transformation. It is the same type as QImageIOHandlerTransformations, so values combine with |.
+type QImageIOHandlerTransformation = QImageIOHandlerTransformations
+
+const (
+	QImageIOHandlerTransformationNone              QImageIOHandlerTransformations = 0
+	QImageIOHandlerTransformationMirror            QImageIOHandlerTransformations = 1
+	QImageIOHandlerTransformationFlip              QImageIOHandlerTransformations = 2
+	QImageIOHandlerTransformationRotate180         QImageIOHandlerTransformations = 3
+	QImageIOHandlerTransformationRotate90          QImageIOHandlerTransformations = 4
+	QImageIOHandlerTransformationMirrorAndRotate90 QImageIOHandlerTransformations = 5
+	QImageIOHandlerTransformationFlipAndRotate90   QImageIOHandlerTransformations = 6
+	QImageIOHandlerTransformationRotate270         QImageIOHandlerTransformations = 7
+)
+
 // QImageReaderImageReaderError wraps the enum QImageReader::ImageReaderError.
 type QImageReaderImageReaderError int64
 
@@ -976,6 +1021,25 @@ const (
 	QKeySequenceExactMatch   QKeySequenceSequenceMatch = 2
 )
 
+// QMatrix4x4Flags is the flags type for QMatrix4x4::Flag (QFlags<QMatrix4x4::Flag>).
+type QMatrix4x4Flags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QMatrix4x4Flags) Has(x QMatrix4x4Flags) bool { return f&x == x }
+
+// QMatrix4x4Flag wraps the enum QMatrix4x4::Flag. It is the same type as QMatrix4x4Flags, so values combine with |.
+type QMatrix4x4Flag = QMatrix4x4Flags
+
+const (
+	QMatrix4x4Identity    QMatrix4x4Flags = 0
+	QMatrix4x4Translation QMatrix4x4Flags = 1
+	QMatrix4x4Scale       QMatrix4x4Flags = 2
+	QMatrix4x4Rotation2D  QMatrix4x4Flags = 4
+	QMatrix4x4Rotation    QMatrix4x4Flags = 8
+	QMatrix4x4Perspective QMatrix4x4Flags = 16
+	QMatrix4x4General     QMatrix4x4Flags = 31
+)
+
 // QMovieMovieState wraps the enum QMovie::MovieState.
 type QMovieMovieState int64
 
@@ -991,6 +1055,44 @@ type QMovieCacheMode int64
 const (
 	QMovieCacheNone QMovieCacheMode = 0
 	QMovieCacheAll  QMovieCacheMode = 1
+)
+
+// QOpenGLContextOpenGLModuleType wraps the enum QOpenGLContext::OpenGLModuleType.
+type QOpenGLContextOpenGLModuleType int64
+
+const (
+	QOpenGLContextLibGL   QOpenGLContextOpenGLModuleType = 0
+	QOpenGLContextLibGLES QOpenGLContextOpenGLModuleType = 1
+)
+
+// QOpenGLFunctionsOpenGLFeatures is the flags type for QOpenGLFunctions::OpenGLFeature (QFlags<QOpenGLFunctions::OpenGLFeature>).
+type QOpenGLFunctionsOpenGLFeatures int64
+
+// Has reports whether every bit of x is set in f.
+func (f QOpenGLFunctionsOpenGLFeatures) Has(x QOpenGLFunctionsOpenGLFeatures) bool { return f&x == x }
+
+// QOpenGLFunctionsOpenGLFeature wraps the enum QOpenGLFunctions::OpenGLFeature. It is the same type as QOpenGLFunctionsOpenGLFeatures, so values combine with |.
+type QOpenGLFunctionsOpenGLFeature = QOpenGLFunctionsOpenGLFeatures
+
+const (
+	QOpenGLFunctionsMultitexture          QOpenGLFunctionsOpenGLFeatures = 1
+	QOpenGLFunctionsShaders               QOpenGLFunctionsOpenGLFeatures = 2
+	QOpenGLFunctionsBuffers               QOpenGLFunctionsOpenGLFeatures = 4
+	QOpenGLFunctionsFramebuffers          QOpenGLFunctionsOpenGLFeatures = 8
+	QOpenGLFunctionsBlendColor            QOpenGLFunctionsOpenGLFeatures = 16
+	QOpenGLFunctionsBlendEquation         QOpenGLFunctionsOpenGLFeatures = 32
+	QOpenGLFunctionsBlendEquationSeparate QOpenGLFunctionsOpenGLFeatures = 64
+	QOpenGLFunctionsBlendFuncSeparate     QOpenGLFunctionsOpenGLFeatures = 128
+	QOpenGLFunctionsBlendSubtract         QOpenGLFunctionsOpenGLFeatures = 256
+	QOpenGLFunctionsCompressedTextures    QOpenGLFunctionsOpenGLFeatures = 512
+	QOpenGLFunctionsMultisample           QOpenGLFunctionsOpenGLFeatures = 1024
+	QOpenGLFunctionsStencilSeparate       QOpenGLFunctionsOpenGLFeatures = 2048
+	QOpenGLFunctionsNPOTTextures          QOpenGLFunctionsOpenGLFeatures = 4096
+	QOpenGLFunctionsNPOTTextureRepeat     QOpenGLFunctionsOpenGLFeatures = 8192
+	QOpenGLFunctionsFixedFunctionPipeline QOpenGLFunctionsOpenGLFeatures = 16384
+	QOpenGLFunctionsTextureRGFormats      QOpenGLFunctionsOpenGLFeatures = 32768
+	QOpenGLFunctionsMultipleRenderTargets QOpenGLFunctionsOpenGLFeatures = 65536
+	QOpenGLFunctionsBlendEquationAdvanced QOpenGLFunctionsOpenGLFeatures = 131072
 )
 
 // QPagedPaintDevicePdfVersion wraps the enum QPagedPaintDevice::PdfVersion.
@@ -1326,6 +1428,52 @@ const (
 	QSurfaceVulkanSurface   QSurfaceSurfaceType = 4
 	QSurfaceMetalSurface    QSurfaceSurfaceType = 5
 	QSurfaceDirect3DSurface QSurfaceSurfaceType = 6
+)
+
+// QSurfaceFormatFormatOptions is the flags type for QSurfaceFormat::FormatOption (QFlags<QSurfaceFormat::FormatOption>).
+type QSurfaceFormatFormatOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QSurfaceFormatFormatOptions) Has(x QSurfaceFormatFormatOptions) bool { return f&x == x }
+
+// QSurfaceFormatFormatOption wraps the enum QSurfaceFormat::FormatOption. It is the same type as QSurfaceFormatFormatOptions, so values combine with |.
+type QSurfaceFormatFormatOption = QSurfaceFormatFormatOptions
+
+const (
+	QSurfaceFormatStereoBuffers       QSurfaceFormatFormatOptions = 1
+	QSurfaceFormatDebugContext        QSurfaceFormatFormatOptions = 2
+	QSurfaceFormatDeprecatedFunctions QSurfaceFormatFormatOptions = 4
+	QSurfaceFormatResetNotification   QSurfaceFormatFormatOptions = 8
+	QSurfaceFormatProtectedContent    QSurfaceFormatFormatOptions = 16
+)
+
+// QSurfaceFormatSwapBehavior wraps the enum QSurfaceFormat::SwapBehavior.
+type QSurfaceFormatSwapBehavior int64
+
+const (
+	QSurfaceFormatDefaultSwapBehavior QSurfaceFormatSwapBehavior = 0
+	QSurfaceFormatSingleBuffer        QSurfaceFormatSwapBehavior = 1
+	QSurfaceFormatDoubleBuffer        QSurfaceFormatSwapBehavior = 2
+	QSurfaceFormatTripleBuffer        QSurfaceFormatSwapBehavior = 3
+)
+
+// QSurfaceFormatRenderableType wraps the enum QSurfaceFormat::RenderableType.
+type QSurfaceFormatRenderableType int64
+
+const (
+	QSurfaceFormatDefaultRenderableType QSurfaceFormatRenderableType = 0
+	QSurfaceFormatOpenGL                QSurfaceFormatRenderableType = 1
+	QSurfaceFormatOpenGLES              QSurfaceFormatRenderableType = 2
+	QSurfaceFormatOpenVG                QSurfaceFormatRenderableType = 4
+)
+
+// QSurfaceFormatOpenGLContextProfile wraps the enum QSurfaceFormat::OpenGLContextProfile.
+type QSurfaceFormatOpenGLContextProfile int64
+
+const (
+	QSurfaceFormatNoProfile            QSurfaceFormatOpenGLContextProfile = 0
+	QSurfaceFormatCoreProfile          QSurfaceFormatOpenGLContextProfile = 1
+	QSurfaceFormatCompatibilityProfile QSurfaceFormatOpenGLContextProfile = 2
 )
 
 // QTextBlockFormatLineHeightTypes wraps the enum QTextBlockFormat::LineHeightTypes.
@@ -1693,6 +1841,30 @@ const (
 	QTextItemUnderline   QTextItemRenderFlags = 32
 	QTextItemStrikeOut   QTextItemRenderFlags = 64
 	QTextItemDummy       QTextItemRenderFlags = 4294967295
+)
+
+// QTextLengthType wraps the enum QTextLength::Type.
+type QTextLengthType int64
+
+const (
+	QTextLengthVariableLength   QTextLengthType = 0
+	QTextLengthFixedLength      QTextLengthType = 1
+	QTextLengthPercentageLength QTextLengthType = 2
+)
+
+// QTextListFormatStyle wraps the enum QTextListFormat::Style.
+type QTextListFormatStyle int64
+
+const (
+	QTextListFormatListDisc           QTextListFormatStyle = -1
+	QTextListFormatListCircle         QTextListFormatStyle = -2
+	QTextListFormatListSquare         QTextListFormatStyle = -3
+	QTextListFormatListDecimal        QTextListFormatStyle = -4
+	QTextListFormatListLowerAlpha     QTextListFormatStyle = -5
+	QTextListFormatListUpperAlpha     QTextListFormatStyle = -6
+	QTextListFormatListLowerRoman     QTextListFormatStyle = -7
+	QTextListFormatListUpperRoman     QTextListFormatStyle = -8
+	QTextListFormatListStyleUndefined QTextListFormatStyle = 0
 )
 
 // QTextOptionTabType wraps the enum QTextOption::TabType.

@@ -42,3 +42,14 @@ func (this *QPagedPaintDevice) NewPage() bool {
 	r := C.qute_QPagedPaintDevice_newPage(self)
 	return bool(r)
 }
+
+// SetPageMargins wraps QPagedPaintDevice::setPageMargins.
+//
+//	C++: bool QPagedPaintDevice::setPageMargins(const QMarginsF & margins, QPageLayout::Unit units = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpagedpaintdevice.html#setPageMargins
+func (this *QPagedPaintDevice) SetPageMargins(margins qtcore.QMarginsF) bool {
+	self := rt.Use(unsafe.Pointer(this), "QPagedPaintDevice.SetPageMargins")
+	r := C.qute_QPagedPaintDevice_setPageMargins(self, cQMarginsF(margins))
+	return bool(r)
+}

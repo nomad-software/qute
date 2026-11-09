@@ -600,6 +600,122 @@ func (this *QTextCursor) InsertBlockWithTextBlockFormatTextCharFormat(format *QT
 	C.qute_QTextCursor_insertBlock_2(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertBlockWithTextBlockFormatTextCharFormat"), rt.UseArg(unsafe.Pointer(charFormat), "QTextCursor.InsertBlockWithTextBlockFormatTextCharFormat"))
 }
 
+// InsertList wraps QTextCursor::insertList.
+//
+//	C++: QTextList * QTextCursor::insertList(const QTextListFormat & format)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The document owns the new object.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertList
+func (this *QTextCursor) InsertList(format *QTextListFormat) *QTextList {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertList")
+	r := C.qute_QTextCursor_insertList(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertList"))
+	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
+}
+
+// InsertListStyle wraps QTextCursor::insertList.
+//
+//	C++: QTextList * QTextCursor::insertList(QTextListFormat::Style style)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The document owns the new object.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertList
+func (this *QTextCursor) InsertListStyle(style QTextListFormatStyle) *QTextList {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertListStyle")
+	r := C.qute_QTextCursor_insertList_1(self, C.int64_t(style))
+	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
+}
+
+// CreateList wraps QTextCursor::createList.
+//
+//	C++: QTextList * QTextCursor::createList(const QTextListFormat & format)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The document owns the new object.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#createList
+func (this *QTextCursor) CreateList(format *QTextListFormat) *QTextList {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CreateList")
+	r := C.qute_QTextCursor_createList(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.CreateList"))
+	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
+}
+
+// CreateListStyle wraps QTextCursor::createList.
+//
+//	C++: QTextList * QTextCursor::createList(QTextListFormat::Style style)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The document owns the new object.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#createList
+func (this *QTextCursor) CreateListStyle(style QTextListFormatStyle) *QTextList {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CreateListStyle")
+	r := C.qute_QTextCursor_createList_1(self, C.int64_t(style))
+	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
+}
+
+// CurrentList wraps QTextCursor::currentList.
+//
+//	C++: QTextList * QTextCursor::currentList() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#currentList
+func (this *QTextCursor) CurrentList() *QTextList {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CurrentList")
+	r := C.qute_QTextCursor_currentList(self)
+	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.KeepOrBorrow), r)
+}
+
+// InsertTableWithFormat wraps QTextCursor::insertTable.
+//
+//	C++: QTextTable * QTextCursor::insertTable(int rows, int cols, const QTextTableFormat & format)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The document owns the new object.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertTable
+func (this *QTextCursor) InsertTableWithFormat(rows int, cols int, format *QTextTableFormat) *QTextTable {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertTableWithFormat")
+	r := C.qute_QTextCursor_insertTable(self, C.int(rows), C.int(cols), rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertTableWithFormat"))
+	return rt.View[QTextTable](rt.WrapClass(r, "QTextTable", rt.TakeParented), r)
+}
+
+// InsertTable wraps QTextCursor::insertTable.
+//
+//	C++: QTextTable * QTextCursor::insertTable(int rows, int cols)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The document owns the new object.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertTable
+func (this *QTextCursor) InsertTable(rows int, cols int) *QTextTable {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertTable")
+	r := C.qute_QTextCursor_insertTable_1(self, C.int(rows), C.int(cols))
+	return rt.View[QTextTable](rt.WrapClass(r, "QTextTable", rt.TakeParented), r)
+}
+
+// CurrentTable wraps QTextCursor::currentTable.
+//
+//	C++: QTextTable * QTextCursor::currentTable() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#currentTable
+func (this *QTextCursor) CurrentTable() *QTextTable {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CurrentTable")
+	r := C.qute_QTextCursor_currentTable(self)
+	return rt.View[QTextTable](rt.WrapClass(r, "QTextTable", rt.KeepOrBorrow), r)
+}
+
 // InsertFrame wraps QTextCursor::insertFrame.
 //
 //	C++: QTextFrame * QTextCursor::insertFrame(const QTextFrameFormat & format)
@@ -658,14 +774,34 @@ func (this *QTextCursor) InsertMarkdown(markdown string) {
 	C.qute_QTextCursor_insertMarkdown(self, (*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)))
 }
 
+// InsertImageWithPosition wraps QTextCursor::insertImage.
+//
+//	C++: void QTextCursor::insertImage(const QTextImageFormat & format, QTextFrameFormat::Position alignment)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertImage
+func (this *QTextCursor) InsertImageWithPosition(format *QTextImageFormat, alignment QTextFrameFormatPosition) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageWithPosition")
+	C.qute_QTextCursor_insertImage(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertImageWithPosition"), C.int64_t(alignment))
+}
+
 // InsertImage wraps QTextCursor::insertImage.
+//
+//	C++: void QTextCursor::insertImage(const QTextImageFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertImage
+func (this *QTextCursor) InsertImage(format *QTextImageFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImage")
+	C.qute_QTextCursor_insertImage_1(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertImage"))
+}
+
+// InsertImageName wraps QTextCursor::insertImage.
 //
 //	C++: void QTextCursor::insertImage(const QString & name)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertImage
-func (this *QTextCursor) InsertImage(name string) {
-	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImage")
-	C.qute_QTextCursor_insertImage(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+func (this *QTextCursor) InsertImageName(name string) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageName")
+	C.qute_QTextCursor_insertImage_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
 }
 
 // InsertImageImage wraps QTextCursor::insertImage.
@@ -675,7 +811,7 @@ func (this *QTextCursor) InsertImage(name string) {
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertImage
 func (this *QTextCursor) InsertImageImage(image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageImage")
-	C.qute_QTextCursor_insertImage_1(self, rt.UseArg(unsafe.Pointer(image), "QTextCursor.InsertImageImage"))
+	C.qute_QTextCursor_insertImage_3(self, rt.UseArg(unsafe.Pointer(image), "QTextCursor.InsertImageImage"))
 }
 
 // BeginEditBlock wraps QTextCursor::beginEditBlock.

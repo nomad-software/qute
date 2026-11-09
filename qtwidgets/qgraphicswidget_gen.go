@@ -77,6 +77,39 @@ func NewQGraphicsWidget(parent QGraphicsItemLike) *QGraphicsWidget {
 	return rt.View[QGraphicsWidget](h, p)
 }
 
+// Layout wraps QGraphicsWidget::layout.
+//
+//	C++: QGraphicsLayout * QGraphicsWidget::layout() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#layout
+func (this *QGraphicsWidget) Layout() *QGraphicsLayout {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Layout")
+	r := C.qute_QGraphicsWidget_layout(self)
+	return rt.View[QGraphicsLayout](rt.WrapClass(r, "QGraphicsLayout", rt.KeepOrBorrow), r)
+}
+
+// SetLayout wraps QGraphicsWidget::setLayout.
+//
+//	C++: void QGraphicsWidget::setLayout(QGraphicsLayout * layout)
+//
+// Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// The widget takes ownership of the layout.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setLayout
+func (this *QGraphicsWidget) SetLayout(layout QGraphicsLayoutLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetLayout")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQGraphicsLayout()), "QGraphicsWidget.SetLayout")
+	}
+	C.qute_QGraphicsWidget_setLayout(self, layoutPtr)
+	layoutH.TransferToCpp()
+}
+
 // AdjustSize wraps QGraphicsWidget::adjustSize.
 //
 //	C++: void QGraphicsWidget::adjustSize()
@@ -254,14 +287,24 @@ func (this *QGraphicsWidget) Rect() qtcore.QRectF {
 	return goQRectF(r)
 }
 
-// SetContentsMargins wraps QGraphicsWidget::setContentsMargins.
+// SetContentsMarginsLeft wraps QGraphicsWidget::setContentsMargins.
 //
 //	C++: void QGraphicsWidget::setContentsMargins(qreal left, qreal top, qreal right, qreal bottom)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setContentsMargins
-func (this *QGraphicsWidget) SetContentsMargins(left float64, top float64, right float64, bottom float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetContentsMargins")
+func (this *QGraphicsWidget) SetContentsMarginsLeft(left float64, top float64, right float64, bottom float64) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetContentsMarginsLeft")
 	C.qute_QGraphicsWidget_setContentsMargins(self, C.double(left), C.double(top), C.double(right), C.double(bottom))
+}
+
+// SetContentsMargins wraps QGraphicsWidget::setContentsMargins.
+//
+//	C++: void QGraphicsWidget::setContentsMargins(QMarginsF margins)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setContentsMargins
+func (this *QGraphicsWidget) SetContentsMargins(margins qtcore.QMarginsF) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetContentsMargins")
+	C.qute_QGraphicsWidget_setContentsMargins_1(self, cQMarginsF(margins))
 }
 
 // GetContentsMargins wraps QGraphicsWidget::getContentsMargins.
@@ -279,14 +322,24 @@ func (this *QGraphicsWidget) GetContentsMargins() (float64, float64, float64, fl
 	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
 }
 
-// SetWindowFrameMargins wraps QGraphicsWidget::setWindowFrameMargins.
+// SetWindowFrameMarginsLeft wraps QGraphicsWidget::setWindowFrameMargins.
 //
 //	C++: void QGraphicsWidget::setWindowFrameMargins(qreal left, qreal top, qreal right, qreal bottom)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setWindowFrameMargins
-func (this *QGraphicsWidget) SetWindowFrameMargins(left float64, top float64, right float64, bottom float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowFrameMargins")
+func (this *QGraphicsWidget) SetWindowFrameMarginsLeft(left float64, top float64, right float64, bottom float64) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowFrameMarginsLeft")
 	C.qute_QGraphicsWidget_setWindowFrameMargins(self, C.double(left), C.double(top), C.double(right), C.double(bottom))
+}
+
+// SetWindowFrameMargins wraps QGraphicsWidget::setWindowFrameMargins.
+//
+//	C++: void QGraphicsWidget::setWindowFrameMargins(QMarginsF margins)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setWindowFrameMargins
+func (this *QGraphicsWidget) SetWindowFrameMargins(margins qtcore.QMarginsF) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowFrameMargins")
+	C.qute_QGraphicsWidget_setWindowFrameMargins_1(self, cQMarginsF(margins))
 }
 
 // GetWindowFrameMargins wraps QGraphicsWidget::getWindowFrameMargins.

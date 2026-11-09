@@ -70,27 +70,6 @@ func NewQPixmapWithFileName(fileName string) *QPixmap {
 	return rt.View[QPixmap](h, p)
 }
 
-// NewQPixmapWithXpm wraps the QPixmap constructor.
-//
-//	C++: QPixmap::QPixmap(const char *const[] xpm)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#QPixmap
-func NewQPixmapWithXpm(xpm []string) *QPixmap {
-	rt.CheckThread("NewQPixmapWithXpm")
-	xpmArr := make([]*C.char, len(xpm)+1)
-	for i, x := range xpm {
-		xpmArr[i] = C.CString(x)
-	}
-	defer func() {
-		for _, x := range xpmArr {
-			C.free(unsafe.Pointer(x))
-		}
-	}()
-	p := C.qute_QPixmap_new_3(unsafe.Pointer(&xpmArr[0]))
-	h := rt.WrapClass(p, "QPixmap", rt.NewOwned)
-	return rt.View[QPixmap](h, p)
-}
-
 // IsNull wraps QPixmap::isNull.
 //
 //	C++: bool QPixmap::isNull() const

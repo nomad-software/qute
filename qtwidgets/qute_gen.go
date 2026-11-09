@@ -52,6 +52,7 @@ var (
 )
 
 var _ = quteMap[C.int, C.int, int, int]
+var _ = qutePairs[C.int, C.int, int, int, int]
 
 // quteStr copies a malloc'd UTF-8 buffer into a Go string and frees it.
 func quteStr(s C.qute_str) string {
@@ -92,6 +93,16 @@ func quteMap[CK comparable, CV any, K comparable, V any](m C.qute_map, kf func(C
 	out := make(map[K]V, len(ks))
 	for i, k := range ks {
 		out[k] = vs[i]
+	}
+	return out
+}
+
+func qutePairs[CK any, CV any, K any, V any, P any](m C.qute_map, kf func(CK) K, vf func(CV) V, mk func(K, V) P) []P {
+	ks := quteList(m.keys, kf)
+	vs := quteList(m.values, vf)
+	out := make([]P, len(ks))
+	for i := range ks {
+		out[i] = mk(ks[i], vs[i])
 	}
 	return out
 }
@@ -186,6 +197,14 @@ func goQMargins(c C.qute_margins) qtcore.QMargins {
 
 func cQMargins(v qtcore.QMargins) C.qute_margins {
 	return C.qute_margins{l: C.int(v.Left), t: C.int(v.Top), r: C.int(v.Right), b: C.int(v.Bottom)}
+}
+
+func goQMarginsF(c C.qute_marginsf) qtcore.QMarginsF {
+	return qtcore.QMarginsF{Left: float64(c.l), Top: float64(c.t), Right: float64(c.r), Bottom: float64(c.b)}
+}
+
+func cQMarginsF(v qtcore.QMarginsF) C.qute_marginsf {
+	return C.qute_marginsf{l: C.double(v.Left), t: C.double(v.Top), r: C.double(v.Right), b: C.double(v.Bottom)}
 }
 
 func goQColor(c C.qute_color) qtgui.QColor {

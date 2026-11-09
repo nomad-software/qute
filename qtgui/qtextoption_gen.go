@@ -231,6 +231,33 @@ func (this *QTextOption) TabArray() []float64 {
 	return quteList(r, func(e C.double) float64 { return float64(e) })
 }
 
+// SetTabs wraps QTextOption::setTabs.
+//
+//	C++: void QTextOption::setTabs(const QList<Tab> & tabStops)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextoption.html#setTabs
+func (this *QTextOption) SetTabs(tabStops []*QTextOptionTab) {
+	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetTabs")
+	tabStopsC := make([]unsafe.Pointer, len(tabStops))
+	for i := range tabStops {
+		tabStopsC[i] = rt.UseArg(unsafe.Pointer(tabStops[i]), "QTextOption.SetTabs")
+	}
+	C.qute_QTextOption_setTabs(self, unsafe.Pointer(unsafe.SliceData(tabStopsC)), C.ptrdiff_t(len(tabStops)))
+}
+
+// Tabs wraps QTextOption::tabs.
+//
+//	C++: QList<Tab> QTextOption::tabs() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextoption.html#tabs
+func (this *QTextOption) Tabs() []*QTextOptionTab {
+	self := rt.Use(unsafe.Pointer(this), "QTextOption.Tabs")
+	r := C.qute_QTextOption_tabs(self)
+	return quteList(r, func(e unsafe.Pointer) *QTextOptionTab {
+		return rt.View[QTextOptionTab](rt.WrapClass(e, "QTextOptionTab", rt.TakeOwned), e)
+	})
+}
+
 // SetUseDesignMetrics wraps QTextOption::setUseDesignMetrics.
 //
 //	C++: void QTextOption::setUseDesignMetrics(bool b)

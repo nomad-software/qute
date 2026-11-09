@@ -377,6 +377,94 @@ func (this *QLocale) ToStringUint(iArg uint) string {
 	return quteStr(r)
 }
 
+// ToStringInt64Padded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(qlonglong number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringInt64Padded(number int64, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringInt64Padded")
+	r := C.qute_QLocale_toString_6(self, C.longlong(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringUint64Padded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(qulonglong number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringUint64Padded(number uint64, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint64Padded")
+	r := C.qute_QLocale_toString_7(self, C.ulonglong(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringPadded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(int number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringPadded(number int, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringPadded")
+	r := C.qute_QLocale_toString_8(self, C.int(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringUintPadded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(uint number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringUintPadded(number uint, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUintPadded")
+	r := C.qute_QLocale_toString_9(self, C.uint(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringLongPadded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(long number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringLongPadded(number int64, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringLongPadded")
+	r := C.qute_QLocale_toString_10(self, C.long(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringUlongPadded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(ulong number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringUlongPadded(number uint64, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUlongPadded")
+	r := C.qute_QLocale_toString_11(self, C.ulong(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringInt16Padded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(short number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringInt16Padded(number int16, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringInt16Padded")
+	r := C.qute_QLocale_toString_12(self, C.short(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
+// ToStringUint16Padded wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(ushort number, int fieldWidth, char32_t fillChar) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringUint16Padded(number uint16, fieldWidth int, fillChar rune) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint16Padded")
+	r := C.qute_QLocale_toString_13(self, C.ushort(number), C.int(fieldWidth), C.uint(fillChar))
+	return quteStr(r)
+}
+
 // ToStringFloat64 wraps QLocale::toString.
 //
 //	C++: QString QLocale::toString(double f, char format = …, int precision = …) const
@@ -384,7 +472,7 @@ func (this *QLocale) ToStringUint(iArg uint) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringFloat64(fArg float64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat64")
-	r := C.qute_QLocale_toString_6(self, C.double(fArg))
+	r := C.qute_QLocale_toString_14(self, C.double(fArg))
 	return quteStr(r)
 }
 
@@ -395,7 +483,7 @@ func (this *QLocale) ToStringFloat64(fArg float64) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringFloat32(fArg float32) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat32")
-	r := C.qute_QLocale_toString_7(self, C.float(fArg))
+	r := C.qute_QLocale_toString_15(self, C.float(fArg))
 	return quteStr(r)
 }
 
@@ -406,7 +494,7 @@ func (this *QLocale) ToStringFloat32(fArg float32) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateFormat(date *QDate, format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFormat")
-	r := C.qute_QLocale_toString_8(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	r := C.qute_QLocale_toString_16(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
 	return quteStr(r)
 }
 
@@ -417,7 +505,7 @@ func (this *QLocale) ToStringDateFormat(date *QDate, format string) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringTimeFormat(time *QTime, format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringTimeFormat")
-	r := C.qute_QLocale_toString_9(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTimeFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	r := C.qute_QLocale_toString_17(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTimeFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
 	return quteStr(r)
 }
 
@@ -428,7 +516,7 @@ func (this *QLocale) ToStringTimeFormat(time *QTime, format string) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateTimeFormat(dateTime *QDateTime, format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFormat")
-	r := C.qute_QLocale_toString_10(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	r := C.qute_QLocale_toString_18(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
 	return quteStr(r)
 }
 
@@ -439,7 +527,7 @@ func (this *QLocale) ToStringDateTimeFormat(dateTime *QDateTime, format string) 
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDate(date *QDate) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDate")
-	r := C.qute_QLocale_toString_11(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDate"))
+	r := C.qute_QLocale_toString_19(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDate"))
 	return quteStr(r)
 }
 
@@ -450,7 +538,7 @@ func (this *QLocale) ToStringDate(date *QDate) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringTime(time *QTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringTime")
-	r := C.qute_QLocale_toString_12(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTime"))
+	r := C.qute_QLocale_toString_20(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTime"))
 	return quteStr(r)
 }
 
@@ -461,7 +549,7 @@ func (this *QLocale) ToStringTime(time *QTime) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateTime(dateTime *QDateTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTime")
-	r := C.qute_QLocale_toString_13(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTime"))
+	r := C.qute_QLocale_toString_21(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTime"))
 	return quteStr(r)
 }
 
@@ -472,7 +560,7 @@ func (this *QLocale) ToStringDateTime(dateTime *QDateTime) string {
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateFormatCalendar(date *QDate, format string, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFormatCalendar")
-	r := C.qute_QLocale_toString_14(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormatCalendar"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateFormatCalendar"))
+	r := C.qute_QLocale_toString_22(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormatCalendar"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateFormatCalendar"))
 	return quteStr(r)
 }
 
@@ -483,7 +571,7 @@ func (this *QLocale) ToStringDateFormatCalendar(date *QDate, format string, cal 
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateFormatType(date *QDate, format QLocaleFormatType, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFormatType")
-	r := C.qute_QLocale_toString_15(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormatType"), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateFormatType"))
+	r := C.qute_QLocale_toString_23(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormatType"), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateFormatType"))
 	return quteStr(r)
 }
 
@@ -494,7 +582,7 @@ func (this *QLocale) ToStringDateFormatType(date *QDate, format QLocaleFormatTyp
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateTimeFormatType(dateTime *QDateTime, format QLocaleFormatType, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFormatType")
-	r := C.qute_QLocale_toString_16(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormatType"), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateTimeFormatType"))
+	r := C.qute_QLocale_toString_24(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormatType"), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateTimeFormatType"))
 	return quteStr(r)
 }
 
@@ -505,7 +593,7 @@ func (this *QLocale) ToStringDateTimeFormatType(dateTime *QDateTime, format QLoc
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateTimeFormatCalendar(dateTime *QDateTime, format string, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFormatCalendar")
-	r := C.qute_QLocale_toString_17(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormatCalendar"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateTimeFormatCalendar"))
+	r := C.qute_QLocale_toString_25(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormatCalendar"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateTimeFormatCalendar"))
 	return quteStr(r)
 }
 

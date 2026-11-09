@@ -111,6 +111,19 @@ func (this *QColorTransform) Map(argb uint) uint {
 	return uint(r)
 }
 
+// MapRgba64 wraps QColorTransform::map.
+//
+//	C++: QRgba64 QColorTransform::map(QRgba64 rgba64) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolortransform.html#map
+func (this *QColorTransform) MapRgba64(rgba64 *QRgba64) *QRgba64 {
+	self := rt.Use(unsafe.Pointer(this), "QColorTransform.MapRgba64")
+	r := C.qute_QColorTransform_map_1(self, rt.UseArg(unsafe.Pointer(rgba64), "QColorTransform.MapRgba64"))
+	return rt.View[QRgba64](rt.WrapClass(r, "QRgba64", rt.TakeOwned), r)
+}
+
 // MapColor wraps QColorTransform::map.
 //
 //	C++: QColor QColorTransform::map(const QColor & color) const
@@ -118,6 +131,6 @@ func (this *QColorTransform) Map(argb uint) uint {
 // Qt docs: https://doc.qt.io/qt-6/qcolortransform.html#map
 func (this *QColorTransform) MapColor(color QColor) QColor {
 	self := rt.Use(unsafe.Pointer(this), "QColorTransform.MapColor")
-	r := C.qute_QColorTransform_map_1(self, cQColor(color))
+	r := C.qute_QColorTransform_map_2(self, cQColor(color))
 	return goQColor(r)
 }

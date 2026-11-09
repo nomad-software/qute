@@ -24,6 +24,7 @@
 #include <QButtonGroup>
 #include <QCalendar>
 #include <QCalendarWidget>
+#include <QChar>
 #include <QCheckBox>
 #include <QChildEvent>
 #include <QClipboard>
@@ -64,6 +65,7 @@
 #include <QFileDevice>
 #include <QFileDialog>
 #include <QFileIconProvider>
+#include <QFileInfo>
 #include <QFocusEvent>
 #include <QFont>
 #include <QFontComboBox>
@@ -80,10 +82,13 @@
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsEffect>
 #include <QGraphicsEllipseItem>
+#include <QGraphicsGridLayout>
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
+#include <QGraphicsLayout>
 #include <QGraphicsLayoutItem>
 #include <QGraphicsLineItem>
+#include <QGraphicsLinearLayout>
 #include <QGraphicsObject>
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsPathItem>
@@ -111,6 +116,7 @@
 #include <QIODeviceBase>
 #include <QIcon>
 #include <QImage>
+#include <QImageIOHandler>
 #include <QImageReader>
 #include <QInputDevice>
 #include <QInputDialog>
@@ -142,6 +148,7 @@
 #include <QListWidgetItem>
 #include <QLocale>
 #include <QMainWindow>
+#include <QMatrix4x4>
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QMenu>
@@ -154,8 +161,14 @@
 #include <QMoveEvent>
 #include <QMovie>
 #include <QObject>
+#include <QOffscreenSurface>
+#include <QOpenGLContext>
+#include <QOpenGLContextGroup>
+#include <QOpenGLExtraFunctions>
+#include <QOpenGLFunctions>
 #include <QPagedPaintDevice>
 #include <QPaintDevice>
+#include <QPaintDeviceWindow>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -174,12 +187,15 @@
 #include <QProgressBar>
 #include <QProgressDialog>
 #include <QPushButton>
+#include <QQuaternion>
 #include <QRadialGradient>
 #include <QRadioButton>
 #include <QRegion>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QRegularExpressionMatchIterator>
 #include <QResizeEvent>
+#include <QRgba64>
 #include <QRubberBand>
 #include <QScreen>
 #include <QScrollArea>
@@ -212,6 +228,8 @@
 #include <QStyleOptionViewItem>
 #include <QStyledItemDelegate>
 #include <QSurface>
+#include <QSurfaceFormat>
+#include <QSysInfo>
 #include <QSystemTrayIcon>
 #include <QTabBar>
 #include <QTabWidget>
@@ -221,6 +239,7 @@
 #include <QTableWidgetSelectionRange>
 #include <QTextBlock>
 #include <QTextBlockFormat>
+#include <QTextBlockGroup>
 #include <QTextBrowser>
 #include <QTextCharFormat>
 #include <QTextCursor>
@@ -230,9 +249,17 @@
 #include <QTextFormat>
 #include <QTextFrame>
 #include <QTextFrameFormat>
+#include <QTextImageFormat>
 #include <QTextItem>
+#include <QTextLength>
+#include <QTextList>
+#include <QTextListFormat>
 #include <QTextObject>
 #include <QTextOption>
+#include <QTextTable>
+#include <QTextTableCell>
+#include <QTextTableCellFormat>
+#include <QTextTableFormat>
 #include <QTime>
 #include <QTimeEdit>
 #include <QTimeZone>
@@ -254,6 +281,8 @@
 #include <QValidator>
 #include <QVariant>
 #include <QVector2D>
+#include <QVector3D>
+#include <QVector4D>
 #include <QWheelEvent>
 #include <QWidget>
 #include <QWidgetAction>
@@ -1449,6 +1478,15 @@ public:
 	~qute_QGraphicsEllipseItem() override { qute_qtwidgets_dead(static_cast<void *>(static_cast<QGraphicsEllipseItem *>(this))); }
 };
 
+class qute_QGraphicsGridLayout : public QGraphicsGridLayout {
+public:
+	using QGraphicsGridLayout::QGraphicsGridLayout;
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QGraphicsGridLayout() override { qute_qtwidgets_dead(static_cast<void *>(static_cast<QGraphicsGridLayout *>(this))); }
+};
+
 class qute_QGraphicsItemGroup : public QGraphicsItemGroup {
 public:
 	using QGraphicsItemGroup::QGraphicsItemGroup;
@@ -1465,6 +1503,15 @@ public:
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	~qute_QGraphicsLineItem() override { qute_qtwidgets_dead(static_cast<void *>(static_cast<QGraphicsLineItem *>(this))); }
+};
+
+class qute_QGraphicsLinearLayout : public QGraphicsLinearLayout {
+public:
+	using QGraphicsLinearLayout::QGraphicsLinearLayout;
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QGraphicsLinearLayout() override { qute_qtwidgets_dead(static_cast<void *>(static_cast<QGraphicsLinearLayout *>(this))); }
 };
 
 class qute_QGraphicsPathItem : public QGraphicsPathItem {
@@ -3047,8 +3094,11 @@ const char *qute_qtwidgets_check_layout(void) {
 	{ QGraphicsDropShadowEffect *d = reinterpret_cast<QGraphicsDropShadowEffect *>(uintptr_t(0x10000)); QGraphicsEffect *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsDropShadowEffect"; }
 	{ QGraphicsEffect *d = reinterpret_cast<QGraphicsEffect *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsEffect"; }
 	{ QGraphicsEllipseItem *d = reinterpret_cast<QGraphicsEllipseItem *>(uintptr_t(0x10000)); QAbstractGraphicsShapeItem *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsEllipseItem"; }
+	{ QGraphicsGridLayout *d = reinterpret_cast<QGraphicsGridLayout *>(uintptr_t(0x10000)); QGraphicsLayout *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsGridLayout"; }
 	{ QGraphicsItemGroup *d = reinterpret_cast<QGraphicsItemGroup *>(uintptr_t(0x10000)); QGraphicsItem *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsItemGroup"; }
+	{ QGraphicsLayout *d = reinterpret_cast<QGraphicsLayout *>(uintptr_t(0x10000)); QGraphicsLayoutItem *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsLayout"; }
 	{ QGraphicsLineItem *d = reinterpret_cast<QGraphicsLineItem *>(uintptr_t(0x10000)); QGraphicsItem *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsLineItem"; }
+	{ QGraphicsLinearLayout *d = reinterpret_cast<QGraphicsLinearLayout *>(uintptr_t(0x10000)); QGraphicsLayout *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsLinearLayout"; }
 	{ QGraphicsObject *d = reinterpret_cast<QGraphicsObject *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsObject"; }
 	{ QGraphicsOpacityEffect *d = reinterpret_cast<QGraphicsOpacityEffect *>(uintptr_t(0x10000)); QGraphicsEffect *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsOpacityEffect"; }
 	{ QGraphicsPathItem *d = reinterpret_cast<QGraphicsPathItem *>(uintptr_t(0x10000)); QAbstractGraphicsShapeItem *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QGraphicsPathItem"; }
@@ -6705,6 +6755,134 @@ void qute_QGraphicsEllipseItem_setSpanAngle(void *self, int a0) {
 	static_cast<QGraphicsEllipseItem *>(self)->setSpanAngle(static_cast<int>(a0));
 }
 
+// ---- QGraphicsGridLayout
+void * qute_QGraphicsGridLayout_new(void * a0) {
+	return static_cast<QGraphicsGridLayout *>(new qute_QGraphicsGridLayout(static_cast<QGraphicsLayoutItem *>(a0)));
+}
+void qute_QGraphicsGridLayout_delete(void *self) {
+	delete static_cast<QGraphicsGridLayout *>(self);
+}
+void qute_QGraphicsGridLayout_addItem(void *self, void * a0, int a1, int a2, int a3, int a4) {
+	static_cast<QGraphicsGridLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
+}
+void qute_QGraphicsGridLayout_addItem_1(void *self, void * a0, int a1, int a2) {
+	static_cast<QGraphicsGridLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QGraphicsGridLayout_setHorizontalSpacing(void *self, double a0) {
+	static_cast<QGraphicsGridLayout *>(self)->setHorizontalSpacing(static_cast<double>(a0));
+}
+double qute_QGraphicsGridLayout_horizontalSpacing(void *self) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->horizontalSpacing());
+}
+void qute_QGraphicsGridLayout_setVerticalSpacing(void *self, double a0) {
+	static_cast<QGraphicsGridLayout *>(self)->setVerticalSpacing(static_cast<double>(a0));
+}
+double qute_QGraphicsGridLayout_verticalSpacing(void *self) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->verticalSpacing());
+}
+void qute_QGraphicsGridLayout_setSpacing(void *self, double a0) {
+	static_cast<QGraphicsGridLayout *>(self)->setSpacing(static_cast<double>(a0));
+}
+void qute_QGraphicsGridLayout_setRowSpacing(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowSpacing(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_rowSpacing(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowSpacing(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setColumnSpacing(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnSpacing(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_columnSpacing(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnSpacing(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setRowStretchFactor(void *self, int a0, int a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowStretchFactor(static_cast<int>(a0), static_cast<int>(a1));
+}
+int qute_QGraphicsGridLayout_rowStretchFactor(void *self, int a0) {
+	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->rowStretchFactor(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setColumnStretchFactor(void *self, int a0, int a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnStretchFactor(static_cast<int>(a0), static_cast<int>(a1));
+}
+int qute_QGraphicsGridLayout_columnStretchFactor(void *self, int a0) {
+	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->columnStretchFactor(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setRowMinimumHeight(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowMinimumHeight(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_rowMinimumHeight(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowMinimumHeight(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setRowPreferredHeight(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowPreferredHeight(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_rowPreferredHeight(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowPreferredHeight(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setRowMaximumHeight(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowMaximumHeight(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_rowMaximumHeight(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowMaximumHeight(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setRowFixedHeight(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowFixedHeight(static_cast<int>(a0), static_cast<double>(a1));
+}
+void qute_QGraphicsGridLayout_setColumnMinimumWidth(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnMinimumWidth(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_columnMinimumWidth(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnMinimumWidth(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setColumnPreferredWidth(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnPreferredWidth(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_columnPreferredWidth(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnPreferredWidth(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setColumnMaximumWidth(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnMaximumWidth(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsGridLayout_columnMaximumWidth(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnMaximumWidth(static_cast<int>(a0)));
+}
+void qute_QGraphicsGridLayout_setColumnFixedWidth(void *self, int a0, double a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnFixedWidth(static_cast<int>(a0), static_cast<double>(a1));
+}
+void qute_QGraphicsGridLayout_setRowAlignment(void *self, int a0, int64_t a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setRowAlignment(static_cast<int>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
+}
+int64_t qute_QGraphicsGridLayout_rowAlignment(void *self, int a0) {
+	return static_cast<int64_t>((static_cast<QGraphicsGridLayout *>(self)->rowAlignment(static_cast<int>(a0))).toInt());
+}
+void qute_QGraphicsGridLayout_setColumnAlignment(void *self, int a0, int64_t a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setColumnAlignment(static_cast<int>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
+}
+int64_t qute_QGraphicsGridLayout_columnAlignment(void *self, int a0) {
+	return static_cast<int64_t>((static_cast<QGraphicsGridLayout *>(self)->columnAlignment(static_cast<int>(a0))).toInt());
+}
+void qute_QGraphicsGridLayout_setAlignment(void *self, void * a0, int64_t a1) {
+	static_cast<QGraphicsGridLayout *>(self)->setAlignment(static_cast<QGraphicsLayoutItem *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
+}
+int64_t qute_QGraphicsGridLayout_alignment(void *self, void * a0) {
+	return static_cast<int64_t>((static_cast<QGraphicsGridLayout *>(self)->alignment(static_cast<QGraphicsLayoutItem *>(a0))).toInt());
+}
+int qute_QGraphicsGridLayout_rowCount(void *self) {
+	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->rowCount());
+}
+int qute_QGraphicsGridLayout_columnCount(void *self) {
+	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->columnCount());
+}
+void * qute_QGraphicsGridLayout_itemAt(void *self, int a0, int a1) {
+	return (void *)(static_cast<QGraphicsGridLayout *>(self)->itemAt(static_cast<int>(a0), static_cast<int>(a1)));
+}
+void qute_QGraphicsGridLayout_removeItem(void *self, void * a0) {
+	static_cast<QGraphicsGridLayout *>(self)->removeItem(static_cast<QGraphicsLayoutItem *>(a0));
+}
+qute_sizef qute_QGraphicsGridLayout_sizeHint(void *self, int64_t a0) {
+	return qute_from_QSizeF(static_cast<QGraphicsGridLayout *>(self)->sizeHint(static_cast<Qt::SizeHint>(a0)));
+}
+
 // ---- QGraphicsItem
 void qute_QGraphicsItem_delete(void *self) {
 	delete static_cast<QGraphicsItem *>(self);
@@ -7192,6 +7370,41 @@ void qute_QGraphicsItemGroup_removeFromGroup(void *self, void * a0) {
 	static_cast<QGraphicsItemGroup *>(self)->removeFromGroup(static_cast<QGraphicsItem *>(a0));
 }
 
+// ---- QGraphicsLayout
+void qute_QGraphicsLayout_delete(void *self) {
+	delete static_cast<QGraphicsLayout *>(self);
+}
+void qute_QGraphicsLayout_setContentsMargins(void *self, double a0, double a1, double a2, double a3) {
+	static_cast<QGraphicsLayout *>(self)->setContentsMargins(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
+}
+void qute_QGraphicsLayout_activate(void *self) {
+	static_cast<QGraphicsLayout *>(self)->activate();
+}
+bool qute_QGraphicsLayout_isActivated(void *self) {
+	return static_cast<bool>(static_cast<QGraphicsLayout *>(self)->isActivated());
+}
+void qute_QGraphicsLayout_invalidate(void *self) {
+	static_cast<QGraphicsLayout *>(self)->invalidate();
+}
+void qute_QGraphicsLayout_widgetEvent(void *self, void * a0) {
+	static_cast<QGraphicsLayout *>(self)->widgetEvent(static_cast<QEvent *>(a0));
+}
+int qute_QGraphicsLayout_count(void *self) {
+	return static_cast<int>(static_cast<QGraphicsLayout *>(self)->count());
+}
+void * qute_QGraphicsLayout_itemAt(void *self, int a0) {
+	return (void *)(static_cast<QGraphicsLayout *>(self)->itemAt(static_cast<int>(a0)));
+}
+void qute_QGraphicsLayout_removeAt(void *self, int a0) {
+	static_cast<QGraphicsLayout *>(self)->removeAt(static_cast<int>(a0));
+}
+void qute_QGraphicsLayout_setInstantInvalidatePropagation(bool a0) {
+	QGraphicsLayout::setInstantInvalidatePropagation(static_cast<bool>(a0));
+}
+bool qute_QGraphicsLayout_instantInvalidatePropagation(void) {
+	return static_cast<bool>(QGraphicsLayout::instantInvalidatePropagation());
+}
+
 // ---- QGraphicsLayoutItem
 void qute_QGraphicsLayoutItem_delete(void *self) {
 	delete static_cast<QGraphicsLayoutItem *>(self);
@@ -7325,6 +7538,68 @@ void * qute_QGraphicsLineItem_line(void *self) {
 }
 void qute_QGraphicsLineItem_setLine(void *self, void * a0) {
 	static_cast<QGraphicsLineItem *>(self)->setLine((a0 ? *static_cast<QLineF *>(a0) : QLineF()));
+}
+
+// ---- QGraphicsLinearLayout
+void * qute_QGraphicsLinearLayout_new(void * a0) {
+	return static_cast<QGraphicsLinearLayout *>(new qute_QGraphicsLinearLayout(static_cast<QGraphicsLayoutItem *>(a0)));
+}
+void * qute_QGraphicsLinearLayout_new_1(int64_t a0, void * a1) {
+	return static_cast<QGraphicsLinearLayout *>(new qute_QGraphicsLinearLayout(static_cast<Qt::Orientation>(a0), static_cast<QGraphicsLayoutItem *>(a1)));
+}
+void qute_QGraphicsLinearLayout_delete(void *self) {
+	delete static_cast<QGraphicsLinearLayout *>(self);
+}
+void qute_QGraphicsLinearLayout_setOrientation(void *self, int64_t a0) {
+	static_cast<QGraphicsLinearLayout *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
+}
+int64_t qute_QGraphicsLinearLayout_orientation(void *self) {
+	return static_cast<int64_t>(static_cast<QGraphicsLinearLayout *>(self)->orientation());
+}
+void qute_QGraphicsLinearLayout_addItem(void *self, void * a0) {
+	static_cast<QGraphicsLinearLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0));
+}
+void qute_QGraphicsLinearLayout_addStretch(void *self) {
+	static_cast<QGraphicsLinearLayout *>(self)->addStretch();
+}
+void qute_QGraphicsLinearLayout_insertItem(void *self, int a0, void * a1) {
+	static_cast<QGraphicsLinearLayout *>(self)->insertItem(static_cast<int>(a0), static_cast<QGraphicsLayoutItem *>(a1));
+}
+void qute_QGraphicsLinearLayout_insertStretch(void *self, int a0) {
+	static_cast<QGraphicsLinearLayout *>(self)->insertStretch(static_cast<int>(a0));
+}
+void qute_QGraphicsLinearLayout_removeItem(void *self, void * a0) {
+	static_cast<QGraphicsLinearLayout *>(self)->removeItem(static_cast<QGraphicsLayoutItem *>(a0));
+}
+void qute_QGraphicsLinearLayout_setSpacing(void *self, double a0) {
+	static_cast<QGraphicsLinearLayout *>(self)->setSpacing(static_cast<double>(a0));
+}
+double qute_QGraphicsLinearLayout_spacing(void *self) {
+	return static_cast<double>(static_cast<QGraphicsLinearLayout *>(self)->spacing());
+}
+void qute_QGraphicsLinearLayout_setItemSpacing(void *self, int a0, double a1) {
+	static_cast<QGraphicsLinearLayout *>(self)->setItemSpacing(static_cast<int>(a0), static_cast<double>(a1));
+}
+double qute_QGraphicsLinearLayout_itemSpacing(void *self, int a0) {
+	return static_cast<double>(static_cast<QGraphicsLinearLayout *>(self)->itemSpacing(static_cast<int>(a0)));
+}
+void qute_QGraphicsLinearLayout_setStretchFactor(void *self, void * a0, int a1) {
+	static_cast<QGraphicsLinearLayout *>(self)->setStretchFactor(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1));
+}
+int qute_QGraphicsLinearLayout_stretchFactor(void *self, void * a0) {
+	return static_cast<int>(static_cast<QGraphicsLinearLayout *>(self)->stretchFactor(static_cast<QGraphicsLayoutItem *>(a0)));
+}
+void qute_QGraphicsLinearLayout_setAlignment(void *self, void * a0, int64_t a1) {
+	static_cast<QGraphicsLinearLayout *>(self)->setAlignment(static_cast<QGraphicsLayoutItem *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
+}
+int64_t qute_QGraphicsLinearLayout_alignment(void *self, void * a0) {
+	return static_cast<int64_t>((static_cast<QGraphicsLinearLayout *>(self)->alignment(static_cast<QGraphicsLayoutItem *>(a0))).toInt());
+}
+qute_sizef qute_QGraphicsLinearLayout_sizeHint(void *self, int64_t a0) {
+	return qute_from_QSizeF(static_cast<QGraphicsLinearLayout *>(self)->sizeHint(static_cast<Qt::SizeHint>(a0)));
+}
+void qute_QGraphicsLinearLayout_dump(void *self) {
+	static_cast<QGraphicsLinearLayout *>(self)->dump();
 }
 
 // ---- QGraphicsObject
@@ -7592,13 +7867,25 @@ void * qute_QGraphicsRotation_new(void * a0) {
 void * qute_QGraphicsRotation_cast(void *obj) {
 	return static_cast<void *>(qobject_cast<QGraphicsRotation *>(static_cast<QObject *>(obj)));
 }
+void * qute_QGraphicsRotation_origin(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QGraphicsRotation *>(self)->origin()));
+}
+void qute_QGraphicsRotation_setOrigin(void *self, void * a0) {
+	static_cast<QGraphicsRotation *>(self)->setOrigin((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
+}
 double qute_QGraphicsRotation_angle(void *self) {
 	return static_cast<double>(static_cast<QGraphicsRotation *>(self)->angle());
 }
 void qute_QGraphicsRotation_setAngle(void *self, double a0) {
 	static_cast<QGraphicsRotation *>(self)->setAngle(static_cast<double>(a0));
 }
-void qute_QGraphicsRotation_setAxis(void *self, int64_t a0) {
+void * qute_QGraphicsRotation_axis(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QGraphicsRotation *>(self)->axis()));
+}
+void qute_QGraphicsRotation_setAxis(void *self, void * a0) {
+	static_cast<QGraphicsRotation *>(self)->setAxis((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
+}
+void qute_QGraphicsRotation_setAxis_1(void *self, int64_t a0) {
 	static_cast<QGraphicsRotation *>(self)->setAxis(static_cast<Qt::Axis>(a0));
 }
 void qute_QGraphicsRotation_originChanged_1(void *self) {
@@ -7632,6 +7919,12 @@ void * qute_QGraphicsScale_new(void * a0) {
 }
 void * qute_QGraphicsScale_cast(void *obj) {
 	return static_cast<void *>(qobject_cast<QGraphicsScale *>(static_cast<QObject *>(obj)));
+}
+void * qute_QGraphicsScale_origin(void *self) {
+	return static_cast<void *>(new QVector3D(static_cast<QGraphicsScale *>(self)->origin()));
+}
+void qute_QGraphicsScale_setOrigin(void *self, void * a0) {
+	static_cast<QGraphicsScale *>(self)->setOrigin((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
 }
 double qute_QGraphicsScale_xScale(void *self) {
 	return static_cast<double>(static_cast<QGraphicsScale *>(self)->xScale());
@@ -7769,28 +8062,28 @@ void qute_QGraphicsScene_addItem(void *self, void * a0) {
 	static_cast<QGraphicsScene *>(self)->addItem(static_cast<QGraphicsItem *>(a0));
 }
 void * qute_QGraphicsScene_addEllipse(void *self, qute_rectf a0) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addEllipse(qute_to_QRectF(a0)));
+	return (void *)([&] { auto i = new qute_QGraphicsEllipseItem(qute_to_QRectF(a0)); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addLine(void *self, void * a0) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addLine((a0 ? *static_cast<QLineF *>(a0) : QLineF())));
+	return (void *)([&] { auto i = new qute_QGraphicsLineItem((a0 ? *static_cast<QLineF *>(a0) : QLineF())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addPath(void *self, void * a0) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addPath((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())));
+	return (void *)([&] { auto i = new qute_QGraphicsPathItem((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addPixmap(void *self, void * a0) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addPixmap((a0 ? *static_cast<QPixmap *>(a0) : QPixmap())));
+	return (void *)([&] { auto i = new qute_QGraphicsPixmapItem((a0 ? *static_cast<QPixmap *>(a0) : QPixmap())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addPolygon(void *self, const void *a0, ptrdiff_t a0_n) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addPolygon(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())));
+	return (void *)([&] { auto i = new qute_QGraphicsPolygonItem(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addRect(void *self, qute_rectf a0) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addRect(qute_to_QRectF(a0)));
+	return (void *)([&] { auto i = new qute_QGraphicsRectItem(qute_to_QRectF(a0)); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addText(void *self, const char *a0, ptrdiff_t a0_len) {
 	return (void *)(static_cast<QGraphicsScene *>(self)->addText(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QGraphicsScene_addSimpleText(void *self, const char *a0, ptrdiff_t a0_len) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->addSimpleText(QString::fromUtf8(a0, a0_len)));
+	return (void *)([&] { auto i = new qute_QGraphicsSimpleTextItem(QString::fromUtf8(a0, a0_len)); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addWidget(void *self, void * a0) {
 	return (void *)(static_cast<QGraphicsScene *>(self)->addWidget(static_cast<QWidget *>(a0)));
@@ -8077,6 +8370,9 @@ void * qute_QGraphicsTextItem_linkHovered(void *self, uintptr_t id) {
 void * qute_QGraphicsTransform_cast(void *obj) {
 	return static_cast<void *>(qobject_cast<QGraphicsTransform *>(static_cast<QObject *>(obj)));
 }
+void qute_QGraphicsTransform_applyTo(void *self, void * a0) {
+	static_cast<QGraphicsTransform *>(self)->applyTo(static_cast<QMatrix4x4 *>(a0));
+}
 
 // ---- QGraphicsView
 void * qute_QGraphicsView_new(void * a0) {
@@ -8302,6 +8598,12 @@ void * qute_QGraphicsWidget_cast(void *obj) {
 void * qute_QGraphicsWidget_as_QGraphicsLayoutItem(void *self) {
 	return static_cast<void *>(static_cast<QGraphicsLayoutItem *>(static_cast<QGraphicsWidget *>(self)));
 }
+void * qute_QGraphicsWidget_layout(void *self) {
+	return (void *)(static_cast<QGraphicsWidget *>(self)->layout());
+}
+void qute_QGraphicsWidget_setLayout(void *self, void * a0) {
+	static_cast<QGraphicsWidget *>(self)->setLayout(static_cast<QGraphicsLayout *>(a0));
+}
 void qute_QGraphicsWidget_adjustSize(void *self) {
 	static_cast<QGraphicsWidget *>(self)->adjustSize();
 }
@@ -8353,6 +8655,9 @@ qute_rectf qute_QGraphicsWidget_rect(void *self) {
 void qute_QGraphicsWidget_setContentsMargins(void *self, double a0, double a1, double a2, double a3) {
 	static_cast<QGraphicsWidget *>(self)->setContentsMargins(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
+void qute_QGraphicsWidget_setContentsMargins_1(void *self, qute_marginsf a0) {
+	static_cast<QGraphicsWidget *>(self)->setContentsMargins(qute_to_QMarginsF(a0));
+}
 void qute_QGraphicsWidget_getContentsMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out) {
 	double t0{};
 	double t1{};
@@ -8366,6 +8671,9 @@ void qute_QGraphicsWidget_getContentsMargins(void *self, double *a0_out, double 
 }
 void qute_QGraphicsWidget_setWindowFrameMargins(void *self, double a0, double a1, double a2, double a3) {
 	static_cast<QGraphicsWidget *>(self)->setWindowFrameMargins(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
+}
+void qute_QGraphicsWidget_setWindowFrameMargins_1(void *self, qute_marginsf a0) {
+	static_cast<QGraphicsWidget *>(self)->setWindowFrameMargins(qute_to_QMarginsF(a0));
 }
 void qute_QGraphicsWidget_getWindowFrameMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out) {
 	double t0{};

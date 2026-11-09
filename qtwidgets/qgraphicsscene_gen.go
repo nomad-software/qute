@@ -389,7 +389,7 @@ func (this *QGraphicsScene) AddItem(item QGraphicsItemLike) {
 func (this *QGraphicsScene) AddEllipse(rect qtcore.QRectF) *QGraphicsEllipseItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddEllipse")
 	r := C.qute_QGraphicsScene_addEllipse(self, cQRectF(rect))
-	return rt.View[QGraphicsEllipseItem](rt.WrapClass(r, "QGraphicsEllipseItem", rt.TakeParented), r)
+	return rt.View[QGraphicsEllipseItem](rt.WrapClass(r, "QGraphicsEllipseItem", rt.NewParented), r)
 }
 
 // AddLine wraps QGraphicsScene::addLine.
@@ -402,7 +402,7 @@ func (this *QGraphicsScene) AddEllipse(rect qtcore.QRectF) *QGraphicsEllipseItem
 func (this *QGraphicsScene) AddLine(line *qtcore.QLineF) *QGraphicsLineItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddLine")
 	r := C.qute_QGraphicsScene_addLine(self, rt.UseArg(unsafe.Pointer(line), "QGraphicsScene.AddLine"))
-	return rt.View[QGraphicsLineItem](rt.WrapClass(r, "QGraphicsLineItem", rt.TakeParented), r)
+	return rt.View[QGraphicsLineItem](rt.WrapClass(r, "QGraphicsLineItem", rt.NewParented), r)
 }
 
 // AddPath wraps QGraphicsScene::addPath.
@@ -415,7 +415,7 @@ func (this *QGraphicsScene) AddLine(line *qtcore.QLineF) *QGraphicsLineItem {
 func (this *QGraphicsScene) AddPath(path *qtgui.QPainterPath) *QGraphicsPathItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPath")
 	r := C.qute_QGraphicsScene_addPath(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.AddPath"))
-	return rt.View[QGraphicsPathItem](rt.WrapClass(r, "QGraphicsPathItem", rt.TakeParented), r)
+	return rt.View[QGraphicsPathItem](rt.WrapClass(r, "QGraphicsPathItem", rt.NewParented), r)
 }
 
 // AddPixmap wraps QGraphicsScene::addPixmap.
@@ -428,7 +428,7 @@ func (this *QGraphicsScene) AddPath(path *qtgui.QPainterPath) *QGraphicsPathItem
 func (this *QGraphicsScene) AddPixmap(pixmap *qtgui.QPixmap) *QGraphicsPixmapItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPixmap")
 	r := C.qute_QGraphicsScene_addPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QGraphicsScene.AddPixmap"))
-	return rt.View[QGraphicsPixmapItem](rt.WrapClass(r, "QGraphicsPixmapItem", rt.TakeParented), r)
+	return rt.View[QGraphicsPixmapItem](rt.WrapClass(r, "QGraphicsPixmapItem", rt.NewParented), r)
 }
 
 // AddPolygon wraps QGraphicsScene::addPolygon.
@@ -445,7 +445,7 @@ func (this *QGraphicsScene) AddPolygon(polygon []qtcore.QPointF) *QGraphicsPolyg
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	r := C.qute_QGraphicsScene_addPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
-	return rt.View[QGraphicsPolygonItem](rt.WrapClass(r, "QGraphicsPolygonItem", rt.TakeParented), r)
+	return rt.View[QGraphicsPolygonItem](rt.WrapClass(r, "QGraphicsPolygonItem", rt.NewParented), r)
 }
 
 // AddRect wraps QGraphicsScene::addRect.
@@ -458,7 +458,7 @@ func (this *QGraphicsScene) AddPolygon(polygon []qtcore.QPointF) *QGraphicsPolyg
 func (this *QGraphicsScene) AddRect(rect qtcore.QRectF) *QGraphicsRectItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddRect")
 	r := C.qute_QGraphicsScene_addRect(self, cQRectF(rect))
-	return rt.View[QGraphicsRectItem](rt.WrapClass(r, "QGraphicsRectItem", rt.TakeParented), r)
+	return rt.View[QGraphicsRectItem](rt.WrapClass(r, "QGraphicsRectItem", rt.NewParented), r)
 }
 
 // AddText wraps QGraphicsScene::addText.
@@ -484,7 +484,7 @@ func (this *QGraphicsScene) AddText(text string) *QGraphicsTextItem {
 func (this *QGraphicsScene) AddSimpleText(text string) *QGraphicsSimpleTextItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddSimpleText")
 	r := C.qute_QGraphicsScene_addSimpleText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	return rt.View[QGraphicsSimpleTextItem](rt.WrapClass(r, "QGraphicsSimpleTextItem", rt.TakeParented), r)
+	return rt.View[QGraphicsSimpleTextItem](rt.WrapClass(r, "QGraphicsSimpleTextItem", rt.NewParented), r)
 }
 
 // AddWidget wraps QGraphicsScene::addWidget.

@@ -1942,6 +1942,371 @@ const (
 	QCalendarSystemUser         QCalendarSystem = -1
 )
 
+// QCharSpecialCharacter wraps the enum QChar::SpecialCharacter.
+type QCharSpecialCharacter int64
+
+const (
+	QCharNull                       QCharSpecialCharacter = 0
+	QCharTabulation                 QCharSpecialCharacter = 9
+	QCharLineFeed                   QCharSpecialCharacter = 10
+	QCharFormFeed                   QCharSpecialCharacter = 12
+	QCharCarriageReturn             QCharSpecialCharacter = 13
+	QCharSpace                      QCharSpecialCharacter = 32
+	QCharNbsp                       QCharSpecialCharacter = 160
+	QCharSoftHyphen                 QCharSpecialCharacter = 173
+	QCharReplacementCharacter       QCharSpecialCharacter = 65533
+	QCharObjectReplacementCharacter QCharSpecialCharacter = 65532
+	QCharByteOrderMark              QCharSpecialCharacter = 65279
+	QCharByteOrderSwapped           QCharSpecialCharacter = 65534
+	QCharParagraphSeparator         QCharSpecialCharacter = 8233
+	QCharLineSeparator              QCharSpecialCharacter = 8232
+	QCharVisualTabCharacter         QCharSpecialCharacter = 8594
+	QCharLastValidCodePoint         QCharSpecialCharacter = 1114111
+)
+
+// QCharCategory wraps the enum QChar::Category.
+type QCharCategory int64
+
+const (
+	QCharMark_NonSpacing          QCharCategory = 0
+	QCharMark_SpacingCombining    QCharCategory = 1
+	QCharMark_Enclosing           QCharCategory = 2
+	QCharNumber_DecimalDigit      QCharCategory = 3
+	QCharNumber_Letter            QCharCategory = 4
+	QCharNumber_Other             QCharCategory = 5
+	QCharSeparator_Space          QCharCategory = 6
+	QCharSeparator_Line           QCharCategory = 7
+	QCharSeparator_Paragraph      QCharCategory = 8
+	QCharOther_Control            QCharCategory = 9
+	QCharOther_Format             QCharCategory = 10
+	QCharOther_Surrogate          QCharCategory = 11
+	QCharOther_PrivateUse         QCharCategory = 12
+	QCharOther_NotAssigned        QCharCategory = 13
+	QCharLetter_Uppercase         QCharCategory = 14
+	QCharLetter_Lowercase         QCharCategory = 15
+	QCharLetter_Titlecase         QCharCategory = 16
+	QCharLetter_Modifier          QCharCategory = 17
+	QCharLetter_Other             QCharCategory = 18
+	QCharPunctuation_Connector    QCharCategory = 19
+	QCharPunctuation_Dash         QCharCategory = 20
+	QCharPunctuation_Open         QCharCategory = 21
+	QCharPunctuation_Close        QCharCategory = 22
+	QCharPunctuation_InitialQuote QCharCategory = 23
+	QCharPunctuation_FinalQuote   QCharCategory = 24
+	QCharPunctuation_Other        QCharCategory = 25
+	QCharSymbol_Math              QCharCategory = 26
+	QCharSymbol_Currency          QCharCategory = 27
+	QCharSymbol_Modifier          QCharCategory = 28
+	QCharSymbol_Other             QCharCategory = 29
+)
+
+// QCharScript wraps the enum QChar::Script.
+type QCharScript int64
+
+const (
+	QCharScript_Unknown               QCharScript = 0
+	QCharScript_Inherited             QCharScript = 1
+	QCharScript_Common                QCharScript = 2
+	QCharScript_Latin                 QCharScript = 3
+	QCharScript_Greek                 QCharScript = 4
+	QCharScript_Cyrillic              QCharScript = 5
+	QCharScript_Armenian              QCharScript = 6
+	QCharScript_Hebrew                QCharScript = 7
+	QCharScript_Arabic                QCharScript = 8
+	QCharScript_Syriac                QCharScript = 9
+	QCharScript_Thaana                QCharScript = 10
+	QCharScript_Devanagari            QCharScript = 11
+	QCharScript_Bengali               QCharScript = 12
+	QCharScript_Gurmukhi              QCharScript = 13
+	QCharScript_Gujarati              QCharScript = 14
+	QCharScript_Oriya                 QCharScript = 15
+	QCharScript_Tamil                 QCharScript = 16
+	QCharScript_Telugu                QCharScript = 17
+	QCharScript_Kannada               QCharScript = 18
+	QCharScript_Malayalam             QCharScript = 19
+	QCharScript_Sinhala               QCharScript = 20
+	QCharScript_Thai                  QCharScript = 21
+	QCharScript_Lao                   QCharScript = 22
+	QCharScript_Tibetan               QCharScript = 23
+	QCharScript_Myanmar               QCharScript = 24
+	QCharScript_Georgian              QCharScript = 25
+	QCharScript_Hangul                QCharScript = 26
+	QCharScript_Ethiopic              QCharScript = 27
+	QCharScript_Cherokee              QCharScript = 28
+	QCharScript_CanadianAboriginal    QCharScript = 29
+	QCharScript_Ogham                 QCharScript = 30
+	QCharScript_Runic                 QCharScript = 31
+	QCharScript_Khmer                 QCharScript = 32
+	QCharScript_Mongolian             QCharScript = 33
+	QCharScript_Hiragana              QCharScript = 34
+	QCharScript_Katakana              QCharScript = 35
+	QCharScript_Bopomofo              QCharScript = 36
+	QCharScript_Han                   QCharScript = 37
+	QCharScript_Yi                    QCharScript = 38
+	QCharScript_OldItalic             QCharScript = 39
+	QCharScript_Gothic                QCharScript = 40
+	QCharScript_Deseret               QCharScript = 41
+	QCharScript_Tagalog               QCharScript = 42
+	QCharScript_Hanunoo               QCharScript = 43
+	QCharScript_Buhid                 QCharScript = 44
+	QCharScript_Tagbanwa              QCharScript = 45
+	QCharScript_Coptic                QCharScript = 46
+	QCharScript_Limbu                 QCharScript = 47
+	QCharScript_TaiLe                 QCharScript = 48
+	QCharScript_LinearB               QCharScript = 49
+	QCharScript_Ugaritic              QCharScript = 50
+	QCharScript_Shavian               QCharScript = 51
+	QCharScript_Osmanya               QCharScript = 52
+	QCharScript_Cypriot               QCharScript = 53
+	QCharScript_Braille               QCharScript = 54
+	QCharScript_Buginese              QCharScript = 55
+	QCharScript_NewTaiLue             QCharScript = 56
+	QCharScript_Glagolitic            QCharScript = 57
+	QCharScript_Tifinagh              QCharScript = 58
+	QCharScript_SylotiNagri           QCharScript = 59
+	QCharScript_OldPersian            QCharScript = 60
+	QCharScript_Kharoshthi            QCharScript = 61
+	QCharScript_Balinese              QCharScript = 62
+	QCharScript_Cuneiform             QCharScript = 63
+	QCharScript_Phoenician            QCharScript = 64
+	QCharScript_PhagsPa               QCharScript = 65
+	QCharScript_Nko                   QCharScript = 66
+	QCharScript_Sundanese             QCharScript = 67
+	QCharScript_Lepcha                QCharScript = 68
+	QCharScript_OlChiki               QCharScript = 69
+	QCharScript_Vai                   QCharScript = 70
+	QCharScript_Saurashtra            QCharScript = 71
+	QCharScript_KayahLi               QCharScript = 72
+	QCharScript_Rejang                QCharScript = 73
+	QCharScript_Lycian                QCharScript = 74
+	QCharScript_Carian                QCharScript = 75
+	QCharScript_Lydian                QCharScript = 76
+	QCharScript_Cham                  QCharScript = 77
+	QCharScript_TaiTham               QCharScript = 78
+	QCharScript_TaiViet               QCharScript = 79
+	QCharScript_Avestan               QCharScript = 80
+	QCharScript_EgyptianHieroglyphs   QCharScript = 81
+	QCharScript_Samaritan             QCharScript = 82
+	QCharScript_Lisu                  QCharScript = 83
+	QCharScript_Bamum                 QCharScript = 84
+	QCharScript_Javanese              QCharScript = 85
+	QCharScript_MeeteiMayek           QCharScript = 86
+	QCharScript_ImperialAramaic       QCharScript = 87
+	QCharScript_OldSouthArabian       QCharScript = 88
+	QCharScript_InscriptionalParthian QCharScript = 89
+	QCharScript_InscriptionalPahlavi  QCharScript = 90
+	QCharScript_OldTurkic             QCharScript = 91
+	QCharScript_Kaithi                QCharScript = 92
+	QCharScript_Batak                 QCharScript = 93
+	QCharScript_Brahmi                QCharScript = 94
+	QCharScript_Mandaic               QCharScript = 95
+	QCharScript_Chakma                QCharScript = 96
+	QCharScript_MeroiticCursive       QCharScript = 97
+	QCharScript_MeroiticHieroglyphs   QCharScript = 98
+	QCharScript_Miao                  QCharScript = 99
+	QCharScript_Sharada               QCharScript = 100
+	QCharScript_SoraSompeng           QCharScript = 101
+	QCharScript_Takri                 QCharScript = 102
+	QCharScript_CaucasianAlbanian     QCharScript = 103
+	QCharScript_BassaVah              QCharScript = 104
+	QCharScript_Duployan              QCharScript = 105
+	QCharScript_Elbasan               QCharScript = 106
+	QCharScript_Grantha               QCharScript = 107
+	QCharScript_PahawhHmong           QCharScript = 108
+	QCharScript_Khojki                QCharScript = 109
+	QCharScript_LinearA               QCharScript = 110
+	QCharScript_Mahajani              QCharScript = 111
+	QCharScript_Manichaean            QCharScript = 112
+	QCharScript_MendeKikakui          QCharScript = 113
+	QCharScript_Modi                  QCharScript = 114
+	QCharScript_Mro                   QCharScript = 115
+	QCharScript_OldNorthArabian       QCharScript = 116
+	QCharScript_Nabataean             QCharScript = 117
+	QCharScript_Palmyrene             QCharScript = 118
+	QCharScript_PauCinHau             QCharScript = 119
+	QCharScript_OldPermic             QCharScript = 120
+	QCharScript_PsalterPahlavi        QCharScript = 121
+	QCharScript_Siddham               QCharScript = 122
+	QCharScript_Khudawadi             QCharScript = 123
+	QCharScript_Tirhuta               QCharScript = 124
+	QCharScript_WarangCiti            QCharScript = 125
+	QCharScript_Ahom                  QCharScript = 126
+	QCharScript_AnatolianHieroglyphs  QCharScript = 127
+	QCharScript_Hatran                QCharScript = 128
+	QCharScript_Multani               QCharScript = 129
+	QCharScript_OldHungarian          QCharScript = 130
+	QCharScript_SignWriting           QCharScript = 131
+	QCharScript_Adlam                 QCharScript = 132
+	QCharScript_Bhaiksuki             QCharScript = 133
+	QCharScript_Marchen               QCharScript = 134
+	QCharScript_Newa                  QCharScript = 135
+	QCharScript_Osage                 QCharScript = 136
+	QCharScript_Tangut                QCharScript = 137
+	QCharScript_MasaramGondi          QCharScript = 138
+	QCharScript_Nushu                 QCharScript = 139
+	QCharScript_Soyombo               QCharScript = 140
+	QCharScript_ZanabazarSquare       QCharScript = 141
+	QCharScript_Dogra                 QCharScript = 142
+	QCharScript_GunjalaGondi          QCharScript = 143
+	QCharScript_HanifiRohingya        QCharScript = 144
+	QCharScript_Makasar               QCharScript = 145
+	QCharScript_Medefaidrin           QCharScript = 146
+	QCharScript_OldSogdian            QCharScript = 147
+	QCharScript_Sogdian               QCharScript = 148
+	QCharScript_Elymaic               QCharScript = 149
+	QCharScript_Nandinagari           QCharScript = 150
+	QCharScript_NyiakengPuachueHmong  QCharScript = 151
+	QCharScript_Wancho                QCharScript = 152
+	QCharScript_Chorasmian            QCharScript = 153
+	QCharScript_DivesAkuru            QCharScript = 154
+	QCharScript_KhitanSmallScript     QCharScript = 155
+	QCharScript_Yezidi                QCharScript = 156
+	QCharScript_CyproMinoan           QCharScript = 157
+	QCharScript_OldUyghur             QCharScript = 158
+	QCharScript_Tangsa                QCharScript = 159
+	QCharScript_Toto                  QCharScript = 160
+	QCharScript_Vithkuqi              QCharScript = 161
+	QCharScript_Kawi                  QCharScript = 162
+	QCharScript_NagMundari            QCharScript = 163
+	QCharScript_Garay                 QCharScript = 164
+	QCharScript_GurungKhema           QCharScript = 165
+	QCharScript_KiratRai              QCharScript = 166
+	QCharScript_OlOnal                QCharScript = 167
+	QCharScript_Sunuwar               QCharScript = 168
+	QCharScript_Todhri                QCharScript = 169
+	QCharScript_TuluTigalari          QCharScript = 170
+	QCharScript_Sidetic               QCharScript = 171
+	QCharScript_TaiYo                 QCharScript = 172
+	QCharScript_TolongSiki            QCharScript = 173
+	QCharScript_BeriaErfe             QCharScript = 174
+	QCharScriptCount                  QCharScript = 175
+)
+
+// QCharDirection wraps the enum QChar::Direction.
+type QCharDirection int64
+
+const (
+	QCharDirL   QCharDirection = 0
+	QCharDirR   QCharDirection = 1
+	QCharDirEN  QCharDirection = 2
+	QCharDirES  QCharDirection = 3
+	QCharDirET  QCharDirection = 4
+	QCharDirAN  QCharDirection = 5
+	QCharDirCS  QCharDirection = 6
+	QCharDirB   QCharDirection = 7
+	QCharDirS   QCharDirection = 8
+	QCharDirWS  QCharDirection = 9
+	QCharDirON  QCharDirection = 10
+	QCharDirLRE QCharDirection = 11
+	QCharDirLRO QCharDirection = 12
+	QCharDirAL  QCharDirection = 13
+	QCharDirRLE QCharDirection = 14
+	QCharDirRLO QCharDirection = 15
+	QCharDirPDF QCharDirection = 16
+	QCharDirNSM QCharDirection = 17
+	QCharDirBN  QCharDirection = 18
+	QCharDirLRI QCharDirection = 19
+	QCharDirRLI QCharDirection = 20
+	QCharDirFSI QCharDirection = 21
+	QCharDirPDI QCharDirection = 22
+)
+
+// QCharDecomposition wraps the enum QChar::Decomposition.
+type QCharDecomposition int64
+
+const (
+	QCharNoDecomposition QCharDecomposition = 0
+	QCharCanonical       QCharDecomposition = 1
+	QCharFont            QCharDecomposition = 2
+	QCharNoBreak         QCharDecomposition = 3
+	QCharInitial         QCharDecomposition = 4
+	QCharMedial          QCharDecomposition = 5
+	QCharFinal           QCharDecomposition = 6
+	QCharIsolated        QCharDecomposition = 7
+	QCharCircle          QCharDecomposition = 8
+	QCharSuper           QCharDecomposition = 9
+	QCharSub             QCharDecomposition = 10
+	QCharVertical        QCharDecomposition = 11
+	QCharWide            QCharDecomposition = 12
+	QCharNarrow          QCharDecomposition = 13
+	QCharSmall           QCharDecomposition = 14
+	QCharSquare          QCharDecomposition = 15
+	QCharCompat          QCharDecomposition = 16
+	QCharFraction        QCharDecomposition = 17
+)
+
+// QCharJoiningType wraps the enum QChar::JoiningType.
+type QCharJoiningType int64
+
+const (
+	QCharJoining_None        QCharJoiningType = 0
+	QCharJoining_Causing     QCharJoiningType = 1
+	QCharJoining_Dual        QCharJoiningType = 2
+	QCharJoining_Right       QCharJoiningType = 3
+	QCharJoining_Left        QCharJoiningType = 4
+	QCharJoining_Transparent QCharJoiningType = 5
+)
+
+// QCharCombiningClass wraps the enum QChar::CombiningClass.
+type QCharCombiningClass int64
+
+const (
+	QCharCombining_BelowLeftAttached  QCharCombiningClass = 200
+	QCharCombining_BelowAttached      QCharCombiningClass = 202
+	QCharCombining_BelowRightAttached QCharCombiningClass = 204
+	QCharCombining_LeftAttached       QCharCombiningClass = 208
+	QCharCombining_RightAttached      QCharCombiningClass = 210
+	QCharCombining_AboveLeftAttached  QCharCombiningClass = 212
+	QCharCombining_AboveAttached      QCharCombiningClass = 214
+	QCharCombining_AboveRightAttached QCharCombiningClass = 216
+	QCharCombining_BelowLeft          QCharCombiningClass = 218
+	QCharCombining_Below              QCharCombiningClass = 220
+	QCharCombining_BelowRight         QCharCombiningClass = 222
+	QCharCombining_Left               QCharCombiningClass = 224
+	QCharCombining_Right              QCharCombiningClass = 226
+	QCharCombining_AboveLeft          QCharCombiningClass = 228
+	QCharCombining_Above              QCharCombiningClass = 230
+	QCharCombining_AboveRight         QCharCombiningClass = 232
+	QCharCombining_DoubleBelow        QCharCombiningClass = 233
+	QCharCombining_DoubleAbove        QCharCombiningClass = 234
+	QCharCombining_IotaSubscript      QCharCombiningClass = 240
+)
+
+// QCharUnicodeVersion wraps the enum QChar::UnicodeVersion.
+type QCharUnicodeVersion int64
+
+const (
+	QCharUnicode_Unassigned QCharUnicodeVersion = 0
+	QCharUnicode_1_1        QCharUnicodeVersion = 1
+	QCharUnicode_2_0        QCharUnicodeVersion = 2
+	QCharUnicode_2_1_2      QCharUnicodeVersion = 3
+	QCharUnicode_3_0        QCharUnicodeVersion = 4
+	QCharUnicode_3_1        QCharUnicodeVersion = 5
+	QCharUnicode_3_2        QCharUnicodeVersion = 6
+	QCharUnicode_4_0        QCharUnicodeVersion = 7
+	QCharUnicode_4_1        QCharUnicodeVersion = 8
+	QCharUnicode_5_0        QCharUnicodeVersion = 9
+	QCharUnicode_5_1        QCharUnicodeVersion = 10
+	QCharUnicode_5_2        QCharUnicodeVersion = 11
+	QCharUnicode_6_0        QCharUnicodeVersion = 12
+	QCharUnicode_6_1        QCharUnicodeVersion = 13
+	QCharUnicode_6_2        QCharUnicodeVersion = 14
+	QCharUnicode_6_3        QCharUnicodeVersion = 15
+	QCharUnicode_7_0        QCharUnicodeVersion = 16
+	QCharUnicode_8_0        QCharUnicodeVersion = 17
+	QCharUnicode_9_0        QCharUnicodeVersion = 18
+	QCharUnicode_10_0       QCharUnicodeVersion = 19
+	QCharUnicode_11_0       QCharUnicodeVersion = 20
+	QCharUnicode_12_0       QCharUnicodeVersion = 21
+	QCharUnicode_12_1       QCharUnicodeVersion = 22
+	QCharUnicode_13_0       QCharUnicodeVersion = 23
+	QCharUnicode_14_0       QCharUnicodeVersion = 24
+	QCharUnicode_15_0       QCharUnicodeVersion = 25
+	QCharUnicode_15_1       QCharUnicodeVersion = 26
+	QCharUnicode_16_0       QCharUnicodeVersion = 27
+	QCharUnicode_17_0       QCharUnicodeVersion = 28
+)
+
 // Constants from an unnamed enum in QCoreApplication.
 const (
 	QCoreApplicationApplicationFlags = 396288
@@ -2067,7 +2432,7 @@ type QDirFilter = QDirFilters
 const (
 	QDirDirs           QDirFilters = 1
 	QDirFiles          QDirFilters = 2
-	QDirDrives         QDirFilters = 4
+	QDirFilterDrives   QDirFilters = 4
 	QDirNoSymLinks     QDirFilters = 8
 	QDirAllEntries     QDirFilters = 7
 	QDirTypeMask       QDirFilters = 15
@@ -3726,6 +4091,22 @@ const (
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForFiltering           QSortFilterProxyModelDataChangeRelevanceFlags = 1
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForSorting             QSortFilterProxyModelDataChangeRelevanceFlags = 2
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForFilteringAndSorting QSortFilterProxyModelDataChangeRelevanceFlags = 3
+)
+
+// QSysInfoSizes wraps the enum QSysInfo::Sizes.
+type QSysInfoSizes int64
+
+const (
+	QSysInfoWordSize QSysInfoSizes = 64
+)
+
+// QSysInfoEndian wraps the enum QSysInfo::Endian.
+type QSysInfoEndian int64
+
+const (
+	QSysInfoBigEndian    QSysInfoEndian = 0
+	QSysInfoLittleEndian QSysInfoEndian = 1
+	QSysInfoByteOrder    QSysInfoEndian = 1
 )
 
 // QTimeZoneInitialization wraps the enum QTimeZone::Initialization.

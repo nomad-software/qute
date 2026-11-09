@@ -290,6 +290,46 @@ func (this *QTextFormat) BrushProperty(propertyId int) *QBrush {
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
+// LengthProperty wraps QTextFormat::lengthProperty.
+//
+//	C++: QTextLength QTextFormat::lengthProperty(int propertyId) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#lengthProperty
+func (this *QTextFormat) LengthProperty(propertyId int) *QTextLength {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.LengthProperty")
+	r := C.qute_QTextFormat_lengthProperty(self, C.int(propertyId))
+	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
+}
+
+// LengthVectorProperty wraps QTextFormat::lengthVectorProperty.
+//
+//	C++: QList<QTextLength> QTextFormat::lengthVectorProperty(int propertyId) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#lengthVectorProperty
+func (this *QTextFormat) LengthVectorProperty(propertyId int) []*QTextLength {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.LengthVectorProperty")
+	r := C.qute_QTextFormat_lengthVectorProperty(self, C.int(propertyId))
+	return quteList(r, func(e unsafe.Pointer) *QTextLength {
+		return rt.View[QTextLength](rt.WrapClass(e, "QTextLength", rt.TakeOwned), e)
+	})
+}
+
+// SetPropertyTextLengths wraps QTextFormat::setProperty.
+//
+//	C++: void QTextFormat::setProperty(int propertyId, const QList<QTextLength> & lengths)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#setProperty
+func (this *QTextFormat) SetPropertyTextLengths(propertyId int, lengths []*QTextLength) {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetPropertyTextLengths")
+	lengthsC := make([]unsafe.Pointer, len(lengths))
+	for i := range lengths {
+		lengthsC[i] = rt.UseArg(unsafe.Pointer(lengths[i]), "QTextFormat.SetPropertyTextLengths")
+	}
+	C.qute_QTextFormat_setProperty_1(self, C.int(propertyId), unsafe.Pointer(unsafe.SliceData(lengthsC)), C.ptrdiff_t(len(lengths)))
+}
+
 // Properties wraps QTextFormat::properties.
 //
 //	C++: QMap<int, QVariant> QTextFormat::properties() const
@@ -438,6 +478,32 @@ func (this *QTextFormat) ToCharFormat() *QTextCharFormat {
 	return rt.View[QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
+// ToListFormat wraps QTextFormat::toListFormat.
+//
+//	C++: QTextListFormat QTextFormat::toListFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#toListFormat
+func (this *QTextFormat) ToListFormat() *QTextListFormat {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToListFormat")
+	r := C.qute_QTextFormat_toListFormat(self)
+	return rt.View[QTextListFormat](rt.WrapClass(r, "QTextListFormat", rt.TakeOwned), r)
+}
+
+// ToTableFormat wraps QTextFormat::toTableFormat.
+//
+//	C++: QTextTableFormat QTextFormat::toTableFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#toTableFormat
+func (this *QTextFormat) ToTableFormat() *QTextTableFormat {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToTableFormat")
+	r := C.qute_QTextFormat_toTableFormat(self)
+	return rt.View[QTextTableFormat](rt.WrapClass(r, "QTextTableFormat", rt.TakeOwned), r)
+}
+
 // ToFrameFormat wraps QTextFormat::toFrameFormat.
 //
 //	C++: QTextFrameFormat QTextFormat::toFrameFormat() const
@@ -449,6 +515,32 @@ func (this *QTextFormat) ToFrameFormat() *QTextFrameFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToFrameFormat")
 	r := C.qute_QTextFormat_toFrameFormat(self)
 	return rt.View[QTextFrameFormat](rt.WrapClass(r, "QTextFrameFormat", rt.TakeOwned), r)
+}
+
+// ToImageFormat wraps QTextFormat::toImageFormat.
+//
+//	C++: QTextImageFormat QTextFormat::toImageFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#toImageFormat
+func (this *QTextFormat) ToImageFormat() *QTextImageFormat {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToImageFormat")
+	r := C.qute_QTextFormat_toImageFormat(self)
+	return rt.View[QTextImageFormat](rt.WrapClass(r, "QTextImageFormat", rt.TakeOwned), r)
+}
+
+// ToTableCellFormat wraps QTextFormat::toTableCellFormat.
+//
+//	C++: QTextTableCellFormat QTextFormat::toTableCellFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#toTableCellFormat
+func (this *QTextFormat) ToTableCellFormat() *QTextTableCellFormat {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToTableCellFormat")
+	r := C.qute_QTextFormat_toTableCellFormat(self)
+	return rt.View[QTextTableCellFormat](rt.WrapClass(r, "QTextTableCellFormat", rt.TakeOwned), r)
 }
 
 // SetLayoutDirection wraps QTextFormat::setLayoutDirection.

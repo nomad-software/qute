@@ -23,6 +23,7 @@ typedef struct { double w, h; } qute_sizef;
 typedef struct { int x, y, w, h; } qute_rect;
 typedef struct { double x, y, w, h; } qute_rectf;
 typedef struct { int l, t, r, b; } qute_margins;
+typedef struct { double l, t, r, b; } qute_marginsf;
 typedef struct { unsigned char r, g, b, a; } qute_color;
 
 #ifdef __cplusplus
@@ -80,6 +81,21 @@ template <class KC, class VC, class M, class KF, class VF> inline qute_map qute_
     r.values = qute_list{v, n};
     return r;
 }
+template <class KC, class VC, class L, class KF, class VF> inline qute_map qute_ret_pairs(const L &l, KF kf, VF vf) {
+    qute_map r;
+    ptrdiff_t n = l.size();
+    KC *k = static_cast<KC *>(std::malloc(sizeof(KC) * (n ? n : 1)));
+    VC *v = static_cast<VC *>(std::malloc(sizeof(VC) * (n ? n : 1)));
+    ptrdiff_t i = 0;
+    for (const auto &p : l) {
+        k[i] = kf(p.first);
+        v[i] = vf(p.second);
+        i++;
+    }
+    r.keys = qute_list{k, n};
+    r.values = qute_list{v, n};
+    return r;
+}
 inline QList<QString> qute_qstrlist(const char *d, const ptrdiff_t *lens, ptrdiff_t n) {
     QList<QString> l;
     l.reserve(n);
@@ -121,6 +137,8 @@ inline QRectF qute_to_QRectF(qute_rectf c) { return QRectF(c.x, c.y, c.w, c.h); 
 inline qute_rectf qute_from_QRectF(const QRectF &v) { return qute_rectf{v.x(), v.y(), v.width(), v.height()}; }
 inline QMargins qute_to_QMargins(qute_margins c) { return QMargins(c.l, c.t, c.r, c.b); }
 inline qute_margins qute_from_QMargins(const QMargins &v) { return qute_margins{v.left(), v.top(), v.right(), v.bottom()}; }
+inline QMarginsF qute_to_QMarginsF(qute_marginsf c) { return QMarginsF(c.l, c.t, c.r, c.b); }
+inline qute_marginsf qute_from_QMarginsF(const QMarginsF &v) { return qute_marginsf{v.left(), v.top(), v.right(), v.bottom()}; }
 
 #ifdef QT_GUI_LIB
 #include <QtGui/QColor>

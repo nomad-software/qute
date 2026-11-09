@@ -11,7 +11,7 @@ import (
 // delete the owner, assert the handle is Dead. Run under -asan the sanitizer
 // also proves nothing was freed twice. Rules the generator cannot exercise on
 // its own take a `test:` snippet in the overlay, or are listed in
-// UNREVIEWED.md as untested.
+// COVERAGE.md as untested.
 
 type testCtx struct {
 	g       *Gen
@@ -190,6 +190,9 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 	b.p("func TestLayout(t *testing.T) {\n\tif c := %s.CheckLayout(); c != \"\" {\n\t\tt.Fatalf(\"%%s: primary base is not at offset 0\", c)\n\t}\n}\n", m.Pkg)
 
 	for _, c := range m.Classes {
+		if c.Opts.EnumsOnly {
+			continue
+		}
 		// constructors with a transfer-this parent
 		for _, ctor := range c.Ctors {
 			if ctor.Overlay != nil && ctor.Overlay.Test != "" {
@@ -434,7 +437,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		b.p("\t\tif got := %s.Ownership(); got != %s {\n\t\t\tt.Errorf(\"result: %%v, want %s\", got)\n\t\t}", res, t.q(core, want), want)
 		if retRule == "transfer-to-go" {
 			b.p("\t\t%s.Delete()\n\t\tif %s.Alive() {\n\t\t\tt.Error(\"result alive after Delete\")\n\t\t}", res, res)
-		} else if mm.Ret.cls.QObject {
+		} else if mm.Ret.cls.QObject || mm.Overlay != nil && mm.Overlay.Created {
 			checks = append(checks, "DEAD:"+res)
 		} else {
 			g.report.unobservable(c, mm)

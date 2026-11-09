@@ -364,6 +364,49 @@ func QFontDatabaseRemoveAllApplicationFonts() bool {
 	return bool(r)
 }
 
+// QFontDatabaseAddApplicationFallbackFontFamily wraps QFontDatabase::addApplicationFallbackFontFamily.
+//
+//	C++: void QFontDatabase::addApplicationFallbackFontFamily(QChar::Script script, const QString & familyName)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#addApplicationFallbackFontFamily
+func QFontDatabaseAddApplicationFallbackFontFamily(script qtcore.QCharScript, familyName string) {
+	rt.CheckThread("QFontDatabaseAddApplicationFallbackFontFamily")
+	C.qute_QFontDatabase_addApplicationFallbackFontFamily(C.int64_t(script), (*C.char)(unsafe.Pointer(unsafe.StringData(familyName))), C.ptrdiff_t(len(familyName)))
+}
+
+// QFontDatabaseRemoveApplicationFallbackFontFamily wraps QFontDatabase::removeApplicationFallbackFontFamily.
+//
+//	C++: bool QFontDatabase::removeApplicationFallbackFontFamily(QChar::Script script, const QString & familyName)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#removeApplicationFallbackFontFamily
+func QFontDatabaseRemoveApplicationFallbackFontFamily(script qtcore.QCharScript, familyName string) bool {
+	rt.CheckThread("QFontDatabaseRemoveApplicationFallbackFontFamily")
+	r := C.qute_QFontDatabase_removeApplicationFallbackFontFamily(C.int64_t(script), (*C.char)(unsafe.Pointer(unsafe.StringData(familyName))), C.ptrdiff_t(len(familyName)))
+	return bool(r)
+}
+
+// QFontDatabaseSetApplicationFallbackFontFamilies wraps QFontDatabase::setApplicationFallbackFontFamilies.
+//
+//	C++: void QFontDatabase::setApplicationFallbackFontFamilies(QChar::Script, const QStringList & familyNames)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#setApplicationFallbackFontFamilies
+func QFontDatabaseSetApplicationFallbackFontFamilies(arg0 qtcore.QCharScript, familyNames []string) {
+	rt.CheckThread("QFontDatabaseSetApplicationFallbackFontFamilies")
+	familyNamesData, familyNamesLens := quteStrListArg(familyNames)
+	C.qute_QFontDatabase_setApplicationFallbackFontFamilies(C.int64_t(arg0), (*C.char)(unsafe.Pointer(unsafe.SliceData(familyNamesData))), (*C.ptrdiff_t)(unsafe.SliceData(familyNamesLens)), C.ptrdiff_t(len(familyNames)))
+}
+
+// QFontDatabaseApplicationFallbackFontFamilies wraps QFontDatabase::applicationFallbackFontFamilies.
+//
+//	C++: QStringList QFontDatabase::applicationFallbackFontFamilies(QChar::Script script)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#applicationFallbackFontFamilies
+func QFontDatabaseApplicationFallbackFontFamilies(script qtcore.QCharScript) []string {
+	rt.CheckThread("QFontDatabaseApplicationFallbackFontFamilies")
+	r := C.qute_QFontDatabase_applicationFallbackFontFamilies(C.int64_t(script))
+	return quteStrList(r)
+}
+
 // QFontDatabaseAddApplicationEmojiFontFamily wraps QFontDatabase::addApplicationEmojiFontFamily.
 //
 //	C++: void QFontDatabase::addApplicationEmojiFontFamily(const QString & familyName)

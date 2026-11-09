@@ -326,13 +326,13 @@ func (this *QIODevice) ReadAll() []byte {
 	return quteBytes(r)
 }
 
-// ReadLineWithData wraps QIODevice::readLine.
+// ReadLineWithBytes wraps QIODevice::readLine.
 //
 //	C++: qint64 QIODevice::readLine(char * data, qint64 maxlen)
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLine
-func (this *QIODevice) ReadLineWithData(data []byte) int64 {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineWithData")
+func (this *QIODevice) ReadLineWithBytes(data []byte) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineWithBytes")
 	r := C.qute_QIODevice_readLine(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
 	return int64(r)
 }
@@ -360,13 +360,13 @@ func (this *QIODevice) ReadLineInto() (bool, []byte) {
 	return bool(r), quteBytes(resultOut)
 }
 
-// ReadLineIntoWithBuffer wraps QIODevice::readLineInto.
+// ReadLineIntoWithBytes wraps QIODevice::readLineInto.
 //
 //	C++: QByteArrayView QIODevice::readLineInto(QSpan<char> buffer)
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLineInto
-func (this *QIODevice) ReadLineIntoWithBuffer(buffer []byte) []byte {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineIntoWithBuffer")
+func (this *QIODevice) ReadLineIntoWithBytes(buffer []byte) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineIntoWithBytes")
 	r := C.qute_QIODevice_readLineInto_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(buffer))), C.ptrdiff_t(len(buffer)))
 	return quteBytes(r)
 }

@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QGraphicsTransform wraps Qt's QGraphicsTransform.
@@ -45,4 +46,14 @@ func QGraphicsTransformCast(o qtcore.QObjectLike) *QGraphicsTransform {
 		return nil
 	}
 	return rt.View[QGraphicsTransform](rt.WrapClass(p, "QGraphicsTransform", rt.KeepOrBorrow), p)
+}
+
+// ApplyTo wraps QGraphicsTransform::applyTo.
+//
+//	C++: void QGraphicsTransform::applyTo(QMatrix4x4 * matrix) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicstransform.html#applyTo
+func (this *QGraphicsTransform) ApplyTo(matrix *qtgui.QMatrix4x4) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsTransform.ApplyTo")
+	C.qute_QGraphicsTransform_applyTo(self, rt.UseArg(unsafe.Pointer(matrix), "QGraphicsTransform.ApplyTo"))
 }

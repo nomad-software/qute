@@ -267,6 +267,29 @@ func (this *QTextFrameFormat) SetWidth(width float64) {
 	C.qute_QTextFrameFormat_setWidth(self, C.double(width))
 }
 
+// SetWidthTextLength wraps QTextFrameFormat::setWidth.
+//
+//	C++: void QTextFrameFormat::setWidth(const QTextLength & length)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextframeformat.html#setWidth
+func (this *QTextFrameFormat) SetWidthTextLength(length *QTextLength) {
+	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetWidthTextLength")
+	C.qute_QTextFrameFormat_setWidth_1(self, rt.UseArg(unsafe.Pointer(length), "QTextFrameFormat.SetWidthTextLength"))
+}
+
+// Width wraps QTextFrameFormat::width.
+//
+//	C++: QTextLength QTextFrameFormat::width() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextframeformat.html#width
+func (this *QTextFrameFormat) Width() *QTextLength {
+	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Width")
+	r := C.qute_QTextFrameFormat_width(self)
+	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
+}
+
 // SetHeight wraps QTextFrameFormat::setHeight.
 //
 //	C++: void QTextFrameFormat::setHeight(qreal height)
@@ -275,6 +298,29 @@ func (this *QTextFrameFormat) SetWidth(width float64) {
 func (this *QTextFrameFormat) SetHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetHeight")
 	C.qute_QTextFrameFormat_setHeight(self, C.double(height))
+}
+
+// SetHeightTextLength wraps QTextFrameFormat::setHeight.
+//
+//	C++: void QTextFrameFormat::setHeight(const QTextLength & height)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextframeformat.html#setHeight
+func (this *QTextFrameFormat) SetHeightTextLength(height *QTextLength) {
+	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetHeightTextLength")
+	C.qute_QTextFrameFormat_setHeight_1(self, rt.UseArg(unsafe.Pointer(height), "QTextFrameFormat.SetHeightTextLength"))
+}
+
+// Height wraps QTextFrameFormat::height.
+//
+//	C++: QTextLength QTextFrameFormat::height() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextframeformat.html#height
+func (this *QTextFrameFormat) Height() *QTextLength {
+	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Height")
+	r := C.qute_QTextFrameFormat_height(self)
+	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
 }
 
 // SetPageBreakPolicy wraps QTextFrameFormat::setPageBreakPolicy.

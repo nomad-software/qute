@@ -223,6 +223,42 @@ func (this *QWindow) SetModality(modality qtcore.WindowModality) {
 	C.qute_QWindow_setModality(self, C.int64_t(modality))
 }
 
+// SetFormat wraps QWindow::setFormat.
+//
+//	C++: void QWindow::setFormat(const QSurfaceFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qwindow.html#setFormat
+func (this *QWindow) SetFormat(format *QSurfaceFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFormat")
+	C.qute_QWindow_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QWindow.SetFormat"))
+}
+
+// Format wraps QWindow::format.
+//
+//	C++: QSurfaceFormat QWindow::format() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwindow.html#format
+func (this *QWindow) Format() *QSurfaceFormat {
+	self := rt.Use(unsafe.Pointer(this), "QWindow.Format")
+	r := C.qute_QWindow_format(self)
+	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
+}
+
+// RequestedFormat wraps QWindow::requestedFormat.
+//
+//	C++: QSurfaceFormat QWindow::requestedFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwindow.html#requestedFormat
+func (this *QWindow) RequestedFormat() *QSurfaceFormat {
+	self := rt.Use(unsafe.Pointer(this), "QWindow.RequestedFormat")
+	r := C.qute_QWindow_requestedFormat(self)
+	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
+}
+
 // SetFlags wraps QWindow::setFlags.
 //
 //	C++: void QWindow::setFlags(Qt::WindowFlags flags)

@@ -86,6 +86,8 @@ type irModule struct {
 	Classes   []irClass `json:"classes"`
 	Enums     []irEnum  `json:"enums"`
 	Flags     []irFlags `json:"flags"`
+	// GLConstants are the integer GL_* macros (QtGui only).
+	GLConstants map[string]uint64 `json:"gl_constants"`
 }
 
 func loadIR(path string) (*irModule, error) {

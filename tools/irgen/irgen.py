@@ -10,7 +10,7 @@ import argparse, glob, json, os, re, subprocess, sys
 
 import clang.cindex as ci
 
-MODULES = ["QtCore", "QtGui", "QtWidgets"]
+MODULES = ["QtCore", "QtGui", "QtWidgets", "QtOpenGL", "QtOpenGLWidgets"]
 K = ci.CursorKind
 
 
@@ -30,8 +30,15 @@ def resource_dir():
 
 
 def has_default(param):
-    for ch in param.get_children():
-        if ch.kind.is_expression():
+    # An "=" token marks a default; array bounds ([2][2]) are expressions too,
+    # so the children alone cannot tell.
+    depth = 0
+    for t in param.get_tokens():
+        if t.spelling in ("(", "[", "<"):
+            depth += 1
+        elif t.spelling in (")", "]", ">"):
+            depth -= 1
+        elif t.spelling == "=" and depth == 0:
             return True
     return False
 
@@ -196,6 +203,26 @@ def namespace_info(c, module, header, out):
                 out["flags"].append(f)
 
 
+def gl_constants(tu):
+    """Integer GL_* macros from the GL headers Qt includes (gl.h, glext.h,
+    qopenglext.h). They are C #defines, so they never appear as declarations."""
+    out = {}
+    for c in tu.cursor.get_children():
+        if c.kind != K.MACRO_DEFINITION or not c.spelling.startswith("GL_"):
+            continue
+        toks = [t.spelling for t in c.get_tokens()]
+        if len(toks) != 2:
+            continue
+        v = toks[1].rstrip("uUlL")
+        try:
+            n = int(v, 0)
+        except ValueError:
+            continue
+        if c.spelling not in out:
+            out[c.spelling] = n
+    return dict(sorted(out.items()))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--qt-include", default="/usr/include/qt6")
@@ -220,7 +247,8 @@ def main():
     src = "".join("#include <%s/%s>\n" % (m, m) for m in MODULES)
     idx = ci.Index.create()
     tu = idx.parse("qute_ir.cpp", args=cargs, unsaved_files=[("qute_ir.cpp", src)],
-                   options=ci.TranslationUnit.PARSE_SKIP_FUNCTION_BODIES)
+                   options=ci.TranslationUnit.PARSE_SKIP_FUNCTION_BODIES |
+                   ci.TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD)
     errs = [d for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     for d in errs[:20]:
         print(d, file=sys.stderr)
@@ -235,6 +263,7 @@ def main():
             version = m.group(1)
 
     mods = {m: {"module": m, "qt_version": version, "classes": [], "enums": [], "flags": []} for m in MODULES}
+    mods["QtGui"]["gl_constants"] = gl_constants(tu)
     seen = set()
     for c in tu.cursor.get_children():
         loc = c.location.file

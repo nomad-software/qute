@@ -112,9 +112,10 @@ type Method struct {
 	Overlay  *overlay
 	Error    bool
 	Numbered bool
-	Full     bool   // generated with all default args
-	Emit     bool   // emits a signal
-	Field    string // "get" or "set": a public data member accessor
+	Full     bool    // generated with all default args
+	Emit     bool    // emits a signal
+	Field    string  // "get" or "set": a public data member accessor
+	PairRet  []*conv // a std::pair result, returned to Go as two results
 	VIndex   int
 	Sig      string
 }
@@ -440,6 +441,9 @@ func (g *Gen) skip(c *Class, m *irMethod, why string) {
 }
 
 func (g *Gen) buildMembers(c *Class) {
+	if c.Opts.EnumsOnly {
+		return
+	}
 	m := c.Module
 	ancestorKeys := map[string]bool{}
 	for b := c.Base; b != nil; b = b.Base {
@@ -473,6 +477,10 @@ func (g *Gen) buildMembers(c *Class) {
 		}
 		if stringSlot(im) {
 			g.skip(c, im, "string-based SLOT() connection; use the On* signal methods instead")
+			continue
+		}
+		if c.Cpp == "QGlyphRun" && im.Name == "setRawData" {
+			g.skip(c, im, "on purpose: low-level font internals")
 			continue
 		}
 		if iteratorNames[im.Name] && returnsIterator(im) {
@@ -609,6 +617,14 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 	names := paramNames(im)
 	for i := 0; i < n; i++ {
 		p := im.Params[i]
+		if c.Opts.RawPointers {
+			if base, _, ptr, ref, _ := parseCpp(p.Type.Canonical); (ptr || strings.Contains(p.Type.Canonical, "*")) && !ref &&
+				(prims[base].goT != "" || base == "void" || strings.HasPrefix(base, "char")) {
+				mm.Params = append(mm.Params, &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i),
+					T: &conv{k: kRaw, cpp: p.Type.Canonical, base: base, ptr: true}, Rule: "borrowed"})
+				continue
+			}
+		}
 		if i+1 < len(im.Params) {
 			if pc, kind := g.pairConv(p, im.Params[i+1]); pc != nil {
 				pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: pc, Pair: kind, Rule: "borrowed"}
@@ -619,6 +635,10 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 				}
 				continue
 			}
+		}
+		if arrayWithoutCount(g, p) {
+			g.skip(c, im, "on purpose: a pointer to an array with no count; Qt would read past one element")
+			return nil
 		}
 		if oc, inout, byPtr, cppT := g.outConv(p); oc != nil {
 			pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: oc,
@@ -643,6 +663,18 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 		g.checkArgKeys(c, im, ov, names)
 	}
 	if !ctor {
+		if base, _, ptr, ref, _ := parseCpp(im.Return.Canonical); !ptr && !ref && strings.HasPrefix(base, "std::pair<") {
+			ab := splitTopLevel(base[len("std::pair<") : len(base)-1])
+			if len(ab) == 2 {
+				a, err1 := g.resolve(irType{Canonical: ab[0]}, true)
+				b, err2 := g.resolve(irType{Canonical: ab[1]}, true)
+				if err1 == nil && err2 == nil {
+					mm.Ret = &conv{k: kVoid}
+					mm.PairRet = []*conv{a, b}
+					return mm
+				}
+			}
+		}
 		if base, cnst, ptr, ref, _ := parseCpp(im.Return.Canonical); ref && !cnst && !ptr && base == c.Cpp && c.Kind == KindValue {
 			mm.Ret = &conv{k: kSelf, cpp: im.Return.Canonical, base: base, cls: c}
 			return mm
@@ -973,6 +1005,9 @@ func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
 // Shims: Go-overridable virtuals and destructor notices.
 
 func (g *Gen) buildShim(c *Class) {
+	if c.Opts.EnumsOnly {
+		return
+	}
 	c.Shim = (c.Opts.Subclass || c.Opts.NotifyDtor) && !c.Opts.NoConstruct
 	if !c.Shim {
 		return
@@ -1335,6 +1370,8 @@ func word(p *Param) string {
 		if t.elem != nil && t.elem.k != kString {
 			return word(&Param{T: t.elem, GoName: p.GoName}) + "s"
 		}
+	case kBytes:
+		return "Bytes" // the []byte twin of a string overload
 	case kRaw:
 		return "Ptr"
 	case kFunc:
@@ -1482,4 +1519,21 @@ func (g *Gen) nameOverloads(ms []*Method, base func(*Method) string, used func(s
 func returnsIterator(m *irMethod) bool {
 	r := m.Return.Canonical
 	return strings.Contains(r, "iterator") || strings.Contains(r, "Iterator") || strings.HasSuffix(r, "*") && len(m.Params) == 0
+}
+
+// arrayWithoutCount spots "const QVector2D *values": a pointer to a value
+// class or struct whose plural name says it is an array, with no count after
+// it. Binding it as one nil-able handle would let Qt read past the element.
+func arrayWithoutCount(g *Gen, p irParam) bool {
+	base, _, ptr, ref, _ := parseCpp(p.Type.Canonical)
+	if !ptr || ref {
+		return false
+	}
+	if cls := g.classes[base]; cls == nil || cls.Kind != KindValue {
+		if g.structs[base] == nil {
+			return false
+		}
+	}
+	n := strings.ToLower(p.Name)
+	return strings.HasSuffix(n, "s") && len(n) > 3 || strings.Contains(n, "array")
 }

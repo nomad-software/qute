@@ -197,6 +197,36 @@ func (this *QUrlQuery) QueryPairDelimiter() rune {
 	return rune(r)
 }
 
+// SetQueryItems wraps QUrlQuery::setQueryItems.
+//
+//	C++: void QUrlQuery::setQueryItems(const QList<std::pair<QString, QString>> & query)
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#setQueryItems
+func (this *QUrlQuery) SetQueryItems(query []Pair[string, string]) {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.SetQueryItems")
+	queryK := make([]C.qute_str, 0, len(query))
+	queryV := make([]C.qute_str, 0, len(query))
+	for _, kv := range query {
+		k, x := kv.First, kv.Second
+		queryK = append(queryK, quteCStr(k))
+		queryV = append(queryV, quteCStr(x))
+	}
+	defer quteFreeStrs(queryK)
+	defer quteFreeStrs(queryV)
+	C.qute_QUrlQuery_setQueryItems(self, unsafe.Pointer(unsafe.SliceData(queryK)), unsafe.Pointer(unsafe.SliceData(queryV)), C.ptrdiff_t(len(query)))
+}
+
+// QueryItems wraps QUrlQuery::queryItems.
+//
+//	C++: QList<std::pair<QString, QString>> QUrlQuery::queryItems(QUrl::ComponentFormattingOptions encoding = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#queryItems
+func (this *QUrlQuery) QueryItems() []Pair[string, string] {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItems")
+	r := C.qute_QUrlQuery_queryItems(self)
+	return qutePairs(r, func(k C.qute_str) string { return quteStr(k) }, func(v C.qute_str) string { return quteStr(v) }, func(a string, b string) Pair[string, string] { return Pair[string, string]{First: a, Second: b} })
+}
+
 // HasQueryItem wraps QUrlQuery::hasQueryItem.
 //
 //	C++: bool QUrlQuery::hasQueryItem(const QString & key) const
@@ -258,4 +288,26 @@ func (this *QUrlQuery) AllQueryItemValues(key string) []string {
 func (this *QUrlQuery) RemoveAllQueryItems(key string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.RemoveAllQueryItems")
 	C.qute_QUrlQuery_removeAllQueryItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+}
+
+// QUrlQueryDefaultQueryValueDelimiter wraps QUrlQuery::defaultQueryValueDelimiter.
+//
+//	C++: char16_t QUrlQuery::defaultQueryValueDelimiter()
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#defaultQueryValueDelimiter
+func QUrlQueryDefaultQueryValueDelimiter() rune {
+	rt.CheckThread("QUrlQueryDefaultQueryValueDelimiter")
+	r := C.qute_QUrlQuery_defaultQueryValueDelimiter()
+	return rune(r)
+}
+
+// QUrlQueryDefaultQueryPairDelimiter wraps QUrlQuery::defaultQueryPairDelimiter.
+//
+//	C++: char16_t QUrlQuery::defaultQueryPairDelimiter()
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#defaultQueryPairDelimiter
+func QUrlQueryDefaultQueryPairDelimiter() rune {
+	rt.CheckThread("QUrlQueryDefaultQueryPairDelimiter")
+	r := C.qute_QUrlQuery_defaultQueryPairDelimiter()
+	return rune(r)
 }

@@ -350,6 +350,17 @@ func (this *QJsonValue) ToStringWithDefaultValue(defaultValue string) string {
 	return quteStr(r)
 }
 
+// ToStringView wraps QJsonValue::toStringView.
+//
+//	C++: QAnyStringView QJsonValue::toStringView(QAnyStringView defaultValue = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toStringView
+func (this *QJsonValue) ToStringView() string {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToStringView")
+	r := C.qute_QJsonValue_toStringView(self)
+	return quteStr(r)
+}
+
 // ToArray wraps QJsonValue::toArray.
 //
 //	C++: QJsonArray QJsonValue::toArray() const

@@ -59,26 +59,26 @@ func NewQDataStreamWithIODevice(iODevice QIODeviceLike) *QDataStream {
 	return rt.View[QDataStream](h, p)
 }
 
-// NewQDataStreamWithByteArray wraps the QDataStream constructor.
+// NewQDataStreamWithBytes wraps the QDataStream constructor.
 //
 //	C++: QDataStream::QDataStream(QByteArray *, OpenMode flags)
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatastream.html#QDataStream
-func NewQDataStreamWithByteArray(flags QIODeviceBaseOpenMode) *QDataStream {
-	rt.CheckThread("NewQDataStreamWithByteArray")
+func NewQDataStreamWithBytes(flags QIODeviceBaseOpenMode) *QDataStream {
+	rt.CheckThread("NewQDataStreamWithBytes")
 	var byteArrayOut C.qute_str
 	p := C.qute_QDataStream_new_2(&byteArrayOut, C.int64_t(flags))
 	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
 	return rt.View[QDataStream](h, p)
 }
 
-// NewQDataStreamWithByteArrayByteArray wraps the QDataStream constructor.
+// NewQDataStreamWithBytesBytes wraps the QDataStream constructor.
 //
 //	C++: QDataStream::QDataStream(const QByteArray &)
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatastream.html#QDataStream
-func NewQDataStreamWithByteArrayByteArray(byteArray []byte) *QDataStream {
-	rt.CheckThread("NewQDataStreamWithByteArrayByteArray")
+func NewQDataStreamWithBytesBytes(byteArray []byte) *QDataStream {
+	rt.CheckThread("NewQDataStreamWithBytesBytes")
 	p := C.qute_QDataStream_new_3((*C.char)(unsafe.Pointer(unsafe.SliceData(byteArray))), C.ptrdiff_t(len(byteArray)))
 	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
 	return rt.View[QDataStream](h, p)

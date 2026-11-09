@@ -15,6 +15,10 @@ is the user-facing introduction.
 - Apps, including ones Claude writes, can be built, tested and visually
   checked headlessly.
 
+Platform priority: Linux comes first for now. macOS and Windows support is
+still wanted, but later; keep the code portable, and don't spend effort on
+those platforms until asked.
+
 Non-goals: Qt 5, a QML-first API (later), zero cgo overhead (correctness
 first).
 
@@ -32,7 +36,7 @@ cleanup queue.
 ```
 Qt headers --libclang (tools/irgen)--> spec/ir/*.json --+
                                        spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/
-                                       spec/overlays/ --+                    UNREVIEWED.md, ownership tests
+                                       spec/overlays/ --+                    COVERAGE.md, ownership tests
 
 run time: app -> qute (root package) -> qtcore/qtgui/qtwidgets (generated Go + C++ shim) -> Qt
                                      \-> internal/rt (handles, registry, pins, cleanup queue)
@@ -41,8 +45,11 @@ run time: app -> qute (root package) -> qtcore/qtgui/qtwidgets (generated Go + C
 Only `internal/rt` decides who frees what. The C++ shim calls back into it
 when Qt destroys an object, emits a signal, or runs an overridden virtual.
 
-One Go package per Qt module (`qtcore`, `qtgui`, `qtwidgets`), each with its
-own cgo shim built via `pkg-config`; plain `go build`. The root package
+One Go package per Qt module (`qtcore`, `qtgui`, `qtwidgets`, `qtopengl`,
+`qtopenglwidgets`), each with its own cgo shim built via `pkg-config`; plain
+`go build`. Module dependencies are explicit in `cmd/qutegen/main.go` (QtOpenGL
+needs only QtCore and QtGui), because each shim may only include headers its
+pkg-config entry provides. The root package
 `qute` holds `Main`, `Post`, `PostSync`, `Screenshot`, `DumpTree`,
 `Click`/`Type`/`Key` and the test harness. `cmd/qute` is the companion tool.
 
@@ -142,12 +149,26 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
 - `const T *` of a value class to a nil-able handle;
 - public data members to getter/setter methods, nested classes
   (`QFont::Tag`) to flat Go names (`QFontTag`), and classes without declared
-  constructors to an implicit `NewX()`.
+  constructors to an implicit `NewX()`;
+- `QList<std::pair<A, B>>` to `[]qtcore.Pair[A, B]`, a single `std::pair`
+  result to two Go results (`major, minor := f.Version()`), `QSet<T>` results
+  to slices, `char32_t`/`char16_t` to `rune`, `QStringView` results to
+  `string`;
+- a `const T *` of a value class with a plural name and no count (an array
+  Qt would read past one element) is skipped, never bound as one handle;
+- classes marked `raw-pointers` (the GL function tables, `QOpenGLTexture`)
+  take every pointer-to-number argument as `unsafe.Pointer`, because GL
+  decides the size from other arguments;
+- the integer `GL_*` macros become untyped constants in `qtgui/gl_gen.go`
+  (`irgen` reads them with libclang's macro records).
 
 Deliberately unsupported (reported as "skipped on purpose", with the reason):
-C++ move overloads, `QBindable`, `QThread`, iterators, private platform APIs,
-C function pointers, returned `std::function`s, `std::initializer_list`, and
-interfaces that need C++ subclassing.
+C++ move overloads, `QBindable`, `QThread`, iterators, Qt's private and
+platform internals, C function pointers, returned `std::function`s,
+`std::initializer_list`, fixed-size C arrays, C++20 ordering types, template
+classes (`QGenericMatrix`, `QRgbaFloat`), printing page setup, accessibility,
+Vulkan, low-level font and text-layout internals, and interfaces that need
+C++ subclassing.
 
 Go strings go in as `(ptr, len)` into `QString::fromUtf8`, which copies, so
 cgo pointer rules hold. Results come back malloc'd and are copied and freed in
@@ -206,7 +227,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   from the shim).
 - **Classes** (`spec/classes/<module>.yaml`): which classes are bound, with
   options `kind: value|event`, `subclass`, `notify-dtor`, `no-construct`,
-  `skip-virtuals`, `reviewed`. A class's primary base must be bound too.
+  `skip-virtuals`, `raw-pointers`, `enums-only` (enums but no wrapper, e.g.
+  `QChar`, which is a `rune` in Go), `reviewed`. A class's primary base must
+  be bound too. Don't use class-level `reviewed`: it hides methods nobody
+  looked at (it hid `QTextCursor::insertList` and `QGraphicsWidget::setLayout`).
 - **Overlays** (`spec/overlays/<module>.yaml`), keyed by method name (all
   overloads) or signature (`addWidget(QWidget*, int, int, Qt::Alignment)`):
 
@@ -219,7 +243,12 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   Arg rules: `transfer-to-cpp`, `transfer-to-go`, `transfer-this`,
   `borrowed`, `scoped` (keyed by name or index). Return rules:
   `transfer-to-go`, `parented`, `borrowed`. Other keys: `name`, `skip`,
-  `keep-defaults`, `full`, `error`, `error-string`, `reviewed`, `doc`, `test`.
+  `keep-defaults`, `full`, `error`, `error-string`, `reviewed`, `doc`, `test`,
+  `cpp` (a custom C++ call: `$self`, `$0`, `$1`…) and `created: true` (the
+  result is built by the binding, so it is registered and its death seen).
+  `QGraphicsScene::addRect` and friends use `cpp` + `created` to build
+  qute's notifying item subclasses instead of Qt's, so those items report
+  their death however they die.
 - **Defaults** (Shiboken-style): a constructor argument named `parent` is
   `transfer-this`; other object pointers and returned objects are
   `borrowed`; value results are Owned copies; trailing default arguments are
@@ -237,8 +266,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `ToStringFloat64`, `DrawLineSegmentsF`). A new overload never reuses a name
   the class inherits through an override (`QFile.Open` stays the
   `QIODevice` one). Overlay `name:` entries override all of this; whatever
-  is still ambiguous gets a number and is listed in `UNREVIEWED.md`.
-- **Review report** `UNREVIEWED.md`: pointer methods on default rules,
+  is still ambiguous gets a number and is listed in `COVERAGE.md`.
+- **Coverage report** `COVERAGE.md` (summary table first): pointer methods on default rules,
   numbered names, skipped methods (split into missing type support, counted
   by type, and skipped on purpose), rules without a test, and results whose
   death qute can't observe. Signal emitters count as reviewed, since emitting
@@ -282,26 +311,34 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   create, transfer, delete the owner, assert Dead. Return rules are tested by
   calling the method and checking the result's state; borrowed object
   arguments are passed as nil. Rules the generator can't
-  set up take a `test:` snippet (Go code run inside `qute.Run`).
+  set up take a `test:` snippet (Go code run inside `qute.Run`), also on
+  constructors. Tests that need a GL context skip with the reason when the
+  driver can't provide one.
   `TestLayout` checks every primary base sits at offset 0.
+- `lsan.supp` suppresses memory that GL drivers keep until exit (driver
+  libraries only), for `LSAN_OPTIONS=suppressions=$PWD/lsan.supp`.
+- `opengl_test.go` draws a triangle (shader program, buffer, VAO) and checks
+  the pixels; `scene_test.go` checks scene items die with the scene, with
+  `Clear()` and with their parent item.
 - `.github/workflows/ci.yml`: Linux runs test, `qute_debug`, `-asan`,
   `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check. The macOS and
-  Windows jobs are written but not yet verified.
+  Windows jobs are kept for later but are not yet verified; they are
+  non-blocking (`continue-on-error`) until that work starts.
 
 ## Roadmap
 
 1. Runtime: done.
-2. Widgets: done for 263 classes. Every ownership rule is reviewed, every
+2. Widgets: done for about 300 classes in five modules, including OpenGL. No
+   method waits for type support, every ownership rule is reviewed, every
    overload has a proper name, and all rules but `QEvent::clone` have a test.
 3. Subclassing and models: done (virtual overrides, item models).
-4. Beyond: type support for the ~150 methods still waiting (mostly on newly
-   bound classes: `QVector3D`, `char32_t`, `QTextLength`, `QFileInfo`;
-   `UNREVIEWED.md` counts them by type), `QThread` affinity (one cleanup
-   queue per thread), QtQuick/QML, more modules.
+4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
+   more modules, Qt's summary text in doc comments, then macOS and Windows.
 
-Known limitation: non-QObject items that Qt creates itself (from
-`QGraphicsScene::addRect` and similar) have no death notice, so their handles
-can't turn Dead when the owner frees them. `UNREVIEWED.md` lists them.
+Known limitation: a non-QObject that Qt itself creates and frees (with no
+notifying subclass qute could substitute) can't report its death. None are
+bound today; `COVERAGE.md` lists any under "Results whose death qute cannot
+see".
 
 Open questions: is one eager `destroyed` connection per wrapped QObject cheap
 enough, or should it be lazy? The first build takes about a minute; would
@@ -313,8 +350,8 @@ distributed binaries. Could miqt's IR or overlays save review time?
 ```sh
 go test ./...                                   # all tests, headless
 go test -tags qute_debug ./...                  # debug runtime checks
-go test -asan . ./qtcore ./qtgui ./qtwidgets
-GOEXPERIMENT=cgocheck2 go test . ./qtcore
+LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtopengl
 go generate ./qtcore                            # = go run ./cmd/qutegen -root .
 go vet ./... && gofmt -l .
 go run ./examples/hello -screenshot out.png     # render offscreen, then Read the PNG
@@ -331,7 +368,7 @@ Layout:
 
 - Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, `testing.go`, tests.
 - `internal/rt`: runtime (hand-written).
-- `qtcore`, `qtgui`, `qtwidgets`: **generated**. Never edit `*_gen.*`,
+- `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`: **generated**. Never edit `*_gen.*`,
   `qute_common.h`, `ownership_gen_test.go` or `export_gen_test.go`; change
   the generator or spec and regenerate. Hand-written code is in `*_manual.*`.
 - `cmd/qutegen`: `types.go` (type mapping), `model.go` (resolution, naming,

@@ -280,6 +280,17 @@ func (this *QBitArray) Bits() string {
 	return C.GoString(r)
 }
 
+// ToUInt32 wraps QBitArray::toUInt32.
+//
+//	C++: quint32 QBitArray::toUInt32(QSysInfo::Endian endianness, bool * ok = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitarray.html#toUInt32
+func (this *QBitArray) ToUInt32(endianness QSysInfoEndian) uint {
+	self := rt.Use(unsafe.Pointer(this), "QBitArray.ToUInt32")
+	r := C.qute_QBitArray_toUInt32(self, C.int64_t(endianness))
+	return uint(r)
+}
+
 // QBitArrayFromBits wraps QBitArray::fromBits.
 //
 //	C++: QBitArray QBitArray::fromBits(const char * data, qsizetype len)

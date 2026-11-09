@@ -422,6 +422,8 @@ QDropEvent:
   mimeData: { return: borrowed }
 
 QPointerEvent:
+  pointingDevice: { return: borrowed }
+  passiveGrabbers: { return: borrowed }
   exclusiveGrabber: { return: borrowed }
   setExclusiveGrabber: { reviewed: true }
   addPassiveGrabber: { reviewed: true }
@@ -492,6 +494,8 @@ QDoubleValidator:
   setRange(double, double): { name: SetRange }
 
 QMovie:
+  setDevice: { reviewed: true }
+  device: { return: borrowed }
   QMovie(QIODevice*, const QByteArray&, QObject*):
     name: NewQMovieWithDevice
     reviewed: true
@@ -527,6 +531,126 @@ QTextFrame:
   parentFrame: { return: borrowed }
 
 QTextCursor:
+  insertList(const QTextListFormat&):
+    name: InsertList
+    return: parented
+    reviewed: true
+    doc: "The document owns the new object."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      x := cur.InsertList(qtgui.NewQTextListFormat())
+      if x == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      doc.Delete()
+      if x.Alive() {
+      	t.Error("result alive after its document was deleted")
+      }
+  insertList(QTextListFormat::Style):
+    name: InsertListStyle
+    return: parented
+    reviewed: true
+    doc: "The document owns the new object."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      x := cur.InsertListStyle(qtgui.QTextListFormatListDisc)
+      if x == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      doc.Delete()
+      if x.Alive() {
+      	t.Error("result alive after its document was deleted")
+      }
+  createList(const QTextListFormat&):
+    name: CreateList
+    return: parented
+    reviewed: true
+    doc: "The document owns the new object."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      x := cur.CreateList(qtgui.NewQTextListFormat())
+      if x == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      doc.Delete()
+      if x.Alive() {
+      	t.Error("result alive after its document was deleted")
+      }
+  createList(QTextListFormat::Style):
+    name: CreateListStyle
+    return: parented
+    reviewed: true
+    doc: "The document owns the new object."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      x := cur.CreateListStyle(qtgui.QTextListFormatListDisc)
+      if x == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      doc.Delete()
+      if x.Alive() {
+      	t.Error("result alive after its document was deleted")
+      }
+  insertTable(int, int, const QTextTableFormat&):
+    name: InsertTableWithFormat
+    return: parented
+    reviewed: true
+    doc: "The document owns the new object."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      x := cur.InsertTableWithFormat(2, 2, qtgui.NewQTextTableFormat())
+      if x == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      doc.Delete()
+      if x.Alive() {
+      	t.Error("result alive after its document was deleted")
+      }
+  insertTable(int, int):
+    name: InsertTable
+    return: parented
+    reviewed: true
+    doc: "The document owns the new object."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      x := cur.InsertTable(2, 2)
+      if x == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      doc.Delete()
+      if x.Alive() {
+      	t.Error("result alive after its document was deleted")
+      }
+  QTextCursor(QTextDocument*): { reviewed: true }
+  QTextCursor(QTextFrame*): { reviewed: true }
+  currentList: { return: borrowed }
+  currentTable: { return: borrowed }
+  currentFrame: { return: borrowed }
+  document: { return: borrowed }
   insertFrame:
     return: parented
     reviewed: true
@@ -553,3 +677,82 @@ QRadialGradient:
 
 QFontDatabase:
   systemFont: { name: QFontDatabaseGetSystemFont }
+
+QEventPoint:
+  device: { return: borrowed }
+
+QImageReader:
+  QImageReader(QIODevice*, const QByteArray&): { reviewed: true }
+  setDevice: { reviewed: true }
+  device: { return: borrowed }
+  imageFormat: { reviewed: true }
+
+QInputDevice:
+  devices: { return: borrowed }
+  primaryKeyboard: { return: borrowed }
+
+QInputEvent:
+  device: { return: borrowed }
+
+QPdfWriter:
+  QPdfWriter(QIODevice*): { reviewed: true }
+
+QPicture:
+  play: { reviewed: true }
+  load: { reviewed: true }
+  save: { reviewed: true }
+
+QPointingDevice:
+  primaryPointingDevice: { return: borrowed }
+
+QTextBlock:
+  document: { return: borrowed }
+  textList: { return: borrowed }
+
+QTextDocumentFragment:
+  QTextDocumentFragment(const QTextDocument*): { reviewed: true }
+
+QTextObject:
+  document: { return: borrowed }
+
+QWindow:
+  parent: { return: borrowed }
+  setParent: { args: { parent: transfer-this } }
+  setTransientParent: { reviewed: true }
+  transientParent: { return: borrowed }
+  isAncestorOf: { reviewed: true }
+  screen: { return: borrowed }
+  setScreen: { reviewed: true }
+  focusObject: { return: borrowed }
+  fromWinId: { return: borrowed }
+
+QOffscreenSurface:
+  QOffscreenSurface(QScreen*, QObject*): { args: { screen: borrowed } }
+  screen: { return: borrowed }
+  setScreen: { reviewed: true }
+
+QOpenGLContext:
+  setShareContext: { reviewed: true }
+  setScreen: { reviewed: true }
+  shareContext: { return: borrowed }
+  shareGroup: { return: borrowed }
+  screen: { return: borrowed }
+  makeCurrent: { reviewed: true }
+  swapBuffers: { reviewed: true }
+  surface: { return: borrowed }
+  functions: { return: borrowed, doc: "The context owns the function table." }
+  extraFunctions: { return: borrowed, doc: "The context owns the function table." }
+  currentContext: { return: borrowed }
+  areSharing: { reviewed: true }
+  globalShareContext: { return: borrowed }
+  openGLModuleType: { name: QOpenGLContextModuleType }
+
+QOpenGLContextGroup:
+  shares: { return: borrowed }
+  currentContextGroup: { return: borrowed }
+
+QOpenGLExtraFunctions:
+  QOpenGLExtraFunctions(QOpenGLContext*): { args: { context: borrowed } }
+
+QOpenGLFunctions:
+  QOpenGLFunctions(QOpenGLContext*): { args: { context: borrowed } }

@@ -226,6 +226,19 @@ func (this *QTextBlock) Document() *QTextDocument {
 	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }
 
+// TextList wraps QTextBlock::textList.
+//
+//	C++: QTextList * QTextBlock::textList() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextblock.html#textList
+func (this *QTextBlock) TextList() *QTextList {
+	self := rt.Use(unsafe.Pointer(this), "QTextBlock.TextList")
+	r := C.qute_QTextBlock_textList(self)
+	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.KeepOrBorrow), r)
+}
+
 // UserState wraps QTextBlock::userState.
 //
 //	C++: int QTextBlock::userState() const
