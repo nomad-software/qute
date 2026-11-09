@@ -475,6 +475,59 @@ func (this *QFormLayout) RemoveRowOfLayout(layout QLayoutLike) {
 	C.qute_QFormLayout_removeRow_2(self, layoutPtr)
 }
 
+// TakeRow wraps QFormLayout::takeRow.
+//
+//	C++: TakeRowResult QFormLayout::takeRow(int row)
+//
+// Ownership: the result is an Owned copy.
+//
+// The returned label and field items are no longer in the layout; their widgets keep their parent.
+//
+// Qt docs: https://doc.qt.io/qt-6/qformlayout.html#takeRow
+func (this *QFormLayout) TakeRow(row int) *QFormLayoutTakeRowResult {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.TakeRow")
+	r := C.qute_QFormLayout_takeRow(self, C.int(row))
+	return rt.View[QFormLayoutTakeRowResult](rt.WrapClass(r, "QFormLayoutTakeRowResult", rt.TakeOwned), r)
+}
+
+// TakeRowWidget wraps QFormLayout::takeRow.
+//
+//	C++: TakeRowResult QFormLayout::takeRow(QWidget * widget)
+//
+// Ownership: the result is an Owned copy.
+//
+// The returned label and field items are no longer in the layout; their widgets keep their parent.
+//
+// Qt docs: https://doc.qt.io/qt-6/qformlayout.html#takeRow
+func (this *QFormLayout) TakeRowWidget(widget QWidgetLike) *QFormLayoutTakeRowResult {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.TakeRowWidget")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QFormLayout.TakeRowWidget")
+	}
+	r := C.qute_QFormLayout_takeRow_1(self, widgetPtr)
+	return rt.View[QFormLayoutTakeRowResult](rt.WrapClass(r, "QFormLayoutTakeRowResult", rt.TakeOwned), r)
+}
+
+// TakeRowLayout wraps QFormLayout::takeRow.
+//
+//	C++: TakeRowResult QFormLayout::takeRow(QLayout * layout)
+//
+// Ownership: the result is an Owned copy.
+//
+// The returned label and field items are no longer in the layout; their widgets keep their parent.
+//
+// Qt docs: https://doc.qt.io/qt-6/qformlayout.html#takeRow
+func (this *QFormLayout) TakeRowLayout(layout QLayoutLike) *QFormLayoutTakeRowResult {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.TakeRowLayout")
+	var layoutPtr unsafe.Pointer
+	if layout != nil {
+		layoutPtr = rt.UseArg(unsafe.Pointer(layout.AsQLayout()), "QFormLayout.TakeRowLayout")
+	}
+	r := C.qute_QFormLayout_takeRow_2(self, layoutPtr)
+	return rt.View[QFormLayoutTakeRowResult](rt.WrapClass(r, "QFormLayoutTakeRowResult", rt.TakeOwned), r)
+}
+
 // SetItem wraps QFormLayout::setItem.
 //
 //	C++: void QFormLayout::setItem(int row, ItemRole role, QLayoutItem * item)
@@ -608,17 +661,64 @@ func (this *QFormLayout) IsRowVisibleOfLayout(layout QLayoutLike) bool {
 	return bool(r)
 }
 
-// ItemAt wraps QFormLayout::itemAt.
+// ItemAtRole wraps QFormLayout::itemAt.
 //
 //	C++: QLayoutItem * QFormLayout::itemAt(int row, ItemRole role) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qformlayout.html#itemAt
-func (this *QFormLayout) ItemAt(row int, role QFormLayoutItemRole) *QLayoutItem {
-	self := rt.Use(unsafe.Pointer(this), "QFormLayout.ItemAt")
+func (this *QFormLayout) ItemAtRole(row int, role QFormLayoutItemRole) *QLayoutItem {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.ItemAtRole")
 	r := C.qute_QFormLayout_itemAt(self, C.int(row), C.int64_t(role))
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+}
+
+// GetItemPosition wraps QFormLayout::getItemPosition.
+//
+//	C++: void QFormLayout::getItemPosition(int index, int * rowPtr, ItemRole * rolePtr) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qformlayout.html#getItemPosition
+func (this *QFormLayout) GetItemPosition(index int) (int, QFormLayoutItemRole) {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.GetItemPosition")
+	var rowPtrOut C.int
+	var rolePtrOut C.int64_t
+	C.qute_QFormLayout_getItemPosition(self, C.int(index), &rowPtrOut, &rolePtrOut)
+	return int(rowPtrOut), QFormLayoutItemRole(rolePtrOut)
+}
+
+// GetWidgetPosition wraps QFormLayout::getWidgetPosition.
+//
+//	C++: void QFormLayout::getWidgetPosition(QWidget * widget, int * rowPtr, ItemRole * rolePtr) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qformlayout.html#getWidgetPosition
+func (this *QFormLayout) GetWidgetPosition(widget QWidgetLike) (int, QFormLayoutItemRole) {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.GetWidgetPosition")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QFormLayout.GetWidgetPosition")
+	}
+	var rowPtrOut C.int
+	var rolePtrOut C.int64_t
+	C.qute_QFormLayout_getWidgetPosition(self, widgetPtr, &rowPtrOut, &rolePtrOut)
+	return int(rowPtrOut), QFormLayoutItemRole(rolePtrOut)
+}
+
+// GetLayoutPosition wraps QFormLayout::getLayoutPosition.
+//
+//	C++: void QFormLayout::getLayoutPosition(QLayout * layout, int * rowPtr, ItemRole * rolePtr) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qformlayout.html#getLayoutPosition
+func (this *QFormLayout) GetLayoutPosition(layout QLayoutLike) (int, QFormLayoutItemRole) {
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.GetLayoutPosition")
+	var layoutPtr unsafe.Pointer
+	if layout != nil {
+		layoutPtr = rt.UseArg(unsafe.Pointer(layout.AsQLayout()), "QFormLayout.GetLayoutPosition")
+	}
+	var rowPtrOut C.int
+	var rolePtrOut C.int64_t
+	C.qute_QFormLayout_getLayoutPosition(self, layoutPtr, &rowPtrOut, &rolePtrOut)
+	return int(rowPtrOut), QFormLayoutItemRole(rolePtrOut)
 }
 
 // LabelForField wraps QFormLayout::labelForField.

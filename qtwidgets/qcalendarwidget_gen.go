@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QCalendarWidget wraps Qt's QCalendarWidget.
@@ -213,6 +214,29 @@ func (this *QCalendarWidget) IsGridVisible() bool {
 	return bool(r)
 }
 
+// Calendar wraps QCalendarWidget::calendar.
+//
+//	C++: QCalendar QCalendarWidget::calendar() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#calendar
+func (this *QCalendarWidget) Calendar() *qtcore.QCalendar {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.Calendar")
+	r := C.qute_QCalendarWidget_calendar(self)
+	return rt.View[qtcore.QCalendar](rt.WrapClass(r, "QCalendar", rt.TakeOwned), r)
+}
+
+// SetCalendar wraps QCalendarWidget::setCalendar.
+//
+//	C++: void QCalendarWidget::setCalendar(QCalendar calendar)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#setCalendar
+func (this *QCalendarWidget) SetCalendar(calendar *qtcore.QCalendar) {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetCalendar")
+	C.qute_QCalendarWidget_setCalendar(self, rt.UseArg(unsafe.Pointer(calendar), "QCalendarWidget.SetCalendar"))
+}
+
 // SelectionMode wraps QCalendarWidget::selectionMode.
 //
 //	C++: SelectionMode QCalendarWidget::selectionMode() const
@@ -274,6 +298,75 @@ func (this *QCalendarWidget) VerticalHeaderFormat() QCalendarWidgetVerticalHeade
 func (this *QCalendarWidget) SetVerticalHeaderFormat(format QCalendarWidgetVerticalHeaderFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetVerticalHeaderFormat")
 	C.qute_QCalendarWidget_setVerticalHeaderFormat(self, C.int64_t(format))
+}
+
+// HeaderTextFormat wraps QCalendarWidget::headerTextFormat.
+//
+//	C++: QTextCharFormat QCalendarWidget::headerTextFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#headerTextFormat
+func (this *QCalendarWidget) HeaderTextFormat() *qtgui.QTextCharFormat {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.HeaderTextFormat")
+	r := C.qute_QCalendarWidget_headerTextFormat(self)
+	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
+}
+
+// SetHeaderTextFormat wraps QCalendarWidget::setHeaderTextFormat.
+//
+//	C++: void QCalendarWidget::setHeaderTextFormat(const QTextCharFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#setHeaderTextFormat
+func (this *QCalendarWidget) SetHeaderTextFormat(format *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetHeaderTextFormat")
+	C.qute_QCalendarWidget_setHeaderTextFormat(self, rt.UseArg(unsafe.Pointer(format), "QCalendarWidget.SetHeaderTextFormat"))
+}
+
+// WeekdayTextFormat wraps QCalendarWidget::weekdayTextFormat.
+//
+//	C++: QTextCharFormat QCalendarWidget::weekdayTextFormat(Qt::DayOfWeek dayOfWeek) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#weekdayTextFormat
+func (this *QCalendarWidget) WeekdayTextFormat(dayOfWeek qtcore.DayOfWeek) *qtgui.QTextCharFormat {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.WeekdayTextFormat")
+	r := C.qute_QCalendarWidget_weekdayTextFormat(self, C.int64_t(dayOfWeek))
+	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
+}
+
+// SetWeekdayTextFormat wraps QCalendarWidget::setWeekdayTextFormat.
+//
+//	C++: void QCalendarWidget::setWeekdayTextFormat(Qt::DayOfWeek dayOfWeek, const QTextCharFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#setWeekdayTextFormat
+func (this *QCalendarWidget) SetWeekdayTextFormat(dayOfWeek qtcore.DayOfWeek, format *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetWeekdayTextFormat")
+	C.qute_QCalendarWidget_setWeekdayTextFormat(self, C.int64_t(dayOfWeek), rt.UseArg(unsafe.Pointer(format), "QCalendarWidget.SetWeekdayTextFormat"))
+}
+
+// DateTextFormat wraps QCalendarWidget::dateTextFormat.
+//
+//	C++: QTextCharFormat QCalendarWidget::dateTextFormat(QDate date) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#dateTextFormat
+func (this *QCalendarWidget) DateTextFormat(date *qtcore.QDate) *qtgui.QTextCharFormat {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.DateTextFormat")
+	r := C.qute_QCalendarWidget_dateTextFormat(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.DateTextFormat"))
+	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
+}
+
+// SetDateTextFormat wraps QCalendarWidget::setDateTextFormat.
+//
+//	C++: void QCalendarWidget::setDateTextFormat(QDate date, const QTextCharFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendarwidget.html#setDateTextFormat
+func (this *QCalendarWidget) SetDateTextFormat(date *qtcore.QDate, format *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetDateTextFormat")
+	C.qute_QCalendarWidget_setDateTextFormat(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.SetDateTextFormat"), rt.UseArg(unsafe.Pointer(format), "QCalendarWidget.SetDateTextFormat"))
 }
 
 // IsDateEditEnabled wraps QCalendarWidget::isDateEditEnabled.

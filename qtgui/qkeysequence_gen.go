@@ -113,6 +113,18 @@ func NewQKeySequenceWithK1(k1 int) *QKeySequence {
 	return rt.View[QKeySequence](h, p)
 }
 
+// NewQKeySequenceWithKeyCombination wraps the QKeySequence constructor.
+//
+//	C++: QKeySequence::QKeySequence(QKeyCombination k1, QKeyCombination k2 = …, QKeyCombination k3 = …, QKeyCombination k4 = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
+func NewQKeySequenceWithKeyCombination(k1 *qtcore.QKeyCombination) *QKeySequence {
+	rt.CheckThread("NewQKeySequenceWithKeyCombination")
+	p := C.qute_QKeySequence_new_3(rt.UseArg(unsafe.Pointer(k1), "NewQKeySequenceWithKeyCombination"))
+	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	return rt.View[QKeySequence](h, p)
+}
+
 // NewQKeySequenceStandard wraps the QKeySequence constructor.
 //
 //	C++: QKeySequence::QKeySequence(StandardKey key)
@@ -120,7 +132,7 @@ func NewQKeySequenceWithK1(k1 int) *QKeySequence {
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
 func NewQKeySequenceStandard(key QKeySequenceStandardKey) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceStandard")
-	p := C.qute_QKeySequence_new_3(C.int64_t(key))
+	p := C.qute_QKeySequence_new_4(C.int64_t(key))
 	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }

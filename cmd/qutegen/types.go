@@ -25,6 +25,15 @@ const (
 	kObj
 	kCStr
 	kChar
+	kRaw      // void*, uchar*: unsafe.Pointer
+	kDur      // std::chrono::duration: time.Duration
+	kTime     // std::chrono::time_point<system_clock>: time.Time
+	kPath     // std::filesystem::path: string
+	kOpt      // std::optional<T> result: *T or nil
+	kMap      // QMap/QHash: Go map
+	kFunc     // std::function argument: Go func
+	kStrArray // const char *const[]: []string
+	kSelf     // T& returning *this: the receiver, for chaining
 )
 
 type primDef struct {
@@ -66,23 +75,181 @@ type structDef struct {
 }
 
 type conv struct {
-	k      tkind
-	cpp    string // canonical C++ type as written in the IR
-	base   string // without const, &, *
-	ptr    bool
-	ref    bool
-	cnst   bool
-	prim   primDef
-	enum   *Enum
-	st     *structDef
-	cls    *Class
-	elem   *conv
-	wrap   string // QPolygon: a QList subclass built from the list
-	reason string
+	k        tkind
+	cpp      string // canonical C++ type as written in the IR
+	base     string // without const, &, *
+	ptr      bool
+	ref      bool
+	cnst     bool
+	prim     primDef
+	enum     *Enum
+	st       *structDef
+	cls      *Class
+	elem     *conv
+	wrap     string  // QPolygon: a QList subclass built from the list
+	key      *conv   // map key
+	fparams  []*conv // std::function parameters (fret is elem)
+	span     bool    // QSpan<T> instead of QList<T>
+	bytes    bool    // QByteArrayView instead of QByteArray
+	twoFlags bool    // QUrlTwoFlags
+	qptr     bool    // QPointer<T> list element
+	reason   string
 }
 
 func (g *Gen) unsupported(t irType, why string) (*conv, error) {
 	return nil, fmt.Errorf("unsupported type %q (%s)", t.Canonical, why)
+}
+
+// onPurpose marks types that are left out by design; the report lists them
+// apart from types still waiting for support.
+func onPurpose(why string) (*conv, error) {
+	return nil, fmt.Errorf("on purpose: %s", why)
+}
+
+var deliberateBases = map[string]string{
+	"QThread":                     "threads are not supported yet: the runtime is GUI-thread-only (roadmap)",
+	"QBindingStorage":             "Qt's property-binding system; use the getters, setters and change signals",
+	"QAbstractEventDispatcher":    "event-loop internals",
+	"QAbstractNativeEventFilter":  "native platform events",
+	"QBackingStore":               "platform internals",
+	"_IO_FILE":                    "C FILE*; use the QFile name or file-descriptor overloads",
+	"QModelRoleDataSpan":          "a batching optimisation of data(); use Data",
+	"QAbstractUndoItem":           "custom undo items need C++ subclassing",
+	"QIconEngine":                 "custom icon engines need C++ subclassing",
+	"QAbstractTextDocumentLayout": "custom text layouts need C++ subclassing",
+	"QPermission":                 "a templated API",
+	"QLatin1String":               "use the string overload",
+	"QFunctionPointer":            "C function pointer",
+}
+
+// special handles types that need more than the base-name lookup.
+func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
+	can := strings.TrimSpace(t.Canonical)
+	base, cnst, ptr, ref, rref := parseCpp(can)
+	c := &conv{cpp: can, base: base, ptr: ptr, ref: ref, cnst: cnst}
+	has := func(p string) bool { return strings.HasPrefix(base, p) }
+	switch {
+	case rref:
+		c, err := onPurpose("C++ move overload; the copying overload does the same in Go")
+		return c, err, true
+	case has("QBindable<"):
+		c, err := onPurpose("Qt's property-binding system; use the getters, setters and change signals")
+		return c, err, true
+	case strings.Contains(can, "(*)"):
+		c, err := onPurpose("C function pointer; a Go closure cannot become one")
+		return c, err, true
+	case has("std::initializer_list<"):
+		c, err := onPurpose("std::initializer_list cannot be built at run time; use the list overload")
+		return c, err, true
+	case has("std::reverse_iterator<"), has("QList<QRect>::const_iterator"):
+		c, err := onPurpose("iterator; use the method that returns a list")
+		return c, err, true
+	case strings.HasPrefix(base, "QPlatform"):
+		c, err := onPurpose("private platform API")
+		return c, err, true
+	}
+	if why, ok := deliberateBases[base]; ok {
+		c, err := onPurpose(why)
+		return c, err, true
+	}
+	switch {
+	case has("QMap<") && strings.Contains(base, "QDate,"):
+		c, err := onPurpose("a map keyed by a value class; use the single-key getter")
+		return c, err, true
+	case base == "QTransform::Affine":
+		c, err := onPurpose("internal matrix access; use M11() … M33()")
+		return c, err, true
+	case has("std::chrono::duration<"):
+		c.k = kDur
+	case has("std::chrono::time_point<std::chrono::system_clock"):
+		c.k = kTime
+	case base == "std::filesystem::path" || base == "std::filesystem::__cxx11::path":
+		c.k = kPath
+	case has("std::optional<") && ret:
+		e, err := g.resolve(irType{Canonical: base[len("std::optional<") : len(base)-1]}, true)
+		if err != nil || e.k != kValue {
+			c, err := g.unsupported(t, "optional of non-value class")
+			return c, err, true
+		}
+		c.k, c.elem = kOpt, e
+	case has("std::function<") && !ret:
+		sig := base[len("std::function<") : len(base)-1]
+		i := strings.Index(sig, "(")
+		r, err := g.resolve(irType{Canonical: strings.TrimSpace(sig[:i])}, true)
+		if err != nil || !virtRetSupported(r) {
+			c, err := g.unsupported(t, "callback result")
+			return c, err, true
+		}
+		c.k, c.elem = kFunc, r
+		inner := strings.TrimSuffix(sig[i+1:], ")")
+		if strings.TrimSpace(inner) != "" {
+			for _, a := range splitTopLevel(inner) {
+				pc, err := g.resolve(irType{Canonical: a}, true)
+				if err != nil {
+					c, err := g.unsupported(t, "callback argument")
+					return c, err, true
+				}
+				c.fparams = append(c.fparams, pc)
+			}
+		}
+	case has("std::function<") && ret:
+		c, err := onPurpose("a C++ function cannot be turned back into a Go func")
+		return c, err, true
+	case can == "const char *const[]" || can == "const char *const *":
+		if ret {
+			return nil, nil, false
+		}
+		c.k = kStrArray
+	case base == "QByteArrayView" && !ptr:
+		c.k, c.bytes = kBytes, true
+	case has("QUrlTwoFlags<"):
+		args := splitTopLevel(base[len("QUrlTwoFlags<") : len(base)-1])
+		en := g.enums[args[0]]
+		if en == nil || !en.emitted {
+			c, err := g.unsupported(t, "flags of unbound enum")
+			return c, err, true
+		}
+		c.k, c.enum, c.twoFlags = kFlags, en, true
+	case has("QSpan<"):
+		inner := strings.TrimSpace(strings.TrimPrefix(base[len("QSpan<"):len(base)-1], "const "))
+		switch inner {
+		case "char", "unsigned char", "std::byte":
+			if ret {
+				return nil, nil, false
+			}
+			c.k, c.span = kBytes, true
+			c.elem = &conv{base: inner}
+		default:
+			e, err := g.resolve(irType{Canonical: inner}, ret)
+			if err != nil || e.k != kStruct {
+				c, err := g.unsupported(t, "span element")
+				return c, err, true
+			}
+			c.k, c.elem, c.span = kList, e, true
+		}
+	case has("QMap<") || has("QHash<"):
+		open := strings.Index(base, "<")
+		kv := splitTopLevel(base[open+1 : len(base)-1])
+		if len(kv) != 2 {
+			return nil, nil, false
+		}
+		k, err1 := g.resolve(irType{Canonical: kv[0]}, ret)
+		v, err2 := g.resolve(irType{Canonical: kv[1]}, ret)
+		if err1 != nil || err2 != nil || !(k.k == kString || k.k == kPrim && k.prim.goT == "int") ||
+			!(v.k == kValue || v.k == kBytes || v.k == kString || v.k == kPrim) {
+			c, err := g.unsupported(t, "map key or value")
+			return c, err, true
+		}
+		c.k, c.key, c.elem = kMap, k, v
+	case (base == "void" || base == "unsigned char" || base == "char" && !cnst) && ptr && !ref:
+		if base == "char" {
+			return nil, nil, false // char* is handled as an out-parameter or buffer
+		}
+		c.k = kRaw
+	default:
+		return nil, nil, false
+	}
+	return c, nil, true
 }
 
 func parseCpp(t string) (base string, cnst, ptr, ref, rref bool) {
@@ -112,6 +279,9 @@ func parseCpp(t string) (base string, cnst, ptr, ref, rref bool) {
 // resolve maps an IR type to a conversion. ret says the type is a return
 // value (or a signal/virtual argument travelling C++ -> Go).
 func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
+	if c, err, ok := g.special(t, ret); ok {
+		return c, err
+	}
 	can := t.Canonical
 	base, cnst, ptr, ref, rref := parseCpp(can)
 	if rref {
@@ -144,8 +314,18 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 			c.cls = cls
 			return c, nil
 		}
-		if cls := g.classes[base]; cls != nil && cls.Kind != KindValue && ref && !ret {
+		if cls := g.classes[base]; cls != nil && cls.Kind != KindValue && ref {
 			c.k = kObj
+			c.cls = cls
+			return c, nil
+		}
+		if cls := g.classes[base]; cls != nil && cls.Kind == KindValue && ptr && !ref {
+			c.k = kValue // T* of a value class: may be nil; a result is copied
+			c.cls = cls
+			return c, nil
+		}
+		if cls := g.classes[base]; cls != nil && cls.Kind == KindValue && ref && ret {
+			c.k = kValue // a non-const reference result is copied
 			c.cls = cls
 			return c, nil
 		}
@@ -204,6 +384,12 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 		c.st = st
 		return c, nil
 	}
+	if strings.HasPrefix(base, "QPointer<") && strings.HasSuffix(base, ">") {
+		if cls := g.classes[base[len("QPointer<"):len(base)-1]]; cls != nil && cls.Kind == KindObject {
+			c.k, c.cls, c.qptr = kObj, cls, true
+			return c, nil
+		}
+	}
 	if strings.HasPrefix(base, "QList<") && strings.HasSuffix(base, ">") {
 		inner := base[len("QList<") : len(base)-1]
 		e, err := g.resolve(irType{Spelling: inner, Canonical: inner}, ret)
@@ -211,7 +397,11 @@ func (g *Gen) resolve(t irType, ret bool) (*conv, error) {
 			return nil, err
 		}
 		switch e.k {
-		case kPrim, kEnum, kFlags, kStruct, kObj, kValue, kString:
+		case kPrim, kEnum, kFlags, kStruct, kObj, kValue, kString, kBytes:
+		case kList:
+			if !ret || e.elem.k != kStruct {
+				return g.unsupported(t, "list element")
+			}
 		default:
 			return g.unsupported(t, "list element")
 		}
@@ -270,6 +460,28 @@ func (g *Gen) goType(c *conv, ctx *Module, param bool) string {
 			return "[]*" + g.qual(c.elem.cls.Module, ctx, c.elem.cls.Name)
 		}
 		return "[]" + g.goType(c.elem, ctx, false)
+	case kSelf:
+		return "*" + g.qual(c.cls.Module, ctx, c.cls.Name)
+	case kRaw:
+		return "unsafe.Pointer"
+	case kDur:
+		return "time.Duration"
+	case kTime:
+		return "time.Time"
+	case kPath:
+		return "string"
+	case kOpt:
+		return "*" + g.qual(c.elem.cls.Module, ctx, c.elem.cls.Name)
+	case kMap:
+		return "map[" + g.goType(c.key, ctx, false) + "]" + g.goType(c.elem, ctx, false)
+	case kStrArray:
+		return "[]string"
+	case kFunc:
+		var ps []string
+		for _, p := range c.fparams {
+			ps = append(ps, g.goType(p, ctx, false))
+		}
+		return "func(" + strings.Join(ps, ", ") + ") " + g.goType(c.elem, ctx, false)
 	}
 	panic("goType")
 }
@@ -301,6 +513,14 @@ func (g *Gen) cgoType(c *conv) string {
 		return "unsafe.Pointer"
 	case kCStr:
 		return "*C.char"
+	case kRaw, kOpt:
+		return "unsafe.Pointer"
+	case kDur, kTime:
+		return "C.int64_t"
+	case kPath:
+		return "C.qute_str"
+	case kMap:
+		return "C.qute_map"
 	}
 	panic("cgoType")
 }
@@ -324,8 +544,20 @@ func cType(c *conv) string {
 		return "void *"
 	case kCStr:
 		return "const char *"
-	case kVoid:
+	case kVoid, kSelf:
 		return "void"
+	case kRaw, kOpt:
+		return "void *"
+	case kDur, kTime:
+		return "int64_t"
+	case kPath:
+		return "qute_str"
+	case kMap:
+		return "qute_map"
+	case kFunc:
+		return "uintptr_t"
+	case kStrArray:
+		return "const void *"
 	}
 	panic("cType")
 }
@@ -339,6 +571,10 @@ func cParams(c *conv, n string) []string {
 		return []string{"const char *" + n, "const ptrdiff_t *" + n + "_lens", "ptrdiff_t " + n + "_n"}
 	case kList:
 		return []string{"const void *" + n, "ptrdiff_t " + n + "_n"}
+	case kPath:
+		return []string{"const char *" + n, "ptrdiff_t " + n + "_len"}
+	case kMap:
+		return []string{"const void *" + n, "const void *" + n + "_v", "ptrdiff_t " + n + "_n"}
 	}
 	return []string{cType(c) + " " + n}
 }
@@ -368,6 +604,8 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 			conv = fmt.Sprintf("rt.UseArg(unsafe.Pointer(%s[i]), %q)", v, method)
 		case kString:
 			conv = fmt.Sprintf("quteCStr(%s[i])", v)
+		case kBytes:
+			conv = fmt.Sprintf("quteCBytes(%s[i])", v)
 		default:
 			_, a := g.goArg(c.elem, v+"[i]", method, ctx)
 			conv = a[0]
@@ -376,7 +614,7 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 			fmt.Sprintf("%s := make([]%s, len(%s))", tmp, et, v),
 			fmt.Sprintf("for i := range %s {\n\t\t%s[i] = %s\n\t}", v, tmp, conv),
 		}
-		if c.elem.k == kString {
+		if c.elem.k == kString || c.elem.k == kBytes {
 			pre = append(pre, fmt.Sprintf("defer quteFreeStrs(%s)", tmp))
 		}
 		return pre, []string{fmt.Sprintf("unsafe.Pointer(unsafe.SliceData(%s))", tmp), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
@@ -385,7 +623,7 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 	case kStruct:
 		return nil, []string{fmt.Sprintf("c%s(%s)", c.st.name, v)}
 	case kValue:
-		if !c.cls.DefCtor {
+		if !c.cls.DefCtor && !c.ptr {
 			return nil, []string{fmt.Sprintf("rt.Use(unsafe.Pointer(%s), %q)", v, method)}
 		}
 		return nil, []string{fmt.Sprintf("rt.UseArg(unsafe.Pointer(%s), %q)", v, method)}
@@ -398,6 +636,60 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 	case kCStr:
 		p := v + "CStr"
 		return []string{fmt.Sprintf("%s := C.CString(%s)", p, v), fmt.Sprintf("defer C.free(unsafe.Pointer(%s))", p)}, []string{p}
+	case kRaw:
+		return nil, []string{v}
+	case kDur:
+		return nil, []string{fmt.Sprintf("C.int64_t(%s)", v)}
+	case kTime:
+		return nil, []string{fmt.Sprintf("C.int64_t(%s.UnixMilli())", v)}
+	case kPath:
+		return nil, []string{fmt.Sprintf("(*C.char)(unsafe.Pointer(unsafe.StringData(%s)))", v), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
+	case kStrArray:
+		a := v + "Arr"
+		return []string{
+			fmt.Sprintf("%s := make([]*C.char, len(%s)+1)", a, v),
+			fmt.Sprintf("for i, x := range %s {\n\t\t%s[i] = C.CString(x)\n\t}", v, a),
+			fmt.Sprintf("defer func() {\n\t\tfor _, x := range %s {\n\t\t\tC.free(unsafe.Pointer(x))\n\t\t}\n\t}()", a),
+		}, []string{fmt.Sprintf("unsafe.Pointer(&%s[0])", a)}
+	case kMap:
+		kc, vc := v+"K", v+"V"
+		kconv, vconv := g.elemArg(c.key, "k", method, ctx), g.elemArg(c.elem, "x", method, ctx)
+		pre = []string{
+			fmt.Sprintf("%s := make([]%s, 0, len(%s))", kc, g.cgoType(c.key), v),
+			fmt.Sprintf("%s := make([]%s, 0, len(%s))", vc, g.cgoType(c.elem), v),
+			fmt.Sprintf("for k, x := range %s {\n\t\t%s = append(%s, %s)\n\t\t%s = append(%s, %s)\n\t}", v, kc, kc, kconv, vc, vc, vconv),
+		}
+		if c.key.k == kString {
+			pre = append(pre, fmt.Sprintf("defer quteFreeStrs(%s)", kc))
+		}
+		if c.elem.k == kString || c.elem.k == kBytes {
+			pre = append(pre, fmt.Sprintf("defer quteFreeStrs(%s)", vc))
+		}
+		return pre, []string{fmt.Sprintf("unsafe.Pointer(unsafe.SliceData(%s))", kc), fmt.Sprintf("unsafe.Pointer(unsafe.SliceData(%s))", vc), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
+	case kFunc:
+		id := v + "ID"
+		var b strings.Builder
+		fmt.Fprintf(&b, "%s := rt.NewFunc(func(args, ret unsafe.Pointer) {\n", id)
+		var names []string
+		if len(c.fparams) > 0 {
+			fmt.Fprintf(&b, "\t\ta := unsafe.Slice((*unsafe.Pointer)(args), %d)\n", len(c.fparams))
+		} else {
+			b.WriteString("\t\t_ = args\n")
+		}
+		for i, p := range c.fparams {
+			n := fmt.Sprintf("p%d", i)
+			fmt.Fprintf(&b, "\t\t%s := %s\n", n, g.goRet(p, fmt.Sprintf("*(*%s)(a[%d])", g.cgoType(p), i), "rt.KeepOrBorrow", ctx))
+			names = append(names, n)
+		}
+		call := fmt.Sprintf("%s(%s)", v, strings.Join(names, ", "))
+		if c.elem.k == kVoid {
+			fmt.Fprintf(&b, "\t\t_ = ret\n\t\t%s\n", call)
+		} else {
+			ex, _ := g.goVirtRet(c.elem, "r", method, ctx)
+			fmt.Fprintf(&b, "\t\tr := %s\n\t\t*(*%s)(ret) = %s\n", call, g.cgoType(c.elem), ex)
+		}
+		b.WriteString("\t})")
+		return []string{b.String()}, []string{fmt.Sprintf("C.uintptr_t(%s)", id)}
 	}
 	panic("goArg")
 }
@@ -434,6 +726,21 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 			inner = g.wrapExpr(c.elem.cls, "e", "rt.TakeOwned", ctx)
 		}
 		return fmt.Sprintf("quteList(%s, func(e %s) %s { return %s })", r, et, gt, inner)
+	case kRaw:
+		return r
+	case kDur:
+		return fmt.Sprintf("time.Duration(%s)", r)
+	case kTime:
+		return fmt.Sprintf("time.UnixMilli(int64(%s))", r)
+	case kPath:
+		return fmt.Sprintf("quteStr(%s)", r)
+	case kOpt:
+		return g.wrapExpr(c.elem.cls, r, "rt.TakeOwned", ctx)
+	case kMap:
+		kt, vt := g.goType(c.key, ctx, false), g.goType(c.elem, ctx, false)
+		kin, vin := g.goRet(c.key, "k", mode, ctx), g.goRet(c.elem, "v", "rt.TakeOwned", ctx)
+		return fmt.Sprintf("quteMap(%s, func(k %s) %s { return %s }, func(v %s) %s { return %s })",
+			r, g.cgoType(c.key), kt, kin, g.cgoType(c.elem), vt, vin)
 	}
 	panic("goRet")
 }
@@ -457,6 +764,9 @@ func (g *Gen) goVirtRet(c *conv, v, method string, ctx *Module) (string, bool) {
 		return a[0], true
 	case kObj:
 		return fmt.Sprintf("rt.UseArg(unsafe.Pointer(%s), %q)", v, method), true
+	case kDur, kTime, kRaw:
+		_, a := g.goArg(c, v, method, ctx)
+		return a[0], true
 	}
 	return "", false
 }
@@ -471,10 +781,20 @@ func (g *Gen) cppArg(c *conv, n string) string {
 	case kEnum:
 		return fmt.Sprintf("static_cast<%s>(%s)", c.enum.cpp, n)
 	case kFlags:
+		if c.twoFlags {
+			return fmt.Sprintf("%s(QFlag(int(%s)))", c.base, n)
+		}
 		return fmt.Sprintf("QFlags<%s>::fromInt(static_cast<QFlags<%s>::Int>(%s))", c.enum.cpp, c.enum.cpp, n)
 	case kString:
 		return fmt.Sprintf("QString::fromUtf8(%s, %s_len)", n, n)
 	case kBytes:
+		if c.span {
+			e := c.elem.base
+			return fmt.Sprintf("QSpan<%s>(reinterpret_cast<%s *>(const_cast<char *>(%s)), %s_len)", e, e, n, n)
+		}
+		if c.bytes {
+			return fmt.Sprintf("QByteArrayView(%s, %s_len)", n, n)
+		}
 		return fmt.Sprintf("QByteArray(%s, %s_len)", n, n)
 	case kStrList:
 		return fmt.Sprintf("qute_qstrlist(%s, %s_lens, %s_n)", n, n, n)
@@ -483,17 +803,59 @@ func (g *Gen) cppArg(c *conv, n string) string {
 	case kStruct:
 		return fmt.Sprintf("qute_to_%s(%s)", c.st.name, n)
 	case kValue:
-		if !c.cls.DefCtor {
-			return fmt.Sprintf("*static_cast<%s *>(%s)", c.cls.Name, n)
+		if c.ptr && c.cnst {
+			return fmt.Sprintf("static_cast<const %s *>(%s)", c.cls.Cpp, n)
 		}
-		return fmt.Sprintf("(%s ? *static_cast<%s *>(%s) : %s())", n, c.cls.Name, n, c.cls.Name)
+		if c.ptr {
+			return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Cpp, n) // Qt may update it in place
+		}
+		if !c.cls.DefCtor {
+			return fmt.Sprintf("*static_cast<%s *>(%s)", c.cls.Cpp, n)
+		}
+		return fmt.Sprintf("(%s ? *static_cast<%s *>(%s) : %s())", n, c.cls.Cpp, n, c.cls.Cpp)
 	case kObj:
 		if c.ref {
-			return fmt.Sprintf("*static_cast<%s *>(%s)", c.cls.Name, n)
+			return fmt.Sprintf("*static_cast<%s *>(%s)", c.cls.Cpp, n)
 		}
-		return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Name, n)
+		return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Cpp, n)
 	case kCStr:
 		return n
+	case kRaw:
+		return fmt.Sprintf("(%s)(%s)", c.cpp, n)
+	case kDur:
+		return fmt.Sprintf("std::chrono::duration_cast<%s>(std::chrono::nanoseconds(%s))", c.base, n)
+	case kTime:
+		return fmt.Sprintf("%s(std::chrono::duration_cast<%s::duration>(std::chrono::milliseconds(%s)))", c.base, c.base, n)
+	case kPath:
+		return fmt.Sprintf("std::filesystem::path(std::string(%s, %s_len))", n, n)
+	case kStrArray:
+		return fmt.Sprintf("static_cast<const char *const *>(%s)", n)
+	case kMap:
+		kd, vd := g.mapElemCpp(c.key, "kd[i]"), g.mapElemCpp(c.elem, "vd[i]")
+		return fmt.Sprintf("[&] { %s m; auto kd = static_cast<%s const *>(%s); auto vd = static_cast<%s const *>(%s_v); for (ptrdiff_t i = 0; i < %s_n; i++) m.insert(%s, %s); return m; }()",
+			c.base, elemCType(c.key), n, elemCType(c.elem), n, n, kd, vd)
+	case kFunc:
+		var decl, conv, refs []string
+		for i, p := range c.fparams {
+			decl = append(decl, fmt.Sprintf("%s p%d", p.cpp, i))
+			conv = append(conv, fmt.Sprintf("%s c%d = %s;", cType(p), i, g.cppRet(p, fmt.Sprintf("p%d", i))))
+			refs = append(refs, fmt.Sprintf("&c%d", i))
+		}
+		args := "nullptr"
+		pre := strings.Join(conv, " ")
+		if len(refs) > 0 {
+			pre += fmt.Sprintf(" void *args[] = {%s};", strings.Join(refs, ", "))
+			args = "args"
+		}
+		body := fmt.Sprintf("%s qute_call(s->id, %s, nullptr);", pre, args)
+		if c.elem.k != kVoid {
+			init := "{}"
+			if c.elem.k == kValue || c.elem.k == kObj {
+				init = " = nullptr"
+			}
+			body = fmt.Sprintf("%s %s r%s; qute_call(s->id, %s, &r); return %s;", pre, cType(c.elem), init, args, g.cppVirtRet(c.elem, "r"))
+		}
+		return fmt.Sprintf("%s([s = std::make_shared<GoSlot>(%s)](%s) -> %s { %s })", c.base, n, strings.Join(decl, ", "), c.elem.cpp, body)
 	case kList:
 		var dt, el string
 		switch c.elem.k {
@@ -501,6 +863,8 @@ func (g *Gen) cppArg(c *conv, n string) string {
 			dt, el = "void *", g.cppArg(c.elem, "d[i]")
 		case kString:
 			dt, el = "qute_str", "QString::fromUtf8(d[i].data, d[i].len)"
+		case kBytes:
+			dt, el = "qute_str", "QByteArray(d[i].data, d[i].len)"
 		default:
 			dt, el = cType(c.elem), g.cppArg(c.elem, "d[i]")
 		}
@@ -508,6 +872,9 @@ func (g *Gen) cppArg(c *conv, n string) string {
 			c.elem.cppBase(), dt, n, n, n, el)
 		if c.wrap != "" {
 			ex = c.wrap + "(" + ex + ")"
+		}
+		if c.span {
+			ex = fmt.Sprintf("QSpan<const %s>(%s)", c.elem.base, ex)
 		}
 		return ex
 	}
@@ -517,7 +884,7 @@ func (g *Gen) cppArg(c *conv, n string) string {
 func (c *conv) cppBase() string {
 	switch c.k {
 	case kObj:
-		return c.cls.Name + " *"
+		return c.cls.Cpp + " *"
 	case kEnum:
 		return c.enum.cpp
 	case kFlags:
@@ -536,10 +903,16 @@ func (g *Gen) cppRet(c *conv, e string) string {
 	case kEnum:
 		return fmt.Sprintf("static_cast<int64_t>(%s)", e)
 	case kFlags:
+		if c.twoFlags {
+			return fmt.Sprintf("static_cast<int64_t>(int(%s))", e)
+		}
 		return fmt.Sprintf("static_cast<int64_t>((%s).toInt())", e)
 	case kString:
 		return fmt.Sprintf("qute_ret_str(%s)", e)
 	case kBytes:
+		if c.bytes {
+			return fmt.Sprintf("qute_ret_bytes((%s).toByteArray())", e)
+		}
 		return fmt.Sprintf("qute_ret_bytes(%s)", e)
 	case kStrList:
 		return fmt.Sprintf("qute_ret_strlist(%s)", e)
@@ -548,14 +921,33 @@ func (g *Gen) cppRet(c *conv, e string) string {
 	case kStruct:
 		return fmt.Sprintf("qute_from_%s(%s)", c.st.name, e)
 	case kValue:
-		return fmt.Sprintf("static_cast<void *>(new %s(%s))", c.cls.Name, e)
+		if c.ptr {
+			return fmt.Sprintf("[&]() -> void * { auto p = %s; return p ? static_cast<void *>(new %s(*p)) : nullptr; }()", e, c.cls.Cpp)
+		}
+		return fmt.Sprintf("static_cast<void *>(new %s(%s))", c.cls.Cpp, e)
 	case kObj:
+		if c.qptr {
+			return fmt.Sprintf("(void *)((%s).data())", e)
+		}
 		if c.ref {
 			return fmt.Sprintf("(void *)(&(%s))", e)
 		}
 		return fmt.Sprintf("(void *)(%s)", e)
 	case kCStr:
 		return e
+	case kRaw:
+		return fmt.Sprintf("(void *)(%s)", e)
+	case kDur:
+		return fmt.Sprintf("static_cast<int64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(%s).count())", e)
+	case kTime:
+		return fmt.Sprintf("static_cast<int64_t>(std::chrono::duration_cast<std::chrono::milliseconds>((%s).time_since_epoch()).count())", e)
+	case kPath:
+		return fmt.Sprintf("qute_ret_bytes(QByteArray::fromStdString((%s).string()))", e)
+	case kOpt:
+		return fmt.Sprintf("[&]() -> void * { auto o = %s; return o ? static_cast<void *>(new %s(*o)) : nullptr; }()", e, c.elem.cls.Cpp)
+	case kMap:
+		return fmt.Sprintf("qute_ret_map<%s, %s>(%s, [](const auto &v) { return %s; }, [](const auto &v) { return %s; })",
+			elemCType(c.key), elemCType(c.elem), e, g.cppRet(c.key, "v"), g.cppRet(c.elem, "v"))
 	case kList:
 		ec := cType(c.elem)
 		return fmt.Sprintf("qute_ret_list<%s>(%s, [](const auto &v) { return %s; })", ec, e, g.cppRet(c.elem, "v"))
@@ -573,7 +965,7 @@ func (g *Gen) cppVirtRet(c *conv, n string) string {
 	case kStrList:
 		return fmt.Sprintf("qute_take_qstrlist(%s)", n)
 	case kObj:
-		return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Name, n)
+		return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Cpp, n)
 	}
 	return g.cppArg(c, n)
 }
@@ -581,8 +973,8 @@ func (g *Gen) cppVirtRet(c *conv, n string) string {
 // virtRetSupported reports whether a type can be returned from a Go override.
 func virtRetSupported(c *conv) bool {
 	switch c.k {
-	case kVoid, kPrim, kEnum, kFlags, kChar, kStruct, kValue, kObj, kString, kBytes, kStrList:
-		return !(c.k == kObj && c.ref)
+	case kVoid, kPrim, kEnum, kFlags, kChar, kStruct, kValue, kObj, kString, kBytes, kStrList, kDur, kTime, kRaw:
+		return !(c.k == kObj && c.ref) && !c.span && !c.bytes
 	}
 	return false
 }
@@ -590,4 +982,39 @@ func virtRetSupported(c *conv) bool {
 // cppDefault is the value a pure virtual returns when Go does not override it.
 func cppDefault(c *conv) string {
 	return "{}"
+}
+
+// elemArg converts one Go element for a C array (map keys and values).
+func (g *Gen) elemArg(c *conv, v, method string, ctx *Module) string {
+	switch c.k {
+	case kString:
+		return fmt.Sprintf("quteCStr(%s)", v)
+	case kBytes:
+		return fmt.Sprintf("quteCBytes(%s)", v)
+	case kValue, kObj:
+		return fmt.Sprintf("rt.UseArg(unsafe.Pointer(%s), %q)", v, method)
+	}
+	_, a := g.goArg(c, v, method, ctx)
+	return a[0]
+}
+
+func elemCType(c *conv) string {
+	switch c.k {
+	case kString, kBytes:
+		return "qute_str"
+	case kValue, kObj:
+		return "void *"
+	}
+	return cType(c)
+}
+
+// mapElemCpp builds a Qt map key or value from its C representation.
+func (g *Gen) mapElemCpp(c *conv, e string) string {
+	switch c.k {
+	case kString:
+		return fmt.Sprintf("QString::fromUtf8(%s.data, %s.len)", e, e)
+	case kBytes:
+		return fmt.Sprintf("QByteArray(%s.data, %s.len)", e, e)
+	}
+	return g.cppArg(c, e)
 }

@@ -88,14 +88,14 @@ func NewQPersistentModelIndex() *QPersistentModelIndex {
 	return rt.View[QPersistentModelIndex](h, p)
 }
 
-// NewQPersistentModelIndexWithIndex wraps the QPersistentModelIndex constructor.
+// NewQPersistentModelIndexWithModelIndex wraps the QPersistentModelIndex constructor.
 //
 //	C++: QPersistentModelIndex::QPersistentModelIndex(const QModelIndex & index)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpersistentmodelindex.html#QPersistentModelIndex
-func NewQPersistentModelIndexWithIndex(index *QModelIndex) *QPersistentModelIndex {
-	rt.CheckThread("NewQPersistentModelIndexWithIndex")
-	p := C.qute_QPersistentModelIndex_new_1(rt.UseArg(unsafe.Pointer(index), "NewQPersistentModelIndexWithIndex"))
+func NewQPersistentModelIndexWithModelIndex(index *QModelIndex) *QPersistentModelIndex {
+	rt.CheckThread("NewQPersistentModelIndexWithModelIndex")
+	p := C.qute_QPersistentModelIndex_new_1(rt.UseArg(unsafe.Pointer(index), "NewQPersistentModelIndexWithModelIndex"))
 	h := rt.WrapClass(p, "QPersistentModelIndex", rt.NewOwned)
 	return rt.View[QPersistentModelIndex](h, p)
 }
@@ -120,6 +120,28 @@ func (this *QPersistentModelIndex) Column() int {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Column")
 	r := C.qute_QPersistentModelIndex_column(self)
 	return int(r)
+}
+
+// InternalPointer wraps QPersistentModelIndex::internalPointer.
+//
+//	C++: void * QPersistentModelIndex::internalPointer() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qpersistentmodelindex.html#internalPointer
+func (this *QPersistentModelIndex) InternalPointer() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.InternalPointer")
+	r := C.qute_QPersistentModelIndex_internalPointer(self)
+	return r
+}
+
+// ConstInternalPointer wraps QPersistentModelIndex::constInternalPointer.
+//
+//	C++: const void * QPersistentModelIndex::constInternalPointer() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qpersistentmodelindex.html#constInternalPointer
+func (this *QPersistentModelIndex) ConstInternalPointer() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.ConstInternalPointer")
+	r := C.qute_QPersistentModelIndex_constInternalPointer(self)
+	return r
 }
 
 // InternalId wraps QPersistentModelIndex::internalId.

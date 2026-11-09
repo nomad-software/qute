@@ -54,42 +54,20 @@ func NewQGraphicsRectItem(parent QGraphicsItemLike) *QGraphicsRectItem {
 	return rt.View[QGraphicsRectItem](h, p)
 }
 
-// NewQGraphicsRectItemWithRect wraps the QGraphicsRectItem constructor.
+// NewQGraphicsRectItemWithRectF wraps the QGraphicsRectItem constructor.
 //
 //	C++: QGraphicsRectItem::QGraphicsRectItem(const QRectF & rect, QGraphicsItem * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsrectitem.html#QGraphicsRectItem
-func NewQGraphicsRectItemWithRect(rect qtcore.QRectF, parent QGraphicsItemLike) *QGraphicsRectItem {
-	rt.CheckThread("NewQGraphicsRectItemWithRect")
+func NewQGraphicsRectItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLike) *QGraphicsRectItem {
+	rt.CheckThread("NewQGraphicsRectItemWithRectF")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsRectItemWithRect")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsRectItemWithRectF")
 	}
 	p := C.qute_QGraphicsRectItem_new_1(cQRectF(rect), parentPtr)
-	mode := rt.NewOwned
-	if parentPtr != nil {
-		mode = rt.NewParented
-	}
-	h := rt.WrapClass(p, "QGraphicsRectItem", mode)
-	return rt.View[QGraphicsRectItem](h, p)
-}
-
-// NewQGraphicsRectItemWithX wraps the QGraphicsRectItem constructor.
-//
-//	C++: QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem * parent = …)
-//
-// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsrectitem.html#QGraphicsRectItem
-func NewQGraphicsRectItemWithX(x float64, y float64, w float64, hArg float64, parent QGraphicsItemLike) *QGraphicsRectItem {
-	rt.CheckThread("NewQGraphicsRectItemWithX")
-	var parentPtr unsafe.Pointer
-	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsRectItemWithX")
-	}
-	p := C.qute_QGraphicsRectItem_new_2(C.double(x), C.double(y), C.double(w), C.double(hArg), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

@@ -63,6 +63,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractanimation.h",
@@ -758,6 +759,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringbuilder.h",
@@ -874,6 +876,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstracteventdispatcher.h",
@@ -1602,6 +1605,124 @@
    "qobject": true
   },
   {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "timerId",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "interval",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "timerType",
+     "type": {
+      "canonical": "Qt::TimerType",
+      "spelling": "Qt::TimerType"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qabstracteventdispatcher.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "TimerInfo",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "TimerInfo",
+     "params": [
+      {
+       "default": false,
+       "name": "id",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": false,
+       "name": "i",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": false,
+       "name": "t",
+       "type": {
+        "canonical": "Qt::TimerType",
+        "spelling": "Qt::TimerType"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QAbstractEventDispatcher::TimerInfo",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "interval",
+     "type": {
+      "canonical": "std::chrono::duration<long, std::ratio<1, 1000000000>>",
+      "spelling": "Duration"
+     }
+    },
+    {
+     "name": "timerId",
+     "type": {
+      "canonical": "Qt::TimerId",
+      "spelling": "Qt::TimerId"
+     }
+    },
+    {
+     "name": "timerType",
+     "type": {
+      "canonical": "Qt::TimerType",
+      "spelling": "Qt::TimerType"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qabstracteventdispatcher.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtCore",
+   "name": "QAbstractEventDispatcher::TimerInfoV2",
+   "qobject": false
+  },
+  {
    "abstract": true,
    "bases": [
     "QAbstractEventDispatcher"
@@ -1611,6 +1732,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstracteventdispatcher.h",
@@ -2039,6 +2161,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QAbstractItemModel::CheckIndexOption",
@@ -5197,6 +5320,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemmodel.h",
@@ -5547,6 +5671,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractnativeeventfilter.h",
@@ -5623,6 +5748,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractproxymodel.h",
@@ -6649,6 +6775,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemmodel.h",
@@ -6974,6 +7101,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qshareddata.h",
@@ -7003,6 +7131,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractanimation.h",
@@ -7272,6 +7401,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qanimationgroup.h",
@@ -7599,6 +7729,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qanystringview.h",
@@ -8311,6 +8442,29 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "ref_",
+     "type": {
+      "canonical": "QBasicAtomicInteger<int>",
+      "spelling": "QBasicAtomicInt"
+     }
+    },
+    {
+     "name": "flags",
+     "type": {
+      "canonical": "QFlags<QArrayData::ArrayOption>",
+      "spelling": "ArrayOptions"
+     }
+    },
+    {
+     "name": "alloc",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    }
+   ],
    "flags": [
     {
      "enum": "QArrayData::ArrayOption",
@@ -8679,6 +8833,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qassociativeiterable.h",
@@ -8744,6 +8899,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qassociativeiterable.h",
@@ -9161,6 +9317,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qassociativeiterable.h",
@@ -9226,6 +9383,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qatomic.h",
@@ -9272,6 +9430,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qatomic_cxx11.h",
@@ -9286,6 +9445,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmutex.h",
@@ -9377,6 +9537,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qreadwritelock.h",
@@ -9895,6 +10056,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbasictimer.h",
@@ -10172,6 +10334,36 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "currentlyEvaluatingBinding",
+     "type": {
+      "canonical": "QtPrivate::BindingEvaluationState *",
+      "spelling": "QtPrivate::BindingEvaluationState *"
+     }
+    },
+    {
+     "name": "currentCompatProperty",
+     "type": {
+      "canonical": "QtPrivate::CompatPropertySafePoint *",
+      "spelling": "QtPrivate::CompatPropertySafePoint *"
+     }
+    },
+    {
+     "name": "threadId",
+     "type": {
+      "canonical": "void *",
+      "spelling": "Qt::HANDLE"
+     }
+    },
+    {
+     "name": "groupUpdateData",
+     "type": {
+      "canonical": "QPropertyDelayedNotifications *",
+      "spelling": "QPropertyDelayedNotifications *"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qbindingstorage.h",
@@ -10189,6 +10381,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbindingstorage.h",
@@ -10347,6 +10540,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbitarray.h",
@@ -10967,6 +11161,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbitarray.h",
@@ -11005,6 +11200,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QBluetoothPermission::CommunicationMode",
@@ -11138,6 +11334,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbuffer.h",
@@ -11679,6 +11876,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QByteArray::Base64Option",
@@ -16315,6 +16513,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbytearraymatcher.h",
@@ -16530,6 +16729,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbytearrayview.h",
@@ -18021,6 +18221,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qcalendar.h",
@@ -18797,6 +18998,157 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qcalendar.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "SystemId",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "index",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "unsigned long",
+      "spelling": "size_t"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isValid",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QCalendar::SystemId",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "year",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "month",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "day",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qcalendar.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "YearMonthDay",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "YearMonthDay",
+     "params": [
+      {
+       "default": false,
+       "name": "y",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": true,
+       "name": "m",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": true,
+       "name": "d",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isValid",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QCalendar::YearMonthDay",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -18823,6 +19175,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qpermissions.h",
@@ -18949,6 +19302,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpermissions.h",
@@ -19036,6 +19390,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcborarray.h",
@@ -20096,6 +20451,92 @@
    "abstract": false,
    "bases": [],
    "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qcborarray.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "ConstIterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "ConstIterator",
+     "params": [
+      {
+       "default": false,
+       "name": "",
+       "type": {
+        "canonical": "const QCborArray::ConstIterator &",
+        "spelling": "const ConstIterator &"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QCborArray::ConstIterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qcborarray.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "Iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "",
+       "type": {
+        "canonical": "const QCborArray::Iterator &",
+        "spelling": "const Iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QCborArray::Iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
    "enums": [
     {
      "name": "Code",
@@ -20166,6 +20607,15 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "c",
+     "type": {
+      "canonical": "QCborError::Code",
+      "spelling": "Code"
+     }
+    }
+   ],
    "flags": [],
    "gadget": true,
    "header": "qcborcommon.h",
@@ -20199,6 +20649,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcbormap.h",
@@ -21744,8 +22195,206 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": {
+    "access": "public",
+    "virtual": false
+   },
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qcbormap.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "ConstIterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "ConstIterator",
+     "params": [
+      {
+       "default": false,
+       "name": "",
+       "type": {
+        "canonical": "const QCborMap::ConstIterator &",
+        "spelling": "const ConstIterator &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "key",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QCborValue",
+      "spelling": "QCborValue"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "keyRef",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QCborValueConstRef",
+      "spelling": "QCborValueConstRef"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "value",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QCborValueConstRef",
+      "spelling": "QCborValueConstRef"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QCborMap::ConstIterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": {
+    "access": "public",
+    "virtual": false
+   },
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qcbormap.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "Iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "",
+       "type": {
+        "canonical": "const QCborMap::Iterator &",
+        "spelling": "const Iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "key",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QCborValue",
+      "spelling": "QCborValue"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "keyRef",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QCborValueConstRef",
+      "spelling": "QCborValueConstRef"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "value",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QCborValueRef",
+      "spelling": "QCborValueRef"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QCborMap::Iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "offset",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qint64"
+     }
+    },
+    {
+     "name": "error",
+     "type": {
+      "canonical": "QCborError",
+      "spelling": "QCborError"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qcborvalue.h",
@@ -21868,6 +22517,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qcborstreamreader.h",
@@ -23016,6 +23666,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcborstreamwriter.h",
@@ -23895,6 +24546,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QCborValue::EncodingOption",
@@ -25469,6 +26121,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcborvalue.h",
@@ -26770,6 +27423,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcborvalue.h",
@@ -28985,6 +29639,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qchar.h",
@@ -30610,6 +31265,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcoreevent.h",
@@ -30768,6 +31424,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qchronotimer.h",
@@ -31192,6 +31849,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcollator.h",
@@ -31645,6 +32303,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcollator.h",
@@ -31796,6 +32455,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QCommandLineOption::Flag",
@@ -32225,6 +32885,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcommandlineparser.h",
@@ -32899,6 +33560,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringbuilder.h",
@@ -33007,6 +33669,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qconcatenatetablesproxymodel.h",
@@ -33729,6 +34392,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qpermissions.h",
@@ -33852,6 +34516,43 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "ref",
+     "type": {
+      "canonical": "QBasicAtomicInteger<int>",
+      "spelling": "QBasicAtomicInt"
+     }
+    },
+    {
+     "name": "alloc",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    },
+    {
+     "name": "count",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    },
+    {
+     "name": "start",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    },
+    {
+     "name": "offset",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qcontiguouscache.h",
@@ -33941,6 +34642,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcoreapplication.h",
@@ -35389,6 +36091,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qcryptographichash.h",
@@ -36157,6 +36860,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qdatastream.h",
@@ -36702,6 +37406,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdatetime.h",
@@ -38257,6 +38962,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdatetime.h",
@@ -39852,6 +40558,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdeadlinetimer.h",
@@ -40340,6 +41047,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdebug.h",
@@ -40745,6 +41453,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdebug.h",
@@ -40929,6 +41638,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QDir::Filter",
@@ -42443,6 +43153,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QDirIterator::IteratorFlag",
@@ -42771,6 +43482,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QDirListing::IteratorFlag",
@@ -43032,6 +43744,515 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qdirlisting.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "fileName",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "baseName",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "completeBaseName",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "suffix",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "bundleName",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "completeSuffix",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "filePath",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isDir",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isFile",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isSymLink",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "exists",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isHidden",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isReadable",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isWritable",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isExecutable",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "fileInfo",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QFileInfo",
+      "spelling": "QFileInfo"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "canonicalFilePath",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "absoluteFilePath",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "absolutePath",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "size",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "long long",
+      "spelling": "qint64"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "birthTime",
+     "params": [
+      {
+       "default": false,
+       "name": "tz",
+       "type": {
+        "canonical": "const QTimeZone &",
+        "spelling": "const QTimeZone &"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QDateTime",
+      "spelling": "QDateTime"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "metadataChangeTime",
+     "params": [
+      {
+       "default": false,
+       "name": "tz",
+       "type": {
+        "canonical": "const QTimeZone &",
+        "spelling": "const QTimeZone &"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QDateTime",
+      "spelling": "QDateTime"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "lastModified",
+     "params": [
+      {
+       "default": false,
+       "name": "tz",
+       "type": {
+        "canonical": "const QTimeZone &",
+        "spelling": "const QTimeZone &"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QDateTime",
+      "spelling": "QDateTime"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "lastRead",
+     "params": [
+      {
+       "default": false,
+       "name": "tz",
+       "type": {
+        "canonical": "const QTimeZone &",
+        "spelling": "const QTimeZone &"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QDateTime",
+      "spelling": "QDateTime"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "fileTime",
+     "params": [
+      {
+       "default": false,
+       "name": "type",
+       "type": {
+        "canonical": "QFileDevice::FileTime",
+        "spelling": "QFileDevice::FileTime"
+       }
+      },
+      {
+       "default": false,
+       "name": "tz",
+       "type": {
+        "canonical": "const QTimeZone &",
+        "spelling": "const QTimeZone &"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QDateTime",
+      "spelling": "QDateTime"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QDirListing::DirEntry",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qdirlisting.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "private",
+     "copy": true,
+     "kind": "ctor",
+     "name": "const_iterator",
+     "params": []
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": true,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "",
+       "type": {
+        "canonical": "QDirListing::const_iterator &&",
+        "spelling": "const_iterator &&"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QDirListing::const_iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qdirlisting.h",
+   "kind": "class",
+   "methods": [],
+   "module": "QtCore",
+   "name": "QDirListing::sentinel",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QEvent"
    ],
@@ -43040,6 +44261,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcoreevent.h",
@@ -43348,6 +44570,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qeasingcurve.h",
@@ -43820,6 +45043,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qelapsedtimer.h",
@@ -44818,6 +46042,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qcoreevent.h",
@@ -45195,6 +46420,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QEventLoop::ProcessEventsFlag",
@@ -45496,6 +46722,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qeventloop.h",
@@ -45610,6 +46837,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qexception.h",
@@ -45685,6 +46913,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfactoryinterface.h",
@@ -45720,6 +46949,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfile.h",
@@ -46886,6 +48116,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QFileDevice::Permission",
@@ -47485,6 +48716,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfileinfo.h",
@@ -48828,6 +50060,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfileselector.h",
@@ -49023,6 +50256,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfilesystemwatcher.h",
@@ -49327,6 +50561,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qflags.h",
@@ -49416,6 +50651,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfutureinterface.h",
@@ -49648,6 +50884,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfutureinterface.h",
@@ -50971,6 +52208,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfuturewatcher.h",
@@ -51695,6 +52933,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qobjectdefs.h",
@@ -51768,6 +53007,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qobjectdefs.h",
@@ -51814,6 +53054,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrunnable.h",
@@ -51844,6 +53085,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qhash.h",
@@ -51870,6 +53112,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qhashfunctions.h",
@@ -51884,6 +53127,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qhashfunctions.h",
@@ -51968,6 +53212,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qiodevice.h",
@@ -53419,6 +54664,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QIODeviceBase::OpenModeFlag",
@@ -53443,6 +54689,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qidentityproxymodel.h",
@@ -54338,6 +55585,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qflags.h",
@@ -54371,6 +55619,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtypes.h",
@@ -54534,6 +55783,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qnamespace.h",
@@ -54647,6 +55897,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qitemselectionmodel.h",
@@ -54889,6 +56140,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QItemSelectionModel::SelectionFlag",
@@ -55717,6 +56969,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qitemselectionmodel.h",
@@ -56119,6 +57372,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qjsonarray.h",
@@ -56864,6 +58118,162 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qjsonarray.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "array",
+       "type": {
+        "canonical": "const QJsonArray *",
+        "spelling": "const QJsonArray *"
+       }
+      },
+      {
+       "default": false,
+       "name": "index",
+       "type": {
+        "canonical": "long long",
+        "spelling": "qsizetype"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "o",
+       "type": {
+        "canonical": "const QJsonArray::iterator &",
+        "spelling": "const iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "const QJsonArray::const_iterator &",
+        "spelling": "const const_iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QJsonArray::const_iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qjsonarray.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "array",
+       "type": {
+        "canonical": "QJsonArray *",
+        "spelling": "QJsonArray *"
+       }
+      },
+      {
+       "default": false,
+       "name": "index",
+       "type": {
+        "canonical": "long long",
+        "spelling": "qsizetype"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "const QJsonArray::iterator &",
+        "spelling": "const iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QJsonArray::iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -56886,6 +58296,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qjsondocument.h",
@@ -57278,6 +58689,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qjsonobject.h",
@@ -58441,6 +59853,252 @@
    "abstract": false,
    "bases": [],
    "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qjsonobject.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "obj",
+       "type": {
+        "canonical": "const QJsonObject *",
+        "spelling": "const QJsonObject *"
+       }
+      },
+      {
+       "default": false,
+       "name": "index",
+       "type": {
+        "canonical": "long long",
+        "spelling": "qsizetype"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "const QJsonObject::iterator &",
+        "spelling": "const iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "const_iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "const QJsonObject::const_iterator &",
+        "spelling": "const const_iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "key",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "keyView",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QAnyStringView",
+      "spelling": "QAnyStringView"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "value",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QJsonValueConstRef",
+      "spelling": "QJsonValueConstRef"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QJsonObject::const_iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qjsonobject.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "obj",
+       "type": {
+        "canonical": "QJsonObject *",
+        "spelling": "QJsonObject *"
+       }
+      },
+      {
+       "default": false,
+       "name": "index",
+       "type": {
+        "canonical": "long long",
+        "spelling": "qsizetype"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "const QJsonObject::iterator &",
+        "spelling": "const iterator &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "key",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QString",
+      "spelling": "QString"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "keyView",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QAnyStringView",
+      "spelling": "QAnyStringView"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "value",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QJsonValueRef",
+      "spelling": "QJsonValueRef"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QJsonObject::iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
    "enums": [
     {
      "name": "ParseError",
@@ -58509,6 +60167,22 @@
        "value": 14
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "offset",
+     "type": {
+      "canonical": "int",
+      "spelling": "std::conditional_t<6 < 7, int, qint64>"
+     }
+    },
+    {
+     "name": "error",
+     "type": {
+      "canonical": "QJsonParseError::ParseError",
+      "spelling": "ParseError"
+     }
     }
    ],
    "flags": [],
@@ -58581,6 +60255,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qjsonvalue.h",
@@ -59324,6 +60999,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qjsonvalue.h",
@@ -60038,6 +61714,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qjsonvalue.h",
@@ -60432,6 +62109,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qnamespace.h",
@@ -60586,6 +62264,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qchar.h",
@@ -60649,6 +62328,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlatin1stringview.h",
@@ -62835,6 +64515,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlatin1stringmatcher.h",
@@ -63061,6 +64742,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QLibrary::LoadHint",
@@ -63686,6 +65368,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qlibraryinfo.h",
@@ -63840,6 +65523,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qline.h",
@@ -64358,6 +66042,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qline.h",
@@ -65098,6 +66783,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbytearraylist.h",
@@ -68678,6 +70364,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QLocale::NumberOption",
@@ -72379,6 +74066,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qpermissions.h",
@@ -72569,6 +74257,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlockfile.h",
@@ -72868,6 +74557,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qloggingcategory.h",
@@ -73110,6 +74800,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmargins.h",
@@ -73362,6 +75053,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmargins.h",
@@ -73635,6 +75327,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmessageauthenticationcode.h",
@@ -74202,6 +75895,43 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "version",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "line",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "file",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    },
+    {
+     "name": "function",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    },
+    {
+     "name": "category",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qlogging.h",
@@ -74275,6 +76005,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlogging.h",
@@ -75178,6 +76909,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetacontainer.h",
@@ -75845,6 +77577,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetaobject.h",
@@ -75914,6 +77647,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetacontainer.h",
@@ -76524,6 +78258,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetaobject.h",
@@ -76995,6 +78730,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetaobject.h",
@@ -78064,6 +79800,29 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "metaType",
+     "type": {
+      "canonical": "const QtPrivate::QMetaTypeInterface *",
+      "spelling": "const QtPrivate::QMetaTypeInterface *"
+     }
+    },
+    {
+     "name": "name",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    },
+    {
+     "name": "data",
+     "type": {
+      "canonical": "const void *",
+      "spelling": "const void *"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qobjectdefs.h",
@@ -78078,6 +79837,29 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "metaType",
+     "type": {
+      "canonical": "const QtPrivate::QMetaTypeInterface *",
+      "spelling": "const QtPrivate::QMetaTypeInterface *"
+     }
+    },
+    {
+     "name": "name",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    },
+    {
+     "name": "data",
+     "type": {
+      "canonical": "void *",
+      "spelling": "void *"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qobjectdefs.h",
@@ -78143,6 +79925,15 @@
        "value": 10
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "d",
+     "type": {
+      "canonical": "QMetaObject::Data",
+      "spelling": "struct Data"
+     }
     }
    ],
    "flags": [],
@@ -79851,6 +81642,159 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "superdata",
+     "type": {
+      "canonical": "QMetaObject::SuperData",
+      "spelling": "SuperData"
+     }
+    },
+    {
+     "name": "stringdata",
+     "type": {
+      "canonical": "const unsigned int *",
+      "spelling": "const uint *"
+     }
+    },
+    {
+     "name": "data",
+     "type": {
+      "canonical": "const unsigned int *",
+      "spelling": "const uint *"
+     }
+    },
+    {
+     "name": "static_metacall",
+     "type": {
+      "canonical": "void (*)(QObject *, QMetaObject::Call, int, void **)",
+      "spelling": "StaticMetacallFunction"
+     }
+    },
+    {
+     "name": "relatedMetaObjects",
+     "type": {
+      "canonical": "const QMetaObject::SuperData *",
+      "spelling": "const SuperData *"
+     }
+    },
+    {
+     "name": "metaTypes",
+     "type": {
+      "canonical": "const QtPrivate::QMetaTypeInterface *const *",
+      "spelling": "const QtPrivate::QMetaTypeInterface *const *"
+     }
+    },
+    {
+     "name": "extradata",
+     "type": {
+      "canonical": "void *",
+      "spelling": "void *"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qobjectdefs.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtCore",
+   "name": "QMetaObject::Data",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "direct",
+     "type": {
+      "canonical": "const QMetaObject *",
+      "spelling": "const QMetaObject *"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qobjectdefs.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "SuperData",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "SuperData",
+     "params": [
+      {
+       "default": false,
+       "name": "",
+       "type": {
+        "canonical": "std::nullptr_t",
+        "spelling": "std::nullptr_t"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "SuperData",
+     "params": [
+      {
+       "default": false,
+       "name": "mo",
+       "type": {
+        "canonical": "const QMetaObject *",
+        "spelling": "const QMetaObject *"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "SuperData",
+     "params": [
+      {
+       "default": false,
+       "name": "g",
+       "type": {
+        "canonical": "const QMetaObject *(*)()",
+        "spelling": "Getter"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QMetaObject::SuperData",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetaobject.h",
@@ -80590,6 +82534,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetacontainer.h",
@@ -81792,6 +83737,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QMetaType::TypeFlag",
@@ -82948,6 +84894,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetatype.h",
@@ -82983,6 +84930,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmetatype.h",
@@ -82997,6 +84945,15 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "arguments",
+     "type": {
+      "canonical": "void **",
+      "spelling": "void **"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qobjectdefs.h",
@@ -83014,6 +84971,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpermissions.h",
@@ -83103,6 +85061,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmimedata.h",
@@ -83649,6 +85608,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmimedatabase.h",
@@ -83970,6 +85930,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qmimetype.h",
@@ -84274,6 +86235,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemmodel.h",
@@ -84561,6 +86523,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemmodel.h",
@@ -84654,6 +86617,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemmodel.h",
@@ -84826,6 +86790,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmutex.h",
@@ -84937,6 +86902,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qtipccommon.h",
@@ -85227,6 +87193,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdebug.h",
@@ -85368,6 +87335,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qobject.h",
@@ -86821,6 +88789,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qobjectcleanuphandler.h",
@@ -86994,6 +88963,141 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "q_ptr",
+     "type": {
+      "canonical": "QObject *",
+      "spelling": "QObject *"
+     }
+    },
+    {
+     "name": "parent",
+     "type": {
+      "canonical": "QObject *",
+      "spelling": "QObject *"
+     }
+    },
+    {
+     "name": "children",
+     "type": {
+      "canonical": "QList<QObject *>",
+      "spelling": "QObjectList"
+     }
+    },
+    {
+     "name": "isWidget",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "blockSig",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "wasDeleted",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "isDeletingChildren",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "sendChildEvents",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "receiveChildEvents",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "isWindow",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "deleteLaterCalled",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "isQuickItem",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "willBeWidget",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "wasWidget",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "receiveParentEvents",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "unused",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "postedEvents",
+     "type": {
+      "canonical": "QAtomicInt",
+      "spelling": "QAtomicInt"
+     }
+    },
+    {
+     "name": "metaObject",
+     "type": {
+      "canonical": "QDynamicMetaObjectData *",
+      "spelling": "QDynamicMetaObjectData *"
+     }
+    },
+    {
+     "name": "bindingStorage",
+     "type": {
+      "canonical": "QBindingStorage",
+      "spelling": "QBindingStorage"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qobject.h",
@@ -87087,6 +89191,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qoperatingsystemversion.h",
@@ -87283,6 +89388,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qoperatingsystemversion.h",
@@ -87598,6 +89704,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qoperatingsystemversion.h",
@@ -87636,6 +89743,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qparallelanimationgroup.h",
@@ -87876,6 +89984,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcompare.h",
@@ -87950,6 +90059,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpauseanimation.h",
@@ -88173,6 +90283,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpermissions.h",
@@ -88230,6 +90341,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemmodel.h",
@@ -88552,6 +90664,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpluginloader.h",
@@ -88871,6 +90984,22 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "data",
+     "type": {
+      "canonical": "const void *",
+      "spelling": "const void *"
+     }
+    },
+    {
+     "name": "size",
+     "type": {
+      "canonical": "unsigned long",
+      "spelling": "size_t"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qplugin.h",
@@ -88901,6 +91030,161 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "n_namesz",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "quint32"
+     }
+    },
+    {
+     "name": "n_descsz",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "quint32"
+     }
+    },
+    {
+     "name": "n_type",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "quint32"
+     }
+    },
+    {
+     "name": "name",
+     "type": {
+      "canonical": "char[12]",
+      "spelling": "char[12]"
+     }
+    },
+    {
+     "name": "header",
+     "type": {
+      "canonical": "QPluginMetaData::Header",
+      "spelling": "Header"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qplugin.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "ElfNoteHeader",
+     "params": [
+      {
+       "default": false,
+       "name": "payloadSize",
+       "type": {
+        "canonical": "unsigned int",
+        "spelling": "quint32"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QPluginMetaData::ElfNoteHeader",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "version",
+     "type": {
+      "canonical": "unsigned char",
+      "spelling": "quint8"
+     }
+    },
+    {
+     "name": "qt_major_version",
+     "type": {
+      "canonical": "unsigned char",
+      "spelling": "quint8"
+     }
+    },
+    {
+     "name": "qt_minor_version",
+     "type": {
+      "canonical": "unsigned char",
+      "spelling": "quint8"
+     }
+    },
+    {
+     "name": "plugin_arch_requirements",
+     "type": {
+      "canonical": "unsigned char",
+      "spelling": "quint8"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qplugin.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtCore",
+   "name": "QPluginMetaData::Header",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "magic",
+     "type": {
+      "canonical": "char[12]",
+      "spelling": "char[12]"
+     }
+    },
+    {
+     "name": "header",
+     "type": {
+      "canonical": "QPluginMetaData::Header",
+      "spelling": "Header"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qplugin.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "MagicHeader",
+     "params": [],
+     "variadic": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QPluginMetaData::MagicHeader",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpoint.h",
@@ -89151,6 +91435,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpoint.h",
@@ -89593,6 +91878,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QProcess::UnixProcessFlag",
@@ -91103,6 +93389,43 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "flags",
+     "type": {
+      "canonical": "QFlags<QProcess::UnixProcessFlag>",
+      "spelling": "UnixProcessFlags"
+     }
+    },
+    {
+     "name": "lowestFileDescriptorToClose",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "_reserved",
+     "type": {
+      "canonical": "unsigned int[6]",
+      "spelling": "quint32[6]"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qprocess.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtCore",
+   "name": "QProcess::UnixProcessParameters",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -91121,6 +93444,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qprocess.h",
@@ -91436,6 +93760,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpropertyanimation.h",
@@ -91781,6 +94106,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -91915,6 +94241,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpropertyprivate.h",
@@ -92116,6 +94443,36 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "fileName",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    },
+    {
+     "name": "functionName",
+     "type": {
+      "canonical": "const char *",
+      "spelling": "const char *"
+     }
+    },
+    {
+     "name": "line",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "quint32"
+     }
+    },
+    {
+     "name": "column",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "quint32"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -92160,6 +94517,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -92189,6 +94547,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -92316,6 +94675,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -92330,6 +94690,29 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "d_ptr",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quintptr"
+     }
+    },
+    {
+     "name": "originalBindingData",
+     "type": {
+      "canonical": "const QtPrivate::QPropertyBindingData *",
+      "spelling": "const QtPrivate::QPropertyBindingData *"
+     }
+    },
+    {
+     "name": "propertyData",
+     "type": {
+      "canonical": "QUntypedPropertyData *",
+      "spelling": "QUntypedPropertyData *"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qpropertyprivate.h",
@@ -92347,6 +94730,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrandom.h",
@@ -93088,6 +95472,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrandom.h",
@@ -93397,6 +95782,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrangemodel.h",
@@ -95083,6 +97469,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qreadwritelock.h",
@@ -95190,6 +97577,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qreadwritelock.h",
@@ -95271,6 +97659,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrect.h",
@@ -96961,6 +99350,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrect.h",
@@ -98599,6 +100989,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmutex.h",
@@ -98831,6 +101222,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QRegularExpression::PatternOption",
@@ -99517,6 +101909,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qregularexpression.h",
@@ -100012,6 +102405,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qregularexpression.h",
@@ -100225,6 +102619,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qresource.h",
@@ -100640,6 +103035,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrunnable.h",
@@ -100755,6 +103151,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsavefile.h",
@@ -101068,6 +103465,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qscopedpointer.h",
@@ -101110,6 +103508,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -101144,6 +103543,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsemaphore.h",
@@ -101353,6 +103753,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsemaphore.h",
@@ -101506,6 +103907,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsequentialanimationgroup.h",
@@ -101858,6 +104260,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsequentialiterable.h",
@@ -101914,6 +104317,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsequentialiterable.h",
@@ -102258,6 +104662,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsequentialiterable.h",
@@ -102417,6 +104822,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsettings.h",
@@ -103395,6 +105801,15 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [
+    {
+     "name": "ref",
+     "type": {
+      "canonical": "QAtomicInt",
+      "spelling": "QAtomicInt"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qshareddata.h",
@@ -103503,6 +105918,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsharedmemory.h",
@@ -104072,6 +106488,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qobject.h",
@@ -104198,6 +106615,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsignalmapper.h",
@@ -104596,6 +107014,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsize.h",
@@ -105084,6 +107503,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsize.h",
@@ -105590,6 +108010,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsocketnotifier.h",
@@ -105664,6 +108085,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsocketnotifier.h",
@@ -106023,6 +108445,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QSortFilterProxyModel::Direction",
@@ -108254,6 +110677,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QStandardPaths::LocateOption",
@@ -108507,6 +110931,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbytearraymatcher.h",
@@ -108604,6 +111029,15 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "instance",
+     "type": {
+      "canonical": "QObject *(*)()",
+      "spelling": "QtPluginInstanceFunction"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qplugin.h",
@@ -108663,6 +111097,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstorageinfo.h",
@@ -109118,6 +111553,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QString::SectionFlag",
@@ -116103,6 +118539,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringconverter_base.h",
@@ -116430,6 +118867,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QStringConverterBase::Flag",
@@ -116474,11 +118912,140 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": {
+    "access": "public",
+    "virtual": false
+   },
+   "enums": [],
+   "fields": [
+    {
+     "name": "flags",
+     "type": {
+      "canonical": "QFlags<QStringConverterBase::Flag>",
+      "spelling": "Flags"
+     }
+    },
+    {
+     "name": "internalState",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "remainingChars",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    },
+    {
+     "name": "invalidChars",
+     "type": {
+      "canonical": "long long",
+      "spelling": "qsizetype"
+     }
+    },
+    {
+     "name": "clearFn",
+     "type": {
+      "canonical": "void (*)(QStringConverterBase::State *) noexcept",
+      "spelling": "ClearDataFn"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qstringconverter_base.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "State",
+     "params": [
+      {
+       "default": true,
+       "name": "f",
+       "type": {
+        "canonical": "QFlags<QStringConverterBase::Flag>",
+        "spelling": "Flags"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": true,
+     "name": "State",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "QStringConverterBase::State &&",
+        "spelling": "State &&"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "clear",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "void",
+      "spelling": "void"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "reset",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "void",
+      "spelling": "void"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "private",
+     "copy": true,
+     "kind": "ctor",
+     "name": "State",
+     "params": []
+    }
+   ],
+   "module": "QtCore",
+   "name": "QStringConverterBase::State",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QStringConverter"
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringconverter.h",
@@ -116790,6 +119357,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringconverter.h",
@@ -117013,6 +119581,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringlistmodel.h",
@@ -117599,6 +120168,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringmatcher.h",
@@ -117927,6 +120497,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringtokenizer.h",
@@ -117968,6 +120539,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstringview.h",
@@ -120409,6 +122981,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsysinfo.h",
@@ -120645,6 +123218,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qsystemsemaphore.h",
@@ -121093,6 +123667,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtemporarydir.h",
@@ -121312,6 +123887,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtemporaryfile.h",
@@ -121748,6 +124324,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextBoundaryFinder::BoundaryReason",
@@ -122231,6 +124808,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextStream::NumberFlag",
@@ -123152,6 +125730,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextstream.h",
@@ -123309,6 +125888,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qthread.h",
@@ -124097,6 +126677,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qthreadpool.h",
@@ -124634,6 +127215,15 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [
+    {
+     "name": "id",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qthreadstorage.h",
@@ -124706,6 +127296,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qthreadstorage.h",
@@ -124737,6 +127328,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdatetime.h",
@@ -125413,6 +128005,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtimeline.h",
@@ -126335,6 +128928,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtimezone.h",
@@ -127346,6 +129940,57 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "abbreviation",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "atUtc",
+     "type": {
+      "canonical": "QDateTime",
+      "spelling": "QDateTime"
+     }
+    },
+    {
+     "name": "offsetFromUtc",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "standardTimeOffset",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "daylightTimeOffset",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qtimezone.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtCore",
+   "name": "QTimeZone::OffsetData",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QObject"
    ],
@@ -127354,6 +129999,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtimer.h",
@@ -128047,6 +130693,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcoreevent.h",
@@ -128209,6 +130856,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtranslator.h",
@@ -128546,6 +131194,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtransposeproxymodel.h",
@@ -129344,6 +131993,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtypeinfo.h",
@@ -129358,6 +132008,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtyperevision.h",
@@ -129477,6 +132128,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qexception.h",
@@ -129615,6 +132267,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -129913,6 +132566,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproperty.h",
@@ -130060,6 +132714,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpropertyprivate.h",
@@ -130230,6 +132885,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QUrl::ComponentFormattingOption",
@@ -131678,6 +134334,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qurlquery.h",
@@ -132345,6 +135002,36 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "data1",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "data2",
+     "type": {
+      "canonical": "unsigned short",
+      "spelling": "ushort"
+     }
+    },
+    {
+     "name": "data3",
+     "type": {
+      "canonical": "unsigned short",
+      "spelling": "ushort"
+     }
+    },
+    {
+     "name": "data4",
+     "type": {
+      "canonical": "unsigned char[8]",
+      "spelling": "uchar[8]"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "quuid.h",
@@ -132847,6 +135534,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvarlengtharray.h",
@@ -132987,6 +135675,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvariant.h",
@@ -135333,6 +138022,335 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "data",
+     "type": {
+      "canonical": "QVariant::Private::(unnamed union at /usr/include/qt6/QtCore/qvariant.h:151:9)",
+      "spelling": "union (unnamed at /usr/include/qt6/QtCore/qvariant.h:151:9)"
+     }
+    },
+    {
+     "name": "is_shared",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quintptr"
+     }
+    },
+    {
+     "name": "is_null",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quintptr"
+     }
+    },
+    {
+     "name": "packedType",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quintptr"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qvariant.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "canUseInternalSpace",
+     "params": [
+      {
+       "default": false,
+       "name": "type",
+       "type": {
+        "canonical": "const QtPrivate::QMetaTypeInterface *",
+        "spelling": "const QtPrivate::QMetaTypeInterface *"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Private",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Private",
+     "params": [
+      {
+       "default": false,
+       "name": "iface",
+       "type": {
+        "canonical": "const QtPrivate::QMetaTypeInterface *",
+        "spelling": "const QtPrivate::QMetaTypeInterface *"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "storage",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "const void *",
+      "spelling": "const void *"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "typeInterface",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "const QtPrivate::QMetaTypeInterface *",
+      "spelling": "const QtPrivate::QMetaTypeInterface *"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "type",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QMetaType",
+      "spelling": "QMetaType"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QVariant::Private",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "ref",
+     "type": {
+      "canonical": "QAtomicInt",
+      "spelling": "QAtomicInt"
+     }
+    },
+    {
+     "name": "offset",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qvariant.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "private",
+     "default_ctor": true,
+     "kind": "ctor",
+     "name": "PrivateShared",
+     "params": []
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "computeOffset",
+     "params": [
+      {
+       "default": false,
+       "name": "ps",
+       "type": {
+        "canonical": "QVariant::PrivateShared *",
+        "spelling": "PrivateShared *"
+       }
+      },
+      {
+       "default": false,
+       "name": "align",
+       "type": {
+        "canonical": "unsigned long",
+        "spelling": "size_t"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "int",
+      "spelling": "int"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "computeAllocationSize",
+     "params": [
+      {
+       "default": false,
+       "name": "size",
+       "type": {
+        "canonical": "unsigned long",
+        "spelling": "size_t"
+       }
+      },
+      {
+       "default": false,
+       "name": "align",
+       "type": {
+        "canonical": "unsigned long",
+        "spelling": "size_t"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "unsigned long",
+      "spelling": "size_t"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "create",
+     "params": [
+      {
+       "default": false,
+       "name": "size",
+       "type": {
+        "canonical": "unsigned long",
+        "spelling": "size_t"
+       }
+      },
+      {
+       "default": false,
+       "name": "align",
+       "type": {
+        "canonical": "unsigned long",
+        "spelling": "size_t"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QVariant::PrivateShared *",
+      "spelling": "PrivateShared *"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "free",
+     "params": [
+      {
+       "default": false,
+       "name": "p",
+       "type": {
+        "canonical": "QVariant::PrivateShared *",
+        "spelling": "PrivateShared *"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "void",
+      "spelling": "void"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "data",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "const void *",
+      "spelling": "const void *"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "data",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "void *",
+      "spelling": "void *"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtCore",
+   "name": "QVariant::PrivateShared",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QAbstractAnimation"
    ],
@@ -135341,6 +138359,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvariantanimation.h",
@@ -135926,6 +138945,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvariant.h",
@@ -135959,6 +138979,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qversionnumber.h",
@@ -136529,6 +139550,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qwaitcondition.h",
@@ -136751,6 +139773,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qreadwritelock.h",
@@ -136836,6 +139859,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -137012,6 +140036,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -137220,6 +140245,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -137322,6 +140348,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -137410,6 +140437,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -137490,6 +140518,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -137663,6 +140692,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",
@@ -138683,6 +141713,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qxmlstream.h",

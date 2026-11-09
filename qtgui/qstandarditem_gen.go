@@ -1088,3 +1088,31 @@ func (this *QStandardItem) Type() int {
 	r := C.qute_QStandardItem_type(self)
 	return int(r)
 }
+
+// Read wraps QStandardItem::read.
+//
+//	C++: void QStandardItem::read(QDataStream & in)
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#read
+func (this *QStandardItem) Read(in qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QStandardItem.Read")
+	}
+	C.qute_QStandardItem_read(self, inPtr)
+}
+
+// Write wraps QStandardItem::write.
+//
+//	C++: void QStandardItem::write(QDataStream & out) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#write
+func (this *QStandardItem) Write(out qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QStandardItem.Write")
+	}
+	C.qute_QStandardItem_write(self, outPtr)
+}

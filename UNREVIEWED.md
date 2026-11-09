@@ -6,7 +6,7 @@ default rule. Fix one by adding an overlay entry in `spec/overlays/<module>.yaml
 (an ownership rule, `reviewed: true`, a `name`, or `skip`), then regenerate.
 A constructor argument named `parent` is treated as reviewed (`transfer-this`).
 
-Bound: 4661 constructors, methods and functions; 4661 need no review or are reviewed.
+Bound: 6827 constructors, methods and functions; 6827 need no review or are reviewed.
 
 ## Default ownership rules (0)
 
@@ -14,879 +14,382 @@ Bound: 4661 constructors, methods and functions; 4661 need no review or are revi
 ## Numbered overload names (0)
 
 
-## Skipped: missing type support (498)
+## Skipped: missing type support (148)
 
 These bind once the generator learns the type. Counts by type:
 
 | Type | Methods |
 | --- | --- |
-| `QCalendar` | 31 |
-| `QTextCursor` | 16 |
-| `unsigned char * (out-parameter or buffer)` | 15 |
-| `QTextCharFormat` | 14 |
-| `QDataStream` | 12 |
-| `QTimeZone` | 12 |
-| `QFont::Tag` | 10 |
-| `QTransform & (out-parameter)` | 10 |
-| `QBitmap` | 9 |
-| `QRegularExpression` | 9 |
-| `QLocale` | 8 |
-| `QWindow` | 8 |
-| `int * (out-parameter or buffer)` | 8 |
-| `void` | 8 |
-| `QColorSpace` | 7 |
-| `QTextBlock` | 7 |
-| `QBindable<bool>` | 6 |
-| `QColorTransform` | 6 |
-| `QItemSelection` | 6 |
-| `QLineF` | 6 |
-| `QMetaType` | 6 |
-| `QRect & (out-parameter)` | 6 |
-| `QString & (out-parameter)` | 6 |
-| `std::function<QVariant (const QUrl &)>` | 6 |
-| `QBindable<int>` | 5 |
-| `QGraphicsWidget` | 5 |
-| `QLine` | 5 |
-| `QPicture` | 5 |
-| `QPoint` | 5 |
-| `QPointF` | 5 |
-| `QStyleOption` | 5 |
-| `QStyleOptionViewItem` | 5 |
-| `QTextOption` | 5 |
-| `std::chrono::duration<long, std::ratio<1, 1000>>` | 5 |
-| `QFontDatabase::WritingSystem` | 4 |
-| `QGraphicsEffect` | 4 |
-| `QKeyCombination` | 4 |
-| `QModelRoleDataSpan` | 4 |
-| `QSessionManager` | 4 |
-| `QTextEdit::ExtraSelection` | 4 |
-| `QTextOption::WrapMode` | 4 |
-| `char * (out-parameter or buffer)` | 4 |
-| `std::reverse_iterator<const QRect *>` | 4 |
-| `QBitArray` | 3 |
-| `QByteArrayView` | 3 |
-| `QEasingCurve` | 3 |
-| `QFormLayout::TakeRowResult` | 3 |
-| `QGradient::Preset` | 3 |
-| `QHash<QString, QVariant>` | 3 |
-| `QJsonArray` | 3 |
-| `QJsonDocument` | 3 |
-| `QJsonObject` | 3 |
-| `QJsonValue` | 3 |
-| `QMap<QString, QVariant>` | 3 |
-| `QPagedPaintDevice` | 3 |
-| `QPixelFormat` | 3 |
-| `QStaticText` | 3 |
-| `QStyleOptionComplex` | 3 |
-| `QTextItem` | 3 |
-| `QAbstractEventDispatcher` | 2 |
-| `QAbstractFileIconProvider` | 2 |
-| `QAbstractNativeEventFilter` | 2 |
-| `QBindable<QAbstractItemModel *>` | 2 |
-| `QBindable<Qt::CaseSensitivity>` | 2 |
-| `QBindingStorage` | 2 |
-| `QByteArray` | 2 |
-| `QDir` | 2 |
-| `QEventPoint` | 2 |
-| `QFlags<QDir::Filter>` | 2 |
-| `QFlags<QEventLoop::ProcessEventsFlag>` | 2 |
-| `QFontInfo` | 2 |
-| `QGradient` | 2 |
-| `QGraphicsItemGroup` | 2 |
-| `QGraphicsProxyWidget` | 2 |
-| `QGraphicsTransform` | 2 |
-| `QHash<int, QByteArray>` | 2 |
-| `QItemEditorFactory` | 2 |
-| `QList<QPolygonF>` | 2 |
-| `QMap<int, QVariant>` | 2 |
-| `QMovie` | 2 |
-| `QPlatformMenu` | 2 |
-| `QPointingDevice` | 2 |
-| `QSpan<const QRect>` | 2 |
-| `QStyleOptionGraphicsItem` | 2 |
-| `QTableWidgetSelectionRange` | 2 |
-| `QTextCursor::MoveOperation` | 2 |
-| `QTextFormat` | 2 |
-| `QTextFrame` | 2 |
-| `QThread` | 2 |
-| `QTranslator` | 2 |
-| `QUrlTwoFlags<QUrl::UrlFormattingOption, QUrl::ComponentFormattingOption>` | 2 |
-| `QUuid` | 2 |
-| `QVariant` | 2 |
-| `bool * (out-parameter or buffer)` | 2 |
-| `char *const[]` | 2 |
-| `std::filesystem::path` | 2 |
-| `QAbstractTextDocumentLayout` | 1 |
-| `QAbstractUndoItem` | 1 |
-| `QBackingStore` | 1 |
-| `QBasicTimer` | 1 |
-| `QBindable<QRegularExpression>` | 1 |
-| `QBindable<Qt::TimerType>` | 1 |
-| `QBrush` | 1 |
-| `QCursor` | 1 |
-| `QDateTime` | 1 |
-| `QGlyphRun` | 1 |
-| `QGraphicsLineItem` | 1 |
-| `QGraphicsPathItem` | 1 |
-| `QGraphicsPolygonItem` | 1 |
-| `QHelpEvent` | 1 |
-| `QIconEngine` | 1 |
-| `QImage` | 1 |
-| `QImageReader` | 1 |
-| `QInputDevice` | 1 |
-| `QInputDevice::DeviceType` | 1 |
-| `QInputMethod` | 1 |
-| `QLatin1String` | 1 |
-| `QList<QByteArray>` | 1 |
-| `QList<QString>` | 1 |
-| `QList<QVariant>` | 1 |
-| `QMap<QDate, QTextCharFormat>` | 1 |
-| `QPainter::PixmapFragment` | 1 |
-| `QPainterPath::Element` | 1 |
-| `QPalette` | 1 |
-| `QPartialOrdering` | 1 |
-| `QPen` | 1 |
-| `QPermission` | 1 |
-| `QPersistentModelIndex` | 1 |
-| `QPlatformMenuBar` | 1 |
-| `QPlatformNativeInterface` | 1 |
-| `QPlatformPixmap` | 1 |
-| `QPointer<QObject>` | 1 |
-| `QPointingDevice::PointerType` | 1 |
-| `QPointingDeviceUniqueId` | 1 |
-| `QRectF` | 1 |
-| `QSpan<char>` | 1 |
-| `QSpan<std::byte>` | 1 |
-| `QSpan<unsigned char>` | 1 |
-| `QStyleHints` | 1 |
-| `QStyleOptionButton` | 1 |
-| `QTextObject` | 1 |
-| `QTransform::Affine` | 1 |
-| `QUrl` | 1 |
-| `QUrlQuery` | 1 |
-| `QVector2D` | 1 |
-| `_IO_FILE` | 1 |
-| `bool (*)(QIODevice &, QMap<QString, QVariant> &)` | 1 |
-| `double * (out-parameter or buffer)` | 1 |
-| `std::chrono::duration<long, std::ratio<1, 1000000000>>` | 1 |
-| `std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000>>>` | 1 |
-| `std::function<void (const QString &, const QByteArray &)>` | 1 |
-| `std::initializer_list<QWidget *>` | 1 |
-| `std::optional<QFont>` | 1 |
-| `void (*)()` | 1 |
+| `QVector3D` | 8 |
+| `char32_t` | 8 |
+| `QTextLength` | 7 |
+| `QFileInfo` | 5 |
+| `QJsonObject::iterator` | 5 |
+| `QChar::Script` | 4 |
+| `QJsonObject::const_iterator` | 4 |
+| `QSurfaceFormat` | 4 |
+| `QTextOption::Tab` | 4 |
+| `QTimeZone::OffsetData` | 4 |
+| `QCalendar::YearMonthDay` | 3 |
+| `QColorSpace::PrimaryPoints` | 3 |
+| `QMarginsF` | 3 |
+| `QTextImageFormat` | 3 |
+| `QTextListFormat` | 3 |
+| `QtPrivate::QMetaTypeInterface` | 3 |
+| `QGraphicsLayout` | 2 |
+| `QJsonArray::iterator` | 2 |
+| `QMap<QFont::Tag, float>` | 2 |
+| `QMap<QFont::Tag, unsigned int>` | 2 |
+| `QPageLayout` | 2 |
+| `QPageRanges` | 2 |
+| `QPdfOutputIntent` | 2 |
+| `QRawFont` | 2 |
+| `QRegularExpressionMatchIterator` | 2 |
+| `QStringView` | 2 |
+| `QTextBlockUserData` | 2 |
+| `QTextDocumentPrivate` | 2 |
+| `QTextFrameLayoutData` | 2 |
+| `QTextList` | 2 |
+| `QTextListFormat::Style` | 2 |
+| `QTextTable` | 2 |
+| `QTextTableFormat` | 2 |
+| `QUuid::Id128Bytes` | 2 |
+| `QVector4D` | 2 |
+| `QVulkanInstance` | 2 |
+| `QtPrivate::QKeyValueRange<QJsonObject>` | 2 |
+| `char16_t` | 2 |
+| `std::pair<QString, QString>` | 2 |
+| `std::pair<double, QColor>` | 2 |
+| `QAccessibilityHints` | 1 |
+| `QAccessibleInterface` | 1 |
+| `QAnyStringView` | 1 |
+| `QCalendar::SystemId` | 1 |
+| `QDebug` | 1 |
+| `QFlags<QImageIOHandler::Transformation>` | 1 |
+| `QFontVariableAxis` | 1 |
+| `QGraphicsEffectSource` | 1 |
+| `QImageIOHandler::ImageOption` | 1 |
+| `QItemEditorCreatorBase` | 1 |
+| `QMatrix4x4` | 1 |
+| `QPageLayout::Orientation` | 1 |
+| `QPageSize` | 1 |
+| `QRgba64` | 1 |
+| `QRgbaFloat<float>` | 1 |
+| `QRgbaFloat<qfloat16>` | 1 |
+| `QSysInfo::Endian` | 1 |
+| `QTextCursorPrivate` | 1 |
+| `QTextLayout` | 1 |
+| `QTextLayout::FormatRange` | 1 |
+| `QTextTableCellFormat` | 1 |
+| `Qt::partial_ordering` | 1 |
+| `Qt::strong_ordering` | 1 |
+| `Qt::weak_ordering` | 1 |
+| `QtPrivate::QKeyValueRange<QJsonObject &>` | 1 |
+| `QtPrivate::QKeyValueRange<const QJsonObject &>` | 1 |
+| `char & (out-parameter)` | 1 |
+| `unsigned char[8]` | 1 |
+| `unsigned int * (out-parameter or buffer)` | 1 |
 
-## Skipped: missing type support, by class (498)
+## Skipped: missing type support, by class (148)
 
 
-### QAbstractItemDelegate
+### QAbstractFileIconProvider
 
-- `void QAbstractItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const`: unsupported type "const QStyleOptionViewItem &" (unknown)
-- `QSize QAbstractItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const`: unsupported type "const QStyleOptionViewItem &" (unknown)
-- `QWidget * QAbstractItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const`: unsupported type "const QStyleOptionViewItem &" (unknown)
-- `void QAbstractItemDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const`: unsupported type "const QStyleOptionViewItem &" (unknown)
-- `bool QAbstractItemDelegate::editorEvent(QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index)`: unsupported type "const QStyleOptionViewItem &" (unknown)
-- `bool QAbstractItemDelegate::helpEvent(QHelpEvent * event, QAbstractItemView * view, const QStyleOptionViewItem & option, const QModelIndex & index)`: unsupported type "QHelpEvent *" (pointer or out-parameter)
+- `QIcon QAbstractFileIconProvider::icon(const QFileInfo &) const`: unsupported type "const QFileInfo &" (unknown)
+- `QString QAbstractFileIconProvider::type(const QFileInfo &) const`: unsupported type "const QFileInfo &" (unknown)
+
+### QBitArray
+
+- `quint32 QBitArray::toUInt32(QSysInfo::Endian endianness, bool * ok = …) const`: unsupported type "QSysInfo::Endian" (unknown)
+
+### QCalendar
+
+- `QCalendar::QCalendar(SystemId id)`: unsupported type "QCalendar::SystemId" (unknown)
+- `QDate QCalendar::dateFromParts(const YearMonthDay & parts) const`: unsupported type "const QCalendar::YearMonthDay &" (unknown)
+- `QDate QCalendar::matchCenturyToWeekday(const YearMonthDay & parts, int dow) const`: unsupported type "const QCalendar::YearMonthDay &" (unknown)
+- `YearMonthDay QCalendar::partsFromDate(QDate date) const`: return: unsupported type "QCalendar::YearMonthDay" (unknown)
+
+### QColorSpace
+
+- `QColorSpace::QColorSpace(const PrimaryPoints & primaryPoints, TransferFunction transferFunction, float gamma = …)`: unsupported type "const QColorSpace::PrimaryPoints &" (unknown)
+- `void QColorSpace::setPrimaryPoints(const PrimaryPoints & primaryPoints)`: unsupported type "const QColorSpace::PrimaryPoints &" (unknown)
+- `PrimaryPoints QColorSpace::primaryPoints() const`: return: unsupported type "QColorSpace::PrimaryPoints" (unknown)
+
+### QColorTransform
+
+- `QRgba64 QColorTransform::map(QRgba64 rgba64) const`: unsupported type "QRgba64" (unknown)
+- `QRgbaFloat16 QColorTransform::map(QRgbaFloat16 rgbafp16) const`: unsupported type "QRgbaFloat<qfloat16>" (unknown)
+- `QRgbaFloat32 QColorTransform::map(QRgbaFloat32 rgbafp32) const`: unsupported type "QRgbaFloat<float>" (unknown)
+
+### QDataStream
+
+- `QDataStream & QDataStream::readBytes(char *&, qint64 & len)`: unsupported type "char *&" (pointer or out-parameter to primitive)
+
+### QDir
+
+- `QFileInfoList QDir::entryInfoList(Filters filters = …, SortFlags sort = …) const`: return: unsupported type "QFileInfo" (unknown)
+- `QFileInfoList QDir::entryInfoList(const QStringList & nameFilters, Filters filters = …, SortFlags sort = …) const`: return: unsupported type "QFileInfo" (unknown)
+- `QFileInfoList QDir::drives()`: return: unsupported type "QFileInfo" (unknown)
+
+### QFontDatabase
+
+- `void QFontDatabase::addApplicationFallbackFontFamily(QChar::Script script, const QString & familyName)`: unsupported type "QChar::Script" (unknown)
+- `bool QFontDatabase::removeApplicationFallbackFontFamily(QChar::Script script, const QString & familyName)`: unsupported type "QChar::Script" (unknown)
+- `void QFontDatabase::setApplicationFallbackFontFamilies(QChar::Script, const QStringList & familyNames)`: unsupported type "QChar::Script" (unknown)
+- `QStringList QFontDatabase::applicationFallbackFontFamilies(QChar::Script script)`: unsupported type "QChar::Script" (unknown)
+
+### QFontInfo
+
+- `QList<QFontVariableAxis> QFontInfo::variableAxes() const`: return: unsupported type "QFontVariableAxis" (unknown)
+
+### QGlyphRun
+
+- `QRawFont QGlyphRun::rawFont() const`: return: unsupported type "QRawFont" (unknown)
+- `void QGlyphRun::setRawFont(const QRawFont & rawFont)`: unsupported type "const QRawFont &" (unknown)
+- `void QGlyphRun::setRawData(const quint32 * glyphIndexArray, const QPointF * glyphPositionArray, int size)`: unsupported type "const unsigned int *" (pointer or out-parameter to primitive)
+
+### QGradient
+
+- `void QGradient::setStops(const QGradientStops & stops)`: unsupported type "std::pair<double, QColor>" (unknown)
+- `QGradientStops QGradient::stops() const`: return: unsupported type "std::pair<double, QColor>" (unknown)
+
+### QGraphicsEffect
+
+- `QGraphicsEffectSource * QGraphicsEffect::source() const`: return: unsupported type "QGraphicsEffectSource *" (pointer or out-parameter)
+
+### QGraphicsRotation
+
+- `QVector3D QGraphicsRotation::origin() const`: return: unsupported type "QVector3D" (unknown)
+- `void QGraphicsRotation::setOrigin(const QVector3D & point)`: unsupported type "const QVector3D &" (unknown)
+- `QVector3D QGraphicsRotation::axis() const`: return: unsupported type "QVector3D" (unknown)
+- `void QGraphicsRotation::setAxis(const QVector3D & axis)`: unsupported type "const QVector3D &" (unknown)
+
+### QGraphicsScale
+
+- `QVector3D QGraphicsScale::origin() const`: return: unsupported type "QVector3D" (unknown)
+- `void QGraphicsScale::setOrigin(const QVector3D & point)`: unsupported type "const QVector3D &" (unknown)
+
+### QGraphicsTransform
+
+- `void QGraphicsTransform::applyTo(QMatrix4x4 * matrix) const`: unsupported type "QMatrix4x4 *" (pointer or out-parameter)
+
+### QGraphicsWidget
+
+- `QGraphicsLayout * QGraphicsWidget::layout() const`: return: unsupported type "QGraphicsLayout *" (pointer or out-parameter)
+- `void QGraphicsWidget::setLayout(QGraphicsLayout * layout)`: unsupported type "QGraphicsLayout *" (pointer or out-parameter)
+- `void QGraphicsWidget::setContentsMargins(QMarginsF margins)`: unsupported type "QMarginsF" (unknown)
+- `void QGraphicsWidget::setWindowFrameMargins(QMarginsF margins)`: unsupported type "QMarginsF" (unknown)
+
+### QImageReader
+
+- `QImageIOHandler::Transformations QImageReader::transformation() const`: return: unsupported type "QFlags<QImageIOHandler::Transformation>" (flags of unbound enum)
+- `bool QImageReader::supportsOption(QImageIOHandler::ImageOption option) const`: unsupported type "QImageIOHandler::ImageOption" (unknown)
+
+### QItemEditorFactory
+
+- `void QItemEditorFactory::registerEditor(int userType, QItemEditorCreatorBase * creator)`: unsupported type "QItemEditorCreatorBase *" (pointer or out-parameter)
+
+### QJsonArray
+
+- `iterator QJsonArray::insert(iterator before, const QJsonValue & value)`: unsupported type "QJsonArray::iterator" (unknown)
+- `iterator QJsonArray::erase(iterator it)`: unsupported type "QJsonArray::iterator" (unknown)
+
+### QJsonObject
+
+- `iterator QJsonObject::erase(iterator it)`: unsupported type "QJsonObject::iterator" (unknown)
+- `QtPrivate::QKeyValueRange<QJsonObject &> QJsonObject::asKeyValueRange()`: return: unsupported type "QtPrivate::QKeyValueRange<QJsonObject &>" (unknown)
+- `QtPrivate::QKeyValueRange<const QJsonObject &> QJsonObject::asKeyValueRange() const`: return: unsupported type "QtPrivate::QKeyValueRange<const QJsonObject &>" (unknown)
+- `QtPrivate::QKeyValueRange<QJsonObject> QJsonObject::asKeyValueRange()`: return: unsupported type "QtPrivate::QKeyValueRange<QJsonObject>" (unknown)
+- `QtPrivate::QKeyValueRange<QJsonObject> QJsonObject::asKeyValueRange() const`: return: unsupported type "QtPrivate::QKeyValueRange<QJsonObject>" (unknown)
+- `iterator QJsonObject::find(const QString & key)`: return: unsupported type "QJsonObject::iterator" (unknown)
+- `const_iterator QJsonObject::find(const QString & key) const`: return: unsupported type "QJsonObject::const_iterator" (unknown)
+- `const_iterator QJsonObject::constFind(const QString & key) const`: return: unsupported type "QJsonObject::const_iterator" (unknown)
+- `iterator QJsonObject::insert(const QString & key, const QJsonValue & value)`: return: unsupported type "QJsonObject::iterator" (unknown)
+- `iterator QJsonObject::find(QStringView key)`: return: unsupported type "QJsonObject::iterator" (unknown)
+- `const_iterator QJsonObject::find(QStringView key) const`: return: unsupported type "QJsonObject::const_iterator" (unknown)
+- `const_iterator QJsonObject::constFind(QStringView key) const`: return: unsupported type "QJsonObject::const_iterator" (unknown)
+- `iterator QJsonObject::insert(QStringView key, const QJsonValue & value)`: return: unsupported type "QJsonObject::iterator" (unknown)
+
+### QJsonValue
+
+- `QAnyStringView QJsonValue::toStringView(QAnyStringView defaultValue = …) const`: return: unsupported type "QAnyStringView" (string view result)
+
+### QLocale
+
+- `QString QLocale::toString(qlonglong number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(qulonglong number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(int number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(uint number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(long number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(ulong number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(short number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+- `QString QLocale::toString(ushort number, int fieldWidth, char32_t fillChar) const`: unsupported type "char32_t" (unknown)
+
+### QMetaType
+
+- `QMetaType::QMetaType(const QtPrivate::QMetaTypeInterface * d)`: unsupported type "const QtPrivate::QMetaTypeInterface *" (pointer or out-parameter)
+- `bool QMetaType::debugStream(QDebug & dbg, const void * rhs)`: unsupported type "QDebug &" (pointer or out-parameter)
+- `const QtPrivate::QMetaTypeInterface * QMetaType::iface()`: return: unsupported type "const QtPrivate::QMetaTypeInterface *" (pointer or out-parameter)
+- `const QtPrivate::QMetaTypeInterface * QMetaType::iface() const`: return: unsupported type "const QtPrivate::QMetaTypeInterface *" (pointer or out-parameter)
+
+### QPagedPaintDevice
+
+- `bool QPagedPaintDevice::setPageLayout(const QPageLayout & pageLayout)`: unsupported type "const QPageLayout &" (unknown)
+- `bool QPagedPaintDevice::setPageSize(const QPageSize & pageSize)`: unsupported type "const QPageSize &" (unknown)
+- `bool QPagedPaintDevice::setPageOrientation(QPageLayout::Orientation orientation)`: unsupported type "QPageLayout::Orientation" (unknown)
+- `bool QPagedPaintDevice::setPageMargins(const QMarginsF & margins, QPageLayout::Unit units = …)`: unsupported type "const QMarginsF &" (unknown)
+- `QPageLayout QPagedPaintDevice::pageLayout() const`: return: unsupported type "QPageLayout" (unknown)
+- `void QPagedPaintDevice::setPageRanges(const QPageRanges & ranges)`: unsupported type "const QPageRanges &" (unknown)
+- `QPageRanges QPagedPaintDevice::pageRanges() const`: return: unsupported type "QPageRanges" (unknown)
+
+### QPartialOrdering
+
+- `QPartialOrdering::QPartialOrdering(Qt::partial_ordering order)`: unsupported type "Qt::partial_ordering" (unknown)
+- `QPartialOrdering::QPartialOrdering(Qt::weak_ordering stdorder)`: unsupported type "Qt::weak_ordering" (unknown)
+- `QPartialOrdering::QPartialOrdering(Qt::strong_ordering stdorder)`: unsupported type "Qt::strong_ordering" (unknown)
+
+### QPdfWriter
+
+- `QPdfOutputIntent QPdfWriter::outputIntent() const`: return: unsupported type "QPdfOutputIntent" (unknown)
+- `void QPdfWriter::setOutputIntent(const QPdfOutputIntent & intent)`: unsupported type "const QPdfOutputIntent &" (unknown)
+
+### QRegularExpression
+
+- `QRegularExpressionMatchIterator QRegularExpression::globalMatch(const QString & subject, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const`: return: unsupported type "QRegularExpressionMatchIterator" (unknown)
+- `QRegularExpressionMatchIterator QRegularExpression::globalMatchView(QStringView subjectView, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const`: return: unsupported type "QRegularExpressionMatchIterator" (unknown)
+
+### QRegularExpressionMatch
+
+- `QStringView QRegularExpressionMatch::capturedView(int nth = …) const`: return: unsupported type "QStringView" (string view result)
+- `QStringView QRegularExpressionMatch::capturedView(QAnyStringView name) const`: return: unsupported type "QStringView" (string view result)
+
+### QStyleHints
+
+- `const QAccessibilityHints * QStyleHints::accessibility() const`: return: unsupported type "const QAccessibilityHints *" (pointer or out-parameter)
+
+### QSurface
+
+- `QSurfaceFormat QSurface::format() const`: return: unsupported type "QSurfaceFormat" (unknown)
+
+### QTextBlock
+
+- `QTextBlock::QTextBlock(QTextDocumentPrivate * priv, int b)`: unsupported type "QTextDocumentPrivate *" (pointer or out-parameter)
+- `QTextLayout * QTextBlock::layout() const`: return: unsupported type "QTextLayout *" (pointer or out-parameter)
+- `QList<QTextLayout::FormatRange> QTextBlock::textFormats() const`: return: unsupported type "QTextLayout::FormatRange" (unknown)
+- `QTextList * QTextBlock::textList() const`: return: unsupported type "QTextList *" (pointer or out-parameter)
+- `QTextBlockUserData * QTextBlock::userData() const`: return: unsupported type "QTextBlockUserData *" (pointer or out-parameter)
+- `void QTextBlock::setUserData(QTextBlockUserData * data)`: unsupported type "QTextBlockUserData *" (pointer or out-parameter)
+
+### QTextBlockFormat
+
+- `void QTextBlockFormat::setTabPositions(const QList<QTextOption::Tab> & tabs)`: unsupported type "QTextOption::Tab" (unknown)
+- `QList<QTextOption::Tab> QTextBlockFormat::tabPositions() const`: return: unsupported type "QTextOption::Tab" (unknown)
+
+### QTextCharFormat
+
+- `void QTextCharFormat::setFontFeatures(const QMap<QFont::Tag, quint32> & fontFeatures)`: unsupported type "const QMap<QFont::Tag, unsigned int> &" (map key or value)
+- `QMap<QFont::Tag, quint32> QTextCharFormat::fontFeatures() const`: return: unsupported type "QMap<QFont::Tag, unsigned int>" (map key or value)
+- `void QTextCharFormat::setFontVariableAxes(const QMap<QFont::Tag, float> & fontVariableAxes)`: unsupported type "const QMap<QFont::Tag, float> &" (map key or value)
+- `QMap<QFont::Tag, float> QTextCharFormat::fontVariableAxes() const`: return: unsupported type "QMap<QFont::Tag, float>" (map key or value)
+
+### QTextCursor
+
+- `QTextCursor::QTextCursor(QTextDocumentPrivate * p, int pos)`: unsupported type "QTextDocumentPrivate *" (pointer or out-parameter)
+- `QTextCursor::QTextCursor(QTextCursorPrivate * d)`: unsupported type "QTextCursorPrivate *" (pointer or out-parameter)
+- `QTextList * QTextCursor::insertList(const QTextListFormat & format)`: unsupported type "const QTextListFormat &" (unknown)
+- `QTextList * QTextCursor::insertList(QTextListFormat::Style style)`: unsupported type "QTextListFormat::Style" (unknown)
+- `QTextList * QTextCursor::createList(const QTextListFormat & format)`: unsupported type "const QTextListFormat &" (unknown)
+- `QTextList * QTextCursor::createList(QTextListFormat::Style style)`: unsupported type "QTextListFormat::Style" (unknown)
+- `QTextList * QTextCursor::currentList() const`: return: unsupported type "QTextList *" (pointer or out-parameter)
+- `QTextTable * QTextCursor::insertTable(int rows, int cols, const QTextTableFormat & format)`: unsupported type "const QTextTableFormat &" (unknown)
+- `QTextTable * QTextCursor::insertTable(int rows, int cols)`: return: unsupported type "QTextTable *" (pointer or out-parameter)
+- `QTextTable * QTextCursor::currentTable() const`: return: unsupported type "QTextTable *" (pointer or out-parameter)
+- `void QTextCursor::insertImage(const QTextImageFormat & format, QTextFrameFormat::Position alignment)`: unsupported type "const QTextImageFormat &" (unknown)
+- `void QTextCursor::insertImage(const QTextImageFormat & format)`: unsupported type "const QTextImageFormat &" (unknown)
+
+### QTextFormat
+
+- `QTextLength QTextFormat::lengthProperty(int propertyId) const`: return: unsupported type "QTextLength" (unknown)
+- `QList<QTextLength> QTextFormat::lengthVectorProperty(int propertyId) const`: return: unsupported type "QTextLength" (unknown)
+- `void QTextFormat::setProperty(int propertyId, const QList<QTextLength> & lengths)`: unsupported type "QTextLength" (unknown)
+- `QTextListFormat QTextFormat::toListFormat() const`: return: unsupported type "QTextListFormat" (unknown)
+- `QTextTableFormat QTextFormat::toTableFormat() const`: return: unsupported type "QTextTableFormat" (unknown)
+- `QTextImageFormat QTextFormat::toImageFormat() const`: return: unsupported type "QTextImageFormat" (unknown)
+- `QTextTableCellFormat QTextFormat::toTableCellFormat() const`: return: unsupported type "QTextTableCellFormat" (unknown)
+
+### QTextFrame
+
+- `QTextFrameLayoutData * QTextFrame::layoutData() const`: return: unsupported type "QTextFrameLayoutData *" (pointer or out-parameter)
+- `void QTextFrame::setLayoutData(QTextFrameLayoutData * data)`: unsupported type "QTextFrameLayoutData *" (pointer or out-parameter)
+
+### QTextFrameFormat
+
+- `void QTextFrameFormat::setWidth(const QTextLength & length)`: unsupported type "const QTextLength &" (unknown)
+- `QTextLength QTextFrameFormat::width() const`: return: unsupported type "QTextLength" (unknown)
+- `void QTextFrameFormat::setHeight(const QTextLength & height)`: unsupported type "const QTextLength &" (unknown)
+- `QTextLength QTextFrameFormat::height() const`: return: unsupported type "QTextLength" (unknown)
+
+### QTextOption
+
+- `void QTextOption::setTabs(const QList<Tab> & tabStops)`: unsupported type "QTextOption::Tab" (unknown)
+- `QList<Tab> QTextOption::tabs() const`: return: unsupported type "QTextOption::Tab" (unknown)
+
+### QTimeZone
+
+- `OffsetData QTimeZone::offsetData(const QDateTime & forDateTime) const`: return: unsupported type "QTimeZone::OffsetData" (unknown)
+- `OffsetData QTimeZone::nextTransition(const QDateTime & afterDateTime) const`: return: unsupported type "QTimeZone::OffsetData" (unknown)
+- `OffsetData QTimeZone::previousTransition(const QDateTime & beforeDateTime) const`: return: unsupported type "QTimeZone::OffsetData" (unknown)
+- `OffsetDataList QTimeZone::transitions(const QDateTime & fromDateTime, const QDateTime & toDateTime) const`: return: unsupported type "QTimeZone::OffsetData" (unknown)
+
+### QUrlQuery
+
+- `void QUrlQuery::setQueryItems(const QList<std::pair<QString, QString>> & query)`: unsupported type "std::pair<QString, QString>" (unknown)
+- `QList<std::pair<QString, QString>> QUrlQuery::queryItems(QUrl::ComponentFormattingOptions encoding = …) const`: return: unsupported type "std::pair<QString, QString>" (unknown)
+- `char16_t QUrlQuery::defaultQueryValueDelimiter()`: return: unsupported type "char16_t" (unknown)
+- `char16_t QUrlQuery::defaultQueryPairDelimiter()`: return: unsupported type "char16_t" (unknown)
+
+### QUuid
+
+- `QUuid::QUuid(Id128Bytes id128, QSysInfo::Endian order = …)`: unsupported type "QUuid::Id128Bytes" (unknown)
+- `Id128Bytes QUuid::toBytes(QSysInfo::Endian order = …) const`: return: unsupported type "QUuid::Id128Bytes" (unknown)
+- `uchar[8] QUuid::data4() const`: field: unsupported type "unsigned char[8]" (unknown)
+
+### QVector2D
+
+- `QVector2D::QVector2D(QVector3D vector)`: unsupported type "QVector3D" (unknown)
+- `QVector2D::QVector2D(QVector4D vector)`: unsupported type "QVector4D" (unknown)
+- `QVector3D QVector2D::toVector3D() const`: return: unsupported type "QVector3D" (unknown)
+- `QVector4D QVector2D::toVector4D() const`: return: unsupported type "QVector4D" (unknown)
+
+### QWindow
+
+- `void QWindow::setFormat(const QSurfaceFormat & format)`: unsupported type "const QSurfaceFormat &" (unknown)
+- `QSurfaceFormat QWindow::format() const`: return: unsupported type "QSurfaceFormat" (unknown)
+- `QSurfaceFormat QWindow::requestedFormat() const`: return: unsupported type "QSurfaceFormat" (unknown)
+- `QAccessibleInterface * QWindow::accessibleRoot() const`: return: unsupported type "QAccessibleInterface *" (pointer or out-parameter)
+- `void QWindow::setVulkanInstance(QVulkanInstance * instance)`: unsupported type "QVulkanInstance *" (pointer or out-parameter)
+- `QVulkanInstance * QWindow::vulkanInstance() const`: return: unsupported type "QVulkanInstance *" (pointer or out-parameter)
+
+## Skipped on purpose (426)
+
 
 ### QAbstractItemModel
 
-- `QMap<int, QVariant> QAbstractItemModel::itemData(const QModelIndex & index) const`: return: unsupported type "QMap<int, QVariant>" (unknown)
-- `bool QAbstractItemModel::setItemData(const QModelIndex & index, const QMap<int, QVariant> & roles)`: unsupported type "const QMap<int, QVariant> &" (unknown)
-- `QHash<int, QByteArray> QAbstractItemModel::roleNames() const`: return: unsupported type "QHash<int, QByteArray>" (unknown)
-- `void QAbstractItemModel::multiData(const QModelIndex & index, QModelRoleDataSpan roleDataSpan) const`: unsupported type "QModelRoleDataSpan" (unknown)
-- `void QAbstractItemModel::encodeData(const QModelIndexList & indexes, QDataStream & stream) const`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex & parent, QDataStream & stream)`: unsupported type "QDataStream &" (pointer or out-parameter)
+- `void QAbstractItemModel::multiData(const QModelIndex & index, QModelRoleDataSpan roleDataSpan) const`: on purpose: a batching optimisation of data(); use Data
 
 ### QAbstractProxyModel
 
-- `QBindable<QAbstractItemModel *> QAbstractProxyModel::bindableSourceModel()`: return: unsupported type "QBindable<QAbstractItemModel *>" (unknown)
-- `QItemSelection QAbstractProxyModel::mapSelectionToSource(const QItemSelection & selection) const`: unsupported type "const QItemSelection &" (unknown)
-- `QItemSelection QAbstractProxyModel::mapSelectionFromSource(const QItemSelection & selection) const`: unsupported type "const QItemSelection &" (unknown)
-- `QModelIndex QAbstractProxyModel::createSourceIndex(int row, int col, void * internalPtr) const`: unsupported type "void *" (pointer or out-parameter)
-
-### QAbstractSpinBox
-
-- `QValidator::State QAbstractSpinBox::validate(QString & input, int & pos) const`: unsupported type "QString &" (pointer or out-parameter)
-- `void QAbstractSpinBox::fixup(QString & input) const`: unsupported type "QString &" (pointer or out-parameter)
-
-### QBrush
-
-- `QBrush::QBrush(const QGradient & gradient)`: unsupported type "const QGradient &" (unknown)
-- `const QGradient * QBrush::gradient() const`: return: unsupported type "const QGradient *" (pointer or out-parameter)
-
-### QCalendarWidget
-
-- `QCalendar QCalendarWidget::calendar() const`: return: unsupported type "QCalendar" (unknown)
-- `void QCalendarWidget::setCalendar(QCalendar calendar)`: unsupported type "QCalendar" (unknown)
-- `QTextCharFormat QCalendarWidget::headerTextFormat() const`: return: unsupported type "QTextCharFormat" (unknown)
-- `void QCalendarWidget::setHeaderTextFormat(const QTextCharFormat & format)`: unsupported type "const QTextCharFormat &" (unknown)
-- `QTextCharFormat QCalendarWidget::weekdayTextFormat(Qt::DayOfWeek dayOfWeek) const`: return: unsupported type "QTextCharFormat" (unknown)
-- `void QCalendarWidget::setWeekdayTextFormat(Qt::DayOfWeek dayOfWeek, const QTextCharFormat & format)`: unsupported type "const QTextCharFormat &" (unknown)
-- `QMap<QDate, QTextCharFormat> QCalendarWidget::dateTextFormat() const`: return: unsupported type "QMap<QDate, QTextCharFormat>" (unknown)
-- `QTextCharFormat QCalendarWidget::dateTextFormat(QDate date) const`: return: unsupported type "QTextCharFormat" (unknown)
-- `void QCalendarWidget::setDateTextFormat(QDate date, const QTextCharFormat & format)`: unsupported type "const QTextCharFormat &" (unknown)
-
-### QClipboard
-
-- `QString QClipboard::text(QString & subtype, Mode mode = …) const`: unsupported type "QString &" (pointer or out-parameter)
-
-### QCommandLinkButton
-
-- `void QCommandLinkButton::initStyleOption(QStyleOptionButton * option) const`: unsupported type "QStyleOptionButton *" (pointer or out-parameter)
-
-### QCoreApplication
-
-- `void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime)`: unsupported type "QFlags<QEventLoop::ProcessEventsFlag>" (flags of unbound enum)
-- `void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, QDeadlineTimer deadline)`: unsupported type "QFlags<QEventLoop::ProcessEventsFlag>" (flags of unbound enum)
-- `QAbstractEventDispatcher * QCoreApplication::eventDispatcher()`: return: unsupported type "QAbstractEventDispatcher *" (pointer or out-parameter)
-- `void QCoreApplication::setEventDispatcher(QAbstractEventDispatcher * eventDispatcher)`: unsupported type "QAbstractEventDispatcher *" (pointer or out-parameter)
-- `Qt::PermissionStatus QCoreApplication::checkPermission(const QPermission & permission)`: unsupported type "const QPermission &" (unknown)
-- `bool QCoreApplication::installTranslator(QTranslator * messageFile)`: unsupported type "QTranslator *" (pointer or out-parameter)
-- `bool QCoreApplication::removeTranslator(QTranslator * messageFile)`: unsupported type "QTranslator *" (pointer or out-parameter)
-- `void QCoreApplication::installNativeEventFilter(QAbstractNativeEventFilter * filterObj)`: unsupported type "QAbstractNativeEventFilter *" (pointer or out-parameter)
-- `void QCoreApplication::removeNativeEventFilter(QAbstractNativeEventFilter * filterObj)`: unsupported type "QAbstractNativeEventFilter *" (pointer or out-parameter)
-
-### QCursor
-
-- `QCursor::QCursor(const QBitmap & bitmap, const QBitmap & mask, int hotX = …, int hotY = …)`: unsupported type "const QBitmap &" (unknown)
-- `QBitmap QCursor::bitmap() const`: return: unsupported type "QBitmap" (unknown)
-- `QBitmap QCursor::mask() const`: return: unsupported type "QBitmap" (unknown)
-
-### QDate
-
-- `QDate::QDate(int y, int m, int d, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `int QDate::year(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `int QDate::month(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `int QDate::day(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `int QDate::dayOfWeek(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `int QDate::dayOfYear(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `int QDate::daysInMonth(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `int QDate::daysInYear(QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDate::startOfDay(const QTimeZone & zone) const`: unsupported type "const QTimeZone &" (unknown)
-- `QDateTime QDate::endOfDay(const QTimeZone & zone) const`: unsupported type "const QTimeZone &" (unknown)
-- `QString QDate::toString(const QString & format, QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `QString QDate::toString(QStringView format, QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `bool QDate::setDate(int year, int month, int day, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `void QDate::getDate(int * year, int * month, int * day) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-- `QDate QDate::addMonths(int months, QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::addYears(int years, QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::fromString(QStringView string, QStringView format, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::fromString(const QString & string, QStringView format, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::fromString(const QString & string, const QString & format, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::fromString(QStringView string, QStringView format, int baseYear, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::fromString(const QString & string, QStringView format, int baseYear, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDate QDate::fromString(const QString & string, const QString & format, int baseYear, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-
-### QDateTime
-
-- `QDateTime::QDateTime(QDate date, QTime time, const QTimeZone & timeZone, TransitionResolution resolve = …)`: unsupported type "const QTimeZone &" (unknown)
-- `QTimeZone QDateTime::timeRepresentation() const`: return: unsupported type "QTimeZone" (unknown)
-- `QTimeZone QDateTime::timeZone() const`: return: unsupported type "QTimeZone" (unknown)
-- `void QDateTime::setTimeZone(const QTimeZone & toZone, TransitionResolution resolve = …)`: unsupported type "const QTimeZone &" (unknown)
-- `QString QDateTime::toString(const QString & format, QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `QString QDateTime::toString(QStringView format, QCalendar cal) const`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::addDuration(std::chrono::milliseconds msecs) const`: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
-- `QDateTime QDateTime::toTimeZone(const QTimeZone & toZone) const`: unsupported type "const QTimeZone &" (unknown)
-- `QDateTime QDateTime::currentDateTime(const QTimeZone & zone)`: unsupported type "const QTimeZone &" (unknown)
-- `QDateTime QDateTime::fromString(QStringView string, QStringView format, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::fromString(const QString & string, QStringView format, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::fromString(const QString & string, const QString & format, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::fromString(QStringView string, QStringView format, int baseYear, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear, QCalendar cal)`: unsupported type "QCalendar" (unknown)
-- `QDateTime QDateTime::fromMSecsSinceEpoch(qint64 msecs, const QTimeZone & timeZone)`: unsupported type "const QTimeZone &" (unknown)
-- `QDateTime QDateTime::fromSecsSinceEpoch(qint64 secs, const QTimeZone & timeZone)`: unsupported type "const QTimeZone &" (unknown)
-- `QDateTime QDateTime::fromStdTimePoint(std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> time)`: unsupported type "std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000>>>" (unknown)
-
-### QDateTimeEdit
-
-- `QCalendar QDateTimeEdit::calendar() const`: return: unsupported type "QCalendar" (unknown)
-- `void QDateTimeEdit::setCalendar(QCalendar calendar)`: unsupported type "QCalendar" (unknown)
-- `QTimeZone QDateTimeEdit::timeZone() const`: return: unsupported type "QTimeZone" (unknown)
-- `void QDateTimeEdit::setTimeZone(const QTimeZone & zone)`: unsupported type "const QTimeZone &" (unknown)
-
-### QEventPoint
-
-- `QVector2D QEventPoint::velocity() const`: return: unsupported type "QVector2D" (unknown)
-- `const QPointingDevice * QEventPoint::device() const`: return: unsupported type "const QPointingDevice *" (pointer or out-parameter)
-- `QPointingDeviceUniqueId QEventPoint::uniqueId() const`: return: unsupported type "QPointingDeviceUniqueId" (unknown)
-
-### QFile
-
-- `std::filesystem::path QFile::filesystemFileName() const`: return: unsupported type "std::filesystem::path" (unknown)
-- `std::filesystem::path QFile::filesystemSymLinkTarget() const`: return: unsupported type "std::filesystem::path" (unknown)
-- `bool QFile::open(FILE * f, OpenMode ioFlags, FileHandleFlags handleFlags = …)`: unsupported type "_IO_FILE *" (pointer or out-parameter)
-
-### QFileDevice
-
-- `uchar * QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags = …)`: return: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
-- `bool QFileDevice::unmap(uchar * address)`: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
-
-### QFileDialog
-
-- `void QFileDialog::setDirectory(const QDir & directory)`: unsupported type "const QDir &" (unknown)
-- `QDir QFileDialog::directory() const`: return: unsupported type "QDir" (unknown)
-- `QDir::Filters QFileDialog::filter() const`: return: unsupported type "QFlags<QDir::Filter>" (flags of unbound enum)
-- `void QFileDialog::setFilter(QDir::Filters filters)`: unsupported type "QFlags<QDir::Filter>" (flags of unbound enum)
-- `void QFileDialog::setIconProvider(QAbstractFileIconProvider * provider)`: unsupported type "QAbstractFileIconProvider *" (pointer or out-parameter)
-- `QAbstractFileIconProvider * QFileDialog::iconProvider() const`: return: unsupported type "QAbstractFileIconProvider *" (pointer or out-parameter)
-- `void QFileDialog::getOpenFileContent(const QString & nameFilter, const std::function<void (const QString &, const QByteArray &)> & fileContentsReady, QWidget * parent = …)`: unsupported type "const std::function<void (const QString &, const QByteArray &)> &" (unknown)
-
-### QFont
-
-- `void QFont::setFeature(Tag tag, quint32 value)`: unsupported type "QFont::Tag" (unknown)
-- `void QFont::unsetFeature(Tag tag)`: unsupported type "QFont::Tag" (unknown)
-- `quint32 QFont::featureValue(Tag tag) const`: unsupported type "QFont::Tag" (unknown)
-- `bool QFont::isFeatureSet(Tag tag) const`: unsupported type "QFont::Tag" (unknown)
-- `QList<Tag> QFont::featureTags() const`: return: unsupported type "QFont::Tag" (unknown)
-- `void QFont::setVariableAxis(Tag tag, float value)`: unsupported type "QFont::Tag" (unknown)
-- `void QFont::unsetVariableAxis(Tag tag)`: unsupported type "QFont::Tag" (unknown)
-- `bool QFont::isVariableAxisSet(Tag tag) const`: unsupported type "QFont::Tag" (unknown)
-- `float QFont::variableAxisValue(Tag tag) const`: unsupported type "QFont::Tag" (unknown)
-- `QList<Tag> QFont::variableAxisTags() const`: return: unsupported type "QFont::Tag" (unknown)
-
-### QFontComboBox
-
-- `void QFontComboBox::setWritingSystem(QFontDatabase::WritingSystem)`: unsupported type "QFontDatabase::WritingSystem" (unknown)
-- `QFontDatabase::WritingSystem QFontComboBox::writingSystem() const`: return: unsupported type "QFontDatabase::WritingSystem" (unknown)
-- `void QFontComboBox::setSampleTextForSystem(QFontDatabase::WritingSystem writingSystem, const QString & sampleText)`: unsupported type "QFontDatabase::WritingSystem" (unknown)
-- `QString QFontComboBox::sampleTextForSystem(QFontDatabase::WritingSystem writingSystem) const`: unsupported type "QFontDatabase::WritingSystem" (unknown)
-- `std::optional<QFont> QFontComboBox::displayFont(const QString & fontFamily) const`: return: unsupported type "std::optional<QFont>" (unknown)
-
-### QFontDialog
-
-- `QFont QFontDialog::getFont(bool * ok, QWidget * parent = …)`: unsupported type "bool *" (pointer or out-parameter to primitive)
-- `QFont QFontDialog::getFont(bool * ok, const QFont & initial, QWidget * parent = …, const QString & title = …, FontDialogOptions options = …)`: unsupported type "bool *" (pointer or out-parameter to primitive)
-
-### QFontMetrics
-
-- `int QFontMetrics::horizontalAdvance(const QString &, const QTextOption & textOption) const`: unsupported type "const QTextOption &" (unknown)
-- `QRect QFontMetrics::boundingRect(const QString & text, const QTextOption & textOption) const`: unsupported type "const QTextOption &" (unknown)
-- `QRect QFontMetrics::tightBoundingRect(const QString & text, const QTextOption & textOption) const`: unsupported type "const QTextOption &" (unknown)
-
-### QFormLayout
-
-- `TakeRowResult QFormLayout::takeRow(int row)`: return: unsupported type "QFormLayout::TakeRowResult" (unknown)
-- `TakeRowResult QFormLayout::takeRow(QWidget * widget)`: return: unsupported type "QFormLayout::TakeRowResult" (unknown)
-- `TakeRowResult QFormLayout::takeRow(QLayout * layout)`: return: unsupported type "QFormLayout::TakeRowResult" (unknown)
-- `void QFormLayout::getItemPosition(int index, int * rowPtr, ItemRole * rolePtr) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-- `void QFormLayout::getWidgetPosition(QWidget * widget, int * rowPtr, ItemRole * rolePtr) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-- `void QFormLayout::getLayoutPosition(QLayout * layout, int * rowPtr, ItemRole * rolePtr) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-
-### QGraphicsItem
-
-- `QGraphicsWidget * QGraphicsItem::parentWidget() const`: return: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
-- `QGraphicsWidget * QGraphicsItem::topLevelWidget() const`: return: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
-- `QGraphicsWidget * QGraphicsItem::window() const`: return: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
-- `QGraphicsItemGroup * QGraphicsItem::group() const`: return: unsupported type "QGraphicsItemGroup *" (pointer or out-parameter)
-- `void QGraphicsItem::setGroup(QGraphicsItemGroup * group)`: unsupported type "QGraphicsItemGroup *" (pointer or out-parameter)
-- `QGraphicsEffect * QGraphicsItem::graphicsEffect() const`: return: unsupported type "QGraphicsEffect *" (pointer or out-parameter)
-- `void QGraphicsItem::setGraphicsEffect(QGraphicsEffect * effect)`: unsupported type "QGraphicsEffect *" (pointer or out-parameter)
-- `QList<QGraphicsTransform *> QGraphicsItem::transformations() const`: return: unsupported type "QGraphicsTransform *" (pointer or out-parameter)
-- `void QGraphicsItem::setTransformations(const QList<QGraphicsTransform *> & transformations)`: unsupported type "QGraphicsTransform *" (pointer or out-parameter)
-- `void QGraphicsItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)`: unsupported type "const QStyleOptionGraphicsItem *" (pointer or out-parameter)
-
-### QGraphicsScene
-
-- `QGraphicsLineItem * QGraphicsScene::addLine(const QLineF & line, const QPen & pen = …)`: unsupported type "const QLineF &" (unknown)
-- `QGraphicsPathItem * QGraphicsScene::addPath(const QPainterPath & path, const QPen & pen = …, const QBrush & brush = …)`: return: unsupported type "QGraphicsPathItem *" (pointer or out-parameter)
-- `QGraphicsPolygonItem * QGraphicsScene::addPolygon(const QPolygonF & polygon, const QPen & pen = …, const QBrush & brush = …)`: return: unsupported type "QGraphicsPolygonItem *" (pointer or out-parameter)
-- `QGraphicsProxyWidget * QGraphicsScene::addWidget(QWidget * widget, Qt::WindowFlags wFlags = …)`: return: unsupported type "QGraphicsProxyWidget *" (pointer or out-parameter)
-- `QGraphicsLineItem * QGraphicsScene::addLine(qreal x1, qreal y1, qreal x2, qreal y2, const QPen & pen = …)`: return: unsupported type "QGraphicsLineItem *" (pointer or out-parameter)
-- `QGraphicsWidget * QGraphicsScene::activeWindow() const`: return: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
-- `void QGraphicsScene::setActiveWindow(QGraphicsWidget * widget)`: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
-
-### QGraphicsTextItem
-
-- `void QGraphicsTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)`: unsupported type "const QStyleOptionGraphicsItem *" (pointer or out-parameter)
-- `void QGraphicsTextItem::setTextCursor(const QTextCursor & cursor)`: unsupported type "const QTextCursor &" (unknown)
-- `QTextCursor QGraphicsTextItem::textCursor() const`: return: unsupported type "QTextCursor" (unknown)
-
-### QGridLayout
-
-- `void QGridLayout::getItemPosition(int idx, int * row, int * column, int * rowSpan, int * columnSpan) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-
-### QGuiApplication
-
-- `QWindowList QGuiApplication::allWindows()`: return: unsupported type "QWindow *" (pointer or out-parameter)
-- `QWindowList QGuiApplication::topLevelWindows()`: return: unsupported type "QWindow *" (pointer or out-parameter)
-- `QWindow * QGuiApplication::topLevelAt(const QPoint & pos)`: return: unsupported type "QWindow *" (pointer or out-parameter)
-- `QWindow * QGuiApplication::modalWindow()`: return: unsupported type "QWindow *" (pointer or out-parameter)
-- `QWindow * QGuiApplication::focusWindow()`: return: unsupported type "QWindow *" (pointer or out-parameter)
-- `QCursor * QGuiApplication::overrideCursor()`: return: unsupported type "QCursor *" (pointer or out-parameter)
-- `QStyleHints * QGuiApplication::styleHints()`: return: unsupported type "QStyleHints *" (pointer or out-parameter)
-- `QInputMethod * QGuiApplication::inputMethod()`: return: unsupported type "QInputMethod *" (pointer or out-parameter)
-- `QPlatformNativeInterface * QGuiApplication::platformNativeInterface()`: return: unsupported type "QPlatformNativeInterface *" (pointer or out-parameter)
-- `QFunctionPointer QGuiApplication::platformFunction(const QByteArray & function)`: return: unsupported type "void (*)()" (unknown)
-- `void QGuiApplication::focusWindowChanged(QWindow * focusWindow)`: signal: unsupported type "QWindow *" (pointer or out-parameter)
-- `void QGuiApplication::focusWindowChanged(QWindow * focusWindow)`: unsupported type "QWindow *" (pointer or out-parameter)
-- `void QGuiApplication::commitDataRequest(QSessionManager & sessionManager)`: signal: unsupported type "QSessionManager &" (pointer or out-parameter)
-- `void QGuiApplication::commitDataRequest(QSessionManager & sessionManager)`: unsupported type "QSessionManager &" (pointer or out-parameter)
-- `void QGuiApplication::saveStateRequest(QSessionManager & sessionManager)`: signal: unsupported type "QSessionManager &" (pointer or out-parameter)
-- `void QGuiApplication::saveStateRequest(QSessionManager & sessionManager)`: unsupported type "QSessionManager &" (pointer or out-parameter)
-
-### QIODevice
-
-- `qint64 QIODevice::read(char * data, qint64 maxlen)`: unsupported type "char *" (pointer or out-parameter to primitive)
-- `qint64 QIODevice::readLine(char * data, qint64 maxlen)`: unsupported type "char *" (pointer or out-parameter to primitive)
-- `bool QIODevice::readLineInto(QByteArray * result, qint64 maxlen = …)`: unsupported type "QByteArray *" (pointer or out-parameter)
-- `QByteArrayView QIODevice::readLineInto(QSpan<char> buffer)`: unsupported type "QSpan<char>" (unknown)
-- `QByteArrayView QIODevice::readLineInto(QSpan<uchar> buffer)`: unsupported type "QSpan<unsigned char>" (unknown)
-- `QByteArrayView QIODevice::readLineInto(QSpan<std::byte> buffer)`: unsupported type "QSpan<std::byte>" (unknown)
-- `qint64 QIODevice::peek(char * data, qint64 maxlen)`: unsupported type "char *" (pointer or out-parameter to primitive)
-- `bool QIODevice::getChar(char * c)`: unsupported type "char *" (pointer or out-parameter to primitive)
-
-### QIcon
-
-- `QIcon::QIcon(QIconEngine * engine)`: unsupported type "QIconEngine *" (pointer or out-parameter)
-
-### QImage
-
-- `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
-- `QImage::QImage(const uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
-- `QImage::QImage(const uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `QImage::QImage(const char *const[] xpm)`: unsupported type "const char *const[]" (unknown)
-- `uchar * QImage::bits()`: return: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
-- `const uchar * QImage::bits() const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `const uchar * QImage::constBits() const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `uchar * QImage::scanLine(int)`: return: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
-- `const uchar * QImage::scanLine(int) const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `const uchar * QImage::constScanLine(int) const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `QColorSpace QImage::colorSpace() const`: return: unsupported type "QColorSpace" (unknown)
-- `QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace) const`: unsupported type "const QColorSpace &" (unknown)
-- `QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …) const`: unsupported type "const QColorSpace &" (unknown)
-- `QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …)`: unsupported type "const QColorSpace &" (unknown)
-- `void QImage::convertToColorSpace(const QColorSpace & colorSpace)`: unsupported type "const QColorSpace &" (unknown)
-- `void QImage::convertToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …)`: unsupported type "const QColorSpace &" (unknown)
-- `void QImage::setColorSpace(const QColorSpace & colorSpace)`: unsupported type "const QColorSpace &" (unknown)
-- `QImage QImage::colorTransformed(const QColorTransform & transform) const`: unsupported type "const QColorTransform &" (unknown)
-- `QImage QImage::colorTransformed(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …) const`: unsupported type "const QColorTransform &" (unknown)
-- `QImage QImage::colorTransformed(const QColorTransform & transform)`: unsupported type "const QColorTransform &" (unknown)
-- `QImage QImage::colorTransformed(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …)`: unsupported type "const QColorTransform &" (unknown)
-- `void QImage::applyColorTransform(const QColorTransform & transform)`: unsupported type "const QColorTransform &" (unknown)
-- `void QImage::applyColorTransform(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …)`: unsupported type "const QColorTransform &" (unknown)
-- `bool QImage::loadFromData(QByteArrayView data, const char * format = …)`: unsupported type "QByteArrayView" (unknown)
-- `bool QImage::loadFromData(const uchar * buf, int len, const char * format = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `QImage QImage::fromData(QByteArrayView data, const char * format = …)`: unsupported type "QByteArrayView" (unknown)
-- `QImage QImage::fromData(const uchar * data, int size, const char * format = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `QPixelFormat QImage::pixelFormat() const`: return: unsupported type "QPixelFormat" (unknown)
-- `QPixelFormat QImage::toPixelFormat(QImage::Format format)`: return: unsupported type "QPixelFormat" (unknown)
-- `QImage::Format QImage::toImageFormat(QPixelFormat format)`: unsupported type "QPixelFormat" (unknown)
-
-### QInputEvent
-
-- `const QInputDevice * QInputEvent::device() const`: return: unsupported type "const QInputDevice *" (pointer or out-parameter)
-- `QInputDevice::DeviceType QInputEvent::deviceType() const`: return: unsupported type "QInputDevice::DeviceType" (unknown)
-
-### QItemSelectionModel
-
-- `const QItemSelection QItemSelectionModel::selection() const`: return: unsupported type "const QItemSelection" (unknown)
-- `QBindable<QAbstractItemModel *> QItemSelectionModel::bindableModel()`: return: unsupported type "QBindable<QAbstractItemModel *>" (unknown)
-- `void QItemSelectionModel::select(const QItemSelection & selection, QItemSelectionModel::SelectionFlags command)`: unsupported type "const QItemSelection &" (unknown)
-- `void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)`: signal: unsupported type "const QItemSelection &" (unknown)
-- `void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)`: unsupported type "const QItemSelection &" (unknown)
-
-### QKeyEvent
-
-- `QKeyCombination QKeyEvent::keyCombination() const`: return: unsupported type "QKeyCombination" (unknown)
-
-### QKeySequence
-
-- `QKeySequence::QKeySequence(QKeyCombination k1, QKeyCombination k2 = …, QKeyCombination k3 = …, QKeyCombination k4 = …)`: unsupported type "QKeyCombination" (unknown)
-
-### QKeySequenceEdit
-
-- `void QKeySequenceEdit::setFinishingKeyCombinations(const QList<QKeyCombination> & finishingKeyCombinations)`: unsupported type "QKeyCombination" (unknown)
-- `QList<QKeyCombination> QKeySequenceEdit::finishingKeyCombinations() const`: return: unsupported type "QKeyCombination" (unknown)
-
-### QLabel
-
-- `QPicture QLabel::picture() const`: return: unsupported type "QPicture" (unknown)
-- `QMovie * QLabel::movie() const`: return: unsupported type "QMovie *" (pointer or out-parameter)
-- `QTextDocument::ResourceProvider QLabel::resourceProvider() const`: return: unsupported type "std::function<QVariant (const QUrl &)>" (unknown)
-- `void QLabel::setResourceProvider(const QTextDocument::ResourceProvider & provider)`: unsupported type "const std::function<QVariant (const QUrl &)> &" (unknown)
-- `void QLabel::setPicture(const QPicture &)`: unsupported type "const QPicture &" (unknown)
-- `void QLabel::setMovie(QMovie * movie)`: unsupported type "QMovie *" (pointer or out-parameter)
-
-### QLayout
-
-- `void QLayout::getContentsMargins(int * left, int * top, int * right, int * bottom) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-
-### QListWidgetItem
-
-- `void QListWidgetItem::read(QDataStream & in)`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `void QListWidgetItem::write(QDataStream & out) const`: unsupported type "QDataStream &" (pointer or out-parameter)
-
-### QMenu
-
-- `QPlatformMenu * QMenu::platformMenu()`: return: unsupported type "QPlatformMenu *" (pointer or out-parameter)
-- `void QMenu::setPlatformMenu(QPlatformMenu * platformMenu)`: unsupported type "QPlatformMenu *" (pointer or out-parameter)
-
-### QMenuBar
-
-- `QPlatformMenuBar * QMenuBar::platformMenuBar()`: return: unsupported type "QPlatformMenuBar *" (pointer or out-parameter)
-
-### QModelIndex
-
-- `void * QModelIndex::internalPointer() const`: return: unsupported type "void *" (pointer or out-parameter)
-- `const void * QModelIndex::constInternalPointer() const`: return: unsupported type "const void *" (pointer or out-parameter)
-- `void QModelIndex::multiData(QModelRoleDataSpan roleDataSpan) const`: unsupported type "QModelRoleDataSpan" (unknown)
-
-### QObject
-
-- `QThread * QObject::thread() const`: return: unsupported type "QThread *" (pointer or out-parameter)
-- `bool QObject::moveToThread(QThread * thread, Qt::Disambiguated_t = …)`: unsupported type "QThread *" (pointer or out-parameter)
-- `int QObject::startTimer(std::chrono::nanoseconds time, Qt::TimerType timerType = …)`: unsupported type "std::chrono::duration<long, std::ratio<1, 1000000000>>" (unknown)
-- `bool QObject::setProperty(const char * name, QVariant && value)`: unsupported type "QVariant &&" (rvalue reference)
-- `QList<QByteArray> QObject::dynamicPropertyNames() const`: return: unsupported type "QList<QByteArray>" (list element)
-- `QBindingStorage * QObject::bindingStorage()`: return: unsupported type "QBindingStorage *" (pointer or out-parameter)
-- `const QBindingStorage * QObject::bindingStorage() const`: return: unsupported type "const QBindingStorage *" (pointer or out-parameter)
-
-### QPainter
-
-- `QFontInfo QPainter::fontInfo() const`: return: unsupported type "QFontInfo" (unknown)
-- `void QPainter::setPen(QPen && pen)`: unsupported type "QPen &&" (rvalue reference)
-- `void QPainter::setBrush(QBrush && brush)`: unsupported type "QBrush &&" (rvalue reference)
-- `void QPainter::drawPoints(const QPointF * points, int pointCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
-- `void QPainter::drawPoints(const QPoint * points, int pointCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawLines(const QLineF * lines, int lineCount)`: unsupported type "const QLineF *" (pointer or out-parameter)
-- `void QPainter::drawLines(const QList<QLineF> & lines)`: unsupported type "QLineF" (unknown)
-- `void QPainter::drawLines(const QPointF * pointPairs, int lineCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
-- `void QPainter::drawLines(const QLine * lines, int lineCount)`: unsupported type "const QLine *" (pointer or out-parameter)
-- `void QPainter::drawLines(const QList<QLine> & lines)`: unsupported type "QLine" (unknown)
-- `void QPainter::drawLines(const QPoint * pointPairs, int lineCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawRects(const QRectF * rects, int rectCount)`: unsupported type "const QRectF *" (pointer or out-parameter)
-- `void QPainter::drawRects(const QRect * rects, int rectCount)`: unsupported type "const QRect *" (pointer or out-parameter)
-- `void QPainter::drawPolyline(const QPointF * points, int pointCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
-- `void QPainter::drawPolyline(const QPoint * points, int pointCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawPolygon(const QPointF * points, int pointCount, Qt::FillRule fillRule = …)`: unsupported type "const QPointF *" (pointer or out-parameter)
-- `void QPainter::drawPolygon(const QPoint * points, int pointCount, Qt::FillRule fillRule = …)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawConvexPolygon(const QPointF * points, int pointCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
-- `void QPainter::drawConvexPolygon(const QPoint * points, int pointCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawPicture(const QPointF & p, const QPicture & picture)`: unsupported type "const QPicture &" (unknown)
-- `void QPainter::drawPicture(int x, int y, const QPicture & picture)`: unsupported type "const QPicture &" (unknown)
-- `void QPainter::drawPicture(const QPoint & p, const QPicture & picture)`: unsupported type "const QPicture &" (unknown)
-- `void QPainter::drawPixmapFragments(const PixmapFragment * fragments, int fragmentCount, const QPixmap & pixmap, PixmapFragmentHints hints = …)`: unsupported type "const QPainter::PixmapFragment *" (pointer or out-parameter)
-- `void QPainter::drawGlyphRun(const QPointF & position, const QGlyphRun & glyphRun)`: unsupported type "const QGlyphRun &" (unknown)
-- `void QPainter::drawStaticText(const QPointF & topLeftPosition, const QStaticText & staticText)`: unsupported type "const QStaticText &" (unknown)
-- `void QPainter::drawStaticText(const QPoint & topLeftPosition, const QStaticText & staticText)`: unsupported type "const QStaticText &" (unknown)
-- `void QPainter::drawStaticText(int left, int top, const QStaticText & staticText)`: unsupported type "const QStaticText &" (unknown)
-- `void QPainter::drawTextItem(const QPointF & p, const QTextItem & ti)`: unsupported type "const QTextItem &" (unknown)
-- `void QPainter::drawTextItem(int x, int y, const QTextItem & ti)`: unsupported type "const QTextItem &" (unknown)
-- `void QPainter::drawTextItem(const QPoint & p, const QTextItem & ti)`: unsupported type "const QTextItem &" (unknown)
-- `void QPainter::fillRect(int x, int y, int w, int h, QGradient::Preset preset)`: unsupported type "QGradient::Preset" (unknown)
-- `void QPainter::fillRect(const QRect & r, QGradient::Preset preset)`: unsupported type "QGradient::Preset" (unknown)
-- `void QPainter::fillRect(const QRectF & r, QGradient::Preset preset)`: unsupported type "QGradient::Preset" (unknown)
-
-### QPainterPath
-
-- `QList<QPolygonF> QPainterPath::toSubpathPolygons(const QTransform & matrix = …) const`: return: unsupported type "QList<QPolygonF>" (list element)
-- `QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform & matrix = …) const`: return: unsupported type "QList<QPolygonF>" (list element)
-- `QPainterPath::Element QPainterPath::elementAt(int i) const`: return: unsupported type "QPainterPath::Element" (unknown)
-
-### QPersistentModelIndex
-
-- `void * QPersistentModelIndex::internalPointer() const`: return: unsupported type "void *" (pointer or out-parameter)
-- `const void * QPersistentModelIndex::constInternalPointer() const`: return: unsupported type "const void *" (pointer or out-parameter)
-- `void QPersistentModelIndex::multiData(QModelRoleDataSpan roleDataSpan) const`: unsupported type "QModelRoleDataSpan" (unknown)
-
-### QPixmap
-
-- `QPixmap::QPixmap(QPlatformPixmap * data)`: unsupported type "QPlatformPixmap *" (pointer or out-parameter)
-- `QPixmap::QPixmap(const char *const[] xpm)`: unsupported type "const char *const[]" (unknown)
-- `QBitmap QPixmap::mask() const`: return: unsupported type "QBitmap" (unknown)
-- `void QPixmap::setMask(const QBitmap &)`: unsupported type "const QBitmap &" (unknown)
-- `QBitmap QPixmap::createHeuristicMask(bool clipTight = …) const`: return: unsupported type "QBitmap" (unknown)
-- `QBitmap QPixmap::createMaskFromColor(const QColor & maskColor, Qt::MaskMode mode = …) const`: return: unsupported type "QBitmap" (unknown)
-- `QPixmap QPixmap::fromImageReader(QImageReader * imageReader, Qt::ImageConversionFlags flags = …)`: unsupported type "QImageReader *" (pointer or out-parameter)
-- `QPixmap QPixmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: unsupported type "QImage &&" (rvalue reference)
-- `bool QPixmap::loadFromData(const uchar * buf, uint len, const char * format = …, Qt::ImageConversionFlags flags = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-
-### QPlainTextEdit
-
-- `void QPlainTextEdit::setTextCursor(const QTextCursor & cursor)`: unsupported type "const QTextCursor &" (unknown)
-- `QTextCursor QPlainTextEdit::textCursor() const`: return: unsupported type "QTextCursor" (unknown)
-- `void QPlainTextEdit::mergeCurrentCharFormat(const QTextCharFormat & modifier)`: unsupported type "const QTextCharFormat &" (unknown)
-- `void QPlainTextEdit::setCurrentCharFormat(const QTextCharFormat & format)`: unsupported type "const QTextCharFormat &" (unknown)
-- `QTextCharFormat QPlainTextEdit::currentCharFormat() const`: return: unsupported type "QTextCharFormat" (unknown)
-- `QTextOption::WrapMode QPlainTextEdit::wordWrapMode() const`: return: unsupported type "QTextOption::WrapMode" (unknown)
-- `void QPlainTextEdit::setWordWrapMode(QTextOption::WrapMode policy)`: unsupported type "QTextOption::WrapMode" (unknown)
-- `bool QPlainTextEdit::find(const QRegularExpression & exp, QTextDocument::FindFlags options = …)`: unsupported type "const QRegularExpression &" (unknown)
-- `QTextCursor QPlainTextEdit::cursorForPosition(const QPoint & pos) const`: return: unsupported type "QTextCursor" (unknown)
-- `QRect QPlainTextEdit::cursorRect(const QTextCursor & cursor) const`: unsupported type "const QTextCursor &" (unknown)
-- `void QPlainTextEdit::setExtraSelections(const QList<QTextEdit::ExtraSelection> & selections)`: unsupported type "QTextEdit::ExtraSelection" (unknown)
-- `QList<QTextEdit::ExtraSelection> QPlainTextEdit::extraSelections() const`: return: unsupported type "QTextEdit::ExtraSelection" (unknown)
-- `void QPlainTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = …)`: unsupported type "QTextCursor::MoveOperation" (unknown)
-- `void QPlainTextEdit::print(QPagedPaintDevice * printer) const`: unsupported type "QPagedPaintDevice *" (pointer or out-parameter)
-
-### QPointerEvent
-
-- `const QPointingDevice * QPointerEvent::pointingDevice() const`: return: unsupported type "const QPointingDevice *" (pointer or out-parameter)
-- `QPointingDevice::PointerType QPointerEvent::pointerType() const`: return: unsupported type "QPointingDevice::PointerType" (unknown)
-- `QEventPoint & QPointerEvent::point(qsizetype i)`: return: unsupported type "QEventPoint &" (pointer or out-parameter)
-- `QEventPoint * QPointerEvent::pointById(int id)`: return: unsupported type "QEventPoint *" (pointer or out-parameter)
-- `QList<QPointer<QObject>> QPointerEvent::passiveGrabbers(const QEventPoint & point) const`: return: unsupported type "QPointer<QObject>" (unknown)
-
-### QRegion
-
-- `QRegion::QRegion(const QBitmap & bitmap)`: unsupported type "const QBitmap &" (unknown)
-- `const_iterator QRegion::begin() const`: return: unsupported type "const QRect *" (pointer or out-parameter)
-- `const_iterator QRegion::cbegin() const`: return: unsupported type "const QRect *" (pointer or out-parameter)
-- `const_iterator QRegion::end() const`: return: unsupported type "const QRect *" (pointer or out-parameter)
-- `const_iterator QRegion::cend() const`: return: unsupported type "const QRect *" (pointer or out-parameter)
-- `const_reverse_iterator QRegion::rbegin() const`: return: unsupported type "std::reverse_iterator<const QRect *>" (unknown)
-- `const_reverse_iterator QRegion::crbegin() const`: return: unsupported type "std::reverse_iterator<const QRect *>" (unknown)
-- `const_reverse_iterator QRegion::rend() const`: return: unsupported type "std::reverse_iterator<const QRect *>" (unknown)
-- `const_reverse_iterator QRegion::crend() const`: return: unsupported type "std::reverse_iterator<const QRect *>" (unknown)
-- `void QRegion::setRects(const QRect * rect, int num)`: unsupported type "const QRect *" (pointer or out-parameter)
-- `void QRegion::setRects(QSpan<const QRect> r)`: unsupported type "QSpan<const QRect>" (unknown)
-- `QSpan<const QRect> QRegion::rects() const`: return: unsupported type "QSpan<const QRect>" (unknown)
-
-### QSettings
-
-- `Format QSettings::registerFormat(const QString & extension, ReadFunc readFunc, WriteFunc writeFunc, Qt::CaseSensitivity caseSensitivity = …)`: unsupported type "bool (*)(QIODevice &, QMap<QString, QVariant> &)" (unknown)
-
-### QSortFilterProxyModel
-
-- `QRegularExpression QSortFilterProxyModel::filterRegularExpression() const`: return: unsupported type "QRegularExpression" (unknown)
-- `QBindable<QRegularExpression> QSortFilterProxyModel::bindableFilterRegularExpression()`: return: unsupported type "QBindable<QRegularExpression>" (unknown)
-- `QBindable<int> QSortFilterProxyModel::bindableFilterKeyColumn()`: return: unsupported type "QBindable<int>" (unknown)
-- `QBindable<Qt::CaseSensitivity> QSortFilterProxyModel::bindableFilterCaseSensitivity()`: return: unsupported type "QBindable<Qt::CaseSensitivity>" (unknown)
-- `QBindable<Qt::CaseSensitivity> QSortFilterProxyModel::bindableSortCaseSensitivity()`: return: unsupported type "QBindable<Qt::CaseSensitivity>" (unknown)
-- `QBindable<bool> QSortFilterProxyModel::bindableIsSortLocaleAware()`: return: unsupported type "QBindable<bool>" (unknown)
-- `QBindable<bool> QSortFilterProxyModel::bindableDynamicSortFilter()`: return: unsupported type "QBindable<bool>" (unknown)
-- `QBindable<int> QSortFilterProxyModel::bindableSortRole()`: return: unsupported type "QBindable<int>" (unknown)
-- `QBindable<int> QSortFilterProxyModel::bindableFilterRole()`: return: unsupported type "QBindable<int>" (unknown)
-- `QBindable<bool> QSortFilterProxyModel::bindableRecursiveFilteringEnabled()`: return: unsupported type "QBindable<bool>" (unknown)
-- `QBindable<bool> QSortFilterProxyModel::bindableAutoAcceptChildRows()`: return: unsupported type "QBindable<bool>" (unknown)
-- `void QSortFilterProxyModel::setFilterRegularExpression(const QRegularExpression & regularExpression)`: unsupported type "const QRegularExpression &" (unknown)
-
-### QSplitter
-
-- `void QSplitter::getRange(int index, int *, int *) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-
-### QStandardItem
-
-- `void QStandardItem::multiData(QModelRoleDataSpan roleDataSpan) const`: unsupported type "QModelRoleDataSpan" (unknown)
-- `void QStandardItem::read(QDataStream & in)`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `void QStandardItem::write(QDataStream & out) const`: unsupported type "QDataStream &" (pointer or out-parameter)
-
-### QStandardItemModel
-
-- `void QStandardItemModel::setItemRoleNames(const QHash<int, QByteArray> & roleNames)`: unsupported type "const QHash<int, QByteArray> &" (unknown)
-- `QBindable<int> QStandardItemModel::bindableSortRole()`: return: unsupported type "QBindable<int>" (unknown)
-
-### QStyle
-
-- `void QStyle::polish(QPalette & palette)`: unsupported type "QPalette &" (pointer or out-parameter)
-- `void QStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const`: unsupported type "const QStyleOption *" (pointer or out-parameter)
-- `void QStyle::drawControl(ControlElement element, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const`: unsupported type "const QStyleOption *" (pointer or out-parameter)
-- `QRect QStyle::subElementRect(SubElement subElement, const QStyleOption * option, const QWidget * widget = …) const`: unsupported type "const QStyleOption *" (pointer or out-parameter)
-- `void QStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, QPainter * p, const QWidget * widget = …) const`: unsupported type "const QStyleOptionComplex *" (pointer or out-parameter)
-- `SubControl QStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, const QPoint & pt, const QWidget * widget = …) const`: unsupported type "const QStyleOptionComplex *" (pointer or out-parameter)
-- `QRect QStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex * opt, SubControl sc, const QWidget * widget = …) const`: unsupported type "const QStyleOptionComplex *" (pointer or out-parameter)
-- `QSize QStyle::sizeFromContents(ContentsType ct, const QStyleOption * opt, const QSize & contentsSize, const QWidget * w = …) const`: unsupported type "const QStyleOption *" (pointer or out-parameter)
-- `QPixmap QStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap & pixmap, const QStyleOption * opt) const`: unsupported type "const QStyleOption *" (pointer or out-parameter)
-
-### QStyledItemDelegate
-
-- `QItemEditorFactory * QStyledItemDelegate::itemEditorFactory() const`: return: unsupported type "QItemEditorFactory *" (pointer or out-parameter)
-- `void QStyledItemDelegate::setItemEditorFactory(QItemEditorFactory * factory)`: unsupported type "QItemEditorFactory *" (pointer or out-parameter)
-- `QString QStyledItemDelegate::displayText(const QVariant & value, const QLocale & locale) const`: unsupported type "const QLocale &" (unknown)
-
-### QTableWidget
-
-- `void QTableWidget::setRangeSelected(const QTableWidgetSelectionRange & range, bool select)`: unsupported type "const QTableWidgetSelectionRange &" (unknown)
-- `QList<QTableWidgetSelectionRange> QTableWidget::selectedRanges() const`: return: unsupported type "QTableWidgetSelectionRange" (unknown)
-
-### QTableWidgetItem
-
-- `void QTableWidgetItem::read(QDataStream & in)`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `void QTableWidgetItem::write(QDataStream & out) const`: unsupported type "QDataStream &" (pointer or out-parameter)
-
-### QTextDocument
-
-- `void QTextDocument::setDocumentLayout(QAbstractTextDocumentLayout * layout)`: unsupported type "QAbstractTextDocumentLayout *" (pointer or out-parameter)
-- `QTextCursor QTextDocument::find(const QString & subString, int from = …, FindFlags options = …) const`: return: unsupported type "QTextCursor" (unknown)
-- `QTextCursor QTextDocument::find(const QString & subString, const QTextCursor & cursor, FindFlags options = …) const`: unsupported type "const QTextCursor &" (unknown)
-- `QTextCursor QTextDocument::find(const QRegularExpression & expr, int from = …, FindFlags options = …) const`: unsupported type "const QRegularExpression &" (unknown)
-- `QTextCursor QTextDocument::find(const QRegularExpression & expr, const QTextCursor & cursor, FindFlags options = …) const`: unsupported type "const QRegularExpression &" (unknown)
-- `QTextFrame * QTextDocument::frameAt(int pos) const`: return: unsupported type "QTextFrame *" (pointer or out-parameter)
-- `QTextFrame * QTextDocument::rootFrame() const`: return: unsupported type "QTextFrame *" (pointer or out-parameter)
-- `QTextObject * QTextDocument::object(int objectIndex) const`: return: unsupported type "QTextObject *" (pointer or out-parameter)
-- `QTextObject * QTextDocument::objectForFormat(const QTextFormat &) const`: unsupported type "const QTextFormat &" (unknown)
-- `QTextBlock QTextDocument::findBlock(int pos) const`: return: unsupported type "QTextBlock" (unknown)
-- `QTextBlock QTextDocument::findBlockByNumber(int blockNumber) const`: return: unsupported type "QTextBlock" (unknown)
-- `QTextBlock QTextDocument::findBlockByLineNumber(int blockNumber) const`: return: unsupported type "QTextBlock" (unknown)
-- `QTextBlock QTextDocument::begin() const`: return: unsupported type "QTextBlock" (unknown)
-- `QTextBlock QTextDocument::end() const`: return: unsupported type "QTextBlock" (unknown)
-- `QTextBlock QTextDocument::firstBlock() const`: return: unsupported type "QTextBlock" (unknown)
-- `QTextBlock QTextDocument::lastBlock() const`: return: unsupported type "QTextBlock" (unknown)
-- `void QTextDocument::print(QPagedPaintDevice * printer) const`: unsupported type "QPagedPaintDevice *" (pointer or out-parameter)
-- `QTextDocument::ResourceProvider QTextDocument::resourceProvider() const`: return: unsupported type "std::function<QVariant (const QUrl &)>" (unknown)
-- `void QTextDocument::setResourceProvider(const ResourceProvider & provider)`: unsupported type "const std::function<QVariant (const QUrl &)> &" (unknown)
-- `QTextDocument::ResourceProvider QTextDocument::defaultResourceProvider()`: return: unsupported type "std::function<QVariant (const QUrl &)>" (unknown)
-- `void QTextDocument::setDefaultResourceProvider(const ResourceProvider & provider)`: unsupported type "const std::function<QVariant (const QUrl &)> &" (unknown)
-- `QList<QTextFormat> QTextDocument::allFormats() const`: return: unsupported type "QTextFormat" (unknown)
-- `void QTextDocument::undo(QTextCursor * cursor)`: unsupported type "QTextCursor *" (pointer or out-parameter)
-- `void QTextDocument::redo(QTextCursor * cursor)`: unsupported type "QTextCursor *" (pointer or out-parameter)
-- `QTextOption QTextDocument::defaultTextOption() const`: return: unsupported type "QTextOption" (unknown)
-- `void QTextDocument::setDefaultTextOption(const QTextOption & option)`: unsupported type "const QTextOption &" (unknown)
-- `void QTextDocument::cursorPositionChanged(const QTextCursor & cursor)`: signal: unsupported type "const QTextCursor &" (unknown)
-- `void QTextDocument::cursorPositionChanged(const QTextCursor & cursor)`: unsupported type "const QTextCursor &" (unknown)
-- `void QTextDocument::appendUndoItem(QAbstractUndoItem *)`: unsupported type "QAbstractUndoItem *" (pointer or out-parameter)
-
-### QTextEdit
-
-- `void QTextEdit::setTextCursor(const QTextCursor & cursor)`: unsupported type "const QTextCursor &" (unknown)
-- `QTextCursor QTextEdit::textCursor() const`: return: unsupported type "QTextCursor" (unknown)
-- `void QTextEdit::mergeCurrentCharFormat(const QTextCharFormat & modifier)`: unsupported type "const QTextCharFormat &" (unknown)
-- `void QTextEdit::setCurrentCharFormat(const QTextCharFormat & format)`: unsupported type "const QTextCharFormat &" (unknown)
-- `QTextCharFormat QTextEdit::currentCharFormat() const`: return: unsupported type "QTextCharFormat" (unknown)
-- `QTextOption::WrapMode QTextEdit::wordWrapMode() const`: return: unsupported type "QTextOption::WrapMode" (unknown)
-- `void QTextEdit::setWordWrapMode(QTextOption::WrapMode policy)`: unsupported type "QTextOption::WrapMode" (unknown)
-- `bool QTextEdit::find(const QRegularExpression & exp, QTextDocument::FindFlags options = …)`: unsupported type "const QRegularExpression &" (unknown)
-- `QTextCursor QTextEdit::cursorForPosition(const QPoint & pos) const`: return: unsupported type "QTextCursor" (unknown)
-- `QRect QTextEdit::cursorRect(const QTextCursor & cursor) const`: unsupported type "const QTextCursor &" (unknown)
-- `void QTextEdit::setExtraSelections(const QList<ExtraSelection> & selections)`: unsupported type "QTextEdit::ExtraSelection" (unknown)
-- `QList<ExtraSelection> QTextEdit::extraSelections() const`: return: unsupported type "QTextEdit::ExtraSelection" (unknown)
-- `void QTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = …)`: unsupported type "QTextCursor::MoveOperation" (unknown)
-- `void QTextEdit::print(QPagedPaintDevice * printer) const`: unsupported type "QPagedPaintDevice *" (pointer or out-parameter)
-- `void QTextEdit::currentCharFormatChanged(const QTextCharFormat & format)`: signal: unsupported type "const QTextCharFormat &" (unknown)
-- `void QTextEdit::currentCharFormatChanged(const QTextCharFormat & format)`: unsupported type "const QTextCharFormat &" (unknown)
-
-### QTimer
-
-- `QBindable<bool> QTimer::bindableActive()`: return: unsupported type "QBindable<bool>" (unknown)
-- `QBindable<int> QTimer::bindableInterval()`: return: unsupported type "QBindable<int>" (unknown)
-- `QBindable<Qt::TimerType> QTimer::bindableTimerType()`: return: unsupported type "QBindable<Qt::TimerType>" (unknown)
-- `QBindable<bool> QTimer::bindableSingleShot()`: return: unsupported type "QBindable<bool>" (unknown)
-- `void QTimer::setInterval(std::chrono::milliseconds value)`: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
-- `std::chrono::milliseconds QTimer::intervalAsDuration() const`: return: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
-- `std::chrono::milliseconds QTimer::remainingTimeAsDuration() const`: return: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
-- `void QTimer::start(std::chrono::milliseconds value)`: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
-
-### QTimerEvent
-
-- `bool QTimerEvent::matches(const QBasicTimer & timer) const`: unsupported type "const QBasicTimer &" (unknown)
-
-### QTransform
-
-- `QTransform & QTransform::translate(qreal dx, qreal dy)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `QTransform & QTransform::scale(qreal sx, qreal sy)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `QTransform & QTransform::shear(qreal sh, qreal sv)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `QTransform & QTransform::rotate(qreal a, Qt::Axis axis, qreal distanceToPlane)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `QTransform & QTransform::rotate(qreal a, Qt::Axis axis = …)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `QTransform & QTransform::rotateRadians(qreal a, Qt::Axis axis, qreal distanceToPlane)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `QTransform & QTransform::rotateRadians(qreal a, Qt::Axis axis = …)`: return: unsupported type "QTransform &" (pointer or out-parameter)
-- `bool QTransform::squareToQuad(const QPolygonF & square, QTransform & result)`: unsupported type "QTransform &" (pointer or out-parameter)
-- `bool QTransform::quadToSquare(const QPolygonF & quad, QTransform & result)`: unsupported type "QTransform &" (pointer or out-parameter)
-- `bool QTransform::quadToQuad(const QPolygonF & one, const QPolygonF & two, QTransform & result)`: unsupported type "QTransform &" (pointer or out-parameter)
-- `QLine QTransform::map(const QLine & l) const`: unsupported type "const QLine &" (unknown)
-- `QLineF QTransform::map(const QLineF & l) const`: unsupported type "const QLineF &" (unknown)
-- `void QTransform::map(int x, int y, int * tx, int * ty) const`: unsupported type "int *" (pointer or out-parameter to primitive)
-- `void QTransform::map(qreal x, qreal y, qreal * tx, qreal * ty) const`: unsupported type "double *" (pointer or out-parameter to primitive)
-- `Affine QTransform::asAffineMatrix()`: return: unsupported type "QTransform::Affine" (unknown)
-
-### QTreeWidgetItem
-
-- `void QTreeWidgetItem::read(QDataStream & in)`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `void QTreeWidgetItem::write(QDataStream & out) const`: unsupported type "QDataStream &" (pointer or out-parameter)
-
-### QUrl
-
-- `QUrl QUrl::adjusted(FormattingOptions options) const`: unsupported type "QUrlTwoFlags<QUrl::UrlFormattingOption, QUrl::ComponentFormattingOption>" (unknown)
-- `QUrl QUrl::fromEncoded(QByteArrayView input, ParsingMode mode = …)`: unsupported type "QByteArrayView" (unknown)
-- `void QUrl::setQuery(const QUrlQuery & query)`: unsupported type "const QUrlQuery &" (unknown)
-- `bool QUrl::matches(const QUrl & url, FormattingOptions options) const`: unsupported type "QUrlTwoFlags<QUrl::UrlFormattingOption, QUrl::ComponentFormattingOption>" (unknown)
-
-### QValidator
-
-- `void QValidator::setLocale(const QLocale & locale)`: unsupported type "const QLocale &" (unknown)
-- `QLocale QValidator::locale() const`: return: unsupported type "QLocale" (unknown)
-- `State QValidator::validate(QString &, int &) const`: unsupported type "QString &" (pointer or out-parameter)
-- `void QValidator::fixup(QString &) const`: unsupported type "QString &" (pointer or out-parameter)
-
-### QVariant
-
-- `QVariant::QVariant(QMetaType type, const void * copy = …)`: unsupported type "QMetaType" (unknown)
-- `QVariant::QVariant(const QBitArray & bitarray)`: unsupported type "const QBitArray &" (unknown)
-- `QVariant::QVariant(QBitArray && bitarray)`: unsupported type "QBitArray &&" (rvalue reference)
-- `QVariant::QVariant(QByteArray && bytearray)`: unsupported type "QByteArray &&" (rvalue reference)
-- `QVariant::QVariant(QDateTime && datetime)`: unsupported type "QDateTime &&" (rvalue reference)
-- `QVariant::QVariant(const QHash<QString, QVariant> & hash)`: unsupported type "const QHash<QString, QVariant> &" (unknown)
-- `QVariant::QVariant(QHash<QString, QVariant> && hash)`: unsupported type "QHash<QString, QVariant> &&" (rvalue reference)
-- `QVariant::QVariant(const QJsonArray & jsonArray)`: unsupported type "const QJsonArray &" (unknown)
-- `QVariant::QVariant(QJsonArray && jsonArray)`: unsupported type "QJsonArray &&" (rvalue reference)
-- `QVariant::QVariant(const QJsonObject & jsonObject)`: unsupported type "const QJsonObject &" (unknown)
-- `QVariant::QVariant(QJsonObject && jsonObject)`: unsupported type "QJsonObject &&" (rvalue reference)
-- `QVariant::QVariant(QList<QVariant> && list)`: unsupported type "QList<QVariant> &&" (rvalue reference)
-- `QVariant::QVariant(const QLocale & locale)`: unsupported type "const QLocale &" (unknown)
-- `QVariant::QVariant(QLocale && locale)`: unsupported type "QLocale &&" (rvalue reference)
-- `QVariant::QVariant(const QMap<QString, QVariant> & map)`: unsupported type "const QMap<QString, QVariant> &" (unknown)
-- `QVariant::QVariant(QMap<QString, QVariant> && map)`: unsupported type "QMap<QString, QVariant> &&" (rvalue reference)
-- `QVariant::QVariant(const QRegularExpression & re)`: unsupported type "const QRegularExpression &" (unknown)
-- `QVariant::QVariant(QRegularExpression && re)`: unsupported type "QRegularExpression &&" (rvalue reference)
-- `QVariant::QVariant(QString && string)`: unsupported type "QString &&" (rvalue reference)
-- `QVariant::QVariant(QStringList && stringlist)`: unsupported type "QList<QString> &&" (rvalue reference)
-- `QVariant::QVariant(QUrl && url)`: unsupported type "QUrl &&" (rvalue reference)
-- `QVariant::QVariant(const QJsonValue & jsonValue)`: unsupported type "const QJsonValue &" (unknown)
-- `QVariant::QVariant(QJsonValue && jsonValue)`: unsupported type "QJsonValue &&" (rvalue reference)
-- `QVariant::QVariant(QUuid uuid)`: unsupported type "QUuid" (unknown)
-- `QVariant::QVariant(QLine line)`: unsupported type "QLine" (unknown)
-- `QVariant::QVariant(QLineF line)`: unsupported type "QLineF" (unknown)
-- `QVariant::QVariant(const QEasingCurve & easing)`: unsupported type "const QEasingCurve &" (unknown)
-- `QVariant::QVariant(QEasingCurve && easing)`: unsupported type "QEasingCurve &&" (rvalue reference)
-- `QVariant::QVariant(const QJsonDocument & jsonDocument)`: unsupported type "const QJsonDocument &" (unknown)
-- `QVariant::QVariant(QJsonDocument && jsonDocument)`: unsupported type "QJsonDocument &&" (rvalue reference)
-- `QVariant::QVariant(QPersistentModelIndex && modelIndex)`: unsupported type "QPersistentModelIndex &&" (rvalue reference)
-- `QVariant::QVariant(QLatin1StringView string)`: unsupported type "QLatin1String" (unknown)
-- `QMetaType QVariant::metaType() const`: return: unsupported type "QMetaType" (unknown)
-- `bool QVariant::canConvert(QMetaType targetType) const`: unsupported type "QMetaType" (unknown)
-- `bool QVariant::convert(QMetaType type)`: unsupported type "QMetaType" (unknown)
-- `bool QVariant::canView(QMetaType targetType) const`: unsupported type "QMetaType" (unknown)
-- `QBitArray QVariant::toBitArray() const`: return: unsupported type "QBitArray" (unknown)
-- `QMap<QString, QVariant> QVariant::toMap() const`: return: unsupported type "QMap<QString, QVariant>" (unknown)
-- `QHash<QString, QVariant> QVariant::toHash() const`: return: unsupported type "QHash<QString, QVariant>" (unknown)
-- `QLine QVariant::toLine() const`: return: unsupported type "QLine" (unknown)
-- `QLineF QVariant::toLineF() const`: return: unsupported type "QLineF" (unknown)
-- `QLocale QVariant::toLocale() const`: return: unsupported type "QLocale" (unknown)
-- `QRegularExpression QVariant::toRegularExpression() const`: return: unsupported type "QRegularExpression" (unknown)
-- `QEasingCurve QVariant::toEasingCurve() const`: return: unsupported type "QEasingCurve" (unknown)
-- `QUuid QVariant::toUuid() const`: return: unsupported type "QUuid" (unknown)
-- `QJsonValue QVariant::toJsonValue() const`: return: unsupported type "QJsonValue" (unknown)
-- `QJsonObject QVariant::toJsonObject() const`: return: unsupported type "QJsonObject" (unknown)
-- `QJsonArray QVariant::toJsonArray() const`: return: unsupported type "QJsonArray" (unknown)
-- `QJsonDocument QVariant::toJsonDocument() const`: return: unsupported type "QJsonDocument" (unknown)
-- `void QVariant::load(QDataStream & ds)`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `void QVariant::save(QDataStream & ds) const`: unsupported type "QDataStream &" (pointer or out-parameter)
-- `void * QVariant::data()`: return: unsupported type "void *" (pointer or out-parameter)
-- `const void * QVariant::constData() const`: return: unsupported type "const void *" (pointer or out-parameter)
-- `const void * QVariant::data() const`: return: unsupported type "const void *" (pointer or out-parameter)
-- `void QVariant::setValue(QVariant && avalue)`: unsupported type "QVariant &&" (rvalue reference)
-- `QVariant QVariant::fromMetaType(QMetaType type, const void * copy = …)`: unsupported type "QMetaType" (unknown)
-- `QPartialOrdering QVariant::compare(const QVariant & lhs, const QVariant & rhs)`: return: unsupported type "QPartialOrdering" (unknown)
-
-### QWidget
-
-- `QFontInfo QWidget::fontInfo() const`: return: unsupported type "QFontInfo" (unknown)
-- `void QWidget::setMask(const QBitmap &)`: unsupported type "const QBitmap &" (unknown)
-- `QGraphicsEffect * QWidget::graphicsEffect() const`: return: unsupported type "QGraphicsEffect *" (pointer or out-parameter)
-- `void QWidget::setGraphicsEffect(QGraphicsEffect * effect)`: unsupported type "QGraphicsEffect *" (pointer or out-parameter)
-- `void QWidget::setLocale(const QLocale & locale)`: unsupported type "const QLocale &" (unknown)
-- `QLocale QWidget::locale() const`: return: unsupported type "QLocale" (unknown)
-- `void QWidget::setTabOrder(std::initializer_list<QWidget *> widgets)`: unsupported type "std::initializer_list<QWidget *>" (unknown)
-- `QGraphicsProxyWidget * QWidget::graphicsProxyWidget() const`: return: unsupported type "QGraphicsProxyWidget *" (pointer or out-parameter)
-- `QBackingStore * QWidget::backingStore() const`: return: unsupported type "QBackingStore *" (pointer or out-parameter)
-- `QWindow * QWidget::windowHandle() const`: return: unsupported type "QWindow *" (pointer or out-parameter)
-
-## Skipped on purpose (189)
-
+- `QBindable<QAbstractItemModel *> QAbstractProxyModel::bindableSourceModel()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
 ### QApplication
 
 - `QWidget * QApplication::widgetAt(int x, int y)`: skipped by overlay (use the QPoint overload)
 - `QWidget * QApplication::topLevelAt(int x, int y)`: skipped by overlay (use the QPoint overload)
+
+### QBitmap
+
+- `QBitmap QBitmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QBitmap::QBitmap(int w, int h)`: on purpose: plain-number twin of the struct overload
 
 ### QBrush
 
@@ -894,9 +397,26 @@ These bind once the generator learns the type. Counts by type:
 - `QBrush::QBrush(Qt::GlobalColor color, const QPixmap & pixmap)`: skipped by overlay (use NewQBrushWithColorPixmap)
 - `void QBrush::setColor(Qt::GlobalColor color)`: skipped by overlay (use SetColor)
 
+### QCalendarWidget
+
+- `QMap<QDate, QTextCharFormat> QCalendarWidget::dateTextFormat() const`: return: on purpose: a map keyed by a value class; use the single-key getter
+
 ### QColorDialog
 
 - `void QColorDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QConicalGradient
+
+- `QConicalGradient::QConicalGradient(qreal cx, qreal cy, qreal startAngle)`: on purpose: plain-number twin of the struct overload
+- `void QConicalGradient::setCenter(qreal x, qreal y)`: on purpose: plain-number twin of the struct overload
+
+### QCoreApplication
+
+- `QAbstractEventDispatcher * QCoreApplication::eventDispatcher()`: return: on purpose: event-loop internals
+- `void QCoreApplication::setEventDispatcher(QAbstractEventDispatcher * eventDispatcher)`: on purpose: event-loop internals
+- `Qt::PermissionStatus QCoreApplication::checkPermission(const QPermission & permission)`: on purpose: a templated API
+- `void QCoreApplication::installNativeEventFilter(QAbstractNativeEventFilter * filterObj)`: on purpose: native platform events
+- `void QCoreApplication::removeNativeEventFilter(QAbstractNativeEventFilter * filterObj)`: on purpose: native platform events
 
 ### QCursor
 
@@ -907,15 +427,25 @@ These bind once the generator learns the type. Counts by type:
 
 - `QString QDate::toString(QStringView format) const`: skipped by overlay (use the QString overload)
 - `QDate QDate::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
+- `QDate QDate::fromString(QStringView string, QStringView format, QCalendar cal)`: skipped by overlay (use the QString overload)
+- `QDate QDate::fromString(const QString & string, QStringView format, QCalendar cal)`: skipped by overlay (use the QString overload)
 - `QDate QDate::fromString(QStringView string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
 - `QDate QDate::fromString(const QString & string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
+- `QString QDate::toString(QStringView format, QCalendar cal) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QDate QDate::fromString(const QString & string, QStringView format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QDate QDate::fromString(const QString & string, const QString & format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QDateTime
 
 - `QString QDateTime::toString(QStringView format) const`: skipped by overlay (use the QString overload)
 - `QDateTime QDateTime::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
+- `QDateTime QDateTime::fromString(QStringView string, QStringView format, QCalendar cal)`: skipped by overlay (use the QString overload)
+- `QDateTime QDateTime::fromString(const QString & string, QStringView format, QCalendar cal)`: skipped by overlay (use the QString overload)
 - `QDateTime QDateTime::fromString(QStringView string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
 - `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
+- `QString QDateTime::toString(QStringView format, QCalendar cal) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QDragEnterEvent
 
@@ -925,15 +455,25 @@ These bind once the generator learns the type. Counts by type:
 
 - `QDragMoveEvent::QDragMoveEvent(const QPoint & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)`: deprecated or variadic
 
+### QEasingCurve
+
+- `void QEasingCurve::setCustomType(EasingFunction func)`: on purpose: C function pointer; a Go closure cannot become one
+- `EasingFunction QEasingCurve::customType() const`: return: on purpose: C function pointer; a Go closure cannot become one
+
 ### QFile
 
 - `QFile::QFile(const QString & name)`: skipped by overlay (use NewQFileWithName(name, nil))
 - `QString QFile::decodeName(const char * localFileName)`: skipped by overlay (use the []byte overload)
+- `bool QFile::open(FILE * f, OpenMode ioFlags, FileHandleFlags handleFlags = …)`: on purpose: C FILE*; use the QFile name or file-descriptor overloads
 - `QFile::QFile()`: redundant: call NewQFile(nil)
 
 ### QFileDialog
 
 - `void QFileDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QFontDatabase
+
+- `QFontDatabase::QFontDatabase()`: deprecated or variadic
 
 ### QFontDialog
 
@@ -943,9 +483,14 @@ These bind once the generator learns the type. Counts by type:
 
 - `QRect QFontMetrics::boundingRect(int x, int y, int w, int h, int flags, const QString & text, int tabstops = …, int * tabarray = …) const`: skipped by overlay (use BoundingRectIn)
 
+### QGraphicsDropShadowEffect
+
+- `void QGraphicsDropShadowEffect::setOffset(qreal dx, qreal dy)`: on purpose: plain-number twin of the struct overload
+
 ### QGraphicsEllipseItem
 
 - `void QGraphicsEllipseItem::setRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem * parent = …)`: on purpose: plain-number twin of the struct overload
 
 ### QGraphicsItem
 
@@ -972,7 +517,18 @@ These bind once the generator learns the type. Counts by type:
 - `QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
 - `QRectF QGraphicsItem::mapRectFromParent(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
 - `QRectF QGraphicsItem::mapRectFromScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
-- `const QGraphicsObject * QGraphicsItem::toGraphicsObject() const`: duplicate Go signature after dropping default arguments
+- `const QGraphicsObject * QGraphicsItem::toGraphicsObject() const`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QGraphicsLayoutItem
+
+- `void QGraphicsLayoutItem::setMinimumSize(qreal w, qreal h)`: on purpose: plain-number twin of the struct overload
+- `void QGraphicsLayoutItem::setPreferredSize(qreal w, qreal h)`: on purpose: plain-number twin of the struct overload
+- `void QGraphicsLayoutItem::setMaximumSize(qreal w, qreal h)`: on purpose: plain-number twin of the struct overload
+
+### QGraphicsLineItem
+
+- `QGraphicsLineItem::QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem * parent = …)`: on purpose: plain-number twin of the struct overload
+- `void QGraphicsLineItem::setLine(qreal x1, qreal y1, qreal x2, qreal y2)`: on purpose: plain-number twin of the struct overload
 
 ### QGraphicsPixmapItem
 
@@ -981,6 +537,7 @@ These bind once the generator learns the type. Counts by type:
 ### QGraphicsRectItem
 
 - `void QGraphicsRectItem::setRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `QGraphicsRectItem::QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem * parent = …)`: on purpose: plain-number twin of the struct overload
 
 ### QGraphicsScene
 
@@ -993,6 +550,8 @@ These bind once the generator learns the type. Counts by type:
 - `QGraphicsRectItem * QGraphicsScene::addRect(qreal x, qreal y, qreal w, qreal h, const QPen & pen = …, const QBrush & brush = …)`: skipped by overlay (use the QRectF overload)
 - `void QGraphicsScene::update(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
 - `void QGraphicsScene::invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers = …)`: skipped by overlay (use the QRectF overload)
+- `QGraphicsScene::QGraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject * parent = …)`: on purpose: plain-number twin of the struct overload
+- `QGraphicsLineItem * QGraphicsScene::addLine(qreal x1, qreal y1, qreal x2, qreal y2, const QPen & pen = …)`: on purpose: plain-number twin of the struct overload
 
 ### QGraphicsView
 
@@ -1008,9 +567,19 @@ These bind once the generator learns the type. Counts by type:
 - `QPoint QGraphicsView::mapFromScene(qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
 - `QPolygon QGraphicsView::mapFromScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
 
+### QGraphicsWidget
+
+- `void QGraphicsWidget::resize(qreal w, qreal h)`: on purpose: plain-number twin of the struct overload
+- `void QGraphicsWidget::setGeometry(qreal x, qreal y, qreal w, qreal h)`: on purpose: plain-number twin of the struct overload
+
 ### QGridLayout
 
 - `void QGridLayout::addWidget(QWidget * w)`: skipped by overlay (use AddWidget(w, row, column))
+
+### QGuiApplication
+
+- `QPlatformNativeInterface * QGuiApplication::platformNativeInterface()`: return: on purpose: private platform API
+- `QFunctionPointer QGuiApplication::platformFunction(const QByteArray & function)`: return: on purpose: C function pointer; a Go closure cannot become one
 
 ### QHBoxLayout
 
@@ -1023,9 +592,12 @@ These bind once the generator learns the type. Counts by type:
 ### QIODevice
 
 - `qint64 QIODevice::write(const char * data, qint64 len)`: skipped by overlay (use Write([]byte))
+- `QByteArrayView QIODevice::readLineInto(QSpan<uchar> buffer)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QByteArrayView QIODevice::readLineInto(QSpan<std::byte> buffer)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QIcon
 
+- `QIcon::QIcon(QIconEngine * engine)`: on purpose: custom icon engines need C++ subclassing
 - `QPixmap QIcon::pixmap(int w, int h, Mode mode = …, State state = …) const`: skipped by overlay (use Pixmap(size))
 - `void QIcon::paint(QPainter * painter, int x, int y, int w, int h, Qt::Alignment alignment = …, Mode mode = …, State state = …) const`: skipped by overlay (use Paint(painter, rect))
 
@@ -1043,10 +615,21 @@ These bind once the generator learns the type. Counts by type:
 - `QImage QImage::mirrored(bool horizontally = …, bool vertically = …) const`: deprecated or variadic
 - `QImage QImage::mirrored(bool horizontally = …, bool vertically = …)`: deprecated or variadic
 - `void QImage::mirror(bool horizontally = …, bool vertically = …)`: deprecated or variadic
-- `QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …)`: duplicate Go signature after dropping default arguments
-- `QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …)`: duplicate Go signature after dropping default arguments
-- `QImage QImage::rgbSwapped()`: duplicate Go signature after dropping default arguments
-- `QImage QImage::flipped(Qt::Orientations orient = …)`: duplicate Go signature after dropping default arguments
+- `QImage::QImage(int width, int height, Format format)`: on purpose: plain-number twin of the struct overload
+- `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: on purpose: plain-number twin of the struct overload
+- `QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `const uchar * QImage::bits() const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `const uchar * QImage::scanLine(int) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::rgbSwapped()`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::flipped(Qt::Orientations orient = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::colorTransformed(const QColorTransform & transform)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::colorTransformed(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `bool QImage::loadFromData(const uchar * buf, int len, const char * format = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `bool QImage::loadFromData(const QByteArray & data, const char * format = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::fromData(const uchar * data, int size, const char * format = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QImage QImage::fromData(const QByteArray & data, const char * format = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QInputDialog
 
@@ -1054,11 +637,123 @@ These bind once the generator learns the type. Counts by type:
 
 ### QItemSelectionModel
 
-- `QAbstractItemModel * QItemSelectionModel::model()`: duplicate Go signature after dropping default arguments
+- `QBindable<QAbstractItemModel *> QItemSelectionModel::bindableModel()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QAbstractItemModel * QItemSelectionModel::model()`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QJsonArray
+
+- `QJsonArray::QJsonArray(std::initializer_list<QJsonValue> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `iterator QJsonArray::begin()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonArray::begin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonArray::constBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonArray::cbegin() const`: on purpose: iterator; use the method that returns a list
+- `iterator QJsonArray::end()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonArray::end() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonArray::constEnd() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonArray::cend() const`: on purpose: iterator; use the method that returns a list
+
+### QJsonDocument
+
+- `QJsonDocument::QJsonDocument(QJsonObject && object)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QJsonDocument::QJsonDocument(QJsonArray && array)`: on purpose: C++ move overload; the copying overload does the same in Go
+
+### QJsonObject
+
+- `QJsonObject::QJsonObject(std::initializer_list<std::pair<QString, QJsonValue>> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `QJsonValue QJsonObject::value(QLatin1StringView key) const`: on purpose: use the string overload
+- `void QJsonObject::remove(QLatin1StringView key)`: on purpose: use the string overload
+- `QJsonValue QJsonObject::take(QLatin1StringView key)`: on purpose: use the string overload
+- `bool QJsonObject::contains(QLatin1StringView key) const`: on purpose: use the string overload
+- `iterator QJsonObject::begin()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonObject::begin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonObject::cbegin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonObject::constBegin() const`: on purpose: iterator; use the method that returns a list
+- `iterator QJsonObject::end()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonObject::end() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonObject::cend() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QJsonObject::constEnd() const`: on purpose: iterator; use the method that returns a list
+- `key_value_iterator QJsonObject::keyValueBegin()`: on purpose: iterator; use the method that returns a list
+- `key_value_iterator QJsonObject::keyValueEnd()`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QJsonObject::keyValueBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QJsonObject::constKeyValueBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QJsonObject::keyValueEnd() const`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QJsonObject::constKeyValueEnd() const`: on purpose: iterator; use the method that returns a list
+- `iterator QJsonObject::find(QLatin1StringView key)`: on purpose: use the string overload
+- `const_iterator QJsonObject::find(QLatin1StringView key) const`: on purpose: use the string overload
+- `const_iterator QJsonObject::constFind(QLatin1StringView key) const`: on purpose: use the string overload
+- `iterator QJsonObject::insert(QLatin1StringView key, const QJsonValue & value)`: on purpose: use the string overload
+- `QJsonValue QJsonObject::value(QStringView key) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `void QJsonObject::remove(QStringView key)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QJsonValue QJsonObject::take(QStringView key)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `bool QJsonObject::contains(QStringView key) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QJsonValue
+
+- `QJsonValue::QJsonValue(QLatin1StringView s)`: on purpose: use the string overload
+- `QJsonValue::QJsonValue(QJsonArray && a)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QJsonValue::QJsonValue(QJsonObject && o)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QJsonValue::QJsonValue(const char * s)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QLabel
+
+- `QTextDocument::ResourceProvider QLabel::resourceProvider() const`: return: on purpose: a C++ function cannot be turned back into a Go func
+
+### QLayout
+
+- `void QLayout::setContentsMargins(int left, int top, int right, int bottom)`: on purpose: plain-number twin of the struct overload
+
+### QLine
+
+- `void QLine::translate(int dx, int dy)`: on purpose: plain-number twin of the struct overload
+- `QLine QLine::translated(int dx, int dy) const`: on purpose: plain-number twin of the struct overload
+
+### QLineEdit
+
+- `void QLineEdit::setTextMargins(int left, int top, int right, int bottom)`: on purpose: plain-number twin of the struct overload
+
+### QLineF
+
+- `QLineF::QLineF(qreal x1, qreal y1, qreal x2, qreal y2)`: on purpose: plain-number twin of the struct overload
+- `void QLineF::translate(qreal dx, qreal dy)`: on purpose: plain-number twin of the struct overload
+- `QLineF QLineF::translated(qreal dx, qreal dy) const`: on purpose: plain-number twin of the struct overload
+
+### QLinearGradient
+
+- `void QLinearGradient::setStart(qreal x, qreal y)`: on purpose: plain-number twin of the struct overload
+- `void QLinearGradient::setFinalStop(qreal x, qreal y)`: on purpose: plain-number twin of the struct overload
 
 ### QListWidget
 
 - `QListWidgetItem * QListWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QLocale
+
+- `QLocale::QLocale(QStringView name)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `short QLocale::toShort(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `ushort QLocale::toUShort(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `int QLocale::toInt(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `uint QLocale::toUInt(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `long QLocale::toLong(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `ulong QLocale::toULong(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `qlonglong QLocale::toLongLong(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `qulonglong QLocale::toULongLong(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `float QLocale::toFloat(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `double QLocale::toDouble(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QLocale::toString(long i) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QLocale::toString(ulong i) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QLocale::toString(QDate date, QStringView format) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QLocale::toString(QTime time, QStringView format) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QLocale::toString(const QDateTime & dateTime, QStringView format) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QLocale::quoteString(QStringView str, QuotationStyle style = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QMenu
+
+- `QPlatformMenu * QMenu::platformMenu()`: return: on purpose: private platform API
+- `void QMenu::setPlatformMenu(QPlatformMenu * platformMenu)`: on purpose: private platform API
+
+### QMenuBar
+
+- `QPlatformMenuBar * QMenuBar::platformMenuBar()`: return: on purpose: private platform API
 
 ### QMessageBox
 
@@ -1068,18 +763,51 @@ These bind once the generator learns the type. Counts by type:
 - `int QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
 - `int QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
 
+### QModelIndex
+
+- `void QModelIndex::multiData(QModelRoleDataSpan roleDataSpan) const`: on purpose: a batching optimisation of data(); use Data
+
+### QMovie
+
+- `QBindable<int> QMovie::bindableSpeed()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<CacheMode> QMovie::bindableCacheMode()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
+### QObject
+
+- `QThread * QObject::thread() const`: return: on purpose: threads are not supported yet: the runtime is GUI-thread-only (roadmap)
+- `bool QObject::moveToThread(QThread * thread, Qt::Disambiguated_t = …)`: on purpose: threads are not supported yet: the runtime is GUI-thread-only (roadmap)
+- `bool QObject::setProperty(const char * name, QVariant && value)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QBindingStorage * QObject::bindingStorage()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `const QBindingStorage * QObject::bindingStorage() const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
 ### QPainter
 
+- `void QPainter::setPen(QPen && pen)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QPainter::setBrush(QBrush && brush)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `void QPainter::setBrush(Qt::GlobalColor color)`: skipped by overlay (use SetBrushColor)
 - `void QPainter::setBrushOrigin(int x, int y)`: skipped by overlay (use SetBrushOrigin)
 - `void QPainter::setClipRect(int x, int y, int w, int h, Qt::ClipOperation op = …)`: skipped by overlay (use SetClipRect)
 - `void QPainter::setWindow(int x, int y, int w, int h)`: skipped by overlay (use SetWindow)
 - `void QPainter::setViewport(int x, int y, int w, int h)`: skipped by overlay (use SetViewport)
 - `void QPainter::drawPoint(int x, int y)`: skipped by overlay (use DrawPoint)
+- `void QPainter::drawPoints(const QPointF * points, int pointCount)`: skipped by overlay (use DrawPointsF)
+- `void QPainter::drawPoints(const QPoint * points, int pointCount)`: skipped by overlay (use DrawPoints)
 - `void QPainter::drawLine(const QLineF & line)`: skipped by overlay (QLineF is not bound)
 - `void QPainter::drawLine(const QLine & line)`: skipped by overlay (QLine is not bound)
+- `void QPainter::drawLines(const QLineF * lines, int lineCount)`: skipped by overlay (use DrawLineSegmentsF)
+- `void QPainter::drawLines(const QPointF * pointPairs, int lineCount)`: skipped by overlay (use DrawLinesF)
+- `void QPainter::drawLines(const QLine * lines, int lineCount)`: skipped by overlay (use DrawLineSegments)
+- `void QPainter::drawLines(const QPoint * pointPairs, int lineCount)`: skipped by overlay (use DrawLines)
 - `void QPainter::drawRect(int x1, int y1, int w, int h)`: skipped by overlay (use DrawRect)
+- `void QPainter::drawRects(const QRectF * rects, int rectCount)`: skipped by overlay (use DrawRectsF)
+- `void QPainter::drawRects(const QRect * rects, int rectCount)`: skipped by overlay (use DrawRects)
 - `void QPainter::drawEllipse(int x, int y, int w, int h)`: skipped by overlay (use DrawEllipse)
+- `void QPainter::drawPolyline(const QPointF * points, int pointCount)`: skipped by overlay (use DrawPolylineF)
+- `void QPainter::drawPolyline(const QPoint * points, int pointCount)`: skipped by overlay (use DrawPolyline)
+- `void QPainter::drawPolygon(const QPointF * points, int pointCount, Qt::FillRule fillRule = …)`: skipped by overlay (use DrawPolygonF)
+- `void QPainter::drawPolygon(const QPoint * points, int pointCount, Qt::FillRule fillRule = …)`: skipped by overlay (use DrawPolygon)
+- `void QPainter::drawConvexPolygon(const QPointF * points, int pointCount)`: skipped by overlay (use DrawConvexPolygonF)
+- `void QPainter::drawConvexPolygon(const QPoint * points, int pointCount)`: skipped by overlay (use DrawConvexPolygon)
 - `void QPainter::drawArc(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawArc)
 - `void QPainter::drawPie(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawPie)
 - `void QPainter::drawChord(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawChord)
@@ -1107,7 +835,11 @@ These bind once the generator learns the type. Counts by type:
 - `void QPainter::fillRect(int x, int y, int w, int h, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrush)
 - `void QPainter::fillRect(const QRect & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrush)
 - `void QPainter::fillRect(const QRectF & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrushF)
+- `void QPainter::fillRect(int x, int y, int w, int h, QGradient::Preset preset)`: skipped by overlay (use FillRectPreset)
 - `void QPainter::eraseRect(int x, int y, int w, int h)`: skipped by overlay (use EraseRect)
+- `void QPainter::drawPicture(int x, int y, const QPicture & picture)`: on purpose: plain-number twin of the struct overload
+- `void QPainter::drawStaticText(int left, int top, const QStaticText & staticText)`: on purpose: plain-number twin of the struct overload
+- `void QPainter::drawTextItem(int x, int y, const QTextItem & ti)`: on purpose: plain-number twin of the struct overload
 
 ### QPainterPath
 
@@ -1128,33 +860,105 @@ These bind once the generator learns the type. Counts by type:
 
 - `QPalette::QPalette(Qt::GlobalColor button)`: skipped by overlay (use NewQPaletteWithButton)
 
+### QPersistentModelIndex
+
+- `void QPersistentModelIndex::multiData(QModelRoleDataSpan roleDataSpan) const`: on purpose: a batching optimisation of data(); use Data
+
 ### QPixmap
 
+- `QPixmap::QPixmap(QPlatformPixmap * data)`: on purpose: private platform API
 - `QPixmap::QPixmap(const QSize &)`: skipped by overlay (use NewQPixmapWithW(w, h))
 - `QPixmap QPixmap::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
+- `QPixmap QPixmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QPixmap QPixmap::copy(int x, int y, int width, int height) const`: skipped by overlay (use Copy(rect))
 - `void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion * exposed = …)`: skipped by overlay (out parameter)
+- `bool QPixmap::loadFromData(const QByteArray & data, const char * format = …, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QProgressDialog
 
 - `void QProgressDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 
+### QRadialGradient
+
+- `QRadialGradient::QRadialGradient(qreal cx, qreal cy, qreal radius)`: on purpose: plain-number twin of the struct overload
+- `void QRadialGradient::setCenter(qreal x, qreal y)`: on purpose: plain-number twin of the struct overload
+- `void QRadialGradient::setFocalPoint(qreal x, qreal y)`: on purpose: plain-number twin of the struct overload
+
 ### QRegion
 
+- `const_iterator QRegion::begin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QRegion::cbegin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QRegion::end() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QRegion::cend() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QRegion::rbegin() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QRegion::crbegin() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QRegion::rend() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QRegion::crend() const`: on purpose: iterator; use the method that returns a list
 - `void QRegion::translate(int dx, int dy)`: skipped by overlay (use the QPoint overload)
 - `QRegion QRegion::translated(int dx, int dy) const`: skipped by overlay (use the QPoint overload)
+- `QRegion::QRegion(int x, int y, int w, int h, RegionType t = …)`: on purpose: plain-number twin of the struct overload
+- `void QRegion::setRects(QSpan<const QRect> r)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QRegularExpression
+
+- `QString QRegularExpression::escape(QStringView str)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QRegularExpression::wildcardToRegularExpression(QStringView str, WildcardConversionOptions options = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QString QRegularExpression::anchoredPattern(QStringView expression)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QSettings
+
+- `Format QSettings::registerFormat(const QString & extension, ReadFunc readFunc, WriteFunc writeFunc, Qt::CaseSensitivity caseSensitivity = …)`: on purpose: C function pointer; a Go closure cannot become one
+
+### QSortFilterProxyModel
+
+- `QBindable<QRegularExpression> QSortFilterProxyModel::bindableFilterRegularExpression()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QSortFilterProxyModel::bindableFilterKeyColumn()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<Qt::CaseSensitivity> QSortFilterProxyModel::bindableFilterCaseSensitivity()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<Qt::CaseSensitivity> QSortFilterProxyModel::bindableSortCaseSensitivity()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<bool> QSortFilterProxyModel::bindableIsSortLocaleAware()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<bool> QSortFilterProxyModel::bindableDynamicSortFilter()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QSortFilterProxyModel::bindableSortRole()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QSortFilterProxyModel::bindableFilterRole()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<bool> QSortFilterProxyModel::bindableRecursiveFilteringEnabled()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<bool> QSortFilterProxyModel::bindableAutoAcceptChildRows()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
 ### QStackedLayout
 
 - `QStackedLayout::QStackedLayout()`: redundant: call NewQStackedLayout(nil)
 
+### QStandardItem
+
+- `void QStandardItem::multiData(QModelRoleDataSpan roleDataSpan) const`: on purpose: a batching optimisation of data(); use Data
+
+### QStandardItemModel
+
+- `QBindable<int> QStandardItemModel::bindableSortRole()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
+### QSurface
+
+- `QPlatformSurface * QSurface::surfaceHandle() const`: return: on purpose: private platform API
+
 ### QTableWidget
 
 - `QTableWidgetItem * QTableWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
 
+### QTextBlock
+
+- `iterator QTextBlock::begin() const`: on purpose: iterator; use the method that returns a list
+- `iterator QTextBlock::end() const`: on purpose: iterator; use the method that returns a list
+
 ### QTextDocument
 
+- `void QTextDocument::setDocumentLayout(QAbstractTextDocumentLayout * layout)`: on purpose: custom text layouts need C++ subclassing
 - `QAbstractTextDocumentLayout * QTextDocument::documentLayout() const`: skipped by overlay (QAbstractTextDocumentLayout is not bound)
+- `QTextDocument::ResourceProvider QTextDocument::resourceProvider() const`: return: on purpose: a C++ function cannot be turned back into a Go func
+- `QTextDocument::ResourceProvider QTextDocument::defaultResourceProvider()`: return: on purpose: a C++ function cannot be turned back into a Go func
+- `void QTextDocument::appendUndoItem(QAbstractUndoItem *)`: on purpose: custom undo items need C++ subclassing
+
+### QTextFrame
+
+- `iterator QTextFrame::begin() const`: on purpose: iterator; use the method that returns a list
+- `iterator QTextFrame::end() const`: on purpose: iterator; use the method that returns a list
 
 ### QTime
 
@@ -1165,6 +969,10 @@ These bind once the generator learns the type. Counts by type:
 
 ### QTimer
 
+- `QBindable<bool> QTimer::bindableActive()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QTimer::bindableInterval()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<Qt::TimerType> QTimer::bindableTimerType()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<bool> QTimer::bindableSingleShot()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 - `void QTimer::singleShot(int msec, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 - `void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 - `void QTimer::singleShot(std::chrono::nanoseconds value, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
@@ -1177,14 +985,50 @@ These bind once the generator learns the type. Counts by type:
 ### QTransform
 
 - `QTransform::QTransform(Qt::Initialization)`: skipped by overlay (internal)
+- `Affine QTransform::asAffineMatrix()`: return: on purpose: internal matrix access; use M11() … M33()
+- `void QTransform::map(int x, int y, int * tx, int * ty) const`: on purpose: plain-number twin of the struct overload
+- `void QTransform::map(qreal x, qreal y, qreal * tx, qreal * ty) const`: on purpose: plain-number twin of the struct overload
 
 ### QTreeWidget
 
 - `QTreeWidgetItem * QTreeWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
 
+### QUrlQuery
+
+- `QUrlQuery::QUrlQuery(std::initializer_list<std::pair<QString, QString>> list)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+
 ### QVBoxLayout
 
 - `QVBoxLayout::QVBoxLayout()`: redundant: call NewQVBoxLayout(nil)
+
+### QVariant
+
+- `QVariant::QVariant(QBitArray && bitarray)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QByteArray && bytearray)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QDateTime && datetime)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QHash<QString, QVariant> && hash)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QJsonArray && jsonArray)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QJsonObject && jsonObject)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QList<QVariant> && list)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QLocale && locale)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QMap<QString, QVariant> && map)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QRegularExpression && re)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QString && string)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QStringList && stringlist)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QUrl && url)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QJsonValue && jsonValue)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QEasingCurve && easing)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QJsonDocument && jsonDocument)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QPersistentModelIndex && modelIndex)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(QLatin1StringView string)`: on purpose: use the string overload
+- `void QVariant::setValue(QVariant && avalue)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QVariant::QVariant(const QMap<QString, QVariant> & map)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QVariant::QVariant(const char * str)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `const void * QVariant::data() const`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QVector2D
+
+- `QVector2D::QVector2D(float xpos, float ypos)`: on purpose: plain-number twin of the struct overload
 
 ### QWidget
 
@@ -1193,6 +1037,7 @@ These bind once the generator learns the type. Counts by type:
 - `void QWidget::setSizeIncrement(const QSize &)`: skipped by overlay (use SetSizeIncrement(w, h))
 - `void QWidget::setBaseSize(const QSize &)`: skipped by overlay (use SetBaseSize(w, h))
 - `void QWidget::setFixedSize(const QSize &)`: skipped by overlay (use SetFixedSize(w, h))
+- `void QWidget::setTabOrder(std::initializer_list<QWidget *> widgets)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
 - `void QWidget::update(int x, int y, int w, int h)`: skipped by overlay (use UpdateRect)
 - `void QWidget::repaint(int x, int y, int w, int h)`: skipped by overlay (use RepaintRect)
 - `void QWidget::move(const QPoint &)`: skipped by overlay (use Move(x, y))
@@ -1202,7 +1047,18 @@ These bind once the generator learns the type. Counts by type:
 - `QAction * QWidget::addAction(const QString & text, const QKeySequence & shortcut, const QObject * receiver, const char * member, Qt::ConnectionType type = …)`: string-based SLOT() connection; use the On* signal methods instead
 - `QAction * QWidget::addAction(const QIcon & icon, const QString & text, const QKeySequence & shortcut, const QObject * receiver, const char * member, Qt::ConnectionType type = …)`: string-based SLOT() connection; use the On* signal methods instead
 - `QWidget * QWidget::childAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+- `QBackingStore * QWidget::backingStore() const`: return: on purpose: platform internals
 - `QWidget * QWidget::createWindowContainer(QWindow * window, QWidget * parent = …, Qt::WindowFlags flags = …)`: skipped by overlay (QWindow is not bound)
+- `void QWidget::setGeometry(int x, int y, int w, int h)`: on purpose: plain-number twin of the struct overload
+- `void QWidget::setContentsMargins(int left, int top, int right, int bottom)`: on purpose: plain-number twin of the struct overload
+
+### QWindow
+
+- `QWindow::QWindow(QScreen * screen = …)`: redundant: call NewQWindow(nil)
+- `void QWindow::setFramePosition(int x, int y)`: on purpose: plain-number twin of the struct overload
+- `void QWindow::setPosition(int posx, int posy)`: on purpose: plain-number twin of the struct overload
+- `void QWindow::resize(int w, int h)`: on purpose: plain-number twin of the struct overload
+- `void QWindow::setGeometry(int posx, int posy, int w, int h)`: on purpose: plain-number twin of the struct overload
 
 ## Ownership rules without a generated test (1)
 
@@ -1210,14 +1066,17 @@ Add a `test:` snippet to the overlay entry to cover these.
 
 - `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
 
-## Results whose death qute cannot see (4)
+## Results whose death qute cannot see (7)
 
 Qt creates these items itself, and they are not QObjects, so no death notice
 reaches Go. The handle is Parented and correct while the owner lives; after
 the owner is deleted, do not use it.
 
 - `QGraphicsEllipseItem * QGraphicsScene::addEllipse(const QRectF & rect, const QPen & pen = …, const QBrush & brush = …)`
+- `QGraphicsLineItem * QGraphicsScene::addLine(const QLineF & line, const QPen & pen = …)`
+- `QGraphicsPathItem * QGraphicsScene::addPath(const QPainterPath & path, const QPen & pen = …, const QBrush & brush = …)`
 - `QGraphicsPixmapItem * QGraphicsScene::addPixmap(const QPixmap & pixmap)`
+- `QGraphicsPolygonItem * QGraphicsScene::addPolygon(const QPolygonF & polygon, const QPen & pen = …, const QBrush & brush = …)`
 - `QGraphicsRectItem * QGraphicsScene::addRect(const QRectF & rect, const QPen & pen = …, const QBrush & brush = …)`
 - `QGraphicsSimpleTextItem * QGraphicsScene::addSimpleText(const QString & text, const QFont & font = …)`
 

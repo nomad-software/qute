@@ -122,6 +122,29 @@ func (this *QFileDevice) SetPermissions(permissionSpec QFileDevicePermissions) b
 	return bool(r)
 }
 
+// Map wraps QFileDevice::map.
+//
+//	C++: uchar * QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledevice.html#map
+func (this *QFileDevice) Map(offset int64, size int64) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Map")
+	r := C.qute_QFileDevice_map(self, C.longlong(offset), C.longlong(size))
+	return r
+}
+
+// Unmap wraps QFileDevice::unmap.
+//
+//	C++: bool QFileDevice::unmap(uchar * address)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledevice.html#unmap
+func (this *QFileDevice) Unmap() (bool, uint8) {
+	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Unmap")
+	var addressOut C.uchar
+	r := C.qute_QFileDevice_unmap(self, &addressOut)
+	return bool(r), uint8(addressOut)
+}
+
 // FileTime wraps QFileDevice::fileTime.
 //
 //	C++: QDateTime QFileDevice::fileTime(QFileDevice::FileTime time) const

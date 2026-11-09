@@ -89,14 +89,26 @@ func NewQCursor() *QCursor {
 	return rt.View[QCursor](h, p)
 }
 
-// NewQCursorWithShape wraps the QCursor constructor.
+// NewQCursorWithCursorShape wraps the QCursor constructor.
 //
 //	C++: QCursor::QCursor(Qt::CursorShape shape)
 //
 // Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
-func NewQCursorWithShape(shape qtcore.CursorShape) *QCursor {
-	rt.CheckThread("NewQCursorWithShape")
+func NewQCursorWithCursorShape(shape qtcore.CursorShape) *QCursor {
+	rt.CheckThread("NewQCursorWithCursorShape")
 	p := C.qute_QCursor_new_1(C.int64_t(shape))
+	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	return rt.View[QCursor](h, p)
+}
+
+// NewQCursorWithBitmap wraps the QCursor constructor.
+//
+//	C++: QCursor::QCursor(const QBitmap & bitmap, const QBitmap & mask, int hotX = …, int hotY = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
+func NewQCursorWithBitmap(bitmap *QBitmap, maskArg *QBitmap) *QCursor {
+	rt.CheckThread("NewQCursorWithBitmap")
+	p := C.qute_QCursor_new_2(rt.UseArg(unsafe.Pointer(bitmap), "NewQCursorWithBitmap"), rt.UseArg(unsafe.Pointer(maskArg), "NewQCursorWithBitmap"))
 	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
@@ -108,7 +120,7 @@ func NewQCursorWithShape(shape qtcore.CursorShape) *QCursor {
 // Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
 func NewQCursorWithPixmap(pixmap *QPixmap) *QCursor {
 	rt.CheckThread("NewQCursorWithPixmap")
-	p := C.qute_QCursor_new_2(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmap"))
+	p := C.qute_QCursor_new_3(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmap"))
 	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
@@ -132,6 +144,32 @@ func (this *QCursor) Shape() qtcore.CursorShape {
 func (this *QCursor) SetShape(newShape qtcore.CursorShape) {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.SetShape")
 	C.qute_QCursor_setShape(self, C.int64_t(newShape))
+}
+
+// Bitmap wraps QCursor::bitmap.
+//
+//	C++: QBitmap QCursor::bitmap() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcursor.html#bitmap
+func (this *QCursor) Bitmap() *QBitmap {
+	self := rt.Use(unsafe.Pointer(this), "QCursor.Bitmap")
+	r := C.qute_QCursor_bitmap(self)
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
+}
+
+// Mask wraps QCursor::mask.
+//
+//	C++: QBitmap QCursor::mask() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcursor.html#mask
+func (this *QCursor) Mask() *QBitmap {
+	self := rt.Use(unsafe.Pointer(this), "QCursor.Mask")
+	r := C.qute_QCursor_mask(self)
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
 // Pixmap wraps QCursor::pixmap.

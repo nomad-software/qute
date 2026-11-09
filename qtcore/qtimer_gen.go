@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"time"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -203,6 +204,48 @@ func (this *QTimer) Start() {
 func (this *QTimer) Stop() {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.Stop")
 	C.qute_QTimer_stop(self)
+}
+
+// SetIntervalDuration wraps QTimer::setInterval.
+//
+//	C++: void QTimer::setInterval(std::chrono::milliseconds value)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimer.html#setInterval
+func (this *QTimer) SetIntervalDuration(value time.Duration) {
+	self := rt.Use(unsafe.Pointer(this), "QTimer.SetIntervalDuration")
+	C.qute_QTimer_setInterval_1(self, C.int64_t(value))
+}
+
+// IntervalAsDuration wraps QTimer::intervalAsDuration.
+//
+//	C++: std::chrono::milliseconds QTimer::intervalAsDuration() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimer.html#intervalAsDuration
+func (this *QTimer) IntervalAsDuration() time.Duration {
+	self := rt.Use(unsafe.Pointer(this), "QTimer.IntervalAsDuration")
+	r := C.qute_QTimer_intervalAsDuration(self)
+	return time.Duration(r)
+}
+
+// RemainingTimeAsDuration wraps QTimer::remainingTimeAsDuration.
+//
+//	C++: std::chrono::milliseconds QTimer::remainingTimeAsDuration() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimer.html#remainingTimeAsDuration
+func (this *QTimer) RemainingTimeAsDuration() time.Duration {
+	self := rt.Use(unsafe.Pointer(this), "QTimer.RemainingTimeAsDuration")
+	r := C.qute_QTimer_remainingTimeAsDuration(self)
+	return time.Duration(r)
+}
+
+// StartWithDuration wraps QTimer::start.
+//
+//	C++: void QTimer::start(std::chrono::milliseconds value)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimer.html#start
+func (this *QTimer) StartWithDuration(value time.Duration) {
+	self := rt.Use(unsafe.Pointer(this), "QTimer.StartWithDuration")
+	C.qute_QTimer_start_2(self, C.int64_t(value))
 }
 
 // OnTimeout connects f to the timeout signal. The connection ends when the

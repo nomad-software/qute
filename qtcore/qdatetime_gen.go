@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"time"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -88,14 +89,28 @@ func NewQDateTime() *QDateTime {
 	return rt.View[QDateTime](h, p)
 }
 
-// NewQDateTimeWithDate wraps the QDateTime constructor.
+// NewQDateTimeIn wraps the QDateTime constructor.
+//
+//	C++: QDateTime::QDateTime(QDate date, QTime time, const QTimeZone & timeZone, TransitionResolution resolve = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#QDateTime
+func NewQDateTimeIn(date *QDate, time *QTime, timeZone *QTimeZone) *QDateTime {
+	rt.CheckThread("NewQDateTimeIn")
+	p := C.qute_QDateTime_new_1(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeIn"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeIn"), rt.UseArg(unsafe.Pointer(timeZone), "NewQDateTimeIn"))
+	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	return rt.View[QDateTime](h, p)
+}
+
+// NewQDateTimeLocal wraps the QDateTime constructor.
 //
 //	C++: QDateTime::QDateTime(QDate date, QTime time, TransitionResolution resolve = …)
 //
+// Local time.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#QDateTime
-func NewQDateTimeWithDate(date *QDate, time *QTime) *QDateTime {
-	rt.CheckThread("NewQDateTimeWithDate")
-	p := C.qute_QDateTime_new_1(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeWithDate"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeWithDate"))
+func NewQDateTimeLocal(date *QDate, time *QTime) *QDateTime {
+	rt.CheckThread("NewQDateTimeLocal")
+	p := C.qute_QDateTime_new_2(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeLocal"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeLocal"))
 	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
@@ -170,6 +185,32 @@ func (this *QDateTime) OffsetFromUtc() int {
 	return int(r)
 }
 
+// TimeRepresentation wraps QDateTime::timeRepresentation.
+//
+//	C++: QTimeZone QDateTime::timeRepresentation() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#timeRepresentation
+func (this *QDateTime) TimeRepresentation() *QTimeZone {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.TimeRepresentation")
+	r := C.qute_QDateTime_timeRepresentation(self)
+	return rt.View[QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
+}
+
+// TimeZone wraps QDateTime::timeZone.
+//
+//	C++: QTimeZone QDateTime::timeZone() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#timeZone
+func (this *QDateTime) TimeZone() *QTimeZone {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.TimeZone")
+	r := C.qute_QDateTime_timeZone(self)
+	return rt.View[QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
+}
+
 // TimeZoneAbbreviation wraps QDateTime::timeZoneAbbreviation.
 //
 //	C++: QString QDateTime::timeZoneAbbreviation() const
@@ -234,6 +275,16 @@ func (this *QDateTime) SetTime(time *QTime) {
 	C.qute_QDateTime_setTime(self, rt.UseArg(unsafe.Pointer(time), "QDateTime.SetTime"))
 }
 
+// SetTimeZone wraps QDateTime::setTimeZone.
+//
+//	C++: void QDateTime::setTimeZone(const QTimeZone & toZone, TransitionResolution resolve = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setTimeZone
+func (this *QDateTime) SetTimeZone(toZone *QTimeZone) {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetTimeZone")
+	C.qute_QDateTime_setTimeZone(self, rt.UseArg(unsafe.Pointer(toZone), "QDateTime.SetTimeZone"))
+}
+
 // SetMSecsSinceEpoch wraps QDateTime::setMSecsSinceEpoch.
 //
 //	C++: void QDateTime::setMSecsSinceEpoch(qint64 msecs)
@@ -273,6 +324,17 @@ func (this *QDateTime) ToString() string {
 func (this *QDateTime) ToStringFormat(format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToStringFormat")
 	r := C.qute_QDateTime_toString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	return quteStr(r)
+}
+
+// ToStringWithFormat wraps QDateTime::toString.
+//
+//	C++: QString QDateTime::toString(const QString & format, QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#toString
+func (this *QDateTime) ToStringWithFormat(format string, cal *QCalendar) string {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToStringWithFormat")
+	r := C.qute_QDateTime_toString_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDateTime.ToStringWithFormat"))
 	return quteStr(r)
 }
 
@@ -341,6 +403,19 @@ func (this *QDateTime) AddMSecs(msecs int64) *QDateTime {
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
+// AddDuration wraps QDateTime::addDuration.
+//
+//	C++: QDateTime QDateTime::addDuration(std::chrono::milliseconds msecs) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#addDuration
+func (this *QDateTime) AddDuration(msecs time.Duration) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddDuration")
+	r := C.qute_QDateTime_addDuration(self, C.int64_t(msecs))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
 // ToLocalTime wraps QDateTime::toLocalTime.
 //
 //	C++: QDateTime QDateTime::toLocalTime() const
@@ -380,6 +455,19 @@ func (this *QDateTime) ToOffsetFromUtc(offsetSeconds int) *QDateTime {
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
+// ToTimeZone wraps QDateTime::toTimeZone.
+//
+//	C++: QDateTime QDateTime::toTimeZone(const QTimeZone & toZone) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#toTimeZone
+func (this *QDateTime) ToTimeZone(toZone *QTimeZone) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToTimeZone")
+	r := C.qute_QDateTime_toTimeZone(self, rt.UseArg(unsafe.Pointer(toZone), "QDateTime.ToTimeZone"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
 // DaysTo wraps QDateTime::daysTo.
 //
 //	C++: qint64 QDateTime::daysTo(const QDateTime &) const
@@ -413,6 +501,19 @@ func (this *QDateTime) MsecsTo(dateTime *QDateTime) int64 {
 	return int64(r)
 }
 
+// QDateTimeCurrentDateTimeWithTimeZone wraps QDateTime::currentDateTime.
+//
+//	C++: QDateTime QDateTime::currentDateTime(const QTimeZone & zone)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#currentDateTime
+func QDateTimeCurrentDateTimeWithTimeZone(zone *QTimeZone) *QDateTime {
+	rt.CheckThread("QDateTimeCurrentDateTimeWithTimeZone")
+	r := C.qute_QDateTime_currentDateTime(rt.UseArg(unsafe.Pointer(zone), "QDateTimeCurrentDateTimeWithTimeZone"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
 // QDateTimeCurrentDateTime wraps QDateTime::currentDateTime.
 //
 //	C++: QDateTime QDateTime::currentDateTime()
@@ -422,7 +523,7 @@ func (this *QDateTime) MsecsTo(dateTime *QDateTime) int64 {
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#currentDateTime
 func QDateTimeCurrentDateTime() *QDateTime {
 	rt.CheckThread("QDateTimeCurrentDateTime")
-	r := C.qute_QDateTime_currentDateTime()
+	r := C.qute_QDateTime_currentDateTime_1()
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -452,6 +553,32 @@ func QDateTimeFromString(stringArg string) *QDateTime {
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
+// QDateTimeFromStringFormatCalendar wraps QDateTime::fromString.
+//
+//	C++: QDateTime QDateTime::fromString(const QString & string, const QString & format, QCalendar cal)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
+func QDateTimeFromStringFormatCalendar(stringArg string, format string, cal *QCalendar) *QDateTime {
+	rt.CheckThread("QDateTimeFromStringFormatCalendar")
+	r := C.qute_QDateTime_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDateTimeFromStringFormatCalendar"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// QDateTimeFromStringFormatYearCalendar wraps QDateTime::fromString.
+//
+//	C++: QDateTime QDateTime::fromString(QStringView string, QStringView format, int baseYear, QCalendar cal)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
+func QDateTimeFromStringFormatYearCalendar(stringArg string, format string, baseYear int, cal *QCalendar) *QDateTime {
+	rt.CheckThread("QDateTimeFromStringFormatYearCalendar")
+	r := C.qute_QDateTime_fromString_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear), rt.UseArg(unsafe.Pointer(cal), "QDateTimeFromStringFormatYearCalendar"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
 // QDateTimeFromStringFormat wraps QDateTime::fromString.
 //
 //	C++: QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear = …)
@@ -461,7 +588,33 @@ func QDateTimeFromString(stringArg string) *QDateTime {
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
 func QDateTimeFromStringFormat(stringArg string, format string) *QDateTime {
 	rt.CheckThread("QDateTimeFromStringFormat")
-	r := C.qute_QDateTime_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	r := C.qute_QDateTime_fromString_3((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// QDateTimeFromMSecsSinceEpochWithTimeZone wraps QDateTime::fromMSecsSinceEpoch.
+//
+//	C++: QDateTime QDateTime::fromMSecsSinceEpoch(qint64 msecs, const QTimeZone & timeZone)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromMSecsSinceEpoch
+func QDateTimeFromMSecsSinceEpochWithTimeZone(msecs int64, timeZone *QTimeZone) *QDateTime {
+	rt.CheckThread("QDateTimeFromMSecsSinceEpochWithTimeZone")
+	r := C.qute_QDateTime_fromMSecsSinceEpoch(C.longlong(msecs), rt.UseArg(unsafe.Pointer(timeZone), "QDateTimeFromMSecsSinceEpochWithTimeZone"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// QDateTimeFromSecsSinceEpochWithTimeZone wraps QDateTime::fromSecsSinceEpoch.
+//
+//	C++: QDateTime QDateTime::fromSecsSinceEpoch(qint64 secs, const QTimeZone & timeZone)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromSecsSinceEpoch
+func QDateTimeFromSecsSinceEpochWithTimeZone(secs int64, timeZone *QTimeZone) *QDateTime {
+	rt.CheckThread("QDateTimeFromSecsSinceEpochWithTimeZone")
+	r := C.qute_QDateTime_fromSecsSinceEpoch(C.longlong(secs), rt.UseArg(unsafe.Pointer(timeZone), "QDateTimeFromSecsSinceEpochWithTimeZone"))
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -474,7 +627,7 @@ func QDateTimeFromStringFormat(stringArg string, format string) *QDateTime {
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromMSecsSinceEpoch
 func QDateTimeFromMSecsSinceEpoch(msecs int64) *QDateTime {
 	rt.CheckThread("QDateTimeFromMSecsSinceEpoch")
-	r := C.qute_QDateTime_fromMSecsSinceEpoch(C.longlong(msecs))
+	r := C.qute_QDateTime_fromMSecsSinceEpoch_1(C.longlong(msecs))
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -487,7 +640,7 @@ func QDateTimeFromMSecsSinceEpoch(msecs int64) *QDateTime {
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromSecsSinceEpoch
 func QDateTimeFromSecsSinceEpoch(secs int64) *QDateTime {
 	rt.CheckThread("QDateTimeFromSecsSinceEpoch")
-	r := C.qute_QDateTime_fromSecsSinceEpoch(C.longlong(secs))
+	r := C.qute_QDateTime_fromSecsSinceEpoch_1(C.longlong(secs))
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -511,4 +664,17 @@ func QDateTimeCurrentSecsSinceEpoch() int64 {
 	rt.CheckThread("QDateTimeCurrentSecsSinceEpoch")
 	r := C.qute_QDateTime_currentSecsSinceEpoch()
 	return int64(r)
+}
+
+// QDateTimeFromStdTimePoint wraps QDateTime::fromStdTimePoint.
+//
+//	C++: QDateTime QDateTime::fromStdTimePoint(std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> time)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromStdTimePoint
+func QDateTimeFromStdTimePoint(time time.Time) *QDateTime {
+	rt.CheckThread("QDateTimeFromStdTimePoint")
+	r := C.qute_QDateTime_fromStdTimePoint(C.int64_t(time.UnixMilli()))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }

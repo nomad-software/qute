@@ -54,42 +54,20 @@ func NewQGraphicsEllipseItem(parent QGraphicsItemLike) *QGraphicsEllipseItem {
 	return rt.View[QGraphicsEllipseItem](h, p)
 }
 
-// NewQGraphicsEllipseItemWithRect wraps the QGraphicsEllipseItem constructor.
+// NewQGraphicsEllipseItemWithRectF wraps the QGraphicsEllipseItem constructor.
 //
 //	C++: QGraphicsEllipseItem::QGraphicsEllipseItem(const QRectF & rect, QGraphicsItem * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsellipseitem.html#QGraphicsEllipseItem
-func NewQGraphicsEllipseItemWithRect(rect qtcore.QRectF, parent QGraphicsItemLike) *QGraphicsEllipseItem {
-	rt.CheckThread("NewQGraphicsEllipseItemWithRect")
+func NewQGraphicsEllipseItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLike) *QGraphicsEllipseItem {
+	rt.CheckThread("NewQGraphicsEllipseItemWithRectF")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsEllipseItemWithRect")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsEllipseItemWithRectF")
 	}
 	p := C.qute_QGraphicsEllipseItem_new_1(cQRectF(rect), parentPtr)
-	mode := rt.NewOwned
-	if parentPtr != nil {
-		mode = rt.NewParented
-	}
-	h := rt.WrapClass(p, "QGraphicsEllipseItem", mode)
-	return rt.View[QGraphicsEllipseItem](h, p)
-}
-
-// NewQGraphicsEllipseItemWithX wraps the QGraphicsEllipseItem constructor.
-//
-//	C++: QGraphicsEllipseItem::QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem * parent = …)
-//
-// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsellipseitem.html#QGraphicsEllipseItem
-func NewQGraphicsEllipseItemWithX(x float64, y float64, w float64, hArg float64, parent QGraphicsItemLike) *QGraphicsEllipseItem {
-	rt.CheckThread("NewQGraphicsEllipseItemWithX")
-	var parentPtr unsafe.Pointer
-	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsEllipseItemWithX")
-	}
-	p := C.qute_QGraphicsEllipseItem_new_2(C.double(x), C.double(y), C.double(w), C.double(hArg), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

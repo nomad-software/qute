@@ -307,6 +307,201 @@ func (this *QTextDocument) CharacterAt(pos int) rune {
 	return rune(r)
 }
 
+// Find wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QString & subString, int from = …, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) Find(subString string) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Find")
+	r := C.qute_QTextDocument_find(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)))
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FindWithTextCursor wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QString & subString, const QTextCursor & cursor, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindWithTextCursor(subString string, cursor *QTextCursor) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindWithTextCursor")
+	r := C.qute_QTextDocument_find_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)), rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.FindWithTextCursor"))
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FindRegularExpression wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QRegularExpression & expr, int from = …, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindRegularExpression(expr *qtcore.QRegularExpression) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpression")
+	r := C.qute_QTextDocument_find_2(self, rt.UseArg(unsafe.Pointer(expr), "QTextDocument.FindRegularExpression"))
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FindRegularExpressionTextCursor wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QRegularExpression & expr, const QTextCursor & cursor, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindRegularExpressionTextCursor(expr *qtcore.QRegularExpression, cursor *QTextCursor) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpressionTextCursor")
+	r := C.qute_QTextDocument_find_3(self, rt.UseArg(unsafe.Pointer(expr), "QTextDocument.FindRegularExpressionTextCursor"), rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.FindRegularExpressionTextCursor"))
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FrameAt wraps QTextDocument::frameAt.
+//
+//	C++: QTextFrame * QTextDocument::frameAt(int pos) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#frameAt
+func (this *QTextDocument) FrameAt(pos int) *QTextFrame {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FrameAt")
+	r := C.qute_QTextDocument_frameAt(self, C.int(pos))
+	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
+}
+
+// RootFrame wraps QTextDocument::rootFrame.
+//
+//	C++: QTextFrame * QTextDocument::rootFrame() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#rootFrame
+func (this *QTextDocument) RootFrame() *QTextFrame {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.RootFrame")
+	r := C.qute_QTextDocument_rootFrame(self)
+	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
+}
+
+// Object wraps QTextDocument::object.
+//
+//	C++: QTextObject * QTextDocument::object(int objectIndex) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#object
+func (this *QTextDocument) Object(objectIndex int) *QTextObject {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Object")
+	r := C.qute_QTextDocument_object(self, C.int(objectIndex))
+	return rt.View[QTextObject](rt.WrapClass(r, "QTextObject", rt.KeepOrBorrow), r)
+}
+
+// ObjectForFormat wraps QTextDocument::objectForFormat.
+//
+//	C++: QTextObject * QTextDocument::objectForFormat(const QTextFormat &) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#objectForFormat
+func (this *QTextDocument) ObjectForFormat(textFormat *QTextFormat) *QTextObject {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ObjectForFormat")
+	r := C.qute_QTextDocument_objectForFormat(self, rt.UseArg(unsafe.Pointer(textFormat), "QTextDocument.ObjectForFormat"))
+	return rt.View[QTextObject](rt.WrapClass(r, "QTextObject", rt.KeepOrBorrow), r)
+}
+
+// FindBlock wraps QTextDocument::findBlock.
+//
+//	C++: QTextBlock QTextDocument::findBlock(int pos) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#findBlock
+func (this *QTextDocument) FindBlock(pos int) *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindBlock")
+	r := C.qute_QTextDocument_findBlock(self, C.int(pos))
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
+// FindBlockByNumber wraps QTextDocument::findBlockByNumber.
+//
+//	C++: QTextBlock QTextDocument::findBlockByNumber(int blockNumber) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#findBlockByNumber
+func (this *QTextDocument) FindBlockByNumber(blockNumber int) *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindBlockByNumber")
+	r := C.qute_QTextDocument_findBlockByNumber(self, C.int(blockNumber))
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
+// FindBlockByLineNumber wraps QTextDocument::findBlockByLineNumber.
+//
+//	C++: QTextBlock QTextDocument::findBlockByLineNumber(int blockNumber) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#findBlockByLineNumber
+func (this *QTextDocument) FindBlockByLineNumber(blockNumber int) *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindBlockByLineNumber")
+	r := C.qute_QTextDocument_findBlockByLineNumber(self, C.int(blockNumber))
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
+// Begin wraps QTextDocument::begin.
+//
+//	C++: QTextBlock QTextDocument::begin() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#begin
+func (this *QTextDocument) Begin() *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Begin")
+	r := C.qute_QTextDocument_begin(self)
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
+// End wraps QTextDocument::end.
+//
+//	C++: QTextBlock QTextDocument::end() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#end
+func (this *QTextDocument) End() *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.End")
+	r := C.qute_QTextDocument_end(self)
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
+// FirstBlock wraps QTextDocument::firstBlock.
+//
+//	C++: QTextBlock QTextDocument::firstBlock() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#firstBlock
+func (this *QTextDocument) FirstBlock() *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FirstBlock")
+	r := C.qute_QTextDocument_firstBlock(self)
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
+// LastBlock wraps QTextDocument::lastBlock.
+//
+//	C++: QTextBlock QTextDocument::lastBlock() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#lastBlock
+func (this *QTextDocument) LastBlock() *QTextBlock {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.LastBlock")
+	r := C.qute_QTextDocument_lastBlock(self)
+	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
+}
+
 // SetPageSize wraps QTextDocument::setPageSize.
 //
 //	C++: void QTextDocument::setPageSize(const QSizeF & size)
@@ -436,6 +631,20 @@ func (this *QTextDocument) IsModified() bool {
 	return bool(r)
 }
 
+// Print wraps QTextDocument::print.
+//
+//	C++: void QTextDocument::print(QPagedPaintDevice * printer) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#print
+func (this *QTextDocument) Print(printer QPagedPaintDeviceLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Print")
+	var printerPtr unsafe.Pointer
+	if printer != nil {
+		printerPtr = rt.UseArg(unsafe.Pointer(printer.AsQPagedPaintDevice()), "QTextDocument.Print")
+	}
+	C.qute_QTextDocument_print(self, printerPtr)
+}
+
 // Resource wraps QTextDocument::resource.
 //
 //	C++: QVariant QTextDocument::resource(int type, const QUrl & name) const
@@ -457,6 +666,35 @@ func (this *QTextDocument) Resource(typeArg int, name *qtcore.QUrl) *qtcore.QVar
 func (this *QTextDocument) AddResource(typeArg int, name *qtcore.QUrl, resource *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AddResource")
 	C.qute_QTextDocument_addResource(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QTextDocument.AddResource"), rt.UseArg(unsafe.Pointer(resource), "QTextDocument.AddResource"))
+}
+
+// SetResourceProvider wraps QTextDocument::setResourceProvider.
+//
+//	C++: void QTextDocument::setResourceProvider(const ResourceProvider & provider)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setResourceProvider
+func (this *QTextDocument) SetResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetResourceProvider")
+	providerID := rt.NewFunc(func(args, ret unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		r := provider(p0)
+		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocument.SetResourceProvider")
+	})
+	C.qute_QTextDocument_setResourceProvider(self, C.uintptr_t(providerID))
+}
+
+// AllFormats wraps QTextDocument::allFormats.
+//
+//	C++: QList<QTextFormat> QTextDocument::allFormats() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#allFormats
+func (this *QTextDocument) AllFormats() []*QTextFormat {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AllFormats")
+	r := C.qute_QTextDocument_allFormats(self)
+	return quteList(r, func(e unsafe.Pointer) *QTextFormat {
+		return rt.View[QTextFormat](rt.WrapClass(e, "QTextFormat", rt.TakeOwned), e)
+	})
 }
 
 // MarkContentsDirty wraps QTextDocument::markContentsDirty.
@@ -674,6 +912,26 @@ func (this *QTextDocument) DefaultStyleSheet() string {
 	return quteStr(r)
 }
 
+// UndoWithTextCursor wraps QTextDocument::undo.
+//
+//	C++: void QTextDocument::undo(QTextCursor * cursor)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#undo
+func (this *QTextDocument) UndoWithTextCursor(cursor *QTextCursor) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.UndoWithTextCursor")
+	C.qute_QTextDocument_undo(self, rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.UndoWithTextCursor"))
+}
+
+// RedoWithTextCursor wraps QTextDocument::redo.
+//
+//	C++: void QTextDocument::redo(QTextCursor * cursor)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#redo
+func (this *QTextDocument) RedoWithTextCursor(cursor *QTextCursor) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.RedoWithTextCursor")
+	C.qute_QTextDocument_redo(self, rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.RedoWithTextCursor"))
+}
+
 // ClearUndoRedoStacks wraps QTextDocument::clearUndoRedoStacks.
 //
 //	C++: void QTextDocument::clearUndoRedoStacks(Stacks historyToClear = …)
@@ -703,6 +961,29 @@ func (this *QTextDocument) MaximumBlockCount() int {
 func (this *QTextDocument) SetMaximumBlockCount(maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetMaximumBlockCount")
 	C.qute_QTextDocument_setMaximumBlockCount(self, C.int(maximum))
+}
+
+// DefaultTextOption wraps QTextDocument::defaultTextOption.
+//
+//	C++: QTextOption QTextDocument::defaultTextOption() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#defaultTextOption
+func (this *QTextDocument) DefaultTextOption() *QTextOption {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DefaultTextOption")
+	r := C.qute_QTextDocument_defaultTextOption(self)
+	return rt.View[QTextOption](rt.WrapClass(r, "QTextOption", rt.TakeOwned), r)
+}
+
+// SetDefaultTextOption wraps QTextDocument::setDefaultTextOption.
+//
+//	C++: void QTextDocument::setDefaultTextOption(const QTextOption & option)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setDefaultTextOption
+func (this *QTextDocument) SetDefaultTextOption(option *QTextOption) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetDefaultTextOption")
+	C.qute_QTextDocument_setDefaultTextOption(self, rt.UseArg(unsafe.Pointer(option), "QTextDocument.SetDefaultTextOption"))
 }
 
 // BaseUrl wraps QTextDocument::baseUrl.
@@ -756,7 +1037,7 @@ func (this *QTextDocument) SetDefaultCursorMoveStyle(style qtcore.CursorMoveStyl
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#undo
 func (this *QTextDocument) Undo() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Undo")
-	C.qute_QTextDocument_undo(self)
+	C.qute_QTextDocument_undo_1(self)
 }
 
 // Redo wraps QTextDocument::redo.
@@ -766,7 +1047,7 @@ func (this *QTextDocument) Undo() {
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#redo
 func (this *QTextDocument) Redo() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Redo")
-	C.qute_QTextDocument_redo(self)
+	C.qute_QTextDocument_redo_1(self)
 }
 
 // SetModified wraps QTextDocument::setModified.
@@ -839,6 +1120,16 @@ func (this *QTextDocument) EmitModificationChanged(m bool) {
 	C.qute_QTextDocument_modificationChanged_1(self, C.bool(m))
 }
 
+// EmitCursorPositionChanged wraps emitting the cursorPositionChanged signal.
+//
+//	C++: void QTextDocument::cursorPositionChanged(const QTextCursor & cursor)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#cursorPositionChanged
+func (this *QTextDocument) EmitCursorPositionChanged(cursor *QTextCursor) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitCursorPositionChanged")
+	C.qute_QTextDocument_cursorPositionChanged_1(self, rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.EmitCursorPositionChanged"))
+}
+
 // EmitBlockCountChanged wraps emitting the blockCountChanged signal.
 //
 //	C++: void QTextDocument::blockCountChanged(int newBlockCount)
@@ -867,6 +1158,22 @@ func (this *QTextDocument) EmitBaseUrlChanged(url *qtcore.QUrl) {
 func (this *QTextDocument) EmitDocumentLayoutChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitDocumentLayoutChanged")
 	C.qute_QTextDocument_documentLayoutChanged_1(self)
+}
+
+// QTextDocumentSetDefaultResourceProvider wraps QTextDocument::setDefaultResourceProvider.
+//
+//	C++: void QTextDocument::setDefaultResourceProvider(const ResourceProvider & provider)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setDefaultResourceProvider
+func QTextDocumentSetDefaultResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVariant) {
+	rt.CheckThread("QTextDocumentSetDefaultResourceProvider")
+	providerID := rt.NewFunc(func(args, ret unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		r := provider(p0)
+		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocumentSetDefaultResourceProvider")
+	})
+	C.qute_QTextDocument_setDefaultResourceProvider(C.uintptr_t(providerID))
 }
 
 // OnContentsChange connects f to the contentsChange signal. The connection ends when the
@@ -963,6 +1270,22 @@ func (this *QTextDocument) OnModificationChanged(f func(m bool)) qtcore.Connecti
 		f(m)
 	})
 	return rt.NewConnection(C.qute_QTextDocument_modificationChanged(self, C.uintptr_t(id)))
+}
+
+// OnCursorPositionChanged connects f to the cursorPositionChanged signal. The connection ends when the
+// sender is destroyed or Disconnect is called; until then the sender is pinned.
+//
+//	C++: void QTextDocument::cursorPositionChanged(const QTextCursor & cursor) [signal]
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#cursorPositionChanged
+func (this *QTextDocument) OnCursorPositionChanged(f func(cursor *QTextCursor)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.OnCursorPositionChanged")
+	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		cursor := rt.View[QTextCursor](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QTextCursor", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		f(cursor)
+	})
+	return rt.NewConnection(C.qute_QTextDocument_cursorPositionChanged(self, C.uintptr_t(id)))
 }
 
 // OnBlockCountChanged connects f to the blockCountChanged signal. The connection ends when the

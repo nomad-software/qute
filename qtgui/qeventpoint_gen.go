@@ -244,6 +244,19 @@ func (this *QEventPoint) NormalizedPosition() qtcore.QPointF {
 	return goQPointF(r)
 }
 
+// Velocity wraps QEventPoint::velocity.
+//
+//	C++: QVector2D QEventPoint::velocity() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#velocity
+func (this *QEventPoint) Velocity() *QVector2D {
+	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Velocity")
+	r := C.qute_QEventPoint_velocity(self)
+	return rt.View[QVector2D](rt.WrapClass(r, "QVector2D", rt.TakeOwned), r)
+}
+
 // State wraps QEventPoint::state.
 //
 //	C++: State QEventPoint::state() const
@@ -255,6 +268,19 @@ func (this *QEventPoint) State() QEventPointStates {
 	return QEventPointStates(r)
 }
 
+// Device wraps QEventPoint::device.
+//
+//	C++: const QPointingDevice * QEventPoint::device() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#device
+func (this *QEventPoint) Device() *QPointingDevice {
+	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Device")
+	r := C.qute_QEventPoint_device(self)
+	return rt.View[QPointingDevice](rt.WrapClass(r, "QPointingDevice", rt.KeepOrBorrow), r)
+}
+
 // Id wraps QEventPoint::id.
 //
 //	C++: int QEventPoint::id() const
@@ -264,6 +290,19 @@ func (this *QEventPoint) Id() int {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Id")
 	r := C.qute_QEventPoint_id(self)
 	return int(r)
+}
+
+// UniqueId wraps QEventPoint::uniqueId.
+//
+//	C++: QPointingDeviceUniqueId QEventPoint::uniqueId() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#uniqueId
+func (this *QEventPoint) UniqueId() *QPointingDeviceUniqueId {
+	self := rt.Use(unsafe.Pointer(this), "QEventPoint.UniqueId")
+	r := C.qute_QEventPoint_uniqueId(self)
+	return rt.View[QPointingDeviceUniqueId](rt.WrapClass(r, "QPointingDeviceUniqueId", rt.TakeOwned), r)
 }
 
 // Timestamp wraps QEventPoint::timestamp.

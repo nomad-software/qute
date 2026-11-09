@@ -92,18 +92,18 @@ func NewQDialogButtonBoxWithOrientation(orientation qtcore.Orientations, parent 
 	return rt.View[QDialogButtonBox](h, p)
 }
 
-// NewQDialogButtonBoxWithButtons wraps the QDialogButtonBox constructor.
+// NewQDialogButtonBoxWithStandardButton wraps the QDialogButtonBox constructor.
 //
 //	C++: QDialogButtonBox::QDialogButtonBox(StandardButtons buttons, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdialogbuttonbox.html#QDialogButtonBox
-func NewQDialogButtonBoxWithButtons(buttons QDialogButtonBoxStandardButtons, parent QWidgetLike) *QDialogButtonBox {
-	rt.CheckThread("NewQDialogButtonBoxWithButtons")
+func NewQDialogButtonBoxWithStandardButton(buttons QDialogButtonBoxStandardButtons, parent QWidgetLike) *QDialogButtonBox {
+	rt.CheckThread("NewQDialogButtonBoxWithStandardButton")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithButtons")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithStandardButton")
 	}
 	p := C.qute_QDialogButtonBox_new_2(C.int64_t(buttons), parentPtr)
 	mode := rt.NewOwned

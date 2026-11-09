@@ -101,6 +101,32 @@ func (this *QAbstractProxyModel) MapFromSource(sourceIndex *QModelIndex) *QModel
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
+// MapSelectionToSource wraps QAbstractProxyModel::mapSelectionToSource.
+//
+//	C++: QItemSelection QAbstractProxyModel::mapSelectionToSource(const QItemSelection & selection) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractproxymodel.html#mapSelectionToSource
+func (this *QAbstractProxyModel) MapSelectionToSource(selection *QItemSelection) *QItemSelection {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.MapSelectionToSource")
+	r := C.qute_QAbstractProxyModel_mapSelectionToSource(self, rt.Use(unsafe.Pointer(selection), "QAbstractProxyModel.MapSelectionToSource"))
+	return rt.View[QItemSelection](rt.WrapClass(r, "QItemSelection", rt.TakeOwned), r)
+}
+
+// MapSelectionFromSource wraps QAbstractProxyModel::mapSelectionFromSource.
+//
+//	C++: QItemSelection QAbstractProxyModel::mapSelectionFromSource(const QItemSelection & selection) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractproxymodel.html#mapSelectionFromSource
+func (this *QAbstractProxyModel) MapSelectionFromSource(selection *QItemSelection) *QItemSelection {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.MapSelectionFromSource")
+	r := C.qute_QAbstractProxyModel_mapSelectionFromSource(self, rt.Use(unsafe.Pointer(selection), "QAbstractProxyModel.MapSelectionFromSource"))
+	return rt.View[QItemSelection](rt.WrapClass(r, "QItemSelection", rt.TakeOwned), r)
+}
+
 // OnSourceModelChanged connects f to the sourceModelChanged signal. The connection ends when the
 // sender is destroyed or Disconnect is called; until then the sender is pinned.
 //

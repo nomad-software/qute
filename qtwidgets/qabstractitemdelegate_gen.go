@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QAbstractItemDelegate wraps Qt's QAbstractItemDelegate.
@@ -45,6 +46,50 @@ func QAbstractItemDelegateCast(o qtcore.QObjectLike) *QAbstractItemDelegate {
 		return nil
 	}
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(p, "QAbstractItemDelegate", rt.KeepOrBorrow), p)
+}
+
+// Paint wraps QAbstractItemDelegate::paint.
+//
+//	C++: void QAbstractItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemdelegate.html#paint
+func (this *QAbstractItemDelegate) Paint(painter qtgui.QPainterLike, option *QStyleOptionViewItem, index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.Paint")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QAbstractItemDelegate.Paint")
+	}
+	C.qute_QAbstractItemDelegate_paint(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.Paint"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.Paint"))
+}
+
+// SizeHint wraps QAbstractItemDelegate::sizeHint.
+//
+//	C++: QSize QAbstractItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemdelegate.html#sizeHint
+func (this *QAbstractItemDelegate) SizeHint(option *QStyleOptionViewItem, index *qtcore.QModelIndex) qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.SizeHint")
+	r := C.qute_QAbstractItemDelegate_sizeHint(self, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.SizeHint"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.SizeHint"))
+	return goQSize(r)
+}
+
+// CreateEditor wraps QAbstractItemDelegate::createEditor.
+//
+//	C++: QWidget * QAbstractItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The editor is created as a child of parent.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemdelegate.html#createEditor
+func (this *QAbstractItemDelegate) CreateEditor(parent QWidgetLike, option *QStyleOptionViewItem, index *qtcore.QModelIndex) *QWidget {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.CreateEditor")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QAbstractItemDelegate.CreateEditor")
+	}
+	r := C.qute_QAbstractItemDelegate_createEditor(self, parentPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.CreateEditor"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.CreateEditor"))
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeParented), r)
 }
 
 // DestroyEditor wraps QAbstractItemDelegate::destroyEditor.
@@ -93,6 +138,39 @@ func (this *QAbstractItemDelegate) SetModelData(editor QWidgetLike, model qtcore
 	C.qute_QAbstractItemDelegate_setModelData(self, editorPtr, modelPtr, rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.SetModelData"))
 }
 
+// UpdateEditorGeometry wraps QAbstractItemDelegate::updateEditorGeometry.
+//
+//	C++: void QAbstractItemDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemdelegate.html#updateEditorGeometry
+func (this *QAbstractItemDelegate) UpdateEditorGeometry(editor QWidgetLike, option *QStyleOptionViewItem, index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.UpdateEditorGeometry")
+	var editorPtr unsafe.Pointer
+	if editor != nil {
+		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemDelegate.UpdateEditorGeometry")
+	}
+	C.qute_QAbstractItemDelegate_updateEditorGeometry(self, editorPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.UpdateEditorGeometry"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.UpdateEditorGeometry"))
+}
+
+// EditorEvent wraps QAbstractItemDelegate::editorEvent.
+//
+//	C++: bool QAbstractItemDelegate::editorEvent(QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index)
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemdelegate.html#editorEvent
+func (this *QAbstractItemDelegate) EditorEvent(event qtcore.QEventLike, model qtcore.QAbstractItemModelLike, option *QStyleOptionViewItem, index *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.EditorEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemDelegate.EditorEvent")
+	}
+	var modelPtr unsafe.Pointer
+	if model != nil {
+		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QAbstractItemDelegate.EditorEvent")
+	}
+	r := C.qute_QAbstractItemDelegate_editorEvent(self, eventPtr, modelPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.EditorEvent"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.EditorEvent"))
+	return bool(r)
+}
+
 // HandleEditorEvent wraps QAbstractItemDelegate::handleEditorEvent.
 //
 //	C++: bool QAbstractItemDelegate::handleEditorEvent(QObject * object, QEvent * event)
@@ -109,6 +187,25 @@ func (this *QAbstractItemDelegate) HandleEditorEvent(object qtcore.QObjectLike, 
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemDelegate.HandleEditorEvent")
 	}
 	r := C.qute_QAbstractItemDelegate_handleEditorEvent(self, objectPtr, eventPtr)
+	return bool(r)
+}
+
+// HelpEvent wraps QAbstractItemDelegate::helpEvent.
+//
+//	C++: bool QAbstractItemDelegate::helpEvent(QHelpEvent * event, QAbstractItemView * view, const QStyleOptionViewItem & option, const QModelIndex & index)
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemdelegate.html#helpEvent
+func (this *QAbstractItemDelegate) HelpEvent(event qtgui.QHelpEventLike, view QAbstractItemViewLike, option *QStyleOptionViewItem, index *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.HelpEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHelpEvent()), "QAbstractItemDelegate.HelpEvent")
+	}
+	var viewPtr unsafe.Pointer
+	if view != nil {
+		viewPtr = rt.UseArg(unsafe.Pointer(view.AsQAbstractItemView()), "QAbstractItemDelegate.HelpEvent")
+	}
+	r := C.qute_QAbstractItemDelegate_helpEvent(self, eventPtr, viewPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.HelpEvent"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.HelpEvent"))
 	return bool(r)
 }
 

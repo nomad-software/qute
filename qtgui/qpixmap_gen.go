@@ -70,6 +70,27 @@ func NewQPixmapWithFileName(fileName string) *QPixmap {
 	return rt.View[QPixmap](h, p)
 }
 
+// NewQPixmapWithXpm wraps the QPixmap constructor.
+//
+//	C++: QPixmap::QPixmap(const char *const[] xpm)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#QPixmap
+func NewQPixmapWithXpm(xpm []string) *QPixmap {
+	rt.CheckThread("NewQPixmapWithXpm")
+	xpmArr := make([]*C.char, len(xpm)+1)
+	for i, x := range xpm {
+		xpmArr[i] = C.CString(x)
+	}
+	defer func() {
+		for _, x := range xpmArr {
+			C.free(unsafe.Pointer(x))
+		}
+	}()
+	p := C.qute_QPixmap_new_3(unsafe.Pointer(&xpmArr[0]))
+	h := rt.WrapClass(p, "QPixmap", rt.NewOwned)
+	return rt.View[QPixmap](h, p)
+}
+
 // IsNull wraps QPixmap::isNull.
 //
 //	C++: bool QPixmap::isNull() const
@@ -113,6 +134,29 @@ func (this *QPixmap) Fill() {
 	C.qute_QPixmap_fill(self)
 }
 
+// Mask wraps QPixmap::mask.
+//
+//	C++: QBitmap QPixmap::mask() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#mask
+func (this *QPixmap) Mask() *QBitmap {
+	self := rt.Use(unsafe.Pointer(this), "QPixmap.Mask")
+	r := C.qute_QPixmap_mask(self)
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
+}
+
+// SetMask wraps QPixmap::setMask.
+//
+//	C++: void QPixmap::setMask(const QBitmap &)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#setMask
+func (this *QPixmap) SetMask(maskArg *QBitmap) {
+	self := rt.Use(unsafe.Pointer(this), "QPixmap.SetMask")
+	C.qute_QPixmap_setMask(self, rt.UseArg(unsafe.Pointer(maskArg), "QPixmap.SetMask"))
+}
+
 // SetDevicePixelRatio wraps QPixmap::setDevicePixelRatio.
 //
 //	C++: void QPixmap::setDevicePixelRatio(qreal scaleFactor)
@@ -154,6 +198,32 @@ func (this *QPixmap) HasAlphaChannel() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.HasAlphaChannel")
 	r := C.qute_QPixmap_hasAlphaChannel(self)
 	return bool(r)
+}
+
+// CreateHeuristicMask wraps QPixmap::createHeuristicMask.
+//
+//	C++: QBitmap QPixmap::createHeuristicMask(bool clipTight = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#createHeuristicMask
+func (this *QPixmap) CreateHeuristicMask() *QBitmap {
+	self := rt.Use(unsafe.Pointer(this), "QPixmap.CreateHeuristicMask")
+	r := C.qute_QPixmap_createHeuristicMask(self)
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
+}
+
+// CreateMaskFromColor wraps QPixmap::createMaskFromColor.
+//
+//	C++: QBitmap QPixmap::createMaskFromColor(const QColor & maskColor, Qt::MaskMode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#createMaskFromColor
+func (this *QPixmap) CreateMaskFromColor(maskColor QColor) *QBitmap {
+	self := rt.Use(unsafe.Pointer(this), "QPixmap.CreateMaskFromColor")
+	r := C.qute_QPixmap_createMaskFromColor(self, cQColor(maskColor))
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
 // Scaled wraps QPixmap::scaled.
@@ -237,12 +307,12 @@ func (this *QPixmap) Load(fileName string) error {
 
 // LoadFromData wraps QPixmap::loadFromData.
 //
-//	C++: bool QPixmap::loadFromData(const QByteArray & data, const char * format = …, Qt::ImageConversionFlags flags = …)
+//	C++: bool QPixmap::loadFromData(const uchar * buf, uint len, const char * format = …, Qt::ImageConversionFlags flags = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpixmap.html#loadFromData
-func (this *QPixmap) LoadFromData(data []byte) bool {
+func (this *QPixmap) LoadFromData(buf []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.LoadFromData")
-	r := C.qute_QPixmap_loadFromData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	r := C.qute_QPixmap_loadFromData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(buf))), C.ptrdiff_t(len(buf)))
 	return bool(r)
 }
 
@@ -368,5 +438,22 @@ func QPixmapTrueMatrix(m *QTransform, w int, hArg int) *QTransform {
 func QPixmapFromImage(image *QImage) *QPixmap {
 	rt.CheckThread("QPixmapFromImage")
 	r := C.qute_QPixmap_fromImage(rt.UseArg(unsafe.Pointer(image), "QPixmapFromImage"))
+	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// QPixmapFromImageReader wraps QPixmap::fromImageReader.
+//
+//	C++: QPixmap QPixmap::fromImageReader(QImageReader * imageReader, Qt::ImageConversionFlags flags = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#fromImageReader
+func QPixmapFromImageReader(imageReader QImageReaderLike) *QPixmap {
+	rt.CheckThread("QPixmapFromImageReader")
+	var imageReaderPtr unsafe.Pointer
+	if imageReader != nil {
+		imageReaderPtr = rt.UseArg(unsafe.Pointer(imageReader.AsQImageReader()), "QPixmapFromImageReader")
+	}
+	r := C.qute_QPixmap_fromImageReader(imageReaderPtr)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }

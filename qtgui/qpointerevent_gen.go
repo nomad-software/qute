@@ -33,6 +33,30 @@ func QPointerEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPointerEvent
 	return rt.View[QPointerEvent](rt.WrapClass(p, "QPointerEvent", rt.ModeFor(own)), p)
 }
 
+// PointingDevice wraps QPointerEvent::pointingDevice.
+//
+//	C++: const QPointingDevice * QPointerEvent::pointingDevice() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#pointingDevice
+func (this *QPointerEvent) PointingDevice() *QPointingDevice {
+	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointingDevice")
+	r := C.qute_QPointerEvent_pointingDevice(self)
+	return rt.View[QPointingDevice](rt.WrapClass(r, "QPointingDevice", rt.KeepOrBorrow), r)
+}
+
+// PointerType wraps QPointerEvent::pointerType.
+//
+//	C++: QPointingDevice::PointerType QPointerEvent::pointerType() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#pointerType
+func (this *QPointerEvent) PointerType() QPointingDevicePointerTypes {
+	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointerType")
+	r := C.qute_QPointerEvent_pointerType(self)
+	return QPointingDevicePointerTypes(r)
+}
+
 // PointCount wraps QPointerEvent::pointCount.
 //
 //	C++: qsizetype QPointerEvent::pointCount() const
@@ -42,6 +66,19 @@ func (this *QPointerEvent) PointCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointCount")
 	r := C.qute_QPointerEvent_pointCount(self)
 	return int(r)
+}
+
+// Point wraps QPointerEvent::point.
+//
+//	C++: QEventPoint & QPointerEvent::point(qsizetype i)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#point
+func (this *QPointerEvent) Point(iArg int) *QEventPoint {
+	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.Point")
+	r := C.qute_QPointerEvent_point(self, C.longlong(iArg))
+	return rt.View[QEventPoint](rt.WrapClass(r, "QEventPoint", rt.TakeOwned), r)
 }
 
 // Points wraps QPointerEvent::points.
@@ -55,6 +92,19 @@ func (this *QPointerEvent) Points() []*QEventPoint {
 	return quteList(r, func(e unsafe.Pointer) *QEventPoint {
 		return rt.View[QEventPoint](rt.WrapClass(e, "QEventPoint", rt.TakeOwned), e)
 	})
+}
+
+// PointById wraps QPointerEvent::pointById.
+//
+//	C++: QEventPoint * QPointerEvent::pointById(int id)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#pointById
+func (this *QPointerEvent) PointById(idArg int) *QEventPoint {
+	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointById")
+	r := C.qute_QPointerEvent_pointById(self, C.int(idArg))
+	return rt.View[QEventPoint](rt.WrapClass(r, "QEventPoint", rt.TakeOwned), r)
 }
 
 // AllPointsGrabbed wraps QPointerEvent::allPointsGrabbed.
@@ -137,6 +187,21 @@ func (this *QPointerEvent) SetExclusiveGrabber(point *QEventPoint, exclusiveGrab
 		exclusiveGrabberPtr = rt.UseArg(unsafe.Pointer(exclusiveGrabber.AsQObject()), "QPointerEvent.SetExclusiveGrabber")
 	}
 	C.qute_QPointerEvent_setExclusiveGrabber(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.SetExclusiveGrabber"), exclusiveGrabberPtr)
+}
+
+// PassiveGrabbers wraps QPointerEvent::passiveGrabbers.
+//
+//	C++: QList<QPointer<QObject>> QPointerEvent::passiveGrabbers(const QEventPoint & point) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#passiveGrabbers
+func (this *QPointerEvent) PassiveGrabbers(point *QEventPoint) []*qtcore.QObject {
+	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PassiveGrabbers")
+	r := C.qute_QPointerEvent_passiveGrabbers(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.PassiveGrabbers"))
+	return quteList(r, func(e unsafe.Pointer) *qtcore.QObject {
+		return rt.View[qtcore.QObject](rt.WrapClass(e, "QObject", rt.KeepOrBorrow), e)
+	})
 }
 
 // ClearPassiveGrabbers wraps QPointerEvent::clearPassiveGrabbers.

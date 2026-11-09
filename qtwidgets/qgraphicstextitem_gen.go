@@ -213,6 +213,24 @@ func (this *QGraphicsTextItem) Contains(point qtcore.QPointF) bool {
 	return bool(r)
 }
 
+// Paint wraps QGraphicsTextItem::paint.
+//
+//	C++: void QGraphicsTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicstextitem.html#paint
+func (this *QGraphicsTextItem) Paint(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem, widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.Paint")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsTextItem.Paint")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsTextItem.Paint")
+	}
+	C.qute_QGraphicsTextItem_paint(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsTextItem.Paint"), widgetPtr)
+}
+
 // IsObscuredBy wraps QGraphicsTextItem::isObscuredBy.
 //
 //	C++: bool QGraphicsTextItem::isObscuredBy(const QGraphicsItem * item) const
@@ -373,6 +391,29 @@ func (this *QGraphicsTextItem) OpenExternalLinks() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.OpenExternalLinks")
 	r := C.qute_QGraphicsTextItem_openExternalLinks(self)
 	return bool(r)
+}
+
+// SetTextCursor wraps QGraphicsTextItem::setTextCursor.
+//
+//	C++: void QGraphicsTextItem::setTextCursor(const QTextCursor & cursor)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicstextitem.html#setTextCursor
+func (this *QGraphicsTextItem) SetTextCursor(cursor *qtgui.QTextCursor) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetTextCursor")
+	C.qute_QGraphicsTextItem_setTextCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QGraphicsTextItem.SetTextCursor"))
+}
+
+// TextCursor wraps QGraphicsTextItem::textCursor.
+//
+//	C++: QTextCursor QGraphicsTextItem::textCursor() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicstextitem.html#textCursor
+func (this *QGraphicsTextItem) TextCursor() *qtgui.QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.TextCursor")
+	r := C.qute_QGraphicsTextItem_textCursor(self)
+	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
 // EmitLinkActivated wraps emitting the linkActivated signal.

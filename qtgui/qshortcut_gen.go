@@ -69,20 +69,20 @@ func NewQShortcut(parent qtcore.QObjectLike) *QShortcut {
 	return rt.View[QShortcut](h, p)
 }
 
-// NewQShortcutWithKey wraps the QShortcut constructor.
+// NewQShortcutWithKeySequence wraps the QShortcut constructor.
 //
 //	C++: QShortcut::QShortcut(const QKeySequence & key, QObject * parent, const char * member = …, const char * ambiguousMember = …, Qt::ShortcutContext context = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qshortcut.html#QShortcut
-func NewQShortcutWithKey(key *QKeySequence, parent qtcore.QObjectLike) *QShortcut {
-	rt.CheckThread("NewQShortcutWithKey")
+func NewQShortcutWithKeySequence(key *QKeySequence, parent qtcore.QObjectLike) *QShortcut {
+	rt.CheckThread("NewQShortcutWithKeySequence")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutWithKey")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutWithKeySequence")
 	}
-	p := C.qute_QShortcut_new_1(rt.UseArg(unsafe.Pointer(key), "NewQShortcutWithKey"), parentPtr)
+	p := C.qute_QShortcut_new_1(rt.UseArg(unsafe.Pointer(key), "NewQShortcutWithKeySequence"), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

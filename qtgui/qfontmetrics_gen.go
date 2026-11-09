@@ -77,14 +77,14 @@ func (this *QFontMetrics) Unkeep() {
 	}
 }
 
-// NewQFontMetrics wraps the QFontMetrics constructor.
+// NewQFontMetricsWithFont wraps the QFontMetrics constructor.
 //
 //	C++: QFontMetrics::QFontMetrics(const QFont &)
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#QFontMetrics
-func NewQFontMetrics(font *QFont) *QFontMetrics {
-	rt.CheckThread("NewQFontMetrics")
-	p := C.qute_QFontMetrics_new(rt.UseArg(unsafe.Pointer(font), "NewQFontMetrics"))
+func NewQFontMetricsWithFont(font *QFont) *QFontMetrics {
+	rt.CheckThread("NewQFontMetricsWithFont")
+	p := C.qute_QFontMetrics_new(rt.UseArg(unsafe.Pointer(font), "NewQFontMetricsWithFont"))
 	h := rt.WrapClass(p, "QFontMetrics", rt.NewOwned)
 	return rt.View[QFontMetrics](h, p)
 }
@@ -281,6 +281,17 @@ func (this *QFontMetrics) HorizontalAdvance(stringArg string) int {
 	return int(r)
 }
 
+// HorizontalAdvanceWithTextOption wraps QFontMetrics::horizontalAdvance.
+//
+//	C++: int QFontMetrics::horizontalAdvance(const QString &, const QTextOption & textOption) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#horizontalAdvance
+func (this *QFontMetrics) HorizontalAdvanceWithTextOption(stringArg string, textOption *QTextOption) int {
+	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvanceWithTextOption")
+	r := C.qute_QFontMetrics_horizontalAdvance_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), rt.UseArg(unsafe.Pointer(textOption), "QFontMetrics.HorizontalAdvanceWithTextOption"))
+	return int(r)
+}
+
 // HorizontalAdvanceChar wraps QFontMetrics::horizontalAdvance.
 //
 //	C++: int QFontMetrics::horizontalAdvance(QChar) const
@@ -288,7 +299,7 @@ func (this *QFontMetrics) HorizontalAdvance(stringArg string) int {
 // Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#horizontalAdvance
 func (this *QFontMetrics) HorizontalAdvanceChar(char rune) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvanceChar")
-	r := C.qute_QFontMetrics_horizontalAdvance_1(self, C.uint(char))
+	r := C.qute_QFontMetrics_horizontalAdvance_2(self, C.uint(char))
 	return int(r)
 }
 
@@ -314,6 +325,17 @@ func (this *QFontMetrics) BoundingRect(text string) qtcore.QRect {
 	return goQRect(r)
 }
 
+// BoundingRectWithOption wraps QFontMetrics::boundingRect.
+//
+//	C++: QRect QFontMetrics::boundingRect(const QString & text, const QTextOption & textOption) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#boundingRect
+func (this *QFontMetrics) BoundingRectWithOption(text string, textOption *QTextOption) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.BoundingRectWithOption")
+	r := C.qute_QFontMetrics_boundingRect_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(textOption), "QFontMetrics.BoundingRectWithOption"))
+	return goQRect(r)
+}
+
 // BoundingRectIn wraps QFontMetrics::boundingRect.
 //
 //	C++: QRect QFontMetrics::boundingRect(const QRect & r, int flags, const QString & text, int tabstops = …, int * tabarray = …) const
@@ -321,7 +343,7 @@ func (this *QFontMetrics) BoundingRect(text string) qtcore.QRect {
 // Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#boundingRect
 func (this *QFontMetrics) BoundingRectIn(rArg qtcore.QRect, flags int, text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.BoundingRectIn")
-	r := C.qute_QFontMetrics_boundingRect_2(self, cQRect(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	r := C.qute_QFontMetrics_boundingRect_3(self, cQRect(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	return goQRect(r)
 }
 
@@ -344,6 +366,17 @@ func (this *QFontMetrics) Size(flags int, str string) qtcore.QSize {
 func (this *QFontMetrics) TightBoundingRect(text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.TightBoundingRect")
 	r := C.qute_QFontMetrics_tightBoundingRect(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	return goQRect(r)
+}
+
+// TightBoundingRectWithTextOption wraps QFontMetrics::tightBoundingRect.
+//
+//	C++: QRect QFontMetrics::tightBoundingRect(const QString & text, const QTextOption & textOption) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#tightBoundingRect
+func (this *QFontMetrics) TightBoundingRectWithTextOption(text string, textOption *QTextOption) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.TightBoundingRectWithTextOption")
+	r := C.qute_QFontMetrics_tightBoundingRect_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(textOption), "QFontMetrics.TightBoundingRectWithTextOption"))
 	return goQRect(r)
 }
 

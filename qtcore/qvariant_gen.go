@@ -88,14 +88,26 @@ func NewQVariant() *QVariant {
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithI wraps the QVariant constructor.
+// NewQVariantWithMetaType wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(QMetaType type, const void * copy = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithMetaType(typeArg *QMetaType) *QVariant {
+	rt.CheckThread("NewQVariantWithMetaType")
+	p := C.qute_QVariant_new_1(rt.UseArg(unsafe.Pointer(typeArg), "NewQVariantWithMetaType"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithIArg wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(int i)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithI(iArg int) *QVariant {
-	rt.CheckThread("NewQVariantWithI")
-	p := C.qute_QVariant_new_1(C.int(iArg))
+func NewQVariantWithIArg(iArg int) *QVariant {
+	rt.CheckThread("NewQVariantWithIArg")
+	p := C.qute_QVariant_new_2(C.int(iArg))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -107,7 +119,7 @@ func NewQVariantWithI(iArg int) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithUi(ui uint) *QVariant {
 	rt.CheckThread("NewQVariantWithUi")
-	p := C.qute_QVariant_new_2(C.uint(ui))
+	p := C.qute_QVariant_new_3(C.uint(ui))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -119,7 +131,7 @@ func NewQVariantWithUi(ui uint) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithLl(ll int64) *QVariant {
 	rt.CheckThread("NewQVariantWithLl")
-	p := C.qute_QVariant_new_3(C.longlong(ll))
+	p := C.qute_QVariant_new_4(C.longlong(ll))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -131,19 +143,19 @@ func NewQVariantWithLl(ll int64) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithUll(ull uint64) *QVariant {
 	rt.CheckThread("NewQVariantWithUll")
-	p := C.qute_QVariant_new_4(C.ulonglong(ull))
+	p := C.qute_QVariant_new_5(C.ulonglong(ull))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithB wraps the QVariant constructor.
+// NewQVariantWithBArg wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(bool b)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithB(bArg bool) *QVariant {
-	rt.CheckThread("NewQVariantWithB")
-	p := C.qute_QVariant_new_5(C.bool(bArg))
+func NewQVariantWithBArg(bArg bool) *QVariant {
+	rt.CheckThread("NewQVariantWithBArg")
+	p := C.qute_QVariant_new_6(C.bool(bArg))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -155,19 +167,19 @@ func NewQVariantWithB(bArg bool) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithD(d float64) *QVariant {
 	rt.CheckThread("NewQVariantWithD")
-	p := C.qute_QVariant_new_6(C.double(d))
+	p := C.qute_QVariant_new_7(C.double(d))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithF wraps the QVariant constructor.
+// NewQVariantWithFArg wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(float f)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithF(fArg float32) *QVariant {
-	rt.CheckThread("NewQVariantWithF")
-	p := C.qute_QVariant_new_7(C.float(fArg))
+func NewQVariantWithFArg(fArg float32) *QVariant {
+	rt.CheckThread("NewQVariantWithFArg")
+	p := C.qute_QVariant_new_8(C.float(fArg))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -179,7 +191,7 @@ func NewQVariantWithF(fArg float32) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithQchar(qchar rune) *QVariant {
 	rt.CheckThread("NewQVariantWithQchar")
-	p := C.qute_QVariant_new_8(C.uint(qchar))
+	p := C.qute_QVariant_new_9(C.uint(qchar))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -191,7 +203,7 @@ func NewQVariantWithQchar(qchar rune) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithDate(date *QDate) *QVariant {
 	rt.CheckThread("NewQVariantWithDate")
-	p := C.qute_QVariant_new_9(rt.UseArg(unsafe.Pointer(date), "NewQVariantWithDate"))
+	p := C.qute_QVariant_new_10(rt.UseArg(unsafe.Pointer(date), "NewQVariantWithDate"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -203,7 +215,19 @@ func NewQVariantWithDate(date *QDate) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithTime(time *QTime) *QVariant {
 	rt.CheckThread("NewQVariantWithTime")
-	p := C.qute_QVariant_new_10(rt.UseArg(unsafe.Pointer(time), "NewQVariantWithTime"))
+	p := C.qute_QVariant_new_11(rt.UseArg(unsafe.Pointer(time), "NewQVariantWithTime"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithBitArray wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QBitArray & bitarray)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithBitArray(bitarray *QBitArray) *QVariant {
+	rt.CheckThread("NewQVariantWithBitArray")
+	p := C.qute_QVariant_new_12(rt.UseArg(unsafe.Pointer(bitarray), "NewQVariantWithBitArray"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -215,47 +239,114 @@ func NewQVariantWithTime(time *QTime) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithBytearray(bytearray []byte) *QVariant {
 	rt.CheckThread("NewQVariantWithBytearray")
-	p := C.qute_QVariant_new_11((*C.char)(unsafe.Pointer(unsafe.SliceData(bytearray))), C.ptrdiff_t(len(bytearray)))
+	p := C.qute_QVariant_new_13((*C.char)(unsafe.Pointer(unsafe.SliceData(bytearray))), C.ptrdiff_t(len(bytearray)))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithDatetime wraps the QVariant constructor.
+// NewQVariantWithDateTime wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(const QDateTime & datetime)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithDatetime(datetime *QDateTime) *QVariant {
-	rt.CheckThread("NewQVariantWithDatetime")
-	p := C.qute_QVariant_new_12(rt.UseArg(unsafe.Pointer(datetime), "NewQVariantWithDatetime"))
+func NewQVariantWithDateTime(datetime *QDateTime) *QVariant {
+	rt.CheckThread("NewQVariantWithDateTime")
+	p := C.qute_QVariant_new_14(rt.UseArg(unsafe.Pointer(datetime), "NewQVariantWithDateTime"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithList wraps the QVariant constructor.
+// NewQVariantWithMap wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QHash<QString, QVariant> & hash)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithMap(hash map[string]*QVariant) *QVariant {
+	rt.CheckThread("NewQVariantWithMap")
+	hashK := make([]C.qute_str, 0, len(hash))
+	hashV := make([]unsafe.Pointer, 0, len(hash))
+	for k, x := range hash {
+		hashK = append(hashK, quteCStr(k))
+		hashV = append(hashV, rt.UseArg(unsafe.Pointer(x), "NewQVariantWithMap"))
+	}
+	defer quteFreeStrs(hashK)
+	p := C.qute_QVariant_new_15(unsafe.Pointer(unsafe.SliceData(hashK)), unsafe.Pointer(unsafe.SliceData(hashV)), C.ptrdiff_t(len(hash)))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithJsonArray wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QJsonArray & jsonArray)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithJsonArray(jsonArray *QJsonArray) *QVariant {
+	rt.CheckThread("NewQVariantWithJsonArray")
+	p := C.qute_QVariant_new_16(rt.UseArg(unsafe.Pointer(jsonArray), "NewQVariantWithJsonArray"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithJsonObject wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QJsonObject & jsonObject)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithJsonObject(jsonObject *QJsonObject) *QVariant {
+	rt.CheckThread("NewQVariantWithJsonObject")
+	p := C.qute_QVariant_new_17(rt.UseArg(unsafe.Pointer(jsonObject), "NewQVariantWithJsonObject"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithVariants wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(const QList<QVariant> & list)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithList(list []*QVariant) *QVariant {
-	rt.CheckThread("NewQVariantWithList")
+func NewQVariantWithVariants(list []*QVariant) *QVariant {
+	rt.CheckThread("NewQVariantWithVariants")
 	listC := make([]unsafe.Pointer, len(list))
 	for i := range list {
-		listC[i] = rt.UseArg(unsafe.Pointer(list[i]), "NewQVariantWithList")
+		listC[i] = rt.UseArg(unsafe.Pointer(list[i]), "NewQVariantWithVariants")
 	}
-	p := C.qute_QVariant_new_13(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
+	p := C.qute_QVariant_new_18(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithString wraps the QVariant constructor.
+// NewQVariantWithLocale wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QLocale & locale)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithLocale(locale *QLocale) *QVariant {
+	rt.CheckThread("NewQVariantWithLocale")
+	p := C.qute_QVariant_new_19(rt.UseArg(unsafe.Pointer(locale), "NewQVariantWithLocale"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithRegularExpression wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QRegularExpression & re)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithRegularExpression(re *QRegularExpression) *QVariant {
+	rt.CheckThread("NewQVariantWithRegularExpression")
+	p := C.qute_QVariant_new_20(rt.UseArg(unsafe.Pointer(re), "NewQVariantWithRegularExpression"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithStringArg wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(const QString & string)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithString(stringArg string) *QVariant {
-	rt.CheckThread("NewQVariantWithString")
-	p := C.qute_QVariant_new_14((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+func NewQVariantWithStringArg(stringArg string) *QVariant {
+	rt.CheckThread("NewQVariantWithStringArg")
+	p := C.qute_QVariant_new_21((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -268,7 +359,7 @@ func NewQVariantWithString(stringArg string) *QVariant {
 func NewQVariantWithStringlist(stringlist []string) *QVariant {
 	rt.CheckThread("NewQVariantWithStringlist")
 	stringlistData, stringlistLens := quteStrListArg(stringlist)
-	p := C.qute_QVariant_new_15((*C.char)(unsafe.Pointer(unsafe.SliceData(stringlistData))), (*C.ptrdiff_t)(unsafe.SliceData(stringlistLens)), C.ptrdiff_t(len(stringlist)))
+	p := C.qute_QVariant_new_22((*C.char)(unsafe.Pointer(unsafe.SliceData(stringlistData))), (*C.ptrdiff_t)(unsafe.SliceData(stringlistLens)), C.ptrdiff_t(len(stringlist)))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -280,7 +371,19 @@ func NewQVariantWithStringlist(stringlist []string) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithUrl(url *QUrl) *QVariant {
 	rt.CheckThread("NewQVariantWithUrl")
-	p := C.qute_QVariant_new_16(rt.UseArg(unsafe.Pointer(url), "NewQVariantWithUrl"))
+	p := C.qute_QVariant_new_23(rt.UseArg(unsafe.Pointer(url), "NewQVariantWithUrl"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithJsonValue wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QJsonValue & jsonValue)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithJsonValue(jsonValue *QJsonValue) *QVariant {
+	rt.CheckThread("NewQVariantWithJsonValue")
+	p := C.qute_QVariant_new_24(rt.UseArg(unsafe.Pointer(jsonValue), "NewQVariantWithJsonValue"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -292,7 +395,19 @@ func NewQVariantWithUrl(url *QUrl) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithModelIndex(modelIndex *QModelIndex) *QVariant {
 	rt.CheckThread("NewQVariantWithModelIndex")
-	p := C.qute_QVariant_new_17(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithModelIndex"))
+	p := C.qute_QVariant_new_25(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithModelIndex"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithUuid wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(QUuid uuid)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithUuid(uuid *QUuid) *QVariant {
+	rt.CheckThread("NewQVariantWithUuid")
+	p := C.qute_QVariant_new_26(rt.UseArg(unsafe.Pointer(uuid), "NewQVariantWithUuid"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -304,7 +419,7 @@ func NewQVariantWithModelIndex(modelIndex *QModelIndex) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithSize(size QSize) *QVariant {
 	rt.CheckThread("NewQVariantWithSize")
-	p := C.qute_QVariant_new_18(cQSize(size))
+	p := C.qute_QVariant_new_27(cQSize(size))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -316,19 +431,19 @@ func NewQVariantWithSize(size QSize) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithSizeF(size QSizeF) *QVariant {
 	rt.CheckThread("NewQVariantWithSizeF")
-	p := C.qute_QVariant_new_19(cQSizeF(size))
+	p := C.qute_QVariant_new_28(cQSizeF(size))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithPt wraps the QVariant constructor.
+// NewQVariantWithPoint wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(QPoint pt)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithPt(pt QPoint) *QVariant {
-	rt.CheckThread("NewQVariantWithPt")
-	p := C.qute_QVariant_new_20(cQPoint(pt))
+func NewQVariantWithPoint(pt QPoint) *QVariant {
+	rt.CheckThread("NewQVariantWithPoint")
+	p := C.qute_QVariant_new_29(cQPoint(pt))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -340,7 +455,31 @@ func NewQVariantWithPt(pt QPoint) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithPointF(pt QPointF) *QVariant {
 	rt.CheckThread("NewQVariantWithPointF")
-	p := C.qute_QVariant_new_21(cQPointF(pt))
+	p := C.qute_QVariant_new_30(cQPointF(pt))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithLine wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(QLine line)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithLine(line *QLine) *QVariant {
+	rt.CheckThread("NewQVariantWithLine")
+	p := C.qute_QVariant_new_31(rt.UseArg(unsafe.Pointer(line), "NewQVariantWithLine"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithLineF wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(QLineF line)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithLineF(line *QLineF) *QVariant {
+	rt.CheckThread("NewQVariantWithLineF")
+	p := C.qute_QVariant_new_32(rt.UseArg(unsafe.Pointer(line), "NewQVariantWithLineF"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -352,7 +491,7 @@ func NewQVariantWithPointF(pt QPointF) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithRect(rect QRect) *QVariant {
 	rt.CheckThread("NewQVariantWithRect")
-	p := C.qute_QVariant_new_22(cQRect(rect))
+	p := C.qute_QVariant_new_33(cQRect(rect))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -364,7 +503,31 @@ func NewQVariantWithRect(rect QRect) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithRectF(rect QRectF) *QVariant {
 	rt.CheckThread("NewQVariantWithRectF")
-	p := C.qute_QVariant_new_23(cQRectF(rect))
+	p := C.qute_QVariant_new_34(cQRectF(rect))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithEasingCurve wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QEasingCurve & easing)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithEasingCurve(easing *QEasingCurve) *QVariant {
+	rt.CheckThread("NewQVariantWithEasingCurve")
+	p := C.qute_QVariant_new_35(rt.UseArg(unsafe.Pointer(easing), "NewQVariantWithEasingCurve"))
+	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	return rt.View[QVariant](h, p)
+}
+
+// NewQVariantWithJsonDocument wraps the QVariant constructor.
+//
+//	C++: QVariant::QVariant(const QJsonDocument & jsonDocument)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
+func NewQVariantWithJsonDocument(jsonDocument *QJsonDocument) *QVariant {
+	rt.CheckThread("NewQVariantWithJsonDocument")
+	p := C.qute_QVariant_new_36(rt.UseArg(unsafe.Pointer(jsonDocument), "NewQVariantWithJsonDocument"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -376,21 +539,7 @@ func NewQVariantWithRectF(rect QRectF) *QVariant {
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
 func NewQVariantWithPersistentIndex(modelIndex *QPersistentModelIndex) *QVariant {
 	rt.CheckThread("NewQVariantWithPersistentIndex")
-	p := C.qute_QVariant_new_24(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithPersistentIndex"))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
-	return rt.View[QVariant](h, p)
-}
-
-// NewQVariantWithStr wraps the QVariant constructor.
-//
-//	C++: QVariant::QVariant(const char * str)
-//
-// Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithStr(str string) *QVariant {
-	rt.CheckThread("NewQVariantWithStr")
-	strCStr := C.CString(str)
-	defer C.free(unsafe.Pointer(strCStr))
-	p := C.qute_QVariant_new_25(strCStr)
+	p := C.qute_QVariant_new_37(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithPersistentIndex"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -426,6 +575,52 @@ func (this *QVariant) TypeName() string {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.TypeName")
 	r := C.qute_QVariant_typeName(self)
 	return C.GoString(r)
+}
+
+// MetaType wraps QVariant::metaType.
+//
+//	C++: QMetaType QVariant::metaType() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#metaType
+func (this *QVariant) MetaType() *QMetaType {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.MetaType")
+	r := C.qute_QVariant_metaType(self)
+	return rt.View[QMetaType](rt.WrapClass(r, "QMetaType", rt.TakeOwned), r)
+}
+
+// CanConvert wraps QVariant::canConvert.
+//
+//	C++: bool QVariant::canConvert(QMetaType targetType) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#canConvert
+func (this *QVariant) CanConvert(targetType *QMetaType) bool {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.CanConvert")
+	r := C.qute_QVariant_canConvert(self, rt.UseArg(unsafe.Pointer(targetType), "QVariant.CanConvert"))
+	return bool(r)
+}
+
+// Convert wraps QVariant::convert.
+//
+//	C++: bool QVariant::convert(QMetaType type)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#convert
+func (this *QVariant) Convert(typeArg *QMetaType) bool {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.Convert")
+	r := C.qute_QVariant_convert(self, rt.UseArg(unsafe.Pointer(typeArg), "QVariant.Convert"))
+	return bool(r)
+}
+
+// CanView wraps QVariant::canView.
+//
+//	C++: bool QVariant::canView(QMetaType targetType) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#canView
+func (this *QVariant) CanView(targetType *QMetaType) bool {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.CanView")
+	r := C.qute_QVariant_canView(self, rt.UseArg(unsafe.Pointer(targetType), "QVariant.CanView"))
+	return bool(r)
 }
 
 // IsValid wraps QVariant::isValid.
@@ -559,6 +754,19 @@ func (this *QVariant) ToByteArray() []byte {
 	return quteBytes(r)
 }
 
+// ToBitArray wraps QVariant::toBitArray.
+//
+//	C++: QBitArray QVariant::toBitArray() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toBitArray
+func (this *QVariant) ToBitArray() *QBitArray {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToBitArray")
+	r := C.qute_QVariant_toBitArray(self)
+	return rt.View[QBitArray](rt.WrapClass(r, "QBitArray", rt.TakeOwned), r)
+}
+
 // ToString wraps QVariant::toString.
 //
 //	C++: QString QVariant::toString() const
@@ -644,6 +852,32 @@ func (this *QVariant) ToList() []*QVariant {
 	})
 }
 
+// ToMap wraps QVariant::toMap.
+//
+//	C++: QMap<QString, QVariant> QVariant::toMap() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toMap
+func (this *QVariant) ToMap() map[string]*QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToMap")
+	r := C.qute_QVariant_toMap(self)
+	return quteMap(r, func(k C.qute_str) string { return quteStr(k) }, func(v unsafe.Pointer) *QVariant {
+		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+	})
+}
+
+// ToHash wraps QVariant::toHash.
+//
+//	C++: QHash<QString, QVariant> QVariant::toHash() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toHash
+func (this *QVariant) ToHash() map[string]*QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToHash")
+	r := C.qute_QVariant_toHash(self)
+	return quteMap(r, func(k C.qute_str) string { return quteStr(k) }, func(v unsafe.Pointer) *QVariant {
+		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+	})
+}
+
 // ToPoint wraps QVariant::toPoint.
 //
 //	C++: QPoint QVariant::toPoint() const
@@ -699,6 +933,32 @@ func (this *QVariant) ToSizeF() QSizeF {
 	return goQSizeF(r)
 }
 
+// ToLine wraps QVariant::toLine.
+//
+//	C++: QLine QVariant::toLine() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toLine
+func (this *QVariant) ToLine() *QLine {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLine")
+	r := C.qute_QVariant_toLine(self)
+	return rt.View[QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
+}
+
+// ToLineF wraps QVariant::toLineF.
+//
+//	C++: QLineF QVariant::toLineF() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toLineF
+func (this *QVariant) ToLineF() *QLineF {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLineF")
+	r := C.qute_QVariant_toLineF(self)
+	return rt.View[QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
+}
+
 // ToRectF wraps QVariant::toRectF.
 //
 //	C++: QRectF QVariant::toRectF() const
@@ -708,6 +968,58 @@ func (this *QVariant) ToRectF() QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToRectF")
 	r := C.qute_QVariant_toRectF(self)
 	return goQRectF(r)
+}
+
+// ToLocale wraps QVariant::toLocale.
+//
+//	C++: QLocale QVariant::toLocale() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toLocale
+func (this *QVariant) ToLocale() *QLocale {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLocale")
+	r := C.qute_QVariant_toLocale(self)
+	return rt.View[QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
+}
+
+// ToRegularExpression wraps QVariant::toRegularExpression.
+//
+//	C++: QRegularExpression QVariant::toRegularExpression() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toRegularExpression
+func (this *QVariant) ToRegularExpression() *QRegularExpression {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToRegularExpression")
+	r := C.qute_QVariant_toRegularExpression(self)
+	return rt.View[QRegularExpression](rt.WrapClass(r, "QRegularExpression", rt.TakeOwned), r)
+}
+
+// ToEasingCurve wraps QVariant::toEasingCurve.
+//
+//	C++: QEasingCurve QVariant::toEasingCurve() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toEasingCurve
+func (this *QVariant) ToEasingCurve() *QEasingCurve {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToEasingCurve")
+	r := C.qute_QVariant_toEasingCurve(self)
+	return rt.View[QEasingCurve](rt.WrapClass(r, "QEasingCurve", rt.TakeOwned), r)
+}
+
+// ToUuid wraps QVariant::toUuid.
+//
+//	C++: QUuid QVariant::toUuid() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toUuid
+func (this *QVariant) ToUuid() *QUuid {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToUuid")
+	r := C.qute_QVariant_toUuid(self)
+	return rt.View[QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
 }
 
 // ToUrl wraps QVariant::toUrl.
@@ -721,6 +1033,58 @@ func (this *QVariant) ToUrl() *QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToUrl")
 	r := C.qute_QVariant_toUrl(self)
 	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
+}
+
+// ToJsonValue wraps QVariant::toJsonValue.
+//
+//	C++: QJsonValue QVariant::toJsonValue() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toJsonValue
+func (this *QVariant) ToJsonValue() *QJsonValue {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonValue")
+	r := C.qute_QVariant_toJsonValue(self)
+	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
+}
+
+// ToJsonObject wraps QVariant::toJsonObject.
+//
+//	C++: QJsonObject QVariant::toJsonObject() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toJsonObject
+func (this *QVariant) ToJsonObject() *QJsonObject {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonObject")
+	r := C.qute_QVariant_toJsonObject(self)
+	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
+}
+
+// ToJsonArray wraps QVariant::toJsonArray.
+//
+//	C++: QJsonArray QVariant::toJsonArray() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toJsonArray
+func (this *QVariant) ToJsonArray() *QJsonArray {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonArray")
+	r := C.qute_QVariant_toJsonArray(self)
+	return rt.View[QJsonArray](rt.WrapClass(r, "QJsonArray", rt.TakeOwned), r)
+}
+
+// ToJsonDocument wraps QVariant::toJsonDocument.
+//
+//	C++: QJsonDocument QVariant::toJsonDocument() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toJsonDocument
+func (this *QVariant) ToJsonDocument() *QJsonDocument {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonDocument")
+	r := C.qute_QVariant_toJsonDocument(self)
+	return rt.View[QJsonDocument](rt.WrapClass(r, "QJsonDocument", rt.TakeOwned), r)
 }
 
 // ToModelIndex wraps QVariant::toModelIndex.
@@ -749,6 +1113,56 @@ func (this *QVariant) ToPersistentModelIndex() *QPersistentModelIndex {
 	return rt.View[QPersistentModelIndex](rt.WrapClass(r, "QPersistentModelIndex", rt.TakeOwned), r)
 }
 
+// Load wraps QVariant::load.
+//
+//	C++: void QVariant::load(QDataStream & ds)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#load
+func (this *QVariant) Load(ds QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.Load")
+	var dsPtr unsafe.Pointer
+	if ds != nil {
+		dsPtr = rt.UseArg(unsafe.Pointer(ds.AsQDataStream()), "QVariant.Load")
+	}
+	C.qute_QVariant_load(self, dsPtr)
+}
+
+// Save wraps QVariant::save.
+//
+//	C++: void QVariant::save(QDataStream & ds) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#save
+func (this *QVariant) Save(ds QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.Save")
+	var dsPtr unsafe.Pointer
+	if ds != nil {
+		dsPtr = rt.UseArg(unsafe.Pointer(ds.AsQDataStream()), "QVariant.Save")
+	}
+	C.qute_QVariant_save(self, dsPtr)
+}
+
+// Data wraps QVariant::data.
+//
+//	C++: void * QVariant::data()
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#data
+func (this *QVariant) Data() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.Data")
+	r := C.qute_QVariant_data(self)
+	return r
+}
+
+// ConstData wraps QVariant::constData.
+//
+//	C++: const void * QVariant::constData() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#constData
+func (this *QVariant) ConstData() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ConstData")
+	r := C.qute_QVariant_constData(self)
+	return r
+}
+
 // SetValue wraps QVariant::setValue.
 //
 //	C++: void QVariant::setValue(const QVariant & avalue)
@@ -757,4 +1171,30 @@ func (this *QVariant) ToPersistentModelIndex() *QPersistentModelIndex {
 func (this *QVariant) SetValue(avalue *QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.SetValue")
 	C.qute_QVariant_setValue(self, rt.UseArg(unsafe.Pointer(avalue), "QVariant.SetValue"))
+}
+
+// QVariantFromMetaType wraps QVariant::fromMetaType.
+//
+//	C++: QVariant QVariant::fromMetaType(QMetaType type, const void * copy = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#fromMetaType
+func QVariantFromMetaType(typeArg *QMetaType) *QVariant {
+	rt.CheckThread("QVariantFromMetaType")
+	r := C.qute_QVariant_fromMetaType(rt.UseArg(unsafe.Pointer(typeArg), "QVariantFromMetaType"))
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// QVariantCompare wraps QVariant::compare.
+//
+//	C++: QPartialOrdering QVariant::compare(const QVariant & lhs, const QVariant & rhs)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#compare
+func QVariantCompare(lhs *QVariant, rhs *QVariant) *QPartialOrdering {
+	rt.CheckThread("QVariantCompare")
+	r := C.qute_QVariant_compare(rt.UseArg(unsafe.Pointer(lhs), "QVariantCompare"), rt.UseArg(unsafe.Pointer(rhs), "QVariantCompare"))
+	return rt.View[QPartialOrdering](rt.WrapClass(r, "QPartialOrdering", rt.TakeOwned), r)
 }

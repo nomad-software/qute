@@ -613,22 +613,12 @@ func (this *QLineEdit) HasAcceptableInput() bool {
 
 // SetTextMargins wraps QLineEdit::setTextMargins.
 //
-//	C++: void QLineEdit::setTextMargins(int left, int top, int right, int bottom)
-//
-// Qt docs: https://doc.qt.io/qt-6/qlineedit.html#setTextMargins
-func (this *QLineEdit) SetTextMargins(left int, top int, right int, bottom int) {
-	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetTextMargins")
-	C.qute_QLineEdit_setTextMargins(self, C.int(left), C.int(top), C.int(right), C.int(bottom))
-}
-
-// SetTextMarginsM wraps QLineEdit::setTextMargins.
-//
 //	C++: void QLineEdit::setTextMargins(const QMargins & margins)
 //
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#setTextMargins
-func (this *QLineEdit) SetTextMarginsM(margins qtcore.QMargins) {
-	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetTextMarginsM")
-	C.qute_QLineEdit_setTextMargins_1(self, cQMargins(margins))
+func (this *QLineEdit) SetTextMargins(margins qtcore.QMargins) {
+	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetTextMargins")
+	C.qute_QLineEdit_setTextMargins(self, cQMargins(margins))
 }
 
 // TextMargins wraps QLineEdit::textMargins.

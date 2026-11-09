@@ -33,6 +33,30 @@ func QInputEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QInputEvent {
 	return rt.View[QInputEvent](rt.WrapClass(p, "QInputEvent", rt.ModeFor(own)), p)
 }
 
+// Device wraps QInputEvent::device.
+//
+//	C++: const QInputDevice * QInputEvent::device() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputevent.html#device
+func (this *QInputEvent) Device() *QInputDevice {
+	self := rt.Use(unsafe.Pointer(this), "QInputEvent.Device")
+	r := C.qute_QInputEvent_device(self)
+	return rt.View[QInputDevice](rt.WrapClass(r, "QInputDevice", rt.KeepOrBorrow), r)
+}
+
+// DeviceType wraps QInputEvent::deviceType.
+//
+//	C++: QInputDevice::DeviceType QInputEvent::deviceType() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputevent.html#deviceType
+func (this *QInputEvent) DeviceType() QInputDeviceDeviceTypes {
+	self := rt.Use(unsafe.Pointer(this), "QInputEvent.DeviceType")
+	r := C.qute_QInputEvent_deviceType(self)
+	return QInputDeviceDeviceTypes(r)
+}
+
 // Modifiers wraps QInputEvent::modifiers.
 //
 //	C++: Qt::KeyboardModifiers QInputEvent::modifiers() const

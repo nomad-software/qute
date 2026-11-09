@@ -69,20 +69,20 @@ func NewQDateTimeEdit(parent QWidgetLike) *QDateTimeEdit {
 	return rt.View[QDateTimeEdit](h, p)
 }
 
-// NewQDateTimeEditWithDt wraps the QDateTimeEdit constructor.
+// NewQDateTimeEditWithDateTime wraps the QDateTimeEdit constructor.
 //
 //	C++: QDateTimeEdit::QDateTimeEdit(const QDateTime & dt, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#QDateTimeEdit
-func NewQDateTimeEditWithDt(dt *qtcore.QDateTime, parent QWidgetLike) *QDateTimeEdit {
-	rt.CheckThread("NewQDateTimeEditWithDt")
+func NewQDateTimeEditWithDateTime(dt *qtcore.QDateTime, parent QWidgetLike) *QDateTimeEdit {
+	rt.CheckThread("NewQDateTimeEditWithDateTime")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithDt")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithDateTime")
 	}
-	p := C.qute_QDateTimeEdit_new_1(rt.UseArg(unsafe.Pointer(dt), "NewQDateTimeEditWithDt"), parentPtr)
+	p := C.qute_QDateTimeEdit_new_1(rt.UseArg(unsafe.Pointer(dt), "NewQDateTimeEditWithDateTime"), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -91,20 +91,20 @@ func NewQDateTimeEditWithDt(dt *qtcore.QDateTime, parent QWidgetLike) *QDateTime
 	return rt.View[QDateTimeEdit](h, p)
 }
 
-// NewQDateTimeEditWithD wraps the QDateTimeEdit constructor.
+// NewQDateTimeEditWithDate wraps the QDateTimeEdit constructor.
 //
 //	C++: QDateTimeEdit::QDateTimeEdit(QDate d, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#QDateTimeEdit
-func NewQDateTimeEditWithD(d *qtcore.QDate, parent QWidgetLike) *QDateTimeEdit {
-	rt.CheckThread("NewQDateTimeEditWithD")
+func NewQDateTimeEditWithDate(d *qtcore.QDate, parent QWidgetLike) *QDateTimeEdit {
+	rt.CheckThread("NewQDateTimeEditWithDate")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithD")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithDate")
 	}
-	p := C.qute_QDateTimeEdit_new_2(rt.UseArg(unsafe.Pointer(d), "NewQDateTimeEditWithD"), parentPtr)
+	p := C.qute_QDateTimeEdit_new_2(rt.UseArg(unsafe.Pointer(d), "NewQDateTimeEditWithDate"), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -113,20 +113,20 @@ func NewQDateTimeEditWithD(d *qtcore.QDate, parent QWidgetLike) *QDateTimeEdit {
 	return rt.View[QDateTimeEdit](h, p)
 }
 
-// NewQDateTimeEditWithT wraps the QDateTimeEdit constructor.
+// NewQDateTimeEditWithTime wraps the QDateTimeEdit constructor.
 //
 //	C++: QDateTimeEdit::QDateTimeEdit(QTime t, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#QDateTimeEdit
-func NewQDateTimeEditWithT(t *qtcore.QTime, parent QWidgetLike) *QDateTimeEdit {
-	rt.CheckThread("NewQDateTimeEditWithT")
+func NewQDateTimeEditWithTime(t *qtcore.QTime, parent QWidgetLike) *QDateTimeEdit {
+	rt.CheckThread("NewQDateTimeEditWithTime")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithT")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithTime")
 	}
-	p := C.qute_QDateTimeEdit_new_3(rt.UseArg(unsafe.Pointer(t), "NewQDateTimeEditWithT"), parentPtr)
+	p := C.qute_QDateTimeEdit_new_3(rt.UseArg(unsafe.Pointer(t), "NewQDateTimeEditWithTime"), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -172,6 +172,29 @@ func (this *QDateTimeEdit) Time() *qtcore.QTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.Time")
 	r := C.qute_QDateTimeEdit_time(self)
 	return rt.View[qtcore.QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
+}
+
+// Calendar wraps QDateTimeEdit::calendar.
+//
+//	C++: QCalendar QDateTimeEdit::calendar() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#calendar
+func (this *QDateTimeEdit) Calendar() *qtcore.QCalendar {
+	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.Calendar")
+	r := C.qute_QDateTimeEdit_calendar(self)
+	return rt.View[qtcore.QCalendar](rt.WrapClass(r, "QCalendar", rt.TakeOwned), r)
+}
+
+// SetCalendar wraps QDateTimeEdit::setCalendar.
+//
+//	C++: void QDateTimeEdit::setCalendar(QCalendar calendar)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#setCalendar
+func (this *QDateTimeEdit) SetCalendar(calendar *qtcore.QCalendar) {
+	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCalendar")
+	C.qute_QDateTimeEdit_setCalendar(self, rt.UseArg(unsafe.Pointer(calendar), "QDateTimeEdit.SetCalendar"))
 }
 
 // MinimumDateTime wraps QDateTimeEdit::minimumDateTime.
@@ -567,6 +590,29 @@ func (this *QDateTimeEdit) CalendarPopup() bool {
 func (this *QDateTimeEdit) SetCalendarPopup(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCalendarPopup")
 	C.qute_QDateTimeEdit_setCalendarPopup(self, C.bool(enable))
+}
+
+// TimeZone wraps QDateTimeEdit::timeZone.
+//
+//	C++: QTimeZone QDateTimeEdit::timeZone() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#timeZone
+func (this *QDateTimeEdit) TimeZone() *qtcore.QTimeZone {
+	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.TimeZone")
+	r := C.qute_QDateTimeEdit_timeZone(self)
+	return rt.View[qtcore.QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
+}
+
+// SetTimeZone wraps QDateTimeEdit::setTimeZone.
+//
+//	C++: void QDateTimeEdit::setTimeZone(const QTimeZone & zone)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#setTimeZone
+func (this *QDateTimeEdit) SetTimeZone(zone *qtcore.QTimeZone) {
+	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetTimeZone")
+	C.qute_QDateTimeEdit_setTimeZone(self, rt.UseArg(unsafe.Pointer(zone), "QDateTimeEdit.SetTimeZone"))
 }
 
 // SetDateTime wraps QDateTimeEdit::setDateTime.

@@ -215,6 +215,19 @@ func (this *QPainter) FontMetrics() *QFontMetrics {
 	return rt.View[QFontMetrics](rt.WrapClass(r, "QFontMetrics", rt.TakeOwned), r)
 }
 
+// FontInfo wraps QPainter::fontInfo.
+//
+//	C++: QFontInfo QPainter::fontInfo() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#fontInfo
+func (this *QPainter) FontInfo() *QFontInfo {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.FontInfo")
+	r := C.qute_QPainter_fontInfo(self)
+	return rt.View[QFontInfo](rt.WrapClass(r, "QFontInfo", rt.TakeOwned), r)
+}
+
 // SetPenColor wraps QPainter::setPen.
 //
 //	C++: void QPainter::setPen(const QColor & color)
@@ -860,6 +873,20 @@ func (this *QPainter) DrawLineF(p1 qtcore.QPointF, p2 qtcore.QPointF) {
 	C.qute_QPainter_drawLine_2(self, cQPointF(p1), cQPointF(p2))
 }
 
+// DrawLineSegmentsF wraps QPainter::drawLines.
+//
+//	C++: void QPainter::drawLines(const QList<QLineF> & lines)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawLines
+func (this *QPainter) DrawLineSegmentsF(lines []*qtcore.QLineF) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawLineSegmentsF")
+	linesC := make([]unsafe.Pointer, len(lines))
+	for i := range lines {
+		linesC[i] = rt.UseArg(unsafe.Pointer(lines[i]), "QPainter.DrawLineSegmentsF")
+	}
+	C.qute_QPainter_drawLines(self, unsafe.Pointer(unsafe.SliceData(linesC)), C.ptrdiff_t(len(lines)))
+}
+
 // DrawLinesF wraps QPainter::drawLines.
 //
 //	C++: void QPainter::drawLines(const QList<QPointF> & pointPairs)
@@ -871,7 +898,21 @@ func (this *QPainter) DrawLinesF(pointPairs []qtcore.QPointF) {
 	for i := range pointPairs {
 		pointPairsC[i] = cQPointF(pointPairs[i])
 	}
-	C.qute_QPainter_drawLines(self, unsafe.Pointer(unsafe.SliceData(pointPairsC)), C.ptrdiff_t(len(pointPairs)))
+	C.qute_QPainter_drawLines_1(self, unsafe.Pointer(unsafe.SliceData(pointPairsC)), C.ptrdiff_t(len(pointPairs)))
+}
+
+// DrawLineSegments wraps QPainter::drawLines.
+//
+//	C++: void QPainter::drawLines(const QList<QLine> & lines)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawLines
+func (this *QPainter) DrawLineSegments(lines []*qtcore.QLine) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawLineSegments")
+	linesC := make([]unsafe.Pointer, len(lines))
+	for i := range lines {
+		linesC[i] = rt.UseArg(unsafe.Pointer(lines[i]), "QPainter.DrawLineSegments")
+	}
+	C.qute_QPainter_drawLines_2(self, unsafe.Pointer(unsafe.SliceData(linesC)), C.ptrdiff_t(len(lines)))
 }
 
 // DrawLines wraps QPainter::drawLines.
@@ -885,7 +926,7 @@ func (this *QPainter) DrawLines(pointPairs []qtcore.QPoint) {
 	for i := range pointPairs {
 		pointPairsC[i] = cQPoint(pointPairs[i])
 	}
-	C.qute_QPainter_drawLines_1(self, unsafe.Pointer(unsafe.SliceData(pointPairsC)), C.ptrdiff_t(len(pointPairs)))
+	C.qute_QPainter_drawLines_3(self, unsafe.Pointer(unsafe.SliceData(pointPairsC)), C.ptrdiff_t(len(pointPairs)))
 }
 
 // DrawRectF wraps QPainter::drawRect.
@@ -1160,6 +1201,26 @@ func (this *QPainter) DrawTiledPixmap(rect qtcore.QRect, pixmap *QPixmap) {
 	C.qute_QPainter_drawTiledPixmap_1(self, cQRect(rect), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawTiledPixmap"))
 }
 
+// DrawPicture wraps QPainter::drawPicture.
+//
+//	C++: void QPainter::drawPicture(const QPointF & p, const QPicture & picture)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPicture
+func (this *QPainter) DrawPicture(pArg qtcore.QPointF, picture *QPicture) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPicture")
+	C.qute_QPainter_drawPicture(self, cQPointF(pArg), rt.UseArg(unsafe.Pointer(picture), "QPainter.DrawPicture"))
+}
+
+// DrawPicturePoint wraps QPainter::drawPicture.
+//
+//	C++: void QPainter::drawPicture(const QPoint & p, const QPicture & picture)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPicture
+func (this *QPainter) DrawPicturePoint(pArg qtcore.QPoint, picture *QPicture) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPicturePoint")
+	C.qute_QPainter_drawPicture_1(self, cQPoint(pArg), rt.UseArg(unsafe.Pointer(picture), "QPainter.DrawPicturePoint"))
+}
+
 // DrawPixmapPartF wraps QPainter::drawPixmap.
 //
 //	C++: void QPainter::drawPixmap(const QRectF & targetRect, const QPixmap & pixmap, const QRectF & sourceRect)
@@ -1208,6 +1269,20 @@ func (this *QPainter) DrawPixmap(pArg qtcore.QPoint, pm *QPixmap) {
 func (this *QPainter) DrawPixmapIn(rArg qtcore.QRect, pm *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapIn")
 	C.qute_QPainter_drawPixmap_4(self, cQRect(rArg), rt.UseArg(unsafe.Pointer(pm), "QPainter.DrawPixmapIn"))
+}
+
+// DrawPixmapFragments wraps QPainter::drawPixmapFragments.
+//
+//	C++: void QPainter::drawPixmapFragments(const PixmapFragment * fragments, int fragmentCount, const QPixmap & pixmap, PixmapFragmentHints hints = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPixmapFragments
+func (this *QPainter) DrawPixmapFragments(fragments []*QPainterPixmapFragment, pixmap *QPixmap) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapFragments")
+	fragmentsC := make([]unsafe.Pointer, len(fragments))
+	for i := range fragments {
+		fragmentsC[i] = rt.UseArg(unsafe.Pointer(fragments[i]), "QPainter.DrawPixmapFragments")
+	}
+	C.qute_QPainter_drawPixmapFragments(self, unsafe.Pointer(unsafe.SliceData(fragmentsC)), C.ptrdiff_t(len(fragments)), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawPixmapFragments"))
 }
 
 // DrawImagePartF wraps QPainter::drawImage.
@@ -1291,6 +1366,36 @@ func (this *QPainter) LayoutDirection() qtcore.LayoutDirection {
 	return qtcore.LayoutDirection(r)
 }
 
+// DrawGlyphRun wraps QPainter::drawGlyphRun.
+//
+//	C++: void QPainter::drawGlyphRun(const QPointF & position, const QGlyphRun & glyphRun)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawGlyphRun
+func (this *QPainter) DrawGlyphRun(position qtcore.QPointF, glyphRun *QGlyphRun) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawGlyphRun")
+	C.qute_QPainter_drawGlyphRun(self, cQPointF(position), rt.UseArg(unsafe.Pointer(glyphRun), "QPainter.DrawGlyphRun"))
+}
+
+// DrawStaticText wraps QPainter::drawStaticText.
+//
+//	C++: void QPainter::drawStaticText(const QPointF & topLeftPosition, const QStaticText & staticText)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawStaticText
+func (this *QPainter) DrawStaticText(topLeftPosition qtcore.QPointF, staticText *QStaticText) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawStaticText")
+	C.qute_QPainter_drawStaticText(self, cQPointF(topLeftPosition), rt.UseArg(unsafe.Pointer(staticText), "QPainter.DrawStaticText"))
+}
+
+// DrawStaticTextPoint wraps QPainter::drawStaticText.
+//
+//	C++: void QPainter::drawStaticText(const QPoint & topLeftPosition, const QStaticText & staticText)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawStaticText
+func (this *QPainter) DrawStaticTextPoint(topLeftPosition qtcore.QPoint, staticText *QStaticText) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawStaticTextPoint")
+	C.qute_QPainter_drawStaticText_1(self, cQPoint(topLeftPosition), rt.UseArg(unsafe.Pointer(staticText), "QPainter.DrawStaticTextPoint"))
+}
+
 // DrawTextF wraps QPainter::drawText.
 //
 //	C++: void QPainter::drawText(const QPointF & p, const QString & s)
@@ -1364,6 +1469,34 @@ func (this *QPainter) BoundingRectTextF(rect qtcore.QRectF, text string) qtcore.
 	return goQRectF(r)
 }
 
+// DrawTextItem wraps QPainter::drawTextItem.
+//
+//	C++: void QPainter::drawTextItem(const QPointF & p, const QTextItem & ti)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawTextItem
+func (this *QPainter) DrawTextItem(pArg qtcore.QPointF, ti QTextItemLike) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextItem")
+	var tiPtr unsafe.Pointer
+	if ti != nil {
+		tiPtr = rt.UseArg(unsafe.Pointer(ti.AsQTextItem()), "QPainter.DrawTextItem")
+	}
+	C.qute_QPainter_drawTextItem(self, cQPointF(pArg), tiPtr)
+}
+
+// DrawTextItemPoint wraps QPainter::drawTextItem.
+//
+//	C++: void QPainter::drawTextItem(const QPoint & p, const QTextItem & ti)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawTextItem
+func (this *QPainter) DrawTextItemPoint(pArg qtcore.QPoint, ti QTextItemLike) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextItemPoint")
+	var tiPtr unsafe.Pointer
+	if ti != nil {
+		tiPtr = rt.UseArg(unsafe.Pointer(ti.AsQTextItem()), "QPainter.DrawTextItemPoint")
+	}
+	C.qute_QPainter_drawTextItem_1(self, cQPoint(pArg), tiPtr)
+}
+
 // FillRectBrushF wraps QPainter::fillRect.
 //
 //	C++: void QPainter::fillRect(const QRectF &, const QBrush &)
@@ -1402,6 +1535,26 @@ func (this *QPainter) FillRectF(rectF qtcore.QRectF, color QColor) {
 func (this *QPainter) FillRect(rect qtcore.QRect, color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRect")
 	C.qute_QPainter_fillRect_3(self, cQRect(rect), cQColor(color))
+}
+
+// FillRectPreset wraps QPainter::fillRect.
+//
+//	C++: void QPainter::fillRect(const QRect & r, QGradient::Preset preset)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#fillRect
+func (this *QPainter) FillRectPreset(rArg qtcore.QRect, preset QGradientPreset) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectPreset")
+	C.qute_QPainter_fillRect_4(self, cQRect(rArg), C.int64_t(preset))
+}
+
+// FillRectPresetF wraps QPainter::fillRect.
+//
+//	C++: void QPainter::fillRect(const QRectF & r, QGradient::Preset preset)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#fillRect
+func (this *QPainter) FillRectPresetF(rArg qtcore.QRectF, preset QGradientPreset) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectPresetF")
+	C.qute_QPainter_fillRect_5(self, cQRectF(rArg), C.int64_t(preset))
 }
 
 // EraseRectF wraps QPainter::eraseRect.

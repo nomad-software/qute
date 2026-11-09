@@ -125,7 +125,14 @@ func (t *testCtx) constructPref(cls *Class, parent string, longest bool) (string
 			var args []string
 			ok := true
 			for _, p := range ctor.Params {
+				if p.Out {
+					continue
+				}
 				if p.Rule == "transfer-this" && p.T.k == kObj {
+					if parent != "nil" && !acceptsWidget(p.T.cls) {
+						args = append(args, "nil") // the root widget is not a valid parent here
+						continue
+					}
 					args = append(args, parent)
 					continue
 				}
@@ -185,6 +192,10 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 	for _, c := range m.Classes {
 		// constructors with a transfer-this parent
 		for _, ctor := range c.Ctors {
+			if ctor.Overlay != nil && ctor.Overlay.Test != "" {
+				g.emitSnippet(t, c, ctor, b)
+				continue
+			}
 			var tp *Param
 			for _, p := range ctor.Params {
 				if p.Rule == "transfer-this" && p.T.k == kObj {
@@ -264,6 +275,15 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 
 func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	if mm.Overlay != nil && mm.Overlay.Test != "" {
+		g.emitSnippet(t, c, mm, b)
+		return
+	}
+	g.emitGenericTest(t, c, mm, b)
+}
+
+// emitSnippet writes a test from an overlay's test: field.
+func (g *Gen) emitSnippet(t *testCtx, c *Class, mm *Method, b *buf) {
+	{
 		if why, ok := strings.CutPrefix(strings.TrimSpace(mm.Overlay.Test), "skip"); ok {
 			g.report.untested(c, mm, "skipped in overlay"+why)
 			return
@@ -280,8 +300,10 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		}
 		b.p("\t})\n}\n")
 		t.n++
-		return
 	}
+}
+
+func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	var transfers []*Param
 	thisRule := false
 	for _, p := range mm.Params {
@@ -333,6 +355,9 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	var checks []string
 	for i, p := range mm.Params {
 		v := fmt.Sprintf("a%d", i)
+		if p.Out {
+			continue
+		}
 		switch {
 		case p.T.k == kObj && (p.Rule == "transfer-to-cpp" || p.Rule == "transfer-this"):
 			parent := "nil"
@@ -432,4 +457,9 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	}
 	b.p("\t})\n}\n")
 	t.n++
+}
+
+// acceptsWidget reports whether a QWidget can be passed where cls is expected.
+func acceptsWidget(cls *Class) bool {
+	return cls.Name == "QWidget" || cls.Name == "QObject"
 }

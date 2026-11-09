@@ -47,13 +47,13 @@ func QRubberBandCast(o qtcore.QObjectLike) *QRubberBand {
 	return rt.View[QRubberBand](rt.WrapClass(p, "QRubberBand", rt.KeepOrBorrow), p)
 }
 
-// NewQRubberBand wraps the QRubberBand constructor.
+// NewQRubberBandWithShape wraps the QRubberBand constructor.
 //
 //	C++: QRubberBand::QRubberBand(Shape, QWidget * = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qrubberband.html#QRubberBand
-func NewQRubberBand(arg0 QRubberBandShape) *QRubberBand {
-	rt.CheckThread("NewQRubberBand")
+func NewQRubberBandWithShape(arg0 QRubberBandShape) *QRubberBand {
+	rt.CheckThread("NewQRubberBandWithShape")
 	p := C.qute_QRubberBand_new(C.int64_t(arg0))
 	h := rt.WrapClass(p, "QRubberBand", rt.NewOwned)
 	return rt.View[QRubberBand](h, p)

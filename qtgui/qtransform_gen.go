@@ -371,6 +371,83 @@ func (this *QTransform) Transposed() *QTransform {
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
+// Translate wraps QTransform::translate.
+//
+//	C++: QTransform & QTransform::translate(qreal dx, qreal dy)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#translate
+func (this *QTransform) Translate(dx float64, dy float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.Translate")
+	C.qute_QTransform_translate(self, C.double(dx), C.double(dy))
+	return this
+}
+
+// Scale wraps QTransform::scale.
+//
+//	C++: QTransform & QTransform::scale(qreal sx, qreal sy)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#scale
+func (this *QTransform) Scale(sx float64, sy float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.Scale")
+	C.qute_QTransform_scale(self, C.double(sx), C.double(sy))
+	return this
+}
+
+// Shear wraps QTransform::shear.
+//
+//	C++: QTransform & QTransform::shear(qreal sh, qreal sv)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#shear
+func (this *QTransform) Shear(sh float64, sv float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.Shear")
+	C.qute_QTransform_shear(self, C.double(sh), C.double(sv))
+	return this
+}
+
+// RotateWithAxis wraps QTransform::rotate.
+//
+//	C++: QTransform & QTransform::rotate(qreal a, Qt::Axis axis, qreal distanceToPlane)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotate
+func (this *QTransform) RotateWithAxis(aArg float64, axis qtcore.Axis, distanceToPlane float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateWithAxis")
+	C.qute_QTransform_rotate(self, C.double(aArg), C.int64_t(axis), C.double(distanceToPlane))
+	return this
+}
+
+// Rotate wraps QTransform::rotate.
+//
+//	C++: QTransform & QTransform::rotate(qreal a, Qt::Axis axis = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotate
+func (this *QTransform) Rotate(aArg float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.Rotate")
+	C.qute_QTransform_rotate_1(self, C.double(aArg))
+	return this
+}
+
+// RotateRadiansWithAxis wraps QTransform::rotateRadians.
+//
+//	C++: QTransform & QTransform::rotateRadians(qreal a, Qt::Axis axis, qreal distanceToPlane)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotateRadians
+func (this *QTransform) RotateRadiansWithAxis(aArg float64, axis qtcore.Axis, distanceToPlane float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateRadiansWithAxis")
+	C.qute_QTransform_rotateRadians(self, C.double(aArg), C.int64_t(axis), C.double(distanceToPlane))
+	return this
+}
+
+// RotateRadians wraps QTransform::rotateRadians.
+//
+//	C++: QTransform & QTransform::rotateRadians(qreal a, Qt::Axis axis = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotateRadians
+func (this *QTransform) RotateRadians(aArg float64) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateRadians")
+	C.qute_QTransform_rotateRadians_1(self, C.double(aArg))
+	return this
+}
+
 // Reset wraps QTransform::reset.
 //
 //	C++: void QTransform::reset()
@@ -403,6 +480,32 @@ func (this *QTransform) MapF(pArg qtcore.QPointF) qtcore.QPointF {
 	return goQPointF(r)
 }
 
+// MapLine wraps QTransform::map.
+//
+//	C++: QLine QTransform::map(const QLine & l) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
+func (this *QTransform) MapLine(l *qtcore.QLine) *qtcore.QLine {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapLine")
+	r := C.qute_QTransform_map_2(self, rt.UseArg(unsafe.Pointer(l), "QTransform.MapLine"))
+	return rt.View[qtcore.QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
+}
+
+// MapLineF wraps QTransform::map.
+//
+//	C++: QLineF QTransform::map(const QLineF & l) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
+func (this *QTransform) MapLineF(l *qtcore.QLineF) *qtcore.QLineF {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapLineF")
+	r := C.qute_QTransform_map_3(self, rt.UseArg(unsafe.Pointer(l), "QTransform.MapLineF"))
+	return rt.View[qtcore.QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
+}
+
 // MapPolygonF wraps QTransform::map.
 //
 //	C++: QPolygonF QTransform::map(const QPolygonF & a) const
@@ -414,7 +517,7 @@ func (this *QTransform) MapPolygonF(aArg []qtcore.QPointF) []qtcore.QPointF {
 	for i := range aArg {
 		aArgC[i] = cQPointF(aArg[i])
 	}
-	r := C.qute_QTransform_map_2(self, unsafe.Pointer(unsafe.SliceData(aArgC)), C.ptrdiff_t(len(aArg)))
+	r := C.qute_QTransform_map_4(self, unsafe.Pointer(unsafe.SliceData(aArgC)), C.ptrdiff_t(len(aArg)))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
@@ -429,7 +532,7 @@ func (this *QTransform) MapPolygon(aArg []qtcore.QPoint) []qtcore.QPoint {
 	for i := range aArg {
 		aArgC[i] = cQPoint(aArg[i])
 	}
-	r := C.qute_QTransform_map_3(self, unsafe.Pointer(unsafe.SliceData(aArgC)), C.ptrdiff_t(len(aArg)))
+	r := C.qute_QTransform_map_5(self, unsafe.Pointer(unsafe.SliceData(aArgC)), C.ptrdiff_t(len(aArg)))
 	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
@@ -442,7 +545,7 @@ func (this *QTransform) MapPolygon(aArg []qtcore.QPoint) []qtcore.QPoint {
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
 func (this *QTransform) MapRegion(rArg *QRegion) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRegion")
-	r := C.qute_QTransform_map_4(self, rt.UseArg(unsafe.Pointer(rArg), "QTransform.MapRegion"))
+	r := C.qute_QTransform_map_6(self, rt.UseArg(unsafe.Pointer(rArg), "QTransform.MapRegion"))
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -455,7 +558,7 @@ func (this *QTransform) MapRegion(rArg *QRegion) *QRegion {
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
 func (this *QTransform) MapPath(pArg *QPainterPath) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapPath")
-	r := C.qute_QTransform_map_5(self, rt.UseArg(unsafe.Pointer(pArg), "QTransform.MapPath"))
+	r := C.qute_QTransform_map_7(self, rt.UseArg(unsafe.Pointer(pArg), "QTransform.MapPath"))
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -490,6 +593,58 @@ func (this *QTransform) MapRectF(rectF qtcore.QRectF) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRectF")
 	r := C.qute_QTransform_mapRect_1(self, cQRectF(rectF))
 	return goQRectF(r)
+}
+
+// QTransformSquareToQuad wraps QTransform::squareToQuad.
+//
+//	C++: bool QTransform::squareToQuad(const QPolygonF & square, QTransform & result)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#squareToQuad
+func QTransformSquareToQuad(square []qtcore.QPointF) (bool, *QTransform) {
+	rt.CheckThread("QTransformSquareToQuad")
+	squareC := make([]C.qute_pointf, len(square))
+	for i := range square {
+		squareC[i] = cQPointF(square[i])
+	}
+	var resultOut unsafe.Pointer
+	r := C.qute_QTransform_squareToQuad(unsafe.Pointer(unsafe.SliceData(squareC)), C.ptrdiff_t(len(square)), &resultOut)
+	return bool(r), rt.View[QTransform](rt.WrapClass(resultOut, "QTransform", rt.TakeOwned), resultOut)
+}
+
+// QTransformQuadToSquare wraps QTransform::quadToSquare.
+//
+//	C++: bool QTransform::quadToSquare(const QPolygonF & quad, QTransform & result)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#quadToSquare
+func QTransformQuadToSquare(quad []qtcore.QPointF) (bool, *QTransform) {
+	rt.CheckThread("QTransformQuadToSquare")
+	quadC := make([]C.qute_pointf, len(quad))
+	for i := range quad {
+		quadC[i] = cQPointF(quad[i])
+	}
+	var resultOut unsafe.Pointer
+	r := C.qute_QTransform_quadToSquare(unsafe.Pointer(unsafe.SliceData(quadC)), C.ptrdiff_t(len(quad)), &resultOut)
+	return bool(r), rt.View[QTransform](rt.WrapClass(resultOut, "QTransform", rt.TakeOwned), resultOut)
+}
+
+// QTransformQuadToQuad wraps QTransform::quadToQuad.
+//
+//	C++: bool QTransform::quadToQuad(const QPolygonF & one, const QPolygonF & two, QTransform & result)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#quadToQuad
+func QTransformQuadToQuad(one []qtcore.QPointF, two []qtcore.QPointF) (bool, *QTransform) {
+	rt.CheckThread("QTransformQuadToQuad")
+	oneC := make([]C.qute_pointf, len(one))
+	for i := range one {
+		oneC[i] = cQPointF(one[i])
+	}
+	twoC := make([]C.qute_pointf, len(two))
+	for i := range two {
+		twoC[i] = cQPointF(two[i])
+	}
+	var resultOut unsafe.Pointer
+	r := C.qute_QTransform_quadToQuad(unsafe.Pointer(unsafe.SliceData(oneC)), C.ptrdiff_t(len(one)), unsafe.Pointer(unsafe.SliceData(twoC)), C.ptrdiff_t(len(two)), &resultOut)
+	return bool(r), rt.View[QTransform](rt.WrapClass(resultOut, "QTransform", rt.TakeOwned), resultOut)
 }
 
 // QTransformFromTranslate wraps QTransform::fromTranslate.

@@ -121,6 +121,28 @@ func (this *QModelIndex) InternalId() uint64 {
 	return uint64(r)
 }
 
+// InternalPointer wraps QModelIndex::internalPointer.
+//
+//	C++: void * QModelIndex::internalPointer() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qmodelindex.html#internalPointer
+func (this *QModelIndex) InternalPointer() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QModelIndex.InternalPointer")
+	r := C.qute_QModelIndex_internalPointer(self)
+	return r
+}
+
+// ConstInternalPointer wraps QModelIndex::constInternalPointer.
+//
+//	C++: const void * QModelIndex::constInternalPointer() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qmodelindex.html#constInternalPointer
+func (this *QModelIndex) ConstInternalPointer() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QModelIndex.ConstInternalPointer")
+	r := C.qute_QModelIndex_constInternalPointer(self)
+	return r
+}
+
 // Parent wraps QModelIndex::parent.
 //
 //	C++: QModelIndex QModelIndex::parent() const

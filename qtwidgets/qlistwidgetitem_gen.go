@@ -494,6 +494,34 @@ func (this *QListWidgetItem) SetData(role int, value *qtcore.QVariant) {
 	C.qute_QListWidgetItem_setData(self, C.int(role), rt.UseArg(unsafe.Pointer(value), "QListWidgetItem.SetData"))
 }
 
+// Read wraps QListWidgetItem::read.
+//
+//	C++: void QListWidgetItem::read(QDataStream & in)
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#read
+func (this *QListWidgetItem) Read(in qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QListWidgetItem.Read")
+	}
+	C.qute_QListWidgetItem_read(self, inPtr)
+}
+
+// Write wraps QListWidgetItem::write.
+//
+//	C++: void QListWidgetItem::write(QDataStream & out) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#write
+func (this *QListWidgetItem) Write(out qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QListWidgetItem.Write")
+	}
+	C.qute_QListWidgetItem_write(self, outPtr)
+}
+
 // Type wraps QListWidgetItem::type.
 //
 //	C++: int QListWidgetItem::type() const

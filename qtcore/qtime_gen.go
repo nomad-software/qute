@@ -88,13 +88,13 @@ func NewQTime() *QTime {
 	return rt.View[QTime](h, p)
 }
 
-// NewQTimeWithH wraps the QTime constructor.
+// NewQTimeWithHArg wraps the QTime constructor.
 //
 //	C++: QTime::QTime(int h, int m, int s = …, int ms = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#QTime
-func NewQTimeWithH(hArg int, m int) *QTime {
-	rt.CheckThread("NewQTimeWithH")
+func NewQTimeWithHArg(hArg int, m int) *QTime {
+	rt.CheckThread("NewQTimeWithHArg")
 	p := C.qute_QTime_new_1(C.int(hArg), C.int(m))
 	h := rt.WrapClass(p, "QTime", rt.NewOwned)
 	return rt.View[QTime](h, p)

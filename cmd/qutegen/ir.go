@@ -72,6 +72,12 @@ type irClass struct {
 	Enums    []irEnum   `json:"enums"`
 	Flags    []irFlags  `json:"flags"`
 	Methods  []irMethod `json:"methods"`
+	Fields   []irField  `json:"fields"`
+}
+
+type irField struct {
+	Name string `json:"name"`
+	Type irType `json:"type"`
 }
 
 type irModule struct {

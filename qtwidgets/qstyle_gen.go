@@ -59,16 +59,16 @@ func (this *QStyle) Name() string {
 	return quteStr(r)
 }
 
-// Polish wraps QStyle::polish.
+// PolishWithWidget wraps QStyle::polish.
 //
 //	C++: void QStyle::polish(QWidget * widget)
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#polish
-func (this *QStyle) Polish(widget QWidgetLike) {
-	self := rt.Use(unsafe.Pointer(this), "QStyle.Polish")
+func (this *QStyle) PolishWithWidget(widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.PolishWithWidget")
 	var widgetPtr unsafe.Pointer
 	if widget != nil {
-		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.Polish")
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.PolishWithWidget")
 	}
 	C.qute_QStyle_polish(self, widgetPtr)
 }
@@ -113,6 +113,18 @@ func (this *QStyle) UnpolishApplication(application QApplicationLike) {
 		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.UnpolishApplication")
 	}
 	C.qute_QStyle_unpolish_1(self, applicationPtr)
+}
+
+// Polish wraps QStyle::polish.
+//
+//	C++: void QStyle::polish(QPalette & palette)
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#polish
+func (this *QStyle) Polish() *qtgui.QPalette {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.Polish")
+	var paletteOut unsafe.Pointer
+	C.qute_QStyle_polish_2(self, &paletteOut)
+	return rt.View[qtgui.QPalette](rt.WrapClass(paletteOut, "QPalette", rt.TakeOwned), paletteOut)
 }
 
 // ItemTextRect wraps QStyle::itemTextRect.
@@ -178,6 +190,81 @@ func (this *QStyle) StandardPalette() *qtgui.QPalette {
 	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
+// DrawPrimitive wraps QStyle::drawPrimitive.
+//
+//	C++: void QStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawPrimitive
+func (this *QStyle) DrawPrimitive(pe QStylePrimitiveElement, opt *QStyleOption, pArg qtgui.QPainterLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawPrimitive")
+	var pArgPtr unsafe.Pointer
+	if pArg != nil {
+		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawPrimitive")
+	}
+	C.qute_QStyle_drawPrimitive(self, C.int64_t(pe), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawPrimitive"), pArgPtr)
+}
+
+// DrawControl wraps QStyle::drawControl.
+//
+//	C++: void QStyle::drawControl(ControlElement element, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawControl
+func (this *QStyle) DrawControl(element QStyleControlElement, opt *QStyleOption, pArg qtgui.QPainterLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawControl")
+	var pArgPtr unsafe.Pointer
+	if pArg != nil {
+		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawControl")
+	}
+	C.qute_QStyle_drawControl(self, C.int64_t(element), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawControl"), pArgPtr)
+}
+
+// SubElementRect wraps QStyle::subElementRect.
+//
+//	C++: QRect QStyle::subElementRect(SubElement subElement, const QStyleOption * option, const QWidget * widget = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#subElementRect
+func (this *QStyle) SubElementRect(subElement QStyleSubElement, option *QStyleOption) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.SubElementRect")
+	r := C.qute_QStyle_subElementRect(self, C.int64_t(subElement), rt.UseArg(unsafe.Pointer(option), "QStyle.SubElementRect"))
+	return goQRect(r)
+}
+
+// DrawComplexControl wraps QStyle::drawComplexControl.
+//
+//	C++: void QStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, QPainter * p, const QWidget * widget = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawComplexControl
+func (this *QStyle) DrawComplexControl(cc QStyleComplexControl, opt *QStyleOptionComplex, pArg qtgui.QPainterLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawComplexControl")
+	var pArgPtr unsafe.Pointer
+	if pArg != nil {
+		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawComplexControl")
+	}
+	C.qute_QStyle_drawComplexControl(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawComplexControl"), pArgPtr)
+}
+
+// HitTestComplexControl wraps QStyle::hitTestComplexControl.
+//
+//	C++: SubControl QStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, const QPoint & pt, const QWidget * widget = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#hitTestComplexControl
+func (this *QStyle) HitTestComplexControl(cc QStyleComplexControl, opt *QStyleOptionComplex, pt qtcore.QPoint) QStyleSubControls {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.HitTestComplexControl")
+	r := C.qute_QStyle_hitTestComplexControl(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.HitTestComplexControl"), cQPoint(pt))
+	return QStyleSubControls(r)
+}
+
+// SubControlRect wraps QStyle::subControlRect.
+//
+//	C++: QRect QStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex * opt, SubControl sc, const QWidget * widget = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#subControlRect
+func (this *QStyle) SubControlRect(cc QStyleComplexControl, opt *QStyleOptionComplex, sc QStyleSubControls) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.SubControlRect")
+	r := C.qute_QStyle_subControlRect(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.SubControlRect"), C.int64_t(sc))
+	return goQRect(r)
+}
+
 // PixelMetric wraps QStyle::pixelMetric.
 //
 //	C++: int QStyle::pixelMetric(PixelMetric metric, const QStyleOption * option = …, const QWidget * widget = …) const
@@ -187,6 +274,17 @@ func (this *QStyle) PixelMetric(metric QStylePixelMetric) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.PixelMetric")
 	r := C.qute_QStyle_pixelMetric(self, C.int64_t(metric))
 	return int(r)
+}
+
+// SizeFromContents wraps QStyle::sizeFromContents.
+//
+//	C++: QSize QStyle::sizeFromContents(ContentsType ct, const QStyleOption * opt, const QSize & contentsSize, const QWidget * w = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#sizeFromContents
+func (this *QStyle) SizeFromContents(ct QStyleContentsType, opt *QStyleOption, contentsSize qtcore.QSize) qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.SizeFromContents")
+	r := C.qute_QStyle_sizeFromContents(self, C.int64_t(ct), rt.UseArg(unsafe.Pointer(opt), "QStyle.SizeFromContents"), cQSize(contentsSize))
+	return goQSize(r)
 }
 
 // StyleHint wraps QStyle::styleHint.
@@ -224,6 +322,19 @@ func (this *QStyle) StandardIcon(standardIcon QStyleStandardPixmap) *qtgui.QIcon
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardIcon")
 	r := C.qute_QStyle_standardIcon(self, C.int64_t(standardIcon))
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
+}
+
+// GeneratedIconPixmap wraps QStyle::generatedIconPixmap.
+//
+//	C++: QPixmap QStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap & pixmap, const QStyleOption * opt) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#generatedIconPixmap
+func (this *QStyle) GeneratedIconPixmap(iconMode qtgui.QIconMode, pixmap *qtgui.QPixmap, opt *QStyleOption) *qtgui.QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.GeneratedIconPixmap")
+	r := C.qute_QStyle_generatedIconPixmap(self, C.int64_t(iconMode), rt.UseArg(unsafe.Pointer(pixmap), "QStyle.GeneratedIconPixmap"), rt.UseArg(unsafe.Pointer(opt), "QStyle.GeneratedIconPixmap"))
+	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
 // LayoutSpacing wraps QStyle::layoutSpacing.

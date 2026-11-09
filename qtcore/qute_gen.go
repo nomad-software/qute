@@ -43,6 +43,11 @@ func qute_qtcore_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) {
 //export qute_qtcore_dead
 func qute_qtcore_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }
 
+//export qute_qtcore_call
+func qute_qtcore_call(id C.uintptr_t, args, ret unsafe.Pointer) {
+	rt.InvokeFunc(uintptr(id), args, ret)
+}
+
 func checkLayout() string {
 	if p := C.qute_qtcore_check_layout(); p != nil {
 		return C.GoString(p)
@@ -60,6 +65,8 @@ var (
 	_ = quteCStrList
 	_ = quteFreeStrs
 )
+
+var _ = quteMap[C.int, C.int, int, int]
 
 // quteStr copies a malloc'd UTF-8 buffer into a Go string and frees it.
 func quteStr(s C.qute_str) string {
@@ -91,6 +98,16 @@ func quteList[CT any, G any](l C.qute_list, f func(CT) G) []G {
 		out[i] = f(e)
 	}
 	C.free(l.data)
+	return out
+}
+
+func quteMap[CK comparable, CV any, K comparable, V any](m C.qute_map, kf func(CK) K, vf func(CV) V) map[K]V {
+	ks := quteList(m.keys, kf)
+	vs := quteList(m.values, vf)
+	out := make(map[K]V, len(ks))
+	for i, k := range ks {
+		out[k] = vs[i]
+	}
 	return out
 }
 

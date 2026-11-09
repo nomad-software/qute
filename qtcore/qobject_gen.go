@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"time"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -244,6 +245,17 @@ func (this *QObject) StartTimer(interval int) int {
 	return int(r)
 }
 
+// StartTimerDuration wraps QObject::startTimer.
+//
+//	C++: int QObject::startTimer(std::chrono::nanoseconds time, Qt::TimerType timerType = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qobject.html#startTimer
+func (this *QObject) StartTimerDuration(time time.Duration) int {
+	self := rt.Use(unsafe.Pointer(this), "QObject.StartTimerDuration")
+	r := C.qute_QObject_startTimer_1(self, C.int64_t(time))
+	return int(r)
+}
+
 // KillTimer wraps QObject::killTimer.
 //
 //	C++: void QObject::killTimer(int id)
@@ -352,6 +364,17 @@ func (this *QObject) Property(name string) *QVariant {
 	defer C.free(unsafe.Pointer(nameCStr))
 	r := C.qute_QObject_property(self, nameCStr)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// DynamicPropertyNames wraps QObject::dynamicPropertyNames.
+//
+//	C++: QList<QByteArray> QObject::dynamicPropertyNames() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qobject.html#dynamicPropertyNames
+func (this *QObject) DynamicPropertyNames() [][]byte {
+	self := rt.Use(unsafe.Pointer(this), "QObject.DynamicPropertyNames")
+	r := C.qute_QObject_dynamicPropertyNames(self)
+	return quteList(r, func(e C.qute_str) []byte { return quteBytes(e) })
 }
 
 // Parent wraps QObject::parent.

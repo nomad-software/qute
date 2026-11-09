@@ -188,6 +188,20 @@ func (this *QGuiApplication) EmitFocusObjectChanged(focusObject qtcore.QObjectLi
 	C.qute_QGuiApplication_focusObjectChanged_1(self, focusObjectPtr)
 }
 
+// EmitFocusWindowChanged wraps emitting the focusWindowChanged signal.
+//
+//	C++: void QGuiApplication::focusWindowChanged(QWindow * focusWindow)
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#focusWindowChanged
+func (this *QGuiApplication) EmitFocusWindowChanged(focusWindow QWindowLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitFocusWindowChanged")
+	var focusWindowPtr unsafe.Pointer
+	if focusWindow != nil {
+		focusWindowPtr = rt.UseArg(unsafe.Pointer(focusWindow.AsQWindow()), "QGuiApplication.EmitFocusWindowChanged")
+	}
+	C.qute_QGuiApplication_focusWindowChanged_1(self, focusWindowPtr)
+}
+
 // EmitApplicationStateChanged wraps emitting the applicationStateChanged signal.
 //
 //	C++: void QGuiApplication::applicationStateChanged(Qt::ApplicationState state)
@@ -206,6 +220,34 @@ func (this *QGuiApplication) EmitApplicationStateChanged(state qtcore.Applicatio
 func (this *QGuiApplication) EmitLayoutDirectionChanged(direction qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitLayoutDirectionChanged")
 	C.qute_QGuiApplication_layoutDirectionChanged_1(self, C.int64_t(direction))
+}
+
+// EmitCommitDataRequest wraps emitting the commitDataRequest signal.
+//
+//	C++: void QGuiApplication::commitDataRequest(QSessionManager & sessionManager)
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#commitDataRequest
+func (this *QGuiApplication) EmitCommitDataRequest(sessionManager QSessionManagerLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitCommitDataRequest")
+	var sessionManagerPtr unsafe.Pointer
+	if sessionManager != nil {
+		sessionManagerPtr = rt.UseArg(unsafe.Pointer(sessionManager.AsQSessionManager()), "QGuiApplication.EmitCommitDataRequest")
+	}
+	C.qute_QGuiApplication_commitDataRequest_1(self, sessionManagerPtr)
+}
+
+// EmitSaveStateRequest wraps emitting the saveStateRequest signal.
+//
+//	C++: void QGuiApplication::saveStateRequest(QSessionManager & sessionManager)
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#saveStateRequest
+func (this *QGuiApplication) EmitSaveStateRequest(sessionManager QSessionManagerLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitSaveStateRequest")
+	var sessionManagerPtr unsafe.Pointer
+	if sessionManager != nil {
+		sessionManagerPtr = rt.UseArg(unsafe.Pointer(sessionManager.AsQSessionManager()), "QGuiApplication.EmitSaveStateRequest")
+	}
+	C.qute_QGuiApplication_saveStateRequest_1(self, sessionManagerPtr)
 }
 
 // EmitApplicationDisplayNameChanged wraps emitting the applicationDisplayNameChanged signal.
@@ -260,6 +302,49 @@ func QGuiApplicationDesktopFileName() string {
 	return quteStr(r)
 }
 
+// QGuiApplicationAllWindows wraps QGuiApplication::allWindows.
+//
+//	C++: QWindowList QGuiApplication::allWindows()
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#allWindows
+func QGuiApplicationAllWindows() []*QWindow {
+	rt.CheckThread("QGuiApplicationAllWindows")
+	r := C.qute_QGuiApplication_allWindows()
+	return quteList(r, func(e unsafe.Pointer) *QWindow {
+		return rt.View[QWindow](rt.WrapClass(e, "QWindow", rt.KeepOrBorrow), e)
+	})
+}
+
+// QGuiApplicationTopLevelWindows wraps QGuiApplication::topLevelWindows.
+//
+//	C++: QWindowList QGuiApplication::topLevelWindows()
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#topLevelWindows
+func QGuiApplicationTopLevelWindows() []*QWindow {
+	rt.CheckThread("QGuiApplicationTopLevelWindows")
+	r := C.qute_QGuiApplication_topLevelWindows()
+	return quteList(r, func(e unsafe.Pointer) *QWindow {
+		return rt.View[QWindow](rt.WrapClass(e, "QWindow", rt.KeepOrBorrow), e)
+	})
+}
+
+// QGuiApplicationTopLevelAt wraps QGuiApplication::topLevelAt.
+//
+//	C++: QWindow * QGuiApplication::topLevelAt(const QPoint & pos)
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#topLevelAt
+func QGuiApplicationTopLevelAt(pos qtcore.QPoint) *QWindow {
+	rt.CheckThread("QGuiApplicationTopLevelAt")
+	r := C.qute_QGuiApplication_topLevelAt(cQPoint(pos))
+	return rt.View[QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
+}
+
 // QGuiApplicationSetWindowIcon wraps QGuiApplication::setWindowIcon.
 //
 //	C++: void QGuiApplication::setWindowIcon(const QIcon & icon)
@@ -292,6 +377,32 @@ func QGuiApplicationPlatformName() string {
 	rt.CheckThread("QGuiApplicationPlatformName")
 	r := C.qute_QGuiApplication_platformName()
 	return quteStr(r)
+}
+
+// QGuiApplicationModalWindow wraps QGuiApplication::modalWindow.
+//
+//	C++: QWindow * QGuiApplication::modalWindow()
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#modalWindow
+func QGuiApplicationModalWindow() *QWindow {
+	rt.CheckThread("QGuiApplicationModalWindow")
+	r := C.qute_QGuiApplication_modalWindow()
+	return rt.View[QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
+}
+
+// QGuiApplicationFocusWindow wraps QGuiApplication::focusWindow.
+//
+//	C++: QWindow * QGuiApplication::focusWindow()
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#focusWindow
+func QGuiApplicationFocusWindow() *QWindow {
+	rt.CheckThread("QGuiApplicationFocusWindow")
+	r := C.qute_QGuiApplication_focusWindow()
+	return rt.View[QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
 }
 
 // QGuiApplicationFocusObject wraps QGuiApplication::focusObject.
@@ -346,6 +457,19 @@ func QGuiApplicationScreenAt(point qtcore.QPoint) *QScreen {
 	rt.CheckThread("QGuiApplicationScreenAt")
 	r := C.qute_QGuiApplication_screenAt(cQPoint(point))
 	return rt.View[QScreen](rt.WrapClass(r, "QScreen", rt.KeepOrBorrow), r)
+}
+
+// QGuiApplicationOverrideCursor wraps QGuiApplication::overrideCursor.
+//
+//	C++: QCursor * QGuiApplication::overrideCursor()
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#overrideCursor
+func QGuiApplicationOverrideCursor() *QCursor {
+	rt.CheckThread("QGuiApplicationOverrideCursor")
+	r := C.qute_QGuiApplication_overrideCursor()
+	return rt.View[QCursor](rt.WrapClass(r, "QCursor", rt.TakeOwned), r)
 }
 
 // QGuiApplicationSetOverrideCursor wraps QGuiApplication::setOverrideCursor.
@@ -513,6 +637,19 @@ func QGuiApplicationIsLeftToRight() bool {
 	return bool(r)
 }
 
+// QGuiApplicationStyleHints wraps QGuiApplication::styleHints.
+//
+//	C++: QStyleHints * QGuiApplication::styleHints()
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#styleHints
+func QGuiApplicationStyleHints() *QStyleHints {
+	rt.CheckThread("QGuiApplicationStyleHints")
+	r := C.qute_QGuiApplication_styleHints()
+	return rt.View[QStyleHints](rt.WrapClass(r, "QStyleHints", rt.KeepOrBorrow), r)
+}
+
 // QGuiApplicationSetDesktopSettingsAware wraps QGuiApplication::setDesktopSettingsAware.
 //
 //	C++: void QGuiApplication::setDesktopSettingsAware(bool on)
@@ -532,6 +669,19 @@ func QGuiApplicationDesktopSettingsAware() bool {
 	rt.CheckThread("QGuiApplicationDesktopSettingsAware")
 	r := C.qute_QGuiApplication_desktopSettingsAware()
 	return bool(r)
+}
+
+// QGuiApplicationInputMethod wraps QGuiApplication::inputMethod.
+//
+//	C++: QInputMethod * QGuiApplication::inputMethod()
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#inputMethod
+func QGuiApplicationInputMethod() *QInputMethod {
+	rt.CheckThread("QGuiApplicationInputMethod")
+	r := C.qute_QGuiApplication_inputMethod()
+	return rt.View[QInputMethod](rt.WrapClass(r, "QInputMethod", rt.KeepOrBorrow), r)
 }
 
 // QGuiApplicationSetQuitOnLastWindowClosed wraps QGuiApplication::setQuitOnLastWindowClosed.
@@ -702,6 +852,22 @@ func (this *QGuiApplication) OnFocusObjectChanged(f func(focusObject *qtcore.QOb
 	return rt.NewConnection(C.qute_QGuiApplication_focusObjectChanged(self, C.uintptr_t(id)))
 }
 
+// OnFocusWindowChanged connects f to the focusWindowChanged signal. The connection ends when the
+// sender is destroyed or Disconnect is called; until then the sender is pinned.
+//
+//	C++: void QGuiApplication::focusWindowChanged(QWindow * focusWindow) [signal]
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#focusWindowChanged
+func (this *QGuiApplication) OnFocusWindowChanged(f func(focusWindow *QWindow)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.OnFocusWindowChanged")
+	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		focusWindow := rt.View[QWindow](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWindow", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+		f(focusWindow)
+	})
+	return rt.NewConnection(C.qute_QGuiApplication_focusWindowChanged(self, C.uintptr_t(id)))
+}
+
 // OnApplicationStateChanged connects f to the applicationStateChanged signal. The connection ends when the
 // sender is destroyed or Disconnect is called; until then the sender is pinned.
 //
@@ -732,6 +898,38 @@ func (this *QGuiApplication) OnLayoutDirectionChanged(f func(direction qtcore.La
 		f(direction)
 	})
 	return rt.NewConnection(C.qute_QGuiApplication_layoutDirectionChanged(self, C.uintptr_t(id)))
+}
+
+// OnCommitDataRequest connects f to the commitDataRequest signal. The connection ends when the
+// sender is destroyed or Disconnect is called; until then the sender is pinned.
+//
+//	C++: void QGuiApplication::commitDataRequest(QSessionManager & sessionManager) [signal]
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#commitDataRequest
+func (this *QGuiApplication) OnCommitDataRequest(f func(sessionManager *QSessionManager)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.OnCommitDataRequest")
+	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		sessionManager := rt.View[QSessionManager](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QSessionManager", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+		f(sessionManager)
+	})
+	return rt.NewConnection(C.qute_QGuiApplication_commitDataRequest(self, C.uintptr_t(id)))
+}
+
+// OnSaveStateRequest connects f to the saveStateRequest signal. The connection ends when the
+// sender is destroyed or Disconnect is called; until then the sender is pinned.
+//
+//	C++: void QGuiApplication::saveStateRequest(QSessionManager & sessionManager) [signal]
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#saveStateRequest
+func (this *QGuiApplication) OnSaveStateRequest(f func(sessionManager *QSessionManager)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.OnSaveStateRequest")
+	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		sessionManager := rt.View[QSessionManager](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QSessionManager", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+		f(sessionManager)
+	})
+	return rt.NewConnection(C.qute_QGuiApplication_saveStateRequest(self, C.uintptr_t(id)))
 }
 
 // OnApplicationDisplayNameChanged connects f to the applicationDisplayNameChanged signal. The connection ends when the

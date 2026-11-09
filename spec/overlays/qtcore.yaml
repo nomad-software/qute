@@ -6,6 +6,8 @@ QIODevice:
   write(const QByteArray&): { name: Write }
   seek: { name: SeekTo, doc: "Named SeekTo so it does not clash with io.Seeker's signature." }
 QCoreApplication:
+  installTranslator: { reviewed: true, doc: "The application does not take ownership of the translator; keep it alive." }
+  removeTranslator: { reviewed: true }
   notify: { reviewed: true }
   instance: { return: borrowed }
   sendEvent: { reviewed: true }
@@ -23,6 +25,7 @@ QObject:
   children: { return: borrowed }
   parent: { return: borrowed }
 QTimer:
+  start(std::chrono::milliseconds): { name: StartWithDuration }
   start(int): { name: StartWithInterval }
   start(): { name: Start }
   QTimer(QObject*): { args: { parent: transfer-this } }
@@ -65,6 +68,10 @@ QPersistentModelIndex:
   model: { return: borrowed }
 
 QDate:
+  fromString(QStringView, QStringView, QCalendar): { skip: "use the QString overload" }
+  fromString(QStringView, QStringView, int, QCalendar): { name: QDateFromStringFormatYearCalendar }
+  fromString(const QString&, const QString&, QCalendar): { name: QDateFromStringFormatCalendar }
+  fromString(const QString&, QStringView, QCalendar): { skip: "use the QString overload" }
   toString(const QString&): { name: ToStringFormat }
   toString(QStringView): { skip: "use the QString overload" }
   fromString(QStringView, Qt::DateFormat): { skip: "use the QString overload" }
@@ -74,6 +81,12 @@ QDate:
   fromString(const QString&, const QString&, int): { name: QDateFromStringFormat }
 
 QDateTime:
+  fromString(QStringView, QStringView, QCalendar): { skip: "use the QString overload" }
+  fromString(QStringView, QStringView, int, QCalendar): { name: QDateTimeFromStringFormatYearCalendar }
+  fromString(const QString&, const QString&, QCalendar): { name: QDateTimeFromStringFormatCalendar }
+  fromString(const QString&, QStringView, QCalendar): { skip: "use the QString overload" }
+  QDateTime(QDate, QTime, QDateTime::TransitionResolution): { name: NewQDateTimeLocal, doc: "Local time." }
+  QDateTime(QDate, QTime, const QTimeZone&, QDateTime::TransitionResolution): { name: NewQDateTimeIn }
   toString(const QString&): { name: ToStringFormat }
   toString(QStringView): { skip: "use the QString overload" }
   fromString(QStringView, Qt::DateFormat): { skip: "use the QString overload" }
@@ -92,6 +105,7 @@ QTime:
   fromString(const QString&, const QString&): { name: QTimeFromStringFormat }
 
 QFile:
+  open(QIODeviceBase::OpenMode, QFileDevice::Permissions): { name: OpenWithPermissions }
   open(int, QIODeviceBase::OpenMode, QFileDevice::FileHandleFlags): { name: OpenFd }
   decodeName(const char*): { skip: "use the []byte overload" }
   QFile(const QString&): { skip: "use NewQFileWithName(name, nil)" }
@@ -103,7 +117,20 @@ QSettings:
   value(QAnyStringView): { name: Value }
 
 QVariant:
+  load: { reviewed: true }
+  save: { reviewed: true }
   QVariant(QSizeF): { name: NewQVariantWithSizeF }
   QVariant(QPointF): { name: NewQVariantWithPointF }
   QVariant(QRectF): { name: NewQVariantWithRectF }
   QVariant(const QPersistentModelIndex&): { name: NewQVariantWithPersistentIndex }
+
+QLocale:
+  toString(qulonglong): { name: ToStringUint64 }
+  toString(int): { name: ToString }
+  toString(qlonglong): { name: ToStringInt64 }
+  QLocale(QLocale::Language, QLocale::Territory): { name: NewQLocaleWithLanguageTerritory }
+  QLocale(QLocale::Language, QLocale::Script, QLocale::Territory): { name: NewQLocaleWithLanguage }
+
+QItemSelectionRange:
+  QItemSelectionRange(const QModelIndex&): { name: NewQItemSelectionRangeOf }
+  QItemSelectionRange(const QModelIndex&, const QModelIndex&): { name: NewQItemSelectionRangeSpan }

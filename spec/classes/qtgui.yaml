@@ -16,7 +16,7 @@ classes:
   QPainterPath: { kind: value }
   QTransform: { kind: value }
   QRegion: { kind: value }
-  QEventPoint: { kind: value }
+  QEventPoint: { kind: value, reviewed: true }
   QPainter: {}
   QAction: {}
   QActionGroup: {}
@@ -29,8 +29,8 @@ classes:
   QIntValidator: {}
   QDoubleValidator: {}
   QTextDocument: {}
-  QInputEvent: { kind: event }
-  QPointerEvent: { kind: event }
+  QInputEvent: { kind: event, reviewed: true }
+  QPointerEvent: { kind: event, reviewed: true }
   QSinglePointEvent: { kind: event }
   QMouseEvent: { kind: event }
   QWheelEvent: { kind: event }
@@ -49,3 +49,45 @@ classes:
   QDragMoveEvent: { kind: event }
   QDragEnterEvent: { kind: event }
   QDragLeaveEvent: { kind: event }
+  QTextCursor: { kind: value, reviewed: true }
+  QTextFormat: { kind: value }
+  QTextCharFormat: { kind: value }
+  QTextBlockFormat: { kind: value }
+  QTextFrameFormat: { kind: value }
+  QTextBlock: { kind: value, reviewed: true }
+  QTextOption: { kind: value }
+  QTextObject: { no-construct: true, reviewed: true }
+  QTextFrame: {}
+  QTextDocumentFragment: { kind: value, reviewed: true }
+  QBitmap: { kind: value }
+  QColorSpace: { kind: value }
+  QColorTransform: { kind: value }
+  QPicture: { kind: value, reviewed: true }
+  "QFont::Tag": { kind: value }
+  QSurface: { no-construct: true }
+  QWindow: { reviewed: true }
+  QSessionManager: { no-construct: true }
+  QPixelFormat: { kind: value }
+  QStaticText: { kind: value }
+  QTextItem: { no-construct: true }
+  QGradient: { kind: value }
+  QLinearGradient: { kind: value }
+  QRadialGradient: { kind: value }
+  QConicalGradient: { kind: value }
+  QFontInfo: { kind: value }
+  QFontDatabase: { no-construct: true }
+  QMovie: { reviewed: true }
+  QInputDevice: { reviewed: true }
+  QPointingDevice: { reviewed: true }
+  QPointingDeviceUniqueId: { kind: value }
+  QStyleHints: { no-construct: true }
+  QInputMethod: { no-construct: true }
+  QVector2D: { kind: value }
+  QImageReader: { reviewed: true }
+  QGlyphRun: { kind: value }
+  "QPainter::PixmapFragment": { kind: value }
+  "QPainterPath::Element": { kind: value }
+  QAbstractFileIconProvider: {}
+  QHelpEvent: { kind: event }
+  QPagedPaintDevice: { no-construct: true }
+  QPdfWriter: { reviewed: true }

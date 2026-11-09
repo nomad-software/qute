@@ -15,7 +15,22 @@ func InCallback() bool { return callbackDepth.Load() > 0 }
 
 type callback struct {
 	fn     func(args unsafe.Pointer)
+	fnr    func(args, ret unsafe.Pointer)
 	sender *Handle
+}
+
+// NewFunc stores a Go func passed to Qt as a std::function. Qt releases it
+// (through the same release path as signals) when it drops the function.
+func NewFunc(fn func(args, ret unsafe.Pointer)) uintptr {
+	return uintptr(cgo.NewHandle(&callback{fnr: fn}))
+}
+
+// InvokeFunc runs a std::function callback and lets it write its result.
+func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
+	cb := cgo.Handle(id).Value().(*callback)
+	callbackDepth.Add(1)
+	defer callbackDepth.Add(-1)
+	cb.fnr(args, ret)
 }
 
 // NewCallback stores fn for a C++ lambda that captures only the returned id.

@@ -220,6 +220,52 @@ func TestOwnership_NewQDoubleValidatorWithBottom(t *testing.T) {
 	})
 }
 
+// QInputDevice::QInputDevice(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQInputDevice(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQInputDevice(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQInputDevice(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QInputDevice::QInputDevice(const QString & name, qint64 systemId, DeviceType type, const QString & seatName = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQInputDeviceWithName(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQInputDeviceWithName("x", 1, qtgui.QInputDeviceDeviceTypes(1), "x", root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQInputDeviceWithName("x", 1, qtgui.QInputDeviceDeviceTypes(1), "x", nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QIntValidator::QIntValidator(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQIntValidator(t *testing.T) {
 	qute.Run(t, func() {
@@ -266,6 +312,115 @@ func TestOwnership_NewQIntValidatorWithBottom(t *testing.T) {
 	})
 }
 
+// QMovie::QMovie(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQMovie(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQMovie(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQMovie(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QMovie::QMovie(QIODevice * device, const QByteArray & format = …, QObject * parent = …) (test from the overlay)
+func TestOwnership_QMovie_NewQMovieWithDevice(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		f := qtcore.NewQFileWithName("missing.gif", nil)
+		x := qtgui.NewQMovieWithDevice(f, nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		f.Delete()
+	})
+}
+
+// QMovie::QMovie(const QString & fileName, const QByteArray & format = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQMovieWithFileName(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQMovieWithFileName("x", nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQMovieWithFileName("x", nil, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QPointingDevice::QPointingDevice(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQPointingDevice(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQPointingDevice(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQPointingDevice(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QPointingDevice::QPointingDevice(const QString & name, qint64 systemId, QInputDevice::DeviceType devType, PointerType pType, Capabilities caps, int maxPoints, int buttonCount, const QString & seatName = …, QPointingDeviceUniqueId uniqueId = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQPointingDeviceWithName(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtgui.NewQPointingDeviceWithName("x", 1, qtgui.QInputDeviceDeviceTypes(1), qtgui.QPointingDevicePointerTypes(1), qtgui.QInputDeviceCapabilities(0), 1, 1, "x", nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQPointingDeviceWithName("x", 1, qtgui.QInputDeviceDeviceTypes(1), qtgui.QPointingDevicePointerTypes(1), qtgui.QInputDeviceCapabilities(0), 1, 1, "x", nil, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QShortcut::QShortcut(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQShortcut(t *testing.T) {
 	qute.Run(t, func() {
@@ -290,10 +445,10 @@ func TestOwnership_NewQShortcut(t *testing.T) {
 }
 
 // QShortcut::QShortcut(const QKeySequence & key, QObject * parent, const char * member = …, const char * ambiguousMember = …, Qt::ShortcutContext context = …): a non-nil parent makes the object Parented, nil makes it Owned.
-func TestOwnership_NewQShortcutWithKey(t *testing.T) {
+func TestOwnership_NewQShortcutWithKeySequence(t *testing.T) {
 	qute.Run(t, func() {
 		root := qtcore.NewQObject(nil)
-		x := qtgui.NewQShortcutWithKey(nil, root)
+		x := qtgui.NewQShortcutWithKeySequence(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
 			t.Errorf("with parent: %v, want Parented", got)
 		}
@@ -301,7 +456,7 @@ func TestOwnership_NewQShortcutWithKey(t *testing.T) {
 		if x.Alive() {
 			t.Error("still alive after its parent was deleted")
 		}
-		y := qtgui.NewQShortcutWithKey(nil, nil)
+		y := qtgui.NewQShortcutWithKeySequence(nil, nil)
 		if got := y.Ownership(); got != qtcore.Owned {
 			t.Errorf("without parent: %v, want Owned", got)
 		}
@@ -905,6 +1060,25 @@ func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 	})
 }
 
+// QTextFrame * QTextCursor::insertFrame(const QTextFrameFormat & format) (test from the overlay)
+func TestOwnership_QTextCursor_InsertFrame(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		cur := qtgui.NewQTextCursorWithTextDocument(doc)
+		f := cur.InsertFrame(qtgui.NewQTextFrameFormat())
+		if f == nil {
+			t.Fatal("no frame")
+		}
+		if got := f.Ownership(); got != qtcore.Parented {
+			t.Errorf("frame: %v, want Parented", got)
+		}
+		doc.Delete()
+		if f.Alive() {
+			t.Error("frame alive after its document was deleted")
+		}
+	})
+}
+
 // QTextDocument::QTextDocument(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQTextDocument(t *testing.T) {
 	qute.Run(t, func() {
@@ -971,6 +1145,44 @@ func TestOwnership_QTextDocument_Clone(t *testing.T) {
 		root.Delete()
 		if recv.Alive() {
 			recv.Delete()
+		}
+	})
+}
+
+// QTextFrame::QTextFrame(QTextDocument * doc) (test from the overlay)
+func TestOwnership_QTextFrame_NewQTextFrame(t *testing.T) {
+	qute.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		f := qtgui.NewQTextFrame(doc)
+		if got := f.Ownership(); got != qtcore.Parented {
+			t.Errorf("frame: %v, want Parented", got)
+		}
+		doc.Delete()
+		if f.Alive() {
+			t.Error("frame alive after its document was deleted")
+		}
+	})
+}
+
+// QWindow::QWindow(QWindow * parent): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQWindow(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtgui.NewQWindow(nil)
+		x := qtgui.NewQWindow(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtgui.NewQWindow(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
 		}
 	})
 }

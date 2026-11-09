@@ -77,22 +77,12 @@ func (this *QLayout) SetSpacing(spacing int) {
 
 // SetContentsMargins wraps QLayout::setContentsMargins.
 //
-//	C++: void QLayout::setContentsMargins(int left, int top, int right, int bottom)
-//
-// Qt docs: https://doc.qt.io/qt-6/qlayout.html#setContentsMargins
-func (this *QLayout) SetContentsMargins(left int, top int, right int, bottom int) {
-	self := rt.Use(unsafe.Pointer(this), "QLayout.SetContentsMargins")
-	C.qute_QLayout_setContentsMargins(self, C.int(left), C.int(top), C.int(right), C.int(bottom))
-}
-
-// SetContentsMarginsM wraps QLayout::setContentsMargins.
-//
 //	C++: void QLayout::setContentsMargins(const QMargins & margins)
 //
 // Qt docs: https://doc.qt.io/qt-6/qlayout.html#setContentsMargins
-func (this *QLayout) SetContentsMarginsM(margins qtcore.QMargins) {
-	self := rt.Use(unsafe.Pointer(this), "QLayout.SetContentsMarginsM")
-	C.qute_QLayout_setContentsMargins_1(self, cQMargins(margins))
+func (this *QLayout) SetContentsMargins(margins qtcore.QMargins) {
+	self := rt.Use(unsafe.Pointer(this), "QLayout.SetContentsMargins")
+	C.qute_QLayout_setContentsMargins(self, cQMargins(margins))
 }
 
 // UnsetContentsMargins wraps QLayout::unsetContentsMargins.
@@ -103,6 +93,21 @@ func (this *QLayout) SetContentsMarginsM(margins qtcore.QMargins) {
 func (this *QLayout) UnsetContentsMargins() {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.UnsetContentsMargins")
 	C.qute_QLayout_unsetContentsMargins(self)
+}
+
+// GetContentsMargins wraps QLayout::getContentsMargins.
+//
+//	C++: void QLayout::getContentsMargins(int * left, int * top, int * right, int * bottom) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qlayout.html#getContentsMargins
+func (this *QLayout) GetContentsMargins() (int, int, int, int) {
+	self := rt.Use(unsafe.Pointer(this), "QLayout.GetContentsMargins")
+	var leftOut C.int
+	var topOut C.int
+	var rightOut C.int
+	var bottomOut C.int
+	C.qute_QLayout_getContentsMargins(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	return int(leftOut), int(topOut), int(rightOut), int(bottomOut)
 }
 
 // ContentsMargins wraps QLayout::contentsMargins.

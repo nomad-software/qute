@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QFileDialog wraps Qt's QFileDialog.
@@ -69,18 +70,18 @@ func NewQFileDialog(parent QWidgetLike) *QFileDialog {
 	return rt.View[QFileDialog](h, p)
 }
 
-// NewQFileDialogWithParent wraps the QFileDialog constructor.
+// NewQFileDialogWithWidget wraps the QFileDialog constructor.
 //
 //	C++: QFileDialog::QFileDialog(QWidget * parent, Qt::WindowFlags f)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#QFileDialog
-func NewQFileDialogWithParent(parent QWidgetLike, fArg qtcore.WindowFlags) *QFileDialog {
-	rt.CheckThread("NewQFileDialogWithParent")
+func NewQFileDialogWithWidget(parent QWidgetLike, fArg qtcore.WindowFlags) *QFileDialog {
+	rt.CheckThread("NewQFileDialogWithWidget")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFileDialogWithParent")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFileDialogWithWidget")
 	}
 	p := C.qute_QFileDialog_new_1(parentPtr, C.int64_t(fArg))
 	mode := rt.NewOwned
@@ -99,6 +100,29 @@ func NewQFileDialogWithParent(parent QWidgetLike, fArg qtcore.WindowFlags) *QFil
 func (this *QFileDialog) SetDirectory(directory string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetDirectory")
 	C.qute_QFileDialog_setDirectory(self, (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)))
+}
+
+// SetDirectoryDir wraps QFileDialog::setDirectory.
+//
+//	C++: void QFileDialog::setDirectory(const QDir & directory)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setDirectory
+func (this *QFileDialog) SetDirectoryDir(directory *qtcore.QDir) {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetDirectoryDir")
+	C.qute_QFileDialog_setDirectory_1(self, rt.UseArg(unsafe.Pointer(directory), "QFileDialog.SetDirectoryDir"))
+}
+
+// Directory wraps QFileDialog::directory.
+//
+//	C++: QDir QFileDialog::directory() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#directory
+func (this *QFileDialog) Directory() *qtcore.QDir {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.Directory")
+	r := C.qute_QFileDialog_directory(self)
+	return rt.View[qtcore.QDir](rt.WrapClass(r, "QDir", rt.TakeOwned), r)
 }
 
 // SetDirectoryUrl wraps QFileDialog::setDirectoryUrl.
@@ -262,6 +286,27 @@ func (this *QFileDialog) MimeTypeFilters() []string {
 func (this *QFileDialog) SelectMimeTypeFilter(filter string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectMimeTypeFilter")
 	C.qute_QFileDialog_selectMimeTypeFilter(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filter))), C.ptrdiff_t(len(filter)))
+}
+
+// Filter wraps QFileDialog::filter.
+//
+//	C++: QDir::Filters QFileDialog::filter() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#filter
+func (this *QFileDialog) Filter() qtcore.QDirFilters {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.Filter")
+	r := C.qute_QFileDialog_filter(self)
+	return qtcore.QDirFilters(r)
+}
+
+// SetFilter wraps QFileDialog::setFilter.
+//
+//	C++: void QFileDialog::setFilter(QDir::Filters filters)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setFilter
+func (this *QFileDialog) SetFilter(filters qtcore.QDirFilters) {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetFilter")
+	C.qute_QFileDialog_setFilter(self, C.int64_t(filters))
 }
 
 // SetViewMode wraps QFileDialog::setViewMode.
@@ -446,6 +491,35 @@ func (this *QFileDialog) ItemDelegate() *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.ItemDelegate")
 	r := C.qute_QFileDialog_itemDelegate(self)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
+}
+
+// SetIconProvider wraps QFileDialog::setIconProvider.
+//
+//	C++: void QFileDialog::setIconProvider(QAbstractFileIconProvider * provider)
+//
+// The dialog does not take ownership of the provider; keep it alive.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setIconProvider
+func (this *QFileDialog) SetIconProvider(provider qtgui.QAbstractFileIconProviderLike) {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetIconProvider")
+	var providerPtr unsafe.Pointer
+	if provider != nil {
+		providerPtr = rt.UseArg(unsafe.Pointer(provider.AsQAbstractFileIconProvider()), "QFileDialog.SetIconProvider")
+	}
+	C.qute_QFileDialog_setIconProvider(self, providerPtr)
+}
+
+// IconProvider wraps QFileDialog::iconProvider.
+//
+//	C++: QAbstractFileIconProvider * QFileDialog::iconProvider() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#iconProvider
+func (this *QFileDialog) IconProvider() *qtgui.QAbstractFileIconProvider {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.IconProvider")
+	r := C.qute_QFileDialog_iconProvider(self)
+	return rt.View[qtgui.QAbstractFileIconProvider](rt.WrapClass(r, "QAbstractFileIconProvider", rt.KeepOrBorrow), r)
 }
 
 // SetLabelText wraps QFileDialog::setLabelText.
@@ -755,6 +829,23 @@ func QFileDialogGetOpenFileUrls() []*qtcore.QUrl {
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QUrl {
 		return rt.View[qtcore.QUrl](rt.WrapClass(e, "QUrl", rt.TakeOwned), e)
 	})
+}
+
+// QFileDialogGetOpenFileContent wraps QFileDialog::getOpenFileContent.
+//
+//	C++: void QFileDialog::getOpenFileContent(const QString & nameFilter, const std::function<void (const QString &, const QByteArray &)> & fileContentsReady, QWidget * parent = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getOpenFileContent
+func QFileDialogGetOpenFileContent(nameFilter string, fileContentsReady func(string, []byte)) {
+	rt.CheckThread("QFileDialogGetOpenFileContent")
+	fileContentsReadyID := rt.NewFunc(func(args, ret unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+		p0 := quteStr(*(*C.qute_str)(a[0]))
+		p1 := quteBytes(*(*C.qute_str)(a[1]))
+		_ = ret
+		fileContentsReady(p0, p1)
+	})
+	C.qute_QFileDialog_getOpenFileContent((*C.char)(unsafe.Pointer(unsafe.StringData(nameFilter))), C.ptrdiff_t(len(nameFilter)), C.uintptr_t(fileContentsReadyID))
 }
 
 // QFileDialogSaveFileContent wraps QFileDialog::saveFileContent.

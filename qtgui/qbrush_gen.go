@@ -149,6 +149,18 @@ func NewQBrushWithImage(image *QImage) *QBrush {
 	return rt.View[QBrush](h, p)
 }
 
+// NewQBrushWithGradient wraps the QBrush constructor.
+//
+//	C++: QBrush::QBrush(const QGradient & gradient)
+//
+// Qt docs: https://doc.qt.io/qt-6/qbrush.html#QBrush
+func NewQBrushWithGradient(gradient *QGradient) *QBrush {
+	rt.CheckThread("NewQBrushWithGradient")
+	p := C.qute_QBrush_new_6(rt.UseArg(unsafe.Pointer(gradient), "NewQBrushWithGradient"))
+	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	return rt.View[QBrush](h, p)
+}
+
 // Style wraps QBrush::style.
 //
 //	C++: Qt::BrushStyle QBrush::style() const
@@ -258,6 +270,19 @@ func (this *QBrush) Color() QColor {
 func (this *QBrush) SetColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.SetColor")
 	C.qute_QBrush_setColor(self, cQColor(color))
+}
+
+// Gradient wraps QBrush::gradient.
+//
+//	C++: const QGradient * QBrush::gradient() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbrush.html#gradient
+func (this *QBrush) Gradient() *QGradient {
+	self := rt.Use(unsafe.Pointer(this), "QBrush.Gradient")
+	r := C.qute_QBrush_gradient(self)
+	return rt.View[QGradient](rt.WrapClass(r, "QGradient", rt.TakeOwned), r)
 }
 
 // IsOpaque wraps QBrush::isOpaque.

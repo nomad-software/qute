@@ -58,22 +58,22 @@ func NewQItemSelectionModel() *QItemSelectionModel {
 	return rt.View[QItemSelectionModel](h, p)
 }
 
-// NewQItemSelectionModelWithModel wraps the QItemSelectionModel constructor.
+// NewQItemSelectionModelWithAbstractItemModel wraps the QItemSelectionModel constructor.
 //
 //	C++: QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent)
 //
 // Ownership: model is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#QItemSelectionModel
-func NewQItemSelectionModelWithModel(model QAbstractItemModelLike, parent QObjectLike) *QItemSelectionModel {
-	rt.CheckThread("NewQItemSelectionModelWithModel")
+func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, parent QObjectLike) *QItemSelectionModel {
+	rt.CheckThread("NewQItemSelectionModelWithAbstractItemModel")
 	var modelPtr unsafe.Pointer
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelWithModel")
+		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelWithAbstractItemModel")
 	}
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQItemSelectionModelWithModel")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQItemSelectionModelWithAbstractItemModel")
 	}
 	p := C.qute_QItemSelectionModel_new_1(modelPtr, parentPtr)
 	mode := rt.NewOwned
@@ -202,6 +202,19 @@ func (this *QItemSelectionModel) SelectedColumns() []*QModelIndex {
 	})
 }
 
+// Selection wraps QItemSelectionModel::selection.
+//
+//	C++: const QItemSelection QItemSelectionModel::selection() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selection
+func (this *QItemSelectionModel) Selection() *QItemSelection {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.Selection")
+	r := C.qute_QItemSelectionModel_selection(self)
+	return rt.View[QItemSelection](rt.WrapClass(r, "QItemSelection", rt.TakeOwned), r)
+}
+
 // Model wraps QItemSelectionModel::model.
 //
 //	C++: const QAbstractItemModel * QItemSelectionModel::model() const
@@ -249,6 +262,16 @@ func (this *QItemSelectionModel) Select(index *QModelIndex, command QItemSelecti
 	C.qute_QItemSelectionModel_select(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionModel.Select"), C.int64_t(command))
 }
 
+// SelectItemSelection wraps QItemSelectionModel::select.
+//
+//	C++: void QItemSelectionModel::select(const QItemSelection & selection, QItemSelectionModel::SelectionFlags command)
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#select
+func (this *QItemSelectionModel) SelectItemSelection(selection *QItemSelection, command QItemSelectionModelSelectionFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectItemSelection")
+	C.qute_QItemSelectionModel_select_1(self, rt.Use(unsafe.Pointer(selection), "QItemSelectionModel.SelectItemSelection"), C.int64_t(command))
+}
+
 // Clear wraps QItemSelectionModel::clear.
 //
 //	C++: void QItemSelectionModel::clear()
@@ -287,6 +310,16 @@ func (this *QItemSelectionModel) ClearSelection() {
 func (this *QItemSelectionModel) ClearCurrentIndex() {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.ClearCurrentIndex")
 	C.qute_QItemSelectionModel_clearCurrentIndex(self)
+}
+
+// EmitSelectionChanged wraps emitting the selectionChanged signal.
+//
+//	C++: void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selectionChanged
+func (this *QItemSelectionModel) EmitSelectionChanged(selected *QItemSelection, deselected *QItemSelection) {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.EmitSelectionChanged")
+	C.qute_QItemSelectionModel_selectionChanged_1(self, rt.Use(unsafe.Pointer(selected), "QItemSelectionModel.EmitSelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QItemSelectionModel.EmitSelectionChanged"))
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -331,6 +364,23 @@ func (this *QItemSelectionModel) EmitModelChanged(model QAbstractItemModelLike) 
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QItemSelectionModel.EmitModelChanged")
 	}
 	C.qute_QItemSelectionModel_modelChanged_1(self, modelPtr)
+}
+
+// OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
+// sender is destroyed or Disconnect is called; until then the sender is pinned.
+//
+//	C++: void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected) [signal]
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selectionChanged
+func (this *QItemSelectionModel) OnSelectionChanged(f func(selected *QItemSelection, deselected *QItemSelection)) Connection {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnSelectionChanged")
+	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+		selected := rt.View[QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		deselected := rt.View[QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+		f(selected, deselected)
+	})
+	return rt.NewConnection(C.qute_QItemSelectionModel_selectionChanged(self, C.uintptr_t(id)))
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the

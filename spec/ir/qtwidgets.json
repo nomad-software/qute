@@ -10,6 +10,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractbutton.h",
@@ -1021,6 +1022,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -1238,6 +1240,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractitemdelegate.h",
@@ -1996,6 +1999,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QAbstractItemView::EditTrigger",
@@ -5173,6 +5177,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractscrollarea.h",
@@ -6264,6 +6269,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstractslider.h",
@@ -7281,6 +7287,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QAbstractSpinBox::StepEnabledFlag",
@@ -8558,6 +8565,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessiblewidget.h",
@@ -9033,6 +9041,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessiblewidget.h",
@@ -9183,6 +9192,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qapplication.h",
@@ -10393,6 +10403,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qboxlayout.h",
@@ -11332,6 +11343,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbuttongroup.h",
@@ -11917,6 +11929,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcalendarwidget.h",
@@ -13197,6 +13210,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcheckbox.h",
@@ -13630,6 +13644,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QColorDialog::ColorDialogOption",
@@ -14237,6 +14252,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcolumnview.h",
@@ -15116,6 +15132,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcombobox.h",
@@ -17343,6 +17360,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcommandlinkbutton.h",
@@ -17668,6 +17686,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcommonstyle.h",
@@ -18530,6 +18549,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcompleter.h",
@@ -19490,6 +19510,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdatawidgetmapper.h",
@@ -20145,6 +20166,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdatetimeedit.h",
@@ -20341,6 +20363,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QDateTimeEdit::Section",
@@ -21907,6 +21930,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdial.h",
@@ -22378,6 +22402,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdialog.h",
@@ -23163,6 +23188,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QDialogButtonBox::StandardButton",
@@ -23887,6 +23913,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QDockWidget::DockWidgetFeature",
@@ -24547,6 +24574,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qspinbox.h",
@@ -25158,6 +25186,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qerrormessage.h",
@@ -25498,6 +25527,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QFileDialog::Option",
@@ -27577,6 +27607,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfileiconprovider.h",
@@ -27661,6 +27692,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfocusframe.h",
@@ -27933,6 +27965,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QFontComboBox::FontFilter",
@@ -28419,6 +28452,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QFontDialog::FontDialogOption",
@@ -29032,6 +29066,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qformlayout.h",
@@ -30647,6 +30682,36 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "labelItem",
+     "type": {
+      "canonical": "QLayoutItem *",
+      "spelling": "QLayoutItem *"
+     }
+    },
+    {
+     "name": "fieldItem",
+     "type": {
+      "canonical": "QLayoutItem *",
+      "spelling": "QLayoutItem *"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qformlayout.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtWidgets",
+   "name": "QFormLayout::TakeRowResult",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QWidget"
    ],
@@ -30728,6 +30793,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qframe.h",
@@ -31271,6 +31337,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgesture.h",
@@ -31528,6 +31595,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgesture.h",
@@ -31945,6 +32013,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGestureRecognizer::ResultFlag",
@@ -32115,6 +32184,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsanchorlayout.h",
@@ -32283,6 +32353,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsanchorlayout.h",
@@ -32769,6 +32840,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGraphicsBlurEffect::BlurHint",
@@ -33048,6 +33120,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicseffect.h",
@@ -33298,6 +33371,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicseffect.h",
@@ -33814,6 +33888,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGraphicsEffect::ChangeFlag",
@@ -34256,6 +34331,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -34770,6 +34846,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsgridlayout.h",
@@ -36324,6 +36401,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGraphicsItem::GraphicsItemFlag",
@@ -41439,6 +41517,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitemanimation.h",
@@ -42192,6 +42271,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -42394,6 +42474,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicslayout.h",
@@ -42769,6 +42850,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicslayoutitem.h",
@@ -43700,6 +43782,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -44175,6 +44258,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicslinearlayout.h",
@@ -44787,6 +44871,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -45181,6 +45266,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicseffect.h",
@@ -45444,6 +45530,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -45815,6 +45902,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -46315,6 +46403,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -46705,6 +46794,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsproxywidget.h",
@@ -47736,6 +47826,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -48172,6 +48263,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicstransform.h",
@@ -48475,6 +48567,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicstransform.h",
@@ -48864,6 +48957,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGraphicsScene::SceneLayer",
@@ -51902,6 +51996,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -52142,6 +52237,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -52592,6 +52688,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -52741,6 +52838,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -52864,6 +52962,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -53182,6 +53281,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -53824,6 +53924,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -53938,6 +54039,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -54052,6 +54154,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicssceneevent.h",
@@ -54500,6 +54603,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -54890,6 +54994,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicsitem.h",
@@ -56153,6 +56258,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicstransform.h",
@@ -56416,6 +56522,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGraphicsView::CacheModeFlag",
@@ -59345,6 +59452,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgraphicswidget.h",
@@ -61491,6 +61599,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgridlayout.h",
@@ -62714,6 +62823,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgroupbox.h",
@@ -63338,6 +63448,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qboxlayout.h",
@@ -63476,6 +63587,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qheaderview.h",
@@ -66325,6 +66437,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QInputDialog::InputDialogOption",
@@ -67938,6 +68051,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qitemdelegate.h",
@@ -68930,6 +69044,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qitemeditorfactory.h",
@@ -68987,6 +69102,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qitemeditorfactory.h",
@@ -69143,6 +69259,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qkeysequenceedit.h",
@@ -69678,6 +69795,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlcdnumber.h",
@@ -70248,6 +70366,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlabel.h",
@@ -71476,6 +71595,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlayout.h",
@@ -72808,6 +72928,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlayoutitem.h",
@@ -73178,6 +73299,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlineedit.h",
@@ -75363,6 +75485,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlistview.h",
@@ -77058,6 +77181,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlistwidget.h",
@@ -78521,6 +78645,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlistwidget.h",
@@ -79389,6 +79514,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QMainWindow::DockOption",
@@ -80897,6 +81023,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QMdiArea::AreaOption",
@@ -81929,6 +82056,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QMdiSubWindow::SubWindowOption",
@@ -82909,6 +83037,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmenu.h",
@@ -84465,6 +84594,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmenubar.h",
@@ -85678,6 +85808,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QMessageBox::Option",
@@ -87399,6 +87530,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgesture.h",
@@ -87645,6 +87777,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QPinchGesture::ChangeFlag",
@@ -88172,6 +88305,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qplaintextedit.h",
@@ -88542,6 +88676,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qplaintextedit.h",
@@ -91057,6 +91192,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qprogressbar.h",
@@ -91711,6 +91847,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qprogressdialog.h",
@@ -92496,6 +92633,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qproxystyle.h",
@@ -93620,6 +93758,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpushbutton.h",
@@ -94199,6 +94338,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qradiobutton.h",
@@ -94532,6 +94672,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrhiwidget.h",
@@ -95355,6 +95496,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrubberband.h",
@@ -95823,6 +95965,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qscrollarea.h",
@@ -96335,6 +96478,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qscrollbar.h",
@@ -96809,6 +96953,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qscroller.h",
@@ -97681,6 +97826,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qscrollerproperties.h",
@@ -97823,6 +97969,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsizegrip.h",
@@ -98310,6 +98457,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QSizePolicy::ControlType",
@@ -98768,6 +98916,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qslider.h",
@@ -99146,6 +99295,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlayoutitem.h",
@@ -99400,6 +99550,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qspinbox.h",
@@ -100035,6 +100186,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsplashscreen.h",
@@ -100421,6 +100573,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsplitter.h",
@@ -101360,6 +101513,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsplitter.h",
@@ -101761,6 +101915,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstackedlayout.h",
@@ -102337,6 +102492,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstackedwidget.h",
@@ -102754,6 +102910,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstatusbar.h",
@@ -105626,6 +105783,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QStyle::StateFlag",
@@ -107040,6 +107198,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstylefactory.h",
@@ -107142,6 +107301,22 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "version",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "type",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -107213,6 +107388,15 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "region",
+     "type": {
+      "canonical": "QRegion",
+      "spelling": "QRegion"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -107265,6 +107449,15 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "variant",
+     "type": {
+      "canonical": "QVariant",
+      "spelling": "QVariant"
+     }
     }
    ],
    "flags": [],
@@ -107431,6 +107624,64 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "version",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "type",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "state",
+     "type": {
+      "canonical": "QFlags<QStyle::StateFlag>",
+      "spelling": "QStyle::State"
+     }
+    },
+    {
+     "name": "direction",
+     "type": {
+      "canonical": "Qt::LayoutDirection",
+      "spelling": "Qt::LayoutDirection"
+     }
+    },
+    {
+     "name": "rect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "fontMetrics",
+     "type": {
+      "canonical": "QFontMetrics",
+      "spelling": "QFontMetrics"
+     }
+    },
+    {
+     "name": "palette",
+     "type": {
+      "canonical": "QPalette",
+      "spelling": "QPalette"
+     }
+    },
+    {
+     "name": "styleObject",
+     "type": {
+      "canonical": "QObject *",
+      "spelling": "QObject *"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -107573,6 +107824,36 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionButton::ButtonFeature>",
+      "spelling": "ButtonFeatures"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "iconSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    }
+   ],
    "flags": [
     {
      "enum": "QStyleOptionButton::ButtonFeature",
@@ -107665,6 +107946,57 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "editable",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "popupRect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "frame",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "currentText",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "currentIcon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "iconSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "textAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -107750,6 +108082,22 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "subControls",
+     "type": {
+      "canonical": "QFlags<QStyle::SubControl>",
+      "spelling": "QStyle::SubControls"
+     }
+    },
+    {
+     "name": "activeSubControls",
+     "type": {
+      "canonical": "QFlags<QStyle::SubControl>",
+      "spelling": "QStyle::SubControls"
+     }
     }
    ],
    "flags": [],
@@ -107838,6 +108186,43 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "title",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "closable",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "movable",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "floatable",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "verticalTitleBar",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -107923,6 +108308,15 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "backgroundColor",
+     "type": {
+      "canonical": "QColor",
+      "spelling": "QColor"
+     }
     }
    ],
    "flags": [],
@@ -108032,6 +108426,36 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "lineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "midLineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionFrame::FrameFeature>",
+      "spelling": "FrameFeatures"
+     }
+    },
+    {
+     "name": "frameShape",
+     "type": {
+      "canonical": "QFrame::Shape",
+      "spelling": "QFrame::Shape"
+     }
+    }
+   ],
    "flags": [
     {
      "enum": "QStyleOptionFrame::FrameFeature",
@@ -108122,6 +108546,15 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "exposedRect",
+     "type": {
+      "canonical": "QRectF",
+      "spelling": "QRectF"
+     }
     }
    ],
    "flags": [],
@@ -108233,6 +108666,50 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionFrame::FrameFeature>",
+      "spelling": "QStyleOptionFrame::FrameFeatures"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "textAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    },
+    {
+     "name": "textColor",
+     "type": {
+      "canonical": "QColor",
+      "spelling": "QColor"
+     }
+    },
+    {
+     "name": "lineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "midLineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
     }
    ],
    "flags": [],
@@ -108390,6 +108867,71 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "section",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "textAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "iconAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    },
+    {
+     "name": "position",
+     "type": {
+      "canonical": "QStyleOptionHeader::SectionPosition",
+      "spelling": "SectionPosition"
+     }
+    },
+    {
+     "name": "selectedPosition",
+     "type": {
+      "canonical": "QStyleOptionHeader::SelectedPosition",
+      "spelling": "SelectedPosition"
+     }
+    },
+    {
+     "name": "sortIndicator",
+     "type": {
+      "canonical": "QStyleOptionHeader::SortIndicator",
+      "spelling": "SortIndicator"
+     }
+    },
+    {
+     "name": "orientation",
+     "type": {
+      "canonical": "Qt::Orientation",
+      "spelling": "Qt::Orientation"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -108475,6 +109017,29 @@
        "value": 2
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "textElideMode",
+     "type": {
+      "canonical": "Qt::TextElideMode",
+      "spelling": "Qt::TextElideMode"
+     }
+    },
+    {
+     "name": "isSectionDragTarget",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "unused",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
     }
    ],
    "flags": [],
@@ -108620,6 +109185,78 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "menuItemType",
+     "type": {
+      "canonical": "QStyleOptionMenuItem::MenuItemType",
+      "spelling": "MenuItemType"
+     }
+    },
+    {
+     "name": "checkType",
+     "type": {
+      "canonical": "QStyleOptionMenuItem::CheckType",
+      "spelling": "CheckType"
+     }
+    },
+    {
+     "name": "checked",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "menuHasCheckableItems",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "menuRect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "maxIconWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "reservedShortcutWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "font",
+     "type": {
+      "canonical": "QFont",
+      "spelling": "QFont"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -108693,6 +109330,22 @@
        "value": 2
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "mouseDown",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "unused",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
     }
    ],
    "flags": [],
@@ -108782,6 +109435,64 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "minimum",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "maximum",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "progress",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "textAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    },
+    {
+     "name": "textVisible",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "invertedAppearance",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "bottomToTop",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -108867,6 +109578,22 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "shape",
+     "type": {
+      "canonical": "QRubberBand::Shape",
+      "spelling": "QRubberBand::Shape"
+     }
+    },
+    {
+     "name": "opaque",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
     }
    ],
    "flags": [],
@@ -108956,6 +109683,15 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "corner",
+     "type": {
+      "canonical": "Qt::Corner",
+      "spelling": "Qt::Corner"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -109043,6 +109779,99 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "orientation",
+     "type": {
+      "canonical": "Qt::Orientation",
+      "spelling": "Qt::Orientation"
+     }
+    },
+    {
+     "name": "minimum",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "maximum",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "tickPosition",
+     "type": {
+      "canonical": "QSlider::TickPosition",
+      "spelling": "QSlider::TickPosition"
+     }
+    },
+    {
+     "name": "tickInterval",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "upsideDown",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "sliderPosition",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "sliderValue",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "singleStep",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "pageStep",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "notchTarget",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "dialWrapping",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "keyboardModifiers",
+     "type": {
+      "canonical": "QFlags<Qt::KeyboardModifier>",
+      "spelling": "Qt::KeyboardModifiers"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -109128,6 +109957,29 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "buttonSymbols",
+     "type": {
+      "canonical": "QAbstractSpinBox::ButtonSymbols",
+      "spelling": "QAbstractSpinBox::ButtonSymbols"
+     }
+    },
+    {
+     "name": "stepEnabled",
+     "type": {
+      "canonical": "QFlags<QAbstractSpinBox::StepEnabledFlag>",
+      "spelling": "QAbstractSpinBox::StepEnabled"
+     }
+    },
+    {
+     "name": "frame",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
     }
    ],
    "flags": [],
@@ -109305,6 +110157,99 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "shape",
+     "type": {
+      "canonical": "QTabBar::Shape",
+      "spelling": "QTabBar::Shape"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "row",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "position",
+     "type": {
+      "canonical": "QStyleOptionTab::TabPosition",
+      "spelling": "TabPosition"
+     }
+    },
+    {
+     "name": "selectedPosition",
+     "type": {
+      "canonical": "QStyleOptionTab::SelectedPosition",
+      "spelling": "SelectedPosition"
+     }
+    },
+    {
+     "name": "cornerWidgets",
+     "type": {
+      "canonical": "QFlags<QStyleOptionTab::CornerWidget>",
+      "spelling": "CornerWidgets"
+     }
+    },
+    {
+     "name": "iconSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "documentMode",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "leftButtonSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "rightButtonSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionTab::TabFeature>",
+      "spelling": "TabFeatures"
+     }
+    },
+    {
+     "name": "tabIndex",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
    "flags": [
     {
      "enum": "QStyleOptionTab::CornerWidget",
@@ -109401,6 +110346,36 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "shape",
+     "type": {
+      "canonical": "QTabBar::Shape",
+      "spelling": "QTabBar::Shape"
+     }
+    },
+    {
+     "name": "tabBarRect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "selectedTabRect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "documentMode",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -109488,6 +110463,64 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "lineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "midLineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "shape",
+     "type": {
+      "canonical": "QTabBar::Shape",
+      "spelling": "QTabBar::Shape"
+     }
+    },
+    {
+     "name": "tabBarSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "rightCornerWidgetSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "leftCornerWidgetSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "tabBarRect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "selectedTabRect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -109573,6 +110606,36 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "titleBarState",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "titleBarFlags",
+     "type": {
+      "canonical": "QFlags<Qt::WindowType>",
+      "spelling": "Qt::WindowFlags"
+     }
     }
    ],
    "flags": [],
@@ -109700,6 +110763,50 @@
        "value": 1
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "positionOfLine",
+     "type": {
+      "canonical": "QStyleOptionToolBar::ToolBarPosition",
+      "spelling": "ToolBarPosition"
+     }
+    },
+    {
+     "name": "positionWithinLine",
+     "type": {
+      "canonical": "QStyleOptionToolBar::ToolBarPosition",
+      "spelling": "ToolBarPosition"
+     }
+    },
+    {
+     "name": "toolBarArea",
+     "type": {
+      "canonical": "Qt::ToolBarArea",
+      "spelling": "Qt::ToolBarArea"
+     }
+    },
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionToolBar::ToolBarFeature>",
+      "spelling": "ToolBarFeatures"
+     }
+    },
+    {
+     "name": "lineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "midLineWidth",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
     }
    ],
    "flags": [
@@ -109838,6 +110945,36 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "position",
+     "type": {
+      "canonical": "QStyleOptionToolBox::TabPosition",
+      "spelling": "TabPosition"
+     }
+    },
+    {
+     "name": "selectedPosition",
+     "type": {
+      "canonical": "QStyleOptionToolBox::SelectedPosition",
+      "spelling": "SelectedPosition"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qstyleoption.h",
@@ -109955,6 +111092,64 @@
        "value": 16
       }
      ]
+    }
+   ],
+   "fields": [
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionToolButton::ToolButtonFeature>",
+      "spelling": "ToolButtonFeatures"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "iconSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "arrowType",
+     "type": {
+      "canonical": "Qt::ArrowType",
+      "spelling": "Qt::ArrowType"
+     }
+    },
+    {
+     "name": "toolButtonStyle",
+     "type": {
+      "canonical": "Qt::ToolButtonStyle",
+      "spelling": "Qt::ToolButtonStyle"
+     }
+    },
+    {
+     "name": "pos",
+     "type": {
+      "canonical": "QPoint",
+      "spelling": "QPoint"
+     }
+    },
+    {
+     "name": "font",
+     "type": {
+      "canonical": "QFont",
+      "spelling": "QFont"
+     }
     }
    ],
    "flags": [
@@ -110141,6 +111336,120 @@
      ]
     }
    ],
+   "fields": [
+    {
+     "name": "displayAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    },
+    {
+     "name": "decorationAlignment",
+     "type": {
+      "canonical": "QFlags<Qt::AlignmentFlag>",
+      "spelling": "Qt::Alignment"
+     }
+    },
+    {
+     "name": "textElideMode",
+     "type": {
+      "canonical": "Qt::TextElideMode",
+      "spelling": "Qt::TextElideMode"
+     }
+    },
+    {
+     "name": "decorationPosition",
+     "type": {
+      "canonical": "QStyleOptionViewItem::Position",
+      "spelling": "Position"
+     }
+    },
+    {
+     "name": "decorationSize",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "font",
+     "type": {
+      "canonical": "QFont",
+      "spelling": "QFont"
+     }
+    },
+    {
+     "name": "showDecorationSelected",
+     "type": {
+      "canonical": "bool",
+      "spelling": "bool"
+     }
+    },
+    {
+     "name": "features",
+     "type": {
+      "canonical": "QFlags<QStyleOptionViewItem::ViewItemFeature>",
+      "spelling": "ViewItemFeatures"
+     }
+    },
+    {
+     "name": "locale",
+     "type": {
+      "canonical": "QLocale",
+      "spelling": "QLocale"
+     }
+    },
+    {
+     "name": "widget",
+     "type": {
+      "canonical": "const QWidget *",
+      "spelling": "const QWidget *"
+     }
+    },
+    {
+     "name": "index",
+     "type": {
+      "canonical": "QModelIndex",
+      "spelling": "QModelIndex"
+     }
+    },
+    {
+     "name": "checkState",
+     "type": {
+      "canonical": "Qt::CheckState",
+      "spelling": "Qt::CheckState"
+     }
+    },
+    {
+     "name": "icon",
+     "type": {
+      "canonical": "QIcon",
+      "spelling": "QIcon"
+     }
+    },
+    {
+     "name": "text",
+     "type": {
+      "canonical": "QString",
+      "spelling": "QString"
+     }
+    },
+    {
+     "name": "viewItemPosition",
+     "type": {
+      "canonical": "QStyleOptionViewItem::ViewItemPosition",
+      "spelling": "ViewItemPosition"
+     }
+    },
+    {
+     "name": "backgroundBrush",
+     "type": {
+      "canonical": "QBrush",
+      "spelling": "QBrush"
+     }
+    }
+   ],
    "flags": [
     {
      "enum": "QStyleOptionViewItem::ViewItemFeature",
@@ -110208,6 +111517,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstylepainter.h",
@@ -110559,6 +111869,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstyleplugin.h",
@@ -110676,6 +111987,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstyleditemdelegate.h",
@@ -111212,6 +112524,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgesture.h",
@@ -111427,6 +112740,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsystemtrayicon.h",
@@ -112020,6 +113334,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtabbar.h",
@@ -114104,6 +115419,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtabwidget.h",
@@ -115707,6 +117023,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtableview.h",
@@ -117673,6 +118990,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtablewidget.h",
@@ -119837,6 +121155,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtablewidget.h",
@@ -120634,6 +121953,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtablewidget.h",
@@ -120795,6 +122115,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgesture.h",
@@ -120966,6 +122287,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgesture.h",
@@ -121098,6 +122420,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextbrowser.h",
@@ -121996,6 +123319,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextEdit::AutoFormattingFlag",
@@ -124802,6 +126126,52 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "cursor",
+     "type": {
+      "canonical": "QTextCursor",
+      "spelling": "QTextCursor"
+     }
+    },
+    {
+     "name": "format",
+     "type": {
+      "canonical": "QTextCharFormat",
+      "spelling": "QTextCharFormat"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qtextedit.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtWidgets",
+   "name": "QTextEdit::ExtraSelection",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "horizontal",
+     "type": {
+      "canonical": "Qt::TileRule",
+      "spelling": "Qt::TileRule"
+     }
+    },
+    {
+     "name": "vertical",
+     "type": {
+      "canonical": "Qt::TileRule",
+      "spelling": "Qt::TileRule"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qdrawutil.h",
@@ -124866,6 +126236,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdatetimeedit.h",
@@ -125009,6 +126380,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtoolbar.h",
@@ -125949,6 +127321,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtoolbox.h",
@@ -126771,6 +128144,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtoolbutton.h",
@@ -127463,6 +128837,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtooltip.h",
@@ -127669,6 +129044,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtreeview.h",
@@ -130273,6 +131649,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtreewidget.h",
@@ -132009,6 +133386,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtreewidget.h",
@@ -133735,6 +135113,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTreeWidgetItemIterator::IteratorFlag",
@@ -133830,6 +135209,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qundoview.h",
@@ -134138,6 +135518,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qboxlayout.h",
@@ -134242,6 +135623,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qwhatsthis.h",
@@ -134415,6 +135797,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QWidget::RenderFlag",
@@ -141272,6 +142655,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qwidgetaction.h",
@@ -141573,6 +142957,134 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [
+    {
+     "name": "winid",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "WId"
+     }
+    },
+    {
+     "name": "widget_attributes",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "window_flags",
+     "type": {
+      "canonical": "QFlags<Qt::WindowType>",
+      "spelling": "Qt::WindowFlags"
+     }
+    },
+    {
+     "name": "window_state",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "focus_policy",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "sizehint_forced",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "is_closing",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "in_show",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "in_set_window_state",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "fstrut_dirty",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "context_menu_policy",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "window_modality",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "in_destructor",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "unused",
+     "type": {
+      "canonical": "unsigned int",
+      "spelling": "uint"
+     }
+    },
+    {
+     "name": "crect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    },
+    {
+     "name": "pal",
+     "type": {
+      "canonical": "QPalette",
+      "spelling": "QPalette"
+     }
+    },
+    {
+     "name": "fnt",
+     "type": {
+      "canonical": "QFont",
+      "spelling": "QFont"
+     }
+    },
+    {
+     "name": "wrect",
+     "type": {
+      "canonical": "QRect",
+      "spelling": "QRect"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qwidget.h",
@@ -141592,6 +143104,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlayoutitem.h",
@@ -141844,6 +143357,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qlayoutitem.h",
@@ -142155,6 +143669,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QWizard::WizardOption",
@@ -143427,6 +144942,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qwizard.h",

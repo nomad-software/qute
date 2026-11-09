@@ -25,7 +25,7 @@ classes:
   QMimeData: {}
   QSettings: {}
   QEvent: { kind: event, no-construct: true }
-  QTimerEvent: { kind: event, no-construct: true }
+  QTimerEvent: { kind: event, no-construct: true, reviewed: true }
   QChildEvent: { kind: event, no-construct: true }
   QVariant: { kind: value }
   QModelIndex: { kind: value }
@@ -34,3 +34,29 @@ classes:
   QDate: { kind: value }
   QTime: { kind: value }
   QDateTime: { kind: value }
+  QCalendar: { kind: value }
+  QTimeZone: { kind: value }
+  QLocale: { kind: value }
+  QRegularExpression: { kind: value }
+  QRegularExpressionMatch: { kind: value }
+  QItemSelection: { kind: value }
+  QItemSelectionRange: { kind: value, reviewed: true }
+  QDataStream: { reviewed: true }
+  QLine: { kind: value }
+  QLineF: { kind: value }
+  QMetaType: { kind: value, reviewed: true }
+  QBitArray: { kind: value }
+  QDir: { kind: value }
+  QEasingCurve: { kind: value }
+  QEventLoop: {}
+  QJsonArray: { kind: value }
+  QJsonDocument: { kind: value }
+  QJsonObject: { kind: value }
+  QJsonValue: { kind: value }
+  QTranslator: {}
+  QUuid: { kind: value }
+  QBasicTimer: { reviewed: true }
+  QUrlQuery: { kind: value }
+  QPartialOrdering: { kind: value }
+  QKeyCombination: { kind: value }
+  QDeadlineTimer: { kind: value }

@@ -89,13 +89,13 @@ func NewQPainterPath() *QPainterPath {
 	return rt.View[QPainterPath](h, p)
 }
 
-// NewQPainterPathWithStartPoint wraps the QPainterPath constructor.
+// NewQPainterPathWithPointF wraps the QPainterPath constructor.
 //
 //	C++: QPainterPath::QPainterPath(const QPointF & startPoint)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#QPainterPath
-func NewQPainterPathWithStartPoint(startPoint qtcore.QPointF) *QPainterPath {
-	rt.CheckThread("NewQPainterPathWithStartPoint")
+func NewQPainterPathWithPointF(startPoint qtcore.QPointF) *QPainterPath {
+	rt.CheckThread("NewQPainterPathWithPointF")
 	p := C.qute_QPainterPath_new_1(cQPointF(startPoint))
 	h := rt.WrapClass(p, "QPainterPath", rt.NewOwned)
 	return rt.View[QPainterPath](h, p)
@@ -430,6 +430,32 @@ func (this *QPainterPath) ToReversed() *QPainterPath {
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
+// ToSubpathPolygons wraps QPainterPath::toSubpathPolygons.
+//
+//	C++: QList<QPolygonF> QPainterPath::toSubpathPolygons(const QTransform & matrix = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toSubpathPolygons
+func (this *QPainterPath) ToSubpathPolygons() [][]qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToSubpathPolygons")
+	r := C.qute_QPainterPath_toSubpathPolygons(self)
+	return quteList(r, func(e C.qute_list) []qtcore.QPointF {
+		return quteList(e, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
+	})
+}
+
+// ToFillPolygons wraps QPainterPath::toFillPolygons.
+//
+//	C++: QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform & matrix = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toFillPolygons
+func (this *QPainterPath) ToFillPolygons() [][]qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToFillPolygons")
+	r := C.qute_QPainterPath_toFillPolygons(self)
+	return quteList(r, func(e C.qute_list) []qtcore.QPointF {
+		return quteList(e, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
+	})
+}
+
 // ToFillPolygon wraps QPainterPath::toFillPolygon.
 //
 //	C++: QPolygonF QPainterPath::toFillPolygon(const QTransform & matrix = …) const
@@ -450,6 +476,19 @@ func (this *QPainterPath) ElementCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ElementCount")
 	r := C.qute_QPainterPath_elementCount(self)
 	return int(r)
+}
+
+// ElementAt wraps QPainterPath::elementAt.
+//
+//	C++: QPainterPath::Element QPainterPath::elementAt(int i) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#elementAt
+func (this *QPainterPath) ElementAt(iArg int) *QPainterPathElement {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ElementAt")
+	r := C.qute_QPainterPath_elementAt(self, C.int(iArg))
+	return rt.View[QPainterPathElement](rt.WrapClass(r, "QPainterPathElement", rt.TakeOwned), r)
 }
 
 // SetElementPositionAt wraps QPainterPath::setElementPositionAt.

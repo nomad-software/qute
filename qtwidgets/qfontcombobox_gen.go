@@ -70,6 +70,27 @@ func NewQFontComboBox(parent QWidgetLike) *QFontComboBox {
 	return rt.View[QFontComboBox](h, p)
 }
 
+// SetWritingSystem wraps QFontComboBox::setWritingSystem.
+//
+//	C++: void QFontComboBox::setWritingSystem(QFontDatabase::WritingSystem)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontcombobox.html#setWritingSystem
+func (this *QFontComboBox) SetWritingSystem(writingSystem qtgui.QFontDatabaseWritingSystem) {
+	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetWritingSystem")
+	C.qute_QFontComboBox_setWritingSystem(self, C.int64_t(writingSystem))
+}
+
+// WritingSystem wraps QFontComboBox::writingSystem.
+//
+//	C++: QFontDatabase::WritingSystem QFontComboBox::writingSystem() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontcombobox.html#writingSystem
+func (this *QFontComboBox) WritingSystem() qtgui.QFontDatabaseWritingSystem {
+	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.WritingSystem")
+	r := C.qute_QFontComboBox_writingSystem(self)
+	return qtgui.QFontDatabaseWritingSystem(r)
+}
+
 // SetFontFilters wraps QFontComboBox::setFontFilters.
 //
 //	C++: void QFontComboBox::setFontFilters(FontFilters filters)
@@ -104,6 +125,27 @@ func (this *QFontComboBox) CurrentFont() *qtgui.QFont {
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
+// SetSampleTextForSystem wraps QFontComboBox::setSampleTextForSystem.
+//
+//	C++: void QFontComboBox::setSampleTextForSystem(QFontDatabase::WritingSystem writingSystem, const QString & sampleText)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontcombobox.html#setSampleTextForSystem
+func (this *QFontComboBox) SetSampleTextForSystem(writingSystem qtgui.QFontDatabaseWritingSystem, sampleText string) {
+	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetSampleTextForSystem")
+	C.qute_QFontComboBox_setSampleTextForSystem(self, C.int64_t(writingSystem), (*C.char)(unsafe.Pointer(unsafe.StringData(sampleText))), C.ptrdiff_t(len(sampleText)))
+}
+
+// SampleTextForSystem wraps QFontComboBox::sampleTextForSystem.
+//
+//	C++: QString QFontComboBox::sampleTextForSystem(QFontDatabase::WritingSystem writingSystem) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontcombobox.html#sampleTextForSystem
+func (this *QFontComboBox) SampleTextForSystem(writingSystem qtgui.QFontDatabaseWritingSystem) string {
+	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SampleTextForSystem")
+	r := C.qute_QFontComboBox_sampleTextForSystem(self, C.int64_t(writingSystem))
+	return quteStr(r)
+}
+
 // SetSampleTextForFont wraps QFontComboBox::setSampleTextForFont.
 //
 //	C++: void QFontComboBox::setSampleTextForFont(const QString & fontFamily, const QString & sampleText)
@@ -133,6 +175,17 @@ func (this *QFontComboBox) SampleTextForFont(fontFamily string) string {
 func (this *QFontComboBox) SetDisplayFont(fontFamily string, font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetDisplayFont")
 	C.qute_QFontComboBox_setDisplayFont(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)), rt.UseArg(unsafe.Pointer(font), "QFontComboBox.SetDisplayFont"))
+}
+
+// DisplayFont wraps QFontComboBox::displayFont.
+//
+//	C++: std::optional<QFont> QFontComboBox::displayFont(const QString & fontFamily) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontcombobox.html#displayFont
+func (this *QFontComboBox) DisplayFont(fontFamily string) *qtgui.QFont {
+	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.DisplayFont")
+	r := C.qute_QFontComboBox_displayFont(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)))
+	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
 // SetCurrentFont wraps QFontComboBox::setCurrentFont.

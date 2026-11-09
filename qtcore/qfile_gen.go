@@ -90,6 +90,17 @@ func NewQFileWithName(name string, parent QObjectLike) *QFile {
 	return rt.View[QFile](h, p)
 }
 
+// FilesystemFileName wraps QFile::filesystemFileName.
+//
+//	C++: std::filesystem::path QFile::filesystemFileName() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfile.html#filesystemFileName
+func (this *QFile) FilesystemFileName() string {
+	self := rt.Use(unsafe.Pointer(this), "QFile.FilesystemFileName")
+	r := C.qute_QFile_filesystemFileName(self)
+	return quteStr(r)
+}
+
 // SetFileName wraps QFile::setFileName.
 //
 //	C++: void QFile::setFileName(const QString & name)
@@ -119,6 +130,17 @@ func (this *QFile) Exists() bool {
 func (this *QFile) SymLinkTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFile.SymLinkTarget")
 	r := C.qute_QFile_symLinkTarget(self)
+	return quteStr(r)
+}
+
+// FilesystemSymLinkTarget wraps QFile::filesystemSymLinkTarget.
+//
+//	C++: std::filesystem::path QFile::filesystemSymLinkTarget() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfile.html#filesystemSymLinkTarget
+func (this *QFile) FilesystemSymLinkTarget() string {
+	self := rt.Use(unsafe.Pointer(this), "QFile.FilesystemSymLinkTarget")
+	r := C.qute_QFile_filesystemSymLinkTarget(self)
 	return quteStr(r)
 }
 
@@ -177,13 +199,13 @@ func (this *QFile) Copy(newName string) bool {
 	return bool(r)
 }
 
-// Open wraps QFile::open.
+// OpenWithPermissions wraps QFile::open.
 //
 //	C++: bool QFile::open(OpenMode flags, Permissions permissions)
 //
 // Qt docs: https://doc.qt.io/qt-6/qfile.html#open
-func (this *QFile) Open(flags QIODeviceBaseOpenMode, permissions QFileDevicePermissions) bool {
-	self := rt.Use(unsafe.Pointer(this), "QFile.Open")
+func (this *QFile) OpenWithPermissions(flags QIODeviceBaseOpenMode, permissions QFileDevicePermissions) bool {
+	self := rt.Use(unsafe.Pointer(this), "QFile.OpenWithPermissions")
 	r := C.qute_QFile_open(self, C.int64_t(flags), C.int64_t(permissions))
 	return bool(r)
 }

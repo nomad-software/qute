@@ -9,6 +9,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QAbstractSpinBox wraps Qt's QAbstractSpinBox.
@@ -309,6 +310,31 @@ func (this *QAbstractSpinBox) IsGroupSeparatorShown() bool {
 func (this *QAbstractSpinBox) InterpretText() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.InterpretText")
 	C.qute_QAbstractSpinBox_interpretText(self)
+}
+
+// Validate wraps QAbstractSpinBox::validate.
+//
+//	C++: QValidator::State QAbstractSpinBox::validate(QString & input, int & pos) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractspinbox.html#validate
+func (this *QAbstractSpinBox) Validate(input string, pos int) (qtgui.QValidatorState, string, int) {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Validate")
+	var inputOut C.qute_str
+	var posOut C.int
+	r := C.qute_QAbstractSpinBox_validate(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut, C.int(pos), &posOut)
+	return qtgui.QValidatorState(r), quteStr(inputOut), int(posOut)
+}
+
+// Fixup wraps QAbstractSpinBox::fixup.
+//
+//	C++: void QAbstractSpinBox::fixup(QString & input) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractspinbox.html#fixup
+func (this *QAbstractSpinBox) Fixup(input string) string {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Fixup")
+	var inputOut C.qute_str
+	C.qute_QAbstractSpinBox_fixup(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut)
+	return quteStr(inputOut)
 }
 
 // StepBy wraps QAbstractSpinBox::stepBy.

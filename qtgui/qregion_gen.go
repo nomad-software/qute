@@ -89,42 +89,42 @@ func NewQRegion() *QRegion {
 	return rt.View[QRegion](h, p)
 }
 
-// NewQRegionWithX wraps the QRegion constructor.
-//
-//	C++: QRegion::QRegion(int x, int y, int w, int h, RegionType t = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
-func NewQRegionWithX(x int, y int, w int, hArg int) *QRegion {
-	rt.CheckThread("NewQRegionWithX")
-	p := C.qute_QRegion_new_1(C.int(x), C.int(y), C.int(w), C.int(hArg))
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
-	return rt.View[QRegion](h, p)
-}
-
-// NewQRegionWithR wraps the QRegion constructor.
+// NewQRegionWithRect wraps the QRegion constructor.
 //
 //	C++: QRegion::QRegion(const QRect & r, RegionType t = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
-func NewQRegionWithR(rArg qtcore.QRect) *QRegion {
-	rt.CheckThread("NewQRegionWithR")
-	p := C.qute_QRegion_new_2(cQRect(rArg))
+func NewQRegionWithRect(rArg qtcore.QRect) *QRegion {
+	rt.CheckThread("NewQRegionWithRect")
+	p := C.qute_QRegion_new_1(cQRect(rArg))
 	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 
-// NewQRegionWithPa wraps the QRegion constructor.
+// NewQRegionWithPoints wraps the QRegion constructor.
 //
 //	C++: QRegion::QRegion(const QPolygon & pa, Qt::FillRule fillRule = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
-func NewQRegionWithPa(pa []qtcore.QPoint) *QRegion {
-	rt.CheckThread("NewQRegionWithPa")
+func NewQRegionWithPoints(pa []qtcore.QPoint) *QRegion {
+	rt.CheckThread("NewQRegionWithPoints")
 	paC := make([]C.qute_point, len(pa))
 	for i := range pa {
 		paC[i] = cQPoint(pa[i])
 	}
-	p := C.qute_QRegion_new_3(unsafe.Pointer(unsafe.SliceData(paC)), C.ptrdiff_t(len(pa)))
+	p := C.qute_QRegion_new_2(unsafe.Pointer(unsafe.SliceData(paC)), C.ptrdiff_t(len(pa)))
+	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	return rt.View[QRegion](h, p)
+}
+
+// NewQRegionWithBitmap wraps the QRegion constructor.
+//
+//	C++: QRegion::QRegion(const QBitmap & bitmap)
+//
+// Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
+func NewQRegionWithBitmap(bitmap *QBitmap) *QRegion {
+	rt.CheckThread("NewQRegionWithBitmap")
+	p := C.qute_QRegion_new_3(rt.UseArg(unsafe.Pointer(bitmap), "NewQRegionWithBitmap"))
 	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
@@ -305,6 +305,31 @@ func (this *QRegion) BoundingRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.BoundingRect")
 	r := C.qute_QRegion_boundingRect(self)
 	return goQRect(r)
+}
+
+// SetRects wraps QRegion::setRects.
+//
+//	C++: void QRegion::setRects(const QRect * rect, int num)
+//
+// Qt docs: https://doc.qt.io/qt-6/qregion.html#setRects
+func (this *QRegion) SetRects(rect []qtcore.QRect) {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.SetRects")
+	rectC := make([]C.qute_rect, len(rect))
+	for i := range rect {
+		rectC[i] = cQRect(rect[i])
+	}
+	C.qute_QRegion_setRects(self, unsafe.Pointer(unsafe.SliceData(rectC)), C.ptrdiff_t(len(rect)))
+}
+
+// Rects wraps QRegion::rects.
+//
+//	C++: QSpan<const QRect> QRegion::rects() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qregion.html#rects
+func (this *QRegion) Rects() []qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.Rects")
+	r := C.qute_QRegion_rects(self)
+	return quteList(r, func(e C.qute_rect) qtcore.QRect { return goQRect(e) })
 }
 
 // RectCount wraps QRegion::rectCount.

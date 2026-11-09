@@ -405,3 +405,18 @@ func (this *QGridLayout) SetDefaultPositioning(n int, orient qtcore.Orientations
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetDefaultPositioning")
 	C.qute_QGridLayout_setDefaultPositioning(self, C.int(n), C.int64_t(orient))
 }
+
+// GetItemPosition wraps QGridLayout::getItemPosition.
+//
+//	C++: void QGridLayout::getItemPosition(int idx, int * row, int * column, int * rowSpan, int * columnSpan) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#getItemPosition
+func (this *QGridLayout) GetItemPosition(idx int) (int, int, int, int) {
+	self := rt.Use(unsafe.Pointer(this), "QGridLayout.GetItemPosition")
+	var rowOut C.int
+	var columnOut C.int
+	var rowSpanOut C.int
+	var columnSpanOut C.int
+	C.qute_QGridLayout_getItemPosition(self, C.int(idx), &rowOut, &columnOut, &rowSpanOut, &columnSpanOut)
+	return int(rowOut), int(columnOut), int(rowSpanOut), int(columnSpanOut)
+}

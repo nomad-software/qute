@@ -559,6 +559,29 @@ func (this *QTableWidget) RemoveCellWidget(row int, column int) {
 	C.qute_QTableWidget_removeCellWidget(self, C.int(row), C.int(column))
 }
 
+// SetRangeSelected wraps QTableWidget::setRangeSelected.
+//
+//	C++: void QTableWidget::setRangeSelected(const QTableWidgetSelectionRange & range, bool select)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidget.html#setRangeSelected
+func (this *QTableWidget) SetRangeSelected(rangeArg *QTableWidgetSelectionRange, selectArg bool) {
+	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetRangeSelected")
+	C.qute_QTableWidget_setRangeSelected(self, rt.UseArg(unsafe.Pointer(rangeArg), "QTableWidget.SetRangeSelected"), C.bool(selectArg))
+}
+
+// SelectedRanges wraps QTableWidget::selectedRanges.
+//
+//	C++: QList<QTableWidgetSelectionRange> QTableWidget::selectedRanges() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidget.html#selectedRanges
+func (this *QTableWidget) SelectedRanges() []*QTableWidgetSelectionRange {
+	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SelectedRanges")
+	r := C.qute_QTableWidget_selectedRanges(self)
+	return quteList(r, func(e unsafe.Pointer) *QTableWidgetSelectionRange {
+		return rt.View[QTableWidgetSelectionRange](rt.WrapClass(e, "QTableWidgetSelectionRange", rt.TakeOwned), e)
+	})
+}
+
 // SelectedItems wraps QTableWidget::selectedItems.
 //
 //	C++: QList<QTableWidgetItem *> QTableWidget::selectedItems() const

@@ -287,6 +287,26 @@ func QCoreApplicationProcessEvents() {
 	C.qute_QCoreApplication_processEvents()
 }
 
+// QCoreApplicationProcessEventsWithProcessEventsFlag wraps QCoreApplication::processEvents.
+//
+//	C++: void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#processEvents
+func QCoreApplicationProcessEventsWithProcessEventsFlag(flags QEventLoopProcessEventsFlags, maxtime int) {
+	rt.CheckThread("QCoreApplicationProcessEventsWithProcessEventsFlag")
+	C.qute_QCoreApplication_processEvents_1(C.int64_t(flags), C.int(maxtime))
+}
+
+// QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer wraps QCoreApplication::processEvents.
+//
+//	C++: void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, QDeadlineTimer deadline)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#processEvents
+func QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer(flags QEventLoopProcessEventsFlags, deadline *QDeadlineTimer) {
+	rt.CheckThread("QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer")
+	C.qute_QCoreApplication_processEvents_2(C.int64_t(flags), rt.UseArg(unsafe.Pointer(deadline), "QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer"))
+}
+
 // QCoreApplicationSendEvent wraps QCoreApplication::sendEvent.
 //
 //	C++: bool QCoreApplication::sendEvent(QObject * receiver, QEvent * event)
@@ -449,6 +469,38 @@ func QCoreApplicationAddLibraryPath(stringArg string) {
 func QCoreApplicationRemoveLibraryPath(stringArg string) {
 	rt.CheckThread("QCoreApplicationRemoveLibraryPath")
 	C.qute_QCoreApplication_removeLibraryPath((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+}
+
+// QCoreApplicationInstallTranslator wraps QCoreApplication::installTranslator.
+//
+//	C++: bool QCoreApplication::installTranslator(QTranslator * messageFile)
+//
+// The application does not take ownership of the translator; keep it alive.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#installTranslator
+func QCoreApplicationInstallTranslator(messageFile QTranslatorLike) bool {
+	rt.CheckThread("QCoreApplicationInstallTranslator")
+	var messageFilePtr unsafe.Pointer
+	if messageFile != nil {
+		messageFilePtr = rt.UseArg(unsafe.Pointer(messageFile.AsQTranslator()), "QCoreApplicationInstallTranslator")
+	}
+	r := C.qute_QCoreApplication_installTranslator(messageFilePtr)
+	return bool(r)
+}
+
+// QCoreApplicationRemoveTranslator wraps QCoreApplication::removeTranslator.
+//
+//	C++: bool QCoreApplication::removeTranslator(QTranslator * messageFile)
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#removeTranslator
+func QCoreApplicationRemoveTranslator(messageFile QTranslatorLike) bool {
+	rt.CheckThread("QCoreApplicationRemoveTranslator")
+	var messageFilePtr unsafe.Pointer
+	if messageFile != nil {
+		messageFilePtr = rt.UseArg(unsafe.Pointer(messageFile.AsQTranslator()), "QCoreApplicationRemoveTranslator")
+	}
+	r := C.qute_QCoreApplication_removeTranslator(messageFilePtr)
+	return bool(r)
 }
 
 // QCoreApplicationTranslate wraps QCoreApplication::translate.

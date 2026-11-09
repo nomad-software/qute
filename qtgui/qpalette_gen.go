@@ -113,14 +113,14 @@ func NewQPaletteWithButtonWindow(button QColor, window QColor) *QPalette {
 	return rt.View[QPalette](h, p)
 }
 
-// NewQPaletteWithWindowText wraps the QPalette constructor.
+// NewQPaletteWithBrush wraps the QPalette constructor.
 //
 //	C++: QPalette::QPalette(const QBrush & windowText, const QBrush & button, const QBrush & light, const QBrush & dark, const QBrush & mid, const QBrush & text, const QBrush & bright_text, const QBrush & base, const QBrush & window)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#QPalette
-func NewQPaletteWithWindowText(windowText *QBrush, button *QBrush, light *QBrush, dark *QBrush, mid *QBrush, text *QBrush, bright_text *QBrush, base *QBrush, window *QBrush) *QPalette {
-	rt.CheckThread("NewQPaletteWithWindowText")
-	p := C.qute_QPalette_new_3(rt.UseArg(unsafe.Pointer(windowText), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(button), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(light), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(dark), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(mid), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(text), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(bright_text), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(base), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(window), "NewQPaletteWithWindowText"))
+func NewQPaletteWithBrush(windowText *QBrush, button *QBrush, light *QBrush, dark *QBrush, mid *QBrush, text *QBrush, bright_text *QBrush, base *QBrush, window *QBrush) *QPalette {
+	rt.CheckThread("NewQPaletteWithBrush")
+	p := C.qute_QPalette_new_3(rt.UseArg(unsafe.Pointer(windowText), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(button), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(light), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(dark), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(mid), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(text), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(bright_text), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(base), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(window), "NewQPaletteWithBrush"))
 	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }

@@ -100,6 +100,18 @@ func NewQDateWithY(y int, m int, d int) *QDate {
 	return rt.View[QDate](h, p)
 }
 
+// NewQDateWithYCalendar wraps the QDate constructor.
+//
+//	C++: QDate::QDate(int y, int m, int d, QCalendar cal)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#QDate
+func NewQDateWithYCalendar(y int, m int, d int, cal *QCalendar) *QDate {
+	rt.CheckThread("NewQDateWithYCalendar")
+	p := C.qute_QDate_new_2(C.int(y), C.int(m), C.int(d), rt.UseArg(unsafe.Pointer(cal), "NewQDateWithYCalendar"))
+	h := rt.WrapClass(p, "QDate", rt.NewOwned)
+	return rt.View[QDate](h, p)
+}
+
 // IsNull wraps QDate::isNull.
 //
 //	C++: bool QDate::isNull() const
@@ -210,6 +222,109 @@ func (this *QDate) WeekNumber() int {
 	return int(r)
 }
 
+// YearWithCalendar wraps QDate::year.
+//
+//	C++: int QDate::year(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#year
+func (this *QDate) YearWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.YearWithCalendar")
+	r := C.qute_QDate_year_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.YearWithCalendar"))
+	return int(r)
+}
+
+// MonthWithCalendar wraps QDate::month.
+//
+//	C++: int QDate::month(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#month
+func (this *QDate) MonthWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.MonthWithCalendar")
+	r := C.qute_QDate_month_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.MonthWithCalendar"))
+	return int(r)
+}
+
+// DayWithCalendar wraps QDate::day.
+//
+//	C++: int QDate::day(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#day
+func (this *QDate) DayWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.DayWithCalendar")
+	r := C.qute_QDate_day_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DayWithCalendar"))
+	return int(r)
+}
+
+// DayOfWeekWithCalendar wraps QDate::dayOfWeek.
+//
+//	C++: int QDate::dayOfWeek(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#dayOfWeek
+func (this *QDate) DayOfWeekWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.DayOfWeekWithCalendar")
+	r := C.qute_QDate_dayOfWeek_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DayOfWeekWithCalendar"))
+	return int(r)
+}
+
+// DayOfYearWithCalendar wraps QDate::dayOfYear.
+//
+//	C++: int QDate::dayOfYear(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#dayOfYear
+func (this *QDate) DayOfYearWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.DayOfYearWithCalendar")
+	r := C.qute_QDate_dayOfYear_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DayOfYearWithCalendar"))
+	return int(r)
+}
+
+// DaysInMonthWithCalendar wraps QDate::daysInMonth.
+//
+//	C++: int QDate::daysInMonth(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#daysInMonth
+func (this *QDate) DaysInMonthWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.DaysInMonthWithCalendar")
+	r := C.qute_QDate_daysInMonth_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DaysInMonthWithCalendar"))
+	return int(r)
+}
+
+// DaysInYearWithCalendar wraps QDate::daysInYear.
+//
+//	C++: int QDate::daysInYear(QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#daysInYear
+func (this *QDate) DaysInYearWithCalendar(cal *QCalendar) int {
+	self := rt.Use(unsafe.Pointer(this), "QDate.DaysInYearWithCalendar")
+	r := C.qute_QDate_daysInYear_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DaysInYearWithCalendar"))
+	return int(r)
+}
+
+// StartOfDayWithTimeZone wraps QDate::startOfDay.
+//
+//	C++: QDateTime QDate::startOfDay(const QTimeZone & zone) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#startOfDay
+func (this *QDate) StartOfDayWithTimeZone(zone *QTimeZone) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QDate.StartOfDayWithTimeZone")
+	r := C.qute_QDate_startOfDay(self, rt.UseArg(unsafe.Pointer(zone), "QDate.StartOfDayWithTimeZone"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// EndOfDayWithTimeZone wraps QDate::endOfDay.
+//
+//	C++: QDateTime QDate::endOfDay(const QTimeZone & zone) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#endOfDay
+func (this *QDate) EndOfDayWithTimeZone(zone *QTimeZone) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QDate.EndOfDayWithTimeZone")
+	r := C.qute_QDate_endOfDay(self, rt.UseArg(unsafe.Pointer(zone), "QDate.EndOfDayWithTimeZone"))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
 // StartOfDay wraps QDate::startOfDay.
 //
 //	C++: QDateTime QDate::startOfDay() const
@@ -219,7 +334,7 @@ func (this *QDate) WeekNumber() int {
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#startOfDay
 func (this *QDate) StartOfDay() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDate.StartOfDay")
-	r := C.qute_QDate_startOfDay(self)
+	r := C.qute_QDate_startOfDay_1(self)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -232,7 +347,7 @@ func (this *QDate) StartOfDay() *QDateTime {
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#endOfDay
 func (this *QDate) EndOfDay() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDate.EndOfDay")
-	r := C.qute_QDate_endOfDay(self)
+	r := C.qute_QDate_endOfDay_1(self)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -258,6 +373,17 @@ func (this *QDate) ToStringFormat(format string) string {
 	return quteStr(r)
 }
 
+// ToStringWithFormat wraps QDate::toString.
+//
+//	C++: QString QDate::toString(const QString & format, QCalendar cal) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#toString
+func (this *QDate) ToStringWithFormat(format string, cal *QCalendar) string {
+	self := rt.Use(unsafe.Pointer(this), "QDate.ToStringWithFormat")
+	r := C.qute_QDate_toString_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDate.ToStringWithFormat"))
+	return quteStr(r)
+}
+
 // SetDate wraps QDate::setDate.
 //
 //	C++: bool QDate::setDate(int year, int month, int day)
@@ -267,6 +393,31 @@ func (this *QDate) SetDate(year int, month int, day int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDate.SetDate")
 	r := C.qute_QDate_setDate(self, C.int(year), C.int(month), C.int(day))
 	return bool(r)
+}
+
+// SetDateWithCalendar wraps QDate::setDate.
+//
+//	C++: bool QDate::setDate(int year, int month, int day, QCalendar cal)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#setDate
+func (this *QDate) SetDateWithCalendar(year int, month int, day int, cal *QCalendar) bool {
+	self := rt.Use(unsafe.Pointer(this), "QDate.SetDateWithCalendar")
+	r := C.qute_QDate_setDate_1(self, C.int(year), C.int(month), C.int(day), rt.UseArg(unsafe.Pointer(cal), "QDate.SetDateWithCalendar"))
+	return bool(r)
+}
+
+// GetDate wraps QDate::getDate.
+//
+//	C++: void QDate::getDate(int * year, int * month, int * day) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#getDate
+func (this *QDate) GetDate() (int, int, int) {
+	self := rt.Use(unsafe.Pointer(this), "QDate.GetDate")
+	var yearOut C.int
+	var monthOut C.int
+	var dayOut C.int
+	C.qute_QDate_getDate(self, &yearOut, &monthOut, &dayOut)
+	return int(yearOut), int(monthOut), int(dayOut)
 }
 
 // AddDays wraps QDate::addDays.
@@ -305,6 +456,32 @@ func (this *QDate) AddMonths(months int) *QDate {
 func (this *QDate) AddYears(years int) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDate.AddYears")
 	r := C.qute_QDate_addYears(self, C.int(years))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// AddMonthsWithCalendar wraps QDate::addMonths.
+//
+//	C++: QDate QDate::addMonths(int months, QCalendar cal) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#addMonths
+func (this *QDate) AddMonthsWithCalendar(months int, cal *QCalendar) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QDate.AddMonthsWithCalendar")
+	r := C.qute_QDate_addMonths_1(self, C.int(months), rt.UseArg(unsafe.Pointer(cal), "QDate.AddMonthsWithCalendar"))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// AddYearsWithCalendar wraps QDate::addYears.
+//
+//	C++: QDate QDate::addYears(int years, QCalendar cal) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#addYears
+func (this *QDate) AddYearsWithCalendar(years int, cal *QCalendar) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QDate.AddYearsWithCalendar")
+	r := C.qute_QDate_addYears_1(self, C.int(years), rt.UseArg(unsafe.Pointer(cal), "QDate.AddYearsWithCalendar"))
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -356,6 +533,32 @@ func QDateFromString(stringArg string) *QDate {
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
+// QDateFromStringFormatCalendar wraps QDate::fromString.
+//
+//	C++: QDate QDate::fromString(const QString & string, const QString & format, QCalendar cal)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
+func QDateFromStringFormatCalendar(stringArg string, format string, cal *QCalendar) *QDate {
+	rt.CheckThread("QDateFromStringFormatCalendar")
+	r := C.qute_QDate_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDateFromStringFormatCalendar"))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// QDateFromStringFormatYearCalendar wraps QDate::fromString.
+//
+//	C++: QDate QDate::fromString(QStringView string, QStringView format, int baseYear, QCalendar cal)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
+func QDateFromStringFormatYearCalendar(stringArg string, format string, baseYear int, cal *QCalendar) *QDate {
+	rt.CheckThread("QDateFromStringFormatYearCalendar")
+	r := C.qute_QDate_fromString_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear), rt.UseArg(unsafe.Pointer(cal), "QDateFromStringFormatYearCalendar"))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
 // QDateFromStringFormat wraps QDate::fromString.
 //
 //	C++: QDate QDate::fromString(const QString & string, const QString & format, int baseYear = …)
@@ -365,7 +568,7 @@ func QDateFromString(stringArg string) *QDate {
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
 func QDateFromStringFormat(stringArg string, format string) *QDate {
 	rt.CheckThread("QDateFromStringFormat")
-	r := C.qute_QDate_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	r := C.qute_QDate_fromString_3((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 

@@ -28,6 +28,10 @@ QApplication:
   alert: { reviewed: true }
 
 QWidget:
+  setGraphicsEffect: { args: { effect: transfer-to-cpp }, doc: "The widget takes ownership of the effect." }
+  graphicsEffect: { return: borrowed }
+  graphicsProxyWidget: { return: borrowed }
+  windowHandle: { return: borrowed }
   setLayout: { args: { layout: transfer-to-cpp } }
   setParent(QWidget*): { args: { parent: transfer-this } }
   topLevelWidget: { return: borrowed }
@@ -91,7 +95,7 @@ QWidget:
   setFixedSize(const QSize&): { skip: "use SetFixedSize(w, h)" }
   setSizeIncrement(const QSize&): { skip: "use SetSizeIncrement(w, h)" }
   setBaseSize(const QSize&): { skip: "use SetBaseSize(w, h)" }
-  setContentsMargins(const QMargins&): { name: SetContentsMarginsM }
+  setContentsMargins(const QMargins&): { name: SetContentsMargins }
   setSizePolicy(QSizePolicy::Policy, QSizePolicy::Policy): { name: SetSizePolicies }
   setFocus(Qt::FocusReason): { name: SetFocusReason }
   grabMouse(const QCursor&): { name: GrabMouseCursor }
@@ -109,6 +113,8 @@ QWidget:
 QFrame: {}
 
 QLabel:
+  setMovie: { reviewed: true, doc: "The label does not take ownership of the movie; keep it alive." }
+  movie: { return: borrowed }
   setBuddy: { reviewed: true }
   buddy: { return: borrowed }
   setNum(double): { name: SetNumFloat }
@@ -142,18 +148,20 @@ QLineEdit:
   validator: { return: borrowed }
   setCompleter: { reviewed: true }
   completer: { return: borrowed }
-  setTextMargins(const QMargins&): { name: SetTextMarginsM }
+  setTextMargins(const QMargins&): { name: SetTextMargins }
   addAction(const QIcon&, QLineEdit::ActionPosition): { name: AddActionIcon, return: parented }
   addAction(QAction*, QLineEdit::ActionPosition): { name: AddActionAt, reviewed: true }
   createStandardContextMenu: { return: transfer-to-go }
 
 QTextEdit:
+  print: { reviewed: true }
   setDocument: { reviewed: true, doc: "The text edit does not take ownership of the document." }
   document: { return: borrowed }
   createStandardContextMenu(): { return: transfer-to-go }
   createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: transfer-to-go }
 
 QPlainTextEdit:
+  print: { reviewed: true }
   setDocument: { reviewed: true }
   document: { return: borrowed }
   createStandardContextMenu(): { return: transfer-to-go }
@@ -547,7 +555,7 @@ QLayout:
   indexOf(const QLayoutItem*): { name: IndexOfItem, reviewed: true }
   setAlignment(QWidget*, Qt::Alignment): { name: SetWidgetAlignment, reviewed: true }
   setAlignment(QLayout*, Qt::Alignment): { name: SetLayoutAlignment, reviewed: true }
-  setContentsMargins(const QMargins&): { name: SetContentsMarginsM }
+  setContentsMargins(const QMargins&): { name: SetContentsMargins }
 
 QLayoutItem:
   widget: { return: borrowed }
@@ -583,6 +591,10 @@ QGridLayout:
   itemAt: { return: borrowed }
 
 QFormLayout:
+  itemAt(int, QFormLayout::ItemRole): { name: ItemAtRole, return: borrowed }
+  takeRow: { reviewed: true, doc: "The returned label and field items are no longer in the layout; their widgets keep their parent." }
+  getLayoutPosition: { reviewed: true }
+  getWidgetPosition: { reviewed: true }
   labelForField(QWidget*): { name: LabelForField, return: borrowed, reviewed: true }
   addRow(QWidget*, QWidget*): { name: AddRow, args: { label: transfer-to-cpp, field: transfer-to-cpp } }
   addRow(QWidget*, QLayout*): { name: AddRowLayout, args: { label: transfer-to-cpp, field: transfer-to-cpp } }
@@ -664,6 +676,8 @@ QTableView:
   verticalHeader: { return: borrowed }
 
 QListWidgetItem:
+  read: { reviewed: true }
+  write: { reviewed: true }
   QListWidgetItem(QListWidget*, int): { args: { listview: transfer-this } }
   QListWidgetItem(const QString&, QListWidget*, int): { args: { listview: transfer-this } }
   QListWidgetItem(const QIcon&, const QString&, QListWidget*, int): { args: { listview: transfer-this } }
@@ -723,6 +737,8 @@ QListWidget:
   itemFromIndex: { return: borrowed }
 
 QTreeWidgetItem:
+  read: { reviewed: true }
+  write: { reviewed: true }
   QTreeWidgetItem(QTreeWidget*, int): { name: NewQTreeWidgetItemIn, args: { treeview: transfer-this } }
   QTreeWidgetItem(QTreeWidget*, const QStringList&, int): { name: NewQTreeWidgetItemInWithStrings, args: { treeview: transfer-this } }
   QTreeWidgetItem(QTreeWidget*, QTreeWidgetItem*, int): { name: NewQTreeWidgetItemInAfter, args: { treeview: transfer-this, after: borrowed } }
@@ -905,6 +921,8 @@ QTableWidget:
   itemFromIndex: { return: borrowed }
 
 QTableWidgetItem:
+  read: { reviewed: true }
+  write: { reviewed: true }
   tableWidget: { return: borrowed }
   clone: { return: transfer-to-go }
 
@@ -979,6 +997,12 @@ QMdiSubWindow:
   systemMenu: { return: borrowed }
 
 QGraphicsScene:
+  addLine: { return: parented }
+  addPath: { return: parented }
+  addPolygon: { return: parented }
+  addWidget: { args: { widget: transfer-to-cpp }, return: parented, doc: "The scene owns the proxy, and the proxy owns the widget." }
+  activeWindow: { return: borrowed }
+  setActiveWindow: { reviewed: true }
   setSceneRect(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
   items(const QPointF&, Qt::ItemSelectionMode, Qt::SortOrder, const QTransform&): { name: ItemsAt }
   items(const QRectF&, Qt::ItemSelectionMode, Qt::SortOrder, const QTransform&): { name: ItemsIn }
@@ -1074,6 +1098,13 @@ QGraphicsView:
   items: { return: borrowed }
 
 QGraphicsItem:
+  setGraphicsEffect: { args: { effect: transfer-to-cpp }, doc: "The item takes ownership of the effect." }
+  graphicsEffect: { return: borrowed }
+  setGroup: { args: { group: transfer-this }, doc: "The item becomes a child of the group." }
+  group: { return: borrowed }
+  paint: { reviewed: true }
+  setTransformations: { reviewed: true, doc: "The item does not take ownership of the transformations." }
+  transformations: { return: borrowed }
   setPos(qreal, qreal): { skip: "use the QPointF overload" }
   ensureVisible(qreal, qreal, qreal, qreal, int, int): { skip: "use the QRectF overload" }
   setTransformOriginPoint(qreal, qreal): { skip: "use the QPointF overload" }
@@ -1148,6 +1179,9 @@ QGraphicsItem:
   removeSceneEventFilter: { reviewed: true }
 
 QStyle:
+  drawComplexControl: { reviewed: true }
+  drawControl: { reviewed: true }
+  drawPrimitive: { reviewed: true }
   polish(QApplication*): { name: PolishApplication }
   unpolish(QApplication*): { name: UnpolishApplication }
   polish: { reviewed: true }
@@ -1157,6 +1191,29 @@ QStyle:
   proxy: { return: borrowed }
 
 QAbstractItemDelegate:
+  updateEditorGeometry: { reviewed: true }
+  editorEvent: { reviewed: true }
+  helpEvent: { reviewed: true }
+  paint: { reviewed: true }
+  createEditor:
+    return: parented
+    reviewed: true
+    doc: "The editor is created as a child of parent."
+    test: |
+      view := qtwidgets.NewQListView(nil)
+      model := qtcore.NewQStringListModelWithStrings([]string{"a"}, view)
+      d := qtwidgets.NewQStyledItemDelegate(view)
+      ed := d.CreateEditor(view, qtwidgets.NewQStyleOptionViewItem(), model.Index(0, 0))
+      if ed == nil {
+      	t.Fatal("no editor")
+      }
+      if got := ed.Ownership(); got != qtcore.Parented {
+      	t.Errorf("editor: %v, want Parented", got)
+      }
+      view.Delete()
+      if ed.Alive() {
+      	t.Error("editor alive after its parent was deleted")
+      }
   destroyEditor: { reviewed: true }
   setEditorData: { reviewed: true }
   setModelData: { reviewed: true }
@@ -1165,12 +1222,15 @@ QAbstractItemDelegate:
   closeEditor: { reviewed: true }
 
 QFileDialog:
+  setIconProvider: { reviewed: true, doc: "The dialog does not take ownership of the provider; keep it alive." }
+  iconProvider: { return: borrowed }
   setItemDelegate: { reviewed: true, doc: "QFileDialog does not take ownership of the delegate (Qt docs)." }
   itemDelegate: { return: borrowed }
   setProxyModel: { args: { model: transfer-to-cpp }, doc: "The file dialog takes ownership of the proxy model (Qt docs)." }
   proxyModel: { return: borrowed }
 
 QGraphicsTextItem:
+  paint: { reviewed: true }
   isObscuredBy: { reviewed: true }
   setDocument: { reviewed: true, doc: "Qt does not document a transfer of ownership; parent the document to a QObject or keep it alive." }
   document: { return: borrowed }
@@ -1231,3 +1291,57 @@ QGraphicsRectItem:
 
 QGraphicsPixmapItem:
   setOffset(qreal, qreal): { skip: "use the QPointF overload" }
+
+QItemEditorFactory:
+  createEditor:
+    return: parented
+    reviewed: true
+    doc: "The editor is created as a child of parent."
+    test: |
+      f := qtwidgets.NewQItemEditorFactory()
+      parent := qtwidgets.NewQWidget(nil)
+      ed := f.CreateEditor(int(qtcore.QMetaTypeQString), parent)
+      if ed == nil {
+      	t.Fatal("no editor")
+      }
+      if got := ed.Ownership(); got != qtcore.Parented {
+      	t.Errorf("editor: %v, want Parented", got)
+      }
+      parent.Delete()
+      if ed.Alive() {
+      	t.Error("editor alive after its parent was deleted")
+      }
+      f.Delete()
+  setDefaultFactory: { args: { factory: transfer-to-cpp }, doc: "Qt keeps and later deletes the default factory." }
+  defaultFactory: { return: borrowed }
+
+QStyledItemDelegate:
+  setItemEditorFactory: { reviewed: true, doc: "The delegate does not take ownership of the factory." }
+  itemEditorFactory: { return: borrowed }
+
+QGraphicsItemGroup:
+  addToGroup: { args: { item: transfer-to-cpp }, doc: "The item becomes a child of the group." }
+  removeFromGroup: { reviewed: true, doc: "The item is reparented to the group's parent, which keeps owning it." }
+
+QGraphicsProxyWidget:
+  createProxyForChildWidget:
+    return: parented
+    doc: "child must be a child of the proxied widget."
+    test: |
+      sc := qtwidgets.NewQGraphicsScene(nil)
+      outer := qtwidgets.NewQWidget(nil)
+      inner := qtwidgets.NewQPushButtonWithText("x", outer)
+      proxy := sc.AddWidget(outer)
+      res := proxy.CreateProxyForChildWidget(inner)
+      if res == nil {
+      	t.Fatal("returned nil")
+      }
+      if got := res.Ownership(); got != qtcore.Parented {
+      	t.Errorf("result: %v, want Parented", got)
+      }
+      sc.Delete()
+      if res.Alive() {
+      	t.Error("child proxy alive after the scene was deleted")
+      }
+  setWidget: { args: { widget: transfer-to-cpp }, doc: "The proxy takes ownership of the widget." }
+  widget: { return: borrowed }

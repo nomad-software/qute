@@ -124,6 +124,31 @@ with connections must be `Delete()`d; `qute vet` flags ones that never are.
 | object pointers                            | `*T`; args take `TLike` | per ownership state               |
 | enums / `QFlags`                           | typed constants / bitmask type with `Has()` | —             |
 
+Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
+
+- out-parameters (`int *row`, `bool *ok`, `QTransform &result`) to extra Go
+  results, and in-out references (`QString &`, `int &`) to a parameter plus a
+  result;
+- a pointer followed by its count (`const QPoint *, int`, `const uchar *, int`,
+  `char *data, qint64 maxlen`) to one slice, and `QSpan<T>` to a slice;
+- `QMap`/`QHash` with string or int keys to Go maps;
+- `std::chrono::duration` to `time.Duration`, `time_point<system_clock>` to
+  `time.Time`, `std::filesystem::path` to `string`, `std::optional<T>` to a
+  nil-able handle;
+- `std::function` parameters to Go funcs, called back through
+  `qute_<pkg>_call` and released when Qt drops the function;
+- `void *`, `uchar *` to `unsafe.Pointer` (escape hatch);
+- a value class's `T &` result that is `*this` to the receiver, for chaining;
+- `const T *` of a value class to a nil-able handle;
+- public data members to getter/setter methods, nested classes
+  (`QFont::Tag`) to flat Go names (`QFontTag`), and classes without declared
+  constructors to an implicit `NewX()`.
+
+Deliberately unsupported (reported as "skipped on purpose", with the reason):
+C++ move overloads, `QBindable`, `QThread`, iterators, private platform APIs,
+C function pointers, returned `std::function`s, `std::initializer_list`, and
+interfaces that need C++ subclassing.
+
 Go strings go in as `(ptr, len)` into `QString::fromUtf8`, which copies, so
 cgo pointer rules hold. Results come back malloc'd and are copied and freed in
 the same generated wrapper; C memory never reaches user code. `nil` maps to
@@ -203,8 +228,16 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `NewX` (parent-only form) and `NewXWith<FirstParam>`; statics are package
   functions `<Class><Method>`; signals `On<Signal>` / `Emit<Signal>`; enums
   `<Class><Value>` (Qt namespace: bare, e.g. `AlignLeft`); unnamed C++
-  parameters get names from setters or their type. Overloads take names
-  from overlays; otherwise a numbered fallback (`Resize2`) is used and listed.
+  parameters get names from setters or their type.
+- **Overloads** are named automatically, in this order: overloads identical
+  in Go (a `QStringView` twin of a `QString` one) are dropped; plain-number
+  twins of a struct overload (`setStart(x, y)` next to `setStart(QPointF)`)
+  are dropped; the overload with the fewest parameters gets the plain name;
+  the others get a suffix from what differs (`Year()` / `YearWithCalendar`,
+  `ToStringFloat64`, `DrawLineSegmentsF`). A new overload never reuses a name
+  the class inherits through an override (`QFile.Open` stays the
+  `QIODevice` one). Overlay `name:` entries override all of this; whatever
+  is still ambiguous gets a number and is listed in `UNREVIEWED.md`.
 - **Review report** `UNREVIEWED.md`: pointer methods on default rules,
   numbered names, skipped methods (split into missing type support, counted
   by type, and skipped on purpose), rules without a test, and results whose
@@ -258,12 +291,13 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Roadmap
 
 1. Runtime: done.
-2. Widgets: done for about 170 classes. Every ownership rule is reviewed, every
+2. Widgets: done for 263 classes. Every ownership rule is reviewed, every
    overload has a proper name, and all rules but `QEvent::clone` have a test.
 3. Subclassing and models: done (virtual overrides, item models).
-4. Beyond: type support for the ~500 skipped methods (`UNREVIEWED.md` counts
-   them by type), `QThread` affinity (one cleanup queue per thread),
-   QtQuick/QML, more modules.
+4. Beyond: type support for the ~150 methods still waiting (mostly on newly
+   bound classes: `QVector3D`, `char32_t`, `QTextLength`, `QFileInfo`;
+   `UNREVIEWED.md` counts them by type), `QThread` affinity (one cleanup
+   queue per thread), QtQuick/QML, more modules.
 
 Known limitation: non-QObject items that Qt creates itself (from
 `QGraphicsScene::addRect` and similar) have no death notice, so their handles
@@ -301,7 +335,10 @@ Layout:
   `qute_common.h`, `ownership_gen_test.go` or `export_gen_test.go`; change
   the generator or spec and regenerate. Hand-written code is in `*_manual.*`.
 - `cmd/qutegen`: `types.go` (type mapping), `model.go` (resolution, naming,
-  rules), `emit.go` (Go/C/C++ output), `tests.go`, `report.go`.
+  rules, out-parameters, pairs, fields), `emit.go` (Go/C/C++ output),
+  `tests.go`, `report.go`.
+- `features_test.go` checks each extra type kind end to end (out-parameters,
+  chaining, buffers, maps, durations, fields, callbacks).
 - `cmd/qute`: `vet` and `new`. `testdata/bad/bad.go` holds `// want <rule>`
   comments that `vet_test.go` checks.
 

@@ -295,12 +295,23 @@ func (this *QIODevice) BytesToWrite() int64 {
 
 // Read wraps QIODevice::read.
 //
+//	C++: qint64 QIODevice::read(char * data, qint64 maxlen)
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#read
+func (this *QIODevice) Read(data []byte) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.Read")
+	r := C.qute_QIODevice_read(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	return int64(r)
+}
+
+// ReadMaxlen wraps QIODevice::read.
+//
 //	C++: QByteArray QIODevice::read(qint64 maxlen)
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#read
-func (this *QIODevice) Read(maxlen int64) []byte {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.Read")
-	r := C.qute_QIODevice_read(self, C.longlong(maxlen))
+func (this *QIODevice) ReadMaxlen(maxlen int64) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadMaxlen")
+	r := C.qute_QIODevice_read_1(self, C.longlong(maxlen))
 	return quteBytes(r)
 }
 
@@ -315,6 +326,17 @@ func (this *QIODevice) ReadAll() []byte {
 	return quteBytes(r)
 }
 
+// ReadLineWithData wraps QIODevice::readLine.
+//
+//	C++: qint64 QIODevice::readLine(char * data, qint64 maxlen)
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLine
+func (this *QIODevice) ReadLineWithData(data []byte) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineWithData")
+	r := C.qute_QIODevice_readLine(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	return int64(r)
+}
+
 // ReadLine wraps QIODevice::readLine.
 //
 //	C++: QByteArray QIODevice::readLine(qint64 maxlen = …)
@@ -322,7 +344,30 @@ func (this *QIODevice) ReadAll() []byte {
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLine
 func (this *QIODevice) ReadLine() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLine")
-	r := C.qute_QIODevice_readLine(self)
+	r := C.qute_QIODevice_readLine_1(self)
+	return quteBytes(r)
+}
+
+// ReadLineInto wraps QIODevice::readLineInto.
+//
+//	C++: bool QIODevice::readLineInto(QByteArray * result, qint64 maxlen = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLineInto
+func (this *QIODevice) ReadLineInto() (bool, []byte) {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineInto")
+	var resultOut C.qute_str
+	r := C.qute_QIODevice_readLineInto(self, &resultOut)
+	return bool(r), quteBytes(resultOut)
+}
+
+// ReadLineIntoWithBuffer wraps QIODevice::readLineInto.
+//
+//	C++: QByteArrayView QIODevice::readLineInto(QSpan<char> buffer)
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLineInto
+func (this *QIODevice) ReadLineIntoWithBuffer(buffer []byte) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineIntoWithBuffer")
+	r := C.qute_QIODevice_readLineInto_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(buffer))), C.ptrdiff_t(len(buffer)))
 	return quteBytes(r)
 }
 
@@ -404,12 +449,23 @@ func (this *QIODevice) Write(data []byte) int64 {
 
 // Peek wraps QIODevice::peek.
 //
+//	C++: qint64 QIODevice::peek(char * data, qint64 maxlen)
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#peek
+func (this *QIODevice) Peek(data []byte) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.Peek")
+	r := C.qute_QIODevice_peek(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	return int64(r)
+}
+
+// PeekMaxlen wraps QIODevice::peek.
+//
 //	C++: QByteArray QIODevice::peek(qint64 maxlen)
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#peek
-func (this *QIODevice) Peek(maxlen int64) []byte {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.Peek")
-	r := C.qute_QIODevice_peek(self, C.longlong(maxlen))
+func (this *QIODevice) PeekMaxlen(maxlen int64) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.PeekMaxlen")
+	r := C.qute_QIODevice_peek_1(self, C.longlong(maxlen))
 	return quteBytes(r)
 }
 
@@ -465,6 +521,18 @@ func (this *QIODevice) PutChar(c byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.PutChar")
 	r := C.qute_QIODevice_putChar(self, C.char(c))
 	return bool(r)
+}
+
+// GetChar wraps QIODevice::getChar.
+//
+//	C++: bool QIODevice::getChar(char * c)
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#getChar
+func (this *QIODevice) GetChar() (bool, byte) {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.GetChar")
+	var cOut C.char
+	r := C.qute_QIODevice_getChar(self, &cOut)
+	return bool(r), byte(cOut)
 }
 
 // ErrorString wraps QIODevice::errorString.

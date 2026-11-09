@@ -140,6 +140,29 @@ func (this *QPlainTextEdit) PlaceholderText() string {
 	return quteStr(r)
 }
 
+// SetTextCursor wraps QPlainTextEdit::setTextCursor.
+//
+//	C++: void QPlainTextEdit::setTextCursor(const QTextCursor & cursor)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#setTextCursor
+func (this *QPlainTextEdit) SetTextCursor(cursor *qtgui.QTextCursor) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetTextCursor")
+	C.qute_QPlainTextEdit_setTextCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QPlainTextEdit.SetTextCursor"))
+}
+
+// TextCursor wraps QPlainTextEdit::textCursor.
+//
+//	C++: QTextCursor QPlainTextEdit::textCursor() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#textCursor
+func (this *QPlainTextEdit) TextCursor() *qtgui.QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.TextCursor")
+	r := C.qute_QPlainTextEdit_textCursor(self)
+	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
 // IsReadOnly wraps QPlainTextEdit::isReadOnly.
 //
 //	C++: bool QPlainTextEdit::isReadOnly() const
@@ -180,6 +203,39 @@ func (this *QPlainTextEdit) TextInteractionFlags() qtcore.TextInteractionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.TextInteractionFlags")
 	r := C.qute_QPlainTextEdit_textInteractionFlags(self)
 	return qtcore.TextInteractionFlags(r)
+}
+
+// MergeCurrentCharFormat wraps QPlainTextEdit::mergeCurrentCharFormat.
+//
+//	C++: void QPlainTextEdit::mergeCurrentCharFormat(const QTextCharFormat & modifier)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#mergeCurrentCharFormat
+func (this *QPlainTextEdit) MergeCurrentCharFormat(modifier *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.MergeCurrentCharFormat")
+	C.qute_QPlainTextEdit_mergeCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QPlainTextEdit.MergeCurrentCharFormat"))
+}
+
+// SetCurrentCharFormat wraps QPlainTextEdit::setCurrentCharFormat.
+//
+//	C++: void QPlainTextEdit::setCurrentCharFormat(const QTextCharFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#setCurrentCharFormat
+func (this *QPlainTextEdit) SetCurrentCharFormat(format *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetCurrentCharFormat")
+	C.qute_QPlainTextEdit_setCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(format), "QPlainTextEdit.SetCurrentCharFormat"))
+}
+
+// CurrentCharFormat wraps QPlainTextEdit::currentCharFormat.
+//
+//	C++: QTextCharFormat QPlainTextEdit::currentCharFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#currentCharFormat
+func (this *QPlainTextEdit) CurrentCharFormat() *qtgui.QTextCharFormat {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CurrentCharFormat")
+	r := C.qute_QPlainTextEdit_currentCharFormat(self)
+	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
 // TabChangesFocus wraps QPlainTextEdit::tabChangesFocus.
@@ -287,6 +343,27 @@ func (this *QPlainTextEdit) SetLineWrapMode(mode QPlainTextEditLineWrapMode) {
 	C.qute_QPlainTextEdit_setLineWrapMode(self, C.int64_t(mode))
 }
 
+// WordWrapMode wraps QPlainTextEdit::wordWrapMode.
+//
+//	C++: QTextOption::WrapMode QPlainTextEdit::wordWrapMode() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#wordWrapMode
+func (this *QPlainTextEdit) WordWrapMode() qtgui.QTextOptionWrapMode {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.WordWrapMode")
+	r := C.qute_QPlainTextEdit_wordWrapMode(self)
+	return qtgui.QTextOptionWrapMode(r)
+}
+
+// SetWordWrapMode wraps QPlainTextEdit::setWordWrapMode.
+//
+//	C++: void QPlainTextEdit::setWordWrapMode(QTextOption::WrapMode policy)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#setWordWrapMode
+func (this *QPlainTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetWordWrapMode")
+	C.qute_QPlainTextEdit_setWordWrapMode(self, C.int64_t(policy))
+}
+
 // SetBackgroundVisible wraps QPlainTextEdit::setBackgroundVisible.
 //
 //	C++: void QPlainTextEdit::setBackgroundVisible(bool visible)
@@ -337,6 +414,17 @@ func (this *QPlainTextEdit) CenterOnScroll() bool {
 func (this *QPlainTextEdit) Find(exp string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Find")
 	r := C.qute_QPlainTextEdit_find(self, (*C.char)(unsafe.Pointer(unsafe.StringData(exp))), C.ptrdiff_t(len(exp)))
+	return bool(r)
+}
+
+// FindRegularExpression wraps QPlainTextEdit::find.
+//
+//	C++: bool QPlainTextEdit::find(const QRegularExpression & exp, QTextDocument::FindFlags options = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#find
+func (this *QPlainTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression) bool {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.FindRegularExpression")
+	r := C.qute_QPlainTextEdit_find_1(self, rt.UseArg(unsafe.Pointer(exp), "QPlainTextEdit.FindRegularExpression"))
 	return bool(r)
 }
 
@@ -400,6 +488,30 @@ func (this *QPlainTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) 
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
+// CursorForPosition wraps QPlainTextEdit::cursorForPosition.
+//
+//	C++: QTextCursor QPlainTextEdit::cursorForPosition(const QPoint & pos) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#cursorForPosition
+func (this *QPlainTextEdit) CursorForPosition(pos qtcore.QPoint) *qtgui.QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorForPosition")
+	r := C.qute_QPlainTextEdit_cursorForPosition(self, cQPoint(pos))
+	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// CursorRectWithTextCursor wraps QPlainTextEdit::cursorRect.
+//
+//	C++: QRect QPlainTextEdit::cursorRect(const QTextCursor & cursor) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#cursorRect
+func (this *QPlainTextEdit) CursorRectWithTextCursor(cursor *qtgui.QTextCursor) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorRectWithTextCursor")
+	r := C.qute_QPlainTextEdit_cursorRect(self, rt.UseArg(unsafe.Pointer(cursor), "QPlainTextEdit.CursorRectWithTextCursor"))
+	return goQRect(r)
+}
+
 // CursorRect wraps QPlainTextEdit::cursorRect.
 //
 //	C++: QRect QPlainTextEdit::cursorRect() const
@@ -407,7 +519,7 @@ func (this *QPlainTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) 
 // Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#cursorRect
 func (this *QPlainTextEdit) CursorRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorRect")
-	r := C.qute_QPlainTextEdit_cursorRect(self)
+	r := C.qute_QPlainTextEdit_cursorRect_1(self)
 	return goQRect(r)
 }
 
@@ -485,6 +597,43 @@ func (this *QPlainTextEdit) SetCursorWidth(width int) {
 	C.qute_QPlainTextEdit_setCursorWidth(self, C.int(width))
 }
 
+// SetExtraSelections wraps QPlainTextEdit::setExtraSelections.
+//
+//	C++: void QPlainTextEdit::setExtraSelections(const QList<QTextEdit::ExtraSelection> & selections)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#setExtraSelections
+func (this *QPlainTextEdit) SetExtraSelections(selections []*QTextEditExtraSelection) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetExtraSelections")
+	selectionsC := make([]unsafe.Pointer, len(selections))
+	for i := range selections {
+		selectionsC[i] = rt.UseArg(unsafe.Pointer(selections[i]), "QPlainTextEdit.SetExtraSelections")
+	}
+	C.qute_QPlainTextEdit_setExtraSelections(self, unsafe.Pointer(unsafe.SliceData(selectionsC)), C.ptrdiff_t(len(selections)))
+}
+
+// ExtraSelections wraps QPlainTextEdit::extraSelections.
+//
+//	C++: QList<QTextEdit::ExtraSelection> QPlainTextEdit::extraSelections() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#extraSelections
+func (this *QPlainTextEdit) ExtraSelections() []*QTextEditExtraSelection {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.ExtraSelections")
+	r := C.qute_QPlainTextEdit_extraSelections(self)
+	return quteList(r, func(e unsafe.Pointer) *QTextEditExtraSelection {
+		return rt.View[QTextEditExtraSelection](rt.WrapClass(e, "QTextEditExtraSelection", rt.TakeOwned), e)
+	})
+}
+
+// MoveCursor wraps QPlainTextEdit::moveCursor.
+//
+//	C++: void QPlainTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#moveCursor
+func (this *QPlainTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.MoveCursor")
+	C.qute_QPlainTextEdit_moveCursor(self, C.int64_t(operation))
+}
+
 // CanPaste wraps QPlainTextEdit::canPaste.
 //
 //	C++: bool QPlainTextEdit::canPaste() const
@@ -494,6 +643,20 @@ func (this *QPlainTextEdit) CanPaste() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CanPaste")
 	r := C.qute_QPlainTextEdit_canPaste(self)
 	return bool(r)
+}
+
+// Print wraps QPlainTextEdit::print.
+//
+//	C++: void QPlainTextEdit::print(QPagedPaintDevice * printer) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#print
+func (this *QPlainTextEdit) Print(printer qtgui.QPagedPaintDeviceLike) {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Print")
+	var printerPtr unsafe.Pointer
+	if printer != nil {
+		printerPtr = rt.UseArg(unsafe.Pointer(printer.AsQPagedPaintDevice()), "QPlainTextEdit.Print")
+	}
+	C.qute_QPlainTextEdit_print(self, printerPtr)
 }
 
 // BlockCount wraps QPlainTextEdit::blockCount.

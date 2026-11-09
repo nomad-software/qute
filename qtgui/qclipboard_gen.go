@@ -123,6 +123,18 @@ func (this *QClipboard) Text() string {
 	return quteStr(r)
 }
 
+// TextWithSubtype wraps QClipboard::text.
+//
+//	C++: QString QClipboard::text(QString & subtype, Mode mode = …) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#text
+func (this *QClipboard) TextWithSubtype(subtype string) (string, string) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.TextWithSubtype")
+	var subtypeOut C.qute_str
+	r := C.qute_QClipboard_text_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subtype))), C.ptrdiff_t(len(subtype)), &subtypeOut)
+	return quteStr(r), quteStr(subtypeOut)
+}
+
 // SetText wraps QClipboard::setText.
 //
 //	C++: void QClipboard::setText(const QString &, Mode mode = …)

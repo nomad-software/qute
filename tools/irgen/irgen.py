@@ -106,11 +106,12 @@ def method_info(c, access, section):
     return m
 
 
-def class_info(c, module, header):
+def class_info(c, module, header, name=None, nested_out=None):
+    name = name or c.spelling
     bases = []
     access = "private" if c.kind == K.CLASS_DECL else "public"
     section = ""
-    methods, enums, flags = [], [], []
+    methods, enums, flags, fields = [], [], [], []
     has_qobject_macro = False
     gadget = False
     dtor = None
@@ -157,13 +158,20 @@ def class_info(c, module, header):
                 continue
             methods.append(method_info(ch, access, section))
         elif ch.kind == K.ENUM_DECL and ch.spelling and access == "public":
-            enums.append(enum_info(ch, c.spelling))
+            enums.append(enum_info(ch, name))
+        elif ch.kind == K.FIELD_DECL and access == "public" and not deprecated(ch):
+            fields.append({"name": ch.spelling, "type": type_info(ch.type)})
+        elif ch.kind in (K.CLASS_DECL, K.STRUCT_DECL) and access == "public" and ch.is_definition() \
+                and ch.spelling and nested_out is not None:
+            # public nested classes become "Outer::Inner"
+            nested_out.append(class_info(ch, module, header, name + "::" + ch.spelling, nested_out))
         elif ch.kind == K.TYPEDEF_DECL and access == "public":
             f = flags_typedef(ch)
             if f:
                 flags.append(f)
     return {
-        "name": c.spelling,
+        "name": name,
+        "fields": fields,
         "module": module,
         "header": header,
         "kind": "struct" if c.kind == K.STRUCT_DECL else "class",
@@ -246,7 +254,9 @@ def main():
             if c.spelling in seen:
                 continue
             seen.add(c.spelling)
-            mods[mod]["classes"].append(class_info(c, mod, header))
+            nested = []
+            mods[mod]["classes"].append(class_info(c, mod, header, None, nested))
+            mods[mod]["classes"].extend(nested)
         elif c.kind == K.NAMESPACE and c.spelling == "Qt":
             namespace_info(c, mod, header, mods[mod])
         elif c.kind == K.ENUM_DECL and c.spelling.startswith("Q"):

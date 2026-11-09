@@ -47,18 +47,18 @@ func QBoxLayoutCast(o qtcore.QObjectLike) *QBoxLayout {
 	return rt.View[QBoxLayout](rt.WrapClass(p, "QBoxLayout", rt.KeepOrBorrow), p)
 }
 
-// NewQBoxLayout wraps the QBoxLayout constructor.
+// NewQBoxLayoutWithDirection wraps the QBoxLayout constructor.
 //
 //	C++: QBoxLayout::QBoxLayout(Direction, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#QBoxLayout
-func NewQBoxLayout(arg0 QBoxLayoutDirection, parent QWidgetLike) *QBoxLayout {
-	rt.CheckThread("NewQBoxLayout")
+func NewQBoxLayoutWithDirection(arg0 QBoxLayoutDirection, parent QWidgetLike) *QBoxLayout {
+	rt.CheckThread("NewQBoxLayoutWithDirection")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQBoxLayout")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQBoxLayoutWithDirection")
 	}
 	p := C.qute_QBoxLayout_new(C.int64_t(arg0), parentPtr)
 	mode := rt.NewOwned

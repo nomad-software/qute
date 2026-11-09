@@ -141,6 +141,19 @@ func (this *QUrl) ToDisplayString() string {
 	return quteStr(r)
 }
 
+// Adjusted wraps QUrl::adjusted.
+//
+//	C++: QUrl QUrl::adjusted(FormattingOptions options) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#adjusted
+func (this *QUrl) Adjusted(options QUrlUrlFormattingOption) *QUrl {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.Adjusted")
+	r := C.qute_QUrl_adjusted(self, C.int64_t(options))
+	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
+}
+
 // ToEncoded wraps QUrl::toEncoded.
 //
 //	C++: QByteArray QUrl::toEncoded(FormattingOptions options = …) const
@@ -395,6 +408,16 @@ func (this *QUrl) SetQuery(query string) {
 	C.qute_QUrl_setQuery(self, (*C.char)(unsafe.Pointer(unsafe.StringData(query))), C.ptrdiff_t(len(query)))
 }
 
+// SetQueryUrlQuery wraps QUrl::setQuery.
+//
+//	C++: void QUrl::setQuery(const QUrlQuery & query)
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setQuery
+func (this *QUrl) SetQueryUrlQuery(query *QUrlQuery) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetQueryUrlQuery")
+	C.qute_QUrl_setQuery_1(self, rt.UseArg(unsafe.Pointer(query), "QUrl.SetQueryUrlQuery"))
+}
+
 // Query wraps QUrl::query.
 //
 //	C++: QString QUrl::query(ComponentFormattingOptions = …) const
@@ -493,6 +516,30 @@ func (this *QUrl) ToLocalFile() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ToLocalFile")
 	r := C.qute_QUrl_toLocalFile(self)
 	return quteStr(r)
+}
+
+// Matches wraps QUrl::matches.
+//
+//	C++: bool QUrl::matches(const QUrl & url, FormattingOptions options) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#matches
+func (this *QUrl) Matches(url *QUrl, options QUrlUrlFormattingOption) bool {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.Matches")
+	r := C.qute_QUrl_matches(self, rt.UseArg(unsafe.Pointer(url), "QUrl.Matches"), C.int64_t(options))
+	return bool(r)
+}
+
+// QUrlFromEncoded wraps QUrl::fromEncoded.
+//
+//	C++: QUrl QUrl::fromEncoded(QByteArrayView input, ParsingMode mode = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fromEncoded
+func QUrlFromEncoded(input []byte) *QUrl {
+	rt.CheckThread("QUrlFromEncoded")
+	r := C.qute_QUrl_fromEncoded((*C.char)(unsafe.Pointer(unsafe.SliceData(input))), C.ptrdiff_t(len(input)))
+	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
 // QUrlFromUserInput wraps QUrl::fromUserInput.

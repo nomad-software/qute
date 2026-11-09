@@ -97,3 +97,28 @@ classes:
   QGraphicsObject: { no-construct: true }
   QGraphicsTextItem: {}
   QToolTip: { no-construct: true }
+  "QTextEdit::ExtraSelection": { kind: value }
+  "QFormLayout::TakeRowResult": { kind: value }
+  QGraphicsLayoutItem: { no-construct: true, reviewed: true }
+  QGraphicsWidget: { reviewed: true }
+  QGraphicsProxyWidget: { reviewed: true }
+  QGraphicsEffect: { no-construct: true }
+  QGraphicsBlurEffect: {}
+  QGraphicsColorizeEffect: {}
+  QGraphicsDropShadowEffect: {}
+  QGraphicsOpacityEffect: {}
+  QGraphicsTransform: { no-construct: true }
+  QGraphicsRotation: {}
+  QGraphicsScale: {}
+  QGraphicsItemGroup: { notify-dtor: true }
+  QGraphicsLineItem: { notify-dtor: true }
+  QGraphicsPathItem: { notify-dtor: true }
+  QGraphicsPolygonItem: { notify-dtor: true }
+  QStyleOption: { kind: value, reviewed: true }
+  QStyleOptionViewItem: { kind: value }
+  QStyleOptionComplex: { kind: value }
+  QStyleOptionButton: { kind: value }
+  QStyleOptionGraphicsItem: { kind: value }
+  QItemEditorFactory: {}
+  QTableWidgetSelectionRange: { kind: value }
+  QFileIconProvider: {}

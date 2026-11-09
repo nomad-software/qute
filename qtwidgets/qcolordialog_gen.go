@@ -70,18 +70,18 @@ func NewQColorDialog(parent QWidgetLike) *QColorDialog {
 	return rt.View[QColorDialog](h, p)
 }
 
-// NewQColorDialogWithInitial wraps the QColorDialog constructor.
+// NewQColorDialogWithColor wraps the QColorDialog constructor.
 //
 //	C++: QColorDialog::QColorDialog(const QColor & initial, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcolordialog.html#QColorDialog
-func NewQColorDialogWithInitial(initial qtgui.QColor, parent QWidgetLike) *QColorDialog {
-	rt.CheckThread("NewQColorDialogWithInitial")
+func NewQColorDialogWithColor(initial qtgui.QColor, parent QWidgetLike) *QColorDialog {
+	rt.CheckThread("NewQColorDialogWithColor")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQColorDialogWithInitial")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQColorDialogWithColor")
 	}
 	p := C.qute_QColorDialog_new_1(cQColor(initial), parentPtr)
 	mode := rt.NewOwned

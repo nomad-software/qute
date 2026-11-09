@@ -465,6 +465,34 @@ func (this *QTableWidgetItem) SetData(role int, value *qtcore.QVariant) {
 	C.qute_QTableWidgetItem_setData(self, C.int(role), rt.UseArg(unsafe.Pointer(value), "QTableWidgetItem.SetData"))
 }
 
+// Read wraps QTableWidgetItem::read.
+//
+//	C++: void QTableWidgetItem::read(QDataStream & in)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#read
+func (this *QTableWidgetItem) Read(in qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QTableWidgetItem.Read")
+	}
+	C.qute_QTableWidgetItem_read(self, inPtr)
+}
+
+// Write wraps QTableWidgetItem::write.
+//
+//	C++: void QTableWidgetItem::write(QDataStream & out) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#write
+func (this *QTableWidgetItem) Write(out qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QTableWidgetItem.Write")
+	}
+	C.qute_QTableWidgetItem_write(self, outPtr)
+}
+
 // Type wraps QTableWidgetItem::type.
 //
 //	C++: int QTableWidgetItem::type() const

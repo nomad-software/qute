@@ -129,6 +129,45 @@ func (this *QGraphicsItem) ParentObject() *QGraphicsObject {
 	return rt.View[QGraphicsObject](rt.WrapClass(r, "QGraphicsObject", rt.KeepOrBorrow), r)
 }
 
+// ParentWidget wraps QGraphicsItem::parentWidget.
+//
+//	C++: QGraphicsWidget * QGraphicsItem::parentWidget() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#parentWidget
+func (this *QGraphicsItem) ParentWidget() *QGraphicsWidget {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.ParentWidget")
+	r := C.qute_QGraphicsItem_parentWidget(self)
+	return rt.View[QGraphicsWidget](rt.WrapClass(r, "QGraphicsWidget", rt.KeepOrBorrow), r)
+}
+
+// TopLevelWidget wraps QGraphicsItem::topLevelWidget.
+//
+//	C++: QGraphicsWidget * QGraphicsItem::topLevelWidget() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#topLevelWidget
+func (this *QGraphicsItem) TopLevelWidget() *QGraphicsWidget {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.TopLevelWidget")
+	r := C.qute_QGraphicsItem_topLevelWidget(self)
+	return rt.View[QGraphicsWidget](rt.WrapClass(r, "QGraphicsWidget", rt.KeepOrBorrow), r)
+}
+
+// Window wraps QGraphicsItem::window.
+//
+//	C++: QGraphicsWidget * QGraphicsItem::window() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#window
+func (this *QGraphicsItem) Window() *QGraphicsWidget {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Window")
+	r := C.qute_QGraphicsItem_window(self)
+	return rt.View[QGraphicsWidget](rt.WrapClass(r, "QGraphicsWidget", rt.KeepOrBorrow), r)
+}
+
 // Panel wraps QGraphicsItem::panel.
 //
 //	C++: QGraphicsItem * QGraphicsItem::panel() const
@@ -218,6 +257,38 @@ func (this *QGraphicsItem) ToGraphicsObject() *QGraphicsObject {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.ToGraphicsObject")
 	r := C.qute_QGraphicsItem_toGraphicsObject(self)
 	return rt.View[QGraphicsObject](rt.WrapClass(r, "QGraphicsObject", rt.KeepOrBorrow), r)
+}
+
+// Group wraps QGraphicsItem::group.
+//
+//	C++: QGraphicsItemGroup * QGraphicsItem::group() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#group
+func (this *QGraphicsItem) Group() *QGraphicsItemGroup {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Group")
+	r := C.qute_QGraphicsItem_group(self)
+	return rt.View[QGraphicsItemGroup](rt.WrapClass(r, "QGraphicsItemGroup", rt.KeepOrBorrow), r)
+}
+
+// SetGroup wraps QGraphicsItem::setGroup.
+//
+//	C++: void QGraphicsItem::setGroup(QGraphicsItemGroup * group)
+//
+// Ownership: group the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// The item becomes a child of the group.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setGroup
+func (this *QGraphicsItem) SetGroup(group QGraphicsItemGroupLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetGroup")
+	var groupPtr unsafe.Pointer
+	if group != nil {
+		groupPtr = rt.UseArg(unsafe.Pointer(group.AsQGraphicsItemGroup()), "QGraphicsItem.SetGroup")
+	}
+	C.qute_QGraphicsItem_setGroup(self, groupPtr)
+	rt.RefOf(unsafe.Pointer(this)).H.SetParented(groupPtr != nil)
 }
 
 // Flags wraps QGraphicsItem::flags.
@@ -518,6 +589,39 @@ func (this *QGraphicsItem) EffectiveOpacity() float64 {
 func (this *QGraphicsItem) SetOpacity(opacity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetOpacity")
 	C.qute_QGraphicsItem_setOpacity(self, C.double(opacity))
+}
+
+// GraphicsEffect wraps QGraphicsItem::graphicsEffect.
+//
+//	C++: QGraphicsEffect * QGraphicsItem::graphicsEffect() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#graphicsEffect
+func (this *QGraphicsItem) GraphicsEffect() *QGraphicsEffect {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.GraphicsEffect")
+	r := C.qute_QGraphicsItem_graphicsEffect(self)
+	return rt.View[QGraphicsEffect](rt.WrapClass(r, "QGraphicsEffect", rt.KeepOrBorrow), r)
+}
+
+// SetGraphicsEffect wraps QGraphicsItem::setGraphicsEffect.
+//
+//	C++: void QGraphicsItem::setGraphicsEffect(QGraphicsEffect * effect)
+//
+// Ownership: effect becomes Parented: Qt frees it from now on.
+//
+// The item takes ownership of the effect.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setGraphicsEffect
+func (this *QGraphicsItem) SetGraphicsEffect(effect QGraphicsEffectLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetGraphicsEffect")
+	var effectPtr unsafe.Pointer
+	var effectH *rt.Handle
+	if effect != nil {
+		effectPtr, effectH = rt.Arg(unsafe.Pointer(effect.AsQGraphicsEffect()), "QGraphicsItem.SetGraphicsEffect")
+	}
+	C.qute_QGraphicsItem_setGraphicsEffect(self, effectPtr)
+	effectH.TransferToCpp()
 }
 
 // AcceptedMouseButtons wraps QGraphicsItem::acceptedMouseButtons.
@@ -982,6 +1086,37 @@ func (this *QGraphicsItem) Scale() float64 {
 	return float64(r)
 }
 
+// Transformations wraps QGraphicsItem::transformations.
+//
+//	C++: QList<QGraphicsTransform *> QGraphicsItem::transformations() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#transformations
+func (this *QGraphicsItem) Transformations() []*QGraphicsTransform {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Transformations")
+	r := C.qute_QGraphicsItem_transformations(self)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsTransform {
+		return rt.View[QGraphicsTransform](rt.WrapClass(e, "QGraphicsTransform", rt.KeepOrBorrow), e)
+	})
+}
+
+// SetTransformations wraps QGraphicsItem::setTransformations.
+//
+//	C++: void QGraphicsItem::setTransformations(const QList<QGraphicsTransform *> & transformations)
+//
+// The item does not take ownership of the transformations.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setTransformations
+func (this *QGraphicsItem) SetTransformations(transformations []*QGraphicsTransform) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetTransformations")
+	transformationsC := make([]unsafe.Pointer, len(transformations))
+	for i := range transformations {
+		transformationsC[i] = rt.UseArg(unsafe.Pointer(transformations[i]), "QGraphicsItem.SetTransformations")
+	}
+	C.qute_QGraphicsItem_setTransformations(self, unsafe.Pointer(unsafe.SliceData(transformationsC)), C.ptrdiff_t(len(transformations)))
+}
+
 // TransformOriginPoint wraps QGraphicsItem::transformOriginPoint.
 //
 //	C++: QPointF QGraphicsItem::transformOriginPoint() const
@@ -1241,6 +1376,20 @@ func (this *QGraphicsItem) BoundingRegionGranularity() float64 {
 func (this *QGraphicsItem) SetBoundingRegionGranularity(granularity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetBoundingRegionGranularity")
 	C.qute_QGraphicsItem_setBoundingRegionGranularity(self, C.double(granularity))
+}
+
+// Paint wraps QGraphicsItem::paint.
+//
+//	C++: void QGraphicsItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#paint
+func (this *QGraphicsItem) Paint(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Paint")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsItem.Paint")
+	}
+	C.qute_QGraphicsItem_paint(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsItem.Paint"))
 }
 
 // Update wraps QGraphicsItem::update.

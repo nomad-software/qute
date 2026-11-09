@@ -137,6 +137,33 @@ func (this *QKeySequenceEdit) IsClearButtonEnabled() bool {
 	return bool(r)
 }
 
+// SetFinishingKeyCombinations wraps QKeySequenceEdit::setFinishingKeyCombinations.
+//
+//	C++: void QKeySequenceEdit::setFinishingKeyCombinations(const QList<QKeyCombination> & finishingKeyCombinations)
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequenceedit.html#setFinishingKeyCombinations
+func (this *QKeySequenceEdit) SetFinishingKeyCombinations(finishingKeyCombinations []*qtcore.QKeyCombination) {
+	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.SetFinishingKeyCombinations")
+	finishingKeyCombinationsC := make([]unsafe.Pointer, len(finishingKeyCombinations))
+	for i := range finishingKeyCombinations {
+		finishingKeyCombinationsC[i] = rt.UseArg(unsafe.Pointer(finishingKeyCombinations[i]), "QKeySequenceEdit.SetFinishingKeyCombinations")
+	}
+	C.qute_QKeySequenceEdit_setFinishingKeyCombinations(self, unsafe.Pointer(unsafe.SliceData(finishingKeyCombinationsC)), C.ptrdiff_t(len(finishingKeyCombinations)))
+}
+
+// FinishingKeyCombinations wraps QKeySequenceEdit::finishingKeyCombinations.
+//
+//	C++: QList<QKeyCombination> QKeySequenceEdit::finishingKeyCombinations() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequenceedit.html#finishingKeyCombinations
+func (this *QKeySequenceEdit) FinishingKeyCombinations() []*qtcore.QKeyCombination {
+	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.FinishingKeyCombinations")
+	r := C.qute_QKeySequenceEdit_finishingKeyCombinations(self)
+	return quteList(r, func(e unsafe.Pointer) *qtcore.QKeyCombination {
+		return rt.View[qtcore.QKeyCombination](rt.WrapClass(e, "QKeyCombination", rt.TakeOwned), e)
+	})
+}
+
 // SetKeySequence wraps QKeySequenceEdit::setKeySequence.
 //
 //	C++: void QKeySequenceEdit::setKeySequence(const QKeySequence & keySequence)

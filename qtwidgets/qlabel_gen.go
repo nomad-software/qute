@@ -116,6 +116,32 @@ func (this *QLabel) Pixmap() *qtgui.QPixmap {
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
+// Picture wraps QLabel::picture.
+//
+//	C++: QPicture QLabel::picture() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#picture
+func (this *QLabel) Picture() *qtgui.QPicture {
+	self := rt.Use(unsafe.Pointer(this), "QLabel.Picture")
+	r := C.qute_QLabel_picture(self)
+	return rt.View[qtgui.QPicture](rt.WrapClass(r, "QPicture", rt.TakeOwned), r)
+}
+
+// Movie wraps QLabel::movie.
+//
+//	C++: QMovie * QLabel::movie() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#movie
+func (this *QLabel) Movie() *qtgui.QMovie {
+	self := rt.Use(unsafe.Pointer(this), "QLabel.Movie")
+	r := C.qute_QLabel_movie(self)
+	return rt.View[qtgui.QMovie](rt.WrapClass(r, "QMovie", rt.KeepOrBorrow), r)
+}
+
 // TextFormat wraps QLabel::textFormat.
 //
 //	C++: Qt::TextFormat QLabel::textFormat() const
@@ -135,6 +161,22 @@ func (this *QLabel) TextFormat() qtcore.TextFormat {
 func (this *QLabel) SetTextFormat(textFormat qtcore.TextFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetTextFormat")
 	C.qute_QLabel_setTextFormat(self, C.int64_t(textFormat))
+}
+
+// SetResourceProvider wraps QLabel::setResourceProvider.
+//
+//	C++: void QLabel::setResourceProvider(const QTextDocument::ResourceProvider & provider)
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#setResourceProvider
+func (this *QLabel) SetResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(this), "QLabel.SetResourceProvider")
+	providerID := rt.NewFunc(func(args, ret unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		r := provider(p0)
+		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLabel.SetResourceProvider")
+	})
+	C.qute_QLabel_setResourceProvider(self, C.uintptr_t(providerID))
 }
 
 // Alignment wraps QLabel::alignment.
@@ -372,6 +414,32 @@ func (this *QLabel) SetText(text string) {
 func (this *QLabel) SetPixmap(pixmap *qtgui.QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetPixmap")
 	C.qute_QLabel_setPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QLabel.SetPixmap"))
+}
+
+// SetPicture wraps QLabel::setPicture.
+//
+//	C++: void QLabel::setPicture(const QPicture &)
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#setPicture
+func (this *QLabel) SetPicture(picture *qtgui.QPicture) {
+	self := rt.Use(unsafe.Pointer(this), "QLabel.SetPicture")
+	C.qute_QLabel_setPicture(self, rt.UseArg(unsafe.Pointer(picture), "QLabel.SetPicture"))
+}
+
+// SetMovie wraps QLabel::setMovie.
+//
+//	C++: void QLabel::setMovie(QMovie * movie)
+//
+// The label does not take ownership of the movie; keep it alive.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#setMovie
+func (this *QLabel) SetMovie(movie qtgui.QMovieLike) {
+	self := rt.Use(unsafe.Pointer(this), "QLabel.SetMovie")
+	var moviePtr unsafe.Pointer
+	if movie != nil {
+		moviePtr = rt.UseArg(unsafe.Pointer(movie.AsQMovie()), "QLabel.SetMovie")
+	}
+	C.qute_QLabel_setMovie(self, moviePtr)
 }
 
 // SetNum wraps QLabel::setNum.

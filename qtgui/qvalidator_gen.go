@@ -47,6 +47,54 @@ func QValidatorCast(o qtcore.QObjectLike) *QValidator {
 	return rt.View[QValidator](rt.WrapClass(p, "QValidator", rt.KeepOrBorrow), p)
 }
 
+// SetLocale wraps QValidator::setLocale.
+//
+//	C++: void QValidator::setLocale(const QLocale & locale)
+//
+// Qt docs: https://doc.qt.io/qt-6/qvalidator.html#setLocale
+func (this *QValidator) SetLocale(locale *qtcore.QLocale) {
+	self := rt.Use(unsafe.Pointer(this), "QValidator.SetLocale")
+	C.qute_QValidator_setLocale(self, rt.UseArg(unsafe.Pointer(locale), "QValidator.SetLocale"))
+}
+
+// Locale wraps QValidator::locale.
+//
+//	C++: QLocale QValidator::locale() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvalidator.html#locale
+func (this *QValidator) Locale() *qtcore.QLocale {
+	self := rt.Use(unsafe.Pointer(this), "QValidator.Locale")
+	r := C.qute_QValidator_locale(self)
+	return rt.View[qtcore.QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
+}
+
+// Validate wraps QValidator::validate.
+//
+//	C++: State QValidator::validate(QString &, int &) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvalidator.html#validate
+func (this *QValidator) Validate(stringArg string, arg1 int) (QValidatorState, string, int) {
+	self := rt.Use(unsafe.Pointer(this), "QValidator.Validate")
+	var stringArgOut C.qute_str
+	var arg1Out C.int
+	r := C.qute_QValidator_validate(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), &stringArgOut, C.int(arg1), &arg1Out)
+	return QValidatorState(r), quteStr(stringArgOut), int(arg1Out)
+}
+
+// Fixup wraps QValidator::fixup.
+//
+//	C++: void QValidator::fixup(QString &) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qvalidator.html#fixup
+func (this *QValidator) Fixup(stringArg string) string {
+	self := rt.Use(unsafe.Pointer(this), "QValidator.Fixup")
+	var stringArgOut C.qute_str
+	C.qute_QValidator_fixup(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), &stringArgOut)
+	return quteStr(stringArgOut)
+}
+
 // EmitChanged wraps emitting the changed signal.
 //
 //	C++: void QValidator::changed()

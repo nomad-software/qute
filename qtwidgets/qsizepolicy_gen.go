@@ -89,13 +89,13 @@ func NewQSizePolicy() *QSizePolicy {
 	return rt.View[QSizePolicy](h, p)
 }
 
-// NewQSizePolicyWithHorizontal wraps the QSizePolicy constructor.
+// NewQSizePolicyWithPolicy wraps the QSizePolicy constructor.
 //
 //	C++: QSizePolicy::QSizePolicy(Policy horizontal, Policy vertical, ControlType type = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qsizepolicy.html#QSizePolicy
-func NewQSizePolicyWithHorizontal(horizontal QSizePolicyPolicy, vertical QSizePolicyPolicy) *QSizePolicy {
-	rt.CheckThread("NewQSizePolicyWithHorizontal")
+func NewQSizePolicyWithPolicy(horizontal QSizePolicyPolicy, vertical QSizePolicyPolicy) *QSizePolicy {
+	rt.CheckThread("NewQSizePolicyWithPolicy")
 	p := C.qute_QSizePolicy_new_1(C.int64_t(horizontal), C.int64_t(vertical))
 	h := rt.WrapClass(p, "QSizePolicy", rt.NewOwned)
 	return rt.View[QSizePolicy](h, p)

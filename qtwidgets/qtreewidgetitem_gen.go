@@ -679,6 +679,34 @@ func (this *QTreeWidgetItem) SetData(column int, role int, value *qtcore.QVarian
 	C.qute_QTreeWidgetItem_setData(self, C.int(column), C.int(role), rt.UseArg(unsafe.Pointer(value), "QTreeWidgetItem.SetData"))
 }
 
+// Read wraps QTreeWidgetItem::read.
+//
+//	C++: void QTreeWidgetItem::read(QDataStream & in)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#read
+func (this *QTreeWidgetItem) Read(in qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QTreeWidgetItem.Read")
+	}
+	C.qute_QTreeWidgetItem_read(self, inPtr)
+}
+
+// Write wraps QTreeWidgetItem::write.
+//
+//	C++: void QTreeWidgetItem::write(QDataStream & out) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#write
+func (this *QTreeWidgetItem) Write(out qtcore.QDataStreamLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QTreeWidgetItem.Write")
+	}
+	C.qute_QTreeWidgetItem_write(self, outPtr)
+}
+
 // Parent wraps QTreeWidgetItem::parent.
 //
 //	C++: QTreeWidgetItem * QTreeWidgetItem::parent() const

@@ -604,6 +604,61 @@ func (this *QFont) HintingPreference() QFontHintingPreference {
 	return QFontHintingPreference(r)
 }
 
+// SetFeature wraps QFont::setFeature.
+//
+//	C++: void QFont::setFeature(Tag tag, quint32 value)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#setFeature
+func (this *QFont) SetFeature(tag *QFontTag, value uint) {
+	self := rt.Use(unsafe.Pointer(this), "QFont.SetFeature")
+	C.qute_QFont_setFeature(self, rt.UseArg(unsafe.Pointer(tag), "QFont.SetFeature"), C.uint(value))
+}
+
+// UnsetFeature wraps QFont::unsetFeature.
+//
+//	C++: void QFont::unsetFeature(Tag tag)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#unsetFeature
+func (this *QFont) UnsetFeature(tag *QFontTag) {
+	self := rt.Use(unsafe.Pointer(this), "QFont.UnsetFeature")
+	C.qute_QFont_unsetFeature(self, rt.UseArg(unsafe.Pointer(tag), "QFont.UnsetFeature"))
+}
+
+// FeatureValue wraps QFont::featureValue.
+//
+//	C++: quint32 QFont::featureValue(Tag tag) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#featureValue
+func (this *QFont) FeatureValue(tag *QFontTag) uint {
+	self := rt.Use(unsafe.Pointer(this), "QFont.FeatureValue")
+	r := C.qute_QFont_featureValue(self, rt.UseArg(unsafe.Pointer(tag), "QFont.FeatureValue"))
+	return uint(r)
+}
+
+// IsFeatureSet wraps QFont::isFeatureSet.
+//
+//	C++: bool QFont::isFeatureSet(Tag tag) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#isFeatureSet
+func (this *QFont) IsFeatureSet(tag *QFontTag) bool {
+	self := rt.Use(unsafe.Pointer(this), "QFont.IsFeatureSet")
+	r := C.qute_QFont_isFeatureSet(self, rt.UseArg(unsafe.Pointer(tag), "QFont.IsFeatureSet"))
+	return bool(r)
+}
+
+// FeatureTags wraps QFont::featureTags.
+//
+//	C++: QList<Tag> QFont::featureTags() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#featureTags
+func (this *QFont) FeatureTags() []*QFontTag {
+	self := rt.Use(unsafe.Pointer(this), "QFont.FeatureTags")
+	r := C.qute_QFont_featureTags(self)
+	return quteList(r, func(e unsafe.Pointer) *QFontTag {
+		return rt.View[QFontTag](rt.WrapClass(e, "QFontTag", rt.TakeOwned), e)
+	})
+}
+
 // ClearFeatures wraps QFont::clearFeatures.
 //
 //	C++: void QFont::clearFeatures()
@@ -614,6 +669,48 @@ func (this *QFont) ClearFeatures() {
 	C.qute_QFont_clearFeatures(self)
 }
 
+// SetVariableAxis wraps QFont::setVariableAxis.
+//
+//	C++: void QFont::setVariableAxis(Tag tag, float value)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#setVariableAxis
+func (this *QFont) SetVariableAxis(tag *QFontTag, value float32) {
+	self := rt.Use(unsafe.Pointer(this), "QFont.SetVariableAxis")
+	C.qute_QFont_setVariableAxis(self, rt.UseArg(unsafe.Pointer(tag), "QFont.SetVariableAxis"), C.float(value))
+}
+
+// UnsetVariableAxis wraps QFont::unsetVariableAxis.
+//
+//	C++: void QFont::unsetVariableAxis(Tag tag)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#unsetVariableAxis
+func (this *QFont) UnsetVariableAxis(tag *QFontTag) {
+	self := rt.Use(unsafe.Pointer(this), "QFont.UnsetVariableAxis")
+	C.qute_QFont_unsetVariableAxis(self, rt.UseArg(unsafe.Pointer(tag), "QFont.UnsetVariableAxis"))
+}
+
+// IsVariableAxisSet wraps QFont::isVariableAxisSet.
+//
+//	C++: bool QFont::isVariableAxisSet(Tag tag) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#isVariableAxisSet
+func (this *QFont) IsVariableAxisSet(tag *QFontTag) bool {
+	self := rt.Use(unsafe.Pointer(this), "QFont.IsVariableAxisSet")
+	r := C.qute_QFont_isVariableAxisSet(self, rt.UseArg(unsafe.Pointer(tag), "QFont.IsVariableAxisSet"))
+	return bool(r)
+}
+
+// VariableAxisValue wraps QFont::variableAxisValue.
+//
+//	C++: float QFont::variableAxisValue(Tag tag) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#variableAxisValue
+func (this *QFont) VariableAxisValue(tag *QFontTag) float32 {
+	self := rt.Use(unsafe.Pointer(this), "QFont.VariableAxisValue")
+	r := C.qute_QFont_variableAxisValue(self, rt.UseArg(unsafe.Pointer(tag), "QFont.VariableAxisValue"))
+	return float32(r)
+}
+
 // ClearVariableAxes wraps QFont::clearVariableAxes.
 //
 //	C++: void QFont::clearVariableAxes()
@@ -622,6 +719,19 @@ func (this *QFont) ClearFeatures() {
 func (this *QFont) ClearVariableAxes() {
 	self := rt.Use(unsafe.Pointer(this), "QFont.ClearVariableAxes")
 	C.qute_QFont_clearVariableAxes(self)
+}
+
+// VariableAxisTags wraps QFont::variableAxisTags.
+//
+//	C++: QList<Tag> QFont::variableAxisTags() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#variableAxisTags
+func (this *QFont) VariableAxisTags() []*QFontTag {
+	self := rt.Use(unsafe.Pointer(this), "QFont.VariableAxisTags")
+	r := C.qute_QFont_variableAxisTags(self)
+	return quteList(r, func(e unsafe.Pointer) *QFontTag {
+		return rt.View[QFontTag](rt.WrapClass(e, "QFontTag", rt.TakeOwned), e)
+	})
 }
 
 // ExactMatch wraps QFont::exactMatch.

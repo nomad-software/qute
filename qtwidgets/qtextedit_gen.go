@@ -142,6 +142,29 @@ func (this *QTextEdit) PlaceholderText() string {
 	return quteStr(r)
 }
 
+// SetTextCursor wraps QTextEdit::setTextCursor.
+//
+//	C++: void QTextEdit::setTextCursor(const QTextCursor & cursor)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#setTextCursor
+func (this *QTextEdit) SetTextCursor(cursor *qtgui.QTextCursor) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTextCursor")
+	C.qute_QTextEdit_setTextCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QTextEdit.SetTextCursor"))
+}
+
+// TextCursor wraps QTextEdit::textCursor.
+//
+//	C++: QTextCursor QTextEdit::textCursor() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#textCursor
+func (this *QTextEdit) TextCursor() *qtgui.QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TextCursor")
+	r := C.qute_QTextEdit_textCursor(self)
+	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
 // IsReadOnly wraps QTextEdit::isReadOnly.
 //
 //	C++: bool QTextEdit::isReadOnly() const
@@ -285,6 +308,39 @@ func (this *QTextEdit) Alignment() qtcore.Alignment {
 	return qtcore.Alignment(r)
 }
 
+// MergeCurrentCharFormat wraps QTextEdit::mergeCurrentCharFormat.
+//
+//	C++: void QTextEdit::mergeCurrentCharFormat(const QTextCharFormat & modifier)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#mergeCurrentCharFormat
+func (this *QTextEdit) MergeCurrentCharFormat(modifier *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.MergeCurrentCharFormat")
+	C.qute_QTextEdit_mergeCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QTextEdit.MergeCurrentCharFormat"))
+}
+
+// SetCurrentCharFormat wraps QTextEdit::setCurrentCharFormat.
+//
+//	C++: void QTextEdit::setCurrentCharFormat(const QTextCharFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#setCurrentCharFormat
+func (this *QTextEdit) SetCurrentCharFormat(format *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetCurrentCharFormat")
+	C.qute_QTextEdit_setCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextEdit.SetCurrentCharFormat"))
+}
+
+// CurrentCharFormat wraps QTextEdit::currentCharFormat.
+//
+//	C++: QTextCharFormat QTextEdit::currentCharFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#currentCharFormat
+func (this *QTextEdit) CurrentCharFormat() *qtgui.QTextCharFormat {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CurrentCharFormat")
+	r := C.qute_QTextEdit_currentCharFormat(self)
+	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
+}
+
 // AutoFormatting wraps QTextEdit::autoFormatting.
 //
 //	C++: AutoFormatting QTextEdit::autoFormatting() const
@@ -411,6 +467,27 @@ func (this *QTextEdit) SetLineWrapColumnOrWidth(w int) {
 	C.qute_QTextEdit_setLineWrapColumnOrWidth(self, C.int(w))
 }
 
+// WordWrapMode wraps QTextEdit::wordWrapMode.
+//
+//	C++: QTextOption::WrapMode QTextEdit::wordWrapMode() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#wordWrapMode
+func (this *QTextEdit) WordWrapMode() qtgui.QTextOptionWrapMode {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.WordWrapMode")
+	r := C.qute_QTextEdit_wordWrapMode(self)
+	return qtgui.QTextOptionWrapMode(r)
+}
+
+// SetWordWrapMode wraps QTextEdit::setWordWrapMode.
+//
+//	C++: void QTextEdit::setWordWrapMode(QTextOption::WrapMode policy)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#setWordWrapMode
+func (this *QTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetWordWrapMode")
+	C.qute_QTextEdit_setWordWrapMode(self, C.int64_t(policy))
+}
+
 // Find wraps QTextEdit::find.
 //
 //	C++: bool QTextEdit::find(const QString & exp, QTextDocument::FindFlags options = …)
@@ -419,6 +496,17 @@ func (this *QTextEdit) SetLineWrapColumnOrWidth(w int) {
 func (this *QTextEdit) Find(exp string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Find")
 	r := C.qute_QTextEdit_find(self, (*C.char)(unsafe.Pointer(unsafe.StringData(exp))), C.ptrdiff_t(len(exp)))
+	return bool(r)
+}
+
+// FindRegularExpression wraps QTextEdit::find.
+//
+//	C++: bool QTextEdit::find(const QRegularExpression & exp, QTextDocument::FindFlags options = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#find
+func (this *QTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FindRegularExpression")
+	r := C.qute_QTextEdit_find_1(self, rt.UseArg(unsafe.Pointer(exp), "QTextEdit.FindRegularExpression"))
 	return bool(r)
 }
 
@@ -504,6 +592,30 @@ func (this *QTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMen
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
+// CursorForPosition wraps QTextEdit::cursorForPosition.
+//
+//	C++: QTextCursor QTextEdit::cursorForPosition(const QPoint & pos) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#cursorForPosition
+func (this *QTextEdit) CursorForPosition(pos qtcore.QPoint) *qtgui.QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorForPosition")
+	r := C.qute_QTextEdit_cursorForPosition(self, cQPoint(pos))
+	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// CursorRectWithTextCursor wraps QTextEdit::cursorRect.
+//
+//	C++: QRect QTextEdit::cursorRect(const QTextCursor & cursor) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#cursorRect
+func (this *QTextEdit) CursorRectWithTextCursor(cursor *qtgui.QTextCursor) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorRectWithTextCursor")
+	r := C.qute_QTextEdit_cursorRect(self, rt.UseArg(unsafe.Pointer(cursor), "QTextEdit.CursorRectWithTextCursor"))
+	return goQRect(r)
+}
+
 // CursorRect wraps QTextEdit::cursorRect.
 //
 //	C++: QRect QTextEdit::cursorRect() const
@@ -511,7 +623,7 @@ func (this *QTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMen
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#cursorRect
 func (this *QTextEdit) CursorRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorRect")
-	r := C.qute_QTextEdit_cursorRect(self)
+	r := C.qute_QTextEdit_cursorRect_1(self)
 	return goQRect(r)
 }
 
@@ -610,6 +722,43 @@ func (this *QTextEdit) SetAcceptRichText(accept bool) {
 	C.qute_QTextEdit_setAcceptRichText(self, C.bool(accept))
 }
 
+// SetExtraSelections wraps QTextEdit::setExtraSelections.
+//
+//	C++: void QTextEdit::setExtraSelections(const QList<ExtraSelection> & selections)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#setExtraSelections
+func (this *QTextEdit) SetExtraSelections(selections []*QTextEditExtraSelection) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetExtraSelections")
+	selectionsC := make([]unsafe.Pointer, len(selections))
+	for i := range selections {
+		selectionsC[i] = rt.UseArg(unsafe.Pointer(selections[i]), "QTextEdit.SetExtraSelections")
+	}
+	C.qute_QTextEdit_setExtraSelections(self, unsafe.Pointer(unsafe.SliceData(selectionsC)), C.ptrdiff_t(len(selections)))
+}
+
+// ExtraSelections wraps QTextEdit::extraSelections.
+//
+//	C++: QList<ExtraSelection> QTextEdit::extraSelections() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#extraSelections
+func (this *QTextEdit) ExtraSelections() []*QTextEditExtraSelection {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ExtraSelections")
+	r := C.qute_QTextEdit_extraSelections(self)
+	return quteList(r, func(e unsafe.Pointer) *QTextEditExtraSelection {
+		return rt.View[QTextEditExtraSelection](rt.WrapClass(e, "QTextEditExtraSelection", rt.TakeOwned), e)
+	})
+}
+
+// MoveCursor wraps QTextEdit::moveCursor.
+//
+//	C++: void QTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#moveCursor
+func (this *QTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.MoveCursor")
+	C.qute_QTextEdit_moveCursor(self, C.int64_t(operation))
+}
+
 // CanPaste wraps QTextEdit::canPaste.
 //
 //	C++: bool QTextEdit::canPaste() const
@@ -619,6 +768,20 @@ func (this *QTextEdit) CanPaste() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CanPaste")
 	r := C.qute_QTextEdit_canPaste(self)
 	return bool(r)
+}
+
+// Print wraps QTextEdit::print.
+//
+//	C++: void QTextEdit::print(QPagedPaintDevice * printer) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#print
+func (this *QTextEdit) Print(printer qtgui.QPagedPaintDeviceLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Print")
+	var printerPtr unsafe.Pointer
+	if printer != nil {
+		printerPtr = rt.UseArg(unsafe.Pointer(printer.AsQPagedPaintDevice()), "QTextEdit.Print")
+	}
+	C.qute_QTextEdit_print(self, printerPtr)
 }
 
 // SetFontPointSize wraps QTextEdit::setFontPointSize.
@@ -911,6 +1074,16 @@ func (this *QTextEdit) EmitRedoAvailable(bArg bool) {
 	C.qute_QTextEdit_redoAvailable_1(self, C.bool(bArg))
 }
 
+// EmitCurrentCharFormatChanged wraps emitting the currentCharFormatChanged signal.
+//
+//	C++: void QTextEdit::currentCharFormatChanged(const QTextCharFormat & format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#currentCharFormatChanged
+func (this *QTextEdit) EmitCurrentCharFormatChanged(format *qtgui.QTextCharFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitCurrentCharFormatChanged")
+	C.qute_QTextEdit_currentCharFormatChanged_1(self, rt.UseArg(unsafe.Pointer(format), "QTextEdit.EmitCurrentCharFormatChanged"))
+}
+
 // EmitCopyAvailable wraps emitting the copyAvailable signal.
 //
 //	C++: void QTextEdit::copyAvailable(bool b)
@@ -986,6 +1159,22 @@ func (this *QTextEdit) OnRedoAvailable(f func(bArg bool)) qtcore.Connection {
 		f(bArg)
 	})
 	return rt.NewConnection(C.qute_QTextEdit_redoAvailable(self, C.uintptr_t(id)))
+}
+
+// OnCurrentCharFormatChanged connects f to the currentCharFormatChanged signal. The connection ends when the
+// sender is destroyed or Disconnect is called; until then the sender is pinned.
+//
+//	C++: void QTextEdit::currentCharFormatChanged(const QTextCharFormat & format) [signal]
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#currentCharFormatChanged
+func (this *QTextEdit) OnCurrentCharFormatChanged(f func(format *qtgui.QTextCharFormat)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.OnCurrentCharFormatChanged")
+	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+		format := rt.View[qtgui.QTextCharFormat](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QTextCharFormat", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		f(format)
+	})
+	return rt.NewConnection(C.qute_QTextEdit_currentCharFormatChanged(self, C.uintptr_t(id)))
 }
 
 // OnCopyAvailable connects f to the copyAvailable signal. The connection ends when the

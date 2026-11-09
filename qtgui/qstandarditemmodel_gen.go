@@ -91,6 +91,23 @@ func NewQStandardItemModelWithRows(rows int, columns int, parent qtcore.QObjectL
 	return rt.View[QStandardItemModel](h, p)
 }
 
+// SetItemRoleNames wraps QStandardItemModel::setItemRoleNames.
+//
+//	C++: void QStandardItemModel::setItemRoleNames(const QHash<int, QByteArray> & roleNames)
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#setItemRoleNames
+func (this *QStandardItemModel) SetItemRoleNames(roleNames map[int][]byte) {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SetItemRoleNames")
+	roleNamesK := make([]C.int, 0, len(roleNames))
+	roleNamesV := make([]C.qute_str, 0, len(roleNames))
+	for k, x := range roleNames {
+		roleNamesK = append(roleNamesK, C.int(k))
+		roleNamesV = append(roleNamesV, quteCBytes(x))
+	}
+	defer quteFreeStrs(roleNamesV)
+	C.qute_QStandardItemModel_setItemRoleNames(self, unsafe.Pointer(unsafe.SliceData(roleNamesK)), unsafe.Pointer(unsafe.SliceData(roleNamesV)), C.ptrdiff_t(len(roleNames)))
+}
+
 // Clear wraps QStandardItemModel::clear.
 //
 //	C++: void QStandardItemModel::clear()

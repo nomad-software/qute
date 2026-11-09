@@ -349,6 +349,19 @@ func (this *QSplitter) Count() int {
 	return int(r)
 }
 
+// GetRange wraps QSplitter::getRange.
+//
+//	C++: void QSplitter::getRange(int index, int *, int *) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qsplitter.html#getRange
+func (this *QSplitter) GetRange(index int) (int, int) {
+	self := rt.Use(unsafe.Pointer(this), "QSplitter.GetRange")
+	var arg1Out C.int
+	var arg2Out C.int
+	C.qute_QSplitter_getRange(self, C.int(index), &arg1Out, &arg2Out)
+	return int(arg1Out), int(arg2Out)
+}
+
 // SetStretchFactor wraps QSplitter::setStretchFactor.
 //
 //	C++: void QSplitter::setStretchFactor(int index, int stretch)

@@ -32,18 +32,18 @@ func QWidgetItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QWidgetItem {
 	return rt.View[QWidgetItem](rt.WrapClass(p, "QWidgetItem", rt.ModeFor(own)), p)
 }
 
-// NewQWidgetItemWithW wraps the QWidgetItem constructor.
+// NewQWidgetItemWithWidget wraps the QWidgetItem constructor.
 //
 //	C++: QWidgetItem::QWidgetItem(QWidget * w)
 //
 // Ownership: w is borrowed for the call only.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidgetitem.html#QWidgetItem
-func NewQWidgetItemWithW(w QWidgetLike) *QWidgetItem {
-	rt.CheckThread("NewQWidgetItemWithW")
+func NewQWidgetItemWithWidget(w QWidgetLike) *QWidgetItem {
+	rt.CheckThread("NewQWidgetItemWithWidget")
 	var wPtr unsafe.Pointer
 	if w != nil {
-		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "NewQWidgetItemWithW")
+		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "NewQWidgetItemWithWidget")
 	}
 	p := C.qute_QWidgetItem_new(wPtr)
 	h := rt.WrapClass(p, "QWidgetItem", rt.NewOwned)

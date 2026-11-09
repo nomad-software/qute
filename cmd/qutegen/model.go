@@ -33,7 +33,8 @@ const (
 )
 
 type Class struct {
-	Name      string
+	Name      string // Go name and C symbol stem: QFontTag
+	Cpp       string // C++ name: QFont::Tag
 	Module    *Module
 	IR        *irClass
 	Opts      *classOpts
@@ -91,6 +92,11 @@ type Param struct {
 	T      *conv
 	Rule   string // transfer-to-cpp, transfer-this, transfer-to-go, borrowed, scoped
 	Ruled  bool   // rule came from an overlay
+	Out    bool   // a pointer or reference the call writes: a Go result
+	InOut  bool   // a reference the call reads and writes: a Go parameter and result
+	ByPtr  bool   // the C++ parameter is a pointer (pass &t), not a reference
+	Pair   string // "array", "bytes" or "buffer": this parameter absorbs the next (its count)
+	CppT   string // C++ type of the local used for an out or in-out parameter
 }
 
 type Method struct {
@@ -106,8 +112,9 @@ type Method struct {
 	Overlay  *overlay
 	Error    bool
 	Numbered bool
-	Full     bool // generated with all default args
-	Emit     bool // emits a signal
+	Full     bool   // generated with all default args
+	Emit     bool   // emits a signal
+	Field    string // "get" or "set": a public data member accessor
 	VIndex   int
 	Sig      string
 }
@@ -224,7 +231,7 @@ func (g *Gen) build() error {
 			if opts == nil {
 				opts = &classOpts{}
 			}
-			c := &Class{Name: n, Module: m, IR: ic, Opts: opts, cNames: map[string]int{}, goNames: map[string]string{}}
+			c := &Class{Name: strings.ReplaceAll(n, "::", ""), Cpp: n, Module: m, IR: ic, Opts: opts, cNames: map[string]int{}, goNames: map[string]string{}}
 			g.classes[n] = c
 			m.Classes = append(m.Classes, c)
 		}
@@ -235,7 +242,7 @@ func (g *Gen) build() error {
 			for i, b := range c.IR.Bases {
 				bc := g.classes[b]
 				if bc == nil {
-					if i == 0 {
+					if i == 0 && !strings.Contains(b, "<") {
 						return fmt.Errorf("%s: primary base %s is not bound; add it to spec/classes", c.Name, b)
 					}
 					continue
@@ -356,7 +363,7 @@ func (g *Gen) collectEnums(m *Module) {
 		if !visible {
 			return
 		}
-		prefix := scope
+		prefix := strings.ReplaceAll(scope, "::", "")
 		if scope == "Qt" {
 			prefix = ""
 		}
@@ -386,7 +393,7 @@ func (g *Gen) collectEnums(m *Module) {
 	}
 	for _, c := range m.Classes {
 		for i := range c.IR.Enums {
-			add(&c.IR.Enums[i], c.Name, c.IR.Flags, true)
+			add(&c.IR.Enums[i], c.Cpp, c.IR.Flags, true)
 		}
 	}
 }
@@ -444,6 +451,7 @@ func (g *Gen) buildMembers(c *Class) {
 		}
 	}
 	var ctors, methods, statics, signals, emits []*Method
+	inherited := map[string]bool{} // names whose inherited binding must stay visible
 	for i := range c.IR.Methods {
 		im := &c.IR.Methods[i]
 		if im.Access != "public" && !(im.Access == "protected" && im.Kind == "ctor") {
@@ -465,6 +473,10 @@ func (g *Gen) buildMembers(c *Class) {
 		}
 		if stringSlot(im) {
 			g.skip(c, im, "string-based SLOT() connection; use the On* signal methods instead")
+			continue
+		}
+		if iteratorNames[im.Name] && returnsIterator(im) {
+			g.skip(c, im, "on purpose: iterator; use the method that returns a list")
 			continue
 		}
 		if ov.skipped() {
@@ -508,6 +520,7 @@ func (g *Gen) buildMembers(c *Class) {
 			}
 		default:
 			if !im.Static && im.Virtual && ancestorKeys[paramKey(im)] {
+				inherited[exportName(im.Name)] = true
 				continue // an override of a bound base method: the base binding dispatches virtually
 			}
 			if !im.Static && ancestorKeys[paramKey(im)] {
@@ -535,11 +548,46 @@ func (g *Gen) buildMembers(c *Class) {
 	if c.Kind == KindValue {
 		// value classes keep their copy constructor internally only
 	}
+	fields := g.fieldMethods(c)
+	if !hasCtor(c.IR) && !c.Abstract && !c.Opts.NoConstruct && !c.Event && c.HasDtor {
+		// an implicit default constructor (plain structs such as ExtraSelection)
+		im := &irMethod{Name: lastName(c.Cpp), Kind: "ctor", Access: "public"}
+		ctors = append(ctors, &Method{Class: c, Owner: c, IR: im, Sig: c.Cpp + "::" + lastName(c.Cpp) + "() [implicit]"})
+	}
 	c.Ctors = g.nameCtors(c, ctors)
-	c.Methods = g.nameMethods(c, methods, "", nil)
+	var keepVisible []*Method
+	for n := range inherited {
+		keepVisible = append(keepVisible, &Method{GoName: n})
+	}
+	c.Methods = g.nameMethods(c, methods, "", keepVisible)
 	c.Statics = g.nameStatics(c, statics)
 	c.Signals = g.nameMethods(c, signals, "On", c.Methods)
 	c.Methods = append(c.Methods, g.nameMethods(c, emits, "Emit", append(append([]*Method{}, c.Methods...), c.Signals...))...)
+	taken := map[string]bool{}
+	for _, mm := range append(append([]*Method{}, c.Methods...), c.Signals...) {
+		taken[mm.GoName] = true
+	}
+	for b := c.Base; b != nil; b = b.Base {
+		for _, mm := range b.Methods {
+			taken[mm.GoName] = true
+		}
+	}
+	for _, f := range fields {
+		name := exportName(f.IR.Name)
+		if f.Field == "set" {
+			name = "Set" + name
+		} else if taken[name] {
+			name = "Get" + name
+		}
+		if taken[name] || reservedMethods[name] {
+			g.skip(c, f.IR, "field accessor name is taken by a method")
+			continue
+		}
+		taken[name] = true
+		f.GoName = name
+		f.CName = c.cName(f.Field + "_" + f.IR.Name)
+		c.Methods = append(c.Methods, f)
+	}
 }
 
 func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *Method {
@@ -561,6 +609,23 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 	names := paramNames(im)
 	for i := 0; i < n; i++ {
 		p := im.Params[i]
+		if i+1 < len(im.Params) {
+			if pc, kind := g.pairConv(p, im.Params[i+1]); pc != nil {
+				pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: pc, Pair: kind, Rule: "borrowed"}
+				mm.Params = append(mm.Params, pp)
+				i++ // the count is implied by the slice
+				if i >= n {
+					n = i + 1
+				}
+				continue
+			}
+		}
+		if oc, inout, byPtr, cppT := g.outConv(p); oc != nil {
+			pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: oc,
+				Out: !inout, InOut: inout, ByPtr: byPtr, CppT: cppT}
+			mm.Params = append(mm.Params, pp)
+			continue
+		}
 		t, err := g.resolve(p.Type, false)
 		if err != nil {
 			g.skip(c, im, err.Error())
@@ -578,6 +643,10 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 		g.checkArgKeys(c, im, ov, names)
 	}
 	if !ctor {
+		if base, cnst, ptr, ref, _ := parseCpp(im.Return.Canonical); ref && !cnst && !ptr && base == c.Cpp && c.Kind == KindValue {
+			mm.Ret = &conv{k: kSelf, cpp: im.Return.Canonical, base: base, cls: c}
+			return mm
+		}
 		t, err := g.resolve(im.Return, true)
 		if err != nil {
 			g.skip(c, im, "return: "+err.Error())
@@ -668,7 +737,10 @@ func (g *Gen) newSignal(c *Class, im *irMethod, ov *overlay) *Method {
 func goSig(m *Method) string {
 	var ps []string
 	for _, p := range m.Params {
-		ps = append(ps, fmt.Sprint(p.T.k, p.T.base))
+		if p.Out {
+			continue
+		}
+		ps = append(ps, goKey(p.T))
 	}
 	return strings.Join(ps, ",")
 }
@@ -706,26 +778,44 @@ func (g *Gen) nameMethods(c *Class, ms []*Method, prefix string, taken []*Method
 			used[m.GoName] = true
 		}
 	}
+	var kept []*Method
+	// hand-named overloads claim their Go signature first
+	for _, m := range ms {
+		if m.Overlay != nil && m.Overlay.Name != "" && !m.Full {
+			key := m.IR.Name + "|" + goSig(m)
+			if m.Emit {
+				key = "emit|" + key
+			}
+			seen[key] = true
+		}
+	}
 	for _, m := range ms {
 		key := m.IR.Name + "|" + goSig(m)
+		if m.Overlay != nil && m.Overlay.Name != "" && !m.Full {
+			kept = append(kept, m)
+			continue
+		}
 		if m.Emit {
 			key = "emit|" + key
 		}
 		if !m.Full && seen[key] {
-			g.skip(c, m.IR, "duplicate Go signature after dropping default arguments")
+			g.skip(c, m.IR, "on purpose: same Go signature as another overload (often a QStringView twin)")
 			continue
 		}
 		seen[key] = true
-		if m.GoName == "" {
-			base := prefix + exportName(m.IR.Name)
-			name := base
-			for n := 2; used[name]; n++ {
-				name = fmt.Sprintf("%s%d", base, n)
-				m.Numbered = true
-			}
-			m.GoName = name
-			used[name] = true
+		kept = append(kept, m)
+	}
+	var kept2 []*Method
+	for _, m := range kept {
+		if m.GoName == "" && prefix == "" && isNumberTwin(m, kept) {
+			g.skip(c, m.IR, "on purpose: plain-number twin of the struct overload")
+			continue
 		}
+		kept2 = append(kept2, m)
+	}
+	g.nameOverloads(kept2, func(m *Method) string { return prefix + exportName(m.IR.Name) },
+		func(n string) bool { return used[n] }, func(n string) { used[n] = true })
+	for _, m := range kept2 {
 		m.CName = c.cName(m.IR.Name)
 		out = append(out, m)
 	}
@@ -748,7 +838,7 @@ func (g *Gen) nameStatics(c *Class, ms []*Method) []*Method {
 	for _, mm := range ms {
 		key := mm.IR.Name + "|" + goSig(mm)
 		if !mm.Full && seen[key] {
-			g.skip(c, mm.IR, "duplicate Go signature after dropping default arguments")
+			g.skip(c, mm.IR, "on purpose: same Go signature as another overload (often a QStringView twin)")
 			continue
 		}
 		seen[key] = true
@@ -761,19 +851,30 @@ func (g *Gen) nameStatics(c *Class, ms []*Method) []*Method {
 		} else if mm.Full {
 			name = c.Name + mm.GoName
 			m.claim(name, mm.Sig)
-		} else {
-			base := c.Name + exportName(mm.IR.Name)
-			name = base
-			for n := 2; !m.claim(name, mm.Sig); n++ {
-				name = fmt.Sprintf("%s%d", base, n)
-				mm.Numbered = true
-			}
 		}
 		mm.GoName = name
-		mm.CName = c.cName(mm.IR.Name)
 		out = append(out, mm)
 	}
-	return out
+	var rest []*Method
+	for _, mm := range out {
+		if mm.GoName == "" && !isNumberTwin(mm, out) {
+			rest = append(rest, mm)
+		} else if mm.GoName == "" {
+			g.skip(c, mm.IR, "on purpose: plain-number twin of the struct overload")
+			mm.GoName = "-"
+		}
+	}
+	g.nameOverloads(rest, func(mm *Method) string { return c.Name + exportName(mm.IR.Name) },
+		func(n string) bool { _, ok := m.pkgNames[n]; return ok }, func(n string) { m.claim(n, "static") })
+	var final []*Method
+	for _, mm := range out {
+		if mm.GoName == "-" {
+			continue
+		}
+		mm.CName = c.cName(mm.IR.Name)
+		final = append(final, mm)
+	}
+	return final
 }
 
 func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
@@ -781,6 +882,7 @@ func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
 	var out []*Method
 	seen := map[string]bool{}
 	primary := "New" + c.Name
+	firstWith := map[string]*Method{}
 	// A constructor taking only the parent is the primary one; a zero-argument
 	// constructor next to it is redundant (pass nil).
 	hasParentOnly := false
@@ -807,8 +909,12 @@ func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
 	}
 	for _, mm := range ms {
 		key := goSig(mm)
+		if (mm.Overlay == nil || mm.Overlay.Name == "") && isNumberTwin(mm, ms) {
+			g.skip(c, mm.IR, "on purpose: plain-number twin of the struct overload")
+			continue
+		}
 		if seen[key] {
-			g.skip(c, mm.IR, "duplicate Go signature after dropping default arguments")
+			g.skip(c, mm.IR, "on purpose: same Go signature as another overload (often a QStringView twin)")
 			continue
 		}
 		seen[key] = true
@@ -826,12 +932,33 @@ func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
 				break
 			}
 			base := primary
-			if len(mm.Params) > 0 && mm.Params[0].Name != "" {
-				base = primary + "With" + exportName(mm.Params[0].Name)
+			if len(mm.Params) > 0 {
+				base = primary + "With" + word(mm.Params[0])
+				if mm.Params[0].Name != "" && (mm.Params[0].T.k == kString || mm.Params[0].T.k == kPrim) {
+					base = primary + "With" + exportName(mm.Params[0].GoName)
+				}
 			}
 			name = base
-			for n := 2; !m.claim(name, mm.Sig); n++ {
-				name = fmt.Sprintf("%s%d", base, n)
+			if o, ok := firstWith[base]; ok {
+				name = ""
+				for n := 1; n <= 3 && name == ""; n++ {
+					if sfx := strings.TrimPrefix(suffixFor(mm, o, n), "With"); sfx != "" {
+						if _, taken := m.pkgNames[base+sfx]; !taken {
+							name = base + sfx
+						}
+					}
+				}
+			} else {
+				firstWith[base] = mm
+			}
+			if name == "" || !m.claim(name, mm.Sig) {
+				b2 := base
+				for n := 2; ; n++ {
+					name = fmt.Sprintf("%s%d", b2, n)
+					if m.claim(name, mm.Sig) {
+						break
+					}
+				}
 				mm.Numbered = true
 			}
 		}
@@ -991,6 +1118,11 @@ func (g *Gen) newProtected(c, owner *Class, im *irMethod) *Method {
 	if mm == nil {
 		return nil
 	}
+	for _, p := range mm.Params {
+		if p.Out || p.InOut || p.Pair != "" {
+			return nil
+		}
+	}
 	mm.Class = c
 	mm.Owner = owner
 	return mm
@@ -1039,4 +1171,315 @@ func (g *Gen) checkArgKeys(c *Class, im *irMethod, ov *overlay, names []string) 
 			g.report.warn("%s: overlay argument %q matches no parameter (use its index)", g.methodSig(c, im), k)
 		}
 	}
+}
+
+var countNames = map[string]bool{"num": true, "count": true, "len": true, "length": true, "size": true, "maxlen": true,
+	"maxSize": true, "n": true, "pointCount": true, "lineCount": true, "rectCount": true, "number": true}
+
+// pairConv recognises a pointer followed by its element count, which Go
+// passes as one slice: drawPoints(const QPoint *points, int pointCount),
+// loadFromData(const uchar *buf, int len), read(char *data, qint64 maxlen).
+func (g *Gen) pairConv(p, q irParam) (*conv, string) {
+	qb, _, qptr, qref, _ := parseCpp(q.Type.Canonical)
+	if qptr || qref || prims[qb].goT == "" || qb == "bool" || qb == "double" || qb == "float" {
+		return nil, ""
+	}
+	base, cnst, ptr, ref, _ := parseCpp(p.Type.Canonical)
+	if !ptr || ref {
+		return nil, ""
+	}
+	switch {
+	case cnst && (base == "unsigned char" || base == "char") && (countNames[q.Name] || q.Name == ""):
+		return &conv{k: kBytes, cpp: p.Type.Canonical, base: base}, "bytes"
+	case !cnst && base == "char" && (countNames[q.Name] || q.Name == ""):
+		return &conv{k: kBytes, cpp: p.Type.Canonical, base: base}, "buffer"
+	case cnst:
+		if !(countNames[q.Name] || strings.HasSuffix(q.Name, "Count")) {
+			break
+		}
+		if st := g.structs[base]; st != nil {
+			return &conv{k: kList, cpp: p.Type.Canonical, base: "QList<" + base + ">",
+				elem: &conv{k: kStruct, cpp: base, base: base, st: st}}, "array"
+		}
+		if cls := g.classes[base]; cls != nil && cls.Kind == KindValue {
+			return &conv{k: kList, cpp: p.Type.Canonical, base: "QList<" + base + ">",
+				elem: &conv{k: kValue, cpp: base, base: base, cls: cls}}, "array"
+		}
+	}
+	return nil, ""
+}
+
+// outConv recognises parameters the call writes: int *row, bool *ok,
+// ItemRole *role (out), and QString &input, int &pos (in-out), and
+// QTransform &result (out, a value class).
+func (g *Gen) outConv(p irParam) (c *conv, inout, byPtr bool, cppT string) {
+	if p.Default {
+		return nil, false, false, ""
+	}
+	base, cnst, ptr, ref, rref := parseCpp(p.Type.Canonical)
+	if cnst || rref || ptr == ref {
+		return nil, false, false, ""
+	}
+	e, err := g.resolve(irType{Spelling: base, Canonical: base}, true)
+	if err != nil {
+		return nil, false, false, ""
+	}
+	switch e.k {
+	case kPrim, kEnum, kFlags:
+		return e, ref, ptr, base
+	case kString, kStruct:
+		if ref {
+			return e, e.k == kString, false, base
+		}
+	case kBytes:
+		return e, false, ptr, base
+	case kValue:
+		if ref && e.cls.DefCtor {
+			return e, false, false, base
+		}
+	}
+	return nil, false, false, ""
+}
+
+// fieldMethods turns public data members (QStyleOption::rect,
+// QTextEdit::ExtraSelection::cursor) into getter and setter methods.
+func (g *Gen) fieldMethods(c *Class) []*Method {
+	var out []*Method
+	for _, f := range c.IR.Fields {
+		get := &irMethod{Name: f.Name, Kind: "method", Access: "public", Return: f.Type, Const: true}
+		t, err := g.resolve(f.Type, true)
+		if err != nil {
+			g.skip(c, get, "field: "+err.Error())
+			continue
+		}
+		gm := &Method{Class: c, Owner: c, IR: get, Ret: t, Field: "get", Sig: fmt.Sprintf("%s %s::%s [field]", f.Type.Spelling, c.Cpp, f.Name)}
+		if t.k == kObj {
+			gm.RetRule, gm.RetRuled = "borrowed", true
+		}
+		out = append(out, gm)
+		base, cnst, _, _, _ := parseCpp(f.Type.Canonical)
+		_ = base
+		if cnst && !t.ptr {
+			continue
+		}
+		at, err := g.resolve(f.Type, false)
+		if err != nil {
+			continue
+		}
+		set := &irMethod{Name: f.Name, Kind: "method", Access: "public", Return: irType{Canonical: "void", Spelling: "void"},
+			Params: []irParam{{Name: f.Name, Type: f.Type}}}
+		sm := &Method{Class: c, Owner: c, IR: set, Ret: &conv{k: kVoid}, Field: "set",
+			Sig:    fmt.Sprintf("void %s::%s = … [field]", c.Cpp, f.Name),
+			Params: []*Param{{Name: f.Name, GoName: goParamName(lowerFirst(f.Name), 0), CName: "a0", T: at, Rule: "borrowed", Ruled: true}}}
+		out = append(out, sm)
+	}
+	return out
+}
+
+var iteratorNames = map[string]bool{"begin": true, "end": true, "cbegin": true, "cend": true,
+	"rbegin": true, "rend": true, "crbegin": true, "crend": true, "constBegin": true, "constEnd": true,
+	"keyValueBegin": true, "keyValueEnd": true, "constKeyValueBegin": true, "constKeyValueEnd": true, "asKeyValueRange": true}
+
+// goKey describes a type as Go sees it, so overloads that differ only in C++
+// (QString and QStringView) count as duplicates.
+func goKey(c *conv) string {
+	switch c.k {
+	case kString, kCStr, kPath:
+		return "string"
+	case kBytes:
+		return "[]byte"
+	case kStrList, kStrArray:
+		return "[]string"
+	case kPrim:
+		return c.prim.goT
+	case kEnum, kFlags:
+		return c.enum.goTypeFor(true)
+	case kStruct:
+		return c.st.name
+	case kValue, kObj, kOpt:
+		if c.cls != nil {
+			return c.cls.Name
+		}
+		if c.elem != nil && c.elem.cls != nil {
+			return c.elem.cls.Name
+		}
+	case kList:
+		return "[]" + goKey(c.elem)
+	case kMap:
+		return "map[" + goKey(c.key) + "]" + goKey(c.elem)
+	}
+	return fmt.Sprint(c.k, c.base)
+}
+
+// word is the suffix an overload gets for one of its parameters:
+// QCalendar -> Calendar, int64 -> Int64, FormatType -> FormatType.
+func word(p *Param) string {
+	t := p.T
+	switch t.k {
+	case kStruct:
+		return strings.TrimPrefix(t.st.name, "Q")
+	case kValue, kObj:
+		return strings.TrimPrefix(t.cls.Name, "Q")
+	case kPrim:
+		if n := strings.TrimSuffix(p.GoName, "Arg"); len(n) >= 3 && !strings.HasPrefix(n, "arg") {
+			return exportName(n)
+		}
+		return exportName(t.prim.goT)
+	case kEnum, kFlags:
+		return exportName(t.enum.ir.Name)
+	case kDur:
+		return "Duration"
+	case kTime:
+		return "Time"
+	case kList:
+		if t.elem != nil && t.elem.k != kString {
+			return word(&Param{T: t.elem, GoName: p.GoName}) + "s"
+		}
+	case kRaw:
+		return "Ptr"
+	case kFunc:
+		return "Func"
+	case kMap:
+		return "Map"
+	}
+	return exportName(strings.TrimSuffix(p.GoName, "Arg"))
+}
+
+func goParams(m *Method) []*Param {
+	var out []*Param
+	for _, p := range m.Params {
+		if !p.Out {
+			out = append(out, p)
+		}
+	}
+	return out
+}
+
+// suffixFor names an overload after what distinguishes it from the primary
+// one: extra trailing parameters get "With" + their word, a parameter of a
+// different type gets its word.
+func suffixFor(m, primary *Method, n int) string {
+	mp, pp := goParams(m), goParams(primary)
+	var words []string
+	replaced := false
+	for i, p := range mp {
+		if i >= len(pp) {
+			words = append(words, word(p))
+		} else if goKey(p.T) != goKey(pp[i].T) {
+			replaced = true
+			words = append(words, word(p))
+		}
+		if len(words) >= n {
+			break
+		}
+	}
+	if len(words) == 0 {
+		return ""
+	}
+	if !replaced {
+		return "With" + strings.Join(words, "")
+	}
+	return strings.Join(words, "")
+}
+
+var twinArity = map[string]int{"QPoint": 2, "QPointF": 2, "QSize": 2, "QSizeF": 2,
+	"QRect": 4, "QRectF": 4, "QLine": 4, "QLineF": 4, "QMargins": 4}
+
+// isNumberTwin reports whether m spells out, as plain numbers, a struct
+// parameter another overload takes: setStart(x, y) next to setStart(QPointF).
+func isNumberTwin(m *Method, all []*Method) bool {
+	mp := goParams(m)
+	for _, o := range all {
+		if o == m || o.IR.Name != m.IR.Name {
+			continue
+		}
+		op := goParams(o)
+		for i, p := range op {
+			n := 0
+			if p.T.k == kStruct {
+				n = twinArity[p.T.st.name]
+			} else if p.T.k == kValue {
+				n = twinArity[p.T.cls.Cpp]
+			}
+			if n == 0 || i+n > len(mp) || len(mp) != len(op)-1+n {
+				continue
+			}
+			ok := true
+			for j := 0; j < n; j++ {
+				if mp[i+j].T.k != kPrim || mp[i+j].T.prim.goT == "bool" {
+					ok = false
+				}
+			}
+			for j := 0; j < i && ok; j++ {
+				ok = goKey(mp[j].T) == goKey(op[j].T)
+			}
+			for j := i + 1; j < len(op) && ok; j++ {
+				ok = goKey(mp[j-1+n].T) == goKey(op[j].T)
+			}
+			if ok {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// nameOverloads gives unnamed methods their Go names: the overload with the
+// fewest parameters gets the plain name, the rest a descriptive suffix, and
+// only what is still ambiguous a number.
+func (g *Gen) nameOverloads(ms []*Method, base func(*Method) string, used func(string) bool, claim func(string)) {
+	groups := map[string][]*Method{}
+	var order []string
+	named := map[string]*Method{} // hand-named methods that already hold a plain name
+	for _, m := range ms {
+		if m.GoName != "" {
+			named[m.GoName] = m
+			continue
+		}
+		b := base(m)
+		if _, ok := groups[b]; !ok {
+			order = append(order, b)
+		}
+		groups[b] = append(groups[b], m)
+	}
+	for _, b := range order {
+		grp := groups[b]
+		sort.SliceStable(grp, func(i, j int) bool { return len(goParams(grp[i])) < len(goParams(grp[j])) })
+		var primary *Method
+		for _, m := range grp {
+			name := ""
+			if primary == nil && !used(b) {
+				name, primary = b, m
+			} else {
+				ref := primary
+				if ref == nil {
+					ref = named[b]
+				}
+				if ref == nil {
+					ref = grp[0]
+				}
+				for n := 1; n <= 3 && name == ""; n++ {
+					if sfx := suffixFor(m, ref, n); sfx != "" && !used(b+sfx) {
+						name = b + sfx
+					}
+				}
+				if name == "" {
+					for k := 2; ; k++ {
+						if cand := fmt.Sprintf("%s%d", b, k); !used(cand) {
+							name = cand
+							break
+						}
+					}
+					m.Numbered = true
+				}
+			}
+			m.GoName = name
+			claim(name)
+		}
+	}
+}
+
+func returnsIterator(m *irMethod) bool {
+	r := m.Return.Canonical
+	return strings.Contains(r, "iterator") || strings.Contains(r, "Iterator") || strings.HasSuffix(r, "*") && len(m.Params) == 0
 }

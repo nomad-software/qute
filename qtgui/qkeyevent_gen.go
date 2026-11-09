@@ -55,6 +55,19 @@ func (this *QKeyEvent) Matches(key QKeySequenceStandardKey) bool {
 	return bool(r)
 }
 
+// KeyCombination wraps QKeyEvent::keyCombination.
+//
+//	C++: QKeyCombination QKeyEvent::keyCombination() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeyevent.html#keyCombination
+func (this *QKeyEvent) KeyCombination() *qtcore.QKeyCombination {
+	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.KeyCombination")
+	r := C.qute_QKeyEvent_keyCombination(self)
+	return rt.View[qtcore.QKeyCombination](rt.WrapClass(r, "QKeyCombination", rt.TakeOwned), r)
+}
+
 // Text wraps QKeyEvent::text.
 //
 //	C++: QString QKeyEvent::text() const

@@ -70,20 +70,20 @@ func NewQFontDialog(parent QWidgetLike) *QFontDialog {
 	return rt.View[QFontDialog](h, p)
 }
 
-// NewQFontDialogWithInitial wraps the QFontDialog constructor.
+// NewQFontDialogWithFont wraps the QFontDialog constructor.
 //
 //	C++: QFontDialog::QFontDialog(const QFont & initial, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#QFontDialog
-func NewQFontDialogWithInitial(initial *qtgui.QFont, parent QWidgetLike) *QFontDialog {
-	rt.CheckThread("NewQFontDialogWithInitial")
+func NewQFontDialogWithFont(initial *qtgui.QFont, parent QWidgetLike) *QFontDialog {
+	rt.CheckThread("NewQFontDialogWithFont")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFontDialogWithInitial")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFontDialogWithFont")
 	}
-	p := C.qute_QFontDialog_new_1(rt.UseArg(unsafe.Pointer(initial), "NewQFontDialogWithInitial"), parentPtr)
+	p := C.qute_QFontDialog_new_1(rt.UseArg(unsafe.Pointer(initial), "NewQFontDialogWithFont"), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -188,6 +188,34 @@ func (this *QFontDialog) EmitCurrentFontChanged(font *qtgui.QFont) {
 func (this *QFontDialog) EmitFontSelected(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.EmitFontSelected")
 	C.qute_QFontDialog_fontSelected_1(self, rt.UseArg(unsafe.Pointer(font), "QFontDialog.EmitFontSelected"))
+}
+
+// QFontDialogGetFont wraps QFontDialog::getFont.
+//
+//	C++: QFont QFontDialog::getFont(bool * ok, QWidget * parent = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#getFont
+func QFontDialogGetFont() (*qtgui.QFont, bool) {
+	rt.CheckThread("QFontDialogGetFont")
+	var okOut C.bool
+	r := C.qute_QFontDialog_getFont(&okOut)
+	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r), bool(okOut)
+}
+
+// QFontDialogGetFontWithFont wraps QFontDialog::getFont.
+//
+//	C++: QFont QFontDialog::getFont(bool * ok, const QFont & initial, QWidget * parent = …, const QString & title = …, FontDialogOptions options = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#getFont
+func QFontDialogGetFontWithFont(initial *qtgui.QFont) (*qtgui.QFont, bool) {
+	rt.CheckThread("QFontDialogGetFontWithFont")
+	var okOut C.bool
+	r := C.qute_QFontDialog_getFont_1(&okOut, rt.UseArg(unsafe.Pointer(initial), "QFontDialogGetFontWithFont"))
+	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r), bool(okOut)
 }
 
 // OnCurrentFontChanged connects f to the currentFontChanged signal. The connection ends when the

@@ -70,42 +70,20 @@ func NewQGraphicsScene(parent qtcore.QObjectLike) *QGraphicsScene {
 	return rt.View[QGraphicsScene](h, p)
 }
 
-// NewQGraphicsSceneWithSceneRect wraps the QGraphicsScene constructor.
+// NewQGraphicsSceneWithRectF wraps the QGraphicsScene constructor.
 //
 //	C++: QGraphicsScene::QGraphicsScene(const QRectF & sceneRect, QObject * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#QGraphicsScene
-func NewQGraphicsSceneWithSceneRect(sceneRect qtcore.QRectF, parent qtcore.QObjectLike) *QGraphicsScene {
-	rt.CheckThread("NewQGraphicsSceneWithSceneRect")
+func NewQGraphicsSceneWithRectF(sceneRect qtcore.QRectF, parent qtcore.QObjectLike) *QGraphicsScene {
+	rt.CheckThread("NewQGraphicsSceneWithRectF")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsSceneWithSceneRect")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsSceneWithRectF")
 	}
 	p := C.qute_QGraphicsScene_new_1(cQRectF(sceneRect), parentPtr)
-	mode := rt.NewOwned
-	if parentPtr != nil {
-		mode = rt.NewParented
-	}
-	h := rt.WrapClass(p, "QGraphicsScene", mode)
-	return rt.View[QGraphicsScene](h, p)
-}
-
-// NewQGraphicsSceneWithX wraps the QGraphicsScene constructor.
-//
-//	C++: QGraphicsScene::QGraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject * parent = …)
-//
-// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#QGraphicsScene
-func NewQGraphicsSceneWithX(x float64, y float64, width float64, height float64, parent qtcore.QObjectLike) *QGraphicsScene {
-	rt.CheckThread("NewQGraphicsSceneWithX")
-	var parentPtr unsafe.Pointer
-	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsSceneWithX")
-	}
-	p := C.qute_QGraphicsScene_new_2(C.double(x), C.double(y), C.double(width), C.double(height), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -414,6 +392,32 @@ func (this *QGraphicsScene) AddEllipse(rect qtcore.QRectF) *QGraphicsEllipseItem
 	return rt.View[QGraphicsEllipseItem](rt.WrapClass(r, "QGraphicsEllipseItem", rt.TakeParented), r)
 }
 
+// AddLine wraps QGraphicsScene::addLine.
+//
+//	C++: QGraphicsLineItem * QGraphicsScene::addLine(const QLineF & line, const QPen & pen = …)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addLine
+func (this *QGraphicsScene) AddLine(line *qtcore.QLineF) *QGraphicsLineItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddLine")
+	r := C.qute_QGraphicsScene_addLine(self, rt.UseArg(unsafe.Pointer(line), "QGraphicsScene.AddLine"))
+	return rt.View[QGraphicsLineItem](rt.WrapClass(r, "QGraphicsLineItem", rt.TakeParented), r)
+}
+
+// AddPath wraps QGraphicsScene::addPath.
+//
+//	C++: QGraphicsPathItem * QGraphicsScene::addPath(const QPainterPath & path, const QPen & pen = …, const QBrush & brush = …)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addPath
+func (this *QGraphicsScene) AddPath(path *qtgui.QPainterPath) *QGraphicsPathItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPath")
+	r := C.qute_QGraphicsScene_addPath(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.AddPath"))
+	return rt.View[QGraphicsPathItem](rt.WrapClass(r, "QGraphicsPathItem", rt.TakeParented), r)
+}
+
 // AddPixmap wraps QGraphicsScene::addPixmap.
 //
 //	C++: QGraphicsPixmapItem * QGraphicsScene::addPixmap(const QPixmap & pixmap)
@@ -425,6 +429,23 @@ func (this *QGraphicsScene) AddPixmap(pixmap *qtgui.QPixmap) *QGraphicsPixmapIte
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPixmap")
 	r := C.qute_QGraphicsScene_addPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QGraphicsScene.AddPixmap"))
 	return rt.View[QGraphicsPixmapItem](rt.WrapClass(r, "QGraphicsPixmapItem", rt.TakeParented), r)
+}
+
+// AddPolygon wraps QGraphicsScene::addPolygon.
+//
+//	C++: QGraphicsPolygonItem * QGraphicsScene::addPolygon(const QPolygonF & polygon, const QPen & pen = …, const QBrush & brush = …)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addPolygon
+func (this *QGraphicsScene) AddPolygon(polygon []qtcore.QPointF) *QGraphicsPolygonItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPolygon")
+	polygonC := make([]C.qute_pointf, len(polygon))
+	for i := range polygon {
+		polygonC[i] = cQPointF(polygon[i])
+	}
+	r := C.qute_QGraphicsScene_addPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	return rt.View[QGraphicsPolygonItem](rt.WrapClass(r, "QGraphicsPolygonItem", rt.TakeParented), r)
 }
 
 // AddRect wraps QGraphicsScene::addRect.
@@ -464,6 +485,27 @@ func (this *QGraphicsScene) AddSimpleText(text string) *QGraphicsSimpleTextItem 
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddSimpleText")
 	r := C.qute_QGraphicsScene_addSimpleText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	return rt.View[QGraphicsSimpleTextItem](rt.WrapClass(r, "QGraphicsSimpleTextItem", rt.TakeParented), r)
+}
+
+// AddWidget wraps QGraphicsScene::addWidget.
+//
+//	C++: QGraphicsProxyWidget * QGraphicsScene::addWidget(QWidget * widget, Qt::WindowFlags wFlags = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on; the result is Parented: its Qt parent frees it.
+//
+// The scene owns the proxy, and the proxy owns the widget.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addWidget
+func (this *QGraphicsScene) AddWidget(widget QWidgetLike) *QGraphicsProxyWidget {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddWidget")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsScene.AddWidget")
+	}
+	r := C.qute_QGraphicsScene_addWidget(self, widgetPtr)
+	widgetH.TransferToCpp()
+	return rt.View[QGraphicsProxyWidget](rt.WrapClass(r, "QGraphicsProxyWidget", rt.TakeParented), r)
 }
 
 // RemoveItem wraps QGraphicsScene::removeItem.
@@ -748,6 +790,33 @@ func (this *QGraphicsScene) SetActivePanel(item QGraphicsItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.SetActivePanel")
 	}
 	C.qute_QGraphicsScene_setActivePanel(self, itemPtr)
+}
+
+// ActiveWindow wraps QGraphicsScene::activeWindow.
+//
+//	C++: QGraphicsWidget * QGraphicsScene::activeWindow() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#activeWindow
+func (this *QGraphicsScene) ActiveWindow() *QGraphicsWidget {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ActiveWindow")
+	r := C.qute_QGraphicsScene_activeWindow(self)
+	return rt.View[QGraphicsWidget](rt.WrapClass(r, "QGraphicsWidget", rt.KeepOrBorrow), r)
+}
+
+// SetActiveWindow wraps QGraphicsScene::setActiveWindow.
+//
+//	C++: void QGraphicsScene::setActiveWindow(QGraphicsWidget * widget)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setActiveWindow
+func (this *QGraphicsScene) SetActiveWindow(widget QGraphicsWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetActiveWindow")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQGraphicsWidget()), "QGraphicsScene.SetActiveWindow")
+	}
+	C.qute_QGraphicsScene_setActiveWindow(self, widgetPtr)
 }
 
 // SendEvent wraps QGraphicsScene::sendEvent.

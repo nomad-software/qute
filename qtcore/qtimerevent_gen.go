@@ -53,3 +53,18 @@ func (this *QTimerEvent) Id() TimerId {
 	r := C.qute_QTimerEvent_id(self)
 	return TimerId(r)
 }
+
+// Matches wraps QTimerEvent::matches.
+//
+//	C++: bool QTimerEvent::matches(const QBasicTimer & timer) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimerevent.html#matches
+func (this *QTimerEvent) Matches(timer QBasicTimerLike) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTimerEvent.Matches")
+	var timerPtr unsafe.Pointer
+	if timer != nil {
+		timerPtr = rt.UseArg(unsafe.Pointer(timer.AsQBasicTimer()), "QTimerEvent.Matches")
+	}
+	r := C.qute_QTimerEvent_matches(self, timerPtr)
+	return bool(r)
+}

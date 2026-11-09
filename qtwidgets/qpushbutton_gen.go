@@ -284,6 +284,12 @@ var qPushButtonVTable = []rt.Virtual{
 			mouseEvent := rt.View[qtgui.QMouseEvent](mouseEventH, mouseEventP)
 			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(mouseEvent)
 		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionButton) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			option := rt.View[QStyleOptionButton](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QStyleOptionButton", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ InitStyleOption(*QStyleOptionButton) }).InitStyleOption(option)
+		}},
 	{Name: "HitButton", Has: func(v any) bool { _, ok := v.(interface{ HitButton(qtcore.QPoint) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -635,22 +641,28 @@ func (s *QPushButtonSuper) MouseMoveEvent(mouseEvent *qtgui.QMouseEvent) {
 	C.qute_QPushButton_super_7(self, mouseEventPtr)
 }
 
+// InitStyleOption calls QPushButton::initStyleOption.
+func (s *QPushButtonSuper) InitStyleOption(option *QStyleOptionButton) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.InitStyleOption")
+	C.qute_QPushButton_super_8(self, rt.UseArg(unsafe.Pointer(option), "QPushButton.Super.InitStyleOption"))
+}
+
 // HitButton calls QPushButton::hitButton.
 func (s *QPushButtonSuper) HitButton(pos qtcore.QPoint) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.HitButton")
-	return bool(C.qute_QPushButton_super_8(self, cQPoint(pos)))
+	return bool(C.qute_QPushButton_super_9(self, cQPoint(pos)))
 }
 
 // CheckStateSet calls QAbstractButton::checkStateSet.
 func (s *QPushButtonSuper) CheckStateSet() {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.CheckStateSet")
-	C.qute_QPushButton_super_9(self)
+	C.qute_QPushButton_super_10(self)
 }
 
 // NextCheckState calls QAbstractButton::nextCheckState.
 func (s *QPushButtonSuper) NextCheckState() {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.NextCheckState")
-	C.qute_QPushButton_super_10(self)
+	C.qute_QPushButton_super_11(self)
 }
 
 // KeyReleaseEvent calls QAbstractButton::keyReleaseEvent.
@@ -660,7 +672,7 @@ func (s *QPushButtonSuper) KeyReleaseEvent(eArg *qtgui.QKeyEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QPushButton.Super.KeyReleaseEvent")
 	}
-	C.qute_QPushButton_super_11(self, eArgPtr)
+	C.qute_QPushButton_super_12(self, eArgPtr)
 }
 
 // MousePressEvent calls QAbstractButton::mousePressEvent.
@@ -670,7 +682,7 @@ func (s *QPushButtonSuper) MousePressEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QPushButton.Super.MousePressEvent")
 	}
-	C.qute_QPushButton_super_12(self, eArgPtr)
+	C.qute_QPushButton_super_13(self, eArgPtr)
 }
 
 // MouseReleaseEvent calls QAbstractButton::mouseReleaseEvent.
@@ -680,7 +692,7 @@ func (s *QPushButtonSuper) MouseReleaseEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QPushButton.Super.MouseReleaseEvent")
 	}
-	C.qute_QPushButton_super_13(self, eArgPtr)
+	C.qute_QPushButton_super_14(self, eArgPtr)
 }
 
 // ChangeEvent calls QAbstractButton::changeEvent.
@@ -690,7 +702,7 @@ func (s *QPushButtonSuper) ChangeEvent(eArg *qtcore.QEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QPushButton.Super.ChangeEvent")
 	}
-	C.qute_QPushButton_super_14(self, eArgPtr)
+	C.qute_QPushButton_super_15(self, eArgPtr)
 }
 
 // TimerEvent calls QAbstractButton::timerEvent.
@@ -700,25 +712,25 @@ func (s *QPushButtonSuper) TimerEvent(eArg *qtcore.QTimerEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQTimerEvent()), "QPushButton.Super.TimerEvent")
 	}
-	C.qute_QPushButton_super_15(self, eArgPtr)
+	C.qute_QPushButton_super_16(self, eArgPtr)
 }
 
 // SetVisible calls QWidget::setVisible.
 func (s *QPushButtonSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.SetVisible")
-	C.qute_QPushButton_super_16(self, C.bool(visible))
+	C.qute_QPushButton_super_17(self, C.bool(visible))
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QPushButtonSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.HeightForWidth")
-	return int(C.qute_QPushButton_super_17(self, C.int(arg0)))
+	return int(C.qute_QPushButton_super_18(self, C.int(arg0)))
 }
 
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QPushButtonSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.HasHeightForWidth")
-	return bool(C.qute_QPushButton_super_18(self))
+	return bool(C.qute_QPushButton_super_19(self))
 }
 
 // MouseDoubleClickEvent calls QWidget::mouseDoubleClickEvent.
@@ -728,7 +740,7 @@ func (s *QPushButtonSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QPushButton.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QPushButton_super_19(self, eventPtr)
+	C.qute_QPushButton_super_20(self, eventPtr)
 }
 
 // WheelEvent calls QWidget::wheelEvent.
@@ -738,7 +750,7 @@ func (s *QPushButtonSuper) WheelEvent(event *qtgui.QWheelEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QPushButton.Super.WheelEvent")
 	}
-	C.qute_QPushButton_super_20(self, eventPtr)
+	C.qute_QPushButton_super_21(self, eventPtr)
 }
 
 // EnterEvent calls QWidget::enterEvent.
@@ -748,7 +760,7 @@ func (s *QPushButtonSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QPushButton.Super.EnterEvent")
 	}
-	C.qute_QPushButton_super_21(self, eventPtr)
+	C.qute_QPushButton_super_22(self, eventPtr)
 }
 
 // LeaveEvent calls QWidget::leaveEvent.
@@ -758,7 +770,7 @@ func (s *QPushButtonSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPushButton.Super.LeaveEvent")
 	}
-	C.qute_QPushButton_super_22(self, eventPtr)
+	C.qute_QPushButton_super_23(self, eventPtr)
 }
 
 // MoveEvent calls QWidget::moveEvent.
@@ -768,7 +780,7 @@ func (s *QPushButtonSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QPushButton.Super.MoveEvent")
 	}
-	C.qute_QPushButton_super_23(self, eventPtr)
+	C.qute_QPushButton_super_24(self, eventPtr)
 }
 
 // ResizeEvent calls QWidget::resizeEvent.
@@ -778,7 +790,7 @@ func (s *QPushButtonSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QPushButton.Super.ResizeEvent")
 	}
-	C.qute_QPushButton_super_24(self, eventPtr)
+	C.qute_QPushButton_super_25(self, eventPtr)
 }
 
 // CloseEvent calls QWidget::closeEvent.
@@ -788,7 +800,7 @@ func (s *QPushButtonSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QPushButton.Super.CloseEvent")
 	}
-	C.qute_QPushButton_super_25(self, eventPtr)
+	C.qute_QPushButton_super_26(self, eventPtr)
 }
 
 // ContextMenuEvent calls QWidget::contextMenuEvent.
@@ -798,7 +810,7 @@ func (s *QPushButtonSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QPushButton.Super.ContextMenuEvent")
 	}
-	C.qute_QPushButton_super_26(self, eventPtr)
+	C.qute_QPushButton_super_27(self, eventPtr)
 }
 
 // DragEnterEvent calls QWidget::dragEnterEvent.
@@ -808,7 +820,7 @@ func (s *QPushButtonSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QPushButton.Super.DragEnterEvent")
 	}
-	C.qute_QPushButton_super_27(self, eventPtr)
+	C.qute_QPushButton_super_28(self, eventPtr)
 }
 
 // DragMoveEvent calls QWidget::dragMoveEvent.
@@ -818,7 +830,7 @@ func (s *QPushButtonSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QPushButton.Super.DragMoveEvent")
 	}
-	C.qute_QPushButton_super_28(self, eventPtr)
+	C.qute_QPushButton_super_29(self, eventPtr)
 }
 
 // DragLeaveEvent calls QWidget::dragLeaveEvent.
@@ -828,7 +840,7 @@ func (s *QPushButtonSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QPushButton.Super.DragLeaveEvent")
 	}
-	C.qute_QPushButton_super_29(self, eventPtr)
+	C.qute_QPushButton_super_30(self, eventPtr)
 }
 
 // DropEvent calls QWidget::dropEvent.
@@ -838,7 +850,7 @@ func (s *QPushButtonSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QPushButton.Super.DropEvent")
 	}
-	C.qute_QPushButton_super_30(self, eventPtr)
+	C.qute_QPushButton_super_31(self, eventPtr)
 }
 
 // ShowEvent calls QWidget::showEvent.
@@ -848,7 +860,7 @@ func (s *QPushButtonSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QPushButton.Super.ShowEvent")
 	}
-	C.qute_QPushButton_super_31(self, eventPtr)
+	C.qute_QPushButton_super_32(self, eventPtr)
 }
 
 // HideEvent calls QWidget::hideEvent.
@@ -858,13 +870,13 @@ func (s *QPushButtonSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QPushButton.Super.HideEvent")
 	}
-	C.qute_QPushButton_super_32(self, eventPtr)
+	C.qute_QPushButton_super_33(self, eventPtr)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QPushButtonSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.FocusNextPrevChild")
-	return bool(C.qute_QPushButton_super_33(self, C.bool(next)))
+	return bool(C.qute_QPushButton_super_34(self, C.bool(next)))
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -878,7 +890,7 @@ func (s *QPushButtonSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QE
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPushButton.Super.EventFilter")
 	}
-	return bool(C.qute_QPushButton_super_34(self, watchedPtr, eventPtr))
+	return bool(C.qute_QPushButton_super_35(self, watchedPtr, eventPtr))
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -888,7 +900,7 @@ func (s *QPushButtonSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QPushButton.Super.ChildEvent")
 	}
-	C.qute_QPushButton_super_35(self, eventPtr)
+	C.qute_QPushButton_super_36(self, eventPtr)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -898,7 +910,7 @@ func (s *QPushButtonSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPushButton.Super.CustomEvent")
 	}
-	C.qute_QPushButton_super_36(self, eventPtr)
+	C.qute_QPushButton_super_37(self, eventPtr)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.

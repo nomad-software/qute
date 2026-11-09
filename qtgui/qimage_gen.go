@@ -58,14 +58,60 @@ func NewQImageWithSize(size qtcore.QSize, format QImageFormat) *QImage {
 	return rt.View[QImage](h, p)
 }
 
-// NewQImageWithWidth wraps the QImage constructor.
+// NewQImageWithPtr wraps the QImage constructor.
 //
-//	C++: QImage::QImage(int width, int height, Format format)
+//	C++: QImage::QImage(const uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
-func NewQImageWithWidth(width int, height int, format QImageFormat) *QImage {
-	rt.CheckThread("NewQImageWithWidth")
-	p := C.qute_QImage_new_2(C.int(width), C.int(height), C.int64_t(format))
+func NewQImageWithPtr(data unsafe.Pointer, width int, height int, format QImageFormat) *QImage {
+	rt.CheckThread("NewQImageWithPtr")
+	p := C.qute_QImage_new_2(data, C.int(width), C.int(height), C.int64_t(format))
+	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	return rt.View[QImage](h, p)
+}
+
+// NewQImageWithData wraps the QImage constructor.
+//
+//	C++: QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
+func NewQImageWithData(width int, height int, bytesPerLine int, format QImageFormat) *QImage {
+	rt.CheckThread("NewQImageWithData")
+	var dataOut C.uchar
+	p := C.qute_QImage_new_3(&dataOut, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
+	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	return rt.View[QImage](h, p)
+}
+
+// NewQImageWithPtrBytesPerLine wraps the QImage constructor.
+//
+//	C++: QImage::QImage(const uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
+func NewQImageWithPtrBytesPerLine(data unsafe.Pointer, width int, height int, bytesPerLine int, format QImageFormat) *QImage {
+	rt.CheckThread("NewQImageWithPtrBytesPerLine")
+	p := C.qute_QImage_new_4(data, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
+	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	return rt.View[QImage](h, p)
+}
+
+// NewQImageWithXpm wraps the QImage constructor.
+//
+//	C++: QImage::QImage(const char *const[] xpm)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
+func NewQImageWithXpm(xpm []string) *QImage {
+	rt.CheckThread("NewQImageWithXpm")
+	xpmArr := make([]*C.char, len(xpm)+1)
+	for i, x := range xpm {
+		xpmArr[i] = C.CString(x)
+	}
+	defer func() {
+		for _, x := range xpmArr {
+			C.free(unsafe.Pointer(x))
+		}
+	}()
+	p := C.qute_QImage_new_5(unsafe.Pointer(&xpmArr[0]))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
@@ -77,7 +123,7 @@ func NewQImageWithWidth(width int, height int, format QImageFormat) *QImage {
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
 func NewQImageWithFileName(fileName string) *QImage {
 	rt.CheckThread("NewQImageWithFileName")
-	p := C.qute_QImage_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	p := C.qute_QImage_new_6((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
@@ -267,6 +313,28 @@ func (this *QImage) IsGrayscale() bool {
 	return bool(r)
 }
 
+// Bits wraps QImage::bits.
+//
+//	C++: uchar * QImage::bits()
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#bits
+func (this *QImage) Bits() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QImage.Bits")
+	r := C.qute_QImage_bits(self)
+	return r
+}
+
+// ConstBits wraps QImage::constBits.
+//
+//	C++: const uchar * QImage::constBits() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#constBits
+func (this *QImage) ConstBits() unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConstBits")
+	r := C.qute_QImage_constBits(self)
+	return r
+}
+
 // SizeInBytes wraps QImage::sizeInBytes.
 //
 //	C++: qsizetype QImage::sizeInBytes() const
@@ -276,6 +344,28 @@ func (this *QImage) SizeInBytes() int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SizeInBytes")
 	r := C.qute_QImage_sizeInBytes(self)
 	return int(r)
+}
+
+// ScanLine wraps QImage::scanLine.
+//
+//	C++: uchar * QImage::scanLine(int)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#scanLine
+func (this *QImage) ScanLine(arg0 int) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ScanLine")
+	r := C.qute_QImage_scanLine(self, C.int(arg0))
+	return r
+}
+
+// ConstScanLine wraps QImage::constScanLine.
+//
+//	C++: const uchar * QImage::constScanLine(int) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#constScanLine
+func (this *QImage) ConstScanLine(arg0 int) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConstScanLine")
+	r := C.qute_QImage_constScanLine(self, C.int(arg0))
+	return r
 }
 
 // BytesPerLine wraps QImage::bytesPerLine.
@@ -587,6 +677,121 @@ func (this *QImage) InvertPixels() {
 	C.qute_QImage_invertPixels(self)
 }
 
+// ColorSpace wraps QImage::colorSpace.
+//
+//	C++: QColorSpace QImage::colorSpace() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#colorSpace
+func (this *QImage) ColorSpace() *QColorSpace {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ColorSpace")
+	r := C.qute_QImage_colorSpace(self)
+	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
+}
+
+// ConvertedToColorSpace wraps QImage::convertedToColorSpace.
+//
+//	C++: QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertedToColorSpace
+func (this *QImage) ConvertedToColorSpace(colorSpace *QColorSpace) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToColorSpace")
+	r := C.qute_QImage_convertedToColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertedToColorSpace"))
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertedToColorSpaceWithFormat wraps QImage::convertedToColorSpace.
+//
+//	C++: QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertedToColorSpace
+func (this *QImage) ConvertedToColorSpaceWithFormat(colorSpace *QColorSpace, format QImageFormat) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToColorSpaceWithFormat")
+	r := C.qute_QImage_convertedToColorSpace_1(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertedToColorSpaceWithFormat"), C.int64_t(format))
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertToColorSpace wraps QImage::convertToColorSpace.
+//
+//	C++: void QImage::convertToColorSpace(const QColorSpace & colorSpace)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToColorSpace
+func (this *QImage) ConvertToColorSpace(colorSpace *QColorSpace) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToColorSpace")
+	C.qute_QImage_convertToColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertToColorSpace"))
+}
+
+// ConvertToColorSpaceWithFormat wraps QImage::convertToColorSpace.
+//
+//	C++: void QImage::convertToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToColorSpace
+func (this *QImage) ConvertToColorSpaceWithFormat(colorSpace *QColorSpace, format QImageFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToColorSpaceWithFormat")
+	C.qute_QImage_convertToColorSpace_1(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertToColorSpaceWithFormat"), C.int64_t(format))
+}
+
+// SetColorSpace wraps QImage::setColorSpace.
+//
+//	C++: void QImage::setColorSpace(const QColorSpace & colorSpace)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#setColorSpace
+func (this *QImage) SetColorSpace(colorSpace *QColorSpace) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.SetColorSpace")
+	C.qute_QImage_setColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.SetColorSpace"))
+}
+
+// ColorTransformed wraps QImage::colorTransformed.
+//
+//	C++: QImage QImage::colorTransformed(const QColorTransform & transform) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#colorTransformed
+func (this *QImage) ColorTransformed(transform *QColorTransform) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTransformed")
+	r := C.qute_QImage_colorTransformed(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ColorTransformed"))
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ColorTransformedWithFormat wraps QImage::colorTransformed.
+//
+//	C++: QImage QImage::colorTransformed(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#colorTransformed
+func (this *QImage) ColorTransformedWithFormat(transform *QColorTransform, format QImageFormat) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTransformedWithFormat")
+	r := C.qute_QImage_colorTransformed_1(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ColorTransformedWithFormat"), C.int64_t(format))
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ApplyColorTransform wraps QImage::applyColorTransform.
+//
+//	C++: void QImage::applyColorTransform(const QColorTransform & transform)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#applyColorTransform
+func (this *QImage) ApplyColorTransform(transform *QColorTransform) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ApplyColorTransform")
+	C.qute_QImage_applyColorTransform(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ApplyColorTransform"))
+}
+
+// ApplyColorTransformWithFormat wraps QImage::applyColorTransform.
+//
+//	C++: void QImage::applyColorTransform(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#applyColorTransform
+func (this *QImage) ApplyColorTransformWithFormat(transform *QColorTransform, format QImageFormat) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ApplyColorTransformWithFormat")
+	C.qute_QImage_applyColorTransform_1(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ApplyColorTransformWithFormat"), C.int64_t(format))
+}
+
 // LoadFrom wraps QImage::load.
 //
 //	C++: bool QImage::load(QIODevice * device, const char * format)
@@ -623,7 +828,7 @@ func (this *QImage) Load(fileName string) error {
 
 // LoadFromData wraps QImage::loadFromData.
 //
-//	C++: bool QImage::loadFromData(const QByteArray & data, const char * format = …)
+//	C++: bool QImage::loadFromData(QByteArrayView data, const char * format = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#loadFromData
 func (this *QImage) LoadFromData(data []byte) bool {
@@ -770,6 +975,19 @@ func (this *QImage) SetText(key string, value string) {
 	C.qute_QImage_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
 }
 
+// PixelFormat wraps QImage::pixelFormat.
+//
+//	C++: QPixelFormat QImage::pixelFormat() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#pixelFormat
+func (this *QImage) PixelFormat() *QPixelFormat {
+	self := rt.Use(unsafe.Pointer(this), "QImage.PixelFormat")
+	r := C.qute_QImage_pixelFormat(self)
+	return rt.View[QPixelFormat](rt.WrapClass(r, "QPixelFormat", rt.TakeOwned), r)
+}
+
 // QImageTrueMatrix wraps QImage::trueMatrix.
 //
 //	C++: QTransform QImage::trueMatrix(const QTransform &, int w, int h)
@@ -785,7 +1003,7 @@ func QImageTrueMatrix(transform *QTransform, w int, hArg int) *QTransform {
 
 // QImageFromData wraps QImage::fromData.
 //
-//	C++: QImage QImage::fromData(const QByteArray & data, const char * format = …)
+//	C++: QImage QImage::fromData(QByteArrayView data, const char * format = …)
 //
 // Ownership: the result is an Owned copy.
 //
@@ -794,4 +1012,28 @@ func QImageFromData(data []byte) *QImage {
 	rt.CheckThread("QImageFromData")
 	r := C.qute_QImage_fromData((*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// QImageToPixelFormat wraps QImage::toPixelFormat.
+//
+//	C++: QPixelFormat QImage::toPixelFormat(QImage::Format format)
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#toPixelFormat
+func QImageToPixelFormat(format QImageFormat) *QPixelFormat {
+	rt.CheckThread("QImageToPixelFormat")
+	r := C.qute_QImage_toPixelFormat(C.int64_t(format))
+	return rt.View[QPixelFormat](rt.WrapClass(r, "QPixelFormat", rt.TakeOwned), r)
+}
+
+// QImageToImageFormat wraps QImage::toImageFormat.
+//
+//	C++: QImage::Format QImage::toImageFormat(QPixelFormat format)
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#toImageFormat
+func QImageToImageFormat(format *QPixelFormat) QImageFormat {
+	rt.CheckThread("QImageToImageFormat")
+	r := C.qute_QImage_toImageFormat(rt.UseArg(unsafe.Pointer(format), "QImageToImageFormat"))
+	return QImageFormat(r)
 }

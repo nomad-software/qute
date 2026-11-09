@@ -504,6 +504,46 @@ const (
 	QFrameShape_Mask  QFrameStyleMask = 15
 )
 
+// QGraphicsBlurEffectBlurHints is the flags type for QGraphicsBlurEffect::BlurHint (QFlags<QGraphicsBlurEffect::BlurHint>).
+type QGraphicsBlurEffectBlurHints int64
+
+// Has reports whether every bit of x is set in f.
+func (f QGraphicsBlurEffectBlurHints) Has(x QGraphicsBlurEffectBlurHints) bool { return f&x == x }
+
+// QGraphicsBlurEffectBlurHint wraps the enum QGraphicsBlurEffect::BlurHint. It is the same type as QGraphicsBlurEffectBlurHints, so values combine with |.
+type QGraphicsBlurEffectBlurHint = QGraphicsBlurEffectBlurHints
+
+const (
+	QGraphicsBlurEffectPerformanceHint QGraphicsBlurEffectBlurHints = 0
+	QGraphicsBlurEffectQualityHint     QGraphicsBlurEffectBlurHints = 1
+	QGraphicsBlurEffectAnimationHint   QGraphicsBlurEffectBlurHints = 2
+)
+
+// QGraphicsEffectChangeFlags is the flags type for QGraphicsEffect::ChangeFlag (QFlags<QGraphicsEffect::ChangeFlag>).
+type QGraphicsEffectChangeFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QGraphicsEffectChangeFlags) Has(x QGraphicsEffectChangeFlags) bool { return f&x == x }
+
+// QGraphicsEffectChangeFlag wraps the enum QGraphicsEffect::ChangeFlag. It is the same type as QGraphicsEffectChangeFlags, so values combine with |.
+type QGraphicsEffectChangeFlag = QGraphicsEffectChangeFlags
+
+const (
+	QGraphicsEffectSourceAttached            QGraphicsEffectChangeFlags = 1
+	QGraphicsEffectSourceDetached            QGraphicsEffectChangeFlags = 2
+	QGraphicsEffectSourceBoundingRectChanged QGraphicsEffectChangeFlags = 4
+	QGraphicsEffectSourceInvalidated         QGraphicsEffectChangeFlags = 8
+)
+
+// QGraphicsEffectPixmapPadMode wraps the enum QGraphicsEffect::PixmapPadMode.
+type QGraphicsEffectPixmapPadMode int64
+
+const (
+	QGraphicsEffectNoPad                      QGraphicsEffectPixmapPadMode = 0
+	QGraphicsEffectPadToTransparentBorder     QGraphicsEffectPixmapPadMode = 1
+	QGraphicsEffectPadToEffectiveBoundingRect QGraphicsEffectPixmapPadMode = 2
+)
+
 // Constants from an unnamed enum in QGraphicsEllipseItem.
 const (
 	QGraphicsEllipseItemType = 4
@@ -604,6 +644,21 @@ const (
 	QGraphicsItemUserType = 65536
 )
 
+// Constants from an unnamed enum in QGraphicsItemGroup.
+const (
+	QGraphicsItemGroupType = 10
+)
+
+// Constants from an unnamed enum in QGraphicsLineItem.
+const (
+	QGraphicsLineItemType = 6
+)
+
+// Constants from an unnamed enum in QGraphicsPathItem.
+const (
+	QGraphicsPathItemType = 2
+)
+
 // QGraphicsPixmapItemShapeMode wraps the enum QGraphicsPixmapItem::ShapeMode.
 type QGraphicsPixmapItemShapeMode int64
 
@@ -616,6 +671,16 @@ const (
 // Constants from an unnamed enum in QGraphicsPixmapItem.
 const (
 	QGraphicsPixmapItemType = 7
+)
+
+// Constants from an unnamed enum in QGraphicsPolygonItem.
+const (
+	QGraphicsPolygonItemType = 5
+)
+
+// Constants from an unnamed enum in QGraphicsProxyWidget.
+const (
+	QGraphicsProxyWidgetType = 12
 )
 
 // Constants from an unnamed enum in QGraphicsRectItem.
@@ -713,6 +778,11 @@ const (
 	QGraphicsViewDontSavePainterState      QGraphicsViewOptimizationFlags = 1
 	QGraphicsViewDontAdjustForAntialiasing QGraphicsViewOptimizationFlags = 2
 	QGraphicsViewIndirectPainting          QGraphicsViewOptimizationFlags = 4
+)
+
+// Constants from an unnamed enum in QGraphicsWidget.
+const (
+	QGraphicsWidgetType = 11
 )
 
 // QHeaderViewResizeMode wraps the enum QHeaderView::ResizeMode.
@@ -1728,6 +1798,171 @@ const (
 	QStyleSP_TabScrollDownButton              QStyleStandardPixmap = 82
 	QStyleNStandardPixmap                     QStyleStandardPixmap = 83
 	QStyleSP_CustomBase                       QStyleStandardPixmap = 4026531840
+)
+
+// QStyleOptionOptionType wraps the enum QStyleOption::OptionType.
+type QStyleOptionOptionType int64
+
+const (
+	QStyleOptionSO_Default           QStyleOptionOptionType = 0
+	QStyleOptionSO_FocusRect         QStyleOptionOptionType = 1
+	QStyleOptionSO_Button            QStyleOptionOptionType = 2
+	QStyleOptionSO_Tab               QStyleOptionOptionType = 3
+	QStyleOptionSO_MenuItem          QStyleOptionOptionType = 4
+	QStyleOptionSO_Frame             QStyleOptionOptionType = 5
+	QStyleOptionSO_ProgressBar       QStyleOptionOptionType = 6
+	QStyleOptionSO_ToolBox           QStyleOptionOptionType = 7
+	QStyleOptionSO_Header            QStyleOptionOptionType = 8
+	QStyleOptionSO_DockWidget        QStyleOptionOptionType = 9
+	QStyleOptionSO_ViewItem          QStyleOptionOptionType = 10
+	QStyleOptionSO_TabWidgetFrame    QStyleOptionOptionType = 11
+	QStyleOptionSO_TabBarBase        QStyleOptionOptionType = 12
+	QStyleOptionSO_RubberBand        QStyleOptionOptionType = 13
+	QStyleOptionSO_ToolBar           QStyleOptionOptionType = 14
+	QStyleOptionSO_GraphicsItem      QStyleOptionOptionType = 15
+	QStyleOptionSO_Complex           QStyleOptionOptionType = 983040
+	QStyleOptionSO_Slider            QStyleOptionOptionType = 983041
+	QStyleOptionSO_SpinBox           QStyleOptionOptionType = 983042
+	QStyleOptionSO_ToolButton        QStyleOptionOptionType = 983043
+	QStyleOptionSO_ComboBox          QStyleOptionOptionType = 983044
+	QStyleOptionSO_TitleBar          QStyleOptionOptionType = 983045
+	QStyleOptionSO_GroupBox          QStyleOptionOptionType = 983046
+	QStyleOptionSO_SizeGrip          QStyleOptionOptionType = 983047
+	QStyleOptionSO_CustomBase        QStyleOptionOptionType = 3840
+	QStyleOptionSO_ComplexCustomBase QStyleOptionOptionType = 251658240
+)
+
+// QStyleOptionStyleOptionType wraps the enum QStyleOption::StyleOptionType.
+type QStyleOptionStyleOptionType int64
+
+const (
+	QStyleOptionType QStyleOptionStyleOptionType = 0
+)
+
+// QStyleOptionStyleOptionVersion wraps the enum QStyleOption::StyleOptionVersion.
+type QStyleOptionStyleOptionVersion int64
+
+const (
+	QStyleOptionVersion QStyleOptionStyleOptionVersion = 1
+)
+
+// QStyleOptionButtonStyleOptionType wraps the enum QStyleOptionButton::StyleOptionType.
+type QStyleOptionButtonStyleOptionType int64
+
+const (
+	QStyleOptionButtonType QStyleOptionButtonStyleOptionType = 2
+)
+
+// QStyleOptionButtonStyleOptionVersion wraps the enum QStyleOptionButton::StyleOptionVersion.
+type QStyleOptionButtonStyleOptionVersion int64
+
+const (
+	QStyleOptionButtonVersion QStyleOptionButtonStyleOptionVersion = 1
+)
+
+// QStyleOptionButtonButtonFeatures is the flags type for QStyleOptionButton::ButtonFeature (QFlags<QStyleOptionButton::ButtonFeature>).
+type QStyleOptionButtonButtonFeatures int64
+
+// Has reports whether every bit of x is set in f.
+func (f QStyleOptionButtonButtonFeatures) Has(x QStyleOptionButtonButtonFeatures) bool {
+	return f&x == x
+}
+
+// QStyleOptionButtonButtonFeature wraps the enum QStyleOptionButton::ButtonFeature. It is the same type as QStyleOptionButtonButtonFeatures, so values combine with |.
+type QStyleOptionButtonButtonFeature = QStyleOptionButtonButtonFeatures
+
+const (
+	QStyleOptionButtonNone              QStyleOptionButtonButtonFeatures = 0
+	QStyleOptionButtonFlat              QStyleOptionButtonButtonFeatures = 1
+	QStyleOptionButtonHasMenu           QStyleOptionButtonButtonFeatures = 2
+	QStyleOptionButtonDefaultButton     QStyleOptionButtonButtonFeatures = 4
+	QStyleOptionButtonAutoDefaultButton QStyleOptionButtonButtonFeatures = 8
+	QStyleOptionButtonCommandLinkButton QStyleOptionButtonButtonFeatures = 16
+)
+
+// QStyleOptionComplexStyleOptionType wraps the enum QStyleOptionComplex::StyleOptionType.
+type QStyleOptionComplexStyleOptionType int64
+
+const (
+	QStyleOptionComplexType QStyleOptionComplexStyleOptionType = 983040
+)
+
+// QStyleOptionComplexStyleOptionVersion wraps the enum QStyleOptionComplex::StyleOptionVersion.
+type QStyleOptionComplexStyleOptionVersion int64
+
+const (
+	QStyleOptionComplexVersion QStyleOptionComplexStyleOptionVersion = 1
+)
+
+// QStyleOptionGraphicsItemStyleOptionType wraps the enum QStyleOptionGraphicsItem::StyleOptionType.
+type QStyleOptionGraphicsItemStyleOptionType int64
+
+const (
+	QStyleOptionGraphicsItemType QStyleOptionGraphicsItemStyleOptionType = 15
+)
+
+// QStyleOptionGraphicsItemStyleOptionVersion wraps the enum QStyleOptionGraphicsItem::StyleOptionVersion.
+type QStyleOptionGraphicsItemStyleOptionVersion int64
+
+const (
+	QStyleOptionGraphicsItemVersion QStyleOptionGraphicsItemStyleOptionVersion = 1
+)
+
+// QStyleOptionViewItemStyleOptionType wraps the enum QStyleOptionViewItem::StyleOptionType.
+type QStyleOptionViewItemStyleOptionType int64
+
+const (
+	QStyleOptionViewItemType QStyleOptionViewItemStyleOptionType = 10
+)
+
+// QStyleOptionViewItemStyleOptionVersion wraps the enum QStyleOptionViewItem::StyleOptionVersion.
+type QStyleOptionViewItemStyleOptionVersion int64
+
+const (
+	QStyleOptionViewItemVersion QStyleOptionViewItemStyleOptionVersion = 1
+)
+
+// QStyleOptionViewItemPosition wraps the enum QStyleOptionViewItem::Position.
+type QStyleOptionViewItemPosition int64
+
+const (
+	QStyleOptionViewItemLeft   QStyleOptionViewItemPosition = 0
+	QStyleOptionViewItemRight  QStyleOptionViewItemPosition = 1
+	QStyleOptionViewItemTop    QStyleOptionViewItemPosition = 2
+	QStyleOptionViewItemBottom QStyleOptionViewItemPosition = 3
+)
+
+// QStyleOptionViewItemViewItemFeatures is the flags type for QStyleOptionViewItem::ViewItemFeature (QFlags<QStyleOptionViewItem::ViewItemFeature>).
+type QStyleOptionViewItemViewItemFeatures int64
+
+// Has reports whether every bit of x is set in f.
+func (f QStyleOptionViewItemViewItemFeatures) Has(x QStyleOptionViewItemViewItemFeatures) bool {
+	return f&x == x
+}
+
+// QStyleOptionViewItemViewItemFeature wraps the enum QStyleOptionViewItem::ViewItemFeature. It is the same type as QStyleOptionViewItemViewItemFeatures, so values combine with |.
+type QStyleOptionViewItemViewItemFeature = QStyleOptionViewItemViewItemFeatures
+
+const (
+	QStyleOptionViewItemNone                      QStyleOptionViewItemViewItemFeatures = 0
+	QStyleOptionViewItemWrapText                  QStyleOptionViewItemViewItemFeatures = 1
+	QStyleOptionViewItemAlternate                 QStyleOptionViewItemViewItemFeatures = 2
+	QStyleOptionViewItemHasCheckIndicator         QStyleOptionViewItemViewItemFeatures = 4
+	QStyleOptionViewItemHasDisplay                QStyleOptionViewItemViewItemFeatures = 8
+	QStyleOptionViewItemHasDecoration             QStyleOptionViewItemViewItemFeatures = 16
+	QStyleOptionViewItemIsDecoratedRootColumn     QStyleOptionViewItemViewItemFeatures = 32
+	QStyleOptionViewItemIsDecorationForRootColumn QStyleOptionViewItemViewItemFeatures = 64
+)
+
+// QStyleOptionViewItemViewItemPosition wraps the enum QStyleOptionViewItem::ViewItemPosition.
+type QStyleOptionViewItemViewItemPosition int64
+
+const (
+	QStyleOptionViewItemInvalid   QStyleOptionViewItemViewItemPosition = 0
+	QStyleOptionViewItemBeginning QStyleOptionViewItemViewItemPosition = 1
+	QStyleOptionViewItemMiddle    QStyleOptionViewItemViewItemPosition = 2
+	QStyleOptionViewItemEnd       QStyleOptionViewItemViewItemPosition = 3
+	QStyleOptionViewItemOnlyOne   QStyleOptionViewItemViewItemPosition = 4
 )
 
 // QSystemTrayIconActivationReason wraps the enum QSystemTrayIcon::ActivationReason.

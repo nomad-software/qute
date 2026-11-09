@@ -1,6 +1,13 @@
 # Ownership overlays for qtgui. See spec/overlays/qtwidgets.yaml for the rules.
 
 QGuiApplication:
+  inputMethod: { return: borrowed }
+  styleHints: { return: borrowed }
+  allWindows: { return: borrowed }
+  topLevelWindows: { return: borrowed }
+  focusWindow: { return: borrowed }
+  modalWindow: { return: borrowed }
+  topLevelAt: { return: borrowed }
   clipboard: { return: borrowed }
   primaryScreen: { return: borrowed }
   screens: { return: borrowed }
@@ -8,6 +15,26 @@ QGuiApplication:
   focusObject: { return: borrowed }
 
 QPainter:
+  drawLines(const QList<QLineF>&): { name: DrawLineSegmentsF }
+  drawLines(const QList<QLine>&): { name: DrawLineSegments }
+  drawLines(const QLineF*, int): { skip: "use DrawLineSegmentsF" }
+  drawLines(const QLine*, int): { skip: "use DrawLineSegments" }
+  drawLines(const QPointF*, int): { skip: "use DrawLinesF" }
+  drawLines(const QPoint*, int): { skip: "use DrawLines" }
+  drawPoints(const QPointF*, int): { skip: "use DrawPointsF" }
+  drawPoints(const QPoint*, int): { skip: "use DrawPoints" }
+  drawRects(const QRectF*, int): { skip: "use DrawRectsF" }
+  drawRects(const QRect*, int): { skip: "use DrawRects" }
+  drawPolyline(const QPointF*, int): { skip: "use DrawPolylineF" }
+  drawPolyline(const QPoint*, int): { skip: "use DrawPolyline" }
+  drawPolygon(const QPointF*, int, Qt::FillRule): { skip: "use DrawPolygonF" }
+  drawPolygon(const QPoint*, int, Qt::FillRule): { skip: "use DrawPolygon" }
+  drawConvexPolygon(const QPointF*, int): { skip: "use DrawConvexPolygonF" }
+  drawConvexPolygon(const QPoint*, int): { skip: "use DrawConvexPolygon" }
+  fillRect(const QRect&, QGradient::Preset): { name: FillRectPreset }
+  fillRect(const QRectF&, QGradient::Preset): { name: FillRectPresetF }
+  fillRect(int, int, int, int, QGradient::Preset): { skip: "use FillRectPreset" }
+  drawTextItem: { reviewed: true }
   boundingRect(const QRectF&, const QString&, const QTextOption&): { name: BoundingRectTextF }
   QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: borrowed }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
   begin: { reviewed: true }
@@ -153,6 +180,7 @@ QImage:
   scaled(const QSize&, Qt::AspectRatioMode, Qt::TransformationMode): { skip: "use Scaled(w, h)" }
 
 QPixmap:
+  fromImageReader: { reviewed: true }
   QPixmap(const QSize&): { skip: "use NewQPixmapWithW(w, h)" }
   load: { error: true }
   save(const QString&, const char*, int): { name: Save, error: true }
@@ -299,6 +327,8 @@ QStandardItemModel:
   indexFromItem: { reviewed: true }
 
 QStandardItem:
+  read: { reviewed: true }
+  write: { reviewed: true }
   appendRow(const QList<QStandardItem*>&): { name: AppendRowItems, args: { items: transfer-to-cpp } }
   appendRow(QStandardItem*): { name: AppendRow, args: { item: transfer-to-cpp } }
   appendRows: { args: { items: transfer-to-cpp } }
@@ -355,6 +385,11 @@ QStandardItem:
   clone: { return: transfer-to-go }
 
 QTextDocument:
+  print: { reviewed: true }
+  frameAt: { return: borrowed }
+  rootFrame: { return: borrowed }
+  objectForFormat: { return: borrowed }
+  object: { return: borrowed }
   drawContents: { reviewed: true }
   clone: { return: transfer-to-go }
   documentLayout: { skip: "QAbstractTextDocumentLayout is not bound" }
@@ -363,6 +398,7 @@ QFont:
   QFont(const QFont&, const QPaintDevice*): { name: NewQFontFor, reviewed: true }
 
 QFontMetrics:
+  boundingRect(const QString&, const QTextOption&): { name: BoundingRectWithOption }
   QFontMetrics(const QFont&, const QPaintDevice*): { name: NewQFontMetricsFor, reviewed: true }
   horizontalAdvance(QChar): { name: HorizontalAdvanceChar }
   boundingRect(QChar): { name: BoundingRectChar }
@@ -454,3 +490,66 @@ QTransform:
 QDoubleValidator:
   setRange(double, double, int): { name: SetRangeDecimals }
   setRange(double, double): { name: SetRange }
+
+QMovie:
+  QMovie(QIODevice*, const QByteArray&, QObject*):
+    name: NewQMovieWithDevice
+    reviewed: true
+    doc: "The device must not be nil; the movie does not take ownership of it."
+    test: |
+      root := qtcore.NewQObject(nil)
+      f := qtcore.NewQFileWithName("missing.gif", nil)
+      x := qtgui.NewQMovieWithDevice(f, nil, root)
+      if got := x.Ownership(); got != qtcore.Parented {
+      	t.Errorf("with parent: %v, want Parented", got)
+      }
+      root.Delete()
+      if x.Alive() {
+      	t.Error("still alive after its parent was deleted")
+      }
+      f.Delete()
+
+QTextFrame:
+  QTextFrame(QTextDocument*):
+    args: { doc: transfer-this }
+    doc: "The document owns the frame; doc must not be nil."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      f := qtgui.NewQTextFrame(doc)
+      if got := f.Ownership(); got != qtcore.Parented {
+      	t.Errorf("frame: %v, want Parented", got)
+      }
+      doc.Delete()
+      if f.Alive() {
+      	t.Error("frame alive after its document was deleted")
+      }
+  childFrames: { return: borrowed }
+  parentFrame: { return: borrowed }
+
+QTextCursor:
+  insertFrame:
+    return: parented
+    reviewed: true
+    doc: "The document owns the new frame."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      cur := qtgui.NewQTextCursorWithTextDocument(doc)
+      f := cur.InsertFrame(qtgui.NewQTextFrameFormat())
+      if f == nil {
+      	t.Fatal("no frame")
+      }
+      if got := f.Ownership(); got != qtcore.Parented {
+      	t.Errorf("frame: %v, want Parented", got)
+      }
+      doc.Delete()
+      if f.Alive() {
+      	t.Error("frame alive after its document was deleted")
+      }
+
+QRadialGradient:
+  QRadialGradient(const QPointF&, qreal): { name: NewQRadialGradientAt }
+  QRadialGradient(const QPointF&, qreal, const QPointF&): { name: NewQRadialGradientWithFocal }
+  QRadialGradient(const QPointF&, qreal, const QPointF&, qreal): { name: NewQRadialGradientExtended }
+
+QFontDatabase:
+  systemFont: { name: QFontDatabaseGetSystemFont }

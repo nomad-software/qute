@@ -1924,9 +1924,106 @@ const (
 	QAbstractItemModelCheckIndexOptionParentIsInvalid QAbstractItemModelCheckIndexOptions = 4
 )
 
+// Constants from an unnamed enum in QCalendar.
+const (
+	QCalendarUnspecified = -2147483648
+)
+
+// QCalendarSystem wraps the enum QCalendar::System.
+type QCalendarSystem int64
+
+const (
+	QCalendarSystemGregorian    QCalendarSystem = 0
+	QCalendarSystemJulian       QCalendarSystem = 8
+	QCalendarSystemMilankovic   QCalendarSystem = 9
+	QCalendarSystemJalali       QCalendarSystem = 10
+	QCalendarSystemIslamicCivil QCalendarSystem = 11
+	QCalendarSystemLast         QCalendarSystem = 11
+	QCalendarSystemUser         QCalendarSystem = -1
+)
+
 // Constants from an unnamed enum in QCoreApplication.
 const (
 	QCoreApplicationApplicationFlags = 396288
+)
+
+// QDataStreamVersion wraps the enum QDataStream::Version.
+type QDataStreamVersion int64
+
+const (
+	QDataStreamQt_1_0                    QDataStreamVersion = 1
+	QDataStreamQt_2_0                    QDataStreamVersion = 2
+	QDataStreamQt_2_1                    QDataStreamVersion = 3
+	QDataStreamQt_3_0                    QDataStreamVersion = 4
+	QDataStreamQt_3_1                    QDataStreamVersion = 5
+	QDataStreamQt_3_3                    QDataStreamVersion = 6
+	QDataStreamQt_4_0                    QDataStreamVersion = 7
+	QDataStreamQt_4_1                    QDataStreamVersion = 7
+	QDataStreamQt_4_2                    QDataStreamVersion = 8
+	QDataStreamQt_4_3                    QDataStreamVersion = 9
+	QDataStreamQt_4_4                    QDataStreamVersion = 10
+	QDataStreamQt_4_5                    QDataStreamVersion = 11
+	QDataStreamQt_4_6                    QDataStreamVersion = 12
+	QDataStreamQt_4_7                    QDataStreamVersion = 12
+	QDataStreamQt_4_8                    QDataStreamVersion = 12
+	QDataStreamQt_4_9                    QDataStreamVersion = 12
+	QDataStreamQt_5_0                    QDataStreamVersion = 13
+	QDataStreamQt_5_1                    QDataStreamVersion = 14
+	QDataStreamQt_5_2                    QDataStreamVersion = 15
+	QDataStreamQt_5_3                    QDataStreamVersion = 15
+	QDataStreamQt_5_4                    QDataStreamVersion = 16
+	QDataStreamQt_5_5                    QDataStreamVersion = 16
+	QDataStreamQt_5_6                    QDataStreamVersion = 17
+	QDataStreamQt_5_7                    QDataStreamVersion = 17
+	QDataStreamQt_5_8                    QDataStreamVersion = 17
+	QDataStreamQt_5_9                    QDataStreamVersion = 17
+	QDataStreamQt_5_10                   QDataStreamVersion = 17
+	QDataStreamQt_5_11                   QDataStreamVersion = 17
+	QDataStreamQt_5_12                   QDataStreamVersion = 18
+	QDataStreamQt_5_13                   QDataStreamVersion = 19
+	QDataStreamQt_5_14                   QDataStreamVersion = 19
+	QDataStreamQt_5_15                   QDataStreamVersion = 19
+	QDataStreamQt_6_0                    QDataStreamVersion = 20
+	QDataStreamQt_6_1                    QDataStreamVersion = 20
+	QDataStreamQt_6_2                    QDataStreamVersion = 20
+	QDataStreamQt_6_3                    QDataStreamVersion = 20
+	QDataStreamQt_6_4                    QDataStreamVersion = 20
+	QDataStreamQt_6_5                    QDataStreamVersion = 20
+	QDataStreamQt_6_6                    QDataStreamVersion = 21
+	QDataStreamQt_6_7                    QDataStreamVersion = 22
+	QDataStreamQt_6_8                    QDataStreamVersion = 22
+	QDataStreamQt_6_9                    QDataStreamVersion = 22
+	QDataStreamQt_6_10                   QDataStreamVersion = 23
+	QDataStreamQt_6_11                   QDataStreamVersion = 24
+	QDataStreamQt_6_12                   QDataStreamVersion = 24
+	QDataStreamQt_DefaultCompiledVersion QDataStreamVersion = 24
+)
+
+// QDataStreamByteOrder wraps the enum QDataStream::ByteOrder.
+type QDataStreamByteOrder int64
+
+const (
+	QDataStreamBigEndian    QDataStreamByteOrder = 0
+	QDataStreamLittleEndian QDataStreamByteOrder = 1
+)
+
+// QDataStreamStatus wraps the enum QDataStream::Status.
+type QDataStreamStatus int64
+
+const (
+	QDataStreamOk                QDataStreamStatus = 0
+	QDataStreamReadPastEnd       QDataStreamStatus = 1
+	QDataStreamReadCorruptData   QDataStreamStatus = 2
+	QDataStreamWriteFailed       QDataStreamStatus = 3
+	QDataStreamSizeLimitExceeded QDataStreamStatus = 4
+)
+
+// QDataStreamFloatingPointPrecision wraps the enum QDataStream::FloatingPointPrecision.
+type QDataStreamFloatingPointPrecision int64
+
+const (
+	QDataStreamSinglePrecision QDataStreamFloatingPointPrecision = 0
+	QDataStreamDoublePrecision QDataStreamFloatingPointPrecision = 1
 )
 
 // QDateTimeTransitionResolution wraps the enum QDateTime::TransitionResolution.
@@ -1949,6 +2046,123 @@ type QDateTimeYearRange int64
 const (
 	QDateTimeYearRangeFirst QDateTimeYearRange = -292275056
 	QDateTimeYearRangeLast  QDateTimeYearRange = 292278994
+)
+
+// QDeadlineTimerForeverConstant wraps the enum QDeadlineTimer::ForeverConstant.
+type QDeadlineTimerForeverConstant int64
+
+const (
+	QDeadlineTimerForeverConstantForever QDeadlineTimerForeverConstant = 0
+)
+
+// QDirFilters is the flags type for QDir::Filter (QFlags<QDir::Filter>).
+type QDirFilters int64
+
+// Has reports whether every bit of x is set in f.
+func (f QDirFilters) Has(x QDirFilters) bool { return f&x == x }
+
+// QDirFilter wraps the enum QDir::Filter. It is the same type as QDirFilters, so values combine with |.
+type QDirFilter = QDirFilters
+
+const (
+	QDirDirs           QDirFilters = 1
+	QDirFiles          QDirFilters = 2
+	QDirDrives         QDirFilters = 4
+	QDirNoSymLinks     QDirFilters = 8
+	QDirAllEntries     QDirFilters = 7
+	QDirTypeMask       QDirFilters = 15
+	QDirReadable       QDirFilters = 16
+	QDirWritable       QDirFilters = 32
+	QDirExecutable     QDirFilters = 64
+	QDirPermissionMask QDirFilters = 112
+	QDirHidden         QDirFilters = 256
+	QDirSystem         QDirFilters = 512
+	QDirAccessMask     QDirFilters = 1008
+	QDirAllDirs        QDirFilters = 1024
+	QDirCaseSensitive  QDirFilters = 2048
+	QDirNoDot          QDirFilters = 8192
+	QDirNoDotDot       QDirFilters = 16384
+	QDirNoDotAndDotDot QDirFilters = 24576
+	QDirNoFilter       QDirFilters = -1
+)
+
+// QDirSortFlags is the flags type for QDir::SortFlag (QFlags<QDir::SortFlag>).
+type QDirSortFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QDirSortFlags) Has(x QDirSortFlags) bool { return f&x == x }
+
+// QDirSortFlag wraps the enum QDir::SortFlag. It is the same type as QDirSortFlags, so values combine with |.
+type QDirSortFlag = QDirSortFlags
+
+const (
+	QDirName        QDirSortFlags = 0
+	QDirTime        QDirSortFlags = 1
+	QDirSize        QDirSortFlags = 2
+	QDirUnsorted    QDirSortFlags = 3
+	QDirSortByMask  QDirSortFlags = 3
+	QDirDirsFirst   QDirSortFlags = 4
+	QDirReversed    QDirSortFlags = 8
+	QDirIgnoreCase  QDirSortFlags = 16
+	QDirDirsLast    QDirSortFlags = 32
+	QDirLocaleAware QDirSortFlags = 64
+	QDirType        QDirSortFlags = 128
+	QDirNoSort      QDirSortFlags = -1
+)
+
+// QEasingCurveType wraps the enum QEasingCurve::Type.
+type QEasingCurveType int64
+
+const (
+	QEasingCurveLinear       QEasingCurveType = 0
+	QEasingCurveInQuad       QEasingCurveType = 1
+	QEasingCurveOutQuad      QEasingCurveType = 2
+	QEasingCurveInOutQuad    QEasingCurveType = 3
+	QEasingCurveOutInQuad    QEasingCurveType = 4
+	QEasingCurveInCubic      QEasingCurveType = 5
+	QEasingCurveOutCubic     QEasingCurveType = 6
+	QEasingCurveInOutCubic   QEasingCurveType = 7
+	QEasingCurveOutInCubic   QEasingCurveType = 8
+	QEasingCurveInQuart      QEasingCurveType = 9
+	QEasingCurveOutQuart     QEasingCurveType = 10
+	QEasingCurveInOutQuart   QEasingCurveType = 11
+	QEasingCurveOutInQuart   QEasingCurveType = 12
+	QEasingCurveInQuint      QEasingCurveType = 13
+	QEasingCurveOutQuint     QEasingCurveType = 14
+	QEasingCurveInOutQuint   QEasingCurveType = 15
+	QEasingCurveOutInQuint   QEasingCurveType = 16
+	QEasingCurveInSine       QEasingCurveType = 17
+	QEasingCurveOutSine      QEasingCurveType = 18
+	QEasingCurveInOutSine    QEasingCurveType = 19
+	QEasingCurveOutInSine    QEasingCurveType = 20
+	QEasingCurveInExpo       QEasingCurveType = 21
+	QEasingCurveOutExpo      QEasingCurveType = 22
+	QEasingCurveInOutExpo    QEasingCurveType = 23
+	QEasingCurveOutInExpo    QEasingCurveType = 24
+	QEasingCurveInCirc       QEasingCurveType = 25
+	QEasingCurveOutCirc      QEasingCurveType = 26
+	QEasingCurveInOutCirc    QEasingCurveType = 27
+	QEasingCurveOutInCirc    QEasingCurveType = 28
+	QEasingCurveInElastic    QEasingCurveType = 29
+	QEasingCurveOutElastic   QEasingCurveType = 30
+	QEasingCurveInOutElastic QEasingCurveType = 31
+	QEasingCurveOutInElastic QEasingCurveType = 32
+	QEasingCurveInBack       QEasingCurveType = 33
+	QEasingCurveOutBack      QEasingCurveType = 34
+	QEasingCurveInOutBack    QEasingCurveType = 35
+	QEasingCurveOutInBack    QEasingCurveType = 36
+	QEasingCurveInBounce     QEasingCurveType = 37
+	QEasingCurveOutBounce    QEasingCurveType = 38
+	QEasingCurveInOutBounce  QEasingCurveType = 39
+	QEasingCurveOutInBounce  QEasingCurveType = 40
+	QEasingCurveInCurve      QEasingCurveType = 41
+	QEasingCurveOutCurve     QEasingCurveType = 42
+	QEasingCurveSineCurve    QEasingCurveType = 43
+	QEasingCurveCosineCurve  QEasingCurveType = 44
+	QEasingCurveBezierSpline QEasingCurveType = 45
+	QEasingCurveTCBSpline    QEasingCurveType = 46
+	QEasingCurveCustom       QEasingCurveType = 47
+	QEasingCurveNCurveTypes  QEasingCurveType = 48
 )
 
 // QEventType wraps the enum QEvent::Type.
@@ -2136,6 +2350,26 @@ const (
 	QEventMaxUser                          QEventType = 65535
 )
 
+// QEventLoopProcessEventsFlags is the flags type for QEventLoop::ProcessEventsFlag (QFlags<QEventLoop::ProcessEventsFlag>).
+type QEventLoopProcessEventsFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QEventLoopProcessEventsFlags) Has(x QEventLoopProcessEventsFlags) bool { return f&x == x }
+
+// QEventLoopProcessEventsFlag wraps the enum QEventLoop::ProcessEventsFlag. It is the same type as QEventLoopProcessEventsFlags, so values combine with |.
+type QEventLoopProcessEventsFlag = QEventLoopProcessEventsFlags
+
+const (
+	QEventLoopAllEvents              QEventLoopProcessEventsFlags = 0
+	QEventLoopExcludeUserInputEvents QEventLoopProcessEventsFlags = 1
+	QEventLoopExcludeSocketNotifiers QEventLoopProcessEventsFlags = 2
+	QEventLoopWaitForMoreEvents      QEventLoopProcessEventsFlags = 4
+	QEventLoopX11ExcludeTimers       QEventLoopProcessEventsFlags = 8
+	QEventLoopEventLoopExec          QEventLoopProcessEventsFlags = 32
+	QEventLoopDialogExec             QEventLoopProcessEventsFlags = 64
+	QEventLoopApplicationExec        QEventLoopProcessEventsFlags = 128
+)
+
 // QFileDeviceFileError wraps the enum QFileDevice::FileError.
 type QFileDeviceFileError int64
 
@@ -2266,6 +2500,1159 @@ const (
 	QItemSelectionModelClearAndSelect QItemSelectionModelSelectionFlags = 3
 )
 
+// QJsonDocumentJsonFormat wraps the enum QJsonDocument::JsonFormat.
+type QJsonDocumentJsonFormat int64
+
+const (
+	QJsonDocumentIndented QJsonDocumentJsonFormat = 0
+	QJsonDocumentCompact  QJsonDocumentJsonFormat = 1
+)
+
+// QJsonValueType wraps the enum QJsonValue::Type.
+type QJsonValueType int64
+
+const (
+	QJsonValueNull      QJsonValueType = 0
+	QJsonValueBool      QJsonValueType = 1
+	QJsonValueDouble    QJsonValueType = 2
+	QJsonValueString    QJsonValueType = 3
+	QJsonValueArray     QJsonValueType = 4
+	QJsonValueObject    QJsonValueType = 5
+	QJsonValueUndefined QJsonValueType = 128
+)
+
+// QLineFIntersectionType wraps the enum QLineF::IntersectionType.
+type QLineFIntersectionType int64
+
+const (
+	QLineFNoIntersection        QLineFIntersectionType = 0
+	QLineFBoundedIntersection   QLineFIntersectionType = 1
+	QLineFUnboundedIntersection QLineFIntersectionType = 2
+)
+
+// QLocaleLanguage wraps the enum QLocale::Language.
+type QLocaleLanguage int64
+
+const (
+	QLocaleAnyLanguage               QLocaleLanguage = 0
+	QLocaleLanguageC                 QLocaleLanguage = 1
+	QLocaleAbkhazian                 QLocaleLanguage = 2
+	QLocaleAfar                      QLocaleLanguage = 3
+	QLocaleAfrikaans                 QLocaleLanguage = 4
+	QLocaleAghem                     QLocaleLanguage = 5
+	QLocaleAkan                      QLocaleLanguage = 6
+	QLocaleAkkadian                  QLocaleLanguage = 7
+	QLocaleAkoose                    QLocaleLanguage = 8
+	QLocaleAlbanian                  QLocaleLanguage = 9
+	QLocaleAmericanSignLanguage      QLocaleLanguage = 10
+	QLocaleAmharic                   QLocaleLanguage = 11
+	QLocaleAncientEgyptian           QLocaleLanguage = 12
+	QLocaleAncientGreek              QLocaleLanguage = 13
+	QLocaleArabic                    QLocaleLanguage = 14
+	QLocaleAragonese                 QLocaleLanguage = 15
+	QLocaleAramaic                   QLocaleLanguage = 16
+	QLocaleArmenian                  QLocaleLanguage = 17
+	QLocaleAssamese                  QLocaleLanguage = 18
+	QLocaleAsturian                  QLocaleLanguage = 19
+	QLocaleAsu                       QLocaleLanguage = 20
+	QLocaleAtsam                     QLocaleLanguage = 21
+	QLocaleAvaric                    QLocaleLanguage = 22
+	QLocaleAvestan                   QLocaleLanguage = 23
+	QLocaleAymara                    QLocaleLanguage = 24
+	QLocaleAzerbaijani               QLocaleLanguage = 25
+	QLocaleBafia                     QLocaleLanguage = 26
+	QLocaleBalinese                  QLocaleLanguage = 27
+	QLocaleBambara                   QLocaleLanguage = 28
+	QLocaleBamun                     QLocaleLanguage = 29
+	QLocaleBangla                    QLocaleLanguage = 30
+	QLocaleBasaa                     QLocaleLanguage = 31
+	QLocaleBashkir                   QLocaleLanguage = 32
+	QLocaleBasque                    QLocaleLanguage = 33
+	QLocaleBatakToba                 QLocaleLanguage = 34
+	QLocaleBelarusian                QLocaleLanguage = 35
+	QLocaleBemba                     QLocaleLanguage = 36
+	QLocaleBena                      QLocaleLanguage = 37
+	QLocaleBhojpuri                  QLocaleLanguage = 38
+	QLocaleBislama                   QLocaleLanguage = 39
+	QLocaleBlin                      QLocaleLanguage = 40
+	QLocaleBodo                      QLocaleLanguage = 41
+	QLocaleBosnian                   QLocaleLanguage = 42
+	QLocaleBreton                    QLocaleLanguage = 43
+	QLocaleBuginese                  QLocaleLanguage = 44
+	QLocaleBulgarian                 QLocaleLanguage = 45
+	QLocaleBurmese                   QLocaleLanguage = 46
+	QLocaleCantonese                 QLocaleLanguage = 47
+	QLocaleCatalan                   QLocaleLanguage = 48
+	QLocaleCebuano                   QLocaleLanguage = 49
+	QLocaleCentralAtlasTamazight     QLocaleLanguage = 50
+	QLocaleCentralKurdish            QLocaleLanguage = 51
+	QLocaleChakma                    QLocaleLanguage = 52
+	QLocaleChamorro                  QLocaleLanguage = 53
+	QLocaleChechen                   QLocaleLanguage = 54
+	QLocaleCherokee                  QLocaleLanguage = 55
+	QLocaleChickasaw                 QLocaleLanguage = 56
+	QLocaleChiga                     QLocaleLanguage = 57
+	QLocaleChinese                   QLocaleLanguage = 58
+	QLocaleChurch                    QLocaleLanguage = 59
+	QLocaleChuvash                   QLocaleLanguage = 60
+	QLocaleColognian                 QLocaleLanguage = 61
+	QLocaleCoptic                    QLocaleLanguage = 62
+	QLocaleCornish                   QLocaleLanguage = 63
+	QLocaleCorsican                  QLocaleLanguage = 64
+	QLocaleCree                      QLocaleLanguage = 65
+	QLocaleCroatian                  QLocaleLanguage = 66
+	QLocaleCzech                     QLocaleLanguage = 67
+	QLocaleDanish                    QLocaleLanguage = 68
+	QLocaleDivehi                    QLocaleLanguage = 69
+	QLocaleDogri                     QLocaleLanguage = 70
+	QLocaleDuala                     QLocaleLanguage = 71
+	QLocaleDutch                     QLocaleLanguage = 72
+	QLocaleDzongkha                  QLocaleLanguage = 73
+	QLocaleEmbu                      QLocaleLanguage = 74
+	QLocaleEnglish                   QLocaleLanguage = 75
+	QLocaleErzya                     QLocaleLanguage = 76
+	QLocaleEsperanto                 QLocaleLanguage = 77
+	QLocaleEstonian                  QLocaleLanguage = 78
+	QLocaleEwe                       QLocaleLanguage = 79
+	QLocaleEwondo                    QLocaleLanguage = 80
+	QLocaleFaroese                   QLocaleLanguage = 81
+	QLocaleFijian                    QLocaleLanguage = 82
+	QLocaleFilipino                  QLocaleLanguage = 83
+	QLocaleFinnish                   QLocaleLanguage = 84
+	QLocaleFrench                    QLocaleLanguage = 85
+	QLocaleFriulian                  QLocaleLanguage = 86
+	QLocaleFulah                     QLocaleLanguage = 87
+	QLocaleGaelic                    QLocaleLanguage = 88
+	QLocaleGa                        QLocaleLanguage = 89
+	QLocaleGalician                  QLocaleLanguage = 90
+	QLocaleGanda                     QLocaleLanguage = 91
+	QLocaleGeez                      QLocaleLanguage = 92
+	QLocaleGeorgian                  QLocaleLanguage = 93
+	QLocaleGerman                    QLocaleLanguage = 94
+	QLocaleGothic                    QLocaleLanguage = 95
+	QLocaleGreek                     QLocaleLanguage = 96
+	QLocaleGuarani                   QLocaleLanguage = 97
+	QLocaleGujarati                  QLocaleLanguage = 98
+	QLocaleGusii                     QLocaleLanguage = 99
+	QLocaleHaitian                   QLocaleLanguage = 100
+	QLocaleHausa                     QLocaleLanguage = 101
+	QLocaleHawaiian                  QLocaleLanguage = 102
+	QLocaleHebrew                    QLocaleLanguage = 103
+	QLocaleHerero                    QLocaleLanguage = 104
+	QLocaleHindi                     QLocaleLanguage = 105
+	QLocaleHiriMotu                  QLocaleLanguage = 106
+	QLocaleHungarian                 QLocaleLanguage = 107
+	QLocaleIcelandic                 QLocaleLanguage = 108
+	QLocaleIdo                       QLocaleLanguage = 109
+	QLocaleIgbo                      QLocaleLanguage = 110
+	QLocaleInariSami                 QLocaleLanguage = 111
+	QLocaleIndonesian                QLocaleLanguage = 112
+	QLocaleIngush                    QLocaleLanguage = 113
+	QLocaleInterlingua               QLocaleLanguage = 114
+	QLocaleInterlingue               QLocaleLanguage = 115
+	QLocaleInuktitut                 QLocaleLanguage = 116
+	QLocaleInupiaq                   QLocaleLanguage = 117
+	QLocaleIrish                     QLocaleLanguage = 118
+	QLocaleItalian                   QLocaleLanguage = 119
+	QLocaleJapanese                  QLocaleLanguage = 120
+	QLocaleJavanese                  QLocaleLanguage = 121
+	QLocaleJju                       QLocaleLanguage = 122
+	QLocaleJolaFonyi                 QLocaleLanguage = 123
+	QLocaleKabuverdianu              QLocaleLanguage = 124
+	QLocaleKabyle                    QLocaleLanguage = 125
+	QLocaleKako                      QLocaleLanguage = 126
+	QLocaleKalaallisut               QLocaleLanguage = 127
+	QLocaleKalenjin                  QLocaleLanguage = 128
+	QLocaleKamba                     QLocaleLanguage = 129
+	QLocaleKannada                   QLocaleLanguage = 130
+	QLocaleKanuri                    QLocaleLanguage = 131
+	QLocaleKashmiri                  QLocaleLanguage = 132
+	QLocaleKazakh                    QLocaleLanguage = 133
+	QLocaleKenyang                   QLocaleLanguage = 134
+	QLocaleKhmer                     QLocaleLanguage = 135
+	QLocaleKiche                     QLocaleLanguage = 136
+	QLocaleKikuyu                    QLocaleLanguage = 137
+	QLocaleKinyarwanda               QLocaleLanguage = 138
+	QLocaleKomi                      QLocaleLanguage = 139
+	QLocaleKongo                     QLocaleLanguage = 140
+	QLocaleKonkani                   QLocaleLanguage = 141
+	QLocaleKorean                    QLocaleLanguage = 142
+	QLocaleKoro                      QLocaleLanguage = 143
+	QLocaleKoyraboroSenni            QLocaleLanguage = 144
+	QLocaleKoyraChiini               QLocaleLanguage = 145
+	QLocaleKpelle                    QLocaleLanguage = 146
+	QLocaleKuanyama                  QLocaleLanguage = 147
+	QLocaleKurdish                   QLocaleLanguage = 148
+	QLocaleKwasio                    QLocaleLanguage = 149
+	QLocaleKyrgyz                    QLocaleLanguage = 150
+	QLocaleLakota                    QLocaleLanguage = 151
+	QLocaleLangi                     QLocaleLanguage = 152
+	QLocaleLao                       QLocaleLanguage = 153
+	QLocaleLatin                     QLocaleLanguage = 154
+	QLocaleLatvian                   QLocaleLanguage = 155
+	QLocaleLezghian                  QLocaleLanguage = 156
+	QLocaleLimburgish                QLocaleLanguage = 157
+	QLocaleLingala                   QLocaleLanguage = 158
+	QLocaleLiteraryChinese           QLocaleLanguage = 159
+	QLocaleLithuanian                QLocaleLanguage = 160
+	QLocaleLojban                    QLocaleLanguage = 161
+	QLocaleLowerSorbian              QLocaleLanguage = 162
+	QLocaleLowGerman                 QLocaleLanguage = 163
+	QLocaleLubaKatanga               QLocaleLanguage = 164
+	QLocaleLuleSami                  QLocaleLanguage = 165
+	QLocaleLuo                       QLocaleLanguage = 166
+	QLocaleLuxembourgish             QLocaleLanguage = 167
+	QLocaleLuyia                     QLocaleLanguage = 168
+	QLocaleMacedonian                QLocaleLanguage = 169
+	QLocaleMachame                   QLocaleLanguage = 170
+	QLocaleMaithili                  QLocaleLanguage = 171
+	QLocaleMakhuwaMeetto             QLocaleLanguage = 172
+	QLocaleMakonde                   QLocaleLanguage = 173
+	QLocaleMalagasy                  QLocaleLanguage = 174
+	QLocaleMalayalam                 QLocaleLanguage = 175
+	QLocaleMalay                     QLocaleLanguage = 176
+	QLocaleMaltese                   QLocaleLanguage = 177
+	QLocaleMandingo                  QLocaleLanguage = 178
+	QLocaleManipuri                  QLocaleLanguage = 179
+	QLocaleManx                      QLocaleLanguage = 180
+	QLocaleMaori                     QLocaleLanguage = 181
+	QLocaleMapuche                   QLocaleLanguage = 182
+	QLocaleMarathi                   QLocaleLanguage = 183
+	QLocaleMarshallese               QLocaleLanguage = 184
+	QLocaleMasai                     QLocaleLanguage = 185
+	QLocaleMazanderani               QLocaleLanguage = 186
+	QLocaleMende                     QLocaleLanguage = 187
+	QLocaleMeru                      QLocaleLanguage = 188
+	QLocaleMeta                      QLocaleLanguage = 189
+	QLocaleMohawk                    QLocaleLanguage = 190
+	QLocaleMongolian                 QLocaleLanguage = 191
+	QLocaleMorisyen                  QLocaleLanguage = 192
+	QLocaleMundang                   QLocaleLanguage = 193
+	QLocaleMuscogee                  QLocaleLanguage = 194
+	QLocaleNama                      QLocaleLanguage = 195
+	QLocaleNauruLanguage             QLocaleLanguage = 196
+	QLocaleNavajo                    QLocaleLanguage = 197
+	QLocaleNdonga                    QLocaleLanguage = 198
+	QLocaleNepali                    QLocaleLanguage = 199
+	QLocaleNewari                    QLocaleLanguage = 200
+	QLocaleNgiemboon                 QLocaleLanguage = 201
+	QLocaleNgomba                    QLocaleLanguage = 202
+	QLocaleNigerianPidgin            QLocaleLanguage = 203
+	QLocaleNko                       QLocaleLanguage = 204
+	QLocaleNorthernLuri              QLocaleLanguage = 205
+	QLocaleNorthernSami              QLocaleLanguage = 206
+	QLocaleNorthernSotho             QLocaleLanguage = 207
+	QLocaleNorthNdebele              QLocaleLanguage = 208
+	QLocaleNorwegianBokmal           QLocaleLanguage = 209
+	QLocaleNorwegianNynorsk          QLocaleLanguage = 210
+	QLocaleNuer                      QLocaleLanguage = 211
+	QLocaleNyanja                    QLocaleLanguage = 212
+	QLocaleNyankole                  QLocaleLanguage = 213
+	QLocaleOccitan                   QLocaleLanguage = 214
+	QLocaleOdia                      QLocaleLanguage = 215
+	QLocaleOjibwa                    QLocaleLanguage = 216
+	QLocaleOldIrish                  QLocaleLanguage = 217
+	QLocaleOldNorse                  QLocaleLanguage = 218
+	QLocaleOldPersian                QLocaleLanguage = 219
+	QLocaleOromo                     QLocaleLanguage = 220
+	QLocaleOsage                     QLocaleLanguage = 221
+	QLocaleOssetic                   QLocaleLanguage = 222
+	QLocalePahlavi                   QLocaleLanguage = 223
+	QLocalePalauan                   QLocaleLanguage = 224
+	QLocalePali                      QLocaleLanguage = 225
+	QLocalePapiamento                QLocaleLanguage = 226
+	QLocalePashto                    QLocaleLanguage = 227
+	QLocalePersian                   QLocaleLanguage = 228
+	QLocalePhoenician                QLocaleLanguage = 229
+	QLocalePolish                    QLocaleLanguage = 230
+	QLocalePortuguese                QLocaleLanguage = 231
+	QLocalePrussian                  QLocaleLanguage = 232
+	QLocalePunjabi                   QLocaleLanguage = 233
+	QLocaleQuechua                   QLocaleLanguage = 234
+	QLocaleRomanian                  QLocaleLanguage = 235
+	QLocaleRomansh                   QLocaleLanguage = 236
+	QLocaleRombo                     QLocaleLanguage = 237
+	QLocaleRundi                     QLocaleLanguage = 238
+	QLocaleRussian                   QLocaleLanguage = 239
+	QLocaleRwa                       QLocaleLanguage = 240
+	QLocaleSaho                      QLocaleLanguage = 241
+	QLocaleSakha                     QLocaleLanguage = 242
+	QLocaleSamburu                   QLocaleLanguage = 243
+	QLocaleSamoan                    QLocaleLanguage = 244
+	QLocaleSango                     QLocaleLanguage = 245
+	QLocaleSangu                     QLocaleLanguage = 246
+	QLocaleSanskrit                  QLocaleLanguage = 247
+	QLocaleSantali                   QLocaleLanguage = 248
+	QLocaleSardinian                 QLocaleLanguage = 249
+	QLocaleSaurashtra                QLocaleLanguage = 250
+	QLocaleSena                      QLocaleLanguage = 251
+	QLocaleSerbian                   QLocaleLanguage = 252
+	QLocaleShambala                  QLocaleLanguage = 253
+	QLocaleShona                     QLocaleLanguage = 254
+	QLocaleSichuanYi                 QLocaleLanguage = 255
+	QLocaleSicilian                  QLocaleLanguage = 256
+	QLocaleSidamo                    QLocaleLanguage = 257
+	QLocaleSilesian                  QLocaleLanguage = 258
+	QLocaleSindhi                    QLocaleLanguage = 259
+	QLocaleSinhala                   QLocaleLanguage = 260
+	QLocaleSkoltSami                 QLocaleLanguage = 261
+	QLocaleSlovak                    QLocaleLanguage = 262
+	QLocaleSlovenian                 QLocaleLanguage = 263
+	QLocaleSoga                      QLocaleLanguage = 264
+	QLocaleSomali                    QLocaleLanguage = 265
+	QLocaleSouthernKurdish           QLocaleLanguage = 266
+	QLocaleSouthernSami              QLocaleLanguage = 267
+	QLocaleSouthernSotho             QLocaleLanguage = 268
+	QLocaleSouthNdebele              QLocaleLanguage = 269
+	QLocaleSpanish                   QLocaleLanguage = 270
+	QLocaleStandardMoroccanTamazight QLocaleLanguage = 271
+	QLocaleSundanese                 QLocaleLanguage = 272
+	QLocaleSwahili                   QLocaleLanguage = 273
+	QLocaleSwati                     QLocaleLanguage = 274
+	QLocaleSwedish                   QLocaleLanguage = 275
+	QLocaleSwissGerman               QLocaleLanguage = 276
+	QLocaleSyriac                    QLocaleLanguage = 277
+	QLocaleTachelhit                 QLocaleLanguage = 278
+	QLocaleTahitian                  QLocaleLanguage = 279
+	QLocaleTaiDam                    QLocaleLanguage = 280
+	QLocaleTaita                     QLocaleLanguage = 281
+	QLocaleTajik                     QLocaleLanguage = 282
+	QLocaleTamil                     QLocaleLanguage = 283
+	QLocaleTaroko                    QLocaleLanguage = 284
+	QLocaleTasawaq                   QLocaleLanguage = 285
+	QLocaleTatar                     QLocaleLanguage = 286
+	QLocaleTelugu                    QLocaleLanguage = 287
+	QLocaleTeso                      QLocaleLanguage = 288
+	QLocaleThai                      QLocaleLanguage = 289
+	QLocaleTibetan                   QLocaleLanguage = 290
+	QLocaleTigre                     QLocaleLanguage = 291
+	QLocaleTigrinya                  QLocaleLanguage = 292
+	QLocaleTokelauLanguage           QLocaleLanguage = 293
+	QLocaleTokPisin                  QLocaleLanguage = 294
+	QLocaleTongan                    QLocaleLanguage = 295
+	QLocaleTsonga                    QLocaleLanguage = 296
+	QLocaleTswana                    QLocaleLanguage = 297
+	QLocaleTurkish                   QLocaleLanguage = 298
+	QLocaleTurkmen                   QLocaleLanguage = 299
+	QLocaleTuvaluLanguage            QLocaleLanguage = 300
+	QLocaleTyap                      QLocaleLanguage = 301
+	QLocaleUgaritic                  QLocaleLanguage = 302
+	QLocaleUkrainian                 QLocaleLanguage = 303
+	QLocaleUpperSorbian              QLocaleLanguage = 304
+	QLocaleUrdu                      QLocaleLanguage = 305
+	QLocaleUyghur                    QLocaleLanguage = 306
+	QLocaleUzbek                     QLocaleLanguage = 307
+	QLocaleVai                       QLocaleLanguage = 308
+	QLocaleVenda                     QLocaleLanguage = 309
+	QLocaleVietnamese                QLocaleLanguage = 310
+	QLocaleVolapuk                   QLocaleLanguage = 311
+	QLocaleVunjo                     QLocaleLanguage = 312
+	QLocaleWalloon                   QLocaleLanguage = 313
+	QLocaleWalser                    QLocaleLanguage = 314
+	QLocaleWarlpiri                  QLocaleLanguage = 315
+	QLocaleWelsh                     QLocaleLanguage = 316
+	QLocaleWesternBalochi            QLocaleLanguage = 317
+	QLocaleWesternFrisian            QLocaleLanguage = 318
+	QLocaleWolaytta                  QLocaleLanguage = 319
+	QLocaleWolof                     QLocaleLanguage = 320
+	QLocaleXhosa                     QLocaleLanguage = 321
+	QLocaleYangben                   QLocaleLanguage = 322
+	QLocaleYiddish                   QLocaleLanguage = 323
+	QLocaleYoruba                    QLocaleLanguage = 324
+	QLocaleZarma                     QLocaleLanguage = 325
+	QLocaleZhuang                    QLocaleLanguage = 326
+	QLocaleZulu                      QLocaleLanguage = 327
+	QLocaleKaingang                  QLocaleLanguage = 328
+	QLocaleNheengatu                 QLocaleLanguage = 329
+	QLocaleHaryanvi                  QLocaleLanguage = 330
+	QLocaleNorthernFrisian           QLocaleLanguage = 331
+	QLocaleRajasthani                QLocaleLanguage = 332
+	QLocaleMoksha                    QLocaleLanguage = 333
+	QLocaleTokiPona                  QLocaleLanguage = 334
+	QLocalePijin                     QLocaleLanguage = 335
+	QLocaleObolo                     QLocaleLanguage = 336
+	QLocaleBaluchi                   QLocaleLanguage = 337
+	QLocaleLigurian                  QLocaleLanguage = 338
+	QLocaleRohingya                  QLocaleLanguage = 339
+	QLocaleTorwali                   QLocaleLanguage = 340
+	QLocaleAnii                      QLocaleLanguage = 341
+	QLocaleKangri                    QLocaleLanguage = 342
+	QLocaleVenetian                  QLocaleLanguage = 343
+	QLocaleKuvi                      QLocaleLanguage = 344
+	QLocaleKaraKalpak                QLocaleLanguage = 345
+	QLocaleSwampyCree                QLocaleLanguage = 346
+	QLocaleLadin                     QLocaleLanguage = 347
+	QLocaleShan                      QLocaleLanguage = 348
+	QLocaleAfan                      QLocaleLanguage = 220
+	QLocaleBengali                   QLocaleLanguage = 30
+	QLocaleBhutani                   QLocaleLanguage = 73
+	QLocaleByelorussian              QLocaleLanguage = 35
+	QLocaleCambodian                 QLocaleLanguage = 135
+	QLocaleCentralMoroccoTamazight   QLocaleLanguage = 50
+	QLocaleChewa                     QLocaleLanguage = 212
+	QLocaleFrisian                   QLocaleLanguage = 318
+	QLocaleGreenlandic               QLocaleLanguage = 127
+	QLocaleInupiak                   QLocaleLanguage = 117
+	QLocaleKirghiz                   QLocaleLanguage = 150
+	QLocaleKurundi                   QLocaleLanguage = 238
+	QLocaleKwanyama                  QLocaleLanguage = 147
+	QLocaleNavaho                    QLocaleLanguage = 197
+	QLocaleOriya                     QLocaleLanguage = 215
+	QLocaleRhaetoRomance             QLocaleLanguage = 236
+	QLocaleUighur                    QLocaleLanguage = 306
+	QLocaleUigur                     QLocaleLanguage = 306
+	QLocaleWalamo                    QLocaleLanguage = 319
+	QLocaleLastLanguage              QLocaleLanguage = 348
+)
+
+// QLocaleScript wraps the enum QLocale::Script.
+type QLocaleScript int64
+
+const (
+	QLocaleAnyScript                   QLocaleScript = 0
+	QLocaleAdlamScript                 QLocaleScript = 1
+	QLocaleAhomScript                  QLocaleScript = 2
+	QLocaleAnatolianHieroglyphsScript  QLocaleScript = 3
+	QLocaleArabicScript                QLocaleScript = 4
+	QLocaleArmenianScript              QLocaleScript = 5
+	QLocaleAvestanScript               QLocaleScript = 6
+	QLocaleBalineseScript              QLocaleScript = 7
+	QLocaleBamumScript                 QLocaleScript = 8
+	QLocaleBanglaScript                QLocaleScript = 9
+	QLocaleBassaVahScript              QLocaleScript = 10
+	QLocaleBatakScript                 QLocaleScript = 11
+	QLocaleBhaiksukiScript             QLocaleScript = 12
+	QLocaleBopomofoScript              QLocaleScript = 13
+	QLocaleBrahmiScript                QLocaleScript = 14
+	QLocaleBrailleScript               QLocaleScript = 15
+	QLocaleBugineseScript              QLocaleScript = 16
+	QLocaleBuhidScript                 QLocaleScript = 17
+	QLocaleCanadianAboriginalScript    QLocaleScript = 18
+	QLocaleCarianScript                QLocaleScript = 19
+	QLocaleCaucasianAlbanianScript     QLocaleScript = 20
+	QLocaleChakmaScript                QLocaleScript = 21
+	QLocaleChamScript                  QLocaleScript = 22
+	QLocaleCherokeeScript              QLocaleScript = 23
+	QLocaleCopticScript                QLocaleScript = 24
+	QLocaleCuneiformScript             QLocaleScript = 25
+	QLocaleCypriotScript               QLocaleScript = 26
+	QLocaleCyrillicScript              QLocaleScript = 27
+	QLocaleDeseretScript               QLocaleScript = 28
+	QLocaleDevanagariScript            QLocaleScript = 29
+	QLocaleDuployanScript              QLocaleScript = 30
+	QLocaleEgyptianHieroglyphsScript   QLocaleScript = 31
+	QLocaleElbasanScript               QLocaleScript = 32
+	QLocaleEthiopicScript              QLocaleScript = 33
+	QLocaleFraserScript                QLocaleScript = 34
+	QLocaleGeorgianScript              QLocaleScript = 35
+	QLocaleGlagoliticScript            QLocaleScript = 36
+	QLocaleGothicScript                QLocaleScript = 37
+	QLocaleGranthaScript               QLocaleScript = 38
+	QLocaleGreekScript                 QLocaleScript = 39
+	QLocaleGujaratiScript              QLocaleScript = 40
+	QLocaleGurmukhiScript              QLocaleScript = 41
+	QLocaleHangulScript                QLocaleScript = 42
+	QLocaleHanScript                   QLocaleScript = 43
+	QLocaleHanunooScript               QLocaleScript = 44
+	QLocaleHanWithBopomofoScript       QLocaleScript = 45
+	QLocaleHatranScript                QLocaleScript = 46
+	QLocaleHebrewScript                QLocaleScript = 47
+	QLocaleHiraganaScript              QLocaleScript = 48
+	QLocaleImperialAramaicScript       QLocaleScript = 49
+	QLocaleInscriptionalPahlaviScript  QLocaleScript = 50
+	QLocaleInscriptionalParthianScript QLocaleScript = 51
+	QLocaleJamoScript                  QLocaleScript = 52
+	QLocaleJapaneseScript              QLocaleScript = 53
+	QLocaleJavaneseScript              QLocaleScript = 54
+	QLocaleKaithiScript                QLocaleScript = 55
+	QLocaleKannadaScript               QLocaleScript = 56
+	QLocaleKatakanaScript              QLocaleScript = 57
+	QLocaleKayahLiScript               QLocaleScript = 58
+	QLocaleKharoshthiScript            QLocaleScript = 59
+	QLocaleKhmerScript                 QLocaleScript = 60
+	QLocaleKhojkiScript                QLocaleScript = 61
+	QLocaleKhudawadiScript             QLocaleScript = 62
+	QLocaleKoreanScript                QLocaleScript = 63
+	QLocaleLannaScript                 QLocaleScript = 64
+	QLocaleLaoScript                   QLocaleScript = 65
+	QLocaleLatinScript                 QLocaleScript = 66
+	QLocaleLepchaScript                QLocaleScript = 67
+	QLocaleLimbuScript                 QLocaleScript = 68
+	QLocaleLinearAScript               QLocaleScript = 69
+	QLocaleLinearBScript               QLocaleScript = 70
+	QLocaleLycianScript                QLocaleScript = 71
+	QLocaleLydianScript                QLocaleScript = 72
+	QLocaleMahajaniScript              QLocaleScript = 73
+	QLocaleMalayalamScript             QLocaleScript = 74
+	QLocaleMandaeanScript              QLocaleScript = 75
+	QLocaleManichaeanScript            QLocaleScript = 76
+	QLocaleMarchenScript               QLocaleScript = 77
+	QLocaleMeiteiMayekScript           QLocaleScript = 78
+	QLocaleMendeScript                 QLocaleScript = 79
+	QLocaleMeroiticCursiveScript       QLocaleScript = 80
+	QLocaleMeroiticScript              QLocaleScript = 81
+	QLocaleModiScript                  QLocaleScript = 82
+	QLocaleMongolianScript             QLocaleScript = 83
+	QLocaleMroScript                   QLocaleScript = 84
+	QLocaleMultaniScript               QLocaleScript = 85
+	QLocaleMyanmarScript               QLocaleScript = 86
+	QLocaleNabataeanScript             QLocaleScript = 87
+	QLocaleNewaScript                  QLocaleScript = 88
+	QLocaleNewTaiLueScript             QLocaleScript = 89
+	QLocaleNkoScript                   QLocaleScript = 90
+	QLocaleOdiaScript                  QLocaleScript = 91
+	QLocaleOghamScript                 QLocaleScript = 92
+	QLocaleOlChikiScript               QLocaleScript = 93
+	QLocaleOldHungarianScript          QLocaleScript = 94
+	QLocaleOldItalicScript             QLocaleScript = 95
+	QLocaleOldNorthArabianScript       QLocaleScript = 96
+	QLocaleOldPermicScript             QLocaleScript = 97
+	QLocaleOldPersianScript            QLocaleScript = 98
+	QLocaleOldSouthArabianScript       QLocaleScript = 99
+	QLocaleOrkhonScript                QLocaleScript = 100
+	QLocaleOsageScript                 QLocaleScript = 101
+	QLocaleOsmanyaScript               QLocaleScript = 102
+	QLocalePahawhHmongScript           QLocaleScript = 103
+	QLocalePalmyreneScript             QLocaleScript = 104
+	QLocalePauCinHauScript             QLocaleScript = 105
+	QLocalePhagsPaScript               QLocaleScript = 106
+	QLocalePhoenicianScript            QLocaleScript = 107
+	QLocalePollardPhoneticScript       QLocaleScript = 108
+	QLocalePsalterPahlaviScript        QLocaleScript = 109
+	QLocaleRejangScript                QLocaleScript = 110
+	QLocaleRunicScript                 QLocaleScript = 111
+	QLocaleSamaritanScript             QLocaleScript = 112
+	QLocaleSaurashtraScript            QLocaleScript = 113
+	QLocaleSharadaScript               QLocaleScript = 114
+	QLocaleShavianScript               QLocaleScript = 115
+	QLocaleSiddhamScript               QLocaleScript = 116
+	QLocaleSignWritingScript           QLocaleScript = 117
+	QLocaleSimplifiedHanScript         QLocaleScript = 118
+	QLocaleSinhalaScript               QLocaleScript = 119
+	QLocaleSoraSompengScript           QLocaleScript = 120
+	QLocaleSundaneseScript             QLocaleScript = 121
+	QLocaleSylotiNagriScript           QLocaleScript = 122
+	QLocaleSyriacScript                QLocaleScript = 123
+	QLocaleTagalogScript               QLocaleScript = 124
+	QLocaleTagbanwaScript              QLocaleScript = 125
+	QLocaleTaiLeScript                 QLocaleScript = 126
+	QLocaleTaiVietScript               QLocaleScript = 127
+	QLocaleTakriScript                 QLocaleScript = 128
+	QLocaleTamilScript                 QLocaleScript = 129
+	QLocaleTangutScript                QLocaleScript = 130
+	QLocaleTeluguScript                QLocaleScript = 131
+	QLocaleThaanaScript                QLocaleScript = 132
+	QLocaleThaiScript                  QLocaleScript = 133
+	QLocaleTibetanScript               QLocaleScript = 134
+	QLocaleTifinaghScript              QLocaleScript = 135
+	QLocaleTirhutaScript               QLocaleScript = 136
+	QLocaleTraditionalHanScript        QLocaleScript = 137
+	QLocaleUgariticScript              QLocaleScript = 138
+	QLocaleVaiScript                   QLocaleScript = 139
+	QLocaleVarangKshitiScript          QLocaleScript = 140
+	QLocaleYiScript                    QLocaleScript = 141
+	QLocaleHanifiScript                QLocaleScript = 142
+	QLocaleBengaliScript               QLocaleScript = 9
+	QLocaleMendeKikakuiScript          QLocaleScript = 79
+	QLocaleOriyaScript                 QLocaleScript = 91
+	QLocaleSimplifiedChineseScript     QLocaleScript = 118
+	QLocaleTraditionalChineseScript    QLocaleScript = 137
+	QLocaleLastScript                  QLocaleScript = 142
+)
+
+// QLocaleCountry wraps the enum QLocale::Country.
+type QLocaleCountry int64
+
+const (
+	QLocaleAnyTerritory                           QLocaleCountry = 0
+	QLocaleAfghanistan                            QLocaleCountry = 1
+	QLocaleAlandIslands                           QLocaleCountry = 2
+	QLocaleAlbania                                QLocaleCountry = 3
+	QLocaleAlgeria                                QLocaleCountry = 4
+	QLocaleAmericanSamoa                          QLocaleCountry = 5
+	QLocaleAndorra                                QLocaleCountry = 6
+	QLocaleAngola                                 QLocaleCountry = 7
+	QLocaleAnguilla                               QLocaleCountry = 8
+	QLocaleAntarctica                             QLocaleCountry = 9
+	QLocaleAntiguaAndBarbuda                      QLocaleCountry = 10
+	QLocaleArgentina                              QLocaleCountry = 11
+	QLocaleArmenia                                QLocaleCountry = 12
+	QLocaleAruba                                  QLocaleCountry = 13
+	QLocaleAscensionIsland                        QLocaleCountry = 14
+	QLocaleAustralia                              QLocaleCountry = 15
+	QLocaleAustria                                QLocaleCountry = 16
+	QLocaleAzerbaijan                             QLocaleCountry = 17
+	QLocaleBahamas                                QLocaleCountry = 18
+	QLocaleBahrain                                QLocaleCountry = 19
+	QLocaleBangladesh                             QLocaleCountry = 20
+	QLocaleBarbados                               QLocaleCountry = 21
+	QLocaleBelarus                                QLocaleCountry = 22
+	QLocaleBelgium                                QLocaleCountry = 23
+	QLocaleBelize                                 QLocaleCountry = 24
+	QLocaleBenin                                  QLocaleCountry = 25
+	QLocaleBermuda                                QLocaleCountry = 26
+	QLocaleBhutan                                 QLocaleCountry = 27
+	QLocaleBolivia                                QLocaleCountry = 28
+	QLocaleBosniaAndHerzegovina                   QLocaleCountry = 29
+	QLocaleBotswana                               QLocaleCountry = 30
+	QLocaleBouvetIsland                           QLocaleCountry = 31
+	QLocaleBrazil                                 QLocaleCountry = 32
+	QLocaleBritishIndianOceanTerritory            QLocaleCountry = 33
+	QLocaleBritishVirginIslands                   QLocaleCountry = 34
+	QLocaleBrunei                                 QLocaleCountry = 35
+	QLocaleBulgaria                               QLocaleCountry = 36
+	QLocaleBurkinaFaso                            QLocaleCountry = 37
+	QLocaleBurundi                                QLocaleCountry = 38
+	QLocaleCambodia                               QLocaleCountry = 39
+	QLocaleCameroon                               QLocaleCountry = 40
+	QLocaleCanada                                 QLocaleCountry = 41
+	QLocaleCanaryIslands                          QLocaleCountry = 42
+	QLocaleCapeVerde                              QLocaleCountry = 43
+	QLocaleCaribbeanNetherlands                   QLocaleCountry = 44
+	QLocaleCaymanIslands                          QLocaleCountry = 45
+	QLocaleCentralAfricanRepublic                 QLocaleCountry = 46
+	QLocaleCeutaAndMelilla                        QLocaleCountry = 47
+	QLocaleChad                                   QLocaleCountry = 48
+	QLocaleChile                                  QLocaleCountry = 49
+	QLocaleChina                                  QLocaleCountry = 50
+	QLocaleChristmasIsland                        QLocaleCountry = 51
+	QLocaleClippertonIsland                       QLocaleCountry = 52
+	QLocaleCocosIslands                           QLocaleCountry = 53
+	QLocaleColombia                               QLocaleCountry = 54
+	QLocaleComoros                                QLocaleCountry = 55
+	QLocaleCongoBrazzaville                       QLocaleCountry = 56
+	QLocaleCongoKinshasa                          QLocaleCountry = 57
+	QLocaleCookIslands                            QLocaleCountry = 58
+	QLocaleCostaRica                              QLocaleCountry = 59
+	QLocaleCroatia                                QLocaleCountry = 60
+	QLocaleCuba                                   QLocaleCountry = 61
+	QLocaleCuracao                                QLocaleCountry = 62
+	QLocaleCyprus                                 QLocaleCountry = 63
+	QLocaleCzechia                                QLocaleCountry = 64
+	QLocaleDenmark                                QLocaleCountry = 65
+	QLocaleDiegoGarcia                            QLocaleCountry = 66
+	QLocaleDjibouti                               QLocaleCountry = 67
+	QLocaleDominica                               QLocaleCountry = 68
+	QLocaleDominicanRepublic                      QLocaleCountry = 69
+	QLocaleEcuador                                QLocaleCountry = 70
+	QLocaleEgypt                                  QLocaleCountry = 71
+	QLocaleElSalvador                             QLocaleCountry = 72
+	QLocaleEquatorialGuinea                       QLocaleCountry = 73
+	QLocaleEritrea                                QLocaleCountry = 74
+	QLocaleEstonia                                QLocaleCountry = 75
+	QLocaleEswatini                               QLocaleCountry = 76
+	QLocaleEthiopia                               QLocaleCountry = 77
+	QLocaleEurope                                 QLocaleCountry = 78
+	QLocaleEuropeanUnion                          QLocaleCountry = 79
+	QLocaleFalklandIslands                        QLocaleCountry = 80
+	QLocaleFaroeIslands                           QLocaleCountry = 81
+	QLocaleFiji                                   QLocaleCountry = 82
+	QLocaleFinland                                QLocaleCountry = 83
+	QLocaleFrance                                 QLocaleCountry = 84
+	QLocaleFrenchGuiana                           QLocaleCountry = 85
+	QLocaleFrenchPolynesia                        QLocaleCountry = 86
+	QLocaleFrenchSouthernTerritories              QLocaleCountry = 87
+	QLocaleGabon                                  QLocaleCountry = 88
+	QLocaleGambia                                 QLocaleCountry = 89
+	QLocaleGeorgia                                QLocaleCountry = 90
+	QLocaleGermany                                QLocaleCountry = 91
+	QLocaleGhana                                  QLocaleCountry = 92
+	QLocaleGibraltar                              QLocaleCountry = 93
+	QLocaleGreece                                 QLocaleCountry = 94
+	QLocaleGreenland                              QLocaleCountry = 95
+	QLocaleGrenada                                QLocaleCountry = 96
+	QLocaleGuadeloupe                             QLocaleCountry = 97
+	QLocaleGuam                                   QLocaleCountry = 98
+	QLocaleGuatemala                              QLocaleCountry = 99
+	QLocaleGuernsey                               QLocaleCountry = 100
+	QLocaleGuineaBissau                           QLocaleCountry = 101
+	QLocaleGuinea                                 QLocaleCountry = 102
+	QLocaleGuyana                                 QLocaleCountry = 103
+	QLocaleHaiti                                  QLocaleCountry = 104
+	QLocaleHeardAndMcDonaldIslands                QLocaleCountry = 105
+	QLocaleHonduras                               QLocaleCountry = 106
+	QLocaleHongKong                               QLocaleCountry = 107
+	QLocaleHungary                                QLocaleCountry = 108
+	QLocaleIceland                                QLocaleCountry = 109
+	QLocaleIndia                                  QLocaleCountry = 110
+	QLocaleIndonesia                              QLocaleCountry = 111
+	QLocaleIran                                   QLocaleCountry = 112
+	QLocaleIraq                                   QLocaleCountry = 113
+	QLocaleIreland                                QLocaleCountry = 114
+	QLocaleIsleOfMan                              QLocaleCountry = 115
+	QLocaleIsrael                                 QLocaleCountry = 116
+	QLocaleItaly                                  QLocaleCountry = 117
+	QLocaleIvoryCoast                             QLocaleCountry = 118
+	QLocaleJamaica                                QLocaleCountry = 119
+	QLocaleJapan                                  QLocaleCountry = 120
+	QLocaleJersey                                 QLocaleCountry = 121
+	QLocaleJordan                                 QLocaleCountry = 122
+	QLocaleKazakhstan                             QLocaleCountry = 123
+	QLocaleKenya                                  QLocaleCountry = 124
+	QLocaleKiribati                               QLocaleCountry = 125
+	QLocaleKosovo                                 QLocaleCountry = 126
+	QLocaleKuwait                                 QLocaleCountry = 127
+	QLocaleKyrgyzstan                             QLocaleCountry = 128
+	QLocaleLaos                                   QLocaleCountry = 129
+	QLocaleLatinAmerica                           QLocaleCountry = 130
+	QLocaleLatvia                                 QLocaleCountry = 131
+	QLocaleLebanon                                QLocaleCountry = 132
+	QLocaleLesotho                                QLocaleCountry = 133
+	QLocaleLiberia                                QLocaleCountry = 134
+	QLocaleLibya                                  QLocaleCountry = 135
+	QLocaleLiechtenstein                          QLocaleCountry = 136
+	QLocaleLithuania                              QLocaleCountry = 137
+	QLocaleLuxembourg                             QLocaleCountry = 138
+	QLocaleMacao                                  QLocaleCountry = 139
+	QLocaleMacedonia                              QLocaleCountry = 140
+	QLocaleMadagascar                             QLocaleCountry = 141
+	QLocaleMalawi                                 QLocaleCountry = 142
+	QLocaleMalaysia                               QLocaleCountry = 143
+	QLocaleMaldives                               QLocaleCountry = 144
+	QLocaleMali                                   QLocaleCountry = 145
+	QLocaleMalta                                  QLocaleCountry = 146
+	QLocaleMarshallIslands                        QLocaleCountry = 147
+	QLocaleMartinique                             QLocaleCountry = 148
+	QLocaleMauritania                             QLocaleCountry = 149
+	QLocaleMauritius                              QLocaleCountry = 150
+	QLocaleMayotte                                QLocaleCountry = 151
+	QLocaleMexico                                 QLocaleCountry = 152
+	QLocaleMicronesia                             QLocaleCountry = 153
+	QLocaleMoldova                                QLocaleCountry = 154
+	QLocaleMonaco                                 QLocaleCountry = 155
+	QLocaleMongolia                               QLocaleCountry = 156
+	QLocaleMontenegro                             QLocaleCountry = 157
+	QLocaleMontserrat                             QLocaleCountry = 158
+	QLocaleMorocco                                QLocaleCountry = 159
+	QLocaleMozambique                             QLocaleCountry = 160
+	QLocaleMyanmar                                QLocaleCountry = 161
+	QLocaleNamibia                                QLocaleCountry = 162
+	QLocaleNauruTerritory                         QLocaleCountry = 163
+	QLocaleNepal                                  QLocaleCountry = 164
+	QLocaleNetherlands                            QLocaleCountry = 165
+	QLocaleNewCaledonia                           QLocaleCountry = 166
+	QLocaleNewZealand                             QLocaleCountry = 167
+	QLocaleNicaragua                              QLocaleCountry = 168
+	QLocaleNigeria                                QLocaleCountry = 169
+	QLocaleNiger                                  QLocaleCountry = 170
+	QLocaleNiue                                   QLocaleCountry = 171
+	QLocaleNorfolkIsland                          QLocaleCountry = 172
+	QLocaleNorthernMarianaIslands                 QLocaleCountry = 173
+	QLocaleNorthKorea                             QLocaleCountry = 174
+	QLocaleNorway                                 QLocaleCountry = 175
+	QLocaleOman                                   QLocaleCountry = 176
+	QLocaleOutlyingOceania                        QLocaleCountry = 177
+	QLocalePakistan                               QLocaleCountry = 178
+	QLocalePalau                                  QLocaleCountry = 179
+	QLocalePalestinianTerritories                 QLocaleCountry = 180
+	QLocalePanama                                 QLocaleCountry = 181
+	QLocalePapuaNewGuinea                         QLocaleCountry = 182
+	QLocaleParaguay                               QLocaleCountry = 183
+	QLocalePeru                                   QLocaleCountry = 184
+	QLocalePhilippines                            QLocaleCountry = 185
+	QLocalePitcairn                               QLocaleCountry = 186
+	QLocalePoland                                 QLocaleCountry = 187
+	QLocalePortugal                               QLocaleCountry = 188
+	QLocalePuertoRico                             QLocaleCountry = 189
+	QLocaleQatar                                  QLocaleCountry = 190
+	QLocaleReunion                                QLocaleCountry = 191
+	QLocaleRomania                                QLocaleCountry = 192
+	QLocaleRussia                                 QLocaleCountry = 193
+	QLocaleRwanda                                 QLocaleCountry = 194
+	QLocaleSaintBarthelemy                        QLocaleCountry = 195
+	QLocaleSaintHelena                            QLocaleCountry = 196
+	QLocaleSaintKittsAndNevis                     QLocaleCountry = 197
+	QLocaleSaintLucia                             QLocaleCountry = 198
+	QLocaleSaintMartin                            QLocaleCountry = 199
+	QLocaleSaintPierreAndMiquelon                 QLocaleCountry = 200
+	QLocaleSaintVincentAndGrenadines              QLocaleCountry = 201
+	QLocaleSamoa                                  QLocaleCountry = 202
+	QLocaleSanMarino                              QLocaleCountry = 203
+	QLocaleSaoTomeAndPrincipe                     QLocaleCountry = 204
+	QLocaleSaudiArabia                            QLocaleCountry = 205
+	QLocaleSenegal                                QLocaleCountry = 206
+	QLocaleSerbia                                 QLocaleCountry = 207
+	QLocaleSeychelles                             QLocaleCountry = 208
+	QLocaleSierraLeone                            QLocaleCountry = 209
+	QLocaleSingapore                              QLocaleCountry = 210
+	QLocaleSintMaarten                            QLocaleCountry = 211
+	QLocaleSlovakia                               QLocaleCountry = 212
+	QLocaleSlovenia                               QLocaleCountry = 213
+	QLocaleSolomonIslands                         QLocaleCountry = 214
+	QLocaleSomalia                                QLocaleCountry = 215
+	QLocaleSouthAfrica                            QLocaleCountry = 216
+	QLocaleSouthGeorgiaAndSouthSandwichIslands    QLocaleCountry = 217
+	QLocaleSouthKorea                             QLocaleCountry = 218
+	QLocaleSouthSudan                             QLocaleCountry = 219
+	QLocaleSpain                                  QLocaleCountry = 220
+	QLocaleSriLanka                               QLocaleCountry = 221
+	QLocaleSudan                                  QLocaleCountry = 222
+	QLocaleSuriname                               QLocaleCountry = 223
+	QLocaleSvalbardAndJanMayen                    QLocaleCountry = 224
+	QLocaleSweden                                 QLocaleCountry = 225
+	QLocaleSwitzerland                            QLocaleCountry = 226
+	QLocaleSyria                                  QLocaleCountry = 227
+	QLocaleTaiwan                                 QLocaleCountry = 228
+	QLocaleTajikistan                             QLocaleCountry = 229
+	QLocaleTanzania                               QLocaleCountry = 230
+	QLocaleThailand                               QLocaleCountry = 231
+	QLocaleTimorLeste                             QLocaleCountry = 232
+	QLocaleTogo                                   QLocaleCountry = 233
+	QLocaleTokelauTerritory                       QLocaleCountry = 234
+	QLocaleTonga                                  QLocaleCountry = 235
+	QLocaleTrinidadAndTobago                      QLocaleCountry = 236
+	QLocaleTristanDaCunha                         QLocaleCountry = 237
+	QLocaleTunisia                                QLocaleCountry = 238
+	QLocaleTurkey                                 QLocaleCountry = 239
+	QLocaleTurkmenistan                           QLocaleCountry = 240
+	QLocaleTurksAndCaicosIslands                  QLocaleCountry = 241
+	QLocaleTuvaluTerritory                        QLocaleCountry = 242
+	QLocaleUganda                                 QLocaleCountry = 243
+	QLocaleUkraine                                QLocaleCountry = 244
+	QLocaleUnitedArabEmirates                     QLocaleCountry = 245
+	QLocaleUnitedKingdom                          QLocaleCountry = 246
+	QLocaleUnitedStatesOutlyingIslands            QLocaleCountry = 247
+	QLocaleUnitedStates                           QLocaleCountry = 248
+	QLocaleUnitedStatesVirginIslands              QLocaleCountry = 249
+	QLocaleUruguay                                QLocaleCountry = 250
+	QLocaleUzbekistan                             QLocaleCountry = 251
+	QLocaleVanuatu                                QLocaleCountry = 252
+	QLocaleVaticanCity                            QLocaleCountry = 253
+	QLocaleVenezuela                              QLocaleCountry = 254
+	QLocaleVietnam                                QLocaleCountry = 255
+	QLocaleWallisAndFutuna                        QLocaleCountry = 256
+	QLocaleWesternSahara                          QLocaleCountry = 257
+	QLocaleWorld                                  QLocaleCountry = 258
+	QLocaleYemen                                  QLocaleCountry = 259
+	QLocaleZambia                                 QLocaleCountry = 260
+	QLocaleZimbabwe                               QLocaleCountry = 261
+	QLocaleAnyCountry                             QLocaleCountry = 0
+	QLocaleBonaire                                QLocaleCountry = 44
+	QLocaleBosniaAndHerzegowina                   QLocaleCountry = 29
+	QLocaleCuraSao                                QLocaleCountry = 62
+	QLocaleCzechRepublic                          QLocaleCountry = 64
+	QLocaleDemocraticRepublicOfCongo              QLocaleCountry = 57
+	QLocaleDemocraticRepublicOfKorea              QLocaleCountry = 174
+	QLocaleEastTimor                              QLocaleCountry = 232
+	QLocaleLatinAmericaAndTheCaribbean            QLocaleCountry = 130
+	QLocaleMacau                                  QLocaleCountry = 139
+	QLocaleNauruCountry                           QLocaleCountry = 163
+	QLocalePeoplesRepublicOfCongo                 QLocaleCountry = 56
+	QLocaleRepublicOfKorea                        QLocaleCountry = 218
+	QLocaleRussianFederation                      QLocaleCountry = 193
+	QLocaleSaintVincentAndTheGrenadines           QLocaleCountry = 201
+	QLocaleSouthGeorgiaAndTheSouthSandwichIslands QLocaleCountry = 217
+	QLocaleSvalbardAndJanMayenIslands             QLocaleCountry = 224
+	QLocaleSwaziland                              QLocaleCountry = 76
+	QLocaleSyrianArabRepublic                     QLocaleCountry = 227
+	QLocaleTokelauCountry                         QLocaleCountry = 234
+	QLocaleTuvaluCountry                          QLocaleCountry = 242
+	QLocaleUnitedStatesMinorOutlyingIslands       QLocaleCountry = 247
+	QLocaleVaticanCityState                       QLocaleCountry = 253
+	QLocaleWallisAndFutunaIslands                 QLocaleCountry = 256
+	QLocaleLastTerritory                          QLocaleCountry = 261
+	QLocaleLastCountry                            QLocaleCountry = 261
+)
+
+// QLocaleMeasurementSystem wraps the enum QLocale::MeasurementSystem.
+type QLocaleMeasurementSystem int64
+
+const (
+	QLocaleMetricSystem     QLocaleMeasurementSystem = 0
+	QLocaleImperialUSSystem QLocaleMeasurementSystem = 1
+	QLocaleImperialUKSystem QLocaleMeasurementSystem = 2
+	QLocaleImperialSystem   QLocaleMeasurementSystem = 1
+)
+
+// QLocaleFormatType wraps the enum QLocale::FormatType.
+type QLocaleFormatType int64
+
+const (
+	QLocaleLongFormat   QLocaleFormatType = 0
+	QLocaleShortFormat  QLocaleFormatType = 1
+	QLocaleNarrowFormat QLocaleFormatType = 2
+)
+
+// QLocaleNumberOptions is the flags type for QLocale::NumberOption (QFlags<QLocale::NumberOption>).
+type QLocaleNumberOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QLocaleNumberOptions) Has(x QLocaleNumberOptions) bool { return f&x == x }
+
+// QLocaleNumberOption wraps the enum QLocale::NumberOption. It is the same type as QLocaleNumberOptions, so values combine with |.
+type QLocaleNumberOption = QLocaleNumberOptions
+
+const (
+	QLocaleDefaultNumberOptions          QLocaleNumberOptions = 0
+	QLocaleOmitGroupSeparator            QLocaleNumberOptions = 1
+	QLocaleRejectGroupSeparator          QLocaleNumberOptions = 2
+	QLocaleOmitLeadingZeroInExponent     QLocaleNumberOptions = 4
+	QLocaleRejectLeadingZeroInExponent   QLocaleNumberOptions = 8
+	QLocaleIncludeTrailingZeroesAfterDot QLocaleNumberOptions = 16
+	QLocaleRejectTrailingZeroesAfterDot  QLocaleNumberOptions = 32
+)
+
+// QLocaleFloatingPointPrecisionOption wraps the enum QLocale::FloatingPointPrecisionOption.
+type QLocaleFloatingPointPrecisionOption int64
+
+const (
+	QLocaleFloatingPointShortest QLocaleFloatingPointPrecisionOption = -128
+)
+
+// QLocaleTagSeparator wraps the enum QLocale::TagSeparator.
+type QLocaleTagSeparator int64
+
+const (
+	QLocaleTagSeparatorDash       QLocaleTagSeparator = 45
+	QLocaleTagSeparatorUnderscore QLocaleTagSeparator = 95
+)
+
+// QLocaleCurrencySymbolFormat wraps the enum QLocale::CurrencySymbolFormat.
+type QLocaleCurrencySymbolFormat int64
+
+const (
+	QLocaleCurrencyIsoCode     QLocaleCurrencySymbolFormat = 0
+	QLocaleCurrencySymbol      QLocaleCurrencySymbolFormat = 1
+	QLocaleCurrencyDisplayName QLocaleCurrencySymbolFormat = 2
+)
+
+// QLocaleDataSizeFormats is the flags type for QLocale::DataSizeFormat (QFlags<QLocale::DataSizeFormat>).
+type QLocaleDataSizeFormats int64
+
+// Has reports whether every bit of x is set in f.
+func (f QLocaleDataSizeFormats) Has(x QLocaleDataSizeFormats) bool { return f&x == x }
+
+// QLocaleDataSizeFormat wraps the enum QLocale::DataSizeFormat. It is the same type as QLocaleDataSizeFormats, so values combine with |.
+type QLocaleDataSizeFormat = QLocaleDataSizeFormats
+
+const (
+	QLocaleDataSizeBase1000          QLocaleDataSizeFormats = 1
+	QLocaleDataSizeSIQuantifiers     QLocaleDataSizeFormats = 2
+	QLocaleDataSizeIecFormat         QLocaleDataSizeFormats = 0
+	QLocaleDataSizeTraditionalFormat QLocaleDataSizeFormats = 2
+	QLocaleDataSizeSIFormat          QLocaleDataSizeFormats = 3
+)
+
+// QLocaleLanguageCodeTypes is the flags type for QLocale::LanguageCodeType (QFlags<QLocale::LanguageCodeType>).
+type QLocaleLanguageCodeTypes int64
+
+// Has reports whether every bit of x is set in f.
+func (f QLocaleLanguageCodeTypes) Has(x QLocaleLanguageCodeTypes) bool { return f&x == x }
+
+// QLocaleLanguageCodeType wraps the enum QLocale::LanguageCodeType. It is the same type as QLocaleLanguageCodeTypes, so values combine with |.
+type QLocaleLanguageCodeType = QLocaleLanguageCodeTypes
+
+const (
+	QLocaleISO639Part1        QLocaleLanguageCodeTypes = 1
+	QLocaleISO639Part2B       QLocaleLanguageCodeTypes = 2
+	QLocaleISO639Part2T       QLocaleLanguageCodeTypes = 4
+	QLocaleISO639Part3        QLocaleLanguageCodeTypes = 8
+	QLocaleLegacyLanguageCode QLocaleLanguageCodeTypes = 32768
+	QLocaleISO639Part2        QLocaleLanguageCodeTypes = 6
+	QLocaleISO639Alpha2       QLocaleLanguageCodeTypes = 1
+	QLocaleISO639Alpha3       QLocaleLanguageCodeTypes = 14
+	QLocaleISO639             QLocaleLanguageCodeTypes = 15
+	QLocaleAnyLanguageCode    QLocaleLanguageCodeTypes = -1
+)
+
+// QLocaleQuotationStyle wraps the enum QLocale::QuotationStyle.
+type QLocaleQuotationStyle int64
+
+const (
+	QLocaleStandardQuotation  QLocaleQuotationStyle = 0
+	QLocaleAlternateQuotation QLocaleQuotationStyle = 1
+)
+
+// QMetaTypeType wraps the enum QMetaType::Type.
+type QMetaTypeType int64
+
+const (
+	QMetaTypeBool                  QMetaTypeType = 1
+	QMetaTypeInt                   QMetaTypeType = 2
+	QMetaTypeUInt                  QMetaTypeType = 3
+	QMetaTypeLongLong              QMetaTypeType = 4
+	QMetaTypeULongLong             QMetaTypeType = 5
+	QMetaTypeDouble                QMetaTypeType = 6
+	QMetaTypeLong                  QMetaTypeType = 32
+	QMetaTypeShort                 QMetaTypeType = 33
+	QMetaTypeChar                  QMetaTypeType = 34
+	QMetaTypeChar16                QMetaTypeType = 56
+	QMetaTypeChar32                QMetaTypeType = 57
+	QMetaTypeULong                 QMetaTypeType = 35
+	QMetaTypeUShort                QMetaTypeType = 36
+	QMetaTypeUChar                 QMetaTypeType = 37
+	QMetaTypeFloat                 QMetaTypeType = 38
+	QMetaTypeSChar                 QMetaTypeType = 40
+	QMetaTypeNullptr               QMetaTypeType = 51
+	QMetaTypeQCborSimpleType       QMetaTypeType = 52
+	QMetaTypeVoid                  QMetaTypeType = 43
+	QMetaTypeVoidStar              QMetaTypeType = 31
+	QMetaTypeQChar                 QMetaTypeType = 7
+	QMetaTypeQString               QMetaTypeType = 10
+	QMetaTypeQByteArray            QMetaTypeType = 12
+	QMetaTypeQBitArray             QMetaTypeType = 13
+	QMetaTypeQDate                 QMetaTypeType = 14
+	QMetaTypeQTime                 QMetaTypeType = 15
+	QMetaTypeQDateTime             QMetaTypeType = 16
+	QMetaTypeQUrl                  QMetaTypeType = 17
+	QMetaTypeQLocale               QMetaTypeType = 18
+	QMetaTypeQRect                 QMetaTypeType = 19
+	QMetaTypeQRectF                QMetaTypeType = 20
+	QMetaTypeQSize                 QMetaTypeType = 21
+	QMetaTypeQSizeF                QMetaTypeType = 22
+	QMetaTypeQLine                 QMetaTypeType = 23
+	QMetaTypeQLineF                QMetaTypeType = 24
+	QMetaTypeQPoint                QMetaTypeType = 25
+	QMetaTypeQPointF               QMetaTypeType = 26
+	QMetaTypeQEasingCurve          QMetaTypeType = 29
+	QMetaTypeQUuid                 QMetaTypeType = 30
+	QMetaTypeQVariant              QMetaTypeType = 41
+	QMetaTypeQRegularExpression    QMetaTypeType = 44
+	QMetaTypeQJsonValue            QMetaTypeType = 45
+	QMetaTypeQJsonObject           QMetaTypeType = 46
+	QMetaTypeQJsonArray            QMetaTypeType = 47
+	QMetaTypeQJsonDocument         QMetaTypeType = 48
+	QMetaTypeQCborValue            QMetaTypeType = 53
+	QMetaTypeQCborArray            QMetaTypeType = 54
+	QMetaTypeQCborMap              QMetaTypeType = 55
+	QMetaTypeFloat16               QMetaTypeType = 63
+	QMetaTypeQModelIndex           QMetaTypeType = 42
+	QMetaTypeQPersistentModelIndex QMetaTypeType = 50
+	QMetaTypeQObjectStar           QMetaTypeType = 39
+	QMetaTypeQVariantMap           QMetaTypeType = 8
+	QMetaTypeQVariantList          QMetaTypeType = 9
+	QMetaTypeQVariantHash          QMetaTypeType = 28
+	QMetaTypeQVariantPair          QMetaTypeType = 58
+	QMetaTypeQByteArrayList        QMetaTypeType = 49
+	QMetaTypeQStringList           QMetaTypeType = 11
+	QMetaTypeQFont                 QMetaTypeType = 4096
+	QMetaTypeQPixmap               QMetaTypeType = 4097
+	QMetaTypeQBrush                QMetaTypeType = 4098
+	QMetaTypeQColor                QMetaTypeType = 4099
+	QMetaTypeQPalette              QMetaTypeType = 4100
+	QMetaTypeQIcon                 QMetaTypeType = 4101
+	QMetaTypeQImage                QMetaTypeType = 4102
+	QMetaTypeQPolygon              QMetaTypeType = 4103
+	QMetaTypeQRegion               QMetaTypeType = 4104
+	QMetaTypeQBitmap               QMetaTypeType = 4105
+	QMetaTypeQCursor               QMetaTypeType = 4106
+	QMetaTypeQKeySequence          QMetaTypeType = 4107
+	QMetaTypeQPen                  QMetaTypeType = 4108
+	QMetaTypeQTextLength           QMetaTypeType = 4109
+	QMetaTypeQTextFormat           QMetaTypeType = 4110
+	QMetaTypeQTransform            QMetaTypeType = 4112
+	QMetaTypeQMatrix4x4            QMetaTypeType = 4113
+	QMetaTypeQVector2D             QMetaTypeType = 4114
+	QMetaTypeQVector3D             QMetaTypeType = 4115
+	QMetaTypeQVector4D             QMetaTypeType = 4116
+	QMetaTypeQQuaternion           QMetaTypeType = 4117
+	QMetaTypeQPolygonF             QMetaTypeType = 4118
+	QMetaTypeQColorSpace           QMetaTypeType = 4119
+	QMetaTypeQSizePolicy           QMetaTypeType = 8192
+	QMetaTypeFirstCoreType         QMetaTypeType = 1
+	QMetaTypeLastCoreType          QMetaTypeType = 63
+	QMetaTypeFirstGuiType          QMetaTypeType = 4096
+	QMetaTypeLastGuiType           QMetaTypeType = 4119
+	QMetaTypeFirstWidgetsType      QMetaTypeType = 8192
+	QMetaTypeLastWidgetsType       QMetaTypeType = 8192
+	QMetaTypeHighestInternalId     QMetaTypeType = 8192
+	QMetaTypeQReal                 QMetaTypeType = 6
+	QMetaTypeUnknownType           QMetaTypeType = 0
+	QMetaTypeUser                  QMetaTypeType = 65536
+)
+
+// QMetaTypeTypeFlags is the flags type for QMetaType::TypeFlag (QFlags<QMetaType::TypeFlag>).
+type QMetaTypeTypeFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QMetaTypeTypeFlags) Has(x QMetaTypeTypeFlags) bool { return f&x == x }
+
+// QMetaTypeTypeFlag wraps the enum QMetaType::TypeFlag. It is the same type as QMetaTypeTypeFlags, so values combine with |.
+type QMetaTypeTypeFlag = QMetaTypeTypeFlags
+
+const (
+	QMetaTypeNeedsConstruction        QMetaTypeTypeFlags = 1
+	QMetaTypeNeedsDestruction         QMetaTypeTypeFlags = 2
+	QMetaTypeRelocatableType          QMetaTypeTypeFlags = 4
+	QMetaTypePointerToQObject         QMetaTypeTypeFlags = 8
+	QMetaTypeIsEnumeration            QMetaTypeTypeFlags = 16
+	QMetaTypeSharedPointerToQObject   QMetaTypeTypeFlags = 32
+	QMetaTypeWeakPointerToQObject     QMetaTypeTypeFlags = 64
+	QMetaTypeTrackingPointerToQObject QMetaTypeTypeFlags = 128
+	QMetaTypeIsUnsignedEnumeration    QMetaTypeTypeFlags = 256
+	QMetaTypeIsGadget                 QMetaTypeTypeFlags = 512
+	QMetaTypePointerToGadget          QMetaTypeTypeFlags = 1024
+	QMetaTypeIsPointer                QMetaTypeTypeFlags = 2048
+	QMetaTypeIsQmlList                QMetaTypeTypeFlags = 4096
+	QMetaTypeIsConst                  QMetaTypeTypeFlags = 8192
+	QMetaTypeNeedsCopyConstruction    QMetaTypeTypeFlags = 16384
+	QMetaTypeNeedsMoveConstruction    QMetaTypeTypeFlags = 32768
+)
+
+// QRegularExpressionPatternOptions is the flags type for QRegularExpression::PatternOption (QFlags<QRegularExpression::PatternOption>).
+type QRegularExpressionPatternOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QRegularExpressionPatternOptions) Has(x QRegularExpressionPatternOptions) bool {
+	return f&x == x
+}
+
+// QRegularExpressionPatternOption wraps the enum QRegularExpression::PatternOption. It is the same type as QRegularExpressionPatternOptions, so values combine with |.
+type QRegularExpressionPatternOption = QRegularExpressionPatternOptions
+
+const (
+	QRegularExpressionNoPatternOption             QRegularExpressionPatternOptions = 0
+	QRegularExpressionCaseInsensitiveOption       QRegularExpressionPatternOptions = 1
+	QRegularExpressionDotMatchesEverythingOption  QRegularExpressionPatternOptions = 2
+	QRegularExpressionMultilineOption             QRegularExpressionPatternOptions = 4
+	QRegularExpressionExtendedPatternSyntaxOption QRegularExpressionPatternOptions = 8
+	QRegularExpressionInvertedGreedinessOption    QRegularExpressionPatternOptions = 16
+	QRegularExpressionDontCaptureOption           QRegularExpressionPatternOptions = 32
+	QRegularExpressionUseUnicodePropertiesOption  QRegularExpressionPatternOptions = 64
+)
+
+// QRegularExpressionMatchType wraps the enum QRegularExpression::MatchType.
+type QRegularExpressionMatchType int64
+
+const (
+	QRegularExpressionNormalMatch                QRegularExpressionMatchType = 0
+	QRegularExpressionPartialPreferCompleteMatch QRegularExpressionMatchType = 1
+	QRegularExpressionPartialPreferFirstMatch    QRegularExpressionMatchType = 2
+	QRegularExpressionNoMatch                    QRegularExpressionMatchType = 3
+)
+
+// QRegularExpressionMatchOptions is the flags type for QRegularExpression::MatchOption (QFlags<QRegularExpression::MatchOption>).
+type QRegularExpressionMatchOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QRegularExpressionMatchOptions) Has(x QRegularExpressionMatchOptions) bool { return f&x == x }
+
+// QRegularExpressionMatchOption wraps the enum QRegularExpression::MatchOption. It is the same type as QRegularExpressionMatchOptions, so values combine with |.
+type QRegularExpressionMatchOption = QRegularExpressionMatchOptions
+
+const (
+	QRegularExpressionNoMatchOption                     QRegularExpressionMatchOptions = 0
+	QRegularExpressionAnchorAtOffsetMatchOption         QRegularExpressionMatchOptions = 1
+	QRegularExpressionDontCheckSubjectStringMatchOption QRegularExpressionMatchOptions = 2
+)
+
+// QRegularExpressionWildcardConversionOptions is the flags type for QRegularExpression::WildcardConversionOption (QFlags<QRegularExpression::WildcardConversionOption>).
+type QRegularExpressionWildcardConversionOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QRegularExpressionWildcardConversionOptions) Has(x QRegularExpressionWildcardConversionOptions) bool {
+	return f&x == x
+}
+
+// QRegularExpressionWildcardConversionOption wraps the enum QRegularExpression::WildcardConversionOption. It is the same type as QRegularExpressionWildcardConversionOptions, so values combine with |.
+type QRegularExpressionWildcardConversionOption = QRegularExpressionWildcardConversionOptions
+
+const (
+	QRegularExpressionDefaultWildcardConversion    QRegularExpressionWildcardConversionOptions = 0
+	QRegularExpressionUnanchoredWildcardConversion QRegularExpressionWildcardConversionOptions = 1
+	QRegularExpressionNonPathWildcardConversion    QRegularExpressionWildcardConversionOptions = 2
+)
+
 // QSettingsStatus wraps the enum QSettings::Status.
 type QSettingsStatus int64
 
@@ -2339,6 +3726,33 @@ const (
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForFiltering           QSortFilterProxyModelDataChangeRelevanceFlags = 1
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForSorting             QSortFilterProxyModelDataChangeRelevanceFlags = 2
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForFilteringAndSorting QSortFilterProxyModelDataChangeRelevanceFlags = 3
+)
+
+// QTimeZoneInitialization wraps the enum QTimeZone::Initialization.
+type QTimeZoneInitialization int64
+
+const (
+	QTimeZoneLocalTime QTimeZoneInitialization = 0
+	QTimeZoneUTC       QTimeZoneInitialization = 1
+)
+
+// QTimeZoneTimeType wraps the enum QTimeZone::TimeType.
+type QTimeZoneTimeType int64
+
+const (
+	QTimeZoneStandardTime QTimeZoneTimeType = 0
+	QTimeZoneDaylightTime QTimeZoneTimeType = 1
+	QTimeZoneGenericTime  QTimeZoneTimeType = 2
+)
+
+// QTimeZoneNameType wraps the enum QTimeZone::NameType.
+type QTimeZoneNameType int64
+
+const (
+	QTimeZoneDefaultName QTimeZoneNameType = 0
+	QTimeZoneLongName    QTimeZoneNameType = 1
+	QTimeZoneShortName   QTimeZoneNameType = 2
+	QTimeZoneOffsetName  QTimeZoneNameType = 3
 )
 
 // QUrlParsingMode wraps the enum QUrl::ParsingMode.
@@ -2415,4 +3829,38 @@ type QUrlAceProcessingOption = QUrlAceProcessingOptions
 const (
 	QUrlIgnoreIDNWhitelist        QUrlAceProcessingOptions = 1
 	QUrlAceTransitionalProcessing QUrlAceProcessingOptions = 2
+)
+
+// QUuidVariant wraps the enum QUuid::Variant.
+type QUuidVariant int64
+
+const (
+	QUuidVarUnknown QUuidVariant = -1
+	QUuidNCS        QUuidVariant = 0
+	QUuidDCE        QUuidVariant = 2
+	QUuidMicrosoft  QUuidVariant = 6
+	QUuidReserved   QUuidVariant = 7
+)
+
+// QUuidVersion wraps the enum QUuid::Version.
+type QUuidVersion int64
+
+const (
+	QUuidVerUnknown    QUuidVersion = -1
+	QUuidTime          QUuidVersion = 1
+	QUuidEmbeddedPOSIX QUuidVersion = 2
+	QUuidMd5           QUuidVersion = 3
+	QUuidName          QUuidVersion = 3
+	QUuidRandom        QUuidVersion = 4
+	QUuidSha1          QUuidVersion = 5
+	QUuidUnixEpoch     QUuidVersion = 7
+)
+
+// QUuidStringFormat wraps the enum QUuid::StringFormat.
+type QUuidStringFormat int64
+
+const (
+	QUuidWithBraces    QUuidStringFormat = 0
+	QUuidWithoutBraces QUuidStringFormat = 1
+	QUuidId128         QUuidStringFormat = 3
 )

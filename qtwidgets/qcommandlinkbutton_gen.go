@@ -133,3 +133,13 @@ func (this *QCommandLinkButton) SetDescription(description string) {
 	self := rt.Use(unsafe.Pointer(this), "QCommandLinkButton.SetDescription")
 	C.qute_QCommandLinkButton_setDescription(self, (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)))
 }
+
+// InitStyleOption wraps QCommandLinkButton::initStyleOption.
+//
+//	C++: void QCommandLinkButton::initStyleOption(QStyleOptionButton * option) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qcommandlinkbutton.html#initStyleOption
+func (this *QCommandLinkButton) InitStyleOption(option *QStyleOptionButton) {
+	self := rt.Use(unsafe.Pointer(this), "QCommandLinkButton.InitStyleOption")
+	C.qute_QCommandLinkButton_initStyleOption(self, rt.UseArg(unsafe.Pointer(option), "QCommandLinkButton.InitStyleOption"))
+}

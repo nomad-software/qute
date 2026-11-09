@@ -57,6 +57,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QAbstractFileIconProvider::Option",
@@ -227,6 +228,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstracttextdocumentlayout.h",
@@ -1037,6 +1039,90 @@
    "qobject": true
   },
   {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "cursorPosition",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "palette",
+     "type": {
+      "canonical": "QPalette",
+      "spelling": "QPalette"
+     }
+    },
+    {
+     "name": "clip",
+     "type": {
+      "canonical": "QRectF",
+      "spelling": "QRectF"
+     }
+    },
+    {
+     "name": "selections",
+     "type": {
+      "canonical": "QList<QAbstractTextDocumentLayout::Selection>",
+      "spelling": "QList<Selection>"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qabstracttextdocumentlayout.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "PaintContext",
+     "params": [],
+     "variadic": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QAbstractTextDocumentLayout::PaintContext",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "cursor",
+     "type": {
+      "canonical": "QTextCursor",
+      "spelling": "QTextCursor"
+     }
+    },
+    {
+     "name": "format",
+     "type": {
+      "canonical": "QTextCharFormat",
+      "spelling": "QTextCharFormat"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qabstracttextdocumentlayout.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtGui",
+   "name": "QAbstractTextDocumentLayout::Selection",
+   "qobject": false
+  },
+  {
    "abstract": true,
    "bases": [],
    "dtor": {
@@ -1044,6 +1130,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextdocument.h",
@@ -1094,6 +1181,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessibilityhints.h",
@@ -2117,6 +2205,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QAccessible::RelationFlag",
@@ -2545,6 +2634,342 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qaccessible_base.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "accessibilityActiveChanged",
+     "params": [
+      {
+       "default": false,
+       "name": "active",
+       "type": {
+        "canonical": "bool",
+        "spelling": "bool"
+       }
+      }
+     ],
+     "pure": true,
+     "return": {
+      "canonical": "void",
+      "spelling": "void"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": true
+    }
+   ],
+   "module": "QtGui",
+   "name": "QAccessible::ActivationObserver",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "disabled",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "selected",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "focusable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "focused",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "pressed",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "checkable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "checked",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "checkStateMixed",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "readOnly",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "hotTracked",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "defaultButton",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "expanded",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "collapsed",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "busy",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "expandable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "marqueed",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "animated",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "invisible",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "offscreen",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "sizeable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "movable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "selfVoicing",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "selectable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "linked",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "traversed",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "multiSelectable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "extSelectable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "passwordEdit",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "hasPopup",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "modal",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "active",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "invalid",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "editable",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "multiLine",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "selectableText",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "supportsAutoCompletion",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "searchEdit",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    },
+    {
+     "name": "qt_reserved",
+     "type": {
+      "canonical": "unsigned long long",
+      "spelling": "quint64"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qaccessible_base.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "State",
+     "params": [],
+     "variadic": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QAccessible::State",
+   "qobject": false
+  },
+  {
+   "abstract": true,
+   "bases": [],
+   "dtor": {
+    "access": "public",
+    "virtual": true
+   },
+   "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -2927,6 +3352,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -3050,6 +3476,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessibleobject.h",
@@ -3239,6 +3666,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -3312,6 +3740,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessiblebridge.h",
@@ -3380,6 +3809,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessiblebridge.h",
@@ -3495,6 +3925,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -3633,6 +4064,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -3809,6 +4241,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -3918,6 +4351,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -3997,6 +4431,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -4579,6 +5014,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessibleobject.h",
@@ -4733,6 +5169,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessibleplugin.h",
@@ -4856,6 +5293,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -5048,6 +5486,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -5133,6 +5572,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -5287,6 +5727,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -5754,6 +6195,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -6021,6 +6463,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -6132,6 +6575,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -6248,6 +6692,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -6785,6 +7230,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -6903,6 +7349,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -7053,6 +7500,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -7202,6 +7650,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -7311,6 +7760,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -7429,6 +7879,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaccessible.h",
@@ -7622,6 +8073,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qaction.h",
@@ -9002,6 +9454,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -9159,6 +9612,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qactiongroup.h",
@@ -9647,6 +10101,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -9750,6 +10205,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbackingstore.h",
@@ -10045,6 +10501,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbitmap.h",
@@ -10333,6 +10790,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbrush.h",
@@ -10857,6 +11315,36 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [
+    {
+     "name": "ref",
+     "type": {
+      "canonical": "QAtomicInt",
+      "spelling": "QAtomicInt"
+     }
+    },
+    {
+     "name": "style",
+     "type": {
+      "canonical": "Qt::BrushStyle",
+      "spelling": "Qt::BrushStyle"
+     }
+    },
+    {
+     "name": "color",
+     "type": {
+      "canonical": "QColor",
+      "spelling": "QColor"
+     }
+    },
+    {
+     "name": "transform",
+     "type": {
+      "canonical": "QTransform",
+      "spelling": "QTransform"
+     }
+    }
+   ],
    "flags": [],
    "gadget": false,
    "header": "qbrush.h",
@@ -10917,6 +11405,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbrush.h",
@@ -10936,6 +11425,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -11074,6 +11564,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qclipboard.h",
@@ -11580,6 +12071,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -11705,6 +12197,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcolor.h",
@@ -14502,6 +14995,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qcolorspace.h",
@@ -15520,11 +16014,96 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "whitePoint",
+     "type": {
+      "canonical": "QPointF",
+      "spelling": "QPointF"
+     }
+    },
+    {
+     "name": "redPoint",
+     "type": {
+      "canonical": "QPointF",
+      "spelling": "QPointF"
+     }
+    },
+    {
+     "name": "greenPoint",
+     "type": {
+      "canonical": "QPointF",
+      "spelling": "QPointF"
+     }
+    },
+    {
+     "name": "bluePoint",
+     "type": {
+      "canonical": "QPointF",
+      "spelling": "QPointF"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qcolorspace.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "fromPrimaries",
+     "params": [
+      {
+       "default": false,
+       "name": "primaries",
+       "type": {
+        "canonical": "QColorSpace::Primaries",
+        "spelling": "Primaries"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QColorSpace::PrimaryPoints",
+      "spelling": "PrimaryPoints"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isValid",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QColorSpace::PrimaryPoints",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": {
     "access": "public",
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcolortransform.h",
@@ -15749,6 +16328,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbrush.h",
@@ -15969,6 +16549,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -16186,6 +16767,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qcursor.h",
@@ -16630,6 +17212,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdesktopservices.h",
@@ -16755,6 +17338,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvalidator.h",
@@ -17277,6 +17861,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qdrag.h",
@@ -17729,6 +18314,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -17902,6 +18488,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -17983,6 +18570,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -18265,6 +18853,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -18554,6 +19143,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -18695,6 +19285,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QEventPoint::State",
@@ -19262,6 +19853,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -19352,6 +19944,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -19539,6 +20132,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QFileSystemModel::Option",
@@ -21090,6 +21684,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -21632,6 +22227,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qfont.h",
@@ -23349,6 +23945,124 @@
    "abstract": false,
    "bases": [],
    "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qfont.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Tag",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isValid",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "value",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "unsigned int",
+      "spelling": "quint32"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "toString",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QByteArray",
+      "spelling": "QByteArray"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "fromValue",
+     "params": [
+      {
+       "default": false,
+       "name": "value",
+       "type": {
+        "canonical": "unsigned int",
+        "spelling": "quint32"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "std::optional<QFont::Tag>",
+      "spelling": "std::optional<Tag>"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "fromString",
+     "params": [
+      {
+       "default": false,
+       "name": "view",
+       "type": {
+        "canonical": "QAnyStringView",
+        "spelling": "QAnyStringView"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "std::optional<QFont::Tag>",
+      "spelling": "std::optional<Tag>"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QFont::Tag",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
    "enums": [
     {
      "name": "WritingSystem",
@@ -23527,6 +24241,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qfontdatabase.h",
@@ -24471,6 +25186,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfontinfo.h",
@@ -24807,6 +25523,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfontmetrics.h",
@@ -25721,6 +26438,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qfontmetrics.h",
@@ -26573,6 +27291,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qfontvariableaxis.h",
@@ -26857,6 +27576,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgenericplugin.h",
@@ -26977,6 +27697,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qgenericpluginfactory.h",
@@ -27071,6 +27792,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QGlyphRun::GlyphRunFlag",
@@ -28445,6 +29167,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qbrush.h",
@@ -28695,6 +29418,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qguiapplication.h",
@@ -30119,6 +30843,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -30315,6 +31040,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -30396,6 +31122,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -31222,6 +31949,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qicon.h",
@@ -32282,6 +33010,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -32378,6 +33107,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qiconengine.h",
@@ -32852,6 +33582,57 @@
    "qobject": false
   },
   {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "size",
+     "type": {
+      "canonical": "QSize",
+      "spelling": "QSize"
+     }
+    },
+    {
+     "name": "mode",
+     "type": {
+      "canonical": "QIcon::Mode",
+      "spelling": "QIcon::Mode"
+     }
+    },
+    {
+     "name": "state",
+     "type": {
+      "canonical": "QIcon::State",
+      "spelling": "QIcon::State"
+     }
+    },
+    {
+     "name": "scale",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "pixmap",
+     "type": {
+      "canonical": "QPixmap",
+      "spelling": "QPixmap"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qiconengine.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtGui",
+   "name": "QIconEngine::ScaledPixmapArgument",
+   "qobject": false
+  },
+  {
    "abstract": true,
    "bases": [
     "QObject"
@@ -32861,6 +33642,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qiconengineplugin.h",
@@ -33155,6 +33937,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qimage.h",
@@ -36853,6 +37636,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QImageIOHandler::Transformation",
@@ -37332,6 +38116,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QImageIOPlugin::Capability",
@@ -37521,6 +38306,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qimagereader.h",
@@ -38608,6 +39394,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qimagewriter.h",
@@ -39398,6 +40185,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QInputDevice::DeviceType",
@@ -39830,6 +40618,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -40145,6 +40934,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qinputmethod.h",
@@ -40759,6 +41549,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -40973,6 +41764,127 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "type",
+     "type": {
+      "canonical": "QInputMethodEvent::AttributeType",
+      "spelling": "AttributeType"
+     }
+    },
+    {
+     "name": "start",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "length",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "value",
+     "type": {
+      "canonical": "QVariant",
+      "spelling": "QVariant"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qevent.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Attribute",
+     "params": [
+      {
+       "default": false,
+       "name": "typ",
+       "type": {
+        "canonical": "QInputMethodEvent::AttributeType",
+        "spelling": "AttributeType"
+       }
+      },
+      {
+       "default": false,
+       "name": "s",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": false,
+       "name": "l",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": false,
+       "name": "val",
+       "type": {
+        "canonical": "QVariant",
+        "spelling": "QVariant"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Attribute",
+     "params": [
+      {
+       "default": false,
+       "name": "typ",
+       "type": {
+        "canonical": "QInputMethodEvent::AttributeType",
+        "spelling": "AttributeType"
+       }
+      },
+      {
+       "default": false,
+       "name": "s",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      },
+      {
+       "default": false,
+       "name": "l",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QInputMethodEvent::Attribute",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QEvent"
    ],
@@ -40981,6 +41893,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -41142,6 +42055,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvalidator.h",
@@ -41490,6 +42404,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -42196,6 +43111,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qkeysequence.h",
@@ -42647,6 +43563,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbrush.h",
@@ -42918,6 +43835,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QMatrix4x4::Flag",
@@ -44525,6 +45443,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -44864,6 +45783,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -45029,6 +45949,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qmovie.h",
@@ -45923,6 +46844,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -46138,6 +47060,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qoffscreensurface.h",
@@ -46515,6 +47438,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qopenglcontext.h",
@@ -47164,6 +48088,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qopenglcontext.h",
@@ -47276,6 +48201,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qopenglextrafunctions.h",
@@ -57098,6 +58024,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qopenglextrafunctions.h",
@@ -57124,6 +58051,1534 @@
    ],
    "module": "QtGui",
    "name": "QOpenGLExtraFunctionsPrivate",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "ReadBuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "DrawRangeElements",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLuint, GLuint, GLsizei, GLenum, const void *)"
+     }
+    },
+    {
+     "name": "TexImage3D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, int, unsigned int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const void *)"
+     }
+    },
+    {
+     "name": "TexSubImage3D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, int, int, unsigned int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const void *)"
+     }
+    },
+    {
+     "name": "CopyTexSubImage3D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, int, int, int)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "CompressedTexImage3D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int, int, int, int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const void *)"
+     }
+    },
+    {
+     "name": "CompressedTexSubImage3D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, int, int, unsigned int, int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const void *)"
+     }
+    },
+    {
+     "name": "GenQueries",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "DeleteQueries",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "IsQuery",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "BeginQuery",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "EndQuery",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "GetQueryiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetQueryObjectuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLuint *)"
+     }
+    },
+    {
+     "name": "UnmapBuffer",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLenum)"
+     }
+    },
+    {
+     "name": "GetBufferPointerv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, void **)",
+      "spelling": "void (*)(GLenum, GLenum, void **)"
+     }
+    },
+    {
+     "name": "DrawBuffers",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLenum *)"
+     }
+    },
+    {
+     "name": "UniformMatrix2x3fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix3x2fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix2x4fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix4x2fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix3x4fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix4x3fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "BlitFramebuffer",
+     "type": {
+      "canonical": "void (*)(int, int, int, int, int, int, int, int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLbitfield, GLenum)"
+     }
+    },
+    {
+     "name": "RenderbufferStorageMultisample",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "FramebufferTextureLayer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, int)",
+      "spelling": "void (*)(GLenum, GLenum, GLuint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "MapBufferRange",
+     "type": {
+      "canonical": "void *(*)(unsigned int, long, long, unsigned int)",
+      "spelling": "void *(*)(GLenum, GLintptr, GLsizeiptr, GLbitfield)"
+     }
+    },
+    {
+     "name": "FlushMappedBufferRange",
+     "type": {
+      "canonical": "void (*)(unsigned int, long, long)",
+      "spelling": "void (*)(GLenum, GLintptr, GLsizeiptr)"
+     }
+    },
+    {
+     "name": "BindVertexArray",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "DeleteVertexArrays",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "GenVertexArrays",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "IsVertexArray",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "GetIntegeri_v",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLuint, GLint *)"
+     }
+    },
+    {
+     "name": "BeginTransformFeedback",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "EndTransformFeedback",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "BindBufferRange",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, long, long)",
+      "spelling": "void (*)(GLenum, GLuint, GLuint, GLintptr, GLsizeiptr)"
+     }
+    },
+    {
+     "name": "BindBufferBase",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "TransformFeedbackVaryings",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const char *const *, unsigned int)",
+      "spelling": "void (*)(GLuint, GLsizei, const GLchar *const *, GLenum)"
+     }
+    },
+    {
+     "name": "GetTransformFeedbackVarying",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int *, int *, unsigned int *, char *)",
+      "spelling": "void (*)(GLuint, GLuint, GLsizei, GLsizei *, GLsizei *, GLenum *, GLchar *)"
+     }
+    },
+    {
+     "name": "VertexAttribIPointer",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, const void *)",
+      "spelling": "void (*)(GLuint, GLint, GLenum, GLsizei, const void *)"
+     }
+    },
+    {
+     "name": "GetVertexAttribIiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetVertexAttribIuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLuint *)"
+     }
+    },
+    {
+     "name": "VertexAttribI4i",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int)",
+      "spelling": "void (*)(GLuint, GLint, GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "VertexAttribI4ui",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint, GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "VertexAttribI4iv",
+     "type": {
+      "canonical": "void (*)(unsigned int, const int *)",
+      "spelling": "void (*)(GLuint, const GLint *)"
+     }
+    },
+    {
+     "name": "VertexAttribI4uiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, const unsigned int *)",
+      "spelling": "void (*)(GLuint, const GLuint *)"
+     }
+    },
+    {
+     "name": "GetUniformuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLint, GLuint *)"
+     }
+    },
+    {
+     "name": "GetFragDataLocation",
+     "type": {
+      "canonical": "int (*)(unsigned int, const char *)",
+      "spelling": "GLint (*)(GLuint, const GLchar *)"
+     }
+    },
+    {
+     "name": "Uniform1ui",
+     "type": {
+      "canonical": "void (*)(int, unsigned int)",
+      "spelling": "void (*)(GLint, GLuint)"
+     }
+    },
+    {
+     "name": "Uniform2ui",
+     "type": {
+      "canonical": "void (*)(int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "Uniform3ui",
+     "type": {
+      "canonical": "void (*)(int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLint, GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "Uniform4ui",
+     "type": {
+      "canonical": "void (*)(int, unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLint, GLuint, GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "Uniform1uiv",
+     "type": {
+      "canonical": "void (*)(int, int, const unsigned int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "Uniform2uiv",
+     "type": {
+      "canonical": "void (*)(int, int, const unsigned int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "Uniform3uiv",
+     "type": {
+      "canonical": "void (*)(int, int, const unsigned int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "Uniform4uiv",
+     "type": {
+      "canonical": "void (*)(int, int, const unsigned int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "ClearBufferiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const int *)",
+      "spelling": "void (*)(GLenum, GLint, const GLint *)"
+     }
+    },
+    {
+     "name": "ClearBufferuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const unsigned int *)",
+      "spelling": "void (*)(GLenum, GLint, const GLuint *)"
+     }
+    },
+    {
+     "name": "ClearBufferfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const float *)",
+      "spelling": "void (*)(GLenum, GLint, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ClearBufferfi",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, float, int)",
+      "spelling": "void (*)(GLenum, GLint, GLfloat, GLint)"
+     }
+    },
+    {
+     "name": "GetStringi",
+     "type": {
+      "canonical": "const unsigned char *(*)(unsigned int, unsigned int)",
+      "spelling": "const GLubyte *(*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "CopyBufferSubData",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, long, long, long)",
+      "spelling": "void (*)(GLenum, GLenum, GLintptr, GLintptr, GLsizeiptr)"
+     }
+    },
+    {
+     "name": "GetUniformIndices",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const char *const *, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLsizei, const GLchar *const *, GLuint *)"
+     }
+    },
+    {
+     "name": "GetActiveUniformsiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const unsigned int *, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLsizei, const GLuint *, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetUniformBlockIndex",
+     "type": {
+      "canonical": "unsigned int (*)(unsigned int, const char *)",
+      "spelling": "GLuint (*)(GLuint, const GLchar *)"
+     }
+    },
+    {
+     "name": "GetActiveUniformBlockiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetActiveUniformBlockName",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLuint, GLuint, GLsizei, GLsizei *, GLchar *)"
+     }
+    },
+    {
+     "name": "UniformBlockBinding",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "DrawArraysInstanced",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int)",
+      "spelling": "void (*)(GLenum, GLint, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "DrawElementsInstanced",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, const void *, int)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, const void *, GLsizei)"
+     }
+    },
+    {
+     "name": "FenceSync",
+     "type": {
+      "canonical": "__GLsync *(*)(unsigned int, unsigned int)",
+      "spelling": "GLsync (*)(GLenum, GLbitfield)"
+     }
+    },
+    {
+     "name": "IsSync",
+     "type": {
+      "canonical": "unsigned char (*)(__GLsync *)",
+      "spelling": "GLboolean (*)(GLsync)"
+     }
+    },
+    {
+     "name": "DeleteSync",
+     "type": {
+      "canonical": "void (*)(__GLsync *)",
+      "spelling": "void (*)(GLsync)"
+     }
+    },
+    {
+     "name": "ClientWaitSync",
+     "type": {
+      "canonical": "unsigned int (*)(__GLsync *, unsigned int, unsigned long)",
+      "spelling": "GLenum (*)(GLsync, GLbitfield, GLuint64)"
+     }
+    },
+    {
+     "name": "WaitSync",
+     "type": {
+      "canonical": "void (*)(__GLsync *, unsigned int, unsigned long)",
+      "spelling": "void (*)(GLsync, GLbitfield, GLuint64)"
+     }
+    },
+    {
+     "name": "GetInteger64v",
+     "type": {
+      "canonical": "void (*)(unsigned int, long *)",
+      "spelling": "void (*)(GLenum, GLint64 *)"
+     }
+    },
+    {
+     "name": "GetSynciv",
+     "type": {
+      "canonical": "void (*)(__GLsync *, unsigned int, int, int *, int *)",
+      "spelling": "void (*)(GLsync, GLenum, GLsizei, GLsizei *, GLint *)"
+     }
+    },
+    {
+     "name": "GetInteger64i_v",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, long *)",
+      "spelling": "void (*)(GLenum, GLuint, GLint64 *)"
+     }
+    },
+    {
+     "name": "GetBufferParameteri64v",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, long *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint64 *)"
+     }
+    },
+    {
+     "name": "GenSamplers",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "DeleteSamplers",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "IsSampler",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "BindSampler",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "SamplerParameteri",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int)",
+      "spelling": "void (*)(GLuint, GLenum, GLint)"
+     }
+    },
+    {
+     "name": "SamplerParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const int *)",
+      "spelling": "void (*)(GLuint, GLenum, const GLint *)"
+     }
+    },
+    {
+     "name": "SamplerParameterf",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, float)",
+      "spelling": "void (*)(GLuint, GLenum, GLfloat)"
+     }
+    },
+    {
+     "name": "SamplerParameterfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const float *)",
+      "spelling": "void (*)(GLuint, GLenum, const GLfloat *)"
+     }
+    },
+    {
+     "name": "GetSamplerParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetSamplerParameterfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, float *)",
+      "spelling": "void (*)(GLuint, GLenum, GLfloat *)"
+     }
+    },
+    {
+     "name": "VertexAttribDivisor",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "BindTransformFeedback",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "DeleteTransformFeedbacks",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "GenTransformFeedbacks",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "IsTransformFeedback",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "PauseTransformFeedback",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "ResumeTransformFeedback",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "GetProgramBinary",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *, unsigned int *, void *)",
+      "spelling": "void (*)(GLuint, GLsizei, GLsizei *, GLenum *, void *)"
+     }
+    },
+    {
+     "name": "ProgramBinary",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const void *, int)",
+      "spelling": "void (*)(GLuint, GLenum, const void *, GLsizei)"
+     }
+    },
+    {
+     "name": "ProgramParameteri",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int)",
+      "spelling": "void (*)(GLuint, GLenum, GLint)"
+     }
+    },
+    {
+     "name": "InvalidateFramebuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const unsigned int *)",
+      "spelling": "void (*)(GLenum, GLsizei, const GLenum *)"
+     }
+    },
+    {
+     "name": "InvalidateSubFramebuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const unsigned int *, int, int, int, int)",
+      "spelling": "void (*)(GLenum, GLsizei, const GLenum *, GLint, GLint, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "TexStorage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "TexStorage3D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int, int)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "GetInternalformativ",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLsizei, GLint *)"
+     }
+    },
+    {
+     "name": "DispatchCompute",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "DispatchComputeIndirect",
+     "type": {
+      "canonical": "void (*)(long)",
+      "spelling": "void (*)(GLintptr)"
+     }
+    },
+    {
+     "name": "DrawArraysIndirect",
+     "type": {
+      "canonical": "void (*)(unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, const void *)"
+     }
+    },
+    {
+     "name": "DrawElementsIndirect",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLenum, const void *)"
+     }
+    },
+    {
+     "name": "FramebufferParameteri",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int)",
+      "spelling": "void (*)(GLenum, GLenum, GLint)"
+     }
+    },
+    {
+     "name": "GetFramebufferParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetProgramInterfaceiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetProgramResourceIndex",
+     "type": {
+      "canonical": "unsigned int (*)(unsigned int, unsigned int, const char *)",
+      "spelling": "GLuint (*)(GLuint, GLenum, const GLchar *)"
+     }
+    },
+    {
+     "name": "GetProgramResourceName",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLuint, GLenum, GLuint, GLsizei, GLsizei *, GLchar *)"
+     }
+    },
+    {
+     "name": "GetProgramResourceiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, const unsigned int *, int, int *, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLuint, GLsizei, const GLenum *, GLsizei, GLsizei *, GLint *)"
+     }
+    },
+    {
+     "name": "GetProgramResourceLocation",
+     "type": {
+      "canonical": "int (*)(unsigned int, unsigned int, const char *)",
+      "spelling": "GLint (*)(GLuint, GLenum, const GLchar *)"
+     }
+    },
+    {
+     "name": "UseProgramStages",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLbitfield, GLuint)"
+     }
+    },
+    {
+     "name": "ActiveShaderProgram",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "CreateShaderProgramv",
+     "type": {
+      "canonical": "unsigned int (*)(unsigned int, int, const char *const *)",
+      "spelling": "GLuint (*)(GLenum, GLsizei, const GLchar *const *)"
+     }
+    },
+    {
+     "name": "BindProgramPipeline",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "DeleteProgramPipelines",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "GenProgramPipelines",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "IsProgramPipeline",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "GetProgramPipelineiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform1i",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int)",
+      "spelling": "void (*)(GLuint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "ProgramUniform2i",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int)",
+      "spelling": "void (*)(GLuint, GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "ProgramUniform3i",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int)",
+      "spelling": "void (*)(GLuint, GLint, GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "ProgramUniform4i",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int)",
+      "spelling": "void (*)(GLuint, GLint, GLint, GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "ProgramUniform1ui",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLint, GLuint)"
+     }
+    },
+    {
+     "name": "ProgramUniform2ui",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "ProgramUniform3ui",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLint, GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "ProgramUniform4ui",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLint, GLuint, GLuint, GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "ProgramUniform1f",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, float)",
+      "spelling": "void (*)(GLuint, GLint, GLfloat)"
+     }
+    },
+    {
+     "name": "ProgramUniform2f",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, float, float)",
+      "spelling": "void (*)(GLuint, GLint, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "ProgramUniform3f",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, float, float, float)",
+      "spelling": "void (*)(GLuint, GLint, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "ProgramUniform4f",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, float, float, float, float)",
+      "spelling": "void (*)(GLuint, GLint, GLfloat, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "ProgramUniform1iv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform2iv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform3iv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform4iv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform1uiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const unsigned int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform2uiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const unsigned int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform3uiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const unsigned int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform4uiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const unsigned int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "ProgramUniform1fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniform2fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniform3fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniform4fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix2fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix3fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix4fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix2x3fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix3x2fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix2x4fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix4x2fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix3x4fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ProgramUniformMatrix4x3fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "ValidateProgramPipeline",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "GetProgramPipelineInfoLog",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLuint, GLsizei, GLsizei *, GLchar *)"
+     }
+    },
+    {
+     "name": "BindImageTexture",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, unsigned char, int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint, GLint, GLboolean, GLint, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "GetBooleani_v",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned char *)",
+      "spelling": "void (*)(GLenum, GLuint, GLboolean *)"
+     }
+    },
+    {
+     "name": "MemoryBarrier",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLbitfield)"
+     }
+    },
+    {
+     "name": "MemoryBarrierByRegion",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLbitfield)"
+     }
+    },
+    {
+     "name": "TexStorage2DMultisample",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int, unsigned char)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLboolean)"
+     }
+    },
+    {
+     "name": "GetMultisamplefv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, float *)",
+      "spelling": "void (*)(GLenum, GLuint, GLfloat *)"
+     }
+    },
+    {
+     "name": "SampleMaski",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLbitfield)"
+     }
+    },
+    {
+     "name": "GetTexLevelParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetTexLevelParameterfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, float *)",
+      "spelling": "void (*)(GLenum, GLint, GLenum, GLfloat *)"
+     }
+    },
+    {
+     "name": "BindVertexBuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, long, int)",
+      "spelling": "void (*)(GLuint, GLuint, GLintptr, GLsizei)"
+     }
+    },
+    {
+     "name": "VertexAttribFormat",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, unsigned char, unsigned int)",
+      "spelling": "void (*)(GLuint, GLint, GLenum, GLboolean, GLuint)"
+     }
+    },
+    {
+     "name": "VertexAttribIFormat",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLint, GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "VertexAttribBinding",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "VertexBindingDivisor",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "BlendBarrier",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "BlendEquationSeparatei",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "BlendEquationi",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLenum)"
+     }
+    },
+    {
+     "name": "BlendFuncSeparatei",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLenum, GLenum, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "BlendFunci",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "ColorMaski",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned char, unsigned char, unsigned char, unsigned char)",
+      "spelling": "void (*)(GLuint, GLboolean, GLboolean, GLboolean, GLboolean)"
+     }
+    },
+    {
+     "name": "CopyImageSubData",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int, int, int, unsigned int, unsigned int, int, int, int, int, int, int, int)",
+      "spelling": "void (*)(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "DebugMessageCallback",
+     "type": {
+      "canonical": "void (*)(void (*)(unsigned int, unsigned int, unsigned int, unsigned int, int, const char *, const void *), const void *)",
+      "spelling": "void (*)(GLDEBUGPROC, const void *)"
+     }
+    },
+    {
+     "name": "DebugMessageControl",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, const unsigned int *, unsigned char)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLsizei, const GLuint *, GLboolean)"
+     }
+    },
+    {
+     "name": "DebugMessageInsert",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int, int, const char *)",
+      "spelling": "void (*)(GLenum, GLenum, GLuint, GLenum, GLsizei, const GLchar *)"
+     }
+    },
+    {
+     "name": "Disablei",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "DrawElementsBaseVertex",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, const void *, int)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, const void *, GLint)"
+     }
+    },
+    {
+     "name": "DrawElementsInstancedBaseVertex",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, const void *, int, int)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, const void *, GLsizei, GLint)"
+     }
+    },
+    {
+     "name": "DrawRangeElementsBaseVertex",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int, unsigned int, const void *, int)",
+      "spelling": "void (*)(GLenum, GLuint, GLuint, GLsizei, GLenum, const void *, GLint)"
+     }
+    },
+    {
+     "name": "Enablei",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "FramebufferTexture",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int)",
+      "spelling": "void (*)(GLenum, GLenum, GLuint, GLint)"
+     }
+    },
+    {
+     "name": "GetDebugMessageLog",
+     "type": {
+      "canonical": "unsigned int (*)(unsigned int, int, unsigned int *, unsigned int *, unsigned int *, unsigned int *, int *, char *)",
+      "spelling": "GLuint (*)(GLuint, GLsizei, GLenum *, GLenum *, GLuint *, GLenum *, GLsizei *, GLchar *)"
+     }
+    },
+    {
+     "name": "GetGraphicsResetStatus",
+     "type": {
+      "canonical": "unsigned int (*)()",
+      "spelling": "GLenum (*)()"
+     }
+    },
+    {
+     "name": "GetObjectLabel",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLenum, GLuint, GLsizei, GLsizei *, GLchar *)"
+     }
+    },
+    {
+     "name": "GetObjectPtrLabel",
+     "type": {
+      "canonical": "void (*)(const void *, int, int *, char *)",
+      "spelling": "void (*)(const void *, GLsizei, GLsizei *, GLchar *)"
+     }
+    },
+    {
+     "name": "GetPointerv",
+     "type": {
+      "canonical": "void (*)(unsigned int, void **)",
+      "spelling": "void (*)(GLenum, void **)"
+     }
+    },
+    {
+     "name": "GetSamplerParameterIiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetSamplerParameterIuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLuint *)"
+     }
+    },
+    {
+     "name": "GetTexParameterIiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetTexParameterIuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLuint *)"
+     }
+    },
+    {
+     "name": "GetnUniformfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, float *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLfloat *)"
+     }
+    },
+    {
+     "name": "GetnUniformiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLint *)"
+     }
+    },
+    {
+     "name": "GetnUniformuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLint, GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "IsEnabledi",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int, unsigned int)",
+      "spelling": "GLboolean (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "MinSampleShading",
+     "type": {
+      "canonical": "void (*)(float)",
+      "spelling": "void (*)(GLfloat)"
+     }
+    },
+    {
+     "name": "ObjectLabel",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, const char *)",
+      "spelling": "void (*)(GLenum, GLuint, GLsizei, const GLchar *)"
+     }
+    },
+    {
+     "name": "ObjectPtrLabel",
+     "type": {
+      "canonical": "void (*)(const void *, int, const char *)",
+      "spelling": "void (*)(const void *, GLsizei, const GLchar *)"
+     }
+    },
+    {
+     "name": "PatchParameteri",
+     "type": {
+      "canonical": "void (*)(unsigned int, int)",
+      "spelling": "void (*)(GLenum, GLint)"
+     }
+    },
+    {
+     "name": "PopDebugGroup",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "PrimitiveBoundingBox",
+     "type": {
+      "canonical": "void (*)(float, float, float, float, float, float, float, float)",
+      "spelling": "void (*)(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "PushDebugGroup",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, const char *)",
+      "spelling": "void (*)(GLenum, GLuint, GLsizei, const GLchar *)"
+     }
+    },
+    {
+     "name": "ReadnPixels",
+     "type": {
+      "canonical": "void (*)(int, int, int, int, unsigned int, unsigned int, int, void *)",
+      "spelling": "void (*)(GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, GLsizei, void *)"
+     }
+    },
+    {
+     "name": "SamplerParameterIiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const int *)",
+      "spelling": "void (*)(GLuint, GLenum, const GLint *)"
+     }
+    },
+    {
+     "name": "SamplerParameterIuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const unsigned int *)",
+      "spelling": "void (*)(GLuint, GLenum, const GLuint *)"
+     }
+    },
+    {
+     "name": "TexBuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "TexBufferRange",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, long, long)",
+      "spelling": "void (*)(GLenum, GLenum, GLuint, GLintptr, GLsizeiptr)"
+     }
+    },
+    {
+     "name": "TexParameterIiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const int *)",
+      "spelling": "void (*)(GLenum, GLenum, const GLint *)"
+     }
+    },
+    {
+     "name": "TexParameterIuiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const unsigned int *)",
+      "spelling": "void (*)(GLenum, GLenum, const GLuint *)"
+     }
+    },
+    {
+     "name": "TexStorage3DMultisample",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int, int, unsigned char)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei, GLboolean)"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qopenglextrafunctions.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtGui",
+   "name": "QOpenGLExtraFunctionsPrivate::Functions",
    "qobject": false
   },
   {
@@ -57215,6 +59670,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QOpenGLFunctions::OpenGLFeature",
@@ -62783,6 +65239,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qopenglfunctions.h",
@@ -62809,6 +65266,1030 @@
    ],
    "module": "QtGui",
    "name": "QOpenGLFunctionsPrivate",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "BindTexture",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "BlendFunc",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "Clear",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLbitfield)"
+     }
+    },
+    {
+     "name": "ClearColor",
+     "type": {
+      "canonical": "void (*)(float, float, float, float)",
+      "spelling": "void (*)(GLclampf, GLclampf, GLclampf, GLclampf)"
+     }
+    },
+    {
+     "name": "ClearDepthf",
+     "type": {
+      "canonical": "void (*)(float)",
+      "spelling": "void (*)(GLclampf)"
+     }
+    },
+    {
+     "name": "ClearStencil",
+     "type": {
+      "canonical": "void (*)(int)",
+      "spelling": "void (*)(GLint)"
+     }
+    },
+    {
+     "name": "ColorMask",
+     "type": {
+      "canonical": "void (*)(unsigned char, unsigned char, unsigned char, unsigned char)",
+      "spelling": "void (*)(GLboolean, GLboolean, GLboolean, GLboolean)"
+     }
+    },
+    {
+     "name": "CopyTexImage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int, int, int, int)",
+      "spelling": "void (*)(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint)"
+     }
+    },
+    {
+     "name": "CopyTexSubImage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, int, int)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "CullFace",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "DeleteTextures",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "DepthFunc",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "DepthMask",
+     "type": {
+      "canonical": "void (*)(unsigned char)",
+      "spelling": "void (*)(GLboolean)"
+     }
+    },
+    {
+     "name": "DepthRangef",
+     "type": {
+      "canonical": "void (*)(float, float)",
+      "spelling": "void (*)(GLclampf, GLclampf)"
+     }
+    },
+    {
+     "name": "Disable",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "DrawArrays",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int)",
+      "spelling": "void (*)(GLenum, GLint, GLsizei)"
+     }
+    },
+    {
+     "name": "DrawElements",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLsizei, GLenum, const GLvoid *)"
+     }
+    },
+    {
+     "name": "Enable",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "Finish",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "Flush",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "FrontFace",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "GenTextures",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "GetBooleanv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned char *)",
+      "spelling": "void (*)(GLenum, GLboolean *)"
+     }
+    },
+    {
+     "name": "GetError",
+     "type": {
+      "canonical": "unsigned int (*)()",
+      "spelling": "GLenum (*)()"
+     }
+    },
+    {
+     "name": "GetFloatv",
+     "type": {
+      "canonical": "void (*)(unsigned int, float *)",
+      "spelling": "void (*)(GLenum, GLfloat *)"
+     }
+    },
+    {
+     "name": "GetIntegerv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetString",
+     "type": {
+      "canonical": "const unsigned char *(*)(unsigned int)",
+      "spelling": "const GLubyte *(*)(GLenum)"
+     }
+    },
+    {
+     "name": "GetTexParameterfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, float *)",
+      "spelling": "void (*)(GLenum, GLenum, GLfloat *)"
+     }
+    },
+    {
+     "name": "GetTexParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "Hint",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "IsEnabled",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLenum)"
+     }
+    },
+    {
+     "name": "IsTexture",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "LineWidth",
+     "type": {
+      "canonical": "void (*)(float)",
+      "spelling": "void (*)(GLfloat)"
+     }
+    },
+    {
+     "name": "PixelStorei",
+     "type": {
+      "canonical": "void (*)(unsigned int, int)",
+      "spelling": "void (*)(GLenum, GLint)"
+     }
+    },
+    {
+     "name": "PolygonOffset",
+     "type": {
+      "canonical": "void (*)(float, float)",
+      "spelling": "void (*)(GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "ReadPixels",
+     "type": {
+      "canonical": "void (*)(int, int, int, int, unsigned int, unsigned int, void *)",
+      "spelling": "void (*)(GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, GLvoid *)"
+     }
+    },
+    {
+     "name": "Scissor",
+     "type": {
+      "canonical": "void (*)(int, int, int, int)",
+      "spelling": "void (*)(GLint, GLint, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "StencilFunc",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLint, GLuint)"
+     }
+    },
+    {
+     "name": "StencilMask",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "StencilOp",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "TexImage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, unsigned int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *)"
+     }
+    },
+    {
+     "name": "TexParameterf",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, float)",
+      "spelling": "void (*)(GLenum, GLenum, GLfloat)"
+     }
+    },
+    {
+     "name": "TexParameterfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const float *)",
+      "spelling": "void (*)(GLenum, GLenum, const GLfloat *)"
+     }
+    },
+    {
+     "name": "TexParameteri",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int)",
+      "spelling": "void (*)(GLenum, GLenum, GLint)"
+     }
+    },
+    {
+     "name": "TexParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const int *)",
+      "spelling": "void (*)(GLenum, GLenum, const GLint *)"
+     }
+    },
+    {
+     "name": "TexSubImage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, unsigned int, unsigned int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const GLvoid *)"
+     }
+    },
+    {
+     "name": "Viewport",
+     "type": {
+      "canonical": "void (*)(int, int, int, int)",
+      "spelling": "void (*)(GLint, GLint, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "ActiveTexture",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "AttachShader",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "BindAttribLocation",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, const char *)",
+      "spelling": "void (*)(GLuint, GLuint, const char *)"
+     }
+    },
+    {
+     "name": "BindBuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "BindFramebuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "BindRenderbuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "BlendColor",
+     "type": {
+      "canonical": "void (*)(float, float, float, float)",
+      "spelling": "void (*)(GLclampf, GLclampf, GLclampf, GLclampf)"
+     }
+    },
+    {
+     "name": "BlendEquation",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "BlendEquationSeparate",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "BlendFuncSeparate",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "BufferData",
+     "type": {
+      "canonical": "void (*)(unsigned int, long, const void *, unsigned int)",
+      "spelling": "void (*)(GLenum, qopengl_GLsizeiptr, const void *, GLenum)"
+     }
+    },
+    {
+     "name": "BufferSubData",
+     "type": {
+      "canonical": "void (*)(unsigned int, long, long, const void *)",
+      "spelling": "void (*)(GLenum, qopengl_GLintptr, qopengl_GLsizeiptr, const void *)"
+     }
+    },
+    {
+     "name": "CheckFramebufferStatus",
+     "type": {
+      "canonical": "unsigned int (*)(unsigned int)",
+      "spelling": "GLenum (*)(GLenum)"
+     }
+    },
+    {
+     "name": "CompileShader",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "CompressedTexImage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, int, int, int, int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const void *)"
+     }
+    },
+    {
+     "name": "CompressedTexSubImage2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int, int, int, int, unsigned int, int, const void *)",
+      "spelling": "void (*)(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const void *)"
+     }
+    },
+    {
+     "name": "CreateProgram",
+     "type": {
+      "canonical": "unsigned int (*)()",
+      "spelling": "GLuint (*)()"
+     }
+    },
+    {
+     "name": "CreateShader",
+     "type": {
+      "canonical": "unsigned int (*)(unsigned int)",
+      "spelling": "GLuint (*)(GLenum)"
+     }
+    },
+    {
+     "name": "DeleteBuffers",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "DeleteFramebuffers",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "DeleteProgram",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "DeleteRenderbuffers",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *)",
+      "spelling": "void (*)(GLsizei, const GLuint *)"
+     }
+    },
+    {
+     "name": "DeleteShader",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "DetachShader",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLuint, GLuint)"
+     }
+    },
+    {
+     "name": "DisableVertexAttribArray",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "EnableVertexAttribArray",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "FramebufferRenderbuffer",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "FramebufferTexture2D",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int, int)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLuint, GLint)"
+     }
+    },
+    {
+     "name": "GenBuffers",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "GenerateMipmap",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLenum)"
+     }
+    },
+    {
+     "name": "GenFramebuffers",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "GenRenderbuffers",
+     "type": {
+      "canonical": "void (*)(int, unsigned int *)",
+      "spelling": "void (*)(GLsizei, GLuint *)"
+     }
+    },
+    {
+     "name": "GetActiveAttrib",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int *, int *, unsigned int *, char *)",
+      "spelling": "void (*)(GLuint, GLuint, GLsizei, GLsizei *, GLint *, GLenum *, char *)"
+     }
+    },
+    {
+     "name": "GetActiveUniform",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int *, int *, unsigned int *, char *)",
+      "spelling": "void (*)(GLuint, GLuint, GLsizei, GLsizei *, GLint *, GLenum *, char *)"
+     }
+    },
+    {
+     "name": "GetAttachedShaders",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *, unsigned int *)",
+      "spelling": "void (*)(GLuint, GLsizei, GLsizei *, GLuint *)"
+     }
+    },
+    {
+     "name": "GetAttribLocation",
+     "type": {
+      "canonical": "int (*)(unsigned int, const char *)",
+      "spelling": "GLint (*)(GLuint, const char *)"
+     }
+    },
+    {
+     "name": "GetBufferParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetFramebufferAttachmentParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetProgramiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetProgramInfoLog",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLuint, GLsizei, GLsizei *, char *)"
+     }
+    },
+    {
+     "name": "GetRenderbufferParameteriv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetShaderiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetShaderInfoLog",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLuint, GLsizei, GLsizei *, char *)"
+     }
+    },
+    {
+     "name": "GetShaderPrecisionFormat",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *, int *)",
+      "spelling": "void (*)(GLenum, GLenum, GLint *, GLint *)"
+     }
+    },
+    {
+     "name": "GetShaderSource",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *, char *)",
+      "spelling": "void (*)(GLuint, GLsizei, GLsizei *, char *)"
+     }
+    },
+    {
+     "name": "GetUniformfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, float *)",
+      "spelling": "void (*)(GLuint, GLint, GLfloat *)"
+     }
+    },
+    {
+     "name": "GetUniformiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, int *)",
+      "spelling": "void (*)(GLuint, GLint, GLint *)"
+     }
+    },
+    {
+     "name": "GetUniformLocation",
+     "type": {
+      "canonical": "int (*)(unsigned int, const char *)",
+      "spelling": "GLint (*)(GLuint, const char *)"
+     }
+    },
+    {
+     "name": "GetVertexAttribfv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, float *)",
+      "spelling": "void (*)(GLuint, GLenum, GLfloat *)"
+     }
+    },
+    {
+     "name": "GetVertexAttribiv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int *)",
+      "spelling": "void (*)(GLuint, GLenum, GLint *)"
+     }
+    },
+    {
+     "name": "GetVertexAttribPointerv",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, void **)",
+      "spelling": "void (*)(GLuint, GLenum, void **)"
+     }
+    },
+    {
+     "name": "IsBuffer",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "IsFramebuffer",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "IsProgram",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "IsRenderbuffer",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "IsShader",
+     "type": {
+      "canonical": "unsigned char (*)(unsigned int)",
+      "spelling": "GLboolean (*)(GLuint)"
+     }
+    },
+    {
+     "name": "LinkProgram",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "ReleaseShaderCompiler",
+     "type": {
+      "canonical": "void (*)()",
+      "spelling": "void (*)()"
+     }
+    },
+    {
+     "name": "RenderbufferStorage",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, int)",
+      "spelling": "void (*)(GLenum, GLenum, GLsizei, GLsizei)"
+     }
+    },
+    {
+     "name": "SampleCoverage",
+     "type": {
+      "canonical": "void (*)(float, unsigned char)",
+      "spelling": "void (*)(GLclampf, GLboolean)"
+     }
+    },
+    {
+     "name": "ShaderBinary",
+     "type": {
+      "canonical": "void (*)(int, const unsigned int *, unsigned int, const void *, int)",
+      "spelling": "void (*)(GLint, const GLuint *, GLenum, const void *, GLint)"
+     }
+    },
+    {
+     "name": "ShaderSource",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, const char **, const int *)",
+      "spelling": "void (*)(GLuint, GLsizei, const char **, const GLint *)"
+     }
+    },
+    {
+     "name": "StencilFuncSeparate",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum, GLint, GLuint)"
+     }
+    },
+    {
+     "name": "StencilMaskSeparate",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLuint)"
+     }
+    },
+    {
+     "name": "StencilOpSeparate",
+     "type": {
+      "canonical": "void (*)(unsigned int, unsigned int, unsigned int, unsigned int)",
+      "spelling": "void (*)(GLenum, GLenum, GLenum, GLenum)"
+     }
+    },
+    {
+     "name": "Uniform1f",
+     "type": {
+      "canonical": "void (*)(int, float)",
+      "spelling": "void (*)(GLint, GLfloat)"
+     }
+    },
+    {
+     "name": "Uniform1fv",
+     "type": {
+      "canonical": "void (*)(int, int, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "Uniform1i",
+     "type": {
+      "canonical": "void (*)(int, int)",
+      "spelling": "void (*)(GLint, GLint)"
+     }
+    },
+    {
+     "name": "Uniform1iv",
+     "type": {
+      "canonical": "void (*)(int, int, const int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "Uniform2f",
+     "type": {
+      "canonical": "void (*)(int, float, float)",
+      "spelling": "void (*)(GLint, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "Uniform2fv",
+     "type": {
+      "canonical": "void (*)(int, int, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "Uniform2i",
+     "type": {
+      "canonical": "void (*)(int, int, int)",
+      "spelling": "void (*)(GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "Uniform2iv",
+     "type": {
+      "canonical": "void (*)(int, int, const int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "Uniform3f",
+     "type": {
+      "canonical": "void (*)(int, float, float, float)",
+      "spelling": "void (*)(GLint, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "Uniform3fv",
+     "type": {
+      "canonical": "void (*)(int, int, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "Uniform3i",
+     "type": {
+      "canonical": "void (*)(int, int, int, int)",
+      "spelling": "void (*)(GLint, GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "Uniform3iv",
+     "type": {
+      "canonical": "void (*)(int, int, const int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "Uniform4f",
+     "type": {
+      "canonical": "void (*)(int, float, float, float, float)",
+      "spelling": "void (*)(GLint, GLfloat, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "Uniform4fv",
+     "type": {
+      "canonical": "void (*)(int, int, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLfloat *)"
+     }
+    },
+    {
+     "name": "Uniform4i",
+     "type": {
+      "canonical": "void (*)(int, int, int, int, int)",
+      "spelling": "void (*)(GLint, GLint, GLint, GLint, GLint)"
+     }
+    },
+    {
+     "name": "Uniform4iv",
+     "type": {
+      "canonical": "void (*)(int, int, const int *)",
+      "spelling": "void (*)(GLint, GLsizei, const GLint *)"
+     }
+    },
+    {
+     "name": "UniformMatrix2fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix3fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UniformMatrix4fv",
+     "type": {
+      "canonical": "void (*)(int, int, unsigned char, const float *)",
+      "spelling": "void (*)(GLint, GLsizei, GLboolean, const GLfloat *)"
+     }
+    },
+    {
+     "name": "UseProgram",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "ValidateProgram",
+     "type": {
+      "canonical": "void (*)(unsigned int)",
+      "spelling": "void (*)(GLuint)"
+     }
+    },
+    {
+     "name": "VertexAttrib1f",
+     "type": {
+      "canonical": "void (*)(unsigned int, float)",
+      "spelling": "void (*)(GLuint, GLfloat)"
+     }
+    },
+    {
+     "name": "VertexAttrib1fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, const float *)",
+      "spelling": "void (*)(GLuint, const GLfloat *)"
+     }
+    },
+    {
+     "name": "VertexAttrib2f",
+     "type": {
+      "canonical": "void (*)(unsigned int, float, float)",
+      "spelling": "void (*)(GLuint, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "VertexAttrib2fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, const float *)",
+      "spelling": "void (*)(GLuint, const GLfloat *)"
+     }
+    },
+    {
+     "name": "VertexAttrib3f",
+     "type": {
+      "canonical": "void (*)(unsigned int, float, float, float)",
+      "spelling": "void (*)(GLuint, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "VertexAttrib3fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, const float *)",
+      "spelling": "void (*)(GLuint, const GLfloat *)"
+     }
+    },
+    {
+     "name": "VertexAttrib4f",
+     "type": {
+      "canonical": "void (*)(unsigned int, float, float, float, float)",
+      "spelling": "void (*)(GLuint, GLfloat, GLfloat, GLfloat, GLfloat)"
+     }
+    },
+    {
+     "name": "VertexAttrib4fv",
+     "type": {
+      "canonical": "void (*)(unsigned int, const float *)",
+      "spelling": "void (*)(GLuint, const GLfloat *)"
+     }
+    },
+    {
+     "name": "VertexAttribPointer",
+     "type": {
+      "canonical": "void (*)(unsigned int, int, unsigned int, unsigned char, int, const void *)",
+      "spelling": "void (*)(GLuint, GLint, GLenum, GLboolean, GLsizei, const void *)"
+     }
+    },
+    {
+     "name": "ClearDepth",
+     "type": {
+      "canonical": "void (*)(double)",
+      "spelling": "void (*)(GLdouble)"
+     }
+    },
+    {
+     "name": "DepthRange",
+     "type": {
+      "canonical": "void (*)(double, double)",
+      "spelling": "void (*)(GLdouble, GLdouble)"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qopenglfunctions.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtGui",
+   "name": "QOpenGLFunctionsPrivate::Functions",
    "qobject": false
   },
   {
@@ -62900,6 +66381,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpagelayout.h",
@@ -63670,6 +67152,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpageranges.h",
@@ -63956,6 +67439,61 @@
    ],
    "module": "QtGui",
    "name": "QPageRanges",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "from",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "to",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qpageranges.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "contains",
+     "params": [
+      {
+       "default": false,
+       "name": "pageNumber",
+       "type": {
+        "canonical": "int",
+        "spelling": "int"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QPageRanges::Range",
    "qobject": false
   },
   {
@@ -64527,6 +68065,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpagesize.h",
@@ -65276,6 +68815,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpagedpaintdevice.h",
@@ -65565,6 +69105,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpaintdevice.h",
@@ -65990,6 +69531,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpaintdevicewindow.h",
@@ -66529,6 +70071,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QPaintEngine::PaintEngineFeature",
@@ -67602,6 +71145,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpaintengine.h",
@@ -67892,6 +71436,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -68237,6 +71782,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QPainter::RenderHint",
@@ -74699,6 +78245,157 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "x",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "y",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "sourceLeft",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "sourceTop",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "width",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "height",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "scaleX",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "scaleY",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "rotation",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "opacity",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qpainter.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "create",
+     "params": [
+      {
+       "default": false,
+       "name": "pos",
+       "type": {
+        "canonical": "const QPointF &",
+        "spelling": "const QPointF &"
+       }
+      },
+      {
+       "default": false,
+       "name": "sourceRect",
+       "type": {
+        "canonical": "const QRectF &",
+        "spelling": "const QRectF &"
+       }
+      },
+      {
+       "default": true,
+       "name": "scaleX",
+       "type": {
+        "canonical": "double",
+        "spelling": "qreal"
+       }
+      },
+      {
+       "default": true,
+       "name": "scaleY",
+       "type": {
+        "canonical": "double",
+        "spelling": "qreal"
+       }
+      },
+      {
+       "default": true,
+       "name": "rotation",
+       "type": {
+        "canonical": "double",
+        "spelling": "qreal"
+       }
+      },
+      {
+       "default": true,
+       "name": "opacity",
+       "type": {
+        "canonical": "double",
+        "spelling": "qreal"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QPainter::PixmapFragment",
+      "spelling": "PixmapFragment"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QPainter::PixmapFragment",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -74729,6 +78426,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpainterpath.h",
@@ -76648,11 +80346,95 @@
   {
    "abstract": false,
    "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "x",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "y",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "type",
+     "type": {
+      "canonical": "QPainterPath::ElementType",
+      "spelling": "ElementType"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qpainterpath.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isMoveTo",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isLineTo",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isCurveTo",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QPainterPath::Element",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
    "dtor": {
     "access": "public",
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpainterpath.h",
@@ -77043,6 +80825,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpainterstateguard.h",
@@ -77303,6 +81086,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qpalette.h",
@@ -78472,6 +82256,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpdfoutputintent.h",
@@ -78743,6 +82528,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpdfwriter.h",
@@ -79304,6 +83090,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpen.h",
@@ -79953,6 +83740,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpicture.h",
@@ -80590,6 +84378,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qpixelformat.h",
@@ -81063,6 +84852,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpixmap.h",
@@ -82512,6 +86302,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpixmapcache.h",
@@ -82746,6 +86537,109 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": {
+    "access": "public",
+    "virtual": false
+   },
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qpixmapcache.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Key",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": true,
+     "kind": "ctor",
+     "move": false,
+     "name": "Key",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "const QPixmapCache::Key &",
+        "spelling": "const Key &"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": true,
+     "name": "Key",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "QPixmapCache::Key &&",
+        "spelling": "Key &&"
+       }
+      }
+     ],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "swap",
+     "params": [
+      {
+       "default": false,
+       "name": "other",
+       "type": {
+        "canonical": "QPixmapCache::Key &",
+        "spelling": "Key &"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "void",
+      "spelling": "void"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "isValid",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QPixmapCache::Key",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QEvent"
    ],
@@ -82771,6 +86665,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -82876,6 +86771,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qevent.h",
@@ -83508,6 +87404,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QPointingDevice::PointerType",
@@ -83887,6 +87784,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qpointingdevice.h",
@@ -83967,6 +87865,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpolygon.h",
@@ -84719,6 +88618,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qpolygon.h",
@@ -85124,6 +89024,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qquaternion.h",
@@ -86271,6 +90172,120 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "x",
+     "type": {
+      "canonical": "QQuaternion::Axis",
+      "spelling": "Axis"
+     }
+    },
+    {
+     "name": "y",
+     "type": {
+      "canonical": "QQuaternion::Axis",
+      "spelling": "Axis"
+     }
+    },
+    {
+     "name": "z",
+     "type": {
+      "canonical": "QQuaternion::Axis",
+      "spelling": "Axis"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qquaternion.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtGui",
+   "name": "QQuaternion::Axes",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "x",
+     "type": {
+      "canonical": "float",
+      "spelling": "float"
+     }
+    },
+    {
+     "name": "y",
+     "type": {
+      "canonical": "float",
+      "spelling": "float"
+     }
+    },
+    {
+     "name": "z",
+     "type": {
+      "canonical": "float",
+      "spelling": "float"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qquaternion.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "const": false,
+     "kind": "method",
+     "name": "fromVector3D",
+     "params": [
+      {
+       "default": false,
+       "name": "v",
+       "type": {
+        "canonical": "QVector3D",
+        "spelling": "QVector3D"
+       }
+      }
+     ],
+     "pure": false,
+     "return": {
+      "canonical": "QQuaternion::Axis",
+      "spelling": "Axis"
+     },
+     "static": true,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "toVector3D",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QVector3D",
+      "spelling": "QVector3D"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QQuaternion::Axis",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QGradient"
    ],
@@ -86279,6 +90294,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qbrush.h",
@@ -86811,6 +90827,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrasterwindow.h",
@@ -87018,6 +91035,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QRawFont::LayoutFlag",
@@ -88022,6 +92040,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qregion.h",
@@ -88834,6 +92853,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvalidator.h",
@@ -89055,6 +93075,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -89178,6 +93199,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qrgba64.h",
@@ -89657,6 +93679,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qscreen.h",
@@ -90632,6 +94655,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -90781,6 +94805,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -90932,6 +94957,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -91179,6 +95205,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsessionmanager.h",
@@ -91555,6 +95582,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qshortcut.h",
@@ -92060,6 +96088,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -92245,6 +96274,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -92326,6 +96356,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qevent.h",
@@ -92720,6 +96751,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstandarditemmodel.h",
@@ -94685,6 +98717,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstandarditemmodel.h",
@@ -96540,6 +100573,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstatictext.h",
@@ -96871,6 +100905,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -96973,6 +101008,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qstylehints.h",
@@ -98248,6 +102284,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qsurface.h",
@@ -98471,6 +102508,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QSurfaceFormat::FormatOption",
@@ -99322,6 +103360,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qsyntaxhighlighter.h",
@@ -99794,6 +103833,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -100065,6 +104105,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -100664,6 +104705,61 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qtextobject.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "fragment",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QTextFragment",
+      "spelling": "QTextFragment"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "atEnd",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QTextBlock::iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QTextFormat"
    ],
@@ -100718,6 +104814,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -101342,6 +105439,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -101553,6 +105651,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -101662,6 +105761,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -103213,6 +107313,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextcursor.h",
@@ -104904,6 +109005,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextDocument::MarkdownFeature",
@@ -107272,6 +111374,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextdocumentfragment.h",
@@ -107525,6 +111628,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextdocumentwriter.h",
@@ -108340,6 +112444,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextFormat::PageBreakFlag",
@@ -109315,6 +113420,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -109542,6 +113648,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -109858,6 +113965,91 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [],
+   "flags": [],
+   "gadget": false,
+   "header": "qtextobject.h",
+   "kind": "class",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "iterator",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "parentFrame",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QTextFrame *",
+      "spelling": "QTextFrame *"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "currentFrame",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QTextFrame *",
+      "spelling": "QTextFrame *"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "currentBlock",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "QTextBlock",
+      "spelling": "QTextBlock"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    },
+    {
+     "access": "public",
+     "const": true,
+     "kind": "method",
+     "name": "atEnd",
+     "params": [],
+     "pure": false,
+     "return": {
+      "canonical": "bool",
+      "spelling": "bool"
+     },
+     "static": false,
+     "variadic": false,
+     "virtual": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QTextFrame::iterator",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QTextFormat"
    ],
@@ -109936,6 +114128,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -110551,6 +114744,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -110567,6 +114761,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -110819,6 +115014,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextlayout.h",
@@ -111120,6 +115316,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextItem::RenderFlag",
@@ -111282,6 +115479,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextLayout::GlyphRunRetrievalFlag",
@@ -112312,6 +116510,43 @@
    "abstract": false,
    "bases": [],
    "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "start",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "length",
+     "type": {
+      "canonical": "int",
+      "spelling": "int"
+     }
+    },
+    {
+     "name": "format",
+     "type": {
+      "canonical": "QTextCharFormat",
+      "spelling": "QTextCharFormat"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qtextlayout.h",
+   "kind": "struct",
+   "methods": [],
+   "module": "QtGui",
+   "name": "QTextLayout::FormatRange",
+   "qobject": false
+  },
+  {
+   "abstract": false,
+   "bases": [],
+   "dtor": null,
    "enums": [
     {
      "name": "Type",
@@ -112334,6 +116569,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -112471,6 +116707,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextlayout.h",
@@ -113083,6 +117320,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextlist.h",
@@ -113423,6 +117661,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -113680,6 +117919,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextobject.h",
@@ -113888,6 +118128,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qabstracttextdocumentlayout.h",
@@ -114095,6 +118336,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [
     {
      "enum": "QTextOption::Flag",
@@ -114469,6 +118711,87 @@
   },
   {
    "abstract": false,
+   "bases": [],
+   "dtor": null,
+   "enums": [],
+   "fields": [
+    {
+     "name": "position",
+     "type": {
+      "canonical": "double",
+      "spelling": "qreal"
+     }
+    },
+    {
+     "name": "type",
+     "type": {
+      "canonical": "QTextOption::TabType",
+      "spelling": "TabType"
+     }
+    },
+    {
+     "name": "delimiter",
+     "type": {
+      "canonical": "QChar",
+      "spelling": "QChar"
+     }
+    }
+   ],
+   "flags": [],
+   "gadget": false,
+   "header": "qtextoption.h",
+   "kind": "struct",
+   "methods": [
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Tab",
+     "params": [],
+     "variadic": false
+    },
+    {
+     "access": "public",
+     "copy": false,
+     "kind": "ctor",
+     "move": false,
+     "name": "Tab",
+     "params": [
+      {
+       "default": false,
+       "name": "pos",
+       "type": {
+        "canonical": "double",
+        "spelling": "qreal"
+       }
+      },
+      {
+       "default": false,
+       "name": "tabType",
+       "type": {
+        "canonical": "QTextOption::TabType",
+        "spelling": "TabType"
+       }
+      },
+      {
+       "default": true,
+       "name": "delim",
+       "type": {
+        "canonical": "QChar",
+        "spelling": "QChar"
+       }
+      }
+     ],
+     "variadic": false
+    }
+   ],
+   "module": "QtGui",
+   "name": "QTextOption::Tab",
+   "qobject": false
+  },
+  {
+   "abstract": false,
    "bases": [
     "QTextFrame"
    ],
@@ -114477,6 +118800,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtexttable.h",
@@ -115100,6 +119424,7 @@
     "virtual": false
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtexttable.h",
@@ -115363,6 +119688,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -116142,6 +120468,7 @@
    ],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtextformat.h",
@@ -116492,6 +120819,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -116597,6 +120925,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -116814,6 +121143,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qtransform.h",
@@ -118260,6 +122590,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qundostack.h",
@@ -118532,6 +122863,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qundogroup.h",
@@ -119071,6 +123403,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qundostack.h",
@@ -119808,6 +124141,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvalidator.h",
@@ -120065,6 +124399,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvectornd.h",
@@ -120506,6 +124841,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvectornd.h",
@@ -121276,6 +125612,7 @@
    "bases": [],
    "dtor": null,
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qvectornd.h",
@@ -121850,6 +126187,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",
@@ -121968,6 +126306,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": true,
    "header": "qevent.h",
@@ -122330,6 +126669,7 @@
      ]
     }
    ],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qwindow.h",
@@ -125743,6 +130083,7 @@
     "virtual": true
    },
    "enums": [],
+   "fields": [],
    "flags": [],
    "gadget": false,
    "header": "qevent.h",

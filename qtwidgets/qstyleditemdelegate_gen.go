@@ -68,3 +68,43 @@ func NewQStyledItemDelegate(parent qtcore.QObjectLike) *QStyledItemDelegate {
 	h := rt.WrapClass(p, "QStyledItemDelegate", mode)
 	return rt.View[QStyledItemDelegate](h, p)
 }
+
+// ItemEditorFactory wraps QStyledItemDelegate::itemEditorFactory.
+//
+//	C++: QItemEditorFactory * QStyledItemDelegate::itemEditorFactory() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyleditemdelegate.html#itemEditorFactory
+func (this *QStyledItemDelegate) ItemEditorFactory() *QItemEditorFactory {
+	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.ItemEditorFactory")
+	r := C.qute_QStyledItemDelegate_itemEditorFactory(self)
+	return rt.View[QItemEditorFactory](rt.WrapClass(r, "QItemEditorFactory", rt.KeepOrBorrow), r)
+}
+
+// SetItemEditorFactory wraps QStyledItemDelegate::setItemEditorFactory.
+//
+//	C++: void QStyledItemDelegate::setItemEditorFactory(QItemEditorFactory * factory)
+//
+// The delegate does not take ownership of the factory.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyleditemdelegate.html#setItemEditorFactory
+func (this *QStyledItemDelegate) SetItemEditorFactory(factory QItemEditorFactoryLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.SetItemEditorFactory")
+	var factoryPtr unsafe.Pointer
+	if factory != nil {
+		factoryPtr = rt.UseArg(unsafe.Pointer(factory.AsQItemEditorFactory()), "QStyledItemDelegate.SetItemEditorFactory")
+	}
+	C.qute_QStyledItemDelegate_setItemEditorFactory(self, factoryPtr)
+}
+
+// DisplayText wraps QStyledItemDelegate::displayText.
+//
+//	C++: QString QStyledItemDelegate::displayText(const QVariant & value, const QLocale & locale) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyleditemdelegate.html#displayText
+func (this *QStyledItemDelegate) DisplayText(value *qtcore.QVariant, locale *qtcore.QLocale) string {
+	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.DisplayText")
+	r := C.qute_QStyledItemDelegate_displayText(self, rt.UseArg(unsafe.Pointer(value), "QStyledItemDelegate.DisplayText"), rt.UseArg(unsafe.Pointer(locale), "QStyledItemDelegate.DisplayText"))
+	return quteStr(r)
+}

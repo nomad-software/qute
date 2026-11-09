@@ -85,6 +85,14 @@ Names follow the Qt docs, so Qt C++ knowledge carries over:
   `(*QVariant).Value()` convert to and from Go values.
 - Calls whose Qt result signals failure return `error`, e.g.
   `img.Load(path)`.
+- Out-parameters become results: `l, t, r, b := layout.GetContentsMargins()`.
+  A pointer and its count become one slice (`f.Read(buf)`), `QMap`/`QHash`
+  become Go maps, `std::chrono` durations and times become `time.Duration` and
+  `time.Time`, `std::filesystem::path` is a `string`, and `std::function`
+  parameters take a Go func.
+- Methods that return the object itself chain: `t.Translate(10, 20).Rotate(45)`.
+- Public data members get getters and setters (`opt.Rect()`, `opt.SetRect(r)`),
+  and nested classes get flat names (`QFont::Tag` is `qtgui.QFontTag`).
 
 ## Signals, subclassing, threads
 
@@ -203,20 +211,22 @@ To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 
 ## Status
 
-Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, 170 classes
-across QtCore, QtGui and QtWidgets (about 4,700 constructors, methods and
+Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, 263 classes
+across QtCore, QtGui and QtWidgets (about 6,800 constructors, methods and
 functions), and Go subclassing (virtual overrides, item models). Every binding
-has a reviewed ownership rule and a proper name, and all but one ownership rule
-has a generated test (about 390 tests in all).
+has a reviewed ownership rule and a proper name, and every ownership rule but
+`QEvent::clone` has a generated test (about 430 tests in all).
 
 Not done yet:
 
-- About 500 methods wait for type support the generator doesn't have yet
-  (`QCalendar`, `QTextCursor`, `QTimeZone`, `QDataStream`, raw byte buffers,
-  out-parameters, ...). `UNREVIEWED.md` counts them by type.
-- Items that `QGraphicsScene` creates itself (`addRect`, `addEllipse`, ...)
-  are not QObjects, so qute can't see when the scene frees them; don't use
-  them after deleting the scene.
+- About 150 methods, mostly on recently added classes, wait for types the
+  generator doesn't handle yet (`QVector3D`, `char32_t`, `QTextLength`,
+  `QFileInfo`, ...). `UNREVIEWED.md` counts them by type. About 430 more are
+  skipped on purpose, each with its reason (C++ move overloads, `QBindable`,
+  iterators, platform internals, `QStringView` and plain-number twins).
+- Items that `QGraphicsScene` creates itself (`addRect`, `addLine`, ...) are
+  not QObjects, so qute can't see when the scene frees them; don't use them
+  after deleting the scene.
 - `QThread` affinity, QtQuick/QML and other modules.
 - Doc comments link to the Qt docs but don't include Qt's summary text.
 - The Linux CI checks have been run locally; the macOS and Windows jobs in

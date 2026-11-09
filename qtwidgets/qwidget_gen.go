@@ -879,6 +879,19 @@ func (this *QWidget) FontMetrics() *qtgui.QFontMetrics {
 	return rt.View[qtgui.QFontMetrics](rt.WrapClass(r, "QFontMetrics", rt.TakeOwned), r)
 }
 
+// FontInfo wraps QWidget::fontInfo.
+//
+//	C++: QFontInfo QWidget::fontInfo() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#fontInfo
+func (this *QWidget) FontInfo() *qtgui.QFontInfo {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.FontInfo")
+	r := C.qute_QWidget_fontInfo(self)
+	return rt.View[qtgui.QFontInfo](rt.WrapClass(r, "QFontInfo", rt.TakeOwned), r)
+}
+
 // Cursor wraps QWidget::cursor.
 //
 //	C++: QCursor QWidget::cursor() const
@@ -967,12 +980,22 @@ func (this *QWidget) HasTabletTracking() bool {
 
 // SetMask wraps QWidget::setMask.
 //
+//	C++: void QWidget::setMask(const QBitmap &)
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setMask
+func (this *QWidget) SetMask(maskArg *qtgui.QBitmap) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetMask")
+	C.qute_QWidget_setMask(self, rt.UseArg(unsafe.Pointer(maskArg), "QWidget.SetMask"))
+}
+
+// SetMaskRegion wraps QWidget::setMask.
+//
 //	C++: void QWidget::setMask(const QRegion &)
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setMask
-func (this *QWidget) SetMask(maskArg *qtgui.QRegion) {
-	self := rt.Use(unsafe.Pointer(this), "QWidget.SetMask")
-	C.qute_QWidget_setMask(self, rt.UseArg(unsafe.Pointer(maskArg), "QWidget.SetMask"))
+func (this *QWidget) SetMaskRegion(maskArg *qtgui.QRegion) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetMaskRegion")
+	C.qute_QWidget_setMask_1(self, rt.UseArg(unsafe.Pointer(maskArg), "QWidget.SetMaskRegion"))
 }
 
 // Mask wraps QWidget::mask.
@@ -1037,6 +1060,39 @@ func (this *QWidget) Grab() *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.Grab")
 	r := C.qute_QWidget_grab(self)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// GraphicsEffect wraps QWidget::graphicsEffect.
+//
+//	C++: QGraphicsEffect * QWidget::graphicsEffect() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#graphicsEffect
+func (this *QWidget) GraphicsEffect() *QGraphicsEffect {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.GraphicsEffect")
+	r := C.qute_QWidget_graphicsEffect(self)
+	return rt.View[QGraphicsEffect](rt.WrapClass(r, "QGraphicsEffect", rt.KeepOrBorrow), r)
+}
+
+// SetGraphicsEffect wraps QWidget::setGraphicsEffect.
+//
+//	C++: void QWidget::setGraphicsEffect(QGraphicsEffect * effect)
+//
+// Ownership: effect becomes Parented: Qt frees it from now on.
+//
+// The widget takes ownership of the effect.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setGraphicsEffect
+func (this *QWidget) SetGraphicsEffect(effect QGraphicsEffectLike) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetGraphicsEffect")
+	var effectPtr unsafe.Pointer
+	var effectH *rt.Handle
+	if effect != nil {
+		effectPtr, effectH = rt.Arg(unsafe.Pointer(effect.AsQGraphicsEffect()), "QWidget.SetGraphicsEffect")
+	}
+	C.qute_QWidget_setGraphicsEffect(self, effectPtr)
+	effectH.TransferToCpp()
 }
 
 // GrabGesture wraps QWidget::grabGesture.
@@ -1397,6 +1453,29 @@ func (this *QWidget) UnsetLayoutDirection() {
 	C.qute_QWidget_unsetLayoutDirection(self)
 }
 
+// SetLocale wraps QWidget::setLocale.
+//
+//	C++: void QWidget::setLocale(const QLocale & locale)
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setLocale
+func (this *QWidget) SetLocale(locale *qtcore.QLocale) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetLocale")
+	C.qute_QWidget_setLocale(self, rt.UseArg(unsafe.Pointer(locale), "QWidget.SetLocale"))
+}
+
+// Locale wraps QWidget::locale.
+//
+//	C++: QLocale QWidget::locale() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#locale
+func (this *QWidget) Locale() *qtcore.QLocale {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.Locale")
+	r := C.qute_QWidget_locale(self)
+	return rt.View[qtcore.QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
+}
+
 // UnsetLocale wraps QWidget::unsetLocale.
 //
 //	C++: void QWidget::unsetLocale()
@@ -1672,6 +1751,19 @@ func (this *QWidget) SetUpdatesEnabled(enable bool) {
 	C.qute_QWidget_setUpdatesEnabled(self, C.bool(enable))
 }
 
+// GraphicsProxyWidget wraps QWidget::graphicsProxyWidget.
+//
+//	C++: QGraphicsProxyWidget * QWidget::graphicsProxyWidget() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#graphicsProxyWidget
+func (this *QWidget) GraphicsProxyWidget() *QGraphicsProxyWidget {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.GraphicsProxyWidget")
+	r := C.qute_QWidget_graphicsProxyWidget(self)
+	return rt.View[QGraphicsProxyWidget](rt.WrapClass(r, "QGraphicsProxyWidget", rt.KeepOrBorrow), r)
+}
+
 // Update wraps QWidget::update.
 //
 //	C++: void QWidget::update()
@@ -1877,16 +1969,6 @@ func (this *QWidget) Resize(w int, hArg int) {
 	C.qute_QWidget_resize(self, C.int(w), C.int(hArg))
 }
 
-// SetGeometry wraps QWidget::setGeometry.
-//
-//	C++: void QWidget::setGeometry(int x, int y, int w, int h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setGeometry
-func (this *QWidget) SetGeometry(x int, y int, w int, hArg int) {
-	self := rt.Use(unsafe.Pointer(this), "QWidget.SetGeometry")
-	C.qute_QWidget_setGeometry(self, C.int(x), C.int(y), C.int(w), C.int(hArg))
-}
-
 // SetGeometryRect wraps QWidget::setGeometry.
 //
 //	C++: void QWidget::setGeometry(const QRect &)
@@ -1894,7 +1976,7 @@ func (this *QWidget) SetGeometry(x int, y int, w int, hArg int) {
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setGeometry
 func (this *QWidget) SetGeometryRect(geometry qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetGeometryRect")
-	C.qute_QWidget_setGeometry_1(self, cQRect(geometry))
+	C.qute_QWidget_setGeometry(self, cQRect(geometry))
 }
 
 // SaveGeometry wraps QWidget::saveGeometry.
@@ -2122,22 +2204,12 @@ func (this *QWidget) VisibleRegion() *qtgui.QRegion {
 
 // SetContentsMargins wraps QWidget::setContentsMargins.
 //
-//	C++: void QWidget::setContentsMargins(int left, int top, int right, int bottom)
-//
-// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setContentsMargins
-func (this *QWidget) SetContentsMargins(left int, top int, right int, bottom int) {
-	self := rt.Use(unsafe.Pointer(this), "QWidget.SetContentsMargins")
-	C.qute_QWidget_setContentsMargins(self, C.int(left), C.int(top), C.int(right), C.int(bottom))
-}
-
-// SetContentsMarginsM wraps QWidget::setContentsMargins.
-//
 //	C++: void QWidget::setContentsMargins(const QMargins & margins)
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setContentsMargins
-func (this *QWidget) SetContentsMarginsM(margins qtcore.QMargins) {
-	self := rt.Use(unsafe.Pointer(this), "QWidget.SetContentsMarginsM")
-	C.qute_QWidget_setContentsMargins_1(self, cQMargins(margins))
+func (this *QWidget) SetContentsMargins(margins qtcore.QMargins) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetContentsMargins")
+	C.qute_QWidget_setContentsMargins(self, cQMargins(margins))
 }
 
 // ContentsMargins wraps QWidget::contentsMargins.
@@ -2620,6 +2692,19 @@ func (this *QWidget) AutoFillBackground() bool {
 func (this *QWidget) SetAutoFillBackground(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetAutoFillBackground")
 	C.qute_QWidget_setAutoFillBackground(self, C.bool(enabled))
+}
+
+// WindowHandle wraps QWidget::windowHandle.
+//
+//	C++: QWindow * QWidget::windowHandle() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#windowHandle
+func (this *QWidget) WindowHandle() *qtgui.QWindow {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.WindowHandle")
+	r := C.qute_QWidget_windowHandle(self)
+	return rt.View[qtgui.QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
 }
 
 // Screen wraps QWidget::screen.
