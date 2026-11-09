@@ -177,25 +177,14 @@ func (this *QTime) ToString() string {
 	return quteStr(r)
 }
 
-// ToString2 wraps QTime::toString.
+// ToStringFormat wraps QTime::toString.
 //
 //	C++: QString QTime::toString(const QString & format) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#toString
-func (this *QTime) ToString2(format string) string {
-	self := rt.Use(unsafe.Pointer(this), "QTime.ToString2")
+func (this *QTime) ToStringFormat(format string) string {
+	self := rt.Use(unsafe.Pointer(this), "QTime.ToStringFormat")
 	r := C.qute_QTime_toString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
-	return quteStr(r)
-}
-
-// ToString3 wraps QTime::toString.
-//
-//	C++: QString QTime::toString(QStringView format) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qtime.html#toString
-func (this *QTime) ToString3(format string) string {
-	self := rt.Use(unsafe.Pointer(this), "QTime.ToString3")
-	r := C.qute_QTime_toString_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
 	return quteStr(r)
 }
 
@@ -297,7 +286,7 @@ func QTimeCurrentTime() *QTime {
 
 // QTimeFromString wraps QTime::fromString.
 //
-//	C++: QTime QTime::fromString(QStringView string, Qt::DateFormat format = …)
+//	C++: QTime QTime::fromString(const QString & string, Qt::DateFormat format = …)
 //
 // Ownership: the result is an Owned copy.
 //
@@ -308,55 +297,16 @@ func QTimeFromString(stringArg string) *QTime {
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
-// QTimeFromString2 wraps QTime::fromString.
-//
-//	C++: QTime QTime::fromString(QStringView string, QStringView format)
-//
-// Ownership: the result is an Owned copy.
-//
-// Qt docs: https://doc.qt.io/qt-6/qtime.html#fromString
-func QTimeFromString2(stringArg string, format string) *QTime {
-	rt.CheckThread("QTimeFromString2")
-	r := C.qute_QTime_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
-	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
-}
-
-// QTimeFromString3 wraps QTime::fromString.
-//
-//	C++: QTime QTime::fromString(const QString & string, QStringView format)
-//
-// Ownership: the result is an Owned copy.
-//
-// Qt docs: https://doc.qt.io/qt-6/qtime.html#fromString
-func QTimeFromString3(stringArg string, format string) *QTime {
-	rt.CheckThread("QTimeFromString3")
-	r := C.qute_QTime_fromString_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
-	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
-}
-
-// QTimeFromString4 wraps QTime::fromString.
-//
-//	C++: QTime QTime::fromString(const QString & string, Qt::DateFormat format = …)
-//
-// Ownership: the result is an Owned copy.
-//
-// Qt docs: https://doc.qt.io/qt-6/qtime.html#fromString
-func QTimeFromString4(stringArg string) *QTime {
-	rt.CheckThread("QTimeFromString4")
-	r := C.qute_QTime_fromString_3((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
-	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
-}
-
-// QTimeFromString5 wraps QTime::fromString.
+// QTimeFromStringFormat wraps QTime::fromString.
 //
 //	C++: QTime QTime::fromString(const QString & string, const QString & format)
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#fromString
-func QTimeFromString5(stringArg string, format string) *QTime {
-	rt.CheckThread("QTimeFromString5")
-	r := C.qute_QTime_fromString_4((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+func QTimeFromStringFormat(stringArg string, format string) *QTime {
+	rt.CheckThread("QTimeFromStringFormat")
+	r := C.qute_QTime_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 

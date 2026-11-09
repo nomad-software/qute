@@ -2179,14 +2179,18 @@ func (this *QWidget) Layout() *QLayout {
 //
 //	C++: void QWidget::setLayout(QLayout *)
 //
+// Ownership: layout becomes Parented: Qt frees it from now on.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setLayout
 func (this *QWidget) SetLayout(layout QLayoutLike) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetLayout")
 	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
 	if layout != nil {
-		layoutPtr = rt.UseArg(unsafe.Pointer(layout.AsQLayout()), "QWidget.SetLayout")
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QWidget.SetLayout")
 	}
 	C.qute_QWidget_setLayout(self, layoutPtr)
+	layoutH.TransferToCpp()
 }
 
 // UpdateGeometry wraps QWidget::updateGeometry.

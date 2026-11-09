@@ -69,19 +69,27 @@ func NewQStackedLayout(parent QWidgetLike) *QStackedLayout {
 	return rt.View[QStackedLayout](h, p)
 }
 
-// NewQStackedLayoutWithParentLayout wraps the QStackedLayout constructor.
+// NewQStackedLayoutIn wraps the QStackedLayout constructor.
 //
 //	C++: QStackedLayout::QStackedLayout(QLayout * parentLayout)
 //
+// Ownership: parentLayout the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// Inserts the new layout into parentLayout, which then owns it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstackedlayout.html#QStackedLayout
-func NewQStackedLayoutWithParentLayout(parentLayout QLayoutLike) *QStackedLayout {
-	rt.CheckThread("NewQStackedLayoutWithParentLayout")
+func NewQStackedLayoutIn(parentLayout QLayoutLike) *QStackedLayout {
+	rt.CheckThread("NewQStackedLayoutIn")
 	var parentLayoutPtr unsafe.Pointer
 	if parentLayout != nil {
-		parentLayoutPtr = rt.UseArg(unsafe.Pointer(parentLayout.AsQLayout()), "NewQStackedLayoutWithParentLayout")
+		parentLayoutPtr = rt.UseArg(unsafe.Pointer(parentLayout.AsQLayout()), "NewQStackedLayoutIn")
 	}
 	p := C.qute_QStackedLayout_new_1(parentLayoutPtr)
-	h := rt.WrapClass(p, "QStackedLayout", rt.NewOwned)
+	mode := rt.NewOwned
+	if parentLayoutPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QStackedLayout", mode)
 	return rt.View[QStackedLayout](h, p)
 }
 

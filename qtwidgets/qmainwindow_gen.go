@@ -464,7 +464,7 @@ func (this *QMainWindow) AddToolBarTitle(title string) *QToolBar {
 //
 //	C++: void QMainWindow::insertToolBar(QToolBar * before, QToolBar * toolbar)
 //
-// Ownership: toolbar becomes Parented: Qt frees it from now on.
+// Ownership: before is borrowed for the call only; toolbar becomes Parented: Qt frees it from now on.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#insertToolBar
 func (this *QMainWindow) InsertToolBar(before QToolBarLike, toolbar QToolBarLike) {

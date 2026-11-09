@@ -91,18 +91,18 @@ func NewQCommandLinkButtonWithText(text string, parent QWidgetLike) *QCommandLin
 	return rt.View[QCommandLinkButton](h, p)
 }
 
-// NewQCommandLinkButtonWithText2 wraps the QCommandLinkButton constructor.
+// NewQCommandLinkButtonWithDescription wraps the QCommandLinkButton constructor.
 //
 //	C++: QCommandLinkButton::QCommandLinkButton(const QString & text, const QString & description, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcommandlinkbutton.html#QCommandLinkButton
-func NewQCommandLinkButtonWithText2(text string, description string, parent QWidgetLike) *QCommandLinkButton {
-	rt.CheckThread("NewQCommandLinkButtonWithText2")
+func NewQCommandLinkButtonWithDescription(text string, description string, parent QWidgetLike) *QCommandLinkButton {
+	rt.CheckThread("NewQCommandLinkButtonWithDescription")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButtonWithText2")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButtonWithDescription")
 	}
 	p := C.qute_QCommandLinkButton_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)), parentPtr)
 	mode := rt.NewOwned

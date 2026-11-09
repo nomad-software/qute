@@ -112,6 +112,68 @@ func TestOwnership_NewQActionGroup(t *testing.T) {
 	})
 }
 
+// QAction * QActionGroup::addAction(const QString & text)
+func TestOwnership_QActionGroup_AddActionText(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtgui.NewQActionGroup(root)
+		res := recv.AddActionText("x")
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// QAction * QActionGroup::addAction(const QIcon & icon, const QString & text)
+func TestOwnership_QActionGroup_AddActionIcon(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtgui.NewQActionGroup(root)
+		res := recv.AddActionIcon(nil, "x")
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// void QClipboard::setMimeData(QMimeData * data, Mode mode = …) (test from the overlay)
+func TestOwnership_QClipboard_SetMimeData(t *testing.T) {
+	qute.Run(t, func() {
+		cb := qtgui.QGuiApplicationClipboard()
+		d := qtcore.NewQMimeData()
+		cb.SetMimeData(d)
+		if got := d.Ownership(); got != qtcore.Parented {
+			t.Errorf("data: %v, want Parented", got)
+		}
+		cb.SetMimeData(qtcore.NewQMimeData()) // replacing deletes the old data
+		if d.Alive() {
+			t.Error("old clipboard data alive after it was replaced")
+		}
+	})
+}
+
 // QDoubleValidator::QDoubleValidator(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQDoubleValidator(t *testing.T) {
 	qute.Run(t, func() {
@@ -364,7 +426,7 @@ func TestOwnership_QStandardItem_AppendRowItems(t *testing.T) {
 		}
 		recv.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 	})
 }
@@ -380,7 +442,7 @@ func TestOwnership_QStandardItem_AppendRows(t *testing.T) {
 		}
 		recv.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 	})
 }
@@ -396,7 +458,7 @@ func TestOwnership_QStandardItem_AppendColumn(t *testing.T) {
 		}
 		recv.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 	})
 }
@@ -428,8 +490,76 @@ func TestOwnership_QStandardItem_AppendRow(t *testing.T) {
 		}
 		recv.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
+	})
+}
+
+// QStandardItem * QStandardItem::takeChild(int row, int column = …) (test from the overlay)
+func TestOwnership_QStandardItem_TakeChild(t *testing.T) {
+	qute.Run(t, func() {
+		p := qtgui.NewQStandardItemWithText("p")
+		p.AppendRow(qtgui.NewQStandardItemWithText("c"))
+		c := p.TakeChild(0)
+		if c == nil || c.Ownership() != qtcore.Owned {
+			t.Errorf("c: %v, want Owned", c.Ownership())
+		}
+		c.Delete()
+		p.Delete()
+	})
+}
+
+// QList<QStandardItem *> QStandardItem::takeRow(int row) (test from the overlay)
+func TestOwnership_QStandardItem_TakeRow(t *testing.T) {
+	qute.Run(t, func() {
+		p := qtgui.NewQStandardItemWithText("p")
+		p.AppendRow(qtgui.NewQStandardItemWithText("c"))
+		l := p.TakeRow(0)
+		if len(l) != 1 {
+			t.Fatalf("got %d items", len(l))
+		}
+		if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+			t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+		}
+		l[0].Delete()
+		p.Delete()
+	})
+}
+
+// QList<QStandardItem *> QStandardItem::takeColumn(int column) (test from the overlay)
+func TestOwnership_QStandardItem_TakeColumn(t *testing.T) {
+	qute.Run(t, func() {
+		p := qtgui.NewQStandardItemWithText("p")
+		p.AppendRow(qtgui.NewQStandardItemWithText("c"))
+		l := p.TakeColumn(0)
+		if len(l) != 1 {
+			t.Fatalf("got %d items", len(l))
+		}
+		if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+			t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+		}
+		l[0].Delete()
+		p.Delete()
+	})
+}
+
+// QStandardItem * QStandardItem::clone() const
+func TestOwnership_QStandardItem_Clone(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
+		res := recv.Clone()
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Owned {
+			t.Errorf("result: %v, want Owned", got)
+		}
+		res.Delete()
+		if res.Alive() {
+			t.Error("result alive after Delete")
+		}
+		recv.Delete()
 	})
 }
 
@@ -571,7 +701,7 @@ func TestOwnership_QStandardItemModel_AppendRowItems(t *testing.T) {
 		}
 		root.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 		if recv.Alive() {
 			recv.Delete()
@@ -591,7 +721,7 @@ func TestOwnership_QStandardItemModel_AppendColumn(t *testing.T) {
 		}
 		root.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 		if recv.Alive() {
 			recv.Delete()
@@ -611,7 +741,7 @@ func TestOwnership_QStandardItemModel_AppendRow(t *testing.T) {
 		}
 		root.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 		if recv.Alive() {
 			recv.Delete()
@@ -679,6 +809,82 @@ func TestOwnership_QStandardItemModel_InsertRowItem(t *testing.T) {
 	})
 }
 
+// QStandardItem * QStandardItemModel::takeItem(int row, int column = …) (test from the overlay)
+func TestOwnership_QStandardItemModel_TakeItem(t *testing.T) {
+	qute.Run(t, func() {
+		m := qtgui.NewQStandardItemModel(nil)
+		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+		x := m.TakeItem(0)
+		if x == nil || x.Ownership() != qtcore.Owned {
+			t.Errorf("x: %v, want Owned", x.Ownership())
+		}
+		x.Delete()
+		m.Delete()
+	})
+}
+
+// QList<QStandardItem *> QStandardItemModel::takeRow(int row) (test from the overlay)
+func TestOwnership_QStandardItemModel_TakeRow(t *testing.T) {
+	qute.Run(t, func() {
+		m := qtgui.NewQStandardItemModel(nil)
+		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+		l := m.TakeRow(0)
+		if len(l) != 1 {
+			t.Fatalf("got %d items", len(l))
+		}
+		if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+			t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+		}
+		l[0].Delete()
+		m.Delete()
+	})
+}
+
+// QList<QStandardItem *> QStandardItemModel::takeColumn(int column) (test from the overlay)
+func TestOwnership_QStandardItemModel_TakeColumn(t *testing.T) {
+	qute.Run(t, func() {
+		m := qtgui.NewQStandardItemModel(nil)
+		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+		l := m.TakeColumn(0)
+		if len(l) != 1 {
+			t.Fatalf("got %d items", len(l))
+		}
+		if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+			t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+		}
+		l[0].Delete()
+		m.Delete()
+	})
+}
+
+// QStandardItem * QStandardItemModel::takeHorizontalHeaderItem(int column) (test from the overlay)
+func TestOwnership_QStandardItemModel_TakeHorizontalHeaderItem(t *testing.T) {
+	qute.Run(t, func() {
+		m := qtgui.NewQStandardItemModelWithRows(1, 1, nil)
+		m.SetHorizontalHeaderItem(0, qtgui.NewQStandardItemWithText("h"))
+		x := m.TakeHorizontalHeaderItem(0)
+		if x == nil || x.Ownership() != qtcore.Owned {
+			t.Errorf("x: %v, want Owned", x.Ownership())
+		}
+		x.Delete()
+		m.Delete()
+	})
+}
+
+// QStandardItem * QStandardItemModel::takeVerticalHeaderItem(int row) (test from the overlay)
+func TestOwnership_QStandardItemModel_TakeVerticalHeaderItem(t *testing.T) {
+	qute.Run(t, func() {
+		m := qtgui.NewQStandardItemModelWithRows(1, 1, nil)
+		m.SetVerticalHeaderItem(0, qtgui.NewQStandardItemWithText("h"))
+		x := m.TakeVerticalHeaderItem(0)
+		if x == nil || x.Ownership() != qtcore.Owned {
+			t.Errorf("x: %v, want Owned", x.Ownership())
+		}
+		x.Delete()
+		m.Delete()
+	})
+}
+
 // void QStandardItemModel::setItemPrototype(const QStandardItem * item)
 func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 	qute.Run(t, func() {
@@ -691,7 +897,7 @@ func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 		}
 		root.Delete()
 		if a0.Alive() {
-			t.Errorf("a0 alive after its owner was deleted")
+			t.Errorf("a alive after its owner was deleted")
 		}
 		if recv.Alive() {
 			recv.Delete()
@@ -741,6 +947,30 @@ func TestOwnership_NewQTextDocumentWithText(t *testing.T) {
 		y.Delete()
 		if y.Alive() {
 			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QTextDocument * QTextDocument::clone(QObject * parent = …) const
+func TestOwnership_QTextDocument_Clone(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtgui.NewQTextDocumentWithText("x", root)
+		res := recv.Clone()
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Owned {
+			t.Errorf("result: %v, want Owned", got)
+		}
+		res.Delete()
+		if res.Alive() {
+			t.Error("result alive after Delete")
+		}
+		root.Delete()
+		if recv.Alive() {
+			recv.Delete()
 		}
 	})
 }

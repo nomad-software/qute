@@ -287,6 +287,8 @@ func (this *QGraphicsTextItem) AdjustSize() {
 //
 //	C++: void QGraphicsTextItem::setDocument(QTextDocument * document)
 //
+// Qt does not document a transfer of ownership; parent the document to a QObject or keep it alive.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicstextitem.html#setDocument
 func (this *QGraphicsTextItem) SetDocument(document qtgui.QTextDocumentLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetDocument")

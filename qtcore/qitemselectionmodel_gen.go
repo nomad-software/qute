@@ -62,7 +62,7 @@ func NewQItemSelectionModel() *QItemSelectionModel {
 //
 //	C++: QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent)
 //
-// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: model is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#QItemSelectionModel
 func NewQItemSelectionModelWithModel(model QAbstractItemModelLike, parent QObjectLike) *QItemSelectionModel {

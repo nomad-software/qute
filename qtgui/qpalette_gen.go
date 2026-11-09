@@ -101,26 +101,14 @@ func NewQPaletteWithButton(button QColor) *QPalette {
 	return rt.View[QPalette](h, p)
 }
 
-// NewQPaletteWithButton2 wraps the QPalette constructor.
-//
-//	C++: QPalette::QPalette(Qt::GlobalColor button)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpalette.html#QPalette
-func NewQPaletteWithButton2(button qtcore.GlobalColor) *QPalette {
-	rt.CheckThread("NewQPaletteWithButton2")
-	p := C.qute_QPalette_new_2(C.int64_t(button))
-	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
-	return rt.View[QPalette](h, p)
-}
-
-// NewQPaletteWithButton3 wraps the QPalette constructor.
+// NewQPaletteWithButtonWindow wraps the QPalette constructor.
 //
 //	C++: QPalette::QPalette(const QColor & button, const QColor & window)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#QPalette
-func NewQPaletteWithButton3(button QColor, window QColor) *QPalette {
-	rt.CheckThread("NewQPaletteWithButton3")
-	p := C.qute_QPalette_new_3(cQColor(button), cQColor(window))
+func NewQPaletteWithButtonWindow(button QColor, window QColor) *QPalette {
+	rt.CheckThread("NewQPaletteWithButtonWindow")
+	p := C.qute_QPalette_new_2(cQColor(button), cQColor(window))
 	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
@@ -132,19 +120,19 @@ func NewQPaletteWithButton3(button QColor, window QColor) *QPalette {
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#QPalette
 func NewQPaletteWithWindowText(windowText *QBrush, button *QBrush, light *QBrush, dark *QBrush, mid *QBrush, text *QBrush, bright_text *QBrush, base *QBrush, window *QBrush) *QPalette {
 	rt.CheckThread("NewQPaletteWithWindowText")
-	p := C.qute_QPalette_new_4(rt.UseArg(unsafe.Pointer(windowText), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(button), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(light), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(dark), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(mid), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(text), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(bright_text), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(base), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(window), "NewQPaletteWithWindowText"))
+	p := C.qute_QPalette_new_3(rt.UseArg(unsafe.Pointer(windowText), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(button), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(light), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(dark), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(mid), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(text), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(bright_text), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(base), "NewQPaletteWithWindowText"), rt.UseArg(unsafe.Pointer(window), "NewQPaletteWithWindowText"))
 	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
 
-// NewQPaletteWithWindowText2 wraps the QPalette constructor.
+// NewQPaletteWithColors wraps the QPalette constructor.
 //
 //	C++: QPalette::QPalette(const QColor & windowText, const QColor & window, const QColor & light, const QColor & dark, const QColor & mid, const QColor & text, const QColor & base)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#QPalette
-func NewQPaletteWithWindowText2(windowText QColor, window QColor, light QColor, dark QColor, mid QColor, text QColor, base QColor) *QPalette {
-	rt.CheckThread("NewQPaletteWithWindowText2")
-	p := C.qute_QPalette_new_5(cQColor(windowText), cQColor(window), cQColor(light), cQColor(dark), cQColor(mid), cQColor(text), cQColor(base))
+func NewQPaletteWithColors(windowText QColor, window QColor, light QColor, dark QColor, mid QColor, text QColor, base QColor) *QPalette {
+	rt.CheckThread("NewQPaletteWithColors")
+	p := C.qute_QPalette_new_4(cQColor(windowText), cQColor(window), cQColor(light), cQColor(dark), cQColor(mid), cQColor(text), cQColor(base))
 	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
@@ -170,47 +158,47 @@ func (this *QPalette) SetCurrentColorGroup(cg QPaletteColorGroup) {
 	C.qute_QPalette_setCurrentColorGroup(self, C.int64_t(cg))
 }
 
-// Color wraps QPalette::color.
+// GroupColor wraps QPalette::color.
 //
 //	C++: const QColor & QPalette::color(ColorGroup cg, ColorRole cr) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#color
-func (this *QPalette) Color(cg QPaletteColorGroup, cr QPaletteColorRole) QColor {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.Color")
+func (this *QPalette) GroupColor(cg QPaletteColorGroup, cr QPaletteColorRole) QColor {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.GroupColor")
 	r := C.qute_QPalette_color(self, C.int64_t(cg), C.int64_t(cr))
 	return goQColor(r)
 }
 
-// Brush wraps QPalette::brush.
+// GroupBrush wraps QPalette::brush.
 //
 //	C++: const QBrush & QPalette::brush(ColorGroup cg, ColorRole cr) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#brush
-func (this *QPalette) Brush(cg QPaletteColorGroup, cr QPaletteColorRole) *QBrush {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.Brush")
+func (this *QPalette) GroupBrush(cg QPaletteColorGroup, cr QPaletteColorRole) *QBrush {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.GroupBrush")
 	r := C.qute_QPalette_brush(self, C.int64_t(cg), C.int64_t(cr))
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
-// SetColor wraps QPalette::setColor.
+// SetGroupColor wraps QPalette::setColor.
 //
 //	C++: void QPalette::setColor(ColorGroup cg, ColorRole cr, const QColor & color)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#setColor
-func (this *QPalette) SetColor(cg QPaletteColorGroup, cr QPaletteColorRole, color QColor) {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.SetColor")
+func (this *QPalette) SetGroupColor(cg QPaletteColorGroup, cr QPaletteColorRole, color QColor) {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.SetGroupColor")
 	C.qute_QPalette_setColor(self, C.int64_t(cg), C.int64_t(cr), cQColor(color))
 }
 
-// SetColor2 wraps QPalette::setColor.
+// SetColor wraps QPalette::setColor.
 //
 //	C++: void QPalette::setColor(ColorRole cr, const QColor & color)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#setColor
-func (this *QPalette) SetColor2(cr QPaletteColorRole, color QColor) {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.SetColor2")
+func (this *QPalette) SetColor(cr QPaletteColorRole, color QColor) {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.SetColor")
 	C.qute_QPalette_setColor_1(self, C.int64_t(cr), cQColor(color))
 }
 
@@ -235,14 +223,14 @@ func (this *QPalette) IsBrushSet(cg QPaletteColorGroup, cr QPaletteColorRole) bo
 	return bool(r)
 }
 
-// SetBrush2 wraps QPalette::setBrush.
+// SetGroupBrush wraps QPalette::setBrush.
 //
 //	C++: void QPalette::setBrush(ColorGroup cg, ColorRole cr, const QBrush & brush)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#setBrush
-func (this *QPalette) SetBrush2(cg QPaletteColorGroup, cr QPaletteColorRole, brush *QBrush) {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.SetBrush2")
-	C.qute_QPalette_setBrush_1(self, C.int64_t(cg), C.int64_t(cr), rt.UseArg(unsafe.Pointer(brush), "QPalette.SetBrush2"))
+func (this *QPalette) SetGroupBrush(cg QPaletteColorGroup, cr QPaletteColorRole, brush *QBrush) {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.SetGroupBrush")
+	C.qute_QPalette_setBrush_1(self, C.int64_t(cg), C.int64_t(cr), rt.UseArg(unsafe.Pointer(brush), "QPalette.SetGroupBrush"))
 }
 
 // SetColorGroup wraps QPalette::setColorGroup.
@@ -266,26 +254,26 @@ func (this *QPalette) IsEqual(cr1 QPaletteColorGroup, cr2 QPaletteColorGroup) bo
 	return bool(r)
 }
 
-// Color2 wraps QPalette::color.
+// Color wraps QPalette::color.
 //
 //	C++: const QColor & QPalette::color(ColorRole cr) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#color
-func (this *QPalette) Color2(cr QPaletteColorRole) QColor {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.Color2")
+func (this *QPalette) Color(cr QPaletteColorRole) QColor {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.Color")
 	r := C.qute_QPalette_color_1(self, C.int64_t(cr))
 	return goQColor(r)
 }
 
-// Brush2 wraps QPalette::brush.
+// Brush wraps QPalette::brush.
 //
 //	C++: const QBrush & QPalette::brush(ColorRole cr) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpalette.html#brush
-func (this *QPalette) Brush2(cr QPaletteColorRole) *QBrush {
-	self := rt.Use(unsafe.Pointer(this), "QPalette.Brush2")
+func (this *QPalette) Brush(cr QPaletteColorRole) *QBrush {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.Brush")
 	r := C.qute_QPalette_brush_1(self, C.int64_t(cr))
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }

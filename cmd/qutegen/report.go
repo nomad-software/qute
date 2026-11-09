@@ -10,6 +10,13 @@ import (
 type Report struct {
 	warnings []string
 	noTest   []string
+	blind    []string
+}
+
+// unobservable records a Parented result that Qt itself created from a
+// non-QObject class: nothing tells Go when its owner frees it.
+func (r *Report) unobservable(c *Class, m *Method) {
+	r.blind = append(r.blind, fmt.Sprintf("- `%s`", m.Sig))
 }
 
 func (r *Report) untested(c *Class, m *Method, why string) {
@@ -53,7 +60,8 @@ func (g *Gen) writeReport(path string) error {
 				if mm.RetRule != "" && !mm.RetRuled {
 					defaults = append(defaults, "return: "+mm.RetRule)
 				}
-				rev := c.Opts.Reviewed || (mm.Overlay != nil && mm.Overlay.Reviewed)
+				// emitting a signal never changes ownership
+				rev := c.Opts.Reviewed || mm.Emit || (mm.Overlay != nil && mm.Overlay.Reviewed)
 				if len(defaults) > 0 && !rev {
 					rules = append(rules, row{c.Name, fmt.Sprintf("- `%s` → %s", mm.Sig, strings.Join(defaults, ", "))})
 				} else {
@@ -61,6 +69,11 @@ func (g *Gen) writeReport(path string) error {
 				}
 				if mm.Numbered {
 					numbered = append(numbered, row{c.Name, fmt.Sprintf("- `%s` → `%s`", mm.Sig, mm.GoName)})
+				}
+			}
+			for _, sg := range c.Signals {
+				if sg.Numbered {
+					numbered = append(numbered, row{c.Name, fmt.Sprintf("- signal `%s` → `%s`", sg.Sig, sg.GoName)})
 				}
 			}
 			for _, v := range c.Virtuals {
@@ -95,11 +108,57 @@ func (g *Gen) writeReport(path string) error {
 	p("Bound: %d constructors, methods and functions; %d need no review or are reviewed.\n", total, reviewed)
 	section("Default ownership rules", rules)
 	section("Numbered overload names", numbered)
-	section("Skipped methods", skipped)
+	// split deliberate skips from ones waiting for type support
+	var onPurpose, missing []row
+	byType := map[string]int{}
+	for _, r := range skipped {
+		if i := strings.Index(r.text, "unsupported type \""); i >= 0 {
+			t := r.text[i+len("unsupported type \""):]
+			t = t[:strings.Index(t, "\"")]
+			base, _, ptr, ref, _ := parseCpp(t)
+			if ptr && !ref && prims[base].goT != "" {
+				base += " * (out-parameter or buffer)"
+			} else if ref && prims[base].goT != "" || base == "QString" || base == "QRect" || base == "QTransform" {
+				base += " & (out-parameter)"
+			}
+			byType[base]++
+			missing = append(missing, r)
+		} else {
+			onPurpose = append(onPurpose, r)
+		}
+	}
+	p("## Skipped: missing type support (%d)\n", len(missing))
+	p("These bind once the generator learns the type. Counts by type:\n")
+	type tc struct {
+		t string
+		n int
+	}
+	var tcs []tc
+	for t, n := range byType {
+		tcs = append(tcs, tc{t, n})
+	}
+	sort.Slice(tcs, func(i, j int) bool { return tcs[i].n > tcs[j].n || tcs[i].n == tcs[j].n && tcs[i].t < tcs[j].t })
+	p("| Type | Methods |\n| --- | --- |")
+	for _, x := range tcs {
+		p("| `%s` | %d |", x.t, x.n)
+	}
+	p("")
+	section("Skipped: missing type support, by class", missing)
+	section("Skipped on purpose", onPurpose)
 	if len(g.report.noTest) > 0 {
 		p("## Ownership rules without a generated test (%d)\n", len(g.report.noTest))
 		p("Add a `test:` snippet to the overlay entry to cover these.\n")
 		for _, w := range g.report.noTest {
+			p("%s", w)
+		}
+		p("")
+	}
+	if len(g.report.blind) > 0 {
+		p("## Results whose death qute cannot see (%d)\n", len(g.report.blind))
+		p("Qt creates these items itself, and they are not QObjects, so no death notice")
+		p("reaches Go. The handle is Parented and correct while the owner lives; after")
+		p("the owner is deleted, do not use it.\n")
+		for _, w := range g.report.blind {
 			p("%s", w)
 		}
 		p("")

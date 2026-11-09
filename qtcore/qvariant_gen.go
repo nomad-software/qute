@@ -309,13 +309,13 @@ func NewQVariantWithSize(size QSize) *QVariant {
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithSize2 wraps the QVariant constructor.
+// NewQVariantWithSizeF wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(QSizeF size)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithSize2(size QSizeF) *QVariant {
-	rt.CheckThread("NewQVariantWithSize2")
+func NewQVariantWithSizeF(size QSizeF) *QVariant {
+	rt.CheckThread("NewQVariantWithSizeF")
 	p := C.qute_QVariant_new_19(cQSizeF(size))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
@@ -333,13 +333,13 @@ func NewQVariantWithPt(pt QPoint) *QVariant {
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithPt2 wraps the QVariant constructor.
+// NewQVariantWithPointF wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(QPointF pt)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithPt2(pt QPointF) *QVariant {
-	rt.CheckThread("NewQVariantWithPt2")
+func NewQVariantWithPointF(pt QPointF) *QVariant {
+	rt.CheckThread("NewQVariantWithPointF")
 	p := C.qute_QVariant_new_21(cQPointF(pt))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
@@ -357,26 +357,26 @@ func NewQVariantWithRect(rect QRect) *QVariant {
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithRect2 wraps the QVariant constructor.
+// NewQVariantWithRectF wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(QRectF rect)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithRect2(rect QRectF) *QVariant {
-	rt.CheckThread("NewQVariantWithRect2")
+func NewQVariantWithRectF(rect QRectF) *QVariant {
+	rt.CheckThread("NewQVariantWithRectF")
 	p := C.qute_QVariant_new_23(cQRectF(rect))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
-// NewQVariantWithModelIndex2 wraps the QVariant constructor.
+// NewQVariantWithPersistentIndex wraps the QVariant constructor.
 //
 //	C++: QVariant::QVariant(const QPersistentModelIndex & modelIndex)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#QVariant
-func NewQVariantWithModelIndex2(modelIndex *QPersistentModelIndex) *QVariant {
-	rt.CheckThread("NewQVariantWithModelIndex2")
-	p := C.qute_QVariant_new_24(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithModelIndex2"))
+func NewQVariantWithPersistentIndex(modelIndex *QPersistentModelIndex) *QVariant {
+	rt.CheckThread("NewQVariantWithPersistentIndex")
+	p := C.qute_QVariant_new_24(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithPersistentIndex"))
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }

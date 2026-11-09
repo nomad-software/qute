@@ -6198,9 +6198,6 @@ qute_rectf qute_QGraphicsEllipseItem_rect(void *self) {
 void qute_QGraphicsEllipseItem_setRect(void *self, qute_rectf a0) {
 	static_cast<QGraphicsEllipseItem *>(self)->setRect(qute_to_QRectF(a0));
 }
-void qute_QGraphicsEllipseItem_setRect_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsEllipseItem *>(self)->setRect(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
 int qute_QGraphicsEllipseItem_startAngle(void *self) {
 	return static_cast<int>(static_cast<QGraphicsEllipseItem *>(self)->startAngle());
 }
@@ -6425,17 +6422,11 @@ qute_pointf qute_QGraphicsItem_scenePos(void *self) {
 void qute_QGraphicsItem_setPos(void *self, qute_pointf a0) {
 	static_cast<QGraphicsItem *>(self)->setPos(qute_to_QPointF(a0));
 }
-void qute_QGraphicsItem_setPos_1(void *self, double a0, double a1) {
-	static_cast<QGraphicsItem *>(self)->setPos(static_cast<double>(a0), static_cast<double>(a1));
-}
 void qute_QGraphicsItem_moveBy(void *self, double a0, double a1) {
 	static_cast<QGraphicsItem *>(self)->moveBy(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsItem_ensureVisible(void *self) {
 	static_cast<QGraphicsItem *>(self)->ensureVisible();
-}
-void qute_QGraphicsItem_ensureVisible_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsItem *>(self)->ensureVisible(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
 void * qute_QGraphicsItem_transform(void *self) {
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsItem *>(self)->transform()));
@@ -6472,9 +6463,6 @@ qute_pointf qute_QGraphicsItem_transformOriginPoint(void *self) {
 }
 void qute_QGraphicsItem_setTransformOriginPoint(void *self, qute_pointf a0) {
 	static_cast<QGraphicsItem *>(self)->setTransformOriginPoint(qute_to_QPointF(a0));
-}
-void qute_QGraphicsItem_setTransformOriginPoint_1(void *self, double a0, double a1) {
-	static_cast<QGraphicsItem *>(self)->setTransformOriginPoint(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsItem_advance(void *self, int a0) {
 	static_cast<QGraphicsItem *>(self)->advance(static_cast<int>(a0));
@@ -6521,9 +6509,6 @@ qute_list qute_QGraphicsItem_collidingItems(void *self) {
 bool qute_QGraphicsItem_isObscured(void *self) {
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isObscured());
 }
-bool qute_QGraphicsItem_isObscured_1(void *self, double a0, double a1, double a2, double a3) {
-	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isObscured(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)));
-}
 bool qute_QGraphicsItem_isObscuredBy(void *self, void * a0) {
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isObscuredBy(static_cast<QGraphicsItem *>(a0)));
 }
@@ -6542,8 +6527,8 @@ void qute_QGraphicsItem_setBoundingRegionGranularity(void *self, double a0) {
 void qute_QGraphicsItem_update(void *self) {
 	static_cast<QGraphicsItem *>(self)->update();
 }
-void qute_QGraphicsItem_update_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsItem *>(self)->update(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
+void qute_QGraphicsItem_update_1(void *self, qute_rectf a0) {
+	static_cast<QGraphicsItem *>(self)->update(qute_to_QRectF(a0));
 }
 void qute_QGraphicsItem_scroll(void *self, double a0, double a1) {
 	static_cast<QGraphicsItem *>(self)->scroll(static_cast<double>(a0), static_cast<double>(a1));
@@ -6637,60 +6622,6 @@ void * qute_QGraphicsItem_mapFromParent_3(void *self, void * a0) {
 }
 void * qute_QGraphicsItem_mapFromScene_3(void *self, void * a0) {
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapFromScene((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
-}
-qute_pointf qute_QGraphicsItem_mapToItem_4(void *self, void * a0, double a1, double a2) {
-	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapToItem(static_cast<QGraphicsItem *>(a0), static_cast<double>(a1), static_cast<double>(a2)));
-}
-qute_pointf qute_QGraphicsItem_mapToParent_4(void *self, double a0, double a1) {
-	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapToParent(static_cast<double>(a0), static_cast<double>(a1)));
-}
-qute_pointf qute_QGraphicsItem_mapToScene_4(void *self, double a0, double a1) {
-	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapToScene(static_cast<double>(a0), static_cast<double>(a1)));
-}
-qute_list qute_QGraphicsItem_mapToItem_5(void *self, void * a0, double a1, double a2, double a3, double a4) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToItem(static_cast<QGraphicsItem *>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_list qute_QGraphicsItem_mapToParent_5(void *self, double a0, double a1, double a2, double a3) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToParent(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_list qute_QGraphicsItem_mapToScene_5(void *self, double a0, double a1, double a2, double a3) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToScene(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_rectf qute_QGraphicsItem_mapRectToItem_1(void *self, void * a0, double a1, double a2, double a3, double a4) {
-	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectToItem(static_cast<QGraphicsItem *>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4)));
-}
-qute_rectf qute_QGraphicsItem_mapRectToParent_1(void *self, double a0, double a1, double a2, double a3) {
-	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectToParent(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)));
-}
-qute_rectf qute_QGraphicsItem_mapRectToScene_1(void *self, double a0, double a1, double a2, double a3) {
-	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectToScene(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)));
-}
-qute_pointf qute_QGraphicsItem_mapFromItem_4(void *self, void * a0, double a1, double a2) {
-	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapFromItem(static_cast<QGraphicsItem *>(a0), static_cast<double>(a1), static_cast<double>(a2)));
-}
-qute_pointf qute_QGraphicsItem_mapFromParent_4(void *self, double a0, double a1) {
-	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapFromParent(static_cast<double>(a0), static_cast<double>(a1)));
-}
-qute_pointf qute_QGraphicsItem_mapFromScene_4(void *self, double a0, double a1) {
-	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapFromScene(static_cast<double>(a0), static_cast<double>(a1)));
-}
-qute_list qute_QGraphicsItem_mapFromItem_5(void *self, void * a0, double a1, double a2, double a3, double a4) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromItem(static_cast<QGraphicsItem *>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_list qute_QGraphicsItem_mapFromParent_5(void *self, double a0, double a1, double a2, double a3) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromParent(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_list qute_QGraphicsItem_mapFromScene_5(void *self, double a0, double a1, double a2, double a3) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromScene(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_rectf qute_QGraphicsItem_mapRectFromItem_1(void *self, void * a0, double a1, double a2, double a3, double a4) {
-	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectFromItem(static_cast<QGraphicsItem *>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4)));
-}
-qute_rectf qute_QGraphicsItem_mapRectFromParent_1(void *self, double a0, double a1, double a2, double a3) {
-	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectFromParent(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)));
-}
-qute_rectf qute_QGraphicsItem_mapRectFromScene_1(void *self, double a0, double a1, double a2, double a3) {
-	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectFromScene(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)));
 }
 bool qute_QGraphicsItem_isAncestorOf(void *self, void * a0) {
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isAncestorOf(static_cast<QGraphicsItem *>(a0)));
@@ -6861,9 +6792,6 @@ qute_pointf qute_QGraphicsPixmapItem_offset(void *self) {
 void qute_QGraphicsPixmapItem_setOffset(void *self, qute_pointf a0) {
 	static_cast<QGraphicsPixmapItem *>(self)->setOffset(qute_to_QPointF(a0));
 }
-void qute_QGraphicsPixmapItem_setOffset_1(void *self, double a0, double a1) {
-	static_cast<QGraphicsPixmapItem *>(self)->setOffset(static_cast<double>(a0), static_cast<double>(a1));
-}
 int64_t qute_QGraphicsPixmapItem_shapeMode(void *self) {
 	return static_cast<int64_t>(static_cast<QGraphicsPixmapItem *>(self)->shapeMode());
 }
@@ -6890,9 +6818,6 @@ qute_rectf qute_QGraphicsRectItem_rect(void *self) {
 void qute_QGraphicsRectItem_setRect(void *self, qute_rectf a0) {
 	static_cast<QGraphicsRectItem *>(self)->setRect(qute_to_QRectF(a0));
 }
-void qute_QGraphicsRectItem_setRect_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsRectItem *>(self)->setRect(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
 
 // ---- QGraphicsScene
 void * qute_QGraphicsScene_new(void * a0) {
@@ -6918,9 +6843,6 @@ double qute_QGraphicsScene_height(void *self) {
 }
 void qute_QGraphicsScene_setSceneRect(void *self, qute_rectf a0) {
 	static_cast<QGraphicsScene *>(self)->setSceneRect(qute_to_QRectF(a0));
-}
-void qute_QGraphicsScene_setSceneRect_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsScene *>(self)->setSceneRect(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
 void qute_QGraphicsScene_render(void *self, void * a0) {
 	static_cast<QGraphicsScene *>(self)->render(static_cast<QPainter *>(a0));
@@ -6955,17 +6877,11 @@ qute_list qute_QGraphicsScene_items_3(void *self, const void *a0, ptrdiff_t a0_n
 qute_list qute_QGraphicsScene_items_4(void *self, void * a0) {
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())), [](const auto &v) { return (void *)(v); });
 }
-qute_list qute_QGraphicsScene_items_5(void *self, double a0, double a1, double a2, double a3, int64_t a4, int64_t a5) {
-	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<Qt::ItemSelectionMode>(a4), static_cast<Qt::SortOrder>(a5)), [](const auto &v) { return (void *)(v); });
-}
 qute_list qute_QGraphicsScene_collidingItems(void *self, void * a0) {
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->collidingItems(static_cast<QGraphicsItem *>(a0)), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QGraphicsScene_itemAt(void *self, qute_pointf a0, void * a1) {
 	return (void *)(static_cast<QGraphicsScene *>(self)->itemAt(qute_to_QPointF(a0), (a1 ? *static_cast<QTransform *>(a1) : QTransform())));
-}
-void * qute_QGraphicsScene_itemAt_1(void *self, double a0, double a1, void * a2) {
-	return (void *)(static_cast<QGraphicsScene *>(self)->itemAt(static_cast<double>(a0), static_cast<double>(a1), (a2 ? *static_cast<QTransform *>(a2) : QTransform())));
 }
 qute_list qute_QGraphicsScene_selectedItems(void *self) {
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->selectedItems(), [](const auto &v) { return (void *)(v); });
@@ -7039,12 +6955,6 @@ void qute_QGraphicsScene_setForegroundBrush(void *self, void * a0) {
 qute_list qute_QGraphicsScene_views(void *self) {
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->views(), [](const auto &v) { return (void *)(v); });
 }
-void qute_QGraphicsScene_update(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsScene *>(self)->update(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
-void qute_QGraphicsScene_invalidate(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsScene *>(self)->invalidate(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
 void * qute_QGraphicsScene_style(void *self) {
 	return (void *)(static_cast<QGraphicsScene *>(self)->style());
 }
@@ -7087,11 +6997,17 @@ bool qute_QGraphicsScene_focusOnTouch(void *self) {
 void qute_QGraphicsScene_setFocusOnTouch(void *self, bool a0) {
 	static_cast<QGraphicsScene *>(self)->setFocusOnTouch(static_cast<bool>(a0));
 }
-void qute_QGraphicsScene_update_1(void *self) {
+void qute_QGraphicsScene_update(void *self) {
 	static_cast<QGraphicsScene *>(self)->update();
 }
-void qute_QGraphicsScene_invalidate_1(void *self) {
+void qute_QGraphicsScene_update_1(void *self, qute_rectf a0) {
+	static_cast<QGraphicsScene *>(self)->update(qute_to_QRectF(a0));
+}
+void qute_QGraphicsScene_invalidate(void *self) {
 	static_cast<QGraphicsScene *>(self)->invalidate();
+}
+void qute_QGraphicsScene_invalidate_1(void *self, qute_rectf a0, int64_t a1) {
+	static_cast<QGraphicsScene *>(self)->invalidate(qute_to_QRectF(a0), QFlags<QGraphicsScene::SceneLayer>::fromInt(static_cast<QFlags<QGraphicsScene::SceneLayer>::Int>(a1)));
 }
 void qute_QGraphicsScene_advance(void *self) {
 	static_cast<QGraphicsScene *>(self)->advance();
@@ -7354,9 +7270,6 @@ qute_rectf qute_QGraphicsView_sceneRect(void *self) {
 void qute_QGraphicsView_setSceneRect(void *self, qute_rectf a0) {
 	static_cast<QGraphicsView *>(self)->setSceneRect(qute_to_QRectF(a0));
 }
-void qute_QGraphicsView_setSceneRect_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsView *>(self)->setSceneRect(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
 void * qute_QGraphicsView_transform(void *self) {
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsView *>(self)->transform()));
 }
@@ -7387,28 +7300,19 @@ void qute_QGraphicsView_translate(void *self, double a0, double a1) {
 void qute_QGraphicsView_centerOn(void *self, qute_pointf a0) {
 	static_cast<QGraphicsView *>(self)->centerOn(qute_to_QPointF(a0));
 }
-void qute_QGraphicsView_centerOn_1(void *self, double a0, double a1) {
-	static_cast<QGraphicsView *>(self)->centerOn(static_cast<double>(a0), static_cast<double>(a1));
-}
-void qute_QGraphicsView_centerOn_2(void *self, void * a0) {
+void qute_QGraphicsView_centerOn_1(void *self, void * a0) {
 	static_cast<QGraphicsView *>(self)->centerOn(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsView_ensureVisible(void *self, qute_rectf a0) {
 	static_cast<QGraphicsView *>(self)->ensureVisible(qute_to_QRectF(a0));
 }
-void qute_QGraphicsView_ensureVisible_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsView *>(self)->ensureVisible(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
-void qute_QGraphicsView_ensureVisible_2(void *self, void * a0) {
+void qute_QGraphicsView_ensureVisible_1(void *self, void * a0) {
 	static_cast<QGraphicsView *>(self)->ensureVisible(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsView_fitInView(void *self, qute_rectf a0) {
 	static_cast<QGraphicsView *>(self)->fitInView(qute_to_QRectF(a0));
 }
-void qute_QGraphicsView_fitInView_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QGraphicsView *>(self)->fitInView(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
-void qute_QGraphicsView_fitInView_2(void *self, void * a0) {
+void qute_QGraphicsView_fitInView_1(void *self, void * a0) {
 	static_cast<QGraphicsView *>(self)->fitInView(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsView_render(void *self, void * a0) {
@@ -7420,26 +7324,17 @@ qute_list qute_QGraphicsView_items(void *self) {
 qute_list qute_QGraphicsView_items_1(void *self, qute_point a0) {
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(qute_to_QPoint(a0)), [](const auto &v) { return (void *)(v); });
 }
-qute_list qute_QGraphicsView_items_2(void *self, int a0, int a1) {
-	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(static_cast<int>(a0), static_cast<int>(a1)), [](const auto &v) { return (void *)(v); });
-}
-qute_list qute_QGraphicsView_items_3(void *self, qute_rect a0) {
+qute_list qute_QGraphicsView_items_2(void *self, qute_rect a0) {
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(qute_to_QRect(a0)), [](const auto &v) { return (void *)(v); });
 }
-qute_list qute_QGraphicsView_items_4(void *self, int a0, int a1, int a2, int a3) {
-	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3)), [](const auto &v) { return (void *)(v); });
-}
-qute_list qute_QGraphicsView_items_5(void *self, const void *a0, ptrdiff_t a0_n) {
+qute_list qute_QGraphicsView_items_3(void *self, const void *a0, ptrdiff_t a0_n) {
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(QPolygon([&] { QList<QPoint> l; auto d = static_cast<qute_point const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPoint(d[i])); return l; }())), [](const auto &v) { return (void *)(v); });
 }
-qute_list qute_QGraphicsView_items_6(void *self, void * a0) {
+qute_list qute_QGraphicsView_items_4(void *self, void * a0) {
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QGraphicsView_itemAt(void *self, qute_point a0) {
 	return (void *)(static_cast<QGraphicsView *>(self)->itemAt(qute_to_QPoint(a0)));
-}
-void * qute_QGraphicsView_itemAt_1(void *self, int a0, int a1) {
-	return (void *)(static_cast<QGraphicsView *>(self)->itemAt(static_cast<int>(a0), static_cast<int>(a1)));
 }
 qute_pointf qute_QGraphicsView_mapToScene(void *self, qute_point a0) {
 	return qute_from_QPointF(static_cast<QGraphicsView *>(self)->mapToScene(qute_to_QPoint(a0)));
@@ -7464,18 +7359,6 @@ qute_list qute_QGraphicsView_mapFromScene_2(void *self, const void *a0, ptrdiff_
 }
 void * qute_QGraphicsView_mapFromScene_3(void *self, void * a0) {
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsView *>(self)->mapFromScene((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
-}
-qute_pointf qute_QGraphicsView_mapToScene_4(void *self, int a0, int a1) {
-	return qute_from_QPointF(static_cast<QGraphicsView *>(self)->mapToScene(static_cast<int>(a0), static_cast<int>(a1)));
-}
-qute_list qute_QGraphicsView_mapToScene_5(void *self, int a0, int a1, int a2, int a3) {
-	return qute_ret_list<qute_pointf>(static_cast<QGraphicsView *>(self)->mapToScene(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3)), [](const auto &v) { return qute_from_QPointF(v); });
-}
-qute_point qute_QGraphicsView_mapFromScene_4(void *self, double a0, double a1) {
-	return qute_from_QPoint(static_cast<QGraphicsView *>(self)->mapFromScene(static_cast<double>(a0), static_cast<double>(a1)));
-}
-qute_list qute_QGraphicsView_mapFromScene_5(void *self, double a0, double a1, double a2, double a3) {
-	return qute_ret_list<qute_point>(static_cast<QGraphicsView *>(self)->mapFromScene(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3)), [](const auto &v) { return qute_from_QPoint(v); });
 }
 void * qute_QGraphicsView_backgroundBrush(void *self) {
 	return static_cast<void *>(new QBrush(static_cast<QGraphicsView *>(self)->backgroundBrush()));
@@ -7689,10 +7572,7 @@ int qute_QHeaderView_visualIndexAt(void *self, int a0) {
 int qute_QHeaderView_logicalIndexAt(void *self, int a0) {
 	return static_cast<int>(static_cast<QHeaderView *>(self)->logicalIndexAt(static_cast<int>(a0)));
 }
-int qute_QHeaderView_logicalIndexAt_1(void *self, int a0, int a1) {
-	return static_cast<int>(static_cast<QHeaderView *>(self)->logicalIndexAt(static_cast<int>(a0), static_cast<int>(a1)));
-}
-int qute_QHeaderView_logicalIndexAt_2(void *self, qute_point a0) {
+int qute_QHeaderView_logicalIndexAt_1(void *self, qute_point a0) {
 	return static_cast<int>(static_cast<QHeaderView *>(self)->logicalIndexAt(qute_to_QPoint(a0)));
 }
 int qute_QHeaderView_sectionSize(void *self, int a0) {

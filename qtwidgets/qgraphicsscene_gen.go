@@ -157,16 +157,6 @@ func (this *QGraphicsScene) SetSceneRect(rect qtcore.QRectF) {
 	C.qute_QGraphicsScene_setSceneRect(self, cQRectF(rect))
 }
 
-// SetSceneRect2 wraps QGraphicsScene::setSceneRect.
-//
-//	C++: void QGraphicsScene::setSceneRect(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setSceneRect
-func (this *QGraphicsScene) SetSceneRect2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSceneRect2")
-	C.qute_QGraphicsScene_setSceneRect_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
 // Render wraps QGraphicsScene::render.
 //
 //	C++: void QGraphicsScene::render(QPainter * painter, const QRectF & target = …, const QRectF & source = …, Qt::AspectRatioMode aspectRatioMode = …)
@@ -249,45 +239,45 @@ func (this *QGraphicsScene) Items() []*QGraphicsItem {
 	})
 }
 
-// Items2 wraps QGraphicsScene::items.
+// ItemsAt wraps QGraphicsScene::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPointF & pos, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
-func (this *QGraphicsScene) Items2(pos qtcore.QPointF) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items2")
+func (this *QGraphicsScene) ItemsAt(pos qtcore.QPointF) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsAt")
 	r := C.qute_QGraphicsScene_items_1(self, cQPointF(pos))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
 }
 
-// Items3 wraps QGraphicsScene::items.
+// ItemsIn wraps QGraphicsScene::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QRectF & rect, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
-func (this *QGraphicsScene) Items3(rect qtcore.QRectF) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items3")
+func (this *QGraphicsScene) ItemsIn(rect qtcore.QRectF) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsIn")
 	r := C.qute_QGraphicsScene_items_2(self, cQRectF(rect))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
 }
 
-// Items4 wraps QGraphicsScene::items.
+// ItemsInPolygon wraps QGraphicsScene::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPolygonF & polygon, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
-func (this *QGraphicsScene) Items4(polygon []qtcore.QPointF) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items4")
+func (this *QGraphicsScene) ItemsInPolygon(polygon []qtcore.QPointF) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInPolygon")
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPointF(polygon[i])
@@ -298,31 +288,16 @@ func (this *QGraphicsScene) Items4(polygon []qtcore.QPointF) []*QGraphicsItem {
 	})
 }
 
-// Items5 wraps QGraphicsScene::items.
+// ItemsInPath wraps QGraphicsScene::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPainterPath & path, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
-func (this *QGraphicsScene) Items5(path *qtgui.QPainterPath) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items5")
-	r := C.qute_QGraphicsScene_items_4(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.Items5"))
-	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
-	})
-}
-
-// Items6 wraps QGraphicsScene::items.
-//
-//	C++: QList<QGraphicsItem *> QGraphicsScene::items(qreal x, qreal y, qreal w, qreal h, Qt::ItemSelectionMode mode, Qt::SortOrder order, const QTransform & deviceTransform = …) const
-//
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
-func (this *QGraphicsScene) Items6(x float64, y float64, w float64, hArg float64, mode qtcore.ItemSelectionMode, order qtcore.SortOrder) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items6")
-	r := C.qute_QGraphicsScene_items_5(self, C.double(x), C.double(y), C.double(w), C.double(hArg), C.int64_t(mode), C.int64_t(order))
+func (this *QGraphicsScene) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInPath")
+	r := C.qute_QGraphicsScene_items_4(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.ItemsInPath"))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -357,19 +332,6 @@ func (this *QGraphicsScene) CollidingItems(item QGraphicsItemLike) []*QGraphicsI
 func (this *QGraphicsScene) ItemAt(pos qtcore.QPointF, deviceTransform *qtgui.QTransform) *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemAt")
 	r := C.qute_QGraphicsScene_itemAt(self, cQPointF(pos), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemAt"))
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
-}
-
-// ItemAt2 wraps QGraphicsScene::itemAt.
-//
-//	C++: QGraphicsItem * QGraphicsScene::itemAt(qreal x, qreal y, const QTransform & deviceTransform) const
-//
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#itemAt
-func (this *QGraphicsScene) ItemAt2(x float64, y float64, deviceTransform *qtgui.QTransform) *QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemAt2")
-	r := C.qute_QGraphicsScene_itemAt_1(self, C.double(x), C.double(y), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemAt2"))
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
@@ -411,14 +373,14 @@ func (this *QGraphicsScene) SetSelectionArea(path *qtgui.QPainterPath, deviceTra
 	C.qute_QGraphicsScene_setSelectionArea(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.SetSelectionArea"), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.SetSelectionArea"))
 }
 
-// SetSelectionArea2 wraps QGraphicsScene::setSelectionArea.
+// SetSelectionAreaWith wraps QGraphicsScene::setSelectionArea.
 //
 //	C++: void QGraphicsScene::setSelectionArea(const QPainterPath & path, Qt::ItemSelectionOperation selectionOperation = …, Qt::ItemSelectionMode mode = …, const QTransform & deviceTransform = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setSelectionArea
-func (this *QGraphicsScene) SetSelectionArea2(path *qtgui.QPainterPath) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSelectionArea2")
-	C.qute_QGraphicsScene_setSelectionArea_1(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.SetSelectionArea2"))
+func (this *QGraphicsScene) SetSelectionAreaWith(path *qtgui.QPainterPath) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSelectionAreaWith")
+	C.qute_QGraphicsScene_setSelectionArea_1(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.SetSelectionAreaWith"))
 }
 
 // AddItem wraps QGraphicsScene::addItem.
@@ -510,7 +472,7 @@ func (this *QGraphicsScene) AddSimpleText(text string) *QGraphicsSimpleTextItem 
 //
 // Ownership: item becomes Owned: Go frees it from now on.
 //
-// Ownership passes back to the caller, so Go owns the item.
+// Ownership passes back to the caller so Go owns the item.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#removeItem
 func (this *QGraphicsScene) RemoveItem(item QGraphicsItemLike) {
@@ -675,26 +637,6 @@ func (this *QGraphicsScene) Views() []*QGraphicsView {
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsView {
 		return rt.View[QGraphicsView](rt.WrapClass(e, "QGraphicsView", rt.KeepOrBorrow), e)
 	})
-}
-
-// Update wraps QGraphicsScene::update.
-//
-//	C++: void QGraphicsScene::update(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#update
-func (this *QGraphicsScene) Update(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Update")
-	C.qute_QGraphicsScene_update(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
-// Invalidate wraps QGraphicsScene::invalidate.
-//
-//	C++: void QGraphicsScene::invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#invalidate
-func (this *QGraphicsScene) Invalidate(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Invalidate")
-	C.qute_QGraphicsScene_invalidate(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
 }
 
 // Style wraps QGraphicsScene::style.
@@ -869,24 +811,44 @@ func (this *QGraphicsScene) SetFocusOnTouch(enabled bool) {
 	C.qute_QGraphicsScene_setFocusOnTouch(self, C.bool(enabled))
 }
 
-// Update2 wraps QGraphicsScene::update.
+// Update wraps QGraphicsScene::update.
 //
 //	C++: void QGraphicsScene::update(const QRectF & rect = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#update
-func (this *QGraphicsScene) Update2() {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Update2")
-	C.qute_QGraphicsScene_update_1(self)
+func (this *QGraphicsScene) Update() {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Update")
+	C.qute_QGraphicsScene_update(self)
 }
 
-// Invalidate2 wraps QGraphicsScene::invalidate.
+// UpdateRect wraps QGraphicsScene::update.
+//
+//	C++: void QGraphicsScene::update(const QRectF & rect = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#update
+func (this *QGraphicsScene) UpdateRect(rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.UpdateRect")
+	C.qute_QGraphicsScene_update_1(self, cQRectF(rect))
+}
+
+// Invalidate wraps QGraphicsScene::invalidate.
 //
 //	C++: void QGraphicsScene::invalidate(const QRectF & rect = …, SceneLayers layers = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#invalidate
-func (this *QGraphicsScene) Invalidate2() {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Invalidate2")
-	C.qute_QGraphicsScene_invalidate_1(self)
+func (this *QGraphicsScene) Invalidate() {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Invalidate")
+	C.qute_QGraphicsScene_invalidate(self)
+}
+
+// InvalidateRect wraps QGraphicsScene::invalidate.
+//
+//	C++: void QGraphicsScene::invalidate(const QRectF & rect = …, SceneLayers layers = …)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#invalidate
+func (this *QGraphicsScene) InvalidateRect(rect qtcore.QRectF, layers QGraphicsSceneSceneLayers) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.InvalidateRect")
+	C.qute_QGraphicsScene_invalidate_1(self, cQRectF(rect), C.int64_t(layers))
 }
 
 // Advance wraps QGraphicsScene::advance.

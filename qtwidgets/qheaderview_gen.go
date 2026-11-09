@@ -135,25 +135,14 @@ func (this *QHeaderView) LogicalIndexAt(position int) int {
 	return int(r)
 }
 
-// LogicalIndexAt2 wraps QHeaderView::logicalIndexAt.
-//
-//	C++: int QHeaderView::logicalIndexAt(int x, int y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qheaderview.html#logicalIndexAt
-func (this *QHeaderView) LogicalIndexAt2(x int, y int) int {
-	self := rt.Use(unsafe.Pointer(this), "QHeaderView.LogicalIndexAt2")
-	r := C.qute_QHeaderView_logicalIndexAt_1(self, C.int(x), C.int(y))
-	return int(r)
-}
-
-// LogicalIndexAt3 wraps QHeaderView::logicalIndexAt.
+// LogicalIndexAtPoint wraps QHeaderView::logicalIndexAt.
 //
 //	C++: int QHeaderView::logicalIndexAt(const QPoint & pos) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qheaderview.html#logicalIndexAt
-func (this *QHeaderView) LogicalIndexAt3(pos qtcore.QPoint) int {
-	self := rt.Use(unsafe.Pointer(this), "QHeaderView.LogicalIndexAt3")
-	r := C.qute_QHeaderView_logicalIndexAt_2(self, cQPoint(pos))
+func (this *QHeaderView) LogicalIndexAtPoint(pos qtcore.QPoint) int {
+	self := rt.Use(unsafe.Pointer(this), "QHeaderView.LogicalIndexAtPoint")
+	r := C.qute_QHeaderView_logicalIndexAt_1(self, cQPoint(pos))
 	return int(r)
 }
 
@@ -410,23 +399,23 @@ func (this *QHeaderView) SectionResizeMode(logicalIndex int) QHeaderViewResizeMo
 	return QHeaderViewResizeMode(r)
 }
 
-// SetSectionResizeMode wraps QHeaderView::setSectionResizeMode.
+// SetSectionResizeModeAll wraps QHeaderView::setSectionResizeMode.
 //
 //	C++: void QHeaderView::setSectionResizeMode(ResizeMode mode)
 //
 // Qt docs: https://doc.qt.io/qt-6/qheaderview.html#setSectionResizeMode
-func (this *QHeaderView) SetSectionResizeMode(mode QHeaderViewResizeMode) {
-	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionResizeMode")
+func (this *QHeaderView) SetSectionResizeModeAll(mode QHeaderViewResizeMode) {
+	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionResizeModeAll")
 	C.qute_QHeaderView_setSectionResizeMode(self, C.int64_t(mode))
 }
 
-// SetSectionResizeMode2 wraps QHeaderView::setSectionResizeMode.
+// SetSectionResizeMode wraps QHeaderView::setSectionResizeMode.
 //
 //	C++: void QHeaderView::setSectionResizeMode(int logicalIndex, ResizeMode mode)
 //
 // Qt docs: https://doc.qt.io/qt-6/qheaderview.html#setSectionResizeMode
-func (this *QHeaderView) SetSectionResizeMode2(logicalIndex int, mode QHeaderViewResizeMode) {
-	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionResizeMode2")
+func (this *QHeaderView) SetSectionResizeMode(logicalIndex int, mode QHeaderViewResizeMode) {
+	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionResizeMode")
 	C.qute_QHeaderView_setSectionResizeMode_1(self, C.int(logicalIndex), C.int64_t(mode))
 }
 

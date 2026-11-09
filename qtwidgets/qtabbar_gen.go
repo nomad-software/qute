@@ -102,14 +102,14 @@ func (this *QTabBar) AddTab(text string) int {
 	return int(r)
 }
 
-// AddTab2 wraps QTabBar::addTab.
+// AddTabIcon wraps QTabBar::addTab.
 //
 //	C++: int QTabBar::addTab(const QIcon & icon, const QString & text)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtabbar.html#addTab
-func (this *QTabBar) AddTab2(icon *qtgui.QIcon, text string) int {
-	self := rt.Use(unsafe.Pointer(this), "QTabBar.AddTab2")
-	r := C.qute_QTabBar_addTab_1(self, rt.UseArg(unsafe.Pointer(icon), "QTabBar.AddTab2"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+func (this *QTabBar) AddTabIcon(icon *qtgui.QIcon, text string) int {
+	self := rt.Use(unsafe.Pointer(this), "QTabBar.AddTabIcon")
+	r := C.qute_QTabBar_addTab_1(self, rt.UseArg(unsafe.Pointer(icon), "QTabBar.AddTabIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	return int(r)
 }
 
@@ -124,14 +124,14 @@ func (this *QTabBar) InsertTab(index int, text string) int {
 	return int(r)
 }
 
-// InsertTab2 wraps QTabBar::insertTab.
+// InsertTabIcon wraps QTabBar::insertTab.
 //
 //	C++: int QTabBar::insertTab(int index, const QIcon & icon, const QString & text)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtabbar.html#insertTab
-func (this *QTabBar) InsertTab2(index int, icon *qtgui.QIcon, text string) int {
-	self := rt.Use(unsafe.Pointer(this), "QTabBar.InsertTab2")
-	r := C.qute_QTabBar_insertTab_1(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QTabBar.InsertTab2"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+func (this *QTabBar) InsertTabIcon(index int, icon *qtgui.QIcon, text string) int {
+	self := rt.Use(unsafe.Pointer(this), "QTabBar.InsertTabIcon")
+	r := C.qute_QTabBar_insertTab_1(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QTabBar.InsertTabIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	return int(r)
 }
 
@@ -480,14 +480,20 @@ func (this *QTabBar) SetTabsClosable(closable bool) {
 //
 //	C++: void QTabBar::setTabButton(int index, ButtonPosition position, QWidget * widget)
 //
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// The tab bar takes ownership of the widget and deletes it when the tab bar is destroyed (Qt docs).
+//
 // Qt docs: https://doc.qt.io/qt-6/qtabbar.html#setTabButton
 func (this *QTabBar) SetTabButton(index int, position QTabBarButtonPosition, widget QWidgetLike) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabButton")
 	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
 	if widget != nil {
-		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QTabBar.SetTabButton")
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QTabBar.SetTabButton")
 	}
 	C.qute_QTabBar_setTabButton(self, C.int(index), C.int64_t(position), widgetPtr)
+	widgetH.TransferToCpp()
 }
 
 // TabButton wraps QTabBar::tabButton.

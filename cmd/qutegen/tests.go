@@ -98,6 +98,10 @@ func (t *testCtx) zeroArg(p *Param) (string, bool) {
 		}
 	case kList:
 		return "nil", true
+	case kObj:
+		if p.Rule == "borrowed" || p.Rule == "" {
+			return "nil", true // a borrowed object argument may be absent
+		}
 	}
 	return "", false
 }
@@ -260,8 +264,8 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 
 func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	if mm.Overlay != nil && mm.Overlay.Test != "" {
-		if strings.TrimSpace(mm.Overlay.Test) == "skip" {
-			g.report.untested(c, mm, "test skipped in overlay")
+		if why, ok := strings.CutPrefix(strings.TrimSpace(mm.Overlay.Test), "skip"); ok {
+			g.report.untested(c, mm, "skipped in overlay"+why)
 			return
 		}
 		for _, md := range g.modules {
@@ -294,13 +298,11 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 			return
 		}
 	}
+	retRule := ""
 	if mm.RetRuled && (mm.RetRule == "transfer-to-go" || mm.RetRule == "parented") {
-		if len(transfers) == 0 && !thisRule {
-			g.report.untested(c, mm, mm.RetRule+" result needs a test snippet")
-			return
-		}
+		retRule = mm.RetRule
 	}
-	if len(transfers) == 0 && !thisRule {
+	if len(transfers) == 0 && !thisRule && retRule == "" {
 		return
 	}
 	core := g.byName["QtCore"]
@@ -365,7 +367,7 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 			if registered(ac) {
 				checks = append(checks, "DEAD:"+v)
 			}
-		case p.T.k == kObj:
+		case p.T.k == kObj && p.Rule != "borrowed":
 			g.report.untested(c, mm, "has another object argument ("+p.GoName+")")
 			return
 		default:
@@ -384,9 +386,35 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	}
 	call := fmt.Sprintf("recv%s.%s(%s)", path(recvCls, c), mm.GoName, strings.Join(args, ", "))
 	if mm.Ret != nil && mm.Ret.k != kVoid {
-		call = "_ = " + call
+		if retRule != "" {
+			call = "res := " + call
+		} else {
+			call = "_ = " + call
+		}
 	}
 	b.p("\t\t%s", call)
+	// the returned object: Parented (freed with its owner) or Owned (ours)
+	if retRule != "" {
+		res := "res"
+		if mm.Ret.k == kList {
+			b.p("\t\tif len(res) == 0 {\n\t\t\tt.Errorf(\"returned an empty list; give this rule a test: snippet\")\n\t\t\treturn\n\t\t}")
+			res = "res[0]"
+		} else {
+			b.p("\t\tif res == nil {\n\t\t\tt.Errorf(\"returned nil; give this rule a test: snippet\")\n\t\t\treturn\n\t\t}")
+		}
+		want := "Parented"
+		if retRule == "transfer-to-go" {
+			want = "Owned"
+		}
+		b.p("\t\tif got := %s.Ownership(); got != %s {\n\t\t\tt.Errorf(\"result: %%v, want %s\", got)\n\t\t}", res, t.q(core, want), want)
+		if retRule == "transfer-to-go" {
+			b.p("\t\t%s.Delete()\n\t\tif %s.Alive() {\n\t\t\tt.Error(\"result alive after Delete\")\n\t\t}", res, res)
+		} else if mm.Ret.cls.QObject {
+			checks = append(checks, "DEAD:"+res)
+		} else {
+			g.report.unobservable(c, mm)
+		}
+	}
 	var dead []string
 	for _, ch := range checks {
 		if strings.HasPrefix(ch, "DEAD:") {
@@ -397,7 +425,7 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	}
 	b.p("\t\t%s.Delete()", rootVar)
 	for _, d := range dead {
-		b.p("\t\tif %s.Alive() {\n\t\t\tt.Errorf(\"%s alive after its owner was deleted\")\n\t\t}", d, d)
+		b.p("\t\tif %s.Alive() {\n\t\t\tt.Errorf(\"%s alive after its owner was deleted\")\n\t\t}", d, strings.Trim(d, "[]0"))
 	}
 	if rootVar != "recv" && registered(recvCls) && !thisRule {
 		b.p("\t\tif recv.Alive() {\n\t\t\trecv.Delete()\n\t\t}")

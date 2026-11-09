@@ -423,6 +423,8 @@ func (this *QFileDialog) History() []string {
 //
 //	C++: void QFileDialog::setItemDelegate(QAbstractItemDelegate * delegate)
 //
+// QFileDialog does not take ownership of the delegate (Qt docs).
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setItemDelegate
 func (this *QFileDialog) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetItemDelegate")
@@ -493,14 +495,20 @@ func (this *QFileDialog) SupportedSchemes() []string {
 //
 //	C++: void QFileDialog::setProxyModel(QAbstractProxyModel * model)
 //
+// Ownership: model becomes Parented: Qt frees it from now on.
+//
+// The file dialog takes ownership of the proxy model (Qt docs).
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setProxyModel
 func (this *QFileDialog) SetProxyModel(model qtcore.QAbstractProxyModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetProxyModel")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractProxyModel()), "QFileDialog.SetProxyModel")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractProxyModel()), "QFileDialog.SetProxyModel")
 	}
 	C.qute_QFileDialog_setProxyModel(self, modelPtr)
+	modelH.TransferToCpp()
 }
 
 // ProxyModel wraps QFileDialog::proxyModel.

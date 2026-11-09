@@ -844,16 +844,6 @@ func (this *QGraphicsItem) SetPos(pos qtcore.QPointF) {
 	C.qute_QGraphicsItem_setPos(self, cQPointF(pos))
 }
 
-// SetPos2 wraps QGraphicsItem::setPos.
-//
-//	C++: void QGraphicsItem::setPos(qreal x, qreal y)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setPos
-func (this *QGraphicsItem) SetPos2(x float64, y float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetPos2")
-	C.qute_QGraphicsItem_setPos_1(self, C.double(x), C.double(y))
-}
-
 // MoveBy wraps QGraphicsItem::moveBy.
 //
 //	C++: void QGraphicsItem::moveBy(qreal dx, qreal dy)
@@ -872,16 +862,6 @@ func (this *QGraphicsItem) MoveBy(dx float64, dy float64) {
 func (this *QGraphicsItem) EnsureVisible() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.EnsureVisible")
 	C.qute_QGraphicsItem_ensureVisible(self)
-}
-
-// EnsureVisible2 wraps QGraphicsItem::ensureVisible.
-//
-//	C++: void QGraphicsItem::ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = …, int ymargin = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#ensureVisible
-func (this *QGraphicsItem) EnsureVisible2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.EnsureVisible2")
-	C.qute_QGraphicsItem_ensureVisible_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
 }
 
 // Transform wraps QGraphicsItem::transform.
@@ -1021,16 +1001,6 @@ func (this *QGraphicsItem) TransformOriginPoint() qtcore.QPointF {
 func (this *QGraphicsItem) SetTransformOriginPoint(origin qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetTransformOriginPoint")
 	C.qute_QGraphicsItem_setTransformOriginPoint(self, cQPointF(origin))
-}
-
-// SetTransformOriginPoint2 wraps QGraphicsItem::setTransformOriginPoint.
-//
-//	C++: void QGraphicsItem::setTransformOriginPoint(qreal ax, qreal ay)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setTransformOriginPoint
-func (this *QGraphicsItem) SetTransformOriginPoint2(ax float64, ay float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetTransformOriginPoint2")
-	C.qute_QGraphicsItem_setTransformOriginPoint_1(self, C.double(ax), C.double(ay))
 }
 
 // Advance wraps QGraphicsItem::advance.
@@ -1211,17 +1181,6 @@ func (this *QGraphicsItem) IsObscured() bool {
 	return bool(r)
 }
 
-// IsObscured2 wraps QGraphicsItem::isObscured.
-//
-//	C++: bool QGraphicsItem::isObscured(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#isObscured
-func (this *QGraphicsItem) IsObscured2(x float64, y float64, w float64, hArg float64) bool {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.IsObscured2")
-	r := C.qute_QGraphicsItem_isObscured_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return bool(r)
-}
-
 // IsObscuredBy wraps QGraphicsItem::isObscuredBy.
 //
 //	C++: bool QGraphicsItem::isObscuredBy(const QGraphicsItem * item) const
@@ -1294,14 +1253,14 @@ func (this *QGraphicsItem) Update() {
 	C.qute_QGraphicsItem_update(self)
 }
 
-// Update2 wraps QGraphicsItem::update.
+// UpdateRect wraps QGraphicsItem::update.
 //
-//	C++: void QGraphicsItem::update(qreal x, qreal y, qreal width, qreal height)
+//	C++: void QGraphicsItem::update(const QRectF & rect = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#update
-func (this *QGraphicsItem) Update2(x float64, y float64, width float64, height float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Update2")
-	C.qute_QGraphicsItem_update_1(self, C.double(x), C.double(y), C.double(width), C.double(height))
+func (this *QGraphicsItem) UpdateRect(rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.UpdateRect")
+	C.qute_QGraphicsItem_update_1(self, cQRectF(rect))
 }
 
 // Scroll wraps QGraphicsItem::scroll.
@@ -1351,39 +1310,39 @@ func (this *QGraphicsItem) MapToScene(point qtcore.QPointF) qtcore.QPointF {
 	return goQPointF(r)
 }
 
-// MapToItem2 wraps QGraphicsItem::mapToItem.
+// MapToItemRect wraps QGraphicsItem::mapToItem.
 //
 //	C++: QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToItem
-func (this *QGraphicsItem) MapToItem2(item QGraphicsItemLike, rect qtcore.QRectF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItem2")
+func (this *QGraphicsItem) MapToItemRect(item QGraphicsItemLike, rect qtcore.QRectF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItemRect")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItem2")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItemRect")
 	}
 	r := C.qute_QGraphicsItem_mapToItem_1(self, itemPtr, cQRectF(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToParent2 wraps QGraphicsItem::mapToParent.
+// MapToParentRect wraps QGraphicsItem::mapToParent.
 //
 //	C++: QPolygonF QGraphicsItem::mapToParent(const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToParent
-func (this *QGraphicsItem) MapToParent2(rect qtcore.QRectF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParent2")
+func (this *QGraphicsItem) MapToParentRect(rect qtcore.QRectF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParentRect")
 	r := C.qute_QGraphicsItem_mapToParent_1(self, cQRectF(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToScene2 wraps QGraphicsItem::mapToScene.
+// MapToSceneRect wraps QGraphicsItem::mapToScene.
 //
 //	C++: QPolygonF QGraphicsItem::mapToScene(const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToScene
-func (this *QGraphicsItem) MapToScene2(rect qtcore.QRectF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScene2")
+func (this *QGraphicsItem) MapToSceneRect(rect qtcore.QRectF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToSceneRect")
 	r := C.qute_QGraphicsItem_mapToScene_1(self, cQRectF(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
@@ -1425,16 +1384,16 @@ func (this *QGraphicsItem) MapRectToScene(rect qtcore.QRectF) qtcore.QRectF {
 	return goQRectF(r)
 }
 
-// MapToItem3 wraps QGraphicsItem::mapToItem.
+// MapToItemPolygon wraps QGraphicsItem::mapToItem.
 //
 //	C++: QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToItem
-func (this *QGraphicsItem) MapToItem3(item QGraphicsItemLike, polygon []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItem3")
+func (this *QGraphicsItem) MapToItemPolygon(item QGraphicsItemLike, polygon []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItemPolygon")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItem3")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItemPolygon")
 	}
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
@@ -1444,13 +1403,13 @@ func (this *QGraphicsItem) MapToItem3(item QGraphicsItemLike, polygon []qtcore.Q
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToParent3 wraps QGraphicsItem::mapToParent.
+// MapToParentPolygon wraps QGraphicsItem::mapToParent.
 //
 //	C++: QPolygonF QGraphicsItem::mapToParent(const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToParent
-func (this *QGraphicsItem) MapToParent3(polygon []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParent3")
+func (this *QGraphicsItem) MapToParentPolygon(polygon []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParentPolygon")
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPointF(polygon[i])
@@ -1459,13 +1418,13 @@ func (this *QGraphicsItem) MapToParent3(polygon []qtcore.QPointF) []qtcore.QPoin
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToScene3 wraps QGraphicsItem::mapToScene.
+// MapToScenePolygon wraps QGraphicsItem::mapToScene.
 //
 //	C++: QPolygonF QGraphicsItem::mapToScene(const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToScene
-func (this *QGraphicsItem) MapToScene3(polygon []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScene3")
+func (this *QGraphicsItem) MapToScenePolygon(polygon []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScenePolygon")
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPointF(polygon[i])
@@ -1474,46 +1433,46 @@ func (this *QGraphicsItem) MapToScene3(polygon []qtcore.QPointF) []qtcore.QPoint
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToItem4 wraps QGraphicsItem::mapToItem.
+// MapToItemPath wraps QGraphicsItem::mapToItem.
 //
 //	C++: QPainterPath QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToItem
-func (this *QGraphicsItem) MapToItem4(item QGraphicsItemLike, path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItem4")
+func (this *QGraphicsItem) MapToItemPath(item QGraphicsItemLike, path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItemPath")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItem4")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItemPath")
 	}
-	r := C.qute_QGraphicsItem_mapToItem_3(self, itemPtr, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapToItem4"))
+	r := C.qute_QGraphicsItem_mapToItem_3(self, itemPtr, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapToItemPath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
-// MapToParent4 wraps QGraphicsItem::mapToParent.
+// MapToParentPath wraps QGraphicsItem::mapToParent.
 //
 //	C++: QPainterPath QGraphicsItem::mapToParent(const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToParent
-func (this *QGraphicsItem) MapToParent4(path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParent4")
-	r := C.qute_QGraphicsItem_mapToParent_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapToParent4"))
+func (this *QGraphicsItem) MapToParentPath(path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParentPath")
+	r := C.qute_QGraphicsItem_mapToParent_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapToParentPath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
-// MapToScene4 wraps QGraphicsItem::mapToScene.
+// MapToScenePath wraps QGraphicsItem::mapToScene.
 //
 //	C++: QPainterPath QGraphicsItem::mapToScene(const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToScene
-func (this *QGraphicsItem) MapToScene4(path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScene4")
-	r := C.qute_QGraphicsItem_mapToScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapToScene4"))
+func (this *QGraphicsItem) MapToScenePath(path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScenePath")
+	r := C.qute_QGraphicsItem_mapToScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapToScenePath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -1554,39 +1513,39 @@ func (this *QGraphicsItem) MapFromScene(point qtcore.QPointF) qtcore.QPointF {
 	return goQPointF(r)
 }
 
-// MapFromItem2 wraps QGraphicsItem::mapFromItem.
+// MapFromItemRect wraps QGraphicsItem::mapFromItem.
 //
 //	C++: QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromItem
-func (this *QGraphicsItem) MapFromItem2(item QGraphicsItemLike, rect qtcore.QRectF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItem2")
+func (this *QGraphicsItem) MapFromItemRect(item QGraphicsItemLike, rect qtcore.QRectF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItemRect")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItem2")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItemRect")
 	}
 	r := C.qute_QGraphicsItem_mapFromItem_1(self, itemPtr, cQRectF(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapFromParent2 wraps QGraphicsItem::mapFromParent.
+// MapFromParentRect wraps QGraphicsItem::mapFromParent.
 //
 //	C++: QPolygonF QGraphicsItem::mapFromParent(const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromParent
-func (this *QGraphicsItem) MapFromParent2(rect qtcore.QRectF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParent2")
+func (this *QGraphicsItem) MapFromParentRect(rect qtcore.QRectF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParentRect")
 	r := C.qute_QGraphicsItem_mapFromParent_1(self, cQRectF(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapFromScene2 wraps QGraphicsItem::mapFromScene.
+// MapFromSceneRect wraps QGraphicsItem::mapFromScene.
 //
 //	C++: QPolygonF QGraphicsItem::mapFromScene(const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromScene
-func (this *QGraphicsItem) MapFromScene2(rect qtcore.QRectF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScene2")
+func (this *QGraphicsItem) MapFromSceneRect(rect qtcore.QRectF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromSceneRect")
 	r := C.qute_QGraphicsItem_mapFromScene_1(self, cQRectF(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
@@ -1628,16 +1587,16 @@ func (this *QGraphicsItem) MapRectFromScene(rect qtcore.QRectF) qtcore.QRectF {
 	return goQRectF(r)
 }
 
-// MapFromItem3 wraps QGraphicsItem::mapFromItem.
+// MapFromItemPolygon wraps QGraphicsItem::mapFromItem.
 //
 //	C++: QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromItem
-func (this *QGraphicsItem) MapFromItem3(item QGraphicsItemLike, polygon []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItem3")
+func (this *QGraphicsItem) MapFromItemPolygon(item QGraphicsItemLike, polygon []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItemPolygon")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItem3")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItemPolygon")
 	}
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
@@ -1647,13 +1606,13 @@ func (this *QGraphicsItem) MapFromItem3(item QGraphicsItemLike, polygon []qtcore
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapFromParent3 wraps QGraphicsItem::mapFromParent.
+// MapFromParentPolygon wraps QGraphicsItem::mapFromParent.
 //
 //	C++: QPolygonF QGraphicsItem::mapFromParent(const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromParent
-func (this *QGraphicsItem) MapFromParent3(polygon []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParent3")
+func (this *QGraphicsItem) MapFromParentPolygon(polygon []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParentPolygon")
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPointF(polygon[i])
@@ -1662,13 +1621,13 @@ func (this *QGraphicsItem) MapFromParent3(polygon []qtcore.QPointF) []qtcore.QPo
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapFromScene3 wraps QGraphicsItem::mapFromScene.
+// MapFromScenePolygon wraps QGraphicsItem::mapFromScene.
 //
 //	C++: QPolygonF QGraphicsItem::mapFromScene(const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromScene
-func (this *QGraphicsItem) MapFromScene3(polygon []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScene3")
+func (this *QGraphicsItem) MapFromScenePolygon(polygon []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScenePolygon")
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPointF(polygon[i])
@@ -1677,269 +1636,47 @@ func (this *QGraphicsItem) MapFromScene3(polygon []qtcore.QPointF) []qtcore.QPoi
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapFromItem4 wraps QGraphicsItem::mapFromItem.
+// MapFromItemPath wraps QGraphicsItem::mapFromItem.
 //
 //	C++: QPainterPath QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromItem
-func (this *QGraphicsItem) MapFromItem4(item QGraphicsItemLike, path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItem4")
+func (this *QGraphicsItem) MapFromItemPath(item QGraphicsItemLike, path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItemPath")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItem4")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItemPath")
 	}
-	r := C.qute_QGraphicsItem_mapFromItem_3(self, itemPtr, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapFromItem4"))
+	r := C.qute_QGraphicsItem_mapFromItem_3(self, itemPtr, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapFromItemPath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
-// MapFromParent4 wraps QGraphicsItem::mapFromParent.
+// MapFromParentPath wraps QGraphicsItem::mapFromParent.
 //
 //	C++: QPainterPath QGraphicsItem::mapFromParent(const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromParent
-func (this *QGraphicsItem) MapFromParent4(path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParent4")
-	r := C.qute_QGraphicsItem_mapFromParent_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapFromParent4"))
+func (this *QGraphicsItem) MapFromParentPath(path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParentPath")
+	r := C.qute_QGraphicsItem_mapFromParent_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapFromParentPath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
-// MapFromScene4 wraps QGraphicsItem::mapFromScene.
+// MapFromScenePath wraps QGraphicsItem::mapFromScene.
 //
 //	C++: QPainterPath QGraphicsItem::mapFromScene(const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromScene
-func (this *QGraphicsItem) MapFromScene4(path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScene4")
-	r := C.qute_QGraphicsItem_mapFromScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapFromScene4"))
+func (this *QGraphicsItem) MapFromScenePath(path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScenePath")
+	r := C.qute_QGraphicsItem_mapFromScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.MapFromScenePath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
-}
-
-// MapToItem5 wraps QGraphicsItem::mapToItem.
-//
-//	C++: QPointF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToItem
-func (this *QGraphicsItem) MapToItem5(item QGraphicsItemLike, x float64, y float64) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItem5")
-	var itemPtr unsafe.Pointer
-	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItem5")
-	}
-	r := C.qute_QGraphicsItem_mapToItem_4(self, itemPtr, C.double(x), C.double(y))
-	return goQPointF(r)
-}
-
-// MapToParent5 wraps QGraphicsItem::mapToParent.
-//
-//	C++: QPointF QGraphicsItem::mapToParent(qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToParent
-func (this *QGraphicsItem) MapToParent5(x float64, y float64) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParent5")
-	r := C.qute_QGraphicsItem_mapToParent_4(self, C.double(x), C.double(y))
-	return goQPointF(r)
-}
-
-// MapToScene5 wraps QGraphicsItem::mapToScene.
-//
-//	C++: QPointF QGraphicsItem::mapToScene(qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToScene
-func (this *QGraphicsItem) MapToScene5(x float64, y float64) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScene5")
-	r := C.qute_QGraphicsItem_mapToScene_4(self, C.double(x), C.double(y))
-	return goQPointF(r)
-}
-
-// MapToItem6 wraps QGraphicsItem::mapToItem.
-//
-//	C++: QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToItem
-func (this *QGraphicsItem) MapToItem6(item QGraphicsItemLike, x float64, y float64, w float64, hArg float64) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToItem6")
-	var itemPtr unsafe.Pointer
-	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapToItem6")
-	}
-	r := C.qute_QGraphicsItem_mapToItem_5(self, itemPtr, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapToParent6 wraps QGraphicsItem::mapToParent.
-//
-//	C++: QPolygonF QGraphicsItem::mapToParent(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToParent
-func (this *QGraphicsItem) MapToParent6(x float64, y float64, w float64, hArg float64) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToParent6")
-	r := C.qute_QGraphicsItem_mapToParent_5(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapToScene6 wraps QGraphicsItem::mapToScene.
-//
-//	C++: QPolygonF QGraphicsItem::mapToScene(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapToScene
-func (this *QGraphicsItem) MapToScene6(x float64, y float64, w float64, hArg float64) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapToScene6")
-	r := C.qute_QGraphicsItem_mapToScene_5(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapRectToItem2 wraps QGraphicsItem::mapRectToItem.
-//
-//	C++: QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapRectToItem
-func (this *QGraphicsItem) MapRectToItem2(item QGraphicsItemLike, x float64, y float64, w float64, hArg float64) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapRectToItem2")
-	var itemPtr unsafe.Pointer
-	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapRectToItem2")
-	}
-	r := C.qute_QGraphicsItem_mapRectToItem_1(self, itemPtr, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return goQRectF(r)
-}
-
-// MapRectToParent2 wraps QGraphicsItem::mapRectToParent.
-//
-//	C++: QRectF QGraphicsItem::mapRectToParent(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapRectToParent
-func (this *QGraphicsItem) MapRectToParent2(x float64, y float64, w float64, hArg float64) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapRectToParent2")
-	r := C.qute_QGraphicsItem_mapRectToParent_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return goQRectF(r)
-}
-
-// MapRectToScene2 wraps QGraphicsItem::mapRectToScene.
-//
-//	C++: QRectF QGraphicsItem::mapRectToScene(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapRectToScene
-func (this *QGraphicsItem) MapRectToScene2(x float64, y float64, w float64, hArg float64) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapRectToScene2")
-	r := C.qute_QGraphicsItem_mapRectToScene_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return goQRectF(r)
-}
-
-// MapFromItem5 wraps QGraphicsItem::mapFromItem.
-//
-//	C++: QPointF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromItem
-func (this *QGraphicsItem) MapFromItem5(item QGraphicsItemLike, x float64, y float64) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItem5")
-	var itemPtr unsafe.Pointer
-	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItem5")
-	}
-	r := C.qute_QGraphicsItem_mapFromItem_4(self, itemPtr, C.double(x), C.double(y))
-	return goQPointF(r)
-}
-
-// MapFromParent5 wraps QGraphicsItem::mapFromParent.
-//
-//	C++: QPointF QGraphicsItem::mapFromParent(qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromParent
-func (this *QGraphicsItem) MapFromParent5(x float64, y float64) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParent5")
-	r := C.qute_QGraphicsItem_mapFromParent_4(self, C.double(x), C.double(y))
-	return goQPointF(r)
-}
-
-// MapFromScene5 wraps QGraphicsItem::mapFromScene.
-//
-//	C++: QPointF QGraphicsItem::mapFromScene(qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromScene
-func (this *QGraphicsItem) MapFromScene5(x float64, y float64) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScene5")
-	r := C.qute_QGraphicsItem_mapFromScene_4(self, C.double(x), C.double(y))
-	return goQPointF(r)
-}
-
-// MapFromItem6 wraps QGraphicsItem::mapFromItem.
-//
-//	C++: QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromItem
-func (this *QGraphicsItem) MapFromItem6(item QGraphicsItemLike, x float64, y float64, w float64, hArg float64) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromItem6")
-	var itemPtr unsafe.Pointer
-	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapFromItem6")
-	}
-	r := C.qute_QGraphicsItem_mapFromItem_5(self, itemPtr, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapFromParent6 wraps QGraphicsItem::mapFromParent.
-//
-//	C++: QPolygonF QGraphicsItem::mapFromParent(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromParent
-func (this *QGraphicsItem) MapFromParent6(x float64, y float64, w float64, hArg float64) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromParent6")
-	r := C.qute_QGraphicsItem_mapFromParent_5(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapFromScene6 wraps QGraphicsItem::mapFromScene.
-//
-//	C++: QPolygonF QGraphicsItem::mapFromScene(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapFromScene
-func (this *QGraphicsItem) MapFromScene6(x float64, y float64, w float64, hArg float64) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapFromScene6")
-	r := C.qute_QGraphicsItem_mapFromScene_5(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapRectFromItem2 wraps QGraphicsItem::mapRectFromItem.
-//
-//	C++: QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapRectFromItem
-func (this *QGraphicsItem) MapRectFromItem2(item QGraphicsItemLike, x float64, y float64, w float64, hArg float64) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapRectFromItem2")
-	var itemPtr unsafe.Pointer
-	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItem.MapRectFromItem2")
-	}
-	r := C.qute_QGraphicsItem_mapRectFromItem_1(self, itemPtr, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return goQRectF(r)
-}
-
-// MapRectFromParent2 wraps QGraphicsItem::mapRectFromParent.
-//
-//	C++: QRectF QGraphicsItem::mapRectFromParent(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapRectFromParent
-func (this *QGraphicsItem) MapRectFromParent2(x float64, y float64, w float64, hArg float64) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapRectFromParent2")
-	r := C.qute_QGraphicsItem_mapRectFromParent_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return goQRectF(r)
-}
-
-// MapRectFromScene2 wraps QGraphicsItem::mapRectFromScene.
-//
-//	C++: QRectF QGraphicsItem::mapRectFromScene(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#mapRectFromScene
-func (this *QGraphicsItem) MapRectFromScene2(x float64, y float64, w float64, hArg float64) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.MapRectFromScene2")
-	r := C.qute_QGraphicsItem_mapRectFromScene_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return goQRectF(r)
 }
 
 // IsAncestorOf wraps QGraphicsItem::isAncestorOf.

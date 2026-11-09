@@ -504,14 +504,14 @@ func (this *QCompleter) EmitActivated(text string) {
 	C.qute_QCompleter_activated_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 }
 
-// EmitActivated2 wraps emitting the activated signal.
+// EmitActivatedIndex wraps emitting the activated signal.
 //
 //	C++: void QCompleter::activated(const QModelIndex & index)
 //
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#activated
-func (this *QCompleter) EmitActivated2(index *qtcore.QModelIndex) {
-	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitActivated2")
-	C.qute_QCompleter_activated_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitActivated2"))
+func (this *QCompleter) EmitActivatedIndex(index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitActivatedIndex")
+	C.qute_QCompleter_activated_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitActivatedIndex"))
 }
 
 // EmitHighlighted wraps emitting the highlighted signal.
@@ -524,14 +524,14 @@ func (this *QCompleter) EmitHighlighted(text string) {
 	C.qute_QCompleter_highlighted_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 }
 
-// EmitHighlighted2 wraps emitting the highlighted signal.
+// EmitHighlightedIndex wraps emitting the highlighted signal.
 //
 //	C++: void QCompleter::highlighted(const QModelIndex & index)
 //
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#highlighted
-func (this *QCompleter) EmitHighlighted2(index *qtcore.QModelIndex) {
-	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitHighlighted2")
-	C.qute_QCompleter_highlighted_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitHighlighted2"))
+func (this *QCompleter) EmitHighlightedIndex(index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitHighlightedIndex")
+	C.qute_QCompleter_highlighted_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitHighlightedIndex"))
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
@@ -550,14 +550,14 @@ func (this *QCompleter) OnActivated(f func(text string)) qtcore.Connection {
 	return rt.NewConnection(C.qute_QCompleter_activated(self, C.uintptr_t(id)))
 }
 
-// OnActivated2 connects f to the activated signal. The connection ends when the
+// OnActivatedIndex connects f to the activated signal. The connection ends when the
 // sender is destroyed or Disconnect is called; until then the sender is pinned.
 //
 //	C++: void QCompleter::activated(const QModelIndex & index) [signal]
 //
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#activated
-func (this *QCompleter) OnActivated2(f func(index *qtcore.QModelIndex)) qtcore.Connection {
-	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnActivated2")
+func (this *QCompleter) OnActivatedIndex(f func(index *qtcore.QModelIndex)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnActivatedIndex")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -582,14 +582,14 @@ func (this *QCompleter) OnHighlighted(f func(text string)) qtcore.Connection {
 	return rt.NewConnection(C.qute_QCompleter_highlighted(self, C.uintptr_t(id)))
 }
 
-// OnHighlighted2 connects f to the highlighted signal. The connection ends when the
+// OnHighlightedIndex connects f to the highlighted signal. The connection ends when the
 // sender is destroyed or Disconnect is called; until then the sender is pinned.
 //
 //	C++: void QCompleter::highlighted(const QModelIndex & index) [signal]
 //
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#highlighted
-func (this *QCompleter) OnHighlighted2(f func(index *qtcore.QModelIndex)) qtcore.Connection {
-	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnHighlighted2")
+func (this *QCompleter) OnHighlightedIndex(f func(index *qtcore.QModelIndex)) qtcore.Connection {
+	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnHighlightedIndex")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

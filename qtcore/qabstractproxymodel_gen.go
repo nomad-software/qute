@@ -50,6 +50,8 @@ func QAbstractProxyModelCast(o QObjectLike) *QAbstractProxyModel {
 //
 //	C++: void QAbstractProxyModel::setSourceModel(QAbstractItemModel * sourceModel)
 //
+// The proxy does not take ownership of the source model.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractproxymodel.html#setSourceModel
 func (this *QAbstractProxyModel) SetSourceModel(sourceModel QAbstractItemModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.SetSourceModel")

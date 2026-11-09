@@ -130,15 +130,15 @@ func (this *QImage) ConvertToFormat(fArg QImageFormat) *QImage {
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
-// ConvertToFormat2 wraps QImage::convertToFormat.
+// ConvertToFormatWithColorTable wraps QImage::convertToFormat.
 //
 //	C++: QImage QImage::convertToFormat(Format f, const QList<QRgb> & colorTable, Qt::ImageConversionFlags flags = …) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToFormat
-func (this *QImage) ConvertToFormat2(fArg QImageFormat, colorTable []uint) *QImage {
-	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFormat2")
+func (this *QImage) ConvertToFormatWithColorTable(fArg QImageFormat, colorTable []uint) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFormatWithColorTable")
 	colorTableC := make([]C.uint, len(colorTable))
 	for i := range colorTable {
 		colorTableC[i] = C.uint(colorTable[i])

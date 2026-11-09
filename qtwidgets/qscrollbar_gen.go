@@ -69,18 +69,18 @@ func NewQScrollBar(parent QWidgetLike) *QScrollBar {
 	return rt.View[QScrollBar](h, p)
 }
 
-// NewQScrollBar2 wraps the QScrollBar constructor.
+// NewQScrollBarWithOrientation wraps the QScrollBar constructor.
 //
 //	C++: QScrollBar::QScrollBar(Qt::Orientation, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qscrollbar.html#QScrollBar
-func NewQScrollBar2(arg0 qtcore.Orientations, parent QWidgetLike) *QScrollBar {
-	rt.CheckThread("NewQScrollBar2")
+func NewQScrollBarWithOrientation(arg0 qtcore.Orientations, parent QWidgetLike) *QScrollBar {
+	rt.CheckThread("NewQScrollBarWithOrientation")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollBar2")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollBarWithOrientation")
 	}
 	p := C.qute_QScrollBar_new_1(C.int64_t(arg0), parentPtr)
 	mode := rt.NewOwned
@@ -95,11 +95,13 @@ func NewQScrollBar2(arg0 qtcore.Orientations, parent QWidgetLike) *QScrollBar {
 //
 //	C++: QMenu * QScrollBar::createStandardContextMenu(QPoint position)
 //
-// Ownership: the result is Borrowed: Go never frees it.
+// Ownership: the result is Owned: Go frees it.
+//
+// The popup menu's ownership is transferred to the caller (Qt docs).
 //
 // Qt docs: https://doc.qt.io/qt-6/qscrollbar.html#createStandardContextMenu
 func (this *QScrollBar) CreateStandardContextMenu(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QScrollBar.CreateStandardContextMenu")
 	r := C.qute_QScrollBar_createStandardContextMenu(self, cQPoint(position))
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }

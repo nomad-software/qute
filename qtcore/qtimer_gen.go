@@ -175,23 +175,23 @@ func (this *QTimer) IsSingleShot() bool {
 	return bool(r)
 }
 
-// Start wraps QTimer::start.
+// StartWithInterval wraps QTimer::start.
 //
 //	C++: void QTimer::start(int msec)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtimer.html#start
-func (this *QTimer) Start(msec int) {
-	self := rt.Use(unsafe.Pointer(this), "QTimer.Start")
+func (this *QTimer) StartWithInterval(msec int) {
+	self := rt.Use(unsafe.Pointer(this), "QTimer.StartWithInterval")
 	C.qute_QTimer_start(self, C.int(msec))
 }
 
-// Start2 wraps QTimer::start.
+// Start wraps QTimer::start.
 //
 //	C++: void QTimer::start()
 //
 // Qt docs: https://doc.qt.io/qt-6/qtimer.html#start
-func (this *QTimer) Start2() {
-	self := rt.Use(unsafe.Pointer(this), "QTimer.Start2")
+func (this *QTimer) Start() {
+	self := rt.Use(unsafe.Pointer(this), "QTimer.Start")
 	C.qute_QTimer_start_1(self)
 }
 

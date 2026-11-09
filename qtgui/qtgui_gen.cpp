@@ -2333,38 +2333,20 @@ void qute_QPainterPath_closeSubpath(void *self) {
 void qute_QPainterPath_moveTo(void *self, qute_pointf a0) {
 	static_cast<QPainterPath *>(self)->moveTo(qute_to_QPointF(a0));
 }
-void qute_QPainterPath_moveTo_1(void *self, double a0, double a1) {
-	static_cast<QPainterPath *>(self)->moveTo(static_cast<double>(a0), static_cast<double>(a1));
-}
 void qute_QPainterPath_lineTo(void *self, qute_pointf a0) {
 	static_cast<QPainterPath *>(self)->lineTo(qute_to_QPointF(a0));
-}
-void qute_QPainterPath_lineTo_1(void *self, double a0, double a1) {
-	static_cast<QPainterPath *>(self)->lineTo(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QPainterPath_arcMoveTo(void *self, qute_rectf a0, double a1) {
 	static_cast<QPainterPath *>(self)->arcMoveTo(qute_to_QRectF(a0), static_cast<double>(a1));
 }
-void qute_QPainterPath_arcMoveTo_1(void *self, double a0, double a1, double a2, double a3, double a4) {
-	static_cast<QPainterPath *>(self)->arcMoveTo(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4));
-}
 void qute_QPainterPath_arcTo(void *self, qute_rectf a0, double a1, double a2) {
 	static_cast<QPainterPath *>(self)->arcTo(qute_to_QRectF(a0), static_cast<double>(a1), static_cast<double>(a2));
-}
-void qute_QPainterPath_arcTo_1(void *self, double a0, double a1, double a2, double a3, double a4, double a5) {
-	static_cast<QPainterPath *>(self)->arcTo(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4), static_cast<double>(a5));
 }
 void qute_QPainterPath_cubicTo(void *self, qute_pointf a0, qute_pointf a1, qute_pointf a2) {
 	static_cast<QPainterPath *>(self)->cubicTo(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPointF(a2));
 }
-void qute_QPainterPath_cubicTo_1(void *self, double a0, double a1, double a2, double a3, double a4, double a5) {
-	static_cast<QPainterPath *>(self)->cubicTo(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4), static_cast<double>(a5));
-}
 void qute_QPainterPath_quadTo(void *self, qute_pointf a0, qute_pointf a1) {
 	static_cast<QPainterPath *>(self)->quadTo(qute_to_QPointF(a0), qute_to_QPointF(a1));
-}
-void qute_QPainterPath_quadTo_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QPainterPath *>(self)->quadTo(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
 qute_pointf qute_QPainterPath_currentPosition(void *self) {
 	return qute_from_QPointF(static_cast<QPainterPath *>(self)->currentPosition());
@@ -2372,16 +2354,10 @@ qute_pointf qute_QPainterPath_currentPosition(void *self) {
 void qute_QPainterPath_addRect(void *self, qute_rectf a0) {
 	static_cast<QPainterPath *>(self)->addRect(qute_to_QRectF(a0));
 }
-void qute_QPainterPath_addRect_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QPainterPath *>(self)->addRect(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
 void qute_QPainterPath_addEllipse(void *self, qute_rectf a0) {
 	static_cast<QPainterPath *>(self)->addEllipse(qute_to_QRectF(a0));
 }
-void qute_QPainterPath_addEllipse_1(void *self, double a0, double a1, double a2, double a3) {
-	static_cast<QPainterPath *>(self)->addEllipse(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
-}
-void qute_QPainterPath_addEllipse_2(void *self, qute_pointf a0, double a1, double a2) {
+void qute_QPainterPath_addEllipse_1(void *self, qute_pointf a0, double a1, double a2) {
 	static_cast<QPainterPath *>(self)->addEllipse(qute_to_QPointF(a0), static_cast<double>(a1), static_cast<double>(a2));
 }
 void qute_QPainterPath_addPolygon(void *self, const void *a0, ptrdiff_t a0_n) {
@@ -2389,9 +2365,6 @@ void qute_QPainterPath_addPolygon(void *self, const void *a0, ptrdiff_t a0_n) {
 }
 void qute_QPainterPath_addText(void *self, qute_pointf a0, void * a1, const char *a2, ptrdiff_t a2_len) {
 	static_cast<QPainterPath *>(self)->addText(qute_to_QPointF(a0), (a1 ? *static_cast<QFont *>(a1) : QFont()), QString::fromUtf8(a2, a2_len));
-}
-void qute_QPainterPath_addText_1(void *self, double a0, double a1, void * a2, const char *a3, ptrdiff_t a3_len) {
-	static_cast<QPainterPath *>(self)->addText(static_cast<double>(a0), static_cast<double>(a1), (a2 ? *static_cast<QFont *>(a2) : QFont()), QString::fromUtf8(a3, a3_len));
 }
 void qute_QPainterPath_addPath(void *self, void * a0) {
 	static_cast<QPainterPath *>(self)->addPath((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()));
@@ -2401,9 +2374,6 @@ void qute_QPainterPath_addRegion(void *self, void * a0) {
 }
 void qute_QPainterPath_addRoundedRect(void *self, qute_rectf a0, double a1, double a2) {
 	static_cast<QPainterPath *>(self)->addRoundedRect(qute_to_QRectF(a0), static_cast<double>(a1), static_cast<double>(a2));
-}
-void qute_QPainterPath_addRoundedRect_1(void *self, double a0, double a1, double a2, double a3, double a4, double a5) {
-	static_cast<QPainterPath *>(self)->addRoundedRect(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4), static_cast<double>(a5));
 }
 void qute_QPainterPath_connectPath(void *self, void * a0) {
 	static_cast<QPainterPath *>(self)->connectPath((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()));
@@ -2417,16 +2387,10 @@ bool qute_QPainterPath_contains_1(void *self, qute_rectf a0) {
 bool qute_QPainterPath_intersects(void *self, qute_rectf a0) {
 	return static_cast<bool>(static_cast<QPainterPath *>(self)->intersects(qute_to_QRectF(a0)));
 }
-void qute_QPainterPath_translate(void *self, double a0, double a1) {
-	static_cast<QPainterPath *>(self)->translate(static_cast<double>(a0), static_cast<double>(a1));
-}
-void qute_QPainterPath_translate_1(void *self, qute_pointf a0) {
+void qute_QPainterPath_translate(void *self, qute_pointf a0) {
 	static_cast<QPainterPath *>(self)->translate(qute_to_QPointF(a0));
 }
-void * qute_QPainterPath_translated(void *self, double a0, double a1) {
-	return static_cast<void *>(new QPainterPath(static_cast<QPainterPath *>(self)->translated(static_cast<double>(a0), static_cast<double>(a1))));
-}
-void * qute_QPainterPath_translated_1(void *self, qute_pointf a0) {
+void * qute_QPainterPath_translated(void *self, qute_pointf a0) {
 	return static_cast<void *>(new QPainterPath(static_cast<QPainterPath *>(self)->translated(qute_to_QPointF(a0))));
 }
 qute_rectf qute_QPainterPath_boundingRect(void *self) {
@@ -2506,16 +2470,13 @@ void * qute_QPalette_new(void) {
 void * qute_QPalette_new_1(qute_color a0) {
 	return static_cast<QPalette *>(new QPalette(qute_to_QColor(a0)));
 }
-void * qute_QPalette_new_2(int64_t a0) {
-	return static_cast<QPalette *>(new QPalette(static_cast<Qt::GlobalColor>(a0)));
-}
-void * qute_QPalette_new_3(qute_color a0, qute_color a1) {
+void * qute_QPalette_new_2(qute_color a0, qute_color a1) {
 	return static_cast<QPalette *>(new QPalette(qute_to_QColor(a0), qute_to_QColor(a1)));
 }
-void * qute_QPalette_new_4(void * a0, void * a1, void * a2, void * a3, void * a4, void * a5, void * a6, void * a7, void * a8) {
+void * qute_QPalette_new_3(void * a0, void * a1, void * a2, void * a3, void * a4, void * a5, void * a6, void * a7, void * a8) {
 	return static_cast<QPalette *>(new QPalette((a0 ? *static_cast<QBrush *>(a0) : QBrush()), (a1 ? *static_cast<QBrush *>(a1) : QBrush()), (a2 ? *static_cast<QBrush *>(a2) : QBrush()), (a3 ? *static_cast<QBrush *>(a3) : QBrush()), (a4 ? *static_cast<QBrush *>(a4) : QBrush()), (a5 ? *static_cast<QBrush *>(a5) : QBrush()), (a6 ? *static_cast<QBrush *>(a6) : QBrush()), (a7 ? *static_cast<QBrush *>(a7) : QBrush()), (a8 ? *static_cast<QBrush *>(a8) : QBrush())));
 }
-void * qute_QPalette_new_5(qute_color a0, qute_color a1, qute_color a2, qute_color a3, qute_color a4, qute_color a5, qute_color a6) {
+void * qute_QPalette_new_4(qute_color a0, qute_color a1, qute_color a2, qute_color a3, qute_color a4, qute_color a5, qute_color a6) {
 	return static_cast<QPalette *>(new QPalette(qute_to_QColor(a0), qute_to_QColor(a1), qute_to_QColor(a2), qute_to_QColor(a3), qute_to_QColor(a4), qute_to_QColor(a5), qute_to_QColor(a6)));
 }
 void qute_QPalette_delete(void *self) {
@@ -2883,16 +2844,10 @@ bool qute_QRegion_contains(void *self, qute_point a0) {
 bool qute_QRegion_contains_1(void *self, qute_rect a0) {
 	return static_cast<bool>(static_cast<QRegion *>(self)->contains(qute_to_QRect(a0)));
 }
-void qute_QRegion_translate(void *self, int a0, int a1) {
-	static_cast<QRegion *>(self)->translate(static_cast<int>(a0), static_cast<int>(a1));
-}
-void qute_QRegion_translate_1(void *self, qute_point a0) {
+void qute_QRegion_translate(void *self, qute_point a0) {
 	static_cast<QRegion *>(self)->translate(qute_to_QPoint(a0));
 }
-void * qute_QRegion_translated(void *self, int a0, int a1) {
-	return static_cast<void *>(new QRegion(static_cast<QRegion *>(self)->translated(static_cast<int>(a0), static_cast<int>(a1))));
-}
-void * qute_QRegion_translated_1(void *self, qute_point a0) {
+void * qute_QRegion_translated(void *self, qute_point a0) {
 	return static_cast<void *>(new QRegion(static_cast<QRegion *>(self)->translated(qute_to_QPoint(a0))));
 }
 void * qute_QRegion_united(void *self, void * a0) {
@@ -3858,16 +3813,13 @@ void * qute_QTextDocument_documentLayoutChanged(void *self, uintptr_t id) {
 }
 
 // ---- QTransform
-void * qute_QTransform_new(int64_t a0) {
-	return static_cast<QTransform *>(new QTransform(static_cast<Qt::Initialization>(a0)));
-}
-void * qute_QTransform_new_1(void) {
+void * qute_QTransform_new(void) {
 	return static_cast<QTransform *>(new QTransform());
 }
-void * qute_QTransform_new_2(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8) {
+void * qute_QTransform_new_1(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8) {
 	return static_cast<QTransform *>(new QTransform(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4), static_cast<double>(a5), static_cast<double>(a6), static_cast<double>(a7), static_cast<double>(a8)));
 }
-void * qute_QTransform_new_3(double a0, double a1, double a2, double a3, double a4, double a5) {
+void * qute_QTransform_new_2(double a0, double a1, double a2, double a3, double a4, double a5) {
 	return static_cast<QTransform *>(new QTransform(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3), static_cast<double>(a4), static_cast<double>(a5)));
 }
 void qute_QTransform_delete(void *self) {

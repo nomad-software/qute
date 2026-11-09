@@ -478,7 +478,7 @@ func (this *QTreeWidget) ItemWidget(item QTreeWidgetItemLike, column int) *QWidg
 //
 //	C++: void QTreeWidget::setItemWidget(QTreeWidgetItem * item, int column, QWidget * widget)
 //
-// Ownership: widget becomes Parented: Qt frees it from now on.
+// Ownership: item is borrowed for the call only; widget becomes Parented: Qt frees it from now on.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#setItemWidget
 func (this *QTreeWidget) SetItemWidget(item QTreeWidgetItemLike, column int, widget QWidgetLike) {

@@ -176,13 +176,15 @@ func (this *QEvent) IsSinglePointEvent() bool {
 //
 //	C++: QEvent * QEvent::clone() const
 //
-// Ownership: the result is Borrowed: Go never frees it.
+// Ownership: the result is Owned: Go frees it.
+//
+// Returns a new copy; the caller owns it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qevent.html#clone
 func (this *QEvent) Clone() *QEvent {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.Clone")
 	r := C.qute_QEvent_clone(self)
-	return rt.View[QEvent](rt.WrapClass(r, "QEvent", rt.KeepOrBorrow), r)
+	return rt.View[QEvent](rt.WrapClass(r, "QEvent", rt.TakeOwned), r)
 }
 
 // QEventRegisterEventType wraps QEvent::registerEventType.

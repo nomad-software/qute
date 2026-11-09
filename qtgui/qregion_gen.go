@@ -162,60 +162,37 @@ func (this *QRegion) Contains(pArg qtcore.QPoint) bool {
 	return bool(r)
 }
 
-// Contains2 wraps QRegion::contains.
+// ContainsRect wraps QRegion::contains.
 //
 //	C++: bool QRegion::contains(const QRect & r) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#contains
-func (this *QRegion) Contains2(rArg qtcore.QRect) bool {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Contains2")
+func (this *QRegion) ContainsRect(rArg qtcore.QRect) bool {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.ContainsRect")
 	r := C.qute_QRegion_contains_1(self, cQRect(rArg))
 	return bool(r)
 }
 
 // Translate wraps QRegion::translate.
 //
-//	C++: void QRegion::translate(int dx, int dy)
-//
-// Qt docs: https://doc.qt.io/qt-6/qregion.html#translate
-func (this *QRegion) Translate(dx int, dy int) {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Translate")
-	C.qute_QRegion_translate(self, C.int(dx), C.int(dy))
-}
-
-// Translate2 wraps QRegion::translate.
-//
 //	C++: void QRegion::translate(const QPoint & p)
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#translate
-func (this *QRegion) Translate2(pArg qtcore.QPoint) {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Translate2")
-	C.qute_QRegion_translate_1(self, cQPoint(pArg))
+func (this *QRegion) Translate(pArg qtcore.QPoint) {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.Translate")
+	C.qute_QRegion_translate(self, cQPoint(pArg))
 }
 
 // Translated wraps QRegion::translated.
-//
-//	C++: QRegion QRegion::translated(int dx, int dy) const
-//
-// Ownership: the result is an Owned copy.
-//
-// Qt docs: https://doc.qt.io/qt-6/qregion.html#translated
-func (this *QRegion) Translated(dx int, dy int) *QRegion {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Translated")
-	r := C.qute_QRegion_translated(self, C.int(dx), C.int(dy))
-	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
-}
-
-// Translated2 wraps QRegion::translated.
 //
 //	C++: QRegion QRegion::translated(const QPoint & p) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#translated
-func (this *QRegion) Translated2(pArg qtcore.QPoint) *QRegion {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Translated2")
-	r := C.qute_QRegion_translated_1(self, cQPoint(pArg))
+func (this *QRegion) Translated(pArg qtcore.QPoint) *QRegion {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.Translated")
+	r := C.qute_QRegion_translated(self, cQPoint(pArg))
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -232,15 +209,15 @@ func (this *QRegion) United(rArg *QRegion) *QRegion {
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
-// United2 wraps QRegion::united.
+// UnitedRect wraps QRegion::united.
 //
 //	C++: QRegion QRegion::united(const QRect & r) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#united
-func (this *QRegion) United2(rArg qtcore.QRect) *QRegion {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.United2")
+func (this *QRegion) UnitedRect(rArg qtcore.QRect) *QRegion {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.UnitedRect")
 	r := C.qute_QRegion_united_1(self, cQRect(rArg))
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
@@ -258,15 +235,15 @@ func (this *QRegion) Intersected(rArg *QRegion) *QRegion {
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
-// Intersected2 wraps QRegion::intersected.
+// IntersectedRect wraps QRegion::intersected.
 //
 //	C++: QRegion QRegion::intersected(const QRect & r) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#intersected
-func (this *QRegion) Intersected2(rArg qtcore.QRect) *QRegion {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Intersected2")
+func (this *QRegion) IntersectedRect(rArg qtcore.QRect) *QRegion {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.IntersectedRect")
 	r := C.qute_QRegion_intersected_1(self, cQRect(rArg))
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
@@ -308,13 +285,13 @@ func (this *QRegion) Intersects(rArg *QRegion) bool {
 	return bool(r)
 }
 
-// Intersects2 wraps QRegion::intersects.
+// IntersectsRect wraps QRegion::intersects.
 //
 //	C++: bool QRegion::intersects(const QRect & r) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#intersects
-func (this *QRegion) Intersects2(rArg qtcore.QRect) bool {
-	self := rt.Use(unsafe.Pointer(this), "QRegion.Intersects2")
+func (this *QRegion) IntersectsRect(rArg qtcore.QRect) bool {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.IntersectsRect")
 	r := C.qute_QRegion_intersects_1(self, cQRect(rArg))
 	return bool(r)
 }

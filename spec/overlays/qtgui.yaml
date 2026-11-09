@@ -8,6 +8,7 @@ QGuiApplication:
   focusObject: { return: borrowed }
 
 QPainter:
+  boundingRect(const QRectF&, const QString&, const QTextOption&): { name: BoundingRectTextF }
   QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: borrowed }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
   begin: { reviewed: true }
   device: { return: borrowed }
@@ -134,6 +135,7 @@ QBrush:
   setColor(Qt::GlobalColor): { skip: "use SetColor" }
 
 QImage:
+  convertToFormat(QImage::Format, const QList<QRgb>&, Qt::ImageConversionFlags): { name: ConvertToFormatWithColorTable }
   load(const QString&, const char*): { name: Load, error: true }
   load(QIODevice*, const char*): { name: LoadFrom, error: true, reviewed: true }
   save(const QString&, const char*, int): { name: Save, error: true }
@@ -198,7 +200,20 @@ QShortcut:
   setKeys(const QList<QKeySequence>&): { name: SetKeys }
 
 QClipboard:
-  setMimeData: { args: { data: transfer-to-cpp }, doc: "The clipboard takes ownership of data." }
+  setMimeData:
+    args: { data: transfer-to-cpp }
+    doc: "The clipboard takes ownership of data."
+    test: |
+      cb := qtgui.QGuiApplicationClipboard()
+      d := qtcore.NewQMimeData()
+      cb.SetMimeData(d)
+      if got := d.Ownership(); got != qtcore.Parented {
+      	t.Errorf("data: %v, want Parented", got)
+      }
+      cb.SetMimeData(qtcore.NewQMimeData()) // replacing deletes the old data
+      if d.Alive() {
+      	t.Error("old clipboard data alive after it was replaced")
+      }
   mimeData: { return: borrowed }
 
 QStandardItemModel:
@@ -212,11 +227,67 @@ QStandardItemModel:
   setItem(int, QStandardItem*): { name: SetItemRow, args: { item: transfer-to-cpp } }
   setHorizontalHeaderItem: { args: { item: transfer-to-cpp } }
   setVerticalHeaderItem: { args: { item: transfer-to-cpp } }
-  takeItem: { return: transfer-to-go }
-  takeRow: { return: transfer-to-go }
-  takeColumn: { return: transfer-to-go }
-  takeHorizontalHeaderItem: { return: transfer-to-go }
-  takeVerticalHeaderItem: { return: transfer-to-go }
+  takeItem:
+    return: transfer-to-go
+    test: |
+      m := qtgui.NewQStandardItemModel(nil)
+      m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+      x := m.TakeItem(0)
+      if x == nil || x.Ownership() != qtcore.Owned {
+      	t.Errorf("x: %v, want Owned", x.Ownership())
+      }
+      x.Delete()
+      m.Delete()
+  takeRow:
+    return: transfer-to-go
+    test: |
+      m := qtgui.NewQStandardItemModel(nil)
+      m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+      l := m.TakeRow(0)
+      if len(l) != 1 {
+      	t.Fatalf("got %d items", len(l))
+      }
+      if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+      	t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+      }
+      l[0].Delete()
+      m.Delete()
+  takeColumn:
+    return: transfer-to-go
+    test: |
+      m := qtgui.NewQStandardItemModel(nil)
+      m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+      l := m.TakeColumn(0)
+      if len(l) != 1 {
+      	t.Fatalf("got %d items", len(l))
+      }
+      if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+      	t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+      }
+      l[0].Delete()
+      m.Delete()
+  takeHorizontalHeaderItem:
+    return: transfer-to-go
+    test: |
+      m := qtgui.NewQStandardItemModelWithRows(1, 1, nil)
+      m.SetHorizontalHeaderItem(0, qtgui.NewQStandardItemWithText("h"))
+      x := m.TakeHorizontalHeaderItem(0)
+      if x == nil || x.Ownership() != qtcore.Owned {
+      	t.Errorf("x: %v, want Owned", x.Ownership())
+      }
+      x.Delete()
+      m.Delete()
+  takeVerticalHeaderItem:
+    return: transfer-to-go
+    test: |
+      m := qtgui.NewQStandardItemModelWithRows(1, 1, nil)
+      m.SetVerticalHeaderItem(0, qtgui.NewQStandardItemWithText("h"))
+      x := m.TakeVerticalHeaderItem(0)
+      if x == nil || x.Ownership() != qtcore.Owned {
+      	t.Errorf("x: %v, want Owned", x.Ownership())
+      }
+      x.Delete()
+      m.Delete()
   setItemPrototype: { args: { item: transfer-to-cpp } }
   itemPrototype: { return: borrowed }
   item: { return: borrowed }
@@ -239,15 +310,52 @@ QStandardItem:
   insertColumn: { args: { items: transfer-to-cpp } }
   setChild(int, int, QStandardItem*): { name: SetChild, args: { item: transfer-to-cpp } }
   setChild(int, QStandardItem*): { name: SetChildRow, args: { item: transfer-to-cpp } }
-  takeChild: { return: transfer-to-go }
-  takeRow: { return: transfer-to-go }
-  takeColumn: { return: transfer-to-go }
+  takeChild:
+    return: transfer-to-go
+    test: |
+      p := qtgui.NewQStandardItemWithText("p")
+      p.AppendRow(qtgui.NewQStandardItemWithText("c"))
+      c := p.TakeChild(0)
+      if c == nil || c.Ownership() != qtcore.Owned {
+      	t.Errorf("c: %v, want Owned", c.Ownership())
+      }
+      c.Delete()
+      p.Delete()
+  takeRow:
+    return: transfer-to-go
+    test: |
+      p := qtgui.NewQStandardItemWithText("p")
+      p.AppendRow(qtgui.NewQStandardItemWithText("c"))
+      l := p.TakeRow(0)
+      if len(l) != 1 {
+      	t.Fatalf("got %d items", len(l))
+      }
+      if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+      	t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+      }
+      l[0].Delete()
+      p.Delete()
+  takeColumn:
+    return: transfer-to-go
+    test: |
+      p := qtgui.NewQStandardItemWithText("p")
+      p.AppendRow(qtgui.NewQStandardItemWithText("c"))
+      l := p.TakeColumn(0)
+      if len(l) != 1 {
+      	t.Fatalf("got %d items", len(l))
+      }
+      if l[0] == nil || l[0].Ownership() != qtcore.Owned {
+      	t.Errorf("l[0]: %v, want Owned", l[0].Ownership())
+      }
+      l[0].Delete()
+      p.Delete()
   child: { return: borrowed }
   parent: { return: borrowed }
   model: { return: borrowed }
   clone: { return: transfer-to-go }
 
 QTextDocument:
+  drawContents: { reviewed: true }
   clone: { return: transfer-to-go }
   documentLayout: { skip: "QAbstractTextDocumentLayout is not bound" }
 
@@ -272,3 +380,77 @@ QCursor:
 QScreen:
   virtualSiblings: { return: borrowed }
   virtualSiblingAt: { return: borrowed }
+
+QDropEvent:
+  source: { return: borrowed }
+  mimeData: { return: borrowed }
+
+QPointerEvent:
+  exclusiveGrabber: { return: borrowed }
+  setExclusiveGrabber: { reviewed: true }
+  addPassiveGrabber: { reviewed: true }
+  removePassiveGrabber: { reviewed: true }
+
+QSinglePointEvent:
+  exclusivePointGrabber: { return: borrowed }
+  setExclusivePointGrabber: { reviewed: true }
+
+QPainterPath:
+  moveTo(qreal, qreal): { skip: "use the QPointF overload" }
+  lineTo(qreal, qreal): { skip: "use the QPointF overload" }
+  arcMoveTo(qreal, qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
+  arcTo(qreal, qreal, qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
+  cubicTo(qreal, qreal, qreal, qreal, qreal, qreal): { skip: "use the QPointF overload" }
+  quadTo(qreal, qreal, qreal, qreal): { skip: "use the QPointF overload" }
+  addRect(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
+  addEllipse(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
+  addEllipse(const QPointF&, qreal, qreal): { name: AddEllipseAt }
+  addText(qreal, qreal, const QFont&, const QString&): { skip: "use the QPointF overload" }
+  addRoundedRect(qreal, qreal, qreal, qreal, qreal, qreal, Qt::SizeMode): { skip: "use the QRectF overload" }
+  contains(const QRectF&): { name: ContainsRect }
+  contains(const QPainterPath&): { name: ContainsPath }
+  translate(qreal, qreal): { skip: "use the QPointF overload" }
+  translate(const QPointF&): { name: Translate }
+  translated(qreal, qreal): { skip: "use the QPointF overload" }
+  translated(const QPointF&): { name: Translated }
+  intersects(const QPainterPath&): { name: IntersectsPath }
+
+QPalette:
+  QPalette(const QColor&): { name: NewQPaletteWithButton }
+  QPalette(Qt::GlobalColor): { skip: "use NewQPaletteWithButton" }
+  QPalette(const QColor&, const QColor&): { name: NewQPaletteWithButtonWindow }
+  QPalette(const QColor&, const QColor&, const QColor&, const QColor&, const QColor&, const QColor&, const QColor&): { name: NewQPaletteWithColors }
+  setColor(QPalette::ColorGroup, QPalette::ColorRole, const QColor&): { name: SetGroupColor }
+  setColor(QPalette::ColorRole, const QColor&): { name: SetColor }
+  setBrush(QPalette::ColorRole, const QBrush&): { name: SetBrush }
+  setBrush(QPalette::ColorGroup, QPalette::ColorRole, const QBrush&): { name: SetGroupBrush }
+  color(QPalette::ColorGroup, QPalette::ColorRole): { name: GroupColor }
+  color(QPalette::ColorRole): { name: Color }
+  brush(QPalette::ColorGroup, QPalette::ColorRole): { name: GroupBrush }
+  brush(QPalette::ColorRole): { name: Brush }
+
+QRegion:
+  contains(const QRect&): { name: ContainsRect }
+  translate(int, int): { skip: "use the QPoint overload" }
+  translate(const QPoint&): { name: Translate }
+  translated(int, int): { skip: "use the QPoint overload" }
+  translated(const QPoint&): { name: Translated }
+  united(const QRect&): { name: UnitedRect }
+  intersected(const QRect&): { name: IntersectedRect }
+  intersects(const QRect&): { name: IntersectsRect }
+
+QTransform:
+  QTransform(Qt::Initialization): { skip: "internal" }
+  QTransform(): { name: NewQTransform }
+  QTransform(qreal, qreal, qreal, qreal, qreal, qreal): { name: NewQTransformAffine }
+  QTransform(qreal, qreal, qreal, qreal, qreal, qreal, qreal, qreal, qreal): { name: NewQTransformProjective }
+  map(const QPointF&): { name: MapF }
+  map(const QPolygonF&): { name: MapPolygonF }
+  map(const QPolygon&): { name: MapPolygon }
+  map(const QRegion&): { name: MapRegion }
+  map(const QPainterPath&): { name: MapPath }
+  mapRect(const QRectF&): { name: MapRectF }
+
+QDoubleValidator:
+  setRange(double, double, int): { name: SetRangeDecimals }
+  setRange(double, double): { name: SetRange }

@@ -501,7 +501,7 @@ func (g *Gen) buildMembers(c *Class) {
 				private = private || strings.HasSuffix(p.Type.Canonical, "QPrivateSignal")
 			}
 			if !private {
-				if mm := g.newMethod(c, im, nil, false, false); mm != nil {
+				if mm := g.newMethod(c, im, ov, false, false); mm != nil {
 					mm.Emit = true
 					emits = append(emits, mm)
 				}
@@ -574,6 +574,9 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 		g.applyArgRule(c, im, ov, pp, i, ctor)
 		mm.Params = append(mm.Params, pp)
 	}
+	if ov != nil && !full {
+		g.checkArgKeys(c, im, ov, names)
+	}
 	if !ctor {
 		t, err := g.resolve(im.Return, true)
 		if err != nil {
@@ -616,7 +619,11 @@ func (g *Gen) applyArgRule(c *Class, im *irMethod, ov *overlay, p *Param, i int,
 	if p.T.k != kObj && !(p.T.k == kList && p.T.elem.k == kObj) {
 		return
 	}
-	if r := ruleFor(ov, p.Name, i); r != "" {
+	r := ruleFor(ov, p.Name, i)
+	if r == "" {
+		r = ruleFor(ov, p.GoName, i)
+	}
+	if r != "" {
 		p.Rule, p.Ruled = r, true
 		switch r {
 		case "transfer-to-cpp", "transfer-this", "transfer-to-go", "borrowed", "scoped":
@@ -690,7 +697,7 @@ func (g *Gen) nameMethods(c *Class, ms []*Method, prefix string, taken []*Method
 	// named by overlay first
 	for _, m := range ms {
 		if m.Overlay != nil && m.Overlay.Name != "" && !m.Full {
-			m.GoName = m.Overlay.Name
+			m.GoName = prefix + m.Overlay.Name // signals: name: X gives OnX and EmitX
 			if used[m.GoName] {
 				g.report.warn("%s: overlay name %s already used", m.Sig, m.GoName)
 			}
@@ -1016,4 +1023,20 @@ func stringSlot(m *irMethod) bool {
 		}
 	}
 	return false
+}
+
+// checkArgKeys warns about overlay argument keys that match no parameter, so
+// a rule keyed by a name the header leaves out can't be silently ignored.
+func (g *Gen) checkArgKeys(c *Class, im *irMethod, ov *overlay, names []string) {
+	for k := range ov.Args {
+		ok := false
+		for i, p := range im.Params {
+			if k == p.Name && k != "" || k == names[i] || k == fmt.Sprint(i) {
+				ok = true
+			}
+		}
+		if !ok {
+			g.report.warn("%s: overlay argument %q matches no parameter (use its index)", g.methodSig(c, im), k)
+		}
+	}
 }

@@ -74,7 +74,7 @@ func NewQGraphicsView(parent QWidgetLike) *QGraphicsView {
 //
 //	C++: QGraphicsView::QGraphicsView(QGraphicsScene * scene, QWidget * parent = …)
 //
-// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: scene is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#QGraphicsView
 func NewQGraphicsViewWithScene(scene QGraphicsSceneLike, parent QWidgetLike) *QGraphicsView {
@@ -397,16 +397,6 @@ func (this *QGraphicsView) SetSceneRect(rect qtcore.QRectF) {
 	C.qute_QGraphicsView_setSceneRect(self, cQRectF(rect))
 }
 
-// SetSceneRect2 wraps QGraphicsView::setSceneRect.
-//
-//	C++: void QGraphicsView::setSceneRect(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setSceneRect
-func (this *QGraphicsView) SetSceneRect2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetSceneRect2")
-	C.qute_QGraphicsView_setSceneRect_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
 // Transform wraps QGraphicsView::transform.
 //
 //	C++: QTransform QGraphicsView::transform() const
@@ -514,28 +504,18 @@ func (this *QGraphicsView) CenterOn(pos qtcore.QPointF) {
 	C.qute_QGraphicsView_centerOn(self, cQPointF(pos))
 }
 
-// CenterOn2 wraps QGraphicsView::centerOn.
-//
-//	C++: void QGraphicsView::centerOn(qreal x, qreal y)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#centerOn
-func (this *QGraphicsView) CenterOn2(x float64, y float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.CenterOn2")
-	C.qute_QGraphicsView_centerOn_1(self, C.double(x), C.double(y))
-}
-
-// CenterOn3 wraps QGraphicsView::centerOn.
+// CenterOnItem wraps QGraphicsView::centerOn.
 //
 //	C++: void QGraphicsView::centerOn(const QGraphicsItem * item)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#centerOn
-func (this *QGraphicsView) CenterOn3(item QGraphicsItemLike) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.CenterOn3")
+func (this *QGraphicsView) CenterOnItem(item QGraphicsItemLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.CenterOnItem")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.CenterOn3")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.CenterOnItem")
 	}
-	C.qute_QGraphicsView_centerOn_2(self, itemPtr)
+	C.qute_QGraphicsView_centerOn_1(self, itemPtr)
 }
 
 // EnsureVisible wraps QGraphicsView::ensureVisible.
@@ -548,28 +528,18 @@ func (this *QGraphicsView) EnsureVisible(rect qtcore.QRectF) {
 	C.qute_QGraphicsView_ensureVisible(self, cQRectF(rect))
 }
 
-// EnsureVisible2 wraps QGraphicsView::ensureVisible.
-//
-//	C++: void QGraphicsView::ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = …, int ymargin = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#ensureVisible
-func (this *QGraphicsView) EnsureVisible2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EnsureVisible2")
-	C.qute_QGraphicsView_ensureVisible_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
-// EnsureVisible3 wraps QGraphicsView::ensureVisible.
+// EnsureVisibleItem wraps QGraphicsView::ensureVisible.
 //
 //	C++: void QGraphicsView::ensureVisible(const QGraphicsItem * item, int xmargin = …, int ymargin = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#ensureVisible
-func (this *QGraphicsView) EnsureVisible3(item QGraphicsItemLike) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EnsureVisible3")
+func (this *QGraphicsView) EnsureVisibleItem(item QGraphicsItemLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EnsureVisibleItem")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.EnsureVisible3")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.EnsureVisibleItem")
 	}
-	C.qute_QGraphicsView_ensureVisible_2(self, itemPtr)
+	C.qute_QGraphicsView_ensureVisible_1(self, itemPtr)
 }
 
 // FitInView wraps QGraphicsView::fitInView.
@@ -582,28 +552,18 @@ func (this *QGraphicsView) FitInView(rect qtcore.QRectF) {
 	C.qute_QGraphicsView_fitInView(self, cQRectF(rect))
 }
 
-// FitInView2 wraps QGraphicsView::fitInView.
-//
-//	C++: void QGraphicsView::fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode aspectRadioMode = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#fitInView
-func (this *QGraphicsView) FitInView2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.FitInView2")
-	C.qute_QGraphicsView_fitInView_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
-// FitInView3 wraps QGraphicsView::fitInView.
+// FitInViewItem wraps QGraphicsView::fitInView.
 //
 //	C++: void QGraphicsView::fitInView(const QGraphicsItem * item, Qt::AspectRatioMode aspectRadioMode = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#fitInView
-func (this *QGraphicsView) FitInView3(item QGraphicsItemLike) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.FitInView3")
+func (this *QGraphicsView) FitInViewItem(item QGraphicsItemLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.FitInViewItem")
 	var itemPtr unsafe.Pointer
 	if item != nil {
-		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.FitInView3")
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.FitInViewItem")
 	}
-	C.qute_QGraphicsView_fitInView_2(self, itemPtr)
+	C.qute_QGraphicsView_fitInView_1(self, itemPtr)
 }
 
 // Render wraps QGraphicsView::render.
@@ -635,95 +595,65 @@ func (this *QGraphicsView) Items() []*QGraphicsItem {
 	})
 }
 
-// Items2 wraps QGraphicsView::items.
+// ItemsAt wraps QGraphicsView::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsView::items(const QPoint & pos) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
-func (this *QGraphicsView) Items2(pos qtcore.QPoint) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.Items2")
+func (this *QGraphicsView) ItemsAt(pos qtcore.QPoint) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsAt")
 	r := C.qute_QGraphicsView_items_1(self, cQPoint(pos))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
 }
 
-// Items3 wraps QGraphicsView::items.
-//
-//	C++: QList<QGraphicsItem *> QGraphicsView::items(int x, int y) const
-//
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
-func (this *QGraphicsView) Items3(x int, y int) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.Items3")
-	r := C.qute_QGraphicsView_items_2(self, C.int(x), C.int(y))
-	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
-	})
-}
-
-// Items4 wraps QGraphicsView::items.
+// ItemsIn wraps QGraphicsView::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsView::items(const QRect & rect, Qt::ItemSelectionMode mode = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
-func (this *QGraphicsView) Items4(rect qtcore.QRect) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.Items4")
-	r := C.qute_QGraphicsView_items_3(self, cQRect(rect))
+func (this *QGraphicsView) ItemsIn(rect qtcore.QRect) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsIn")
+	r := C.qute_QGraphicsView_items_2(self, cQRect(rect))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
 }
 
-// Items5 wraps QGraphicsView::items.
-//
-//	C++: QList<QGraphicsItem *> QGraphicsView::items(int x, int y, int w, int h, Qt::ItemSelectionMode mode = …) const
-//
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
-func (this *QGraphicsView) Items5(x int, y int, w int, hArg int) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.Items5")
-	r := C.qute_QGraphicsView_items_4(self, C.int(x), C.int(y), C.int(w), C.int(hArg))
-	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
-	})
-}
-
-// Items6 wraps QGraphicsView::items.
+// ItemsInPolygon wraps QGraphicsView::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsView::items(const QPolygon & polygon, Qt::ItemSelectionMode mode = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
-func (this *QGraphicsView) Items6(polygon []qtcore.QPoint) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.Items6")
+func (this *QGraphicsView) ItemsInPolygon(polygon []qtcore.QPoint) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsInPolygon")
 	polygonC := make([]C.qute_point, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPoint(polygon[i])
 	}
-	r := C.qute_QGraphicsView_items_5(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	r := C.qute_QGraphicsView_items_3(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
 }
 
-// Items7 wraps QGraphicsView::items.
+// ItemsInPath wraps QGraphicsView::items.
 //
 //	C++: QList<QGraphicsItem *> QGraphicsView::items(const QPainterPath & path, Qt::ItemSelectionMode mode = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
-func (this *QGraphicsView) Items7(path *qtgui.QPainterPath) []*QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.Items7")
-	r := C.qute_QGraphicsView_items_6(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.Items7"))
+func (this *QGraphicsView) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsInPath")
+	r := C.qute_QGraphicsView_items_4(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.ItemsInPath"))
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -742,19 +672,6 @@ func (this *QGraphicsView) ItemAt(pos qtcore.QPoint) *QGraphicsItem {
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
-// ItemAt2 wraps QGraphicsView::itemAt.
-//
-//	C++: QGraphicsItem * QGraphicsView::itemAt(int x, int y) const
-//
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#itemAt
-func (this *QGraphicsView) ItemAt2(x int, y int) *QGraphicsItem {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemAt2")
-	r := C.qute_QGraphicsView_itemAt_1(self, C.int(x), C.int(y))
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
-}
-
 // MapToScene wraps QGraphicsView::mapToScene.
 //
 //	C++: QPointF QGraphicsView::mapToScene(const QPoint & point) const
@@ -766,24 +683,24 @@ func (this *QGraphicsView) MapToScene(point qtcore.QPoint) qtcore.QPointF {
 	return goQPointF(r)
 }
 
-// MapToScene2 wraps QGraphicsView::mapToScene.
+// MapToSceneRect wraps QGraphicsView::mapToScene.
 //
 //	C++: QPolygonF QGraphicsView::mapToScene(const QRect & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapToScene
-func (this *QGraphicsView) MapToScene2(rect qtcore.QRect) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScene2")
+func (this *QGraphicsView) MapToSceneRect(rect qtcore.QRect) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToSceneRect")
 	r := C.qute_QGraphicsView_mapToScene_1(self, cQRect(rect))
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToScene3 wraps QGraphicsView::mapToScene.
+// MapToScenePolygon wraps QGraphicsView::mapToScene.
 //
 //	C++: QPolygonF QGraphicsView::mapToScene(const QPolygon & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapToScene
-func (this *QGraphicsView) MapToScene3(polygon []qtcore.QPoint) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScene3")
+func (this *QGraphicsView) MapToScenePolygon(polygon []qtcore.QPoint) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScenePolygon")
 	polygonC := make([]C.qute_point, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPoint(polygon[i])
@@ -792,16 +709,16 @@ func (this *QGraphicsView) MapToScene3(polygon []qtcore.QPoint) []qtcore.QPointF
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// MapToScene4 wraps QGraphicsView::mapToScene.
+// MapToScenePath wraps QGraphicsView::mapToScene.
 //
 //	C++: QPainterPath QGraphicsView::mapToScene(const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapToScene
-func (this *QGraphicsView) MapToScene4(path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScene4")
-	r := C.qute_QGraphicsView_mapToScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.MapToScene4"))
+func (this *QGraphicsView) MapToScenePath(path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScenePath")
+	r := C.qute_QGraphicsView_mapToScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.MapToScenePath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -816,24 +733,24 @@ func (this *QGraphicsView) MapFromScene(point qtcore.QPointF) qtcore.QPoint {
 	return goQPoint(r)
 }
 
-// MapFromScene2 wraps QGraphicsView::mapFromScene.
+// MapFromSceneRect wraps QGraphicsView::mapFromScene.
 //
 //	C++: QPolygon QGraphicsView::mapFromScene(const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapFromScene
-func (this *QGraphicsView) MapFromScene2(rect qtcore.QRectF) []qtcore.QPoint {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScene2")
+func (this *QGraphicsView) MapFromSceneRect(rect qtcore.QRectF) []qtcore.QPoint {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromSceneRect")
 	r := C.qute_QGraphicsView_mapFromScene_1(self, cQRectF(rect))
 	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
-// MapFromScene3 wraps QGraphicsView::mapFromScene.
+// MapFromScenePolygon wraps QGraphicsView::mapFromScene.
 //
 //	C++: QPolygon QGraphicsView::mapFromScene(const QPolygonF & polygon) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapFromScene
-func (this *QGraphicsView) MapFromScene3(polygon []qtcore.QPointF) []qtcore.QPoint {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScene3")
+func (this *QGraphicsView) MapFromScenePolygon(polygon []qtcore.QPointF) []qtcore.QPoint {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScenePolygon")
 	polygonC := make([]C.qute_pointf, len(polygon))
 	for i := range polygon {
 		polygonC[i] = cQPointF(polygon[i])
@@ -842,61 +759,17 @@ func (this *QGraphicsView) MapFromScene3(polygon []qtcore.QPointF) []qtcore.QPoi
 	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
-// MapFromScene4 wraps QGraphicsView::mapFromScene.
+// MapFromScenePath wraps QGraphicsView::mapFromScene.
 //
 //	C++: QPainterPath QGraphicsView::mapFromScene(const QPainterPath & path) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapFromScene
-func (this *QGraphicsView) MapFromScene4(path *qtgui.QPainterPath) *qtgui.QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScene4")
-	r := C.qute_QGraphicsView_mapFromScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.MapFromScene4"))
+func (this *QGraphicsView) MapFromScenePath(path *qtgui.QPainterPath) *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScenePath")
+	r := C.qute_QGraphicsView_mapFromScene_3(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.MapFromScenePath"))
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
-}
-
-// MapToScene5 wraps QGraphicsView::mapToScene.
-//
-//	C++: QPointF QGraphicsView::mapToScene(int x, int y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapToScene
-func (this *QGraphicsView) MapToScene5(x int, y int) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScene5")
-	r := C.qute_QGraphicsView_mapToScene_4(self, C.int(x), C.int(y))
-	return goQPointF(r)
-}
-
-// MapToScene6 wraps QGraphicsView::mapToScene.
-//
-//	C++: QPolygonF QGraphicsView::mapToScene(int x, int y, int w, int h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapToScene
-func (this *QGraphicsView) MapToScene6(x int, y int, w int, hArg int) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapToScene6")
-	r := C.qute_QGraphicsView_mapToScene_5(self, C.int(x), C.int(y), C.int(w), C.int(hArg))
-	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
-}
-
-// MapFromScene5 wraps QGraphicsView::mapFromScene.
-//
-//	C++: QPoint QGraphicsView::mapFromScene(qreal x, qreal y) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapFromScene
-func (this *QGraphicsView) MapFromScene5(x float64, y float64) qtcore.QPoint {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScene5")
-	r := C.qute_QGraphicsView_mapFromScene_4(self, C.double(x), C.double(y))
-	return goQPoint(r)
-}
-
-// MapFromScene6 wraps QGraphicsView::mapFromScene.
-//
-//	C++: QPolygon QGraphicsView::mapFromScene(qreal x, qreal y, qreal w, qreal h) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#mapFromScene
-func (this *QGraphicsView) MapFromScene6(x float64, y float64, w float64, hArg float64) []qtcore.QPoint {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.MapFromScene6")
-	r := C.qute_QGraphicsView_mapFromScene_5(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
 // BackgroundBrush wraps QGraphicsView::backgroundBrush.

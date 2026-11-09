@@ -87,30 +87,30 @@ func (this *QStyle) Unpolish(widget QWidgetLike) {
 	C.qute_QStyle_unpolish(self, widgetPtr)
 }
 
-// Polish2 wraps QStyle::polish.
+// PolishApplication wraps QStyle::polish.
 //
 //	C++: void QStyle::polish(QApplication * application)
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#polish
-func (this *QStyle) Polish2(application QApplicationLike) {
-	self := rt.Use(unsafe.Pointer(this), "QStyle.Polish2")
+func (this *QStyle) PolishApplication(application QApplicationLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.PolishApplication")
 	var applicationPtr unsafe.Pointer
 	if application != nil {
-		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.Polish2")
+		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.PolishApplication")
 	}
 	C.qute_QStyle_polish_1(self, applicationPtr)
 }
 
-// Unpolish2 wraps QStyle::unpolish.
+// UnpolishApplication wraps QStyle::unpolish.
 //
 //	C++: void QStyle::unpolish(QApplication * application)
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#unpolish
-func (this *QStyle) Unpolish2(application QApplicationLike) {
-	self := rt.Use(unsafe.Pointer(this), "QStyle.Unpolish2")
+func (this *QStyle) UnpolishApplication(application QApplicationLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.UnpolishApplication")
 	var applicationPtr unsafe.Pointer
 	if application != nil {
-		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.Unpolish2")
+		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.UnpolishApplication")
 	}
 	C.qute_QStyle_unpolish_1(self, applicationPtr)
 }

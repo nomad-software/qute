@@ -119,16 +119,6 @@ func (this *QGraphicsEllipseItem) SetRect(rect qtcore.QRectF) {
 	C.qute_QGraphicsEllipseItem_setRect(self, cQRectF(rect))
 }
 
-// SetRect2 wraps QGraphicsEllipseItem::setRect.
-//
-//	C++: void QGraphicsEllipseItem::setRect(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsellipseitem.html#setRect
-func (this *QGraphicsEllipseItem) SetRect2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.SetRect2")
-	C.qute_QGraphicsEllipseItem_setRect_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
 // StartAngle wraps QGraphicsEllipseItem::startAngle.
 //
 //	C++: int QGraphicsEllipseItem::startAngle() const

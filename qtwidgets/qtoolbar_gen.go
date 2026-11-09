@@ -229,7 +229,7 @@ func (this *QToolBar) AddWidget(widget QWidgetLike) *qtgui.QAction {
 //
 //	C++: QAction * QToolBar::insertWidget(QAction * before, QWidget * widget)
 //
-// Ownership: widget becomes Parented: Qt frees it from now on; the result is Parented: its Qt parent frees it.
+// Ownership: before is borrowed for the call only; widget becomes Parented: Qt frees it from now on; the result is Parented: its Qt parent frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtoolbar.html#insertWidget
 func (this *QToolBar) InsertWidget(before qtgui.QActionLike, widget QWidgetLike) *qtgui.QAction {

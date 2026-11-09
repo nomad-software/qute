@@ -18,6 +18,19 @@ func TestLayout(t *testing.T) {
 	}
 }
 
+// QMimeData * QAbstractItemModel::mimeData(const QModelIndexList & indexes) const (test from the overlay)
+func TestOwnership_QAbstractItemModel_MimeData(t *testing.T) {
+	qute.Run(t, func() {
+		m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
+		d := m.MimeData([]*qtcore.QModelIndex{m.Index(0, 0)})
+		if d == nil || d.Ownership() != qtcore.Owned {
+			t.Errorf("d: %v, want Owned", d.Ownership())
+		}
+		d.Delete()
+		m.Delete()
+	})
+}
+
 // QFile::QFile(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQFile(t *testing.T) {
 	qute.Run(t, func() {
@@ -42,10 +55,10 @@ func TestOwnership_NewQFile(t *testing.T) {
 }
 
 // QFile::QFile(const QString & name, QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
-func TestOwnership_NewQFileWithName2(t *testing.T) {
+func TestOwnership_NewQFileWithName(t *testing.T) {
 	qute.Run(t, func() {
 		root := qtcore.NewQObject(nil)
-		x := qtcore.NewQFileWithName2("x", root)
+		x := qtcore.NewQFileWithName("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
 			t.Errorf("with parent: %v, want Parented", got)
 		}
@@ -53,7 +66,30 @@ func TestOwnership_NewQFileWithName2(t *testing.T) {
 		if x.Alive() {
 			t.Error("still alive after its parent was deleted")
 		}
-		y := qtcore.NewQFileWithName2("x", nil)
+		y := qtcore.NewQFileWithName("x", nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQItemSelectionModelWithModel(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQItemSelectionModelWithModel(nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQItemSelectionModelWithModel(nil, nil)
 		if got := y.Ownership(); got != qtcore.Owned {
 			t.Errorf("without parent: %v, want Owned", got)
 		}
@@ -216,10 +252,10 @@ func TestOwnership_NewQSettingsWithFileName(t *testing.T) {
 }
 
 // QSettings::QSettings(Scope scope, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
-func TestOwnership_NewQSettingsWithScope2(t *testing.T) {
+func TestOwnership_NewQSettingsWithScopeOnly(t *testing.T) {
 	qute.Run(t, func() {
 		root := qtcore.NewQObject(nil)
-		x := qtcore.NewQSettingsWithScope2(qtcore.QSettingsScope(0), root)
+		x := qtcore.NewQSettingsWithScopeOnly(qtcore.QSettingsScope(0), root)
 		if got := x.Ownership(); got != qtcore.Parented {
 			t.Errorf("with parent: %v, want Parented", got)
 		}
@@ -227,7 +263,7 @@ func TestOwnership_NewQSettingsWithScope2(t *testing.T) {
 		if x.Alive() {
 			t.Error("still alive after its parent was deleted")
 		}
-		y := qtcore.NewQSettingsWithScope2(qtcore.QSettingsScope(0), nil)
+		y := qtcore.NewQSettingsWithScopeOnly(qtcore.QSettingsScope(0), nil)
 		if got := y.Ownership(); got != qtcore.Owned {
 			t.Errorf("without parent: %v, want Owned", got)
 		}

@@ -134,13 +134,13 @@ func (this *QLCDNumber) CheckOverflow(num float64) bool {
 	return bool(r)
 }
 
-// CheckOverflow2 wraps QLCDNumber::checkOverflow.
+// CheckOverflowInt wraps QLCDNumber::checkOverflow.
 //
 //	C++: bool QLCDNumber::checkOverflow(int num) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qlcdnumber.html#checkOverflow
-func (this *QLCDNumber) CheckOverflow2(num int) bool {
-	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.CheckOverflow2")
+func (this *QLCDNumber) CheckOverflowInt(num int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.CheckOverflowInt")
 	r := C.qute_QLCDNumber_checkOverflow_1(self, C.int(num))
 	return bool(r)
 }
@@ -219,23 +219,23 @@ func (this *QLCDNumber) Display(str string) {
 	C.qute_QLCDNumber_display(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)))
 }
 
-// Display2 wraps QLCDNumber::display.
+// DisplayInt wraps QLCDNumber::display.
 //
 //	C++: void QLCDNumber::display(int num)
 //
 // Qt docs: https://doc.qt.io/qt-6/qlcdnumber.html#display
-func (this *QLCDNumber) Display2(num int) {
-	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.Display2")
+func (this *QLCDNumber) DisplayInt(num int) {
+	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.DisplayInt")
 	C.qute_QLCDNumber_display_1(self, C.int(num))
 }
 
-// Display3 wraps QLCDNumber::display.
+// DisplayFloat wraps QLCDNumber::display.
 //
 //	C++: void QLCDNumber::display(double num)
 //
 // Qt docs: https://doc.qt.io/qt-6/qlcdnumber.html#display
-func (this *QLCDNumber) Display3(num float64) {
-	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.Display3")
+func (this *QLCDNumber) DisplayFloat(num float64) {
+	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.DisplayFloat")
 	C.qute_QLCDNumber_display_2(self, C.double(num))
 }
 

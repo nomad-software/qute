@@ -70,30 +70,18 @@ func NewQFile(parent QObjectLike) *QFile {
 
 // NewQFileWithName wraps the QFile constructor.
 //
-//	C++: QFile::QFile(const QString & name)
-//
-// Qt docs: https://doc.qt.io/qt-6/qfile.html#QFile
-func NewQFileWithName(name string) *QFile {
-	rt.CheckThread("NewQFileWithName")
-	p := C.qute_QFile_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
-	h := rt.WrapClass(p, "QFile", rt.NewOwned)
-	return rt.View[QFile](h, p)
-}
-
-// NewQFileWithName2 wraps the QFile constructor.
-//
 //	C++: QFile::QFile(const QString & name, QObject * parent)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfile.html#QFile
-func NewQFileWithName2(name string, parent QObjectLike) *QFile {
-	rt.CheckThread("NewQFileWithName2")
+func NewQFileWithName(name string, parent QObjectLike) *QFile {
+	rt.CheckThread("NewQFileWithName")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileWithName2")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileWithName")
 	}
-	p := C.qute_QFile_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), parentPtr)
+	p := C.qute_QFile_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), parentPtr)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -200,13 +188,13 @@ func (this *QFile) Open(flags QIODeviceBaseOpenMode, permissions QFileDevicePerm
 	return bool(r)
 }
 
-// Open2 wraps QFile::open.
+// OpenFd wraps QFile::open.
 //
 //	C++: bool QFile::open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qfile.html#open
-func (this *QFile) Open2(fd int, ioFlags QIODeviceBaseOpenMode) bool {
-	self := rt.Use(unsafe.Pointer(this), "QFile.Open2")
+func (this *QFile) OpenFd(fd int, ioFlags QIODeviceBaseOpenMode) bool {
+	self := rt.Use(unsafe.Pointer(this), "QFile.OpenFd")
 	r := C.qute_QFile_open_1(self, C.int(fd), C.int64_t(ioFlags))
 	return bool(r)
 }
@@ -230,19 +218,6 @@ func QFileEncodeName(fileName string) []byte {
 func QFileDecodeName(localFileName []byte) string {
 	rt.CheckThread("QFileDecodeName")
 	r := C.qute_QFile_decodeName((*C.char)(unsafe.Pointer(unsafe.SliceData(localFileName))), C.ptrdiff_t(len(localFileName)))
-	return quteStr(r)
-}
-
-// QFileDecodeName2 wraps QFile::decodeName.
-//
-//	C++: QString QFile::decodeName(const char * localFileName)
-//
-// Qt docs: https://doc.qt.io/qt-6/qfile.html#decodeName
-func QFileDecodeName2(localFileName string) string {
-	rt.CheckThread("QFileDecodeName2")
-	localFileNameCStr := C.CString(localFileName)
-	defer C.free(unsafe.Pointer(localFileNameCStr))
-	r := C.qute_QFile_decodeName_1(localFileNameCStr)
 	return quteStr(r)
 }
 

@@ -118,13 +118,3 @@ func (this *QGraphicsRectItem) SetRect(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRectItem.SetRect")
 	C.qute_QGraphicsRectItem_setRect(self, cQRectF(rect))
 }
-
-// SetRect2 wraps QGraphicsRectItem::setRect.
-//
-//	C++: void QGraphicsRectItem::setRect(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicsrectitem.html#setRect
-func (this *QGraphicsRectItem) SetRect2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsRectItem.SetRect2")
-	C.qute_QGraphicsRectItem_setRect_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}

@@ -91,23 +91,23 @@ func NewQDoubleValidatorWithBottom(bottom float64, top float64, decimals int, pa
 	return rt.View[QDoubleValidator](h, p)
 }
 
-// SetRange wraps QDoubleValidator::setRange.
+// SetRangeDecimals wraps QDoubleValidator::setRange.
 //
 //	C++: void QDoubleValidator::setRange(double bottom, double top, int decimals)
 //
 // Qt docs: https://doc.qt.io/qt-6/qdoublevalidator.html#setRange
-func (this *QDoubleValidator) SetRange(bottom float64, top float64, decimals int) {
-	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetRange")
+func (this *QDoubleValidator) SetRangeDecimals(bottom float64, top float64, decimals int) {
+	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetRangeDecimals")
 	C.qute_QDoubleValidator_setRange(self, C.double(bottom), C.double(top), C.int(decimals))
 }
 
-// SetRange2 wraps QDoubleValidator::setRange.
+// SetRange wraps QDoubleValidator::setRange.
 //
 //	C++: void QDoubleValidator::setRange(double bottom, double top)
 //
 // Qt docs: https://doc.qt.io/qt-6/qdoublevalidator.html#setRange
-func (this *QDoubleValidator) SetRange2(bottom float64, top float64) {
-	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetRange2")
+func (this *QDoubleValidator) SetRange(bottom float64, top float64) {
+	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetRange")
 	C.qute_QDoubleValidator_setRange_1(self, C.double(bottom), C.double(top))
 }
 

@@ -408,7 +408,7 @@ func (this *QListWidget) ItemWidget(item QListWidgetItemLike) *QWidget {
 //
 //	C++: void QListWidget::setItemWidget(QListWidgetItem * item, QWidget * widget)
 //
-// Ownership: widget becomes Parented: Qt frees it from now on.
+// Ownership: item is borrowed for the call only; widget becomes Parented: Qt frees it from now on.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlistwidget.html#setItemWidget
 func (this *QListWidget) SetItemWidget(item QListWidgetItemLike, widget QWidgetLike) {

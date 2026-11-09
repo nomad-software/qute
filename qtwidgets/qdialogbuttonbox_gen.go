@@ -114,18 +114,18 @@ func NewQDialogButtonBoxWithButtons(buttons QDialogButtonBoxStandardButtons, par
 	return rt.View[QDialogButtonBox](h, p)
 }
 
-// NewQDialogButtonBoxWithButtons2 wraps the QDialogButtonBox constructor.
+// NewQDialogButtonBoxWithButtonsOriented wraps the QDialogButtonBox constructor.
 //
 //	C++: QDialogButtonBox::QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation, QWidget * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdialogbuttonbox.html#QDialogButtonBox
-func NewQDialogButtonBoxWithButtons2(buttons QDialogButtonBoxStandardButtons, orientation qtcore.Orientations, parent QWidgetLike) *QDialogButtonBox {
-	rt.CheckThread("NewQDialogButtonBoxWithButtons2")
+func NewQDialogButtonBoxWithButtonsOriented(buttons QDialogButtonBoxStandardButtons, orientation qtcore.Orientations, parent QWidgetLike) *QDialogButtonBox {
+	rt.CheckThread("NewQDialogButtonBoxWithButtonsOriented")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithButtons2")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithButtonsOriented")
 	}
 	p := C.qute_QDialogButtonBox_new_3(C.int64_t(buttons), C.int64_t(orientation), parentPtr)
 	mode := rt.NewOwned
@@ -207,7 +207,7 @@ func (this *QDialogButtonBox) AddStandardButton(button QDialogButtonBoxStandardB
 //
 // Ownership: button becomes Owned: Go frees it from now on.
 //
-// The button is not deleted; its parent is cleared, so Go owns it.
+// The button is not deleted; its parent is cleared so Go owns it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdialogbuttonbox.html#removeButton
 func (this *QDialogButtonBox) RemoveButton(button QAbstractButtonLike) {

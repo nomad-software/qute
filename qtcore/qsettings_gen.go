@@ -156,18 +156,18 @@ func NewQSettingsWithFileName(fileName string, format QSettingsFormat, parent QO
 	return rt.View[QSettings](h, p)
 }
 
-// NewQSettingsWithScope2 wraps the QSettings constructor.
+// NewQSettingsWithScopeOnly wraps the QSettings constructor.
 //
 //	C++: QSettings::QSettings(Scope scope, QObject * parent = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsettings.html#QSettings
-func NewQSettingsWithScope2(scope QSettingsScope, parent QObjectLike) *QSettings {
-	rt.CheckThread("NewQSettingsWithScope2")
+func NewQSettingsWithScopeOnly(scope QSettingsScope, parent QObjectLike) *QSettings {
+	rt.CheckThread("NewQSettingsWithScopeOnly")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
-		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithScope2")
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithScopeOnly")
 	}
 	p := C.qute_QSettings_new_5(C.int64_t(scope), parentPtr)
 	mode := rt.NewOwned
@@ -356,28 +356,28 @@ func (this *QSettings) SetValue(key string, value *QVariant) {
 	C.qute_QSettings_setValue(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), rt.UseArg(unsafe.Pointer(value), "QSettings.SetValue"))
 }
 
-// Value wraps QSettings::value.
+// ValueOr wraps QSettings::value.
 //
 //	C++: QVariant QSettings::value(QAnyStringView key, const QVariant & defaultValue) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsettings.html#value
-func (this *QSettings) Value(key string, defaultValue *QVariant) *QVariant {
-	self := rt.Use(unsafe.Pointer(this), "QSettings.Value")
-	r := C.qute_QSettings_value(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), rt.UseArg(unsafe.Pointer(defaultValue), "QSettings.Value"))
+func (this *QSettings) ValueOr(key string, defaultValue *QVariant) *QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QSettings.ValueOr")
+	r := C.qute_QSettings_value(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), rt.UseArg(unsafe.Pointer(defaultValue), "QSettings.ValueOr"))
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
-// Value2 wraps QSettings::value.
+// Value wraps QSettings::value.
 //
 //	C++: QVariant QSettings::value(QAnyStringView key) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsettings.html#value
-func (this *QSettings) Value2(key string) *QVariant {
-	self := rt.Use(unsafe.Pointer(this), "QSettings.Value2")
+func (this *QSettings) Value(key string) *QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QSettings.Value")
 	r := C.qute_QSettings_value_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }

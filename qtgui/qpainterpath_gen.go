@@ -152,16 +152,6 @@ func (this *QPainterPath) MoveTo(pArg qtcore.QPointF) {
 	C.qute_QPainterPath_moveTo(self, cQPointF(pArg))
 }
 
-// MoveTo2 wraps QPainterPath::moveTo.
-//
-//	C++: void QPainterPath::moveTo(qreal x, qreal y)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#moveTo
-func (this *QPainterPath) MoveTo2(x float64, y float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.MoveTo2")
-	C.qute_QPainterPath_moveTo_1(self, C.double(x), C.double(y))
-}
-
 // LineTo wraps QPainterPath::lineTo.
 //
 //	C++: void QPainterPath::lineTo(const QPointF & p)
@@ -170,16 +160,6 @@ func (this *QPainterPath) MoveTo2(x float64, y float64) {
 func (this *QPainterPath) LineTo(pArg qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.LineTo")
 	C.qute_QPainterPath_lineTo(self, cQPointF(pArg))
-}
-
-// LineTo2 wraps QPainterPath::lineTo.
-//
-//	C++: void QPainterPath::lineTo(qreal x, qreal y)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#lineTo
-func (this *QPainterPath) LineTo2(x float64, y float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.LineTo2")
-	C.qute_QPainterPath_lineTo_1(self, C.double(x), C.double(y))
 }
 
 // ArcMoveTo wraps QPainterPath::arcMoveTo.
@@ -192,16 +172,6 @@ func (this *QPainterPath) ArcMoveTo(rect qtcore.QRectF, angle float64) {
 	C.qute_QPainterPath_arcMoveTo(self, cQRectF(rect), C.double(angle))
 }
 
-// ArcMoveTo2 wraps QPainterPath::arcMoveTo.
-//
-//	C++: void QPainterPath::arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal angle)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#arcMoveTo
-func (this *QPainterPath) ArcMoveTo2(x float64, y float64, w float64, hArg float64, angle float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ArcMoveTo2")
-	C.qute_QPainterPath_arcMoveTo_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg), C.double(angle))
-}
-
 // ArcTo wraps QPainterPath::arcTo.
 //
 //	C++: void QPainterPath::arcTo(const QRectF & rect, qreal startAngle, qreal arcLength)
@@ -210,16 +180,6 @@ func (this *QPainterPath) ArcMoveTo2(x float64, y float64, w float64, hArg float
 func (this *QPainterPath) ArcTo(rect qtcore.QRectF, startAngle float64, arcLength float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ArcTo")
 	C.qute_QPainterPath_arcTo(self, cQRectF(rect), C.double(startAngle), C.double(arcLength))
-}
-
-// ArcTo2 wraps QPainterPath::arcTo.
-//
-//	C++: void QPainterPath::arcTo(qreal x, qreal y, qreal w, qreal h, qreal startAngle, qreal arcLength)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#arcTo
-func (this *QPainterPath) ArcTo2(x float64, y float64, w float64, hArg float64, startAngle float64, arcLength float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ArcTo2")
-	C.qute_QPainterPath_arcTo_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg), C.double(startAngle), C.double(arcLength))
 }
 
 // CubicTo wraps QPainterPath::cubicTo.
@@ -232,16 +192,6 @@ func (this *QPainterPath) CubicTo(ctrlPt1 qtcore.QPointF, ctrlPt2 qtcore.QPointF
 	C.qute_QPainterPath_cubicTo(self, cQPointF(ctrlPt1), cQPointF(ctrlPt2), cQPointF(endPt))
 }
 
-// CubicTo2 wraps QPainterPath::cubicTo.
-//
-//	C++: void QPainterPath::cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#cubicTo
-func (this *QPainterPath) CubicTo2(ctrlPt1x float64, ctrlPt1y float64, ctrlPt2x float64, ctrlPt2y float64, endPtx float64, endPty float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.CubicTo2")
-	C.qute_QPainterPath_cubicTo_1(self, C.double(ctrlPt1x), C.double(ctrlPt1y), C.double(ctrlPt2x), C.double(ctrlPt2y), C.double(endPtx), C.double(endPty))
-}
-
 // QuadTo wraps QPainterPath::quadTo.
 //
 //	C++: void QPainterPath::quadTo(const QPointF & ctrlPt, const QPointF & endPt)
@@ -250,16 +200,6 @@ func (this *QPainterPath) CubicTo2(ctrlPt1x float64, ctrlPt1y float64, ctrlPt2x 
 func (this *QPainterPath) QuadTo(ctrlPt qtcore.QPointF, endPt qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.QuadTo")
 	C.qute_QPainterPath_quadTo(self, cQPointF(ctrlPt), cQPointF(endPt))
-}
-
-// QuadTo2 wraps QPainterPath::quadTo.
-//
-//	C++: void QPainterPath::quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#quadTo
-func (this *QPainterPath) QuadTo2(ctrlPtx float64, ctrlPty float64, endPtx float64, endPty float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.QuadTo2")
-	C.qute_QPainterPath_quadTo_1(self, C.double(ctrlPtx), C.double(ctrlPty), C.double(endPtx), C.double(endPty))
 }
 
 // CurrentPosition wraps QPainterPath::currentPosition.
@@ -283,16 +223,6 @@ func (this *QPainterPath) AddRect(rect qtcore.QRectF) {
 	C.qute_QPainterPath_addRect(self, cQRectF(rect))
 }
 
-// AddRect2 wraps QPainterPath::addRect.
-//
-//	C++: void QPainterPath::addRect(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addRect
-func (this *QPainterPath) AddRect2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRect2")
-	C.qute_QPainterPath_addRect_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
 // AddEllipse wraps QPainterPath::addEllipse.
 //
 //	C++: void QPainterPath::addEllipse(const QRectF & rect)
@@ -303,24 +233,14 @@ func (this *QPainterPath) AddEllipse(rect qtcore.QRectF) {
 	C.qute_QPainterPath_addEllipse(self, cQRectF(rect))
 }
 
-// AddEllipse2 wraps QPainterPath::addEllipse.
-//
-//	C++: void QPainterPath::addEllipse(qreal x, qreal y, qreal w, qreal h)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addEllipse
-func (this *QPainterPath) AddEllipse2(x float64, y float64, w float64, hArg float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddEllipse2")
-	C.qute_QPainterPath_addEllipse_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg))
-}
-
-// AddEllipse3 wraps QPainterPath::addEllipse.
+// AddEllipseAt wraps QPainterPath::addEllipse.
 //
 //	C++: void QPainterPath::addEllipse(const QPointF & center, qreal rx, qreal ry)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addEllipse
-func (this *QPainterPath) AddEllipse3(center qtcore.QPointF, rx float64, ry float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddEllipse3")
-	C.qute_QPainterPath_addEllipse_2(self, cQPointF(center), C.double(rx), C.double(ry))
+func (this *QPainterPath) AddEllipseAt(center qtcore.QPointF, rx float64, ry float64) {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddEllipseAt")
+	C.qute_QPainterPath_addEllipse_1(self, cQPointF(center), C.double(rx), C.double(ry))
 }
 
 // AddPolygon wraps QPainterPath::addPolygon.
@@ -345,16 +265,6 @@ func (this *QPainterPath) AddPolygon(polygon []qtcore.QPointF) {
 func (this *QPainterPath) AddText(point qtcore.QPointF, fArg *QFont, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddText")
 	C.qute_QPainterPath_addText(self, cQPointF(point), rt.UseArg(unsafe.Pointer(fArg), "QPainterPath.AddText"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-}
-
-// AddText2 wraps QPainterPath::addText.
-//
-//	C++: void QPainterPath::addText(qreal x, qreal y, const QFont & f, const QString & text)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addText
-func (this *QPainterPath) AddText2(x float64, y float64, fArg *QFont, text string) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddText2")
-	C.qute_QPainterPath_addText_1(self, C.double(x), C.double(y), rt.UseArg(unsafe.Pointer(fArg), "QPainterPath.AddText2"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 }
 
 // AddPath wraps QPainterPath::addPath.
@@ -387,16 +297,6 @@ func (this *QPainterPath) AddRoundedRect(rect qtcore.QRectF, xRadius float64, yR
 	C.qute_QPainterPath_addRoundedRect(self, cQRectF(rect), C.double(xRadius), C.double(yRadius))
 }
 
-// AddRoundedRect2 wraps QPainterPath::addRoundedRect.
-//
-//	C++: void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addRoundedRect
-func (this *QPainterPath) AddRoundedRect2(x float64, y float64, w float64, hArg float64, xRadius float64, yRadius float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRoundedRect2")
-	C.qute_QPainterPath_addRoundedRect_1(self, C.double(x), C.double(y), C.double(w), C.double(hArg), C.double(xRadius), C.double(yRadius))
-}
-
 // ConnectPath wraps QPainterPath::connectPath.
 //
 //	C++: void QPainterPath::connectPath(const QPainterPath & path)
@@ -418,13 +318,13 @@ func (this *QPainterPath) Contains(pt qtcore.QPointF) bool {
 	return bool(r)
 }
 
-// Contains2 wraps QPainterPath::contains.
+// ContainsRect wraps QPainterPath::contains.
 //
 //	C++: bool QPainterPath::contains(const QRectF & rect) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#contains
-func (this *QPainterPath) Contains2(rect qtcore.QRectF) bool {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Contains2")
+func (this *QPainterPath) ContainsRect(rect qtcore.QRectF) bool {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ContainsRect")
 	r := C.qute_QPainterPath_contains_1(self, cQRectF(rect))
 	return bool(r)
 }
@@ -442,47 +342,24 @@ func (this *QPainterPath) Intersects(rect qtcore.QRectF) bool {
 
 // Translate wraps QPainterPath::translate.
 //
-//	C++: void QPainterPath::translate(qreal dx, qreal dy)
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#translate
-func (this *QPainterPath) Translate(dx float64, dy float64) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translate")
-	C.qute_QPainterPath_translate(self, C.double(dx), C.double(dy))
-}
-
-// Translate2 wraps QPainterPath::translate.
-//
 //	C++: void QPainterPath::translate(const QPointF & offset)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#translate
-func (this *QPainterPath) Translate2(offset qtcore.QPointF) {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translate2")
-	C.qute_QPainterPath_translate_1(self, cQPointF(offset))
+func (this *QPainterPath) Translate(offset qtcore.QPointF) {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translate")
+	C.qute_QPainterPath_translate(self, cQPointF(offset))
 }
 
 // Translated wraps QPainterPath::translated.
-//
-//	C++: QPainterPath QPainterPath::translated(qreal dx, qreal dy) const
-//
-// Ownership: the result is an Owned copy.
-//
-// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#translated
-func (this *QPainterPath) Translated(dx float64, dy float64) *QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translated")
-	r := C.qute_QPainterPath_translated(self, C.double(dx), C.double(dy))
-	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
-}
-
-// Translated2 wraps QPainterPath::translated.
 //
 //	C++: QPainterPath QPainterPath::translated(const QPointF & offset) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#translated
-func (this *QPainterPath) Translated2(offset qtcore.QPointF) *QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translated2")
-	r := C.qute_QPainterPath_translated_1(self, cQPointF(offset))
+func (this *QPainterPath) Translated(offset qtcore.QPointF) *QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translated")
+	r := C.qute_QPainterPath_translated(self, cQPointF(offset))
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -674,25 +551,25 @@ func (this *QPainterPath) Trimmed(fromFraction float64, toFraction float64) *QPa
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
-// Intersects2 wraps QPainterPath::intersects.
+// IntersectsPath wraps QPainterPath::intersects.
 //
 //	C++: bool QPainterPath::intersects(const QPainterPath & p) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#intersects
-func (this *QPainterPath) Intersects2(pArg *QPainterPath) bool {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Intersects2")
-	r := C.qute_QPainterPath_intersects_1(self, rt.UseArg(unsafe.Pointer(pArg), "QPainterPath.Intersects2"))
+func (this *QPainterPath) IntersectsPath(pArg *QPainterPath) bool {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.IntersectsPath")
+	r := C.qute_QPainterPath_intersects_1(self, rt.UseArg(unsafe.Pointer(pArg), "QPainterPath.IntersectsPath"))
 	return bool(r)
 }
 
-// Contains3 wraps QPainterPath::contains.
+// ContainsPath wraps QPainterPath::contains.
 //
 //	C++: bool QPainterPath::contains(const QPainterPath & p) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#contains
-func (this *QPainterPath) Contains3(pArg *QPainterPath) bool {
-	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Contains3")
-	r := C.qute_QPainterPath_contains_2(self, rt.UseArg(unsafe.Pointer(pArg), "QPainterPath.Contains3"))
+func (this *QPainterPath) ContainsPath(pArg *QPainterPath) bool {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ContainsPath")
+	r := C.qute_QPainterPath_contains_2(self, rt.UseArg(unsafe.Pointer(pArg), "QPainterPath.ContainsPath"))
 	return bool(r)
 }
 

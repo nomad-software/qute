@@ -203,19 +203,21 @@ To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 
 ## Status
 
-Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, 170 classes across
-QtCore, QtGui and QtWidgets (about 4,700 constructors, methods and functions),
-and Go subclassing (virtual overrides, item models). The test suite has about
-300 tests, 286 of them generated from ownership rules.
+Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, 170 classes
+across QtCore, QtGui and QtWidgets (about 4,700 constructors, methods and
+functions), and Go subclassing (virtual overrides, item models). Every binding
+has a reviewed ownership rule and a proper name, and all but one ownership rule
+has a generated test (about 390 tests in all).
 
 Not done yet:
 
+- About 500 methods wait for type support the generator doesn't have yet
+  (`QCalendar`, `QTextCursor`, `QTimeZone`, `QDataStream`, raw byte buffers,
+  out-parameters, ...). `UNREVIEWED.md` counts them by type.
+- Items that `QGraphicsScene` creates itself (`addRect`, `addEllipse`, ...)
+  are not QObjects, so qute can't see when the scene frees them; don't use
+  them after deleting the scene.
 - `QThread` affinity, QtQuick/QML and other modules.
-- Reviewing what `UNREVIEWED.md` lists: about 170 methods on default
-  ownership rules, 165 numbered overload names, about 610 skipped methods
-  (mostly unsupported types such as `QCalendar`, `QTimeZone`, `QLineF`), and
-  79 rules without a generated test.
-- Doc comments link to the Qt docs but don't include Qt's summary text,
-  because the Qt doc index wasn't available when they were generated.
-- The Linux CI checks have been run locally. The macOS and Windows jobs in
+- Doc comments link to the Qt docs but don't include Qt's summary text.
+- The Linux CI checks have been run locally; the macOS and Windows jobs in
   `.github/workflows/ci.yml` are written but not yet verified.

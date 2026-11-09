@@ -79,48 +79,36 @@ func (this *QTransform) Unkeep() {
 
 // NewQTransform wraps the QTransform constructor.
 //
-//	C++: QTransform::QTransform(Qt::Initialization)
-//
-// Qt docs: https://doc.qt.io/qt-6/qtransform.html#QTransform
-func NewQTransform(arg0 qtcore.Initialization) *QTransform {
-	rt.CheckThread("NewQTransform")
-	p := C.qute_QTransform_new(C.int64_t(arg0))
-	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
-	return rt.View[QTransform](h, p)
-}
-
-// NewQTransform2 wraps the QTransform constructor.
-//
 //	C++: QTransform::QTransform()
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#QTransform
-func NewQTransform2() *QTransform {
-	rt.CheckThread("NewQTransform2")
-	p := C.qute_QTransform_new_1()
+func NewQTransform() *QTransform {
+	rt.CheckThread("NewQTransform")
+	p := C.qute_QTransform_new()
 	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
 	return rt.View[QTransform](h, p)
 }
 
-// NewQTransformWithH11 wraps the QTransform constructor.
+// NewQTransformProjective wraps the QTransform constructor.
 //
 //	C++: QTransform::QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23, qreal h31, qreal h32, qreal h33)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#QTransform
-func NewQTransformWithH11(h11 float64, h12 float64, h13 float64, h21 float64, h22 float64, h23 float64, h31 float64, h32 float64, h33 float64) *QTransform {
-	rt.CheckThread("NewQTransformWithH11")
-	p := C.qute_QTransform_new_2(C.double(h11), C.double(h12), C.double(h13), C.double(h21), C.double(h22), C.double(h23), C.double(h31), C.double(h32), C.double(h33))
+func NewQTransformProjective(h11 float64, h12 float64, h13 float64, h21 float64, h22 float64, h23 float64, h31 float64, h32 float64, h33 float64) *QTransform {
+	rt.CheckThread("NewQTransformProjective")
+	p := C.qute_QTransform_new_1(C.double(h11), C.double(h12), C.double(h13), C.double(h21), C.double(h22), C.double(h23), C.double(h31), C.double(h32), C.double(h33))
 	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
 	return rt.View[QTransform](h, p)
 }
 
-// NewQTransformWithH112 wraps the QTransform constructor.
+// NewQTransformAffine wraps the QTransform constructor.
 //
 //	C++: QTransform::QTransform(qreal h11, qreal h12, qreal h21, qreal h22, qreal dx, qreal dy)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#QTransform
-func NewQTransformWithH112(h11 float64, h12 float64, h21 float64, h22 float64, dx float64, dy float64) *QTransform {
-	rt.CheckThread("NewQTransformWithH112")
-	p := C.qute_QTransform_new_3(C.double(h11), C.double(h12), C.double(h21), C.double(h22), C.double(dx), C.double(dy))
+func NewQTransformAffine(h11 float64, h12 float64, h21 float64, h22 float64, dx float64, dy float64) *QTransform {
+	rt.CheckThread("NewQTransformAffine")
+	p := C.qute_QTransform_new_2(C.double(h11), C.double(h12), C.double(h21), C.double(h22), C.double(dx), C.double(dy))
 	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
 	return rt.View[QTransform](h, p)
 }
@@ -404,24 +392,24 @@ func (this *QTransform) Map(pArg qtcore.QPoint) qtcore.QPoint {
 	return goQPoint(r)
 }
 
-// Map2 wraps QTransform::map.
+// MapF wraps QTransform::map.
 //
 //	C++: QPointF QTransform::map(const QPointF & p) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
-func (this *QTransform) Map2(pArg qtcore.QPointF) qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QTransform.Map2")
+func (this *QTransform) MapF(pArg qtcore.QPointF) qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapF")
 	r := C.qute_QTransform_map_1(self, cQPointF(pArg))
 	return goQPointF(r)
 }
 
-// Map3 wraps QTransform::map.
+// MapPolygonF wraps QTransform::map.
 //
 //	C++: QPolygonF QTransform::map(const QPolygonF & a) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
-func (this *QTransform) Map3(aArg []qtcore.QPointF) []qtcore.QPointF {
-	self := rt.Use(unsafe.Pointer(this), "QTransform.Map3")
+func (this *QTransform) MapPolygonF(aArg []qtcore.QPointF) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapPolygonF")
 	aArgC := make([]C.qute_pointf, len(aArg))
 	for i := range aArg {
 		aArgC[i] = cQPointF(aArg[i])
@@ -430,13 +418,13 @@ func (this *QTransform) Map3(aArg []qtcore.QPointF) []qtcore.QPointF {
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
-// Map4 wraps QTransform::map.
+// MapPolygon wraps QTransform::map.
 //
 //	C++: QPolygon QTransform::map(const QPolygon & a) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
-func (this *QTransform) Map4(aArg []qtcore.QPoint) []qtcore.QPoint {
-	self := rt.Use(unsafe.Pointer(this), "QTransform.Map4")
+func (this *QTransform) MapPolygon(aArg []qtcore.QPoint) []qtcore.QPoint {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapPolygon")
 	aArgC := make([]C.qute_point, len(aArg))
 	for i := range aArg {
 		aArgC[i] = cQPoint(aArg[i])
@@ -445,29 +433,29 @@ func (this *QTransform) Map4(aArg []qtcore.QPoint) []qtcore.QPoint {
 	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
-// Map5 wraps QTransform::map.
+// MapRegion wraps QTransform::map.
 //
 //	C++: QRegion QTransform::map(const QRegion & r) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
-func (this *QTransform) Map5(rArg *QRegion) *QRegion {
-	self := rt.Use(unsafe.Pointer(this), "QTransform.Map5")
-	r := C.qute_QTransform_map_4(self, rt.UseArg(unsafe.Pointer(rArg), "QTransform.Map5"))
+func (this *QTransform) MapRegion(rArg *QRegion) *QRegion {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRegion")
+	r := C.qute_QTransform_map_4(self, rt.UseArg(unsafe.Pointer(rArg), "QTransform.MapRegion"))
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
-// Map6 wraps QTransform::map.
+// MapPath wraps QTransform::map.
 //
 //	C++: QPainterPath QTransform::map(const QPainterPath & p) const
 //
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#map
-func (this *QTransform) Map6(pArg *QPainterPath) *QPainterPath {
-	self := rt.Use(unsafe.Pointer(this), "QTransform.Map6")
-	r := C.qute_QTransform_map_5(self, rt.UseArg(unsafe.Pointer(pArg), "QTransform.Map6"))
+func (this *QTransform) MapPath(pArg *QPainterPath) *QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapPath")
+	r := C.qute_QTransform_map_5(self, rt.UseArg(unsafe.Pointer(pArg), "QTransform.MapPath"))
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -493,13 +481,13 @@ func (this *QTransform) MapRect(rect qtcore.QRect) qtcore.QRect {
 	return goQRect(r)
 }
 
-// MapRect2 wraps QTransform::mapRect.
+// MapRectF wraps QTransform::mapRect.
 //
 //	C++: QRectF QTransform::mapRect(const QRectF &) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#mapRect
-func (this *QTransform) MapRect2(rectF qtcore.QRectF) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRect2")
+func (this *QTransform) MapRectF(rectF qtcore.QRectF) qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRectF")
 	r := C.qute_QTransform_mapRect_1(self, cQRectF(rectF))
 	return goQRectF(r)
 }

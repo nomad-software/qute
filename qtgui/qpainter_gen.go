@@ -1353,13 +1353,13 @@ func (this *QPainter) BoundingRect(rect qtcore.QRect, flags int, text string) qt
 	return goQRect(r)
 }
 
-// BoundingRect2 wraps QPainter::boundingRect.
+// BoundingRectTextF wraps QPainter::boundingRect.
 //
 //	C++: QRectF QPainter::boundingRect(const QRectF & rect, const QString & text, const QTextOption & o = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#boundingRect
-func (this *QPainter) BoundingRect2(rect qtcore.QRectF, text string) qtcore.QRectF {
-	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRect2")
+func (this *QPainter) BoundingRectTextF(rect qtcore.QRectF, text string) qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRectTextF")
 	r := C.qute_QPainter_boundingRect_2(self, cQRectF(rect), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	return goQRectF(r)
 }

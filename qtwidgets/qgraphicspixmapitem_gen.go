@@ -142,16 +142,6 @@ func (this *QGraphicsPixmapItem) SetOffset(offset qtcore.QPointF) {
 	C.qute_QGraphicsPixmapItem_setOffset(self, cQPointF(offset))
 }
 
-// SetOffset2 wraps QGraphicsPixmapItem::setOffset.
-//
-//	C++: void QGraphicsPixmapItem::setOffset(qreal x, qreal y)
-//
-// Qt docs: https://doc.qt.io/qt-6/qgraphicspixmapitem.html#setOffset
-func (this *QGraphicsPixmapItem) SetOffset2(x float64, y float64) {
-	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.SetOffset2")
-	C.qute_QGraphicsPixmapItem_setOffset_1(self, C.double(x), C.double(y))
-}
-
 // ShapeMode wraps QGraphicsPixmapItem::shapeMode.
 //
 //	C++: ShapeMode QGraphicsPixmapItem::shapeMode() const

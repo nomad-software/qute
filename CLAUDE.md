@@ -206,7 +206,14 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   parameters get names from setters or their type. Overloads take names
   from overlays; otherwise a numbered fallback (`Resize2`) is used and listed.
 - **Review report** `UNREVIEWED.md`: pointer methods on default rules,
-  numbered names, skipped methods (with reasons), rules without a test.
+  numbered names, skipped methods (split into missing type support, counted
+  by type, and skipped on purpose), rules without a test, and results whose
+  death qute can't observe. Signal emitters count as reviewed, since emitting
+  never changes ownership.
+- Naming conventions for overloads: the version taking a Qt struct is
+  primary; plain-number twins (`setPos(x, y)`) and `QStringView` twins are
+  skipped; other versions get a suffix saying what differs (`ItemsInPath`,
+  `DisplayInt`, `MapToItemRect`).
 - **Escape hatches**: `.Ptr()`, `XFromPtr(p, qtcore.Borrowed)`, `XCast(obj)`
   (`qobject_cast`), and hand-written `*_manual.{go,cpp,h}` files the
   generator never touches.
@@ -239,7 +246,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Testing and CI
 
 - Every transfer rule gets a generated test (`*/ownership_gen_test.go`):
-  create, transfer, delete the owner, assert Dead. Rules the generator can't
+  create, transfer, delete the owner, assert Dead. Return rules are tested by
+  calling the method and checking the result's state; borrowed object
+  arguments are passed as nil. Rules the generator can't
   set up take a `test:` snippet (Go code run inside `qute.Run`).
   `TestLayout` checks every primary base sits at offset 0.
 - `.github/workflows/ci.yml`: Linux runs test, `qute_debug`, `-asan`,
@@ -249,11 +258,16 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Roadmap
 
 1. Runtime: done.
-2. Widgets: about 170 classes bound; finish reviewing `UNREVIEWED.md`.
+2. Widgets: done for about 170 classes. Every ownership rule is reviewed, every
+   overload has a proper name, and all rules but `QEvent::clone` have a test.
 3. Subclassing and models: done (virtual overrides, item models).
-4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
-   more modules, unsupported types (`QCalendar`, `QTimeZone`, `QLineF`,
-   out-parameters).
+4. Beyond: type support for the ~500 skipped methods (`UNREVIEWED.md` counts
+   them by type), `QThread` affinity (one cleanup queue per thread),
+   QtQuick/QML, more modules.
+
+Known limitation: non-QObject items that Qt creates itself (from
+`QGraphicsScene::addRect` and similar) have no death notice, so their handles
+can't turn Dead when the owner frees them. `UNREVIEWED.md` lists them.
 
 Open questions: is one eager `destroyed` connection per wrapped QObject cheap
 enough, or should it be lazy? The first build takes about a minute; would

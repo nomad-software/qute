@@ -6,581 +6,176 @@ default rule. Fix one by adding an overlay entry in `spec/overlays/<module>.yaml
 (an ownership rule, `reviewed: true`, a `name`, or `skip`), then regenerate.
 A constructor argument named `parent` is treated as reviewed (`transfer-this`).
 
-Bound: 4732 constructors, methods and functions; 4565 need no review or are reviewed.
-
-## Default ownership rules (167)
-
-
-### QAbstractItemDelegate
-
-- `void QAbstractItemDelegate::destroyEditor(QWidget * editor, const QModelIndex & index) const` → `editor`: borrowed
-- `void QAbstractItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const` → `editor`: borrowed
-- `void QAbstractItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const` → `editor`: borrowed, `model`: borrowed
-- `bool QAbstractItemDelegate::handleEditorEvent(QObject * object, QEvent * event)` → `object`: borrowed, `event`: borrowed
-- `void QAbstractItemDelegate::commitData(QWidget * editor)` → `editor`: borrowed
-- `void QAbstractItemDelegate::closeEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint = …)` → `editor`: borrowed
-
-### QAbstractItemModel
-
-- `QMimeData * QAbstractItemModel::mimeData(const QModelIndexList & indexes) const` → return: borrowed
-- `bool QAbstractItemModel::canDropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) const` → `data`: borrowed
-- `bool QAbstractItemModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)` → `data`: borrowed
-
-### QAbstractItemView
-
-- `QAbstractItemDelegate * QAbstractItemView::itemDelegateForIndex(const QModelIndex & index) const` → return: borrowed
-
-### QAbstractProxyModel
-
-- `void QAbstractProxyModel::setSourceModel(QAbstractItemModel * sourceModel)` → `sourceModel`: borrowed
-- `QAbstractItemModel * QAbstractProxyModel::sourceModel() const` → return: borrowed
-
-### QActionGroup
-
-- `void QActionGroup::triggered(QAction *)` → `action`: borrowed
-- `void QActionGroup::hovered(QAction *)` → `action`: borrowed
-
-### QApplication
-
-- `void QApplication::focusChanged(QWidget * old, QWidget * now)` → `old`: borrowed, `now`: borrowed
-
-### QButtonGroup
-
-- `void QButtonGroup::buttonClicked(QAbstractButton *)` → `abstractButton`: borrowed
-- `void QButtonGroup::buttonPressed(QAbstractButton *)` → `abstractButton`: borrowed
-- `void QButtonGroup::buttonReleased(QAbstractButton *)` → `abstractButton`: borrowed
-- `void QButtonGroup::buttonToggled(QAbstractButton *, bool)` → `abstractButton`: borrowed
-
-### QChildEvent
-
-- `QObject * QChildEvent::child() const` → return: borrowed
-
-### QCoreApplication
-
-- `bool QCoreApplication::notify(QObject *, QEvent *)` → `object`: borrowed, `event`: borrowed
-- `QCoreApplication * QCoreApplication::instance()` → return: borrowed
-- `bool QCoreApplication::sendEvent(QObject * receiver, QEvent * event)` → `receiver`: borrowed, `event`: borrowed
-- `void QCoreApplication::postEvent(QObject * receiver, QEvent * event, int priority = …)` → `receiver`: borrowed, `event`: borrowed
-- `void QCoreApplication::removePostedEvents(QObject * receiver, int eventType = …)` → `receiver`: borrowed
-
-### QDialogButtonBox
-
-- `void QDialogButtonBox::clicked(QAbstractButton * button)` → `button`: borrowed
-
-### QDropEvent
-
-- `QObject * QDropEvent::source() const` → return: borrowed
-- `const QMimeData * QDropEvent::mimeData() const` → return: borrowed
-
-### QEvent
-
-- `QEvent * QEvent::clone() const` → return: borrowed
-
-### QFileDialog
-
-- `void QFileDialog::setItemDelegate(QAbstractItemDelegate * delegate)` → `delegate`: borrowed
-- `QAbstractItemDelegate * QFileDialog::itemDelegate() const` → return: borrowed
-- `void QFileDialog::setProxyModel(QAbstractProxyModel * model)` → `model`: borrowed
-- `QAbstractProxyModel * QFileDialog::proxyModel() const` → return: borrowed
-
-### QFormLayout
-
-- `QWidget * QFormLayout::labelForField(QWidget * field) const` → `field`: borrowed
-- `QWidget * QFormLayout::labelForField(QLayout * field) const` → `field`: borrowed
-
-### QGraphicsItem
-
-- `bool QGraphicsItem::isVisibleTo(const QGraphicsItem * parent) const` → `parent`: borrowed
-- `QTransform QGraphicsItem::itemTransform(const QGraphicsItem * other, bool * ok = …) const` → `other`: borrowed
-- `bool QGraphicsItem::isObscuredBy(const QGraphicsItem * item) const` → `item`: borrowed
-- `QPointF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPointF & point) const` → `item`: borrowed
-- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QRectF & rect) const` → `item`: borrowed
-- `QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem * item, const QRectF & rect) const` → `item`: borrowed
-- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPolygonF & polygon) const` → `item`: borrowed
-- `QPainterPath QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPainterPath & path) const` → `item`: borrowed
-- `QPointF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPointF & point) const` → `item`: borrowed
-- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QRectF & rect) const` → `item`: borrowed
-- `QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem * item, const QRectF & rect) const` → `item`: borrowed
-- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPolygonF & polygon) const` → `item`: borrowed
-- `QPainterPath QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPainterPath & path) const` → `item`: borrowed
-- `QPointF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y) const` → `item`: borrowed
-- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `item`: borrowed
-- `QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `item`: borrowed
-- `QPointF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y) const` → `item`: borrowed
-- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `item`: borrowed
-- `QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `item`: borrowed
-- `QGraphicsItem * QGraphicsItem::commonAncestorItem(const QGraphicsItem * other) const` → `other`: borrowed
-
-### QGraphicsScene
-
-- `void QGraphicsScene::render(QPainter * painter, const QRectF & target = …, const QRectF & source = …, Qt::AspectRatioMode aspectRatioMode = …)` → `painter`: borrowed
-- `QGraphicsItem * QGraphicsScene::activePanel() const` → return: borrowed
-- `void QGraphicsScene::setActivePanel(QGraphicsItem * item)` → `item`: borrowed
-- `bool QGraphicsScene::sendEvent(QGraphicsItem * item, QEvent * event)` → `item`: borrowed, `event`: borrowed
-- `void QGraphicsScene::focusItemChanged(QGraphicsItem * newFocus, QGraphicsItem * oldFocus, Qt::FocusReason reason)` → `newFocus`: borrowed, `oldFocus`: borrowed
-
-### QGraphicsTextItem
-
-- `bool QGraphicsTextItem::isObscuredBy(const QGraphicsItem * item) const` → `item`: borrowed
-- `void QGraphicsTextItem::setDocument(QTextDocument * document)` → `document`: borrowed
-- `QTextDocument * QGraphicsTextItem::document() const` → return: borrowed
-
-### QGraphicsView
-
-- `QGraphicsView::QGraphicsView(QGraphicsScene * scene, QWidget * parent = …)` → `scene`: borrowed
-- `void QGraphicsView::centerOn(const QGraphicsItem * item)` → `item`: borrowed
-- `void QGraphicsView::ensureVisible(const QGraphicsItem * item, int xmargin = …, int ymargin = …)` → `item`: borrowed
-- `void QGraphicsView::fitInView(const QGraphicsItem * item, Qt::AspectRatioMode aspectRadioMode = …)` → `item`: borrowed
-- `void QGraphicsView::render(QPainter * painter, const QRectF & target = …, const QRect & source = …, Qt::AspectRatioMode aspectRatioMode = …)` → `painter`: borrowed
-
-### QGuiApplication
-
-- `void QGuiApplication::screenAdded(QScreen * screen)` → `screen`: borrowed
-- `void QGuiApplication::screenRemoved(QScreen * screen)` → `screen`: borrowed
-- `void QGuiApplication::primaryScreenChanged(QScreen * screen)` → `screen`: borrowed
-- `void QGuiApplication::focusObjectChanged(QObject * focusObject)` → `focusObject`: borrowed
-
-### QInputDialog
-
-- `QString QInputDialog::getText(QWidget * parent, const QString & title, const QString & label, QLineEdit::EchoMode echo = …, const QString & text = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)` → `parent`: borrowed
-- `QString QInputDialog::getMultiLineText(QWidget * parent, const QString & title, const QString & label, const QString & text = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)` → `parent`: borrowed
-- `QString QInputDialog::getItem(QWidget * parent, const QString & title, const QString & label, const QStringList & items, int current = …, bool editable = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)` → `parent`: borrowed
-- `int QInputDialog::getInt(QWidget * parent, const QString & title, const QString & label, int value = …, int minValue = …, int maxValue = …, int step = …, bool * ok = …, Qt::WindowFlags flags = …)` → `parent`: borrowed
-- `double QInputDialog::getDouble(QWidget * parent, const QString & title, const QString & label, double value = …, double minValue = …, double maxValue = …, int decimals = …, bool * ok = …, Qt::WindowFlags flags = …, double step = …)` → `parent`: borrowed
-
-### QItemSelectionModel
-
-- `QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent)` → `model`: borrowed
-- `const QAbstractItemModel * QItemSelectionModel::model() const` → return: borrowed
-- `void QItemSelectionModel::setModel(QAbstractItemModel * model)` → `model`: borrowed
-- `void QItemSelectionModel::modelChanged(QAbstractItemModel * model)` → `model`: borrowed
-
-### QLayout
-
-- `QLayout * QLayout::layout()` → return: borrowed
-- `QSize QLayout::closestAcceptableSize(const QWidget * w, const QSize & s)` → `w`: borrowed
-
-### QLineEdit
-
-- `void QLineEdit::timerEvent(QTimerEvent *)` → `timerEvent`: borrowed
-
-### QListWidget
-
-- `QWidget * QListWidget::itemWidget(QListWidgetItem * item) const` → `item`: borrowed
-- `void QListWidget::setItemWidget(QListWidgetItem * item, QWidget * widget)` → `item`: borrowed
-- `QList<QListWidgetItem *> QListWidget::items(const QMimeData * data) const` → `data`: borrowed, return: borrowed
-- `void QListWidget::itemPressed(QListWidgetItem * item)` → `item`: borrowed
-- `void QListWidget::itemClicked(QListWidgetItem * item)` → `item`: borrowed
-- `void QListWidget::itemDoubleClicked(QListWidgetItem * item)` → `item`: borrowed
-- `void QListWidget::itemActivated(QListWidgetItem * item)` → `item`: borrowed
-- `void QListWidget::itemEntered(QListWidgetItem * item)` → `item`: borrowed
-- `void QListWidget::itemChanged(QListWidgetItem * item)` → `item`: borrowed
-- `void QListWidget::currentItemChanged(QListWidgetItem * current, QListWidgetItem * previous)` → `current`: borrowed, `previous`: borrowed
-
-### QMainWindow
-
-- `void QMainWindow::insertToolBar(QToolBar * before, QToolBar * toolbar)` → `before`: borrowed
-- `void QMainWindow::tabifiedDockWidgetActivated(QDockWidget * dockWidget)` → `dockWidget`: borrowed
-
-### QMdiArea
-
-- `void QMdiArea::subWindowActivated(QMdiSubWindow *)` → `mdiSubWindow`: borrowed
-
-### QMdiSubWindow
-
-- `QWidget * QMdiSubWindow::maximizedButtonsWidget() const` → return: borrowed
-- `QWidget * QMdiSubWindow::maximizedSystemMenuIconWidget() const` → return: borrowed
-
-### QMenu
-
-- `void QMenu::setNoReplayFor(QWidget * widget)` → `widget`: borrowed
-- `void QMenu::triggered(QAction * action)` → `action`: borrowed
-- `void QMenu::hovered(QAction * action)` → `action`: borrowed
-- `QMenu * QMenu::menuInAction(const QAction * action)` → `action`: borrowed
-
-### QMenuBar
-
-- `QRect QMenuBar::actionGeometry(QAction *) const` → `action`: borrowed
-- `QAction * QMenuBar::actionAt(const QPoint &) const` → return: borrowed
-- `void QMenuBar::triggered(QAction * action)` → `action`: borrowed
-- `void QMenuBar::hovered(QAction * action)` → `action`: borrowed
-
-### QMessageBox
-
-- `StandardButton QMessageBox::standardButton(QAbstractButton * button) const` → `button`: borrowed
-- `void QMessageBox::buttonClicked(QAbstractButton * button)` → `button`: borrowed
-
-### QModelIndex
-
-- `const QAbstractItemModel * QModelIndex::model() const` → return: borrowed
-
-### QObject
-
-- `bool QObject::event(QEvent * event)` → `event`: borrowed
-- `bool QObject::eventFilter(QObject * watched, QEvent * event)` → `watched`: borrowed, `event`: borrowed
-- `void QObject::installEventFilter(QObject * filterObj)` → `filterObj`: borrowed
-- `void QObject::removeEventFilter(QObject * obj)` → `obj`: borrowed
-
-### QPersistentModelIndex
-
-- `const QAbstractItemModel * QPersistentModelIndex::model() const` → return: borrowed
-
-### QPointerEvent
-
-- `QObject * QPointerEvent::exclusiveGrabber(const QEventPoint & point) const` → return: borrowed
-- `void QPointerEvent::setExclusiveGrabber(const QEventPoint & point, QObject * exclusiveGrabber)` → `exclusiveGrabber`: borrowed
-- `bool QPointerEvent::addPassiveGrabber(const QEventPoint & point, QObject * grabber)` → `grabber`: borrowed
-- `bool QPointerEvent::removePassiveGrabber(const QEventPoint & point, QObject * grabber)` → `grabber`: borrowed
-
-### QScrollBar
-
-- `QMenu * QScrollBar::createStandardContextMenu(QPoint position)` → return: borrowed
-
-### QSinglePointEvent
-
-- `QObject * QSinglePointEvent::exclusivePointGrabber() const` → return: borrowed
-- `void QSinglePointEvent::setExclusivePointGrabber(QObject * exclusiveGrabber)` → `exclusiveGrabber`: borrowed
-
-### QStackedLayout
-
-- `QStackedLayout::QStackedLayout(QLayout * parentLayout)` → `parentLayout`: borrowed
-
-### QStandardItemModel
-
-- `void QStandardItemModel::itemChanged(QStandardItem * item)` → `item`: borrowed
-
-### QStyle
-
-- `void QStyle::polish(QWidget * widget)` → `widget`: borrowed
-- `void QStyle::unpolish(QWidget * widget)` → `widget`: borrowed
-- `void QStyle::polish(QApplication * application)` → `application`: borrowed
-- `void QStyle::unpolish(QApplication * application)` → `application`: borrowed
-- `void QStyle::drawItemText(QPainter * painter, const QRect & rect, int flags, const QPalette & pal, bool enabled, const QString & text, QPalette::ColorRole textRole = …) const` → `painter`: borrowed
-- `void QStyle::drawItemPixmap(QPainter * painter, const QRect & rect, int alignment, const QPixmap & pixmap) const` → `painter`: borrowed
-
-### QTabBar
-
-- `void QTabBar::setTabButton(int index, ButtonPosition position, QWidget * widget)` → `widget`: borrowed
-- `QWidget * QTabBar::tabButton(int index, ButtonPosition position) const` → return: borrowed
-
-### QTableWidget
-
-- `QList<QTableWidgetItem *> QTableWidget::items(const QMimeData * data) const` → `data`: borrowed, return: borrowed
-- `void QTableWidget::itemPressed(QTableWidgetItem * item)` → `item`: borrowed
-- `void QTableWidget::itemClicked(QTableWidgetItem * item)` → `item`: borrowed
-- `void QTableWidget::itemDoubleClicked(QTableWidgetItem * item)` → `item`: borrowed
-- `void QTableWidget::itemActivated(QTableWidgetItem * item)` → `item`: borrowed
-- `void QTableWidget::itemEntered(QTableWidgetItem * item)` → `item`: borrowed
-- `void QTableWidget::itemChanged(QTableWidgetItem * item)` → `item`: borrowed
-- `void QTableWidget::currentItemChanged(QTableWidgetItem * current, QTableWidgetItem * previous)` → `current`: borrowed, `previous`: borrowed
-
-### QTextDocument
-
-- `void QTextDocument::drawContents(QPainter * painter, const QRectF & rect = …)` → `painter`: borrowed
-
-### QToolBar
-
-- `QAction * QToolBar::insertWidget(QAction * before, QWidget * widget)` → `before`: borrowed
-- `QWidget * QToolBar::widgetForAction(QAction * action) const` → `action`: borrowed
-- `void QToolBar::actionTriggered(QAction * action)` → `action`: borrowed
-
-### QToolButton
-
-- `void QToolButton::triggered(QAction *)` → `action`: borrowed
-
-### QTreeWidget
-
-- `QWidget * QTreeWidget::itemWidget(QTreeWidgetItem * item, int column) const` → `item`: borrowed
-- `void QTreeWidget::setItemWidget(QTreeWidgetItem * item, int column, QWidget * widget)` → `item`: borrowed
-- `QTreeWidgetItem * QTreeWidget::itemAbove(const QTreeWidgetItem * item) const` → `item`: borrowed
-- `QTreeWidgetItem * QTreeWidget::itemBelow(const QTreeWidgetItem * item) const` → `item`: borrowed
-- `void QTreeWidget::itemPressed(QTreeWidgetItem * item, int column)` → `item`: borrowed
-- `void QTreeWidget::itemClicked(QTreeWidgetItem * item, int column)` → `item`: borrowed
-- `void QTreeWidget::itemDoubleClicked(QTreeWidgetItem * item, int column)` → `item`: borrowed
-- `void QTreeWidget::itemActivated(QTreeWidgetItem * item, int column)` → `item`: borrowed
-- `void QTreeWidget::itemEntered(QTreeWidgetItem * item, int column)` → `item`: borrowed
-- `void QTreeWidget::itemChanged(QTreeWidgetItem * item, int column)` → `item`: borrowed
-- `void QTreeWidget::itemExpanded(QTreeWidgetItem * item)` → `item`: borrowed
-- `void QTreeWidget::itemCollapsed(QTreeWidgetItem * item)` → `item`: borrowed
-- `void QTreeWidget::currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous)` → `current`: borrowed, `previous`: borrowed
-
-### QWidget
-
-- `QWidget * QWidget::topLevelWidget() const` → return: borrowed
-- `void QWidget::stackUnder(QWidget *)` → `widget`: borrowed
-- `void QWidget::setLayout(QLayout *)` → `layout`: borrowed
-- `QList<QAction *> QWidget::actions() const` → return: borrowed
-- `QScreen * QWidget::screen() const` → return: borrowed
-- `void QWidget::setScreen(QScreen *)` → `screen`: borrowed
-- `QWidget * QWidget::mouseGrabber()` → return: borrowed
-- `QWidget * QWidget::keyboardGrabber()` → return: borrowed
-
-### QWidgetAction
-
-- `QWidget * QWidgetAction::requestWidget(QWidget * parent)` → `parent`: borrowed
-
-## Numbered overload names (165)
-
-
-### QCommandLinkButton
-
-- `QCommandLinkButton::QCommandLinkButton(const QString & text, const QString & description, QWidget * parent = …)` → `NewQCommandLinkButtonWithText2`
-
-### QCompleter
-
-- `void QCompleter::activated(const QModelIndex & index)` → `EmitActivated2`
-- `void QCompleter::highlighted(const QModelIndex & index)` → `EmitHighlighted2`
-
-### QDate
-
-- `QString QDate::toString(const QString & format) const` → `ToString2`
-- `QString QDate::toString(QStringView format) const` → `ToString3`
-- `QDate QDate::fromString(const QString & string, Qt::DateFormat format = …)` → `QDateFromString2`
-- `QDate QDate::fromString(QStringView string, QStringView format, int baseYear = …)` → `QDateFromString3`
-- `QDate QDate::fromString(const QString & string, QStringView format, int baseYear = …)` → `QDateFromString4`
-- `QDate QDate::fromString(const QString & string, const QString & format, int baseYear = …)` → `QDateFromString5`
-
-### QDateTime
-
-- `QString QDateTime::toString(const QString & format) const` → `ToString2`
-- `QString QDateTime::toString(QStringView format) const` → `ToString3`
-- `QDateTime QDateTime::fromString(const QString & string, Qt::DateFormat format = …)` → `QDateTimeFromString2`
-- `QDateTime QDateTime::fromString(QStringView string, QStringView format, int baseYear = …)` → `QDateTimeFromString3`
-- `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear = …)` → `QDateTimeFromString4`
-- `QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear = …)` → `QDateTimeFromString5`
-
-### QDialogButtonBox
-
-- `QDialogButtonBox::QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation, QWidget * parent = …)` → `NewQDialogButtonBoxWithButtons2`
-
-### QDoubleValidator
-
-- `void QDoubleValidator::setRange(double bottom, double top)` → `SetRange2`
-
-### QFile
-
-- `QFile::QFile(const QString & name, QObject * parent)` → `NewQFileWithName2`
-- `bool QFile::open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags = …)` → `Open2`
-- `QString QFile::decodeName(const char * localFileName)` → `QFileDecodeName2`
-
-### QGraphicsEllipseItem
-
-- `void QGraphicsEllipseItem::setRect(qreal x, qreal y, qreal w, qreal h)` → `SetRect2`
-
-### QGraphicsItem
-
-- `void QGraphicsItem::setPos(qreal x, qreal y)` → `SetPos2`
-- `void QGraphicsItem::ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = …, int ymargin = …)` → `EnsureVisible2`
-- `void QGraphicsItem::setTransformOriginPoint(qreal ax, qreal ay)` → `SetTransformOriginPoint2`
-- `bool QGraphicsItem::isObscured(qreal x, qreal y, qreal w, qreal h) const` → `IsObscured2`
-- `void QGraphicsItem::update(qreal x, qreal y, qreal width, qreal height)` → `Update2`
-- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QRectF & rect) const` → `MapToItem2`
-- `QPolygonF QGraphicsItem::mapToParent(const QRectF & rect) const` → `MapToParent2`
-- `QPolygonF QGraphicsItem::mapToScene(const QRectF & rect) const` → `MapToScene2`
-- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPolygonF & polygon) const` → `MapToItem3`
-- `QPolygonF QGraphicsItem::mapToParent(const QPolygonF & polygon) const` → `MapToParent3`
-- `QPolygonF QGraphicsItem::mapToScene(const QPolygonF & polygon) const` → `MapToScene3`
-- `QPainterPath QGraphicsItem::mapToItem(const QGraphicsItem * item, const QPainterPath & path) const` → `MapToItem4`
-- `QPainterPath QGraphicsItem::mapToParent(const QPainterPath & path) const` → `MapToParent4`
-- `QPainterPath QGraphicsItem::mapToScene(const QPainterPath & path) const` → `MapToScene4`
-- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QRectF & rect) const` → `MapFromItem2`
-- `QPolygonF QGraphicsItem::mapFromParent(const QRectF & rect) const` → `MapFromParent2`
-- `QPolygonF QGraphicsItem::mapFromScene(const QRectF & rect) const` → `MapFromScene2`
-- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPolygonF & polygon) const` → `MapFromItem3`
-- `QPolygonF QGraphicsItem::mapFromParent(const QPolygonF & polygon) const` → `MapFromParent3`
-- `QPolygonF QGraphicsItem::mapFromScene(const QPolygonF & polygon) const` → `MapFromScene3`
-- `QPainterPath QGraphicsItem::mapFromItem(const QGraphicsItem * item, const QPainterPath & path) const` → `MapFromItem4`
-- `QPainterPath QGraphicsItem::mapFromParent(const QPainterPath & path) const` → `MapFromParent4`
-- `QPainterPath QGraphicsItem::mapFromScene(const QPainterPath & path) const` → `MapFromScene4`
-- `QPointF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y) const` → `MapToItem5`
-- `QPointF QGraphicsItem::mapToParent(qreal x, qreal y) const` → `MapToParent5`
-- `QPointF QGraphicsItem::mapToScene(qreal x, qreal y) const` → `MapToScene5`
-- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `MapToItem6`
-- `QPolygonF QGraphicsItem::mapToParent(qreal x, qreal y, qreal w, qreal h) const` → `MapToParent6`
-- `QPolygonF QGraphicsItem::mapToScene(qreal x, qreal y, qreal w, qreal h) const` → `MapToScene6`
-- `QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `MapRectToItem2`
-- `QRectF QGraphicsItem::mapRectToParent(qreal x, qreal y, qreal w, qreal h) const` → `MapRectToParent2`
-- `QRectF QGraphicsItem::mapRectToScene(qreal x, qreal y, qreal w, qreal h) const` → `MapRectToScene2`
-- `QPointF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y) const` → `MapFromItem5`
-- `QPointF QGraphicsItem::mapFromParent(qreal x, qreal y) const` → `MapFromParent5`
-- `QPointF QGraphicsItem::mapFromScene(qreal x, qreal y) const` → `MapFromScene5`
-- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `MapFromItem6`
-- `QPolygonF QGraphicsItem::mapFromParent(qreal x, qreal y, qreal w, qreal h) const` → `MapFromParent6`
-- `QPolygonF QGraphicsItem::mapFromScene(qreal x, qreal y, qreal w, qreal h) const` → `MapFromScene6`
-- `QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const` → `MapRectFromItem2`
-- `QRectF QGraphicsItem::mapRectFromParent(qreal x, qreal y, qreal w, qreal h) const` → `MapRectFromParent2`
-- `QRectF QGraphicsItem::mapRectFromScene(qreal x, qreal y, qreal w, qreal h) const` → `MapRectFromScene2`
-
-### QGraphicsPixmapItem
-
-- `void QGraphicsPixmapItem::setOffset(qreal x, qreal y)` → `SetOffset2`
-
-### QGraphicsRectItem
-
-- `void QGraphicsRectItem::setRect(qreal x, qreal y, qreal w, qreal h)` → `SetRect2`
-
-### QGraphicsScene
-
-- `void QGraphicsScene::setSceneRect(qreal x, qreal y, qreal w, qreal h)` → `SetSceneRect2`
-- `QList<QGraphicsItem *> QGraphicsScene::items(const QPointF & pos, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const` → `Items2`
-- `QList<QGraphicsItem *> QGraphicsScene::items(const QRectF & rect, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const` → `Items3`
-- `QList<QGraphicsItem *> QGraphicsScene::items(const QPolygonF & polygon, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const` → `Items4`
-- `QList<QGraphicsItem *> QGraphicsScene::items(const QPainterPath & path, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const` → `Items5`
-- `QList<QGraphicsItem *> QGraphicsScene::items(qreal x, qreal y, qreal w, qreal h, Qt::ItemSelectionMode mode, Qt::SortOrder order, const QTransform & deviceTransform = …) const` → `Items6`
-- `QGraphicsItem * QGraphicsScene::itemAt(qreal x, qreal y, const QTransform & deviceTransform) const` → `ItemAt2`
-- `void QGraphicsScene::setSelectionArea(const QPainterPath & path, Qt::ItemSelectionOperation selectionOperation = …, Qt::ItemSelectionMode mode = …, const QTransform & deviceTransform = …)` → `SetSelectionArea2`
-- `void QGraphicsScene::update(const QRectF & rect = …)` → `Update2`
-- `void QGraphicsScene::invalidate(const QRectF & rect = …, SceneLayers layers = …)` → `Invalidate2`
-
-### QGraphicsView
-
-- `void QGraphicsView::setSceneRect(qreal x, qreal y, qreal w, qreal h)` → `SetSceneRect2`
-- `void QGraphicsView::centerOn(qreal x, qreal y)` → `CenterOn2`
-- `void QGraphicsView::centerOn(const QGraphicsItem * item)` → `CenterOn3`
-- `void QGraphicsView::ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = …, int ymargin = …)` → `EnsureVisible2`
-- `void QGraphicsView::ensureVisible(const QGraphicsItem * item, int xmargin = …, int ymargin = …)` → `EnsureVisible3`
-- `void QGraphicsView::fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode aspectRadioMode = …)` → `FitInView2`
-- `void QGraphicsView::fitInView(const QGraphicsItem * item, Qt::AspectRatioMode aspectRadioMode = …)` → `FitInView3`
-- `QList<QGraphicsItem *> QGraphicsView::items(const QPoint & pos) const` → `Items2`
-- `QList<QGraphicsItem *> QGraphicsView::items(int x, int y) const` → `Items3`
-- `QList<QGraphicsItem *> QGraphicsView::items(const QRect & rect, Qt::ItemSelectionMode mode = …) const` → `Items4`
-- `QList<QGraphicsItem *> QGraphicsView::items(int x, int y, int w, int h, Qt::ItemSelectionMode mode = …) const` → `Items5`
-- `QList<QGraphicsItem *> QGraphicsView::items(const QPolygon & polygon, Qt::ItemSelectionMode mode = …) const` → `Items6`
-- `QList<QGraphicsItem *> QGraphicsView::items(const QPainterPath & path, Qt::ItemSelectionMode mode = …) const` → `Items7`
-- `QGraphicsItem * QGraphicsView::itemAt(int x, int y) const` → `ItemAt2`
-- `QPolygonF QGraphicsView::mapToScene(const QRect & rect) const` → `MapToScene2`
-- `QPolygonF QGraphicsView::mapToScene(const QPolygon & polygon) const` → `MapToScene3`
-- `QPainterPath QGraphicsView::mapToScene(const QPainterPath & path) const` → `MapToScene4`
-- `QPolygon QGraphicsView::mapFromScene(const QRectF & rect) const` → `MapFromScene2`
-- `QPolygon QGraphicsView::mapFromScene(const QPolygonF & polygon) const` → `MapFromScene3`
-- `QPainterPath QGraphicsView::mapFromScene(const QPainterPath & path) const` → `MapFromScene4`
-- `QPointF QGraphicsView::mapToScene(int x, int y) const` → `MapToScene5`
-- `QPolygonF QGraphicsView::mapToScene(int x, int y, int w, int h) const` → `MapToScene6`
-- `QPoint QGraphicsView::mapFromScene(qreal x, qreal y) const` → `MapFromScene5`
-- `QPolygon QGraphicsView::mapFromScene(qreal x, qreal y, qreal w, qreal h) const` → `MapFromScene6`
-
-### QHeaderView
-
-- `int QHeaderView::logicalIndexAt(int x, int y) const` → `LogicalIndexAt2`
-- `int QHeaderView::logicalIndexAt(const QPoint & pos) const` → `LogicalIndexAt3`
-- `void QHeaderView::setSectionResizeMode(int logicalIndex, ResizeMode mode)` → `SetSectionResizeMode2`
-
-### QIODevice
-
-- `qint64 QIODevice::write(const char * data)` → `Write2`
-- `qint64 QIODevice::write(const QByteArray & data)` → `Write3`
-
-### QImage
-
-- `QImage QImage::convertToFormat(Format f, const QList<QRgb> & colorTable, Qt::ImageConversionFlags flags = …) const` → `ConvertToFormat2`
-
-### QLCDNumber
-
-- `bool QLCDNumber::checkOverflow(int num) const` → `CheckOverflow2`
-- `void QLCDNumber::display(int num)` → `Display2`
-- `void QLCDNumber::display(double num)` → `Display3`
-
-### QObject
-
-- `void QObject::killTimer(Qt::TimerId id)` → `KillTimer2`
-
-### QPainter
-
-- `QRectF QPainter::boundingRect(const QRectF & rect, const QString & text, const QTextOption & o = …)` → `BoundingRect2`
-
-### QPainterPath
-
-- `void QPainterPath::moveTo(qreal x, qreal y)` → `MoveTo2`
-- `void QPainterPath::lineTo(qreal x, qreal y)` → `LineTo2`
-- `void QPainterPath::arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal angle)` → `ArcMoveTo2`
-- `void QPainterPath::arcTo(qreal x, qreal y, qreal w, qreal h, qreal startAngle, qreal arcLength)` → `ArcTo2`
-- `void QPainterPath::cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty)` → `CubicTo2`
-- `void QPainterPath::quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty)` → `QuadTo2`
-- `void QPainterPath::addRect(qreal x, qreal y, qreal w, qreal h)` → `AddRect2`
-- `void QPainterPath::addEllipse(qreal x, qreal y, qreal w, qreal h)` → `AddEllipse2`
-- `void QPainterPath::addEllipse(const QPointF & center, qreal rx, qreal ry)` → `AddEllipse3`
-- `void QPainterPath::addText(qreal x, qreal y, const QFont & f, const QString & text)` → `AddText2`
-- `void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)` → `AddRoundedRect2`
-- `bool QPainterPath::contains(const QRectF & rect) const` → `Contains2`
-- `void QPainterPath::translate(const QPointF & offset)` → `Translate2`
-- `QPainterPath QPainterPath::translated(const QPointF & offset) const` → `Translated2`
-- `bool QPainterPath::intersects(const QPainterPath & p) const` → `Intersects2`
-- `bool QPainterPath::contains(const QPainterPath & p) const` → `Contains3`
-
-### QPalette
-
-- `QPalette::QPalette(Qt::GlobalColor button)` → `NewQPaletteWithButton2`
-- `QPalette::QPalette(const QColor & button, const QColor & window)` → `NewQPaletteWithButton3`
-- `QPalette::QPalette(const QColor & windowText, const QColor & window, const QColor & light, const QColor & dark, const QColor & mid, const QColor & text, const QColor & base)` → `NewQPaletteWithWindowText2`
-- `void QPalette::setColor(ColorRole cr, const QColor & color)` → `SetColor2`
-- `void QPalette::setBrush(ColorGroup cg, ColorRole cr, const QBrush & brush)` → `SetBrush2`
-- `const QColor & QPalette::color(ColorRole cr) const` → `Color2`
-- `const QBrush & QPalette::brush(ColorRole cr) const` → `Brush2`
-
-### QRegion
-
-- `bool QRegion::contains(const QRect & r) const` → `Contains2`
-- `void QRegion::translate(const QPoint & p)` → `Translate2`
-- `QRegion QRegion::translated(const QPoint & p) const` → `Translated2`
-- `QRegion QRegion::united(const QRect & r) const` → `United2`
-- `QRegion QRegion::intersected(const QRect & r) const` → `Intersected2`
-- `bool QRegion::intersects(const QRect & r) const` → `Intersects2`
-
-### QScrollBar
-
-- `QScrollBar::QScrollBar(Qt::Orientation, QWidget * parent = …)` → `NewQScrollBar2`
-
-### QSettings
-
-- `QSettings::QSettings(Scope scope, QObject * parent = …)` → `NewQSettingsWithScope2`
-- `QVariant QSettings::value(QAnyStringView key) const` → `Value2`
-
-### QStyle
-
-- `void QStyle::polish(QApplication * application)` → `Polish2`
-- `void QStyle::unpolish(QApplication * application)` → `Unpolish2`
-
-### QSystemTrayIcon
-
-- `void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, QSystemTrayIcon::MessageIcon icon = …, int msecs = …)` → `ShowMessage2`
-
-### QTabBar
-
-- `int QTabBar::addTab(const QIcon & icon, const QString & text)` → `AddTab2`
-- `int QTabBar::insertTab(int index, const QIcon & icon, const QString & text)` → `InsertTab2`
-
-### QTime
-
-- `QString QTime::toString(const QString & format) const` → `ToString2`
-- `QString QTime::toString(QStringView format) const` → `ToString3`
-- `QTime QTime::fromString(QStringView string, QStringView format)` → `QTimeFromString2`
-- `QTime QTime::fromString(const QString & string, QStringView format)` → `QTimeFromString3`
-- `QTime QTime::fromString(const QString & string, Qt::DateFormat format = …)` → `QTimeFromString4`
-- `QTime QTime::fromString(const QString & string, const QString & format)` → `QTimeFromString5`
-
-### QTimer
-
-- `void QTimer::start()` → `Start2`
-
-### QTransform
-
-- `QTransform::QTransform()` → `NewQTransform2`
-- `QTransform::QTransform(qreal h11, qreal h12, qreal h21, qreal h22, qreal dx, qreal dy)` → `NewQTransformWithH112`
-- `QPointF QTransform::map(const QPointF & p) const` → `Map2`
-- `QPolygonF QTransform::map(const QPolygonF & a) const` → `Map3`
-- `QPolygon QTransform::map(const QPolygon & a) const` → `Map4`
-- `QRegion QTransform::map(const QRegion & r) const` → `Map5`
-- `QPainterPath QTransform::map(const QPainterPath & p) const` → `Map6`
-- `QRectF QTransform::mapRect(const QRectF &) const` → `MapRect2`
-
-### QVariant
-
-- `QVariant::QVariant(QSizeF size)` → `NewQVariantWithSize2`
-- `QVariant::QVariant(QPointF pt)` → `NewQVariantWithPt2`
-- `QVariant::QVariant(QRectF rect)` → `NewQVariantWithRect2`
-- `QVariant::QVariant(const QPersistentModelIndex & modelIndex)` → `NewQVariantWithModelIndex2`
-
-## Skipped methods (613)
+Bound: 4661 constructors, methods and functions; 4661 need no review or are reviewed.
+
+## Default ownership rules (0)
+
+
+## Numbered overload names (0)
+
+
+## Skipped: missing type support (498)
+
+These bind once the generator learns the type. Counts by type:
+
+| Type | Methods |
+| --- | --- |
+| `QCalendar` | 31 |
+| `QTextCursor` | 16 |
+| `unsigned char * (out-parameter or buffer)` | 15 |
+| `QTextCharFormat` | 14 |
+| `QDataStream` | 12 |
+| `QTimeZone` | 12 |
+| `QFont::Tag` | 10 |
+| `QTransform & (out-parameter)` | 10 |
+| `QBitmap` | 9 |
+| `QRegularExpression` | 9 |
+| `QLocale` | 8 |
+| `QWindow` | 8 |
+| `int * (out-parameter or buffer)` | 8 |
+| `void` | 8 |
+| `QColorSpace` | 7 |
+| `QTextBlock` | 7 |
+| `QBindable<bool>` | 6 |
+| `QColorTransform` | 6 |
+| `QItemSelection` | 6 |
+| `QLineF` | 6 |
+| `QMetaType` | 6 |
+| `QRect & (out-parameter)` | 6 |
+| `QString & (out-parameter)` | 6 |
+| `std::function<QVariant (const QUrl &)>` | 6 |
+| `QBindable<int>` | 5 |
+| `QGraphicsWidget` | 5 |
+| `QLine` | 5 |
+| `QPicture` | 5 |
+| `QPoint` | 5 |
+| `QPointF` | 5 |
+| `QStyleOption` | 5 |
+| `QStyleOptionViewItem` | 5 |
+| `QTextOption` | 5 |
+| `std::chrono::duration<long, std::ratio<1, 1000>>` | 5 |
+| `QFontDatabase::WritingSystem` | 4 |
+| `QGraphicsEffect` | 4 |
+| `QKeyCombination` | 4 |
+| `QModelRoleDataSpan` | 4 |
+| `QSessionManager` | 4 |
+| `QTextEdit::ExtraSelection` | 4 |
+| `QTextOption::WrapMode` | 4 |
+| `char * (out-parameter or buffer)` | 4 |
+| `std::reverse_iterator<const QRect *>` | 4 |
+| `QBitArray` | 3 |
+| `QByteArrayView` | 3 |
+| `QEasingCurve` | 3 |
+| `QFormLayout::TakeRowResult` | 3 |
+| `QGradient::Preset` | 3 |
+| `QHash<QString, QVariant>` | 3 |
+| `QJsonArray` | 3 |
+| `QJsonDocument` | 3 |
+| `QJsonObject` | 3 |
+| `QJsonValue` | 3 |
+| `QMap<QString, QVariant>` | 3 |
+| `QPagedPaintDevice` | 3 |
+| `QPixelFormat` | 3 |
+| `QStaticText` | 3 |
+| `QStyleOptionComplex` | 3 |
+| `QTextItem` | 3 |
+| `QAbstractEventDispatcher` | 2 |
+| `QAbstractFileIconProvider` | 2 |
+| `QAbstractNativeEventFilter` | 2 |
+| `QBindable<QAbstractItemModel *>` | 2 |
+| `QBindable<Qt::CaseSensitivity>` | 2 |
+| `QBindingStorage` | 2 |
+| `QByteArray` | 2 |
+| `QDir` | 2 |
+| `QEventPoint` | 2 |
+| `QFlags<QDir::Filter>` | 2 |
+| `QFlags<QEventLoop::ProcessEventsFlag>` | 2 |
+| `QFontInfo` | 2 |
+| `QGradient` | 2 |
+| `QGraphicsItemGroup` | 2 |
+| `QGraphicsProxyWidget` | 2 |
+| `QGraphicsTransform` | 2 |
+| `QHash<int, QByteArray>` | 2 |
+| `QItemEditorFactory` | 2 |
+| `QList<QPolygonF>` | 2 |
+| `QMap<int, QVariant>` | 2 |
+| `QMovie` | 2 |
+| `QPlatformMenu` | 2 |
+| `QPointingDevice` | 2 |
+| `QSpan<const QRect>` | 2 |
+| `QStyleOptionGraphicsItem` | 2 |
+| `QTableWidgetSelectionRange` | 2 |
+| `QTextCursor::MoveOperation` | 2 |
+| `QTextFormat` | 2 |
+| `QTextFrame` | 2 |
+| `QThread` | 2 |
+| `QTranslator` | 2 |
+| `QUrlTwoFlags<QUrl::UrlFormattingOption, QUrl::ComponentFormattingOption>` | 2 |
+| `QUuid` | 2 |
+| `QVariant` | 2 |
+| `bool * (out-parameter or buffer)` | 2 |
+| `char *const[]` | 2 |
+| `std::filesystem::path` | 2 |
+| `QAbstractTextDocumentLayout` | 1 |
+| `QAbstractUndoItem` | 1 |
+| `QBackingStore` | 1 |
+| `QBasicTimer` | 1 |
+| `QBindable<QRegularExpression>` | 1 |
+| `QBindable<Qt::TimerType>` | 1 |
+| `QBrush` | 1 |
+| `QCursor` | 1 |
+| `QDateTime` | 1 |
+| `QGlyphRun` | 1 |
+| `QGraphicsLineItem` | 1 |
+| `QGraphicsPathItem` | 1 |
+| `QGraphicsPolygonItem` | 1 |
+| `QHelpEvent` | 1 |
+| `QIconEngine` | 1 |
+| `QImage` | 1 |
+| `QImageReader` | 1 |
+| `QInputDevice` | 1 |
+| `QInputDevice::DeviceType` | 1 |
+| `QInputMethod` | 1 |
+| `QLatin1String` | 1 |
+| `QList<QByteArray>` | 1 |
+| `QList<QString>` | 1 |
+| `QList<QVariant>` | 1 |
+| `QMap<QDate, QTextCharFormat>` | 1 |
+| `QPainter::PixmapFragment` | 1 |
+| `QPainterPath::Element` | 1 |
+| `QPalette` | 1 |
+| `QPartialOrdering` | 1 |
+| `QPen` | 1 |
+| `QPermission` | 1 |
+| `QPersistentModelIndex` | 1 |
+| `QPlatformMenuBar` | 1 |
+| `QPlatformNativeInterface` | 1 |
+| `QPlatformPixmap` | 1 |
+| `QPointer<QObject>` | 1 |
+| `QPointingDevice::PointerType` | 1 |
+| `QPointingDeviceUniqueId` | 1 |
+| `QRectF` | 1 |
+| `QSpan<char>` | 1 |
+| `QSpan<std::byte>` | 1 |
+| `QSpan<unsigned char>` | 1 |
+| `QStyleHints` | 1 |
+| `QStyleOptionButton` | 1 |
+| `QTextObject` | 1 |
+| `QTransform::Affine` | 1 |
+| `QUrl` | 1 |
+| `QUrlQuery` | 1 |
+| `QVector2D` | 1 |
+| `_IO_FILE` | 1 |
+| `bool (*)(QIODevice &, QMap<QString, QVariant> &)` | 1 |
+| `double * (out-parameter or buffer)` | 1 |
+| `std::chrono::duration<long, std::ratio<1, 1000000000>>` | 1 |
+| `std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000>>>` | 1 |
+| `std::function<void (const QString &, const QByteArray &)>` | 1 |
+| `std::initializer_list<QWidget *>` | 1 |
+| `std::optional<QFont>` | 1 |
+| `void (*)()` | 1 |
+
+## Skipped: missing type support, by class (498)
 
 
 ### QAbstractItemDelegate
@@ -613,17 +208,9 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QValidator::State QAbstractSpinBox::validate(QString & input, int & pos) const`: unsupported type "QString &" (pointer or out-parameter)
 - `void QAbstractSpinBox::fixup(QString & input) const`: unsupported type "QString &" (pointer or out-parameter)
 
-### QApplication
-
-- `QWidget * QApplication::widgetAt(int x, int y)`: skipped by overlay (use the QPoint overload)
-- `QWidget * QApplication::topLevelAt(int x, int y)`: skipped by overlay (use the QPoint overload)
-
 ### QBrush
 
-- `QBrush::QBrush(Qt::GlobalColor color, Qt::BrushStyle bs = …)`: skipped by overlay (use NewQBrushWithColor)
-- `QBrush::QBrush(Qt::GlobalColor color, const QPixmap & pixmap)`: skipped by overlay (use NewQBrushWithColorPixmap)
 - `QBrush::QBrush(const QGradient & gradient)`: unsupported type "const QGradient &" (unknown)
-- `void QBrush::setColor(Qt::GlobalColor color)`: skipped by overlay (use SetColor)
 - `const QGradient * QBrush::gradient() const`: return: unsupported type "const QGradient *" (pointer or out-parameter)
 
 ### QCalendarWidget
@@ -641,10 +228,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 ### QClipboard
 
 - `QString QClipboard::text(QString & subtype, Mode mode = …) const`: unsupported type "QString &" (pointer or out-parameter)
-
-### QColorDialog
-
-- `void QColorDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 
 ### QCommandLinkButton
 
@@ -667,8 +250,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QCursor::QCursor(const QBitmap & bitmap, const QBitmap & mask, int hotX = …, int hotY = …)`: unsupported type "const QBitmap &" (unknown)
 - `QBitmap QCursor::bitmap() const`: return: unsupported type "QBitmap" (unknown)
 - `QBitmap QCursor::mask() const`: return: unsupported type "QBitmap" (unknown)
-- `void QCursor::setPos(int x, int y)`: skipped by overlay (use QCursorSetPos(point))
-- `void QCursor::setPos(QScreen * screen, int x, int y)`: skipped by overlay (use QCursorSetPosOn)
 
 ### QDate
 
@@ -723,14 +304,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QTimeZone QDateTimeEdit::timeZone() const`: return: unsupported type "QTimeZone" (unknown)
 - `void QDateTimeEdit::setTimeZone(const QTimeZone & zone)`: unsupported type "const QTimeZone &" (unknown)
 
-### QDragEnterEvent
-
-- `QDragEnterEvent::QDragEnterEvent(const QPoint & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)`: deprecated or variadic
-
-### QDragMoveEvent
-
-- `QDragMoveEvent::QDragMoveEvent(const QPoint & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)`: deprecated or variadic
-
 ### QEventPoint
 
 - `QVector2D QEventPoint::velocity() const`: return: unsupported type "QVector2D" (unknown)
@@ -742,7 +315,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `std::filesystem::path QFile::filesystemFileName() const`: return: unsupported type "std::filesystem::path" (unknown)
 - `std::filesystem::path QFile::filesystemSymLinkTarget() const`: return: unsupported type "std::filesystem::path" (unknown)
 - `bool QFile::open(FILE * f, OpenMode ioFlags, FileHandleFlags handleFlags = …)`: unsupported type "_IO_FILE *" (pointer or out-parameter)
-- `QFile::QFile()`: redundant: call NewQFile(nil)
 
 ### QFileDevice
 
@@ -757,7 +329,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `void QFileDialog::setFilter(QDir::Filters filters)`: unsupported type "QFlags<QDir::Filter>" (flags of unbound enum)
 - `void QFileDialog::setIconProvider(QAbstractFileIconProvider * provider)`: unsupported type "QAbstractFileIconProvider *" (pointer or out-parameter)
 - `QAbstractFileIconProvider * QFileDialog::iconProvider() const`: return: unsupported type "QAbstractFileIconProvider *" (pointer or out-parameter)
-- `void QFileDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 - `void QFileDialog::getOpenFileContent(const QString & nameFilter, const std::function<void (const QString &, const QByteArray &)> & fileContentsReady, QWidget * parent = …)`: unsupported type "const std::function<void (const QString &, const QByteArray &)> &" (unknown)
 
 ### QFont
@@ -783,7 +354,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 ### QFontDialog
 
-- `void QFontDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 - `QFont QFontDialog::getFont(bool * ok, QWidget * parent = …)`: unsupported type "bool *" (pointer or out-parameter to primitive)
 - `QFont QFontDialog::getFont(bool * ok, const QFont & initial, QWidget * parent = …, const QString & title = …, FontDialogOptions options = …)`: unsupported type "bool *" (pointer or out-parameter to primitive)
 
@@ -791,7 +361,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 - `int QFontMetrics::horizontalAdvance(const QString &, const QTextOption & textOption) const`: unsupported type "const QTextOption &" (unknown)
 - `QRect QFontMetrics::boundingRect(const QString & text, const QTextOption & textOption) const`: unsupported type "const QTextOption &" (unknown)
-- `QRect QFontMetrics::boundingRect(int x, int y, int w, int h, int flags, const QString & text, int tabstops = …, int * tabarray = …) const`: skipped by overlay (use BoundingRectIn)
 - `QRect QFontMetrics::tightBoundingRect(const QString & text, const QTextOption & textOption) const`: unsupported type "const QTextOption &" (unknown)
 
 ### QFormLayout
@@ -815,19 +384,14 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QList<QGraphicsTransform *> QGraphicsItem::transformations() const`: return: unsupported type "QGraphicsTransform *" (pointer or out-parameter)
 - `void QGraphicsItem::setTransformations(const QList<QGraphicsTransform *> & transformations)`: unsupported type "QGraphicsTransform *" (pointer or out-parameter)
 - `void QGraphicsItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)`: unsupported type "const QStyleOptionGraphicsItem *" (pointer or out-parameter)
-- `const QGraphicsObject * QGraphicsItem::toGraphicsObject() const`: duplicate Go signature after dropping default arguments
 
 ### QGraphicsScene
 
-- `QGraphicsItemGroup * QGraphicsScene::createItemGroup(const QList<QGraphicsItem *> & items)`: skipped by overlay (QGraphicsItemGroup is not bound)
-- `void QGraphicsScene::destroyItemGroup(QGraphicsItemGroup * group)`: skipped by overlay (QGraphicsItemGroup is not bound)
 - `QGraphicsLineItem * QGraphicsScene::addLine(const QLineF & line, const QPen & pen = …)`: unsupported type "const QLineF &" (unknown)
 - `QGraphicsPathItem * QGraphicsScene::addPath(const QPainterPath & path, const QPen & pen = …, const QBrush & brush = …)`: return: unsupported type "QGraphicsPathItem *" (pointer or out-parameter)
 - `QGraphicsPolygonItem * QGraphicsScene::addPolygon(const QPolygonF & polygon, const QPen & pen = …, const QBrush & brush = …)`: return: unsupported type "QGraphicsPolygonItem *" (pointer or out-parameter)
 - `QGraphicsProxyWidget * QGraphicsScene::addWidget(QWidget * widget, Qt::WindowFlags wFlags = …)`: return: unsupported type "QGraphicsProxyWidget *" (pointer or out-parameter)
-- `QGraphicsEllipseItem * QGraphicsScene::addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen & pen = …, const QBrush & brush = …)`: skipped by overlay (use the QRectF overload)
 - `QGraphicsLineItem * QGraphicsScene::addLine(qreal x1, qreal y1, qreal x2, qreal y2, const QPen & pen = …)`: return: unsupported type "QGraphicsLineItem *" (pointer or out-parameter)
-- `QGraphicsRectItem * QGraphicsScene::addRect(qreal x, qreal y, qreal w, qreal h, const QPen & pen = …, const QBrush & brush = …)`: skipped by overlay (use the QRectF overload)
 - `QGraphicsWidget * QGraphicsScene::activeWindow() const`: return: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
 - `void QGraphicsScene::setActiveWindow(QGraphicsWidget * widget)`: unsupported type "QGraphicsWidget *" (pointer or out-parameter)
 
@@ -839,7 +403,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 ### QGridLayout
 
-- `void QGridLayout::addWidget(QWidget * w)`: skipped by overlay (use AddWidget(w, row, column))
 - `void QGridLayout::getItemPosition(int idx, int * row, int * column, int * rowSpan, int * columnSpan) const`: unsupported type "int *" (pointer or out-parameter to primitive)
 
 ### QGuiApplication
@@ -861,10 +424,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `void QGuiApplication::saveStateRequest(QSessionManager & sessionManager)`: signal: unsupported type "QSessionManager &" (pointer or out-parameter)
 - `void QGuiApplication::saveStateRequest(QSessionManager & sessionManager)`: unsupported type "QSessionManager &" (pointer or out-parameter)
 
-### QHBoxLayout
-
-- `QHBoxLayout::QHBoxLayout()`: redundant: call NewQHBoxLayout(nil)
-
 ### QIODevice
 
 - `qint64 QIODevice::read(char * data, qint64 maxlen)`: unsupported type "char *" (pointer or out-parameter to primitive)
@@ -879,8 +438,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 ### QIcon
 
 - `QIcon::QIcon(QIconEngine * engine)`: unsupported type "QIconEngine *" (pointer or out-parameter)
-- `QPixmap QIcon::pixmap(int w, int h, Mode mode = …, State state = …) const`: skipped by overlay (use Pixmap(size))
-- `void QIcon::paint(QPainter * painter, int x, int y, int w, int h, Qt::Alignment alignment = …, Mode mode = …, State state = …) const`: skipped by overlay (use Paint(painter, rect))
 
 ### QImage
 
@@ -889,24 +446,12 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
 - `QImage::QImage(const uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
 - `QImage::QImage(const char *const[] xpm)`: unsupported type "const char *const[]" (unknown)
-- `QImage QImage::copy(int x, int y, int w, int h) const`: skipped by overlay (use Copy(rect))
 - `uchar * QImage::bits()`: return: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
 - `const uchar * QImage::bits() const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
 - `const uchar * QImage::constBits() const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
 - `uchar * QImage::scanLine(int)`: return: unsupported type "unsigned char *" (pointer or out-parameter to primitive)
 - `const uchar * QImage::scanLine(int) const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
 - `const uchar * QImage::constScanLine(int) const`: return: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `bool QImage::valid(const QPoint & pt) const`: skipped by overlay (use Valid(x, y))
-- `int QImage::pixelIndex(const QPoint & pt) const`: skipped by overlay (use PixelIndex(x, y))
-- `QRgb QImage::pixel(const QPoint & pt) const`: skipped by overlay (use Pixel(x, y))
-- `void QImage::setPixel(const QPoint & pt, uint index_or_rgb)`: skipped by overlay (use SetPixel(x, y, v))
-- `QColor QImage::pixelColor(const QPoint & pt) const`: skipped by overlay (use PixelColor(x, y))
-- `void QImage::setPixelColor(const QPoint & pt, const QColor & c)`: skipped by overlay (use SetPixelColor(x, y, c))
-- `void QImage::fill(Qt::GlobalColor color)`: skipped by overlay (use FillColor)
-- `QImage QImage::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
-- `QImage QImage::mirrored(bool horizontally = …, bool vertically = …) const`: deprecated or variadic
-- `QImage QImage::mirrored(bool horizontally = …, bool vertically = …)`: deprecated or variadic
-- `void QImage::mirror(bool horizontally = …, bool vertically = …)`: deprecated or variadic
 - `QColorSpace QImage::colorSpace() const`: return: unsupported type "QColorSpace" (unknown)
 - `QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace) const`: unsupported type "const QColorSpace &" (unknown)
 - `QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …) const`: unsupported type "const QColorSpace &" (unknown)
@@ -927,14 +472,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QPixelFormat QImage::pixelFormat() const`: return: unsupported type "QPixelFormat" (unknown)
 - `QPixelFormat QImage::toPixelFormat(QImage::Format format)`: return: unsupported type "QPixelFormat" (unknown)
 - `QImage::Format QImage::toImageFormat(QPixelFormat format)`: unsupported type "QPixelFormat" (unknown)
-- `QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …)`: duplicate Go signature after dropping default arguments
-- `QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …)`: duplicate Go signature after dropping default arguments
-- `QImage QImage::rgbSwapped()`: duplicate Go signature after dropping default arguments
-- `QImage QImage::flipped(Qt::Orientations orient = …)`: duplicate Go signature after dropping default arguments
-
-### QInputDialog
-
-- `void QInputDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 
 ### QInputEvent
 
@@ -948,7 +485,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `void QItemSelectionModel::select(const QItemSelection & selection, QItemSelectionModel::SelectionFlags command)`: unsupported type "const QItemSelection &" (unknown)
 - `void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)`: signal: unsupported type "const QItemSelection &" (unknown)
 - `void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)`: unsupported type "const QItemSelection &" (unknown)
-- `QAbstractItemModel * QItemSelectionModel::model()`: duplicate Go signature after dropping default arguments
 
 ### QKeyEvent
 
@@ -976,10 +512,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 - `void QLayout::getContentsMargins(int * left, int * top, int * right, int * bottom) const`: unsupported type "int *" (pointer or out-parameter to primitive)
 
-### QListWidget
-
-- `QListWidgetItem * QListWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
-
 ### QListWidgetItem
 
 - `void QListWidgetItem::read(QDataStream & in)`: unsupported type "QDataStream &" (pointer or out-parameter)
@@ -993,14 +525,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 ### QMenuBar
 
 - `QPlatformMenuBar * QMenuBar::platformMenuBar()`: return: unsupported type "QPlatformMenuBar *" (pointer or out-parameter)
-
-### QMessageBox
-
-- `void QMessageBox::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
-- `StandardButton QMessageBox::information(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1 = …)`: skipped by overlay (obsolete overload)
-- `int QMessageBox::question(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
-- `int QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
-- `int QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
 
 ### QModelIndex
 
@@ -1023,74 +547,36 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QFontInfo QPainter::fontInfo() const`: return: unsupported type "QFontInfo" (unknown)
 - `void QPainter::setPen(QPen && pen)`: unsupported type "QPen &&" (rvalue reference)
 - `void QPainter::setBrush(QBrush && brush)`: unsupported type "QBrush &&" (rvalue reference)
-- `void QPainter::setBrush(Qt::GlobalColor color)`: skipped by overlay (use SetBrushColor)
-- `void QPainter::setBrushOrigin(int x, int y)`: skipped by overlay (use SetBrushOrigin)
-- `void QPainter::setClipRect(int x, int y, int w, int h, Qt::ClipOperation op = …)`: skipped by overlay (use SetClipRect)
-- `void QPainter::setWindow(int x, int y, int w, int h)`: skipped by overlay (use SetWindow)
-- `void QPainter::setViewport(int x, int y, int w, int h)`: skipped by overlay (use SetViewport)
-- `void QPainter::drawPoint(int x, int y)`: skipped by overlay (use DrawPoint)
 - `void QPainter::drawPoints(const QPointF * points, int pointCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
 - `void QPainter::drawPoints(const QPoint * points, int pointCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawLine(const QLineF & line)`: skipped by overlay (QLineF is not bound)
-- `void QPainter::drawLine(const QLine & line)`: skipped by overlay (QLine is not bound)
 - `void QPainter::drawLines(const QLineF * lines, int lineCount)`: unsupported type "const QLineF *" (pointer or out-parameter)
 - `void QPainter::drawLines(const QList<QLineF> & lines)`: unsupported type "QLineF" (unknown)
 - `void QPainter::drawLines(const QPointF * pointPairs, int lineCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
 - `void QPainter::drawLines(const QLine * lines, int lineCount)`: unsupported type "const QLine *" (pointer or out-parameter)
 - `void QPainter::drawLines(const QList<QLine> & lines)`: unsupported type "QLine" (unknown)
 - `void QPainter::drawLines(const QPoint * pointPairs, int lineCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawRect(int x1, int y1, int w, int h)`: skipped by overlay (use DrawRect)
 - `void QPainter::drawRects(const QRectF * rects, int rectCount)`: unsupported type "const QRectF *" (pointer or out-parameter)
 - `void QPainter::drawRects(const QRect * rects, int rectCount)`: unsupported type "const QRect *" (pointer or out-parameter)
-- `void QPainter::drawEllipse(int x, int y, int w, int h)`: skipped by overlay (use DrawEllipse)
 - `void QPainter::drawPolyline(const QPointF * points, int pointCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
 - `void QPainter::drawPolyline(const QPoint * points, int pointCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
 - `void QPainter::drawPolygon(const QPointF * points, int pointCount, Qt::FillRule fillRule = …)`: unsupported type "const QPointF *" (pointer or out-parameter)
 - `void QPainter::drawPolygon(const QPoint * points, int pointCount, Qt::FillRule fillRule = …)`: unsupported type "const QPoint *" (pointer or out-parameter)
 - `void QPainter::drawConvexPolygon(const QPointF * points, int pointCount)`: unsupported type "const QPointF *" (pointer or out-parameter)
 - `void QPainter::drawConvexPolygon(const QPoint * points, int pointCount)`: unsupported type "const QPoint *" (pointer or out-parameter)
-- `void QPainter::drawArc(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawArc)
-- `void QPainter::drawPie(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawPie)
-- `void QPainter::drawChord(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawChord)
-- `void QPainter::drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)`: skipped by overlay (use DrawRoundedRect)
-- `void QPainter::drawTiledPixmap(int x, int y, int w, int h, const QPixmap &, int sx = …, int sy = …)`: skipped by overlay (use DrawTiledPixmap)
 - `void QPainter::drawPicture(const QPointF & p, const QPicture & picture)`: unsupported type "const QPicture &" (unknown)
 - `void QPainter::drawPicture(int x, int y, const QPicture & picture)`: unsupported type "const QPicture &" (unknown)
 - `void QPainter::drawPicture(const QPoint & p, const QPicture & picture)`: unsupported type "const QPicture &" (unknown)
-- `void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap & pm, int sx, int sy, int sw, int sh)`: skipped by overlay (use DrawPixmapPart)
-- `void QPainter::drawPixmap(int x, int y, const QPixmap & pm, int sx, int sy, int sw, int sh)`: skipped by overlay (use DrawPixmapPart)
-- `void QPainter::drawPixmap(const QPointF & p, const QPixmap & pm, const QRectF & sr)`: skipped by overlay (use DrawPixmapPartF)
-- `void QPainter::drawPixmap(const QPoint & p, const QPixmap & pm, const QRect & sr)`: skipped by overlay (use DrawPixmapPart)
-- `void QPainter::drawPixmap(int x, int y, const QPixmap & pm)`: skipped by overlay (use DrawPixmap)
-- `void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap & pm)`: skipped by overlay (use DrawPixmapIn)
 - `void QPainter::drawPixmapFragments(const PixmapFragment * fragments, int fragmentCount, const QPixmap & pixmap, PixmapFragmentHints hints = …)`: unsupported type "const QPainter::PixmapFragment *" (pointer or out-parameter)
-- `void QPainter::drawImage(const QPointF & p, const QImage & image, const QRectF & sr, Qt::ImageConversionFlags flags = …)`: skipped by overlay (use DrawImagePartF)
-- `void QPainter::drawImage(const QPoint & p, const QImage & image, const QRect & sr, Qt::ImageConversionFlags flags = …)`: skipped by overlay (use DrawImagePart)
-- `void QPainter::drawImage(int x, int y, const QImage & image, int sx = …, int sy = …, int sw = …, int sh = …, Qt::ImageConversionFlags flags = …)`: skipped by overlay (use DrawImage)
 - `void QPainter::drawGlyphRun(const QPointF & position, const QGlyphRun & glyphRun)`: unsupported type "const QGlyphRun &" (unknown)
 - `void QPainter::drawStaticText(const QPointF & topLeftPosition, const QStaticText & staticText)`: unsupported type "const QStaticText &" (unknown)
 - `void QPainter::drawStaticText(const QPoint & topLeftPosition, const QStaticText & staticText)`: unsupported type "const QStaticText &" (unknown)
 - `void QPainter::drawStaticText(int left, int top, const QStaticText & staticText)`: unsupported type "const QStaticText &" (unknown)
-- `void QPainter::drawText(int x, int y, const QString & s)`: skipped by overlay (use DrawText)
-- `void QPainter::drawText(const QPointF & p, const QString & str, int tf, int justificationPadding)`: skipped by overlay (internal overload)
-- `void QPainter::drawText(int x, int y, int w, int h, int flags, const QString & text, QRect * br = …)`: skipped by overlay (use DrawTextIn)
-- `void QPainter::drawText(const QRectF & r, const QString & text, const QTextOption & o = …)`: skipped by overlay (QTextOption is not bound)
-- `QRect QPainter::boundingRect(int x, int y, int w, int h, int flags, const QString & text)`: skipped by overlay (use BoundingRect)
 - `void QPainter::drawTextItem(const QPointF & p, const QTextItem & ti)`: unsupported type "const QTextItem &" (unknown)
 - `void QPainter::drawTextItem(int x, int y, const QTextItem & ti)`: unsupported type "const QTextItem &" (unknown)
 - `void QPainter::drawTextItem(const QPoint & p, const QTextItem & ti)`: unsupported type "const QTextItem &" (unknown)
-- `void QPainter::fillRect(int x, int y, int w, int h, const QBrush &)`: skipped by overlay (use FillRectBrush)
-- `void QPainter::fillRect(int x, int y, int w, int h, const QColor & color)`: skipped by overlay (use FillRect)
-- `void QPainter::fillRect(int x, int y, int w, int h, Qt::GlobalColor c)`: skipped by overlay (use FillRect)
-- `void QPainter::fillRect(const QRect & r, Qt::GlobalColor c)`: skipped by overlay (use FillRect)
-- `void QPainter::fillRect(const QRectF & r, Qt::GlobalColor c)`: skipped by overlay (use FillRectF)
-- `void QPainter::fillRect(int x, int y, int w, int h, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrush)
-- `void QPainter::fillRect(const QRect & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrush)
-- `void QPainter::fillRect(const QRectF & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrushF)
 - `void QPainter::fillRect(int x, int y, int w, int h, QGradient::Preset preset)`: unsupported type "QGradient::Preset" (unknown)
 - `void QPainter::fillRect(const QRect & r, QGradient::Preset preset)`: unsupported type "QGradient::Preset" (unknown)
 - `void QPainter::fillRect(const QRectF & r, QGradient::Preset preset)`: unsupported type "QGradient::Preset" (unknown)
-- `void QPainter::eraseRect(int x, int y, int w, int h)`: skipped by overlay (use EraseRect)
 
 ### QPainterPath
 
@@ -1107,18 +593,14 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 ### QPixmap
 
 - `QPixmap::QPixmap(QPlatformPixmap * data)`: unsupported type "QPlatformPixmap *" (pointer or out-parameter)
-- `QPixmap::QPixmap(const QSize &)`: skipped by overlay (use NewQPixmapWithW(w, h))
 - `QPixmap::QPixmap(const char *const[] xpm)`: unsupported type "const char *const[]" (unknown)
 - `QBitmap QPixmap::mask() const`: return: unsupported type "QBitmap" (unknown)
 - `void QPixmap::setMask(const QBitmap &)`: unsupported type "const QBitmap &" (unknown)
 - `QBitmap QPixmap::createHeuristicMask(bool clipTight = …) const`: return: unsupported type "QBitmap" (unknown)
 - `QBitmap QPixmap::createMaskFromColor(const QColor & maskColor, Qt::MaskMode mode = …) const`: return: unsupported type "QBitmap" (unknown)
-- `QPixmap QPixmap::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
 - `QPixmap QPixmap::fromImageReader(QImageReader * imageReader, Qt::ImageConversionFlags flags = …)`: unsupported type "QImageReader *" (pointer or out-parameter)
 - `QPixmap QPixmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: unsupported type "QImage &&" (rvalue reference)
 - `bool QPixmap::loadFromData(const uchar * buf, uint len, const char * format = …, Qt::ImageConversionFlags flags = …)`: unsupported type "const unsigned char *" (pointer or out-parameter to primitive)
-- `QPixmap QPixmap::copy(int x, int y, int width, int height) const`: skipped by overlay (use Copy(rect))
-- `void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion * exposed = …)`: skipped by overlay (out parameter)
 
 ### QPlainTextEdit
 
@@ -1144,10 +626,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QEventPoint & QPointerEvent::point(qsizetype i)`: return: unsupported type "QEventPoint &" (pointer or out-parameter)
 - `QEventPoint * QPointerEvent::pointById(int id)`: return: unsupported type "QEventPoint *" (pointer or out-parameter)
 - `QList<QPointer<QObject>> QPointerEvent::passiveGrabbers(const QEventPoint & point) const`: return: unsupported type "QPointer<QObject>" (unknown)
-
-### QProgressDialog
-
-- `void QProgressDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 
 ### QRegion
 
@@ -1187,10 +665,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 - `void QSplitter::getRange(int index, int *, int *) const`: unsupported type "int *" (pointer or out-parameter to primitive)
 
-### QStackedLayout
-
-- `QStackedLayout::QStackedLayout()`: redundant: call NewQStackedLayout(nil)
-
 ### QStandardItem
 
 - `void QStandardItem::multiData(QModelRoleDataSpan roleDataSpan) const`: unsupported type "QModelRoleDataSpan" (unknown)
@@ -1224,7 +698,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 - `void QTableWidget::setRangeSelected(const QTableWidgetSelectionRange & range, bool select)`: unsupported type "const QTableWidgetSelectionRange &" (unknown)
 - `QList<QTableWidgetSelectionRange> QTableWidget::selectedRanges() const`: return: unsupported type "QTableWidgetSelectionRange" (unknown)
-- `QTableWidgetItem * QTableWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
 
 ### QTableWidgetItem
 
@@ -1234,7 +707,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 ### QTextDocument
 
 - `void QTextDocument::setDocumentLayout(QAbstractTextDocumentLayout * layout)`: unsupported type "QAbstractTextDocumentLayout *" (pointer or out-parameter)
-- `QAbstractTextDocumentLayout * QTextDocument::documentLayout() const`: skipped by overlay (QAbstractTextDocumentLayout is not bound)
 - `QTextCursor QTextDocument::find(const QString & subString, int from = …, FindFlags options = …) const`: return: unsupported type "QTextCursor" (unknown)
 - `QTextCursor QTextDocument::find(const QString & subString, const QTextCursor & cursor, FindFlags options = …) const`: unsupported type "const QTextCursor &" (unknown)
 - `QTextCursor QTextDocument::find(const QRegularExpression & expr, int from = …, FindFlags options = …) const`: unsupported type "const QRegularExpression &" (unknown)
@@ -1289,22 +761,14 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QBindable<int> QTimer::bindableInterval()`: return: unsupported type "QBindable<int>" (unknown)
 - `QBindable<Qt::TimerType> QTimer::bindableTimerType()`: return: unsupported type "QBindable<Qt::TimerType>" (unknown)
 - `QBindable<bool> QTimer::bindableSingleShot()`: return: unsupported type "QBindable<bool>" (unknown)
-- `void QTimer::singleShot(int msec, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
-- `void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 - `void QTimer::setInterval(std::chrono::milliseconds value)`: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
 - `std::chrono::milliseconds QTimer::intervalAsDuration() const`: return: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
 - `std::chrono::milliseconds QTimer::remainingTimeAsDuration() const`: return: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
-- `void QTimer::singleShot(std::chrono::nanoseconds value, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
-- `void QTimer::singleShot(std::chrono::nanoseconds interval, Qt::TimerType timerType, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 - `void QTimer::start(std::chrono::milliseconds value)`: unsupported type "std::chrono::duration<long, std::ratio<1, 1000>>" (unknown)
 
 ### QTimerEvent
 
 - `bool QTimerEvent::matches(const QBasicTimer & timer) const`: unsupported type "const QBasicTimer &" (unknown)
-
-### QToolBar
-
-- `QAction * QToolBar::actionAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
 
 ### QTransform
 
@@ -1324,10 +788,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `void QTransform::map(qreal x, qreal y, qreal * tx, qreal * ty) const`: unsupported type "double *" (pointer or out-parameter to primitive)
 - `Affine QTransform::asAffineMatrix()`: return: unsupported type "QTransform::Affine" (unknown)
 
-### QTreeWidget
-
-- `QTreeWidgetItem * QTreeWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
-
 ### QTreeWidgetItem
 
 - `void QTreeWidgetItem::read(QDataStream & in)`: unsupported type "QDataStream &" (pointer or out-parameter)
@@ -1339,10 +799,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QUrl QUrl::fromEncoded(QByteArrayView input, ParsingMode mode = …)`: unsupported type "QByteArrayView" (unknown)
 - `void QUrl::setQuery(const QUrlQuery & query)`: unsupported type "const QUrlQuery &" (unknown)
 - `bool QUrl::matches(const QUrl & url, FormattingOptions options) const`: unsupported type "QUrlTwoFlags<QUrl::UrlFormattingOption, QUrl::ComponentFormattingOption>" (unknown)
-
-### QVBoxLayout
-
-- `QVBoxLayout::QVBoxLayout()`: redundant: call NewQVBoxLayout(nil)
 
 ### QValidator
 
@@ -1413,11 +869,6 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 
 ### QWidget
 
-- `void QWidget::setMinimumSize(const QSize &)`: skipped by overlay (use SetMinimumSize(w, h))
-- `void QWidget::setMaximumSize(const QSize &)`: skipped by overlay (use SetMaximumSize(w, h))
-- `void QWidget::setSizeIncrement(const QSize &)`: skipped by overlay (use SetSizeIncrement(w, h))
-- `void QWidget::setBaseSize(const QSize &)`: skipped by overlay (use SetBaseSize(w, h))
-- `void QWidget::setFixedSize(const QSize &)`: skipped by overlay (use SetFixedSize(w, h))
 - `QFontInfo QWidget::fontInfo() const`: return: unsupported type "QFontInfo" (unknown)
 - `void QWidget::setMask(const QBitmap &)`: unsupported type "const QBitmap &" (unknown)
 - `QGraphicsEffect * QWidget::graphicsEffect() const`: return: unsupported type "QGraphicsEffect *" (pointer or out-parameter)
@@ -1426,6 +877,322 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QLocale QWidget::locale() const`: return: unsupported type "QLocale" (unknown)
 - `void QWidget::setTabOrder(std::initializer_list<QWidget *> widgets)`: unsupported type "std::initializer_list<QWidget *>" (unknown)
 - `QGraphicsProxyWidget * QWidget::graphicsProxyWidget() const`: return: unsupported type "QGraphicsProxyWidget *" (pointer or out-parameter)
+- `QBackingStore * QWidget::backingStore() const`: return: unsupported type "QBackingStore *" (pointer or out-parameter)
+- `QWindow * QWidget::windowHandle() const`: return: unsupported type "QWindow *" (pointer or out-parameter)
+
+## Skipped on purpose (189)
+
+
+### QApplication
+
+- `QWidget * QApplication::widgetAt(int x, int y)`: skipped by overlay (use the QPoint overload)
+- `QWidget * QApplication::topLevelAt(int x, int y)`: skipped by overlay (use the QPoint overload)
+
+### QBrush
+
+- `QBrush::QBrush(Qt::GlobalColor color, Qt::BrushStyle bs = …)`: skipped by overlay (use NewQBrushWithColor)
+- `QBrush::QBrush(Qt::GlobalColor color, const QPixmap & pixmap)`: skipped by overlay (use NewQBrushWithColorPixmap)
+- `void QBrush::setColor(Qt::GlobalColor color)`: skipped by overlay (use SetColor)
+
+### QColorDialog
+
+- `void QColorDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QCursor
+
+- `void QCursor::setPos(int x, int y)`: skipped by overlay (use QCursorSetPos(point))
+- `void QCursor::setPos(QScreen * screen, int x, int y)`: skipped by overlay (use QCursorSetPosOn)
+
+### QDate
+
+- `QString QDate::toString(QStringView format) const`: skipped by overlay (use the QString overload)
+- `QDate QDate::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
+- `QDate QDate::fromString(QStringView string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
+- `QDate QDate::fromString(const QString & string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
+
+### QDateTime
+
+- `QString QDateTime::toString(QStringView format) const`: skipped by overlay (use the QString overload)
+- `QDateTime QDateTime::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
+- `QDateTime QDateTime::fromString(QStringView string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
+- `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear = …)`: skipped by overlay (use the QString overload)
+
+### QDragEnterEvent
+
+- `QDragEnterEvent::QDragEnterEvent(const QPoint & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)`: deprecated or variadic
+
+### QDragMoveEvent
+
+- `QDragMoveEvent::QDragMoveEvent(const QPoint & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)`: deprecated or variadic
+
+### QFile
+
+- `QFile::QFile(const QString & name)`: skipped by overlay (use NewQFileWithName(name, nil))
+- `QString QFile::decodeName(const char * localFileName)`: skipped by overlay (use the []byte overload)
+- `QFile::QFile()`: redundant: call NewQFile(nil)
+
+### QFileDialog
+
+- `void QFileDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QFontDialog
+
+- `void QFontDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QFontMetrics
+
+- `QRect QFontMetrics::boundingRect(int x, int y, int w, int h, int flags, const QString & text, int tabstops = …, int * tabarray = …) const`: skipped by overlay (use BoundingRectIn)
+
+### QGraphicsEllipseItem
+
+- `void QGraphicsEllipseItem::setRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+
+### QGraphicsItem
+
+- `void QGraphicsItem::setPos(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
+- `void QGraphicsItem::ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = …, int ymargin = …)`: skipped by overlay (use the QRectF overload)
+- `void QGraphicsItem::setTransformOriginPoint(qreal ax, qreal ay)`: skipped by overlay (use the QPointF overload)
+- `bool QGraphicsItem::isObscured(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `void QGraphicsItem::update(qreal x, qreal y, qreal width, qreal height)`: skipped by overlay (use the QRectF overload)
+- `QPointF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPointF QGraphicsItem::mapToParent(qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPointF QGraphicsItem::mapToScene(qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QPolygonF QGraphicsItem::mapToParent(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QPolygonF QGraphicsItem::mapToScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QRectF QGraphicsItem::mapRectToParent(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QRectF QGraphicsItem::mapRectToScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QPointF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPointF QGraphicsItem::mapFromParent(qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPointF QGraphicsItem::mapFromScene(qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QPolygonF QGraphicsItem::mapFromParent(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QPolygonF QGraphicsItem::mapFromScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QRectF QGraphicsItem::mapRectFromItem(const QGraphicsItem * item, qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QRectF QGraphicsItem::mapRectFromParent(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `QRectF QGraphicsItem::mapRectFromScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+- `const QGraphicsObject * QGraphicsItem::toGraphicsObject() const`: duplicate Go signature after dropping default arguments
+
+### QGraphicsPixmapItem
+
+- `void QGraphicsPixmapItem::setOffset(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
+
+### QGraphicsRectItem
+
+- `void QGraphicsRectItem::setRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+
+### QGraphicsScene
+
+- `void QGraphicsScene::setSceneRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `QList<QGraphicsItem *> QGraphicsScene::items(qreal x, qreal y, qreal w, qreal h, Qt::ItemSelectionMode mode, Qt::SortOrder order, const QTransform & deviceTransform = …) const`: skipped by overlay (use the QRectF overload)
+- `QGraphicsItem * QGraphicsScene::itemAt(qreal x, qreal y, const QTransform & deviceTransform) const`: skipped by overlay (use the QPointF overload)
+- `QGraphicsItemGroup * QGraphicsScene::createItemGroup(const QList<QGraphicsItem *> & items)`: skipped by overlay (QGraphicsItemGroup is not bound)
+- `void QGraphicsScene::destroyItemGroup(QGraphicsItemGroup * group)`: skipped by overlay (QGraphicsItemGroup is not bound)
+- `QGraphicsEllipseItem * QGraphicsScene::addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen & pen = …, const QBrush & brush = …)`: skipped by overlay (use the QRectF overload)
+- `QGraphicsRectItem * QGraphicsScene::addRect(qreal x, qreal y, qreal w, qreal h, const QPen & pen = …, const QBrush & brush = …)`: skipped by overlay (use the QRectF overload)
+- `void QGraphicsScene::update(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `void QGraphicsScene::invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers = …)`: skipped by overlay (use the QRectF overload)
+
+### QGraphicsView
+
+- `void QGraphicsView::setSceneRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `void QGraphicsView::centerOn(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
+- `void QGraphicsView::ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = …, int ymargin = …)`: skipped by overlay (use the QRectF overload)
+- `void QGraphicsView::fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode aspectRadioMode = …)`: skipped by overlay (use the QRectF overload)
+- `QList<QGraphicsItem *> QGraphicsView::items(int x, int y) const`: skipped by overlay (use the QPoint overload)
+- `QList<QGraphicsItem *> QGraphicsView::items(int x, int y, int w, int h, Qt::ItemSelectionMode mode = …) const`: skipped by overlay (use the QRect overload)
+- `QGraphicsItem * QGraphicsView::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+- `QPointF QGraphicsView::mapToScene(int x, int y) const`: skipped by overlay (use the QPoint overload)
+- `QPolygonF QGraphicsView::mapToScene(int x, int y, int w, int h) const`: skipped by overlay (use the QRect overload)
+- `QPoint QGraphicsView::mapFromScene(qreal x, qreal y) const`: skipped by overlay (use the QPointF overload)
+- `QPolygon QGraphicsView::mapFromScene(qreal x, qreal y, qreal w, qreal h) const`: skipped by overlay (use the QRectF overload)
+
+### QGridLayout
+
+- `void QGridLayout::addWidget(QWidget * w)`: skipped by overlay (use AddWidget(w, row, column))
+
+### QHBoxLayout
+
+- `QHBoxLayout::QHBoxLayout()`: redundant: call NewQHBoxLayout(nil)
+
+### QHeaderView
+
+- `int QHeaderView::logicalIndexAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QIODevice
+
+- `qint64 QIODevice::write(const char * data, qint64 len)`: skipped by overlay (use Write([]byte))
+
+### QIcon
+
+- `QPixmap QIcon::pixmap(int w, int h, Mode mode = …, State state = …) const`: skipped by overlay (use Pixmap(size))
+- `void QIcon::paint(QPainter * painter, int x, int y, int w, int h, Qt::Alignment alignment = …, Mode mode = …, State state = …) const`: skipped by overlay (use Paint(painter, rect))
+
+### QImage
+
+- `QImage QImage::copy(int x, int y, int w, int h) const`: skipped by overlay (use Copy(rect))
+- `bool QImage::valid(const QPoint & pt) const`: skipped by overlay (use Valid(x, y))
+- `int QImage::pixelIndex(const QPoint & pt) const`: skipped by overlay (use PixelIndex(x, y))
+- `QRgb QImage::pixel(const QPoint & pt) const`: skipped by overlay (use Pixel(x, y))
+- `void QImage::setPixel(const QPoint & pt, uint index_or_rgb)`: skipped by overlay (use SetPixel(x, y, v))
+- `QColor QImage::pixelColor(const QPoint & pt) const`: skipped by overlay (use PixelColor(x, y))
+- `void QImage::setPixelColor(const QPoint & pt, const QColor & c)`: skipped by overlay (use SetPixelColor(x, y, c))
+- `void QImage::fill(Qt::GlobalColor color)`: skipped by overlay (use FillColor)
+- `QImage QImage::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
+- `QImage QImage::mirrored(bool horizontally = …, bool vertically = …) const`: deprecated or variadic
+- `QImage QImage::mirrored(bool horizontally = …, bool vertically = …)`: deprecated or variadic
+- `void QImage::mirror(bool horizontally = …, bool vertically = …)`: deprecated or variadic
+- `QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …)`: duplicate Go signature after dropping default arguments
+- `QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …)`: duplicate Go signature after dropping default arguments
+- `QImage QImage::rgbSwapped()`: duplicate Go signature after dropping default arguments
+- `QImage QImage::flipped(Qt::Orientations orient = …)`: duplicate Go signature after dropping default arguments
+
+### QInputDialog
+
+- `void QInputDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QItemSelectionModel
+
+- `QAbstractItemModel * QItemSelectionModel::model()`: duplicate Go signature after dropping default arguments
+
+### QListWidget
+
+- `QListWidgetItem * QListWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QMessageBox
+
+- `void QMessageBox::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+- `StandardButton QMessageBox::information(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1 = …)`: skipped by overlay (obsolete overload)
+- `int QMessageBox::question(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
+- `int QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
+- `int QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
+
+### QPainter
+
+- `void QPainter::setBrush(Qt::GlobalColor color)`: skipped by overlay (use SetBrushColor)
+- `void QPainter::setBrushOrigin(int x, int y)`: skipped by overlay (use SetBrushOrigin)
+- `void QPainter::setClipRect(int x, int y, int w, int h, Qt::ClipOperation op = …)`: skipped by overlay (use SetClipRect)
+- `void QPainter::setWindow(int x, int y, int w, int h)`: skipped by overlay (use SetWindow)
+- `void QPainter::setViewport(int x, int y, int w, int h)`: skipped by overlay (use SetViewport)
+- `void QPainter::drawPoint(int x, int y)`: skipped by overlay (use DrawPoint)
+- `void QPainter::drawLine(const QLineF & line)`: skipped by overlay (QLineF is not bound)
+- `void QPainter::drawLine(const QLine & line)`: skipped by overlay (QLine is not bound)
+- `void QPainter::drawRect(int x1, int y1, int w, int h)`: skipped by overlay (use DrawRect)
+- `void QPainter::drawEllipse(int x, int y, int w, int h)`: skipped by overlay (use DrawEllipse)
+- `void QPainter::drawArc(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawArc)
+- `void QPainter::drawPie(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawPie)
+- `void QPainter::drawChord(int x, int y, int w, int h, int a, int alen)`: skipped by overlay (use DrawChord)
+- `void QPainter::drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)`: skipped by overlay (use DrawRoundedRect)
+- `void QPainter::drawTiledPixmap(int x, int y, int w, int h, const QPixmap &, int sx = …, int sy = …)`: skipped by overlay (use DrawTiledPixmap)
+- `void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap & pm, int sx, int sy, int sw, int sh)`: skipped by overlay (use DrawPixmapPart)
+- `void QPainter::drawPixmap(int x, int y, const QPixmap & pm, int sx, int sy, int sw, int sh)`: skipped by overlay (use DrawPixmapPart)
+- `void QPainter::drawPixmap(const QPointF & p, const QPixmap & pm, const QRectF & sr)`: skipped by overlay (use DrawPixmapPartF)
+- `void QPainter::drawPixmap(const QPoint & p, const QPixmap & pm, const QRect & sr)`: skipped by overlay (use DrawPixmapPart)
+- `void QPainter::drawPixmap(int x, int y, const QPixmap & pm)`: skipped by overlay (use DrawPixmap)
+- `void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap & pm)`: skipped by overlay (use DrawPixmapIn)
+- `void QPainter::drawImage(const QPointF & p, const QImage & image, const QRectF & sr, Qt::ImageConversionFlags flags = …)`: skipped by overlay (use DrawImagePartF)
+- `void QPainter::drawImage(const QPoint & p, const QImage & image, const QRect & sr, Qt::ImageConversionFlags flags = …)`: skipped by overlay (use DrawImagePart)
+- `void QPainter::drawImage(int x, int y, const QImage & image, int sx = …, int sy = …, int sw = …, int sh = …, Qt::ImageConversionFlags flags = …)`: skipped by overlay (use DrawImage)
+- `void QPainter::drawText(int x, int y, const QString & s)`: skipped by overlay (use DrawText)
+- `void QPainter::drawText(const QPointF & p, const QString & str, int tf, int justificationPadding)`: skipped by overlay (internal overload)
+- `void QPainter::drawText(int x, int y, int w, int h, int flags, const QString & text, QRect * br = …)`: skipped by overlay (use DrawTextIn)
+- `void QPainter::drawText(const QRectF & r, const QString & text, const QTextOption & o = …)`: skipped by overlay (QTextOption is not bound)
+- `QRect QPainter::boundingRect(int x, int y, int w, int h, int flags, const QString & text)`: skipped by overlay (use BoundingRect)
+- `void QPainter::fillRect(int x, int y, int w, int h, const QBrush &)`: skipped by overlay (use FillRectBrush)
+- `void QPainter::fillRect(int x, int y, int w, int h, const QColor & color)`: skipped by overlay (use FillRect)
+- `void QPainter::fillRect(int x, int y, int w, int h, Qt::GlobalColor c)`: skipped by overlay (use FillRect)
+- `void QPainter::fillRect(const QRect & r, Qt::GlobalColor c)`: skipped by overlay (use FillRect)
+- `void QPainter::fillRect(const QRectF & r, Qt::GlobalColor c)`: skipped by overlay (use FillRectF)
+- `void QPainter::fillRect(int x, int y, int w, int h, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrush)
+- `void QPainter::fillRect(const QRect & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrush)
+- `void QPainter::fillRect(const QRectF & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrushF)
+- `void QPainter::eraseRect(int x, int y, int w, int h)`: skipped by overlay (use EraseRect)
+
+### QPainterPath
+
+- `void QPainterPath::moveTo(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
+- `void QPainterPath::lineTo(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
+- `void QPainterPath::arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal angle)`: skipped by overlay (use the QRectF overload)
+- `void QPainterPath::arcTo(qreal x, qreal y, qreal w, qreal h, qreal startAngle, qreal arcLength)`: skipped by overlay (use the QRectF overload)
+- `void QPainterPath::cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty)`: skipped by overlay (use the QPointF overload)
+- `void QPainterPath::quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty)`: skipped by overlay (use the QPointF overload)
+- `void QPainterPath::addRect(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `void QPainterPath::addEllipse(qreal x, qreal y, qreal w, qreal h)`: skipped by overlay (use the QRectF overload)
+- `void QPainterPath::addText(qreal x, qreal y, const QFont & f, const QString & text)`: skipped by overlay (use the QPointF overload)
+- `void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)`: skipped by overlay (use the QRectF overload)
+- `void QPainterPath::translate(qreal dx, qreal dy)`: skipped by overlay (use the QPointF overload)
+- `QPainterPath QPainterPath::translated(qreal dx, qreal dy) const`: skipped by overlay (use the QPointF overload)
+
+### QPalette
+
+- `QPalette::QPalette(Qt::GlobalColor button)`: skipped by overlay (use NewQPaletteWithButton)
+
+### QPixmap
+
+- `QPixmap::QPixmap(const QSize &)`: skipped by overlay (use NewQPixmapWithW(w, h))
+- `QPixmap QPixmap::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
+- `QPixmap QPixmap::copy(int x, int y, int width, int height) const`: skipped by overlay (use Copy(rect))
+- `void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion * exposed = …)`: skipped by overlay (out parameter)
+
+### QProgressDialog
+
+- `void QProgressDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QRegion
+
+- `void QRegion::translate(int dx, int dy)`: skipped by overlay (use the QPoint overload)
+- `QRegion QRegion::translated(int dx, int dy) const`: skipped by overlay (use the QPoint overload)
+
+### QStackedLayout
+
+- `QStackedLayout::QStackedLayout()`: redundant: call NewQStackedLayout(nil)
+
+### QTableWidget
+
+- `QTableWidgetItem * QTableWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QTextDocument
+
+- `QAbstractTextDocumentLayout * QTextDocument::documentLayout() const`: skipped by overlay (QAbstractTextDocumentLayout is not bound)
+
+### QTime
+
+- `QString QTime::toString(QStringView format) const`: skipped by overlay (use the QString overload)
+- `QTime QTime::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
+- `QTime QTime::fromString(QStringView string, QStringView format)`: skipped by overlay (use the QString overload)
+- `QTime QTime::fromString(const QString & string, QStringView format)`: skipped by overlay (use the QString overload)
+
+### QTimer
+
+- `void QTimer::singleShot(int msec, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+- `void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+- `void QTimer::singleShot(std::chrono::nanoseconds value, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+- `void QTimer::singleShot(std::chrono::nanoseconds interval, Qt::TimerType timerType, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QToolBar
+
+- `QAction * QToolBar::actionAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QTransform
+
+- `QTransform::QTransform(Qt::Initialization)`: skipped by overlay (internal)
+
+### QTreeWidget
+
+- `QTreeWidgetItem * QTreeWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QVBoxLayout
+
+- `QVBoxLayout::QVBoxLayout()`: redundant: call NewQVBoxLayout(nil)
+
+### QWidget
+
+- `void QWidget::setMinimumSize(const QSize &)`: skipped by overlay (use SetMinimumSize(w, h))
+- `void QWidget::setMaximumSize(const QSize &)`: skipped by overlay (use SetMaximumSize(w, h))
+- `void QWidget::setSizeIncrement(const QSize &)`: skipped by overlay (use SetSizeIncrement(w, h))
+- `void QWidget::setBaseSize(const QSize &)`: skipped by overlay (use SetBaseSize(w, h))
+- `void QWidget::setFixedSize(const QSize &)`: skipped by overlay (use SetFixedSize(w, h))
 - `void QWidget::update(int x, int y, int w, int h)`: skipped by overlay (use UpdateRect)
 - `void QWidget::repaint(int x, int y, int w, int h)`: skipped by overlay (use RepaintRect)
 - `void QWidget::move(const QPoint &)`: skipped by overlay (use Move(x, y))
@@ -1435,91 +1202,22 @@ Bound: 4732 constructors, methods and functions; 4565 need no review or are revi
 - `QAction * QWidget::addAction(const QString & text, const QKeySequence & shortcut, const QObject * receiver, const char * member, Qt::ConnectionType type = …)`: string-based SLOT() connection; use the On* signal methods instead
 - `QAction * QWidget::addAction(const QIcon & icon, const QString & text, const QKeySequence & shortcut, const QObject * receiver, const char * member, Qt::ConnectionType type = …)`: string-based SLOT() connection; use the On* signal methods instead
 - `QWidget * QWidget::childAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
-- `QBackingStore * QWidget::backingStore() const`: return: unsupported type "QBackingStore *" (pointer or out-parameter)
-- `QWindow * QWidget::windowHandle() const`: return: unsupported type "QWindow *" (pointer or out-parameter)
 - `QWidget * QWidget::createWindowContainer(QWindow * window, QWidget * parent = …, Qt::WindowFlags flags = …)`: skipped by overlay (QWindow is not bound)
 
-## Ownership rules without a generated test (79)
+## Ownership rules without a generated test (1)
 
 Add a `test:` snippet to the overlay entry to cover these.
 
-- `QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent)`: arguments or lifetime not observable
-- `QAction * QActionGroup::addAction(const QString & text)`: parented result needs a test snippet
-- `QAction * QActionGroup::addAction(const QIcon & icon, const QString & text)`: parented result needs a test snippet
-- `void QClipboard::setMimeData(QMimeData * data, Mode mode = …)`: cannot construct the receiver
-- `QStandardItem * QStandardItem::takeChild(int row, int column = …)`: transfer-to-go result needs a test snippet
-- `QList<QStandardItem *> QStandardItem::takeRow(int row)`: transfer-to-go result needs a test snippet
-- `QList<QStandardItem *> QStandardItem::takeColumn(int column)`: transfer-to-go result needs a test snippet
-- `QStandardItem * QStandardItem::clone() const`: transfer-to-go result needs a test snippet
-- `QStandardItem * QStandardItemModel::takeItem(int row, int column = …)`: transfer-to-go result needs a test snippet
-- `QList<QStandardItem *> QStandardItemModel::takeRow(int row)`: transfer-to-go result needs a test snippet
-- `QList<QStandardItem *> QStandardItemModel::takeColumn(int column)`: transfer-to-go result needs a test snippet
-- `QStandardItem * QStandardItemModel::takeHorizontalHeaderItem(int column)`: transfer-to-go result needs a test snippet
-- `QStandardItem * QStandardItemModel::takeVerticalHeaderItem(int row)`: transfer-to-go result needs a test snippet
-- `QTextDocument * QTextDocument::clone(QObject * parent = …) const`: transfer-to-go result needs a test snippet
-- `QCompleter::QCompleter(QAbstractItemModel * model, QObject * parent = …)`: arguments or lifetime not observable
-- `QPushButton * QDialogButtonBox::addButton(const QString & text, ButtonRole role)`: parented result needs a test snippet
-- `QPushButton * QDialogButtonBox::addButton(StandardButton button)`: parented result needs a test snippet
-- `void QDialogButtonBox::removeButton(QAbstractButton * button)`: transfer-to-go argument needs a test snippet
-- `QGraphicsEllipseItem * QGraphicsScene::addEllipse(const QRectF & rect, const QPen & pen = …, const QBrush & brush = …)`: parented result needs a test snippet
-- `QGraphicsPixmapItem * QGraphicsScene::addPixmap(const QPixmap & pixmap)`: parented result needs a test snippet
-- `QGraphicsRectItem * QGraphicsScene::addRect(const QRectF & rect, const QPen & pen = …, const QBrush & brush = …)`: parented result needs a test snippet
-- `QGraphicsTextItem * QGraphicsScene::addText(const QString & text, const QFont & font = …)`: parented result needs a test snippet
-- `QGraphicsSimpleTextItem * QGraphicsScene::addSimpleText(const QString & text, const QFont & font = …)`: parented result needs a test snippet
-- `void QGraphicsScene::removeItem(QGraphicsItem * item)`: transfer-to-go argument needs a test snippet
-- `QGraphicsView::QGraphicsView(QGraphicsScene * scene, QWidget * parent = …)`: arguments or lifetime not observable
-- `void QLayout::removeItem(QLayoutItem *)`: transfer-to-go argument needs a test snippet
-- `QLayoutItem * QLayout::takeAt(int index)`: transfer-to-go result needs a test snippet
-- `QLayoutItem * QLayout::replaceWidget(QWidget * from, QWidget * to, Qt::FindChildOptions options = …)`: has another object argument (from)
-- `QAction * QLineEdit::addAction(const QIcon & icon, ActionPosition position)`: parented result needs a test snippet
-- `QMenu * QLineEdit::createStandardContextMenu()`: transfer-to-go result needs a test snippet
-- `QListWidgetItem * QListWidget::takeItem(int row)`: transfer-to-go result needs a test snippet
-- `void QListWidget::setItemWidget(QListWidgetItem * item, QWidget * widget)`: has another object argument (item)
-- `QListWidgetItem * QListWidgetItem::clone() const`: transfer-to-go result needs a test snippet
-- `QMenuBar * QMainWindow::menuBar() const`: parented result needs a test snippet
-- `QStatusBar * QMainWindow::statusBar() const`: parented result needs a test snippet
-- `QWidget * QMainWindow::takeCentralWidget()`: transfer-to-go result needs a test snippet
-- `QToolBar * QMainWindow::addToolBar(const QString & title)`: parented result needs a test snippet
-- `void QMainWindow::insertToolBar(QToolBar * before, QToolBar * toolbar)`: has another object argument (before)
-- `QMenu * QMainWindow::createPopupMenu()`: transfer-to-go result needs a test snippet
-- `void QMdiArea::removeSubWindow(QWidget * widget)`: transfer-to-go argument needs a test snippet
-- `QMenu * QMenu::addMenu(const QString & title)`: parented result needs a test snippet
-- `QMenu * QMenu::addMenu(const QIcon & icon, const QString & title)`: parented result needs a test snippet
-- `QAction * QMenu::addSeparator()`: parented result needs a test snippet
-- `QAction * QMenu::addSection(const QString & text)`: parented result needs a test snippet
-- `QAction * QMenu::addSection(const QIcon & icon, const QString & text)`: parented result needs a test snippet
-- `QAction * QMenu::insertSeparator(QAction * before)`: parented result needs a test snippet
-- `QAction * QMenu::insertSection(QAction * before, const QString & text)`: parented result needs a test snippet
-- `QAction * QMenu::insertSection(QAction * before, const QIcon & icon, const QString & text)`: parented result needs a test snippet
-- `QMenu * QMenuBar::addMenu(const QString & title)`: parented result needs a test snippet
-- `QMenu * QMenuBar::addMenu(const QIcon & icon, const QString & title)`: parented result needs a test snippet
-- `QAction * QMenuBar::addSeparator()`: parented result needs a test snippet
-- `QAction * QMenuBar::insertSeparator(QAction * before)`: parented result needs a test snippet
-- `QPushButton * QMessageBox::addButton(const QString & text, ButtonRole role)`: parented result needs a test snippet
-- `QPushButton * QMessageBox::addButton(StandardButton button)`: parented result needs a test snippet
-- `void QMessageBox::removeButton(QAbstractButton * button)`: transfer-to-go argument needs a test snippet
-- `QMenu * QPlainTextEdit::createStandardContextMenu()`: transfer-to-go result needs a test snippet
-- `QMenu * QPlainTextEdit::createStandardContextMenu(const QPoint & position)`: transfer-to-go result needs a test snippet
-- `QWidget * QScrollArea::takeWidget()`: transfer-to-go result needs a test snippet
-- `QTableWidgetItem * QTableWidget::takeItem(int row, int column)`: transfer-to-go result needs a test snippet
-- `QTableWidgetItem * QTableWidget::takeVerticalHeaderItem(int row)`: transfer-to-go result needs a test snippet
-- `QTableWidgetItem * QTableWidget::takeHorizontalHeaderItem(int column)`: transfer-to-go result needs a test snippet
-- `QTableWidgetItem * QTableWidgetItem::clone() const`: transfer-to-go result needs a test snippet
-- `QMenu * QTextEdit::createStandardContextMenu()`: transfer-to-go result needs a test snippet
-- `QMenu * QTextEdit::createStandardContextMenu(const QPoint & position)`: transfer-to-go result needs a test snippet
-- `QAction * QToolBar::addSeparator()`: parented result needs a test snippet
-- `QAction * QToolBar::insertSeparator(QAction * before)`: parented result needs a test snippet
-- `QAction * QToolBar::insertWidget(QAction * before, QWidget * widget)`: has another object argument (before)
-- `QTreeWidgetItem * QTreeWidget::takeTopLevelItem(int index)`: transfer-to-go result needs a test snippet
-- `void QTreeWidget::setItemWidget(QTreeWidgetItem * item, int column, QWidget * widget)`: has another object argument (item)
-- `QTreeWidgetItem::QTreeWidgetItem(QTreeWidget * treeview, QTreeWidgetItem * after, int type = …)`: arguments or lifetime not observable
-- `QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem * parent, QTreeWidgetItem * after, int type = …)`: arguments or lifetime not observable
-- `QTreeWidgetItem * QTreeWidgetItem::clone() const`: transfer-to-go result needs a test snippet
-- `void QTreeWidgetItem::removeChild(QTreeWidgetItem * child)`: transfer-to-go argument needs a test snippet
-- `QTreeWidgetItem * QTreeWidgetItem::takeChild(int index)`: transfer-to-go result needs a test snippet
-- `QList<QTreeWidgetItem *> QTreeWidgetItem::takeChildren()`: transfer-to-go result needs a test snippet
-- `QAction * QWidget::addAction(const QString & text)`: parented result needs a test snippet
-- `QAction * QWidget::addAction(const QIcon & icon, const QString & text)`: parented result needs a test snippet
-- `QAction * QWidget::addAction(const QString & text, const QKeySequence & shortcut)`: parented result needs a test snippet
-- `QAction * QWidget::addAction(const QIcon & icon, const QString & text, const QKeySequence & shortcut)`: parented result needs a test snippet
+- `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
+
+## Results whose death qute cannot see (4)
+
+Qt creates these items itself, and they are not QObjects, so no death notice
+reaches Go. The handle is Parented and correct while the owner lives; after
+the owner is deleted, do not use it.
+
+- `QGraphicsEllipseItem * QGraphicsScene::addEllipse(const QRectF & rect, const QPen & pen = …, const QBrush & brush = …)`
+- `QGraphicsPixmapItem * QGraphicsScene::addPixmap(const QPixmap & pixmap)`
+- `QGraphicsRectItem * QGraphicsScene::addRect(const QRectF & rect, const QPen & pen = …, const QBrush & brush = …)`
+- `QGraphicsSimpleTextItem * QGraphicsScene::addSimpleText(const QString & text, const QFont & font = …)`
 

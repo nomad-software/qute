@@ -254,13 +254,13 @@ func (this *QObject) KillTimer(idArg int) {
 	C.qute_QObject_killTimer(self, C.int(idArg))
 }
 
-// KillTimer2 wraps QObject::killTimer.
+// KillTimerID wraps QObject::killTimer.
 //
 //	C++: void QObject::killTimer(Qt::TimerId id)
 //
 // Qt docs: https://doc.qt.io/qt-6/qobject.html#killTimer
-func (this *QObject) KillTimer2(idArg TimerId) {
-	self := rt.Use(unsafe.Pointer(this), "QObject.KillTimer2")
+func (this *QObject) KillTimerID(idArg TimerId) {
+	self := rt.Use(unsafe.Pointer(this), "QObject.KillTimerID")
 	C.qute_QObject_killTimer_1(self, C.int64_t(idArg))
 }
 
@@ -299,6 +299,8 @@ func (this *QObject) SetParent(parent QObjectLike) {
 // InstallEventFilter wraps QObject::installEventFilter.
 //
 //	C++: void QObject::installEventFilter(QObject * filterObj)
+//
+// The object does not take ownership of the filter; keep the filter alive while it is installed.
 //
 // Qt docs: https://doc.qt.io/qt-6/qobject.html#installEventFilter
 func (this *QObject) InstallEventFilter(filterObj QObjectLike) {

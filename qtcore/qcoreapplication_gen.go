@@ -310,6 +310,10 @@ func QCoreApplicationSendEvent(receiver QObjectLike, event QEventLike) bool {
 //
 //	C++: void QCoreApplication::postEvent(QObject * receiver, QEvent * event, int priority = …)
 //
+// Ownership: receiver is borrowed for the call only; event becomes Parented: Qt frees it from now on.
+//
+// The post event queue takes ownership of the event and deletes it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#postEvent
 func QCoreApplicationPostEvent(receiver QObjectLike, event QEventLike) {
 	rt.CheckThread("QCoreApplicationPostEvent")
@@ -318,10 +322,12 @@ func QCoreApplicationPostEvent(receiver QObjectLike, event QEventLike) {
 		receiverPtr = rt.UseArg(unsafe.Pointer(receiver.AsQObject()), "QCoreApplicationPostEvent")
 	}
 	var eventPtr unsafe.Pointer
+	var eventH *rt.Handle
 	if event != nil {
-		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCoreApplicationPostEvent")
+		eventPtr, eventH = rt.Arg(unsafe.Pointer(event.AsQEvent()), "QCoreApplicationPostEvent")
 	}
 	C.qute_QCoreApplication_postEvent(receiverPtr, eventPtr)
+	eventH.TransferToCpp()
 }
 
 // QCoreApplicationSendPostedEvents wraps QCoreApplication::sendPostedEvents.

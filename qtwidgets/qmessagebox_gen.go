@@ -142,7 +142,7 @@ func (this *QMessageBox) AddStandardButton(button QMessageBoxStandardButtons) *Q
 //
 // Ownership: button becomes Owned: Go frees it from now on.
 //
-// The button is not deleted; its parent is cleared, so Go owns it.
+// The button is not deleted; its parent is cleared so Go owns it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#removeButton
 func (this *QMessageBox) RemoveButton(button QAbstractButtonLike) {

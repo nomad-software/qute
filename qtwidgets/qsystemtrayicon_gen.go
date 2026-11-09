@@ -217,23 +217,23 @@ func (this *QSystemTrayIcon) Hide() {
 	C.qute_QSystemTrayIcon_hide(self)
 }
 
-// ShowMessage wraps QSystemTrayIcon::showMessage.
+// ShowMessageIcon wraps QSystemTrayIcon::showMessage.
 //
 //	C++: void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, const QIcon & icon, int msecs = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#showMessage
-func (this *QSystemTrayIcon) ShowMessage(title string, msg string, icon *qtgui.QIcon) {
-	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessage")
-	C.qute_QSystemTrayIcon_showMessage(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)), rt.UseArg(unsafe.Pointer(icon), "QSystemTrayIcon.ShowMessage"))
+func (this *QSystemTrayIcon) ShowMessageIcon(title string, msg string, icon *qtgui.QIcon) {
+	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessageIcon")
+	C.qute_QSystemTrayIcon_showMessage(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)), rt.UseArg(unsafe.Pointer(icon), "QSystemTrayIcon.ShowMessageIcon"))
 }
 
-// ShowMessage2 wraps QSystemTrayIcon::showMessage.
+// ShowMessage wraps QSystemTrayIcon::showMessage.
 //
 //	C++: void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, QSystemTrayIcon::MessageIcon icon = …, int msecs = …)
 //
 // Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#showMessage
-func (this *QSystemTrayIcon) ShowMessage2(title string, msg string) {
-	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessage2")
+func (this *QSystemTrayIcon) ShowMessage(title string, msg string) {
+	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessage")
 	C.qute_QSystemTrayIcon_showMessage_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)))
 }
 

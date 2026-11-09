@@ -105,7 +105,9 @@ func (this *QWidgetAction) DefaultWidget() *QWidget {
 //
 //	C++: QWidget * QWidgetAction::requestWidget(QWidget * parent)
 //
-// Ownership: the result is Borrowed: Go never frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// The widget is created with the given parent (or is the default widget reparented to it).
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidgetaction.html#requestWidget
 func (this *QWidgetAction) RequestWidget(parent QWidgetLike) *QWidget {
@@ -115,7 +117,7 @@ func (this *QWidgetAction) RequestWidget(parent QWidgetLike) *QWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QWidgetAction.RequestWidget")
 	}
 	r := C.qute_QWidgetAction_requestWidget(self, parentPtr)
-	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeParented), r)
 }
 
 // ReleaseWidget wraps QWidgetAction::releaseWidget.

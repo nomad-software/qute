@@ -378,40 +378,27 @@ func (this *QIODevice) IsTransactionStarted() bool {
 	return bool(r)
 }
 
-// Write wraps QIODevice::write.
-//
-//	C++: qint64 QIODevice::write(const char * data, qint64 len)
-//
-// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#write
-func (this *QIODevice) Write(data string, lenArg int64) int64 {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.Write")
-	dataCStr := C.CString(data)
-	defer C.free(unsafe.Pointer(dataCStr))
-	r := C.qute_QIODevice_write(self, dataCStr, C.longlong(lenArg))
-	return int64(r)
-}
-
-// Write2 wraps QIODevice::write.
+// WriteString wraps QIODevice::write.
 //
 //	C++: qint64 QIODevice::write(const char * data)
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#write
-func (this *QIODevice) Write2(data string) int64 {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.Write2")
+func (this *QIODevice) WriteString(data string) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.WriteString")
 	dataCStr := C.CString(data)
 	defer C.free(unsafe.Pointer(dataCStr))
-	r := C.qute_QIODevice_write_1(self, dataCStr)
+	r := C.qute_QIODevice_write(self, dataCStr)
 	return int64(r)
 }
 
-// Write3 wraps QIODevice::write.
+// Write wraps QIODevice::write.
 //
 //	C++: qint64 QIODevice::write(const QByteArray & data)
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#write
-func (this *QIODevice) Write3(data []byte) int64 {
-	self := rt.Use(unsafe.Pointer(this), "QIODevice.Write3")
-	r := C.qute_QIODevice_write_2(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+func (this *QIODevice) Write(data []byte) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.Write")
+	r := C.qute_QIODevice_write_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
 	return int64(r)
 }
 

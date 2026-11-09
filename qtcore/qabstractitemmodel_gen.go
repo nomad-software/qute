@@ -203,7 +203,9 @@ func (this *QAbstractItemModel) MimeTypes() []string {
 //
 //	C++: QMimeData * QAbstractItemModel::mimeData(const QModelIndexList & indexes) const
 //
-// Ownership: the result is Borrowed: Go never frees it.
+// Ownership: the result is Owned: Go frees it.
+//
+// The default implementation returns a new QMimeData with no parent; the caller (normally QDrag) owns it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#mimeData
 func (this *QAbstractItemModel) MimeData(indexes []*QModelIndex) *QMimeData {
@@ -213,7 +215,7 @@ func (this *QAbstractItemModel) MimeData(indexes []*QModelIndex) *QMimeData {
 		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QAbstractItemModel.MimeData")
 	}
 	r := C.qute_QAbstractItemModel_mimeData(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)))
-	return rt.View[QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
+	return rt.View[QMimeData](rt.WrapClass(r, "QMimeData", rt.TakeOwned), r)
 }
 
 // CanDropMimeData wraps QAbstractItemModel::canDropMimeData.

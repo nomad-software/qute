@@ -2900,9 +2900,6 @@ qute_str qute_QDate_toString(void *self) {
 qute_str qute_QDate_toString_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_str(static_cast<QDate *>(self)->toString(QString::fromUtf8(a0, a0_len)));
 }
-qute_str qute_QDate_toString_2(void *self, const char *a0, ptrdiff_t a0_len) {
-	return qute_ret_str(static_cast<QDate *>(self)->toString(QString::fromUtf8(a0, a0_len)));
-}
 bool qute_QDate_setDate(void *self, int a0, int a1, int a2) {
 	return static_cast<bool>(static_cast<QDate *>(self)->setDate(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2)));
 }
@@ -2927,16 +2924,7 @@ void * qute_QDate_currentDate(void) {
 void * qute_QDate_fromString(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QDate(QDate::fromString(QString::fromUtf8(a0, a0_len))));
 }
-void * qute_QDate_fromString_1(const char *a0, ptrdiff_t a0_len) {
-	return static_cast<void *>(new QDate(QDate::fromString(QString::fromUtf8(a0, a0_len))));
-}
-void * qute_QDate_fromString_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
-	return static_cast<void *>(new QDate(QDate::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
-}
-void * qute_QDate_fromString_3(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
-	return static_cast<void *>(new QDate(QDate::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
-}
-void * qute_QDate_fromString_4(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
+void * qute_QDate_fromString_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
 	return static_cast<void *>(new QDate(QDate::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
 }
 bool qute_QDate_isValid_1(int a0, int a1, int a2) {
@@ -3007,9 +2995,6 @@ qute_str qute_QDateTime_toString(void *self) {
 qute_str qute_QDateTime_toString_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_str(static_cast<QDateTime *>(self)->toString(QString::fromUtf8(a0, a0_len)));
 }
-qute_str qute_QDateTime_toString_2(void *self, const char *a0, ptrdiff_t a0_len) {
-	return qute_ret_str(static_cast<QDateTime *>(self)->toString(QString::fromUtf8(a0, a0_len)));
-}
 void * qute_QDateTime_addDays(void *self, long long a0) {
 	return static_cast<void *>(new QDateTime(static_cast<QDateTime *>(self)->addDays(static_cast<long long>(a0))));
 }
@@ -3052,16 +3037,7 @@ void * qute_QDateTime_currentDateTimeUtc(void) {
 void * qute_QDateTime_fromString(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QDateTime(QDateTime::fromString(QString::fromUtf8(a0, a0_len))));
 }
-void * qute_QDateTime_fromString_1(const char *a0, ptrdiff_t a0_len) {
-	return static_cast<void *>(new QDateTime(QDateTime::fromString(QString::fromUtf8(a0, a0_len))));
-}
-void * qute_QDateTime_fromString_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
-	return static_cast<void *>(new QDateTime(QDateTime::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
-}
-void * qute_QDateTime_fromString_3(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
-	return static_cast<void *>(new QDateTime(QDateTime::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
-}
-void * qute_QDateTime_fromString_4(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
+void * qute_QDateTime_fromString_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
 	return static_cast<void *>(new QDateTime(QDateTime::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
 }
 void * qute_QDateTime_fromMSecsSinceEpoch(long long a0) {
@@ -3119,10 +3095,7 @@ int qute_QEvent_registerEventType(void) {
 void * qute_QFile_new(void * a0) {
 	return static_cast<QFile *>(new QFile(static_cast<QObject *>(a0)));
 }
-void * qute_QFile_new_1(const char *a0, ptrdiff_t a0_len) {
-	return static_cast<QFile *>(new QFile(QString::fromUtf8(a0, a0_len)));
-}
-void * qute_QFile_new_2(const char *a0, ptrdiff_t a0_len, void * a1) {
+void * qute_QFile_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	return static_cast<QFile *>(new QFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QFile_cast(void *obj) {
@@ -3163,9 +3136,6 @@ qute_str qute_QFile_encodeName(const char *a0, ptrdiff_t a0_len) {
 }
 qute_str qute_QFile_decodeName(const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_str(QFile::decodeName(QByteArray(a0, a0_len)));
-}
-qute_str qute_QFile_decodeName_1(const char * a0) {
-	return qute_ret_str(QFile::decodeName(a0));
 }
 bool qute_QFile_exists_1(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<bool>(QFile::exists(QString::fromUtf8(a0, a0_len)));
@@ -3330,13 +3300,10 @@ void qute_QIODevice_rollbackTransaction(void *self) {
 bool qute_QIODevice_isTransactionStarted(void *self) {
 	return static_cast<bool>(static_cast<QIODevice *>(self)->isTransactionStarted());
 }
-long long qute_QIODevice_write(void *self, const char * a0, long long a1) {
-	return static_cast<long long>(static_cast<QIODevice *>(self)->write(a0, static_cast<long long>(a1)));
-}
-long long qute_QIODevice_write_1(void *self, const char * a0) {
+long long qute_QIODevice_write(void *self, const char * a0) {
 	return static_cast<long long>(static_cast<QIODevice *>(self)->write(a0));
 }
-long long qute_QIODevice_write_2(void *self, const char *a0, ptrdiff_t a0_len) {
+long long qute_QIODevice_write_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return static_cast<long long>(static_cast<QIODevice *>(self)->write(QByteArray(a0, a0_len)));
 }
 qute_str qute_QIODevice_peek(void *self, long long a0) {
@@ -4278,9 +4245,6 @@ qute_str qute_QTime_toString(void *self) {
 qute_str qute_QTime_toString_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	return qute_ret_str(static_cast<QTime *>(self)->toString(QString::fromUtf8(a0, a0_len)));
 }
-qute_str qute_QTime_toString_2(void *self, const char *a0, ptrdiff_t a0_len) {
-	return qute_ret_str(static_cast<QTime *>(self)->toString(QString::fromUtf8(a0, a0_len)));
-}
 bool qute_QTime_setHMS(void *self, int a0, int a1, int a2) {
 	return static_cast<bool>(static_cast<QTime *>(self)->setHMS(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2)));
 }
@@ -4309,15 +4273,6 @@ void * qute_QTime_fromString(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QTime(QTime::fromString(QString::fromUtf8(a0, a0_len))));
 }
 void * qute_QTime_fromString_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
-	return static_cast<void *>(new QTime(QTime::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
-}
-void * qute_QTime_fromString_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
-	return static_cast<void *>(new QTime(QTime::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
-}
-void * qute_QTime_fromString_3(const char *a0, ptrdiff_t a0_len) {
-	return static_cast<void *>(new QTime(QTime::fromString(QString::fromUtf8(a0, a0_len))));
-}
-void * qute_QTime_fromString_4(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
 	return static_cast<void *>(new QTime(QTime::fromString(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len))));
 }
 bool qute_QTime_isValid_1(int a0, int a1, int a2) {

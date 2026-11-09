@@ -1,14 +1,109 @@
 # Ownership overlays for qtcore. Rules: transfer-to-cpp, transfer-to-go,
 # transfer-this, borrowed, scoped. Keys are method names or signatures.
 QIODevice:
+  write(const char*, qint64): { skip: "use Write([]byte)" }
+  write(const char*): { name: WriteString }
+  write(const QByteArray&): { name: Write }
   seek: { name: SeekTo, doc: "Named SeekTo so it does not clash with io.Seeker's signature." }
 QCoreApplication:
+  notify: { reviewed: true }
+  instance: { return: borrowed }
+  sendEvent: { reviewed: true }
+  postEvent: { args: { event: transfer-to-cpp, receiver: borrowed }, doc: "The post event queue takes ownership of the event and deletes it." }
+  removePostedEvents: { reviewed: true }
   exit: { keep-defaults: true }
 QObject:
+  killTimer(Qt::TimerId): { name: KillTimerID }
   setParent: { args: { parent: transfer-this } }
+  event: { reviewed: true }
+  eventFilter: { reviewed: true }
+  installEventFilter: { reviewed: true, doc: "The object does not take ownership of the filter; keep the filter alive while it is installed." }
+  removeEventFilter: { reviewed: true }
   deleteLater: { doc: "Safe inside signal and event handlers; the object is deleted when control returns to the event loop." }
   children: { return: borrowed }
   parent: { return: borrowed }
 QTimer:
+  start(int): { name: StartWithInterval }
+  start(): { name: Start }
   QTimer(QObject*): { args: { parent: transfer-this } }
   start: { keep-defaults: false }
+
+QAbstractItemModel:
+  mimeData:
+    return: transfer-to-go
+    doc: "The default implementation returns a new QMimeData with no parent; the caller (normally QDrag) owns it."
+    test: |
+      m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
+      d := m.MimeData([]*qtcore.QModelIndex{m.Index(0, 0)})
+      if d == nil || d.Ownership() != qtcore.Owned {
+      	t.Errorf("d: %v, want Owned", d.Ownership())
+      }
+      d.Delete()
+      m.Delete()
+  canDropMimeData: { reviewed: true }
+  dropMimeData: { reviewed: true }
+
+QAbstractProxyModel:
+  setSourceModel: { reviewed: true, doc: "The proxy does not take ownership of the source model." }
+  sourceModel: { return: borrowed }
+
+QChildEvent:
+  child: { return: borrowed }
+
+QEvent:
+  clone: { return: transfer-to-go, doc: "Returns a new copy; the caller owns it.", test: "skip: event objects cannot be constructed from Go" }
+
+QItemSelectionModel:
+  QItemSelectionModel(QAbstractItemModel*, QObject*): { args: { model: borrowed } }
+  model: { return: borrowed }
+  setModel: { reviewed: true }
+
+QModelIndex:
+  model: { return: borrowed }
+
+QPersistentModelIndex:
+  model: { return: borrowed }
+
+QDate:
+  toString(const QString&): { name: ToStringFormat }
+  toString(QStringView): { skip: "use the QString overload" }
+  fromString(QStringView, Qt::DateFormat): { skip: "use the QString overload" }
+  fromString(const QString&, Qt::DateFormat): { name: QDateFromString }
+  fromString(QStringView, QStringView, int): { skip: "use the QString overload" }
+  fromString(const QString&, QStringView, int): { skip: "use the QString overload" }
+  fromString(const QString&, const QString&, int): { name: QDateFromStringFormat }
+
+QDateTime:
+  toString(const QString&): { name: ToStringFormat }
+  toString(QStringView): { skip: "use the QString overload" }
+  fromString(QStringView, Qt::DateFormat): { skip: "use the QString overload" }
+  fromString(const QString&, Qt::DateFormat): { name: QDateTimeFromString }
+  fromString(QStringView, QStringView, int): { skip: "use the QString overload" }
+  fromString(const QString&, QStringView, int): { skip: "use the QString overload" }
+  fromString(const QString&, const QString&, int): { name: QDateTimeFromStringFormat }
+
+QTime:
+  toString(const QString&): { name: ToStringFormat }
+  toString(QStringView): { skip: "use the QString overload" }
+  fromString(QStringView, Qt::DateFormat): { skip: "use the QString overload" }
+  fromString(QStringView, QStringView): { skip: "use the QString overload" }
+  fromString(const QString&, QStringView): { skip: "use the QString overload" }
+  fromString(const QString&, Qt::DateFormat): { name: QTimeFromString }
+  fromString(const QString&, const QString&): { name: QTimeFromStringFormat }
+
+QFile:
+  open(int, QIODeviceBase::OpenMode, QFileDevice::FileHandleFlags): { name: OpenFd }
+  decodeName(const char*): { skip: "use the []byte overload" }
+  QFile(const QString&): { skip: "use NewQFileWithName(name, nil)" }
+  QFile(const QString&, QObject*): { name: NewQFileWithName }
+
+QSettings:
+  QSettings(QSettings::Scope, QObject*): { name: NewQSettingsWithScopeOnly }
+  value(QAnyStringView, const QVariant&): { name: ValueOr }
+  value(QAnyStringView): { name: Value }
+
+QVariant:
+  QVariant(QSizeF): { name: NewQVariantWithSizeF }
+  QVariant(QPointF): { name: NewQVariantWithPointF }
+  QVariant(QRectF): { name: NewQVariantWithRectF }
+  QVariant(const QPersistentModelIndex&): { name: NewQVariantWithPersistentIndex }
