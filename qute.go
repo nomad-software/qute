@@ -1,11 +1,11 @@
-// Package goqt runs Qt applications from Go and provides the tools that make
+// Package qute runs Qt applications from Go and provides the tools that make
 // them checkable without a human at the screen: headless screenshots, an
 // object tree dump and scripted input.
 //
 // A minimal program:
 //
 //	func main() {
-//		goqt.Main(func() {
+//		qute.Main(func() {
 //			w := qtwidgets.NewQWidget(nil)
 //			w.SetWindowTitle("Hello")
 //			w.Show()
@@ -14,7 +14,7 @@
 //
 // All Qt calls must run on the GUI thread, which is the main goroutine inside
 // Main. From other goroutines use Post or PostSync.
-package goqt
+package qute
 
 import (
 	"os"
@@ -26,14 +26,14 @@ import (
 
 // Main creates the QApplication, runs setup on the GUI thread, then runs the
 // event loop until the application quits. It returns the exit code. Call it
-// from main(): the main goroutine is locked to the main OS thread when goqt is
+// from main(): the main goroutine is locked to the main OS thread when qute is
 // imported, which Qt requires.
 //
 // Once the loop has exited, queued GC cleanups are dropped rather than run,
 // since deleting objects after the application is gone crashes Qt.
 func Main(setup func()) int {
 	if !rt.IsGUIThread() {
-		panic("goqt.Main: must be called from the main goroutine (it owns the main OS thread)")
+		panic("qute.Main: must be called from the main goroutine (it owns the main OS thread)")
 	}
 	if !rt.AppExists() {
 		qtwidgets.NewQApplication(os.Args)

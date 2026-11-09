@@ -32,7 +32,10 @@ func callSite() string {
 // libraryFrame reports frames inside the binding itself (not its tests or
 // examples).
 func libraryFrame(fn string) bool {
-	for _, p := range []string{"internal/rt.", "qtcore.", "qtgui.", "qtwidgets.", "goqt."} {
+	if strings.HasPrefix(fn, strings.TrimSuffix(modulePrefix, "/")+".") {
+		return true // the root package: qute.Main, qute.Run, ...
+	}
+	for _, p := range []string{"internal/rt.", "qtcore.", "qtgui.", "qtwidgets."} {
 		if strings.HasPrefix(fn, modulePrefix+p) {
 			return true
 		}

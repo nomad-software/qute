@@ -1,7 +1,7 @@
-// Command goqt is the companion tool for the goqt Qt bindings.
+// Command qute is the companion tool for the qute Qt bindings.
 //
-//	goqt vet [packages]     static ownership and threading checks
-//	goqt new app <dir>      write a known-good starter application
+//	qute vet [packages]     static ownership and threading checks
+//	qute new app <dir>      write a known-good starter application
 package main
 
 import (
@@ -10,8 +10,8 @@ import (
 )
 
 const usage = `usage:
-  goqt vet [packages]        check for ownership and threading mistakes (default ./...)
-  goqt new app <dir> [module] write main.go, a window, a behaviour test and a screenshot test
+  qute vet [packages]        check for ownership and threading mistakes (default ./...)
+  qute new app <dir> [module] write main.go, a window, a behaviour test and a screenshot test
 `
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 			module = os.Args[4]
 		}
 		if err := newApp(os.Args[3], module); err != nil {
-			fmt.Fprintln(os.Stderr, "goqt new:", err)
+			fmt.Fprintln(os.Stderr, "qute new:", err)
 			os.Exit(1)
 		}
 	default:

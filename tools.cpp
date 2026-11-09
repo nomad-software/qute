@@ -17,7 +17,7 @@ static char *dup(const QByteArray &b) {
     return p;
 }
 
-extern "C" goqt_rgba goqt_tools_grab(void *widget) {
+extern "C" qute_rgba qute_tools_grab(void *widget) {
     QWidget *w = static_cast<QWidget *>(widget);
     // A widget that was never shown has not been laid out yet.
     w->ensurePolished();
@@ -26,7 +26,7 @@ extern "C" goqt_rgba goqt_tools_grab(void *widget) {
         if (!w->testAttribute(Qt::WA_Resized)) w->adjustSize();
     }
     QImage img = w->grab().toImage().convertToFormat(QImage::Format_RGBA8888);
-    goqt_rgba out{nullptr, img.width(), img.height()};
+    qute_rgba out{nullptr, img.width(), img.height()};
     const int row = img.width() * 4;
     out.data = static_cast<unsigned char *>(std::malloc(size_t(row) * img.height() + 1));
     for (int y = 0; y < img.height(); y++) {
@@ -35,7 +35,7 @@ extern "C" goqt_rgba goqt_tools_grab(void *widget) {
     return out;
 }
 
-extern "C" void goqt_tools_info(void *obj, goqt_objinfo *out) {
+extern "C" void qute_tools_info(void *obj, qute_objinfo *out) {
     QObject *o = static_cast<QObject *>(obj);
     out->cls = dup(QByteArray(o->metaObject()->className()));
     out->name = dup(o->objectName().toUtf8());
@@ -59,23 +59,23 @@ extern "C" void goqt_tools_info(void *obj, goqt_objinfo *out) {
     for (int i = 0; i < ch.size(); i++) out->children[i] = ch[i];
 }
 
-extern "C" void goqt_tools_free_info(goqt_objinfo *info) {
+extern "C" void qute_tools_free_info(qute_objinfo *info) {
     std::free(info->cls);
     std::free(info->name);
     std::free(info->children);
 }
 
-extern "C" void goqt_tools_click(void *widget, int button, int x, int y, bool at) {
+extern "C" void qute_tools_click(void *widget, int button, int x, int y, bool at) {
     QWidget *w = static_cast<QWidget *>(widget);
     QPoint pos = at ? QPoint(x, y) : QPoint();
     QTest::mouseClick(w, Qt::MouseButton(button), Qt::NoModifier, pos);
 }
 
-extern "C" void goqt_tools_dblclick(void *widget, int button) {
+extern "C" void qute_tools_dblclick(void *widget, int button) {
     QTest::mouseDClick(static_cast<QWidget *>(widget), Qt::MouseButton(button));
 }
 
-extern "C" void goqt_tools_type(void *widget, const char *s, ptrdiff_t n) {
+extern "C" void qute_tools_type(void *widget, const char *s, ptrdiff_t n) {
     QWidget *w = static_cast<QWidget *>(widget);
     const QString text = QString::fromUtf8(s, n);
     // QTest::keyClicks only handles ASCII; send other characters as text with
@@ -94,10 +94,10 @@ extern "C" void goqt_tools_type(void *widget, const char *s, ptrdiff_t n) {
     }
 }
 
-extern "C" void goqt_tools_key(void *widget, int key, int mods) {
+extern "C" void qute_tools_key(void *widget, int key, int mods) {
     QTest::keyClick(static_cast<QWidget *>(widget), Qt::Key(key), Qt::KeyboardModifiers::fromInt(mods));
 }
 
-extern "C" void goqt_tools_wait(int ms) { QTest::qWait(ms); }
+extern "C" void qute_tools_wait(int ms) { QTest::qWait(ms); }
 
-extern "C" void goqt_tools_process(void) { QCoreApplication::processEvents(QEventLoop::AllEvents); }
+extern "C" void qute_tools_process(void) { QCoreApplication::processEvents(QEventLoop::AllEvents); }

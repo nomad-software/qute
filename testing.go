@@ -1,4 +1,4 @@
-package goqt
+package qute
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 // TestMain runs a package's tests with a QApplication on the main thread.
 // Use it from the package's TestMain:
 //
-//	func TestMain(m *testing.M) { goqt.TestMain(m) }
+//	func TestMain(m *testing.M) { qute.TestMain(m) }
 //
 // Test functions run on other goroutines, so wrap Qt calls in Run(t, ...).
 // QT_QPA_PLATFORM defaults to offscreen, so tests need no display.
@@ -59,7 +59,7 @@ func Run(t testing.TB, f func()) {
 // that unreachable objects really are freed. Call it off the GUI thread.
 func CollectGarbage() {
 	if rt.IsGUIThread() {
-		panic("goqt.CollectGarbage: call it outside Run, so the GUI thread can free objects")
+		panic("qute.CollectGarbage: call it outside Run, so the GUI thread can free objects")
 	}
 	for i := 0; i < 4; i++ {
 		runtime.GC()

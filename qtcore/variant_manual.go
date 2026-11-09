@@ -1,4 +1,4 @@
-// Hand-written; goqtgen never overwrites *_manual.go files.
+// Hand-written; qutegen never overwrites *_manual.go files.
 
 package qtcore
 
@@ -21,42 +21,42 @@ func NewQVariantOf(v any) *QVariant {
 	var p unsafe.Pointer
 	switch x := v.(type) {
 	case nil:
-		p = C.goqt_variant_null()
+		p = C.qute_variant_null()
 	case bool:
-		p = C.goqt_variant_bool(C.bool(x))
+		p = C.qute_variant_bool(C.bool(x))
 	case int:
-		p = C.goqt_variant_int64(C.longlong(x))
+		p = C.qute_variant_int64(C.longlong(x))
 	case int32:
-		p = C.goqt_variant_int(C.int(x))
+		p = C.qute_variant_int(C.int(x))
 	case int64:
-		p = C.goqt_variant_int64(C.longlong(x))
+		p = C.qute_variant_int64(C.longlong(x))
 	case uint:
-		p = C.goqt_variant_uint64(C.ulonglong(x))
+		p = C.qute_variant_uint64(C.ulonglong(x))
 	case uint32:
-		p = C.goqt_variant_uint64(C.ulonglong(x))
+		p = C.qute_variant_uint64(C.ulonglong(x))
 	case uint64:
-		p = C.goqt_variant_uint64(C.ulonglong(x))
+		p = C.qute_variant_uint64(C.ulonglong(x))
 	case float32:
-		p = C.goqt_variant_double(C.double(x))
+		p = C.qute_variant_double(C.double(x))
 	case float64:
-		p = C.goqt_variant_double(C.double(x))
+		p = C.qute_variant_double(C.double(x))
 	case string:
-		p = C.goqt_variant_string((*C.char)(unsafe.Pointer(unsafe.StringData(x))), C.ptrdiff_t(len(x)))
+		p = C.qute_variant_string((*C.char)(unsafe.Pointer(unsafe.StringData(x))), C.ptrdiff_t(len(x)))
 	case []byte:
-		p = C.goqt_variant_bytes((*C.char)(unsafe.Pointer(unsafe.SliceData(x))), C.ptrdiff_t(len(x)))
+		p = C.qute_variant_bytes((*C.char)(unsafe.Pointer(unsafe.SliceData(x))), C.ptrdiff_t(len(x)))
 	case []string:
-		d, l := goqtStrListArg(x)
-		p = C.goqt_variant_strlist((*C.char)(unsafe.Pointer(unsafe.SliceData(d))), (*C.ptrdiff_t)(unsafe.SliceData(l)), C.ptrdiff_t(len(x)))
+		d, l := quteStrListArg(x)
+		p = C.qute_variant_strlist((*C.char)(unsafe.Pointer(unsafe.SliceData(d))), (*C.ptrdiff_t)(unsafe.SliceData(l)), C.ptrdiff_t(len(x)))
 	case *QVariant:
 		return NewQVariantOf(x.Value())
 	case QPoint:
-		p = C.goqt_variant_point(cQPoint(x))
+		p = C.qute_variant_point(cQPoint(x))
 	case QSize:
-		p = C.goqt_variant_size(cQSize(x))
+		p = C.qute_variant_size(cQSize(x))
 	case QRect:
-		p = C.goqt_variant_rect(cQRect(x))
+		p = C.qute_variant_rect(cQRect(x))
 	case QPointF:
-		p = C.goqt_variant_pointf(cQPointF(x))
+		p = C.qute_variant_pointf(cQPointF(x))
 	default:
 		panic(fmt.Sprintf("NewQVariantOf: unsupported Go type %T; convert it to a basic type first", v))
 	}
@@ -68,33 +68,33 @@ func NewQVariantOf(v any) *QVariant {
 // are returned as their string form, or nil if Qt cannot convert them.
 func (this *QVariant) Value() any {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.Value")
-	switch C.goqt_variant_kind(self) {
+	switch C.qute_variant_kind(self) {
 	case 0:
 		return nil
 	case 1:
-		return bool(C.goqt_variant_to_bool(self))
+		return bool(C.qute_variant_to_bool(self))
 	case 2:
-		return int64(C.goqt_variant_to_int64(self))
+		return int64(C.qute_variant_to_int64(self))
 	case 3:
-		return uint64(C.goqt_variant_to_uint64(self))
+		return uint64(C.qute_variant_to_uint64(self))
 	case 4:
-		return float64(C.goqt_variant_to_double(self))
+		return float64(C.qute_variant_to_double(self))
 	case 5:
-		return goqtStr(C.goqt_variant_to_string(self))
+		return quteStr(C.qute_variant_to_string(self))
 	case 6:
-		return goqtBytes(C.goqt_variant_to_bytes(self))
+		return quteBytes(C.qute_variant_to_bytes(self))
 	case 7:
-		return goqtStrList(C.goqt_variant_to_strlist(self))
+		return quteStrList(C.qute_variant_to_strlist(self))
 	case 8:
-		return goQPoint(C.goqt_variant_to_point(self))
+		return goQPoint(C.qute_variant_to_point(self))
 	case 9:
-		return goQSize(C.goqt_variant_to_size(self))
+		return goQSize(C.qute_variant_to_size(self))
 	case 10:
-		return goQRect(C.goqt_variant_to_rect(self))
+		return goQRect(C.qute_variant_to_rect(self))
 	case 11:
-		return goQPointF(C.goqt_variant_to_pointf(self))
+		return goQPointF(C.qute_variant_to_pointf(self))
 	case 12:
-		return goqtStr(C.goqt_variant_to_string(self))
+		return quteStr(C.qute_variant_to_string(self))
 	}
 	return nil
 }

@@ -1,8 +1,8 @@
-// Command goqtgen generates the qtcore, qtgui and qtwidgets packages from the
+// Command qutegen generates the qtcore, qtgui and qtwidgets packages from the
 // checked-in IR (spec/ir) and the class and ownership specs (spec/classes,
 // spec/overlays). It needs neither Qt nor libclang.
 //
-//	go run ./cmd/goqtgen -root .
+//	go run ./cmd/qutegen -root .
 package main
 
 import (
@@ -16,7 +16,7 @@ func main() {
 	root := flag.String("root", ".", "repository root")
 	flag.Parse()
 	if err := run(*root); err != nil {
-		fmt.Fprintln(os.Stderr, "goqtgen:", err)
+		fmt.Fprintln(os.Stderr, "qutegen:", err)
 		os.Exit(1)
 	}
 }
@@ -69,6 +69,6 @@ func run(root string) error {
 	for _, m := range g.modules {
 		n += len(m.Classes)
 	}
-	fmt.Printf("goqtgen: %d classes in %d packages\n", n, len(g.modules))
+	fmt.Printf("qutegen: %d classes in %d packages\n", n, len(g.modules))
 	return nil
 }

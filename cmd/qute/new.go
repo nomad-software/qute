@@ -76,11 +76,11 @@ const mainTmpl = `package main
 import (
 	"os"
 
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 )
 
 func main() {
-	os.Exit(goqt.Main(func() {
+	os.Exit(qute.Main(func() {
 		w := NewWindow()
 		w.Show()
 	}))
@@ -129,17 +129,17 @@ const testTmpl = `package main
 import (
 	"testing"
 
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 )
 
-func TestMain(m *testing.M) { goqt.TestMain(m) }
+func TestMain(m *testing.M) { qute.TestMain(m) }
 
 func TestClickUpdatesLabel(t *testing.T) {
-	goqt.Run(t, func() {
+	qute.Run(t, func() {
 		w := NewWindow()
 		defer w.Delete()
-		goqt.Click(w.Button)
-		goqt.Click(w.Button)
+		qute.Click(w.Button)
+		qute.Click(w.Button)
 		if got := w.Label.Text(); got != "Clicked 2 times" {
 			t.Errorf("label = %q", got)
 		}
@@ -153,25 +153,25 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 )
 
 // TestScreenshot renders the window offscreen and saves it, so the layout can
 // be looked at without a display. Run with -v to see the file path.
 func TestScreenshot(t *testing.T) {
-	goqt.Run(t, func() {
+	qute.Run(t, func() {
 		w := NewWindow()
 		defer w.Delete()
-		img := goqt.Screenshot(w)
+		img := qute.Screenshot(w)
 		if b := img.Bounds(); b.Dx() < 100 || b.Dy() < 50 {
 			t.Fatalf("window too small: %v", b)
 		}
 		path := filepath.Join(t.TempDir(), "window.png")
-		if err := goqt.SaveScreenshot(w, path); err != nil {
+		if err := qute.SaveScreenshot(w, path); err != nil {
 			t.Fatal(err)
 		}
 		t.Log("screenshot:", path)
-		t.Log(goqt.DumpTree(w))
+		t.Log(qute.DumpTree(w))
 	})
 }
 `

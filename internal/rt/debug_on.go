@@ -1,4 +1,4 @@
-//go:build goqt_debug
+//go:build qute_debug
 
 package rt
 

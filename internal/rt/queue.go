@@ -139,7 +139,7 @@ func PostSync(f func()) {
 		return
 	}
 	if !Running() {
-		panic("goqt.PostSync: the application is not running; call it from inside goqt.Main or a goqt.TestMain test")
+		panic("qute.PostSync: the application is not running; call it from inside qute.Main or a qute.TestMain test")
 	}
 	done := make(chan any, 1)
 	Post(func() {
@@ -154,7 +154,7 @@ func PostSync(f func()) {
 func checkThread(method string) {
 	if !IsGUIThread() {
 		panic(fmt.Sprintf("%s: called off the GUI thread; Qt objects may only be used on the GUI thread, "+
-			"wrap the call in goqt.Post(func() { ... })", method))
+			"wrap the call in qute.Post(func() { ... })", method))
 	}
 }
 

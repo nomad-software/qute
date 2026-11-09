@@ -729,9 +729,9 @@ func (c *Class) cName(n string) string {
 	k := c.cNames[n]
 	c.cNames[n] = k + 1
 	if k == 0 {
-		return fmt.Sprintf("goqt_%s_%s", c.Name, n)
+		return fmt.Sprintf("qute_%s_%s", c.Name, n)
 	}
-	return fmt.Sprintf("goqt_%s_%s_%d", c.Name, n, k)
+	return fmt.Sprintf("qute_%s_%s_%d", c.Name, n, k)
 }
 
 func (g *Gen) nameStatics(c *Class, ms []*Method) []*Method {
@@ -938,7 +938,7 @@ func (g *Gen) buildShim(c *Class) {
 			v.Numbered = true
 		}
 		v.GoName = n
-		v.CName = fmt.Sprintf("goqt_%s_super_%d", c.Name, v.VIndex)
+		v.CName = fmt.Sprintf("qute_%s_super_%d", c.Name, v.VIndex)
 	}
 	pused := map[string]int{}
 	for _, v := range c.Protected {

@@ -1,4 +1,4 @@
-// Hand-written; goqtgen never overwrites *_manual.go files.
+// Hand-written; qutegen never overwrites *_manual.go files.
 
 package qtgui
 

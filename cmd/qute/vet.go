@@ -24,17 +24,17 @@ type finding struct {
 	msg  string
 }
 
-// vet runs the goqt static checks:
+// vet runs the qute static checks:
 //
 //	owned-leak      an Owned object with signal connections is never deleted,
 //	                parented or shown (its connections pin it forever)
 //	delete-handler  Delete() inside a signal or event handler (use DeleteLater)
-//	gui-goroutine   Qt calls inside a goroutine (use goqt.Post)
+//	gui-goroutine   Qt calls inside a goroutine (use qute.Post)
 //	scoped-escape   an event or painter argument stored past its callback
 func vet(args []string) int {
 	all, err := vetFindings(args)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "goqt vet:", err)
+		fmt.Fprintln(os.Stderr, "qute vet:", err)
 		return 2
 	}
 	for _, f := range all {
@@ -133,7 +133,7 @@ func (v *vetter) file(f *ast.File) {
 	v.checkLeaks(f)
 }
 
-// gui-goroutine: Qt calls in `go` statements, except inside goqt.Post/PostSync.
+// gui-goroutine: Qt calls in `go` statements, except inside qute.Post/PostSync.
 func (v *vetter) checkGoroutines(f *ast.File) {
 	ast.Inspect(f, func(n ast.Node) bool {
 		g, ok := n.(*ast.GoStmt)
@@ -149,14 +149,14 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 			if !ok {
 				return true
 			}
-			if fn, _ := isQtFunc(v.pkg.TypesInfo, call); fn != nil && fn.Pkg().Path() == modPath+"goqt" {
+			if fn, _ := isQtFunc(v.pkg.TypesInfo, call); fn != nil && fn.Pkg().Path() == strings.TrimSuffix(modPath, "/") {
 				switch fn.Name() {
 				case "Post", "PostSync", "Run", "Quit":
 					return false // runs on the GUI thread
 				}
 			}
 			if fn, ok := isQtFunc(v.pkg.TypesInfo, call); ok {
-				v.report(call, "gui-goroutine", "%s called from a goroutine; Qt objects live on the GUI thread, wrap it in goqt.Post(func() { ... })", fn.Name())
+				v.report(call, "gui-goroutine", "%s called from a goroutine; Qt objects live on the GUI thread, wrap it in qute.Post(func() { ... })", fn.Name())
 				return false
 			}
 			return true

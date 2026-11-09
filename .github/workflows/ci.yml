@@ -22,13 +22,13 @@ jobs:
         run: go vet ./... && go test ./...
       - name: debug build (thread checks, call sites)
         if: matrix.mode == 'debug'
-        run: go test -tags goqt_debug ./...
+        run: go test -tags qute_debug ./...
       - name: AddressSanitizer and LeakSanitizer
         if: matrix.mode == 'asan'
-        run: go test -asan ./goqt ./qtcore ./qtgui ./qtwidgets
+        run: go test -asan . ./qtcore ./qtgui ./qtwidgets
       - name: strict cgo pointer checks
         if: matrix.mode == 'cgocheck2'
-        run: GOEXPERIMENT=cgocheck2 go test ./goqt ./qtcore ./qtgui ./qtwidgets
+        run: GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets
       - name: generated code is up to date
         if: matrix.mode == 'generate'
         run: go generate ./qtcore && git diff --exit-code

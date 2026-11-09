@@ -290,9 +290,9 @@ func (g *Gen) cgoType(c *conv) string {
 	case kEnum, kFlags:
 		return "C.int64_t"
 	case kString, kBytes:
-		return "C.goqt_str"
+		return "C.qute_str"
 	case kStrList, kList:
-		return "C.goqt_list"
+		return "C.qute_list"
 	case kChar:
 		return "C.uint"
 	case kStruct:
@@ -313,9 +313,9 @@ func cType(c *conv) string {
 	case kEnum, kFlags:
 		return "int64_t"
 	case kString, kBytes:
-		return "goqt_str"
+		return "qute_str"
 	case kStrList, kList:
-		return "goqt_list"
+		return "qute_list"
 	case kChar:
 		return "unsigned int"
 	case kStruct:
@@ -357,7 +357,7 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 		return nil, []string{fmt.Sprintf("(*C.char)(unsafe.Pointer(unsafe.SliceData(%s)))", v), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
 	case kStrList:
 		d, l := v+"Data", v+"Lens"
-		return []string{fmt.Sprintf("%s, %s := goqtStrListArg(%s)", d, l, v)},
+		return []string{fmt.Sprintf("%s, %s := quteStrListArg(%s)", d, l, v)},
 			[]string{fmt.Sprintf("(*C.char)(unsafe.Pointer(unsafe.SliceData(%s)))", d), fmt.Sprintf("(*C.ptrdiff_t)(unsafe.SliceData(%s))", l), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
 	case kList:
 		tmp := v + "C"
@@ -367,7 +367,7 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 		case kObj, kValue:
 			conv = fmt.Sprintf("rt.UseArg(unsafe.Pointer(%s[i]), %q)", v, method)
 		case kString:
-			conv = fmt.Sprintf("goqtCStr(%s[i])", v)
+			conv = fmt.Sprintf("quteCStr(%s[i])", v)
 		default:
 			_, a := g.goArg(c.elem, v+"[i]", method, ctx)
 			conv = a[0]
@@ -377,7 +377,7 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 			fmt.Sprintf("for i := range %s {\n\t\t%s[i] = %s\n\t}", v, tmp, conv),
 		}
 		if c.elem.k == kString {
-			pre = append(pre, fmt.Sprintf("defer goqtFreeStrs(%s)", tmp))
+			pre = append(pre, fmt.Sprintf("defer quteFreeStrs(%s)", tmp))
 		}
 		return pre, []string{fmt.Sprintf("unsafe.Pointer(unsafe.SliceData(%s))", tmp), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
 	case kChar:
@@ -411,11 +411,11 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 	case kEnum, kFlags:
 		return fmt.Sprintf("%s(%s)", g.goType(c, ctx, false), r)
 	case kString:
-		return fmt.Sprintf("goqtStr(%s)", r)
+		return fmt.Sprintf("quteStr(%s)", r)
 	case kBytes:
-		return fmt.Sprintf("goqtBytes(%s)", r)
+		return fmt.Sprintf("quteBytes(%s)", r)
 	case kStrList:
-		return fmt.Sprintf("goqtStrList(%s)", r)
+		return fmt.Sprintf("quteStrList(%s)", r)
 	case kChar:
 		return fmt.Sprintf("rune(%s)", r)
 	case kCStr:
@@ -433,7 +433,7 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 		if c.elem.k == kValue {
 			inner = g.wrapExpr(c.elem.cls, "e", "rt.TakeOwned", ctx)
 		}
-		return fmt.Sprintf("goqtList(%s, func(e %s) %s { return %s })", r, et, gt, inner)
+		return fmt.Sprintf("quteList(%s, func(e %s) %s { return %s })", r, et, gt, inner)
 	}
 	panic("goRet")
 }
@@ -447,11 +447,11 @@ func (g *Gen) wrapExpr(cls *Class, p, mode string, ctx *Module) string {
 func (g *Gen) goVirtRet(c *conv, v, method string, ctx *Module) (string, bool) {
 	switch c.k {
 	case kString:
-		return fmt.Sprintf("goqtCStr(%s)", v), true
+		return fmt.Sprintf("quteCStr(%s)", v), true
 	case kBytes:
-		return fmt.Sprintf("goqtCBytes(%s)", v), true
+		return fmt.Sprintf("quteCBytes(%s)", v), true
 	case kStrList:
-		return fmt.Sprintf("goqtCStrList(%s)", v), true
+		return fmt.Sprintf("quteCStrList(%s)", v), true
 	case kPrim, kEnum, kFlags, kChar, kStruct, kValue:
 		_, a := g.goArg(c, v, method, ctx)
 		return a[0], true
@@ -477,11 +477,11 @@ func (g *Gen) cppArg(c *conv, n string) string {
 	case kBytes:
 		return fmt.Sprintf("QByteArray(%s, %s_len)", n, n)
 	case kStrList:
-		return fmt.Sprintf("goqt_qstrlist(%s, %s_lens, %s_n)", n, n, n)
+		return fmt.Sprintf("qute_qstrlist(%s, %s_lens, %s_n)", n, n, n)
 	case kChar:
 		return fmt.Sprintf("QChar(static_cast<char32_t>(%s))", n)
 	case kStruct:
-		return fmt.Sprintf("goqt_to_%s(%s)", c.st.name, n)
+		return fmt.Sprintf("qute_to_%s(%s)", c.st.name, n)
 	case kValue:
 		if !c.cls.DefCtor {
 			return fmt.Sprintf("*static_cast<%s *>(%s)", c.cls.Name, n)
@@ -500,7 +500,7 @@ func (g *Gen) cppArg(c *conv, n string) string {
 		case kObj, kValue:
 			dt, el = "void *", g.cppArg(c.elem, "d[i]")
 		case kString:
-			dt, el = "goqt_str", "QString::fromUtf8(d[i].data, d[i].len)"
+			dt, el = "qute_str", "QString::fromUtf8(d[i].data, d[i].len)"
 		default:
 			dt, el = cType(c.elem), g.cppArg(c.elem, "d[i]")
 		}
@@ -538,15 +538,15 @@ func (g *Gen) cppRet(c *conv, e string) string {
 	case kFlags:
 		return fmt.Sprintf("static_cast<int64_t>((%s).toInt())", e)
 	case kString:
-		return fmt.Sprintf("goqt_ret_str(%s)", e)
+		return fmt.Sprintf("qute_ret_str(%s)", e)
 	case kBytes:
-		return fmt.Sprintf("goqt_ret_bytes(%s)", e)
+		return fmt.Sprintf("qute_ret_bytes(%s)", e)
 	case kStrList:
-		return fmt.Sprintf("goqt_ret_strlist(%s)", e)
+		return fmt.Sprintf("qute_ret_strlist(%s)", e)
 	case kChar:
 		return fmt.Sprintf("static_cast<unsigned int>((%s).unicode())", e)
 	case kStruct:
-		return fmt.Sprintf("goqt_from_%s(%s)", c.st.name, e)
+		return fmt.Sprintf("qute_from_%s(%s)", c.st.name, e)
 	case kValue:
 		return fmt.Sprintf("static_cast<void *>(new %s(%s))", c.cls.Name, e)
 	case kObj:
@@ -558,7 +558,7 @@ func (g *Gen) cppRet(c *conv, e string) string {
 		return e
 	case kList:
 		ec := cType(c.elem)
-		return fmt.Sprintf("goqt_ret_list<%s>(%s, [](const auto &v) { return %s; })", ec, e, g.cppRet(c.elem, "v"))
+		return fmt.Sprintf("qute_ret_list<%s>(%s, [](const auto &v) { return %s; })", ec, e, g.cppRet(c.elem, "v"))
 	}
 	panic("cppRet")
 }
@@ -567,11 +567,11 @@ func (g *Gen) cppRet(c *conv, e string) string {
 func (g *Gen) cppVirtRet(c *conv, n string) string {
 	switch c.k {
 	case kString:
-		return fmt.Sprintf("goqt_take_qstr(%s)", n)
+		return fmt.Sprintf("qute_take_qstr(%s)", n)
 	case kBytes:
-		return fmt.Sprintf("goqt_take_qbytes(%s)", n)
+		return fmt.Sprintf("qute_take_qbytes(%s)", n)
 	case kStrList:
-		return fmt.Sprintf("goqt_take_qstrlist(%s)", n)
+		return fmt.Sprintf("qute_take_qstrlist(%s)", n)
 	case kObj:
 		return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Name, n)
 	}

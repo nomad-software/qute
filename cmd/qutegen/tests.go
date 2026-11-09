@@ -173,7 +173,7 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 	core := g.byName["QtCore"]
 	owned, parented := t.q(core, "Owned"), t.q(core, "Parented")
 
-	b.p("func TestMain(m *testing.M) { goqt.TestMain(m) }\n")
+	b.p("func TestMain(m *testing.M) { qute.TestMain(m) }\n")
 	b.p("// TestLayout checks the runtime's assumption that every primary base sits at")
 	b.p("// offset 0, so one pointer serves the whole embedding chain.")
 	b.p("func TestLayout(t *testing.T) {\n\tif c := %s.CheckLayout(); c != \"\" {\n\t\tt.Fatalf(\"%%s: primary base is not at offset 0\", c)\n\t}\n}\n", m.Pkg)
@@ -215,7 +215,7 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 				continue
 			}
 			b.p("// %s: a non-nil parent makes the object Parented, nil makes it Owned.", ctor.Sig)
-			b.p("func TestOwnership_%s(t *testing.T) {\n\tgoqt.Run(t, func() {", ctor.GoName)
+			b.p("func TestOwnership_%s(t *testing.T) {\n\tqute.Run(t, func() {", ctor.GoName)
 			b.p("\t\troot := %s", rootExpr)
 			b.p("\t\tx := %s(%s)", t.q(m, ctor.GoName), strings.Join(args, ", "))
 			b.p("\t\tif got := x.Ownership(); got != %s {\n\t\t\tt.Errorf(\"with parent: %%v, want Parented\", got)\n\t\t}", parented)
@@ -235,7 +235,7 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 	out.p("%s", strings.TrimSuffix(genHeader, "\n"))
 	out.p("package %s_test\n", m.Pkg)
 	out.p("import (\n\t\"testing\"\n")
-	out.p("\t\"%s/goqt\"", modulePath)
+	out.p("\t%q", modulePath)
 	t.imports[m.ImportPath] = true
 	var ims []string
 	for k := range t.imports {
@@ -270,7 +270,7 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 			}
 		}
 		b.p("// %s (test from the overlay)", mm.Sig)
-		b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tgoqt.Run(t, func() {", c.Name, mm.GoName)
+		b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tqute.Run(t, func() {", c.Name, mm.GoName)
 		for _, l := range strings.Split(strings.TrimRight(mm.Overlay.Test, "\n"), "\n") {
 			b.p("\t\t%s", l)
 		}
@@ -378,7 +378,7 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		}
 	}
 	b.p("// %s", mm.Sig)
-	b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tgoqt.Run(t, func() {", c.Name, mm.GoName)
+	b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tqute.Run(t, func() {", c.Name, mm.GoName)
 	for _, l := range pre {
 		b.p("\t\t%s", l)
 	}

@@ -1,8 +1,8 @@
-// Package bad holds one example of each mistake goqt vet reports.
+// Package bad holds one example of each mistake qute vet reports.
 package bad
 
 import (
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
 )
@@ -38,6 +38,6 @@ func DeleteInHandler(w *qtwidgets.QWidget) {
 func Goroutine(lbl *qtwidgets.QLabel) {
 	go func() {
 		lbl.SetText("x") // want gui-goroutine
-		goqt.Post(func() { lbl.SetText("fine") })
+		qute.Post(func() { lbl.SetText("fine") })
 	}()
 }

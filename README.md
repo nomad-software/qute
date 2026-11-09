@@ -1,6 +1,6 @@
 # qute
 
-Qt 6 bindings for Go (working name `goqt`). Every Qt object has a Go handle
+Qt 6 bindings for Go. Every Qt object has a Go handle
 that tracks who owns it, so a double free or use-after-free is a clear panic
 instead of a segfault. GC cleanup is on by default and safe; `Delete()` is
 there when you need it to be deterministic.
@@ -11,12 +11,12 @@ package main
 import (
 	"os"
 
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtwidgets"
 )
 
 func main() {
-	os.Exit(goqt.Main(func() {
+	os.Exit(qute.Main(func() {
 		w := qtwidgets.NewQWidget(nil)                  // Owned
 		lay := qtwidgets.NewQVBoxLayout(w)              // Parented to w
 		lbl := qtwidgets.NewQLabelWithText("hi", nil)   // Owned
@@ -43,7 +43,7 @@ Each handle is in one state, changed only by annotated methods:
 
 - A dead handle panics with the class, method and fix:
   `QLabel.SetText: object destroyed (destroyed by Qt); keep its owner alive while you use it, or check Alive() first`.
-  Build with `-tags goqt_debug` to also get the call sites where the object
+  Build with `-tags qute_debug` to also get the call sites where the object
   was created and destroyed, a GUI-thread check on every call, and a panic for
   `Delete()` inside a handler.
 - GC never frees a window you can see: an Owned object is pinned while it is a
@@ -54,6 +54,37 @@ Each handle is in one state, changed only by annotated methods:
   thread. After the event loop exits, queued cleanups are dropped.
 - `Ownership()`, `Alive()`, `Delete()`, `Keep()`, `Ptr()` exist on every object.
   `XFromPtr(p, qtcore.Borrowed)` is the unsafe escape hatch.
+
+## API conventions
+
+Names follow the Qt docs, so Qt C++ knowledge carries over:
+
+| Qt C++                              | Go                                          |
+| ----------------------------------- | ------------------------------------------- |
+| `new QLabel(parent)`                | `qtwidgets.NewQLabel(parent)`               |
+| `new QLabel("hi", parent)`          | `qtwidgets.NewQLabelWithText("hi", parent)` |
+| `label->setText(s)`                 | `label.SetText(s)`                          |
+| `QApplication::focusWidget()`       | `qtwidgets.QApplicationFocusWidget()`       |
+| `connect(btn, &QPushButton::clicked, …)` | `btn.OnClicked(func(checked bool) { … })` |
+| `emit model->dataChanged(a, b)`     | `model.EmitDataChanged(a, b)`               |
+| `Qt::AlignLeft \| Qt::AlignTop`     | `qtcore.AlignLeft \| qtcore.AlignTop`       |
+| `QLineEdit::Password`               | `qtwidgets.QLineEditPassword`               |
+| `qobject_cast<QLabel*>(obj)`        | `qtwidgets.QLabelCast(obj)`                 |
+
+- Trailing default arguments are dropped; a constructor's `parent` is kept.
+  Pass `nil` for "no parent".
+- Overloads get readable names from the overlays (`DrawRect`, `DrawRectF`,
+  `AddTabIcon`). Where no name has been chosen yet, a numbered fallback
+  (`Resize2`) is used and listed in `UNREVIEWED.md`.
+- An argument of type `QWidgetLike` accepts any widget (`*QLabel`,
+  `*QPushButton`, your own subclass). Pass untyped `nil`, not a typed nil.
+- `QString`, `QByteArray` and `QStringList` are `string`, `[]byte` and
+  `[]string`. `QPoint`, `QSize`, `QRect`, `QMargins` and `QColor` are plain
+  Go structs. `QImage`, `QFont`, `QIcon`, `QVariant` and other value classes
+  are Owned handles that GC frees. `qtcore.NewQVariantOf(v)` and
+  `(*QVariant).Value()` convert to and from Go values.
+- Calls whose Qt result signals failure return `error`, e.g.
+  `img.Load(path)`.
 
 ## Signals, subclassing, threads
 
@@ -77,30 +108,30 @@ Event arguments are scoped: they are Dead once the handler returns. Call
 way: embed `qtcore.QAbstractListModelBase` and define `RowCount` and `Data`.
 
 All Qt calls happen on the GUI thread (the main goroutine inside
-`goqt.Main`). From other goroutines use `goqt.Post(f)` or `goqt.PostSync(f)`.
+`qute.Main`). From other goroutines use `qute.Post(f)` or `qute.PostSync(f)`.
 
 ## Checking an app without a screen
 
 ```go
-func TestMain(m *testing.M) { goqt.TestMain(m) } // offscreen QApplication
+func TestMain(m *testing.M) { qute.TestMain(m) } // offscreen QApplication
 
 func TestClick(t *testing.T) {
-	goqt.Run(t, func() {             // on the GUI thread
+	qute.Run(t, func() {             // on the GUI thread
 		w := NewWindow()
 		defer w.Delete()
-		goqt.Click(w.Button)
-		goqt.Type(w.Name, "Ada")
-		img := goqt.Screenshot(w)        // image.Image, no display needed
-		t.Log(goqt.DumpTree(w))          // class, objectName, ownership, geometry as JSON
+		qute.Click(w.Button)
+		qute.Type(w.Name, "Ada")
+		img := qute.Screenshot(w)        // image.Image, no display needed
+		t.Log(qute.DumpTree(w))          // class, objectName, ownership, geometry as JSON
 	})
 }
 ```
 
-The `goqt` command:
+The `qute` command (`go install github.com/nomad-software/qute/cmd/qute@latest`):
 
-- `goqt new app <dir> [module]` writes `main.go`, a window, a behaviour test
+- `qute new app <dir> [module]` writes `main.go`, a window, a behaviour test
   and a screenshot test.
-- `goqt vet ./...` reports Owned objects with connections that are never
+- `qute vet ./...` reports Owned objects with connections that are never
   deleted or parented, `Delete()` inside handlers, Qt calls from goroutines,
   and event arguments stored past their callback.
 
@@ -111,7 +142,7 @@ Try the example: `go run ./examples/hello`, or render it headless with
 
 ```
 Qt headers --libclang--> spec/ir/*.json --+
-                         spec/classes/    +--> cmd/goqtgen --> qtcore/ qtgui/ qtwidgets/
+                         spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/
                          spec/overlays/ --+                    UNREVIEWED.md, ownership tests
 ```
 
@@ -149,18 +180,42 @@ Qt headers --libclang--> spec/ir/*.json --+
 | ------------------ | -------------------------------------------------------- |
 | `internal/rt`      | runtime: handles, registry, pins, cleanup queue, threads |
 | `qtcore`, `qtgui`, `qtwidgets` | generated packages (+ `*_manual` files)  |
-| `goqt`             | `Main`, `Post`, `Screenshot`, `DumpTree`, `Click`, tests |
-| `cmd/goqtgen`      | the generator                                            |
-| `cmd/goqt`         | `goqt vet`, `goqt new app`                               |
+| `.` (package `qute`) | `Main`, `Post`, `Screenshot`, `DumpTree`, `Click`, tests |
+| `cmd/qutegen`      | the generator                                            |
+| `cmd/qute`         | `qute vet`, `qute new app`                               |
 | `spec`             | IR, class lists, ownership overlays                      |
 | `examples/hello`   | a small app                                              |
 
+## Development
+
+```sh
+go test ./...                          # everything, headless (offscreen)
+go test -tags qute_debug ./...         # with thread checks and call sites
+go test -asan . ./qtcore ./qtgui ./qtwidgets
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets
+go generate ./qtcore                   # regenerate packages, tests, UNREVIEWED.md
+python3 tools/irgen/irgen.py           # re-parse headers (new Qt version only; needs python3-clang)
+```
+
+To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
+./qtcore`, then run that module's tests. To bind a new class, add it to
+`spec/classes/<module>.yaml` (its primary base must be bound too).
+
 ## Status
 
-Phases 1–3 of the design are in place: the runtime, about 170 classes across
-QtCore, QtGui and QtWidgets, and Go subclassing (virtual overrides, item
-models). Not done yet: `QThread` affinity, QtQuick/QML, more modules, and
-reviewing the remaining entries in `UNREVIEWED.md`. Doc comments link to the
-Qt docs but don't include Qt's summary text, because the Qt doc index isn't
-available offline here. The Linux CI matrix has been run locally; the macOS
-and Windows jobs are written but not yet verified.
+Phases 1–3 of the roadmap in CLAUDE.md are in place: the runtime, 170 classes across
+QtCore, QtGui and QtWidgets (about 4,700 constructors, methods and functions),
+and Go subclassing (virtual overrides, item models). The test suite has about
+300 tests, 286 of them generated from ownership rules.
+
+Not done yet:
+
+- `QThread` affinity, QtQuick/QML and other modules.
+- Reviewing what `UNREVIEWED.md` lists: about 170 methods on default
+  ownership rules, 165 numbered overload names, about 610 skipped methods
+  (mostly unsupported types such as `QCalendar`, `QTimeZone`, `QLineF`), and
+  79 rules without a generated test.
+- Doc comments link to the Qt docs but don't include Qt's summary text,
+  because the Qt doc index wasn't available when they were generated.
+- The Linux CI checks have been run locally. The macOS and Windows jobs in
+  `.github/workflows/ci.yml` are written but not yet verified.

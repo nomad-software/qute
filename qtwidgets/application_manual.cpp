@@ -1,4 +1,4 @@
-// Hand-written; goqtgen never overwrites *_manual files.
+// Hand-written; qutegen never overwrites *_manual files.
 #include "application_manual.h"
 
 #include <QtCore/QEvent>
@@ -8,7 +8,7 @@
 
 #include <cstring>
 
-extern "C" void goqt_qtwidgets_visibility(void *obj, bool visible);
+extern "C" void qute_qtwidgets_visibility(void *obj, bool visible);
 
 namespace {
 // Pins Owned top-level windows while they are visible, so GC never deletes a
@@ -20,28 +20,28 @@ public:
         const auto t = e->type();
         if ((t == QEvent::Show || t == QEvent::Hide) && o->isWidgetType() &&
             static_cast<QWidget *>(o)->isWindow()) {
-            goqt_qtwidgets_visibility(static_cast<void *>(o), t == QEvent::Show);
+            qute_qtwidgets_visibility(static_cast<void *>(o), t == QEvent::Show);
         }
         return false;
     }
 };
 
-int goqt_argc = 0;
-char **goqt_argv = nullptr;
+int qute_argc = 0;
+char **qute_argv = nullptr;
 } // namespace
 
-extern "C" void *goqt_application_new(const char *args, const ptrdiff_t *lens, ptrdiff_t n) {
+extern "C" void *qute_application_new(const char *args, const ptrdiff_t *lens, ptrdiff_t n) {
     // QApplication keeps references to argc and argv for its whole life.
-    goqt_argc = int(n);
-    goqt_argv = new char *[n + 1];
+    qute_argc = int(n);
+    qute_argv = new char *[n + 1];
     for (ptrdiff_t i = 0; i < n; i++) {
-        goqt_argv[i] = new char[lens[i] + 1];
-        std::memcpy(goqt_argv[i], args, lens[i]);
-        goqt_argv[i][lens[i]] = 0;
+        qute_argv[i] = new char[lens[i] + 1];
+        std::memcpy(qute_argv[i], args, lens[i]);
+        qute_argv[i][lens[i]] = 0;
         args += lens[i];
     }
-    goqt_argv[n] = nullptr;
-    auto app = new QApplication(goqt_argc, goqt_argv);
+    qute_argv[n] = nullptr;
+    auto app = new QApplication(qute_argc, qute_argv);
     app->installEventFilter(new VisibilityFilter(app));
     return static_cast<QApplication *>(app);
 }

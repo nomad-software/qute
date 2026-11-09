@@ -1,4 +1,4 @@
-// Command hello is a small goqt application: a form, a list, a custom-painted
+// Command hello is a small qute application: a form, a list, a custom-painted
 // widget and a menu. Run it with -screenshot out.png to render it offscreen
 // and exit (QT_QPA_PLATFORM=offscreen needs no display).
 package main
@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
@@ -42,7 +42,7 @@ func (s *Swatch) MousePressEvent(e *qtgui.QMouseEvent) {
 
 func build() *qtwidgets.QMainWindow {
 	win := qtwidgets.NewQMainWindow(nil)
-	win.SetWindowTitle("goqt hello")
+	win.SetWindowTitle("qute hello")
 
 	file := win.MenuBar().AddMenuTitle("&File")
 	quit := file.AddActionText("&Quit")
@@ -89,18 +89,18 @@ func main() {
 	if *shot != "" && os.Getenv("QT_QPA_PLATFORM") == "" {
 		os.Setenv("QT_QPA_PLATFORM", "offscreen")
 	}
-	os.Exit(goqt.Main(func() {
+	os.Exit(qute.Main(func() {
 		win := build()
 		win.Show()
 		if *shot != "" {
-			goqt.Post(func() { // after the first layout pass
-				if err := goqt.SaveScreenshot(win, *shot); err != nil {
+			qute.Post(func() { // after the first layout pass
+				if err := qute.SaveScreenshot(win, *shot); err != nil {
 					log.Fatal(err)
 				}
 				if *tree {
-					fmt.Println(goqt.DumpTree(win))
+					fmt.Println(qute.DumpTree(win))
 				}
-				goqt.Quit(0)
+				qute.Quit(0)
 			})
 		}
 	}))

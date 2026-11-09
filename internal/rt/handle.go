@@ -1,4 +1,4 @@
-// Package rt is the goqt runtime. It is the only layer that decides who frees
+// Package rt is the qute runtime. It is the only layer that decides who frees
 // a Qt object: every wrapped C++ object has exactly one Handle, and the
 // handle's ownership state changes only through the transitions in this file.
 package rt
@@ -603,7 +603,7 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 	}
 	v, ok := classes.Load(class)
 	if !ok {
-		panic("goqt: class " + class + " is not registered")
+		panic("qute: class " + class + " is not registered")
 	}
 	ci := v.(classInfo)
 	kind := ci.kind

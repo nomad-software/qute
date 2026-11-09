@@ -88,7 +88,7 @@ func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) {
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	if idx < 0 || idx >= len(h.VTable) {
-		panic(fmt.Sprintf("goqt: virtual index %d out of range for %s", idx, h.class))
+		panic(fmt.Sprintf("qute: virtual index %d out of range for %s", idx, h.class))
 	}
 	h.VTable[idx].Call(h.Self, args, ret)
 }

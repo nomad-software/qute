@@ -1,9 +1,9 @@
-package goqt_test
+package qute_test
 
 import (
 	"testing"
 
-	"github.com/nomad-software/qute/goqt"
+	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtwidgets"
 )
@@ -31,7 +31,7 @@ func (m *fruitModel) add(s string) {
 }
 
 func TestGoListModel(t *testing.T) {
-	goqt.Run(t, func() {
+	qute.Run(t, func() {
 		view := qtwidgets.NewQListView(nil)
 		defer view.Delete()
 		m := &fruitModel{items: []string{"apple", "pear"}}
@@ -58,6 +58,6 @@ func TestGoListModel(t *testing.T) {
 			t.Errorf("C++ RowCount = %d", view.Model().RowCount())
 		}
 		view.Resize(120, 100)
-		goqt.Screenshot(view)
+		qute.Screenshot(view)
 	})
 }

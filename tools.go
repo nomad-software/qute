@@ -1,4 +1,4 @@
-package goqt
+package qute
 
 // #cgo pkg-config: Qt6Widgets Qt6Test
 // #cgo CXXFLAGS: -std=c++17 -fPIC -O1 -g0
@@ -30,8 +30,8 @@ func widgetPtr(w qtwidgets.QWidgetLike, method string) unsafe.Pointer {
 // looked at and fixed with no display. A widget that was never shown is laid
 // out and sized to its size hint first.
 func Screenshot(w qtwidgets.QWidgetLike) *image.NRGBA {
-	p := widgetPtr(w, "goqt.Screenshot")
-	r := C.goqt_tools_grab(p)
+	p := widgetPtr(w, "qute.Screenshot")
+	r := C.qute_tools_grab(p)
 	defer C.free(unsafe.Pointer(r.data))
 	img := image.NewNRGBA(image.Rect(0, 0, int(r.w), int(r.h)))
 	copy(img.Pix, unsafe.Slice((*byte)(unsafe.Pointer(r.data)), int(r.w)*int(r.h)*4))
@@ -71,13 +71,13 @@ func Tree(o qtcore.QObjectLike) *Node {
 	if o == nil {
 		return nil
 	}
-	return tree(rt.Use(unsafe.Pointer(o.AsQObject()), "goqt.Tree"))
+	return tree(rt.Use(unsafe.Pointer(o.AsQObject()), "qute.Tree"))
 }
 
 func tree(p unsafe.Pointer) *Node {
-	var info C.goqt_objinfo
-	C.goqt_tools_info(p, &info)
-	defer C.goqt_tools_free_info(&info)
+	var info C.qute_objinfo
+	C.qute_tools_info(p, &info)
+	defer C.qute_tools_free_info(&info)
 	n := &Node{Class: C.GoString(info.cls), ObjectName: C.GoString(info.name), Ownership: "untracked"}
 	if h := rt.Lookup(p); h != nil {
 		n.Ownership = h.State().String()
@@ -106,38 +106,38 @@ func DumpTree(o qtcore.QObjectLike) string {
 
 // Click sends a left mouse click to the centre of w, as a user would.
 func Click(w qtwidgets.QWidgetLike) {
-	C.goqt_tools_click(widgetPtr(w, "goqt.Click"), C.int(qtcore.LeftButton), 0, 0, false)
+	C.qute_tools_click(widgetPtr(w, "qute.Click"), C.int(qtcore.LeftButton), 0, 0, false)
 }
 
 // ClickAt sends a mouse click with button at pos (widget coordinates).
 func ClickAt(w qtwidgets.QWidgetLike, button qtcore.MouseButton, pos qtcore.QPoint) {
-	C.goqt_tools_click(widgetPtr(w, "goqt.ClickAt"), C.int(button), C.int(pos.X), C.int(pos.Y), true)
+	C.qute_tools_click(widgetPtr(w, "qute.ClickAt"), C.int(button), C.int(pos.X), C.int(pos.Y), true)
 }
 
 // DoubleClick sends a left double click to the centre of w.
 func DoubleClick(w qtwidgets.QWidgetLike) {
-	C.goqt_tools_dblclick(widgetPtr(w, "goqt.DoubleClick"), C.int(qtcore.LeftButton))
+	C.qute_tools_dblclick(widgetPtr(w, "qute.DoubleClick"), C.int(qtcore.LeftButton))
 }
 
 // Type sends text to w as key presses.
 func Type(w qtwidgets.QWidgetLike, text string) {
-	C.goqt_tools_type(widgetPtr(w, "goqt.Type"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	C.qute_tools_type(widgetPtr(w, "qute.Type"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 }
 
 // Key sends one key press with modifiers, e.g. Key(edit, qtcore.Key_Return, 0).
 func Key(w qtwidgets.QWidgetLike, key qtcore.Key, mods qtcore.KeyboardModifiers) {
-	C.goqt_tools_key(widgetPtr(w, "goqt.Key"), C.int(key), C.int(mods))
+	C.qute_tools_key(widgetPtr(w, "qute.Key"), C.int(key), C.int(mods))
 }
 
 // Wait runs the event loop for ms milliseconds (timers, deferred deletes).
 // Call it on the GUI thread.
 func Wait(ms int) {
-	rt.CheckThread("goqt.Wait")
-	C.goqt_tools_wait(C.int(ms))
+	rt.CheckThread("qute.Wait")
+	C.qute_tools_wait(C.int(ms))
 }
 
 // ProcessEvents handles pending events once. Call it on the GUI thread.
 func ProcessEvents() {
-	rt.CheckThread("goqt.ProcessEvents")
-	C.goqt_tools_process()
+	rt.CheckThread("qute.ProcessEvents")
+	C.qute_tools_process()
 }

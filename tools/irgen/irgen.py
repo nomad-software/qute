@@ -211,7 +211,7 @@ def main():
     ]
     src = "".join("#include <%s/%s>\n" % (m, m) for m in MODULES)
     idx = ci.Index.create()
-    tu = idx.parse("goqt_ir.cpp", args=cargs, unsaved_files=[("goqt_ir.cpp", src)],
+    tu = idx.parse("qute_ir.cpp", args=cargs, unsaved_files=[("qute_ir.cpp", src)],
                    options=ci.TranslationUnit.PARSE_SKIP_FUNCTION_BODIES)
     errs = [d for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     for d in errs[:20]:
