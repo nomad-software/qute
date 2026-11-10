@@ -18,7 +18,7 @@ func InCallback() bool { return callbackDepth.Load() > 0 }
 // A panic in a Go handler called from Qt would otherwise unwind through the
 // C++ frames between the handler and the Go code that entered Qt, skipping
 // their destructors and leaving Qt in an inconsistent state. While a capture
-// is active (qute.Run), handlers recover their own panic at the cgo boundary,
+// is active (qutetest.Run), handlers recover their own panic at the cgo boundary,
 // return normally to Qt, and the first panic is re-raised once control is
 // back in Go. Without a capture (qute.Main) a handler panic still crashes the
 // program, with its stack.
@@ -70,14 +70,33 @@ func catchPanic() {
 	}
 }
 
+// guiOnlyEntry panics when Qt calls into a Go handler from a thread other
+// than the GUI thread. Handlers use Qt objects, and the runtime's callback
+// state (InCallback, captured panics) belongs to the GUI thread, so such a
+// call cannot work; the panic names the problem instead of a crash somewhere
+// else. A binding whose callback Qt runs on a worker thread must be
+// hand-written to convert its arguments to plain Go values first (see
+// qtwebenginecore's SetCookieFilter).
+func guiOnlyEntry(what string) {
+	if offGUIThread() {
+		panic("qute: Qt called a Go " + what + " from a thread other than the GUI thread; " +
+			"qute runs Go handlers only on the GUI thread, so this binding cannot be used as generated. " +
+			"Please report it: its callback needs a hand-written binding")
+	}
+}
+
 // NewFunc stores a Go func passed to Qt as a std::function. Qt releases it
 // (through the same release path as signals) when it drops the function.
 func NewFunc(fn func(args, ret unsafe.Pointer)) uintptr {
 	return uintptr(cgo.NewHandle(fn)) | funcBit
 }
 
-// InvokeFunc runs a std::function callback and lets it write its result.
+// InvokeFunc runs a std::function callback and lets it write its result. If
+// the callback panics and the panic is recovered (inside qutetest.Run or
+// PostSync), the result keeps the zero value the shim initialised it with,
+// and the panic is re-raised once control is back in Go.
 func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
+	guiOnlyEntry("std::function callback")
 	fn := cgo.Handle(id &^ funcBit).Value().(func(args, ret unsafe.Pointer))
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
@@ -110,6 +129,7 @@ const funcBit = uintptr(1) << (unsafe.Sizeof(uintptr(0))*8 - 1)
 // array. A closure whose object tree GC already collected (its deletion is
 // still queued) is skipped.
 func InvokeCallback(id uintptr, args unsafe.Pointer) {
+	guiOnlyEntry("signal handler")
 	var fn func(args unsafe.Pointer)
 	if h := slotHandle(id); h != nil {
 		h.mu.Lock()
@@ -190,8 +210,13 @@ type Virtual struct {
 
 // Dispatch is called by a shim for an overridden virtual. It reports false
 // when the Go value is gone (its object tree was collected and is about to be
-// deleted); the shim then runs the C++ implementation instead.
+// deleted); the shim then runs the C++ implementation instead. It also
+// reports false when the override panicked and the panic was recovered
+// (inside qutetest.Run or PostSync): Qt then gets the C++ implementation's
+// result, a sensible value, rather than whatever the override half wrote, and
+// the panic is re-raised once control is back in Go.
 func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) bool {
+	guiOnlyEntry("virtual method override")
 	h := slotHandle(id)
 	if h == nil || h.Self == nil {
 		return false

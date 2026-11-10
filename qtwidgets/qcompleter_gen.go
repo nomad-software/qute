@@ -97,7 +97,7 @@ func NewQCompleterWithModel(model qtcore.QAbstractItemModelLike, parent qtcore.Q
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QCompleter", mode)
-	rt.KeepArg(h, "model", modelH)
+	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QCompleter](h, p)
 }
 
@@ -172,7 +172,7 @@ func (this *QCompleter) SetModel(c qtcore.QAbstractItemModelLike) {
 	C.qute_QCompleter_setModel(self, cPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(c)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "model", cH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "model", cH, false)
 }
 
 // Model wraps QCompleter::model.

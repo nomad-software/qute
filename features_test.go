@@ -10,12 +10,13 @@ import (
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // These tests exercise each kind of type the generator maps beyond the basics.
 
 func TestOutParameters(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		defer w.Delete()
 		lay := qtwidgets.NewQVBoxLayout(w)
@@ -35,7 +36,7 @@ func TestOutParameters(t *testing.T) {
 }
 
 func TestChainingReturnsReceiver(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		tr := qtgui.NewQTransform()
 		if got := tr.Translate(10, 20).Rotate(0); got != tr {
 			t.Error("Translate did not return the receiver")
@@ -48,7 +49,7 @@ func TestChainingReturnsReceiver(t *testing.T) {
 
 func TestByteBuffersAndPaths(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "data.bin")
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		f := qtcore.NewQFileWithName(path, nil)
 		defer f.Delete()
 		if !f.Open(qtcore.QIODeviceBaseWriteOnly) {
@@ -76,7 +77,7 @@ func TestByteBuffersAndPaths(t *testing.T) {
 }
 
 func TestMapsAndJSON(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
 		defer m.Delete()
 		roles := m.RoleNames()
@@ -95,7 +96,7 @@ func TestMapsAndJSON(t *testing.T) {
 }
 
 func TestDurationsAndTimes(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		tm := qtcore.NewQTimer(nil)
 		defer tm.Delete()
 		tm.SetIntervalDuration(1500 * time.Millisecond)
@@ -111,7 +112,7 @@ func TestDurationsAndTimes(t *testing.T) {
 }
 
 func TestFieldsAndNestedClasses(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		opt := qtwidgets.NewQStyleOption()
 		opt.SetRect(qtcore.QRect{X: 1, Y: 2, Width: 30, Height: 40})
 		if got := opt.Rect(); got != (qtcore.QRect{X: 1, Y: 2, Width: 30, Height: 40}) {
@@ -134,7 +135,7 @@ func TestFieldsAndNestedClasses(t *testing.T) {
 }
 
 func TestCallbackArgument(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		lbl := qtwidgets.NewQLabel(nil)
 		defer lbl.Delete()
 		asked := ""

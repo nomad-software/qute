@@ -353,7 +353,7 @@ func (this *QObject) InstallEventFilter(filterObj QObjectLike) {
 	C.qute_QObject_installEventFilter(self, filterObjPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(filterObj)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, filterObjH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, filterObjH, false)
 }
 
 // RemoveEventFilter wraps QObject::removeEventFilter.

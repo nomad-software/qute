@@ -3,19 +3,11 @@
 
 #include <QAbstractFileIconProvider>
 #include <QAbstractItemModel>
-#include <QAbstractListModel>
-#include <QAbstractProxyModel>
-#include <QAbstractTableModel>
 #include <QAction>
 #include <QActionGroup>
-#include <QBasicTimer>
-#include <QBitArray>
 #include <QBitmap>
 #include <QBrush>
-#include <QBuffer>
-#include <QCalendar>
 #include <QChar>
-#include <QChildEvent>
 #include <QClipboard>
 #include <QCloseEvent>
 #include <QColorSpace>
@@ -25,22 +17,14 @@
 #include <QCoreApplication>
 #include <QCursor>
 #include <QDataStream>
-#include <QDate>
-#include <QDateTime>
-#include <QDeadlineTimer>
-#include <QDir>
 #include <QDoubleValidator>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <QEasingCurve>
 #include <QEnterEvent>
 #include <QEvent>
-#include <QEventLoop>
 #include <QEventPoint>
-#include <QFile>
-#include <QFileDevice>
 #include <QFileInfo>
 #include <QFocusEvent>
 #include <QFont>
@@ -54,7 +38,6 @@
 #include <QHideEvent>
 #include <QHoverEvent>
 #include <QIODevice>
-#include <QIODeviceBase>
 #include <QIcon>
 #include <QImage>
 #include <QImageIOHandler>
@@ -63,13 +46,6 @@
 #include <QInputEvent>
 #include <QInputMethod>
 #include <QIntValidator>
-#include <QItemSelection>
-#include <QItemSelectionModel>
-#include <QItemSelectionRange>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
 #include <QKeyCombination>
 #include <QKeyEvent>
 #include <QKeySequence>
@@ -78,7 +54,6 @@
 #include <QLinearGradient>
 #include <QLocale>
 #include <QMatrix4x4>
-#include <QMetaType>
 #include <QMimeData>
 #include <QModelIndex>
 #include <QMouseEvent>
@@ -97,10 +72,8 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPalette>
-#include <QPartialOrdering>
 #include <QPdfWriter>
 #include <QPen>
-#include <QPersistentModelIndex>
 #include <QPicture>
 #include <QPixelFormat>
 #include <QPixmap>
@@ -111,25 +84,19 @@
 #include <QRadialGradient>
 #include <QRegion>
 #include <QRegularExpression>
-#include <QRegularExpressionMatch>
-#include <QRegularExpressionMatchIterator>
 #include <QResizeEvent>
 #include <QRgba64>
 #include <QScreen>
 #include <QSessionManager>
-#include <QSettings>
 #include <QShortcut>
 #include <QShowEvent>
 #include <QSinglePointEvent>
-#include <QSortFilterProxyModel>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QStaticText>
-#include <QStringListModel>
 #include <QStyleHints>
 #include <QSurface>
 #include <QSurfaceFormat>
-#include <QSysInfo>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextBlockGroup>
@@ -151,14 +118,8 @@
 #include <QTextTableCell>
 #include <QTextTableCellFormat>
 #include <QTextTableFormat>
-#include <QTime>
-#include <QTimeZone>
-#include <QTimer>
-#include <QTimerEvent>
 #include <QTransform>
-#include <QTranslator>
 #include <QUrl>
-#include <QUrlQuery>
 #include <QUuid>
 #include <QValidator>
 #include <QVariant>
@@ -185,8 +146,10 @@ void qute_qtgui_call(uintptr_t id, void *args, void *ret);
 static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtgui_call(id, args, ret); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
-// It is checked here, where it costs a thread-local read, so release builds
-// catch it too (qute_debug builds also name the method).
+// It is checked here, in every build (qute_debug builds also name the
+// method): QCoreApplication::instance() and two thread lookups. Before the
+// application exists nothing is checked; calls made then (registrations in
+// init, such as QWebEngineUrlScheme) run on whatever thread makes them.
 static inline void qute_gui_only() {
 	QCoreApplication *app = QCoreApplication::instance();
 	if (app && QThread::currentThread() != app->thread()) {

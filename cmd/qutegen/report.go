@@ -40,7 +40,8 @@ func (g *Gen) writeReport(path string) error {
 	p("{{SUMMARY}}")
 
 	type row struct{ cls, text string }
-	var rules, numbered, skipped []row
+	var rules, numbered, skipped, notIR []row
+	droppedBy := map[string]int{}
 	total, fulls, tied := 0, 0, 0
 	var blind []string // results whose death qute cannot see
 	for _, m := range g.modules {
@@ -97,6 +98,16 @@ func (g *Gen) writeReport(path string) error {
 			for _, v := range c.Virtuals {
 				if v.Numbered {
 					numbered = append(numbered, row{c.Name, fmt.Sprintf("- virtual `%s` → `%s`", v.Sig, v.GoName)})
+				}
+			}
+			byKind := map[string][]string{}
+			for _, d := range c.IR.Dropped {
+				byKind[d.Kind] = append(byKind[d.Kind], "`"+d.Name+"`")
+				droppedBy[d.Kind]++
+			}
+			for _, k := range []string{"conversion", "operator", "template"} {
+				if len(byKind[k]) > 0 {
+					notIR = append(notIR, row{c.Name, fmt.Sprintf("- %ss: %s", k, strings.Join(byKind[k], ", "))})
 				}
 			}
 			seen := map[string]bool{}
@@ -162,6 +173,24 @@ func (g *Gen) writeReport(path string) error {
 	p("")
 	section("Skipped: missing type support, by class", missing)
 	section("Skipped on purpose", onPurpose)
+	p("## Not in the IR: operators, conversions and member templates (%d)\n", droppedBy["operator"]+droppedBy["conversion"]+droppedBy["template"])
+	p("tools/irgen leaves these out before the IR is written, so the generator never")
+	p("sees them and they are not counted as bound or skipped above. Go has no")
+	p("operator overloading: comparisons and arithmetic are done on the Go structs or")
+	p("through named methods. Conversions to QVariant are covered by")
+	p("`qtgui.NewQVariantOf`, and `QVariant::value<T>()` by `QVariant.Value` and")
+	p("`qtgui.VariantValue`. Counts: %d operators, %d conversion operators, %d member templates.\n",
+		droppedBy["operator"], droppedBy["conversion"], droppedBy["template"])
+	sort.SliceStable(notIR, func(i, j int) bool { return notIR[i].cls < notIR[j].cls })
+	last := ""
+	for _, r := range notIR {
+		if r.cls != last {
+			p("\n### %s\n", r.cls)
+			last = r.cls
+		}
+		p("%s", r.text)
+	}
+	p("")
 	if len(g.report.noTest) > 0 {
 		p("## Ownership rules without a generated test (%d)\n", len(g.report.noTest))
 		p("Add a `test:` snippet to the overlay entry to cover these.\n")
@@ -193,6 +222,8 @@ func (g *Gen) writeReport(path string) error {
 	fmt.Fprintf(&sum, "| of which Full forms (every argument, defaults included) | %d |\n", fulls)
 	fmt.Fprintf(&sum, "| Plain-object results that depend on their receiver | %d |\n", tied)
 	fmt.Fprintf(&sum, "| Skipped on purpose (with reasons below) | %d |\n", len(onPurpose))
+	fmt.Fprintf(&sum, "| Operators, conversions and member templates not in the IR | %d |\n",
+		droppedBy["operator"]+droppedBy["conversion"]+droppedBy["template"])
 	fmt.Fprintf(&sum, "| Default ownership rules to review | %d |\n", len(rules))
 	fmt.Fprintf(&sum, "| Numbered overload names | %d |\n", len(numbered))
 	fmt.Fprintf(&sum, "| Waiting for type support | %d |\n", len(missing))

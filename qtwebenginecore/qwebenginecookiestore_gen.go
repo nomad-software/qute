@@ -48,23 +48,6 @@ func QWebEngineCookieStoreCast(o qtcore.QObjectLike) *QWebEngineCookieStore {
 	return rt.View[QWebEngineCookieStore](rt.WrapClass(p, "QWebEngineCookieStore", rt.KeepOrBorrow), p)
 }
 
-// SetCookieFilter wraps QWebEngineCookieStore::setCookieFilter.
-//
-//	C++: void QWebEngineCookieStore::setCookieFilter(const std::function<bool (const FilterRequest &)> & filterCallback)
-//
-// Qt docs: https://doc.qt.io/qt-6/qwebenginecookiestore.html#setCookieFilter
-func (this *QWebEngineCookieStore) SetCookieFilter(filterCallback func(*QWebEngineCookieStoreFilterRequest) bool) {
-	self := rt.Use(unsafe.Pointer(this), "QWebEngineCookieStore.SetCookieFilter")
-	filterCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[QWebEngineCookieStoreFilterRequest](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWebEngineCookieStoreFilterRequest", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		r := filterCallback(p0)
-		*(*C.bool)(ret) = C.bool(r)
-	})
-	C.qute_QWebEngineCookieStore_setCookieFilter(self, C.uintptr_t(filterCallbackID))
-	runtime.KeepAlive(this)
-}
-
 // DeleteSessionCookies wraps QWebEngineCookieStore::deleteSessionCookies.
 //
 //	C++: void QWebEngineCookieStore::deleteSessionCookies()

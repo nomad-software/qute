@@ -338,7 +338,7 @@ func (this *QWebEngineProfile) SetUrlRequestInterceptor(interceptor QWebEngineUr
 	C.qute_QWebEngineProfile_setUrlRequestInterceptor(self, interceptorPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(interceptor)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "interceptor", interceptorH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "interceptor", interceptorH, false)
 }
 
 // ClearAllVisitedLinks wraps QWebEngineProfile::clearAllVisitedLinks.
@@ -462,7 +462,7 @@ func (this *QWebEngineProfile) InstallUrlSchemeHandler(scheme []byte, webEngineU
 	C.qute_QWebEngineProfile_installUrlSchemeHandler(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(scheme))), C.ptrdiff_t(len(scheme)), webEngineUrlSchemeHandlerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(webEngineUrlSchemeHandler)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, webEngineUrlSchemeHandlerH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, webEngineUrlSchemeHandlerH, false)
 }
 
 // RemoveUrlScheme wraps QWebEngineProfile::removeUrlScheme.

@@ -4,15 +4,15 @@ package qtopengl_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtopengl"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -24,7 +24,7 @@ func TestLayout(t *testing.T) {
 
 // QOpenGLDebugLogger::QOpenGLDebugLogger(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLDebugLogger(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtopengl.NewQOpenGLDebugLogger(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -47,7 +47,7 @@ func TestOwnership_NewQOpenGLDebugLogger(t *testing.T) {
 
 // QOpenGLShader::QOpenGLShader(QOpenGLShader::ShaderType type, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLShaderWithShaderTypeBit(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtopengl.NewQOpenGLShaderWithShaderTypeBit(qtopengl.QOpenGLShaderShaderType(0), root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -70,7 +70,7 @@ func TestOwnership_NewQOpenGLShaderWithShaderTypeBit(t *testing.T) {
 
 // QOpenGLShaderProgram::QOpenGLShaderProgram(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLShaderProgram(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtopengl.NewQOpenGLShaderProgram(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -93,7 +93,7 @@ func TestOwnership_NewQOpenGLShaderProgram(t *testing.T) {
 
 // QOpenGLTexture * QOpenGLTexture::createTextureView(Target target, TextureFormat viewFormat, int minimumMipmapLevel, int maximumMipmapLevel, int minimumLayer, int maximumLayer) const (test from the overlay)
 func TestOwnership_QOpenGLTexture_CreateTextureView(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		fmt := qtgui.NewQSurfaceFormat()
 		fmt.SetVersion(4, 3)
 		fmt.SetProfile(qtgui.QSurfaceFormatCoreProfile)
@@ -126,7 +126,7 @@ func TestOwnership_QOpenGLTexture_CreateTextureView(t *testing.T) {
 
 // QOpenGLVertexArrayObject::QOpenGLVertexArrayObject(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLVertexArrayObject(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtopengl.NewQOpenGLVertexArrayObject(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -149,7 +149,7 @@ func TestOwnership_NewQOpenGLVertexArrayObject(t *testing.T) {
 
 // QOpenGLWindow::QOpenGLWindow(UpdateBehavior updateBehavior = …, QWindow * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLWindowWithUpdateBehavior(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtgui.NewQWindow(nil)
 		x := qtopengl.NewQOpenGLWindowWithUpdateBehavior(qtopengl.QOpenGLWindowUpdateBehavior(1), root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -172,7 +172,7 @@ func TestOwnership_NewQOpenGLWindowWithUpdateBehavior(t *testing.T) {
 
 // QOpenGLWindow::QOpenGLWindow(QOpenGLContext * shareContext, UpdateBehavior updateBehavior = …, QWindow * parent = …): keep rules
 func TestKeep_QOpenGLWindow_QOpenGLWindowShared(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtgui.NewQOpenGLContext(nil)
 		x := qtopengl.NewQOpenGLWindowShared(a0, qtopengl.QOpenGLWindowUpdateBehavior(1), nil)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -184,7 +184,7 @@ func TestKeep_QOpenGLWindow_QOpenGLWindowShared(t *testing.T) {
 
 // QOpenGLWindow::QOpenGLWindow(QOpenGLContext * shareContext, UpdateBehavior updateBehavior = …, QWindow * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLWindowShared(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtgui.NewQWindow(nil)
 		x := qtopengl.NewQOpenGLWindowShared(nil, qtopengl.QOpenGLWindowUpdateBehavior(1), root)
 		if got := x.Ownership(); got != qtcore.Parented {

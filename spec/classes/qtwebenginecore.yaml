@@ -14,7 +14,6 @@ classes:
   QWebEngineScript: { kind: value }
   QWebEngineScriptCollection: { no-construct: true }
   QWebEngineCookieStore: { no-construct: true }
-  "QWebEngineCookieStore::FilterRequest": { kind: value }
   QWebEngineDownloadRequest: { no-construct: true }
   QWebEngineContextMenuRequest: { no-construct: true }
   QWebEngineNavigationRequest: { no-construct: true }

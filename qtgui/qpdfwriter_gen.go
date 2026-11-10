@@ -84,7 +84,7 @@ func NewQPdfWriterWithIODevice(device qtcore.QIODeviceLike) *QPdfWriter {
 	p := C.qute_QPdfWriter_new_1(devicePtr)
 	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
-	rt.KeepArg(h, "QPdfWriter.device", deviceH)
+	rt.KeepArg(h, "QPdfWriter.device", deviceH, false)
 	return rt.View[QPdfWriter](h, p)
 }
 

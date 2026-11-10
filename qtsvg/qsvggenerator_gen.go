@@ -229,7 +229,7 @@ func (this *QSvgGenerator) SetOutputDevice(outputDevice qtcore.QIODeviceLike) {
 	C.qute_QSvgGenerator_setOutputDevice(self, outputDevicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(outputDevice)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", outputDeviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", outputDeviceH, true)
 }
 
 // SetResolution wraps QSvgGenerator::setResolution.

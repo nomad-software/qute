@@ -551,7 +551,7 @@ func (this *QFileDialog) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 	C.qute_QFileDialog_setItemDelegate(self, delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH, false)
 }
 
 // ItemDelegate wraps QFileDialog::itemDelegate.
@@ -587,7 +587,7 @@ func (this *QFileDialog) SetIconProvider(provider qtgui.QAbstractFileIconProvide
 	C.qute_QFileDialog_setIconProvider(self, providerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(provider)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setIconProvider.provider", providerH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setIconProvider.provider", providerH, true)
 }
 
 // IconProvider wraps QFileDialog::iconProvider.

@@ -4,15 +4,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // Items built by QGraphicsScene.AddX are tracked: however they die, using
 // them afterwards is a clear panic, not a crash.
 func TestSceneItemsReportDeath(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		r := qtcore.QRectF{Width: 10, Height: 10}
 
 		sc := qtwidgets.NewQGraphicsScene(nil)

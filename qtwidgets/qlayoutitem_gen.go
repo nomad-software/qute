@@ -27,6 +27,11 @@ func init() {
 	rt.RegisterClass("QLayoutItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QLayoutItem_delete(p) })
 }
 
+// A Parented QLayoutItem is in a container that does not notice its destructor.
+func init() {
+	rt.RegisterParentedDelete("QLayoutItem", "take it out of its layout with the layout's TakeAt or RemoveItem first, which makes it Owned")
+}
+
 // A QLayoutItem may be a QObject (through a QObject subclass); its wrapper then
 // shares that object's handle and learns of its death.
 func init() {

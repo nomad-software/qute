@@ -61,7 +61,7 @@ func NewQDataStreamWithIODevice(iODevice QIODeviceLike) *QDataStream {
 	p := C.qute_QDataStream_new_1(iODevicePtr)
 	runtime.KeepAlive(iODevice)
 	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
-	rt.KeepArg(h, "device", iODeviceH)
+	rt.KeepArg(h, "device", iODeviceH, true)
 	return rt.View[QDataStream](h, p)
 }
 
@@ -108,7 +108,7 @@ func (this *QDataStream) SetDevice(device QIODeviceLike) {
 	C.qute_QDataStream_setDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, true)
 }
 
 // AtEnd wraps QDataStream::atEnd.
@@ -242,14 +242,12 @@ func (this *QDataStream) ReadRawData(arg0 []byte) int64 {
 //
 //	C++: QDataStream & QDataStream::writeBytes(const char *, qint64 len)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
 // Qt docs: https://doc.qt.io/qt-6/qdatastream.html#writeBytes
 func (this *QDataStream) WriteBytes(arg0 []byte) *QDataStream {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.WriteBytes")
-	r := C.qute_QDataStream_writeBytes(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(arg0))), C.ptrdiff_t(len(arg0)))
+	C.qute_QDataStream_writeBytes(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(arg0))), C.ptrdiff_t(len(arg0)))
 	runtime.KeepAlive(this)
-	return rt.View[QDataStream](rt.WrapClassFrom(r, "QDataStream", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // WriteRawData wraps QDataStream::writeRawData.

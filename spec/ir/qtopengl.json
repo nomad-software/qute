@@ -3,6 +3,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -119,6 +120,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -279,6 +281,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QOpenGLBuffer &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QOpenGLBuffer &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -911,6 +923,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1404,6 +1417,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QOpenGLDebugMessage &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QOpenGLDebugMessage &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QOpenGLDebugMessage &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QOpenGLDebugMessage &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -1795,6 +1826,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -2785,6 +2817,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QOpenGLFramebufferObjectFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QOpenGLFramebufferObjectFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QOpenGLFramebufferObjectFormat &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -3028,6 +3074,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -3077,6 +3124,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -3431,6 +3479,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -3480,6 +3529,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -5304,6 +5354,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -5353,6 +5404,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -5483,6 +5535,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -5532,6 +5585,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -5669,6 +5723,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -5718,6 +5773,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -5778,6 +5834,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -5827,6 +5884,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -6069,6 +6127,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -6118,6 +6177,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -6199,6 +6259,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -6248,6 +6309,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -6525,6 +6587,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -6574,6 +6637,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -6641,6 +6705,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -6690,6 +6755,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -6974,6 +7040,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -7023,6 +7090,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -7174,6 +7242,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -7223,6 +7292,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -7892,6 +7962,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -7941,6 +8012,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -8211,6 +8283,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -8260,6 +8333,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -8320,6 +8394,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -8369,6 +8444,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -8975,6 +9051,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -9024,6 +9101,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -9182,6 +9260,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -9231,6 +9310,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -9333,6 +9413,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -9382,6 +9463,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -9533,6 +9615,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -9582,6 +9665,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -10006,6 +10090,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -10055,6 +10140,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -10283,6 +10369,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -10332,6 +10419,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -10672,6 +10760,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -10721,6 +10810,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -11355,6 +11445,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -11404,6 +11495,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -11506,6 +11598,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -11555,6 +11648,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -11874,6 +11968,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -11923,6 +12018,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -12004,6 +12100,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -12053,6 +12150,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -12813,6 +12911,7 @@
    "bases": [
     "QOpenGLVersionFunctionsBackend"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -12862,6 +12961,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -12964,6 +13064,7 @@
    "bases": [
     "QPaintDevice"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13337,6 +13438,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QOpenGLPixelTransferOptions &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QOpenGLPixelTransferOptions &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -13721,6 +13832,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -14071,6 +14183,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -19405,6 +19518,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -23743,6 +23857,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -24111,6 +24226,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -24386,6 +24502,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -24635,6 +24752,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -24805,6 +24923,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "get(QOpenGLContext *)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -24853,6 +24977,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -24921,6 +25046,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QOpenGLVersionProfile &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -25116,6 +25247,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -25213,6 +25345,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -25402,6 +25535,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -25478,6 +25612,7 @@
    "bases": [
     "QPaintDeviceWindow"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

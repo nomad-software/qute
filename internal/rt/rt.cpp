@@ -29,6 +29,11 @@ static std::unordered_set<QObject *> qute_watched;
 
 extern "C" void qute_rt_init(void) { qute_main_thread = std::this_thread::get_id(); }
 
+extern "C" bool qute_rt_off_gui_thread(void) {
+    QCoreApplication *app = QCoreApplication::instance();
+    return app && QThread::currentThread() != app->thread();
+}
+
 extern "C" bool qute_rt_is_gui_thread(void) {
     QCoreApplication *app = QCoreApplication::instance();
     if (app) {

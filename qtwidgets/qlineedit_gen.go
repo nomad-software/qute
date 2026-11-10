@@ -276,7 +276,7 @@ func (this *QLineEdit) SetValidator(validator qtgui.QValidatorLike) {
 	C.qute_QLineEdit_setValidator(self, validatorPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(validator)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setValidator.validator", validatorH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setValidator.validator", validatorH, false)
 }
 
 // Validator wraps QLineEdit::validator.
@@ -310,7 +310,7 @@ func (this *QLineEdit) SetCompleter(completer QCompleterLike) {
 	C.qute_QLineEdit_setCompleter(self, completerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(completer)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCompleter.completer", completerH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCompleter.completer", completerH, false)
 }
 
 // Completer wraps QLineEdit::completer.
@@ -716,7 +716,7 @@ func (this *QLineEdit) AddActionAt(action qtgui.QActionLike, position QLineEditA
 	C.qute_QLineEdit_addAction(self, actionPtr, C.int64_t(position))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH, false)
 }
 
 // AddActionIcon wraps QLineEdit::addAction.
@@ -848,14 +848,16 @@ func (this *QLineEdit) Insert(stringArg string) {
 //
 //	C++: QMenu * QLineEdit::createStandardContextMenu()
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#createStandardContextMenu
 func (this *QLineEdit) CreateStandardContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CreateStandardContextMenu")
 	r := C.qute_QLineEdit_createStandardContextMenu(self)
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
 // TimerEvent wraps QLineEdit::timerEvent.

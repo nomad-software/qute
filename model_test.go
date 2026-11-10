@@ -6,6 +6,7 @@ import (
 	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // fruitModel is a list model implemented in Go.
@@ -31,7 +32,7 @@ func (m *fruitModel) add(s string) {
 }
 
 func TestGoListModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		view := qtwidgets.NewQListView(nil)
 		defer view.Delete()
 		m := &fruitModel{items: []string{"apple", "pear"}}

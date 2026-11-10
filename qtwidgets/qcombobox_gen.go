@@ -394,7 +394,7 @@ func (this *QComboBox) SetValidator(vArg qtgui.QValidatorLike) {
 	C.qute_QComboBox_setValidator(self, vArgPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(vArg)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setValidator.vArg", vArgH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setValidator.vArg", vArgH, false)
 }
 
 // Validator wraps QComboBox::validator.
@@ -428,7 +428,7 @@ func (this *QComboBox) SetCompleter(c QCompleterLike) {
 	C.qute_QComboBox_setCompleter(self, cPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(c)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCompleter.c", cH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCompleter.c", cH, false)
 }
 
 // Completer wraps QComboBox::completer.
@@ -476,7 +476,7 @@ func (this *QComboBox) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 	C.qute_QComboBox_setItemDelegate(self, delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH, false)
 }
 
 // Model wraps QComboBox::model.
@@ -512,7 +512,7 @@ func (this *QComboBox) SetModel(model qtcore.QAbstractItemModelLike) {
 	C.qute_QComboBox_setModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setModel.model", modelH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setModel.model", modelH, false)
 }
 
 // RootModelIndex wraps QComboBox::rootModelIndex.

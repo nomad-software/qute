@@ -98,14 +98,14 @@ func NewQScrollBarWithOrientation(orientation qtcore.Orientations, parent QWidge
 //
 //	C++: QMenu * QScrollBar::createStandardContextMenu(QPoint position)
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
 //
-// The popup menu's ownership is transferred to the caller (Qt docs).
+// Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qscrollbar.html#createStandardContextMenu
 func (this *QScrollBar) CreateStandardContextMenu(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QScrollBar.CreateStandardContextMenu")
 	r := C.qute_QScrollBar_createStandardContextMenu(self, cQPoint(position))
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }

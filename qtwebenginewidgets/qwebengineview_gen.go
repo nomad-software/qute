@@ -80,7 +80,7 @@ func NewQWebEngineView(parent qtwidgets.QWidgetLike) *QWebEngineView {
 //
 // Ownership: profile is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
-// The view's page keeps using the profile, so the view keeps it alive.
+// The view's page keeps using the profile, so the view keeps it alive; deleting the profile while the view lives panics.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwebengineview.html#QWebEngineView
 func NewQWebEngineViewWithProfile(profile qtwebenginecore.QWebEngineProfileLike, parent qtwidgets.QWidgetLike) *QWebEngineView {
@@ -102,7 +102,7 @@ func NewQWebEngineViewWithProfile(profile qtwebenginecore.QWebEngineProfileLike,
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QWebEngineView", mode)
-	rt.KeepArg(h, "profile", profileH)
+	rt.KeepArg(h, "profile", profileH, true)
 	return rt.View[QWebEngineView](h, p)
 }
 
@@ -134,7 +134,7 @@ func NewQWebEngineViewWithPage(page qtwebenginecore.QWebEnginePageLike, parent q
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QWebEngineView", mode)
-	rt.KeepArg(h, "page", pageH)
+	rt.KeepArg(h, "page", pageH, false)
 	return rt.View[QWebEngineView](h, p)
 }
 
@@ -173,7 +173,7 @@ func (this *QWebEngineView) SetPage(page qtwebenginecore.QWebEnginePageLike) {
 	C.qute_QWebEngineView_setPage(self, pagePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(page)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "page", pageH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "page", pageH, false)
 }
 
 // Load wraps QWebEngineView::load.

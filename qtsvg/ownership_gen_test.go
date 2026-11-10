@@ -4,14 +4,14 @@ package qtsvg_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtsvg"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -23,7 +23,7 @@ func TestLayout(t *testing.T) {
 
 // void QSvgGenerator::setOutputDevice(QIODevice * outputDevice): keep rules
 func TestKeep_QSvgGenerator_SetOutputDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtsvg.NewQSvgGenerator()
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetOutputDevice(a0)
@@ -36,7 +36,7 @@ func TestKeep_QSvgGenerator_SetOutputDevice(t *testing.T) {
 
 // QSvgRenderer::QSvgRenderer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSvgRenderer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtsvg.NewQSvgRenderer(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -59,7 +59,7 @@ func TestOwnership_NewQSvgRenderer(t *testing.T) {
 
 // QSvgRenderer::QSvgRenderer(const QString & filename, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSvgRendererWithFilename(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtsvg.NewQSvgRendererWithFilename("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -82,7 +82,7 @@ func TestOwnership_NewQSvgRendererWithFilename(t *testing.T) {
 
 // QSvgRenderer::QSvgRenderer(const QByteArray & contents, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSvgRendererWithBytes(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtsvg.NewQSvgRendererWithBytes(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {

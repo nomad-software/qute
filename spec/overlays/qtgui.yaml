@@ -38,6 +38,7 @@ QPainter:
   boundingRect(const QRectF&, const QString&, const QTextOption&): { name: BoundingRectTextF }
   QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: keep:device }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
   begin: { args: { 0: keep:device }, reviewed: true }
+  end: { unkeep: device, reviewed: true, doc: "An inactive painter no longer uses its device, so End() drops the painter's reference to it: the device may be deleted afterwards." }
   device: { return: borrowed }
   setPen(const QColor&): { name: SetPenColor }
   setPen(const QPen&): { name: SetPen }
@@ -178,10 +179,10 @@ QImage:
   fill(Qt::GlobalColor): { skip: "use FillColor" }
   scaled(int, int, Qt::AspectRatioMode, Qt::TransformationMode): { name: Scaled }
   scaled(const QSize&, Qt::AspectRatioMode, Qt::TransformationMode): { skip: "use Scaled(w, h)" }
-  QImage(uchar*, int, int, QImage::Format, QImageCleanupFunction, void*): { skip: "on purpose: use the const uchar * overload (NewQImageWithPtr*), which never writes into memory the image does not own; the buffer must outlive the image and must not be Go memory" }
-  QImage(uchar*, int, int, qsizetype, QImage::Format, QImageCleanupFunction, void*): { skip: "on purpose: use the const uchar * overload (NewQImageWithPtr*), which never writes into memory the image does not own; the buffer must outlive the image and must not be Go memory" }
-  QImage(const uchar*, int, int, QImage::Format, QImageCleanupFunction, void*): { doc: "The image reads data in place without copying it: the buffer must stay valid and unchanged for the image's life, and must be C memory (Go memory may move or be freed). Copy() the image to detach it." }
-  QImage(const uchar*, int, int, qsizetype, QImage::Format, QImageCleanupFunction, void*): { doc: "The image reads data in place without copying it: the buffer must stay valid and unchanged for the image's life, and must be C memory (Go memory may move or be freed). Copy() the image to detach it." }
+  QImage(uchar*, int, int, QImage::Format, QImageCleanupFunction, void*): { skip: "on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own" }
+  QImage(uchar*, int, int, qsizetype, QImage::Format, QImageCleanupFunction, void*): { skip: "on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own" }
+  QImage(const uchar*, int, int, QImage::Format, QImageCleanupFunction, void*): { name: NewQImageOverMemory, doc: "Escape hatch: the image reads data in place without copying it, after this call returns. The buffer must stay valid and unchanged for the image's life, and must be C memory or Go memory pinned with runtime.Pinner until the image is gone (unpinned Go memory breaks the cgo pointer rules and may be freed under the image). NewQImageFromBytes copies instead; Copy() detaches an image from its buffer." }
+  QImage(const uchar*, int, int, qsizetype, QImage::Format, QImageCleanupFunction, void*): { name: NewQImageOverMemoryBytesPerLine, doc: "Escape hatch: the image reads data in place without copying it, after this call returns. The buffer must stay valid and unchanged for the image's life, and must be C memory or Go memory pinned with runtime.Pinner until the image is gone (unpinned Go memory breaks the cgo pointer rules and may be freed under the image). NewQImageFromBytes copies instead; Copy() detaches an image from its buffer." }
 
 QPixmap:
   fromImageReader: { reviewed: true }
@@ -660,7 +661,7 @@ QTextCursor:
       if x.Alive() {
       	t.Error("result alive after its document was deleted")
       }
-  QTextCursor(QTextDocument*): { args: { document: keep:document }, reviewed: true }
+  QTextCursor(QTextDocument*): { args: { document: keep:document }, kept-delete: allow, reviewed: true, doc: "The cursor keeps the document from being garbage collected; deleting the document makes the cursor null, which Qt handles." }
   QTextCursor(QTextFrame*): { reviewed: true, doc: "The frame belongs to its document; keep the document alive while the cursor is used." }
   currentList: { return: borrowed }
   currentTable: { return: borrowed }

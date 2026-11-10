@@ -144,17 +144,17 @@ const testTmpl = `package main
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/qutetest"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 func TestClickUpdatesLabel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := NewWindow()
 		defer w.Delete()
-		qute.Click(w.Button)
-		qute.Click(w.Button)
+		qutetest.Click(w.Button)
+		qutetest.Click(w.Button)
 		if got := w.Label.Text(); got != "Clicked 2 times" {
 			t.Errorf("label = %q", got)
 		}
@@ -169,12 +169,13 @@ import (
 	"testing"
 
 	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // TestScreenshot renders the window offscreen and saves it, so the layout can
 // be looked at without a display. Run with -v to see the file path.
 func TestScreenshot(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := NewWindow()
 		defer w.Delete()
 		img := qute.Screenshot(w)

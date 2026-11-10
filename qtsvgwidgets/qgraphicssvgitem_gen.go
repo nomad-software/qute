@@ -136,7 +136,7 @@ func (this *QGraphicsSvgItem) SetSharedRenderer(renderer qtsvg.QSvgRendererLike)
 	C.qute_QGraphicsSvgItem_setSharedRenderer(self, rendererPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(renderer)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "renderer", rendererH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "renderer", rendererH, false)
 }
 
 // Renderer wraps QGraphicsSvgItem::renderer.

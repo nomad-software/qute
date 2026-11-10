@@ -1,4 +1,22 @@
-package qute
+// Package qutetest runs tests of qute programs on the GUI thread, headlessly,
+// and drives widgets as a user would (clicks, typing, key presses) through
+// Qt's QtTest module. It is a separate package so that programs, which import
+// only qute, do not link QtTest.
+//
+//	func TestMain(m *testing.M) { qutetest.TestMain(m) }
+//
+//	func TestButton(t *testing.T) {
+//		qutetest.Run(t, func() {
+//			btn := qtwidgets.NewQPushButtonWithText("OK", nil)
+//			clicked := false
+//			btn.OnClicked(func(bool) { clicked = true })
+//			qutetest.Click(btn)
+//			if !clicked {
+//				t.Error("not clicked")
+//			}
+//		})
+//	}
+package qutetest
 
 import (
 	"fmt"
@@ -8,13 +26,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nomad-software/qute"
 	rt "github.com/nomad-software/qute/internal/rt"
 )
 
 // TestMain runs a package's tests with a QApplication on the main thread.
 // Use it from the package's TestMain:
 //
-//	func TestMain(m *testing.M) { qute.TestMain(m) }
+//	func TestMain(m *testing.M) { qutetest.TestMain(m) }
 //
 // Test functions run on other goroutines, so wrap Qt calls in Run(t, ...).
 // QT_QPA_PLATFORM defaults to offscreen, so tests need no display.
@@ -26,11 +45,11 @@ func TestMain(m *testing.M) {
 	// A t.Fatal inside Run ends the GUI goroutine; the runtime keeps serving
 	// Qt from a nested event loop, and once that quits the binary exits here.
 	rt.AfterRescue = func() { os.Exit(<-done) }
-	Main(func() {
+	qute.Main(func() {
 		go func() {
 			code := m.Run()
 			done <- code
-			Quit(code)
+			qute.Quit(code)
 		}()
 	})
 	os.Exit(<-done)
@@ -40,7 +59,7 @@ func TestMain(m *testing.M) {
 // panic message instead of crashing the test binary. A panic in a signal or
 // event handler that f triggers is recovered where Qt called the handler, so
 // Qt's own frames return normally; it fails t too, and the input helpers
-// (Click, Type, Key, Wait, ProcessEvents) re-raise it as soon as they return.
+// (Click, Type, Key, Wait and qute.ProcessEvents) re-raise it as soon as they return.
 //
 // t.Fatal, t.FailNow and t.Skip work inside f: they end f and then the test,
 // as they would on the test's own goroutine. (They end the GUI goroutine
@@ -78,7 +97,7 @@ func Run(t testing.TB, f func()) {
 			t.SkipNow()
 		}
 		if !t.Failed() {
-			t.Error("qute.Run: the function called runtime.Goexit")
+			t.Error("qutetest.Run: the function called runtime.Goexit")
 		}
 		t.FailNow()
 	}
@@ -89,12 +108,12 @@ func Run(t testing.TB, f func()) {
 // that unreachable objects really are freed. Call it off the GUI thread.
 func CollectGarbage() {
 	if rt.IsGUIThread() {
-		panic("qute.CollectGarbage: call it outside Run, so the GUI thread can free objects")
+		panic("qutetest.CollectGarbage: call it outside Run, so the GUI thread can free objects")
 	}
 	for i := 0; i < 4; i++ {
 		runtime.GC()
 		time.Sleep(5 * time.Millisecond) // cleanups run on their own goroutine
-		PostSync(func() { rt.Drain() })
+		qute.PostSync(func() { rt.Drain() })
 	}
 }
 

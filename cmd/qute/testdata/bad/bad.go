@@ -6,6 +6,7 @@ import (
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtopengl"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 var lastEvent *qtgui.QMouseEvent
@@ -69,8 +70,8 @@ func Goroutine(lbl *qtwidgets.QLabel) {
 	go func() {
 		lbl.SetText("x") // want gui-goroutine
 		qute.Post(func() { lbl.SetText("fine") })
-		qute.Click(lbl) // want gui-goroutine
-		qute.PostSync(func() { qute.Click(lbl) })
+		qutetest.Click(lbl) // want gui-goroutine
+		qute.PostSync(func() { qutetest.Click(lbl) })
 	}()
 }
 

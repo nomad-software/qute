@@ -10,9 +10,9 @@ QMediaPlayer:
   audioOutput: { return: borrowed }
   setAudioBufferOutput: { args: { output: keep:audioBufferOutput }, reviewed: true, doc: "The player does not take ownership of the output." }
   audioBufferOutput: { return: borrowed }
-  setVideoOutput: { args: { 0: keep:videoOutput }, reviewed: true, doc: "The player does not take ownership of the output (a QVideoWidget, QGraphicsVideoItem or QVideoSink)." }
+  setVideoOutput: { args: { 0: keep:video }, reviewed: true, doc: "The player does not take ownership of the output (a QVideoWidget, QGraphicsVideoItem or QVideoSink). It replaces the sink SetVideoSink set." }
   videoOutput: { return: borrowed }
-  setVideoSink: { args: { sink: keep:videoSink }, reviewed: true, doc: "The player does not take ownership of the sink." }
+  setVideoSink: { args: { sink: keep:video }, reviewed: true, doc: "The player does not take ownership of the sink. It replaces the output SetVideoOutput set." }
   videoSink: { return: borrowed }
   setSourceDevice: { args: { device: keep:device }, reviewed: true, doc: "The player does not take ownership of the device; it must stay open while it plays." }
   sourceDevice: { return: borrowed }
@@ -48,9 +48,9 @@ QMediaCaptureSession:
   videoFrameInput: { return: borrowed }
   setRecorder: { args: { recorder: keep:recorder }, reviewed: true, doc: "The session does not take ownership of the recorder." }
   recorder: { return: borrowed }
-  setVideoOutput: { args: { output: keep:videoOutput }, reviewed: true, doc: "The session does not take ownership of the output." }
+  setVideoOutput: { args: { output: keep:video }, reviewed: true, doc: "The session does not take ownership of the output. It replaces the sink SetVideoSink set." }
   videoOutput: { return: borrowed }
-  setVideoSink: { args: { sink: keep:videoSink }, reviewed: true, doc: "The session does not take ownership of the sink." }
+  setVideoSink: { args: { sink: keep:video }, reviewed: true, doc: "The session does not take ownership of the sink. It replaces the output SetVideoOutput set." }
   videoSink: { return: borrowed }
   setAudioOutput: { args: { output: keep:audioOutput }, reviewed: true, doc: "The session does not take ownership of the output." }
   audioOutput: { return: borrowed }

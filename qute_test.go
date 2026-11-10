@@ -8,12 +8,13 @@ import (
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 func TestLifecycle(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		lay := qtwidgets.NewQVBoxLayout(w)
 		lbl := qtwidgets.NewQLabelWithText("hi", nil)
@@ -42,7 +43,7 @@ func TestLifecycle(t *testing.T) {
 }
 
 func TestDeadHandlePanics(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		lbl := qtwidgets.NewQLabelWithText("x", w)
 		w.Delete()
@@ -60,7 +61,7 @@ func TestDeadHandlePanics(t *testing.T) {
 }
 
 func TestBorrowedDeletePanics(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		defer w.Delete()
 		qtwidgets.NewQLabelWithText("x", w)
@@ -80,18 +81,18 @@ func TestBorrowedDeletePanics(t *testing.T) {
 }
 
 func TestSignal(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		btn := qtwidgets.NewQPushButtonWithText("press", nil)
 		defer btn.Delete()
 		clicks := 0
 		conn := btn.OnClicked(func(checked bool) { clicks++ })
-		qute.Click(btn)
-		qute.Click(btn)
+		qutetest.Click(btn)
+		qutetest.Click(btn)
 		if clicks != 2 {
 			t.Errorf("clicks = %d, want 2", clicks)
 		}
 		conn.Disconnect()
-		qute.Click(btn)
+		qutetest.Click(btn)
 		if clicks != 2 {
 			t.Errorf("clicks after Disconnect = %d, want 2", clicks)
 		}
@@ -100,12 +101,12 @@ func TestSignal(t *testing.T) {
 }
 
 func TestTypeAndText(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		e := qtwidgets.NewQLineEdit(nil)
 		defer e.Delete()
 		var changes []string
 		e.OnTextChanged(func(s string) { changes = append(changes, s) })
-		qute.Type(e, "héllo")
+		qutetest.Type(e, "héllo")
 		if e.Text() != "héllo" {
 			t.Errorf("Text() = %q", e.Text())
 		}
@@ -135,7 +136,7 @@ func (c *canvas) SizeHint() qtcore.QSize {
 }
 
 func TestVirtualOverride(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		c := &canvas{}
 		w := qtwidgets.NewQWidgetWith(c, nil)
 		defer w.Delete()
@@ -159,7 +160,7 @@ func TestVirtualOverride(t *testing.T) {
 
 func TestScopedEventExpires(t *testing.T) {
 	var saved *qtgui.QPaintEvent
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		sc := &savingCanvas{save: &saved}
 		w := qtwidgets.NewQWidgetWith(sc, nil)
 		defer w.Delete()
@@ -182,21 +183,21 @@ type savingCanvas struct {
 func (c *savingCanvas) PaintEvent(e *qtgui.QPaintEvent) { *c.save = e }
 
 func TestGCFreesUnreachable(t *testing.T) {
-	before := qute.Freed()
-	qute.Run(t, func() {
+	before := qutetest.Freed()
+	qutetest.Run(t, func() {
 		for i := 0; i < 50; i++ {
 			qtwidgets.NewQLabelWithText("garbage", nil)
 		}
 	})
-	qute.CollectGarbage()
-	if freed := qute.Freed() - before; freed < 40 {
+	qutetest.CollectGarbage()
+	if freed := qutetest.Freed() - before; freed < 40 {
 		t.Errorf("GC freed %d of 50 unreachable labels", freed)
 	}
 }
 
 func TestVisibleWindowPinned(t *testing.T) {
 	var win *qtwidgets.QWidget
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		w.SetObjectName("pinned")
 		w.Show()
@@ -204,8 +205,8 @@ func TestVisibleWindowPinned(t *testing.T) {
 	})
 	ptr := win.Ptr()
 	win = nil
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		found := false
 		for _, w := range qtwidgets.QApplicationTopLevelWidgets() {
 			if w.Ptr() == ptr {
@@ -224,7 +225,7 @@ func TestVisibleWindowPinned(t *testing.T) {
 }
 
 func TestDumpTree(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		defer w.Delete()
 		w.SetObjectName("root")

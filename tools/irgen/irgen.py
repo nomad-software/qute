@@ -122,7 +122,7 @@ def class_info(c, module, header, name=None, nested_out=None):
     bases = []
     access = "private" if c.kind == K.CLASS_DECL else "public"
     section = ""
-    methods, enums, flags, fields = [], [], [], []
+    methods, enums, flags, fields, dropped = [], [], [], [], []
     has_qobject_macro = False
     gadget = False
     dtor = None
@@ -163,11 +163,19 @@ def class_info(c, module, header, name=None, nested_out=None):
         if ch.kind == K.DESTRUCTOR:
             dtor = {"access": access, "virtual": ch.is_virtual_method()}
         elif ch.kind in (K.CXX_METHOD, K.CONSTRUCTOR):
-            if ch.spelling.startswith("operator") or ch.spelling.startswith("qt_") or ch.spelling in ("d_func",):
-                if not ch.spelling.startswith("operator"):
-                    continue
+            if ch.spelling.startswith("qt_") or ch.spelling in ("d_func",):
+                continue
+            if ch.spelling.startswith("operator"):
+                # not bound; recorded so the coverage report can say so
+                if access == "public" and not deprecated(ch):
+                    dropped.append({"kind": "operator", "name": ch.displayname})
                 continue
             methods.append(method_info(ch, access, section))
+        elif ch.kind == K.CONVERSION_FUNCTION and access == "public" and not deprecated(ch):
+            dropped.append({"kind": "conversion", "name": ch.displayname})
+        elif ch.kind == K.FUNCTION_TEMPLATE and access == "public" and not deprecated(ch) \
+                and not ch.spelling.startswith("qt_"):
+            dropped.append({"kind": "template", "name": ch.displayname})
         elif ch.kind == K.ENUM_DECL and ch.spelling and access == "public":
             enums.append(enum_info(ch, name))
         elif ch.kind == K.FIELD_DECL and access == "public" and not deprecated(ch):
@@ -194,6 +202,7 @@ def class_info(c, module, header, name=None, nested_out=None):
         "enums": enums,
         "flags": flags,
         "methods": methods,
+        "dropped": dropped,
     }
 
 

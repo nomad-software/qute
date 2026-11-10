@@ -3,6 +3,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineCertificateError &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -272,6 +278,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineClientCertificateSelection &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -378,6 +390,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": false
@@ -492,6 +505,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1020,6 +1034,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1438,6 +1453,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1731,6 +1747,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -1782,6 +1799,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineDesktopMediaRequest &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineDesktopMediaRequest &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -1968,6 +1995,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -2748,6 +2776,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineExtensionInfo &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineExtensionInfo &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -2973,6 +3011,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3337,6 +3376,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineFileSystemAccessRequest &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineFileSystemAccessRequest &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -3555,6 +3604,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineFindTextResult &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -3631,6 +3686,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineFrame &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineFrame &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -3954,6 +4019,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineFullScreenRequest &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineFullScreenRequest &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -4082,6 +4157,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": true
@@ -4470,6 +4546,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineHistoryItem &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineHistoryItem &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -4641,6 +4727,7 @@
    "bases": [
     "QAbstractListModel"
    ],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": true
@@ -4833,6 +4920,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineHttpRequest &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineHttpRequest &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QWebEngineHttpRequest &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QWebEngineHttpRequest &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -5205,6 +5310,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineLoadingInfo &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineLoadingInfo &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -5456,6 +5571,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5661,6 +5777,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5904,6 +6021,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -6176,6 +6294,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -9099,6 +9218,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEnginePermission &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEnginePermission &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -9417,6 +9546,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -10684,6 +10814,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -10943,6 +11074,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const QWebEngineRegisterProtocolHandlerRequest &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QWebEngineRegisterProtocolHandlerRequest &)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -11030,6 +11171,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineScript &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QWebEngineScript &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QWebEngineScript &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -11375,6 +11530,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -11581,6 +11737,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -12274,6 +12431,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": false
@@ -12680,6 +12838,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -12798,6 +12957,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13080,6 +13240,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QWebEngineUrlScheme &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QWebEngineUrlScheme &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QWebEngineUrlScheme &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QWebEngineUrlScheme &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -13454,6 +13632,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13577,6 +13756,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -13623,6 +13803,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

@@ -4,14 +4,14 @@ package qtwebenginecore_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtwebenginecore"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -23,7 +23,7 @@ func TestLayout(t *testing.T) {
 
 // QWebEnginePage::QWebEnginePage(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEnginePage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtwebenginecore.NewQWebEnginePage(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -46,7 +46,7 @@ func TestOwnership_NewQWebEnginePage(t *testing.T) {
 
 // QWebEnginePage::QWebEnginePage(QWebEngineProfile * profile, QObject * parent = …): keep rules
 func TestKeep_QWebEnginePage_QWebEnginePageWithProfile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtwebenginecore.NewQWebEngineProfile(nil)
 		x := qtwebenginecore.NewQWebEnginePageWithProfile(a0, nil)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -58,7 +58,7 @@ func TestKeep_QWebEnginePage_QWebEnginePageWithProfile(t *testing.T) {
 
 // QWebEnginePage::QWebEnginePage(QWebEngineProfile * profile, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEnginePageWithProfile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtwebenginecore.NewQWebEnginePageWithProfile(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -81,7 +81,7 @@ func TestOwnership_NewQWebEnginePageWithProfile(t *testing.T) {
 
 // void QWebEnginePage::setInspectedPage(QWebEnginePage * page): keep rules
 func TestKeep_QWebEnginePage_SetInspectedPage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtwebenginecore.NewQWebEnginePage(nil)
 		a0 := qtwebenginecore.NewQWebEnginePage(nil)
 		recv.SetInspectedPage(a0)
@@ -94,7 +94,7 @@ func TestKeep_QWebEnginePage_SetInspectedPage(t *testing.T) {
 
 // void QWebEnginePage::setDevToolsPage(QWebEnginePage * page): keep rules
 func TestKeep_QWebEnginePage_SetDevToolsPage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtwebenginecore.NewQWebEnginePage(nil)
 		a0 := qtwebenginecore.NewQWebEnginePage(nil)
 		recv.SetDevToolsPage(a0)
@@ -107,7 +107,7 @@ func TestKeep_QWebEnginePage_SetDevToolsPage(t *testing.T) {
 
 // void QWebEnginePage::setUrlRequestInterceptor(QWebEngineUrlRequestInterceptor * interceptor) (test from the overlay)
 func TestOwnership_QWebEnginePage_SetUrlRequestInterceptor(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		ic := qtwebenginecore.NewQWebEngineUrlRequestInterceptorWith(&struct {
 			qtwebenginecore.QWebEngineUrlRequestInterceptorBase
 		}{})
@@ -123,7 +123,7 @@ func TestOwnership_QWebEnginePage_SetUrlRequestInterceptor(t *testing.T) {
 
 // QWebEngineProfile::QWebEngineProfile(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEngineProfile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtwebenginecore.NewQWebEngineProfile(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -146,7 +146,7 @@ func TestOwnership_NewQWebEngineProfile(t *testing.T) {
 
 // QWebEngineProfile::QWebEngineProfile(const QString & name, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEngineProfileWithName(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtwebenginecore.NewQWebEngineProfileWithName("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -169,7 +169,7 @@ func TestOwnership_NewQWebEngineProfileWithName(t *testing.T) {
 
 // void QWebEngineProfile::setUrlRequestInterceptor(QWebEngineUrlRequestInterceptor * interceptor) (test from the overlay)
 func TestOwnership_QWebEngineProfile_SetUrlRequestInterceptor(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		ic := qtwebenginecore.NewQWebEngineUrlRequestInterceptorWith(&struct {
 			qtwebenginecore.QWebEngineUrlRequestInterceptorBase
 		}{})
@@ -185,7 +185,7 @@ func TestOwnership_QWebEngineProfile_SetUrlRequestInterceptor(t *testing.T) {
 
 // void QWebEngineProfile::installUrlSchemeHandler(const QByteArray & scheme, QWebEngineUrlSchemeHandler *) (test from the overlay)
 func TestOwnership_QWebEngineProfile_InstallUrlSchemeHandler(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		sh := qtwebenginecore.NewQWebEngineUrlSchemeHandlerWith(&struct {
 			qtwebenginecore.QWebEngineUrlSchemeHandlerBase
 		}{}, nil)
@@ -201,7 +201,7 @@ func TestOwnership_QWebEngineProfile_InstallUrlSchemeHandler(t *testing.T) {
 
 // void QWebEngineProfile::removeUrlSchemeHandler(QWebEngineUrlSchemeHandler *) (test from the overlay)
 func TestOwnership_QWebEngineProfile_RemoveUrlSchemeHandler(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		sh := qtwebenginecore.NewQWebEngineUrlSchemeHandlerWith(&struct {
 			qtwebenginecore.QWebEngineUrlSchemeHandlerBase
 		}{}, nil)
@@ -218,7 +218,7 @@ func TestOwnership_QWebEngineProfile_RemoveUrlSchemeHandler(t *testing.T) {
 
 // QWebEngineProfile * QWebEngineProfileBuilder::createProfile(const QString & storageName, QObject * parent = …) const
 func TestOwnership_QWebEngineProfileBuilder_CreateProfile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtwebenginecore.NewQWebEngineProfileBuilder()
 		res := recv.CreateProfile("x")
 		if res == nil {

@@ -108,7 +108,7 @@ func NewQPainterOn(paintDevice QPaintDeviceLike) *QPainter {
 	p := C.qute_QPainter_new_1(paintDevicePtr)
 	runtime.KeepAlive(paintDevice)
 	h := rt.WrapClass(p, "QPainter", rt.NewOwned)
-	rt.KeepArg(h, "device", paintDeviceH)
+	rt.KeepArg(h, "device", paintDeviceH, true)
 	return rt.View[QPainter](h, p)
 }
 
@@ -143,7 +143,7 @@ func (this *QPainter) Begin(paintDevice QPaintDeviceLike) bool {
 	r := C.qute_QPainter_begin(self, paintDevicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(paintDevice)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", paintDeviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", paintDeviceH, true)
 	return bool(r)
 }
 
@@ -151,11 +151,14 @@ func (this *QPainter) Begin(paintDevice QPaintDeviceLike) bool {
 //
 //	C++: bool QPainter::end()
 //
+// An inactive painter no longer uses its device, so End() drops the painter's reference to it: the device may be deleted afterwards.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#end
 func (this *QPainter) End() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.End")
 	r := C.qute_QPainter_end(self)
 	runtime.KeepAlive(this)
+	rt.Unkeep(rt.RefOf(unsafe.Pointer(this)).H, "device")
 	return bool(r)
 }
 

@@ -78,7 +78,7 @@ func NewQWebEnginePage(parent qtcore.QObjectLike) *QWebEnginePage {
 //
 // Ownership: profile is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
-// The page keeps the profile alive: Qt requires the profile to outlive the page.
+// The page keeps the profile alive: Qt requires the profile to outlive the page, so deleting the profile while the page lives panics.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#QWebEnginePage
 func NewQWebEnginePageWithProfile(profile QWebEngineProfileLike, parent qtcore.QObjectLike) *QWebEnginePage {
@@ -100,7 +100,7 @@ func NewQWebEnginePageWithProfile(profile QWebEngineProfileLike, parent qtcore.Q
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QWebEnginePage", mode)
-	rt.KeepArg(h, "profile", profileH)
+	rt.KeepArg(h, "profile", profileH, true)
 	return rt.View[QWebEnginePage](h, p)
 }
 
@@ -640,7 +640,7 @@ func (this *QWebEnginePage) SetInspectedPage(page QWebEnginePageLike) {
 	C.qute_QWebEnginePage_setInspectedPage(self, pagePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(page)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "inspected", pageH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "inspected", pageH, false)
 }
 
 // InspectedPage wraps QWebEnginePage::inspectedPage.
@@ -676,7 +676,7 @@ func (this *QWebEnginePage) SetDevToolsPage(page QWebEnginePageLike) {
 	C.qute_QWebEnginePage_setDevToolsPage(self, pagePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(page)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "devTools", pageH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "devTools", pageH, false)
 }
 
 // DevToolsPage wraps QWebEnginePage::devToolsPage.
@@ -724,7 +724,7 @@ func (this *QWebEnginePage) SetUrlRequestInterceptor(interceptor QWebEngineUrlRe
 	C.qute_QWebEnginePage_setUrlRequestInterceptor(self, interceptorPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(interceptor)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "interceptor", interceptorH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "interceptor", interceptorH, false)
 }
 
 // LifecycleState wraps QWebEnginePage::lifecycleState.

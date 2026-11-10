@@ -184,7 +184,7 @@ func (this *QPushButton) SetMenu(menu QMenuLike) {
 	C.qute_QPushButton_setMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMenu.menu", menuH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMenu.menu", menuH, false)
 }
 
 // Menu wraps QPushButton::menu.

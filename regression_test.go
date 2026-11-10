@@ -16,6 +16,7 @@ import (
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // Regression tests for bindings whose signature was wrong: out-parameters
@@ -24,7 +25,7 @@ import (
 
 // copyDataTo writes 16 floats; the old binding pointed it at one stack float.
 func TestMatrixCopyDataTo(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtgui.NewQMatrix4x4()
 		m.TranslateFloat32Float32(1, 2, 3)
 		got := m.CopyDataTo()
@@ -43,7 +44,7 @@ func TestMatrixCopyDataTo(t *testing.T) {
 // The image-over-data constructor used to build the image over a dead stack
 // byte and dropped the data argument. It now takes the caller's buffer.
 func TestImageOverCallerBuffer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		const w, h = 4, 2
 		buf := make([]uint32, w*h)
 		for i := range buf {
@@ -54,7 +55,7 @@ func TestImageOverCallerBuffer(t *testing.T) {
 		var pin runtime.Pinner
 		pin.Pin(&buf[0])
 		defer pin.Unpin()
-		img := qtgui.NewQImageWithPtrBytesPerLine(unsafe.Pointer(&buf[0]), w, h, w*4, qtgui.QImageFormat_ARGB32)
+		img := qtgui.NewQImageOverMemoryBytesPerLine(unsafe.Pointer(&buf[0]), w, h, w*4, qtgui.QImageFormat_ARGB32)
 		if got := img.Pixel(3, 1); got != 0xff112233 {
 			t.Errorf("Pixel = %#x, want 0xff112233", got)
 		}
@@ -65,7 +66,7 @@ func TestImageOverCallerBuffer(t *testing.T) {
 // The byte-array stream constructor kept a pointer to a temporary; it is
 // skipped now, and the read-only one has its proper name.
 func TestDataStreamOverBytes(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		ds := qtcore.NewQDataStreamWithBytes([]byte("hello"))
 		buf := make([]byte, 5)
 		if n := ds.ReadRawData(buf); n != 5 || string(buf) != "hello" {
@@ -84,7 +85,7 @@ func TestFileUnmap(t *testing.T) {
 	if err := os.WriteFile(path, []byte("mapped bytes"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		f := qtcore.NewQFileWithName(path, nil)
 		defer f.Delete()
 		if !f.Open(qtcore.QIODeviceBaseReadOnly) {
@@ -108,7 +109,7 @@ func TestFileUnmap(t *testing.T) {
 // polish(QPalette &) reads the palette it adjusts; it was bound as out-only,
 // so the caller's palette never reached Qt.
 func TestStylePolishPaletteReadsInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		red := qtgui.RGB(255, 0, 0)
 		pal := qtgui.NewQPalette()
 		pal.SetColor(qtgui.QPaletteWindow, red)
@@ -131,7 +132,7 @@ func (b *longLabelButton) InitStyleOption(opt *qtwidgets.QStyleOptionButton) {
 // An InitStyleOption override used to fill in a copy Qt never saw. The paint
 // path draws from the option, so the override's label must show on screen.
 func TestInitStyleOptionOverrideReachesQt(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		shot := func(b *qtwidgets.QPushButton) []byte {
 			b.Resize(360, 40)
 			return qute.Screenshot(b).Pix
@@ -166,7 +167,7 @@ func (b *keepOptionButton) InitStyleOption(opt *qtwidgets.QStyleOptionButton) {
 }
 
 func TestInitStyleOptionArgumentIsScoped(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		v := &keepOptionButton{}
 		btn := qtwidgets.NewQPushButtonWith(v, nil)
 		defer btn.Delete()
@@ -189,13 +190,13 @@ func TestStreamKeepsDevice(t *testing.T) {
 		t.Fatal(err)
 	}
 	var ds *qtcore.QDataStream
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		f := qtcore.NewQFileWithName(path, nil)
 		f.Open(qtcore.QIODeviceBaseReadOnly)
 		ds = qtcore.NewQDataStreamWithIODevice(f)
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		if ds.AtEnd() {
 			t.Error("AtEnd = true on an unread 11-byte file")
 		}
@@ -212,12 +213,12 @@ func TestStreamKeepsDevice(t *testing.T) {
 // model is deleted.
 func TestIndexKeepsModel(t *testing.T) {
 	var idx *qtcore.QModelIndex
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
 		idx = m.Index(0, 0)
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		if got := idx.Data().ToString(); got != "a" {
 			t.Errorf("Data = %q, want \"a\"", got)
 		}
@@ -236,12 +237,12 @@ func TestIndexKeepsModel(t *testing.T) {
 // A view keeps a model nobody else references (it used to empty silently).
 func TestViewKeepsModel(t *testing.T) {
 	var v *qtwidgets.QListView
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		v = qtwidgets.NewQListView(nil)
 		v.SetModel(qtcore.NewQStringListModelWithStrings([]string{"a", "b"}, nil))
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		m := v.Model()
 		if m == nil {
 			t.Error("model was garbage collected while the view used it")
@@ -258,23 +259,23 @@ func TestViewKeepsModel(t *testing.T) {
 func TestKeptArgumentReplaced(t *testing.T) {
 	var v *qtwidgets.QListView
 	var old weak.Pointer[qtcore.QStringListModel]
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		v = qtwidgets.NewQListView(nil)
 		m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
 		old = weak.Make(m)
 		v.SetModel(m)
 		v.SetModel(nil)
 	})
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	if old.Value() != nil {
 		t.Error("the replaced model is still referenced; SetModel(nil) should drop the view's reference")
 	}
-	qute.Run(t, func() { v.Delete() })
+	qutetest.Run(t, func() { v.Delete() })
 }
 
 // keep-each and release: a menu keeps a parentless action until it is removed.
 func TestWidgetKeepsActions(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		menu := qtwidgets.NewQMenu(nil)
 		defer menu.Delete()
 		a := qtgui.NewQActionWithText("one", nil)
@@ -293,7 +294,7 @@ func TestWidgetKeepsActions(t *testing.T) {
 // A widget's kept references go when the widget dies, even though no Go
 // variable refers to it any more (its handle is anchored while it keeps them).
 func TestKeptReferencesDropWithOwner(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		view := qtwidgets.NewQListView(root)
 		m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
@@ -327,11 +328,11 @@ func wantDepPanic(t *testing.T, method, owner string, f func()) {
 // and return "").
 func TestTextBlockKeepsDocument(t *testing.T) {
 	var b *qtgui.QTextBlock
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		b = qtgui.NewQTextDocumentWithText("hello\nworld", nil).Begin()
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		if got := b.Text(); got != "hello" {
 			t.Errorf("Text after GC = %q, want \"hello\"", got)
 		}
@@ -345,12 +346,12 @@ func TestTextBlockKeepsDocument(t *testing.T) {
 // or the document is gone.
 func TestTextTableCellKeepsTable(t *testing.T) {
 	var c *qtgui.QTextTableCell
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		d := qtgui.NewQTextDocument(nil)
 		c = qtgui.NewQTextCursorWithTextDocument(d).InsertTable(2, 2).CellAtWithCol(1, 1)
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		if c.Row() != 1 || c.RowSpan() != 1 {
 			t.Errorf("Row, RowSpan after GC = %d, %d, want 1, 1", c.Row(), c.RowSpan())
 		}
@@ -359,7 +360,7 @@ func TestTextTableCellKeepsTable(t *testing.T) {
 		wantDepPanic(t, "QTextTableCell.RowSpan", "QTextTable", func() { c.RowSpan() })
 		d.Delete()
 	})
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		d := qtgui.NewQTextDocument(nil)
 		c := qtgui.NewQTextCursorWithTextDocument(d).InsertTable(1, 1).CellAtWithCol(0, 0)
 		d.Delete()
@@ -369,7 +370,7 @@ func TestTextTableCellKeepsTable(t *testing.T) {
 
 // A cell of a nested table depends on the inner table, not the outer one.
 func TestTextTableCellFindsInnermostTable(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		d := qtgui.NewQTextDocument(nil)
 		defer d.Delete()
 		outer := qtgui.NewQTextCursorWithTextDocument(d).InsertTable(2, 2)
@@ -398,17 +399,17 @@ func TestTextTableCellFindsInnermostTable(t *testing.T) {
 func TestWidgetItemKeepsWidget(t *testing.T) {
 	var it *qtwidgets.QWidgetItem
 	var w weak.Pointer[qtwidgets.QWidget]
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		x := qtwidgets.NewQWidget(nil)
 		x.SetMinimumSize(30, 20)
 		w = weak.Make(x)
 		it = qtwidgets.NewQWidgetItemWithWidget(x)
 	})
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	if w.Value() == nil {
 		t.Fatal("the widget was collected while the item pointed at it")
 	}
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		// a parentless widget is a window, which an item reports as empty,
 		// so read the widget back through the item
 		if got := it.Widget().MinimumSize(); got.Width != 30 || got.Height != 20 {
@@ -422,7 +423,7 @@ func TestWidgetItemKeepsWidget(t *testing.T) {
 
 // QBuffer gives QDataStream an in-memory device to write to.
 func TestDataStreamOverBuffer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		buf := qtcore.NewQBuffer(nil)
 		defer buf.Delete()
 		if !buf.Open(qtcore.QIODeviceBaseReadWrite) {
@@ -445,7 +446,7 @@ func TestDataStreamOverBuffer(t *testing.T) {
 	})
 }
 
-// fakeTB records the failure qute.Run reports instead of failing the test.
+// fakeTB records the failure qutetest.Run reports instead of failing the test.
 type fakeTB struct {
 	testing.TB
 	failed string
@@ -460,11 +461,11 @@ func (f *fakeTB) Fatalf(s string, args ...any) { f.failed = fmt.Sprintf(s, args.
 func TestHandlerPanicIsReported(t *testing.T) {
 	ft := &fakeTB{TB: t}
 	reached := false
-	qute.Run(ft, func() {
+	qutetest.Run(ft, func() {
 		btn := qtwidgets.NewQPushButtonWithText("boom", nil)
 		defer btn.Delete()
 		btn.OnClicked(func(bool) { panic("boom from a handler") })
-		qute.Click(btn)
+		qutetest.Click(btn)
 		reached = true
 	})
 	if !strings.Contains(ft.failed, "boom from a handler") || !strings.Contains(ft.failed, "panic in a Qt callback") {
@@ -474,12 +475,12 @@ func TestHandlerPanicIsReported(t *testing.T) {
 		t.Error("code after Click ran; Click should re-raise the handler's panic")
 	}
 	// Qt is still usable afterwards.
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		clicks := 0
 		btn := qtwidgets.NewQPushButtonWithText("ok", nil)
 		defer btn.Delete()
 		btn.OnClicked(func(bool) { clicks++ })
-		qute.Click(btn)
+		qutetest.Click(btn)
 		if clicks != 1 {
 			t.Errorf("clicks = %d after a recovered panic, want 1", clicks)
 		}

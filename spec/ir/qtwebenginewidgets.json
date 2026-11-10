@@ -5,6 +5,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

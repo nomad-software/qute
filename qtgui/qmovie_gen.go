@@ -99,7 +99,7 @@ func NewQMovieWithDevice(device qtcore.QIODeviceLike, format []byte, parent qtco
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QMovie", mode)
-	rt.KeepArg(h, "device", deviceH)
+	rt.KeepArg(h, "device", deviceH, false)
 	return rt.View[QMovie](h, p)
 }
 
@@ -143,7 +143,7 @@ func (this *QMovie) SetDevice(device qtcore.QIODeviceLike) {
 	C.qute_QMovie_setDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, false)
 }
 
 // Device wraps QMovie::device.

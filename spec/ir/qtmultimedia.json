@@ -3,6 +3,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -76,6 +77,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -120,6 +122,28 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QAudioBuffer &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QAudioBuffer &&)"
+    },
+    {
+     "kind": "template",
+     "name": "constData()"
+    },
+    {
+     "kind": "template",
+     "name": "data()"
+    },
+    {
+     "kind": "template",
+     "name": "data()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -398,6 +422,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -594,6 +619,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -760,6 +786,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1344,6 +1371,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QAudioDevice &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QAudioDevice &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QAudioDevice &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QAudioDevice &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -1657,6 +1702,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "channelConfig(Args...)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -2281,6 +2332,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -2588,6 +2640,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -2894,6 +2947,12 @@
    "abstract": false,
    "bases": [
     "QObject"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "start(Callback &&)"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -3437,6 +3496,12 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "start(Callback &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3979,6 +4044,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5940,6 +6006,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QCameraDevice &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QCameraDevice &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QCameraDevice &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -6127,6 +6207,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QCameraFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QCameraFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QCameraFormat &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -6248,6 +6342,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QCapturableWindow &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QCapturableWindow &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -6387,6 +6491,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7261,6 +7366,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -8010,6 +8116,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -8261,6 +8368,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QMediaFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QMediaFormat &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QMediaFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QMediaFormat &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -8985,6 +9110,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator[](Key)"
+    },
+    {
+     "kind": "template",
+     "name": "asKeyValueRange()"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -9329,6 +9464,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -10879,6 +11015,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -12091,6 +12228,36 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QMediaTimeRange &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QMediaTimeRange &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const Interval &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(const QMediaTimeRange &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(const Interval &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(const QMediaTimeRange &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(const Interval &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -12512,6 +12679,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -12671,6 +12839,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPlaybackOptions &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPlaybackOptions &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -12940,6 +13118,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13372,6 +13551,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13969,6 +14149,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QVideoFrame &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QVideoFrame &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QVideoFrame &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QVideoFrame &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -14756,6 +14954,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -14811,6 +15010,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QVideoFrameFormat &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QVideoFrameFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QVideoFrameFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QVideoFrameFormat &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -15830,6 +16047,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -16026,6 +16244,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -16330,6 +16549,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

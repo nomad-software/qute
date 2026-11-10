@@ -31,22 +31,55 @@ var keepMu sync.Mutex
 // maps are keyed by handle serial, so they outlive the handles: a keeper's
 // handle may be collected long before Qt destroys the object.
 var (
-	keptBy = map[uint64]int32{}    // kept handle serial -> keepers holding it
-	holds  = map[uint64][]uint64{} // keeper serial -> serials it keeps, one per slot
+	keptBy = map[uint64]int32{}  // kept handle serial -> keepers holding it
+	holds  = map[uint64][]hold{} // keeper serial -> what it keeps, one per slot
+
+	// A guarded hold is one where Qt would follow a dangling pointer if the
+	// kept object were deleted while the keeper lives (a QPainter's device),
+	// so Delete() of the kept object panics instead (see guardingKeeper).
+	guardedBy   = map[uint64]int32{}  // kept serial -> guarded holds on it
+	keeperClass = map[uint64]string{} // keeper serial -> class, for messages
 )
 
+type hold struct {
+	kept  uint64
+	guard bool
+}
+
 // holdLocked records that keeper holds kept. The caller holds keepMu.
-func holdLocked(keeper, kept uint64) {
-	holds[keeper] = append(holds[keeper], kept)
+func holdLocked(keeper *Handle, kept uint64, guard bool) {
+	holds[keeper.serial] = append(holds[keeper.serial], hold{kept, guard})
 	keptBy[kept]++
+	if guard {
+		guardedBy[kept]++
+		keeperClass[keeper.serial] = keeper.class
+	}
+}
+
+// dropLocked forgets one hold on kept and reports whether kept is now free
+// to go. The caller holds keepMu.
+func dropLocked(hd hold) bool {
+	if hd.guard {
+		if guardedBy[hd.kept]--; guardedBy[hd.kept] <= 0 {
+			delete(guardedBy, hd.kept)
+		}
+	}
+	if keptBy[hd.kept]--; keptBy[hd.kept] <= 0 {
+		delete(keptBy, hd.kept)
+		return true
+	}
+	return false
 }
 
 // unholdLocked drops one hold of keeper on kept and reports whether kept is
 // now free to go. The caller holds keepMu.
 func unholdLocked(keeper, kept uint64) bool {
 	hs := holds[keeper]
-	for i, s := range hs {
-		if s == kept {
+	var hd hold
+	found := false
+	for i, x := range hs {
+		if x.kept == kept {
+			hd, found = x, true
 			hs[i] = hs[len(hs)-1]
 			hs = hs[:len(hs)-1]
 			break
@@ -54,14 +87,14 @@ func unholdLocked(keeper, kept uint64) bool {
 	}
 	if len(hs) == 0 {
 		delete(holds, keeper)
+		delete(keeperClass, keeper)
 	} else {
 		holds[keeper] = hs
 	}
-	if keptBy[kept]--; keptBy[kept] <= 0 {
-		delete(keptBy, kept)
-		return true
+	if !found {
+		return false
 	}
-	return false
+	return dropLocked(hd)
 }
 
 // releaseHolds drops every hold of a keeper that died or whose handle was
@@ -69,17 +102,35 @@ func unholdLocked(keeper, kept uint64) bool {
 func releaseHolds(keeper uint64) {
 	keepMu.Lock()
 	freed := false
-	for _, s := range holds[keeper] {
-		if keptBy[s]--; keptBy[s] <= 0 {
-			delete(keptBy, s)
+	for _, hd := range holds[keeper] {
+		if dropLocked(hd) {
 			freed = true
 		}
 	}
 	delete(holds, keeper)
+	delete(keeperClass, keeper)
 	keepMu.Unlock()
 	if freed {
 		wakeDeferred()
 	}
+}
+
+// guardingKeeper returns the class of a live keeper whose guarded hold on
+// the object with serial would make deleting it unsafe, or "".
+func guardingKeeper(serial uint64) string {
+	keepMu.Lock()
+	defer keepMu.Unlock()
+	if guardedBy[serial] == 0 {
+		return ""
+	}
+	for keeper, hs := range holds {
+		for _, hd := range hs {
+			if hd.kept == serial && hd.guard {
+				return keeperClass[keeper]
+			}
+		}
+	}
+	return "keeper"
 }
 
 // isKept reports whether a live keeper still holds the object with serial.
@@ -98,13 +149,43 @@ func slotsFor(owner *Handle, create bool) map[string]any {
 		owner.keeps = map[string]any{}
 		if owner.registeredKind() {
 			owner.anchorPin()
-		} else if !owner.hasCleanupNow() {
-			// Go never frees this owner, so nothing would report its end:
-			// release what it holds once its handle is collected.
-			runtime.AddCleanup(owner, releaseHolds, owner.serial)
+		} else {
+			owner.syncReleaseLocked()
 		}
 	}
 	return owner.keeps
+}
+
+// syncReleaseLocked keeps the release cleanup of an unregistered keeper in
+// step with who frees it. When Go frees it (it has a GC cleanup), its free
+// releases what it holds, after the keeper is gone. When Go does not (it is
+// Borrowed, or Parented after a transfer), nothing would report its end, so
+// what it holds is released once its handle is collected. The caller holds
+// keepMu.
+func (h *Handle) syncReleaseLocked() {
+	if h.registeredKind() {
+		return
+	}
+	want := h.keeps != nil && h.State() != Dead && !h.hasCleanupNow()
+	if want == h.hasRelease {
+		return
+	}
+	if want {
+		h.release = runtime.AddCleanup(h, releaseHolds, h.serial)
+	} else {
+		h.release.Stop()
+	}
+	h.hasRelease = want
+}
+
+// syncRelease is syncReleaseLocked for callers that do not hold keepMu.
+func (h *Handle) syncRelease() {
+	if h.registeredKind() {
+		return
+	}
+	keepMu.Lock()
+	h.syncReleaseLocked()
+	keepMu.Unlock()
 }
 
 // unslotLocked drops one slot and the owner's anchor once nothing is kept.
@@ -121,13 +202,17 @@ func unslotLocked(owner *Handle, slot string) {
 		owner.keeps = nil
 		if owner.registeredKind() {
 			owner.anchorUnpin()
+		} else {
+			owner.syncReleaseLocked()
 		}
 	}
 }
 
 // KeepArg makes owner hold arg (a handle, or nil to clear) under slot,
-// replacing whatever the slot held. Dead owners keep nothing.
-func KeepArg(owner *Handle, slot string, arg *Handle) {
+// replacing whatever the slot held. Dead owners keep nothing. With guard set,
+// Delete() of arg panics while owner keeps it: Qt would use it after it was
+// freed (a QPainter's device, a QDataStream's device).
+func KeepArg(owner *Handle, slot string, arg *Handle, guard bool) {
 	if owner == nil || !owner.Alive() {
 		return
 	}
@@ -147,16 +232,27 @@ func KeepArg(owner *Handle, slot string, arg *Handle) {
 		}
 	}
 	ks[slot] = arg
-	holdLocked(owner.serial, arg.serial)
+	holdLocked(owner, arg.serial, guard)
 }
 
 // KeepEach makes owner hold arg until owner dies or Release drops it. Unlike
 // KeepArg, each distinct argument gets its own entry (actions added to a widget).
-func KeepEach(owner *Handle, arg *Handle) {
+func KeepEach(owner *Handle, arg *Handle, guard bool) {
 	if arg == nil {
 		return
 	}
-	KeepArg(owner, eachSlot(arg), arg)
+	KeepArg(owner, eachSlot(arg), arg, guard)
+}
+
+// Unkeep drops what owner holds under slot (a QPainter's device once End
+// returns, since an inactive painter no longer uses it).
+func Unkeep(owner *Handle, slot string) {
+	if owner == nil {
+		return
+	}
+	keepMu.Lock()
+	defer keepMu.Unlock()
+	unslotLocked(owner, slot)
 }
 
 // Release drops a reference KeepEach took.
@@ -197,7 +293,7 @@ func KeepsArg(owner, arg unsafe.Pointer) bool {
 // KeepEachArg is KeepEach for two generated wrappers (for generated tests).
 func KeepEachArg(owner, arg unsafe.Pointer) {
 	if owner != nil && arg != nil {
-		KeepEach(RefOf(owner).H, RefOf(arg).H)
+		KeepEach(RefOf(owner).H, RefOf(arg).H, false)
 	}
 }
 
@@ -206,6 +302,7 @@ func (h *Handle) dropHandleKeeps() {
 	keepMu.Lock()
 	had := h.keeps != nil
 	h.keeps = nil
+	h.syncReleaseLocked()
 	keepMu.Unlock()
 	if had && h.registeredKind() {
 		h.anchorUnpin()

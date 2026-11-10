@@ -4,10 +4,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtsvg"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 const redSquare = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">` +
@@ -15,7 +15,7 @@ const redSquare = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10
 
 // The renderer draws into an image through a painter.
 func TestRenderToImage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		r := qtsvg.NewQSvgRendererWithBytes([]byte(redSquare), nil)
 		if !r.IsValid() {
 			t.Fatal("renderer rejected a valid SVG")
@@ -34,7 +34,7 @@ func TestRenderToImage(t *testing.T) {
 
 // The generator writes SVG into the device passed to SetOutputDevice.
 func TestGeneratorWritesToKeptDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		g := qtsvg.NewQSvgGenerator()
 		buf := qtcore.NewQBuffer(nil)
 		g.SetOutputDevice(buf)

@@ -535,7 +535,7 @@ func (this *QLabel) SetMovie(movie qtgui.QMovieLike) {
 	C.qute_QLabel_setMovie(self, moviePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(movie)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMovie.movie", movieH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMovie.movie", movieH, false)
 }
 
 // SetNum wraps QLabel::setNum.

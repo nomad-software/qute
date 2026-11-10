@@ -90,7 +90,7 @@ func (this *QActionGroup) AddAction(aArg QActionLike) *QAction {
 	r := C.qute_QActionGroup_addAction(self, aArgPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(aArg)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, aArgH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, aArgH, false)
 	return rt.View[QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 

@@ -3,6 +3,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -223,6 +224,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1041,6 +1043,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -1095,6 +1098,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -1125,6 +1129,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1176,6 +1181,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1370,6 +1376,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -2629,6 +2636,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -2672,6 +2680,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -2964,6 +2973,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3347,6 +3357,7 @@
    "bases": [
     "QAccessibleEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3474,6 +3485,7 @@
    "bases": [
     "QAccessibleObject"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -3661,6 +3673,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3735,6 +3748,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3804,6 +3818,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -3920,6 +3935,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -4059,6 +4075,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -4236,6 +4253,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -4346,6 +4364,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -4426,6 +4445,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": true
@@ -5009,6 +5029,7 @@
    "bases": [
     "QAccessibleInterface"
    ],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": true
@@ -5164,6 +5185,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5288,6 +5310,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5481,6 +5504,7 @@
    "bases": [
     "QAccessibleEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5567,6 +5591,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5722,6 +5747,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -6157,6 +6183,7 @@
    "bases": [
     "QAccessibleEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -6458,6 +6485,7 @@
    "bases": [
     "QAccessibleEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -6570,6 +6598,7 @@
    "bases": [
     "QAccessibleTextCursorEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -6687,6 +6716,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7225,6 +7255,7 @@
    "bases": [
     "QAccessibleTextCursorEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7344,6 +7375,7 @@
    "bases": [
     "QAccessibleTextCursorEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7495,6 +7527,7 @@
    "bases": [
     "QAccessibleTextCursorEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7645,6 +7678,7 @@
    "bases": [
     "QAccessibleEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7755,6 +7789,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7874,6 +7909,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7994,6 +8030,16 @@
    "abstract": false,
    "bases": [
     "QObject"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "menu()"
+    },
+    {
+     "kind": "template",
+     "name": "setMenu(T)"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -9449,6 +9495,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -9586,6 +9633,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -10096,6 +10144,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -10200,6 +10249,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -10496,6 +10546,12 @@
    "bases": [
     "QPixmap"
    ],
+   "dropped": [
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -10785,6 +10841,40 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QBrush &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QBrush &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(Qt::BrushStyle)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QColor)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(Qt::GlobalColor)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QBrush &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QBrush &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -11310,6 +11400,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": false
@@ -11403,6 +11494,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator()(QBrushData *)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -11420,6 +11517,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -11534,6 +11632,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": true
@@ -12066,6 +12165,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -12146,6 +12246,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(Qt::GlobalColor)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QColor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QColor &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -14837,6 +14955,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QColorSpace &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QColorSpace &&)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -16014,6 +16146,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -16098,6 +16231,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QColorTransform &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QColorTransform &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -16323,6 +16466,7 @@
    "bases": [
     "QGradient"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -16523,6 +16667,7 @@
    "bases": [
     "QInputEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -16762,6 +16907,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QCursor &&)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -17210,6 +17369,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -17316,6 +17476,7 @@
    "bases": [
     "QValidator"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -17856,6 +18017,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -18309,6 +18471,7 @@
    "bases": [
     "QDragMoveEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -18483,6 +18646,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -18565,6 +18729,7 @@
    "bases": [
     "QDropEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -18848,6 +19013,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -19138,6 +19304,7 @@
    "bases": [
     "QSinglePointEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -19251,6 +19418,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QEventPoint &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QEventPoint &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QEventPoint &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QEventPoint &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -19848,6 +20033,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -19939,6 +20125,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -20078,6 +20265,7 @@
    "bases": [
     "QAbstractItemModel"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -21679,6 +21867,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -21821,6 +22010,32 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QFont &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QFont &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QFont &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<(const QFont &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QFont &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -23944,6 +24159,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "Tag(const char (&)[N])"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -24062,6 +24283,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -25181,6 +25403,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QFontInfo &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QFontInfo &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -25518,6 +25750,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QFontMetrics &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QFontMetrics &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QFontMetrics &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QFontMetrics &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -26433,6 +26683,28 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QFontMetricsF &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QFontMetrics &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QFontMetricsF &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QFontMetricsF &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QFontMetricsF &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -27286,6 +27558,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QFontVariableAxis &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QFontVariableAxis &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -27571,6 +27853,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -27695,6 +27978,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -27758,6 +28042,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QGlyphRun &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QGlyphRun &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QGlyphRun &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QGlyphRun &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -28393,6 +28695,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const QGradient &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QGradient &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -29412,6 +29724,12 @@
    "abstract": false,
    "bases": [
     "QCoreApplication"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "nativeInterface()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -30838,6 +31156,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -31035,6 +31354,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -31117,6 +31437,7 @@
    "bases": [
     "QSinglePointEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -31291,6 +31612,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QIcon &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QIcon &&)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -33005,6 +33340,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -33085,6 +33421,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -33584,6 +33921,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -33637,6 +33975,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -33754,6 +34093,28 @@
    "abstract": false,
    "bases": [
     "QPaintDevice"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QImage &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QImage &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QImage &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QImage &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -37506,6 +37867,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -38090,6 +38452,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -38272,6 +38635,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -39364,6 +39728,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -40063,6 +40428,12 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const QInputDevice &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -40613,6 +40984,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -40912,6 +41284,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": true
@@ -41511,6 +41884,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -41765,6 +42139,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -41888,6 +42263,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -42050,6 +42426,7 @@
    "bases": [
     "QValidator"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -42399,6 +42776,7 @@
    "bases": [
     "QInputEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -42777,6 +43155,48 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator[](uint)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QKeySequence &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QKeySequence &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QKeySequence &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QKeySequence &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<(const QKeySequence &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator>(const QKeySequence &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<=(const QKeySequence &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator>=(const QKeySequence &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -43558,6 +43978,7 @@
    "bases": [
     "QGradient"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -43796,6 +44217,56 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "QMatrix4x4(const QGenericMatrix<N, M, float> &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator()(int, int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator()(int, int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(const QMatrix4x4 &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(const QMatrix4x4 &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(const QMatrix4x4 &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QMatrix4x4 &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QMatrix4x4 &)"
+    },
+    {
+     "kind": "template",
+     "name": "toGenericMatrix()"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -45438,6 +45909,7 @@
    "bases": [
     "QSinglePointEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -45778,6 +46250,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -45907,6 +46380,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -46839,6 +47313,7 @@
    "bases": [
     "QSinglePointEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -47054,6 +47529,12 @@
    "bases": [
     "QObject",
     "QSurface"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "nativeInterface()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -47415,6 +47896,12 @@
    "abstract": false,
    "bases": [
     "QObject"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "nativeInterface()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -48083,6 +48570,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -48196,6 +48684,7 @@
    "bases": [
     "QOpenGLFunctions"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -58022,6 +58511,7 @@
    "bases": [
     "QOpenGLFunctionsPrivate"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -58056,6 +58546,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -59584,6 +60075,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -65237,6 +65729,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -65271,6 +65764,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -66295,6 +66789,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QPageLayout &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QPageLayout &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -67147,6 +67651,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPageRanges &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPageRanges &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -67444,6 +67958,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -67499,6 +68014,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QPageSize &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QPageSize &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -68785,6 +69310,7 @@
    "bases": [
     "QPaintDevice"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -69035,6 +69561,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -69529,6 +70056,7 @@
     "QWindow",
     "QPaintDevice"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -69805,6 +70333,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -71143,6 +71672,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -71431,6 +71961,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -71568,6 +72099,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -78245,6 +78777,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -78396,6 +78929,56 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPainterPath &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator&(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator|(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator&=(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator|=(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(const QPainterPath &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(const QPainterPath &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -80346,6 +80929,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "conversion",
+     "name": "operator QPointF()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const Element &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const Element &)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -80429,6 +81026,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -80803,6 +81401,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QPainterStateGuard &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -80944,6 +81548,28 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPalette &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPalette &&)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QPalette &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QPalette &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -82251,6 +82877,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPdfOutputIntent &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPdfOutputIntent &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -82498,6 +83134,7 @@
     "QObject",
     "QPagedPaintDevice"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -83085,6 +83722,36 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPen &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPen &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QColor)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(Qt::PenStyle)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QPen &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QPen &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -83735,6 +84402,16 @@
    "bases": [
     "QPaintDevice"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPicture &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPicture &&)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -84167,6 +84844,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -84846,6 +85524,24 @@
    "abstract": false,
    "bases": [
     "QPaintDevice"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QPixmap &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QPixmap &&)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -86300,6 +86996,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -86538,6 +87235,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(Key &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const Key &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const Key &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const Key &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -86643,6 +87358,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -86766,6 +87482,7 @@
    "bases": [
     "QInputEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -87322,6 +88039,12 @@
    "bases": [
     "QInputDevice"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const QPointingDevice &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -87782,6 +88505,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -87862,6 +88586,12 @@
    "abstract": false,
    "bases": [
     "QList<QPoint>"
+   ],
+   "dropped": [
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
    ],
    "dtor": null,
    "enums": [],
@@ -88616,6 +89346,12 @@
    "bases": [
     "QList<QPointF>"
    ],
+   "dropped": [
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -89022,6 +89758,36 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator+=(const QQuaternion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(const QQuaternion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(const QQuaternion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(float)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "template",
+     "name": "fromEulerAngles(const QVector3D &)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -90173,6 +90939,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -90210,6 +90977,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -90289,6 +91057,7 @@
    "bases": [
     "QGradient"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -90822,6 +91591,7 @@
    "bases": [
     "QPaintDeviceWindow"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -90993,6 +91763,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QRawFont &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QRawFont &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QRawFont &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QRawFont &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -92018,6 +92806,84 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(QRegion &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator|(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+(const QRect &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator&(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator&(const QRect &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator^(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator|=(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(const QRect &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator&=(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator&=(const QRect &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator^=(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QRegion &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QRegion &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -92848,6 +93714,7 @@
    "bases": [
     "QValidator"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -93070,6 +93937,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -93197,6 +94065,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "conversion",
+     "name": "operator unsigned long long()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(quint64)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -93673,6 +94551,12 @@
    "abstract": false,
    "bases": [
     "QObject"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "nativeInterface()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -94650,6 +95534,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -94779,6 +95664,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -94952,6 +95838,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -95175,6 +96062,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": true
@@ -95576,6 +96464,40 @@
    "abstract": false,
    "bases": [
     "QObject"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "QShortcut(const QKeySequence &, QObject *, Func1, Qt::ShortcutContext)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(const QKeySequence &, QObject *, const Obj1 *, Func1, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(const QKeySequence &, QObject *, const Obj1 *, Func1, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(const QKeySequence &, QObject *, const Obj1 *, Func1, const Obj2 *, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj2 *>::Value>::type *)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(QKeySequence::StandardKey, QObject *, Func1, Qt::ShortcutContext)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(QKeySequence::StandardKey, QObject *, const Obj1 *, Func1, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(QKeySequence::StandardKey, QObject *, const Obj1 *, Func1, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)"
+    },
+    {
+     "kind": "template",
+     "name": "QShortcut(QKeySequence::StandardKey, QObject *, const Obj1 *, Func1, const Obj2 *, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj2 *>::Value>::type *)"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -96083,6 +97005,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -96269,6 +97192,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -96351,6 +97275,7 @@
    "bases": [
     "QPointerEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -96729,6 +97654,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator<(const QStandardItem &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -98712,6 +99643,7 @@
    "bases": [
     "QAbstractItemModel"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -100551,6 +101483,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QStaticText &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QStaticText &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QStaticText &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QStaticText &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -100900,6 +101850,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -101006,6 +101957,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -102230,6 +103182,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -102406,6 +103359,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QSurfaceFormat &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -103355,6 +104314,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -103828,6 +104788,7 @@
    "bases": [
     "QSinglePointEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -104103,6 +105064,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextBlock &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QTextBlock &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTextBlock &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<(const QTextBlock &)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -104706,6 +105685,32 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const iterator &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const iterator &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator++()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator++(int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator--()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator--(int)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -104763,6 +105768,7 @@
    "bases": [
     "QTextFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -105434,6 +106440,7 @@
    "bases": [
     "QTextObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": true
@@ -105646,6 +106653,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -105666,6 +106674,7 @@
    "bases": [
     "QTextFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -107159,6 +108168,40 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QTextCursor &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTextCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<(const QTextCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<=(const QTextCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QTextCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator>=(const QTextCursor &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator>(const QTextCursor &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -108883,6 +109926,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -111369,6 +112413,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextDocumentFragment &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -111623,6 +112673,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -111890,6 +112941,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QTextFormat &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTextFormat &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -113418,6 +114487,24 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextFragment &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QTextFragment &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTextFragment &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator<(const QTextFragment &)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -113643,6 +114730,7 @@
    "bases": [
     "QTextObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -113966,6 +115054,32 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const iterator &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const iterator &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator++()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator++(int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator--()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator--(int)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -114053,6 +115167,7 @@
    "bases": [
     "QTextFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -114739,6 +115854,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -114759,6 +115875,7 @@
    "bases": [
     "QTextCharFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -115012,6 +116129,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -115285,6 +116403,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -115425,6 +116544,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -116509,6 +117629,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -116546,6 +117667,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const QTextLength &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTextLength &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -116672,6 +117807,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -117315,6 +118451,7 @@
    "bases": [
     "QTextBlockGroup"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -117614,6 +118751,7 @@
    "bases": [
     "QTextFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [
     {
@@ -117914,6 +119052,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": true
@@ -118123,6 +119262,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -118238,6 +119378,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextOption &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -118712,6 +119858,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const Tab &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const Tab &)"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -118795,6 +119951,7 @@
    "bases": [
     "QTextFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -119419,6 +120576,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTextTableCell &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QTextTableCell &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTextTableCell &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -119686,6 +120857,7 @@
    "bases": [
     "QTextCharFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -120466,6 +121638,7 @@
    "bases": [
     "QTextFrameFormat"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -120814,6 +121987,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -120920,6 +122094,7 @@
    "bases": [
     "QPointerEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -121108,6 +122283,52 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(QTransform &&)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QTransform &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QTransform &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QTransform &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(const QTransform &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*(const QTransform &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(qreal)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(qreal)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(qreal)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(qreal)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -122585,6 +123806,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -122858,6 +124080,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -123398,6 +124621,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -124115,6 +125339,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -124397,6 +125622,44 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator[](int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator[](int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(QVector2D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(QVector2D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(QVector2D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(QVector2D)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -124839,6 +126102,44 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator[](int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator[](int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(QVector3D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(QVector3D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(QVector3D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(QVector3D)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -125610,6 +126911,44 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator[](int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator[](int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(QVector4D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(QVector4D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*=(QVector4D)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(float)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator/=(QVector4D)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -126182,6 +127521,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -126288,6 +127628,7 @@
    "bases": [
     "QSinglePointEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -126614,6 +127955,12 @@
    "bases": [
     "QObject",
     "QSurface"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "nativeInterface()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -130078,6 +131425,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

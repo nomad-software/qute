@@ -167,21 +167,21 @@ QLineEdit:
   setTextMargins(const QMargins&): { name: SetTextMargins }
   addAction(const QIcon&, QLineEdit::ActionPosition): { name: AddActionIcon, return: parented }
   addAction(QAction*, QLineEdit::ActionPosition): { args: { action: keep-each }, name: AddActionAt, reviewed: true }
-  createStandardContextMenu: { return: transfer-to-go }
+  createStandardContextMenu: { return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QTextEdit:
   print: { reviewed: true }
   setDocument: { args: { document: keep }, reviewed: true, doc: "The text edit does not take ownership of the document." }
   document: { return: borrowed }
-  createStandardContextMenu(): { return: transfer-to-go }
-  createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: transfer-to-go }
+  createStandardContextMenu(): { return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
+  createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QPlainTextEdit:
   print: { reviewed: true }
   setDocument: { args: { document: keep }, reviewed: true }
   document: { return: borrowed }
-  createStandardContextMenu(): { return: transfer-to-go }
-  createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: transfer-to-go }
+  createStandardContextMenu(): { return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
+  createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QAbstractScrollArea:
   setViewport: { args: { widget: transfer-to-cpp } }
@@ -343,13 +343,14 @@ QMainWindow:
   restoreDockWidget: { reviewed: true }
   resizeDocks: { reviewed: true }
   createPopupMenu:
-    return: transfer-to-go
+    return: parented
+    doc: "Qt makes the menu a child of the main window and leaves it to the caller to delete: Delete() it when done, or it lives until the window dies. An override's menu becomes Parented too."
     test: |
       mw := qtwidgets.NewQMainWindow(nil)
       mw.AddDockWidget(qtcore.LeftDockWidgetArea, qtwidgets.NewQDockWidgetWithTitle("dock", nil))
       m := mw.CreatePopupMenu()
-      if m == nil || m.Ownership() != qtcore.Owned {
-      	t.Errorf("m: %v, want Owned", m.Ownership())
+      if m == nil || m.Ownership() != qtcore.Parented {
+      	t.Errorf("m: %v, want Parented", m.Ownership())
       }
       m.Delete()
       mw.Delete()
@@ -1302,7 +1303,7 @@ QInputDialog:
 
 QScrollBar:
   QScrollBar(Qt::Orientation, QWidget*): { name: NewQScrollBarWithOrientation }
-  createStandardContextMenu: { return: transfer-to-go, doc: "The popup menu's ownership is transferred to the caller (Qt docs)." }
+  createStandardContextMenu: { return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QTabBar:
   addTab(const QIcon&, const QString&): { name: AddTabIcon }

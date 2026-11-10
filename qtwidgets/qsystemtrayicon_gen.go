@@ -115,7 +115,7 @@ func (this *QSystemTrayIcon) SetContextMenu(menu QMenuLike) {
 	C.qute_QSystemTrayIcon_setContextMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setContextMenu.menu", menuH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setContextMenu.menu", menuH, false)
 }
 
 // ContextMenu wraps QSystemTrayIcon::contextMenu.

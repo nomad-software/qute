@@ -74,24 +74,9 @@ int64_t qute_QWebEngineContextMenuRequest_editFlags(void *self);
 
 // QWebEngineCookieStore
 void * qute_QWebEngineCookieStore_cast(void *obj);
-void qute_QWebEngineCookieStore_setCookieFilter(void *self, uintptr_t a0);
 void qute_QWebEngineCookieStore_deleteSessionCookies(void *self);
 void qute_QWebEngineCookieStore_deleteAllCookies(void *self);
 void qute_QWebEngineCookieStore_loadAllCookies(void *self);
-
-// QWebEngineCookieStoreFilterRequest
-void * qute_QWebEngineCookieStoreFilterRequest_new(void);
-void qute_QWebEngineCookieStoreFilterRequest_delete(void *self);
-void * qute_QWebEngineCookieStoreFilterRequest_get_firstPartyUrl(void *self);
-void qute_QWebEngineCookieStoreFilterRequest_set_firstPartyUrl(void *self, void * a0);
-void * qute_QWebEngineCookieStoreFilterRequest_get_origin(void *self);
-void qute_QWebEngineCookieStoreFilterRequest_set_origin(void *self, void * a0);
-bool qute_QWebEngineCookieStoreFilterRequest_get_thirdParty(void *self);
-void qute_QWebEngineCookieStoreFilterRequest_set_thirdParty(void *self, bool a0);
-bool qute_QWebEngineCookieStoreFilterRequest_get__reservedFlag(void *self);
-void qute_QWebEngineCookieStoreFilterRequest_set__reservedFlag(void *self, bool a0);
-unsigned short qute_QWebEngineCookieStoreFilterRequest_get__reservedType(void *self);
-void qute_QWebEngineCookieStoreFilterRequest_set__reservedType(void *self, unsigned short a0);
 
 // QWebEngineDesktopMediaRequest
 void * qute_QWebEngineDesktopMediaRequest_new(void);
@@ -524,12 +509,12 @@ void * qute_QWebEngineProfile_clearHttpCacheCompleted(void *self, uintptr_t id);
 void * qute_QWebEngineProfileBuilder_new(void);
 void qute_QWebEngineProfileBuilder_delete(void *self);
 void * qute_QWebEngineProfileBuilder_createProfile(void *self, const char *a0, ptrdiff_t a0_len);
-void * qute_QWebEngineProfileBuilder_setPersistentStoragePath(void *self, const char *a0, ptrdiff_t a0_len);
-void * qute_QWebEngineProfileBuilder_setCachePath(void *self, const char *a0, ptrdiff_t a0_len);
-void * qute_QWebEngineProfileBuilder_setHttpCacheType(void *self, int64_t a0);
-void * qute_QWebEngineProfileBuilder_setPersistentCookiesPolicy(void *self, int64_t a0);
-void * qute_QWebEngineProfileBuilder_setHttpCacheMaximumSize(void *self, int a0);
-void * qute_QWebEngineProfileBuilder_setPersistentPermissionsPolicy(void *self, int64_t a0);
+void qute_QWebEngineProfileBuilder_setPersistentStoragePath(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QWebEngineProfileBuilder_setCachePath(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QWebEngineProfileBuilder_setHttpCacheType(void *self, int64_t a0);
+void qute_QWebEngineProfileBuilder_setPersistentCookiesPolicy(void *self, int64_t a0);
+void qute_QWebEngineProfileBuilder_setHttpCacheMaximumSize(void *self, int a0);
+void qute_QWebEngineProfileBuilder_setPersistentPermissionsPolicy(void *self, int64_t a0);
 void * qute_QWebEngineProfileBuilder_createProfile_1(void *self, const char *a0, ptrdiff_t a0_len, void * a1);
 void * qute_QWebEngineProfileBuilder_createOffTheRecordProfile(void);
 void * qute_QWebEngineProfileBuilder_createOffTheRecordProfile_1(void * a0);

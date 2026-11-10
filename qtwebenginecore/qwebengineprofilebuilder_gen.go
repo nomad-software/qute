@@ -99,7 +99,7 @@ func NewQWebEngineProfileBuilder() *QWebEngineProfileBuilder {
 //
 // Ownership: the result is Owned: Go frees it.
 //
-// The new profile is Go's to free when parent is nil; otherwise its parent frees it.
+// The new profile is Owned when parent is nil; with a parent it is Parented and its parent frees it.
 //
 // Arguments with C++ defaults are left at them; CreateProfileFull takes every argument.
 //
@@ -115,96 +115,72 @@ func (this *QWebEngineProfileBuilder) CreateProfile(storageName string) *QWebEng
 //
 //	C++: QWebEngineProfileBuilder & QWebEngineProfileBuilder::setPersistentStoragePath(const QString & path)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Returns the builder itself, for chaining.
-//
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofilebuilder.html#setPersistentStoragePath
 func (this *QWebEngineProfileBuilder) SetPersistentStoragePath(path string) *QWebEngineProfileBuilder {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfileBuilder.SetPersistentStoragePath")
-	r := C.qute_QWebEngineProfileBuilder_setPersistentStoragePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	C.qute_QWebEngineProfileBuilder_setPersistentStoragePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
 	runtime.KeepAlive(this)
-	return rt.View[QWebEngineProfileBuilder](rt.WrapClassFrom(r, "QWebEngineProfileBuilder", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // SetCachePath wraps QWebEngineProfileBuilder::setCachePath.
 //
 //	C++: QWebEngineProfileBuilder & QWebEngineProfileBuilder::setCachePath(const QString & path)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Returns the builder itself, for chaining.
-//
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofilebuilder.html#setCachePath
 func (this *QWebEngineProfileBuilder) SetCachePath(path string) *QWebEngineProfileBuilder {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfileBuilder.SetCachePath")
-	r := C.qute_QWebEngineProfileBuilder_setCachePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	C.qute_QWebEngineProfileBuilder_setCachePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
 	runtime.KeepAlive(this)
-	return rt.View[QWebEngineProfileBuilder](rt.WrapClassFrom(r, "QWebEngineProfileBuilder", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // SetHttpCacheType wraps QWebEngineProfileBuilder::setHttpCacheType.
 //
 //	C++: QWebEngineProfileBuilder & QWebEngineProfileBuilder::setHttpCacheType(QWebEngineProfile::HttpCacheType httpCacheType)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Returns the builder itself, for chaining.
-//
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofilebuilder.html#setHttpCacheType
 func (this *QWebEngineProfileBuilder) SetHttpCacheType(httpCacheType QWebEngineProfileHttpCacheType) *QWebEngineProfileBuilder {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfileBuilder.SetHttpCacheType")
-	r := C.qute_QWebEngineProfileBuilder_setHttpCacheType(self, C.int64_t(httpCacheType))
+	C.qute_QWebEngineProfileBuilder_setHttpCacheType(self, C.int64_t(httpCacheType))
 	runtime.KeepAlive(this)
-	return rt.View[QWebEngineProfileBuilder](rt.WrapClassFrom(r, "QWebEngineProfileBuilder", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // SetPersistentCookiesPolicy wraps QWebEngineProfileBuilder::setPersistentCookiesPolicy.
 //
 //	C++: QWebEngineProfileBuilder & QWebEngineProfileBuilder::setPersistentCookiesPolicy(QWebEngineProfile::PersistentCookiesPolicy persistentCookiesPolicy)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Returns the builder itself, for chaining.
-//
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofilebuilder.html#setPersistentCookiesPolicy
 func (this *QWebEngineProfileBuilder) SetPersistentCookiesPolicy(persistentCookiesPolicy QWebEngineProfilePersistentCookiesPolicy) *QWebEngineProfileBuilder {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfileBuilder.SetPersistentCookiesPolicy")
-	r := C.qute_QWebEngineProfileBuilder_setPersistentCookiesPolicy(self, C.int64_t(persistentCookiesPolicy))
+	C.qute_QWebEngineProfileBuilder_setPersistentCookiesPolicy(self, C.int64_t(persistentCookiesPolicy))
 	runtime.KeepAlive(this)
-	return rt.View[QWebEngineProfileBuilder](rt.WrapClassFrom(r, "QWebEngineProfileBuilder", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // SetHttpCacheMaximumSize wraps QWebEngineProfileBuilder::setHttpCacheMaximumSize.
 //
 //	C++: QWebEngineProfileBuilder & QWebEngineProfileBuilder::setHttpCacheMaximumSize(int maxSizeInBytes)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Returns the builder itself, for chaining.
-//
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofilebuilder.html#setHttpCacheMaximumSize
 func (this *QWebEngineProfileBuilder) SetHttpCacheMaximumSize(maxSizeInBytes int) *QWebEngineProfileBuilder {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfileBuilder.SetHttpCacheMaximumSize")
-	r := C.qute_QWebEngineProfileBuilder_setHttpCacheMaximumSize(self, C.int(maxSizeInBytes))
+	C.qute_QWebEngineProfileBuilder_setHttpCacheMaximumSize(self, C.int(maxSizeInBytes))
 	runtime.KeepAlive(this)
-	return rt.View[QWebEngineProfileBuilder](rt.WrapClassFrom(r, "QWebEngineProfileBuilder", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // SetPersistentPermissionsPolicy wraps QWebEngineProfileBuilder::setPersistentPermissionsPolicy.
 //
 //	C++: QWebEngineProfileBuilder & QWebEngineProfileBuilder::setPersistentPermissionsPolicy(QWebEngineProfile::PersistentPermissionsPolicy persistentPermissionPolicy)
 //
-// Ownership: the result is Borrowed: Go never frees it.
-//
-// Returns the builder itself, for chaining.
-//
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofilebuilder.html#setPersistentPermissionsPolicy
 func (this *QWebEngineProfileBuilder) SetPersistentPermissionsPolicy(persistentPermissionPolicy QWebEngineProfilePersistentPermissionsPolicy) *QWebEngineProfileBuilder {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfileBuilder.SetPersistentPermissionsPolicy")
-	r := C.qute_QWebEngineProfileBuilder_setPersistentPermissionsPolicy(self, C.int64_t(persistentPermissionPolicy))
+	C.qute_QWebEngineProfileBuilder_setPersistentPermissionsPolicy(self, C.int64_t(persistentPermissionPolicy))
 	runtime.KeepAlive(this)
-	return rt.View[QWebEngineProfileBuilder](rt.WrapClassFrom(r, "QWebEngineProfileBuilder", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+	return this
 }
 
 // CreateProfileFull wraps QWebEngineProfileBuilder::createProfile.
@@ -213,7 +189,7 @@ func (this *QWebEngineProfileBuilder) SetPersistentPermissionsPolicy(persistentP
 //
 // Ownership: the result is Owned: Go frees it.
 //
-// The new profile is Go's to free when parent is nil; otherwise its parent frees it.
+// The new profile is Owned when parent is nil; with a parent it is Parented and its parent frees it.
 //
 // CreateProfileFull is CreateProfile with every argument, including those CreateProfile leaves at their C++ defaults.
 //
@@ -236,7 +212,7 @@ func (this *QWebEngineProfileBuilder) CreateProfileFull(storageName string, pare
 //
 // Ownership: the result is Owned: Go frees it.
 //
-// The new profile is Go's to free when parent is nil; otherwise its parent frees it.
+// The new profile is Owned when parent is nil; with a parent it is Parented and its parent frees it.
 //
 // Arguments with C++ defaults are left at them; QWebEngineProfileBuilderCreateOffTheRecordProfileFull takes every argument.
 //
@@ -253,7 +229,7 @@ func QWebEngineProfileBuilderCreateOffTheRecordProfile() *QWebEngineProfile {
 //
 // Ownership: the result is Owned: Go frees it.
 //
-// The new profile is Go's to free when parent is nil; otherwise its parent frees it.
+// The new profile is Owned when parent is nil; with a parent it is Parented and its parent frees it.
 //
 // QWebEngineProfileBuilderCreateOffTheRecordProfileFull is QWebEngineProfileBuilderCreateOffTheRecordProfile with every argument, including those QWebEngineProfileBuilderCreateOffTheRecordProfile leaves at their C++ defaults.
 //

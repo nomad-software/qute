@@ -126,7 +126,7 @@ func (this *QToolButton) SetMenu(menu QMenuLike) {
 	C.qute_QToolButton_setMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMenu.menu", menuH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMenu.menu", menuH, false)
 }
 
 // Menu wraps QToolButton::menu.
@@ -242,7 +242,7 @@ func (this *QToolButton) SetDefaultAction(defaultAction qtgui.QActionLike) {
 	C.qute_QToolButton_setDefaultAction(self, defaultActionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(defaultAction)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDefaultAction.defaultAction", defaultActionH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDefaultAction.defaultAction", defaultActionH, false)
 }
 
 // EmitTriggered wraps emitting the triggered signal.

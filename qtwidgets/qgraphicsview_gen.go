@@ -98,7 +98,7 @@ func NewQGraphicsViewWithScene(scene QGraphicsSceneLike, parent QWidgetLike) *QG
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QGraphicsView", mode)
-	rt.KeepArg(h, "scene", sceneH)
+	rt.KeepArg(h, "scene", sceneH, false)
 	return rt.View[QGraphicsView](h, p)
 }
 
@@ -414,7 +414,7 @@ func (this *QGraphicsView) SetScene(scene QGraphicsSceneLike) {
 	C.qute_QGraphicsView_setScene(self, scenePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(scene)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "scene", sceneH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "scene", sceneH, false)
 }
 
 // SceneRect wraps QGraphicsView::sceneRect.

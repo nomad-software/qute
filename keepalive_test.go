@@ -12,9 +12,10 @@ import (
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
-// t.Fatal must not be called inside qute.Run: it would end the GUI goroutine.
+// t.Fatal must not be called inside qutetest.Run: it would end the GUI goroutine.
 
 // These tests guard against the use-after-free in miqt issue #366: once a
 // generated method has handed the raw pointer to C, nothing refers to the Go
@@ -25,19 +26,19 @@ import (
 // collectInside runs the GC and lets the GUI thread drain the cleanup queue
 // from inside a running call. It returns how many objects were freed.
 func collectInside() int64 {
-	before := qute.Freed()
+	before := qutetest.Freed()
 	for range 4 {
 		runtime.GC()
 		time.Sleep(5 * time.Millisecond) // cleanups run on their own goroutine
 		qute.ProcessEvents()
 	}
-	return qute.Freed() - before
+	return qutetest.Freed() - before
 }
 
 // TestKeepAliveReceiver: an unreferenced QEventLoop must survive its own Exec.
 func TestKeepAliveReceiver(t *testing.T) {
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		loop := qtcore.NewQEventLoop(nil)
 		p := loop.Ptr()
 		timer := qtcore.NewQTimer(nil)
@@ -76,8 +77,8 @@ func (w *fontChangeWidget) ChangeEvent(e *qtcore.QEvent) {
 // TestKeepAliveArgument: an unreferenced value-class argument must survive
 // the call it was passed to.
 func TestKeepAliveArgument(t *testing.T) {
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		v := &fontChangeWidget{}
 		w := qtwidgets.NewQWidgetWith(v, nil)
 		defer w.Delete()
@@ -113,7 +114,7 @@ func (m *overrideModel) Data(index *qtcore.QModelIndex, role int) *qtcore.QVaria
 // is still freed by GC afterwards, so it neither crashes nor leaks.
 func TestOverrideReturnValue(t *testing.T) {
 	om := &overrideModel{}
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtcore.NewQAbstractListModelWith(om, nil)
 		defer m.Delete()
 		for range 50 {
@@ -125,7 +126,7 @@ func TestOverrideReturnValue(t *testing.T) {
 			collectInside()
 		}
 	})
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	if len(om.returned) != 50 {
 		t.Fatalf("Data override ran %d times, want 50", len(om.returned))
 	}

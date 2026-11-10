@@ -4,10 +4,10 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtopengl"
 	"github.com/nomad-software/qute/qtopenglwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 type glCanvas struct {
@@ -25,7 +25,7 @@ func (c *glCanvas) PaintGL() {
 }
 
 func TestOpenGLWidget(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		c := &glCanvas{}
 		w := qtopenglwidgets.NewQOpenGLWidgetWith(c, nil)
 		defer w.Delete()
@@ -100,7 +100,7 @@ func (g *glTriangle) PaintGL() {
 }
 
 func TestOpenGLTriangle(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		g := &glTriangle{}
 		w := qtopenglwidgets.NewQOpenGLWidgetWith(g, nil)
 		defer w.Delete()

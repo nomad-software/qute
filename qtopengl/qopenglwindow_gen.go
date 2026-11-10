@@ -98,7 +98,7 @@ func NewQOpenGLWindowShared(shareContext qtgui.QOpenGLContextLike, updateBehavio
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QOpenGLWindow", mode)
-	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH)
+	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH, false)
 	return rt.View[QOpenGLWindow](h, p)
 }
 

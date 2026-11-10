@@ -102,7 +102,10 @@ type Param struct {
 	// the slot's previous one), "each" (one reference per distinct argument)
 	// or "release" (drops a reference "each" took).
 	Keep string
-	View bool // a virtual's non-const value-class pointer or reference: passed in place, not copied
+	// KeepGuard makes Delete() of the kept argument panic while the receiver
+	// keeps it (see the overlay key kept-delete).
+	KeepGuard bool
+	View      bool // a virtual's non-const value-class pointer or reference: passed in place, not copied
 }
 
 type Method struct {
@@ -819,8 +822,11 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 				}
 			}
 		}
-		if base, cnst, ptr, ref, _ := parseCpp(im.Return.Canonical); ref && !cnst && !ptr && base == c.Cpp && c.Kind == KindValue {
+		if base, cnst, ptr, ref, _ := parseCpp(im.Return.Canonical); ref && !cnst && !ptr && base == c.Cpp && !c.QObject {
 			mm.Ret = &conv{k: kSelf, cpp: im.Return.Canonical, base: base, cls: c}
+			if ov != nil && ov.Return != "" {
+				g.report.warn("%s: return rule on a result that is the receiver", mm.Sig)
+			}
 			return mm
 		}
 		t, err := g.resolve(im.Return, true)
@@ -900,6 +906,18 @@ func (g *Gen) applyArgRule(c *Class, im *irMethod, ov *overlay, p *Param, i int,
 			if im.Static {
 				g.report.warn("%s: %s rule on a static function, which has no receiver to hold the reference", g.methodSig(c, im), r)
 				p.Keep = ""
+			}
+			if p.T.k == kObj {
+				p.KeepGuard = !c.QObject || !p.T.cls.QObject
+			}
+			switch ov.KeptDelete {
+			case "allow":
+				p.KeepGuard = false
+			case "guard":
+				p.KeepGuard = true
+			case "":
+			default:
+				g.report.warn("%s: unknown kept-delete value %q (allow or guard)", g.methodSig(c, im), ov.KeptDelete)
 			}
 			if p.T.k != kObj {
 				g.report.warn("%s: %s rule on a list argument is not supported", g.methodSig(c, im), r)
@@ -1519,6 +1537,11 @@ func (g *Gen) fieldMethods(c *Class) []*Method {
 	var out []*Method
 	for _, f := range c.IR.Fields {
 		get := &irMethod{Name: f.Name, Kind: "method", Access: "public", Return: f.Type, Const: true}
+		if strings.HasPrefix(f.Name, "_") {
+			// public only for layout reasons (QWebEngineCookieStore::FilterRequest::_reservedFlag)
+			g.skip(c, get, "on purpose: reserved field")
+			continue
+		}
 		t, err := g.resolve(f.Type, true)
 		if err != nil {
 			g.skip(c, get, "field: "+err.Error())

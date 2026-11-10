@@ -64,29 +64,29 @@ func NewQImageWithSize(size qtcore.QSize, format QImageFormat) *QImage {
 	return rt.View[QImage](h, p)
 }
 
-// NewQImageWithPtr wraps the QImage constructor.
+// NewQImageOverMemory wraps the QImage constructor.
 //
 //	C++: QImage::QImage(const uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
 //
-// The image reads data in place without copying it: the buffer must stay valid and unchanged for the image's life, and must be C memory (Go memory may move or be freed). Copy() the image to detach it.
+// Escape hatch: the image reads data in place without copying it, after this call returns. The buffer must stay valid and unchanged for the image's life, and must be C memory or Go memory pinned with runtime.Pinner until the image is gone (unpinned Go memory breaks the cgo pointer rules and may be freed under the image). NewQImageFromBytes copies instead; Copy() detaches an image from its buffer.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
-func NewQImageWithPtr(data unsafe.Pointer, width int, height int, format QImageFormat) *QImage {
-	rt.CheckThread("NewQImageWithPtr")
+func NewQImageOverMemory(data unsafe.Pointer, width int, height int, format QImageFormat) *QImage {
+	rt.CheckThread("NewQImageOverMemory")
 	p := C.qute_QImage_new_2(data, C.int(width), C.int(height), C.int64_t(format))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 
-// NewQImageWithPtrBytesPerLine wraps the QImage constructor.
+// NewQImageOverMemoryBytesPerLine wraps the QImage constructor.
 //
 //	C++: QImage::QImage(const uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
 //
-// The image reads data in place without copying it: the buffer must stay valid and unchanged for the image's life, and must be C memory (Go memory may move or be freed). Copy() the image to detach it.
+// Escape hatch: the image reads data in place without copying it, after this call returns. The buffer must stay valid and unchanged for the image's life, and must be C memory or Go memory pinned with runtime.Pinner until the image is gone (unpinned Go memory breaks the cgo pointer rules and may be freed under the image). NewQImageFromBytes copies instead; Copy() detaches an image from its buffer.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
-func NewQImageWithPtrBytesPerLine(data unsafe.Pointer, width int, height int, bytesPerLine int, format QImageFormat) *QImage {
-	rt.CheckThread("NewQImageWithPtrBytesPerLine")
+func NewQImageOverMemoryBytesPerLine(data unsafe.Pointer, width int, height int, bytesPerLine int, format QImageFormat) *QImage {
+	rt.CheckThread("NewQImageOverMemoryBytesPerLine")
 	p := C.qute_QImage_new_3(data, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)

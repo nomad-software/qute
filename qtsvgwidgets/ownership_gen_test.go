@@ -4,16 +4,16 @@ package qtsvgwidgets_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtsvg"
 	"github.com/nomad-software/qute/qtsvgwidgets"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -25,7 +25,7 @@ func TestLayout(t *testing.T) {
 
 // void QGraphicsSvgItem::setSharedRenderer(QSvgRenderer * renderer): keep rules
 func TestKeep_QGraphicsSvgItem_SetSharedRenderer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtsvgwidgets.NewQGraphicsSvgItem()
 		a0 := qtsvg.NewQSvgRenderer(nil)
 		recv.SetSharedRenderer(a0)
@@ -38,7 +38,7 @@ func TestKeep_QGraphicsSvgItem_SetSharedRenderer(t *testing.T) {
 
 // QSvgWidget::QSvgWidget(QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSvgWidget(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtsvgwidgets.NewQSvgWidget(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -61,7 +61,7 @@ func TestOwnership_NewQSvgWidget(t *testing.T) {
 
 // QSvgWidget::QSvgWidget(const QString & file, QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSvgWidgetWithFile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtsvgwidgets.NewQSvgWidgetWithFile("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {

@@ -4,6 +4,7 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+	"time"
 	"unsafe"
 	"weak"
 )
@@ -55,16 +56,16 @@ func TestDeleteBorrowedPanics(t *testing.T) {
 
 func TestKeepArgSlots(t *testing.T) {
 	owner, a, b := newPlain("Owner"), newPlain("A"), newPlain("B")
-	KeepArg(owner, "setModel", a)
+	KeepArg(owner, "setModel", a, false)
 	if !Keeps(owner, a) {
 		t.Fatal("a not kept")
 	}
-	KeepArg(owner, "setModel", b) // replaces a
+	KeepArg(owner, "setModel", b, false) // replaces a
 	if Keeps(owner, a) || !Keeps(owner, b) {
 		t.Fatalf("after replacing: keeps a=%v b=%v, want false true", Keeps(owner, a), Keeps(owner, b))
 	}
-	KeepArg(owner, "other", a) // independent slot
-	KeepArg(owner, "setModel", nil)
+	KeepArg(owner, "other", a, false) // independent slot
+	KeepArg(owner, "setModel", nil, false)
 	if Keeps(owner, b) || !Keeps(owner, a) {
 		t.Fatalf("after clearing setModel: keeps a=%v b=%v, want true false", Keeps(owner, a), Keeps(owner, b))
 	}
@@ -72,9 +73,9 @@ func TestKeepArgSlots(t *testing.T) {
 
 func TestKeepEachAndRelease(t *testing.T) {
 	owner, a, b := newPlain("Owner"), newPlain("A"), newPlain("B")
-	KeepEach(owner, a)
-	KeepEach(owner, b)
-	KeepEach(owner, a) // twice is one entry
+	KeepEach(owner, a, false)
+	KeepEach(owner, b, false)
+	KeepEach(owner, a, false) // twice is one entry
 	if !Keeps(owner, a) || !Keeps(owner, b) {
 		t.Fatal("KeepEach lost an argument")
 	}
@@ -84,17 +85,17 @@ func TestKeepEachAndRelease(t *testing.T) {
 	}
 	Release(owner, a) // idempotent
 	Release(nil, b)
-	KeepEach(owner, nil)
+	KeepEach(owner, nil, false)
 }
 
 func TestKeepsDropWhenPlainOwnerDies(t *testing.T) {
 	owner, a := newPlain("Owner"), newPlain("A")
-	KeepArg(owner, "s", a)
+	KeepArg(owner, "s", a, false)
 	owner.markDead("test")
 	if Keeps(owner, a) {
 		t.Fatal("a dead owner still keeps its argument")
 	}
-	KeepArg(owner, "s", a)
+	KeepArg(owner, "s", a, false)
 	if Keeps(owner, a) {
 		t.Fatal("a dead owner took a new reference")
 	}
@@ -106,7 +107,7 @@ func TestKeepsOfRegisteredOwnerDropOnDestroyed(t *testing.T) {
 	key := fakePtr(1)
 	owner := Wrap(key, "Owner", KindNotify, KeepOrBorrow, nil)
 	a := newPlain("A")
-	KeepArg(owner, "s", a)
+	KeepArg(owner, "s", a, false)
 	if owner.Anchored() != "global" {
 		t.Fatalf("owner with kept references anchored %q, want global", owner.Anchored())
 	}
@@ -128,7 +129,7 @@ func TestKeepsAnchorReleased(t *testing.T) {
 	owner := Wrap(key, "Owner", KindNotify, KeepOrBorrow, nil)
 	defer Destroyed(key, "test")
 	a := newPlain("A")
-	KeepEach(owner, a)
+	KeepEach(owner, a, false)
 	if owner.Pins() != 1 {
 		t.Fatalf("pins = %d, want 1 while keeping", owner.Pins())
 	}
@@ -244,7 +245,7 @@ func TestDrainFreesKeepersFirst(t *testing.T) {
 	var order []string
 	keeper := &Handle{ptr: fakePtr(1), class: "Page", kind: KindPlain, serial: serialCounter.Add(1)}
 	kept := &Handle{ptr: fakePtr(2), class: "Profile", kind: KindPlain, serial: serialCounter.Add(1)}
-	KeepArg(keeper, "profile", kept)
+	KeepArg(keeper, "profile", kept, false)
 	// the kept object first: the order a LIFO queue would free them wrongly in
 	enqueueCleanup(cleanupArg{key: keeper.ptr, serial: keeper.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { order = append(order, "page") }})
 	enqueueCleanup(cleanupArg{key: kept.ptr, serial: kept.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { order = append(order, "profile") }})
@@ -267,7 +268,7 @@ func TestDrainDefersUntilKeeperDies(t *testing.T) {
 	key := fakePtr(3)
 	keeper := Wrap(key, "Page", KindNotify, KeepOrBorrow, nil)
 	kept := &Handle{ptr: fakePtr(4), class: "Profile", kind: KindPlain, serial: serialCounter.Add(1)}
-	KeepArg(keeper, "profile", kept)
+	KeepArg(keeper, "profile", kept, false)
 	enqueueCleanup(cleanupArg{key: kept.ptr, serial: kept.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { freed++ }})
 	Drain()
 	if freed != 0 {
@@ -283,7 +284,7 @@ func TestDrainDefersUntilKeeperDies(t *testing.T) {
 	// entry's serial still releases the hold
 	key2 := fakePtr(5)
 	keeper2 := Wrap(key2, "Page", KindNotify, KeepOrBorrow, nil)
-	KeepArg(keeper2, "profile", kept)
+	KeepArg(keeper2, "profile", kept, false)
 	releaseHolds(keeper2.serial)
 	if isKept(kept.serial) {
 		t.Fatal("hold survived releaseHolds")
@@ -294,17 +295,17 @@ func TestDrainDefersUntilKeeperDies(t *testing.T) {
 // Replacing or clearing a slot drops the hold on the old argument.
 func TestKeepSlotHolds(t *testing.T) {
 	owner, a, b := newPlain("Owner"), newPlain("A"), newPlain("B")
-	KeepArg(owner, "s", a)
-	KeepArg(owner, "s", a) // same argument again: still one hold
-	KeepArg(owner, "s", b)
+	KeepArg(owner, "s", a, false)
+	KeepArg(owner, "s", a, false) // same argument again: still one hold
+	KeepArg(owner, "s", b, false)
 	if isKept(a.serial) || !isKept(b.serial) {
 		t.Fatalf("after replacing: a kept=%v b kept=%v, want false true", isKept(a.serial), isKept(b.serial))
 	}
-	KeepArg(owner, "s", nil)
+	KeepArg(owner, "s", nil, false)
 	if isKept(b.serial) {
 		t.Fatal("cleared slot still holds its argument")
 	}
-	KeepEach(owner, a)
+	KeepEach(owner, a, false)
 	Release(owner, a)
 	if isKept(a.serial) {
 		t.Fatal("released argument still held")
@@ -563,4 +564,78 @@ func TestCallbackSlots(t *testing.T) {
 		t.Fatal("NewFunc id lacks the func bit")
 	}
 	ReleaseCallback(fid)
+}
+
+// A plain keeper that Qt takes over (Parented, so Go never frees it) releases
+// what it keeps once its handle is collected; while Go frees it, only that
+// free releases them (after the keeper is gone).
+func TestPlainKeeperReleaseFollowsOwnership(t *testing.T) {
+	owner := Wrap(fakePtr(1), "Keeper", KindPlain, TakeOwned, func(unsafe.Pointer) {})
+	kept := newPlain("Kept")
+	KeepArg(owner, "s", kept, false)
+	if owner.hasRelease {
+		t.Fatal("an Owned keeper releases on collection; its free should")
+	}
+	owner.TransferToCpp()
+	if !owner.hasRelease {
+		t.Fatal("a Parented keeper has no release cleanup")
+	}
+	owner.TransferToGo()
+	if owner.hasRelease {
+		t.Fatal("back to Owned, the release cleanup stayed")
+	}
+	owner.TransferToCpp()
+	serial := kept.serial
+	owner = nil
+	for i := 0; i < 20 && isKept(serial); i++ {
+		runtime.GC()
+		time.Sleep(time.Millisecond)
+	}
+	if isKept(serial) {
+		t.Fatal("the collected Parented keeper still holds its argument")
+	}
+}
+
+// A guarded hold makes Delete of the kept object panic; clearing it allows it.
+func TestGuardedKeepBlocksDelete(t *testing.T) {
+	owner := newPlain("Painter")
+	kept := Wrap(fakePtr(2), "Image", KindValue, TakeOwned, func(unsafe.Pointer) {})
+	KeepArg(owner, "device", kept, true)
+	func() {
+		defer func() {
+			if p, _ := recover().(string); !strings.Contains(p, "a Painter still uses this Image") {
+				t.Errorf("Delete of a guarded object: panic %q", p)
+			}
+		}()
+		kept.Delete("Image.Delete")
+	}()
+	Unkeep(owner, "device")
+	kept.Delete("Image.Delete")
+	if kept.State() != Dead {
+		t.Fatalf("kept = %v after Delete, want Dead", kept.State())
+	}
+}
+
+// Qt handing an object out again after GC collected its Owned handle, before
+// the queued free ran: the free hands the object to the new handle instead
+// of deleting it underneath.
+func TestQueuedFreeOfRewrappedObject(t *testing.T) {
+	key := fakePtr(3)
+	regMu.Lock()
+	registry[key] = &regEntry{serial: 0} // the collected handle's entry
+	regMu.Unlock()
+	old := serialCounter.Add(1)
+	regMu.Lock()
+	registry[key].serial = old
+	regMu.Unlock()
+	h := Wrap(key, "Obj", KindNotify, KeepOrBorrow, func(unsafe.Pointer) { t.Error("object deleted under its new handle") })
+	defer Destroyed(key, "test")
+	if h.State() != Borrowed {
+		t.Fatalf("re-wrapped: %v, want Borrowed", h.State())
+	}
+	freeNode(cleanupArg{key: key, serial: old, kind: KindNotify, registered: true, deleter: h.deleter})
+	if h.State() != Owned {
+		t.Fatalf("after the stale free: %v, want Owned (Go still owns it)", h.State())
+	}
+	h.stopCleanup()
 }

@@ -73,6 +73,14 @@ type irClass struct {
 	Flags    []irFlags  `json:"flags"`
 	Methods  []irMethod `json:"methods"`
 	Fields   []irField  `json:"fields"`
+	// Dropped lists what irgen leaves out of Methods (operators, conversion
+	// operators, member templates); only the coverage report reads it.
+	Dropped []irDropped `json:"dropped"`
+}
+
+type irDropped struct {
+	Kind string `json:"kind"` // operator, conversion or template
+	Name string `json:"name"`
 }
 
 type irField struct {

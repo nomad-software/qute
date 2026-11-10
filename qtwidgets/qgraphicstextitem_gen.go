@@ -346,7 +346,7 @@ func (this *QGraphicsTextItem) SetDocument(document qtgui.QTextDocumentLike) {
 	C.qute_QGraphicsTextItem_setDocument(self, documentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(document)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH, false)
 }
 
 // Document wraps QGraphicsTextItem::document.

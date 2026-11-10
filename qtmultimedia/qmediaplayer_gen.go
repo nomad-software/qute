@@ -201,7 +201,7 @@ func (this *QMediaPlayer) SetAudioBufferOutput(output QAudioBufferOutputLike) {
 	C.qute_QMediaPlayer_setAudioBufferOutput(self, outputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(output)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioBufferOutput", outputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioBufferOutput", outputH, false)
 }
 
 // AudioBufferOutput wraps QMediaPlayer::audioBufferOutput.
@@ -237,7 +237,7 @@ func (this *QMediaPlayer) SetAudioOutput(output QAudioOutputLike) {
 	C.qute_QMediaPlayer_setAudioOutput(self, outputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(output)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioOutput", outputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioOutput", outputH, false)
 }
 
 // AudioOutput wraps QMediaPlayer::audioOutput.
@@ -260,7 +260,7 @@ func (this *QMediaPlayer) AudioOutput() *QAudioOutput {
 //
 // Ownership: videoOutput is borrowed, and the receiver keeps it from being garbage collected while it lives.
 //
-// The player does not take ownership of the output (a QVideoWidget, QGraphicsVideoItem or QVideoSink).
+// The player does not take ownership of the output (a QVideoWidget, QGraphicsVideoItem or QVideoSink). It replaces the sink SetVideoSink set.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmediaplayer.html#setVideoOutput
 func (this *QMediaPlayer) SetVideoOutput(videoOutput qtcore.QObjectLike) {
@@ -273,7 +273,7 @@ func (this *QMediaPlayer) SetVideoOutput(videoOutput qtcore.QObjectLike) {
 	C.qute_QMediaPlayer_setVideoOutput(self, videoOutputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(videoOutput)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "videoOutput", videoOutputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "video", videoOutputH, false)
 }
 
 // VideoOutput wraps QMediaPlayer::videoOutput.
@@ -296,7 +296,7 @@ func (this *QMediaPlayer) VideoOutput() *qtcore.QObject {
 //
 // Ownership: sink is borrowed, and the receiver keeps it from being garbage collected while it lives.
 //
-// The player does not take ownership of the sink.
+// The player does not take ownership of the sink. It replaces the output SetVideoOutput set.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmediaplayer.html#setVideoSink
 func (this *QMediaPlayer) SetVideoSink(sink QVideoSinkLike) {
@@ -309,7 +309,7 @@ func (this *QMediaPlayer) SetVideoSink(sink QVideoSinkLike) {
 	C.qute_QMediaPlayer_setVideoSink(self, sinkPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(sink)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "videoSink", sinkH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "video", sinkH, false)
 }
 
 // VideoSink wraps QMediaPlayer::videoSink.
@@ -687,7 +687,7 @@ func (this *QMediaPlayer) SetSourceDevice(device qtcore.QIODeviceLike) {
 	C.qute_QMediaPlayer_setSourceDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, false)
 }
 
 // SetPitchCompensation wraps QMediaPlayer::setPitchCompensation.
@@ -989,7 +989,7 @@ func (this *QMediaPlayer) SetSourceDeviceFull(device qtcore.QIODeviceLike, sourc
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
 	runtime.KeepAlive(sourceUrl)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, false)
 }
 
 // OnSourceChanged connects f to the sourceChanged signal. The connection ends when the

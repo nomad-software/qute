@@ -220,7 +220,7 @@ func (this *QGraphicsWidget) SetStyle(style QStyleLike) {
 	C.qute_QGraphicsWidget_setStyle(self, stylePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(style)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setStyle.style", styleH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setStyle.style", styleH, false)
 }
 
 // Font wraps QGraphicsWidget::font.
@@ -631,7 +631,7 @@ func (this *QGraphicsWidget) AddAction(action qtgui.QActionLike) {
 	C.qute_QGraphicsWidget_addAction(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH, false)
 }
 
 // AddActions wraps QGraphicsWidget::addActions.
@@ -693,7 +693,7 @@ func (this *QGraphicsWidget) InsertAction(before qtgui.QActionLike, action qtgui
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(action)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH, false)
 }
 
 // RemoveAction wraps QGraphicsWidget::removeAction.

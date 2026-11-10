@@ -55,7 +55,7 @@ classes:
   # qute cannot watch: an item handed out by a layout depends on it (see
   # WrapClassFrom), and on its widget, whose deletion also frees the item.
   # Items built in Go report their death themselves (notify-dtor).
-  QLayoutItem: { no-construct: true, depends-on: widget }
+  QLayoutItem: { no-construct: true, depends-on: widget, parented-delete: "take it out of its layout with the layout's TakeAt or RemoveItem first, which makes it Owned" }
   QSpacerItem: { notify-dtor: true }
   QWidgetItem: { notify-dtor: true, depends-on: widget }
   QLayout: {}

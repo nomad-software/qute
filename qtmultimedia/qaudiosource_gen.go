@@ -142,7 +142,7 @@ func (this *QAudioSource) StartWithDevice(device qtcore.QIODeviceLike) {
 	C.qute_QAudioSource_start(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, false)
 }
 
 // Start wraps QAudioSource::start.

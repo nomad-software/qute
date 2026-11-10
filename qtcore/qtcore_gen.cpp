@@ -76,8 +76,10 @@ void qute_qtcore_call(uintptr_t id, void *args, void *ret);
 static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtcore_call(id, args, ret); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
-// It is checked here, where it costs a thread-local read, so release builds
-// catch it too (qute_debug builds also name the method).
+// It is checked here, in every build (qute_debug builds also name the
+// method): QCoreApplication::instance() and two thread lookups. Before the
+// application exists nothing is checked; calls made then (registrations in
+// init, such as QWebEngineUrlScheme) run on whatever thread makes them.
 static inline void qute_gui_only() {
 	QCoreApplication *app = QCoreApplication::instance();
 	if (app && QThread::currentThread() != app->thread()) {
@@ -4038,9 +4040,9 @@ long long qute_QDataStream_readRawData(void *self, const char *a0, ptrdiff_t a0_
 	qute_gui_only();
 	return static_cast<long long>(static_cast<QDataStream *>(self)->readRawData(const_cast<char *>(a0), a0_len));
 }
-void * qute_QDataStream_writeBytes(void *self, const char *a0, ptrdiff_t a0_len) {
+void qute_QDataStream_writeBytes(void *self, const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
-	return (void *)(&(static_cast<QDataStream *>(self)->writeBytes(reinterpret_cast<const char *>(a0), a0_len)));
+	static_cast<QDataStream *>(self)->writeBytes(reinterpret_cast<const char *>(a0), a0_len);
 }
 long long qute_QDataStream_writeRawData(void *self, const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();

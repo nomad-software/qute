@@ -104,7 +104,7 @@ func (this *QStyledItemDelegate) SetItemEditorFactory(factory QItemEditorFactory
 	C.qute_QStyledItemDelegate_setItemEditorFactory(self, factoryPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(factory)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemEditorFactory.factory", factoryH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemEditorFactory.factory", factoryH, true)
 }
 
 // DisplayText wraps QStyledItemDelegate::displayText.

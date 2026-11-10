@@ -62,7 +62,7 @@ func NewQOpenGLExtraFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpe
 	p := C.qute_QOpenGLExtraFunctions_new_1(contextPtr)
 	runtime.KeepAlive(context)
 	h := rt.WrapClass(p, "QOpenGLExtraFunctions", rt.NewOwned)
-	rt.KeepArg(h, "QOpenGLExtraFunctions.context", contextH)
+	rt.KeepArg(h, "QOpenGLExtraFunctions.context", contextH, true)
 	return rt.View[QOpenGLExtraFunctions](h, p)
 }
 

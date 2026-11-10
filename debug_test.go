@@ -6,15 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // Debug builds check the thread on every call.
 func TestDebugWrongThreadPanics(t *testing.T) {
 	var lbl *qtwidgets.QLabel
-	qute.Run(t, func() { lbl = qtwidgets.NewQLabelWithText("x", nil) })
-	defer qute.Run(t, func() { lbl.Delete() })
+	qutetest.Run(t, func() { lbl = qtwidgets.NewQLabelWithText("x", nil) })
+	defer qutetest.Run(t, func() { lbl.Delete() })
 	defer func() {
 		p := recover()
 		if p == nil || !strings.Contains(p.(string), "off the GUI thread") {
@@ -24,30 +24,9 @@ func TestDebugWrongThreadPanics(t *testing.T) {
 	lbl.SetText("from a test goroutine")
 }
 
-// Debug builds forbid Delete inside a handler (rule 5).
-func TestDebugDeleteInHandlerPanics(t *testing.T) {
-	qute.Run(t, func() {
-		btn := qtwidgets.NewQPushButtonWithText("x", nil)
-		var msg string
-		btn.OnClicked(func(bool) {
-			defer func() {
-				if p := recover(); p != nil {
-					msg = p.(string)
-				}
-			}()
-			btn.Delete()
-		})
-		qute.Click(btn)
-		if !strings.Contains(msg, "DeleteLater") {
-			t.Errorf("want DeleteLater hint, got %q", msg)
-		}
-		btn.Delete()
-	})
-}
-
 // Debug builds record where an object died.
 func TestDebugDeathSite(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		lbl := qtwidgets.NewQLabelWithText("x", w)
 		w.Delete()

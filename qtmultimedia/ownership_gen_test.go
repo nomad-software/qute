@@ -4,14 +4,14 @@ package qtmultimedia_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtmultimedia"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -23,7 +23,7 @@ func TestLayout(t *testing.T) {
 
 // QAudioBufferInput::QAudioBufferInput(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioBufferInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioBufferInput(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -46,7 +46,7 @@ func TestOwnership_NewQAudioBufferInput(t *testing.T) {
 
 // QAudioBufferInput::QAudioBufferInput(const QAudioFormat & format, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioBufferInputWithAudioFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioBufferInputWithAudioFormat(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -69,7 +69,7 @@ func TestOwnership_NewQAudioBufferInputWithAudioFormat(t *testing.T) {
 
 // QAudioBufferOutput::QAudioBufferOutput(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioBufferOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioBufferOutput(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -92,7 +92,7 @@ func TestOwnership_NewQAudioBufferOutput(t *testing.T) {
 
 // QAudioBufferOutput::QAudioBufferOutput(const QAudioFormat & format, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioBufferOutputWithAudioFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioBufferOutputWithAudioFormat(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -115,7 +115,7 @@ func TestOwnership_NewQAudioBufferOutputWithAudioFormat(t *testing.T) {
 
 // QAudioDecoder::QAudioDecoder(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioDecoder(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioDecoder(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -138,7 +138,7 @@ func TestOwnership_NewQAudioDecoder(t *testing.T) {
 
 // void QAudioDecoder::setSourceDevice(QIODevice * device): keep rules
 func TestKeep_QAudioDecoder_SetSourceDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQAudioDecoder(nil)
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetSourceDevice(a0)
@@ -151,7 +151,7 @@ func TestKeep_QAudioDecoder_SetSourceDevice(t *testing.T) {
 
 // QAudioInput::QAudioInput(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioInput(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -174,7 +174,7 @@ func TestOwnership_NewQAudioInput(t *testing.T) {
 
 // QAudioInput::QAudioInput(const QAudioDevice & deviceInfo, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioInputWithAudioDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioInputWithAudioDevice(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -197,7 +197,7 @@ func TestOwnership_NewQAudioInputWithAudioDevice(t *testing.T) {
 
 // QAudioOutput::QAudioOutput(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioOutput(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -220,7 +220,7 @@ func TestOwnership_NewQAudioOutput(t *testing.T) {
 
 // QAudioOutput::QAudioOutput(const QAudioDevice & device, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioOutputWithAudioDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioOutputWithAudioDevice(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -243,7 +243,7 @@ func TestOwnership_NewQAudioOutputWithAudioDevice(t *testing.T) {
 
 // QAudioSink::QAudioSink(const QAudioFormat & format = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioSinkWithAudioFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioSinkWithAudioFormat(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -266,7 +266,7 @@ func TestOwnership_NewQAudioSinkWithAudioFormat(t *testing.T) {
 
 // QAudioSink::QAudioSink(const QAudioDevice & audioDeviceInfo, const QAudioFormat & format = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioSinkWithAudioDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioSinkWithAudioDevice(nil, nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -289,7 +289,7 @@ func TestOwnership_NewQAudioSinkWithAudioDevice(t *testing.T) {
 
 // void QAudioSink::start(QIODevice * device): keep rules
 func TestKeep_QAudioSink_StartWithDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQAudioSinkWithAudioFormat(nil, nil)
 		a0 := qtcore.NewQBuffer(nil)
 		recv.StartWithDevice(a0)
@@ -302,7 +302,7 @@ func TestKeep_QAudioSink_StartWithDevice(t *testing.T) {
 
 // QAudioSource::QAudioSource(const QAudioFormat & format = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioSourceWithAudioFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioSourceWithAudioFormat(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -325,7 +325,7 @@ func TestOwnership_NewQAudioSourceWithAudioFormat(t *testing.T) {
 
 // QAudioSource::QAudioSource(const QAudioDevice & audioDeviceInfo, const QAudioFormat & format = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAudioSourceWithAudioDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQAudioSourceWithAudioDevice(nil, nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -348,7 +348,7 @@ func TestOwnership_NewQAudioSourceWithAudioDevice(t *testing.T) {
 
 // void QAudioSource::start(QIODevice * device): keep rules
 func TestKeep_QAudioSource_StartWithDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQAudioSourceWithAudioFormat(nil, nil)
 		a0 := qtcore.NewQBuffer(nil)
 		recv.StartWithDevice(a0)
@@ -361,7 +361,7 @@ func TestKeep_QAudioSource_StartWithDevice(t *testing.T) {
 
 // QCamera::QCamera(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQCamera(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQCamera(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -384,7 +384,7 @@ func TestOwnership_NewQCamera(t *testing.T) {
 
 // QCamera::QCamera(const QCameraDevice & cameraDevice, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQCameraWithCameraDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQCameraWithCameraDevice(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -407,7 +407,7 @@ func TestOwnership_NewQCameraWithCameraDevice(t *testing.T) {
 
 // QCamera::QCamera(QCameraDevice::Position position, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQCameraWithPosition(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQCameraWithPosition(qtmultimedia.QCameraDevicePosition(0), root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -430,7 +430,7 @@ func TestOwnership_NewQCameraWithPosition(t *testing.T) {
 
 // QImageCapture::QImageCapture(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQImageCapture(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQImageCapture(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -453,7 +453,7 @@ func TestOwnership_NewQImageCapture(t *testing.T) {
 
 // QMediaCaptureSession::QMediaCaptureSession(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQMediaCaptureSession(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQMediaCaptureSession(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -476,7 +476,7 @@ func TestOwnership_NewQMediaCaptureSession(t *testing.T) {
 
 // void QMediaCaptureSession::setAudioInput(QAudioInput * input): keep rules
 func TestKeep_QMediaCaptureSession_SetAudioInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQAudioInput(nil)
 		recv.SetAudioInput(a0)
@@ -489,7 +489,7 @@ func TestKeep_QMediaCaptureSession_SetAudioInput(t *testing.T) {
 
 // void QMediaCaptureSession::setAudioBufferInput(QAudioBufferInput * input): keep rules
 func TestKeep_QMediaCaptureSession_SetAudioBufferInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQAudioBufferInput(nil)
 		recv.SetAudioBufferInput(a0)
@@ -502,7 +502,7 @@ func TestKeep_QMediaCaptureSession_SetAudioBufferInput(t *testing.T) {
 
 // void QMediaCaptureSession::setCamera(QCamera * camera): keep rules
 func TestKeep_QMediaCaptureSession_SetCamera(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQCamera(nil)
 		recv.SetCamera(a0)
@@ -515,7 +515,7 @@ func TestKeep_QMediaCaptureSession_SetCamera(t *testing.T) {
 
 // void QMediaCaptureSession::setNativeVideoSource(QObject * videoSource): keep rules
 func TestKeep_QMediaCaptureSession_SetNativeVideoSource(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtcore.NewQObject(nil)
 		recv.SetNativeVideoSource(a0)
@@ -528,7 +528,7 @@ func TestKeep_QMediaCaptureSession_SetNativeVideoSource(t *testing.T) {
 
 // void QMediaCaptureSession::setImageCapture(QImageCapture * imageCapture): keep rules
 func TestKeep_QMediaCaptureSession_SetImageCapture(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQImageCapture(nil)
 		recv.SetImageCapture(a0)
@@ -541,7 +541,7 @@ func TestKeep_QMediaCaptureSession_SetImageCapture(t *testing.T) {
 
 // void QMediaCaptureSession::setScreenCapture(QScreenCapture * screenCapture): keep rules
 func TestKeep_QMediaCaptureSession_SetScreenCapture(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQScreenCapture(nil)
 		recv.SetScreenCapture(a0)
@@ -554,7 +554,7 @@ func TestKeep_QMediaCaptureSession_SetScreenCapture(t *testing.T) {
 
 // void QMediaCaptureSession::setWindowCapture(QWindowCapture * windowCapture): keep rules
 func TestKeep_QMediaCaptureSession_SetWindowCapture(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQWindowCapture(nil)
 		recv.SetWindowCapture(a0)
@@ -567,7 +567,7 @@ func TestKeep_QMediaCaptureSession_SetWindowCapture(t *testing.T) {
 
 // void QMediaCaptureSession::setVideoFrameInput(QVideoFrameInput * input): keep rules
 func TestKeep_QMediaCaptureSession_SetVideoFrameInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQVideoFrameInput(nil)
 		recv.SetVideoFrameInput(a0)
@@ -580,7 +580,7 @@ func TestKeep_QMediaCaptureSession_SetVideoFrameInput(t *testing.T) {
 
 // void QMediaCaptureSession::setRecorder(QMediaRecorder * recorder): keep rules
 func TestKeep_QMediaCaptureSession_SetRecorder(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQMediaRecorder(nil)
 		recv.SetRecorder(a0)
@@ -593,7 +593,7 @@ func TestKeep_QMediaCaptureSession_SetRecorder(t *testing.T) {
 
 // void QMediaCaptureSession::setVideoOutput(QObject * output): keep rules
 func TestKeep_QMediaCaptureSession_SetVideoOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtcore.NewQObject(nil)
 		recv.SetVideoOutput(a0)
@@ -606,7 +606,7 @@ func TestKeep_QMediaCaptureSession_SetVideoOutput(t *testing.T) {
 
 // void QMediaCaptureSession::setVideoSink(QVideoSink * sink): keep rules
 func TestKeep_QMediaCaptureSession_SetVideoSink(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQVideoSink(nil)
 		recv.SetVideoSink(a0)
@@ -619,7 +619,7 @@ func TestKeep_QMediaCaptureSession_SetVideoSink(t *testing.T) {
 
 // void QMediaCaptureSession::setAudioOutput(QAudioOutput * output): keep rules
 func TestKeep_QMediaCaptureSession_SetAudioOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaCaptureSession(nil)
 		a0 := qtmultimedia.NewQAudioOutput(nil)
 		recv.SetAudioOutput(a0)
@@ -632,7 +632,7 @@ func TestKeep_QMediaCaptureSession_SetAudioOutput(t *testing.T) {
 
 // QMediaDevices::QMediaDevices(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQMediaDevices(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQMediaDevices(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -655,7 +655,7 @@ func TestOwnership_NewQMediaDevices(t *testing.T) {
 
 // QMediaPlayer::QMediaPlayer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQMediaPlayer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQMediaPlayer(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -678,7 +678,7 @@ func TestOwnership_NewQMediaPlayer(t *testing.T) {
 
 // void QMediaPlayer::setAudioBufferOutput(QAudioBufferOutput * output): keep rules
 func TestKeep_QMediaPlayer_SetAudioBufferOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaPlayer(nil)
 		a0 := qtmultimedia.NewQAudioBufferOutput(nil)
 		recv.SetAudioBufferOutput(a0)
@@ -691,7 +691,7 @@ func TestKeep_QMediaPlayer_SetAudioBufferOutput(t *testing.T) {
 
 // void QMediaPlayer::setAudioOutput(QAudioOutput * output): keep rules
 func TestKeep_QMediaPlayer_SetAudioOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaPlayer(nil)
 		a0 := qtmultimedia.NewQAudioOutput(nil)
 		recv.SetAudioOutput(a0)
@@ -704,7 +704,7 @@ func TestKeep_QMediaPlayer_SetAudioOutput(t *testing.T) {
 
 // void QMediaPlayer::setVideoOutput(QObject *): keep rules
 func TestKeep_QMediaPlayer_SetVideoOutput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaPlayer(nil)
 		a0 := qtcore.NewQObject(nil)
 		recv.SetVideoOutput(a0)
@@ -717,7 +717,7 @@ func TestKeep_QMediaPlayer_SetVideoOutput(t *testing.T) {
 
 // void QMediaPlayer::setVideoSink(QVideoSink * sink): keep rules
 func TestKeep_QMediaPlayer_SetVideoSink(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaPlayer(nil)
 		a0 := qtmultimedia.NewQVideoSink(nil)
 		recv.SetVideoSink(a0)
@@ -730,7 +730,7 @@ func TestKeep_QMediaPlayer_SetVideoSink(t *testing.T) {
 
 // void QMediaPlayer::setSourceDevice(QIODevice * device, const QUrl & sourceUrl = …): keep rules
 func TestKeep_QMediaPlayer_SetSourceDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaPlayer(nil)
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetSourceDevice(a0)
@@ -743,7 +743,7 @@ func TestKeep_QMediaPlayer_SetSourceDevice(t *testing.T) {
 
 // QMediaRecorder::QMediaRecorder(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQMediaRecorder(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQMediaRecorder(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -766,7 +766,7 @@ func TestOwnership_NewQMediaRecorder(t *testing.T) {
 
 // void QMediaRecorder::setOutputDevice(QIODevice * device): keep rules
 func TestKeep_QMediaRecorder_SetOutputDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtmultimedia.NewQMediaRecorder(nil)
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetOutputDevice(a0)
@@ -779,7 +779,7 @@ func TestKeep_QMediaRecorder_SetOutputDevice(t *testing.T) {
 
 // QScreenCapture::QScreenCapture(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQScreenCapture(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQScreenCapture(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -802,7 +802,7 @@ func TestOwnership_NewQScreenCapture(t *testing.T) {
 
 // QSoundEffect::QSoundEffect(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSoundEffect(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQSoundEffect(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -825,7 +825,7 @@ func TestOwnership_NewQSoundEffect(t *testing.T) {
 
 // QSoundEffect::QSoundEffect(const QAudioDevice & audioDevice, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSoundEffectWithAudioDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQSoundEffectWithAudioDevice(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -848,7 +848,7 @@ func TestOwnership_NewQSoundEffectWithAudioDevice(t *testing.T) {
 
 // QVideoFrameInput::QVideoFrameInput(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQVideoFrameInput(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQVideoFrameInput(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -871,7 +871,7 @@ func TestOwnership_NewQVideoFrameInput(t *testing.T) {
 
 // QVideoFrameInput::QVideoFrameInput(const QVideoFrameFormat & format, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQVideoFrameInputWithVideoFrameFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQVideoFrameInputWithVideoFrameFormat(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -894,7 +894,7 @@ func TestOwnership_NewQVideoFrameInputWithVideoFrameFormat(t *testing.T) {
 
 // QVideoSink::QVideoSink(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQVideoSink(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQVideoSink(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -917,7 +917,7 @@ func TestOwnership_NewQVideoSink(t *testing.T) {
 
 // QWindowCapture::QWindowCapture(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWindowCapture(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtmultimedia.NewQWindowCapture(root)
 		if got := x.Ownership(); got != qtcore.Parented {

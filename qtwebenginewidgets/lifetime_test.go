@@ -4,12 +4,12 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtwebenginecore"
 	"github.com/nomad-software/qute/qtwebenginewidgets"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // Qt only accepts custom schemes registered before the application exists;
@@ -43,7 +43,7 @@ func TestSchemeReplyDeviceSurvivesGC(t *testing.T) {
 	var prof *qtwebenginecore.QWebEngineProfile
 	h := &replyHandler{}
 	loaded, ok := false, false
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		prof = qtwebenginecore.NewQWebEngineProfile(nil)
 		handler = qtwebenginecore.NewQWebEngineUrlSchemeHandlerWith(h, nil)
 		prof.InstallUrlSchemeHandler([]byte("qute"), handler)
@@ -51,14 +51,14 @@ func TestSchemeReplyDeviceSurvivesGC(t *testing.T) {
 		view.OnLoadFinished(func(success bool) { loaded, ok = true, success })
 		view.SetUrl(qtcore.NewQUrlWithUrl("qute:page"))
 		for i := 0; i < 100 && !h.kept; i++ {
-			qute.Wait(20)
+			qutetest.Wait(20)
 		}
 	})
-	qute.CollectGarbage() // the buffer has no Go variable left
+	qutetest.CollectGarbage() // the buffer has no Go variable left
 	var text string
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		for i := 0; i < 250 && !loaded; i++ {
-			qute.Wait(20)
+			qutetest.Wait(20)
 		}
 		if !h.kept {
 			t.Error("the job did not keep the reply device")
@@ -69,7 +69,7 @@ func TestSchemeReplyDeviceSurvivesGC(t *testing.T) {
 		done := false
 		view.Page().ToPlainText(func(s string) { text, done = s, true })
 		for i := 0; i < 100 && !done; i++ {
-			qute.Wait(20)
+			qutetest.Wait(20)
 		}
 		if text != "hello from go" {
 			t.Errorf("page text %q, want %q", text, "hello from go")
@@ -85,8 +85,8 @@ func TestSchemeReplyDeviceSurvivesGC(t *testing.T) {
 // free the window (and with it the page) before the profile, whatever order
 // the GC queued them in.
 func TestPageAndProfileCollectedTogether(t *testing.T) {
-	before := qute.Freed()
-	qute.Run(t, func() {
+	before := qutetest.Freed()
+	qutetest.Run(t, func() {
 		for i := 0; i < 3; i++ {
 			win := qtwidgets.NewQWidget(nil)
 			prof := qtwebenginecore.NewQWebEngineProfile(nil)
@@ -94,9 +94,9 @@ func TestPageAndProfileCollectedTogether(t *testing.T) {
 			qtwebenginewidgets.NewQWebEngineViewWithPage(page, win)
 		}
 	})
-	qute.CollectGarbage()
-	if got := qute.Freed() - before; got < 6 {
+	qutetest.CollectGarbage()
+	if got := qutetest.Freed() - before; got < 6 {
 		t.Errorf("freed %d objects, want at least 6 (3 windows, 3 profiles)", got)
 	}
-	qute.Run(t, func() { qute.Wait(50) }) // let Chromium finish tearing down
+	qutetest.Run(t, func() { qutetest.Wait(50) }) // let Chromium finish tearing down
 }

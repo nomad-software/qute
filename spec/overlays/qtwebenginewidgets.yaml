@@ -1,7 +1,7 @@
 # Ownership overlays for qtwebenginewidgets. See spec/overlays/qtwidgets.yaml for the rules.
 
 QWebEngineView:
-  QWebEngineView(QWebEngineProfile*, QWidget*): { name: NewQWebEngineViewWithProfile, args: { profile: keep:profile }, reviewed: true, doc: "The view's page keeps using the profile, so the view keeps it alive." }
+  QWebEngineView(QWebEngineProfile*, QWidget*): { name: NewQWebEngineViewWithProfile, args: { profile: keep:profile }, kept-delete: guard, reviewed: true, doc: "The view's page keeps using the profile, so the view keeps it alive; deleting the profile while the view lives panics." }
   QWebEngineView(QWebEnginePage*, QWidget*): { name: NewQWebEngineViewWithPage, args: { page: keep:page }, reviewed: true, doc: "The view does not take ownership of the page." }
   setPage: { args: { page: keep:page }, reviewed: true, doc: "The view does not take ownership of the page; its parent still owns it. A previous page that is the view's child is deleted." }
   page: { return: borrowed, doc: "The page belongs to the view (or to whoever passed it to SetPage)." }

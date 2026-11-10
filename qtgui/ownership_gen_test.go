@@ -4,15 +4,15 @@ package qtgui_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -24,7 +24,7 @@ func TestLayout(t *testing.T) {
 
 // QAction::QAction(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAction(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQAction(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -47,7 +47,7 @@ func TestOwnership_NewQAction(t *testing.T) {
 
 // QAction::QAction(const QString & text, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQActionWithText(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQActionWithText("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -70,7 +70,7 @@ func TestOwnership_NewQActionWithText(t *testing.T) {
 
 // QAction::QAction(const QIcon & icon, const QString & text, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQActionWithIcon(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQActionWithIcon(nil, "x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -93,7 +93,7 @@ func TestOwnership_NewQActionWithIcon(t *testing.T) {
 
 // QActionGroup::QActionGroup(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQActionGroup(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQActionGroup(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -116,7 +116,7 @@ func TestOwnership_NewQActionGroup(t *testing.T) {
 
 // QAction * QActionGroup::addAction(QAction * a): keep rules
 func TestKeep_QActionGroup_AddAction(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQActionGroup(nil)
 		a0 := qtgui.NewQAction(nil)
 		_ = recv.AddAction(a0)
@@ -129,7 +129,7 @@ func TestKeep_QActionGroup_AddAction(t *testing.T) {
 
 // QAction * QActionGroup::addAction(const QString & text)
 func TestOwnership_QActionGroup_AddActionText(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQActionGroup(root)
 		res := recv.AddActionText("x")
@@ -152,7 +152,7 @@ func TestOwnership_QActionGroup_AddActionText(t *testing.T) {
 
 // QAction * QActionGroup::addAction(const QIcon & icon, const QString & text)
 func TestOwnership_QActionGroup_AddActionIcon(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQActionGroup(root)
 		res := recv.AddActionIcon(nil, "x")
@@ -175,7 +175,7 @@ func TestOwnership_QActionGroup_AddActionIcon(t *testing.T) {
 
 // void QActionGroup::removeAction(QAction * a): keep rules
 func TestKeep_QActionGroup_RemoveAction(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQActionGroup(nil)
 		a0 := qtgui.NewQAction(nil)
 		rt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(a0))
@@ -189,7 +189,7 @@ func TestKeep_QActionGroup_RemoveAction(t *testing.T) {
 
 // void QClipboard::setMimeData(QMimeData * data, Mode mode = …) (test from the overlay)
 func TestOwnership_QClipboard_SetMimeData(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		cb := qtgui.QGuiApplicationClipboard()
 		d := qtcore.NewQMimeData()
 		cb.SetMimeData(d)
@@ -205,7 +205,7 @@ func TestOwnership_QClipboard_SetMimeData(t *testing.T) {
 
 // QDoubleValidator::QDoubleValidator(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQDoubleValidator(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQDoubleValidator(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -228,7 +228,7 @@ func TestOwnership_NewQDoubleValidator(t *testing.T) {
 
 // QDoubleValidator::QDoubleValidator(double bottom, double top, int decimals, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQDoubleValidatorWithBottom(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQDoubleValidatorWithBottom(1, 1, 1, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -251,7 +251,7 @@ func TestOwnership_NewQDoubleValidatorWithBottom(t *testing.T) {
 
 // QImageReader::QImageReader(QIODevice * device, const QByteArray & format = …): keep rules
 func TestKeep_QImageReader_QImageReaderWithIODevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtcore.NewQBuffer(nil)
 		x := qtgui.NewQImageReaderWithIODevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -263,7 +263,7 @@ func TestKeep_QImageReader_QImageReaderWithIODevice(t *testing.T) {
 
 // void QImageReader::setDevice(QIODevice * device): keep rules
 func TestKeep_QImageReader_SetDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQImageReader()
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetDevice(a0)
@@ -276,7 +276,7 @@ func TestKeep_QImageReader_SetDevice(t *testing.T) {
 
 // QInputDevice::QInputDevice(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQInputDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQInputDevice(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -299,7 +299,7 @@ func TestOwnership_NewQInputDevice(t *testing.T) {
 
 // QInputDevice::QInputDevice(const QString & name, qint64 systemId, DeviceType type, const QString & seatName = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQInputDeviceWithName(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQInputDeviceWithName("x", 1, qtgui.QInputDeviceDeviceTypes(1), "x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -322,7 +322,7 @@ func TestOwnership_NewQInputDeviceWithName(t *testing.T) {
 
 // QIntValidator::QIntValidator(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQIntValidator(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQIntValidator(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -345,7 +345,7 @@ func TestOwnership_NewQIntValidator(t *testing.T) {
 
 // QIntValidator::QIntValidator(int bottom, int top, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQIntValidatorWithBottom(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQIntValidatorWithBottom(1, 1, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -368,7 +368,7 @@ func TestOwnership_NewQIntValidatorWithBottom(t *testing.T) {
 
 // QMovie::QMovie(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQMovie(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQMovie(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -391,7 +391,7 @@ func TestOwnership_NewQMovie(t *testing.T) {
 
 // QMovie::QMovie(QIODevice * device, const QByteArray & format = …, QObject * parent = …) (test from the overlay)
 func TestOwnership_QMovie_NewQMovieWithDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		f := qtcore.NewQFileWithName("missing.gif", nil)
 		x := qtgui.NewQMovieWithDevice(f, nil, root)
@@ -408,7 +408,7 @@ func TestOwnership_QMovie_NewQMovieWithDevice(t *testing.T) {
 
 // QMovie::QMovie(const QString & fileName, const QByteArray & format = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQMovieWithFileName(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQMovieWithFileName("x", nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -431,7 +431,7 @@ func TestOwnership_NewQMovieWithFileName(t *testing.T) {
 
 // void QMovie::setDevice(QIODevice * device): keep rules
 func TestKeep_QMovie_SetDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQMovie(nil)
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetDevice(a0)
@@ -444,7 +444,7 @@ func TestKeep_QMovie_SetDevice(t *testing.T) {
 
 // QOffscreenSurface::QOffscreenSurface(QScreen * screen = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOffscreenSurfaceWithScreen(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQOffscreenSurfaceWithScreen(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -467,7 +467,7 @@ func TestOwnership_NewQOffscreenSurfaceWithScreen(t *testing.T) {
 
 // QOpenGLContext::QOpenGLContext(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLContext(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQOpenGLContext(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -490,7 +490,7 @@ func TestOwnership_NewQOpenGLContext(t *testing.T) {
 
 // void QOpenGLContext::setShareContext(QOpenGLContext * shareContext): keep rules
 func TestKeep_QOpenGLContext_SetShareContext(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQOpenGLContext(nil)
 		a0 := qtgui.NewQOpenGLContext(nil)
 		recv.SetShareContext(a0)
@@ -503,7 +503,7 @@ func TestKeep_QOpenGLContext_SetShareContext(t *testing.T) {
 
 // QOpenGLExtraFunctions::QOpenGLExtraFunctions(QOpenGLContext * context) (test from the overlay)
 func TestOwnership_QOpenGLExtraFunctions_NewQOpenGLExtraFunctionsWithOpenGLContext(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		ctx := qtgui.NewQOpenGLContext(nil)
 		defer ctx.Delete()
 		surf := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
@@ -524,7 +524,7 @@ func TestOwnership_QOpenGLExtraFunctions_NewQOpenGLExtraFunctionsWithOpenGLConte
 
 // QOpenGLFunctions::QOpenGLFunctions(QOpenGLContext * context) (test from the overlay)
 func TestOwnership_QOpenGLFunctions_NewQOpenGLFunctionsWithOpenGLContext(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		ctx := qtgui.NewQOpenGLContext(nil)
 		defer ctx.Delete()
 		surf := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
@@ -545,7 +545,7 @@ func TestOwnership_QOpenGLFunctions_NewQOpenGLFunctionsWithOpenGLContext(t *test
 
 // QPainter::QPainter(QPaintDevice *): keep rules
 func TestKeep_QPainter_QPainterOn(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtgui.NewQImage()
 		x := qtgui.NewQPainterOn(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -557,7 +557,7 @@ func TestKeep_QPainter_QPainterOn(t *testing.T) {
 
 // bool QPainter::begin(QPaintDevice *): keep rules
 func TestKeep_QPainter_Begin(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQPainter()
 		a0 := qtgui.NewQImage()
 		_ = recv.Begin(a0)
@@ -570,7 +570,7 @@ func TestKeep_QPainter_Begin(t *testing.T) {
 
 // QPdfWriter::QPdfWriter(QIODevice * device): keep rules
 func TestKeep_QPdfWriter_QPdfWriterWithIODevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtcore.NewQBuffer(nil)
 		x := qtgui.NewQPdfWriterWithIODevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -582,7 +582,7 @@ func TestKeep_QPdfWriter_QPdfWriterWithIODevice(t *testing.T) {
 
 // QPointingDevice::QPointingDevice(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQPointingDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQPointingDevice(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -605,7 +605,7 @@ func TestOwnership_NewQPointingDevice(t *testing.T) {
 
 // QPointingDevice::QPointingDevice(const QString & name, qint64 systemId, QInputDevice::DeviceType devType, PointerType pType, Capabilities caps, int maxPoints, int buttonCount, const QString & seatName = …, QPointingDeviceUniqueId uniqueId = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQPointingDeviceWithName(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQPointingDeviceWithName("x", 1, qtgui.QInputDeviceDeviceTypes(1), qtgui.QPointingDevicePointerTypes(1), qtgui.QInputDeviceCapabilities(0), 1, 1, "x", nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -628,7 +628,7 @@ func TestOwnership_NewQPointingDeviceWithName(t *testing.T) {
 
 // QShortcut::QShortcut(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQShortcut(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQShortcut(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -651,7 +651,7 @@ func TestOwnership_NewQShortcut(t *testing.T) {
 
 // QShortcut::QShortcut(const QKeySequence & key, QObject * parent, const char * member = …, const char * ambiguousMember = …, Qt::ShortcutContext context = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQShortcutWithKeySequence(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQShortcutWithKeySequence(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -674,7 +674,7 @@ func TestOwnership_NewQShortcutWithKeySequence(t *testing.T) {
 
 // QShortcut::QShortcut(QKeySequence::StandardKey key, QObject * parent, const char * member = …, const char * ambiguousMember = …, Qt::ShortcutContext context = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQShortcutStandard(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQShortcutStandard(qtgui.QKeySequenceStandardKey(1), root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -697,7 +697,7 @@ func TestOwnership_NewQShortcutStandard(t *testing.T) {
 
 // void QStandardItem::setChild(int row, int column, QStandardItem * item)
 func TestOwnership_QStandardItem_SetChild(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a2 := qtgui.NewQStandardItem()
 		recv.SetChild(0, 0, a2)
@@ -713,7 +713,7 @@ func TestOwnership_QStandardItem_SetChild(t *testing.T) {
 
 // void QStandardItem::setChild(int row, QStandardItem * item)
 func TestOwnership_QStandardItem_SetChildRow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a1 := qtgui.NewQStandardItem()
 		recv.SetChildRow(0, a1)
@@ -729,7 +729,7 @@ func TestOwnership_QStandardItem_SetChildRow(t *testing.T) {
 
 // void QStandardItem::insertRow(int row, const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItem_InsertRowItems(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a1 := qtgui.NewQStandardItem()
 		recv.InsertRowItems(0, []*qtgui.QStandardItem{a1})
@@ -745,7 +745,7 @@ func TestOwnership_QStandardItem_InsertRowItems(t *testing.T) {
 
 // void QStandardItem::insertColumn(int column, const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItem_InsertColumn(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a1 := qtgui.NewQStandardItem()
 		recv.InsertColumn(0, []*qtgui.QStandardItem{a1})
@@ -761,7 +761,7 @@ func TestOwnership_QStandardItem_InsertColumn(t *testing.T) {
 
 // void QStandardItem::insertRows(int row, const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItem_InsertRowsItems(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a1 := qtgui.NewQStandardItem()
 		recv.InsertRowsItems(0, []*qtgui.QStandardItem{a1})
@@ -777,7 +777,7 @@ func TestOwnership_QStandardItem_InsertRowsItems(t *testing.T) {
 
 // void QStandardItem::appendRow(const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItem_AppendRowItems(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a0 := qtgui.NewQStandardItem()
 		recv.AppendRowItems([]*qtgui.QStandardItem{a0})
@@ -793,7 +793,7 @@ func TestOwnership_QStandardItem_AppendRowItems(t *testing.T) {
 
 // void QStandardItem::appendRows(const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItem_AppendRows(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a0 := qtgui.NewQStandardItem()
 		recv.AppendRows([]*qtgui.QStandardItem{a0})
@@ -809,7 +809,7 @@ func TestOwnership_QStandardItem_AppendRows(t *testing.T) {
 
 // void QStandardItem::appendColumn(const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItem_AppendColumn(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a0 := qtgui.NewQStandardItem()
 		recv.AppendColumn([]*qtgui.QStandardItem{a0})
@@ -825,7 +825,7 @@ func TestOwnership_QStandardItem_AppendColumn(t *testing.T) {
 
 // void QStandardItem::insertRow(int row, QStandardItem * item)
 func TestOwnership_QStandardItem_InsertRowItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a1 := qtgui.NewQStandardItem()
 		recv.InsertRowItem(0, a1)
@@ -841,7 +841,7 @@ func TestOwnership_QStandardItem_InsertRowItem(t *testing.T) {
 
 // void QStandardItem::appendRow(QStandardItem * item)
 func TestOwnership_QStandardItem_AppendRow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		a0 := qtgui.NewQStandardItem()
 		recv.AppendRow(a0)
@@ -857,7 +857,7 @@ func TestOwnership_QStandardItem_AppendRow(t *testing.T) {
 
 // QStandardItem * QStandardItem::takeChild(int row, int column = …) (test from the overlay)
 func TestOwnership_QStandardItem_TakeChild(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		p := qtgui.NewQStandardItemWithText("p")
 		p.AppendRow(qtgui.NewQStandardItemWithText("c"))
 		c := p.TakeChild(0)
@@ -871,7 +871,7 @@ func TestOwnership_QStandardItem_TakeChild(t *testing.T) {
 
 // QList<QStandardItem *> QStandardItem::takeRow(int row) (test from the overlay)
 func TestOwnership_QStandardItem_TakeRow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		p := qtgui.NewQStandardItemWithText("p")
 		p.AppendRow(qtgui.NewQStandardItemWithText("c"))
 		l := p.TakeRow(0)
@@ -888,7 +888,7 @@ func TestOwnership_QStandardItem_TakeRow(t *testing.T) {
 
 // QList<QStandardItem *> QStandardItem::takeColumn(int column) (test from the overlay)
 func TestOwnership_QStandardItem_TakeColumn(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		p := qtgui.NewQStandardItemWithText("p")
 		p.AppendRow(qtgui.NewQStandardItemWithText("c"))
 		l := p.TakeColumn(0)
@@ -905,7 +905,7 @@ func TestOwnership_QStandardItem_TakeColumn(t *testing.T) {
 
 // QStandardItem * QStandardItem::clone() const
 func TestOwnership_QStandardItem_Clone(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQStandardItemWithIcon(nil, "x")
 		res := recv.Clone()
 		if res == nil {
@@ -925,7 +925,7 @@ func TestOwnership_QStandardItem_Clone(t *testing.T) {
 
 // QStandardItemModel::QStandardItemModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQStandardItemModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQStandardItemModel(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -948,7 +948,7 @@ func TestOwnership_NewQStandardItemModel(t *testing.T) {
 
 // QStandardItemModel::QStandardItemModel(int rows, int columns, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQStandardItemModelWithRows(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -971,7 +971,7 @@ func TestOwnership_NewQStandardItemModelWithRows(t *testing.T) {
 
 // void QStandardItemModel::setItem(int row, int column, QStandardItem * item)
 func TestOwnership_QStandardItemModel_SetItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a2 := qtgui.NewQStandardItem()
@@ -991,7 +991,7 @@ func TestOwnership_QStandardItemModel_SetItem(t *testing.T) {
 
 // void QStandardItemModel::setItem(int row, QStandardItem * item)
 func TestOwnership_QStandardItemModel_SetItemRow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a1 := qtgui.NewQStandardItem()
@@ -1011,7 +1011,7 @@ func TestOwnership_QStandardItemModel_SetItemRow(t *testing.T) {
 
 // void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem * item)
 func TestOwnership_QStandardItemModel_SetHorizontalHeaderItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a1 := qtgui.NewQStandardItem()
@@ -1031,7 +1031,7 @@ func TestOwnership_QStandardItemModel_SetHorizontalHeaderItem(t *testing.T) {
 
 // void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem * item)
 func TestOwnership_QStandardItemModel_SetVerticalHeaderItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a1 := qtgui.NewQStandardItem()
@@ -1051,7 +1051,7 @@ func TestOwnership_QStandardItemModel_SetVerticalHeaderItem(t *testing.T) {
 
 // void QStandardItemModel::appendRow(const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItemModel_AppendRowItems(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a0 := qtgui.NewQStandardItem()
@@ -1071,7 +1071,7 @@ func TestOwnership_QStandardItemModel_AppendRowItems(t *testing.T) {
 
 // void QStandardItemModel::appendColumn(const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItemModel_AppendColumn(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a0 := qtgui.NewQStandardItem()
@@ -1091,7 +1091,7 @@ func TestOwnership_QStandardItemModel_AppendColumn(t *testing.T) {
 
 // void QStandardItemModel::appendRow(QStandardItem * item)
 func TestOwnership_QStandardItemModel_AppendRow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a0 := qtgui.NewQStandardItem()
@@ -1111,7 +1111,7 @@ func TestOwnership_QStandardItemModel_AppendRow(t *testing.T) {
 
 // void QStandardItemModel::insertRow(int row, const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItemModel_InsertRowItems(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a1 := qtgui.NewQStandardItem()
@@ -1131,7 +1131,7 @@ func TestOwnership_QStandardItemModel_InsertRowItems(t *testing.T) {
 
 // void QStandardItemModel::insertColumn(int column, const QList<QStandardItem *> & items)
 func TestOwnership_QStandardItemModel_InsertColumnItems(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a1 := qtgui.NewQStandardItem()
@@ -1151,7 +1151,7 @@ func TestOwnership_QStandardItemModel_InsertColumnItems(t *testing.T) {
 
 // void QStandardItemModel::insertRow(int row, QStandardItem * item)
 func TestOwnership_QStandardItemModel_InsertRowItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a1 := qtgui.NewQStandardItem()
@@ -1171,7 +1171,7 @@ func TestOwnership_QStandardItemModel_InsertRowItem(t *testing.T) {
 
 // QStandardItem * QStandardItemModel::takeItem(int row, int column = …) (test from the overlay)
 func TestOwnership_QStandardItemModel_TakeItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtgui.NewQStandardItemModel(nil)
 		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
 		x := m.TakeItem(0)
@@ -1185,7 +1185,7 @@ func TestOwnership_QStandardItemModel_TakeItem(t *testing.T) {
 
 // QList<QStandardItem *> QStandardItemModel::takeRow(int row) (test from the overlay)
 func TestOwnership_QStandardItemModel_TakeRow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtgui.NewQStandardItemModel(nil)
 		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
 		l := m.TakeRow(0)
@@ -1202,7 +1202,7 @@ func TestOwnership_QStandardItemModel_TakeRow(t *testing.T) {
 
 // QList<QStandardItem *> QStandardItemModel::takeColumn(int column) (test from the overlay)
 func TestOwnership_QStandardItemModel_TakeColumn(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtgui.NewQStandardItemModel(nil)
 		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
 		l := m.TakeColumn(0)
@@ -1219,7 +1219,7 @@ func TestOwnership_QStandardItemModel_TakeColumn(t *testing.T) {
 
 // QStandardItem * QStandardItemModel::takeHorizontalHeaderItem(int column) (test from the overlay)
 func TestOwnership_QStandardItemModel_TakeHorizontalHeaderItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtgui.NewQStandardItemModelWithRows(1, 1, nil)
 		m.SetHorizontalHeaderItem(0, qtgui.NewQStandardItemWithText("h"))
 		x := m.TakeHorizontalHeaderItem(0)
@@ -1233,7 +1233,7 @@ func TestOwnership_QStandardItemModel_TakeHorizontalHeaderItem(t *testing.T) {
 
 // QStandardItem * QStandardItemModel::takeVerticalHeaderItem(int row) (test from the overlay)
 func TestOwnership_QStandardItemModel_TakeVerticalHeaderItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtgui.NewQStandardItemModelWithRows(1, 1, nil)
 		m.SetVerticalHeaderItem(0, qtgui.NewQStandardItemWithText("h"))
 		x := m.TakeVerticalHeaderItem(0)
@@ -1247,7 +1247,7 @@ func TestOwnership_QStandardItemModel_TakeVerticalHeaderItem(t *testing.T) {
 
 // void QStandardItemModel::setItemPrototype(const QStandardItem * item)
 func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQStandardItemModelWithRows(1, 1, root)
 		a0 := qtgui.NewQStandardItem()
@@ -1267,7 +1267,7 @@ func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 
 // QTextCursor::QTextCursor(QTextDocument * document): keep rules
 func TestKeep_QTextCursor_QTextCursorWithTextDocument(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtgui.NewQTextDocument(nil)
 		x := qtgui.NewQTextCursorWithTextDocument(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -1279,7 +1279,7 @@ func TestKeep_QTextCursor_QTextCursorWithTextDocument(t *testing.T) {
 
 // QTextList * QTextCursor::insertList(const QTextListFormat & format) (test from the overlay)
 func TestOwnership_QTextCursor_InsertList(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		x := cur.InsertList(qtgui.NewQTextListFormat())
@@ -1298,7 +1298,7 @@ func TestOwnership_QTextCursor_InsertList(t *testing.T) {
 
 // QTextList * QTextCursor::insertList(QTextListFormat::Style style) (test from the overlay)
 func TestOwnership_QTextCursor_InsertListStyle(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		x := cur.InsertListStyle(qtgui.QTextListFormatListDisc)
@@ -1317,7 +1317,7 @@ func TestOwnership_QTextCursor_InsertListStyle(t *testing.T) {
 
 // QTextList * QTextCursor::createList(const QTextListFormat & format) (test from the overlay)
 func TestOwnership_QTextCursor_CreateList(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		x := cur.CreateList(qtgui.NewQTextListFormat())
@@ -1336,7 +1336,7 @@ func TestOwnership_QTextCursor_CreateList(t *testing.T) {
 
 // QTextList * QTextCursor::createList(QTextListFormat::Style style) (test from the overlay)
 func TestOwnership_QTextCursor_CreateListStyle(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		x := cur.CreateListStyle(qtgui.QTextListFormatListDisc)
@@ -1355,7 +1355,7 @@ func TestOwnership_QTextCursor_CreateListStyle(t *testing.T) {
 
 // QTextTable * QTextCursor::insertTable(int rows, int cols, const QTextTableFormat & format) (test from the overlay)
 func TestOwnership_QTextCursor_InsertTableWithFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		x := cur.InsertTableWithFormat(2, 2, qtgui.NewQTextTableFormat())
@@ -1374,7 +1374,7 @@ func TestOwnership_QTextCursor_InsertTableWithFormat(t *testing.T) {
 
 // QTextTable * QTextCursor::insertTable(int rows, int cols) (test from the overlay)
 func TestOwnership_QTextCursor_InsertTable(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		x := cur.InsertTable(2, 2)
@@ -1393,7 +1393,7 @@ func TestOwnership_QTextCursor_InsertTable(t *testing.T) {
 
 // QTextFrame * QTextCursor::insertFrame(const QTextFrameFormat & format) (test from the overlay)
 func TestOwnership_QTextCursor_InsertFrame(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		cur := qtgui.NewQTextCursorWithTextDocument(doc)
 		f := cur.InsertFrame(qtgui.NewQTextFrameFormat())
@@ -1412,7 +1412,7 @@ func TestOwnership_QTextCursor_InsertFrame(t *testing.T) {
 
 // QTextDocument::QTextDocument(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQTextDocument(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQTextDocument(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -1435,7 +1435,7 @@ func TestOwnership_NewQTextDocument(t *testing.T) {
 
 // QTextDocument::QTextDocument(const QString & text, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQTextDocumentWithText(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtgui.NewQTextDocumentWithText("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -1458,7 +1458,7 @@ func TestOwnership_NewQTextDocumentWithText(t *testing.T) {
 
 // QTextDocument * QTextDocument::clone(QObject * parent = …) const
 func TestOwnership_QTextDocument_Clone(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		recv := qtgui.NewQTextDocumentWithText("x", root)
 		res := recv.Clone()
@@ -1482,7 +1482,7 @@ func TestOwnership_QTextDocument_Clone(t *testing.T) {
 
 // QTextFrame::QTextFrame(QTextDocument * doc) (test from the overlay)
 func TestOwnership_QTextFrame_NewQTextFrame(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		doc := qtgui.NewQTextDocument(nil)
 		f := qtgui.NewQTextFrame(doc)
 		if got := f.Ownership(); got != qtcore.Parented {
@@ -1497,7 +1497,7 @@ func TestOwnership_QTextFrame_NewQTextFrame(t *testing.T) {
 
 // QWindow::QWindow(QWindow * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWindow(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtgui.NewQWindow(nil)
 		x := qtgui.NewQWindow(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -1520,7 +1520,7 @@ func TestOwnership_NewQWindow(t *testing.T) {
 
 // void QWindow::setParent(QWindow * parent)
 func TestOwnership_QWindow_SetParent(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtgui.NewQWindow(nil)
 		a0 := qtgui.NewQWindow(nil)
 		recv.SetParent(a0)

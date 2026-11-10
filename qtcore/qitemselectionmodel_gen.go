@@ -87,7 +87,7 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QItemSelectionModel", mode)
-	rt.KeepArg(h, "model", modelH)
+	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QItemSelectionModel](h, p)
 }
 
@@ -296,7 +296,7 @@ func (this *QItemSelectionModel) SetModel(model QAbstractItemModelLike) {
 	C.qute_QItemSelectionModel_setModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "model", modelH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "model", modelH, false)
 }
 
 // SetCurrentIndex wraps QItemSelectionModel::setCurrentIndex.

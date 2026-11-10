@@ -469,7 +469,7 @@ void qute_QDataStream_setByteOrder(void *self, int64_t a0);
 int qute_QDataStream_version(void *self);
 void qute_QDataStream_setVersion(void *self, int a0);
 long long qute_QDataStream_readRawData(void *self, const char *a0, ptrdiff_t a0_len);
-void * qute_QDataStream_writeBytes(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QDataStream_writeBytes(void *self, const char *a0, ptrdiff_t a0_len);
 long long qute_QDataStream_writeRawData(void *self, const char *a0, ptrdiff_t a0_len);
 long long qute_QDataStream_skipRawData(void *self, long long a0);
 void qute_QDataStream_startTransaction(void *self);

@@ -4,16 +4,16 @@ package qtwebenginewidgets_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtwebenginecore"
 	"github.com/nomad-software/qute/qtwebenginewidgets"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -25,7 +25,7 @@ func TestLayout(t *testing.T) {
 
 // QWebEngineView::QWebEngineView(QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEngineView(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtwebenginewidgets.NewQWebEngineView(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -48,7 +48,7 @@ func TestOwnership_NewQWebEngineView(t *testing.T) {
 
 // QWebEngineView::QWebEngineView(QWebEngineProfile * profile, QWidget * parent = …): keep rules
 func TestKeep_QWebEngineView_QWebEngineViewWithProfile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtwebenginecore.NewQWebEngineProfile(nil)
 		x := qtwebenginewidgets.NewQWebEngineViewWithProfile(a0, nil)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -60,7 +60,7 @@ func TestKeep_QWebEngineView_QWebEngineViewWithProfile(t *testing.T) {
 
 // QWebEngineView::QWebEngineView(QWebEngineProfile * profile, QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEngineViewWithProfile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtwebenginewidgets.NewQWebEngineViewWithProfile(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -83,7 +83,7 @@ func TestOwnership_NewQWebEngineViewWithProfile(t *testing.T) {
 
 // QWebEngineView::QWebEngineView(QWebEnginePage * page, QWidget * parent = …): keep rules
 func TestKeep_QWebEngineView_QWebEngineViewWithPage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtwebenginecore.NewQWebEnginePage(nil)
 		x := qtwebenginewidgets.NewQWebEngineViewWithPage(a0, nil)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -95,7 +95,7 @@ func TestKeep_QWebEngineView_QWebEngineViewWithPage(t *testing.T) {
 
 // QWebEngineView::QWebEngineView(QWebEnginePage * page, QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQWebEngineViewWithPage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtwebenginewidgets.NewQWebEngineViewWithPage(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -118,7 +118,7 @@ func TestOwnership_NewQWebEngineViewWithPage(t *testing.T) {
 
 // void QWebEngineView::setPage(QWebEnginePage * page): keep rules
 func TestKeep_QWebEngineView_SetPage(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtwebenginewidgets.NewQWebEngineView(nil)
 		a0 := qtwebenginecore.NewQWebEnginePage(nil)
 		recv.SetPage(a0)
@@ -131,7 +131,7 @@ func TestKeep_QWebEngineView_SetPage(t *testing.T) {
 
 // QMenu * QWebEngineView::createStandardContextMenu() (test from the overlay)
 func TestOwnership_QWebEngineView_CreateStandardContextMenu(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		view := qtwebenginewidgets.NewQWebEngineView(nil)
 		if m := view.CreateStandardContextMenu(); m != nil {
 			t.Errorf("menu without a context-menu request: %v, want nil", m)

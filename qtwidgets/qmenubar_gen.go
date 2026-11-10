@@ -91,7 +91,7 @@ func (this *QMenuBar) AddMenu(menu QMenuLike) *qtgui.QAction {
 	r := C.qute_QMenuBar_addMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, menuH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, menuH, false)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -179,7 +179,7 @@ func (this *QMenuBar) InsertMenu(before qtgui.QActionLike, menu QMenuLike) *qtgu
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(menu)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, menuH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, menuH, false)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 

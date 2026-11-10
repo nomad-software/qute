@@ -114,7 +114,7 @@ func (this *QTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 	C.qute_QTextEdit_setDocument(self, documentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(document)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH, false)
 }
 
 // Document wraps QTextEdit::document.
@@ -632,28 +632,32 @@ func (this *QTextEdit) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore.QVar
 //
 //	C++: QMenu * QTextEdit::createStandardContextMenu()
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#createStandardContextMenu
 func (this *QTextEdit) CreateStandardContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CreateStandardContextMenu")
 	r := C.qute_QTextEdit_createStandardContextMenu(self)
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
 // CreateStandardContextMenuAt wraps QTextEdit::createStandardContextMenu.
 //
 //	C++: QMenu * QTextEdit::createStandardContextMenu(const QPoint & position)
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#createStandardContextMenu
 func (this *QTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CreateStandardContextMenuAt")
 	r := C.qute_QTextEdit_createStandardContextMenu_1(self, cQPoint(position))
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
 // CursorForPosition wraps QTextEdit::cursorForPosition.

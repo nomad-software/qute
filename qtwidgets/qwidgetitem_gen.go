@@ -27,6 +27,11 @@ func init() {
 	rt.RegisterClass("QWidgetItem", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QWidgetItem_delete(p) })
 }
 
+// A Parented QWidgetItem is in a container that does not notice its destructor.
+func init() {
+	rt.RegisterParentedDelete("QWidgetItem", "take it out of its layout with the layout's TakeAt or RemoveItem first, which makes it Owned")
+}
+
 // Every QWidgetItem holds the QWidget it belongs to (depends-on: widget).
 func init() {
 	rt.RegisterDependency("QWidgetItem", func(p unsafe.Pointer) *rt.Handle {

@@ -11,9 +11,10 @@ import (
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
-// t.Fatal inside qute.Run used to kill the test binary with "panic called
+// t.Fatal inside qutetest.Run used to kill the test binary with "panic called
 // with nil argument". The child tests below run in a separate process: the
 // first calls t.Fatal inside Run, the next ones must still run.
 func TestFatalInsideRun(t *testing.T) {
@@ -51,7 +52,7 @@ func childOnly(t *testing.T) {
 
 func TestFatalChild1(t *testing.T) {
 	childOnly(t)
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		t.Fatal("fatal inside Run")
 		t.Log("after Fatal")
 	})
@@ -60,12 +61,12 @@ func TestFatalChild1(t *testing.T) {
 
 func TestFatalChild2(t *testing.T) {
 	childOnly(t)
-	qute.Run(t, func() { t.Skip("skipped inside Run") })
+	qutetest.Run(t, func() { t.Skip("skipped inside Run") })
 }
 
 func TestFatalChild3(t *testing.T) {
 	childOnly(t)
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		w.Delete()
 	})
@@ -73,13 +74,13 @@ func TestFatalChild3(t *testing.T) {
 
 func TestFatalChild4(t *testing.T) {
 	childOnly(t)
-	qute.Run(t, func() { t.Fatalf("second %s", "fatal") })
+	qutetest.Run(t, func() { t.Fatalf("second %s", "fatal") })
 }
 
 func TestFatalChild5(t *testing.T) {
 	childOnly(t)
-	qute.CollectGarbage()
-	qute.Run(t, func() {})
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {})
 }
 
 // A handler panic under PostSync is recovered where Qt called the handler,
@@ -88,11 +89,11 @@ func TestFatalChild5(t *testing.T) {
 func TestPostSyncHandlerPanic(t *testing.T) {
 	var after bool
 	var b *qtwidgets.QPushButton
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		b = qtwidgets.NewQPushButtonWithText("x", nil)
 		b.OnClicked(func(bool) { handlerThatPanics() })
 	})
-	defer qute.Run(t, func() { b.Delete() })
+	defer qutetest.Run(t, func() { b.Delete() })
 	p := func() (p any) {
 		defer func() { p = recover() }()
 		qute.PostSync(func() {
@@ -119,12 +120,12 @@ func handlerThatPanics() { panic("handler boom") }
 // methods and the hand-written helpers alike.
 func TestOffThreadCallPanics(t *testing.T) {
 	var w *qtwidgets.QWidget
-	qute.Run(t, func() { w = qtwidgets.NewQWidget(nil) })
-	defer qute.Run(t, func() { w.Delete() })
+	qutetest.Run(t, func() { w = qtwidgets.NewQWidget(nil) })
+	defer qutetest.Run(t, func() { w.Delete() })
 	for name, f := range map[string]func(){
-		"ObjectName": func() { _ = w.ObjectName() },
-		"qute.Click": func() { qute.Click(w) },
-		"qute.Tree":  func() { qute.Tree(w) },
+		"ObjectName":     func() { _ = w.ObjectName() },
+		"qutetest.Click": func() { qutetest.Click(w) },
+		"qute.Tree":      func() { qute.Tree(w) },
 	} {
 		func() {
 			defer func() {
@@ -140,7 +141,7 @@ func TestOffThreadCallPanics(t *testing.T) {
 
 // Arguments with C++ defaults can be passed through each method's Full form.
 func TestFullForms(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		// a tree model: below the top level needs the parent argument
 		m := qtgui.NewQStandardItemModel(nil)
 		defer m.Delete()

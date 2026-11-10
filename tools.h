@@ -22,11 +22,6 @@ typedef struct {
 qute_rgba qute_tools_grab(void *widget);
 void qute_tools_info(void *obj, qute_objinfo *out);
 void qute_tools_free_info(qute_objinfo *info);
-void qute_tools_click(void *widget, int button, int x, int y, bool at);
-void qute_tools_dblclick(void *widget, int button);
-void qute_tools_type(void *widget, const char *s, ptrdiff_t n);
-void qute_tools_key(void *widget, int key, int mods);
-void qute_tools_wait(int ms);
 void qute_tools_process(void);
 #ifdef __cplusplus
 }

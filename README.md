@@ -36,6 +36,11 @@ doesn't need Qt WebEngine installed (see [Qt modules](#qt-modules)). The first
 build compiles the C++ shims, which takes about two minutes; after that Go's
 build cache keeps rebuilds fast.
 
+The API is not frozen yet. qute is tagged v1, but nobody depends on it yet,
+and until that changes a minor version may rename or move things when that
+makes the API clearer (as moving the test helpers to `qutetest` did). Pin an
+exact version if you use it.
+
 ## Why qute
 
 - **Mistakes panic and say what to do.** Calling a method on a widget whose
@@ -111,9 +116,18 @@ Ownership in the newer modules follows Qt's documented rules, like the rest:
 
 Within a bound module, a few methods are left out because they need a module
 qute doesn't bind or a type it can't map yet: printing (`QWebEngineView.Print`), `QWebChannel`,
-cookies, certificates and authentication (QtNetwork types), HTTP header maps
+cookie objects, certificates and authentication (QtNetwork types), HTTP header maps
 keyed by byte arrays, `std::optional<qreal>` frame-rate limits, custom video
 buffers and web notifications. `COVERAGE.md` lists every one with its reason.
+`QWebEngineCookieStore.SetCookieFilter` is hand-written: Qt calls the filter
+on a network thread, so it gets plain Go values (`CookieFilterRequest`) and
+must not touch Qt objects.
+
+`QIODevice` can't be subclassed from Go, so there are no custom streams yet:
+no pull-mode audio from a Go source, no custom media source and no streaming
+replies from a URL scheme handler. Use a `QBuffer` or `QFile` instead. (Qt
+Multimedia and the web engine read devices from their own threads, so a Go
+device needs the same care as the cookie filter.)
 
 Not bound yet:
 
@@ -127,8 +141,8 @@ Not bound yet:
   Qt5Compat. Go's standard library covers much of what some of them do
   (`net/http`, `database/sql`, `encoding/xml`).
 - **Not planned**: QtConcurrent (templates; use goroutines and `qute.Post`),
-  QtTest (the root package wraps what tests need: `Click`, `Type`, `Key`,
-  `Wait`), and tool or internal libraries (Designer, Linguist, QmlCompiler,
+  QtTest (the `qutetest` package wraps what tests need: `Click`, `Type`,
+  `Key`, `Wait`), and tool or internal libraries (Designer, Linguist, QmlCompiler,
   ShaderTools, UiPlugin, platform plugins).
 
 Adding a module is mostly spec work (see [How the bindings are made](#how-the-bindings-are-made)).
@@ -151,13 +165,14 @@ to see the UI:
 - **The agent can read the window.** `qute.DumpTree(w)` returns the object
   tree as JSON: class, `objectName`, ownership state, pins, what holds its Go
   state (`anchored`), geometry and visibility. It is a precise, text-only view of what is on screen.
-- **The agent can use the window.** `qute.Click`, `ClickAt`, `DoubleClick`,
-  `Type` (including non-ASCII text), `Key` and `Wait` drive real Qt input
-  events through QTest, so behaviour tests exercise signals and handlers the
-  way a user would.
+- **The agent can use the window.** `qutetest.Click`, `ClickAt`,
+  `DoubleClick`, `Type` (including non-ASCII text), `Key` and `Wait` drive
+  real Qt input events through QTest, so behaviour tests exercise signals and
+  handlers the way a user would. They live in their own package, so a
+  program's binary doesn't link QtTest.
 - **Errors explain themselves.** Panics name the method, say what happened,
   give the fix and, where an ownership rule applies, cite its number.
-  `qute.Run` turns a panic into a test failure (with the Go stack for runtime
+  `qutetest.Run` turns a panic into a test failure (with the Go stack for runtime
   errors) instead of crashing the test binary, including a panic in a signal
   or event handler, which is caught where Qt called it. An agent can act on the
   message alone. A Qt call from the wrong goroutine panics too. With
@@ -184,14 +199,14 @@ qute vet ./...                         # ownership and threading checks
 A test that both checks behaviour and leaves something to look at:
 
 ```go
-func TestMain(m *testing.M) { qute.TestMain(m) } // offscreen QApplication
+func TestMain(m *testing.M) { qutetest.TestMain(m) } // offscreen QApplication
 
 func TestClick(t *testing.T) {
-	qute.Run(t, func() { // runs on the GUI thread
+	qutetest.Run(t, func() { // runs on the GUI thread
 		w := NewWindow()
 		defer w.Delete()
-		qute.Click(w.Button)
-		qute.Type(w.Name, "Ada")
+		qutetest.Click(w.Button)
+		qutetest.Type(w.Name, "Ada")
 		if got := w.Greeting.Text(); got != "Hello, Ada" {
 			t.Errorf("greeting = %q", got)
 		}
@@ -208,7 +223,7 @@ lines are a good start:
 - GUI code uses qute (Qt 6 for Go). Run `go test ./...`; tests are headless.
 - To check a layout, save a screenshot with qute.SaveScreenshot and open
   the PNG; use qute.DumpTree for exact geometry.
-- Drive the UI in tests with qute.Click/Type/Key inside qute.Run.
+- Drive the UI in tests with qutetest.Click/Type/Key inside qutetest.Run.
 - Run `qute vet ./...` before finishing. Inside handlers use DeleteLater,
   never Delete. From goroutines use qute.Post.
 ```
@@ -225,13 +240,19 @@ Each handle is in one state, changed only by annotated methods:
 | Dead     | already destroyed              | any handle after its object died  |
 
 - Using a Dead handle panics with the class, method and fix, and so does a
-  Qt call off the GUI thread. Build with `-tags qute_debug` to also get the
-  creation and destruction call sites, the method name in thread panics, and
-  a panic for `Delete()` inside a handler.
+  Qt call off the GUI thread, and `Delete()` of a QObject inside a handler
+  (use `DeleteLater()`). Build with `-tags qute_debug` to also get the
+  creation and destruction call sites and the method name in thread panics.
+- `Delete()` also panics where Qt would be left with a dangling pointer: on
+  an object something still uses without watching for its destruction (the
+  image a `QPainter` draws on until `End()`, a stream's device), and on a
+  layout item inside a layout (take it out with `TakeAt` first).
 - GC never frees a window you can see: a visible top-level widget or
   `QWindow` is pinned, and so is anything after `Keep()` until `Unkeep()`.
   GC also never deletes a QObject that has a parent, even if an ownership rule
-  was missed, and an object Qt gives a parent becomes Parented.
+  was missed (it prints a warning naming the class), and an object Qt gives a
+  parent becomes Parented, also when a method that hands an object to Go
+  finds Qt has already parented it.
 - Go state of an object (its signal handlers, its Go subclass value, the
   references it keeps) lives as long as the object. Inside a window it is
   held by the window's handle, so GC frees an unreachable, hidden window with
@@ -288,7 +309,9 @@ Each handle is in one state, changed only by annotated methods:
   `[]string`. `QPoint`, `QSize`, `QRect`, `QMargins` and `QColor` are plain
   Go structs. `QImage`, `QFont`, `QIcon`, `QVariant` and other value classes
   are Owned handles that GC frees. `qtcore.NewQVariantOf(v)` and
-  `(*QVariant).Value()` convert to and from Go values.
+  `(*QVariant).Value()` convert to and from Go values; `qtgui.NewQVariantOf`
+  and `qtgui.VariantValue` also take and return colours, icons, fonts, brushes,
+  pixmaps, images and the other GUI values, for item model roles.
 - Calls whose Qt result signals failure return `error`, e.g.
   `img.Load(path)`.
 - Out-parameters become results: `l, t, r, b := layout.GetContentsMargins()`.
@@ -327,8 +350,16 @@ All Qt calls happen on the GUI thread (the main goroutine inside
 `qute.Post(f)` or `qute.PostSync(f)`. A panic in a handler that `f` triggers
 is re-raised by `PostSync` with the handler's stack.
 
-In tests, `t.Fatal` and `t.Skip` work inside `qute.Run` and end the test as
-usual.
+In tests, `t.Fatal` and `t.Skip` work inside `qutetest.Run` and end the test
+as usual.
+
+The application object is never destroyed: once the event loop exits, qute
+drops the cleanups still queued instead of running them, because deleting
+objects after the application is gone crashes Qt. So no Qt destructor runs at
+exit. Anything that relies on teardown, such as a web engine profile flushing
+its storage or temporary files a Qt object would remove, should be deleted
+explicitly while the event loop still runs: `Delete()` it before calling
+`qute.Quit`, or `DeleteLater()` it from a handler.
 
 ## OpenGL
 
@@ -366,8 +397,8 @@ a triangle with a shader program, a vertex buffer and a VAO.
   and a screenshot test.
 - `qute vet ./...` reports Owned objects with connections, and parentless Go
   subclasses, that are never deleted or parented, `Delete()` inside handlers,
-  Qt calls (including `qute.Click` and the other input helpers) from
-  goroutines, and event arguments stored past their callback.
+  Qt calls (including `qute.Screenshot` and the `qutetest` input helpers)
+  from goroutines, and event arguments stored past their callback.
 
 Try the example: `go run ./examples/hello`, or render it headlessly with
 `go run ./examples/hello -screenshot out.png -tree`.
@@ -411,7 +442,8 @@ Qt headers --libclang--> spec/ir/*.json --+
 
 | Path                 | What                                                       |
 | -------------------- | ---------------------------------------------------------- |
-| `.` (package `qute`) | `Main`, `Post`, `Screenshot`, `DumpTree`, `Click`, testing |
+| `.` (package `qute`) | `Main`, `Post`, `Screenshot`, `DumpTree`, `ProcessEvents`    |
+| `qutetest`           | `TestMain`, `Run`, `Click`, `Type`, `Key`, `Wait`, GC checks |
 | `internal/rt`        | runtime: handles, registry, pins, cleanup queue, threads   |
 | `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`, `qtsvg`, `qtsvgwidgets`, `qtmultimedia`, `qtmultimediawidgets`, `qtwebenginecore`, `qtwebenginewidgets` | generated packages (plus `*_manual` files) |
 | `cmd/qutegen`        | the generator                                              |
@@ -423,9 +455,9 @@ Qt headers --libclang--> spec/ir/*.json --+
 
 ```sh
 go test ./...                          # everything, headless (offscreen)
-go test -tags qute_debug ./...         # with call sites and rule-5 checks
-LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
-GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
+go test -tags qute_debug ./...         # with call sites and method names in thread panics
+LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
 go generate ./qtcore                   # regenerate packages, tests, COVERAGE.md
 python3 tools/irgen/irgen.py           # re-parse headers (new Qt version only; needs python3-clang)
 ```
@@ -449,7 +481,7 @@ The runtime, the bindings for the eleven modules above and Go subclassing are
 done. No method is waiting for type support, every ownership rule has been
 reviewed, every overload has a proper name, every out-parameter is confirmed
 by a rule, and every rule but `QEvent::clone` and
-`QWebEngineUrlRequestJob::reply` has a generated test (about 590 in all;
+`QWebEngineUrlRequestJob::reply` has a generated test (about 570 in all;
 `reply` is covered by a hand-written test, since a job exists only while Qt
 loads a URL).
 
@@ -459,7 +491,9 @@ Not done yet:
   `COVERAGE.md`: C++ move overloads, `QBindable`, iterators, Qt's private
   and platform internals, `QStringView` and plain-number twins, printing page
   setup, accessibility, Vulkan, types from modules that aren't bound, and
-  interfaces that need C++ subclassing.
+  interfaces that need C++ subclassing. About 500 operators, conversion
+  operators and member templates are not in the IR at all; `COVERAGE.md`
+  lists them too.
 - `QThread` affinity, QtQuick/QML and the other modules listed under
   [Qt modules](#qt-modules).
 - Doc comments link to the Qt docs but don't include Qt's summary text.

@@ -2,6 +2,7 @@ package rt
 
 import (
 	"fmt"
+	"os"
 	"runtime/cgo"
 	"sync"
 	"sync/atomic"
@@ -75,13 +76,22 @@ func Drain() {
 	for n := queueHead.Swap(nil); n != nil; n = n.next {
 		pending = append(pending, n.arg)
 	}
+	pending = freeReady(pending)
+	deferred = pending
+	deferredN.Store(int32(len(pending)))
+}
+
+// freeReady frees every object in pending that no live keeper holds, again
+// and again while that frees keepers, and returns the ones still held. Every
+// path that frees queued objects goes through it, so a kept object is never
+// freed before its keeper (a QImage before the QPainter drawing on it).
+func freeReady(pending []cleanupArg) []cleanupArg {
 	for progress := true; progress && len(pending) > 0; {
 		progress = false
 		rest := pending[:0]
 		for _, a := range pending {
 			if appExited.Load() {
-				deferredN.Store(0)
-				return // deleting after the app is gone crashes inside Qt destructors
+				return nil // deleting after the app is gone crashes inside Qt destructors
 			}
 			if a.serial != 0 && isKept(a.serial) {
 				rest = append(rest, a)
@@ -92,8 +102,7 @@ func Drain() {
 		}
 		pending = rest
 	}
-	deferred = pending
-	deferredN.Store(int32(len(pending)))
+	return pending
 }
 
 // wakeDeferred schedules a drain when a free was waiting for a keeper.
@@ -108,13 +117,30 @@ func freeNode(a cleanupArg) {
 		regMu.Lock()
 		e := registry[a.key]
 		ok := e != nil && e.serial == a.serial
+		var revived *Handle
+		if e != nil && !ok && e.prevSerial == a.serial {
+			revived = e.w.Value()
+		}
 		regMu.Unlock()
+		if revived != nil && revived.State() == Borrowed {
+			// Qt handed the object out again after GC collected its Owned
+			// handle and before this free ran: Go still owns it, so the new
+			// handle takes over instead of the object being freed under it.
+			revived.TransferToGo()
+			return
+		}
+		if revived != nil {
+			return // a rule since then said who owns it
+		}
 		if !ok {
 			return // already destroyed, or the address was reused
 		}
 		if a.kind == KindQObject && HasParent(a.key) {
 			// Safety net: an ownership rule was missed and Qt now owns the
-			// object. Never delete something with a parent.
+			// object. Never delete something with a parent. The Go state its
+			// handle anchored was collected with it, so say so instead of
+			// letting its handlers stop running without a trace.
+			warnParentedFree(a.class)
 			return
 		}
 	}
@@ -129,6 +155,25 @@ func freeNode(a cleanupArg) {
 	}
 	if !a.quiet {
 		Drained.Add(1)
+	}
+}
+
+var (
+	warnedMu sync.Mutex
+	warned   = map[string]bool{}
+)
+
+// warnParentedFree reports, once per class, that GC collected the Owned
+// handle of an object Qt had given a parent (rule 7).
+func warnParentedFree(class string) {
+	warnedMu.Lock()
+	seen := warned[class]
+	warned[class] = true
+	warnedMu.Unlock()
+	if !seen {
+		fmt.Fprintf(os.Stderr, "qute: GC collected the Owned handle of a %s that Qt has given a parent; "+
+			"the object is left to its parent (rule 7), but the Go handlers of its tree no longer run. "+
+			"An ownership rule is missing: the method that gave it the parent needs transfer-to-cpp\n", class)
 	}
 }
 
@@ -238,10 +283,10 @@ const errNotRun = "qute.PostSync: the application exited before the function cou
 
 // ErrGoexit is the panic PostSync raises when f called runtime.Goexit.
 const ErrGoexit = "qute.PostSync: the function called runtime.Goexit (t.Fatal, t.FailNow or t.Skip) on the GUI thread; " +
-	"inside qute.Run that ends the test, elsewhere return from the function instead"
+	"inside qutetest.Run that ends the test, elsewhere return from the function instead"
 
 // AfterRescue, when set, runs on the GUI thread once the event loop that
-// replaced one ended by runtime.Goexit has quit (qute.TestMain exits there).
+// replaced one ended by runtime.Goexit has quit (qutetest.TestMain exits there).
 var AfterRescue func()
 
 // PostSync runs f on the GUI thread and waits for it. Called on the GUI
@@ -262,7 +307,7 @@ func PostSync(f func()) {
 }
 
 // PostSyncExit is PostSync that reports a runtime.Goexit in f (a t.Fatal
-// inside qute.Run) instead of panicking, so the caller can end its own
+// inside qutetest.Run) instead of panicking, so the caller can end its own
 // goroutine the same way.
 func PostSyncExit(f func()) (goexit bool) {
 	switch r := postSync(f); {
@@ -291,7 +336,7 @@ func postSync(f func()) syncResult {
 		return syncResult{}
 	}
 	if !Running() {
-		panic("qute.PostSync: the application is not running; call it from inside qute.Main or a qute.TestMain test")
+		panic("qute.PostSync: the application is not running; call it from inside qute.Main or a qutetest.TestMain test")
 	}
 	s := &syncCall{done: make(chan syncResult, 1)}
 	syncMu.Lock()

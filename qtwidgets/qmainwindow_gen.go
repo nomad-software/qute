@@ -839,14 +839,16 @@ func (this *QMainWindow) RestoreState(state []byte) bool {
 //
 //	C++: QMenu * QMainWindow::createPopupMenu()
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt makes the menu a child of the main window and leaves it to the caller to delete: Delete() it when done, or it lives until the window dies. An override's menu becomes Parented too.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#createPopupMenu
 func (this *QMainWindow) CreatePopupMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.CreatePopupMenu")
 	r := C.qute_QMainWindow_createPopupMenu(self)
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
 // SetAnimated wraps QMainWindow::setAnimated.

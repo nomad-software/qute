@@ -5,6 +5,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1017,6 +1018,7 @@
    "bases": [
     "QGraphicsItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1206,6 +1208,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -1841,6 +1844,7 @@
    "bases": [
     "QAbstractScrollArea"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -5151,6 +5155,7 @@
    "bases": [
     "QFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -6223,6 +6228,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -7209,6 +7215,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -8560,6 +8567,7 @@
     "QAccessibleObject",
     "QAccessibleActionInterface"
    ],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": true
@@ -9036,6 +9044,7 @@
     "QAccessibleWidget",
     "QAccessibleAttributesInterface"
    ],
+   "dropped": [],
    "dtor": {
     "access": "protected",
     "virtual": true
@@ -9186,6 +9195,12 @@
    "abstract": false,
    "bases": [
     "QGuiApplication"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "nativeInterface()"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -10365,6 +10380,7 @@
    "bases": [
     "QLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -11338,6 +11354,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -11867,6 +11884,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13205,6 +13223,7 @@
    "bases": [
     "QAbstractButton"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -13614,6 +13633,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -14247,6 +14267,7 @@
    "bases": [
     "QAbstractItemView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -15054,6 +15075,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -17355,6 +17377,7 @@
    "bases": [
     "QPushButton"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -17681,6 +17704,7 @@
    "bases": [
     "QStyle"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -18503,6 +18527,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -19488,6 +19513,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -20161,6 +20187,7 @@
    "bases": [
     "QDateTimeEdit"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -20305,6 +20332,7 @@
    "bases": [
     "QAbstractSpinBox"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -21925,6 +21953,7 @@
    "bases": [
     "QAbstractSlider"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -22380,6 +22409,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -23010,6 +23040,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -23871,6 +23902,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -24569,6 +24601,7 @@
    "bases": [
     "QAbstractSpinBox"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -25181,6 +25214,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -25401,6 +25435,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -27602,6 +27637,7 @@
    "bases": [
     "QAbstractFileIconProvider"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -27687,6 +27723,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -27931,6 +27968,7 @@
    "bases": [
     "QComboBox"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -28414,6 +28452,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -29000,6 +29039,7 @@
    "bases": [
     "QLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -30683,6 +30723,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -30715,6 +30756,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -31315,6 +31357,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -31590,6 +31633,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -31967,6 +32011,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -32179,6 +32224,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -32348,6 +32394,7 @@
    "bases": [
     "QGraphicsLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -32814,6 +32861,7 @@
    "bases": [
     "QGraphicsEffect"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -33115,6 +33163,7 @@
    "bases": [
     "QGraphicsEffect"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -33366,6 +33415,7 @@
    "bases": [
     "QGraphicsEffect"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -33838,6 +33888,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -34313,6 +34364,7 @@
    "bases": [
     "QAbstractGraphicsShapeItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -34841,6 +34893,7 @@
    "bases": [
     "QGraphicsLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -36111,6 +36164,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -41512,6 +41566,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -42253,6 +42308,7 @@
    "bases": [
     "QGraphicsItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -42469,6 +42525,7 @@
    "bases": [
     "QGraphicsLayoutItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -42845,6 +42902,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -43764,6 +43822,7 @@
    "bases": [
     "QGraphicsItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -44253,6 +44312,7 @@
    "bases": [
     "QGraphicsLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -44866,6 +44926,7 @@
     "QObject",
     "QGraphicsItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -45261,6 +45322,7 @@
    "bases": [
     "QGraphicsEffect"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -45512,6 +45574,7 @@
    "bases": [
     "QAbstractGraphicsShapeItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -45864,6 +45927,7 @@
    "bases": [
     "QGraphicsItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -46385,6 +46449,7 @@
    "bases": [
     "QAbstractGraphicsShapeItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -46776,6 +46841,7 @@
    "bases": [
     "QGraphicsWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -47808,6 +47874,7 @@
    "bases": [
     "QAbstractGraphicsShapeItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -48258,6 +48325,7 @@
    "bases": [
     "QGraphicsTransform"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -48562,6 +48630,7 @@
    "bases": [
     "QGraphicsTransform"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -48911,6 +48980,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -51970,6 +52040,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -52232,6 +52303,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -52683,6 +52755,7 @@
    "bases": [
     "QEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -52833,6 +52906,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -52957,6 +53031,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -53276,6 +53351,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -53919,6 +53995,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -54034,6 +54111,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -54149,6 +54227,7 @@
    "bases": [
     "QGraphicsSceneEvent"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -54585,6 +54664,7 @@
    "bases": [
     "QAbstractGraphicsShapeItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -54976,6 +55056,7 @@
    "bases": [
     "QGraphicsObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -56253,6 +56334,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -56412,6 +56494,7 @@
    "bases": [
     "QAbstractScrollArea"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -59434,6 +59517,7 @@
     "QGraphicsObject",
     "QGraphicsLayoutItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -61594,6 +61678,7 @@
    "bases": [
     "QLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -62818,6 +62903,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -63443,6 +63529,7 @@
    "bases": [
     "QBoxLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -63553,6 +63640,7 @@
    "bases": [
     "QAbstractItemView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -66391,6 +66479,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -68046,6 +68135,7 @@
    "bases": [
     "QAbstractItemDelegate"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -69039,6 +69129,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -69097,6 +69188,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -69254,6 +69346,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -69745,6 +69838,7 @@
    "bases": [
     "QFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -70361,6 +70455,7 @@
    "bases": [
     "QFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -71557,6 +71652,7 @@
     "QObject",
     "QLayoutItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -72923,6 +73019,7 @@
   {
    "abstract": true,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -73253,6 +73350,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -75395,6 +75493,7 @@
    "bases": [
     "QAbstractItemView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -77176,6 +77275,7 @@
    "bases": [
     "QListView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -78623,6 +78723,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator<(const QListWidgetItem &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QListWidgetItem &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -79476,6 +79586,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -80969,6 +81080,7 @@
    "bases": [
     "QAbstractScrollArea"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -82026,6 +82138,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -83032,6 +83145,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -84589,6 +84703,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -85594,6 +85709,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -87525,6 +87641,7 @@
    "bases": [
     "QGesture"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -87751,6 +87868,7 @@
    "bases": [
     "QGesture"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -88300,6 +88418,7 @@
    "bases": [
     "QAbstractTextDocumentLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -88654,6 +88773,7 @@
    "bases": [
     "QAbstractScrollArea"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -91170,6 +91290,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -91842,6 +91963,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -92628,6 +92750,7 @@
    "bases": [
     "QCommonStyle"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -93753,6 +93876,7 @@
    "bases": [
     "QAbstractButton"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -94333,6 +94457,7 @@
    "bases": [
     "QAbstractButton"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -94610,6 +94735,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -95474,6 +95600,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -95960,6 +96087,7 @@
    "bases": [
     "QAbstractScrollArea"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -96473,6 +96601,7 @@
    "bases": [
     "QAbstractSlider"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -96879,6 +97008,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "private",
     "virtual": true
@@ -97684,6 +97814,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QScrollerProperties &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator==(const QScrollerProperties &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QScrollerProperties &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -97964,6 +98108,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -98326,6 +98471,20 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator==(const QSizePolicy &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator!=(const QSizePolicy &)"
+    },
+    {
+     "kind": "conversion",
+     "name": "operator QVariant()"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -98878,6 +99037,7 @@
    "bases": [
     "QAbstractSlider"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -99290,6 +99450,7 @@
    "bases": [
     "QLayoutItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -99545,6 +99706,7 @@
    "bases": [
     "QAbstractSpinBox"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -100181,6 +100343,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -100568,6 +100731,7 @@
    "bases": [
     "QFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -101508,6 +101672,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -101893,6 +102058,7 @@
    "bases": [
     "QLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -102487,6 +102653,7 @@
    "bases": [
     "QFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -102905,6 +103072,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -103425,6 +103593,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -107196,6 +107365,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -107251,6 +107421,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -107358,6 +107529,7 @@
    "bases": [
     "QStyleHintReturn"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -107421,6 +107593,7 @@
    "bases": [
     "QStyleHintReturn"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -107482,6 +107655,12 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOption &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -107765,6 +107944,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionButton &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -107919,6 +108104,12 @@
    "bases": [
     "QStyleOptionComplex"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionComboBox &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -108057,6 +108248,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionComplex &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -108158,6 +108355,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionDockWidget &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -108283,6 +108486,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionFocusRect &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -108378,6 +108587,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionFrame &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -108521,6 +108736,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionGraphicsItem &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -108640,6 +108861,12 @@
    "abstract": false,
    "bases": [
     "QStyleOptionComplex"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionGroupBox &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -108771,6 +108998,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionHeader &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -108992,6 +109225,12 @@
    "bases": [
     "QStyleOptionHeader"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionHeaderV2 &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -109101,6 +109340,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionMenuItem &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -109317,6 +109562,12 @@
    "bases": [
     "QStyleOptionMenuItem"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionMenuItemV2 &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -109407,6 +109658,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionProgressBar &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -109553,6 +109810,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionRubberBand &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -109656,6 +109919,12 @@
    "bases": [
     "QStyleOptionComplex"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionSizeGrip &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -109751,6 +110020,12 @@
    "abstract": false,
    "bases": [
     "QStyleOptionComplex"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionSlider &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -109932,6 +110207,12 @@
    "bases": [
     "QStyleOptionComplex"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionSpinBox &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -110041,6 +110322,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionTab &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -110319,6 +110606,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionTabBarBase &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -110435,6 +110728,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionTabWidgetFrame &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -110581,6 +110880,12 @@
    "bases": [
     "QStyleOptionComplex"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionTitleBar &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -110697,6 +111002,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionToolBar &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -110874,6 +111185,12 @@
    "bases": [
     "QStyleOption"
    ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionToolBox &)"
+    }
+   ],
    "dtor": null,
    "enums": [
     {
@@ -111034,6 +111351,12 @@
    "abstract": false,
    "bases": [
     "QStyleOptionComplex"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionToolButton &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -111216,6 +111539,12 @@
    "abstract": false,
    "bases": [
     "QStyleOption"
+   ],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QStyleOptionViewItem &)"
+    }
    ],
    "dtor": null,
    "enums": [
@@ -111515,6 +111844,7 @@
    "bases": [
     "QPainter"
    ],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -111864,6 +112194,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -111982,6 +112313,7 @@
    "bases": [
     "QAbstractItemDelegate"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -112490,6 +112822,7 @@
    "bases": [
     "QGesture"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -112682,6 +113015,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -113252,6 +113586,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -115373,6 +115708,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -117018,6 +117354,7 @@
    "bases": [
     "QAbstractItemView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -118985,6 +119322,7 @@
    "bases": [
     "QTableView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -121133,6 +121471,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator<(const QTableWidgetItem &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QTableWidgetItem &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -121951,6 +122299,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -122110,6 +122459,7 @@
    "bases": [
     "QGesture"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -122282,6 +122632,7 @@
    "bases": [
     "QGesture"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -122415,6 +122766,7 @@
    "bases": [
     "QTextEdit"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -123269,6 +123621,7 @@
    "bases": [
     "QAbstractScrollArea"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -126124,6 +126477,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -126154,6 +126508,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -126231,6 +126586,7 @@
    "bases": [
     "QDateTimeEdit"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -126375,6 +126731,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -127316,6 +127673,7 @@
    "bases": [
     "QFrame"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -128118,6 +128476,7 @@
    "bases": [
     "QAbstractButton"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -128835,6 +129194,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -129039,6 +129399,7 @@
    "bases": [
     "QAbstractItemView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -131644,6 +132005,7 @@
    "bases": [
     "QTreeView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -133344,6 +133706,16 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator<(const QTreeWidgetItem &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator=(const QTreeWidgetItem &)"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -135019,6 +135391,40 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [
+    {
+     "kind": "operator",
+     "name": "operator=(const QTreeWidgetItemIterator &)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator++()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator++(int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator+=(int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator--()"
+    },
+    {
+     "kind": "operator",
+     "name": "operator--(int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator-=(int)"
+    },
+    {
+     "kind": "operator",
+     "name": "operator*()"
+    }
+   ],
    "dtor": {
     "access": "public",
     "virtual": false
@@ -135204,6 +135610,7 @@
    "bases": [
     "QListView"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -135513,6 +135920,7 @@
    "bases": [
     "QBoxLayout"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -135621,6 +136029,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [],
@@ -135770,6 +136179,24 @@
    "bases": [
     "QObject",
     "QPaintDevice"
+   ],
+   "dropped": [
+    {
+     "kind": "template",
+     "name": "addAction(const QString &, Args &&...)"
+    },
+    {
+     "kind": "template",
+     "name": "addAction(const QIcon &, const QString &, Args &&...)"
+    },
+    {
+     "kind": "template",
+     "name": "addAction(const QString &, const QKeySequence &, Args &&...)"
+    },
+    {
+     "kind": "template",
+     "name": "addAction(const QIcon &, const QString &, const QKeySequence &, Args &&...)"
+    }
    ],
    "dtor": {
     "access": "public",
@@ -142650,6 +143077,7 @@
    "bases": [
     "QAction"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -142955,6 +143383,7 @@
   {
    "abstract": false,
    "bases": [],
+   "dropped": [],
    "dtor": null,
    "enums": [],
    "fields": [
@@ -143099,6 +143528,7 @@
    "bases": [
     "QLayoutItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -143352,6 +143782,7 @@
    "bases": [
     "QWidgetItem"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -143467,6 +143898,7 @@
    "bases": [
     "QDialog"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -144937,6 +145369,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

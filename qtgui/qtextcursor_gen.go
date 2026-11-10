@@ -96,6 +96,8 @@ func NewQTextCursor() *QTextCursor {
 //
 // Ownership: document is borrowed, and the new object keeps it from being garbage collected while it lives.
 //
+// The cursor keeps the document from being garbage collected; deleting the document makes the cursor null, which Qt handles.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#QTextCursor
 func NewQTextCursorWithTextDocument(document QTextDocumentLike) *QTextCursor {
 	rt.CheckThread("NewQTextCursorWithTextDocument")
@@ -107,7 +109,7 @@ func NewQTextCursorWithTextDocument(document QTextDocumentLike) *QTextCursor {
 	p := C.qute_QTextCursor_new_1(documentPtr)
 	runtime.KeepAlive(document)
 	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
-	rt.KeepArg(h, "document", documentH)
+	rt.KeepArg(h, "document", documentH, false)
 	return rt.View[QTextCursor](h, p)
 }
 

@@ -165,7 +165,6 @@ QDataStream:
   QDataStream(QIODevice*): { args: { 0: keep:device }, reviewed: true }
   device: { return: borrowed }
   setDevice: { args: { 0: keep:device }, reviewed: true }
-  writeBytes: { return: borrowed }
   QDataStream(QByteArray*, QIODeviceBase::OpenMode): { skip: "on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer (NewQBuffer, then Data())" }
 
 QMetaType:

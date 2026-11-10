@@ -112,7 +112,7 @@ func (this *QPlainTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 	C.qute_QPlainTextEdit_setDocument(self, documentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(document)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH, false)
 }
 
 // Document wraps QPlainTextEdit::document.
@@ -517,28 +517,32 @@ func (this *QPlainTextEdit) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore
 //
 //	C++: QMenu * QPlainTextEdit::createStandardContextMenu()
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#createStandardContextMenu
 func (this *QPlainTextEdit) CreateStandardContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CreateStandardContextMenu")
 	r := C.qute_QPlainTextEdit_createStandardContextMenu(self)
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
 // CreateStandardContextMenuAt wraps QPlainTextEdit::createStandardContextMenu.
 //
 //	C++: QMenu * QPlainTextEdit::createStandardContextMenu(const QPoint & position)
 //
-// Ownership: the result is Owned: Go frees it.
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#createStandardContextMenu
 func (this *QPlainTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CreateStandardContextMenuAt")
 	r := C.qute_QPlainTextEdit_createStandardContextMenu_1(self, cQPoint(position))
 	runtime.KeepAlive(this)
-	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
 // CursorForPosition wraps QPlainTextEdit::cursorForPosition.

@@ -27,6 +27,11 @@ func init() {
 	rt.RegisterClass("QSpacerItem", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QSpacerItem_delete(p) })
 }
 
+// A Parented QSpacerItem is in a container that does not notice its destructor.
+func init() {
+	rt.RegisterParentedDelete("QSpacerItem", "take it out of its layout with the layout's TakeAt or RemoveItem first, which makes it Owned")
+}
+
 // QSpacerItemFromPtr wraps an existing C++ QSpacerItem. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QSpacerItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSpacerItem {

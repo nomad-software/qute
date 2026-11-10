@@ -100,7 +100,7 @@ func (this *QOpenGLContext) SetShareContext(shareContext QOpenGLContextLike) {
 	C.qute_QOpenGLContext_setShareContext(self, shareContextPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(shareContext)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setShareContext.shareContext", shareContextH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setShareContext.shareContext", shareContextH, false)
 }
 
 // SetScreen wraps QOpenGLContext::setScreen.

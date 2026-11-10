@@ -32,13 +32,13 @@ func callSite() string {
 // libraryPkgs are the runtime and the generated packages. Their external test
 // packages (qtcore_test) are user code for this purpose.
 var libraryPkgs = []string{"internal/rt", "qtcore", "qtgui", "qtwidgets", "qtopengl", "qtopenglwidgets",
-	"qtsvg", "qtsvgwidgets", "qtmultimedia", "qtmultimediawidgets", "qtwebenginecore", "qtwebenginewidgets"}
+	"qtsvg", "qtsvgwidgets", "qtmultimedia", "qtmultimediawidgets", "qtwebenginecore", "qtwebenginewidgets", "qutetest"}
 
 // libraryFrame reports frames inside the binding itself (not its tests or
 // examples).
 func libraryFrame(fn string) bool {
 	if strings.HasPrefix(fn, strings.TrimSuffix(modulePrefix, "/")+".") {
-		return true // the root package: qute.Main, qute.Run, ...
+		return true // the root package: qute.Main, qute.Screenshot, ...
 	}
 	for _, p := range libraryPkgs {
 		if strings.HasPrefix(fn, modulePrefix+p+".") {

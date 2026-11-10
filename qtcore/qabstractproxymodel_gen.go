@@ -66,7 +66,7 @@ func (this *QAbstractProxyModel) SetSourceModel(sourceModel QAbstractItemModelLi
 	C.qute_QAbstractProxyModel_setSourceModel(self, sourceModelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(sourceModel)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setSourceModel.sourceModel", sourceModelH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setSourceModel.sourceModel", sourceModelH, false)
 }
 
 // SourceModel wraps QAbstractProxyModel::sourceModel.

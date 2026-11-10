@@ -186,7 +186,7 @@ func (this *QWidget) SetStyle(style QStyleLike) {
 	C.qute_QWidget_setStyle(self, stylePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(style)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setStyle.style", styleH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setStyle.style", styleH, false)
 }
 
 // IsWindow wraps QWidget::isWindow.
@@ -2688,7 +2688,7 @@ func (this *QWidget) AddAction(action qtgui.QActionLike) {
 	C.qute_QWidget_addAction(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH, false)
 }
 
 // AddActions wraps QWidget::addActions.
@@ -2750,7 +2750,7 @@ func (this *QWidget) InsertAction(before qtgui.QActionLike, action qtgui.QAction
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(action)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH, false)
 }
 
 // RemoveAction wraps QWidget::removeAction.

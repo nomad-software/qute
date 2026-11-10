@@ -128,7 +128,7 @@ func (this *QMediaRecorder) SetOutputDevice(device qtcore.QIODeviceLike) {
 	C.qute_QMediaRecorder_setOutputDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, false)
 }
 
 // OutputDevice wraps QMediaRecorder::outputDevice.

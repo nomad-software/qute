@@ -6,11 +6,11 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/nomad-software/qute"
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
 // Object lifetimes qute used to get wrong: objects Qt frees without telling
@@ -38,7 +38,7 @@ func mustPanic(t *testing.T, what, want string, f func()) {
 // A layout item Qt made dies with its layout; the wrapper used to stay Alive
 // and segfault on the next call.
 func TestLayoutItemDiesWithLayout(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		lay := qtwidgets.NewQVBoxLayout(w)
 		lay.AddWidget(qtwidgets.NewQLabelWithText("hi", nil))
@@ -58,7 +58,7 @@ func TestLayoutItemDiesWithLayout(t *testing.T) {
 
 // Deleting a widget makes its layout free the item that held it.
 func TestLayoutItemDiesWithWidget(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		defer w.Delete()
 		lay := qtwidgets.NewQVBoxLayout(w)
@@ -75,7 +75,7 @@ func TestLayoutItemDiesWithWidget(t *testing.T) {
 
 // A spacer built in Go reports its death when its layout frees it.
 func TestSpacerItemReportsDeath(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		lay := qtwidgets.NewQVBoxLayout(w)
 		s := qtwidgets.NewQSpacerItemWithW(10, 10)
@@ -92,7 +92,7 @@ func TestSpacerItemReportsDeath(t *testing.T) {
 
 // A nested layout seen as a QLayoutItem is the layout's own handle.
 func TestNestedLayoutItemSharesHandle(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtwidgets.NewQWidget(nil)
 		outer := qtwidgets.NewQVBoxLayout(w)
 		inner := qtwidgets.NewQHBoxLayout(nil)
@@ -112,7 +112,7 @@ func TestNestedLayoutItemSharesHandle(t *testing.T) {
 // A QObject reached through its second base (a text item listed by the
 // scene) shares the QObject's handle, so it learns the object died.
 func TestSecondBaseSharesHandle(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		sc := qtwidgets.NewQGraphicsScene(nil)
 		defer sc.Delete()
 		txt := sc.AddText("hi")
@@ -139,7 +139,7 @@ func TestSecondBaseSharesHandle(t *testing.T) {
 // A widget seen as a QPaintDevice is the widget's handle; a device that is
 // not a QObject (an image) depends on the painter that handed it out.
 func TestPaintDeviceLifetime(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 8, Height: 8}, qtgui.QImageFormat_ARGB32)
 		p := qtgui.NewQPainterOn(img)
 		d := p.Device()
@@ -170,7 +170,7 @@ func TestPaintDeviceLifetime(t *testing.T) {
 // while it is on screen, and frees it once it is hidden.
 func TestVisibleQWindowPinned(t *testing.T) {
 	count := func() (n int) {
-		qute.Run(t, func() {
+		qutetest.Run(t, func() {
 			for _, w := range qtgui.QGuiApplicationTopLevelWindows() {
 				if w.ObjectName() == "pinned-window" {
 					n++
@@ -179,23 +179,23 @@ func TestVisibleQWindowPinned(t *testing.T) {
 		})
 		return n
 	}
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w := qtgui.NewQWindow(nil)
 		w.SetObjectName("pinned-window")
 		w.Show()
 	})
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	if n := count(); n != 1 {
 		t.Fatalf("visible QWindow count after GC = %d, want 1", n)
 	}
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		for _, w := range qtgui.QGuiApplicationTopLevelWindows() {
 			if w.ObjectName() == "pinned-window" {
 				w.Hide()
 			}
 		}
 	})
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	if n := count(); n != 0 {
 		t.Errorf("hidden, unreferenced QWindow count after GC = %d, want 0", n)
 	}
@@ -205,8 +205,8 @@ func TestVisibleQWindowPinned(t *testing.T) {
 // the closure was a GC root. It is now held by the dialog's own handle.
 func TestWindowWithHandlersCollected(t *testing.T) {
 	const n = 20
-	before := qute.Freed()
-	qute.Run(t, func() {
+	before := qutetest.Freed()
+	qutetest.Run(t, func() {
 		for i := 0; i < n; i++ {
 			d := qtwidgets.NewQDialog(nil)
 			b := qtwidgets.NewQPushButtonWithText("ok", d)
@@ -215,8 +215,8 @@ func TestWindowWithHandlersCollected(t *testing.T) {
 			d.Hide()
 		}
 	})
-	qute.CollectGarbage()
-	if got := qute.Freed() - before; got < n {
+	qutetest.CollectGarbage()
+	if got := qutetest.Freed() - before; got < n {
 		t.Errorf("freed %d of %d dialogs whose handlers refer to them", got, n)
 	}
 }
@@ -232,15 +232,15 @@ func (s *selfRef) PaintEvent(*qtgui.QPaintEvent) {}
 // the window too, so the window can still be collected.
 func TestWindowWithSubclassChildCollected(t *testing.T) {
 	const n = 20
-	before := qute.Freed()
-	qute.Run(t, func() {
+	before := qutetest.Freed()
+	qutetest.Run(t, func() {
 		for i := 0; i < n; i++ {
 			w := qtwidgets.NewQWidget(nil)
 			qtwidgets.NewQWidgetWith(&selfRef{win: w}, w)
 		}
 	})
-	qute.CollectGarbage()
-	if got := qute.Freed() - before; got < n {
+	qutetest.CollectGarbage()
+	if got := qutetest.Freed() - before; got < n {
 		t.Errorf("freed %d of %d windows with a subclass child that refers back", got, n)
 	}
 }
@@ -252,7 +252,7 @@ func TestHandlersFollowReparenting(t *testing.T) {
 	var clicks int
 	var b *qtwidgets.QPushButton
 	var keep *qtwidgets.QWidget
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		b = qtwidgets.NewQPushButtonWithText("x", nil)
 		b.OnClicked(func(bool) { clicks++ })
 		if got := rt.RefOf(unsafe.Pointer(b)).H.Anchored(); got != "global" {
@@ -266,8 +266,8 @@ func TestHandlersFollowReparenting(t *testing.T) {
 		keep = qtwidgets.NewQWidget(nil)
 		b.SetParent(keep) // first is now unreachable and empty of b
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		if !b.Alive() {
 			t.Error("button died with the window it left")
 			return
@@ -285,13 +285,13 @@ func TestHandlersOfLiveWindowSurviveGC(t *testing.T) {
 	var w *qtwidgets.QWidget
 	var b *qtwidgets.QPushButton
 	clicks := 0
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		w = qtwidgets.NewQWidget(nil)
 		b = qtwidgets.NewQPushButtonWithText("x", w)
 		b.OnClicked(func(bool) { clicks++ })
 	})
-	qute.CollectGarbage()
-	qute.Run(t, func() {
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
 		b.Click()
 		w.Delete()
 	})
@@ -312,8 +312,8 @@ func (m *winModel) Data(*qtcore.QModelIndex, int) *qtcore.QVariant { return nil 
 
 func TestWindowWithKeptModelCollected(t *testing.T) {
 	const n = 10
-	before := qute.Freed()
-	qute.Run(t, func() {
+	before := qutetest.Freed()
+	qutetest.Run(t, func() {
 		for i := 0; i < n; i++ {
 			w := qtwidgets.NewQWidget(nil)
 			v := qtwidgets.NewQListView(w)
@@ -322,8 +322,8 @@ func TestWindowWithKeptModelCollected(t *testing.T) {
 			v.SetModel(m)
 		}
 	})
-	qute.CollectGarbage()
-	if got := qute.Freed() - before; got < n {
+	qutetest.CollectGarbage()
+	if got := qutetest.Freed() - before; got < n {
 		t.Errorf("freed %d of %d windows whose view keeps a model that refers back", got, n)
 	}
 }
@@ -332,7 +332,7 @@ func TestWindowWithKeptModelCollected(t *testing.T) {
 // for Go, parentless for Qt. When the layout dies they are Go's again.
 func TestOrphanLayoutWidgetsFreed(t *testing.T) {
 	alive := func() (n int) {
-		qute.Run(t, func() {
+		qutetest.Run(t, func() {
 			for _, w := range qtwidgets.QApplicationAllWidgets() {
 				if w.ObjectName() == "orphan-label" {
 					n++
@@ -341,7 +341,7 @@ func TestOrphanLayoutWidgetsFreed(t *testing.T) {
 		})
 		return n
 	}
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		for i := 0; i < 20; i++ {
 			lay := qtwidgets.NewQVBoxLayout(nil)
 			l := qtwidgets.NewQLabelWithText("x", nil)
@@ -349,13 +349,13 @@ func TestOrphanLayoutWidgetsFreed(t *testing.T) {
 			lay.AddWidget(l)
 		}
 	})
-	qute.CollectGarbage()
-	qute.CollectGarbage() // the labels are freed once their layouts are
+	qutetest.CollectGarbage()
+	qutetest.CollectGarbage() // the labels are freed once their layouts are
 	if n := alive(); n != 0 {
 		t.Errorf("%d of 20 labels in dropped parentless layouts still alive", n)
 	}
 	// a layout installed later still owns its widgets through Qt
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		lay := qtwidgets.NewQVBoxLayout(nil)
 		l := qtwidgets.NewQLabelWithText("x", nil)
 		lay.AddWidget(l)
@@ -379,10 +379,10 @@ func TestOrphanLayoutWidgetsFreed(t *testing.T) {
 // bytes are counted, and enough of them runs the GC, even inside one handler.
 func TestImageMemoryTriggersGC(t *testing.T) {
 	runtime.GC()
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	live0, gcs0 := rt.MemoryLive(), rt.MemoryCollections.Load()
 	var peak int64
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		for i := 0; i < 60; i++ { // 60 x 16 MB
 			img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 2000, Height: 2000}, qtgui.QImageFormat_ARGB32)
 			img.Fill(0)
@@ -395,12 +395,12 @@ func TestImageMemoryTriggersGC(t *testing.T) {
 	if peak > 400<<20 {
 		t.Errorf("tracked image memory peaked at %d MB in one handler, want it bounded", peak>>20)
 	}
-	qute.CollectGarbage()
+	qutetest.CollectGarbage()
 	if live := rt.MemoryLive() - live0; live > 64<<20 {
 		t.Errorf("%d MB of images still counted after GC", live>>20)
 	}
 	// a size change is measured again, and Delete gives the bytes back
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		img := qtgui.NewQImage()
 		before := rt.MemoryLive()
 		img2 := qtgui.NewQImageWithSize(qtcore.QSize{Width: 100, Height: 100}, qtgui.QImageFormat_ARGB32)
@@ -429,7 +429,7 @@ func (w *popupWindow) CreatePopupMenu() *qtwidgets.QMenu {
 // createPopupMenu, mime data from mimeData) is Parented from then on, so GC
 // cannot free it while Qt still uses it.
 func TestOverrideResultTransferredToCpp(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		v := &popupWindow{}
 		w := qtwidgets.NewQMainWindowWith(v, nil)
 		defer w.Delete()

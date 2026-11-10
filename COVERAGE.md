@@ -16,10 +16,11 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 10103 |
+| Bound constructors, methods and functions | 10091 |
 | of which Full forms (every argument, defaults included) | 627 |
-| Plain-object results that depend on their receiver | 95 |
-| Skipped on purpose (with reasons below) | 651 |
+| Plain-object results that depend on their receiver | 88 |
+| Skipped on purpose (with reasons below) | 652 |
+| Operators, conversions and member templates not in the IR | 506 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
@@ -44,7 +45,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (651)
+## Skipped on purpose (652)
 
 
 ### QAbstractItemModel
@@ -313,8 +314,8 @@ These bind once the generator learns the type. Counts by type:
 
 ### QImage
 
-- `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use the const uchar * overload (NewQImageWithPtr*), which never writes into memory the image does not own; the buffer must outlive the image and must not be Go memory)
-- `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use the const uchar * overload (NewQImageWithPtr*), which never writes into memory the image does not own; the buffer must outlive the image and must not be Go memory)
+- `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own)
+- `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own)
 - `QImage::QImage(const char *const[] xpm)`: on purpose: a fixed-size C array; use the string or byte-array form
 - `QImage QImage::copy(int x, int y, int w, int h) const`: skipped by overlay (use Copy(rect))
 - `bool QImage::valid(const QPoint & pt) const`: skipped by overlay (use Valid(x, y))
@@ -1019,7 +1020,8 @@ These bind once the generator learns the type. Counts by type:
 
 ### QWebEngineCookieStore
 
-- `void QWebEngineCookieStore::setCookieFilter(std::function<bool (const FilterRequest &)> && filterCallback)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QWebEngineCookieStore::setCookieFilter(const std::function<bool (const FilterRequest &)> & filterCallback)`: skipped by overlay (on purpose: hand-written in cookiefilter_manual.go, because Qt calls the filter on a network thread)
+- `void QWebEngineCookieStore::setCookieFilter(std::function<bool (const FilterRequest &)> && filterCallback)`: skipped by overlay (on purpose: hand-written in cookiefilter_manual.go, because Qt calls the filter on a network thread)
 - `void QWebEngineCookieStore::setCookie(const QNetworkCookie & cookie, const QUrl & origin = …)`: on purpose: QtNetwork is not bound
 - `void QWebEngineCookieStore::deleteCookie(const QNetworkCookie & cookie, const QUrl & origin = …)`: on purpose: QtNetwork is not bound
 - `void QWebEngineCookieStore::cookieAdded(const QNetworkCookie & cookie)`: signal: on purpose: QtNetwork is not bound
@@ -1100,10 +1102,541 @@ These bind once the generator learns the type. Counts by type:
 - `void QWindowCapture::setMaximumFrameRate(std::optional<qreal> frameRate)`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 - `std::optional<qreal> QWindowCapture::maximumFrameRate() const`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 
+## Not in the IR: operators, conversions and member templates (506)
+
+tools/irgen leaves these out before the IR is written, so the generator never
+sees them and they are not counted as bound or skipped above. Go has no
+operator overloading: comparisons and arithmetic are done on the Go structs or
+through named methods. Conversions to QVariant are covered by
+`qtgui.NewQVariantOf`, and `QVariant::value<T>()` by `QVariant.Value` and
+`qtgui.VariantValue`. Counts: 371 operators, 26 conversion operators, 109 member templates.
+
+
+### QAction
+
+- templates: `menu()`, `setMenu(T)`
+
+### QApplication
+
+- templates: `nativeInterface()`
+
+### QAudioBuffer
+
+- operators: `operator=(const QAudioBuffer &)`, `operator=(QAudioBuffer &&)`
+- templates: `constData()`, `data()`, `data()`
+
+### QAudioDevice
+
+- operators: `operator=(QAudioDevice &&)`, `operator=(const QAudioDevice &)`, `operator==(const QAudioDevice &)`, `operator!=(const QAudioDevice &)`
+
+### QAudioFormat
+
+- templates: `channelConfig(Args...)`
+
+### QAudioSink
+
+- templates: `start(Callback &&)`
+
+### QAudioSource
+
+- templates: `start(Callback &&)`
+
+### QBasicTimer
+
+- operators: `operator=(QBasicTimer &&)`
+
+### QBitArray
+
+- operators: `operator=(const QBitArray &)`, `operator=(QBitArray &&)`, `operator[](qsizetype)`, `operator[](qsizetype)`, `operator&=(QBitArray &&)`, `operator|=(QBitArray &&)`, `operator^=(QBitArray &&)`, `operator&=(const QBitArray &)`, `operator|=(const QBitArray &)`, `operator^=(const QBitArray &)`
+
+### QBitmap
+
+- conversions: `operator QVariant()`
+
+### QBrush
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QBrush &)`, `operator=(QBrush &&)`, `operator=(Qt::BrushStyle)`, `operator=(QColor)`, `operator=(Qt::GlobalColor)`, `operator==(const QBrush &)`, `operator!=(const QBrush &)`
+
+### QCameraDevice
+
+- operators: `operator=(const QCameraDevice &)`, `operator==(const QCameraDevice &)`, `operator!=(const QCameraDevice &)`
+
+### QCameraFormat
+
+- operators: `operator=(const QCameraFormat &)`, `operator==(const QCameraFormat &)`, `operator!=(const QCameraFormat &)`
+
+### QCapturableWindow
+
+- operators: `operator=(const QCapturableWindow &)`, `operator=(QCapturableWindow &&)`
+
+### QChar
+
+- templates: `QChar(const Char)`, `QChar(const Char)`, `QChar(const Char)`, `QChar(const Char)`
+
+### QColorSpace
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QColorSpace &)`, `operator=(QColorSpace &&)`
+
+### QColorTransform
+
+- operators: `operator=(const QColorTransform &)`, `operator=(QColorTransform &&)`
+
+### QCoreApplication
+
+- templates: `requestPermission(const QPermission &, const typename QtPrivate::ContextTypeForFunctor<Functor>::ContextType *, Functor &&)`, `requestPermission(const QPermission &, Functor &&)`, `nativeInterface()`
+
+### QCursor
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QCursor &)`, `operator=(QCursor &&)`
+
+### QDataStream
+
+- conversions: `operator bool()`
+- operators: `operator>>(char &)`, `operator>>(qint8 &)`, `operator>>(quint8 &)`, `operator>>(qint16 &)`, `operator>>(quint16 &)`, `operator>>(qint32 &)`, `operator>>(quint32 &)`, `operator>>(qint64 &)`, `operator>>(quint64 &)`, `operator>>(std::nullptr_t &)`, `operator>>(bool &)`, `operator>>(float &)`, `operator>>(double &)`, `operator>>(char *&)`, `operator>>(char16_t &)`, `operator>>(char32_t &)`, `operator<<(char)`, `operator<<(qint8)`, `operator<<(quint8)`, `operator<<(qint16)`, `operator<<(quint16)`, `operator<<(qint32)`, `operator<<(quint32)`, `operator<<(qint64)`, `operator<<(quint64)`, `operator<<(std::nullptr_t)`, `operator<<(float)`, `operator<<(double)`, `operator<<(const char *)`, `operator<<(char16_t)`, `operator<<(char32_t)`
+- templates: `operator<<(T)`
+
+### QDateTime
+
+- operators: `operator=(QDateTime &&)`, `operator=(const QDateTime &)`, `operator+=(std::chrono::milliseconds)`, `operator-=(std::chrono::milliseconds)`
+
+### QDeadlineTimer
+
+- operators: `operator+=(qint64)`, `operator-=(qint64)`
+- templates: `QDeadlineTimer(std::chrono::time_point<Clock, Duration>, Qt::TimerType)`, `operator=(std::chrono::time_point<Clock, Duration>)`, `setDeadline(std::chrono::time_point<Clock, Duration>, Qt::TimerType)`, `deadline()`, `QDeadlineTimer(std::chrono::duration<Rep, Period>, Qt::TimerType)`, `operator=(std::chrono::duration<Rep, Period>)`, `setRemainingTime(std::chrono::duration<Rep, Period>, Qt::TimerType)`
+
+### QDir
+
+- operators: `operator=(const QDir &)`, `operator=(QDir &&)`, `operator[](qsizetype)`
+- templates: `QDir(const T &)`, `QDir(const T &, const QString &, SortFlags, Filters)`, `setPath(const T &)`, `addSearchPath(const QString &, const T &)`
+
+### QEasingCurve
+
+- operators: `operator=(const QEasingCurve &)`, `operator=(QEasingCurve &&)`
+
+### QEventPoint
+
+- operators: `operator=(const QEventPoint &)`, `operator=(QEventPoint &&)`, `operator==(const QEventPoint &)`, `operator!=(const QEventPoint &)`
+
+### QFile
+
+- templates: `QFile(const T &)`, `QFile(const T &, QObject *)`, `setFileName(const T &)`, `exists(const T &)`, `filesystemSymLinkTarget(const T &)`, `remove(const T &)`, `moveToTrash(const T &, QString *)`, `rename(const T &)`, `rename(const T &, const T &)`, `link(const T &)`, `link(const T &, const T &)`, `copy(const T &)`, `copy(const T &, const T &)`, `permissions(const T &)`, `setPermissions(const T &, Permissions)`
+
+### QFileInfo
+
+- operators: `operator=(const QFileInfo &)`, `operator=(QFileInfo &&)`
+- templates: `QFileInfo(const T &)`, `QFileInfo(const QDir &, const T &)`, `setFile(const T &)`
+
+### QFont
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QFont &)`, `operator==(const QFont &)`, `operator!=(const QFont &)`, `operator<(const QFont &)`, `operator=(QFont &&)`
+
+### QFontInfo
+
+- operators: `operator=(const QFontInfo &)`, `operator=(QFontInfo &&)`
+
+### QFontMetrics
+
+- operators: `operator=(const QFontMetrics &)`, `operator=(QFontMetrics &&)`, `operator==(const QFontMetrics &)`, `operator!=(const QFontMetrics &)`
+
+### QFontTag
+
+- templates: `Tag(const char (&)[N])`
+
+### QGlyphRun
+
+- operators: `operator=(QGlyphRun &&)`, `operator=(const QGlyphRun &)`, `operator==(const QGlyphRun &)`, `operator!=(const QGlyphRun &)`
+
+### QGradient
+
+- operators: `operator==(const QGradient &)`, `operator!=(const QGradient &)`
+
+### QGuiApplication
+
+- templates: `nativeInterface()`
+
+### QIcon
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QIcon &)`, `operator=(QIcon &&)`
+
+### QImage
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QImage &)`, `operator=(QImage &&)`, `operator==(const QImage &)`, `operator!=(const QImage &)`
+
+### QInputDevice
+
+- operators: `operator==(const QInputDevice &)`
+
+### QJsonArray
+
+- operators: `operator=(const QJsonArray &)`, `operator=(QJsonArray &&)`, `operator[](qsizetype)`, `operator[](qsizetype)`, `operator+(const QJsonValue &)`, `operator+=(const QJsonValue &)`, `operator<<(const QJsonValue &)`
+
+### QJsonDocument
+
+- operators: `operator=(const QJsonDocument &)`, `operator=(QJsonDocument &&)`, `operator[](const QString &)`, `operator[](QStringView)`, `operator[](QLatin1StringView)`, `operator[](qsizetype)`
+
+### QJsonObject
+
+- operators: `operator=(const QJsonObject &)`, `operator=(QJsonObject &&)`, `operator[](const QString &)`, `operator[](const QString &)`, `operator[](QStringView)`, `operator[](QLatin1StringView)`, `operator[](QStringView)`, `operator[](QLatin1StringView)`
+
+### QJsonValue
+
+- operators: `operator=(const QJsonValue &)`, `operator=(QJsonValue &&)`, `operator[](const QString &)`, `operator[](QStringView)`, `operator[](QLatin1StringView)`, `operator[](qsizetype)`
+
+### QKeySequence
+
+- conversions: `operator QVariant()`
+- operators: `operator[](uint)`, `operator=(const QKeySequence &)`, `operator=(QKeySequence &&)`, `operator==(const QKeySequence &)`, `operator!=(const QKeySequence &)`, `operator<(const QKeySequence &)`, `operator>(const QKeySequence &)`, `operator<=(const QKeySequence &)`, `operator>=(const QKeySequence &)`
+
+### QListWidgetItem
+
+- operators: `operator<(const QListWidgetItem &)`, `operator=(const QListWidgetItem &)`
+
+### QLocale
+
+- operators: `operator=(QLocale &&)`, `operator=(const QLocale &)`
+
+### QMatrix4x4
+
+- conversions: `operator QVariant()`
+- operators: `operator()(int, int)`, `operator()(int, int)`, `operator+=(const QMatrix4x4 &)`, `operator-=(const QMatrix4x4 &)`, `operator*=(const QMatrix4x4 &)`, `operator*=(float)`, `operator/=(float)`, `operator==(const QMatrix4x4 &)`, `operator!=(const QMatrix4x4 &)`
+- templates: `QMatrix4x4(const QGenericMatrix<N, M, float> &)`, `toGenericMatrix()`
+
+### QMediaFormat
+
+- operators: `operator=(const QMediaFormat &)`, `operator=(QMediaFormat &&)`, `operator==(const QMediaFormat &)`, `operator!=(const QMediaFormat &)`
+
+### QMediaMetaData
+
+- operators: `operator[](Key)`
+- templates: `asKeyValueRange()`
+
+### QMediaTimeRange
+
+- operators: `operator=(const QMediaTimeRange &)`, `operator=(QMediaTimeRange &&)`, `operator=(const Interval &)`, `operator+=(const QMediaTimeRange &)`, `operator+=(const Interval &)`, `operator-=(const QMediaTimeRange &)`, `operator-=(const Interval &)`
+
+### QMetaType
+
+- templates: `fromType()`, `registerConverter()`, `registerConverter(To (From::*)() const)`, `registerMutableView(To (From::*)())`, `registerConverter(To (From::*)(bool *) const)`, `registerConverter(UnaryFunction)`, `registerMutableView(UnaryFunction)`, `hasRegisteredConverterFunction()`, `hasRegisteredMutableViewFunction()`
+
+### QObject
+
+- templates: `setObjectName(const QString &)`, `findChild(QAnyStringView, Qt::FindChildOptions)`, `findChildren(QAnyStringView, Qt::FindChildOptions)`, `findChild(Qt::FindChildOptions)`, `findChildren(Qt::FindChildOptions)`, `findChildren(const QRegularExpression &, Qt::FindChildOptions)`, `connect(const typename QtPrivate::FunctionPointer<Func1>::Object *, Func1, const typename QtPrivate::ContextTypeForFunctor<Func2>::ContextType *, Func2 &&, Qt::ConnectionType)`, `connect(const typename QtPrivate::FunctionPointer<Func1>::Object *, Func1, Func2 &&)`, `disconnect(const typename QtPrivate::FunctionPointer<Func1>::Object *, Func1, const typename QtPrivate::FunctionPointer<Func2>::Object *, Func2)`, `disconnect(const typename QtPrivate::FunctionPointer<Func1>::Object *, Func1, const QObject *, void **)`
+
+### QOffscreenSurface
+
+- templates: `nativeInterface()`
+
+### QOpenGLBuffer
+
+- operators: `operator=(const QOpenGLBuffer &)`, `operator=(QOpenGLBuffer &&)`
+
+### QOpenGLContext
+
+- templates: `nativeInterface()`
+
+### QOpenGLDebugMessage
+
+- operators: `operator=(const QOpenGLDebugMessage &)`, `operator=(QOpenGLDebugMessage &&)`, `operator==(const QOpenGLDebugMessage &)`, `operator!=(const QOpenGLDebugMessage &)`
+
+### QOpenGLFramebufferObjectFormat
+
+- operators: `operator=(const QOpenGLFramebufferObjectFormat &)`, `operator==(const QOpenGLFramebufferObjectFormat &)`, `operator!=(const QOpenGLFramebufferObjectFormat &)`
+
+### QOpenGLPixelTransferOptions
+
+- operators: `operator=(QOpenGLPixelTransferOptions &&)`, `operator=(const QOpenGLPixelTransferOptions &)`
+
+### QPainterPath
+
+- operators: `operator=(const QPainterPath &)`, `operator=(QPainterPath &&)`, `operator==(const QPainterPath &)`, `operator!=(const QPainterPath &)`, `operator&(const QPainterPath &)`, `operator|(const QPainterPath &)`, `operator+(const QPainterPath &)`, `operator-(const QPainterPath &)`, `operator&=(const QPainterPath &)`, `operator|=(const QPainterPath &)`, `operator+=(const QPainterPath &)`, `operator-=(const QPainterPath &)`
+
+### QPainterPathElement
+
+- conversions: `operator QPointF()`
+- operators: `operator==(const Element &)`, `operator!=(const Element &)`
+
+### QPalette
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QPalette &)`, `operator=(QPalette &&)`, `operator==(const QPalette &)`, `operator!=(const QPalette &)`
+
+### QPartialOrdering
+
+- conversions: `operator partial_ordering()`
+
+### QPen
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QPen &)`, `operator=(QPen &&)`, `operator=(QColor)`, `operator=(Qt::PenStyle)`, `operator==(const QPen &)`, `operator!=(const QPen &)`
+
+### QPersistentModelIndex
+
+- conversions: `operator QModelIndex()`
+- operators: `operator=(const QPersistentModelIndex &)`, `operator=(QPersistentModelIndex &&)`, `operator=(const QModelIndex &)`
+
+### QPicture
+
+- operators: `operator=(const QPicture &)`, `operator=(QPicture &&)`
+
+### QPixmap
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QPixmap &)`, `operator=(QPixmap &&)`, `operator!()`
+
+### QPlaybackOptions
+
+- operators: `operator=(const QPlaybackOptions &)`, `operator=(QPlaybackOptions &&)`
+
+### QPointingDevice
+
+- operators: `operator==(const QPointingDevice &)`
+
+### QQuaternion
+
+- conversions: `operator QVariant()`
+- operators: `operator+=(const QQuaternion &)`, `operator-=(const QQuaternion &)`, `operator*=(float)`, `operator*=(const QQuaternion &)`, `operator/=(float)`
+- templates: `fromEulerAngles(const QVector3D &)`
+
+### QRegion
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QRegion &)`, `operator=(QRegion &&)`, `operator|(const QRegion &)`, `operator+(const QRegion &)`, `operator+(const QRect &)`, `operator&(const QRegion &)`, `operator&(const QRect &)`, `operator-(const QRegion &)`, `operator^(const QRegion &)`, `operator|=(const QRegion &)`, `operator+=(const QRegion &)`, `operator+=(const QRect &)`, `operator&=(const QRegion &)`, `operator&=(const QRect &)`, `operator-=(const QRegion &)`, `operator^=(const QRegion &)`, `operator==(const QRegion &)`, `operator!=(const QRegion &)`
+
+### QRegularExpression
+
+- operators: `operator=(const QRegularExpression &)`, `operator=(QRegularExpression &&)`
+
+### QRegularExpressionMatch
+
+- operators: `operator=(const QRegularExpressionMatch &)`, `operator=(QRegularExpressionMatch &&)`
+
+### QRegularExpressionMatchIterator
+
+- operators: `operator=(const QRegularExpressionMatchIterator &)`, `operator=(QRegularExpressionMatchIterator &&)`
+
+### QRgba64
+
+- conversions: `operator unsigned long long()`
+- operators: `operator=(quint64)`
+
+### QScreen
+
+- templates: `nativeInterface()`
+
+### QShortcut
+
+- templates: `QShortcut(const QKeySequence &, QObject *, Func1, Qt::ShortcutContext)`, `QShortcut(const QKeySequence &, QObject *, const Obj1 *, Func1, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)`, `QShortcut(const QKeySequence &, QObject *, const Obj1 *, Func1, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)`, `QShortcut(const QKeySequence &, QObject *, const Obj1 *, Func1, const Obj2 *, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj2 *>::Value>::type *)`, `QShortcut(QKeySequence::StandardKey, QObject *, Func1, Qt::ShortcutContext)`, `QShortcut(QKeySequence::StandardKey, QObject *, const Obj1 *, Func1, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)`, `QShortcut(QKeySequence::StandardKey, QObject *, const Obj1 *, Func1, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *)`, `QShortcut(QKeySequence::StandardKey, QObject *, const Obj1 *, Func1, const Obj2 *, Func2, Qt::ShortcutContext, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj1 *>::Value>::type *, typename std::enable_if<QtPrivate::IsPointerToTypeDerivedFromQObject<Obj2 *>::Value>::type *)`
+
+### QSizePolicy
+
+- conversions: `operator QVariant()`
+- operators: `operator==(const QSizePolicy &)`, `operator!=(const QSizePolicy &)`
+
+### QStandardItem
+
+- operators: `operator<(const QStandardItem &)`
+
+### QStaticText
+
+- operators: `operator=(QStaticText &&)`, `operator=(const QStaticText &)`, `operator==(const QStaticText &)`, `operator!=(const QStaticText &)`
+
+### QStyleOption
+
+- operators: `operator=(const QStyleOption &)`
+
+### QStyleOptionButton
+
+- operators: `operator=(const QStyleOptionButton &)`
+
+### QStyleOptionComplex
+
+- operators: `operator=(const QStyleOptionComplex &)`
+
+### QStyleOptionGraphicsItem
+
+- operators: `operator=(const QStyleOptionGraphicsItem &)`
+
+### QStyleOptionViewItem
+
+- operators: `operator=(const QStyleOptionViewItem &)`
+
+### QSurfaceFormat
+
+- operators: `operator=(const QSurfaceFormat &)`
+
+### QTableWidgetItem
+
+- operators: `operator<(const QTableWidgetItem &)`, `operator=(const QTableWidgetItem &)`
+
+### QTextBlock
+
+- operators: `operator=(const QTextBlock &)`, `operator==(const QTextBlock &)`, `operator!=(const QTextBlock &)`, `operator<(const QTextBlock &)`
+
+### QTextCursor
+
+- operators: `operator=(QTextCursor &&)`, `operator=(const QTextCursor &)`, `operator!=(const QTextCursor &)`, `operator<(const QTextCursor &)`, `operator<=(const QTextCursor &)`, `operator==(const QTextCursor &)`, `operator>=(const QTextCursor &)`, `operator>(const QTextCursor &)`
+
+### QTextDocumentFragment
+
+- operators: `operator=(const QTextDocumentFragment &)`
+
+### QTextFormat
+
+- conversions: `operator QVariant()`
+- operators: `operator=(const QTextFormat &)`, `operator==(const QTextFormat &)`, `operator!=(const QTextFormat &)`
+
+### QTextLength
+
+- conversions: `operator QVariant()`
+- operators: `operator==(const QTextLength &)`, `operator!=(const QTextLength &)`
+
+### QTextOption
+
+- operators: `operator=(const QTextOption &)`
+
+### QTextOptionTab
+
+- operators: `operator==(const Tab &)`, `operator!=(const Tab &)`
+
+### QTextTableCell
+
+- operators: `operator=(const QTextTableCell &)`, `operator==(const QTextTableCell &)`, `operator!=(const QTextTableCell &)`
+
+### QTimeZone
+
+- operators: `operator=(const QTimeZone &)`, `operator=(QTimeZone &&)`
+
+### QTimer
+
+- templates: `singleShot(Duration, const typename QtPrivate::ContextTypeForFunctor<Functor>::ContextType *, Functor &&)`, `singleShot(Duration, Qt::TimerType, const typename QtPrivate::ContextTypeForFunctor<Functor>::ContextType *, Functor &&)`, `singleShot(Duration, Functor &&)`, `singleShot(Duration, Qt::TimerType, Functor &&)`, `callOnTimeout(Args &&...)`
+
+### QTransform
+
+- conversions: `operator QVariant()`
+- operators: `operator=(QTransform &&)`, `operator=(const QTransform &)`, `operator==(const QTransform &)`, `operator!=(const QTransform &)`, `operator*=(const QTransform &)`, `operator*(const QTransform &)`, `operator*=(qreal)`, `operator/=(qreal)`, `operator+=(qreal)`, `operator-=(qreal)`
+
+### QTreeWidgetItem
+
+- operators: `operator<(const QTreeWidgetItem &)`, `operator=(const QTreeWidgetItem &)`
+
+### QUrl
+
+- operators: `operator=(const QUrl &)`, `operator=(const QString &)`, `operator=(QUrl &&)`
+
+### QUrlQuery
+
+- operators: `operator=(const QUrlQuery &)`, `operator=(QUrlQuery &&)`
+
+### QUuid
+
+- templates: `createUuidV3(const QUuid &, const QString &)`, `createUuidV5(const QUuid &, const QString &)`
+
+### QVariant
+
+- operators: `operator=(const QVariant &)`, `operator=(QVariant &&)`
+- templates: `QVariant(std::in_place_type_t<T>, Args &&...)`, `QVariant(std::in_place_type_t<T>, std::initializer_list<U>, Args &&...)`, `QVariant(T)`, `emplace(Args &&...)`, `emplace(std::initializer_list<U>, Args &&...)`, `setValue(T &&)`, `value()`, `view()`, `value()`, `fromValue(T &&)`, `fromValue(const T &)`, `fromStdVariant(const std::variant<Types...> &)`, `fromStdVariant(std::variant<Types...> &&)`, `canConvert()`, `canView()`
+
+### QVector2D
+
+- conversions: `operator QVariant()`
+- operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector2D)`, `operator-=(QVector2D)`, `operator*=(float)`, `operator*=(QVector2D)`, `operator/=(float)`, `operator/=(QVector2D)`
+
+### QVector3D
+
+- conversions: `operator QVariant()`
+- operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector3D)`, `operator-=(QVector3D)`, `operator*=(float)`, `operator*=(QVector3D)`, `operator/=(float)`, `operator/=(QVector3D)`
+
+### QVector4D
+
+- conversions: `operator QVariant()`
+- operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector4D)`, `operator-=(QVector4D)`, `operator*=(float)`, `operator*=(QVector4D)`, `operator/=(float)`, `operator/=(QVector4D)`
+
+### QVideoFrame
+
+- operators: `operator=(QVideoFrame &&)`, `operator=(const QVideoFrame &)`, `operator==(const QVideoFrame &)`, `operator!=(const QVideoFrame &)`
+
+### QVideoFrameFormat
+
+- operators: `operator=(QVideoFrameFormat &&)`, `operator=(const QVideoFrameFormat &)`, `operator==(const QVideoFrameFormat &)`, `operator!=(const QVideoFrameFormat &)`
+
+### QWebEngineCertificateError
+
+- operators: `operator=(const QWebEngineCertificateError &)`
+
+### QWebEngineClientCertificateSelection
+
+- operators: `operator=(const QWebEngineClientCertificateSelection &)`
+
+### QWebEngineDesktopMediaRequest
+
+- operators: `operator=(const QWebEngineDesktopMediaRequest &)`, `operator=(QWebEngineDesktopMediaRequest &&)`
+
+### QWebEngineExtensionInfo
+
+- operators: `operator=(const QWebEngineExtensionInfo &)`, `operator=(QWebEngineExtensionInfo &&)`
+
+### QWebEngineFileSystemAccessRequest
+
+- operators: `operator=(const QWebEngineFileSystemAccessRequest &)`, `operator=(QWebEngineFileSystemAccessRequest &&)`
+
+### QWebEngineFindTextResult
+
+- operators: `operator=(const QWebEngineFindTextResult &)`
+
+### QWebEngineFrame
+
+- operators: `operator=(const QWebEngineFrame &)`, `operator=(QWebEngineFrame &&)`
+
+### QWebEngineFullScreenRequest
+
+- operators: `operator=(const QWebEngineFullScreenRequest &)`, `operator=(QWebEngineFullScreenRequest &&)`
+
+### QWebEngineHistoryItem
+
+- operators: `operator=(const QWebEngineHistoryItem &)`, `operator=(QWebEngineHistoryItem &&)`
+
+### QWebEngineHttpRequest
+
+- operators: `operator=(QWebEngineHttpRequest &&)`, `operator=(const QWebEngineHttpRequest &)`, `operator==(const QWebEngineHttpRequest &)`, `operator!=(const QWebEngineHttpRequest &)`
+
+### QWebEngineLoadingInfo
+
+- operators: `operator=(const QWebEngineLoadingInfo &)`, `operator=(QWebEngineLoadingInfo &&)`
+
+### QWebEnginePermission
+
+- operators: `operator=(const QWebEnginePermission &)`, `operator=(QWebEnginePermission &&)`
+
+### QWebEngineRegisterProtocolHandlerRequest
+
+- operators: `operator==(const QWebEngineRegisterProtocolHandlerRequest &)`, `operator!=(const QWebEngineRegisterProtocolHandlerRequest &)`
+
+### QWebEngineScript
+
+- operators: `operator=(const QWebEngineScript &)`, `operator==(const QWebEngineScript &)`, `operator!=(const QWebEngineScript &)`
+
+### QWebEngineUrlScheme
+
+- operators: `operator=(const QWebEngineUrlScheme &)`, `operator=(QWebEngineUrlScheme &&)`, `operator==(const QWebEngineUrlScheme &)`, `operator!=(const QWebEngineUrlScheme &)`
+
+### QWidget
+
+- templates: `addAction(const QString &, Args &&...)`, `addAction(const QIcon &, const QString &, Args &&...)`, `addAction(const QString &, const QKeySequence &, Args &&...)`, `addAction(const QIcon &, const QString &, const QKeySequence &, Args &&...)`
+
+### QWindow
+
+- templates: `nativeInterface()`
+
 ## Ownership rules without a generated test (2)
 
 Add a `test:` snippet to the overlay entry to cover these.
 
 - `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
-- `void QWebEngineUrlRequestJob::reply(const QByteArray & contentType, QIODevice * device)`: skipped in overlay: a job exists only while Qt loads a URL of a scheme registered before the application starts; covered by webengine_test.go
+- `void QWebEngineUrlRequestJob::reply(const QByteArray & contentType, QIODevice * device)`: skipped in overlay: a job exists only while Qt loads a URL of a scheme registered before the application starts; covered by qtwebenginewidgets/lifetime_test.go
 

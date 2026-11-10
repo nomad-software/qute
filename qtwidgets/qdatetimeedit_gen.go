@@ -575,7 +575,7 @@ func (this *QDateTimeEdit) SetCalendarWidget(calendarWidget QCalendarWidgetLike)
 	C.qute_QDateTimeEdit_setCalendarWidget(self, calendarWidgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(calendarWidget)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCalendarWidget.calendarWidget", calendarWidgetH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCalendarWidget.calendarWidget", calendarWidgetH, false)
 }
 
 // SectionCount wraps QDateTimeEdit::sectionCount.

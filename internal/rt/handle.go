@@ -79,6 +79,10 @@ type Handle struct {
 	memBytes   int64                                 // external memory counted for this value (memory.go)
 
 	keeps map[string]any // kept references (guarded by keepMu)
+	// release drops what an unregistered keeper holds once its handle is
+	// collected, while Go does not free it (guarded by keepMu, see keep.go)
+	release    runtime.Cleanup
+	hasRelease bool
 
 	// anchoring (anchor.go), guarded by anchorMu
 	anchorN  int32                // reasons to hold the Go state: connections, Self, keeps
@@ -116,6 +120,9 @@ type regEntry struct {
 	w       weak.Pointer[Handle]
 	serial  uint64
 	watched bool
+	// prevSerial is the serial of a collected handle this entry's handle
+	// replaced; a queued free of that one hands the object to the new handle.
+	prevSerial uint64
 }
 
 var (
@@ -207,11 +214,15 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 		}
 	}
 	st := mode.state()
+	if st == Owned && kind == KindQObject && AppExists() && HasParent(key) {
+		st = Parented // a transfer-to-go result Qt gave a parent (see TransferToGo)
+	}
 	h := newHandle(key, class, kind, st, deleter)
 	needWatch := kind == KindQObject
 	if e != nil {
 		needWatch = needWatch && !e.watched
 		e.w = weak.Make(h)
+		e.prevSerial = e.serial
 		e.serial = h.serial
 		e.watched = e.watched || needWatch
 	} else {
@@ -314,9 +325,15 @@ func (h *Handle) TransferToCpp() {
 	}
 }
 
-// TransferToGo makes Go responsible for freeing the object again.
+// TransferToGo makes Go responsible for freeing the object again. A QObject
+// that has a Qt parent stays (or becomes) Parented instead: its parent frees
+// it, whatever the rule said (the safety net of rule 7, applied up front).
 func (h *Handle) TransferToGo() {
 	if h == nil {
+		return
+	}
+	if h.kind == KindQObject && h.State() != Dead && AppExists() && HasParent(h.ptr) {
+		h.TransferToCpp()
 		return
 	}
 	for {
@@ -350,6 +367,7 @@ func (h *Handle) SetParented(hasParent bool) {
 type cleanupArg struct {
 	key        unsafe.Pointer
 	serial     uint64
+	class      string
 	kind       Kind
 	deleter    func(unsafe.Pointer)
 	registered bool
@@ -359,14 +377,16 @@ type cleanupArg struct {
 
 func (h *Handle) attachCleanup() {
 	h.mu.Lock()
-	defer h.mu.Unlock()
 	if h.hasCleanup || h.deleter == nil {
+		h.mu.Unlock()
 		return
 	}
-	arg := cleanupArg{key: h.ptr, serial: h.serial, kind: h.kind, deleter: h.deleter,
+	arg := cleanupArg{key: h.ptr, serial: h.serial, class: h.class, kind: h.kind, deleter: h.deleter,
 		registered: h.registeredKind(), mem: h.memBytes}
 	h.cleanup = runtime.AddCleanup(h, enqueueCleanup, arg)
 	h.hasCleanup = true
+	h.mu.Unlock()
+	h.syncRelease() // keepMu comes before h.mu, so only once h.mu is free
 }
 
 // hasCleanupNow reports whether Go will free the object through its GC cleanup.
@@ -378,31 +398,36 @@ func (h *Handle) hasCleanupNow() bool {
 
 func (h *Handle) stopCleanup() {
 	h.mu.Lock()
-	defer h.mu.Unlock()
-	if h.hasCleanup {
+	stopped := h.hasCleanup
+	if stopped {
 		h.cleanup.Stop()
 		h.hasCleanup = false
 	}
+	h.mu.Unlock()
+	if stopped {
+		h.syncRelease()
+	}
 }
 
-// Pin holds the handle strongly so GC cannot free it or its Go state.
+// Pin holds the handle strongly so GC cannot free it or its Go state. The
+// count and the strong set change under one lock, so they always agree.
 func (h *Handle) Pin() {
+	strongMu.Lock()
 	if h.pins.Add(1) == 1 {
-		strongMu.Lock()
 		strong[h] = struct{}{}
-		strongMu.Unlock()
 	}
+	strongMu.Unlock()
 }
 
 // Unpin releases one Pin.
 func (h *Handle) Unpin() {
+	strongMu.Lock()
 	if n := h.pins.Add(-1); n == 0 {
-		strongMu.Lock()
 		delete(strong, h)
-		strongMu.Unlock()
 	} else if n < 0 {
 		h.pins.Store(0)
 	}
+	strongMu.Unlock()
 }
 
 // Pins returns the current pin count.
@@ -517,7 +542,10 @@ func (h *Handle) markDead(why string) {
 }
 
 // Delete frees the object now. It is idempotent and works on Owned and
-// Parented objects; on Borrowed objects it panics.
+// Parented objects; on Borrowed objects it panics, and so it does where Qt
+// would be left with a dangling pointer: an object a keeper guards (see
+// KeepArg), a Parented object of a class whose container does not notice
+// (RegisterParentedDelete), a QObject inside a handler (rule 5).
 func (h *Handle) Delete(method string) {
 	if h == nil {
 		return
@@ -529,9 +557,20 @@ func (h *Handle) Delete(method string) {
 		panic(fmt.Sprintf("%s: object is Borrowed, so Go does not own it and may not delete it (rule 4); "+
 			"let its owner delete it, or call DeleteLater() on a QObject", method))
 	}
-	if debugEnabled && InCallback() && h.kind == KindQObject {
+	if InCallback() && h.kind == KindQObject {
 		panic(fmt.Sprintf("%s: Delete() inside a signal or event handler (rule 5); Qt may still be using the object, "+
 			"call DeleteLater() instead", method))
+	}
+	if keeper := guardingKeeper(h.serial); keeper != "" {
+		panic(fmt.Sprintf("%s: a %s still uses this %s, and deleting it would leave Qt with a dangling pointer (rule 4); "+
+			"end or delete the %s first, or pass another object or nil to the method that gave it the %s",
+			method, keeper, h.class, keeper, h.class))
+	}
+	if h.State() == Parented {
+		if hint := parentedDeleteHint(h.class); hint != "" {
+			panic(fmt.Sprintf("%s: the %s belongs to a container that would keep a dangling pointer to it (rule 4); %s",
+				method, h.class, hint))
+		}
 	}
 	if h.deleter == nil {
 		panic(fmt.Sprintf("%s: %s has no public destructor", method, h.class))
@@ -581,7 +620,7 @@ func UseArg(wrapper unsafe.Pointer, method string) unsafe.Pointer {
 }
 
 // GUIOnly panics when called off the GUI thread, in every build. Generated
-// methods check in their C shim instead; hand-written helpers (qute.Click,
+// methods check in their C shim instead; hand-written helpers (qutetest.Click,
 // qute.Screenshot) call this.
 func GUIOnly(method string) {
 	if AppExists() {
@@ -640,6 +679,9 @@ type classInfo struct {
 	deleter  func(unsafe.Pointer)
 	toObject func(unsafe.Pointer) unsafe.Pointer
 	memory   func(unsafe.Pointer) int64
+	// parentedDelete, when set, is the fix Delete() names for a Parented
+	// object of this class (see RegisterParentedDelete)
+	parentedDelete string
 }
 
 var classes sync.Map // name -> classInfo
@@ -657,6 +699,21 @@ func RegisterClass(name string, kind Kind, deleter func(unsafe.Pointer)) {
 // of getting a second handle that never learns the object died.
 func RegisterBaseOfQObject(name string, toObject func(unsafe.Pointer) unsafe.Pointer) {
 	updateClass(name, func(ci *classInfo) { ci.toObject = toObject })
+}
+
+// RegisterParentedDelete says that a Parented object of class may not be
+// deleted from Go: its container keeps a pointer to it and does not notice
+// its destructor (a QSpacerItem in a layout). Delete() then panics with hint,
+// which names the way to take it out first.
+func RegisterParentedDelete(class, hint string) {
+	updateClass(class, func(ci *classInfo) { ci.parentedDelete = hint })
+}
+
+func parentedDeleteHint(class string) string {
+	if v, ok := classes.Load(class); ok {
+		return v.(classInfo).parentedDelete
+	}
+	return ""
 }
 
 // updateClass changes the record of a class RegisterClass already made. It

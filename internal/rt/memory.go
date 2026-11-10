@@ -18,8 +18,9 @@ import (
 // GC cleanups only queue the deletion; the GUI thread frees the objects when
 // it next runs the queue. A loop inside one handler would never get there, so
 // tracked allocations on the GUI thread also free the value objects already
-// queued, right away. Only value objects: they are copies Go alone refers to,
-// whereas a QObject in the queue might be the one whose handler is running.
+// queued, right away, and the plain objects that may keep them (see
+// drainValues); never QObjects, one of which might be the object whose
+// handler is running.
 
 const memMin = 32 << 20
 
@@ -108,17 +109,25 @@ func allocated(n int64) {
 // MemoryLive reports the bytes held by tracked value objects (for tests).
 func MemoryLive() int64 { return memLive.Load() }
 
-// drainValues frees the value objects in the cleanup queue now and leaves
-// everything else for the next Drain. It must run on the GUI thread.
+// drainValues frees the value and plain objects in the cleanup queue now and
+// leaves everything else for the next Drain. It must run on the GUI thread.
+// Plain objects are freed too because they are often what keeps a value (a
+// QPainter keeps the QImage it draws on); a kept object still waits for its
+// keeper, as in Drain. QObjects and notifying objects wait for Drain: one of
+// them might be the object whose handler is running.
 func drainValues() {
 	n := queueHead.Swap(nil)
+	var now []cleanupArg
 	var rest []*qnode
 	for ; n != nil; n = n.next {
-		if n.arg.kind != KindValue || appExited.Load() {
+		if (n.arg.kind != KindValue && n.arg.kind != KindPlain) || n.arg.registered || appExited.Load() {
 			rest = append(rest, n)
 			continue
 		}
-		freeNode(n.arg)
+		now = append(now, n.arg)
+	}
+	for _, a := range freeReady(now) {
+		rest = append(rest, &qnode{arg: a})
 	}
 	for i := len(rest) - 1; i >= 0; i-- {
 		push(rest[i])

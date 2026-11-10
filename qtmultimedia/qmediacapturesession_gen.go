@@ -104,7 +104,7 @@ func (this *QMediaCaptureSession) SetAudioInput(input QAudioInputLike) {
 	C.qute_QMediaCaptureSession_setAudioInput(self, inputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(input)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioInput", inputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioInput", inputH, false)
 }
 
 // AudioBufferInput wraps QMediaCaptureSession::audioBufferInput.
@@ -140,7 +140,7 @@ func (this *QMediaCaptureSession) SetAudioBufferInput(input QAudioBufferInputLik
 	C.qute_QMediaCaptureSession_setAudioBufferInput(self, inputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(input)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioBufferInput", inputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioBufferInput", inputH, false)
 }
 
 // Camera wraps QMediaCaptureSession::camera.
@@ -176,7 +176,7 @@ func (this *QMediaCaptureSession) SetCamera(camera QCameraLike) {
 	C.qute_QMediaCaptureSession_setCamera(self, cameraPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(camera)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "camera", cameraH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "camera", cameraH, false)
 }
 
 // NativeVideoSource wraps QMediaCaptureSession::nativeVideoSource.
@@ -212,7 +212,7 @@ func (this *QMediaCaptureSession) SetNativeVideoSource(videoSource qtcore.QObjec
 	C.qute_QMediaCaptureSession_setNativeVideoSource(self, videoSourcePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(videoSource)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "nativeVideoSource", videoSourceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "nativeVideoSource", videoSourceH, false)
 }
 
 // ImageCapture wraps QMediaCaptureSession::imageCapture.
@@ -248,7 +248,7 @@ func (this *QMediaCaptureSession) SetImageCapture(imageCapture QImageCaptureLike
 	C.qute_QMediaCaptureSession_setImageCapture(self, imageCapturePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(imageCapture)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "imageCapture", imageCaptureH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "imageCapture", imageCaptureH, false)
 }
 
 // ScreenCapture wraps QMediaCaptureSession::screenCapture.
@@ -284,7 +284,7 @@ func (this *QMediaCaptureSession) SetScreenCapture(screenCapture QScreenCaptureL
 	C.qute_QMediaCaptureSession_setScreenCapture(self, screenCapturePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(screenCapture)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "screenCapture", screenCaptureH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "screenCapture", screenCaptureH, false)
 }
 
 // WindowCapture wraps QMediaCaptureSession::windowCapture.
@@ -320,7 +320,7 @@ func (this *QMediaCaptureSession) SetWindowCapture(windowCapture QWindowCaptureL
 	C.qute_QMediaCaptureSession_setWindowCapture(self, windowCapturePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(windowCapture)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "windowCapture", windowCaptureH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "windowCapture", windowCaptureH, false)
 }
 
 // VideoFrameInput wraps QMediaCaptureSession::videoFrameInput.
@@ -356,7 +356,7 @@ func (this *QMediaCaptureSession) SetVideoFrameInput(input QVideoFrameInputLike)
 	C.qute_QMediaCaptureSession_setVideoFrameInput(self, inputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(input)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "videoFrameInput", inputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "videoFrameInput", inputH, false)
 }
 
 // Recorder wraps QMediaCaptureSession::recorder.
@@ -392,7 +392,7 @@ func (this *QMediaCaptureSession) SetRecorder(recorder QMediaRecorderLike) {
 	C.qute_QMediaCaptureSession_setRecorder(self, recorderPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(recorder)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "recorder", recorderH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "recorder", recorderH, false)
 }
 
 // SetVideoOutput wraps QMediaCaptureSession::setVideoOutput.
@@ -401,7 +401,7 @@ func (this *QMediaCaptureSession) SetRecorder(recorder QMediaRecorderLike) {
 //
 // Ownership: output is borrowed, and the receiver keeps it from being garbage collected while it lives.
 //
-// The session does not take ownership of the output.
+// The session does not take ownership of the output. It replaces the sink SetVideoSink set.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmediacapturesession.html#setVideoOutput
 func (this *QMediaCaptureSession) SetVideoOutput(output qtcore.QObjectLike) {
@@ -414,7 +414,7 @@ func (this *QMediaCaptureSession) SetVideoOutput(output qtcore.QObjectLike) {
 	C.qute_QMediaCaptureSession_setVideoOutput(self, outputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(output)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "videoOutput", outputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "video", outputH, false)
 }
 
 // VideoOutput wraps QMediaCaptureSession::videoOutput.
@@ -437,7 +437,7 @@ func (this *QMediaCaptureSession) VideoOutput() *qtcore.QObject {
 //
 // Ownership: sink is borrowed, and the receiver keeps it from being garbage collected while it lives.
 //
-// The session does not take ownership of the sink.
+// The session does not take ownership of the sink. It replaces the output SetVideoOutput set.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmediacapturesession.html#setVideoSink
 func (this *QMediaCaptureSession) SetVideoSink(sink QVideoSinkLike) {
@@ -450,7 +450,7 @@ func (this *QMediaCaptureSession) SetVideoSink(sink QVideoSinkLike) {
 	C.qute_QMediaCaptureSession_setVideoSink(self, sinkPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(sink)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "videoSink", sinkH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "video", sinkH, false)
 }
 
 // VideoSink wraps QMediaCaptureSession::videoSink.
@@ -486,7 +486,7 @@ func (this *QMediaCaptureSession) SetAudioOutput(output QAudioOutputLike) {
 	C.qute_QMediaCaptureSession_setAudioOutput(self, outputPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(output)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioOutput", outputH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "audioOutput", outputH, false)
 }
 
 // AudioOutput wraps QMediaCaptureSession::audioOutput.

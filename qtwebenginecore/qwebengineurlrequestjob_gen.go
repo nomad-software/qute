@@ -127,7 +127,7 @@ func (this *QWebEngineUrlRequestJob) Reply(contentType []byte, device qtcore.QIO
 	C.qute_QWebEngineUrlRequestJob_reply(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(contentType))), C.ptrdiff_t(len(contentType)), devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, false)
 }
 
 // Fail wraps QWebEngineUrlRequestJob::fail.

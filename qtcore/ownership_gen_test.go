@@ -4,14 +4,14 @@ package qtcore_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
+	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -23,7 +23,7 @@ func TestLayout(t *testing.T) {
 
 // QMimeData * QAbstractItemModel::mimeData(const QModelIndexList & indexes) const (test from the overlay)
 func TestOwnership_QAbstractItemModel_MimeData(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		m := qtcore.NewQStringListModelWithStrings([]string{"a"}, nil)
 		d := m.MimeData([]*qtcore.QModelIndex{m.Index(0, 0)})
 		if d == nil || d.Ownership() != qtcore.Owned {
@@ -36,7 +36,7 @@ func TestOwnership_QAbstractItemModel_MimeData(t *testing.T) {
 
 // void QAbstractProxyModel::setSourceModel(QAbstractItemModel * sourceModel): keep rules
 func TestKeep_QAbstractProxyModel_SetSourceModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtcore.NewQSortFilterProxyModel(nil)
 		a0 := qtgui.NewQStandardItemModel(nil)
 		recv.QAbstractProxyModel.SetSourceModel(a0)
@@ -49,7 +49,7 @@ func TestKeep_QAbstractProxyModel_SetSourceModel(t *testing.T) {
 
 // QBuffer::QBuffer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQBuffer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQBuffer(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -72,7 +72,7 @@ func TestOwnership_NewQBuffer(t *testing.T) {
 
 // QDataStream::QDataStream(QIODevice *): keep rules
 func TestKeep_QDataStream_QDataStreamWithIODevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtcore.NewQBuffer(nil)
 		x := qtcore.NewQDataStreamWithIODevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -84,7 +84,7 @@ func TestKeep_QDataStream_QDataStreamWithIODevice(t *testing.T) {
 
 // void QDataStream::setDevice(QIODevice *): keep rules
 func TestKeep_QDataStream_SetDevice(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtcore.NewQDataStream()
 		a0 := qtcore.NewQBuffer(nil)
 		recv.SetDevice(a0)
@@ -97,7 +97,7 @@ func TestKeep_QDataStream_SetDevice(t *testing.T) {
 
 // QEventLoop::QEventLoop(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQEventLoop(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQEventLoop(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -120,7 +120,7 @@ func TestOwnership_NewQEventLoop(t *testing.T) {
 
 // QFile::QFile(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQFile(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQFile(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -143,7 +143,7 @@ func TestOwnership_NewQFile(t *testing.T) {
 
 // QFile::QFile(const QString & name, QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQFileWithName(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQFileWithName("x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -166,7 +166,7 @@ func TestOwnership_NewQFileWithName(t *testing.T) {
 
 // QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent): keep rules
 func TestKeep_QItemSelectionModel_QItemSelectionModelWithAbstractItemModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		a0 := qtgui.NewQStandardItemModel(nil)
 		x := qtcore.NewQItemSelectionModelWithAbstractItemModel(a0, nil)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
@@ -178,7 +178,7 @@ func TestKeep_QItemSelectionModel_QItemSelectionModelWithAbstractItemModel(t *te
 
 // QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQItemSelectionModelWithAbstractItemModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQItemSelectionModelWithAbstractItemModel(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -201,7 +201,7 @@ func TestOwnership_NewQItemSelectionModelWithAbstractItemModel(t *testing.T) {
 
 // void QItemSelectionModel::setModel(QAbstractItemModel * model): keep rules
 func TestKeep_QItemSelectionModel_SetModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtcore.NewQItemSelectionModel()
 		a0 := qtgui.NewQStandardItemModel(nil)
 		recv.SetModel(a0)
@@ -214,7 +214,7 @@ func TestKeep_QItemSelectionModel_SetModel(t *testing.T) {
 
 // QObject::QObject(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQObject(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQObject(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -237,7 +237,7 @@ func TestOwnership_NewQObject(t *testing.T) {
 
 // void QObject::setParent(QObject * parent)
 func TestOwnership_QObject_SetParent(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtcore.NewQObject(nil)
 		a0 := qtcore.NewQObject(nil)
 		recv.SetParent(a0)
@@ -250,7 +250,7 @@ func TestOwnership_QObject_SetParent(t *testing.T) {
 
 // void QObject::installEventFilter(QObject * filterObj): keep rules
 func TestKeep_QObject_InstallEventFilter(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtcore.NewQObject(nil)
 		a0 := qtcore.NewQObject(nil)
 		recv.InstallEventFilter(a0)
@@ -263,7 +263,7 @@ func TestKeep_QObject_InstallEventFilter(t *testing.T) {
 
 // void QObject::removeEventFilter(QObject * obj): keep rules
 func TestKeep_QObject_RemoveEventFilter(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		recv := qtcore.NewQObject(nil)
 		a0 := qtcore.NewQObject(nil)
 		rt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(a0))
@@ -277,7 +277,7 @@ func TestKeep_QObject_RemoveEventFilter(t *testing.T) {
 
 // QSettings::QSettings(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSettings(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSettings(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -300,7 +300,7 @@ func TestOwnership_NewQSettings(t *testing.T) {
 
 // QSettings::QSettings(const QString & organization, const QString & application = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSettingsWithOrganization(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSettingsWithOrganization("x", "x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -323,7 +323,7 @@ func TestOwnership_NewQSettingsWithOrganization(t *testing.T) {
 
 // QSettings::QSettings(Scope scope, const QString & organization, const QString & application = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSettingsWithScope(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSettingsWithScope(qtcore.QSettingsScope(0), "x", "x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -346,7 +346,7 @@ func TestOwnership_NewQSettingsWithScope(t *testing.T) {
 
 // QSettings::QSettings(Format format, Scope scope, const QString & organization, const QString & application = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSettingsWithFormat(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSettingsWithFormat(qtcore.QSettingsFormat(0), qtcore.QSettingsScope(0), "x", "x", root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -369,7 +369,7 @@ func TestOwnership_NewQSettingsWithFormat(t *testing.T) {
 
 // QSettings::QSettings(const QString & fileName, Format format, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSettingsWithFileName(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSettingsWithFileName("x", qtcore.QSettingsFormat(0), root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -392,7 +392,7 @@ func TestOwnership_NewQSettingsWithFileName(t *testing.T) {
 
 // QSettings::QSettings(Scope scope, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSettingsWithScopeOnly(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSettingsWithScopeOnly(qtcore.QSettingsScope(0), root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -415,7 +415,7 @@ func TestOwnership_NewQSettingsWithScopeOnly(t *testing.T) {
 
 // QSortFilterProxyModel::QSortFilterProxyModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSortFilterProxyModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQSortFilterProxyModel(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -438,7 +438,7 @@ func TestOwnership_NewQSortFilterProxyModel(t *testing.T) {
 
 // QStringListModel::QStringListModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQStringListModel(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQStringListModel(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -461,7 +461,7 @@ func TestOwnership_NewQStringListModel(t *testing.T) {
 
 // QStringListModel::QStringListModel(const QStringList & strings, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQStringListModelWithStrings(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQStringListModelWithStrings(nil, root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -484,7 +484,7 @@ func TestOwnership_NewQStringListModelWithStrings(t *testing.T) {
 
 // QTimer::QTimer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQTimer(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQTimer(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -507,7 +507,7 @@ func TestOwnership_NewQTimer(t *testing.T) {
 
 // QTranslator::QTranslator(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQTranslator(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtcore.NewQObject(nil)
 		x := qtcore.NewQTranslator(root)
 		if got := x.Ownership(); got != qtcore.Parented {

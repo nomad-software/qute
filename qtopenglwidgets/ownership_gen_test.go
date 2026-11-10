@@ -4,13 +4,13 @@ package qtopenglwidgets_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtopenglwidgets"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -22,7 +22,7 @@ func TestLayout(t *testing.T) {
 
 // QOpenGLWidget::QOpenGLWidget(QWidget * parent = …, Qt::WindowFlags f = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOpenGLWidget(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtopenglwidgets.NewQOpenGLWidget(root)
 		if got := x.Ownership(); got != qtcore.Parented {

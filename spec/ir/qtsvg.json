@@ -5,6 +5,7 @@
    "bases": [
     "QPaintDevice"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -460,6 +461,7 @@
    "bases": [
     "QObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

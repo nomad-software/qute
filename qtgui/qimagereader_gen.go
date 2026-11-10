@@ -108,7 +108,7 @@ func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 	p := C.qute_QImageReader_new_1(devicePtr)
 	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
-	rt.KeepArg(h, "device", deviceH)
+	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QImageReader](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQImageReaderWithIODeviceFull(device qtcore.QIODeviceLike, format []byte)
 	p := C.qute_QImageReader_new_3(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
 	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
-	rt.KeepArg(h, "device", deviceH)
+	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QImageReader](h, p)
 }
 
@@ -249,7 +249,7 @@ func (this *QImageReader) SetDevice(device qtcore.QIODeviceLike) {
 	C.qute_QImageReader_setDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH, true)
 }
 
 // Device wraps QImageReader::device.

@@ -5,6 +5,7 @@
    "bases": [
     "QGraphicsObject"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true
@@ -371,6 +372,7 @@
    "bases": [
     "QWidget"
    ],
+   "dropped": [],
    "dtor": {
     "access": "public",
     "virtual": true

@@ -50,6 +50,10 @@ type classOpts struct {
 	// QImage's pixels), so GC runs as those add up: size is a C++ expression
 	// over $self, changed-by lists the methods after which it is measured again.
 	Memory *memSpec `yaml:"memory"`
+	// ParentedDelete makes Delete() of a Parented object of this class (and
+	// of its non-QObject subclasses) panic with this fix: its container keeps
+	// a pointer to it and does not notice its destructor (QLayoutItem).
+	ParentedDelete string `yaml:"parented-delete"`
 }
 
 type memSpec struct {
@@ -121,6 +125,15 @@ type overlay struct {
 	Reviewed bool              `yaml:"reviewed"`
 	Test     string            `yaml:"test"`
 	Doc      string            `yaml:"doc"`
+	// Unkeep names a keep slot the method empties: after it returns, Qt no
+	// longer uses what the slot held (QPainter::end and its device).
+	Unkeep string `yaml:"unkeep"`
+	// KeptDelete says whether Delete() of what the method's keep rules keep
+	// is allowed while the receiver lives: "allow" when Qt notices the kept
+	// object's destruction, "guard" when it would follow a dangling pointer.
+	// The default guards when the receiver or the kept argument is not a
+	// QObject, since only QObject-to-QObject references are usually watched.
+	KeptDelete string `yaml:"kept-delete"`
 }
 
 func (o *overlay) skipped() bool {
@@ -211,6 +224,12 @@ func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) 
 		}
 		if o.Doc != "" {
 			out.Doc = o.Doc
+		}
+		if o.Unkeep != "" {
+			out.Unkeep = o.Unkeep
+		}
+		if o.KeptDelete != "" {
+			out.KeptDelete = o.KeptDelete
 		}
 	}
 	if o, ok := entries[m.Name]; ok {

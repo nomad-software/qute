@@ -67,7 +67,7 @@ func (this *QAbstractItemView) SetModel(model qtcore.QAbstractItemModelLike) {
 	C.qute_QAbstractItemView_setModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setModel.model", modelH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setModel.model", modelH, false)
 }
 
 // Model wraps QAbstractItemView::model.
@@ -101,7 +101,7 @@ func (this *QAbstractItemView) SetSelectionModel(selectionModel qtcore.QItemSele
 	C.qute_QAbstractItemView_setSelectionModel(self, selectionModelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(selectionModel)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setSelectionModel.selectionModel", selectionModelH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setSelectionModel.selectionModel", selectionModelH, false)
 }
 
 // SelectionModel wraps QAbstractItemView::selectionModel.
@@ -137,7 +137,7 @@ func (this *QAbstractItemView) SetItemDelegate(delegate QAbstractItemDelegateLik
 	C.qute_QAbstractItemView_setItemDelegate(self, delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
-	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH, false)
 }
 
 // ItemDelegate wraps QAbstractItemView::itemDelegate.
@@ -797,7 +797,7 @@ func (this *QAbstractItemView) SetItemDelegateForRow(row int, delegate QAbstract
 	C.qute_QAbstractItemView_setItemDelegateForRow(self, C.int(row), delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, delegateH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, delegateH, false)
 }
 
 // ItemDelegateForRow wraps QAbstractItemView::itemDelegateForRow.
@@ -831,7 +831,7 @@ func (this *QAbstractItemView) SetItemDelegateForColumn(column int, delegate QAb
 	C.qute_QAbstractItemView_setItemDelegateForColumn(self, C.int(column), delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
-	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, delegateH)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, delegateH, false)
 }
 
 // ItemDelegateForColumn wraps QAbstractItemView::itemDelegateForColumn.

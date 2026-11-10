@@ -381,18 +381,30 @@ func (g *Gen) emitHeader(m *Module, b *buf) {
 
 // ---- C++ ----------------------------------------------------------------
 
-func (g *Gen) includes(m *Module) []string {
+// includes returns the headers the shim needs: one per class of the module,
+// and one per class of a dependency that body (the shim's code) names. The
+// dependencies' own headers bring in what those include, so a small module
+// does not parse every header of QtCore and QtGui.
+func (g *Gen) includes(m *Module, body string) []string {
 	set := map[string]bool{}
+	for _, c := range m.Classes {
+		set[strings.Split(c.Cpp, "::")[0]] = true
+	}
 	var walk func(x *Module)
 	walk = func(x *Module) {
 		for _, c := range x.Classes {
-			set[strings.Split(c.Cpp, "::")[0]] = true
+			n := strings.Split(c.Cpp, "::")[0]
+			if !set[n] && cppNames(body, n) {
+				set[n] = true
+			}
 		}
 		for _, d := range x.Deps {
 			walk(d)
 		}
 	}
-	walk(m)
+	for _, d := range m.Deps {
+		walk(d)
+	}
 	var out []string
 	for n := range set {
 		out = append(out, n)
@@ -401,12 +413,37 @@ func (g *Gen) includes(m *Module) []string {
 	return out
 }
 
+// cppNames reports whether code mentions the C++ identifier name.
+func cppNames(code, name string) bool {
+	ident := func(c byte) bool {
+		return c == '_' || c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z'
+	}
+	for i := 0; ; {
+		j := strings.Index(code[i:], name)
+		if j < 0 {
+			return false
+		}
+		j += i
+		end := j + len(name)
+		if (j == 0 || !ident(code[j-1])) && (end == len(code) || !ident(code[end])) {
+			return true
+		}
+		i = j + 1
+	}
+}
+
 func (g *Gen) emitCpp(m *Module, b *buf) {
+	var body buf
+	g.emitCppBody(m, &body)
 	b.p("%s", strings.TrimSuffix(genHeader, "\n"))
 	b.p("#include \"%s_gen.h\"\n", m.Pkg)
-	for _, inc := range g.includes(m) {
+	for _, inc := range g.includes(m, body.String()) {
 		b.p("#include <%s>", inc)
 	}
+	b.Write(body.Bytes())
+}
+
+func (g *Gen) emitCppBody(m *Module, b *buf) {
 	b.p("\n#include <QtCore/QCoreApplication>\n#include <QtCore/QThread>\n#include <cstring>\n#include <memory>\n")
 	b.p("extern \"C\" {")
 	b.p("void qute_%s_signal(uintptr_t id, void *args);", m.Pkg)
@@ -418,8 +455,10 @@ func (g *Gen) emitCpp(m *Module, b *buf) {
 	b.p("}\n")
 	b.p("static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_%s_call(id, args, ret); }\n", m.Pkg)
 	b.p("// Every Qt call must come from the GUI thread; the Go side panics otherwise.")
-	b.p("// It is checked here, where it costs a thread-local read, so release builds")
-	b.p("// catch it too (qute_debug builds also name the method).")
+	b.p("// It is checked here, in every build (qute_debug builds also name the")
+	b.p("// method): QCoreApplication::instance() and two thread lookups. Before the")
+	b.p("// application exists nothing is checked; calls made then (registrations in")
+	b.p("// init, such as QWebEngineUrlScheme) run on whatever thread makes them.")
 	b.p("static inline void qute_gui_only() {")
 	b.p("\tQCoreApplication *app = QCoreApplication::instance();")
 	b.p("\tif (app && QThread::currentThread() != app->thread()) {\n\t\tqute_%s_wrong_thread();\n\t}\n}\n", m.Pkg)
@@ -801,6 +840,21 @@ func (g *Gen) emitEnums(m *Module) []byte {
 
 // ---- classes ------------------------------------------------------------
 
+// parentedDelete returns the parented-delete fix of c or of the nearest base
+// that sets one. QObject classes never get one: a QObject's destructor tells
+// its parent, so deleting it is always safe (a QLayout in a layout).
+func parentedDelete(c *Class) string {
+	if c.QObject {
+		return ""
+	}
+	for b := c; b != nil; b = b.Base {
+		if b.Opts.ParentedDelete != "" {
+			return b.Opts.ParentedDelete
+		}
+	}
+	return ""
+}
+
 func kindConst(c *Class) string {
 	switch {
 	case c.Kind == KindValue:
@@ -854,6 +908,10 @@ func (g *Gen) emitClass(c *Class) []byte {
 	b.p("// As%s returns the receiver; it lets derived types be passed as %sLike.", cls, cls)
 	b.p("func (this *%s) As%s() *%s { return this }\n", cls, cls, cls)
 	b.p("func init() { rt.RegisterClass(%q, %s, %s) }\n", cls, kindConst(c), g.deleterExpr(c))
+	if hint := parentedDelete(c); hint != "" {
+		b.p("// A Parented %s is in a container that does not notice its destructor.", cls)
+		b.p("func init() {\n\trt.RegisterParentedDelete(%q, %q)\n}\n", cls, hint)
+	}
 	if c.QBase {
 		b.p("// A %s may be a QObject (through a QObject subclass); its wrapper then", cls)
 		b.p("// shares that object's handle and learns of its death.")
@@ -1152,11 +1210,11 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 				}
 				switch p.Keep {
 				case "each":
-					gc.post = append(gc.post, fmt.Sprintf("rt.KeepEach(%s, %s)", owner, hh))
+					gc.post = append(gc.post, fmt.Sprintf("rt.KeepEach(%s, %s, %t)", owner, hh, p.KeepGuard))
 				case "release":
 					gc.post = append(gc.post, fmt.Sprintf("rt.Release(%s, %s)", owner, hh))
 				default:
-					gc.post = append(gc.post, fmt.Sprintf("rt.KeepArg(%s, %q, %s)", owner, p.Keep, hh))
+					gc.post = append(gc.post, fmt.Sprintf("rt.KeepArg(%s, %q, %s, %t)", owner, p.Keep, hh, p.KeepGuard))
 				}
 			}
 			continue
@@ -1172,6 +1230,13 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 				owner = "rt.RefOf(unsafe.Pointer(this)).H"
 			}
 			gc.post = append(gc.post, fmt.Sprintf("for _, x := range %s {\n\t\tif x != nil {\n\t\t\trt.TransferTo(%s, rt.RefOf(unsafe.Pointer(x)).H)\n\t\t}\n\t}", p.GoName, owner))
+		}
+	}
+	if ov := mm.Overlay; ov != nil && ov.Unkeep != "" {
+		if mm.IR.Kind == "ctor" || mm.IR.Static || virtualParams {
+			g.report.warn("%s: unkeep needs a receiver", mm.Sig)
+		} else {
+			gc.post = append(gc.post, fmt.Sprintf("rt.Unkeep(rt.RefOf(unsafe.Pointer(this)).H, %q)", ov.Unkeep))
 		}
 	}
 	return gc

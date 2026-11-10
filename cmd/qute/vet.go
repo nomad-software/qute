@@ -139,10 +139,22 @@ func (v *vetter) file(f *ast.File) {
 	v.checkLeaks(f)
 }
 
-// rootAnyThread are the qute functions any goroutine may call; the rest of
-// the root package (Click, Type, Screenshot, DumpTree...) drives Qt.
+// rootAnyThread are the qute and qutetest functions any goroutine may call;
+// the rest of those packages (Screenshot, DumpTree, Click, Type...) drives Qt.
 var rootAnyThread = map[string]bool{"Post": true, "PostSync": true, "Run": true, "Quit": true,
 	"IsGUIThread": true, "CollectGarbage": true, "Freed": true, "Main": true, "TestMain": true}
+
+// helperPkg returns the name of the qute package with hand-written helpers
+// (qute or qutetest) that fn belongs to, or "".
+func helperPkg(fn *types.Func) string {
+	switch fn.Pkg().Path() {
+	case strings.TrimSuffix(modPath, "/"):
+		return "qute"
+	case modPath + "qutetest":
+		return "qutetest"
+	}
+	return ""
+}
 
 // gui-goroutine: Qt calls in `go` statements, except inside qute.Post/PostSync.
 func (v *vetter) checkGoroutines(f *ast.File) {
@@ -160,7 +172,7 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 			if !ok {
 				return true
 			}
-			if fn, _ := isQtFunc(v.pkg.TypesInfo, call); fn != nil && fn.Pkg().Path() == strings.TrimSuffix(modPath, "/") {
+			if fn, _ := isQtFunc(v.pkg.TypesInfo, call); fn != nil && helperPkg(fn) != "" {
 				if sig, ok := fn.Type().(*types.Signature); ok && sig.Recv() != nil {
 					return true
 				}
@@ -168,7 +180,7 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 				case fn.Name() == "Post" || fn.Name() == "PostSync" || fn.Name() == "Run":
 					return false // runs on the GUI thread
 				case !rootAnyThread[fn.Name()] && fn.Exported():
-					v.report(call, "gui-goroutine", "qute.%s called from a goroutine; it drives Qt on the GUI thread, wrap it in qute.Post(func() { ... })", fn.Name())
+					v.report(call, "gui-goroutine", "%s.%s called from a goroutine; it drives Qt on the GUI thread, wrap it in qute.Post(func() { ... })", helperPkg(fn), fn.Name())
 					return false
 				}
 			}

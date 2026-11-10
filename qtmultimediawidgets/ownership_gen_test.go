@@ -4,13 +4,13 @@ package qtmultimediawidgets_test
 import (
 	"testing"
 
-	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtmultimediawidgets"
 	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
 )
 
-func TestMain(m *testing.M) { qute.TestMain(m) }
+func TestMain(m *testing.M) { qutetest.TestMain(m) }
 
 // TestLayout checks the runtime's assumption that every primary base sits at
 // offset 0, so one pointer serves the whole embedding chain.
@@ -22,7 +22,7 @@ func TestLayout(t *testing.T) {
 
 // QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQGraphicsVideoItem(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQGraphicsItemGroup(nil)
 		x := qtmultimediawidgets.NewQGraphicsVideoItem(root)
 		if got := x.Ownership(); got != qtcore.Parented {
@@ -45,7 +45,7 @@ func TestOwnership_NewQGraphicsVideoItem(t *testing.T) {
 
 // QVideoWidget::QVideoWidget(QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQVideoWidget(t *testing.T) {
-	qute.Run(t, func() {
+	qutetest.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)
 		x := qtmultimediawidgets.NewQVideoWidget(root)
 		if got := x.Ownership(); got != qtcore.Parented {
