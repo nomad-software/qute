@@ -1,6 +1,9 @@
 name: ci
 
-on: [push, pull_request]
+# Runs only when a release tag (v1.2.3) is pushed.
+on:
+  push:
+    tags: ["v*"]
 
 env:
   QT_QPA_PLATFORM: offscreen

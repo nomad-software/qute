@@ -452,9 +452,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   subclass children or kept models, orphaned layout widgets, image memory,
   override results. `run_test.go` covers `t.Fatal` inside `Run` (in a child
   process), `PostSync` handler panics, the off-thread check and Full forms.
-- `.github/workflows/ci.yml`: Linux runs test (with `gofmt -l` and
-  `qute vet ./examples/...`), `qute_debug`, `-asan`,
-  `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check, each in an
+- `.github/workflows/ci.yml` runs only when a release tag (`v*`) is
+  pushed, so run the commands under "Working in the repo" before tagging. It
+  runs test (with `gofmt -l` and `qute vet ./examples/...`), `qute_debug`,
+  `-asan`, `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check, each in an
   `archlinux` container because the bindings need Qt 6.12+ and Ubuntu's Qt
   is older (Go itself comes from `setup-go`, pinned to the 1.26 minimum). CI
   is Linux only; macOS and Windows jobs come back when that work starts.
