@@ -369,6 +369,13 @@ func (h *Handle) attachCleanup() {
 	h.hasCleanup = true
 }
 
+// hasCleanupNow reports whether Go will free the object through its GC cleanup.
+func (h *Handle) hasCleanupNow() bool {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.hasCleanup
+}
+
 func (h *Handle) stopCleanup() {
 	h.mu.Lock()
 	defer h.mu.Unlock()
@@ -466,6 +473,10 @@ func Destroyed(key unsafe.Pointer, why string) {
 	if e != nil {
 		if h := e.w.Value(); h != nil {
 			h.markDead(why)
+		} else {
+			// the handle was collected first (its tree is being freed):
+			// what it kept may go now
+			releaseHolds(e.serial)
 		}
 	}
 	orphaned(key)

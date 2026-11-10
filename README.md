@@ -30,9 +30,11 @@ func main() {
 
 Requirements: Go 1.26+, Qt 6.12 or newer (development packages), `pkg-config`
 and a C++17 compiler. The bindings are generated from Qt 6.12 and use its
-API, so older Qt (Ubuntu 24.04 ships 6.4) fails to compile them. Linux is the supported platform for now. The first build compiles
-the C++ shims, which takes about two minutes; after that Go's build cache keeps
-rebuilds fast.
+API, so older Qt (Ubuntu 24.04 ships 6.4) fails to compile them. Linux is the supported platform for now. Each Go package
+needs only its own Qt module, so an app that doesn't import `qtwebenginewidgets`
+doesn't need Qt WebEngine installed (see [Qt modules](#qt-modules)). The first
+build compiles the C++ shims, which takes about two minutes; after that Go's
+build cache keeps rebuilds fast.
 
 ## Why qute
 
@@ -58,10 +60,10 @@ rebuilds fast.
   `QPoint`/`QRect`/`QColor` are plain structs, out-parameters are extra
   results, failures return `error`, and `std::function` parameters take Go
   funcs.
-- **Broad coverage.** About 300 classes across QtCore, QtGui, QtWidgets,
-  QtOpenGL and QtOpenGLWidgets: over 8,800 constructors, methods and
-  functions, plus subclassing (virtual overrides, item models,
-  `QOpenGLWidget`). A method with C++ default arguments has a short form and
+- **Broad coverage.** About 390 classes across eleven Qt modules (widgets,
+  OpenGL, SVG, multimedia and the web engine): over 10,000 constructors,
+  methods and functions, plus subclassing (virtual overrides, item models,
+  `QOpenGLWidget`, web URL scheme handlers). A method with C++ default arguments has a short form and
   a `Full` form that takes them all (`Index(row, col)` and
   `IndexFull(row, col, parent)`).
 - **Checked, not hoped.** Every ownership rule lives in a small YAML file
@@ -71,6 +73,65 @@ rebuilds fast.
 - **Plain `go build`.** One cgo package per Qt module, found through
   `pkg-config`. You don't need a separate build system or code generation
   step in your app.
+
+## Qt modules
+
+Each bound Qt module is one Go package with its own cgo shim, found through
+`pkg-config`. An app links only the modules it imports.
+
+| Package               | Qt module           | What it covers                                                         | Arch package |
+| --------------------- | ------------------- | ---------------------------------------------------------------------- | ------------ |
+| `qtcore`              | QtCore              | objects, signals, timers, item models, files, settings, variants, URLs  | `qt6-base`   |
+| `qtgui`               | QtGui               | painting, images, fonts, colours, text documents, windows, GL functions | `qt6-base`   |
+| `qtwidgets`           | QtWidgets           | widgets, layouts, dialogs, item views, graphics view                   | `qt6-base`   |
+| `qtopengl`            | QtOpenGL            | shader programs, buffers, VAOs, textures, framebuffer objects          | `qt6-base`   |
+| `qtopenglwidgets`     | QtOpenGLWidgets     | `QOpenGLWidget`                                                        | `qt6-base`   |
+| `qtsvg`               | QtSvg               | `QSvgRenderer` (draw SVG with a painter), `QSvgGenerator` (write SVG)  | `qt6-svg`    |
+| `qtsvgwidgets`        | QtSvgWidgets        | `QSvgWidget`, `QGraphicsSvgItem`                                       | `qt6-svg`    |
+| `qtmultimedia`        | QtMultimedia        | playback, capture (camera, screen, window), recording, audio in/out, video frames | `qt6-multimedia` (plus a backend, e.g. `qt6-multimedia-ffmpeg`) |
+| `qtmultimediawidgets` | QtMultimediaWidgets | `QVideoWidget`, `QGraphicsVideoItem`                                   | `qt6-multimedia` |
+| `qtwebenginecore`     | QtWebEngineCore     | pages, profiles, settings, history, scripts, downloads, URL scheme handlers, request interceptors | `qt6-webengine` |
+| `qtwebenginewidgets`  | QtWebEngineWidgets  | `QWebEngineView`                                                       | `qt6-webengine` |
+
+Ownership in the newer modules follows Qt's documented rules, like the rest:
+
+- Qt Multimedia never owns what you plug into a player or capture session
+  (audio outputs, video sinks and widgets, cameras, recorders, devices). Each
+  setter keeps its argument alive while the receiver uses it, so
+  `player.SetAudioOutput(qtmultimedia.NewQAudioOutput(nil))` is safe.
+  `QVideoFrame` and `QAudioBuffer` count their pixel and sample bytes towards
+  running the GC, like images do.
+- Qt WebEngine requires a profile to outlive its pages. A page keeps its
+  profile, and when the GC collects both together the page is freed first. A
+  view keeps a page passed to `SetPage` without owning it. Chromium runs in
+  helper processes; as root or in containers, set
+  `QTWEBENGINE_DISABLE_SANDBOX=1`.
+- `QGraphicsSvgItem.SetSharedRenderer` and `QSvgGenerator.SetOutputDevice`
+  keep their arguments alive.
+
+Within a bound module, a few methods are left out because they need a module
+qute doesn't bind or a type it can't map yet: printing (`QWebEngineView.Print`), `QWebChannel`,
+cookies, certificates and authentication (QtNetwork types), HTTP header maps
+keyed by byte arrays, `std::optional<qreal>` frame-rate limits, custom video
+buffers and web notifications. `COVERAGE.md` lists every one with its reason.
+
+Not bound yet:
+
+- **QtQuick and QML**: Qml, Quick, QuickControls2, QuickWidgets, Quick3D,
+  WebEngineQuick, MultimediaQuick and the Labs modules. A QML-first API is
+  planned for later.
+- **Other modules**: QtNetwork, QtPrintSupport, QtSql, QtXml, QtDBus,
+  QtWebChannel, QtWebSockets, QtPdf and QtPdfWidgets, QtGraphs (charts),
+  QtTextToSpeech, QtPositioning, QtLocation, QtBluetooth, QtNfc,
+  QtSerialPort, QtSpatialAudio, QtHelp, QtUiTools, QtVirtualKeyboard and
+  Qt5Compat. Go's standard library covers much of what some of them do
+  (`net/http`, `database/sql`, `encoding/xml`).
+- **Not planned**: QtConcurrent (templates; use goroutines and `qute.Post`),
+  QtTest (the root package wraps what tests need: `Click`, `Type`, `Key`,
+  `Wait`), and tool or internal libraries (Designer, Linguist, QmlCompiler,
+  ShaderTools, UiPlugin, platform plugins).
+
+Adding a module is mostly spec work (see [How the bindings are made](#how-the-bindings-are-made)).
 
 ## Building apps with a coding agent
 
@@ -315,7 +376,7 @@ Try the example: `go run ./examples/hello`, or render it headlessly with
 
 ```
 Qt headers --libclang--> spec/ir/*.json --+
-                         spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/ qtopengl/ qtopenglwidgets/
+                         spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/ qtopengl/ ... (one per module)
                          spec/overlays/ --+                    COVERAGE.md, ownership tests
 ```
 
@@ -352,7 +413,7 @@ Qt headers --libclang--> spec/ir/*.json --+
 | -------------------- | ---------------------------------------------------------- |
 | `.` (package `qute`) | `Main`, `Post`, `Screenshot`, `DumpTree`, `Click`, testing |
 | `internal/rt`        | runtime: handles, registry, pins, cleanup queue, threads   |
-| `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets` | generated packages (plus `*_manual` files) |
+| `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`, `qtsvg`, `qtsvgwidgets`, `qtmultimedia`, `qtmultimediawidgets`, `qtwebenginecore`, `qtwebenginewidgets` | generated packages (plus `*_manual` files) |
 | `cmd/qutegen`        | the generator                                              |
 | `cmd/qute`           | `qute vet`, `qute new app`                                 |
 | `spec`               | IR, class lists, ownership overlays                        |
@@ -363,14 +424,20 @@ Qt headers --libclang--> spec/ir/*.json --+
 ```sh
 go test ./...                          # everything, headless (offscreen)
 go test -tags qute_debug ./...         # with call sites and rule-5 checks
-LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
-GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
 go generate ./qtcore                   # regenerate packages, tests, COVERAGE.md
 python3 tools/irgen/irgen.py           # re-parse headers (new Qt version only; needs python3-clang)
 ```
 
-`lsan.supp` silences memory that GL drivers keep until exit. It lists only
-driver libraries, so qute's own allocations are still checked.
+`lsan.supp` silences memory that GL and video drivers, FFmpeg and Chromium
+(Qt WebEngine's internals) keep until exit. It lists only those libraries, so
+qute's own allocations are still checked. On a machine with CUDA, also set
+`QT_FFMPEG_DECODING_HW_DEVICE_TYPES=, QT_FFMPEG_ENCODING_HW_DEVICE_TYPES=,`
+for `-asan` runs (see the comment in `lsan.supp`). `go test ./...` needs
+every module's Qt package installed (`qt6-svg`, `qt6-multimedia`,
+`qt6-webengine`); as root or in a container, set
+`QTWEBENGINE_DISABLE_SANDBOX=1`.
 
 To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 ./qtcore`, then run that module's tests. To bind a new class, add it to
@@ -378,18 +445,23 @@ To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 
 ## Status
 
-The runtime, the widget bindings and Go subclassing are done. No method is
-waiting for type support, every ownership rule has been reviewed, every
-overload has a proper name, every out-parameter is confirmed by a rule, and
-every rule but `QEvent::clone` has a generated test (about 500 in all).
+The runtime, the bindings for the eleven modules above and Go subclassing are
+done. No method is waiting for type support, every ownership rule has been
+reviewed, every overload has a proper name, every out-parameter is confirmed
+by a rule, and every rule but `QEvent::clone` and
+`QWebEngineUrlRequestJob::reply` has a generated test (about 590 in all;
+`reply` is covered by a hand-written test, since a job exists only while Qt
+loads a URL).
 
 Not done yet:
 
-- About 600 methods are skipped on purpose, each with its reason in
+- About 650 methods are skipped on purpose, each with its reason in
   `COVERAGE.md`: C++ move overloads, `QBindable`, iterators, Qt's private
   and platform internals, `QStringView` and plain-number twins, printing page
-  setup, accessibility, Vulkan, and interfaces that need C++ subclassing.
-- `QThread` affinity, QtQuick/QML and other modules.
+  setup, accessibility, Vulkan, types from modules that aren't bound, and
+  interfaces that need C++ subclassing.
+- `QThread` affinity, QtQuick/QML and the other modules listed under
+  [Qt modules](#qt-modules).
 - Doc comments link to the Qt docs but don't include Qt's summary text.
 - Linux comes first for now; macOS and Windows support (and CI for them)
   comes later.

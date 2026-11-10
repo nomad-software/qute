@@ -447,3 +447,76 @@ func TestDependsOnQObjectWarns(t *testing.T) {
 		t.Error("no warning for depends-on on a QObject class")
 	}
 }
+
+// An object reference in a virtual (interceptRequest(QWebEngineUrlRequestInfo &))
+// is Qt's object on its stack: the override gets it in place and scoped, and
+// the class stays subclassable.
+func TestVirtualObjectReferenceInPlace(t *testing.T) {
+	c := class(t, "QWebEngineUrlRequestInterceptor")
+	if !c.Opts.Subclass {
+		t.Fatal("QWebEngineUrlRequestInterceptor is not subclassable")
+	}
+	var v *Method
+	for _, x := range c.Virtuals {
+		if x.IR.Name == "interceptRequest" {
+			v = x
+		}
+	}
+	if v == nil {
+		t.Fatal("interceptRequest is not overridable")
+	}
+	if p := v.Params[0]; !p.View || p.Rule != "scoped" || !p.T.inplace {
+		t.Errorf("info: View=%v Rule=%q inplace=%v, want an in-place scoped argument", p.View, p.Rule, p.T.inplace)
+	}
+	var b buf
+	gen(t).emitShimClass(c, &b)
+	if !strings.Contains(b.String(), "static_cast<void *>(&a0)") {
+		t.Error("the shim does not pass the address of Qt's object")
+	}
+}
+
+// A declared copy constructor suppresses C++'s implicit default constructor,
+// so the generator must not default-construct the class.
+func TestCopyOnlyClassHasNoDefaultCtor(t *testing.T) {
+	for _, n := range []string{"QWebEngineHistoryItem", "QWebEngineClientCertificateSelection"} {
+		if c := class(t, n); c.DefCtor {
+			t.Errorf("%s: DefCtor = true, but it declares only a copy constructor", n)
+		}
+	}
+}
+
+// A signal that shares its name with a method (QAudioDecoder::error() and the
+// signal error(Error)) must be connected through an explicit member pointer.
+func TestSignalSharingMethodName(t *testing.T) {
+	c := class(t, "QAudioDecoder")
+	for _, sg := range c.Signals {
+		if sg.IR.Name == "error" {
+			if f := gen(t).signalCFunc(c, sg); !strings.Contains(f.body, "static_cast<void (QAudioDecoder::*)(QAudioDecoder::Error)>") {
+				t.Errorf("error signal connected without a cast:\n%s", f.body)
+			}
+			return
+		}
+	}
+	t.Fatal("QAudioDecoder has no error signal")
+}
+
+// Enums of a module namespace take the namespace as their prefix; Qt's own
+// namespace keeps bare names.
+func TestModuleNamespaceEnums(t *testing.T) {
+	g := gen(t)
+	for cpp, want := range map[string]string{
+		"QAudio::State":     "QAudioState",
+		"QtVideo::Rotation": "QtVideoRotation",
+		"QtSvg::Option":     "QtSvgOption",
+		"Qt::AlignmentFlag": "AlignmentFlag",
+	} {
+		e := g.enums[cpp]
+		if e == nil || !e.emitted {
+			t.Errorf("%s is not bound", cpp)
+			continue
+		}
+		if e.goName != want {
+			t.Errorf("%s is %s, want %s", cpp, e.goName, want)
+		}
+	}
+}

@@ -18,6 +18,9 @@ const modPath = "github.com/nomad-software/qute/"
 var qtPkgs = map[string]bool{
 	modPath + "qtcore": true, modPath + "qtgui": true, modPath + "qtwidgets": true,
 	modPath + "qtopengl": true, modPath + "qtopenglwidgets": true,
+	modPath + "qtsvg": true, modPath + "qtsvgwidgets": true,
+	modPath + "qtmultimedia": true, modPath + "qtmultimediawidgets": true,
+	modPath + "qtwebenginecore": true, modPath + "qtwebenginewidgets": true,
 }
 
 type finding struct {

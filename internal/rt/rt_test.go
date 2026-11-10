@@ -236,6 +236,81 @@ func TestDrainSkipsQuietCount(t *testing.T) {
 	}
 }
 
+// A kept object collected together with its keeper is freed after it, in
+// whatever order the GC queued them (a page must not outlive its profile).
+func TestDrainFreesKeepersFirst(t *testing.T) {
+	queueHead.Store(nil)
+	defer queueHead.Store(nil)
+	var order []string
+	keeper := &Handle{ptr: fakePtr(1), class: "Page", kind: KindPlain, serial: serialCounter.Add(1)}
+	kept := &Handle{ptr: fakePtr(2), class: "Profile", kind: KindPlain, serial: serialCounter.Add(1)}
+	KeepArg(keeper, "profile", kept)
+	// the kept object first: the order a LIFO queue would free them wrongly in
+	enqueueCleanup(cleanupArg{key: keeper.ptr, serial: keeper.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { order = append(order, "page") }})
+	enqueueCleanup(cleanupArg{key: kept.ptr, serial: kept.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { order = append(order, "profile") }})
+	Drain()
+	if len(order) != 2 || order[0] != "page" || order[1] != "profile" {
+		t.Fatalf("freed %v, want [page profile]", order)
+	}
+	if isKept(kept.serial) || deferredN.Load() != 0 {
+		t.Fatal("hold or deferred free left behind")
+	}
+}
+
+// A kept object whose keeper Qt destroys later (a page inside a window being
+// freed) waits for the keeper's death notice, even when the keeper's handle
+// is already gone.
+func TestDrainDefersUntilKeeperDies(t *testing.T) {
+	queueHead.Store(nil)
+	defer queueHead.Store(nil)
+	freed := 0
+	key := fakePtr(3)
+	keeper := Wrap(key, "Page", KindNotify, KeepOrBorrow, nil)
+	kept := &Handle{ptr: fakePtr(4), class: "Profile", kind: KindPlain, serial: serialCounter.Add(1)}
+	KeepArg(keeper, "profile", kept)
+	enqueueCleanup(cleanupArg{key: kept.ptr, serial: kept.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { freed++ }})
+	Drain()
+	if freed != 0 {
+		t.Fatal("kept object freed while its keeper lives")
+	}
+	Destroyed(key, "test")
+	Drain()
+	if freed != 1 || deferredN.Load() != 0 {
+		t.Fatalf("freed %d after the keeper died, want 1", freed)
+	}
+
+	// the keeper's handle collected before Qt destroys it: the registry
+	// entry's serial still releases the hold
+	key2 := fakePtr(5)
+	keeper2 := Wrap(key2, "Page", KindNotify, KeepOrBorrow, nil)
+	KeepArg(keeper2, "profile", kept)
+	releaseHolds(keeper2.serial)
+	if isKept(kept.serial) {
+		t.Fatal("hold survived releaseHolds")
+	}
+	Destroyed(key2, "test")
+}
+
+// Replacing or clearing a slot drops the hold on the old argument.
+func TestKeepSlotHolds(t *testing.T) {
+	owner, a, b := newPlain("Owner"), newPlain("A"), newPlain("B")
+	KeepArg(owner, "s", a)
+	KeepArg(owner, "s", a) // same argument again: still one hold
+	KeepArg(owner, "s", b)
+	if isKept(a.serial) || !isKept(b.serial) {
+		t.Fatalf("after replacing: a kept=%v b kept=%v, want false true", isKept(a.serial), isKept(b.serial))
+	}
+	KeepArg(owner, "s", nil)
+	if isKept(b.serial) {
+		t.Fatal("cleared slot still holds its argument")
+	}
+	KeepEach(owner, a)
+	Release(owner, a)
+	if isKept(a.serial) {
+		t.Fatal("released argument still held")
+	}
+}
+
 // PostSync must not wait forever when its function can never run.
 func TestPostSyncPostFails(t *testing.T) {
 	// No QApplication exists in this test binary, so the post itself fails.

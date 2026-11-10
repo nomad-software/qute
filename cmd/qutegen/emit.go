@@ -329,9 +329,11 @@ func primaryCtor(c *Class) *Method {
 
 func (g *Gen) signalCFunc(c *Class, sg *Method) cFunc {
 	cls := c.Cpp
+	// any method of the same name makes &Class::name ambiguous, not only
+	// another signal: QAudioDecoder has error() and the signal error(Error)
 	overloaded := 0
 	for i := range c.IR.Methods {
-		if c.IR.Methods[i].Kind == "signal" && c.IR.Methods[i].Name == sg.IR.Name {
+		if c.IR.Methods[i].Name == sg.IR.Name {
 			overloaded++
 		}
 	}

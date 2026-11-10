@@ -58,14 +58,48 @@ func scheduleDrain() {
 	}
 }
 
-// Drain frees every queued object. It must run on the GUI thread.
+// deferred holds frees of objects a live keeper still holds (see keep.go);
+// only the GUI thread touches it. deferredN mirrors its length for wakeDeferred.
+var (
+	deferred  []cleanupArg
+	deferredN atomic.Int32
+)
+
+// Drain frees every queued object. It must run on the GUI thread. An object
+// another object keeps waits until its keepers are gone: freeing a keeper
+// in this same drain releases it, and a keeper Qt destroys later wakes the
+// queue again (wakeDeferred).
 func Drain() {
-	n := queueHead.Swap(nil)
-	for ; n != nil; n = n.next {
-		if appExited.Load() {
-			return // deleting after the app is gone crashes inside Qt destructors
+	pending := deferred
+	deferred = nil
+	for n := queueHead.Swap(nil); n != nil; n = n.next {
+		pending = append(pending, n.arg)
+	}
+	for progress := true; progress && len(pending) > 0; {
+		progress = false
+		rest := pending[:0]
+		for _, a := range pending {
+			if appExited.Load() {
+				deferredN.Store(0)
+				return // deleting after the app is gone crashes inside Qt destructors
+			}
+			if a.serial != 0 && isKept(a.serial) {
+				rest = append(rest, a)
+				continue
+			}
+			freeNode(a)
+			progress = true
 		}
-		freeNode(n.arg)
+		pending = rest
+	}
+	deferred = pending
+	deferredN.Store(int32(len(pending)))
+}
+
+// wakeDeferred schedules a drain when a free was waiting for a keeper.
+func wakeDeferred() {
+	if deferredN.Load() > 0 {
+		scheduleDrain()
 	}
 }
 
@@ -90,6 +124,8 @@ func freeNode(a cleanupArg) {
 	}
 	if a.registered {
 		Destroyed(a.key, "freed by GC")
+	} else if a.serial != 0 {
+		releaseHolds(a.serial) // what a plain object kept may go now
 	}
 	if !a.quiet {
 		Drained.Add(1)

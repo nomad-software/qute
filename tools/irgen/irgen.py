@@ -10,7 +10,11 @@ import argparse, glob, json, os, re, subprocess, sys
 
 import clang.cindex as ci
 
-MODULES = ["QtCore", "QtGui", "QtWidgets", "QtOpenGL", "QtOpenGLWidgets"]
+MODULES = ["QtCore", "QtGui", "QtWidgets", "QtOpenGL", "QtOpenGLWidgets", "QtSvg", "QtSvgWidgets",
+           "QtMultimedia", "QtMultimediaWidgets", "QtWebEngineCore", "QtWebEngineWidgets"]
+# Module namespaces whose enums are bound (as QAudioState, QtVideoRotation, ...).
+# Qt's own namespace is read in every module and its enums keep bare names.
+NAMESPACES = ["QAudio", "QtVideo", "QtSvg"]
 K = ci.CursorKind
 
 
@@ -286,7 +290,7 @@ def main():
             nested = []
             mods[mod]["classes"].append(class_info(c, mod, header, None, nested))
             mods[mod]["classes"].extend(nested)
-        elif c.kind == K.NAMESPACE and c.spelling == "Qt":
+        elif c.kind == K.NAMESPACE and (c.spelling == "Qt" or c.spelling in NAMESPACES):
             namespace_info(c, mod, header, mods[mod])
         elif c.kind == K.ENUM_DECL and c.spelling.startswith("Q"):
             mods[mod]["enums"].append(enum_info(c, ""))

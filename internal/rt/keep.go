@@ -2,6 +2,7 @@ package rt
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 	"unsafe"
 )
@@ -22,6 +23,72 @@ import (
 
 var keepMu sync.Mutex
 
+// A kept object and its keeper often become unreachable in the same GC cycle
+// (a window whose page keeps a QWebEngineProfile), and Go runs their cleanups
+// in no particular order. Qt may need the kept object while the keeper is
+// destroyed (a page must not outlive its profile), so the cleanup queue
+// frees a kept object only once no live keeper holds it (see Drain). Both
+// maps are keyed by handle serial, so they outlive the handles: a keeper's
+// handle may be collected long before Qt destroys the object.
+var (
+	keptBy = map[uint64]int32{}    // kept handle serial -> keepers holding it
+	holds  = map[uint64][]uint64{} // keeper serial -> serials it keeps, one per slot
+)
+
+// holdLocked records that keeper holds kept. The caller holds keepMu.
+func holdLocked(keeper, kept uint64) {
+	holds[keeper] = append(holds[keeper], kept)
+	keptBy[kept]++
+}
+
+// unholdLocked drops one hold of keeper on kept and reports whether kept is
+// now free to go. The caller holds keepMu.
+func unholdLocked(keeper, kept uint64) bool {
+	hs := holds[keeper]
+	for i, s := range hs {
+		if s == kept {
+			hs[i] = hs[len(hs)-1]
+			hs = hs[:len(hs)-1]
+			break
+		}
+	}
+	if len(hs) == 0 {
+		delete(holds, keeper)
+	} else {
+		holds[keeper] = hs
+	}
+	if keptBy[kept]--; keptBy[kept] <= 0 {
+		delete(keptBy, kept)
+		return true
+	}
+	return false
+}
+
+// releaseHolds drops every hold of a keeper that died or whose handle was
+// collected, and wakes the cleanup queue if a deferred free may now run.
+func releaseHolds(keeper uint64) {
+	keepMu.Lock()
+	freed := false
+	for _, s := range holds[keeper] {
+		if keptBy[s]--; keptBy[s] <= 0 {
+			delete(keptBy, s)
+			freed = true
+		}
+	}
+	delete(holds, keeper)
+	keepMu.Unlock()
+	if freed {
+		wakeDeferred()
+	}
+}
+
+// isKept reports whether a live keeper still holds the object with serial.
+func isKept(serial uint64) bool {
+	keepMu.Lock()
+	defer keepMu.Unlock()
+	return keptBy[serial] > 0
+}
+
 func (h *Handle) registeredKind() bool { return h.kind == KindQObject || h.kind == KindNotify }
 
 // slotsFor returns the keep slots of owner, creating them if create is set.
@@ -31,6 +98,10 @@ func slotsFor(owner *Handle, create bool) map[string]any {
 		owner.keeps = map[string]any{}
 		if owner.registeredKind() {
 			owner.anchorPin()
+		} else if !owner.hasCleanupNow() {
+			// Go never frees this owner, so nothing would report its end:
+			// release what it holds once its handle is collected.
+			runtime.AddCleanup(owner, releaseHolds, owner.serial)
 		}
 	}
 	return owner.keeps
@@ -41,6 +112,9 @@ func slotsFor(owner *Handle, create bool) map[string]any {
 func unslotLocked(owner *Handle, slot string) {
 	if owner.keeps == nil {
 		return
+	}
+	if old, ok := owner.keeps[slot].(*Handle); ok && unholdLocked(owner.serial, old.serial) {
+		defer wakeDeferred()
 	}
 	delete(owner.keeps, slot)
 	if len(owner.keeps) == 0 {
@@ -63,7 +137,17 @@ func KeepArg(owner *Handle, slot string, arg *Handle) {
 		unslotLocked(owner, slot)
 		return
 	}
-	slotsFor(owner, true)[slot] = arg
+	ks := slotsFor(owner, true)
+	if old, ok := ks[slot].(*Handle); ok {
+		if old == arg {
+			return
+		}
+		if unholdLocked(owner.serial, old.serial) {
+			defer wakeDeferred()
+		}
+	}
+	ks[slot] = arg
+	holdLocked(owner.serial, arg.serial)
 }
 
 // KeepEach makes owner hold arg until owner dies or Release drops it. Unlike
@@ -126,6 +210,7 @@ func (h *Handle) dropHandleKeeps() {
 	if had && h.registeredKind() {
 		h.anchorUnpin()
 	}
+	releaseHolds(h.serial)
 }
 
 // A value that only means something while another object lives (a

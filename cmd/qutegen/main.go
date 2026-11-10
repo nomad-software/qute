@@ -1,5 +1,6 @@
 // Command qutegen generates the binding packages (qtcore, qtgui, qtwidgets,
-// qtopengl, qtopenglwidgets), their ownership tests and COVERAGE.md from the
+// qtopengl, qtopenglwidgets, qtsvg, qtsvgwidgets, qtmultimedia,
+// qtmultimediawidgets, qtwebenginecore, qtwebenginewidgets), their ownership tests and COVERAGE.md from the
 // checked-in IR (spec/ir) and the class and ownership specs (spec/classes,
 // spec/overlays). It needs neither Qt nor libclang.
 //
@@ -60,6 +61,12 @@ func load(root string) (*Gen, error) {
 		{"QtWidgets", "qtwidgets", "Qt6Widgets", []string{"QtCore", "QtGui"}},
 		{"QtOpenGL", "qtopengl", "Qt6OpenGL", []string{"QtCore", "QtGui"}},
 		{"QtOpenGLWidgets", "qtopenglwidgets", "Qt6OpenGLWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtOpenGL"}},
+		{"QtSvg", "qtsvg", "Qt6Svg", []string{"QtCore", "QtGui"}},
+		{"QtSvgWidgets", "qtsvgwidgets", "Qt6SvgWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtSvg"}},
+		{"QtMultimedia", "qtmultimedia", "Qt6Multimedia", []string{"QtCore", "QtGui"}},
+		{"QtMultimediaWidgets", "qtmultimediawidgets", "Qt6MultimediaWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtMultimedia"}},
+		{"QtWebEngineCore", "qtwebenginecore", "Qt6WebEngineCore", []string{"QtCore", "QtGui"}},
+		{"QtWebEngineWidgets", "qtwebenginewidgets", "Qt6WebEngineWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtWebEngineCore"}},
 	}
 	for _, md := range mods {
 		ir, err := loadIR(filepath.Join(root, "spec", "ir", md.pkg+".json"))

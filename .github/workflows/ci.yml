@@ -7,6 +7,12 @@ on:
 
 env:
   QT_QPA_PLATFORM: offscreen
+  # Chromium (Qt WebEngine) refuses its sandbox as root, which container steps run as
+  QTWEBENGINE_DISABLE_SANDBOX: "1"
+  # no hardware video decoding: nothing to probe in a container, and on CUDA
+  # machines the probe leaks from a library it unloads (see lsan.supp)
+  QT_FFMPEG_DECODING_HW_DEVICE_TYPES: ","
+  QT_FFMPEG_ENCODING_HW_DEVICE_TYPES: ","
 
 jobs:
   linux:
@@ -19,7 +25,7 @@ jobs:
         mode: [test, debug, asan, cgocheck2, generate]
     steps:
       - name: Qt 6, compiler and tools
-        run: pacman -Syu --noconfirm --needed qt6-base gcc pkgconf mesa git ttf-dejavu
+        run: pacman -Syu --noconfirm --needed qt6-base qt6-svg qt6-multimedia qt6-multimedia-ffmpeg qt6-webengine gcc pkgconf mesa git ttf-dejavu
       - uses: actions/checkout@v4
       # steps run as root in the container but the checkout belongs to the
       # runner's user, and git ignores a repository owned by someone else
@@ -41,10 +47,10 @@ jobs:
         run: go test -tags qute_debug ./...
       - name: AddressSanitizer and LeakSanitizer
         if: matrix.mode == 'asan'
-        run: LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+        run: LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
       - name: strict cgo pointer checks
         if: matrix.mode == 'cgocheck2'
-        run: GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+        run: GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
       - name: generated code is up to date
         if: matrix.mode == 'generate'
         # git status also catches new untracked files the generator wrote

@@ -146,7 +146,8 @@ var goKeywords = map[string]bool{
 	// identifiers the generated code uses
 	"C": true, "rt": true, "unsafe": true, "this": true, "qtcore": true, "qtgui": true, "qtwidgets": true,
 	"runtime": true, "fmt": true, "self": true, "args": true, "ret": true, "string": true, "len": true,
-	"qtopengl": true, "qtopenglwidgets": true, "error": true, "bool": true, "int": true, "f": true, "e": true, "i": true, "v": true, "r": true, "p": true, "h": true,
+	"qtopengl": true, "qtopenglwidgets": true, "qtsvg": true, "qtsvgwidgets": true, "qtmultimedia": true,
+	"qtmultimediawidgets": true, "qtwebenginecore": true, "qtwebenginewidgets": true, "error": true, "bool": true, "int": true, "f": true, "e": true, "i": true, "v": true, "r": true, "p": true, "h": true,
 	"new": true, "nil": true, "true": true, "false": true, "id": true, "mask": true, "b": true, "s": true, "a": true,
 }
 
@@ -450,8 +451,10 @@ func (g *Gen) collectEnums(m *Module) {
 	}
 	for i := range m.IR.Enums {
 		e := &m.IR.Enums[i]
-		if e.Scope == "Qt" {
-			add(e, "Qt", m.IR.Flags, true)
+		if e.Scope != "" {
+			// Qt's namespace keeps bare names; a module namespace
+			// (QAudio, QtVideo) becomes the prefix.
+			add(e, e.Scope, m.IR.Flags, true)
 		}
 	}
 	for _, c := range m.Classes {
@@ -1304,10 +1307,16 @@ func (g *Gen) newVirtual(c, owner *Class, im *irMethod) *Method {
 		if err != nil {
 			return nil
 		}
-		if t.k == kObj && t.ref {
-			return nil
-		}
 		pp := &Param{Name: p.Name, GoName: paramNames(im)[i], CName: fmt.Sprintf("a%d", i), T: t, Rule: "borrowed"}
+		if t.k == kObj && t.ref {
+			// interceptRequest(QWebEngineUrlRequestInfo &): Qt's object on
+			// its stack, so Go gets that object, valid for the call only
+			tc := *t
+			tc.inplace = true
+			pp.T, pp.View, pp.Rule = &tc, true, "scoped"
+			mm.Params = append(mm.Params, pp)
+			continue
+		}
 		if t.k == kObj && (t.cls.Event || t.cls.Name == "QPainter" || strings.HasPrefix(t.cls.Name, "QStyleOption")) {
 			pp.Rule = "scoped"
 		}
@@ -1371,9 +1380,12 @@ func (m *Module) dependsOn(x *Module) bool {
 	return false
 }
 
+// hasCtor reports whether the class declares any constructor. A declared
+// copy or move constructor counts too: C++ then gives it no implicit
+// default constructor (QWebEngineHistoryItem).
 func hasCtor(c *irClass) bool {
 	for _, m := range c.Methods {
-		if m.Kind == "ctor" && !m.Copy && !m.Move {
+		if m.Kind == "ctor" {
 			return true
 		}
 	}

@@ -31,7 +31,8 @@ func callSite() string {
 
 // libraryPkgs are the runtime and the generated packages. Their external test
 // packages (qtcore_test) are user code for this purpose.
-var libraryPkgs = []string{"internal/rt", "qtcore", "qtgui", "qtwidgets", "qtopengl", "qtopenglwidgets"}
+var libraryPkgs = []string{"internal/rt", "qtcore", "qtgui", "qtwidgets", "qtopengl", "qtopenglwidgets",
+	"qtsvg", "qtsvgwidgets", "qtmultimedia", "qtmultimediawidgets", "qtwebenginecore", "qtwebenginewidgets"}
 
 // libraryFrame reports frames inside the binding itself (not its tests or
 // examples).

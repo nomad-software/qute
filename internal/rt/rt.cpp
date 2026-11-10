@@ -58,8 +58,13 @@ extern "C" bool qute_rt_post_drain(void) {
 extern "C" void qute_rt_watch(void *obj) {
     QObject *o = static_cast<QObject *>(obj);
     qute_watched.insert(o);
-    // No context object: the connection lives exactly as long as o does.
-    QObject::connect(o, &QObject::destroyed, [o] {
+    // The context is a separate object that is never destroyed, so the
+    // connection lives exactly as long as o does. Without one, o itself is
+    // the receiver, and a destructor that disconnects its own receiver
+    // connections before ~QObject emits destroyed (~QVideoSink does) would
+    // drop the death notice and leave a dangling handle.
+    static QObject *ctx = new QObject;
+    QObject::connect(o, &QObject::destroyed, ctx, [o] {
         qute_watched.erase(o);
         qute_rt_destroyed(o);
     });

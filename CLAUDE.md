@@ -38,10 +38,10 @@ cleanup queue.
 
 ```
 Qt headers --libclang (tools/irgen)--> spec/ir/*.json --+
-                                       spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/
+                                       spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/ ... (one per module)
                                        spec/overlays/ --+                    COVERAGE.md, ownership tests
 
-run time: app -> qute (root package) -> qtcore/qtgui/qtwidgets (generated Go + C++ shim) -> Qt
+run time: app -> qute (root package) -> qtcore/qtgui/qtwidgets/... (generated Go + C++ shim) -> Qt
                                      \-> internal/rt (handles, registry, pins, cleanup queue)
 ```
 
@@ -49,10 +49,14 @@ Only `internal/rt` decides who frees what. The C++ shim calls back into it
 when Qt destroys an object, emits a signal, or runs an overridden virtual.
 
 One Go package per Qt module (`qtcore`, `qtgui`, `qtwidgets`, `qtopengl`,
-`qtopenglwidgets`), each with its own cgo shim built via `pkg-config`; plain
-`go build`. Module dependencies are explicit in `cmd/qutegen/main.go` (QtOpenGL
-needs only QtCore and QtGui), because each shim may only include headers its
-pkg-config entry provides. The root package
+`qtopenglwidgets`, `qtsvg`, `qtsvgwidgets`, `qtmultimedia`,
+`qtmultimediawidgets`, `qtwebenginecore`, `qtwebenginewidgets`), each with
+its own cgo shim built via `pkg-config`; plain `go build`, and an app needs
+only the Qt modules it imports. Module dependencies are explicit in
+`cmd/qutegen/main.go` (QtOpenGL needs only QtCore and QtGui), because each
+shim may only include headers its pkg-config entry provides. Types from
+modules qute doesn't bind (QtNetwork's `QSslCertificate`, `QPrinter`,
+`QWebChannel`) are type-wide `deliberate` reasons in `types.go`. The root package
 `qute` holds `Main`, `Post`, `PostSync`, `Screenshot`, `DumpTree`,
 `Click`/`Type`/`Key` and the test harness. `cmd/qute` is the companion tool.
 
@@ -60,7 +64,11 @@ Adding a module touches more than the generator. Every list of the generated
 packages must include it: `mods` in `cmd/qutegen/main.go`, `libraryPkgs` in
 `internal/rt/site.go` (debug call sites), `qtPkgs` in `cmd/qute/vet.go`
 (otherwise `qute vet` silently ignores the package), `goKeywords` in
-`cmd/qutegen/model.go`, and the package lists in CI, the README and below.
+`cmd/qutegen/model.go`, `MODULES` in `tools/irgen/irgen.py` (plus
+`NAMESPACES` for a module namespace with enums, like `QAudio`), the Qt
+packages CI installs, and the package lists in CI, the README (including its
+"Qt modules" table) and below. A module needs a `doc_manual.go` with its
+package doc.
 
 ## Ownership model
 
@@ -138,6 +146,14 @@ every distinct argument until a `release` method drops it. References live
 on the receiver's handle; a QObject or notify-dtor receiver is anchored while
 it keeps anything, because its Parented handle could otherwise be collected
 while the object lives. The death notice drops them.
+A keeper and what it keeps are often collected in the same GC cycle, and Go
+runs cleanups in no order, but Qt may need the kept object while the keeper
+dies (a `QWebEnginePage` must not outlive its profile). So `keep.go` also
+counts holds by handle serial, which outlives the handle, and `rt.Drain`
+frees a kept object only once no keeper holds it: a keeper freed in the same
+drain releases it at once, and one Qt destroys later (a page inside a
+collected window) releases it through its death notice, even when its handle
+is already gone.
 A value only valid with another object (`QModelIndex` and its model,
 `QTextBlock` and its document, `QWidgetItem` and its widget) uses the class
 option `depends-on`: each wrapper holds that object, and `rt.Use` panics once
@@ -153,7 +169,9 @@ class: <bound class>}` when Qt has no getter; a class may list several
   per type; an upcast of a derived wrapper returns its embedded base, so
   comparing wrappers of the same object with `==` works.
 - **Death notice.** On first wrap of a QObject, `rt` connects
-  `QObject::destroyed`; it marks the handle Dead, removes the registry entry
+  `QObject::destroyed`, with a separate never-destroyed context object
+  (`~QVideoSink` drops connections whose receiver is itself before
+  `destroyed` is emitted, which would lose the notice); it marks the handle Dead, removes the registry entry
   and releases its Go callbacks. The entry goes before the memory is freed, so
   a new object at a reused address gets a fresh handle. Queued cleanups carry
   a serial number for the same reason.
@@ -218,7 +236,8 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
 - `void *`, `uchar *` to `unsafe.Pointer` (escape hatch);
 - a virtual's non-const value-class pointer or reference
   (`initStyleOption(QStyleOptionButton *)`) to Qt's own object, in place and
-  scoped, so what the override writes reaches Qt;
+  scoped, so what the override writes reaches Qt; an object reference in a
+  virtual (`interceptRequest(QWebEngineUrlRequestInfo &)`) likewise;
 - a value class's `T &` result that is `*this` to the receiver, for chaining;
 - `const T *` of a value class to a nil-able handle;
 - public data members to getter/setter methods, nested classes
@@ -371,7 +390,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   first parameter by its name, except a one-argument conversion or a
   cryptic name, which are named by type: `NewQVariantWithInt`); statics are package
   functions `<Class><Method>`; signals `On<Signal>` / `Emit<Signal>`; enums
-  `<Class><Value>` (Qt namespace: bare, e.g. `AlignLeft`); unnamed C++
+  `<Class><Value>` (Qt namespace: bare, e.g. `AlignLeft`; a module namespace
+  is the prefix, e.g. `QAudioActiveState`, `QtSvgOptions`); unnamed C++
   parameters get names from setters or their type (`QTextCursor::MoveMode`
   gives `moveMode`).
 - **Overloads** are named automatically, in this order: overloads identical
@@ -441,8 +461,12 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   constructors. Tests that need a GL context skip with the reason when the
   driver can't provide one.
   `TestLayout` checks every primary base sits at offset 0.
-- `lsan.supp` suppresses memory that GL drivers keep until exit (driver
-  libraries only), for `LSAN_OPTIONS=suppressions=$PWD/lsan.supp`.
+- `lsan.supp` suppresses memory that GL and video drivers, FFmpeg and
+  Chromium (`libQt6WebEngineCore`) keep until exit (third-party libraries
+  only), for `LSAN_OPTIONS=suppressions=$PWD/lsan.supp`. On a CUDA machine
+  set `QT_FFMPEG_DECODING_HW_DEVICE_TYPES=,` and
+  `QT_FFMPEG_ENCODING_HW_DEVICE_TYPES=,` for `-asan`; CI sets them, and
+  `QTWEBENGINE_DISABLE_SANDBOX=1` because its container runs as root.
 - `opengl_test.go` draws a triangle (shader program, buffer, VAO) and checks
   the pixels; `scene_test.go` checks scene items die with the scene, with
   `Clear()` and with their parent item.
@@ -450,7 +474,12 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   items and paint devices after their owner died, a QObject through its
   second base, visible `QWindow`s, windows kept alive by their handlers,
   subclass children or kept models, orphaned layout widgets, image memory,
-  override results. `run_test.go` covers `t.Fatal` inside `Run` (in a child
+  override results. The newer modules carry their own lifetime tests:
+  `qtsvg/render_test.go`, `qtmultimedia/lifetime_test.go` (kept outputs
+  through GC, `QVideoSink` death, frame memory) and
+  `qtwebenginewidgets/lifetime_test.go` (a custom-scheme reply device kept
+  through GC, pages and profiles collected together; it registers its scheme
+  in `init`, before the application exists). `run_test.go` covers `t.Fatal` inside `Run` (in a child
   process), `PostSync` handler panics, the off-thread check and Full forms.
 - `.github/workflows/ci.yml` runs only when a release tag (`v*`) is
   pushed, so run the commands under "Working in the repo" before tagging. It
@@ -463,13 +492,16 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Roadmap
 
 1. Runtime: done.
-2. Widgets: done for about 300 classes in five modules, including OpenGL. No
-   method waits for type support, every ownership rule is reviewed, every
-   overload has a proper name, every out-parameter is confirmed by a rule,
-   and all rules but `QEvent::clone` have a test.
+2. Widgets: done for about 390 classes in eleven modules, including OpenGL,
+   SVG, multimedia and the web engine. No method waits for type support,
+   every ownership rule is reviewed, every overload has a proper name, every
+   out-parameter is confirmed by a rule, and all rules but `QEvent::clone`
+   and `QWebEngineUrlRequestJob::reply` have a generated test (`reply` is
+   covered by `qtwebenginewidgets/lifetime_test.go`).
 3. Subclassing and models: done (virtual overrides, item models).
 4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
-   more modules, Qt's summary text in doc comments, then macOS and Windows.
+   more modules (QtNetwork, QtPrintSupport and QtWebChannel would fill the
+   gaps the web engine's skipped methods name), Qt's summary text in doc comments, then macOS and Windows.
 
 Known limitations:
 
@@ -498,8 +530,8 @@ distributed binaries. Could miqt's IR or overlays save review time?
 ```sh
 go test ./...                                   # all tests, headless
 go test -tags qute_debug ./...                  # debug runtime checks
-LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
-GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
+LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
+GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets
 go generate ./qtcore                            # = go run ./cmd/qutegen -root .
 go vet ./... && gofmt -l .
 go run ./examples/hello -screenshot out.png     # render offscreen, then Read the PNG
@@ -531,7 +563,9 @@ Layout:
   (value-object bytes), `queue.go` (cleanup queue, Post/PostSync),
   `callbacks.go`, and `rt.cpp` (the application event filter for window
   pins and reparenting).
-- `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`: **generated**. Never edit `*_gen.*`,
+- `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`, `qtsvg`,
+  `qtsvgwidgets`, `qtmultimedia`, `qtmultimediawidgets`, `qtwebenginecore`,
+  `qtwebenginewidgets`: **generated**. Never edit `*_gen.*`,
   `qute_common.h`, `ownership_gen_test.go` or `export_gen_test.go`; change
   the generator or spec and regenerate. Hand-written code is in `*_manual.*`.
 - `cmd/qutegen`: `types.go` (type mapping), `model.go` (resolution, naming,

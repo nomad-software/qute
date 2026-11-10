@@ -16,17 +16,17 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 8806 |
-| of which Full forms (every argument, defaults included) | 602 |
-| Plain-object results that depend on their receiver | 83 |
-| Skipped on purpose (with reasons below) | 607 |
+| Bound constructors, methods and functions | 10103 |
+| of which Full forms (every argument, defaults included) | 627 |
+| Plain-object results that depend on their receiver | 95 |
+| Skipped on purpose (with reasons below) | 651 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
-| Ownership rules without a generated test | 1 |
+| Ownership rules without a generated test | 2 |
 | Results whose death qute cannot see | 0 |
 
-1 item(s) open; see their sections below.
+2 item(s) open; see their sections below.
 
 ## Default ownership rules (0)
 
@@ -44,7 +44,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (607)
+## Skipped on purpose (651)
 
 
 ### QAbstractItemModel
@@ -343,6 +343,10 @@ These bind once the generator learns the type. Counts by type:
 - `QImage QImage::fromData(const uchar * data, int size, const char * format = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QImage QImage::fromData(const QByteArray & data, const char * format = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QImageCapture
+
+- `void QImageCapture::setResolution(int width, int height)`: on purpose: plain-number twin of the struct overload
+
 ### QInputDialog
 
 - `void QInputDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
@@ -483,6 +487,19 @@ These bind once the generator learns the type. Counts by type:
 - `void QMatrix4x4::copyDataTo(float * values) const`: skipped by overlay (on purpose: Qt writes 16 floats through the pointer; use CopyDataTo in qmatrix4x4_manual.go)
 - `const float * QMatrix4x4::data() const`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `void QMatrix4x4::viewport(float left, float bottom, float width, float height, float nearPlane = …, float farPlane = …)`: on purpose: plain-number twin of the struct overload
+
+### QMediaCaptureSession
+
+- `QPlatformMediaCaptureSession * QMediaCaptureSession::platformSession() const`: return: on purpose: private platform API
+
+### QMediaFormat
+
+- `QMimeType QMediaFormat::mimeType() const`: return: on purpose: the MIME database is not bound; use the file format enum
+
+### QMediaRecorder
+
+- `QPlatformMediaRecorder * QMediaRecorder::platformRecoder() const`: return: on purpose: private platform API
+- `void QMediaRecorder::setVideoResolution(int width, int height)`: on purpose: plain-number twin of the struct overload
 
 ### QMenu
 
@@ -801,6 +818,11 @@ These bind once the generator learns the type. Counts by type:
 - `QString QRegularExpression::wildcardToRegularExpression(QStringView str, WildcardConversionOptions options = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QString QRegularExpression::anchoredPattern(QStringView expression)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QScreenCapture
+
+- `void QScreenCapture::setMaximumFrameRate(std::optional<qreal> frameRate)`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
+- `std::optional<qreal> QScreenCapture::maximumFrameRate() const`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
+
 ### QSettings
 
 - `Format QSettings::registerFormat(const QString & extension, ReadFunc readFunc, WriteFunc writeFunc, Qt::CaseSensitivity caseSensitivity = …)`: on purpose: C function pointer; a Go closure cannot become one
@@ -837,6 +859,11 @@ These bind once the generator learns the type. Counts by type:
 ### QSurface
 
 - `QPlatformSurface * QSurface::surfaceHandle() const`: return: on purpose: private platform API
+
+### QSvgRenderer
+
+- `QSvgRenderer::QSvgRenderer(QXmlStreamReader * contents, QObject * parent = …)`: on purpose: XML streams are not bound; use the file name or byte-array overloads
+- `bool QSvgRenderer::load(QXmlStreamReader * contents)`: on purpose: XML streams are not bound; use the file name or byte-array overloads
 
 ### QTableWidget
 
@@ -960,6 +987,81 @@ These bind once the generator learns the type. Counts by type:
 
 - `QVector2D::QVector2D(float xpos, float ypos)`: on purpose: plain-number twin of the struct overload
 
+### QVideoFrame
+
+- `QVideoFrame::QVideoFrame(std::unique_ptr<QAbstractVideoBuffer> videoBuffer)`: skipped by overlay (on purpose: custom video buffers need C++ subclassing)
+- `const uchar * QVideoFrame::bits(int plane) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QVideoFrameFormat
+
+- `void QVideoFrameFormat::setFrameSize(int width, int height)`: on purpose: plain-number twin of the struct overload
+
+### QVideoSink
+
+- `QRhi * QVideoSink::rhi() const`: return: on purpose: Qt's rendering hardware interface is not bound
+- `void QVideoSink::setRhi(QRhi * rhi)`: on purpose: Qt's rendering hardware interface is not bound
+- `QPlatformVideoSink * QVideoSink::platformVideoSink() const`: return: on purpose: private platform API
+
+### QWebEngineCertificateError
+
+- `QList<QSslCertificate> QWebEngineCertificateError::certificateChain() const`: return: on purpose: QtNetwork is not bound
+
+### QWebEngineClientCertificateSelection
+
+- `void QWebEngineClientCertificateSelection::select(const QSslCertificate & certificate)`: on purpose: QtNetwork is not bound
+- `QList<QSslCertificate> QWebEngineClientCertificateSelection::certificates() const`: return: on purpose: QtNetwork is not bound
+
+### QWebEngineClientCertificateStore
+
+- `void QWebEngineClientCertificateStore::add(const QSslCertificate & certificate, const QSslKey & privateKey)`: on purpose: QtNetwork is not bound
+- `QList<QSslCertificate> QWebEngineClientCertificateStore::certificates() const`: return: on purpose: QtNetwork is not bound
+- `void QWebEngineClientCertificateStore::remove(const QSslCertificate & certificate)`: on purpose: QtNetwork is not bound
+
+### QWebEngineCookieStore
+
+- `void QWebEngineCookieStore::setCookieFilter(std::function<bool (const FilterRequest &)> && filterCallback)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QWebEngineCookieStore::setCookie(const QNetworkCookie & cookie, const QUrl & origin = …)`: on purpose: QtNetwork is not bound
+- `void QWebEngineCookieStore::deleteCookie(const QNetworkCookie & cookie, const QUrl & origin = …)`: on purpose: QtNetwork is not bound
+- `void QWebEngineCookieStore::cookieAdded(const QNetworkCookie & cookie)`: signal: on purpose: QtNetwork is not bound
+- `void QWebEngineCookieStore::cookieAdded(const QNetworkCookie & cookie)`: on purpose: QtNetwork is not bound
+- `void QWebEngineCookieStore::cookieRemoved(const QNetworkCookie & cookie)`: signal: on purpose: QtNetwork is not bound
+- `void QWebEngineCookieStore::cookieRemoved(const QNetworkCookie & cookie)`: on purpose: QtNetwork is not bound
+
+### QWebEngineLoadingInfo
+
+- `QMultiMap<QByteArray, QByteArray> QWebEngineLoadingInfo::responseHeaders() const`: skipped by overlay (on purpose: multi-maps keyed by byte arrays are not supported yet)
+
+### QWebEnginePage
+
+- `QWebChannel * QWebEnginePage::webChannel() const`: return: on purpose: QtWebChannel is not bound
+- `void QWebEnginePage::setWebChannel(QWebChannel *, quint32 worldId = …)`: skipped by overlay (on purpose: QtWebChannel is not bound)
+- `void QWebEnginePage::authenticationRequired(const QUrl & requestUrl, QAuthenticator * authenticator)`: signal: on purpose: QtNetwork is not bound
+- `void QWebEnginePage::authenticationRequired(const QUrl & requestUrl, QAuthenticator * authenticator)`: on purpose: QtNetwork is not bound
+- `void QWebEnginePage::proxyAuthenticationRequired(const QUrl & requestUrl, QAuthenticator * authenticator, const QString & proxyHost)`: signal: on purpose: QtNetwork is not bound
+- `void QWebEnginePage::proxyAuthenticationRequired(const QUrl & requestUrl, QAuthenticator * authenticator, const QString & proxyHost)`: on purpose: QtNetwork is not bound
+
+### QWebEngineProfile
+
+- `void QWebEngineProfile::setNotificationPresenter(std::function<void (std::unique_ptr<QWebEngineNotification>)> notificationPresenter)`: skipped by overlay (on purpose: Qt hands the notification over as a std::unique_ptr)
+- `QList<QSslCertificate> QWebEngineProfile::additionalTrustedCertificates() const`: return: on purpose: QtNetwork is not bound
+
+### QWebEngineProfileBuilder
+
+- `QWebEngineProfileBuilder & QWebEngineProfileBuilder::setAdditionalTrustedCertificates(const QList<QSslCertificate> & additionalTrustedCertificates)`: on purpose: QtNetwork is not bound
+
+### QWebEngineUrlRequestInfo
+
+- `QHash<QByteArray, QByteArray> QWebEngineUrlRequestInfo::httpHeaders() const`: skipped by overlay (on purpose: maps keyed by byte arrays are not supported yet)
+
+### QWebEngineUrlRequestJob
+
+- `QMap<QByteArray, QByteArray> QWebEngineUrlRequestJob::requestHeaders() const`: skipped by overlay (on purpose: maps keyed by byte arrays are not supported yet)
+- `void QWebEngineUrlRequestJob::setAdditionalResponseHeaders(const QMultiMap<QByteArray, QByteArray> & additionalResponseHeaders) const`: skipped by overlay (on purpose: multi-maps keyed by byte arrays are not supported yet)
+
+### QWebEngineView
+
+- `void QWebEngineView::print(QPrinter * printer)`: skipped by overlay (on purpose: QtPrintSupport is not bound)
+
 ### QWidget
 
 - `void QWidget::setMinimumSize(const QSize &)`: skipped by overlay (use SetMinimumSize(w, h))
@@ -993,9 +1095,15 @@ These bind once the generator learns the type. Counts by type:
 - `void QWindow::resize(int w, int h)`: on purpose: plain-number twin of the struct overload
 - `void QWindow::setGeometry(int posx, int posy, int w, int h)`: on purpose: plain-number twin of the struct overload
 
-## Ownership rules without a generated test (1)
+### QWindowCapture
+
+- `void QWindowCapture::setMaximumFrameRate(std::optional<qreal> frameRate)`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
+- `std::optional<qreal> QWindowCapture::maximumFrameRate() const`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
+
+## Ownership rules without a generated test (2)
 
 Add a `test:` snippet to the overlay entry to cover these.
 
 - `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
+- `void QWebEngineUrlRequestJob::reply(const QByteArray & contentType, QIODevice * device)`: skipped in overlay: a job exists only while Qt loads a URL of a scheme registered before the application starts; covered by webengine_test.go
 
