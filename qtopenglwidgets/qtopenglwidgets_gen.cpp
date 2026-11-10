@@ -21,6 +21,7 @@
 #include <QBitmap>
 #include <QBoxLayout>
 #include <QBrush>
+#include <QBuffer>
 #include <QButtonGroup>
 #include <QCalendar>
 #include <QCalendarWidget>

@@ -114,6 +114,11 @@ QFile:
   QFile(const QString&): { skip: "use NewQFileWithName(name, nil)" }
   QFile(const QString&, QObject*): { name: NewQFileWithName }
 
+QBuffer:
+  QBuffer(QByteArray*, QObject*): { skip: "on purpose: the buffer keeps a pointer to the byte array, which Go cannot keep alive; use NewQBuffer and SetData" }
+  setBuffer: { skip: "on purpose: the buffer keeps a pointer to the byte array, which Go cannot keep alive; use SetData" }
+  buffer: { skip: "on purpose: the same bytes as Data" }
+
 QSettings:
   QSettings(QSettings::Scope, QObject*): { name: NewQSettingsWithScopeOnly }
   value(QAnyStringView, const QVariant&): { name: ValueOr }
@@ -159,7 +164,7 @@ QDataStream:
   device: { return: borrowed }
   setDevice: { args: { 0: keep:device }, reviewed: true }
   writeBytes: { return: borrowed }
-  QDataStream(QByteArray*, QIODeviceBase::OpenMode): { skip: "on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer" }
+  QDataStream(QByteArray*, QIODeviceBase::OpenMode): { skip: "on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer (NewQBuffer, then Data())" }
 
 QMetaType:
   save: { reviewed: true }

@@ -16,8 +16,8 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 8201 |
-| Skipped on purpose (with reasons below) | 602 |
+| Bound constructors, methods and functions | 8204 |
+| Skipped on purpose (with reasons below) | 607 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
@@ -42,7 +42,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (602)
+## Skipped on purpose (607)
 
 
 ### QAbstractItemModel
@@ -68,6 +68,14 @@ These bind once the generator learns the type. Counts by type:
 - `QBrush::QBrush(Qt::GlobalColor color, Qt::BrushStyle bs = …)`: skipped by overlay (use NewQBrushWithColor)
 - `QBrush::QBrush(Qt::GlobalColor color, const QPixmap & pixmap)`: skipped by overlay (use NewQBrushWithColorPixmap)
 - `void QBrush::setColor(Qt::GlobalColor color)`: skipped by overlay (use SetColor)
+
+### QBuffer
+
+- `QBuffer::QBuffer(QByteArray * buf, QObject * parent = …)`: skipped by overlay (on purpose: the buffer keeps a pointer to the byte array, which Go cannot keep alive; use NewQBuffer and SetData)
+- `QByteArray & QBuffer::buffer()`: skipped by overlay (on purpose: the same bytes as Data)
+- `const QByteArray & QBuffer::buffer() const`: skipped by overlay (on purpose: the same bytes as Data)
+- `void QBuffer::setBuffer(QByteArray * a)`: skipped by overlay (on purpose: the buffer keeps a pointer to the byte array, which Go cannot keep alive; use SetData)
+- `void QBuffer::setData(const char * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QCalendarWidget
 
@@ -102,7 +110,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QDataStream
 
-- `QDataStream::QDataStream(QByteArray *, OpenMode flags)`: skipped by overlay (on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer)
+- `QDataStream::QDataStream(QByteArray *, OpenMode flags)`: skipped by overlay (on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer (NewQBuffer, then Data()))
 - `QDataStream & QDataStream::readBytes(char *&, qint64 & len)`: on purpose: returns memory allocated with new[]; use the QByteArray overload
 
 ### QDate

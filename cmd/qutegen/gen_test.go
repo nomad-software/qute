@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 )
 
 // These tests load the checked-in IR and specs (no Qt needed) and check the
@@ -206,6 +209,51 @@ func TestDependsOnEmitted(t *testing.T) {
 	src := string(gen(t).emitClass(class(t, "QModelIndex")))
 	if !strings.Contains(src, `rt.RegisterDependency("QModelIndex"`) || !strings.Contains(src, `"QAbstractItemModel"`) {
 		t.Error("QModelIndex does not register its model as a dependency")
+	}
+}
+
+// depends-on also accepts a getter declared on a base class and C++
+// expressions, and a class may list several.
+func TestDependsOnForms(t *testing.T) {
+	g := gen(t)
+	item := string(g.emitClass(class(t, "QWidgetItem")))
+	if !strings.Contains(item, `rt.RegisterDependency("QWidgetItem"`) || !strings.Contains(item, "qute_QLayoutItem_widget") {
+		t.Error("QWidgetItem does not register its widget (getter on the base) as a dependency")
+	}
+	cell := class(t, "QTextTableCell")
+	src := string(g.emitClass(cell))
+	for _, want := range []string{"C.qute_QTextTableCell_dep0(p), \"QTextTable\"", "C.qute_QTextTableCell_dep1(p), \"QTextDocument\""} {
+		if !strings.Contains(src, want) {
+			t.Errorf("QTextTableCell: no %s", want)
+		}
+	}
+	var dep1 string
+	for _, f := range g.classCFuncs(cell) {
+		if strings.Contains(f.decl, "qute_QTextTableCell_dep1(") {
+			dep1 = f.body
+		}
+	}
+	if !strings.Contains(dep1, "static_cast<const QTextTableCell *>(self)->firstCursorPosition().document()") {
+		t.Errorf("dep1 body does not expand $self:\n%s", dep1)
+	}
+}
+
+func TestDependsOnYAML(t *testing.T) {
+	var o classOpts
+	src := "depends-on:\n  - model\n  - { cpp: \"$self->x()\", class: QFoo }\n"
+	if err := yaml.Unmarshal([]byte(src), &o); err != nil {
+		t.Fatal(err)
+	}
+	want := depList{{Getter: "model"}, {Cpp: "$self->x()", Class: "QFoo"}}
+	if fmt.Sprint(o.DependsOn) != fmt.Sprint(want) {
+		t.Errorf("DependsOn = %v, want %v", o.DependsOn, want)
+	}
+	if err := yaml.Unmarshal([]byte("depends-on: { cpp: x }\n"), &o); err == nil {
+		t.Error("a cpp entry without class was accepted")
+	}
+	o = classOpts{}
+	if err := yaml.Unmarshal([]byte("depends-on: model\n"), &o); err != nil || len(o.DependsOn) != 1 || o.DependsOn[0].Getter != "model" {
+		t.Errorf("plain string form: %v, %v", o.DependsOn, err)
 	}
 }
 

@@ -7,6 +7,8 @@
 #   skip-virtuals: [x] virtuals Go may not override
 #   raw-pointers: true pass pointer-to-number arguments as unsafe.Pointer (GL)
 #   enums-only: true   emit the enums but no wrapper (QChar is a rune in Go)
+#   depends-on: x      the object(s) a value is only valid with: a getter name,
+#                      or {cpp: <expr over $self>, class: <class>}; a list for several
 #   reviewed: true     every default rule on the class was checked; avoid it,
 #                      it hides methods nobody looked at (review per method)
 module: QtCore
@@ -26,6 +28,7 @@ classes:
   QIODevice: {}
   QFileDevice: {}
   QFile: {}
+  QBuffer: {}
   QMimeData: {}
   QSettings: {}
   QEvent: { kind: event, no-construct: true }

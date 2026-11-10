@@ -39,10 +39,57 @@ type classOpts struct {
 	RawPointers bool `yaml:"raw-pointers"`
 	// EnumsOnly emits the class's enums but no wrapper (QChar is a rune in Go).
 	EnumsOnly bool `yaml:"enums-only"`
-	// DependsOn names a const getter returning the object this value is only
-	// valid with (QModelIndex: model). Every wrapper holds a reference to that
-	// object, so GC cannot free it first, and panics once it is destroyed.
-	DependsOn string `yaml:"depends-on"`
+	// DependsOn lists the objects this value is only valid with. Each entry is
+	// a const getter returning an object pointer (QModelIndex: model), or
+	// {cpp: <C++ expression over $self>, class: <bound class>} when no getter
+	// exists (a QTextTableCell's table). Every wrapper holds a reference to
+	// those objects, so GC cannot free them first, and panics once one of them
+	// is destroyed. A single getter may be written as a plain string.
+	DependsOn depList `yaml:"depends-on"`
+}
+
+// depSpec is one depends-on entry: Getter, or Cpp with the Class it returns.
+type depSpec struct {
+	Getter string
+	Cpp    string `yaml:"cpp"`
+	Class  string `yaml:"class"`
+}
+
+type depList []depSpec
+
+func (d *depList) UnmarshalYAML(n *yaml.Node) error {
+	one := func(n *yaml.Node) (depSpec, error) {
+		var s depSpec
+		if n.Kind == yaml.ScalarNode {
+			s.Getter = n.Value
+			return s, nil
+		}
+		var m struct {
+			Cpp   string `yaml:"cpp"`
+			Class string `yaml:"class"`
+		}
+		if err := n.Decode(&m); err != nil {
+			return s, err
+		}
+		if m.Cpp == "" || m.Class == "" {
+			return s, fmt.Errorf("line %d: a depends-on entry needs both cpp and class", n.Line)
+		}
+		s.Cpp, s.Class = m.Cpp, m.Class
+		return s, nil
+	}
+	if n.Kind != yaml.SequenceNode {
+		s, err := one(n)
+		*d = depList{s}
+		return err
+	}
+	for _, e := range n.Content {
+		s, err := one(e)
+		if err != nil {
+			return err
+		}
+		*d = append(*d, s)
+	}
+	return nil
 }
 
 type classSpec struct {

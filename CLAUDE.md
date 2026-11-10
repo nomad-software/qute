@@ -118,10 +118,13 @@ every distinct argument until a `release` method drops it. References of
 QObjects and notify-dtor objects are stored by object address in `rt` and
 dropped by the death notice, because a Parented receiver's Go handle may be
 collected while the object lives; other receivers hold them on the handle.
-A value only valid with another object (`QModelIndex` and its model) uses
-the class option `depends-on: <getter>`: each wrapper holds that object, and
-`rt.Use` panics once it is destroyed instead of letting Qt follow a dangling
-pointer.
+A value only valid with another object (`QModelIndex` and its model,
+`QTextBlock` and its document, `QWidgetItem` and its widget) uses the class
+option `depends-on`: each wrapper holds that object, and `rt.Use` panics once
+it is destroyed instead of letting Qt follow a dangling pointer. An entry is a
+getter name (also one declared on a base), or `{cpp: <expression over $self>,
+class: <bound class>}` when Qt has no getter; a class may list several
+(`QTextTableCell` depends on its table and its document).
 
 ## Object lifetime and handle safety
 

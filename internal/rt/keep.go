@@ -151,16 +151,24 @@ func (h *Handle) dropHandleKeeps() {
 // dependency is dead instead of letting Qt follow a dangling pointer, and the
 // strong reference keeps the GC from freeing it first.
 
-type depInfo struct {
-	find func(p unsafe.Pointer) *Handle
-}
+type depFinder func(p unsafe.Pointer) *Handle
 
-var deps sync.Map // class name -> depInfo
+var (
+	depMu sync.Mutex
+	deps  sync.Map // class name -> []depFinder (copy on write under depMu)
+)
 
 // RegisterDependency says that every wrapped object of class depends on the
-// object find returns for it (nil for none).
+// object find returns for it (nil for none). A class may register several
+// (a QTextTableCell depends on its table and on its document).
 func RegisterDependency(class string, find func(p unsafe.Pointer) *Handle) {
-	deps.Store(class, depInfo{find: find})
+	depMu.Lock()
+	defer depMu.Unlock()
+	var fs []depFinder
+	if v, ok := deps.Load(class); ok {
+		fs = v.([]depFinder)
+	}
+	deps.Store(class, append(fs[:len(fs):len(fs)], find))
 }
 
 func (h *Handle) attachDependency() {
@@ -168,30 +176,34 @@ func (h *Handle) attachDependency() {
 	if !ok {
 		return
 	}
-	if d := v.(depInfo).find(h.ptr); d != nil && d != h {
-		h.dep = d
+	for _, find := range v.([]depFinder) {
+		if d := find(h.ptr); d != nil && d != h {
+			h.deps = append(h.deps, d)
+		}
 	}
 }
 
-// Dependency returns the object h depends on, or nil (for tests).
-func (h *Handle) Dependency() *Handle {
+// Dependencies returns the objects h depends on (for tests).
+func (h *Handle) Dependencies() []*Handle {
 	if h == nil {
 		return nil
 	}
-	return h.dep
+	return h.deps
 }
 
-// checkDependency panics when the object h depends on has been destroyed.
+// checkDependency panics when an object h depends on has been destroyed.
 func checkDependency(h *Handle, method string) {
-	if d := h.dep; d != nil && State(d.state.Load()) == Dead {
-		panic(depMessage(h, method))
+	for _, d := range h.deps {
+		if State(d.state.Load()) == Dead {
+			panic(depMessage(h, d, method))
+		}
 	}
 }
 
-func depMessage(h *Handle, method string) string {
+func depMessage(h, dep *Handle, method string) string {
 	return fmt.Sprintf("%s: the %s this %s belongs to was destroyed (%s); "+
 		"a %s is only valid while its owner lives, so keep the owner alive or fetch a fresh one",
-		method, h.dep.class, h.class, deathNote(h.dep), h.class)
+		method, dep.class, h.class, deathNote(dep), h.class)
 }
 
 func deathNote(h *Handle) string {

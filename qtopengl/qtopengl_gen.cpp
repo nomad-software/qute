@@ -12,6 +12,7 @@
 #include <QBitArray>
 #include <QBitmap>
 #include <QBrush>
+#include <QBuffer>
 #include <QCalendar>
 #include <QChar>
 #include <QChildEvent>

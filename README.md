@@ -174,7 +174,8 @@ Each handle is in one state, changed only by annotated methods:
 - When Qt keeps a pointer it doesn't own (a view's model, a stream's device,
   a button's menu, actions added to a menu), the receiver holds a reference to
   it, so GC can't free it while Qt still uses it. A `QModelIndex` keeps its
-  model alive, and using one after its model was deleted panics.
+  model alive (a `QTextBlock` or `QTextTableCell` its document, a `QWidgetItem`
+  its widget), and using one after that owner was deleted panics.
 - `Ownership()`, `Alive()`, `Delete()`, `Keep()`, `Unkeep()` and `Ptr()` exist
   on every object. `XFromPtr(p, qtcore.Borrowed)` is the unsafe escape hatch.
 

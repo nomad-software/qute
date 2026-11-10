@@ -47,10 +47,33 @@ func TestKeep_QAbstractProxyModel_SetSourceModel(t *testing.T) {
 	})
 }
 
+// QBuffer::QBuffer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQBuffer(t *testing.T) {
+	qute.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQBuffer(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQBuffer(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QDataStream::QDataStream(QIODevice *): keep rules
 func TestKeep_QDataStream_QDataStreamWithIODevice(t *testing.T) {
 	qute.Run(t, func() {
-		a0 := qtcore.NewQFile(nil)
+		a0 := qtcore.NewQBuffer(nil)
 		x := qtcore.NewQDataStreamWithIODevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
 			t.Error("iODevice: not kept by the new object")
@@ -63,7 +86,7 @@ func TestKeep_QDataStream_QDataStreamWithIODevice(t *testing.T) {
 func TestKeep_QDataStream_SetDevice(t *testing.T) {
 	qute.Run(t, func() {
 		recv := qtcore.NewQDataStream()
-		a0 := qtcore.NewQFile(nil)
+		a0 := qtcore.NewQBuffer(nil)
 		recv.SetDevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
 			t.Error("device: not kept by the receiver")

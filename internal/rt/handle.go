@@ -78,9 +78,9 @@ type Handle struct {
 	deathNote  string
 	keeps      map[string]any // kept references of an unregistered owner (guarded by keepMu)
 
-	// dep is the object this one only makes sense with (a QModelIndex's
-	// model); set once at creation, so Use reads it without a lock.
-	dep *Handle
+	// deps are the objects this one only makes sense with (a QModelIndex's
+	// model); set once at creation, so Use reads them without a lock.
+	deps []*Handle
 
 	// Self is the Go value that overrides virtuals (nil for plain wrappers).
 	Self any

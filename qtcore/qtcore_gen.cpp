@@ -7,6 +7,7 @@
 #include <QAbstractTableModel>
 #include <QBasicTimer>
 #include <QBitArray>
+#include <QBuffer>
 #include <QCalendar>
 #include <QChar>
 #include <QChildEvent>
@@ -2042,6 +2043,7 @@ const char *qute_qtcore_check_layout(void) {
 	{ QAbstractListModel *d = reinterpret_cast<QAbstractListModel *>(uintptr_t(0x10000)); QAbstractItemModel *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QAbstractListModel"; }
 	{ QAbstractProxyModel *d = reinterpret_cast<QAbstractProxyModel *>(uintptr_t(0x10000)); QAbstractItemModel *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QAbstractProxyModel"; }
 	{ QAbstractTableModel *d = reinterpret_cast<QAbstractTableModel *>(uintptr_t(0x10000)); QAbstractItemModel *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QAbstractTableModel"; }
+	{ QBuffer *d = reinterpret_cast<QBuffer *>(uintptr_t(0x10000)); QIODevice *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QBuffer"; }
 	{ QChildEvent *d = reinterpret_cast<QChildEvent *>(uintptr_t(0x10000)); QEvent *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QChildEvent"; }
 	{ QCoreApplication *d = reinterpret_cast<QCoreApplication *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QCoreApplication"; }
 	{ QDataStream *d = reinterpret_cast<QDataStream *>(uintptr_t(0x10000)); QIODeviceBase *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QDataStream"; }
@@ -2936,6 +2938,20 @@ unsigned int qute_QBitArray_toUInt32(void *self, int64_t a0) {
 }
 void * qute_QBitArray_fromBits(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<void *>(new QBitArray(QBitArray::fromBits(reinterpret_cast<const char *>(a0), a0_len)));
+}
+
+// ---- QBuffer
+void * qute_QBuffer_new(void * a0) {
+	return static_cast<QBuffer *>(new QBuffer(static_cast<QObject *>(a0)));
+}
+void * qute_QBuffer_cast(void *obj) {
+	return static_cast<void *>(qobject_cast<QBuffer *>(static_cast<QObject *>(obj)));
+}
+void qute_QBuffer_setData(void *self, const char *a0, ptrdiff_t a0_len) {
+	static_cast<QBuffer *>(self)->setData(QByteArray(a0, a0_len));
+}
+qute_str qute_QBuffer_data(void *self) {
+	return qute_ret_bytes(static_cast<QBuffer *>(self)->data());
 }
 
 // ---- QCalendar

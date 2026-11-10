@@ -255,6 +255,13 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(qobject_cast<%s *>(static_cast<QObject *>(obj)));", cpp))
 	}
+	for i, d := range c.Opts.DependsOn {
+		if d.Cpp != "" {
+			expr := expandCpp(d.Cpp, fmt.Sprintf("static_cast<const %s *>(self)", cpp), nil)
+			add(cDecl("void *", fmt.Sprintf("qute_%s_dep%d", cls, i), []string{"void *self"}),
+				fmt.Sprintf("return const_cast<void *>(static_cast<const void *>(%s));", expr))
+		}
+	}
 	for _, s := range c.Secondary {
 		add(cDecl("void *", fmt.Sprintf("qute_%s_as_%s", cls, s.Name), []string{"void *self"}),
 			fmt.Sprintf("return static_cast<void *>(static_cast<%s *>(%s));", s.Cpp, self))
@@ -828,17 +835,32 @@ func (g *Gen) emitClass(c *Class) []byte {
 	b.p("// As%s returns the receiver; it lets derived types be passed as %sLike.", cls, cls)
 	b.p("func (this *%s) As%s() *%s { return this }\n", cls, cls, cls)
 	b.p("func init() { rt.RegisterClass(%q, %s, %s) }\n", cls, kindConst(c), g.deleterExpr(c))
-	if dep := c.Opts.DependsOn; dep != "" {
+	for i, dep := range c.Opts.DependsOn {
+		if dep.Cpp != "" {
+			if dc := g.classes[dep.Class]; dc == nil || dc.Opts.EnumsOnly {
+				g.report.warn("%s: depends-on class %q is not bound", cls, dep.Class)
+				continue
+			}
+			b.p("// Every %s holds the %s it belongs to (depends-on, found in C++).", cls, dep.Class)
+			b.p("func init() {\n\trt.RegisterDependency(%q, func(p unsafe.Pointer) *rt.Handle {", cls)
+			b.p("\t\treturn rt.WrapClass(C.qute_%s_dep%d(p), %q, rt.KeepOrBorrow)\n\t})\n}\n", cls, i, dep.Class)
+			continue
+		}
+		// the getter may be declared on a base (QWidgetItem::widget overrides
+		// QLayoutItem's); its shim takes the base pointer, which every primary
+		// base shares
 		var getter *Method
-		for _, mm := range c.Methods {
-			if mm.IR.Name == dep && len(mm.Params) == 0 && mm.Ret != nil && mm.Ret.k == kObj && !mm.Ret.ref {
-				getter = mm
+		for k := c; k != nil && getter == nil; k = k.Base {
+			for _, mm := range k.Methods {
+				if mm.IR.Name == dep.Getter && len(mm.Params) == 0 && mm.Ret != nil && mm.Ret.k == kObj && !mm.Ret.ref {
+					getter = mm
+				}
 			}
 		}
 		if getter == nil {
-			g.report.warn("%s: depends-on %q is not a bound getter returning an object pointer", cls, dep)
+			g.report.warn("%s: depends-on %q is not a bound getter returning an object pointer", cls, dep.Getter)
 		} else {
-			b.p("// Every %s holds the %s it belongs to (depends-on: %s).", cls, getter.Ret.cls.Name, dep)
+			b.p("// Every %s holds the %s it belongs to (depends-on: %s).", cls, getter.Ret.cls.Name, dep.Getter)
 			b.p("func init() {\n\trt.RegisterDependency(%q, func(p unsafe.Pointer) *rt.Handle {", cls)
 			b.p("\t\treturn rt.WrapClass(C.%s(p), %q, rt.KeepOrBorrow)\n\t})\n}\n", getter.CName, getter.Ret.cls.Name)
 		}

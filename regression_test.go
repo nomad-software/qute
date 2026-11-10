@@ -309,6 +309,142 @@ func TestKeptReferencesDropWithOwner(t *testing.T) {
 	})
 }
 
+// wantDepPanic runs f and checks it panics naming method and the dead owner.
+func wantDepPanic(t *testing.T, method, owner string, f func()) {
+	t.Helper()
+	defer func() {
+		p := recover()
+		msg, _ := p.(string)
+		if !strings.Contains(msg, method) || !strings.Contains(msg, "the "+owner+" this") {
+			t.Errorf("%s after its %s died: panic %v, want a message naming both", method, owner, p)
+		}
+	}()
+	f()
+}
+
+// A text block holds a raw pointer into its document: the block keeps the
+// document alive, and panics once it is deleted (it used to read freed memory
+// and return "").
+func TestTextBlockKeepsDocument(t *testing.T) {
+	var b *qtgui.QTextBlock
+	qute.Run(t, func() {
+		b = qtgui.NewQTextDocumentWithText("hello\nworld", nil).Begin()
+	})
+	qute.CollectGarbage()
+	qute.Run(t, func() {
+		if got := b.Text(); got != "hello" {
+			t.Errorf("Text after GC = %q, want \"hello\"", got)
+		}
+		b.Document().Delete()
+		wantDepPanic(t, "QTextBlock.Text", "QTextDocument", func() { b.Text() })
+	})
+}
+
+// A table cell holds a raw pointer to its table: it keeps the document alive
+// (it used to segfault in QTextTableCell::format) and panics once the table
+// or the document is gone.
+func TestTextTableCellKeepsTable(t *testing.T) {
+	var c *qtgui.QTextTableCell
+	qute.Run(t, func() {
+		d := qtgui.NewQTextDocument(nil)
+		c = qtgui.NewQTextCursorWithTextDocument(d).InsertTable(2, 2).CellAtWithCol(1, 1)
+	})
+	qute.CollectGarbage()
+	qute.Run(t, func() {
+		if c.Row() != 1 || c.RowSpan() != 1 {
+			t.Errorf("Row, RowSpan after GC = %d, %d, want 1, 1", c.Row(), c.RowSpan())
+		}
+		d := c.FirstCursorPosition().Document()
+		d.Clear() // destroys the table, not the document
+		wantDepPanic(t, "QTextTableCell.RowSpan", "QTextTable", func() { c.RowSpan() })
+		d.Delete()
+	})
+	qute.Run(t, func() {
+		d := qtgui.NewQTextDocument(nil)
+		c := qtgui.NewQTextCursorWithTextDocument(d).InsertTable(1, 1).CellAtWithCol(0, 0)
+		d.Delete()
+		wantDepPanic(t, "QTextTableCell.Row", "QTextTable", func() { c.Row() })
+	})
+}
+
+// A cell of a nested table depends on the inner table, not the outer one.
+func TestTextTableCellFindsInnermostTable(t *testing.T) {
+	qute.Run(t, func() {
+		d := qtgui.NewQTextDocument(nil)
+		defer d.Delete()
+		outer := qtgui.NewQTextCursorWithTextDocument(d).InsertTable(2, 2)
+		oc := outer.CellAtWithCol(0, 0)
+		inner := oc.FirstCursorPosition().InsertTable(1, 1)
+		ic := inner.CellAtWithCol(0, 0)
+		oc = outer.CellAtWithCol(0, 0)
+		depOf := func(x unsafe.Pointer) *rt.Handle {
+			ds := rt.RefOf(x).H.Dependencies()
+			if len(ds) != 2 {
+				t.Errorf("%d dependencies, want the table and the document", len(ds))
+				return nil
+			}
+			return ds[0]
+		}
+		if got := depOf(unsafe.Pointer(ic)); got != rt.RefOf(unsafe.Pointer(inner)).H {
+			t.Error("inner cell does not depend on the inner table")
+		}
+		if got := depOf(unsafe.Pointer(oc)); got != rt.RefOf(unsafe.Pointer(outer)).H {
+			t.Error("outer cell does not depend on the outer table")
+		}
+	})
+}
+
+// A widget item keeps a raw pointer to a widget it does not own.
+func TestWidgetItemKeepsWidget(t *testing.T) {
+	var it *qtwidgets.QWidgetItem
+	var w weak.Pointer[qtwidgets.QWidget]
+	qute.Run(t, func() {
+		x := qtwidgets.NewQWidget(nil)
+		x.SetMinimumSize(30, 20)
+		w = weak.Make(x)
+		it = qtwidgets.NewQWidgetItemWithWidget(x)
+	})
+	qute.CollectGarbage()
+	if w.Value() == nil {
+		t.Fatal("the widget was collected while the item pointed at it")
+	}
+	qute.Run(t, func() {
+		// a parentless widget is a window, which an item reports as empty,
+		// so read the widget back through the item
+		if got := it.Widget().MinimumSize(); got.Width != 30 || got.Height != 20 {
+			t.Errorf("Widget().MinimumSize after GC = %v, want 30x20", got)
+		}
+		it.Widget().Delete()
+		wantDepPanic(t, "MinimumSize", "QWidget", func() { it.MinimumSize() })
+		it.Delete()
+	})
+}
+
+// QBuffer gives QDataStream an in-memory device to write to.
+func TestDataStreamOverBuffer(t *testing.T) {
+	qute.Run(t, func() {
+		buf := qtcore.NewQBuffer(nil)
+		defer buf.Delete()
+		if !buf.Open(qtcore.QIODeviceBaseReadWrite) {
+			t.Error("Open failed")
+			return
+		}
+		ds := qtcore.NewQDataStreamWithIODevice(buf)
+		defer ds.Delete()
+		if n := ds.WriteRawData([]byte("hello")); n != 5 {
+			t.Errorf("WriteRawData = %d, want 5", n)
+		}
+		if got := string(buf.Data()); got != "hello" {
+			t.Errorf("Data = %q, want \"hello\"", got)
+		}
+		buf.SeekTo(0)
+		got := make([]byte, 5)
+		if n := ds.ReadRawData(got); n != 5 || string(got) != "hello" {
+			t.Errorf("ReadRawData = %d %q, want 5 \"hello\"", n, got)
+		}
+	})
+}
+
 // fakeTB records the failure qute.Run reports instead of failing the test.
 type fakeTB struct {
 	testing.TB

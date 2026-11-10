@@ -160,7 +160,7 @@ func TestDependency(t *testing.T) {
 	RegisterDependency("Index", func(unsafe.Pointer) *Handle { return model })
 	defer deps.Delete("Index")
 	idx := Wrap(fakePtr(3), "Index", KindValue, TakeOwned, func(unsafe.Pointer) {})
-	if idx.Dependency() != model {
+	if d := idx.Dependencies(); len(d) != 1 || d[0] != model {
 		t.Fatal("dependency not attached")
 	}
 	// checkDependency is the part of Use under test; Use itself also checks
@@ -181,9 +181,30 @@ func TestDependency(t *testing.T) {
 func TestNoDependencyForNil(t *testing.T) {
 	RegisterDependency("Index2", func(unsafe.Pointer) *Handle { return nil })
 	defer deps.Delete("Index2")
-	if h := Wrap(fakePtr(4), "Index2", KindValue, TakeOwned, func(unsafe.Pointer) {}); h.Dependency() != nil {
+	if h := Wrap(fakePtr(4), "Index2", KindValue, TakeOwned, func(unsafe.Pointer) {}); h.Dependencies() != nil {
 		t.Fatal("dependency attached for a nil result")
 	}
+}
+
+// Several dependencies: the panic names whichever one died.
+func TestSeveralDependencies(t *testing.T) {
+	table, doc := newPlain("Table"), newPlain("Doc")
+	RegisterDependency("Cell", func(unsafe.Pointer) *Handle { return table })
+	RegisterDependency("Cell", func(unsafe.Pointer) *Handle { return doc })
+	defer deps.Delete("Cell")
+	cell := Wrap(fakePtr(5), "Cell", KindValue, TakeOwned, func(unsafe.Pointer) {})
+	if d := cell.Dependencies(); len(d) != 2 || d[0] != table || d[1] != doc {
+		t.Fatalf("dependencies = %v, want [table doc]", d)
+	}
+	checkDependency(cell, "Cell.Row")
+	doc.markDead("deleted by Delete()")
+	defer func() {
+		msg, _ := recover().(string)
+		if !strings.Contains(msg, "Doc this Cell belongs to was destroyed") {
+			t.Errorf("Use after the document died: panic %q", msg)
+		}
+	}()
+	checkDependency(cell, "Cell.Row")
 }
 
 // Connections are freed on the GUI thread through the cleanup queue, never

@@ -298,6 +298,12 @@ const char * qute_QBitArray_bits(void *self);
 unsigned int qute_QBitArray_toUInt32(void *self, int64_t a0);
 void * qute_QBitArray_fromBits(const char *a0, ptrdiff_t a0_len);
 
+// QBuffer
+void * qute_QBuffer_new(void * a0);
+void * qute_QBuffer_cast(void *obj);
+void qute_QBuffer_setData(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QBuffer_data(void *self);
+
 // QCalendar
 void * qute_QCalendar_new(void);
 void * qute_QCalendar_new_1(int64_t a0);

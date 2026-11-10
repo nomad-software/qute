@@ -27,6 +27,13 @@ func init() {
 	rt.RegisterClass("QWidgetItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QWidgetItem_delete(p) })
 }
 
+// Every QWidgetItem holds the QWidget it belongs to (depends-on: widget).
+func init() {
+	rt.RegisterDependency("QWidgetItem", func(p unsafe.Pointer) *rt.Handle {
+		return rt.WrapClass(C.qute_QLayoutItem_widget(p), "QWidget", rt.KeepOrBorrow)
+	})
+}
+
 // QWidgetItemFromPtr wraps an existing C++ QWidgetItem. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QWidgetItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QWidgetItem {

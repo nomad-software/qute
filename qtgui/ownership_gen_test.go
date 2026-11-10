@@ -252,7 +252,7 @@ func TestOwnership_NewQDoubleValidatorWithBottom(t *testing.T) {
 // QImageReader::QImageReader(QIODevice * device, const QByteArray & format = …): keep rules
 func TestKeep_QImageReader_QImageReaderWithIODevice(t *testing.T) {
 	qute.Run(t, func() {
-		a0 := qtcore.NewQFile(nil)
+		a0 := qtcore.NewQBuffer(nil)
 		x := qtgui.NewQImageReaderWithIODevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
 			t.Error("device: not kept by the new object")
@@ -265,7 +265,7 @@ func TestKeep_QImageReader_QImageReaderWithIODevice(t *testing.T) {
 func TestKeep_QImageReader_SetDevice(t *testing.T) {
 	qute.Run(t, func() {
 		recv := qtgui.NewQImageReader()
-		a0 := qtcore.NewQFile(nil)
+		a0 := qtcore.NewQBuffer(nil)
 		recv.SetDevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
 			t.Error("device: not kept by the receiver")
@@ -433,7 +433,7 @@ func TestOwnership_NewQMovieWithFileName(t *testing.T) {
 func TestKeep_QMovie_SetDevice(t *testing.T) {
 	qute.Run(t, func() {
 		recv := qtgui.NewQMovie(nil)
-		a0 := qtcore.NewQFile(nil)
+		a0 := qtcore.NewQBuffer(nil)
 		recv.SetDevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
 			t.Error("device: not kept by the receiver")
@@ -571,7 +571,7 @@ func TestKeep_QPainter_Begin(t *testing.T) {
 // QPdfWriter::QPdfWriter(QIODevice * device): keep rules
 func TestKeep_QPdfWriter_QPdfWriterWithIODevice(t *testing.T) {
 	qute.Run(t, func() {
-		a0 := qtcore.NewQFile(nil)
+		a0 := qtcore.NewQBuffer(nil)
 		x := qtgui.NewQPdfWriterWithIODevice(a0)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
 			t.Error("device: not kept by the new object")

@@ -3053,6 +3053,8 @@ void qute_QTextTable_setFormat(void *self, void * a0);
 // QTextTableCell
 void * qute_QTextTableCell_new(void);
 void qute_QTextTableCell_delete(void *self);
+void * qute_QTextTableCell_dep0(void *self);
+void * qute_QTextTableCell_dep1(void *self);
 void qute_QTextTableCell_setFormat(void *self, void * a0);
 void * qute_QTextTableCell_format(void *self);
 int qute_QTextTableCell_row(void *self);

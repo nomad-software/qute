@@ -12,6 +12,7 @@
 #include <QBitArray>
 #include <QBitmap>
 #include <QBrush>
+#include <QBuffer>
 #include <QCalendar>
 #include <QChar>
 #include <QChildEvent>
@@ -9185,6 +9186,17 @@ void * qute_QTextTableCell_new(void) {
 }
 void qute_QTextTableCell_delete(void *self) {
 	delete static_cast<QTextTableCell *>(self);
+}
+void * qute_QTextTableCell_dep0(void *self) {
+	return const_cast<void *>(static_cast<const void *>([](const QTextTableCell *c) -> QTextTable * {
+		if (!c->isValid()) return nullptr;
+		for (QTextFrame *f = c->firstCursorPosition().currentFrame(); f; f = f->parentFrame())
+			if (auto *t = qobject_cast<QTextTable *>(f); t && t->cellAt(c->firstPosition()) == *c) return t;
+		return nullptr;
+	}(static_cast<const QTextTableCell *>(self))));
+}
+void * qute_QTextTableCell_dep1(void *self) {
+	return const_cast<void *>(static_cast<const void *>(static_cast<const QTextTableCell *>(self)->firstCursorPosition().document()));
 }
 void qute_QTextTableCell_setFormat(void *self, void * a0) {
 	static_cast<QTextTableCell *>(self)->setFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));

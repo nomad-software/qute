@@ -28,6 +28,20 @@ func init() {
 	rt.RegisterClass("QTextTableCell", rt.KindValue, func(p unsafe.Pointer) { C.qute_QTextTableCell_delete(p) })
 }
 
+// Every QTextTableCell holds the QTextTable it belongs to (depends-on, found in C++).
+func init() {
+	rt.RegisterDependency("QTextTableCell", func(p unsafe.Pointer) *rt.Handle {
+		return rt.WrapClass(C.qute_QTextTableCell_dep0(p), "QTextTable", rt.KeepOrBorrow)
+	})
+}
+
+// Every QTextTableCell holds the QTextDocument it belongs to (depends-on, found in C++).
+func init() {
+	rt.RegisterDependency("QTextTableCell", func(p unsafe.Pointer) *rt.Handle {
+		return rt.WrapClass(C.qute_QTextTableCell_dep1(p), "QTextDocument", rt.KeepOrBorrow)
+	})
+}
+
 // QTextTableCellFromPtr wraps an existing C++ QTextTableCell. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QTextTableCellFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextTableCell {

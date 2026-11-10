@@ -53,7 +53,7 @@ classes:
   QDialogButtonBox: {}
   QLayoutItem: { no-construct: true }
   QSpacerItem: {}
-  QWidgetItem: {}
+  QWidgetItem: { depends-on: widget }
   QLayout: {}
   QBoxLayout: {}
   QHBoxLayout: {}

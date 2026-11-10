@@ -28,6 +28,13 @@ func init() {
 	rt.RegisterClass("QTextBlock", rt.KindValue, func(p unsafe.Pointer) { C.qute_QTextBlock_delete(p) })
 }
 
+// Every QTextBlock holds the QTextDocument it belongs to (depends-on: document).
+func init() {
+	rt.RegisterDependency("QTextBlock", func(p unsafe.Pointer) *rt.Handle {
+		return rt.WrapClass(C.qute_QTextBlock_document(p), "QTextDocument", rt.KeepOrBorrow)
+	})
+}
+
 // QTextBlockFromPtr wraps an existing C++ QTextBlock. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QTextBlockFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextBlock {
