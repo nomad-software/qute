@@ -91,7 +91,8 @@ to see the UI:
 - **Errors explain themselves.** Panics name the method, say what happened,
   give the fix and, where an ownership rule applies, cite its number.
   `qute.Run` turns a panic into a test failure (with the Go stack for runtime
-  errors) instead of crashing the test binary. An agent can act on the
+  errors) instead of crashing the test binary, including a panic in a signal
+  or event handler, which is caught where Qt called it. An agent can act on the
   message alone. With `-tags qute_debug` the messages also give the call
   sites where the object was created and destroyed, and every call checks it
   is on the GUI thread.
@@ -170,6 +171,10 @@ Each handle is in one state, changed only by annotated methods:
   thread, and after the event loop exits, queued cleanups are dropped.
 - Every call keeps its receiver and arguments alive until it returns, so GC
   can't free them during a call that runs a nested event loop.
+- When Qt keeps a pointer it doesn't own (a view's model, a stream's device,
+  a button's menu, actions added to a menu), the receiver holds a reference to
+  it, so GC can't free it while Qt still uses it. A `QModelIndex` keeps its
+  model alive, and using one after its model was deleted panics.
 - `Ownership()`, `Alive()`, `Delete()`, `Keep()`, `Unkeep()` and `Ptr()` exist
   on every object. `XFromPtr(p, qtcore.Borrowed)` is the unsafe escape hatch.
 
@@ -301,7 +306,9 @@ Qt headers --libclang--> spec/ir/*.json --+
 
   The defaults follow Shiboken: a constructor argument named `parent` is
   `transfer-this`, other object pointers are `borrowed`, and value results
-  are Owned copies.
+  are Owned copies. `keep` marks a pointer Qt stores without owning, and
+  `out`/`in-out` confirm out-parameters, which are otherwise only a guess
+  from the type and stay open in `COVERAGE.md`.
 - `go generate ./qtcore` regenerates everything. Hand-written `*_manual.*`
   files are never overwritten.
 - `COVERAGE.md` records what is bound, every method skipped on purpose with
@@ -343,8 +350,8 @@ To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 
 The runtime, the widget bindings and Go subclassing are done. No method is
 waiting for type support, every ownership rule has been reviewed, every
-overload has a proper name, and every rule but `QEvent::clone` has a
-generated test (over 430 in all).
+overload has a proper name, every out-parameter is confirmed by a rule, and
+every rule but `QEvent::clone` has a generated test (about 500 in all).
 
 Not done yet:
 

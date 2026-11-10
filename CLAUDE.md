@@ -107,6 +107,22 @@ live signal connections, or after `Keep()` (until `Unkeep()`). GC frees an
 Owned object only when it is unpinned and unreachable. So a parentless object
 with connections must be `Delete()`d; `qute vet` flags ones that never are.
 
+**Kept references.** Qt often stores a pointer it does not own: a view's
+model, a stream's device, a button's menu, actions added to a widget. The arg
+rules `keep`, `keep-each` and `release` make the receiver (or, on a
+constructor, the new object) hold a Go reference to the argument, so GC can't
+free it underneath Qt (PySide's reference-keeping). `keep` fills one slot per
+method (`keep:<slot>` shares one, e.g. `QDataStream` constructor and
+`setDevice`); passing another argument or nil replaces it. `keep-each` holds
+every distinct argument until a `release` method drops it. References of
+QObjects and notify-dtor objects are stored by object address in `rt` and
+dropped by the death notice, because a Parented receiver's Go handle may be
+collected while the object lives; other receivers hold them on the handle.
+A value only valid with another object (`QModelIndex` and its model) uses
+the class option `depends-on: <getter>`: each wrapper holds that object, and
+`rt.Use` panics once it is destroyed instead of letting Qt follow a dangling
+pointer.
+
 ## Object lifetime and handle safety
 
 - **Registry.** `map[unsafe.Pointer]weak.Pointer[Handle]` (Go `weak`).
@@ -151,7 +167,12 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
 
 - out-parameters (`int *row`, `bool *ok`, `QTransform &result`) to extra Go
   results, and in-out references (`QString &`, `int &`) to a parameter plus a
-  result;
+  result. The shape is guessed from the type, so every one needs an `out` or
+  `in-out` overlay rule (which also overrides the guess: `QStyle::polish(QPalette
+  &)` is in-out); until then COVERAGE.md lists it as open. A constructor's
+  pointer (the object keeps it) and `uchar *` (raw memory) are never
+  out-parameters. Anything that writes an array (`QMatrix4x4::copyDataTo`) is
+  skipped and, if useful, hand-written;
 - a pointer followed by its count (`const QPoint *, int`, `const uchar *, int`,
   `char *data, qint64 maxlen`) to one slice, and `QSpan<T>` to a slice;
 - `QMap`/`QHash` with string or int keys to Go maps;
@@ -161,6 +182,9 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
 - `std::function` parameters to Go funcs, called back through
   `qute_<pkg>_call` and released when Qt drops the function;
 - `void *`, `uchar *` to `unsafe.Pointer` (escape hatch);
+- a virtual's non-const value-class pointer or reference
+  (`initStyleOption(QStyleOptionButton *)`) to Qt's own object, in place and
+  scoped, so what the override writes reaches Qt;
 - a value class's `T &` result that is `*this` to the receiver, for chaining;
 - `const T *` of a value class to a nil-able handle;
 - public data members to getter/setter methods, nested classes
@@ -202,6 +226,9 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
 - GC cleanups never call `delete`: they push onto a lock-free queue that the
   GUI thread drains from a posted event. After the event loop exits, queued
   cleanups are dropped, since deleting after the app is gone crashes Qt.
+  Unreachable `qtcore.Connection`s are freed through the same queue.
+- `PostSync` panics instead of waiting forever when its function can never
+  run (the post fails, or the event loop exits first).
 - Build tag `qute_debug` adds a GUI-thread check to every call, records
   creation and death call sites, and enforces rule 5.
 
@@ -244,7 +271,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 - **Classes** (`spec/classes/<module>.yaml`): which classes are bound, with
   options `kind: value|event`, `subclass`, `notify-dtor`, `no-construct`,
   `skip-virtuals`, `raw-pointers`, `enums-only` (enums but no wrapper, e.g.
-  `QChar`, which is a `rune` in Go), `reviewed`. A class's primary base must
+  `QChar`, which is a `rune` in Go), `depends-on` (see Kept references),
+  `reviewed`. A class's primary base must
   be bound too. Don't use class-level `reviewed`: it hides methods nobody
   looked at (it hid `QTextCursor::insertList` and `QGraphicsWidget::setLayout`).
 - **Overlays** (`spec/overlays/<module>.yaml`), keyed by method name (all
@@ -257,7 +285,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   ```
 
   Arg rules: `transfer-to-cpp`, `transfer-to-go`, `transfer-this`,
-  `borrowed`, `scoped` (keyed by name or index). Return rules:
+  `borrowed`, `scoped`, `keep`, `keep:<slot>`, `keep-each`, `release`, and
+  for non-object parameters `out` and `in-out` (keyed by name or index).
+  Return rules:
   `transfer-to-go`, `parented`, `borrowed`. An unknown rule, or a return
   rule on a result that is not an object pointer, is a generator warning.
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `error`,
@@ -284,7 +314,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   the class inherits through an override (`QFile.Open` stays the
   `QIODevice` one). Overlay `name:` entries override all of this; whatever
   is still ambiguous gets a number and is listed in `COVERAGE.md`.
-- **Coverage report** `COVERAGE.md` (summary table first): pointer methods on default rules,
+- **Coverage report** `COVERAGE.md` (summary table first): pointer methods on default rules
+  and out-parameters not yet confirmed by an `out`/`in-out` rule,
   numbered names, skipped methods (split into missing type support, counted
   by type, and skipped on purpose), rules without a test, and results whose
   death qute can't observe. Signal emitters count as reviewed, since emitting
@@ -314,6 +345,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `Wait`, `ProcessEvents`, over QTest.
 - `qute.TestMain(m)` and `qute.Run(t, f)` run tests on the GUI thread,
   offscreen; `qute.CollectGarbage()` / `qute.Freed()` check that GC frees.
+  Inside `Run`, a panic in a signal, virtual or callback handler is recovered
+  at the cgo boundary (so Qt's C++ frames return normally), re-raised by the
+  input helpers and `ProcessEvents`/`Wait`, and fails the test. Under
+  `qute.Main` a handler panic still crashes the program.
 - `qute vet`: owned-leak, delete-handler, gui-goroutine, scoped-escape.
 - `qute new app <dir> [module]`: main.go, a window, a behaviour test and a
   screenshot test.
@@ -323,7 +358,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 - Every transfer rule gets a generated test (`*/ownership_gen_test.go`):
   create, transfer, delete the owner, assert Dead. Return rules are tested by
   calling the method and checking the result's state; borrowed object
-  arguments are passed as nil. Rules the generator can't
+  arguments are passed as nil. Keep rules get a `TestKeep_` test that the
+  reference is held (or released). Rules the generator can't
   set up take a `test:` snippet (Go code run inside `qute.Run`), also on
   constructors. Tests that need a GL context skip with the reason when the
   driver can't provide one.
@@ -343,7 +379,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 1. Runtime: done.
 2. Widgets: done for about 300 classes in five modules, including OpenGL. No
    method waits for type support, every ownership rule is reviewed, every
-   overload has a proper name, and all rules but `QEvent::clone` have a test.
+   overload has a proper name, every out-parameter is confirmed by a rule,
+   and all rules but `QEvent::clone` have a test.
 3. Subclassing and models: done (virtual overrides, item models).
 4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
    more modules, Qt's summary text in doc comments, then macOS and Windows.
@@ -383,7 +420,12 @@ python3 tools/irgen/irgen.py                    # only for a new Qt version (nee
 Layout:
 
 - Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, `testing.go`, tests
-  (`tools_test.go` covers every input and inspection helper).
+  (`tools_test.go` covers every input and inspection helper;
+  `regression_test.go` covers bindings whose signature was once wrong:
+  out-parameters, kept references, in-place virtual arguments, handler panics).
+- `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and
+  the generator directly (no QApplication; the generator test loads the real
+  spec).
 - `internal/rt`: runtime (hand-written).
 - `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`: **generated**. Never edit `*_gen.*`,
   `qute_common.h`, `ownership_gen_test.go` or `export_gen_test.go`; change

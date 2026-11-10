@@ -99,18 +99,22 @@ func NewQTextEditWithText(text string, parent QWidgetLike) *QTextEdit {
 //
 //	C++: void QTextEdit::setDocument(QTextDocument * document)
 //
+// Ownership: document is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The text edit does not take ownership of the document.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#setDocument
 func (this *QTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetDocument")
 	var documentPtr unsafe.Pointer
+	var documentH *rt.Handle
 	if document != nil {
-		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "QTextEdit.SetDocument")
+		documentPtr, documentH = rt.Arg(unsafe.Pointer(document.AsQTextDocument()), "QTextEdit.SetDocument")
 	}
 	C.qute_QTextEdit_setDocument(self, documentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(document)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH)
 }
 
 // Document wraps QTextEdit::document.

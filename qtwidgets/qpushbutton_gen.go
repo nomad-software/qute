@@ -169,18 +169,22 @@ func (this *QPushButton) SetDefault(defaultArg bool) {
 //
 //	C++: void QPushButton::setMenu(QMenu * menu)
 //
+// Ownership: menu is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The button does not take ownership of the menu.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpushbutton.html#setMenu
 func (this *QPushButton) SetMenu(menu QMenuLike) {
 	self := rt.Use(unsafe.Pointer(this), "QPushButton.SetMenu")
 	var menuPtr unsafe.Pointer
+	var menuH *rt.Handle
 	if menu != nil {
-		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QPushButton.SetMenu")
+		menuPtr, menuH = rt.Arg(unsafe.Pointer(menu.AsQMenu()), "QPushButton.SetMenu")
 	}
 	C.qute_QPushButton_setMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMenu.menu", menuH)
 }
 
 // Menu wraps QPushButton::menu.
@@ -302,7 +306,10 @@ var qPushButtonVTable = []rt.Virtual{
 	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionButton) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			option := rt.View[QStyleOptionButton](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QStyleOptionButton", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionButton", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionButton](optionH, optionP)
 			v.(interface{ InitStyleOption(*QStyleOptionButton) }).InitStyleOption(option)
 		}},
 	{Name: "HitButton", Has: func(v any) bool { _, ok := v.(interface{ HitButton(qtcore.QPoint) bool }); return ok },

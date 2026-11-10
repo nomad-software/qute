@@ -509,18 +509,22 @@ func (this *QFileDialog) History() []string {
 //
 //	C++: void QFileDialog::setItemDelegate(QAbstractItemDelegate * delegate)
 //
+// Ownership: delegate is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // QFileDialog does not take ownership of the delegate (Qt docs).
 //
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setItemDelegate
 func (this *QFileDialog) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetItemDelegate")
 	var delegatePtr unsafe.Pointer
+	var delegateH *rt.Handle
 	if delegate != nil {
-		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QFileDialog.SetItemDelegate")
+		delegatePtr, delegateH = rt.Arg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QFileDialog.SetItemDelegate")
 	}
 	C.qute_QFileDialog_setItemDelegate(self, delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH)
 }
 
 // ItemDelegate wraps QFileDialog::itemDelegate.
@@ -541,18 +545,22 @@ func (this *QFileDialog) ItemDelegate() *QAbstractItemDelegate {
 //
 //	C++: void QFileDialog::setIconProvider(QAbstractFileIconProvider * provider)
 //
-// The dialog does not take ownership of the provider; keep it alive.
+// Ownership: provider is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// The dialog does not take ownership of the provider; it keeps the provider from being garbage collected.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setIconProvider
 func (this *QFileDialog) SetIconProvider(provider qtgui.QAbstractFileIconProviderLike) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetIconProvider")
 	var providerPtr unsafe.Pointer
+	var providerH *rt.Handle
 	if provider != nil {
-		providerPtr = rt.UseArg(unsafe.Pointer(provider.AsQAbstractFileIconProvider()), "QFileDialog.SetIconProvider")
+		providerPtr, providerH = rt.Arg(unsafe.Pointer(provider.AsQAbstractFileIconProvider()), "QFileDialog.SetIconProvider")
 	}
 	C.qute_QFileDialog_setIconProvider(self, providerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(provider)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setIconProvider.provider", providerH)
 }
 
 // IconProvider wraps QFileDialog::iconProvider.

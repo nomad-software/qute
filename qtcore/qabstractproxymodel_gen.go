@@ -51,18 +51,22 @@ func QAbstractProxyModelCast(o QObjectLike) *QAbstractProxyModel {
 //
 //	C++: void QAbstractProxyModel::setSourceModel(QAbstractItemModel * sourceModel)
 //
+// Ownership: sourceModel is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The proxy does not take ownership of the source model.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractproxymodel.html#setSourceModel
 func (this *QAbstractProxyModel) SetSourceModel(sourceModel QAbstractItemModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.SetSourceModel")
 	var sourceModelPtr unsafe.Pointer
+	var sourceModelH *rt.Handle
 	if sourceModel != nil {
-		sourceModelPtr = rt.UseArg(unsafe.Pointer(sourceModel.AsQAbstractItemModel()), "QAbstractProxyModel.SetSourceModel")
+		sourceModelPtr, sourceModelH = rt.Arg(unsafe.Pointer(sourceModel.AsQAbstractItemModel()), "QAbstractProxyModel.SetSourceModel")
 	}
 	C.qute_QAbstractProxyModel_setSourceModel(self, sourceModelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(sourceModel)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setSourceModel.sourceModel", sourceModelH)
 }
 
 // SourceModel wraps QAbstractProxyModel::sourceModel.

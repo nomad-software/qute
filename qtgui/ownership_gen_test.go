@@ -5,9 +5,11 @@ import (
 	"testing"
 
 	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"unsafe"
 )
 
 func TestMain(m *testing.M) { qute.TestMain(m) }
@@ -112,6 +114,19 @@ func TestOwnership_NewQActionGroup(t *testing.T) {
 	})
 }
 
+// QAction * QActionGroup::addAction(QAction * a): keep rules
+func TestKeep_QActionGroup_AddAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQActionGroup(nil)
+		a0 := qtgui.NewQAction(nil)
+		_ = recv.AddAction(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("aArg: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QAction * QActionGroup::addAction(const QString & text)
 func TestOwnership_QActionGroup_AddActionText(t *testing.T) {
 	qute.Run(t, func() {
@@ -155,6 +170,20 @@ func TestOwnership_QActionGroup_AddActionIcon(t *testing.T) {
 		if recv.Alive() {
 			recv.Delete()
 		}
+	})
+}
+
+// void QActionGroup::removeAction(QAction * a): keep rules
+func TestKeep_QActionGroup_RemoveAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQActionGroup(nil)
+		a0 := qtgui.NewQAction(nil)
+		rt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(a0))
+		recv.RemoveAction(a0)
+		if rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("aArg: still kept after the call")
+		}
+		recv.Delete()
 	})
 }
 
@@ -217,6 +246,31 @@ func TestOwnership_NewQDoubleValidatorWithBottom(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// QImageReader::QImageReader(QIODevice * device, const QByteArray & format = …): keep rules
+func TestKeep_QImageReader_QImageReaderWithIODevice(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtcore.NewQFile(nil)
+		x := qtgui.NewQImageReaderWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// void QImageReader::setDevice(QIODevice * device): keep rules
+func TestKeep_QImageReader_SetDevice(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQImageReader()
+		a0 := qtcore.NewQFile(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -375,6 +429,19 @@ func TestOwnership_NewQMovieWithFileName(t *testing.T) {
 	})
 }
 
+// void QMovie::setDevice(QIODevice * device): keep rules
+func TestKeep_QMovie_SetDevice(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQMovie(nil)
+		a0 := qtcore.NewQFile(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QOffscreenSurface::QOffscreenSurface(QScreen * screen = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQOffscreenSurfaceWithScreen(t *testing.T) {
 	qute.Run(t, func() {
@@ -418,6 +485,98 @@ func TestOwnership_NewQOpenGLContext(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QOpenGLContext::setShareContext(QOpenGLContext * shareContext): keep rules
+func TestKeep_QOpenGLContext_SetShareContext(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQOpenGLContext(nil)
+		a0 := qtgui.NewQOpenGLContext(nil)
+		recv.SetShareContext(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("shareContext: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QOpenGLExtraFunctions::QOpenGLExtraFunctions(QOpenGLContext * context) (test from the overlay)
+func TestOwnership_QOpenGLExtraFunctions_NewQOpenGLExtraFunctionsWithOpenGLContext(t *testing.T) {
+	qute.Run(t, func() {
+		ctx := qtgui.NewQOpenGLContext(nil)
+		defer ctx.Delete()
+		surf := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
+		defer surf.Delete()
+		surf.Create()
+		if !ctx.Create() || !ctx.MakeCurrent(surf) {
+			t.Log("no OpenGL context on this platform; the keep rule is not exercised")
+			return
+		}
+		defer ctx.DoneCurrent()
+		x := qtgui.NewQOpenGLExtraFunctionsWithOpenGLContext(ctx)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(ctx)) {
+			t.Error("context not kept by the function table")
+		}
+		x.Delete()
+	})
+}
+
+// QOpenGLFunctions::QOpenGLFunctions(QOpenGLContext * context) (test from the overlay)
+func TestOwnership_QOpenGLFunctions_NewQOpenGLFunctionsWithOpenGLContext(t *testing.T) {
+	qute.Run(t, func() {
+		ctx := qtgui.NewQOpenGLContext(nil)
+		defer ctx.Delete()
+		surf := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
+		defer surf.Delete()
+		surf.Create()
+		if !ctx.Create() || !ctx.MakeCurrent(surf) {
+			t.Log("no OpenGL context on this platform; the keep rule is not exercised")
+			return
+		}
+		defer ctx.DoneCurrent()
+		x := qtgui.NewQOpenGLFunctionsWithOpenGLContext(ctx)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(ctx)) {
+			t.Error("context not kept by the function table")
+		}
+		x.Delete()
+	})
+}
+
+// QPainter::QPainter(QPaintDevice *): keep rules
+func TestKeep_QPainter_QPainterOn(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtgui.NewQImage()
+		x := qtgui.NewQPainterOn(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("paintDevice: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// bool QPainter::begin(QPaintDevice *): keep rules
+func TestKeep_QPainter_Begin(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtgui.NewQPainter()
+		a0 := qtgui.NewQImage()
+		_ = recv.Begin(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("paintDevice: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QPdfWriter::QPdfWriter(QIODevice * device): keep rules
+func TestKeep_QPdfWriter_QPdfWriterWithIODevice(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtcore.NewQFile(nil)
+		x := qtgui.NewQPdfWriterWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 
@@ -1103,6 +1262,18 @@ func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 		if recv.Alive() {
 			recv.Delete()
 		}
+	})
+}
+
+// QTextCursor::QTextCursor(QTextDocument * document): keep rules
+func TestKeep_QTextCursor_QTextCursorWithTextDocument(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtgui.NewQTextDocument(nil)
+		x := qtgui.NewQTextCursorWithTextDocument(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("document: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 

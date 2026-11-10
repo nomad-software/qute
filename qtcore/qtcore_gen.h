@@ -414,8 +414,7 @@ void * qute_QCoreApplication_applicationVersionChanged(void *self, uintptr_t id)
 // QDataStream
 void * qute_QDataStream_new(void);
 void * qute_QDataStream_new_1(void * a0);
-void * qute_QDataStream_new_2(qute_str *a0_out, int64_t a1);
-void * qute_QDataStream_new_3(const char *a0, ptrdiff_t a0_len);
+void * qute_QDataStream_new_2(const char *a0, ptrdiff_t a0_len);
 void qute_QDataStream_delete(void *self);
 void * qute_QDataStream_device(void *self);
 void qute_QDataStream_setDevice(void *self, void * a0);
@@ -713,7 +712,7 @@ bool qute_QFileDevice_resize(void *self, long long a0);
 int64_t qute_QFileDevice_permissions(void *self);
 bool qute_QFileDevice_setPermissions(void *self, int64_t a0);
 void * qute_QFileDevice_map(void *self, long long a0, long long a1);
-bool qute_QFileDevice_unmap(void *self, unsigned char *a0_out);
+bool qute_QFileDevice_unmap(void *self, void * a0);
 void * qute_QFileDevice_fileTime(void *self, int64_t a0);
 bool qute_QFileDevice_setFileTime(void *self, void * a0, int64_t a1);
 

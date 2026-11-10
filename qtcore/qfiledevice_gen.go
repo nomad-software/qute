@@ -147,12 +147,11 @@ func (this *QFileDevice) Map(offset int64, size int64) unsafe.Pointer {
 //	C++: bool QFileDevice::unmap(uchar * address)
 //
 // Qt docs: https://doc.qt.io/qt-6/qfiledevice.html#unmap
-func (this *QFileDevice) Unmap() (bool, uint8) {
+func (this *QFileDevice) Unmap(address unsafe.Pointer) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Unmap")
-	var addressOut C.uchar
-	r := C.qute_QFileDevice_unmap(self, &addressOut)
+	r := C.qute_QFileDevice_unmap(self, address)
 	runtime.KeepAlive(this)
-	return bool(r), uint8(addressOut)
+	return bool(r)
 }
 
 // FileTime wraps QFileDevice::fileTime.

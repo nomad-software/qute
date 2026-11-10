@@ -55,17 +55,33 @@ QWidget:
   childAt(int, int): { skip: "use the QPoint overload" }
   childAt(const QPointF&): { name: ChildAtF }
   setFocusProxy: { reviewed: true }
-  setStyle: { reviewed: true, doc: "Qt does not take ownership of the style." }
+  setStyle:
+    args: { 0: keep }
+    reviewed: true
+    doc: "Qt does not take ownership of the style; the widget keeps it from being garbage collected."
+    test: |
+      recv := qtwidgets.NewQWidget(nil)
+      s := qtwidgets.QStyleFactoryCreate("Fusion")
+      recv.SetStyle(s)
+      if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(s)) {
+        t.Error("style not kept")
+      }
+      recv.SetStyle(nil)
+      if rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(s)) {
+        t.Error("style still kept after SetStyle(nil)")
+      }
+      s.Delete()
+      recv.Delete()
   style: { return: borrowed }
-  addAction(QAction*): { args: { action: borrowed } }
+  addAction(QAction*): { args: { action: keep-each } }
   addAction(const QString&): { name: AddActionText, return: parented }
   addAction(const QIcon&, const QString&): { name: AddActionIcon, return: parented }
   addAction(const QString&, const QKeySequence&): { name: AddActionShortcut, return: parented }
   addAction(const QIcon&, const QString&, const QKeySequence&): { name: AddActionIconShortcut, return: parented }
   addActions: { reviewed: true }
-  insertAction: { reviewed: true }
+  insertAction: { args: { action: keep-each }, reviewed: true }
   insertActions: { reviewed: true }
-  removeAction: { reviewed: true }
+  removeAction: { args: { action: release }, reviewed: true }
   setTabOrder: { reviewed: true }
   isAncestorOf: { reviewed: true }
   isEnabledTo: { reviewed: true }
@@ -113,7 +129,7 @@ QWidget:
 QFrame: {}
 
 QLabel:
-  setMovie: { reviewed: true, doc: "The label does not take ownership of the movie; keep it alive." }
+  setMovie: { args: { movie: keep }, reviewed: true, doc: "The label does not take ownership of the movie; it keeps the movie from being garbage collected." }
   movie: { return: borrowed }
   setBuddy: { reviewed: true }
   buddy: { return: borrowed }
@@ -123,14 +139,14 @@ QAbstractButton:
   group: { return: borrowed }
 
 QPushButton:
-  setMenu: { reviewed: true, doc: "The button does not take ownership of the menu." }
+  setMenu: { args: { menu: keep }, reviewed: true, doc: "The button does not take ownership of the menu." }
   menu: { return: borrowed }
 
 QToolButton:
-  setMenu: { reviewed: true, doc: "The button does not take ownership of the menu." }
+  setMenu: { args: { menu: keep }, reviewed: true, doc: "The button does not take ownership of the menu." }
   menu: { return: borrowed }
   defaultAction: { return: borrowed }
-  setDefaultAction: { reviewed: true }
+  setDefaultAction: { args: { 0: keep }, reviewed: true }
 
 QButtonGroup:
   addButton: { reviewed: true, doc: "The group does not take ownership of the button." }
@@ -144,25 +160,25 @@ QButtonGroup:
 QLineEdit:
   timerEvent: { reviewed: true }
   QLineEdit(const QString&, QWidget*): { name: NewQLineEditWithText }
-  setValidator: { reviewed: true, doc: "The line edit does not take ownership of the validator." }
+  setValidator: { args: { 0: keep }, reviewed: true, doc: "The line edit does not take ownership of the validator." }
   validator: { return: borrowed }
-  setCompleter: { reviewed: true }
+  setCompleter: { args: { completer: keep }, reviewed: true }
   completer: { return: borrowed }
   setTextMargins(const QMargins&): { name: SetTextMargins }
   addAction(const QIcon&, QLineEdit::ActionPosition): { name: AddActionIcon, return: parented }
-  addAction(QAction*, QLineEdit::ActionPosition): { name: AddActionAt, reviewed: true }
+  addAction(QAction*, QLineEdit::ActionPosition): { args: { action: keep-each }, name: AddActionAt, reviewed: true }
   createStandardContextMenu: { return: transfer-to-go }
 
 QTextEdit:
   print: { reviewed: true }
-  setDocument: { reviewed: true, doc: "The text edit does not take ownership of the document." }
+  setDocument: { args: { document: keep }, reviewed: true, doc: "The text edit does not take ownership of the document." }
   document: { return: borrowed }
   createStandardContextMenu(): { return: transfer-to-go }
   createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: transfer-to-go }
 
 QPlainTextEdit:
   print: { reviewed: true }
-  setDocument: { reviewed: true }
+  setDocument: { args: { document: keep }, reviewed: true }
   document: { return: borrowed }
   createStandardContextMenu(): { return: transfer-to-go }
   createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: transfer-to-go }
@@ -200,21 +216,23 @@ QScrollArea:
   ensureWidgetVisible: { reviewed: true }
 
 QAbstractSpinBox:
+  validate: { args: { input: in-out, pos: in-out } }
+  fixup: { args: { input: in-out } }
 
 QDateTimeEdit:
-  setCalendarWidget: { reviewed: true, doc: "The editor does not take ownership of the calendar widget (Qt docs); parent it yourself." }
+  setCalendarWidget: { args: { calendarWidget: keep }, reviewed: true, doc: "The editor does not take ownership of the calendar widget (Qt docs); it keeps it from being garbage collected, but parent it to free it with the editor." }
   calendarWidget: { return: borrowed }
 
 QComboBox:
   setLineEdit: { args: { edit: transfer-to-cpp } }
   lineEdit: { return: borrowed }
-  setValidator: { reviewed: true }
+  setValidator: { args: { v: keep }, reviewed: true }
   validator: { return: borrowed }
-  setCompleter: { reviewed: true }
+  setCompleter: { args: { c: keep }, reviewed: true }
   completer: { return: borrowed }
-  setItemDelegate: { reviewed: true }
+  setItemDelegate: { args: { delegate: keep }, reviewed: true }
   itemDelegate: { return: borrowed }
-  setModel: { reviewed: true, doc: "The combo box does not take ownership of the model." }
+  setModel: { args: { model: keep }, reviewed: true, doc: "The combo box does not take ownership of the model." }
   model: { return: borrowed }
   setView: { args: { itemView: transfer-to-cpp } }
   view: { return: borrowed }
@@ -281,6 +299,7 @@ QSplitter:
       old.Delete()
   widget: { return: borrowed }
   indexOf: { reviewed: true }
+  getRange: { args: { 1: out, 2: out } }
 
 QMainWindow:
   setCentralWidget: { args: { widget: transfer-to-cpp } }
@@ -338,10 +357,10 @@ QMainWindow:
 QMenuBar:
   actionGeometry: { reviewed: true }
   actionAt: { return: borrowed }
-  addMenu(QMenu*): { args: { menu: borrowed }, return: borrowed, doc: "The menu bar does not take ownership of the menu." }
+  addMenu(QMenu*): { args: { menu: keep-each }, return: borrowed, doc: "The menu bar does not take ownership of the menu." }
   addMenu(const QString&): { name: AddMenuTitle, return: parented }
   addMenu(const QIcon&, const QString&): { name: AddMenuIcon, return: parented }
-  insertMenu: { reviewed: true, return: borrowed }
+  insertMenu: { args: { menu: keep-each }, reviewed: true, return: borrowed }
   addSeparator: { return: parented }
   insertSeparator: { return: parented, reviewed: true }
   setCornerWidget: { args: { w: transfer-to-cpp } }
@@ -351,10 +370,10 @@ QMenuBar:
 
 QMenu:
   setNoReplayFor: { reviewed: true }
-  addMenu(QMenu*): { args: { menu: borrowed }, return: borrowed, doc: "The menu does not take ownership of the submenu." }
+  addMenu(QMenu*): { args: { menu: keep-each }, return: borrowed, doc: "The menu does not take ownership of the submenu." }
   addMenu(const QString&): { name: AddMenuTitle, return: parented }
   addMenu(const QIcon&, const QString&): { name: AddMenuIcon, return: parented }
-  insertMenu: { reviewed: true, return: borrowed }
+  insertMenu: { args: { menu: keep-each }, reviewed: true, return: borrowed }
   addSeparator: { return: parented }
   insertSeparator: { return: parented, reviewed: true }
   addSection(const QString&): { name: AddSection, return: parented }
@@ -556,6 +575,7 @@ QLayout:
   setAlignment(QWidget*, Qt::Alignment): { name: SetWidgetAlignment, reviewed: true }
   setAlignment(QLayout*, Qt::Alignment): { name: SetLayoutAlignment, reviewed: true }
   setContentsMargins(const QMargins&): { name: SetContentsMargins }
+  getContentsMargins: { args: { left: out, top: out, right: out, bottom: out } }
 
 QLayoutItem:
   widget: { return: borrowed }
@@ -589,12 +609,13 @@ QGridLayout:
   itemAtPosition: { return: borrowed }
   takeAt: { return: transfer-to-go }
   itemAt: { return: borrowed }
+  getItemPosition: { args: { row: out, column: out, rowSpan: out, columnSpan: out } }
 
 QFormLayout:
   itemAt(int, QFormLayout::ItemRole): { name: ItemAtRole, return: borrowed }
   takeRow: { reviewed: true, doc: "The returned label and field items are no longer in the layout; their widgets keep their parent." }
-  getLayoutPosition: { reviewed: true }
-  getWidgetPosition: { reviewed: true }
+  getLayoutPosition: { args: { rowPtr: out, rolePtr: out }, reviewed: true }
+  getWidgetPosition: { args: { rowPtr: out, rolePtr: out }, reviewed: true }
   labelForField(QWidget*): { name: LabelForField, return: borrowed, reviewed: true }
   addRow(QWidget*, QWidget*): { name: AddRow, args: { label: transfer-to-cpp, field: transfer-to-cpp } }
   addRow(QWidget*, QLayout*): { name: AddRowLayout, args: { label: transfer-to-cpp, field: transfer-to-cpp } }
@@ -624,6 +645,7 @@ QFormLayout:
   isRowVisible(int): { name: IsRowVisible }
   isRowVisible(QWidget*): { name: IsRowVisibleOf, reviewed: true }
   isRowVisible(QLayout*): { name: IsRowVisibleOfLayout, reviewed: true }
+  getItemPosition: { args: { rowPtr: out, rolePtr: out } }
 
 QStackedLayout:
   QStackedLayout(QLayout*): { name: NewQStackedLayoutIn, args: { parentLayout: transfer-this }, doc: "Inserts the new layout into parentLayout, which then owns it." }
@@ -638,14 +660,14 @@ QStackedLayout:
 
 QAbstractItemView:
   itemDelegateForIndex: { return: borrowed }
-  setModel: { reviewed: true, doc: "The view does not take ownership of the model; parent the model to the view, or keep it alive." }
+  setModel: { args: { model: keep }, reviewed: true, doc: "The view does not take ownership of the model; it keeps the model from being garbage collected while the view lives." }
   model: { return: borrowed }
-  setSelectionModel: { reviewed: true }
+  setSelectionModel: { args: { selectionModel: keep }, reviewed: true }
   selectionModel: { return: borrowed }
-  setItemDelegate: { reviewed: true, doc: "The view does not take ownership of the delegate." }
+  setItemDelegate: { args: { delegate: keep }, reviewed: true, doc: "The view does not take ownership of the delegate." }
   itemDelegate: { return: borrowed }
-  setItemDelegateForRow: { reviewed: true }
-  setItemDelegateForColumn: { reviewed: true }
+  setItemDelegateForRow: { args: { delegate: keep-each }, reviewed: true }
+  setItemDelegateForColumn: { args: { delegate: keep-each }, reviewed: true }
   itemDelegateForRow: { return: borrowed }
   itemDelegateForColumn: { return: borrowed }
   setIndexWidget:
@@ -929,12 +951,12 @@ QTableWidgetItem:
 QCompleter:
   activated(const QModelIndex&): { name: ActivatedIndex }
   highlighted(const QModelIndex&): { name: HighlightedIndex }
-  QCompleter(QAbstractItemModel*, QObject*): { name: NewQCompleterWithModel, args: { model: borrowed } }
+  QCompleter(QAbstractItemModel*, QObject*): { name: NewQCompleterWithModel, args: { model: keep:model } }
   setPopup: { args: { popup: transfer-to-cpp } }
   popup: { return: borrowed }
   setWidget: { reviewed: true }
   widget: { return: borrowed }
-  setModel: { reviewed: true }
+  setModel: { args: { c: keep:model }, reviewed: true }
   model: { return: borrowed }
   completionModel: { return: borrowed }
 
@@ -963,7 +985,7 @@ QWidgetAction:
 QSystemTrayIcon:
   showMessage(const QString&, const QString&, const QIcon&, int): { name: ShowMessageIcon }
   showMessage(const QString&, const QString&, QSystemTrayIcon::MessageIcon, int): { name: ShowMessage }
-  setContextMenu: { reviewed: true, doc: "The tray icon does not take ownership of the menu." }
+  setContextMenu: { args: { menu: keep }, reviewed: true, doc: "The tray icon does not take ownership of the menu." }
   contextMenu: { return: borrowed }
 
 QMdiArea:
@@ -1080,7 +1102,21 @@ QGraphicsScene:
   views: { return: borrowed }
   createItemGroup: { skip: "QGraphicsItemGroup is not bound" }
   destroyItemGroup: { skip: "QGraphicsItemGroup is not bound" }
-  setStyle: { reviewed: true }
+  setStyle:
+    args: { style: transfer-to-cpp }
+    reviewed: true
+    doc: "The scene reparents the style to itself and deletes the style it replaces (Qt docs), so never pass a style something else owns, such as QApplicationStyle()."
+    test: |
+      recv := qtwidgets.NewQGraphicsScene(nil)
+      s := qtwidgets.QStyleFactoryCreate("Fusion")
+      recv.SetStyle(s)
+      if got := s.Ownership(); got != qtcore.Parented {
+        t.Errorf("style: %v, want Parented", got)
+      }
+      recv.Delete()
+      if s.Alive() {
+        t.Error("style alive after its scene was deleted")
+      }
   style: { return: borrowed }
 
 QGraphicsView:
@@ -1108,12 +1144,12 @@ QGraphicsView:
   mapToScene(int, int, int, int): { skip: "use the QRect overload" }
   mapFromScene(qreal, qreal): { skip: "use the QPointF overload" }
   mapFromScene(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
-  QGraphicsView(QGraphicsScene*, QWidget*): { name: NewQGraphicsViewWithScene, args: { scene: borrowed } }
+  QGraphicsView(QGraphicsScene*, QWidget*): { name: NewQGraphicsViewWithScene, args: { scene: keep:scene } }
   centerOn: { reviewed: true }
   ensureVisible: { reviewed: true }
   fitInView: { reviewed: true }
   render: { reviewed: true }
-  setScene: { reviewed: true, doc: "The view does not take ownership of the scene." }
+  setScene: { args: { scene: keep:scene }, reviewed: true, doc: "The view does not take ownership of the scene." }
   scene: { return: borrowed }
   itemAt: { return: borrowed }
   items: { return: borrowed }
@@ -1210,6 +1246,7 @@ QStyle:
   drawItemText: { reviewed: true }
   drawItemPixmap: { reviewed: true }
   proxy: { return: borrowed }
+  polish(QPalette&): { args: { palette: in-out }, doc: "Qt adjusts the palette it is given, so pass the palette to start from; the result is the polished copy." }
 
 QAbstractItemDelegate:
   updateEditorGeometry: { reviewed: true }
@@ -1243,9 +1280,9 @@ QAbstractItemDelegate:
   closeEditor: { reviewed: true }
 
 QFileDialog:
-  setIconProvider: { reviewed: true, doc: "The dialog does not take ownership of the provider; keep it alive." }
+  setIconProvider: { args: { provider: keep }, reviewed: true, doc: "The dialog does not take ownership of the provider; it keeps the provider from being garbage collected." }
   iconProvider: { return: borrowed }
-  setItemDelegate: { reviewed: true, doc: "QFileDialog does not take ownership of the delegate (Qt docs)." }
+  setItemDelegate: { args: { delegate: keep }, reviewed: true, doc: "QFileDialog does not take ownership of the delegate (Qt docs)." }
   itemDelegate: { return: borrowed }
   setProxyModel: { args: { model: transfer-to-cpp }, doc: "The file dialog takes ownership of the proxy model (Qt docs)." }
   proxyModel: { return: borrowed }
@@ -1253,7 +1290,7 @@ QFileDialog:
 QGraphicsTextItem:
   paint: { reviewed: true }
   isObscuredBy: { reviewed: true }
-  setDocument: { reviewed: true, doc: "Qt does not document a transfer of ownership; parent the document to a QObject or keep it alive." }
+  setDocument: { args: { document: keep }, reviewed: true, doc: "Qt does not document a transfer of ownership; the item keeps the document from being garbage collected." }
   document: { return: borrowed }
 
 QInputDialog:
@@ -1337,7 +1374,7 @@ QItemEditorFactory:
   defaultFactory: { return: borrowed }
 
 QStyledItemDelegate:
-  setItemEditorFactory: { reviewed: true, doc: "The delegate does not take ownership of the factory." }
+  setItemEditorFactory: { args: { factory: keep }, reviewed: true, doc: "The delegate does not take ownership of the factory." }
   itemEditorFactory: { return: borrowed }
 
 QGraphicsItemGroup:
@@ -1466,24 +1503,45 @@ QGraphicsLayout:
 
 QGraphicsWidget:
   style: { return: borrowed }
-  setStyle: { reviewed: true }
+  setStyle:
+    args: { style: keep }
+    reviewed: true
+    doc: "QGraphicsWidget does not take ownership of the style (Qt docs); it keeps the style from being garbage collected."
+    test: |
+      recv := qtwidgets.NewQGraphicsWidget(nil)
+      s := qtwidgets.QStyleFactoryCreate("Fusion")
+      recv.SetStyle(s)
+      if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(s)) {
+        t.Error("style not kept")
+      }
+      defer s.Delete()
+      recv.Delete()
   focusWidget: { return: borrowed }
-  addAction: { reviewed: true }
+  addAction: { args: { action: keep-each }, reviewed: true }
   addActions: { reviewed: true }
   insertActions: { reviewed: true }
-  insertAction: { reviewed: true }
-  removeAction: { reviewed: true }
+  insertAction: { args: { action: keep-each }, reviewed: true }
+  removeAction: { args: { action: release }, reviewed: true }
   actions: { return: borrowed }
   paint: { reviewed: true }
   paintWindowFrame: { reviewed: true }
   setTabOrder: { reviewed: true }
   setLayout: { args: { layout: transfer-to-cpp }, doc: "The widget takes ownership of the layout." }
   layout: { return: borrowed }
+  getContentsMargins: { args: { left: out, top: out, right: out, bottom: out } }
+  getWindowFrameMargins: { args: { left: out, top: out, right: out, bottom: out } }
 
 QGraphicsLayoutItem:
   parentLayoutItem: { return: borrowed }
   setParentLayoutItem: { reviewed: true }
   graphicsItem: { return: borrowed }
+  getContentsMargins: { args: { left: out, top: out, right: out, bottom: out } }
 
 QStyleOption:
   initFrom: { reviewed: true }
+
+QFontDialog:
+  getFont: { args: { ok: out } }
+
+QStyleFactory:
+  create: { return: transfer-to-go }

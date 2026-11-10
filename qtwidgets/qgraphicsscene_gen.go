@@ -763,16 +763,22 @@ func (this *QGraphicsScene) Style() *QStyle {
 //
 //	C++: void QGraphicsScene::setStyle(QStyle * style)
 //
+// Ownership: style becomes Parented: Qt frees it from now on.
+//
+// The scene reparents the style to itself and deletes the style it replaces (Qt docs), so never pass a style something else owns, such as QApplicationStyle().
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setStyle
 func (this *QGraphicsScene) SetStyle(style QStyleLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetStyle")
 	var stylePtr unsafe.Pointer
+	var styleH *rt.Handle
 	if style != nil {
-		stylePtr = rt.UseArg(unsafe.Pointer(style.AsQStyle()), "QGraphicsScene.SetStyle")
+		stylePtr, styleH = rt.Arg(unsafe.Pointer(style.AsQStyle()), "QGraphicsScene.SetStyle")
 	}
 	C.qute_QGraphicsScene_setStyle(self, stylePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(style)
+	styleH.TransferToCpp()
 }
 
 // Font wraps QGraphicsScene::font.

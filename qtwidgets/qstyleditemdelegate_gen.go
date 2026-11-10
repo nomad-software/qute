@@ -89,18 +89,22 @@ func (this *QStyledItemDelegate) ItemEditorFactory() *QItemEditorFactory {
 //
 //	C++: void QStyledItemDelegate::setItemEditorFactory(QItemEditorFactory * factory)
 //
+// Ownership: factory is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The delegate does not take ownership of the factory.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyleditemdelegate.html#setItemEditorFactory
 func (this *QStyledItemDelegate) SetItemEditorFactory(factory QItemEditorFactoryLike) {
 	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.SetItemEditorFactory")
 	var factoryPtr unsafe.Pointer
+	var factoryH *rt.Handle
 	if factory != nil {
-		factoryPtr = rt.UseArg(unsafe.Pointer(factory.AsQItemEditorFactory()), "QStyledItemDelegate.SetItemEditorFactory")
+		factoryPtr, factoryH = rt.Arg(unsafe.Pointer(factory.AsQItemEditorFactory()), "QStyledItemDelegate.SetItemEditorFactory")
 	}
 	C.qute_QStyledItemDelegate_setItemEditorFactory(self, factoryPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(factory)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemEditorFactory.factory", factoryH)
 }
 
 // DisplayText wraps QStyledItemDelegate::displayText.

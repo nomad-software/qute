@@ -135,6 +135,8 @@ func (this *QClipboard) Text() string {
 //
 //	C++: QString QClipboard::text(QString & subtype, Mode mode = …) const
 //
+// subtype is read (the MIME subtype wanted, or empty for any) and set to the subtype found.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#text
 func (this *QClipboard) TextWithSubtype(subtype string) (string, string) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.TextWithSubtype")

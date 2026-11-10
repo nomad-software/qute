@@ -71,16 +71,20 @@ func NewQPdfWriterWithFilename(filename string) *QPdfWriter {
 //
 //	C++: QPdfWriter::QPdfWriter(QIODevice * device)
 //
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpdfwriter.html#QPdfWriter
 func NewQPdfWriterWithIODevice(device qtcore.QIODeviceLike) *QPdfWriter {
 	rt.CheckThread("NewQPdfWriterWithIODevice")
 	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
 	if device != nil {
-		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "NewQPdfWriterWithIODevice")
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "NewQPdfWriterWithIODevice")
 	}
 	p := C.qute_QPdfWriter_new_1(devicePtr)
 	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	rt.KeepArg(h, "QPdfWriter.device", deviceH)
 	return rt.View[QPdfWriter](h, p)
 }
 

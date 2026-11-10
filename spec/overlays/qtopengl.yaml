@@ -160,6 +160,6 @@ QOpenGLPaintDevice:
   context: { return: borrowed }
 
 QOpenGLWindow:
-  QOpenGLWindow(QOpenGLContext*, QOpenGLWindow::UpdateBehavior, QWindow*): { name: NewQOpenGLWindowShared, args: { shareContext: borrowed } }
+  QOpenGLWindow(QOpenGLContext*, QOpenGLWindow::UpdateBehavior, QWindow*): { name: NewQOpenGLWindowShared, args: { shareContext: keep } }
   context: { return: borrowed }
   shareContext: { return: borrowed }

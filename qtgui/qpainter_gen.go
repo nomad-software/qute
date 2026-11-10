@@ -93,7 +93,7 @@ func NewQPainter() *QPainter {
 //
 //	C++: QPainter::QPainter(QPaintDevice *)
 //
-// Ownership: paintDevice is borrowed for the call only.
+// Ownership: paintDevice is borrowed, and the new object keeps it from being garbage collected while it lives.
 //
 // Painting ends when the painter is deleted; call End() or Delete() before the handler returns.
 //
@@ -101,12 +101,14 @@ func NewQPainter() *QPainter {
 func NewQPainterOn(paintDevice QPaintDeviceLike) *QPainter {
 	rt.CheckThread("NewQPainterOn")
 	var paintDevicePtr unsafe.Pointer
+	var paintDeviceH *rt.Handle
 	if paintDevice != nil {
-		paintDevicePtr = rt.UseArg(unsafe.Pointer(paintDevice.AsQPaintDevice()), "NewQPainterOn")
+		paintDevicePtr, paintDeviceH = rt.Arg(unsafe.Pointer(paintDevice.AsQPaintDevice()), "NewQPainterOn")
 	}
 	p := C.qute_QPainter_new_1(paintDevicePtr)
 	runtime.KeepAlive(paintDevice)
 	h := rt.WrapClass(p, "QPainter", rt.NewOwned)
+	rt.KeepArg(h, "device", paintDeviceH)
 	return rt.View[QPainter](h, p)
 }
 
@@ -128,16 +130,20 @@ func (this *QPainter) Device() *QPaintDevice {
 //
 //	C++: bool QPainter::begin(QPaintDevice *)
 //
+// Ownership: paintDevice is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#begin
 func (this *QPainter) Begin(paintDevice QPaintDeviceLike) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Begin")
 	var paintDevicePtr unsafe.Pointer
+	var paintDeviceH *rt.Handle
 	if paintDevice != nil {
-		paintDevicePtr = rt.UseArg(unsafe.Pointer(paintDevice.AsQPaintDevice()), "QPainter.Begin")
+		paintDevicePtr, paintDeviceH = rt.Arg(unsafe.Pointer(paintDevice.AsQPaintDevice()), "QPainter.Begin")
 	}
 	r := C.qute_QPainter_begin(self, paintDevicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(paintDevice)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", paintDeviceH)
 	return bool(r)
 }
 

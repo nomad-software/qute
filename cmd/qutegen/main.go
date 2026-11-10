@@ -23,39 +23,8 @@ func main() {
 }
 
 func run(root string) error {
-	g := &Gen{root: root, byName: map[string]*Module{}, classes: map[string]*Class{},
-		enums: map[string]*Enum{}, structs: map[string]*structDef{}, report: &Report{}}
-	mods := []struct {
-		name, pkg, pc string
-		deps          []string
-	}{
-		{"QtCore", "qtcore", "Qt6Core", nil},
-		{"QtGui", "qtgui", "Qt6Gui", []string{"QtCore"}},
-		{"QtWidgets", "qtwidgets", "Qt6Widgets", []string{"QtCore", "QtGui"}},
-		{"QtOpenGL", "qtopengl", "Qt6OpenGL", []string{"QtCore", "QtGui"}},
-		{"QtOpenGLWidgets", "qtopenglwidgets", "Qt6OpenGLWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtOpenGL"}},
-	}
-	for _, md := range mods {
-		ir, err := loadIR(filepath.Join(root, "spec", "ir", md.pkg+".json"))
-		if err != nil {
-			return err
-		}
-		spec := &classSpec{}
-		if err := loadYAML(filepath.Join(root, "spec", "classes", md.pkg+".yaml"), spec); err != nil {
-			return err
-		}
-		ov := overlayFile{}
-		if err := loadYAML(filepath.Join(root, "spec", "overlays", md.pkg+".yaml"), &ov); err != nil {
-			return err
-		}
-		m := &Module{Name: md.name, Pkg: md.pkg, ImportPath: modulePath + "/" + md.pkg, PkgConfig: md.pc,
-			IR: ir, Spec: spec, Overlays: ov, Deps: depsOf(g, md.deps),
-			imports: map[string]bool{}, pkgNames: map[string]string{}, usedOver: map[string]bool{}}
-		g.modules = append(g.modules, m)
-		g.byName[md.name] = m
-	}
-	g.initStructs()
-	if err := g.build(); err != nil {
+	g, err := load(root)
+	if err != nil {
 		return err
 	}
 	for _, m := range g.modules {
@@ -75,6 +44,47 @@ func run(root string) error {
 	}
 	fmt.Printf("qutegen: %d classes in %d packages\n", n, len(g.modules))
 	return nil
+}
+
+// load reads the IR and specs and resolves every class, without writing
+// anything.
+func load(root string) (*Gen, error) {
+	g := &Gen{root: root, byName: map[string]*Module{}, classes: map[string]*Class{},
+		enums: map[string]*Enum{}, structs: map[string]*structDef{}, report: &Report{}}
+	mods := []struct {
+		name, pkg, pc string
+		deps          []string
+	}{
+		{"QtCore", "qtcore", "Qt6Core", nil},
+		{"QtGui", "qtgui", "Qt6Gui", []string{"QtCore"}},
+		{"QtWidgets", "qtwidgets", "Qt6Widgets", []string{"QtCore", "QtGui"}},
+		{"QtOpenGL", "qtopengl", "Qt6OpenGL", []string{"QtCore", "QtGui"}},
+		{"QtOpenGLWidgets", "qtopenglwidgets", "Qt6OpenGLWidgets", []string{"QtCore", "QtGui", "QtWidgets", "QtOpenGL"}},
+	}
+	for _, md := range mods {
+		ir, err := loadIR(filepath.Join(root, "spec", "ir", md.pkg+".json"))
+		if err != nil {
+			return nil, err
+		}
+		spec := &classSpec{}
+		if err := loadYAML(filepath.Join(root, "spec", "classes", md.pkg+".yaml"), spec); err != nil {
+			return nil, err
+		}
+		ov := overlayFile{}
+		if err := loadYAML(filepath.Join(root, "spec", "overlays", md.pkg+".yaml"), &ov); err != nil {
+			return nil, err
+		}
+		m := &Module{Name: md.name, Pkg: md.pkg, ImportPath: modulePath + "/" + md.pkg, PkgConfig: md.pc,
+			IR: ir, Spec: spec, Overlays: ov, Deps: depsOf(g, md.deps),
+			imports: map[string]bool{}, pkgNames: map[string]string{}, usedOver: map[string]bool{}}
+		g.modules = append(g.modules, m)
+		g.byName[md.name] = m
+	}
+	g.initStructs()
+	if err := g.build(); err != nil {
+		return nil, err
+	}
+	return g, nil
 }
 
 func depsOf(g *Gen, names []string) []*Module {

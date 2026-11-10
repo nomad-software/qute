@@ -1,0 +1,59 @@
+I found four real bugs in the generated bindings, three of them memory-unsafe, plus one design gap that breaks the project's first goal. The runtime core itself is well built. Nothing in the repo was changed; gofmt, go vet and go test ./... are all clean on the current tree.
+
+Confirmed bugs
+
+All four come from one generator rule: outConv in cmd/qutegen/model.go:1243 treats any non-const pointer or reference parameter as an out-parameter, purely by type. I ran the first three under AddressSanitizer in a scratch module outside the repo.
+
+┌──────────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────┬──────────────────────────────────────┐
+│             Binding              │                                        What happens                                         │                Result                │
+├──────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────────┤
+│ QMatrix4x4.CopyDataTo()          │ Qt writes 16 floats through a pointer to one stack float                                    │ "stack smashing detected", abort     │
+├──────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────────┤
+│ NewQImageWithData(w, h, bpl,     │ The image is built over a one-byte C++ stack local that is dead on return; the data         │ crash on Fill                        │
+│ fmt)                             │ argument is gone from the Go signature                                                      │                                      │
+├──────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────────┤
+│ NewQDataStreamWithBytes(flags)   │ The stream is built over a temporary QByteArray destroyed on return                         │ dangling pointer (read from the      │
+│                                  │                                                                                             │ shim, not run)                       │
+├──────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────────┤
+│ QFileDevice.Unmap()              │ Takes no address and passes a stack byte, so it can never unmap what Map returned           │ always fails (not run)               │
+└──────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────┴──────────────────────────────────────┘
+
+Two related wrong-behaviour cases, read from the code rather than run:
+
+- QStyle.Polish(): the QPalette & is in-out in Qt but bound as out-only, so the caller's palette is never passed in.
+- InitStyleOption override on QPushButton: the shim hands Go a copy of the option and never copies it back, so a Go override has no effect.
+
+The out-parameter list is short (about 30 signatures) and the rest look right (getDate, getContentsMargins, bool *ok), so this is fixable with overlay entries plus a per-method override for the heuristic.
+
+Design gap: Qt keeps a raw pointer, GC frees the target
+
+There is no "keep this argument alive as long as the receiver" rule. When Qt holds a non-owning pointer and Go drops its last reference, the GC deletes the object underneath Qt. Two cases crash from ordinary Go code:
+
+- Stream on a device: NewQDataStreamWithIODevice(f) with f otherwise unreferenced, then a GC, then ds.AtEnd() segfaults.
+- Index on a model: idx := model.Index(0, 0), model unreferenced, GC, then idx.Data() segfaults.
+
+QImageReader and QMovie with a device, and a long-lived QPainter on a device, have the same shape. Deletion only happens at an event-loop turn, so straight-line code is safe; the problem is anything held across events.
+
+Where Qt uses a guarded pointer the failure is silent instead. After view.SetModel(NewQStringListModel…(…, nil)) and a GC, view.Model() is nil and the view is empty. The same applies to SetMenu, SetCompleter, SetValidator and SetItemDelegate. The overlay doc says "parent it or keep it alive", but with a non-deterministic GC this will show up as random disappearing models. PySide solves this with a reference-keeping annotation; qute needs the equivalent.
+
+Smaller concerns
+
+- Coverage numbers overstate safety. COVERAGE.md reports 0 open review items, yet every bug above is in code marked bound and reviewed. The generated tests check ownership transitions, not whether a binding's signature makes sense.
+- No direct tests for the core. internal/rt and the 5,400-line cmd/qutegen have no test files; they are exercised only through the generated packages.
+- Off-thread Qt call. NewConnection in internal/rt/callbacks.go frees the QMetaObject::Connection from a GC cleanup, which runs off the GUI thread. That contradicts the stated invariant; I did not confirm it causes harm.
+- Panic recovery in qute.Run. A panic inside a nested signal handler is recovered after abandoning C++ frames without unwinding them, which may leave Qt in an odd state for later tests. Also unconfirmed.
+- PostSync can block forever if the post fails or the app exits before the function runs.
+- Naming. NewQDataStreamWithBytesBytes slipped past the "every overload has a proper name" claim.
+
+What is good
+
+- The runtime is small and coherent. One place decides ownership, about 1,100 lines, and it is easy to follow.
+- Address reuse is handled properly. Registry entries are removed before memory is freed, and queued cleanups carry a serial number.
+- GC never deletes off the GUI thread, and the "never delete a QObject with a parent" safety net is a sensible backstop.
+- The KeepAlive work is real. keepalive_test.go runs the GC inside a live call and would catch a regression.
+- Subclassing is done carefully. UserDefined rejecting promoted methods prevents a subtle infinite recursion.
+- Error messages are excellent. Panics name the method, the cause and the fix.
+- The spec/overlay split works. Each bug above is a one-line overlay fix plus a small generator change.
+- Headless tooling (screenshot, tree dump, scripted input) and the CI matrix (asan, cgocheck2, regenerate-and-diff) are more than most binding projects have.
+
+The reproduction tests are in /tmp/claude-1000/-mnt-data-Projects-Go-qute/711cb3dd-3857-4a55-83fe-ff7c21f737da/scratchpad/repro/repro_test.go.

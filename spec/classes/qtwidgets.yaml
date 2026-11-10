@@ -80,6 +80,7 @@ classes:
   QLCDNumber: {}
   QKeySequenceEdit: {}
   QStyle: { no-construct: true }
+  QStyleFactory: { no-construct: true }
   QSystemTrayIcon: {}
   QWidgetAction: {}
   QRubberBand: {}

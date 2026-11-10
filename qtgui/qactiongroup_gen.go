@@ -75,7 +75,7 @@ func NewQActionGroup(parent qtcore.QObjectLike) *QActionGroup {
 //
 //	C++: QAction * QActionGroup::addAction(QAction * a)
 //
-// Ownership: aArg is borrowed for the call only; the result is Borrowed: Go never frees it.
+// Ownership: aArg is borrowed, and the receiver keeps it from being garbage collected while it lives; the result is Borrowed: Go never frees it.
 //
 // The group does not take ownership of the action.
 //
@@ -83,12 +83,14 @@ func NewQActionGroup(parent qtcore.QObjectLike) *QActionGroup {
 func (this *QActionGroup) AddAction(aArg QActionLike) *QAction {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.AddAction")
 	var aArgPtr unsafe.Pointer
+	var aArgH *rt.Handle
 	if aArg != nil {
-		aArgPtr = rt.UseArg(unsafe.Pointer(aArg.AsQAction()), "QActionGroup.AddAction")
+		aArgPtr, aArgH = rt.Arg(unsafe.Pointer(aArg.AsQAction()), "QActionGroup.AddAction")
 	}
 	r := C.qute_QActionGroup_addAction(self, aArgPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(aArg)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, aArgH)
 	return rt.View[QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -125,16 +127,20 @@ func (this *QActionGroup) AddActionIcon(icon *QIcon, text string) *QAction {
 //
 //	C++: void QActionGroup::removeAction(QAction * a)
 //
+// Ownership: aArg is borrowed, and the receiver drops the reference it kept to it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qactiongroup.html#removeAction
 func (this *QActionGroup) RemoveAction(aArg QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.RemoveAction")
 	var aArgPtr unsafe.Pointer
+	var aArgH *rt.Handle
 	if aArg != nil {
-		aArgPtr = rt.UseArg(unsafe.Pointer(aArg.AsQAction()), "QActionGroup.RemoveAction")
+		aArgPtr, aArgH = rt.Arg(unsafe.Pointer(aArg.AsQAction()), "QActionGroup.RemoveAction")
 	}
 	C.qute_QActionGroup_removeAction(self, aArgPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(aArg)
+	rt.Release(rt.RefOf(unsafe.Pointer(this)).H, aArgH)
 }
 
 // Actions wraps QActionGroup::actions.

@@ -81,7 +81,9 @@ func Drain() {
 		if a.registered {
 			Destroyed(a.key, "freed by GC")
 		}
-		Drained.Add(1)
+		if !a.quiet {
+			Drained.Add(1)
+		}
 	}
 }
 
@@ -108,30 +110,68 @@ func AppExited() {
 	appRunning.Store(false)
 	appExited.Store(true)
 	queueHead.Store(nil)
+	// Work posted but never run (the loop exited first) would leave its
+	// PostSync caller waiting forever; wake every waiter instead.
+	syncMu.Lock()
+	ws := syncWaiters
+	syncWaiters = map[*syncCall]struct{}{}
+	syncMu.Unlock()
+	for w := range ws {
+		w.finish(syncResult{notRun: true})
+	}
 }
 
 // Running reports whether the application event loop can take posted work.
 func Running() bool { return appRunning.Load() && !appExited.Load() }
 
 // Post queues f to run on the GUI thread.
-func Post(f func()) {
+func Post(f func()) { post(f) }
+
+// post queues f and reports whether it was accepted. Work queued before the
+// application starts counts as accepted; work after it exits does not.
+func post(f func()) bool {
 	if !appRunning.Load() {
 		if appExited.Load() {
-			return
+			return false
 		}
 		pendingMu.Lock()
 		pendingPosts = append(pendingPosts, f)
 		pendingMu.Unlock()
-		return
+		return true
 	}
 	h := cgo.NewHandle(f)
 	if !postC(uintptr(h)) {
 		h.Delete()
+		return false
 	}
+	return true
 }
 
+type syncResult struct {
+	panicked bool
+	val      any
+	notRun   bool
+}
+
+type syncCall struct {
+	once sync.Once
+	done chan syncResult
+}
+
+func (s *syncCall) finish(r syncResult) { s.once.Do(func() { s.done <- r }) }
+
+var (
+	syncMu      sync.Mutex
+	syncWaiters = map[*syncCall]struct{}{}
+)
+
+// errNotRun is the panic PostSync raises when f never ran.
+const errNotRun = "qute.PostSync: the application exited before the function could run on the GUI thread"
+
 // PostSync runs f on the GUI thread and waits for it. Called on the GUI
-// thread it runs f directly. A panic in f is re-raised in the caller.
+// thread it runs f directly. A panic in f is re-raised in the caller. If the
+// application exits (or the post fails) before f runs, PostSync panics instead
+// of waiting forever.
 func PostSync(f func()) {
 	if IsGUIThread() {
 		f()
@@ -140,13 +180,36 @@ func PostSync(f func()) {
 	if !Running() {
 		panic("qute.PostSync: the application is not running; call it from inside qute.Main or a qute.TestMain test")
 	}
-	done := make(chan any, 1)
-	Post(func() {
-		defer func() { done <- recover() }()
+	s := &syncCall{done: make(chan syncResult, 1)}
+	syncMu.Lock()
+	syncWaiters[s] = struct{}{}
+	syncMu.Unlock()
+	ok := post(func() {
+		syncMu.Lock()
+		delete(syncWaiters, s)
+		syncMu.Unlock()
+		r := syncResult{panicked: true}
+		defer func() {
+			if r.panicked {
+				r.val = recover()
+			}
+			s.finish(r)
+		}()
 		f()
+		r.panicked = false
 	})
-	if p := <-done; p != nil {
-		panic(p)
+	if !ok {
+		syncMu.Lock()
+		delete(syncWaiters, s)
+		syncMu.Unlock()
+		s.finish(syncResult{notRun: true})
+	}
+	r := <-s.done
+	switch {
+	case r.notRun:
+		panic(errNotRun)
+	case r.panicked:
+		panic(r.val)
 	}
 }
 

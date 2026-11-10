@@ -40,7 +40,10 @@ func (g *Gen) writeReport(path string) error {
 	p("cannot map yet, or a rule without a generated test. Fix an open item with an")
 	p("overlay entry in `spec/overlays/<module>.yaml` (an ownership rule,")
 	p("`reviewed: true`, a `name`, `skip`, or a `test:` snippet), then regenerate.")
-	p("A constructor argument named `parent` is treated as reviewed (`transfer-this`).\n")
+	p("A constructor argument named `parent` is treated as reviewed (`transfer-this`).")
+	p("An out-parameter guessed from its type (`int *`, `QString &`) stays open until")
+	p("an `out` or `in-out` rule confirms it: the type alone cannot say whether Qt")
+	p("wants an array or also reads the value.\n")
 	p("{{SUMMARY}}")
 
 	type row struct{ cls, text string }
@@ -59,12 +62,22 @@ func (g *Gen) writeReport(path string) error {
 					if (prm.T.k == kObj || prm.T.k == kList && prm.T.elem.k == kObj) && !prm.Ruled {
 						defaults = append(defaults, fmt.Sprintf("`%s`: %s", prm.GoName, prm.Rule))
 					}
+					if (prm.Out || prm.InOut) && !prm.Ruled {
+						// guessed from the type: Qt may want an array, or read the value too
+						defaults = append(defaults, fmt.Sprintf("`%s`: %s (inferred)", prm.GoName, prm.Rule))
+					}
 				}
 				if mm.RetRule != "" && !mm.RetRuled {
 					defaults = append(defaults, "return: "+mm.RetRule)
 				}
-				// emitting a signal never changes ownership
+				// emitting a signal never changes ownership; an inferred
+				// out-parameter needs its own `out`/`in-out` rule
 				rev := c.Opts.Reviewed || mm.Emit || (mm.Overlay != nil && mm.Overlay.Reviewed)
+				for _, prm := range mm.Params {
+					if (prm.Out || prm.InOut) && !prm.Ruled {
+						rev = false
+					}
+				}
 				if len(defaults) > 0 && !rev {
 					rules = append(rules, row{c.Name, fmt.Sprintf("- `%s` → %s", mm.Sig, strings.Join(defaults, ", "))})
 				}

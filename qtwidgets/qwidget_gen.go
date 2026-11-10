@@ -144,18 +144,22 @@ func (this *QWidget) Style() *QStyle {
 //
 //	C++: void QWidget::setStyle(QStyle *)
 //
-// Qt does not take ownership of the style.
+// Ownership: style is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// Qt does not take ownership of the style; the widget keeps it from being garbage collected.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setStyle
 func (this *QWidget) SetStyle(style QStyleLike) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetStyle")
 	var stylePtr unsafe.Pointer
+	var styleH *rt.Handle
 	if style != nil {
-		stylePtr = rt.UseArg(unsafe.Pointer(style.AsQStyle()), "QWidget.SetStyle")
+		stylePtr, styleH = rt.Arg(unsafe.Pointer(style.AsQStyle()), "QWidget.SetStyle")
 	}
 	C.qute_QWidget_setStyle(self, stylePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(style)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setStyle.style", styleH)
 }
 
 // IsWindow wraps QWidget::isWindow.
@@ -2630,18 +2634,20 @@ func (this *QWidget) SetAcceptDrops(on bool) {
 //
 //	C++: void QWidget::addAction(QAction * action)
 //
-// Ownership: action is borrowed for the call only.
+// Ownership: action is borrowed, and the receiver keeps it from being garbage collected while it lives.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#addAction
 func (this *QWidget) AddAction(action qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.AddAction")
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QWidget.AddAction")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QWidget.AddAction")
 	}
 	C.qute_QWidget_addAction(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // AddActions wraps QWidget::addActions.
@@ -2685,6 +2691,8 @@ func (this *QWidget) InsertActions(before qtgui.QActionLike, actions []*qtgui.QA
 //
 //	C++: void QWidget::insertAction(QAction * before, QAction * action)
 //
+// Ownership: action is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#insertAction
 func (this *QWidget) InsertAction(before qtgui.QActionLike, action qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.InsertAction")
@@ -2693,29 +2701,35 @@ func (this *QWidget) InsertAction(before qtgui.QActionLike, action qtgui.QAction
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QWidget.InsertAction")
 	}
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QWidget.InsertAction")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QWidget.InsertAction")
 	}
 	C.qute_QWidget_insertAction(self, beforePtr, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(action)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // RemoveAction wraps QWidget::removeAction.
 //
 //	C++: void QWidget::removeAction(QAction * action)
 //
+// Ownership: action is borrowed, and the receiver drops the reference it kept to it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#removeAction
 func (this *QWidget) RemoveAction(action qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.RemoveAction")
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QWidget.RemoveAction")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QWidget.RemoveAction")
 	}
 	C.qute_QWidget_removeAction(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
+	rt.Release(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // Actions wraps QWidget::actions.

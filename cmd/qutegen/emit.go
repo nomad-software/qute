@@ -464,7 +464,14 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		b.p("\t\tif (qute_has(%d)) {", v.VIndex)
 		var refs []string
 		for i, p := range v.Params {
-			b.p("\t\t\t%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName))
+			switch {
+			case p.View && p.T.inplace:
+				b.p("\t\t\tvoid * c%d = static_cast<void *>(&%s);", i, p.CName)
+			case p.View:
+				b.p("\t\t\tvoid * c%d = static_cast<void *>(%s);", i, p.CName)
+			default:
+				b.p("\t\t\t%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName))
+			}
 			refs = append(refs, fmt.Sprintf("&c%d", i))
 		}
 		args := "nullptr"
@@ -821,6 +828,21 @@ func (g *Gen) emitClass(c *Class) []byte {
 	b.p("// As%s returns the receiver; it lets derived types be passed as %sLike.", cls, cls)
 	b.p("func (this *%s) As%s() *%s { return this }\n", cls, cls, cls)
 	b.p("func init() { rt.RegisterClass(%q, %s, %s) }\n", cls, kindConst(c), g.deleterExpr(c))
+	if dep := c.Opts.DependsOn; dep != "" {
+		var getter *Method
+		for _, mm := range c.Methods {
+			if mm.IR.Name == dep && len(mm.Params) == 0 && mm.Ret != nil && mm.Ret.k == kObj && !mm.Ret.ref {
+				getter = mm
+			}
+		}
+		if getter == nil {
+			g.report.warn("%s: depends-on %q is not a bound getter returning an object pointer", cls, dep)
+		} else {
+			b.p("// Every %s holds the %s it belongs to (depends-on: %s).", cls, getter.Ret.cls.Name, dep)
+			b.p("func init() {\n\trt.RegisterDependency(%q, func(p unsafe.Pointer) *rt.Handle {", cls)
+			b.p("\t\treturn rt.WrapClass(C.%s(p), %q, rt.KeepOrBorrow)\n\t})\n}\n", getter.CName, getter.Ret.cls.Name)
+		}
+	}
 	own := g.qual(core, m, "Ownership")
 	b.p("// %sFromPtr wraps an existing C++ %s. This is an unsafe escape hatch: own says", cls, cls)
 	b.p("// who frees the object (Borrowed keeps the state of an already wrapped object).")
@@ -903,7 +925,20 @@ func (g *Gen) docLines(c *Class, mm *Method, b *buf, what string) {
 	b.p("//\n//\tC++: %s", mm.Sig)
 	var rules []string
 	for _, p := range mm.Params {
-		if p.Rule == "" || p.Rule == "borrowed" && !p.Ruled {
+		if p.Rule == "" || p.Rule == "borrowed" && !p.Ruled || p.Out || p.InOut {
+			continue
+		}
+		switch p.Keep {
+		case "":
+		case "release":
+			rules = append(rules, fmt.Sprintf("%s is borrowed, and the receiver drops the reference it kept to it", p.GoName))
+			continue
+		default:
+			who := "the receiver"
+			if mm.IR.Kind == "ctor" {
+				who = "the new object"
+			}
+			rules = append(rules, fmt.Sprintf("%s is borrowed, and %s keeps it from being garbage collected while it lives", p.GoName, who))
 			continue
 		}
 		desc := map[string]string{
@@ -1015,7 +1050,7 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 		if p.T.k == kObj {
 			pp, hh := p.GoName+"Ptr", p.GoName+"H"
 			gc.pre = append(gc.pre, fmt.Sprintf("var %s unsafe.Pointer", pp))
-			needH := p.Rule == "transfer-to-cpp" || p.Rule == "transfer-to-go"
+			needH := p.Rule == "transfer-to-cpp" || p.Rule == "transfer-to-go" || p.Keep != ""
 			if needH {
 				gc.pre = append(gc.pre, fmt.Sprintf("var %s *rt.Handle", hh))
 				gc.pre = append(gc.pre, fmt.Sprintf("if %s != nil {\n\t\t%s, %s = rt.Arg(unsafe.Pointer(%s.As%s()), %q)\n\t}", p.GoName, pp, hh, p.GoName, p.T.cls.Name, method))
@@ -1031,6 +1066,20 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 			case "transfer-this":
 				if mm.IR.Kind != "ctor" {
 					gc.post = append(gc.post, fmt.Sprintf("rt.RefOf(unsafe.Pointer(this)).H.SetParented(%s != nil)", pp))
+				}
+			}
+			if p.Keep != "" && !virtualParams {
+				owner := "rt.RefOf(unsafe.Pointer(this)).H"
+				if mm.IR.Kind == "ctor" {
+					owner = "h" // the constructor's new handle
+				}
+				switch p.Keep {
+				case "each":
+					gc.post = append(gc.post, fmt.Sprintf("rt.KeepEach(%s, %s)", owner, hh))
+				case "release":
+					gc.post = append(gc.post, fmt.Sprintf("rt.Release(%s, %s)", owner, hh))
+				default:
+					gc.post = append(gc.post, fmt.Sprintf("rt.KeepArg(%s, %q, %s)", owner, p.Keep, hh))
 				}
 			}
 			continue
@@ -1209,7 +1258,7 @@ func (g *Gen) unpackArgs(c *Class, mm *Method, b *buf, indent string) []string {
 	b.p("%sa := unsafe.Slice((*unsafe.Pointer)(args), %d)", indent, len(mm.Params))
 	for i, p := range mm.Params {
 		cv := fmt.Sprintf("*(*%s)(a[%d])", g.cgoType(p.T), i)
-		if p.T.k == kObj && p.Rule == "scoped" {
+		if (p.T.k == kObj || p.View) && p.Rule == "scoped" {
 			hn := p.GoName + "H"
 			cls := g.qual(p.T.cls.Module, m, p.T.cls.Name)
 			b.p("%s%sP := %s", indent, p.GoName, cv)

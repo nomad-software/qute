@@ -27,6 +27,13 @@ func init() {
 	rt.RegisterClass("QModelIndex", rt.KindValue, func(p unsafe.Pointer) { C.qute_QModelIndex_delete(p) })
 }
 
+// Every QModelIndex holds the QAbstractItemModel it belongs to (depends-on: model).
+func init() {
+	rt.RegisterDependency("QModelIndex", func(p unsafe.Pointer) *rt.Handle {
+		return rt.WrapClass(C.qute_QModelIndex_model(p), "QAbstractItemModel", rt.KeepOrBorrow)
+	})
+}
+
 // QModelIndexFromPtr wraps an existing C++ QModelIndex. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QModelIndexFromPtr(p unsafe.Pointer, own Ownership) *QModelIndex {

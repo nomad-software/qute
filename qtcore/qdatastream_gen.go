@@ -48,40 +48,31 @@ func NewQDataStream() *QDataStream {
 //
 //	C++: QDataStream::QDataStream(QIODevice *)
 //
+// Ownership: iODevice is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatastream.html#QDataStream
 func NewQDataStreamWithIODevice(iODevice QIODeviceLike) *QDataStream {
 	rt.CheckThread("NewQDataStreamWithIODevice")
 	var iODevicePtr unsafe.Pointer
+	var iODeviceH *rt.Handle
 	if iODevice != nil {
-		iODevicePtr = rt.UseArg(unsafe.Pointer(iODevice.AsQIODevice()), "NewQDataStreamWithIODevice")
+		iODevicePtr, iODeviceH = rt.Arg(unsafe.Pointer(iODevice.AsQIODevice()), "NewQDataStreamWithIODevice")
 	}
 	p := C.qute_QDataStream_new_1(iODevicePtr)
 	runtime.KeepAlive(iODevice)
 	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
+	rt.KeepArg(h, "device", iODeviceH)
 	return rt.View[QDataStream](h, p)
 }
 
 // NewQDataStreamWithBytes wraps the QDataStream constructor.
 //
-//	C++: QDataStream::QDataStream(QByteArray *, OpenMode flags)
-//
-// Qt docs: https://doc.qt.io/qt-6/qdatastream.html#QDataStream
-func NewQDataStreamWithBytes(flags QIODeviceBaseOpenMode) *QDataStream {
-	rt.CheckThread("NewQDataStreamWithBytes")
-	var byteArrayOut C.qute_str
-	p := C.qute_QDataStream_new_2(&byteArrayOut, C.int64_t(flags))
-	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
-	return rt.View[QDataStream](h, p)
-}
-
-// NewQDataStreamWithBytesBytes wraps the QDataStream constructor.
-//
 //	C++: QDataStream::QDataStream(const QByteArray &)
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatastream.html#QDataStream
-func NewQDataStreamWithBytesBytes(byteArray []byte) *QDataStream {
-	rt.CheckThread("NewQDataStreamWithBytesBytes")
-	p := C.qute_QDataStream_new_3((*C.char)(unsafe.Pointer(unsafe.SliceData(byteArray))), C.ptrdiff_t(len(byteArray)))
+func NewQDataStreamWithBytes(byteArray []byte) *QDataStream {
+	rt.CheckThread("NewQDataStreamWithBytes")
+	p := C.qute_QDataStream_new_2((*C.char)(unsafe.Pointer(unsafe.SliceData(byteArray))), C.ptrdiff_t(len(byteArray)))
 	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
 	return rt.View[QDataStream](h, p)
 }
@@ -104,16 +95,20 @@ func (this *QDataStream) Device() *QIODevice {
 //
 //	C++: void QDataStream::setDevice(QIODevice *)
 //
+// Ownership: device is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatastream.html#setDevice
 func (this *QDataStream) SetDevice(device QIODeviceLike) {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.SetDevice")
 	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
 	if device != nil {
-		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QDataStream.SetDevice")
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "QDataStream.SetDevice")
 	}
 	C.qute_QDataStream_setDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
 }
 
 // AtEnd wraps QDataStream::atEnd.

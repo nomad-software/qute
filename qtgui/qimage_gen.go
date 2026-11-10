@@ -63,6 +63,8 @@ func NewQImageWithSize(size qtcore.QSize, format QImageFormat) *QImage {
 //
 //	C++: QImage::QImage(const uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
 //
+// The image reads data in place without copying it: the buffer must stay valid and unchanged for the image's life, and must be C memory (Go memory may move or be freed). Copy() the image to detach it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
 func NewQImageWithPtr(data unsafe.Pointer, width int, height int, format QImageFormat) *QImage {
 	rt.CheckThread("NewQImageWithPtr")
@@ -71,27 +73,16 @@ func NewQImageWithPtr(data unsafe.Pointer, width int, height int, format QImageF
 	return rt.View[QImage](h, p)
 }
 
-// NewQImageWithData wraps the QImage constructor.
-//
-//	C++: QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
-//
-// Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
-func NewQImageWithData(width int, height int, bytesPerLine int, format QImageFormat) *QImage {
-	rt.CheckThread("NewQImageWithData")
-	var dataOut C.uchar
-	p := C.qute_QImage_new_3(&dataOut, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
-	return rt.View[QImage](h, p)
-}
-
 // NewQImageWithPtrBytesPerLine wraps the QImage constructor.
 //
 //	C++: QImage::QImage(const uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)
 //
+// The image reads data in place without copying it: the buffer must stay valid and unchanged for the image's life, and must be C memory (Go memory may move or be freed). Copy() the image to detach it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
 func NewQImageWithPtrBytesPerLine(data unsafe.Pointer, width int, height int, bytesPerLine int, format QImageFormat) *QImage {
 	rt.CheckThread("NewQImageWithPtrBytesPerLine")
-	p := C.qute_QImage_new_4(data, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
+	p := C.qute_QImage_new_3(data, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
@@ -103,7 +94,7 @@ func NewQImageWithPtrBytesPerLine(data unsafe.Pointer, width int, height int, by
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
 func NewQImageWithFileName(fileName string) *QImage {
 	rt.CheckThread("NewQImageWithFileName")
-	p := C.qute_QImage_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	p := C.qute_QImage_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }

@@ -5,7 +5,10 @@ import (
 	"testing"
 
 	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
+	"unsafe"
 )
 
 func TestMain(m *testing.M) { qute.TestMain(m) }
@@ -28,6 +31,44 @@ func TestOwnership_QAbstractItemModel_MimeData(t *testing.T) {
 		}
 		d.Delete()
 		m.Delete()
+	})
+}
+
+// void QAbstractProxyModel::setSourceModel(QAbstractItemModel * sourceModel): keep rules
+func TestKeep_QAbstractProxyModel_SetSourceModel(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtcore.NewQSortFilterProxyModel(nil)
+		a0 := qtgui.NewQStandardItemModel(nil)
+		recv.QAbstractProxyModel.SetSourceModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("sourceModel: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QDataStream::QDataStream(QIODevice *): keep rules
+func TestKeep_QDataStream_QDataStreamWithIODevice(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtcore.NewQFile(nil)
+		x := qtcore.NewQDataStreamWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("iODevice: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// void QDataStream::setDevice(QIODevice *): keep rules
+func TestKeep_QDataStream_SetDevice(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtcore.NewQDataStream()
+		a0 := qtcore.NewQFile(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -100,6 +141,18 @@ func TestOwnership_NewQFileWithName(t *testing.T) {
 	})
 }
 
+// QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent): keep rules
+func TestKeep_QItemSelectionModel_QItemSelectionModelWithAbstractItemModel(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtgui.NewQStandardItemModel(nil)
+		x := qtcore.NewQItemSelectionModelWithAbstractItemModel(a0, nil)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("model: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQItemSelectionModelWithAbstractItemModel(t *testing.T) {
 	qute.Run(t, func() {
@@ -120,6 +173,19 @@ func TestOwnership_NewQItemSelectionModelWithAbstractItemModel(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QItemSelectionModel::setModel(QAbstractItemModel * model): keep rules
+func TestKeep_QItemSelectionModel_SetModel(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtcore.NewQItemSelectionModel()
+		a0 := qtgui.NewQStandardItemModel(nil)
+		recv.SetModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("model: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -156,6 +222,33 @@ func TestOwnership_QObject_SetParent(t *testing.T) {
 			t.Errorf("receiver: %v, want Parented", got)
 		}
 		a0.Delete()
+	})
+}
+
+// void QObject::installEventFilter(QObject * filterObj): keep rules
+func TestKeep_QObject_InstallEventFilter(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtcore.NewQObject(nil)
+		a0 := qtcore.NewQObject(nil)
+		recv.InstallEventFilter(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("filterObj: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QObject::removeEventFilter(QObject * obj): keep rules
+func TestKeep_QObject_RemoveEventFilter(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtcore.NewQObject(nil)
+		a0 := qtcore.NewQObject(nil)
+		rt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(a0))
+		recv.RemoveEventFilter(a0)
+		if rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("obj: still kept after the call")
+		}
+		recv.Delete()
 	})
 }
 

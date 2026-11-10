@@ -261,18 +261,22 @@ func (this *QLineEdit) SetReadOnly(readOnly bool) {
 //
 //	C++: void QLineEdit::setValidator(const QValidator *)
 //
+// Ownership: validator is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The line edit does not take ownership of the validator.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#setValidator
 func (this *QLineEdit) SetValidator(validator qtgui.QValidatorLike) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetValidator")
 	var validatorPtr unsafe.Pointer
+	var validatorH *rt.Handle
 	if validator != nil {
-		validatorPtr = rt.UseArg(unsafe.Pointer(validator.AsQValidator()), "QLineEdit.SetValidator")
+		validatorPtr, validatorH = rt.Arg(unsafe.Pointer(validator.AsQValidator()), "QLineEdit.SetValidator")
 	}
 	C.qute_QLineEdit_setValidator(self, validatorPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(validator)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setValidator.validator", validatorH)
 }
 
 // Validator wraps QLineEdit::validator.
@@ -293,16 +297,20 @@ func (this *QLineEdit) Validator() *qtgui.QValidator {
 //
 //	C++: void QLineEdit::setCompleter(QCompleter * completer)
 //
+// Ownership: completer is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#setCompleter
 func (this *QLineEdit) SetCompleter(completer QCompleterLike) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetCompleter")
 	var completerPtr unsafe.Pointer
+	var completerH *rt.Handle
 	if completer != nil {
-		completerPtr = rt.UseArg(unsafe.Pointer(completer.AsQCompleter()), "QLineEdit.SetCompleter")
+		completerPtr, completerH = rt.Arg(unsafe.Pointer(completer.AsQCompleter()), "QLineEdit.SetCompleter")
 	}
 	C.qute_QLineEdit_setCompleter(self, completerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(completer)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCompleter.completer", completerH)
 }
 
 // Completer wraps QLineEdit::completer.
@@ -691,16 +699,20 @@ func (this *QLineEdit) TextMargins() qtcore.QMargins {
 //
 //	C++: void QLineEdit::addAction(QAction * action, ActionPosition position)
 //
+// Ownership: action is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#addAction
 func (this *QLineEdit) AddActionAt(action qtgui.QActionLike, position QLineEditActionPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.AddActionAt")
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QLineEdit.AddActionAt")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QLineEdit.AddActionAt")
 	}
 	C.qute_QLineEdit_addAction(self, actionPtr, C.int64_t(position))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // AddActionIcon wraps QLineEdit::addAction.

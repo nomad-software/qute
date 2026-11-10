@@ -34,17 +34,28 @@ func TestMain(m *testing.M) {
 }
 
 // Run executes f on the GUI thread and waits. A panic in f fails t with the
-// panic message instead of crashing the test binary.
+// panic message instead of crashing the test binary. A panic in a signal or
+// event handler that f triggers is recovered where Qt called the handler, so
+// Qt's own frames return normally; it fails t too, and the input helpers
+// (Click, Type, Key, Wait, ProcessEvents) re-raise it as soon as they return.
 func Run(t testing.TB, f func()) {
 	t.Helper()
 	var failure string
 	PostSync(func() {
+		stop := rt.CapturePanics()
 		defer func() {
+			cp := stop()
 			if p := recover(); p != nil {
 				failure = fmt.Sprint(p)
 				if _, ok := p.(runtime.Error); ok {
 					failure += "\n" + string(debug.Stack())
 				}
+			}
+			if cp != nil {
+				if failure != "" {
+					failure += "\n"
+				}
+				failure += cp.String()
 			}
 		}()
 		f()

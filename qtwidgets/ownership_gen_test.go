@@ -5,9 +5,11 @@ import (
 	"testing"
 
 	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
+	"unsafe"
 )
 
 func TestMain(m *testing.M) { qute.TestMain(m) }
@@ -40,6 +42,45 @@ func TestOwnership_QAbstractItemDelegate_CreateEditor(t *testing.T) {
 	})
 }
 
+// void QAbstractItemView::setModel(QAbstractItemModel * model): keep rules
+func TestKeep_QAbstractItemView_SetModel(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQHeaderViewWithOrientation(qtcore.Orientations(1), nil)
+		a0 := qtgui.NewQStandardItemModel(nil)
+		recv.QAbstractItemView.SetModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("model: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QAbstractItemView::setSelectionModel(QItemSelectionModel * selectionModel): keep rules
+func TestKeep_QAbstractItemView_SetSelectionModel(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQHeaderViewWithOrientation(qtcore.Orientations(1), nil)
+		a0 := qtcore.NewQItemSelectionModel()
+		recv.QAbstractItemView.SetSelectionModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("selectionModel: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QAbstractItemView::setItemDelegate(QAbstractItemDelegate * delegate): keep rules
+func TestKeep_QAbstractItemView_SetItemDelegate(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQHeaderViewWithOrientation(qtcore.Orientations(1), nil)
+		a0 := qtwidgets.NewQStyledItemDelegate(nil)
+		recv.QAbstractItemView.SetItemDelegate(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("delegate: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // void QAbstractItemView::setIndexWidget(const QModelIndex & index, QWidget * widget) (test from the overlay)
 func TestOwnership_QAbstractItemView_SetIndexWidget(t *testing.T) {
 	qute.Run(t, func() {
@@ -55,6 +96,32 @@ func TestOwnership_QAbstractItemView_SetIndexWidget(t *testing.T) {
 		if w.Alive() {
 			t.Error("index widget alive after the view was deleted")
 		}
+	})
+}
+
+// void QAbstractItemView::setItemDelegateForRow(int row, QAbstractItemDelegate * delegate): keep rules
+func TestKeep_QAbstractItemView_SetItemDelegateForRow(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQHeaderViewWithOrientation(qtcore.Orientations(1), nil)
+		a1 := qtwidgets.NewQStyledItemDelegate(nil)
+		recv.QAbstractItemView.SetItemDelegateForRow(0, a1)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a1)) {
+			t.Error("delegate: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QAbstractItemView::setItemDelegateForColumn(int column, QAbstractItemDelegate * delegate): keep rules
+func TestKeep_QAbstractItemView_SetItemDelegateForColumn(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQHeaderViewWithOrientation(qtcore.Orientations(1), nil)
+		a1 := qtwidgets.NewQStyledItemDelegate(nil)
+		recv.QAbstractItemView.SetItemDelegateForColumn(0, a1)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a1)) {
+			t.Error("delegate: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -538,6 +605,58 @@ func TestOwnership_QComboBox_SetLineEdit(t *testing.T) {
 	})
 }
 
+// void QComboBox::setValidator(const QValidator * v): keep rules
+func TestKeep_QComboBox_SetValidator(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQComboBox(nil)
+		a0 := qtgui.NewQDoubleValidator(nil)
+		recv.SetValidator(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("vArg: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QComboBox::setCompleter(QCompleter * c): keep rules
+func TestKeep_QComboBox_SetCompleter(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQComboBox(nil)
+		a0 := qtwidgets.NewQCompleter(nil)
+		recv.SetCompleter(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("c: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QComboBox::setItemDelegate(QAbstractItemDelegate * delegate): keep rules
+func TestKeep_QComboBox_SetItemDelegate(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQComboBox(nil)
+		a0 := qtwidgets.NewQStyledItemDelegate(nil)
+		recv.SetItemDelegate(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("delegate: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QComboBox::setModel(QAbstractItemModel * model): keep rules
+func TestKeep_QComboBox_SetModel(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQComboBox(nil)
+		a0 := qtgui.NewQStandardItemModel(nil)
+		recv.SetModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("model: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // void QComboBox::setView(QAbstractItemView * itemView)
 func TestOwnership_QComboBox_SetView(t *testing.T) {
 	qute.Run(t, func() {
@@ -646,6 +765,18 @@ func TestOwnership_NewQCompleter(t *testing.T) {
 	})
 }
 
+// QCompleter::QCompleter(QAbstractItemModel * model, QObject * parent = …): keep rules
+func TestKeep_QCompleter_QCompleterWithModel(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtgui.NewQStandardItemModel(nil)
+		x := qtwidgets.NewQCompleterWithModel(a0, nil)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("model: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QCompleter::QCompleter(QAbstractItemModel * model, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQCompleterWithModel(t *testing.T) {
 	qute.Run(t, func() {
@@ -689,6 +820,19 @@ func TestOwnership_NewQCompleterWithCompletions(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QCompleter::setModel(QAbstractItemModel * c): keep rules
+func TestKeep_QCompleter_SetModel(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQCompleter(nil)
+		a0 := qtgui.NewQStandardItemModel(nil)
+		recv.SetModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("c: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -847,6 +991,19 @@ func TestOwnership_NewQDateTimeEditWithTime(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QDateTimeEdit::setCalendarWidget(QCalendarWidget * calendarWidget): keep rules
+func TestKeep_QDateTimeEdit_SetCalendarWidget(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQDateTimeEdit(nil)
+		a0 := qtwidgets.NewQCalendarWidget(nil)
+		recv.SetCalendarWidget(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("calendarWidget: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -1207,6 +1364,32 @@ func TestOwnership_NewQFileDialogWithWidget(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QFileDialog::setItemDelegate(QAbstractItemDelegate * delegate): keep rules
+func TestKeep_QFileDialog_SetItemDelegate(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQFileDialog(nil)
+		a0 := qtwidgets.NewQStyledItemDelegate(nil)
+		recv.SetItemDelegate(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("delegate: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QFileDialog::setIconProvider(QAbstractFileIconProvider * provider): keep rules
+func TestKeep_QFileDialog_SetIconProvider(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQFileDialog(nil)
+		a0 := qtgui.NewQAbstractFileIconProvider()
+		recv.SetIconProvider(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("provider: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -2673,6 +2856,22 @@ func TestOwnership_QGraphicsScene_RemoveItem(t *testing.T) {
 	})
 }
 
+// void QGraphicsScene::setStyle(QStyle * style) (test from the overlay)
+func TestOwnership_QGraphicsScene_SetStyle(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsScene(nil)
+		s := qtwidgets.QStyleFactoryCreate("Fusion")
+		recv.SetStyle(s)
+		if got := s.Ownership(); got != qtcore.Parented {
+			t.Errorf("style: %v, want Parented", got)
+		}
+		recv.Delete()
+		if s.Alive() {
+			t.Error("style alive after its scene was deleted")
+		}
+	})
+}
+
 // QGraphicsSimpleTextItem::QGraphicsSimpleTextItem(QGraphicsItem * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQGraphicsSimpleTextItem(t *testing.T) {
 	qute.Run(t, func() {
@@ -2765,6 +2964,19 @@ func TestOwnership_NewQGraphicsTextItemWithText(t *testing.T) {
 	})
 }
 
+// void QGraphicsTextItem::setDocument(QTextDocument * document): keep rules
+func TestKeep_QGraphicsTextItem_SetDocument(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsTextItem(nil)
+		a0 := qtgui.NewQTextDocument(nil)
+		recv.SetDocument(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("document: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QGraphicsView::QGraphicsView(QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQGraphicsView(t *testing.T) {
 	qute.Run(t, func() {
@@ -2788,6 +3000,18 @@ func TestOwnership_NewQGraphicsView(t *testing.T) {
 	})
 }
 
+// QGraphicsView::QGraphicsView(QGraphicsScene * scene, QWidget * parent = …): keep rules
+func TestKeep_QGraphicsView_QGraphicsViewWithScene(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtwidgets.NewQGraphicsScene(nil)
+		x := qtwidgets.NewQGraphicsViewWithScene(a0, nil)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("scene: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QGraphicsView::QGraphicsView(QGraphicsScene * scene, QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQGraphicsViewWithScene(t *testing.T) {
 	qute.Run(t, func() {
@@ -2808,6 +3032,19 @@ func TestOwnership_NewQGraphicsViewWithScene(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QGraphicsView::setScene(QGraphicsScene * scene): keep rules
+func TestKeep_QGraphicsView_SetScene(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsView(nil)
+		a0 := qtwidgets.NewQGraphicsScene(nil)
+		recv.SetScene(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("scene: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -2847,6 +3084,60 @@ func TestOwnership_QGraphicsWidget_SetLayout(t *testing.T) {
 		if a0.Alive() {
 			t.Errorf("a alive after its owner was deleted")
 		}
+	})
+}
+
+// void QGraphicsWidget::setStyle(QStyle * style) (test from the overlay)
+func TestOwnership_QGraphicsWidget_SetStyle(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsWidget(nil)
+		s := qtwidgets.QStyleFactoryCreate("Fusion")
+		recv.SetStyle(s)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(s)) {
+			t.Error("style not kept")
+		}
+		defer s.Delete()
+		recv.Delete()
+	})
+}
+
+// void QGraphicsWidget::addAction(QAction * action): keep rules
+func TestKeep_QGraphicsWidget_AddAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsWidget(nil)
+		a0 := qtgui.NewQAction(nil)
+		recv.AddAction(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("action: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QGraphicsWidget::insertAction(QAction * before, QAction * action): keep rules
+func TestKeep_QGraphicsWidget_InsertAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsWidget(nil)
+		a1 := qtgui.NewQAction(nil)
+		recv.InsertAction(nil, a1)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a1)) {
+			t.Error("action: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QGraphicsWidget::removeAction(QAction * action): keep rules
+func TestKeep_QGraphicsWidget_RemoveAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQGraphicsWidget(nil)
+		a0 := qtgui.NewQAction(nil)
+		rt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(a0))
+		recv.RemoveAction(a0)
+		if rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("action: still kept after the call")
+		}
+		recv.Delete()
 	})
 }
 
@@ -3243,6 +3534,19 @@ func TestOwnership_NewQLabelWithText(t *testing.T) {
 	})
 }
 
+// void QLabel::setMovie(QMovie * movie): keep rules
+func TestKeep_QLabel_SetMovie(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQLabel(nil)
+		a0 := qtgui.NewQMovie(nil)
+		recv.SetMovie(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("movie: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // void QLayout::setMenuBar(QWidget * w)
 func TestOwnership_QLayout_SetMenuBar(t *testing.T) {
 	qute.Run(t, func() {
@@ -3407,6 +3711,45 @@ func TestOwnership_NewQLineEditWithText(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QLineEdit::setValidator(const QValidator *): keep rules
+func TestKeep_QLineEdit_SetValidator(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQLineEdit(nil)
+		a0 := qtgui.NewQDoubleValidator(nil)
+		recv.SetValidator(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("validator: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QLineEdit::setCompleter(QCompleter * completer): keep rules
+func TestKeep_QLineEdit_SetCompleter(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQLineEdit(nil)
+		a0 := qtwidgets.NewQCompleter(nil)
+		recv.SetCompleter(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("completer: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QLineEdit::addAction(QAction * action, ActionPosition position): keep rules
+func TestKeep_QLineEdit_AddActionAt(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQLineEdit(nil)
+		a0 := qtgui.NewQAction(nil)
+		recv.AddActionAt(a0, qtwidgets.QLineEditActionPosition(0))
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("action: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -4069,6 +4412,19 @@ func TestOwnership_NewQMenuWithTitle(t *testing.T) {
 	})
 }
 
+// QAction * QMenu::addMenu(QMenu * menu): keep rules
+func TestKeep_QMenu_AddMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQMenu(nil)
+		a0 := qtwidgets.NewQMenu(nil)
+		_ = recv.AddMenu(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QMenu * QMenu::addMenu(const QString & title)
 func TestOwnership_QMenu_AddMenuTitle(t *testing.T) {
 	qute.Run(t, func() {
@@ -4164,6 +4520,19 @@ func TestOwnership_QMenu_AddSectionIcon(t *testing.T) {
 	})
 }
 
+// QAction * QMenu::insertMenu(QAction * before, QMenu * menu): keep rules
+func TestKeep_QMenu_InsertMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQMenu(nil)
+		a1 := qtwidgets.NewQMenu(nil)
+		_ = recv.InsertMenu(nil, a1)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a1)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QAction * QMenu::insertSeparator(QAction * before)
 func TestOwnership_QMenu_InsertSeparator(t *testing.T) {
 	qute.Run(t, func() {
@@ -4244,6 +4613,19 @@ func TestOwnership_NewQMenuBar(t *testing.T) {
 	})
 }
 
+// QAction * QMenuBar::addMenu(QMenu * menu): keep rules
+func TestKeep_QMenuBar_AddMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQMenuBar(nil)
+		a0 := qtwidgets.NewQMenu(nil)
+		_ = recv.AddMenu(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QMenu * QMenuBar::addMenu(const QString & title)
 func TestOwnership_QMenuBar_AddMenuTitle(t *testing.T) {
 	qute.Run(t, func() {
@@ -4317,6 +4699,19 @@ func TestOwnership_QMenuBar_InsertSeparator(t *testing.T) {
 		if res.Alive() {
 			t.Errorf("res alive after its owner was deleted")
 		}
+	})
+}
+
+// QAction * QMenuBar::insertMenu(QAction * before, QMenu * menu): keep rules
+func TestKeep_QMenuBar_InsertMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQMenuBar(nil)
+		a1 := qtwidgets.NewQMenu(nil)
+		_ = recv.InsertMenu(nil, a1)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a1)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -4516,6 +4911,19 @@ func TestOwnership_NewQPlainTextEditWithText(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QPlainTextEdit::setDocument(QTextDocument * document): keep rules
+func TestKeep_QPlainTextEdit_SetDocument(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQPlainTextEdit(nil)
+		a0 := qtgui.NewQTextDocument(nil)
+		recv.SetDocument(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("document: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -4742,6 +5150,19 @@ func TestOwnership_NewQPushButtonWithIcon(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QPushButton::setMenu(QMenu * menu): keep rules
+func TestKeep_QPushButton_SetMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQPushButton(nil)
+		a0 := qtwidgets.NewQMenu(nil)
+		recv.SetMenu(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -5336,6 +5757,19 @@ func TestOwnership_NewQStyledItemDelegate(t *testing.T) {
 	})
 }
 
+// void QStyledItemDelegate::setItemEditorFactory(QItemEditorFactory * factory): keep rules
+func TestKeep_QStyledItemDelegate_SetItemEditorFactory(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQStyledItemDelegate(nil)
+		a0 := qtwidgets.NewQItemEditorFactory()
+		recv.SetItemEditorFactory(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("factory: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QSystemTrayIcon::QSystemTrayIcon(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSystemTrayIcon(t *testing.T) {
 	qute.Run(t, func() {
@@ -5379,6 +5813,19 @@ func TestOwnership_NewQSystemTrayIconWithIcon(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QSystemTrayIcon::setContextMenu(QMenu * menu): keep rules
+func TestKeep_QSystemTrayIcon_SetContextMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQSystemTrayIcon(nil)
+		a0 := qtwidgets.NewQMenu(nil)
+		recv.SetContextMenu(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -5837,6 +6284,19 @@ func TestOwnership_NewQTextEditWithText(t *testing.T) {
 	})
 }
 
+// void QTextEdit::setDocument(QTextDocument * document): keep rules
+func TestKeep_QTextEdit_SetDocument(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQTextEdit(nil)
+		a0 := qtgui.NewQTextDocument(nil)
+		recv.SetDocument(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("document: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
 // QMenu * QTextEdit::createStandardContextMenu()
 func TestOwnership_QTextEdit_CreateStandardContextMenu(t *testing.T) {
 	qute.Run(t, func() {
@@ -6166,6 +6626,32 @@ func TestOwnership_NewQToolButton(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// void QToolButton::setMenu(QMenu * menu): keep rules
+func TestKeep_QToolButton_SetMenu(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQToolButton(nil)
+		a0 := qtwidgets.NewQMenu(nil)
+		recv.SetMenu(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("menu: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QToolButton::setDefaultAction(QAction *): keep rules
+func TestKeep_QToolButton_SetDefaultAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQToolButton(nil)
+		a0 := qtgui.NewQAction(nil)
+		recv.SetDefaultAction(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("defaultAction: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }
 
@@ -6659,6 +7145,24 @@ func TestOwnership_NewQWidget(t *testing.T) {
 	})
 }
 
+// void QWidget::setStyle(QStyle *) (test from the overlay)
+func TestOwnership_QWidget_SetStyle(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQWidget(nil)
+		s := qtwidgets.QStyleFactoryCreate("Fusion")
+		recv.SetStyle(s)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(s)) {
+			t.Error("style not kept")
+		}
+		recv.SetStyle(nil)
+		if rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(s)) {
+			t.Error("style still kept after SetStyle(nil)")
+		}
+		s.Delete()
+		recv.Delete()
+	})
+}
+
 // void QWidget::setGraphicsEffect(QGraphicsEffect * effect)
 func TestOwnership_QWidget_SetGraphicsEffect(t *testing.T) {
 	qute.Run(t, func() {
@@ -6714,6 +7218,46 @@ func TestOwnership_QWidget_SetParentWithFlags(t *testing.T) {
 			t.Errorf("receiver: %v, want Parented", got)
 		}
 		a0.Delete()
+	})
+}
+
+// void QWidget::addAction(QAction * action): keep rules
+func TestKeep_QWidget_AddAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQWidget(nil)
+		a0 := qtgui.NewQAction(nil)
+		recv.AddAction(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("action: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QWidget::insertAction(QAction * before, QAction * action): keep rules
+func TestKeep_QWidget_InsertAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQWidget(nil)
+		a1 := qtgui.NewQAction(nil)
+		recv.InsertAction(nil, a1)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a1)) {
+			t.Error("action: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QWidget::removeAction(QAction * action): keep rules
+func TestKeep_QWidget_RemoveAction(t *testing.T) {
+	qute.Run(t, func() {
+		recv := qtwidgets.NewQWidget(nil)
+		a0 := qtgui.NewQAction(nil)
+		rt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(a0))
+		recv.RemoveAction(a0)
+		if rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("action: still kept after the call")
+		}
+		recv.Delete()
 	})
 }
 

@@ -198,6 +198,7 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 				g.emitSnippet(t, c, ctor, b)
 				continue
 			}
+			g.emitKeepTest(t, c, ctor, b)
 			var tp *Param
 			for _, p := range ctor.Params {
 				if p.Rule == "transfer-this" && p.T.k == kObj {
@@ -280,6 +281,126 @@ func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		return
 	}
 	g.emitGenericTest(t, c, mm, b)
+	g.emitKeepTest(t, c, mm, b)
+}
+
+// emitKeepTest checks keep, keep-each and release rules: after the call the
+// receiver (or the new object) holds a reference to the argument, or no
+// longer does.
+func (g *Gen) emitKeepTest(t *testCtx, c *Class, mm *Method, b *buf) {
+	var keeps []*Param
+	for _, p := range mm.Params {
+		if p.Keep != "" {
+			keeps = append(keeps, p)
+		}
+	}
+	if len(keeps) == 0 {
+		return
+	}
+	ctor := mm.IR.Kind == "ctor"
+	var pre, args []string
+	recvCls := c
+	if !ctor {
+		// the first usable constructor: the longest one may want a real
+		// argument that zeroArg would pass as nil (QMovie's device)
+		ex, rc, ok := t.construct(c, "nil")
+		if !ok {
+			g.report.untested(mm, "cannot construct the receiver")
+			return
+		}
+		recvCls = rc
+		pre = append(pre, "recv := "+ex)
+	}
+	vars := map[*Param]string{}
+	for i, p := range mm.Params {
+		if p.Out {
+			continue
+		}
+		v := fmt.Sprintf("a%d", i)
+		switch {
+		case p.Keep != "":
+			ex, _, ok := t.construct(p.T.cls, "nil")
+			if !ok {
+				g.report.untested(mm, "cannot construct argument "+p.GoName)
+				return
+			}
+			pre = append(pre, fmt.Sprintf("%s := %s", v, ex))
+			args = append(args, v)
+			vars[p] = v
+		case p.T.k == kObj && p.Rule == "transfer-this":
+			args = append(args, "nil")
+		default:
+			a, ok := t.zeroArg(p)
+			if !ok {
+				g.report.untested(mm, "cannot build argument "+p.GoName)
+				return
+			}
+			args = append(args, a)
+		}
+	}
+	t.imports["unsafe"] = true
+	t.imports[modulePath+"/internal/rt"] = true
+	b.p("// %s: keep rules", mm.Sig)
+	b.p("func TestKeep_%s_%s(t *testing.T) {\n\tqute.Run(t, func() {", c.Name, strings.TrimPrefix(mm.GoName, "New"))
+	for _, l := range pre {
+		b.p("\t\t%s", l)
+	}
+	owner := "recv"
+	if ctor {
+		owner = "x"
+		b.p("\t\tx := %s(%s)", t.q(c.Module, mm.GoName), strings.Join(args, ", "))
+	} else {
+		for _, p := range keeps {
+			if p.Keep == "release" {
+				b.p("\t\trt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(%s))", vars[p])
+			}
+		}
+		call := fmt.Sprintf("recv%s.%s(%s)", path(recvCls, c), mm.GoName, strings.Join(args, ", "))
+		if n := results(mm); n > 0 {
+			call = strings.TrimSuffix(strings.Repeat("_, ", n), ", ") + " = " + call
+		}
+		b.p("\t\t%s", call)
+	}
+	for _, p := range keeps {
+		v := vars[p]
+		if p.Keep == "release" {
+			b.p("\t\tif rt.KeepsArg(unsafe.Pointer(%s), unsafe.Pointer(%s)) {\n\t\t\tt.Error(\"%s: still kept after the call\")\n\t\t}", owner, v, p.GoName)
+		} else {
+			who := "receiver"
+			if ctor {
+				who = "new object"
+			}
+			b.p("\t\tif !rt.KeepsArg(unsafe.Pointer(%s), unsafe.Pointer(%s)) {\n\t\t\tt.Error(\"%s: not kept by the %s\")\n\t\t}", owner, v, p.GoName, who)
+		}
+	}
+	b.p("\t\t%s.Delete()", owner)
+	b.p("\t})\n}\n")
+}
+
+func hasOut(mm *Method) bool {
+	for _, p := range mm.Params {
+		if p.Out || p.InOut {
+			return true
+		}
+	}
+	return false
+}
+
+// results counts the Go results of a generated method.
+func results(mm *Method) int {
+	n := len(mm.PairRet)
+	if mm.Ret != nil && mm.Ret.k != kVoid && !mm.Error {
+		n++
+	}
+	if mm.Error {
+		n++
+	}
+	for _, p := range mm.Params {
+		if p.Out || p.InOut {
+			n++
+		}
+	}
+	return n
 }
 
 // emitSnippet writes a test from an overlay's test: field.
@@ -292,6 +413,12 @@ func (g *Gen) emitSnippet(t *testCtx, c *Class, mm *Method, b *buf) {
 		if strings.Contains(mm.Overlay.Test, md.Pkg+".") {
 			t.imports[md.ImportPath] = true
 		}
+	}
+	if strings.Contains(mm.Overlay.Test, "rt.") {
+		t.imports[modulePath+"/internal/rt"] = true
+	}
+	if strings.Contains(mm.Overlay.Test, "unsafe.") {
+		t.imports["unsafe"] = true
 	}
 	b.p("// %s (test from the overlay)", mm.Sig)
 	b.p("func TestOwnership_%s_%s(t *testing.T) {\n\tqute.Run(t, func() {", c.Name, mm.GoName)

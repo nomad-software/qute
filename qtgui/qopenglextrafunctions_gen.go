@@ -49,18 +49,20 @@ func NewQOpenGLExtraFunctions() *QOpenGLExtraFunctions {
 //
 //	C++: QOpenGLExtraFunctions::QOpenGLExtraFunctions(QOpenGLContext * context)
 //
-// Ownership: context is borrowed for the call only.
+// Ownership: context is borrowed, and the new object keeps it from being garbage collected while it lives.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopenglextrafunctions.html#QOpenGLExtraFunctions
 func NewQOpenGLExtraFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpenGLExtraFunctions {
 	rt.CheckThread("NewQOpenGLExtraFunctionsWithOpenGLContext")
 	var contextPtr unsafe.Pointer
+	var contextH *rt.Handle
 	if context != nil {
-		contextPtr = rt.UseArg(unsafe.Pointer(context.AsQOpenGLContext()), "NewQOpenGLExtraFunctionsWithOpenGLContext")
+		contextPtr, contextH = rt.Arg(unsafe.Pointer(context.AsQOpenGLContext()), "NewQOpenGLExtraFunctionsWithOpenGLContext")
 	}
 	p := C.qute_QOpenGLExtraFunctions_new_1(contextPtr)
 	runtime.KeepAlive(context)
 	h := rt.WrapClass(p, "QOpenGLExtraFunctions", rt.NewOwned)
+	rt.KeepArg(h, "QOpenGLExtraFunctions.context", contextH)
 	return rt.View[QOpenGLExtraFunctions](h, p)
 }
 

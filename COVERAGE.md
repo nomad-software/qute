@@ -8,13 +8,16 @@ cannot map yet, or a rule without a generated test. Fix an open item with an
 overlay entry in `spec/overlays/<module>.yaml` (an ownership rule,
 `reviewed: true`, a `name`, `skip`, or a `test:` snippet), then regenerate.
 A constructor argument named `parent` is treated as reviewed (`transfer-this`).
+An out-parameter guessed from its type (`int *`, `QString &`) stays open until
+an `out` or `in-out` rule confirms it: the type alone cannot say whether Qt
+wants an array or also reads the value.
 
 ## Summary
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 8202 |
-| Skipped on purpose (with reasons below) | 599 |
+| Bound constructors, methods and functions | 8201 |
+| Skipped on purpose (with reasons below) | 602 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
@@ -39,7 +42,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (599)
+## Skipped on purpose (602)
 
 
 ### QAbstractItemModel
@@ -99,6 +102,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QDataStream
 
+- `QDataStream::QDataStream(QByteArray *, OpenMode flags)`: skipped by overlay (on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer)
 - `QDataStream & QDataStream::readBytes(char *&, qint64 & len)`: on purpose: returns memory allocated with new[]; use the QByteArray overload
 
 ### QDate
@@ -299,6 +303,8 @@ These bind once the generator learns the type. Counts by type:
 
 ### QImage
 
+- `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use the const uchar * overload (NewQImageWithPtr*), which never writes into memory the image does not own; the buffer must outlive the image and must not be Go memory)
+- `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use the const uchar * overload (NewQImageWithPtr*), which never writes into memory the image does not own; the buffer must outlive the image and must not be Go memory)
 - `QImage::QImage(const char *const[] xpm)`: on purpose: a fixed-size C array; use the string or byte-array form
 - `QImage QImage::copy(int x, int y, int w, int h) const`: skipped by overlay (use Copy(rect))
 - `bool QImage::valid(const QPoint & pt) const`: skipped by overlay (use Valid(x, y))
@@ -313,7 +319,6 @@ These bind once the generator learns the type. Counts by type:
 - `QImage QImage::mirrored(bool horizontally = …, bool vertically = …)`: deprecated or variadic
 - `void QImage::mirror(bool horizontally = …, bool vertically = …)`: deprecated or variadic
 - `QImage::QImage(int width, int height, Format format)`: on purpose: plain-number twin of the struct overload
-- `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: on purpose: plain-number twin of the struct overload
 - `QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `const uchar * QImage::bits() const`: on purpose: same Go signature as another overload (often a QStringView twin)
@@ -465,6 +470,7 @@ These bind once the generator learns the type. Counts by type:
 ### QMatrix4x4
 
 - `QMatrix3x3 QMatrix4x4::normalMatrix() const`: return: on purpose: a template class; use QMatrix4x4
+- `void QMatrix4x4::copyDataTo(float * values) const`: skipped by overlay (on purpose: Qt writes 16 floats through the pointer; use CopyDataTo in qmatrix4x4_manual.go)
 - `const float * QMatrix4x4::data() const`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `void QMatrix4x4::viewport(float left, float bottom, float width, float height, float nearPlane = …, float farPlane = …)`: on purpose: plain-number twin of the struct overload
 

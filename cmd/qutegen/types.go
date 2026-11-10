@@ -94,6 +94,7 @@ type conv struct {
 	twoFlags bool    // QUrlTwoFlags
 	qptr     bool    // QPointer<T> list element
 	pairs    bool    // QList<std::pair<A, B>>: a kMap shaped as a slice of pairs
+	inplace  bool    // value class passed by non-const reference: the object itself, never a copy
 }
 
 func unsupported(t irType, why string) (*conv, error) {
@@ -896,7 +897,7 @@ func (g *Gen) cppArg(c *conv, n string) string {
 		if c.ptr {
 			return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Cpp, n) // Qt may update it in place
 		}
-		if !c.cls.DefCtor {
+		if !c.cls.DefCtor || c.inplace {
 			return fmt.Sprintf("*static_cast<%s *>(%s)", c.cls.Cpp, n)
 		}
 		return fmt.Sprintf("(%s ? *static_cast<%s *>(%s) : %s())", n, c.cls.Cpp, n, c.cls.Cpp)

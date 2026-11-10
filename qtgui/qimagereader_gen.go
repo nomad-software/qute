@@ -93,16 +93,20 @@ func NewQImageReader() *QImageReader {
 //
 //	C++: QImageReader::QImageReader(QIODevice * device, const QByteArray & format = …)
 //
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimagereader.html#QImageReader
 func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 	rt.CheckThread("NewQImageReaderWithIODevice")
 	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
 	if device != nil {
-		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "NewQImageReaderWithIODevice")
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "NewQImageReaderWithIODevice")
 	}
 	p := C.qute_QImageReader_new_1(devicePtr)
 	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	rt.KeepArg(h, "device", deviceH)
 	return rt.View[QImageReader](h, p)
 }
 
@@ -191,16 +195,20 @@ func (this *QImageReader) DecideFormatFromContent() bool {
 //
 //	C++: void QImageReader::setDevice(QIODevice * device)
 //
+// Ownership: device is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimagereader.html#setDevice
 func (this *QImageReader) SetDevice(device qtcore.QIODeviceLike) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetDevice")
 	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
 	if device != nil {
-		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QImageReader.SetDevice")
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "QImageReader.SetDevice")
 	}
 	C.qute_QImageReader_setDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
 }
 
 // Device wraps QImageReader::device.

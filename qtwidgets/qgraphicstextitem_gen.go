@@ -331,18 +331,22 @@ func (this *QGraphicsTextItem) AdjustSize() {
 //
 //	C++: void QGraphicsTextItem::setDocument(QTextDocument * document)
 //
-// Qt does not document a transfer of ownership; parent the document to a QObject or keep it alive.
+// Ownership: document is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// Qt does not document a transfer of ownership; the item keeps the document from being garbage collected.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicstextitem.html#setDocument
 func (this *QGraphicsTextItem) SetDocument(document qtgui.QTextDocumentLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetDocument")
 	var documentPtr unsafe.Pointer
+	var documentH *rt.Handle
 	if document != nil {
-		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "QGraphicsTextItem.SetDocument")
+		documentPtr, documentH = rt.Arg(unsafe.Pointer(document.AsQTextDocument()), "QGraphicsTextItem.SetDocument")
 	}
 	C.qute_QGraphicsTextItem_setDocument(self, documentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(document)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH)
 }
 
 // Document wraps QGraphicsTextItem::document.

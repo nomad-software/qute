@@ -99,7 +99,7 @@ func NewQMenuWithTitle(title string, parent QWidgetLike) *QMenu {
 //
 //	C++: QAction * QMenu::addMenu(QMenu * menu)
 //
-// Ownership: menu is borrowed for the call only; the result is Borrowed: Go never frees it.
+// Ownership: menu is borrowed, and the receiver keeps it from being garbage collected while it lives; the result is Borrowed: Go never frees it.
 //
 // The menu does not take ownership of the submenu.
 //
@@ -107,12 +107,14 @@ func NewQMenuWithTitle(title string, parent QWidgetLike) *QMenu {
 func (this *QMenu) AddMenu(menu QMenuLike) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.AddMenu")
 	var menuPtr unsafe.Pointer
+	var menuH *rt.Handle
 	if menu != nil {
-		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QMenu.AddMenu")
+		menuPtr, menuH = rt.Arg(unsafe.Pointer(menu.AsQMenu()), "QMenu.AddMenu")
 	}
 	r := C.qute_QMenu_addMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, menuH)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -192,7 +194,7 @@ func (this *QMenu) AddSectionIcon(icon *qtgui.QIcon, text string) *qtgui.QAction
 //
 //	C++: QAction * QMenu::insertMenu(QAction * before, QMenu * menu)
 //
-// Ownership: the result is Borrowed: Go never frees it.
+// Ownership: menu is borrowed, and the receiver keeps it from being garbage collected while it lives; the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmenu.html#insertMenu
 func (this *QMenu) InsertMenu(before qtgui.QActionLike, menu QMenuLike) *qtgui.QAction {
@@ -202,13 +204,15 @@ func (this *QMenu) InsertMenu(before qtgui.QActionLike, menu QMenuLike) *qtgui.Q
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QMenu.InsertMenu")
 	}
 	var menuPtr unsafe.Pointer
+	var menuH *rt.Handle
 	if menu != nil {
-		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QMenu.InsertMenu")
+		menuPtr, menuH = rt.Arg(unsafe.Pointer(menu.AsQMenu()), "QMenu.InsertMenu")
 	}
 	r := C.qute_QMenu_insertMenu(self, beforePtr, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(menu)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, menuH)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 

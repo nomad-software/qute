@@ -3270,11 +3270,7 @@ void * qute_QDataStream_new(void) {
 void * qute_QDataStream_new_1(void * a0) {
 	return static_cast<QDataStream *>(new QDataStream(static_cast<QIODevice *>(a0)));
 }
-void * qute_QDataStream_new_2(qute_str *a0_out, int64_t a1) {
-	QByteArray t0{};
-	return static_cast<QDataStream *>(new QDataStream(&t0, QFlags<QIODeviceBase::OpenModeFlag>::fromInt(static_cast<QFlags<QIODeviceBase::OpenModeFlag>::Int>(a1))));
-}
-void * qute_QDataStream_new_3(const char *a0, ptrdiff_t a0_len) {
+void * qute_QDataStream_new_2(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<QDataStream *>(new QDataStream(QByteArray(a0, a0_len)));
 }
 void qute_QDataStream_delete(void *self) {
@@ -4138,11 +4134,8 @@ bool qute_QFileDevice_setPermissions(void *self, int64_t a0) {
 void * qute_QFileDevice_map(void *self, long long a0, long long a1) {
 	return (void *)(static_cast<QFileDevice *>(self)->map(static_cast<long long>(a0), static_cast<long long>(a1)));
 }
-bool qute_QFileDevice_unmap(void *self, unsigned char *a0_out) {
-	unsigned char t0{};
-	auto &&r = static_cast<QFileDevice *>(self)->unmap(&t0);
-	*a0_out = static_cast<unsigned char>(t0);
-	return static_cast<bool>(r);
+bool qute_QFileDevice_unmap(void *self, void * a0) {
+	return static_cast<bool>(static_cast<QFileDevice *>(self)->unmap((unsigned char *)(a0)));
 }
 void * qute_QFileDevice_fileTime(void *self, int64_t a0) {
 	return static_cast<void *>(new QDateTime(static_cast<QFileDevice *>(self)->fileTime(static_cast<QFileDevice::FileTime>(a0))));

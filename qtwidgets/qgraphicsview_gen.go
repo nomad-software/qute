@@ -76,14 +76,15 @@ func NewQGraphicsView(parent QWidgetLike) *QGraphicsView {
 //
 //	C++: QGraphicsView::QGraphicsView(QGraphicsScene * scene, QWidget * parent = …)
 //
-// Ownership: scene is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: scene is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#QGraphicsView
 func NewQGraphicsViewWithScene(scene QGraphicsSceneLike, parent QWidgetLike) *QGraphicsView {
 	rt.CheckThread("NewQGraphicsViewWithScene")
 	var scenePtr unsafe.Pointer
+	var sceneH *rt.Handle
 	if scene != nil {
-		scenePtr = rt.UseArg(unsafe.Pointer(scene.AsQGraphicsScene()), "NewQGraphicsViewWithScene")
+		scenePtr, sceneH = rt.Arg(unsafe.Pointer(scene.AsQGraphicsScene()), "NewQGraphicsViewWithScene")
 	}
 	var parentPtr unsafe.Pointer
 	if parent != nil {
@@ -97,6 +98,7 @@ func NewQGraphicsViewWithScene(scene QGraphicsSceneLike, parent QWidgetLike) *QG
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QGraphicsView", mode)
+	rt.KeepArg(h, "scene", sceneH)
 	return rt.View[QGraphicsView](h, p)
 }
 
@@ -393,18 +395,22 @@ func (this *QGraphicsView) Scene() *QGraphicsScene {
 //
 //	C++: void QGraphicsView::setScene(QGraphicsScene * scene)
 //
+// Ownership: scene is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The view does not take ownership of the scene.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setScene
 func (this *QGraphicsView) SetScene(scene QGraphicsSceneLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetScene")
 	var scenePtr unsafe.Pointer
+	var sceneH *rt.Handle
 	if scene != nil {
-		scenePtr = rt.UseArg(unsafe.Pointer(scene.AsQGraphicsScene()), "QGraphicsView.SetScene")
+		scenePtr, sceneH = rt.Arg(unsafe.Pointer(scene.AsQGraphicsScene()), "QGraphicsView.SetScene")
 	}
 	C.qute_QGraphicsView_setScene(self, scenePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(scene)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "scene", sceneH)
 }
 
 // SceneRect wraps QGraphicsView::sceneRect.

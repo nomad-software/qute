@@ -234,6 +234,7 @@
 #include <QStatusBar>
 #include <QStringListModel>
 #include <QStyle>
+#include <QStyleFactory>
 #include <QStyleHints>
 #include <QStyleOption>
 #include <QStyleOptionButton>

@@ -466,18 +466,22 @@ func (this *QLabel) SetPicture(picture *qtgui.QPicture) {
 //
 //	C++: void QLabel::setMovie(QMovie * movie)
 //
-// The label does not take ownership of the movie; keep it alive.
+// Ownership: movie is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// The label does not take ownership of the movie; it keeps the movie from being garbage collected.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlabel.html#setMovie
 func (this *QLabel) SetMovie(movie qtgui.QMovieLike) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetMovie")
 	var moviePtr unsafe.Pointer
+	var movieH *rt.Handle
 	if movie != nil {
-		moviePtr = rt.UseArg(unsafe.Pointer(movie.AsQMovie()), "QLabel.SetMovie")
+		moviePtr, movieH = rt.Arg(unsafe.Pointer(movie.AsQMovie()), "QLabel.SetMovie")
 	}
 	C.qute_QLabel_setMovie(self, moviePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(movie)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMovie.movie", movieH)
 }
 
 // SetNum wraps QLabel::setNum.

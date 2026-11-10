@@ -5,6 +5,8 @@ QIODevice:
   write(const char*): { name: WriteString }
   write(const QByteArray&): { name: Write }
   seek: { name: SeekTo, doc: "Named SeekTo so it does not clash with io.Seeker's signature." }
+  getChar: { args: { c: out } }
+  readLineInto(QByteArray*, qint64): { args: { result: out } }
 QCoreApplication:
   installTranslator: { reviewed: true, doc: "The application does not take ownership of the translator; keep it alive." }
   removeTranslator: { reviewed: true }
@@ -19,8 +21,8 @@ QObject:
   setParent: { args: { parent: transfer-this } }
   event: { reviewed: true }
   eventFilter: { reviewed: true }
-  installEventFilter: { reviewed: true, doc: "The object does not take ownership of the filter; keep the filter alive while it is installed." }
-  removeEventFilter: { reviewed: true }
+  installEventFilter: { args: { filterObj: keep-each }, reviewed: true, doc: "The object does not take ownership of the filter; it keeps the filter from being garbage collected until RemoveEventFilter." }
+  removeEventFilter: { args: { obj: release }, reviewed: true }
   deleteLater: { doc: "Safe inside signal and event handlers; the object is deleted when control returns to the event loop." }
   children: { return: borrowed }
   parent: { return: borrowed }
@@ -47,7 +49,7 @@ QAbstractItemModel:
   dropMimeData: { reviewed: true }
 
 QAbstractProxyModel:
-  setSourceModel: { reviewed: true, doc: "The proxy does not take ownership of the source model." }
+  setSourceModel: { args: { sourceModel: keep }, reviewed: true, doc: "The proxy does not take ownership of the source model." }
   sourceModel: { return: borrowed }
 
 QChildEvent:
@@ -57,9 +59,9 @@ QEvent:
   clone: { return: transfer-to-go, doc: "Returns a new copy; the caller owns it.", test: "skip: event objects cannot be constructed from Go" }
 
 QItemSelectionModel:
-  QItemSelectionModel(QAbstractItemModel*, QObject*): { args: { model: borrowed } }
+  QItemSelectionModel(QAbstractItemModel*, QObject*): { args: { model: keep:model } }
   model: { return: borrowed }
-  setModel: { reviewed: true }
+  setModel: { args: { model: keep:model }, reviewed: true }
 
 QModelIndex:
   model: { return: borrowed }
@@ -79,6 +81,7 @@ QDate:
   fromString(QStringView, QStringView, int): { skip: "use the QString overload" }
   fromString(const QString&, QStringView, int): { skip: "use the QString overload" }
   fromString(const QString&, const QString&, int): { name: QDateFromStringFormat }
+  getDate: { args: { year: out, month: out, day: out } }
 
 QDateTime:
   fromString(QStringView, QStringView, QCalendar): { skip: "use the QString overload" }
@@ -152,10 +155,11 @@ QBasicTimer:
   start: { reviewed: true }
 
 QDataStream:
-  QDataStream(QIODevice*): { reviewed: true }
+  QDataStream(QIODevice*): { args: { 0: keep:device }, reviewed: true }
   device: { return: borrowed }
-  setDevice: { reviewed: true }
+  setDevice: { args: { 0: keep:device }, reviewed: true }
   writeBytes: { return: borrowed }
+  QDataStream(QByteArray*, QIODeviceBase::OpenMode): { skip: "on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer" }
 
 QMetaType:
   save: { reviewed: true }

@@ -87,16 +87,20 @@ func (this *QOpenGLContext) SetFormat(format *QSurfaceFormat) {
 //
 //	C++: void QOpenGLContext::setShareContext(QOpenGLContext * shareContext)
 //
+// Ownership: shareContext is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglcontext.html#setShareContext
 func (this *QOpenGLContext) SetShareContext(shareContext QOpenGLContextLike) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.SetShareContext")
 	var shareContextPtr unsafe.Pointer
+	var shareContextH *rt.Handle
 	if shareContext != nil {
-		shareContextPtr = rt.UseArg(unsafe.Pointer(shareContext.AsQOpenGLContext()), "QOpenGLContext.SetShareContext")
+		shareContextPtr, shareContextH = rt.Arg(unsafe.Pointer(shareContext.AsQOpenGLContext()), "QOpenGLContext.SetShareContext")
 	}
 	C.qute_QOpenGLContext_setShareContext(self, shareContextPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(shareContext)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setShareContext.shareContext", shareContextH)
 }
 
 // SetScreen wraps QOpenGLContext::setScreen.

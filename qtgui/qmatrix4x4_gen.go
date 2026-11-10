@@ -494,19 +494,6 @@ func (this *QMatrix4x4) FlipCoordinates() {
 	runtime.KeepAlive(this)
 }
 
-// CopyDataTo wraps QMatrix4x4::copyDataTo.
-//
-//	C++: void QMatrix4x4::copyDataTo(float * values) const
-//
-// Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#copyDataTo
-func (this *QMatrix4x4) CopyDataTo() float32 {
-	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.CopyDataTo")
-	var valuesOut C.float
-	C.qute_QMatrix4x4_copyDataTo(self, &valuesOut)
-	runtime.KeepAlive(this)
-	return float32(valuesOut)
-}
-
 // ToTransform wraps QMatrix4x4::toTransform.
 //
 //	C++: QTransform QMatrix4x4::toTransform() const

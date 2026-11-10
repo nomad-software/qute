@@ -63,14 +63,15 @@ func NewQItemSelectionModel() *QItemSelectionModel {
 //
 //	C++: QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent)
 //
-// Ownership: model is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: model is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#QItemSelectionModel
 func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, parent QObjectLike) *QItemSelectionModel {
 	rt.CheckThread("NewQItemSelectionModelWithAbstractItemModel")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelWithAbstractItemModel")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelWithAbstractItemModel")
 	}
 	var parentPtr unsafe.Pointer
 	if parent != nil {
@@ -84,6 +85,7 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QItemSelectionModel", mode)
+	rt.KeepArg(h, "model", modelH)
 	return rt.View[QItemSelectionModel](h, p)
 }
 
@@ -248,16 +250,20 @@ func (this *QItemSelectionModel) Model() *QAbstractItemModel {
 //
 //	C++: void QItemSelectionModel::setModel(QAbstractItemModel * model)
 //
+// Ownership: model is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#setModel
 func (this *QItemSelectionModel) SetModel(model QAbstractItemModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SetModel")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QItemSelectionModel.SetModel")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "QItemSelectionModel.SetModel")
 	}
 	C.qute_QItemSelectionModel_setModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "model", modelH)
 }
 
 // SetCurrentIndex wraps QItemSelectionModel::setCurrentIndex.

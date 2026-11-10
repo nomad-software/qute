@@ -61,16 +61,16 @@ func (this *QStyle) Name() string {
 	return quteStr(r)
 }
 
-// PolishWithWidget wraps QStyle::polish.
+// Polish wraps QStyle::polish.
 //
 //	C++: void QStyle::polish(QWidget * widget)
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#polish
-func (this *QStyle) PolishWithWidget(widget QWidgetLike) {
-	self := rt.Use(unsafe.Pointer(this), "QStyle.PolishWithWidget")
+func (this *QStyle) Polish(widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.Polish")
 	var widgetPtr unsafe.Pointer
 	if widget != nil {
-		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.PolishWithWidget")
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.Polish")
 	}
 	C.qute_QStyle_polish(self, widgetPtr)
 	runtime.KeepAlive(this)
@@ -125,16 +125,19 @@ func (this *QStyle) UnpolishApplication(application QApplicationLike) {
 	runtime.KeepAlive(application)
 }
 
-// Polish wraps QStyle::polish.
+// PolishPalette wraps QStyle::polish.
 //
 //	C++: void QStyle::polish(QPalette & palette)
 //
+// Qt adjusts the palette it is given, so pass the palette to start from; the result is the polished copy.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#polish
-func (this *QStyle) Polish() *qtgui.QPalette {
-	self := rt.Use(unsafe.Pointer(this), "QStyle.Polish")
+func (this *QStyle) PolishPalette(palette *qtgui.QPalette) *qtgui.QPalette {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.PolishPalette")
 	var paletteOut unsafe.Pointer
-	C.qute_QStyle_polish_2(self, &paletteOut)
+	C.qute_QStyle_polish_2(self, rt.UseArg(unsafe.Pointer(palette), "QStyle.PolishPalette"), &paletteOut)
 	runtime.KeepAlive(this)
+	runtime.KeepAlive(palette)
 	return rt.View[qtgui.QPalette](rt.WrapClass(paletteOut, "QPalette", rt.TakeOwned), paletteOut)
 }
 

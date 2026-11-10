@@ -111,18 +111,22 @@ func (this *QToolButton) SetArrowType(typeArg qtcore.ArrowType) {
 //
 //	C++: void QToolButton::setMenu(QMenu * menu)
 //
+// Ownership: menu is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The button does not take ownership of the menu.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtoolbutton.html#setMenu
 func (this *QToolButton) SetMenu(menu QMenuLike) {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.SetMenu")
 	var menuPtr unsafe.Pointer
+	var menuH *rt.Handle
 	if menu != nil {
-		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QToolButton.SetMenu")
+		menuPtr, menuH = rt.Arg(unsafe.Pointer(menu.AsQMenu()), "QToolButton.SetMenu")
 	}
 	C.qute_QToolButton_setMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setMenu.menu", menuH)
 }
 
 // Menu wraps QToolButton::menu.
@@ -225,16 +229,20 @@ func (this *QToolButton) SetToolButtonStyle(style qtcore.ToolButtonStyle) {
 //
 //	C++: void QToolButton::setDefaultAction(QAction *)
 //
+// Ownership: defaultAction is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtoolbutton.html#setDefaultAction
 func (this *QToolButton) SetDefaultAction(defaultAction qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.SetDefaultAction")
 	var defaultActionPtr unsafe.Pointer
+	var defaultActionH *rt.Handle
 	if defaultAction != nil {
-		defaultActionPtr = rt.UseArg(unsafe.Pointer(defaultAction.AsQAction()), "QToolButton.SetDefaultAction")
+		defaultActionPtr, defaultActionH = rt.Arg(unsafe.Pointer(defaultAction.AsQAction()), "QToolButton.SetDefaultAction")
 	}
 	C.qute_QToolButton_setDefaultAction(self, defaultActionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(defaultAction)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDefaultAction.defaultAction", defaultActionH)
 }
 
 // EmitTriggered wraps emitting the triggered signal.

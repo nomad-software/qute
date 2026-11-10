@@ -178,16 +178,22 @@ func (this *QGraphicsWidget) Style() *QStyle {
 //
 //	C++: void QGraphicsWidget::setStyle(QStyle * style)
 //
+// Ownership: style is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// QGraphicsWidget does not take ownership of the style (Qt docs); it keeps the style from being garbage collected.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setStyle
 func (this *QGraphicsWidget) SetStyle(style QStyleLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetStyle")
 	var stylePtr unsafe.Pointer
+	var styleH *rt.Handle
 	if style != nil {
-		stylePtr = rt.UseArg(unsafe.Pointer(style.AsQStyle()), "QGraphicsWidget.SetStyle")
+		stylePtr, styleH = rt.Arg(unsafe.Pointer(style.AsQStyle()), "QGraphicsWidget.SetStyle")
 	}
 	C.qute_QGraphicsWidget_setStyle(self, stylePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(style)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setStyle.style", styleH)
 }
 
 // Font wraps QGraphicsWidget::font.
@@ -579,16 +585,20 @@ func (this *QGraphicsWidget) SetShortcutAutoRepeat(idArg int) {
 //
 //	C++: void QGraphicsWidget::addAction(QAction * action)
 //
+// Ownership: action is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#addAction
 func (this *QGraphicsWidget) AddAction(action qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.AddAction")
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.AddAction")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.AddAction")
 	}
 	C.qute_QGraphicsWidget_addAction(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // AddActions wraps QGraphicsWidget::addActions.
@@ -632,6 +642,8 @@ func (this *QGraphicsWidget) InsertActions(before qtgui.QActionLike, actions []*
 //
 //	C++: void QGraphicsWidget::insertAction(QAction * before, QAction * action)
 //
+// Ownership: action is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#insertAction
 func (this *QGraphicsWidget) InsertAction(before qtgui.QActionLike, action qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.InsertAction")
@@ -640,29 +652,35 @@ func (this *QGraphicsWidget) InsertAction(before qtgui.QActionLike, action qtgui
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QGraphicsWidget.InsertAction")
 	}
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.InsertAction")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.InsertAction")
 	}
 	C.qute_QGraphicsWidget_insertAction(self, beforePtr, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(action)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // RemoveAction wraps QGraphicsWidget::removeAction.
 //
 //	C++: void QGraphicsWidget::removeAction(QAction * action)
 //
+// Ownership: action is borrowed, and the receiver drops the reference it kept to it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#removeAction
 func (this *QGraphicsWidget) RemoveAction(action qtgui.QActionLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.RemoveAction")
 	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
 	if action != nil {
-		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.RemoveAction")
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.RemoveAction")
 	}
 	C.qute_QGraphicsWidget_removeAction(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
+	rt.Release(rt.RefOf(unsafe.Pointer(this)).H, actionH)
 }
 
 // Actions wraps QGraphicsWidget::actions.

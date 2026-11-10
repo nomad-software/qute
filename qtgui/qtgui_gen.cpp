@@ -2321,14 +2321,10 @@ void * qute_QImage_new_1(qute_size a0, int64_t a1) {
 void * qute_QImage_new_2(void * a0, int a1, int a2, int64_t a3) {
 	return static_cast<QImage *>(new QImage((const unsigned char *)(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<QImage::Format>(a3)));
 }
-void * qute_QImage_new_3(unsigned char *a0_out, int a1, int a2, long long a3, int64_t a4) {
-	unsigned char t0{};
-	return static_cast<QImage *>(new QImage(&t0, static_cast<int>(a1), static_cast<int>(a2), static_cast<long long>(a3), static_cast<QImage::Format>(a4)));
-}
-void * qute_QImage_new_4(void * a0, int a1, int a2, long long a3, int64_t a4) {
+void * qute_QImage_new_3(void * a0, int a1, int a2, long long a3, int64_t a4) {
 	return static_cast<QImage *>(new QImage((const unsigned char *)(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<long long>(a3), static_cast<QImage::Format>(a4)));
 }
-void * qute_QImage_new_5(const char *a0, ptrdiff_t a0_len) {
+void * qute_QImage_new_4(const char *a0, ptrdiff_t a0_len) {
 	return static_cast<QImage *>(new QImage(QString::fromUtf8(a0, a0_len)));
 }
 void qute_QImage_delete(void *self) {
@@ -3202,11 +3198,6 @@ void qute_QMatrix4x4_viewport(void *self, qute_rectf a0) {
 }
 void qute_QMatrix4x4_flipCoordinates(void *self) {
 	static_cast<QMatrix4x4 *>(self)->flipCoordinates();
-}
-void qute_QMatrix4x4_copyDataTo(void *self, float *a0_out) {
-	float t0{};
-	static_cast<QMatrix4x4 *>(self)->copyDataTo(&t0);
-	*a0_out = static_cast<float>(t0);
 }
 void * qute_QMatrix4x4_toTransform(void *self) {
 	return static_cast<void *>(new QTransform(static_cast<QMatrix4x4 *>(self)->toTransform()));

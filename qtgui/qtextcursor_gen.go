@@ -94,22 +94,28 @@ func NewQTextCursor() *QTextCursor {
 //
 //	C++: QTextCursor::QTextCursor(QTextDocument * document)
 //
+// Ownership: document is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#QTextCursor
 func NewQTextCursorWithTextDocument(document QTextDocumentLike) *QTextCursor {
 	rt.CheckThread("NewQTextCursorWithTextDocument")
 	var documentPtr unsafe.Pointer
+	var documentH *rt.Handle
 	if document != nil {
-		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "NewQTextCursorWithTextDocument")
+		documentPtr, documentH = rt.Arg(unsafe.Pointer(document.AsQTextDocument()), "NewQTextCursorWithTextDocument")
 	}
 	p := C.qute_QTextCursor_new_1(documentPtr)
 	runtime.KeepAlive(document)
 	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
+	rt.KeepArg(h, "document", documentH)
 	return rt.View[QTextCursor](h, p)
 }
 
 // NewQTextCursorWithTextFrame wraps the QTextCursor constructor.
 //
 //	C++: QTextCursor::QTextCursor(QTextFrame * frame)
+//
+// The frame belongs to its document; keep the document alive while the cursor is used.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#QTextCursor
 func NewQTextCursorWithTextFrame(frame QTextFrameLike) *QTextCursor {

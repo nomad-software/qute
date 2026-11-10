@@ -220,6 +220,7 @@
 #include <QStatusBar>
 #include <QStringListModel>
 #include <QStyle>
+#include <QStyleFactory>
 #include <QStyleHints>
 #include <QStyleOption>
 #include <QStyleOptionButton>
@@ -2383,7 +2384,7 @@ public:
 	void qute_super_7(QMouseEvent * a0) { return QPushButton::mouseMoveEvent(a0); }
 	void initStyleOption(QStyleOptionButton * a0) const override {
 		if (qute_has(8)) {
-			void * c0 = [&]() -> void * { auto p = a0; return p ? static_cast<void *>(new QStyleOptionButton(*p)) : nullptr; }();
+			void * c0 = static_cast<void *>(a0);
 			void *args[] = {&c0};
 			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
 			return;
@@ -12810,8 +12811,8 @@ void qute_QStyle_polish_1(void *self, void * a0) {
 void qute_QStyle_unpolish_1(void *self, void * a0) {
 	static_cast<QStyle *>(self)->unpolish(static_cast<QApplication *>(a0));
 }
-void qute_QStyle_polish_2(void *self, void * *a0_out) {
-	QPalette t0{};
+void qute_QStyle_polish_2(void *self, void * a0, void * *a0_out) {
+	QPalette t0 = (a0 ? *static_cast<QPalette *>(a0) : QPalette());
 	static_cast<QStyle *>(self)->polish(t0);
 	*a0_out = static_cast<void *>(new QPalette(t0));
 }
@@ -12892,6 +12893,17 @@ int64_t qute_QStyle_visualAlignment(int64_t a0, int64_t a1) {
 }
 qute_rect qute_QStyle_alignedRect(int64_t a0, int64_t a1, qute_size a2, qute_rect a3) {
 	return qute_from_QRect(QStyle::alignedRect(static_cast<Qt::LayoutDirection>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)), qute_to_QSize(a2), qute_to_QRect(a3)));
+}
+
+// ---- QStyleFactory
+void qute_QStyleFactory_delete(void *self) {
+	delete static_cast<QStyleFactory *>(self);
+}
+qute_list qute_QStyleFactory_keys(void) {
+	return qute_ret_strlist(QStyleFactory::keys());
+}
+void * qute_QStyleFactory_create(const char *a0, ptrdiff_t a0_len) {
+	return (void *)(QStyleFactory::create(QString::fromUtf8(a0, a0_len)));
 }
 
 // ---- QStyleOption

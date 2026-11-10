@@ -334,34 +334,42 @@ func (this *QObject) SetParent(parent QObjectLike) {
 //
 //	C++: void QObject::installEventFilter(QObject * filterObj)
 //
-// The object does not take ownership of the filter; keep the filter alive while it is installed.
+// Ownership: filterObj is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// The object does not take ownership of the filter; it keeps the filter from being garbage collected until RemoveEventFilter.
 //
 // Qt docs: https://doc.qt.io/qt-6/qobject.html#installEventFilter
 func (this *QObject) InstallEventFilter(filterObj QObjectLike) {
 	self := rt.Use(unsafe.Pointer(this), "QObject.InstallEventFilter")
 	var filterObjPtr unsafe.Pointer
+	var filterObjH *rt.Handle
 	if filterObj != nil {
-		filterObjPtr = rt.UseArg(unsafe.Pointer(filterObj.AsQObject()), "QObject.InstallEventFilter")
+		filterObjPtr, filterObjH = rt.Arg(unsafe.Pointer(filterObj.AsQObject()), "QObject.InstallEventFilter")
 	}
 	C.qute_QObject_installEventFilter(self, filterObjPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(filterObj)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, filterObjH)
 }
 
 // RemoveEventFilter wraps QObject::removeEventFilter.
 //
 //	C++: void QObject::removeEventFilter(QObject * obj)
 //
+// Ownership: obj is borrowed, and the receiver drops the reference it kept to it.
+//
 // Qt docs: https://doc.qt.io/qt-6/qobject.html#removeEventFilter
 func (this *QObject) RemoveEventFilter(obj QObjectLike) {
 	self := rt.Use(unsafe.Pointer(this), "QObject.RemoveEventFilter")
 	var objPtr unsafe.Pointer
+	var objH *rt.Handle
 	if obj != nil {
-		objPtr = rt.UseArg(unsafe.Pointer(obj.AsQObject()), "QObject.RemoveEventFilter")
+		objPtr, objH = rt.Arg(unsafe.Pointer(obj.AsQObject()), "QObject.RemoveEventFilter")
 	}
 	C.qute_QObject_removeEventFilter(self, objPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(obj)
+	rt.Release(rt.RefOf(unsafe.Pointer(this)).H, objH)
 }
 
 // SetProperty wraps QObject::setProperty.

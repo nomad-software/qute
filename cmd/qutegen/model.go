@@ -96,6 +96,12 @@ type Param struct {
 	ByPtr  bool   // the C++ parameter is a pointer (pass &t), not a reference
 	Pair   string // "array", "bytes" or "buffer": this parameter absorbs the next (its count)
 	CppT   string // C++ type of the local used for an out or in-out parameter
+	// Keep makes the receiver hold a reference to this object argument, for
+	// pointers Qt stores without owning: a slot name (the reference replaces
+	// the slot's previous one), "each" (one reference per distinct argument)
+	// or "release" (drops a reference "each" took).
+	Keep string
+	View bool // a virtual's non-const value-class pointer or reference: passed in place, not copied
 }
 
 type Method struct {
@@ -629,11 +635,21 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 			g.skip(c, im, "on purpose: a pointer to an array with no count; Qt would read past one element")
 			return nil
 		}
-		if oc, inout, byPtr, cppT := g.outConv(p); oc != nil {
+		outRule := ruleFor(ov, p.Name, i)
+		if outRule == "" {
+			outRule = ruleFor(ov, names[i], i)
+		}
+		if oc, inout, byPtr, cppT := g.outConv(p, ctor, outRule); oc != nil {
 			pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: oc,
-				Out: !inout, InOut: inout, ByPtr: byPtr, CppT: cppT}
+				Out: !inout, InOut: inout, ByPtr: byPtr, CppT: cppT, Rule: "out", Ruled: outRule != ""}
+			if inout {
+				pp.Rule = "in-out"
+			}
 			mm.Params = append(mm.Params, pp)
 			continue
+		} else if outRule == "out" || outRule == "in-out" {
+			g.report.warn("%s: %s rule on %s, which is not a non-const pointer or reference to a supported type",
+				g.methodSig(c, im), outRule, names[i])
 		}
 		t, err := g.resolve(p.Type, false)
 		if err != nil {
@@ -722,8 +738,34 @@ func (g *Gen) applyArgRule(c *Class, im *irMethod, ov *overlay, p *Param, i int,
 	}
 	if r != "" {
 		p.Rule, p.Ruled = r, true
-		switch r {
-		case "transfer-to-cpp", "transfer-this", "transfer-to-go", "borrowed", "scoped":
+		switch {
+		case r == "transfer-to-cpp", r == "transfer-this", r == "transfer-to-go", r == "borrowed", r == "scoped":
+		case r == "keep" || strings.HasPrefix(r, "keep:") || r == "keep-each" || r == "release":
+			// Qt stores the pointer but does not own it: still borrowed, but
+			// the receiver (or the new object) holds a Go reference to it
+			p.Rule = "borrowed"
+			switch {
+			case r == "keep":
+				owner := im.Name
+				if ctor {
+					owner = c.Name
+				}
+				p.Keep = owner + "." + p.GoName
+			case r == "keep-each":
+				p.Keep = "each"
+			case r == "release":
+				p.Keep = "release"
+			default:
+				p.Keep = strings.TrimPrefix(r, "keep:")
+			}
+			if im.Static {
+				g.report.warn("%s: %s rule on a static function, which has no receiver to hold the reference", g.methodSig(c, im), r)
+				p.Keep = ""
+			}
+			if p.T.k != kObj {
+				g.report.warn("%s: %s rule on a list argument is not supported", g.methodSig(c, im), r)
+				p.Keep = ""
+			}
 		default:
 			g.report.warn("%s: unknown rule %q", g.methodSig(c, im), r)
 		}
@@ -1128,6 +1170,17 @@ func (g *Gen) newVirtual(c, owner *Class, im *irMethod) *Method {
 		if t.k == kObj && (t.cls.Event || t.cls.Name == "QPainter" || strings.HasPrefix(t.cls.Name, "QStyleOption")) {
 			pp.Rule = "scoped"
 		}
+		if _, cnst, ptr, ref, _ := parseCpp(p.Type.Canonical); t.k == kValue && !cnst && (ptr || ref) {
+			// initStyleOption(QStyleOptionButton *), polish(QPalette &): the
+			// override fills in Qt's object, so Go gets that object itself
+			// (valid for the call only), never a copy Qt would not see
+			pp.View, pp.Rule = true, "scoped"
+			if ref {
+				tc := *t
+				tc.inplace = true
+				pp.T = &tc
+			}
+		}
 		mm.Params = append(mm.Params, pp)
 	}
 	t, err := g.resolve(im.Return, true)
@@ -1239,17 +1292,43 @@ func (g *Gen) pairConv(p, q irParam) (*conv, string) {
 
 // outConv recognises parameters the call writes: int *row, bool *ok,
 // ItemRole *role (out), and QString &input, int &pos (in-out), and
-// QTransform &result (out, a value class).
-func (g *Gen) outConv(p irParam) (c *conv, inout, byPtr bool, cppT string) {
-	if p.Default {
+// QTransform &result (out, a value class). The guess is by type alone, so
+// every inferred one is listed in COVERAGE.md until an overlay confirms it
+// with an `out` or `in-out` rule, which also overrides the guess
+// (QStyle::polish(QPalette &) reads the palette it updates).
+//
+// Two shapes are never out-parameters: a constructor's pointer (the object
+// keeps it, so a local in the shim would dangle) and uchar * (raw memory,
+// bound as unsafe.Pointer).
+func (g *Gen) outConv(p irParam, ctor bool, rule string) (c *conv, inout, byPtr bool, cppT string) {
+	if p.Default && rule == "" {
 		return nil, false, false, ""
 	}
 	base, cnst, ptr, ref, rref := parseCpp(p.Type.Canonical)
 	if cnst || rref || ptr == ref {
 		return nil, false, false, ""
 	}
+	if ctor && ptr || base == "unsigned char" && rule == "" {
+		return nil, false, false, ""
+	}
 	e, err := g.resolve(irType{Spelling: base, Canonical: base}, true)
 	if err != nil {
+		return nil, false, false, ""
+	}
+	switch rule {
+	case "out", "in-out":
+		switch e.k {
+		case kPrim, kEnum, kFlags, kString, kStruct, kBytes:
+		case kValue:
+			if !e.cls.DefCtor || ptr {
+				return nil, false, false, ""
+			}
+		default:
+			return nil, false, false, ""
+		}
+		return e, rule == "in-out", ptr, base
+	case "":
+	default:
 		return nil, false, false, ""
 	}
 	switch e.k {

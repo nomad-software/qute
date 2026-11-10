@@ -39,6 +39,10 @@ type classOpts struct {
 	RawPointers bool `yaml:"raw-pointers"`
 	// EnumsOnly emits the class's enums but no wrapper (QChar is a rune in Go).
 	EnumsOnly bool `yaml:"enums-only"`
+	// DependsOn names a const getter returning the object this value is only
+	// valid with (QModelIndex: model). Every wrapper holds a reference to that
+	// object, so GC cannot free it first, and panics once it is destroyed.
+	DependsOn string `yaml:"depends-on"`
 }
 
 type classSpec struct {

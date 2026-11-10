@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"runtime/cgo"
+	"runtime/debug"
 	"sync/atomic"
 	"unsafe"
 )
@@ -12,6 +13,61 @@ var callbackDepth atomic.Int32
 
 // InCallback reports whether a signal or virtual handler is running.
 func InCallback() bool { return callbackDepth.Load() > 0 }
+
+// A panic in a Go handler called from Qt would otherwise unwind through the
+// C++ frames between the handler and the Go code that entered Qt, skipping
+// their destructors and leaving Qt in an inconsistent state. While a capture
+// is active (qute.Run), handlers recover their own panic at the cgo boundary,
+// return normally to Qt, and the first panic is re-raised once control is
+// back in Go. Without a capture (qute.Main) a handler panic still crashes the
+// program, with its stack.
+
+// CallbackPanic is a panic recovered from a Go handler called by Qt.
+type CallbackPanic struct {
+	Value any
+	Stack string
+}
+
+func (p *CallbackPanic) String() string {
+	return fmt.Sprintf("panic in a Qt callback: %v\n%s", p.Value, p.Stack)
+}
+
+var (
+	capturing    atomic.Int32
+	pendingPanic atomic.Pointer[CallbackPanic]
+)
+
+// CapturePanics starts recovering handler panics on the GUI thread. The
+// returned stop ends the capture and returns the first recovered panic, if any.
+func CapturePanics() (stop func() *CallbackPanic) {
+	capturing.Add(1)
+	return func() *CallbackPanic {
+		capturing.Add(-1)
+		return pendingPanic.Swap(nil)
+	}
+}
+
+// RethrowCallbackPanic re-raises a recovered handler panic in the caller. Call
+// it after a call into Qt that may have run handlers (the input helpers).
+func RethrowCallbackPanic() {
+	if p := pendingPanic.Swap(nil); p != nil {
+		panic(p)
+	}
+}
+
+// catchPanic is deferred by every entry point from Qt into Go handlers.
+func catchPanic() {
+	if capturing.Load() == 0 {
+		return // let the panic crash the program as usual
+	}
+	if p := recover(); p != nil {
+		cp := &CallbackPanic{Value: p, Stack: string(debug.Stack())}
+		if inner, ok := p.(*CallbackPanic); ok {
+			cp = inner // a nested handler's panic, re-raised by a helper
+		}
+		pendingPanic.CompareAndSwap(nil, cp)
+	}
+}
 
 type callback struct {
 	fn     func(args unsafe.Pointer)
@@ -30,6 +86,7 @@ func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
 	cb := cgo.Handle(id).Value().(*callback)
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
+	defer catchPanic()
 	cb.fnr(args, ret)
 }
 
@@ -48,6 +105,7 @@ func InvokeCallback(id uintptr, args unsafe.Pointer) {
 	cb := cgo.Handle(id).Value().(*callback)
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
+	defer catchPanic()
 	cb.fn(args)
 }
 
@@ -72,11 +130,19 @@ type connState struct {
 	done atomic.Bool
 }
 
-// NewConnection wraps a heap QMetaObject::Connection*.
+// NewConnection wraps a heap QMetaObject::Connection*. When the Connection
+// value becomes unreachable the C++ object is freed on the GUI thread, through
+// the same queue as GC cleanups: GC cleanups run on their own goroutine, and
+// freeing the last reference to a disconnected connection can destroy its slot
+// object, which must not happen off the GUI thread.
 func NewConnection(conn unsafe.Pointer) Connection {
 	s := &connState{conn: conn}
-	runtime.AddCleanup(s, func(p unsafe.Pointer) { freeConnectionC(p) }, conn)
+	runtime.AddCleanup(s, freeConnectionLater, conn)
 	return Connection{c: s}
+}
+
+func freeConnectionLater(conn unsafe.Pointer) {
+	enqueueCleanup(cleanupArg{key: conn, kind: KindPlain, deleter: freeConnectionC, quiet: true})
 }
 
 // Disconnect breaks the connection and releases its closure. It is safe to
@@ -102,6 +168,7 @@ func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) {
 	h := cgo.Handle(id).Value().(*Handle)
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
+	defer catchPanic()
 	if idx < 0 || idx >= len(h.VTable) {
 		panic(fmt.Sprintf("qute: virtual index %d out of range for %s", idx, h.class))
 	}

@@ -32,7 +32,7 @@ classes:
   QTimerEvent: { kind: event, no-construct: true }
   QChildEvent: { kind: event, no-construct: true }
   QVariant: { kind: value }
-  QModelIndex: { kind: value }
+  QModelIndex: { kind: value, depends-on: model }
   QPersistentModelIndex: { kind: value }
   QUrl: { kind: value }
   QDate: { kind: value }

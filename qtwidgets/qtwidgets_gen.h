@@ -3197,7 +3197,7 @@ void qute_QStyle_polish(void *self, void * a0);
 void qute_QStyle_unpolish(void *self, void * a0);
 void qute_QStyle_polish_1(void *self, void * a0);
 void qute_QStyle_unpolish_1(void *self, void * a0);
-void qute_QStyle_polish_2(void *self, void * *a0_out);
+void qute_QStyle_polish_2(void *self, void * a0, void * *a0_out);
 qute_rect qute_QStyle_itemTextRect(void *self, void * a0, qute_rect a1, int a2, bool a3, const char *a4, ptrdiff_t a4_len);
 qute_rect qute_QStyle_itemPixmapRect(void *self, qute_rect a0, int a1, void * a2);
 void qute_QStyle_drawItemText(void *self, void * a0, qute_rect a1, int a2, void * a3, bool a4, const char *a5, ptrdiff_t a5_len);
@@ -3224,6 +3224,11 @@ int qute_QStyle_sliderPositionFromValue(int a0, int a1, int a2, int a3);
 int qute_QStyle_sliderValueFromPosition(int a0, int a1, int a2, int a3);
 int64_t qute_QStyle_visualAlignment(int64_t a0, int64_t a1);
 qute_rect qute_QStyle_alignedRect(int64_t a0, int64_t a1, qute_size a2, qute_rect a3);
+
+// QStyleFactory
+void qute_QStyleFactory_delete(void *self);
+qute_list qute_QStyleFactory_keys(void);
+void * qute_QStyleFactory_create(const char *a0, ptrdiff_t a0_len);
 
 // QStyleOption
 void * qute_QStyleOption_new(void);

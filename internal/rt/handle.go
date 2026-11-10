@@ -76,6 +76,11 @@ type Handle struct {
 	cache      []any
 	selfID     cgo.Handle
 	deathNote  string
+	keeps      map[string]any // kept references of an unregistered owner (guarded by keepMu)
+
+	// dep is the object this one only makes sense with (a QModelIndex's
+	// model); set once at creation, so Use reads it without a lock.
+	dep *Handle
 
 	// Self is the Go value that overrides virtuals (nil for plain wrappers).
 	Self any
@@ -166,6 +171,7 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 			st = Borrowed
 		}
 		h := newHandle(key, class, kind, st, deleter)
+		h.attachDependency()
 		if st == Owned {
 			h.attachCleanup()
 		}
@@ -319,6 +325,7 @@ type cleanupArg struct {
 	kind       Kind
 	deleter    func(unsafe.Pointer)
 	registered bool
+	quiet      bool // not an object handle: not counted in Drained
 }
 
 func (h *Handle) attachCleanup() {
@@ -422,6 +429,7 @@ func Destroyed(key unsafe.Pointer, why string) {
 	e := registry[key]
 	delete(registry, key)
 	regMu.Unlock()
+	dropKeeps(key)
 	if e == nil {
 		return
 	}
@@ -456,6 +464,7 @@ func (h *Handle) markDead(why string) {
 		id.Delete()
 		h.Unpin()
 	}
+	h.dropHandleKeeps()
 }
 
 // Delete frees the object now. It is idempotent and works on Owned and
@@ -507,6 +516,7 @@ func Use(wrapper unsafe.Pointer, method string) unsafe.Pointer {
 	if State(r.H.state.Load()) == Dead {
 		panic(deadMessage(r.H, method))
 	}
+	checkDependency(r.H, method)
 	if debugEnabled {
 		checkThread(method)
 	}

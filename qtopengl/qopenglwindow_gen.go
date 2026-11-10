@@ -76,14 +76,15 @@ func NewQOpenGLWindowWithUpdateBehavior(updateBehavior QOpenGLWindowUpdateBehavi
 //
 //	C++: QOpenGLWindow::QOpenGLWindow(QOpenGLContext * shareContext, UpdateBehavior updateBehavior = …, QWindow * parent = …)
 //
-// Ownership: shareContext is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: shareContext is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopenglwindow.html#QOpenGLWindow
 func NewQOpenGLWindowShared(shareContext qtgui.QOpenGLContextLike, updateBehavior QOpenGLWindowUpdateBehavior, parent qtgui.QWindowLike) *QOpenGLWindow {
 	rt.CheckThread("NewQOpenGLWindowShared")
 	var shareContextPtr unsafe.Pointer
+	var shareContextH *rt.Handle
 	if shareContext != nil {
-		shareContextPtr = rt.UseArg(unsafe.Pointer(shareContext.AsQOpenGLContext()), "NewQOpenGLWindowShared")
+		shareContextPtr, shareContextH = rt.Arg(unsafe.Pointer(shareContext.AsQOpenGLContext()), "NewQOpenGLWindowShared")
 	}
 	var parentPtr unsafe.Pointer
 	if parent != nil {
@@ -97,6 +98,7 @@ func NewQOpenGLWindowShared(shareContext qtgui.QOpenGLContextLike, updateBehavio
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QOpenGLWindow", mode)
+	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH)
 	return rt.View[QOpenGLWindow](h, p)
 }
 

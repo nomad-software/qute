@@ -5,9 +5,11 @@ import (
 	"testing"
 
 	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtopengl"
+	"unsafe"
 )
 
 func TestMain(m *testing.M) { qute.TestMain(m) }
@@ -165,6 +167,18 @@ func TestOwnership_NewQOpenGLWindowWithUpdateBehavior(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// QOpenGLWindow::QOpenGLWindow(QOpenGLContext * shareContext, UpdateBehavior updateBehavior = …, QWindow * parent = …): keep rules
+func TestKeep_QOpenGLWindow_QOpenGLWindowShared(t *testing.T) {
+	qute.Run(t, func() {
+		a0 := qtgui.NewQOpenGLContext(nil)
+		x := qtopengl.NewQOpenGLWindowShared(a0, qtopengl.QOpenGLWindowUpdateBehavior(1), nil)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("shareContext: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 

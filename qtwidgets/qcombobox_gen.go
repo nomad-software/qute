@@ -377,16 +377,20 @@ func (this *QComboBox) LineEdit() *QLineEdit {
 //
 //	C++: void QComboBox::setValidator(const QValidator * v)
 //
+// Ownership: vArg is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#setValidator
 func (this *QComboBox) SetValidator(vArg qtgui.QValidatorLike) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetValidator")
 	var vArgPtr unsafe.Pointer
+	var vArgH *rt.Handle
 	if vArg != nil {
-		vArgPtr = rt.UseArg(unsafe.Pointer(vArg.AsQValidator()), "QComboBox.SetValidator")
+		vArgPtr, vArgH = rt.Arg(unsafe.Pointer(vArg.AsQValidator()), "QComboBox.SetValidator")
 	}
 	C.qute_QComboBox_setValidator(self, vArgPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(vArg)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setValidator.vArg", vArgH)
 }
 
 // Validator wraps QComboBox::validator.
@@ -407,16 +411,20 @@ func (this *QComboBox) Validator() *qtgui.QValidator {
 //
 //	C++: void QComboBox::setCompleter(QCompleter * c)
 //
+// Ownership: c is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#setCompleter
 func (this *QComboBox) SetCompleter(c QCompleterLike) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetCompleter")
 	var cPtr unsafe.Pointer
+	var cH *rt.Handle
 	if c != nil {
-		cPtr = rt.UseArg(unsafe.Pointer(c.AsQCompleter()), "QComboBox.SetCompleter")
+		cPtr, cH = rt.Arg(unsafe.Pointer(c.AsQCompleter()), "QComboBox.SetCompleter")
 	}
 	C.qute_QComboBox_setCompleter(self, cPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(c)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCompleter.c", cH)
 }
 
 // Completer wraps QComboBox::completer.
@@ -451,16 +459,20 @@ func (this *QComboBox) ItemDelegate() *QAbstractItemDelegate {
 //
 //	C++: void QComboBox::setItemDelegate(QAbstractItemDelegate * delegate)
 //
+// Ownership: delegate is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#setItemDelegate
 func (this *QComboBox) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetItemDelegate")
 	var delegatePtr unsafe.Pointer
+	var delegateH *rt.Handle
 	if delegate != nil {
-		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QComboBox.SetItemDelegate")
+		delegatePtr, delegateH = rt.Arg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QComboBox.SetItemDelegate")
 	}
 	C.qute_QComboBox_setItemDelegate(self, delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH)
 }
 
 // Model wraps QComboBox::model.
@@ -481,18 +493,22 @@ func (this *QComboBox) Model() *qtcore.QAbstractItemModel {
 //
 //	C++: void QComboBox::setModel(QAbstractItemModel * model)
 //
+// Ownership: model is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The combo box does not take ownership of the model.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#setModel
 func (this *QComboBox) SetModel(model qtcore.QAbstractItemModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetModel")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QComboBox.SetModel")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "QComboBox.SetModel")
 	}
 	C.qute_QComboBox_setModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setModel.model", modelH)
 }
 
 // RootModelIndex wraps QComboBox::rootModelIndex.

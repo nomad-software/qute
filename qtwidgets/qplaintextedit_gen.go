@@ -99,16 +99,20 @@ func NewQPlainTextEditWithText(text string, parent QWidgetLike) *QPlainTextEdit 
 //
 //	C++: void QPlainTextEdit::setDocument(QTextDocument * document)
 //
+// Ownership: document is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#setDocument
 func (this *QPlainTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetDocument")
 	var documentPtr unsafe.Pointer
+	var documentH *rt.Handle
 	if document != nil {
-		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "QPlainTextEdit.SetDocument")
+		documentPtr, documentH = rt.Arg(unsafe.Pointer(document.AsQTextDocument()), "QPlainTextEdit.SetDocument")
 	}
 	C.qute_QPlainTextEdit_setDocument(self, documentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(document)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setDocument.document", documentH)
 }
 
 // Document wraps QPlainTextEdit::document.

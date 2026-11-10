@@ -75,14 +75,15 @@ func NewQCompleter(parent qtcore.QObjectLike) *QCompleter {
 //
 //	C++: QCompleter::QCompleter(QAbstractItemModel * model, QObject * parent = …)
 //
-// Ownership: model is borrowed for the call only; parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: model is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#QCompleter
 func NewQCompleterWithModel(model qtcore.QAbstractItemModelLike, parent qtcore.QObjectLike) *QCompleter {
 	rt.CheckThread("NewQCompleterWithModel")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQCompleterWithModel")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQCompleterWithModel")
 	}
 	var parentPtr unsafe.Pointer
 	if parent != nil {
@@ -96,6 +97,7 @@ func NewQCompleterWithModel(model qtcore.QAbstractItemModelLike, parent qtcore.Q
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QCompleter", mode)
+	rt.KeepArg(h, "model", modelH)
 	return rt.View[QCompleter](h, p)
 }
 
@@ -157,16 +159,20 @@ func (this *QCompleter) Widget() *QWidget {
 //
 //	C++: void QCompleter::setModel(QAbstractItemModel * c)
 //
+// Ownership: c is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#setModel
 func (this *QCompleter) SetModel(c qtcore.QAbstractItemModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetModel")
 	var cPtr unsafe.Pointer
+	var cH *rt.Handle
 	if c != nil {
-		cPtr = rt.UseArg(unsafe.Pointer(c.AsQAbstractItemModel()), "QCompleter.SetModel")
+		cPtr, cH = rt.Arg(unsafe.Pointer(c.AsQAbstractItemModel()), "QCompleter.SetModel")
 	}
 	C.qute_QCompleter_setModel(self, cPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(c)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "model", cH)
 }
 
 // Model wraps QCompleter::model.

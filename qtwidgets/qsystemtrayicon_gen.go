@@ -100,18 +100,22 @@ func NewQSystemTrayIconWithIcon(icon *qtgui.QIcon, parent qtcore.QObjectLike) *Q
 //
 //	C++: void QSystemTrayIcon::setContextMenu(QMenu * menu)
 //
+// Ownership: menu is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The tray icon does not take ownership of the menu.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#setContextMenu
 func (this *QSystemTrayIcon) SetContextMenu(menu QMenuLike) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.SetContextMenu")
 	var menuPtr unsafe.Pointer
+	var menuH *rt.Handle
 	if menu != nil {
-		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QSystemTrayIcon.SetContextMenu")
+		menuPtr, menuH = rt.Arg(unsafe.Pointer(menu.AsQMenu()), "QSystemTrayIcon.SetContextMenu")
 	}
 	C.qute_QSystemTrayIcon_setContextMenu(self, menuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menu)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setContextMenu.menu", menuH)
 }
 
 // ContextMenu wraps QSystemTrayIcon::contextMenu.

@@ -560,18 +560,22 @@ func (this *QDateTimeEdit) CalendarWidget() *QCalendarWidget {
 //
 //	C++: void QDateTimeEdit::setCalendarWidget(QCalendarWidget * calendarWidget)
 //
-// The editor does not take ownership of the calendar widget (Qt docs); parent it yourself.
+// Ownership: calendarWidget is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// The editor does not take ownership of the calendar widget (Qt docs); it keeps it from being garbage collected, but parent it to free it with the editor.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetimeedit.html#setCalendarWidget
 func (this *QDateTimeEdit) SetCalendarWidget(calendarWidget QCalendarWidgetLike) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCalendarWidget")
 	var calendarWidgetPtr unsafe.Pointer
+	var calendarWidgetH *rt.Handle
 	if calendarWidget != nil {
-		calendarWidgetPtr = rt.UseArg(unsafe.Pointer(calendarWidget.AsQCalendarWidget()), "QDateTimeEdit.SetCalendarWidget")
+		calendarWidgetPtr, calendarWidgetH = rt.Arg(unsafe.Pointer(calendarWidget.AsQCalendarWidget()), "QDateTimeEdit.SetCalendarWidget")
 	}
 	C.qute_QDateTimeEdit_setCalendarWidget(self, calendarWidgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(calendarWidget)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setCalendarWidget.calendarWidget", calendarWidgetH)
 }
 
 // SectionCount wraps QDateTimeEdit::sectionCount.

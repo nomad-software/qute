@@ -75,7 +75,7 @@ func NewQMovie(parent qtcore.QObjectLike) *QMovie {
 //
 //	C++: QMovie::QMovie(QIODevice * device, const QByteArray & format = …, QObject * parent = …)
 //
-// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives; parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // The device must not be nil; the movie does not take ownership of it.
 //
@@ -83,8 +83,9 @@ func NewQMovie(parent qtcore.QObjectLike) *QMovie {
 func NewQMovieWithDevice(device qtcore.QIODeviceLike, format []byte, parent qtcore.QObjectLike) *QMovie {
 	rt.CheckThread("NewQMovieWithDevice")
 	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
 	if device != nil {
-		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "NewQMovieWithDevice")
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "NewQMovieWithDevice")
 	}
 	var parentPtr unsafe.Pointer
 	if parent != nil {
@@ -98,6 +99,7 @@ func NewQMovieWithDevice(device qtcore.QIODeviceLike, format []byte, parent qtco
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QMovie", mode)
+	rt.KeepArg(h, "device", deviceH)
 	return rt.View[QMovie](h, p)
 }
 
@@ -128,16 +130,20 @@ func NewQMovieWithFileName(fileName string, format []byte, parent qtcore.QObject
 //
 //	C++: void QMovie::setDevice(QIODevice * device)
 //
+// Ownership: device is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmovie.html#setDevice
 func (this *QMovie) SetDevice(device qtcore.QIODeviceLike) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetDevice")
 	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
 	if device != nil {
-		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QMovie.SetDevice")
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "QMovie.SetDevice")
 	}
 	C.qute_QMovie_setDevice(self, devicePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", deviceH)
 }
 
 // Device wraps QMovie::device.

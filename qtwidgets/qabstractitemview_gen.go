@@ -52,18 +52,22 @@ func QAbstractItemViewCast(o qtcore.QObjectLike) *QAbstractItemView {
 //
 //	C++: void QAbstractItemView::setModel(QAbstractItemModel * model)
 //
-// The view does not take ownership of the model; parent the model to the view, or keep it alive.
+// Ownership: model is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// The view does not take ownership of the model; it keeps the model from being garbage collected while the view lives.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#setModel
 func (this *QAbstractItemView) SetModel(model qtcore.QAbstractItemModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetModel")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QAbstractItemView.SetModel")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "QAbstractItemView.SetModel")
 	}
 	C.qute_QAbstractItemView_setModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setModel.model", modelH)
 }
 
 // Model wraps QAbstractItemView::model.
@@ -84,16 +88,20 @@ func (this *QAbstractItemView) Model() *qtcore.QAbstractItemModel {
 //
 //	C++: void QAbstractItemView::setSelectionModel(QItemSelectionModel * selectionModel)
 //
+// Ownership: selectionModel is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#setSelectionModel
 func (this *QAbstractItemView) SetSelectionModel(selectionModel qtcore.QItemSelectionModelLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetSelectionModel")
 	var selectionModelPtr unsafe.Pointer
+	var selectionModelH *rt.Handle
 	if selectionModel != nil {
-		selectionModelPtr = rt.UseArg(unsafe.Pointer(selectionModel.AsQItemSelectionModel()), "QAbstractItemView.SetSelectionModel")
+		selectionModelPtr, selectionModelH = rt.Arg(unsafe.Pointer(selectionModel.AsQItemSelectionModel()), "QAbstractItemView.SetSelectionModel")
 	}
 	C.qute_QAbstractItemView_setSelectionModel(self, selectionModelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(selectionModel)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setSelectionModel.selectionModel", selectionModelH)
 }
 
 // SelectionModel wraps QAbstractItemView::selectionModel.
@@ -114,18 +122,22 @@ func (this *QAbstractItemView) SelectionModel() *qtcore.QItemSelectionModel {
 //
 //	C++: void QAbstractItemView::setItemDelegate(QAbstractItemDelegate * delegate)
 //
+// Ownership: delegate is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // The view does not take ownership of the delegate.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#setItemDelegate
 func (this *QAbstractItemView) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetItemDelegate")
 	var delegatePtr unsafe.Pointer
+	var delegateH *rt.Handle
 	if delegate != nil {
-		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegate")
+		delegatePtr, delegateH = rt.Arg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegate")
 	}
 	C.qute_QAbstractItemView_setItemDelegate(self, delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setItemDelegate.delegate", delegateH)
 }
 
 // ItemDelegate wraps QAbstractItemView::itemDelegate.
@@ -770,16 +782,20 @@ func (this *QAbstractItemView) IndexWidget(index *qtcore.QModelIndex) *QWidget {
 //
 //	C++: void QAbstractItemView::setItemDelegateForRow(int row, QAbstractItemDelegate * delegate)
 //
+// Ownership: delegate is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#setItemDelegateForRow
 func (this *QAbstractItemView) SetItemDelegateForRow(row int, delegate QAbstractItemDelegateLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetItemDelegateForRow")
 	var delegatePtr unsafe.Pointer
+	var delegateH *rt.Handle
 	if delegate != nil {
-		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegateForRow")
+		delegatePtr, delegateH = rt.Arg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegateForRow")
 	}
 	C.qute_QAbstractItemView_setItemDelegateForRow(self, C.int(row), delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, delegateH)
 }
 
 // ItemDelegateForRow wraps QAbstractItemView::itemDelegateForRow.
@@ -800,16 +816,20 @@ func (this *QAbstractItemView) ItemDelegateForRow(row int) *QAbstractItemDelegat
 //
 //	C++: void QAbstractItemView::setItemDelegateForColumn(int column, QAbstractItemDelegate * delegate)
 //
+// Ownership: delegate is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#setItemDelegateForColumn
 func (this *QAbstractItemView) SetItemDelegateForColumn(column int, delegate QAbstractItemDelegateLike) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetItemDelegateForColumn")
 	var delegatePtr unsafe.Pointer
+	var delegateH *rt.Handle
 	if delegate != nil {
-		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegateForColumn")
+		delegatePtr, delegateH = rt.Arg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegateForColumn")
 	}
 	C.qute_QAbstractItemView_setItemDelegateForColumn(self, C.int(column), delegatePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(delegate)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, delegateH)
 }
 
 // ItemDelegateForColumn wraps QAbstractItemView::itemDelegateForColumn.
