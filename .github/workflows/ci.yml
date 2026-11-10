@@ -21,6 +21,10 @@ jobs:
       - name: Qt 6, compiler and tools
         run: pacman -Syu --noconfirm --needed qt6-base gcc pkgconf mesa git ttf-dejavu
       - uses: actions/checkout@v4
+      # steps run as root in the container but the checkout belongs to the
+      # runner's user, and git ignores a repository owned by someone else
+      - name: Trust the checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - uses: actions/setup-go@v5
         with: { go-version: "1.26" }
       - name: Qt version
