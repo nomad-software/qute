@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQStyleOptionComplex() *QStyleOptionComplex {
 func (this *QStyleOptionComplex) SubControls() QStyleSubControls {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionComplex.SubControls")
 	r := C.qute_QStyleOptionComplex_get_subControls(self)
+	runtime.KeepAlive(this)
 	return QStyleSubControls(r)
 }
 
@@ -66,6 +68,7 @@ func (this *QStyleOptionComplex) SubControls() QStyleSubControls {
 func (this *QStyleOptionComplex) SetSubControls(subControls QStyleSubControls) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionComplex.SetSubControls")
 	C.qute_QStyleOptionComplex_set_subControls(self, C.int64_t(subControls))
+	runtime.KeepAlive(this)
 }
 
 // ActiveSubControls wraps the public field QStyleOptionComplex::activeSubControls.
@@ -76,6 +79,7 @@ func (this *QStyleOptionComplex) SetSubControls(subControls QStyleSubControls) {
 func (this *QStyleOptionComplex) ActiveSubControls() QStyleSubControls {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionComplex.ActiveSubControls")
 	r := C.qute_QStyleOptionComplex_get_activeSubControls(self)
+	runtime.KeepAlive(this)
 	return QStyleSubControls(r)
 }
 
@@ -89,4 +93,5 @@ func (this *QStyleOptionComplex) ActiveSubControls() QStyleSubControls {
 func (this *QStyleOptionComplex) SetActiveSubControls(activeSubControls QStyleSubControls) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionComplex.SetActiveSubControls")
 	C.qute_QStyleOptionComplex_set_activeSubControls(self, C.int64_t(activeSubControls))
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQFontComboBox(parent QWidgetLike) *QFontComboBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFontComboBox")
 	}
 	p := C.qute_QFontComboBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQFontComboBox(parent QWidgetLike) *QFontComboBox {
 func (this *QFontComboBox) SetWritingSystem(writingSystem qtgui.QFontDatabaseWritingSystem) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetWritingSystem")
 	C.qute_QFontComboBox_setWritingSystem(self, C.int64_t(writingSystem))
+	runtime.KeepAlive(this)
 }
 
 // WritingSystem wraps QFontComboBox::writingSystem.
@@ -88,6 +91,7 @@ func (this *QFontComboBox) SetWritingSystem(writingSystem qtgui.QFontDatabaseWri
 func (this *QFontComboBox) WritingSystem() qtgui.QFontDatabaseWritingSystem {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.WritingSystem")
 	r := C.qute_QFontComboBox_writingSystem(self)
+	runtime.KeepAlive(this)
 	return qtgui.QFontDatabaseWritingSystem(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QFontComboBox) WritingSystem() qtgui.QFontDatabaseWritingSystem {
 func (this *QFontComboBox) SetFontFilters(filters QFontComboBoxFontFilters) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetFontFilters")
 	C.qute_QFontComboBox_setFontFilters(self, C.int64_t(filters))
+	runtime.KeepAlive(this)
 }
 
 // FontFilters wraps QFontComboBox::fontFilters.
@@ -109,6 +114,7 @@ func (this *QFontComboBox) SetFontFilters(filters QFontComboBoxFontFilters) {
 func (this *QFontComboBox) FontFilters() QFontComboBoxFontFilters {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.FontFilters")
 	r := C.qute_QFontComboBox_fontFilters(self)
+	runtime.KeepAlive(this)
 	return QFontComboBoxFontFilters(r)
 }
 
@@ -122,6 +128,7 @@ func (this *QFontComboBox) FontFilters() QFontComboBoxFontFilters {
 func (this *QFontComboBox) CurrentFont() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.CurrentFont")
 	r := C.qute_QFontComboBox_currentFont(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -133,6 +140,7 @@ func (this *QFontComboBox) CurrentFont() *qtgui.QFont {
 func (this *QFontComboBox) SetSampleTextForSystem(writingSystem qtgui.QFontDatabaseWritingSystem, sampleText string) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetSampleTextForSystem")
 	C.qute_QFontComboBox_setSampleTextForSystem(self, C.int64_t(writingSystem), (*C.char)(unsafe.Pointer(unsafe.StringData(sampleText))), C.ptrdiff_t(len(sampleText)))
+	runtime.KeepAlive(this)
 }
 
 // SampleTextForSystem wraps QFontComboBox::sampleTextForSystem.
@@ -143,6 +151,7 @@ func (this *QFontComboBox) SetSampleTextForSystem(writingSystem qtgui.QFontDatab
 func (this *QFontComboBox) SampleTextForSystem(writingSystem qtgui.QFontDatabaseWritingSystem) string {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SampleTextForSystem")
 	r := C.qute_QFontComboBox_sampleTextForSystem(self, C.int64_t(writingSystem))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -154,6 +163,7 @@ func (this *QFontComboBox) SampleTextForSystem(writingSystem qtgui.QFontDatabase
 func (this *QFontComboBox) SetSampleTextForFont(fontFamily string, sampleText string) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetSampleTextForFont")
 	C.qute_QFontComboBox_setSampleTextForFont(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)), (*C.char)(unsafe.Pointer(unsafe.StringData(sampleText))), C.ptrdiff_t(len(sampleText)))
+	runtime.KeepAlive(this)
 }
 
 // SampleTextForFont wraps QFontComboBox::sampleTextForFont.
@@ -164,6 +174,7 @@ func (this *QFontComboBox) SetSampleTextForFont(fontFamily string, sampleText st
 func (this *QFontComboBox) SampleTextForFont(fontFamily string) string {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SampleTextForFont")
 	r := C.qute_QFontComboBox_sampleTextForFont(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -175,6 +186,8 @@ func (this *QFontComboBox) SampleTextForFont(fontFamily string) string {
 func (this *QFontComboBox) SetDisplayFont(fontFamily string, font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetDisplayFont")
 	C.qute_QFontComboBox_setDisplayFont(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)), rt.UseArg(unsafe.Pointer(font), "QFontComboBox.SetDisplayFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // DisplayFont wraps QFontComboBox::displayFont.
@@ -185,6 +198,7 @@ func (this *QFontComboBox) SetDisplayFont(fontFamily string, font *qtgui.QFont) 
 func (this *QFontComboBox) DisplayFont(fontFamily string) *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.DisplayFont")
 	r := C.qute_QFontComboBox_displayFont(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -196,6 +210,8 @@ func (this *QFontComboBox) DisplayFont(fontFamily string) *qtgui.QFont {
 func (this *QFontComboBox) SetCurrentFont(fArg *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.SetCurrentFont")
 	C.qute_QFontComboBox_setCurrentFont(self, rt.UseArg(unsafe.Pointer(fArg), "QFontComboBox.SetCurrentFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fArg)
 }
 
 // EmitCurrentFontChanged wraps emitting the currentFontChanged signal.
@@ -206,6 +222,8 @@ func (this *QFontComboBox) SetCurrentFont(fArg *qtgui.QFont) {
 func (this *QFontComboBox) EmitCurrentFontChanged(fArg *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.EmitCurrentFontChanged")
 	C.qute_QFontComboBox_currentFontChanged_1(self, rt.UseArg(unsafe.Pointer(fArg), "QFontComboBox.EmitCurrentFontChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fArg)
 }
 
 // OnCurrentFontChanged connects f to the currentFontChanged signal. The connection ends when the

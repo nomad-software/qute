@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -47,6 +48,7 @@ func QAbstractGraphicsShapeItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *
 func (this *QAbstractGraphicsShapeItem) Pen() *qtgui.QPen {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractGraphicsShapeItem.Pen")
 	r := C.qute_QAbstractGraphicsShapeItem_pen(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPen](rt.WrapClass(r, "QPen", rt.TakeOwned), r)
 }
 
@@ -58,6 +60,8 @@ func (this *QAbstractGraphicsShapeItem) Pen() *qtgui.QPen {
 func (this *QAbstractGraphicsShapeItem) SetPen(pen *qtgui.QPen) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractGraphicsShapeItem.SetPen")
 	C.qute_QAbstractGraphicsShapeItem_setPen(self, rt.UseArg(unsafe.Pointer(pen), "QAbstractGraphicsShapeItem.SetPen"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pen)
 }
 
 // Brush wraps QAbstractGraphicsShapeItem::brush.
@@ -70,6 +74,7 @@ func (this *QAbstractGraphicsShapeItem) SetPen(pen *qtgui.QPen) {
 func (this *QAbstractGraphicsShapeItem) Brush() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractGraphicsShapeItem.Brush")
 	r := C.qute_QAbstractGraphicsShapeItem_brush(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -81,4 +86,6 @@ func (this *QAbstractGraphicsShapeItem) Brush() *qtgui.QBrush {
 func (this *QAbstractGraphicsShapeItem) SetBrush(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractGraphicsShapeItem.SetBrush")
 	C.qute_QAbstractGraphicsShapeItem_setBrush(self, rt.UseArg(unsafe.Pointer(brush), "QAbstractGraphicsShapeItem.SetBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQToolButton(parent QWidgetLike) *QToolButton {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolButton")
 	}
 	p := C.qute_QToolButton_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQToolButton(parent QWidgetLike) *QToolButton {
 func (this *QToolButton) ToolButtonStyle() qtcore.ToolButtonStyle {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.ToolButtonStyle")
 	r := C.qute_QToolButton_toolButtonStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.ToolButtonStyle(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QToolButton) ToolButtonStyle() qtcore.ToolButtonStyle {
 func (this *QToolButton) ArrowType() qtcore.ArrowType {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.ArrowType")
 	r := C.qute_QToolButton_arrowType(self)
+	runtime.KeepAlive(this)
 	return qtcore.ArrowType(r)
 }
 
@@ -100,6 +104,7 @@ func (this *QToolButton) ArrowType() qtcore.ArrowType {
 func (this *QToolButton) SetArrowType(typeArg qtcore.ArrowType) {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.SetArrowType")
 	C.qute_QToolButton_setArrowType(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // SetMenu wraps QToolButton::setMenu.
@@ -116,6 +121,8 @@ func (this *QToolButton) SetMenu(menu QMenuLike) {
 		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QToolButton.SetMenu")
 	}
 	C.qute_QToolButton_setMenu(self, menuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(menu)
 }
 
 // Menu wraps QToolButton::menu.
@@ -128,6 +135,7 @@ func (this *QToolButton) SetMenu(menu QMenuLike) {
 func (this *QToolButton) Menu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.Menu")
 	r := C.qute_QToolButton_menu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
 }
 
@@ -139,6 +147,7 @@ func (this *QToolButton) Menu() *QMenu {
 func (this *QToolButton) SetPopupMode(mode QToolButtonToolButtonPopupMode) {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.SetPopupMode")
 	C.qute_QToolButton_setPopupMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // PopupMode wraps QToolButton::popupMode.
@@ -149,6 +158,7 @@ func (this *QToolButton) SetPopupMode(mode QToolButtonToolButtonPopupMode) {
 func (this *QToolButton) PopupMode() QToolButtonToolButtonPopupMode {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.PopupMode")
 	r := C.qute_QToolButton_popupMode(self)
+	runtime.KeepAlive(this)
 	return QToolButtonToolButtonPopupMode(r)
 }
 
@@ -162,6 +172,7 @@ func (this *QToolButton) PopupMode() QToolButtonToolButtonPopupMode {
 func (this *QToolButton) DefaultAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.DefaultAction")
 	r := C.qute_QToolButton_defaultAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -173,6 +184,7 @@ func (this *QToolButton) DefaultAction() *qtgui.QAction {
 func (this *QToolButton) SetAutoRaise(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.SetAutoRaise")
 	C.qute_QToolButton_setAutoRaise(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // AutoRaise wraps QToolButton::autoRaise.
@@ -183,6 +195,7 @@ func (this *QToolButton) SetAutoRaise(enable bool) {
 func (this *QToolButton) AutoRaise() bool {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.AutoRaise")
 	r := C.qute_QToolButton_autoRaise(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -194,6 +207,7 @@ func (this *QToolButton) AutoRaise() bool {
 func (this *QToolButton) ShowMenu() {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.ShowMenu")
 	C.qute_QToolButton_showMenu(self)
+	runtime.KeepAlive(this)
 }
 
 // SetToolButtonStyle wraps QToolButton::setToolButtonStyle.
@@ -204,6 +218,7 @@ func (this *QToolButton) ShowMenu() {
 func (this *QToolButton) SetToolButtonStyle(style qtcore.ToolButtonStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QToolButton.SetToolButtonStyle")
 	C.qute_QToolButton_setToolButtonStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // SetDefaultAction wraps QToolButton::setDefaultAction.
@@ -218,6 +233,8 @@ func (this *QToolButton) SetDefaultAction(defaultAction qtgui.QActionLike) {
 		defaultActionPtr = rt.UseArg(unsafe.Pointer(defaultAction.AsQAction()), "QToolButton.SetDefaultAction")
 	}
 	C.qute_QToolButton_setDefaultAction(self, defaultActionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(defaultAction)
 }
 
 // EmitTriggered wraps emitting the triggered signal.
@@ -232,6 +249,8 @@ func (this *QToolButton) EmitTriggered(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QToolButton.EmitTriggered")
 	}
 	C.qute_QToolButton_triggered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the

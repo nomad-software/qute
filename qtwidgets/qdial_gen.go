@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQDial(parent QWidgetLike) *QDial {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDial")
 	}
 	p := C.qute_QDial_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQDial(parent QWidgetLike) *QDial {
 func (this *QDial) Wrapping() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDial.Wrapping")
 	r := C.qute_QDial_wrapping(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QDial) Wrapping() bool {
 func (this *QDial) NotchSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QDial.NotchSize")
 	r := C.qute_QDial_notchSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QDial) NotchSize() int {
 func (this *QDial) SetNotchTarget(target float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDial.SetNotchTarget")
 	C.qute_QDial_setNotchTarget(self, C.double(target))
+	runtime.KeepAlive(this)
 }
 
 // NotchTarget wraps QDial::notchTarget.
@@ -109,6 +114,7 @@ func (this *QDial) SetNotchTarget(target float64) {
 func (this *QDial) NotchTarget() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDial.NotchTarget")
 	r := C.qute_QDial_notchTarget(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -120,6 +126,7 @@ func (this *QDial) NotchTarget() float64 {
 func (this *QDial) NotchesVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDial.NotchesVisible")
 	r := C.qute_QDial_notchesVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +138,7 @@ func (this *QDial) NotchesVisible() bool {
 func (this *QDial) SetNotchesVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDial.SetNotchesVisible")
 	C.qute_QDial_setNotchesVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // SetWrapping wraps QDial::setWrapping.
@@ -141,4 +149,5 @@ func (this *QDial) SetNotchesVisible(visible bool) {
 func (this *QDial) SetWrapping(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDial.SetWrapping")
 	C.qute_QDial_setWrapping(self, C.bool(on))
+	runtime.KeepAlive(this)
 }

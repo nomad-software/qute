@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQKeySequenceEdit(parent QWidgetLike) *QKeySequenceEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQKeySequenceEdit")
 	}
 	p := C.qute_QKeySequenceEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func NewQKeySequenceEditWithKeySequence(keySequence *qtgui.QKeySequence, parent 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQKeySequenceEditWithKeySequence")
 	}
 	p := C.qute_QKeySequenceEdit_new_1(rt.UseArg(unsafe.Pointer(keySequence), "NewQKeySequenceEditWithKeySequence"), parentPtr)
+	runtime.KeepAlive(keySequence)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -102,6 +106,7 @@ func NewQKeySequenceEditWithKeySequence(keySequence *qtgui.QKeySequence, parent 
 func (this *QKeySequenceEdit) KeySequence() *qtgui.QKeySequence {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.KeySequence")
 	r := C.qute_QKeySequenceEdit_keySequence(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QKeySequence](rt.WrapClass(r, "QKeySequence", rt.TakeOwned), r)
 }
 
@@ -113,6 +118,7 @@ func (this *QKeySequenceEdit) KeySequence() *qtgui.QKeySequence {
 func (this *QKeySequenceEdit) MaximumSequenceLength() int {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.MaximumSequenceLength")
 	r := C.qute_QKeySequenceEdit_maximumSequenceLength(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -124,6 +130,7 @@ func (this *QKeySequenceEdit) MaximumSequenceLength() int {
 func (this *QKeySequenceEdit) SetClearButtonEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.SetClearButtonEnabled")
 	C.qute_QKeySequenceEdit_setClearButtonEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsClearButtonEnabled wraps QKeySequenceEdit::isClearButtonEnabled.
@@ -134,6 +141,7 @@ func (this *QKeySequenceEdit) SetClearButtonEnabled(enable bool) {
 func (this *QKeySequenceEdit) IsClearButtonEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.IsClearButtonEnabled")
 	r := C.qute_QKeySequenceEdit_isClearButtonEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -149,6 +157,8 @@ func (this *QKeySequenceEdit) SetFinishingKeyCombinations(finishingKeyCombinatio
 		finishingKeyCombinationsC[i] = rt.UseArg(unsafe.Pointer(finishingKeyCombinations[i]), "QKeySequenceEdit.SetFinishingKeyCombinations")
 	}
 	C.qute_QKeySequenceEdit_setFinishingKeyCombinations(self, unsafe.Pointer(unsafe.SliceData(finishingKeyCombinationsC)), C.ptrdiff_t(len(finishingKeyCombinations)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(finishingKeyCombinations)
 }
 
 // FinishingKeyCombinations wraps QKeySequenceEdit::finishingKeyCombinations.
@@ -159,6 +169,7 @@ func (this *QKeySequenceEdit) SetFinishingKeyCombinations(finishingKeyCombinatio
 func (this *QKeySequenceEdit) FinishingKeyCombinations() []*qtcore.QKeyCombination {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.FinishingKeyCombinations")
 	r := C.qute_QKeySequenceEdit_finishingKeyCombinations(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QKeyCombination {
 		return rt.View[qtcore.QKeyCombination](rt.WrapClass(e, "QKeyCombination", rt.TakeOwned), e)
 	})
@@ -172,6 +183,8 @@ func (this *QKeySequenceEdit) FinishingKeyCombinations() []*qtcore.QKeyCombinati
 func (this *QKeySequenceEdit) SetKeySequence(keySequence *qtgui.QKeySequence) {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.SetKeySequence")
 	C.qute_QKeySequenceEdit_setKeySequence(self, rt.UseArg(unsafe.Pointer(keySequence), "QKeySequenceEdit.SetKeySequence"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(keySequence)
 }
 
 // Clear wraps QKeySequenceEdit::clear.
@@ -182,6 +195,7 @@ func (this *QKeySequenceEdit) SetKeySequence(keySequence *qtgui.QKeySequence) {
 func (this *QKeySequenceEdit) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.Clear")
 	C.qute_QKeySequenceEdit_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SetMaximumSequenceLength wraps QKeySequenceEdit::setMaximumSequenceLength.
@@ -192,6 +206,7 @@ func (this *QKeySequenceEdit) Clear() {
 func (this *QKeySequenceEdit) SetMaximumSequenceLength(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.SetMaximumSequenceLength")
 	C.qute_QKeySequenceEdit_setMaximumSequenceLength(self, C.longlong(count))
+	runtime.KeepAlive(this)
 }
 
 // EmitEditingFinished wraps emitting the editingFinished signal.
@@ -202,6 +217,7 @@ func (this *QKeySequenceEdit) SetMaximumSequenceLength(count int) {
 func (this *QKeySequenceEdit) EmitEditingFinished() {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.EmitEditingFinished")
 	C.qute_QKeySequenceEdit_editingFinished_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitKeySequenceChanged wraps emitting the keySequenceChanged signal.
@@ -212,6 +228,8 @@ func (this *QKeySequenceEdit) EmitEditingFinished() {
 func (this *QKeySequenceEdit) EmitKeySequenceChanged(keySequence *qtgui.QKeySequence) {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequenceEdit.EmitKeySequenceChanged")
 	C.qute_QKeySequenceEdit_keySequenceChanged_1(self, rt.UseArg(unsafe.Pointer(keySequence), "QKeySequenceEdit.EmitKeySequenceChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(keySequence)
 }
 
 // OnEditingFinished connects f to the editingFinished signal. The connection ends when the

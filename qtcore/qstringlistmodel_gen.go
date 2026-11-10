@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,7 @@ func NewQStringListModel(parent QObjectLike) *QStringListModel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStringListModel")
 	}
 	p := C.qute_QStringListModel_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQStringListModelWithStrings(strings []string, parent QObjectLike) *QStri
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStringListModelWithStrings")
 	}
 	p := C.qute_QStringListModel_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQStringListModelWithStrings(strings []string, parent QObjectLike) *QStri
 func (this *QStringListModel) StringList() []string {
 	self := rt.Use(unsafe.Pointer(this), "QStringListModel.StringList")
 	r := C.qute_QStringListModel_stringList(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -111,4 +115,5 @@ func (this *QStringListModel) SetStringList(strings []string) {
 	self := rt.Use(unsafe.Pointer(this), "QStringListModel.SetStringList")
 	stringsData, stringsLens := quteStrListArg(strings)
 	C.qute_QStringListModel_setStringList(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
+	runtime.KeepAlive(this)
 }

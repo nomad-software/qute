@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -106,6 +107,7 @@ func NewQUrlWithUrl(url string) *QUrl {
 func (this *QUrl) SetUrl(url string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUrl")
 	C.qute_QUrl_setUrl(self, (*C.char)(unsafe.Pointer(unsafe.StringData(url))), C.ptrdiff_t(len(url)))
+	runtime.KeepAlive(this)
 }
 
 // Url wraps QUrl::url.
@@ -116,6 +118,7 @@ func (this *QUrl) SetUrl(url string) {
 func (this *QUrl) Url() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Url")
 	r := C.qute_QUrl_url(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -127,6 +130,7 @@ func (this *QUrl) Url() string {
 func (this *QUrl) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ToString")
 	r := C.qute_QUrl_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -138,6 +142,7 @@ func (this *QUrl) ToString() string {
 func (this *QUrl) ToDisplayString() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ToDisplayString")
 	r := C.qute_QUrl_toDisplayString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -151,6 +156,7 @@ func (this *QUrl) ToDisplayString() string {
 func (this *QUrl) Adjusted(options QUrlUrlFormattingOption) *QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Adjusted")
 	r := C.qute_QUrl_adjusted(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -162,6 +168,7 @@ func (this *QUrl) Adjusted(options QUrlUrlFormattingOption) *QUrl {
 func (this *QUrl) ToEncoded() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ToEncoded")
 	r := C.qute_QUrl_toEncoded(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -173,6 +180,7 @@ func (this *QUrl) ToEncoded() []byte {
 func (this *QUrl) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.IsValid")
 	r := C.qute_QUrl_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -184,6 +192,7 @@ func (this *QUrl) IsValid() bool {
 func (this *QUrl) ErrorString() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ErrorString")
 	r := C.qute_QUrl_errorString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -195,6 +204,7 @@ func (this *QUrl) ErrorString() string {
 func (this *QUrl) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.IsEmpty")
 	r := C.qute_QUrl_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -206,6 +216,7 @@ func (this *QUrl) IsEmpty() bool {
 func (this *QUrl) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Clear")
 	C.qute_QUrl_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SetScheme wraps QUrl::setScheme.
@@ -216,6 +227,7 @@ func (this *QUrl) Clear() {
 func (this *QUrl) SetScheme(scheme string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetScheme")
 	C.qute_QUrl_setScheme(self, (*C.char)(unsafe.Pointer(unsafe.StringData(scheme))), C.ptrdiff_t(len(scheme)))
+	runtime.KeepAlive(this)
 }
 
 // Scheme wraps QUrl::scheme.
@@ -226,6 +238,7 @@ func (this *QUrl) SetScheme(scheme string) {
 func (this *QUrl) Scheme() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Scheme")
 	r := C.qute_QUrl_scheme(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -237,6 +250,7 @@ func (this *QUrl) Scheme() string {
 func (this *QUrl) SetAuthority(authority string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetAuthority")
 	C.qute_QUrl_setAuthority(self, (*C.char)(unsafe.Pointer(unsafe.StringData(authority))), C.ptrdiff_t(len(authority)))
+	runtime.KeepAlive(this)
 }
 
 // Authority wraps QUrl::authority.
@@ -247,6 +261,7 @@ func (this *QUrl) SetAuthority(authority string) {
 func (this *QUrl) Authority() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Authority")
 	r := C.qute_QUrl_authority(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -258,6 +273,7 @@ func (this *QUrl) Authority() string {
 func (this *QUrl) SetUserInfo(userInfo string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUserInfo")
 	C.qute_QUrl_setUserInfo(self, (*C.char)(unsafe.Pointer(unsafe.StringData(userInfo))), C.ptrdiff_t(len(userInfo)))
+	runtime.KeepAlive(this)
 }
 
 // UserInfo wraps QUrl::userInfo.
@@ -268,6 +284,7 @@ func (this *QUrl) SetUserInfo(userInfo string) {
 func (this *QUrl) UserInfo() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.UserInfo")
 	r := C.qute_QUrl_userInfo(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -279,6 +296,7 @@ func (this *QUrl) UserInfo() string {
 func (this *QUrl) SetUserName(userName string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUserName")
 	C.qute_QUrl_setUserName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(userName))), C.ptrdiff_t(len(userName)))
+	runtime.KeepAlive(this)
 }
 
 // UserName wraps QUrl::userName.
@@ -289,6 +307,7 @@ func (this *QUrl) SetUserName(userName string) {
 func (this *QUrl) UserName() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.UserName")
 	r := C.qute_QUrl_userName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -300,6 +319,7 @@ func (this *QUrl) UserName() string {
 func (this *QUrl) SetPassword(password string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPassword")
 	C.qute_QUrl_setPassword(self, (*C.char)(unsafe.Pointer(unsafe.StringData(password))), C.ptrdiff_t(len(password)))
+	runtime.KeepAlive(this)
 }
 
 // Password wraps QUrl::password.
@@ -310,6 +330,7 @@ func (this *QUrl) SetPassword(password string) {
 func (this *QUrl) Password() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Password")
 	r := C.qute_QUrl_password(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -321,6 +342,7 @@ func (this *QUrl) Password() string {
 func (this *QUrl) SetHost(host string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetHost")
 	C.qute_QUrl_setHost(self, (*C.char)(unsafe.Pointer(unsafe.StringData(host))), C.ptrdiff_t(len(host)))
+	runtime.KeepAlive(this)
 }
 
 // Host wraps QUrl::host.
@@ -331,6 +353,7 @@ func (this *QUrl) SetHost(host string) {
 func (this *QUrl) Host() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Host")
 	r := C.qute_QUrl_host(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -342,6 +365,7 @@ func (this *QUrl) Host() string {
 func (this *QUrl) SetPort(port int) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPort")
 	C.qute_QUrl_setPort(self, C.int(port))
+	runtime.KeepAlive(this)
 }
 
 // Port wraps QUrl::port.
@@ -352,6 +376,7 @@ func (this *QUrl) SetPort(port int) {
 func (this *QUrl) Port() int {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Port")
 	r := C.qute_QUrl_port(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -363,6 +388,7 @@ func (this *QUrl) Port() int {
 func (this *QUrl) SetPath(path string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPath")
 	C.qute_QUrl_setPath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	runtime.KeepAlive(this)
 }
 
 // Path wraps QUrl::path.
@@ -373,6 +399,7 @@ func (this *QUrl) SetPath(path string) {
 func (this *QUrl) Path() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Path")
 	r := C.qute_QUrl_path(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -384,6 +411,7 @@ func (this *QUrl) Path() string {
 func (this *QUrl) FileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.FileName")
 	r := C.qute_QUrl_fileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -395,6 +423,7 @@ func (this *QUrl) FileName() string {
 func (this *QUrl) HasQuery() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.HasQuery")
 	r := C.qute_QUrl_hasQuery(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -406,6 +435,7 @@ func (this *QUrl) HasQuery() bool {
 func (this *QUrl) SetQuery(query string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetQuery")
 	C.qute_QUrl_setQuery(self, (*C.char)(unsafe.Pointer(unsafe.StringData(query))), C.ptrdiff_t(len(query)))
+	runtime.KeepAlive(this)
 }
 
 // SetQueryUrlQuery wraps QUrl::setQuery.
@@ -416,6 +446,8 @@ func (this *QUrl) SetQuery(query string) {
 func (this *QUrl) SetQueryUrlQuery(query *QUrlQuery) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetQueryUrlQuery")
 	C.qute_QUrl_setQuery_1(self, rt.UseArg(unsafe.Pointer(query), "QUrl.SetQueryUrlQuery"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(query)
 }
 
 // Query wraps QUrl::query.
@@ -426,6 +458,7 @@ func (this *QUrl) SetQueryUrlQuery(query *QUrlQuery) {
 func (this *QUrl) Query() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Query")
 	r := C.qute_QUrl_query(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -437,6 +470,7 @@ func (this *QUrl) Query() string {
 func (this *QUrl) HasFragment() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.HasFragment")
 	r := C.qute_QUrl_hasFragment(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -448,6 +482,7 @@ func (this *QUrl) HasFragment() bool {
 func (this *QUrl) Fragment() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Fragment")
 	r := C.qute_QUrl_fragment(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -459,6 +494,7 @@ func (this *QUrl) Fragment() string {
 func (this *QUrl) SetFragment(fragment string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetFragment")
 	C.qute_QUrl_setFragment(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fragment))), C.ptrdiff_t(len(fragment)))
+	runtime.KeepAlive(this)
 }
 
 // Resolved wraps QUrl::resolved.
@@ -471,6 +507,8 @@ func (this *QUrl) SetFragment(fragment string) {
 func (this *QUrl) Resolved(relative *QUrl) *QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Resolved")
 	r := C.qute_QUrl_resolved(self, rt.UseArg(unsafe.Pointer(relative), "QUrl.Resolved"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(relative)
 	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -482,6 +520,7 @@ func (this *QUrl) Resolved(relative *QUrl) *QUrl {
 func (this *QUrl) IsRelative() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.IsRelative")
 	r := C.qute_QUrl_isRelative(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -493,6 +532,8 @@ func (this *QUrl) IsRelative() bool {
 func (this *QUrl) IsParentOf(url *QUrl) bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.IsParentOf")
 	r := C.qute_QUrl_isParentOf(self, rt.UseArg(unsafe.Pointer(url), "QUrl.IsParentOf"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 	return bool(r)
 }
 
@@ -504,6 +545,7 @@ func (this *QUrl) IsParentOf(url *QUrl) bool {
 func (this *QUrl) IsLocalFile() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.IsLocalFile")
 	r := C.qute_QUrl_isLocalFile(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -515,6 +557,7 @@ func (this *QUrl) IsLocalFile() bool {
 func (this *QUrl) ToLocalFile() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ToLocalFile")
 	r := C.qute_QUrl_toLocalFile(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -526,6 +569,8 @@ func (this *QUrl) ToLocalFile() string {
 func (this *QUrl) Matches(url *QUrl, options QUrlUrlFormattingOption) bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Matches")
 	r := C.qute_QUrl_matches(self, rt.UseArg(unsafe.Pointer(url), "QUrl.Matches"), C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 	return bool(r)
 }
 
@@ -635,6 +680,7 @@ func QUrlToStringList(uris []*QUrl) []string {
 		urisC[i] = rt.UseArg(unsafe.Pointer(uris[i]), "QUrlToStringList")
 	}
 	r := C.qute_QUrl_toStringList(unsafe.Pointer(unsafe.SliceData(urisC)), C.ptrdiff_t(len(uris)))
+	runtime.KeepAlive(uris)
 	return quteStrList(r)
 }
 

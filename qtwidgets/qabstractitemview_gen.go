@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,8 @@ func (this *QAbstractItemView) SetModel(model qtcore.QAbstractItemModelLike) {
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QAbstractItemView.SetModel")
 	}
 	C.qute_QAbstractItemView_setModel(self, modelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(model)
 }
 
 // Model wraps QAbstractItemView::model.
@@ -73,6 +76,7 @@ func (this *QAbstractItemView) SetModel(model qtcore.QAbstractItemModelLike) {
 func (this *QAbstractItemView) Model() *qtcore.QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.Model")
 	r := C.qute_QAbstractItemView_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -88,6 +92,8 @@ func (this *QAbstractItemView) SetSelectionModel(selectionModel qtcore.QItemSele
 		selectionModelPtr = rt.UseArg(unsafe.Pointer(selectionModel.AsQItemSelectionModel()), "QAbstractItemView.SetSelectionModel")
 	}
 	C.qute_QAbstractItemView_setSelectionModel(self, selectionModelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selectionModel)
 }
 
 // SelectionModel wraps QAbstractItemView::selectionModel.
@@ -100,6 +106,7 @@ func (this *QAbstractItemView) SetSelectionModel(selectionModel qtcore.QItemSele
 func (this *QAbstractItemView) SelectionModel() *qtcore.QItemSelectionModel {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SelectionModel")
 	r := C.qute_QAbstractItemView_selectionModel(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QItemSelectionModel](rt.WrapClass(r, "QItemSelectionModel", rt.KeepOrBorrow), r)
 }
 
@@ -117,6 +124,8 @@ func (this *QAbstractItemView) SetItemDelegate(delegate QAbstractItemDelegateLik
 		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegate")
 	}
 	C.qute_QAbstractItemView_setItemDelegate(self, delegatePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(delegate)
 }
 
 // ItemDelegate wraps QAbstractItemView::itemDelegate.
@@ -129,6 +138,7 @@ func (this *QAbstractItemView) SetItemDelegate(delegate QAbstractItemDelegateLik
 func (this *QAbstractItemView) ItemDelegate() *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ItemDelegate")
 	r := C.qute_QAbstractItemView_itemDelegate(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
@@ -140,6 +150,7 @@ func (this *QAbstractItemView) ItemDelegate() *QAbstractItemDelegate {
 func (this *QAbstractItemView) SetSelectionMode(mode QAbstractItemViewSelectionMode) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetSelectionMode")
 	C.qute_QAbstractItemView_setSelectionMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // SelectionMode wraps QAbstractItemView::selectionMode.
@@ -150,6 +161,7 @@ func (this *QAbstractItemView) SetSelectionMode(mode QAbstractItemViewSelectionM
 func (this *QAbstractItemView) SelectionMode() QAbstractItemViewSelectionMode {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SelectionMode")
 	r := C.qute_QAbstractItemView_selectionMode(self)
+	runtime.KeepAlive(this)
 	return QAbstractItemViewSelectionMode(r)
 }
 
@@ -161,6 +173,7 @@ func (this *QAbstractItemView) SelectionMode() QAbstractItemViewSelectionMode {
 func (this *QAbstractItemView) SetSelectionBehavior(behavior QAbstractItemViewSelectionBehavior) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetSelectionBehavior")
 	C.qute_QAbstractItemView_setSelectionBehavior(self, C.int64_t(behavior))
+	runtime.KeepAlive(this)
 }
 
 // SelectionBehavior wraps QAbstractItemView::selectionBehavior.
@@ -171,6 +184,7 @@ func (this *QAbstractItemView) SetSelectionBehavior(behavior QAbstractItemViewSe
 func (this *QAbstractItemView) SelectionBehavior() QAbstractItemViewSelectionBehavior {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SelectionBehavior")
 	r := C.qute_QAbstractItemView_selectionBehavior(self)
+	runtime.KeepAlive(this)
 	return QAbstractItemViewSelectionBehavior(r)
 }
 
@@ -184,6 +198,7 @@ func (this *QAbstractItemView) SelectionBehavior() QAbstractItemViewSelectionBeh
 func (this *QAbstractItemView) CurrentIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.CurrentIndex")
 	r := C.qute_QAbstractItemView_currentIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -197,6 +212,7 @@ func (this *QAbstractItemView) CurrentIndex() *qtcore.QModelIndex {
 func (this *QAbstractItemView) RootIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.RootIndex")
 	r := C.qute_QAbstractItemView_rootIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -208,6 +224,7 @@ func (this *QAbstractItemView) RootIndex() *qtcore.QModelIndex {
 func (this *QAbstractItemView) SetEditTriggers(triggers QAbstractItemViewEditTriggers) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetEditTriggers")
 	C.qute_QAbstractItemView_setEditTriggers(self, C.int64_t(triggers))
+	runtime.KeepAlive(this)
 }
 
 // EditTriggers wraps QAbstractItemView::editTriggers.
@@ -218,6 +235,7 @@ func (this *QAbstractItemView) SetEditTriggers(triggers QAbstractItemViewEditTri
 func (this *QAbstractItemView) EditTriggers() QAbstractItemViewEditTriggers {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EditTriggers")
 	r := C.qute_QAbstractItemView_editTriggers(self)
+	runtime.KeepAlive(this)
 	return QAbstractItemViewEditTriggers(r)
 }
 
@@ -229,6 +247,7 @@ func (this *QAbstractItemView) EditTriggers() QAbstractItemViewEditTriggers {
 func (this *QAbstractItemView) SetVerticalScrollMode(mode QAbstractItemViewScrollMode) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetVerticalScrollMode")
 	C.qute_QAbstractItemView_setVerticalScrollMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // VerticalScrollMode wraps QAbstractItemView::verticalScrollMode.
@@ -239,6 +258,7 @@ func (this *QAbstractItemView) SetVerticalScrollMode(mode QAbstractItemViewScrol
 func (this *QAbstractItemView) VerticalScrollMode() QAbstractItemViewScrollMode {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.VerticalScrollMode")
 	r := C.qute_QAbstractItemView_verticalScrollMode(self)
+	runtime.KeepAlive(this)
 	return QAbstractItemViewScrollMode(r)
 }
 
@@ -250,6 +270,7 @@ func (this *QAbstractItemView) VerticalScrollMode() QAbstractItemViewScrollMode 
 func (this *QAbstractItemView) ResetVerticalScrollMode() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ResetVerticalScrollMode")
 	C.qute_QAbstractItemView_resetVerticalScrollMode(self)
+	runtime.KeepAlive(this)
 }
 
 // SetHorizontalScrollMode wraps QAbstractItemView::setHorizontalScrollMode.
@@ -260,6 +281,7 @@ func (this *QAbstractItemView) ResetVerticalScrollMode() {
 func (this *QAbstractItemView) SetHorizontalScrollMode(mode QAbstractItemViewScrollMode) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetHorizontalScrollMode")
 	C.qute_QAbstractItemView_setHorizontalScrollMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // HorizontalScrollMode wraps QAbstractItemView::horizontalScrollMode.
@@ -270,6 +292,7 @@ func (this *QAbstractItemView) SetHorizontalScrollMode(mode QAbstractItemViewScr
 func (this *QAbstractItemView) HorizontalScrollMode() QAbstractItemViewScrollMode {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.HorizontalScrollMode")
 	r := C.qute_QAbstractItemView_horizontalScrollMode(self)
+	runtime.KeepAlive(this)
 	return QAbstractItemViewScrollMode(r)
 }
 
@@ -281,6 +304,7 @@ func (this *QAbstractItemView) HorizontalScrollMode() QAbstractItemViewScrollMod
 func (this *QAbstractItemView) ResetHorizontalScrollMode() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ResetHorizontalScrollMode")
 	C.qute_QAbstractItemView_resetHorizontalScrollMode(self)
+	runtime.KeepAlive(this)
 }
 
 // SetAutoScroll wraps QAbstractItemView::setAutoScroll.
@@ -291,6 +315,7 @@ func (this *QAbstractItemView) ResetHorizontalScrollMode() {
 func (this *QAbstractItemView) SetAutoScroll(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetAutoScroll")
 	C.qute_QAbstractItemView_setAutoScroll(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // HasAutoScroll wraps QAbstractItemView::hasAutoScroll.
@@ -301,6 +326,7 @@ func (this *QAbstractItemView) SetAutoScroll(enable bool) {
 func (this *QAbstractItemView) HasAutoScroll() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.HasAutoScroll")
 	r := C.qute_QAbstractItemView_hasAutoScroll(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -312,6 +338,7 @@ func (this *QAbstractItemView) HasAutoScroll() bool {
 func (this *QAbstractItemView) SetAutoScrollMargin(margin int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetAutoScrollMargin")
 	C.qute_QAbstractItemView_setAutoScrollMargin(self, C.int(margin))
+	runtime.KeepAlive(this)
 }
 
 // AutoScrollMargin wraps QAbstractItemView::autoScrollMargin.
@@ -322,6 +349,7 @@ func (this *QAbstractItemView) SetAutoScrollMargin(margin int) {
 func (this *QAbstractItemView) AutoScrollMargin() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.AutoScrollMargin")
 	r := C.qute_QAbstractItemView_autoScrollMargin(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -333,6 +361,7 @@ func (this *QAbstractItemView) AutoScrollMargin() int {
 func (this *QAbstractItemView) SetTabKeyNavigation(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetTabKeyNavigation")
 	C.qute_QAbstractItemView_setTabKeyNavigation(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // TabKeyNavigation wraps QAbstractItemView::tabKeyNavigation.
@@ -343,6 +372,7 @@ func (this *QAbstractItemView) SetTabKeyNavigation(enable bool) {
 func (this *QAbstractItemView) TabKeyNavigation() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.TabKeyNavigation")
 	r := C.qute_QAbstractItemView_tabKeyNavigation(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -354,6 +384,7 @@ func (this *QAbstractItemView) TabKeyNavigation() bool {
 func (this *QAbstractItemView) SetDropIndicatorShown(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetDropIndicatorShown")
 	C.qute_QAbstractItemView_setDropIndicatorShown(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // ShowDropIndicator wraps QAbstractItemView::showDropIndicator.
@@ -364,6 +395,7 @@ func (this *QAbstractItemView) SetDropIndicatorShown(enable bool) {
 func (this *QAbstractItemView) ShowDropIndicator() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ShowDropIndicator")
 	r := C.qute_QAbstractItemView_showDropIndicator(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -375,6 +407,7 @@ func (this *QAbstractItemView) ShowDropIndicator() bool {
 func (this *QAbstractItemView) SetDragEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetDragEnabled")
 	C.qute_QAbstractItemView_setDragEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // DragEnabled wraps QAbstractItemView::dragEnabled.
@@ -385,6 +418,7 @@ func (this *QAbstractItemView) SetDragEnabled(enable bool) {
 func (this *QAbstractItemView) DragEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.DragEnabled")
 	r := C.qute_QAbstractItemView_dragEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -396,6 +430,7 @@ func (this *QAbstractItemView) DragEnabled() bool {
 func (this *QAbstractItemView) SetDragDropOverwriteMode(overwrite bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetDragDropOverwriteMode")
 	C.qute_QAbstractItemView_setDragDropOverwriteMode(self, C.bool(overwrite))
+	runtime.KeepAlive(this)
 }
 
 // DragDropOverwriteMode wraps QAbstractItemView::dragDropOverwriteMode.
@@ -406,6 +441,7 @@ func (this *QAbstractItemView) SetDragDropOverwriteMode(overwrite bool) {
 func (this *QAbstractItemView) DragDropOverwriteMode() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.DragDropOverwriteMode")
 	r := C.qute_QAbstractItemView_dragDropOverwriteMode(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -417,6 +453,7 @@ func (this *QAbstractItemView) DragDropOverwriteMode() bool {
 func (this *QAbstractItemView) SetDragDropMode(behavior QAbstractItemViewDragDropMode) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetDragDropMode")
 	C.qute_QAbstractItemView_setDragDropMode(self, C.int64_t(behavior))
+	runtime.KeepAlive(this)
 }
 
 // DragDropMode wraps QAbstractItemView::dragDropMode.
@@ -427,6 +464,7 @@ func (this *QAbstractItemView) SetDragDropMode(behavior QAbstractItemViewDragDro
 func (this *QAbstractItemView) DragDropMode() QAbstractItemViewDragDropMode {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.DragDropMode")
 	r := C.qute_QAbstractItemView_dragDropMode(self)
+	runtime.KeepAlive(this)
 	return QAbstractItemViewDragDropMode(r)
 }
 
@@ -438,6 +476,7 @@ func (this *QAbstractItemView) DragDropMode() QAbstractItemViewDragDropMode {
 func (this *QAbstractItemView) SetDefaultDropAction(dropAction qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetDefaultDropAction")
 	C.qute_QAbstractItemView_setDefaultDropAction(self, C.int64_t(dropAction))
+	runtime.KeepAlive(this)
 }
 
 // DefaultDropAction wraps QAbstractItemView::defaultDropAction.
@@ -448,6 +487,7 @@ func (this *QAbstractItemView) SetDefaultDropAction(dropAction qtcore.DropAction
 func (this *QAbstractItemView) DefaultDropAction() qtcore.DropActions {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.DefaultDropAction")
 	r := C.qute_QAbstractItemView_defaultDropAction(self)
+	runtime.KeepAlive(this)
 	return qtcore.DropActions(r)
 }
 
@@ -459,6 +499,7 @@ func (this *QAbstractItemView) DefaultDropAction() qtcore.DropActions {
 func (this *QAbstractItemView) SetAlternatingRowColors(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetAlternatingRowColors")
 	C.qute_QAbstractItemView_setAlternatingRowColors(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // AlternatingRowColors wraps QAbstractItemView::alternatingRowColors.
@@ -469,6 +510,7 @@ func (this *QAbstractItemView) SetAlternatingRowColors(enable bool) {
 func (this *QAbstractItemView) AlternatingRowColors() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.AlternatingRowColors")
 	r := C.qute_QAbstractItemView_alternatingRowColors(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -480,6 +522,7 @@ func (this *QAbstractItemView) AlternatingRowColors() bool {
 func (this *QAbstractItemView) SetIconSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetIconSize")
 	C.qute_QAbstractItemView_setIconSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // IconSize wraps QAbstractItemView::iconSize.
@@ -490,6 +533,7 @@ func (this *QAbstractItemView) SetIconSize(size qtcore.QSize) {
 func (this *QAbstractItemView) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.IconSize")
 	r := C.qute_QAbstractItemView_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -501,6 +545,7 @@ func (this *QAbstractItemView) IconSize() qtcore.QSize {
 func (this *QAbstractItemView) SetTextElideMode(mode qtcore.TextElideMode) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetTextElideMode")
 	C.qute_QAbstractItemView_setTextElideMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // TextElideMode wraps QAbstractItemView::textElideMode.
@@ -511,6 +556,7 @@ func (this *QAbstractItemView) SetTextElideMode(mode qtcore.TextElideMode) {
 func (this *QAbstractItemView) TextElideMode() qtcore.TextElideMode {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.TextElideMode")
 	r := C.qute_QAbstractItemView_textElideMode(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextElideMode(r)
 }
 
@@ -522,6 +568,7 @@ func (this *QAbstractItemView) TextElideMode() qtcore.TextElideMode {
 func (this *QAbstractItemView) KeyboardSearch(search string) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.KeyboardSearch")
 	C.qute_QAbstractItemView_keyboardSearch(self, (*C.char)(unsafe.Pointer(unsafe.StringData(search))), C.ptrdiff_t(len(search)))
+	runtime.KeepAlive(this)
 }
 
 // VisualRect wraps QAbstractItemView::visualRect.
@@ -532,6 +579,8 @@ func (this *QAbstractItemView) KeyboardSearch(search string) {
 func (this *QAbstractItemView) VisualRect(index *qtcore.QModelIndex) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.VisualRect")
 	r := C.qute_QAbstractItemView_visualRect(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.VisualRect"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return goQRect(r)
 }
 
@@ -543,6 +592,8 @@ func (this *QAbstractItemView) VisualRect(index *qtcore.QModelIndex) qtcore.QRec
 func (this *QAbstractItemView) ScrollTo(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ScrollTo")
 	C.qute_QAbstractItemView_scrollTo(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.ScrollTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // IndexAt wraps QAbstractItemView::indexAt.
@@ -555,6 +606,7 @@ func (this *QAbstractItemView) ScrollTo(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) IndexAt(point qtcore.QPoint) *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.IndexAt")
 	r := C.qute_QAbstractItemView_indexAt(self, cQPoint(point))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -566,6 +618,8 @@ func (this *QAbstractItemView) IndexAt(point qtcore.QPoint) *qtcore.QModelIndex 
 func (this *QAbstractItemView) SizeHintForIndex(index *qtcore.QModelIndex) qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SizeHintForIndex")
 	r := C.qute_QAbstractItemView_sizeHintForIndex(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.SizeHintForIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return goQSize(r)
 }
 
@@ -577,6 +631,7 @@ func (this *QAbstractItemView) SizeHintForIndex(index *qtcore.QModelIndex) qtcor
 func (this *QAbstractItemView) SizeHintForRow(row int) int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SizeHintForRow")
 	r := C.qute_QAbstractItemView_sizeHintForRow(self, C.int(row))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -588,6 +643,7 @@ func (this *QAbstractItemView) SizeHintForRow(row int) int {
 func (this *QAbstractItemView) SizeHintForColumn(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SizeHintForColumn")
 	r := C.qute_QAbstractItemView_sizeHintForColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -599,6 +655,7 @@ func (this *QAbstractItemView) SizeHintForColumn(column int) int {
 func (this *QAbstractItemView) UpdateThreshold() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.UpdateThreshold")
 	r := C.qute_QAbstractItemView_updateThreshold(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -610,6 +667,7 @@ func (this *QAbstractItemView) UpdateThreshold() int {
 func (this *QAbstractItemView) SetUpdateThreshold(threshold int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetUpdateThreshold")
 	C.qute_QAbstractItemView_setUpdateThreshold(self, C.int(threshold))
+	runtime.KeepAlive(this)
 }
 
 // KeyboardSearchFlags wraps QAbstractItemView::keyboardSearchFlags.
@@ -620,6 +678,7 @@ func (this *QAbstractItemView) SetUpdateThreshold(threshold int) {
 func (this *QAbstractItemView) KeyboardSearchFlags() qtcore.MatchFlags {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.KeyboardSearchFlags")
 	r := C.qute_QAbstractItemView_keyboardSearchFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.MatchFlags(r)
 }
 
@@ -631,6 +690,7 @@ func (this *QAbstractItemView) KeyboardSearchFlags() qtcore.MatchFlags {
 func (this *QAbstractItemView) SetKeyboardSearchFlags(searchFlags qtcore.MatchFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetKeyboardSearchFlags")
 	C.qute_QAbstractItemView_setKeyboardSearchFlags(self, C.int64_t(searchFlags))
+	runtime.KeepAlive(this)
 }
 
 // OpenPersistentEditor wraps QAbstractItemView::openPersistentEditor.
@@ -641,6 +701,8 @@ func (this *QAbstractItemView) SetKeyboardSearchFlags(searchFlags qtcore.MatchFl
 func (this *QAbstractItemView) OpenPersistentEditor(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.OpenPersistentEditor")
 	C.qute_QAbstractItemView_openPersistentEditor(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.OpenPersistentEditor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // ClosePersistentEditor wraps QAbstractItemView::closePersistentEditor.
@@ -651,6 +713,8 @@ func (this *QAbstractItemView) OpenPersistentEditor(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) ClosePersistentEditor(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ClosePersistentEditor")
 	C.qute_QAbstractItemView_closePersistentEditor(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.ClosePersistentEditor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // IsPersistentEditorOpen wraps QAbstractItemView::isPersistentEditorOpen.
@@ -661,6 +725,8 @@ func (this *QAbstractItemView) ClosePersistentEditor(index *qtcore.QModelIndex) 
 func (this *QAbstractItemView) IsPersistentEditorOpen(index *qtcore.QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.IsPersistentEditorOpen")
 	r := C.qute_QAbstractItemView_isPersistentEditorOpen(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.IsPersistentEditorOpen"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -679,6 +745,9 @@ func (this *QAbstractItemView) SetIndexWidget(index *qtcore.QModelIndex, widget 
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QAbstractItemView.SetIndexWidget")
 	}
 	C.qute_QAbstractItemView_setIndexWidget(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.SetIndexWidget"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -692,6 +761,8 @@ func (this *QAbstractItemView) SetIndexWidget(index *qtcore.QModelIndex, widget 
 func (this *QAbstractItemView) IndexWidget(index *qtcore.QModelIndex) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.IndexWidget")
 	r := C.qute_QAbstractItemView_indexWidget(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.IndexWidget"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -707,6 +778,8 @@ func (this *QAbstractItemView) SetItemDelegateForRow(row int, delegate QAbstract
 		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegateForRow")
 	}
 	C.qute_QAbstractItemView_setItemDelegateForRow(self, C.int(row), delegatePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(delegate)
 }
 
 // ItemDelegateForRow wraps QAbstractItemView::itemDelegateForRow.
@@ -719,6 +792,7 @@ func (this *QAbstractItemView) SetItemDelegateForRow(row int, delegate QAbstract
 func (this *QAbstractItemView) ItemDelegateForRow(row int) *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ItemDelegateForRow")
 	r := C.qute_QAbstractItemView_itemDelegateForRow(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
@@ -734,6 +808,8 @@ func (this *QAbstractItemView) SetItemDelegateForColumn(column int, delegate QAb
 		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QAbstractItemView.SetItemDelegateForColumn")
 	}
 	C.qute_QAbstractItemView_setItemDelegateForColumn(self, C.int(column), delegatePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(delegate)
 }
 
 // ItemDelegateForColumn wraps QAbstractItemView::itemDelegateForColumn.
@@ -746,6 +822,7 @@ func (this *QAbstractItemView) SetItemDelegateForColumn(column int, delegate QAb
 func (this *QAbstractItemView) ItemDelegateForColumn(column int) *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ItemDelegateForColumn")
 	r := C.qute_QAbstractItemView_itemDelegateForColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
@@ -759,6 +836,8 @@ func (this *QAbstractItemView) ItemDelegateForColumn(column int) *QAbstractItemD
 func (this *QAbstractItemView) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ItemDelegateForIndex")
 	r := C.qute_QAbstractItemView_itemDelegateForIndex(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.ItemDelegateForIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
@@ -770,6 +849,7 @@ func (this *QAbstractItemView) ItemDelegateForIndex(index *qtcore.QModelIndex) *
 func (this *QAbstractItemView) Reset() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.Reset")
 	C.qute_QAbstractItemView_reset(self)
+	runtime.KeepAlive(this)
 }
 
 // SetRootIndex wraps QAbstractItemView::setRootIndex.
@@ -780,6 +860,8 @@ func (this *QAbstractItemView) Reset() {
 func (this *QAbstractItemView) SetRootIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetRootIndex")
 	C.qute_QAbstractItemView_setRootIndex(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.SetRootIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // DoItemsLayout wraps QAbstractItemView::doItemsLayout.
@@ -790,6 +872,7 @@ func (this *QAbstractItemView) SetRootIndex(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) DoItemsLayout() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.DoItemsLayout")
 	C.qute_QAbstractItemView_doItemsLayout(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectAll wraps QAbstractItemView::selectAll.
@@ -800,6 +883,7 @@ func (this *QAbstractItemView) DoItemsLayout() {
 func (this *QAbstractItemView) SelectAll() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SelectAll")
 	C.qute_QAbstractItemView_selectAll(self)
+	runtime.KeepAlive(this)
 }
 
 // Edit wraps QAbstractItemView::edit.
@@ -810,6 +894,8 @@ func (this *QAbstractItemView) SelectAll() {
 func (this *QAbstractItemView) Edit(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.Edit")
 	C.qute_QAbstractItemView_edit(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Edit"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // ClearSelection wraps QAbstractItemView::clearSelection.
@@ -820,6 +906,7 @@ func (this *QAbstractItemView) Edit(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) ClearSelection() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ClearSelection")
 	C.qute_QAbstractItemView_clearSelection(self)
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentIndex wraps QAbstractItemView::setCurrentIndex.
@@ -830,6 +917,8 @@ func (this *QAbstractItemView) ClearSelection() {
 func (this *QAbstractItemView) SetCurrentIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.SetCurrentIndex")
 	C.qute_QAbstractItemView_setCurrentIndex(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.SetCurrentIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // ScrollToTop wraps QAbstractItemView::scrollToTop.
@@ -840,6 +929,7 @@ func (this *QAbstractItemView) SetCurrentIndex(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) ScrollToTop() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ScrollToTop")
 	C.qute_QAbstractItemView_scrollToTop(self)
+	runtime.KeepAlive(this)
 }
 
 // ScrollToBottom wraps QAbstractItemView::scrollToBottom.
@@ -850,6 +940,7 @@ func (this *QAbstractItemView) ScrollToTop() {
 func (this *QAbstractItemView) ScrollToBottom() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ScrollToBottom")
 	C.qute_QAbstractItemView_scrollToBottom(self)
+	runtime.KeepAlive(this)
 }
 
 // Update wraps QAbstractItemView::update.
@@ -860,6 +951,8 @@ func (this *QAbstractItemView) ScrollToBottom() {
 func (this *QAbstractItemView) Update(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.Update")
 	C.qute_QAbstractItemView_update(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Update"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitPressed wraps emitting the pressed signal.
@@ -870,6 +963,8 @@ func (this *QAbstractItemView) Update(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) EmitPressed(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitPressed")
 	C.qute_QAbstractItemView_pressed_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.EmitPressed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitClicked wraps emitting the clicked signal.
@@ -880,6 +975,8 @@ func (this *QAbstractItemView) EmitPressed(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) EmitClicked(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitClicked")
 	C.qute_QAbstractItemView_clicked_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.EmitClicked"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitDoubleClicked wraps emitting the doubleClicked signal.
@@ -890,6 +987,8 @@ func (this *QAbstractItemView) EmitClicked(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) EmitDoubleClicked(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitDoubleClicked")
 	C.qute_QAbstractItemView_doubleClicked_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.EmitDoubleClicked"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitActivated wraps emitting the activated signal.
@@ -900,6 +999,8 @@ func (this *QAbstractItemView) EmitDoubleClicked(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) EmitActivated(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitActivated")
 	C.qute_QAbstractItemView_activated_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.EmitActivated"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitEntered wraps emitting the entered signal.
@@ -910,6 +1011,8 @@ func (this *QAbstractItemView) EmitActivated(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) EmitEntered(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitEntered")
 	C.qute_QAbstractItemView_entered_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.EmitEntered"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitViewportEntered wraps emitting the viewportEntered signal.
@@ -920,6 +1023,7 @@ func (this *QAbstractItemView) EmitEntered(index *qtcore.QModelIndex) {
 func (this *QAbstractItemView) EmitViewportEntered() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitViewportEntered")
 	C.qute_QAbstractItemView_viewportEntered_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitIconSizeChanged wraps emitting the iconSizeChanged signal.
@@ -930,6 +1034,7 @@ func (this *QAbstractItemView) EmitViewportEntered() {
 func (this *QAbstractItemView) EmitIconSizeChanged(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitIconSizeChanged")
 	C.qute_QAbstractItemView_iconSizeChanged_1(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // OnPressed connects f to the pressed signal. The connection ends when the

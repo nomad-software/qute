@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QHelpEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QHelpEvent {
 func (this *QHelpEvent) X() int {
 	self := rt.Use(unsafe.Pointer(this), "QHelpEvent.X")
 	r := C.qute_QHelpEvent_x(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QHelpEvent) X() int {
 func (this *QHelpEvent) Y() int {
 	self := rt.Use(unsafe.Pointer(this), "QHelpEvent.Y")
 	r := C.qute_QHelpEvent_y(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -63,6 +66,7 @@ func (this *QHelpEvent) Y() int {
 func (this *QHelpEvent) GlobalX() int {
 	self := rt.Use(unsafe.Pointer(this), "QHelpEvent.GlobalX")
 	r := C.qute_QHelpEvent_globalX(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -74,6 +78,7 @@ func (this *QHelpEvent) GlobalX() int {
 func (this *QHelpEvent) GlobalY() int {
 	self := rt.Use(unsafe.Pointer(this), "QHelpEvent.GlobalY")
 	r := C.qute_QHelpEvent_globalY(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -85,6 +90,7 @@ func (this *QHelpEvent) GlobalY() int {
 func (this *QHelpEvent) Pos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QHelpEvent.Pos")
 	r := C.qute_QHelpEvent_pos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -96,5 +102,6 @@ func (this *QHelpEvent) Pos() qtcore.QPoint {
 func (this *QHelpEvent) GlobalPos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QHelpEvent.GlobalPos")
 	r := C.qute_QHelpEvent_globalPos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }

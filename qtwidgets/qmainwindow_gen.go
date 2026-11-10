@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQMainWindow(parent QWidgetLike) *QMainWindow {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMainWindow")
 	}
 	p := C.qute_QMainWindow_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQMainWindow(parent QWidgetLike) *QMainWindow {
 func (this *QMainWindow) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.IconSize")
 	r := C.qute_QMainWindow_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QMainWindow) IconSize() qtcore.QSize {
 func (this *QMainWindow) SetIconSize(iconSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetIconSize")
 	C.qute_QMainWindow_setIconSize(self, cQSize(iconSize))
+	runtime.KeepAlive(this)
 }
 
 // ToolButtonStyle wraps QMainWindow::toolButtonStyle.
@@ -99,6 +103,7 @@ func (this *QMainWindow) SetIconSize(iconSize qtcore.QSize) {
 func (this *QMainWindow) ToolButtonStyle() qtcore.ToolButtonStyle {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.ToolButtonStyle")
 	r := C.qute_QMainWindow_toolButtonStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.ToolButtonStyle(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QMainWindow) ToolButtonStyle() qtcore.ToolButtonStyle {
 func (this *QMainWindow) SetToolButtonStyle(toolButtonStyle qtcore.ToolButtonStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetToolButtonStyle")
 	C.qute_QMainWindow_setToolButtonStyle(self, C.int64_t(toolButtonStyle))
+	runtime.KeepAlive(this)
 }
 
 // IsAnimated wraps QMainWindow::isAnimated.
@@ -120,6 +126,7 @@ func (this *QMainWindow) SetToolButtonStyle(toolButtonStyle qtcore.ToolButtonSty
 func (this *QMainWindow) IsAnimated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.IsAnimated")
 	r := C.qute_QMainWindow_isAnimated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +138,7 @@ func (this *QMainWindow) IsAnimated() bool {
 func (this *QMainWindow) IsDockNestingEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.IsDockNestingEnabled")
 	r := C.qute_QMainWindow_isDockNestingEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -142,6 +150,7 @@ func (this *QMainWindow) IsDockNestingEnabled() bool {
 func (this *QMainWindow) DocumentMode() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.DocumentMode")
 	r := C.qute_QMainWindow_documentMode(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -153,6 +162,7 @@ func (this *QMainWindow) DocumentMode() bool {
 func (this *QMainWindow) SetDocumentMode(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetDocumentMode")
 	C.qute_QMainWindow_setDocumentMode(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // TabShape wraps QMainWindow::tabShape.
@@ -163,6 +173,7 @@ func (this *QMainWindow) SetDocumentMode(enabled bool) {
 func (this *QMainWindow) TabShape() QTabWidgetTabShape {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.TabShape")
 	r := C.qute_QMainWindow_tabShape(self)
+	runtime.KeepAlive(this)
 	return QTabWidgetTabShape(r)
 }
 
@@ -174,6 +185,7 @@ func (this *QMainWindow) TabShape() QTabWidgetTabShape {
 func (this *QMainWindow) SetTabShape(tabShape QTabWidgetTabShape) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetTabShape")
 	C.qute_QMainWindow_setTabShape(self, C.int64_t(tabShape))
+	runtime.KeepAlive(this)
 }
 
 // TabPosition wraps QMainWindow::tabPosition.
@@ -184,6 +196,7 @@ func (this *QMainWindow) SetTabShape(tabShape QTabWidgetTabShape) {
 func (this *QMainWindow) TabPosition(area qtcore.DockWidgetAreas) QTabWidgetTabPosition {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.TabPosition")
 	r := C.qute_QMainWindow_tabPosition(self, C.int64_t(area))
+	runtime.KeepAlive(this)
 	return QTabWidgetTabPosition(r)
 }
 
@@ -195,6 +208,7 @@ func (this *QMainWindow) TabPosition(area qtcore.DockWidgetAreas) QTabWidgetTabP
 func (this *QMainWindow) SetTabPosition(areas qtcore.DockWidgetAreas, tabPosition QTabWidgetTabPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetTabPosition")
 	C.qute_QMainWindow_setTabPosition(self, C.int64_t(areas), C.int64_t(tabPosition))
+	runtime.KeepAlive(this)
 }
 
 // SetDockOptions wraps QMainWindow::setDockOptions.
@@ -205,6 +219,7 @@ func (this *QMainWindow) SetTabPosition(areas qtcore.DockWidgetAreas, tabPositio
 func (this *QMainWindow) SetDockOptions(options QMainWindowDockOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetDockOptions")
 	C.qute_QMainWindow_setDockOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // DockOptions wraps QMainWindow::dockOptions.
@@ -215,6 +230,7 @@ func (this *QMainWindow) SetDockOptions(options QMainWindowDockOptions) {
 func (this *QMainWindow) DockOptions() QMainWindowDockOptions {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.DockOptions")
 	r := C.qute_QMainWindow_dockOptions(self)
+	runtime.KeepAlive(this)
 	return QMainWindowDockOptions(r)
 }
 
@@ -226,6 +242,7 @@ func (this *QMainWindow) DockOptions() QMainWindowDockOptions {
 func (this *QMainWindow) IsSeparator(pos qtcore.QPoint) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.IsSeparator")
 	r := C.qute_QMainWindow_isSeparator(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -239,6 +256,7 @@ func (this *QMainWindow) IsSeparator(pos qtcore.QPoint) bool {
 func (this *QMainWindow) MenuBar() *QMenuBar {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.MenuBar")
 	r := C.qute_QMainWindow_menuBar(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenuBar](rt.WrapClass(r, "QMenuBar", rt.TakeParented), r)
 }
 
@@ -257,6 +275,8 @@ func (this *QMainWindow) SetMenuBar(menubar QMenuBarLike) {
 		menubarPtr, menubarH = rt.Arg(unsafe.Pointer(menubar.AsQMenuBar()), "QMainWindow.SetMenuBar")
 	}
 	C.qute_QMainWindow_setMenuBar(self, menubarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(menubar)
 	menubarH.TransferToCpp()
 }
 
@@ -270,6 +290,7 @@ func (this *QMainWindow) SetMenuBar(menubar QMenuBarLike) {
 func (this *QMainWindow) MenuWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.MenuWidget")
 	r := C.qute_QMainWindow_menuWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -288,6 +309,8 @@ func (this *QMainWindow) SetMenuWidget(menubar QWidgetLike) {
 		menubarPtr, menubarH = rt.Arg(unsafe.Pointer(menubar.AsQWidget()), "QMainWindow.SetMenuWidget")
 	}
 	C.qute_QMainWindow_setMenuWidget(self, menubarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(menubar)
 	menubarH.TransferToCpp()
 }
 
@@ -301,6 +324,7 @@ func (this *QMainWindow) SetMenuWidget(menubar QWidgetLike) {
 func (this *QMainWindow) StatusBar() *QStatusBar {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.StatusBar")
 	r := C.qute_QMainWindow_statusBar(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStatusBar](rt.WrapClass(r, "QStatusBar", rt.TakeParented), r)
 }
 
@@ -319,6 +343,8 @@ func (this *QMainWindow) SetStatusBar(statusbar QStatusBarLike) {
 		statusbarPtr, statusbarH = rt.Arg(unsafe.Pointer(statusbar.AsQStatusBar()), "QMainWindow.SetStatusBar")
 	}
 	C.qute_QMainWindow_setStatusBar(self, statusbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(statusbar)
 	statusbarH.TransferToCpp()
 }
 
@@ -332,6 +358,7 @@ func (this *QMainWindow) SetStatusBar(statusbar QStatusBarLike) {
 func (this *QMainWindow) CentralWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.CentralWidget")
 	r := C.qute_QMainWindow_centralWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -350,6 +377,8 @@ func (this *QMainWindow) SetCentralWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QMainWindow.SetCentralWidget")
 	}
 	C.qute_QMainWindow_setCentralWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -363,6 +392,7 @@ func (this *QMainWindow) SetCentralWidget(widget QWidgetLike) {
 func (this *QMainWindow) TakeCentralWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.TakeCentralWidget")
 	r := C.qute_QMainWindow_takeCentralWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeOwned), r)
 }
 
@@ -374,6 +404,7 @@ func (this *QMainWindow) TakeCentralWidget() *QWidget {
 func (this *QMainWindow) SetCorner(corner qtcore.Corner, area qtcore.DockWidgetAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetCorner")
 	C.qute_QMainWindow_setCorner(self, C.int64_t(corner), C.int64_t(area))
+	runtime.KeepAlive(this)
 }
 
 // Corner wraps QMainWindow::corner.
@@ -384,6 +415,7 @@ func (this *QMainWindow) SetCorner(corner qtcore.Corner, area qtcore.DockWidgetA
 func (this *QMainWindow) Corner(corner qtcore.Corner) qtcore.DockWidgetAreas {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.Corner")
 	r := C.qute_QMainWindow_corner(self, C.int64_t(corner))
+	runtime.KeepAlive(this)
 	return qtcore.DockWidgetAreas(r)
 }
 
@@ -395,6 +427,7 @@ func (this *QMainWindow) Corner(corner qtcore.Corner) qtcore.DockWidgetAreas {
 func (this *QMainWindow) AddToolBarBreak() {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.AddToolBarBreak")
 	C.qute_QMainWindow_addToolBarBreak(self)
+	runtime.KeepAlive(this)
 }
 
 // InsertToolBarBreak wraps QMainWindow::insertToolBarBreak.
@@ -409,6 +442,8 @@ func (this *QMainWindow) InsertToolBarBreak(before QToolBarLike) {
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQToolBar()), "QMainWindow.InsertToolBarBreak")
 	}
 	C.qute_QMainWindow_insertToolBarBreak(self, beforePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
 }
 
 // AddToolBarArea wraps QMainWindow::addToolBar.
@@ -426,6 +461,8 @@ func (this *QMainWindow) AddToolBarArea(area qtcore.ToolBarAreas, toolbar QToolB
 		toolbarPtr, toolbarH = rt.Arg(unsafe.Pointer(toolbar.AsQToolBar()), "QMainWindow.AddToolBarArea")
 	}
 	C.qute_QMainWindow_addToolBar(self, C.int64_t(area), toolbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toolbar)
 	toolbarH.TransferToCpp()
 }
 
@@ -444,6 +481,8 @@ func (this *QMainWindow) AddToolBar(toolbar QToolBarLike) {
 		toolbarPtr, toolbarH = rt.Arg(unsafe.Pointer(toolbar.AsQToolBar()), "QMainWindow.AddToolBar")
 	}
 	C.qute_QMainWindow_addToolBar_1(self, toolbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toolbar)
 	toolbarH.TransferToCpp()
 }
 
@@ -457,6 +496,7 @@ func (this *QMainWindow) AddToolBar(toolbar QToolBarLike) {
 func (this *QMainWindow) AddToolBarTitle(title string) *QToolBar {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.AddToolBarTitle")
 	r := C.qute_QMainWindow_addToolBar_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 	return rt.View[QToolBar](rt.WrapClass(r, "QToolBar", rt.TakeParented), r)
 }
 
@@ -479,6 +519,9 @@ func (this *QMainWindow) InsertToolBar(before QToolBarLike, toolbar QToolBarLike
 		toolbarPtr, toolbarH = rt.Arg(unsafe.Pointer(toolbar.AsQToolBar()), "QMainWindow.InsertToolBar")
 	}
 	C.qute_QMainWindow_insertToolBar(self, beforePtr, toolbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(toolbar)
 	toolbarH.TransferToCpp()
 }
 
@@ -496,6 +539,8 @@ func (this *QMainWindow) RemoveToolBar(toolbar QToolBarLike) {
 		toolbarPtr = rt.UseArg(unsafe.Pointer(toolbar.AsQToolBar()), "QMainWindow.RemoveToolBar")
 	}
 	C.qute_QMainWindow_removeToolBar(self, toolbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toolbar)
 }
 
 // RemoveToolBarBreak wraps QMainWindow::removeToolBarBreak.
@@ -510,6 +555,8 @@ func (this *QMainWindow) RemoveToolBarBreak(before QToolBarLike) {
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQToolBar()), "QMainWindow.RemoveToolBarBreak")
 	}
 	C.qute_QMainWindow_removeToolBarBreak(self, beforePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
 }
 
 // UnifiedTitleAndToolBarOnMac wraps QMainWindow::unifiedTitleAndToolBarOnMac.
@@ -520,6 +567,7 @@ func (this *QMainWindow) RemoveToolBarBreak(before QToolBarLike) {
 func (this *QMainWindow) UnifiedTitleAndToolBarOnMac() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.UnifiedTitleAndToolBarOnMac")
 	r := C.qute_QMainWindow_unifiedTitleAndToolBarOnMac(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -535,6 +583,8 @@ func (this *QMainWindow) ToolBarArea(toolbar QToolBarLike) qtcore.ToolBarAreas {
 		toolbarPtr = rt.UseArg(unsafe.Pointer(toolbar.AsQToolBar()), "QMainWindow.ToolBarArea")
 	}
 	r := C.qute_QMainWindow_toolBarArea(self, toolbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toolbar)
 	return qtcore.ToolBarAreas(r)
 }
 
@@ -550,6 +600,8 @@ func (this *QMainWindow) ToolBarBreak(toolbar QToolBarLike) bool {
 		toolbarPtr = rt.UseArg(unsafe.Pointer(toolbar.AsQToolBar()), "QMainWindow.ToolBarBreak")
 	}
 	r := C.qute_QMainWindow_toolBarBreak(self, toolbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toolbar)
 	return bool(r)
 }
 
@@ -568,6 +620,8 @@ func (this *QMainWindow) AddDockWidget(area qtcore.DockWidgetAreas, dockwidget Q
 		dockwidgetPtr, dockwidgetH = rt.Arg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.AddDockWidget")
 	}
 	C.qute_QMainWindow_addDockWidget(self, C.int64_t(area), dockwidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockwidget)
 	dockwidgetH.TransferToCpp()
 }
 
@@ -586,6 +640,8 @@ func (this *QMainWindow) AddDockWidgetOriented(area qtcore.DockWidgetAreas, dock
 		dockwidgetPtr, dockwidgetH = rt.Arg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.AddDockWidgetOriented")
 	}
 	C.qute_QMainWindow_addDockWidget_1(self, C.int64_t(area), dockwidgetPtr, C.int64_t(orientation))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockwidget)
 	dockwidgetH.TransferToCpp()
 }
 
@@ -605,6 +661,9 @@ func (this *QMainWindow) SplitDockWidget(after QDockWidgetLike, dockwidget QDock
 		dockwidgetPtr = rt.UseArg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.SplitDockWidget")
 	}
 	C.qute_QMainWindow_splitDockWidget(self, afterPtr, dockwidgetPtr, C.int64_t(orientation))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(after)
+	runtime.KeepAlive(dockwidget)
 }
 
 // TabifyDockWidget wraps QMainWindow::tabifyDockWidget.
@@ -623,6 +682,9 @@ func (this *QMainWindow) TabifyDockWidget(first QDockWidgetLike, second QDockWid
 		secondPtr = rt.UseArg(unsafe.Pointer(second.AsQDockWidget()), "QMainWindow.TabifyDockWidget")
 	}
 	C.qute_QMainWindow_tabifyDockWidget(self, firstPtr, secondPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(first)
+	runtime.KeepAlive(second)
 }
 
 // TabifiedDockWidgets wraps QMainWindow::tabifiedDockWidgets.
@@ -639,6 +701,8 @@ func (this *QMainWindow) TabifiedDockWidgets(dockwidget QDockWidgetLike) []*QDoc
 		dockwidgetPtr = rt.UseArg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.TabifiedDockWidgets")
 	}
 	r := C.qute_QMainWindow_tabifiedDockWidgets(self, dockwidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockwidget)
 	return quteList(r, func(e unsafe.Pointer) *QDockWidget {
 		return rt.View[QDockWidget](rt.WrapClass(e, "QDockWidget", rt.KeepOrBorrow), e)
 	})
@@ -656,6 +720,8 @@ func (this *QMainWindow) RemoveDockWidget(dockwidget QDockWidgetLike) {
 		dockwidgetPtr = rt.UseArg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.RemoveDockWidget")
 	}
 	C.qute_QMainWindow_removeDockWidget(self, dockwidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockwidget)
 }
 
 // RestoreDockWidget wraps QMainWindow::restoreDockWidget.
@@ -670,6 +736,8 @@ func (this *QMainWindow) RestoreDockWidget(dockwidget QDockWidgetLike) bool {
 		dockwidgetPtr = rt.UseArg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.RestoreDockWidget")
 	}
 	r := C.qute_QMainWindow_restoreDockWidget(self, dockwidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockwidget)
 	return bool(r)
 }
 
@@ -685,6 +753,8 @@ func (this *QMainWindow) DockWidgetArea(dockwidget QDockWidgetLike) qtcore.DockW
 		dockwidgetPtr = rt.UseArg(unsafe.Pointer(dockwidget.AsQDockWidget()), "QMainWindow.DockWidgetArea")
 	}
 	r := C.qute_QMainWindow_dockWidgetArea(self, dockwidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockwidget)
 	return qtcore.DockWidgetAreas(r)
 }
 
@@ -704,6 +774,8 @@ func (this *QMainWindow) ResizeDocks(docks []*QDockWidget, sizes []int, orientat
 		sizesC[i] = C.int(sizes[i])
 	}
 	C.qute_QMainWindow_resizeDocks(self, unsafe.Pointer(unsafe.SliceData(docksC)), C.ptrdiff_t(len(docks)), unsafe.Pointer(unsafe.SliceData(sizesC)), C.ptrdiff_t(len(sizes)), C.int64_t(orientation))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(docks)
 }
 
 // SaveState wraps QMainWindow::saveState.
@@ -714,6 +786,7 @@ func (this *QMainWindow) ResizeDocks(docks []*QDockWidget, sizes []int, orientat
 func (this *QMainWindow) SaveState() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SaveState")
 	r := C.qute_QMainWindow_saveState(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -725,6 +798,7 @@ func (this *QMainWindow) SaveState() []byte {
 func (this *QMainWindow) RestoreState(state []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.RestoreState")
 	r := C.qute_QMainWindow_restoreState(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(state))), C.ptrdiff_t(len(state)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -738,6 +812,7 @@ func (this *QMainWindow) RestoreState(state []byte) bool {
 func (this *QMainWindow) CreatePopupMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.CreatePopupMenu")
 	r := C.qute_QMainWindow_createPopupMenu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
@@ -749,6 +824,7 @@ func (this *QMainWindow) CreatePopupMenu() *QMenu {
 func (this *QMainWindow) SetAnimated(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetAnimated")
 	C.qute_QMainWindow_setAnimated(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // SetDockNestingEnabled wraps QMainWindow::setDockNestingEnabled.
@@ -759,6 +835,7 @@ func (this *QMainWindow) SetAnimated(enabled bool) {
 func (this *QMainWindow) SetDockNestingEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetDockNestingEnabled")
 	C.qute_QMainWindow_setDockNestingEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // SetUnifiedTitleAndToolBarOnMac wraps QMainWindow::setUnifiedTitleAndToolBarOnMac.
@@ -769,6 +846,7 @@ func (this *QMainWindow) SetDockNestingEnabled(enabled bool) {
 func (this *QMainWindow) SetUnifiedTitleAndToolBarOnMac(set bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SetUnifiedTitleAndToolBarOnMac")
 	C.qute_QMainWindow_setUnifiedTitleAndToolBarOnMac(self, C.bool(set))
+	runtime.KeepAlive(this)
 }
 
 // EmitIconSizeChanged wraps emitting the iconSizeChanged signal.
@@ -779,6 +857,7 @@ func (this *QMainWindow) SetUnifiedTitleAndToolBarOnMac(set bool) {
 func (this *QMainWindow) EmitIconSizeChanged(iconSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.EmitIconSizeChanged")
 	C.qute_QMainWindow_iconSizeChanged_1(self, cQSize(iconSize))
+	runtime.KeepAlive(this)
 }
 
 // EmitToolButtonStyleChanged wraps emitting the toolButtonStyleChanged signal.
@@ -789,6 +868,7 @@ func (this *QMainWindow) EmitIconSizeChanged(iconSize qtcore.QSize) {
 func (this *QMainWindow) EmitToolButtonStyleChanged(toolButtonStyle qtcore.ToolButtonStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.EmitToolButtonStyleChanged")
 	C.qute_QMainWindow_toolButtonStyleChanged_1(self, C.int64_t(toolButtonStyle))
+	runtime.KeepAlive(this)
 }
 
 // EmitTabifiedDockWidgetActivated wraps emitting the tabifiedDockWidgetActivated signal.
@@ -803,6 +883,8 @@ func (this *QMainWindow) EmitTabifiedDockWidgetActivated(dockWidget QDockWidgetL
 		dockWidgetPtr = rt.UseArg(unsafe.Pointer(dockWidget.AsQDockWidget()), "QMainWindow.EmitTabifiedDockWidgetActivated")
 	}
 	C.qute_QMainWindow_tabifiedDockWidgetActivated_1(self, dockWidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dockWidget)
 }
 
 // OnIconSizeChanged connects f to the iconSizeChanged signal. The connection ends when the
@@ -1192,7 +1274,9 @@ type QMainWindowSuper struct{ this *QMainWindow }
 // CreatePopupMenu calls QMainWindow::createPopupMenu.
 func (s *QMainWindowSuper) CreatePopupMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.CreatePopupMenu")
-	return rt.View[QMenu](rt.WrapClass(C.qute_QMainWindow_super_0(self), "QMenu", rt.KeepOrBorrow), C.qute_QMainWindow_super_0(self))
+	r := C.qute_QMainWindow_super_0(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
 }
 
 // ContextMenuEvent calls QMainWindow::contextMenuEvent.
@@ -1203,6 +1287,8 @@ func (s *QMainWindowSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QMainWindow.Super.ContextMenuEvent")
 	}
 	C.qute_QMainWindow_super_1(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // Event calls QMainWindow::event.
@@ -1212,37 +1298,49 @@ func (s *QMainWindowSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMainWindow.Super.Event")
 	}
-	return bool(C.qute_QMainWindow_super_2(self, eventPtr))
+	r := C.qute_QMainWindow_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // SetVisible calls QWidget::setVisible.
 func (s *QMainWindowSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.SetVisible")
 	C.qute_QMainWindow_super_3(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
 }
 
 // SizeHint calls QWidget::sizeHint.
 func (s *QMainWindowSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.SizeHint")
-	return goQSize(C.qute_QMainWindow_super_4(self))
+	r := C.qute_QMainWindow_super_4(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // MinimumSizeHint calls QWidget::minimumSizeHint.
 func (s *QMainWindowSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.MinimumSizeHint")
-	return goQSize(C.qute_QMainWindow_super_5(self))
+	r := C.qute_QMainWindow_super_5(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QMainWindowSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.HeightForWidth")
-	return int(C.qute_QMainWindow_super_6(self, C.int(arg0)))
+	r := C.qute_QMainWindow_super_6(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QMainWindowSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.HasHeightForWidth")
-	return bool(C.qute_QMainWindow_super_7(self))
+	r := C.qute_QMainWindow_super_7(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // MousePressEvent calls QWidget::mousePressEvent.
@@ -1253,6 +1351,8 @@ func (s *QMainWindowSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QMainWindow.Super.MousePressEvent")
 	}
 	C.qute_QMainWindow_super_8(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MouseReleaseEvent calls QWidget::mouseReleaseEvent.
@@ -1263,6 +1363,8 @@ func (s *QMainWindowSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QMainWindow.Super.MouseReleaseEvent")
 	}
 	C.qute_QMainWindow_super_9(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MouseDoubleClickEvent calls QWidget::mouseDoubleClickEvent.
@@ -1273,6 +1375,8 @@ func (s *QMainWindowSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QMainWindow.Super.MouseDoubleClickEvent")
 	}
 	C.qute_QMainWindow_super_10(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MouseMoveEvent calls QWidget::mouseMoveEvent.
@@ -1283,6 +1387,8 @@ func (s *QMainWindowSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QMainWindow.Super.MouseMoveEvent")
 	}
 	C.qute_QMainWindow_super_11(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // WheelEvent calls QWidget::wheelEvent.
@@ -1293,6 +1399,8 @@ func (s *QMainWindowSuper) WheelEvent(event *qtgui.QWheelEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QMainWindow.Super.WheelEvent")
 	}
 	C.qute_QMainWindow_super_12(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // KeyPressEvent calls QWidget::keyPressEvent.
@@ -1303,6 +1411,8 @@ func (s *QMainWindowSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QMainWindow.Super.KeyPressEvent")
 	}
 	C.qute_QMainWindow_super_13(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // KeyReleaseEvent calls QWidget::keyReleaseEvent.
@@ -1313,6 +1423,8 @@ func (s *QMainWindowSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QMainWindow.Super.KeyReleaseEvent")
 	}
 	C.qute_QMainWindow_super_14(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusInEvent calls QWidget::focusInEvent.
@@ -1323,6 +1435,8 @@ func (s *QMainWindowSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QMainWindow.Super.FocusInEvent")
 	}
 	C.qute_QMainWindow_super_15(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusOutEvent calls QWidget::focusOutEvent.
@@ -1333,6 +1447,8 @@ func (s *QMainWindowSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QMainWindow.Super.FocusOutEvent")
 	}
 	C.qute_QMainWindow_super_16(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // EnterEvent calls QWidget::enterEvent.
@@ -1343,6 +1459,8 @@ func (s *QMainWindowSuper) EnterEvent(event *qtgui.QEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QMainWindow.Super.EnterEvent")
 	}
 	C.qute_QMainWindow_super_17(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // LeaveEvent calls QWidget::leaveEvent.
@@ -1353,6 +1471,8 @@ func (s *QMainWindowSuper) LeaveEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMainWindow.Super.LeaveEvent")
 	}
 	C.qute_QMainWindow_super_18(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // PaintEvent calls QWidget::paintEvent.
@@ -1363,6 +1483,8 @@ func (s *QMainWindowSuper) PaintEvent(event *qtgui.QPaintEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPaintEvent()), "QMainWindow.Super.PaintEvent")
 	}
 	C.qute_QMainWindow_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MoveEvent calls QWidget::moveEvent.
@@ -1373,6 +1495,8 @@ func (s *QMainWindowSuper) MoveEvent(event *qtgui.QMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QMainWindow.Super.MoveEvent")
 	}
 	C.qute_QMainWindow_super_20(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ResizeEvent calls QWidget::resizeEvent.
@@ -1383,6 +1507,8 @@ func (s *QMainWindowSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QMainWindow.Super.ResizeEvent")
 	}
 	C.qute_QMainWindow_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CloseEvent calls QWidget::closeEvent.
@@ -1393,6 +1519,8 @@ func (s *QMainWindowSuper) CloseEvent(event *qtgui.QCloseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QMainWindow.Super.CloseEvent")
 	}
 	C.qute_QMainWindow_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragEnterEvent calls QWidget::dragEnterEvent.
@@ -1403,6 +1531,8 @@ func (s *QMainWindowSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QMainWindow.Super.DragEnterEvent")
 	}
 	C.qute_QMainWindow_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragMoveEvent calls QWidget::dragMoveEvent.
@@ -1413,6 +1543,8 @@ func (s *QMainWindowSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QMainWindow.Super.DragMoveEvent")
 	}
 	C.qute_QMainWindow_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragLeaveEvent calls QWidget::dragLeaveEvent.
@@ -1423,6 +1555,8 @@ func (s *QMainWindowSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QMainWindow.Super.DragLeaveEvent")
 	}
 	C.qute_QMainWindow_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DropEvent calls QWidget::dropEvent.
@@ -1433,6 +1567,8 @@ func (s *QMainWindowSuper) DropEvent(event *qtgui.QDropEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QMainWindow.Super.DropEvent")
 	}
 	C.qute_QMainWindow_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ShowEvent calls QWidget::showEvent.
@@ -1443,6 +1579,8 @@ func (s *QMainWindowSuper) ShowEvent(event *qtgui.QShowEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QMainWindow.Super.ShowEvent")
 	}
 	C.qute_QMainWindow_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // HideEvent calls QWidget::hideEvent.
@@ -1453,6 +1591,8 @@ func (s *QMainWindowSuper) HideEvent(event *qtgui.QHideEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QMainWindow.Super.HideEvent")
 	}
 	C.qute_QMainWindow_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChangeEvent calls QWidget::changeEvent.
@@ -1463,12 +1603,16 @@ func (s *QMainWindowSuper) ChangeEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMainWindow.Super.ChangeEvent")
 	}
 	C.qute_QMainWindow_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QMainWindowSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QMainWindow.Super.FocusNextPrevChild")
-	return bool(C.qute_QMainWindow_super_30(self, C.bool(next)))
+	r := C.qute_QMainWindow_super_30(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -1482,7 +1626,11 @@ func (s *QMainWindowSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QE
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMainWindow.Super.EventFilter")
 	}
-	return bool(C.qute_QMainWindow_super_31(self, watchedPtr, eventPtr))
+	r := C.qute_QMainWindow_super_31(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // TimerEvent calls QObject::timerEvent.
@@ -1493,6 +1641,8 @@ func (s *QMainWindowSuper) TimerEvent(event *qtcore.QTimerEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QMainWindow.Super.TimerEvent")
 	}
 	C.qute_QMainWindow_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -1503,6 +1653,8 @@ func (s *QMainWindowSuper) ChildEvent(event *qtcore.QChildEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QMainWindow.Super.ChildEvent")
 	}
 	C.qute_QMainWindow_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -1513,30 +1665,36 @@ func (s *QMainWindowSuper) CustomEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMainWindow.Super.CustomEvent")
 	}
 	C.qute_QMainWindow_super_34(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QMainWindowBase) UpdateMicroFocus() {
 	self := rt.Use(unsafe.Pointer(b.QMainWindow), "QMainWindow.UpdateMicroFocus")
 	C.qute_QMainWindow_prot_updateMicroFocus(self)
+	runtime.KeepAlive(b)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QMainWindowBase) Create() {
 	self := rt.Use(unsafe.Pointer(b.QMainWindow), "QMainWindow.Create")
 	C.qute_QMainWindow_prot_create(self)
+	runtime.KeepAlive(b)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QMainWindowBase) Destroy() {
 	self := rt.Use(unsafe.Pointer(b.QMainWindow), "QMainWindow.Destroy")
 	C.qute_QMainWindow_prot_destroy(self)
+	runtime.KeepAlive(b)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QMainWindowBase) FocusNextChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QMainWindow), "QMainWindow.FocusNextChild")
 	r := C.qute_QMainWindow_prot_focusNextChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1544,6 +1702,7 @@ func (b *QMainWindowBase) FocusNextChild() bool {
 func (b *QMainWindowBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QMainWindow), "QMainWindow.FocusPreviousChild")
 	r := C.qute_QMainWindow_prot_focusPreviousChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1551,6 +1710,7 @@ func (b *QMainWindowBase) FocusPreviousChild() bool {
 func (b *QMainWindowBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
 	self := rt.Use(unsafe.Pointer(b.QMainWindow), "QMainWindow.GetDecodedMetricF")
 	r := C.qute_QMainWindow_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(b)
 	return float64(r)
 }
 
@@ -1568,6 +1728,7 @@ func NewQMainWindowWith(v QMainWindowSubclass, parent QWidgetLike) *QMainWindow 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMainWindowWith")
 	}
 	p := C.qute_QMainWindow_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

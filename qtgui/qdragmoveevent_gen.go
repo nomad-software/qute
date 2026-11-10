@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QDragMoveEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QDragMoveEve
 func (this *QDragMoveEvent) AnswerRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QDragMoveEvent.AnswerRect")
 	r := C.qute_QDragMoveEvent_answerRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QDragMoveEvent) AnswerRect() qtcore.QRect {
 func (this *QDragMoveEvent) Accept(rArg qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QDragMoveEvent.Accept")
 	C.qute_QDragMoveEvent_accept(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 }
 
 // Ignore wraps QDragMoveEvent::ignore.
@@ -62,4 +65,5 @@ func (this *QDragMoveEvent) Accept(rArg qtcore.QRect) {
 func (this *QDragMoveEvent) Ignore(rArg qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QDragMoveEvent.Ignore")
 	C.qute_QDragMoveEvent_ignore(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 }

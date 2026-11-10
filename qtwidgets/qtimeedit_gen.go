@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQTimeEdit(parent QWidgetLike) *QTimeEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTimeEdit")
 	}
 	p := C.qute_QTimeEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,8 @@ func NewQTimeEditWithTime(time *qtcore.QTime, parent QWidgetLike) *QTimeEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTimeEditWithTime")
 	}
 	p := C.qute_QTimeEdit_new_1(rt.UseArg(unsafe.Pointer(time), "NewQTimeEditWithTime"), parentPtr)
+	runtime.KeepAlive(time)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +103,8 @@ func NewQTimeEditWithTime(time *qtcore.QTime, parent QWidgetLike) *QTimeEdit {
 func (this *QTimeEdit) EmitUserTimeChanged(time *qtcore.QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QTimeEdit.EmitUserTimeChanged")
 	C.qute_QTimeEdit_userTimeChanged_1(self, rt.UseArg(unsafe.Pointer(time), "QTimeEdit.EmitUserTimeChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
 }
 
 // OnUserTimeChanged connects f to the userTimeChanged signal. The connection ends when the

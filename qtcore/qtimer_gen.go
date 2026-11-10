@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -61,6 +62,7 @@ func NewQTimer(parent QObjectLike) *QTimer {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTimer")
 	}
 	p := C.qute_QTimer_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQTimer(parent QObjectLike) *QTimer {
 func (this *QTimer) IsActive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.IsActive")
 	r := C.qute_QTimer_isActive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QTimer) IsActive() bool {
 func (this *QTimer) TimerId() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.TimerId")
 	r := C.qute_QTimer_timerId(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QTimer) TimerId() int {
 func (this *QTimer) Id() TimerId {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.Id")
 	r := C.qute_QTimer_id(self)
+	runtime.KeepAlive(this)
 	return TimerId(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QTimer) Id() TimerId {
 func (this *QTimer) SetInterval(msec int) {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.SetInterval")
 	C.qute_QTimer_setInterval(self, C.int(msec))
+	runtime.KeepAlive(this)
 }
 
 // Interval wraps QTimer::interval.
@@ -120,6 +126,7 @@ func (this *QTimer) SetInterval(msec int) {
 func (this *QTimer) Interval() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.Interval")
 	r := C.qute_QTimer_interval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -131,6 +138,7 @@ func (this *QTimer) Interval() int {
 func (this *QTimer) RemainingTime() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.RemainingTime")
 	r := C.qute_QTimer_remainingTime(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -142,6 +150,7 @@ func (this *QTimer) RemainingTime() int {
 func (this *QTimer) SetTimerType(atype TimerType) {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.SetTimerType")
 	C.qute_QTimer_setTimerType(self, C.int64_t(atype))
+	runtime.KeepAlive(this)
 }
 
 // TimerType wraps QTimer::timerType.
@@ -152,6 +161,7 @@ func (this *QTimer) SetTimerType(atype TimerType) {
 func (this *QTimer) TimerType() TimerType {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.TimerType")
 	r := C.qute_QTimer_timerType(self)
+	runtime.KeepAlive(this)
 	return TimerType(r)
 }
 
@@ -163,6 +173,7 @@ func (this *QTimer) TimerType() TimerType {
 func (this *QTimer) SetSingleShot(singleShot bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.SetSingleShot")
 	C.qute_QTimer_setSingleShot(self, C.bool(singleShot))
+	runtime.KeepAlive(this)
 }
 
 // IsSingleShot wraps QTimer::isSingleShot.
@@ -173,6 +184,7 @@ func (this *QTimer) SetSingleShot(singleShot bool) {
 func (this *QTimer) IsSingleShot() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.IsSingleShot")
 	r := C.qute_QTimer_isSingleShot(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -184,6 +196,7 @@ func (this *QTimer) IsSingleShot() bool {
 func (this *QTimer) StartWithInterval(msec int) {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.StartWithInterval")
 	C.qute_QTimer_start(self, C.int(msec))
+	runtime.KeepAlive(this)
 }
 
 // Start wraps QTimer::start.
@@ -194,6 +207,7 @@ func (this *QTimer) StartWithInterval(msec int) {
 func (this *QTimer) Start() {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.Start")
 	C.qute_QTimer_start_1(self)
+	runtime.KeepAlive(this)
 }
 
 // Stop wraps QTimer::stop.
@@ -204,6 +218,7 @@ func (this *QTimer) Start() {
 func (this *QTimer) Stop() {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.Stop")
 	C.qute_QTimer_stop(self)
+	runtime.KeepAlive(this)
 }
 
 // SetIntervalDuration wraps QTimer::setInterval.
@@ -214,6 +229,7 @@ func (this *QTimer) Stop() {
 func (this *QTimer) SetIntervalDuration(value time.Duration) {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.SetIntervalDuration")
 	C.qute_QTimer_setInterval_1(self, C.int64_t(value))
+	runtime.KeepAlive(this)
 }
 
 // IntervalAsDuration wraps QTimer::intervalAsDuration.
@@ -224,6 +240,7 @@ func (this *QTimer) SetIntervalDuration(value time.Duration) {
 func (this *QTimer) IntervalAsDuration() time.Duration {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.IntervalAsDuration")
 	r := C.qute_QTimer_intervalAsDuration(self)
+	runtime.KeepAlive(this)
 	return time.Duration(r)
 }
 
@@ -235,6 +252,7 @@ func (this *QTimer) IntervalAsDuration() time.Duration {
 func (this *QTimer) RemainingTimeAsDuration() time.Duration {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.RemainingTimeAsDuration")
 	r := C.qute_QTimer_remainingTimeAsDuration(self)
+	runtime.KeepAlive(this)
 	return time.Duration(r)
 }
 
@@ -246,6 +264,7 @@ func (this *QTimer) RemainingTimeAsDuration() time.Duration {
 func (this *QTimer) StartWithDuration(value time.Duration) {
 	self := rt.Use(unsafe.Pointer(this), "QTimer.StartWithDuration")
 	C.qute_QTimer_start_2(self, C.int64_t(value))
+	runtime.KeepAlive(this)
 }
 
 // OnTimeout connects f to the timeout signal. The connection ends when the

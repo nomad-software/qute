@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -121,6 +122,7 @@ func NewQBrushWithColor(color QColor) *QBrush {
 func NewQBrushWithColorPixmap(color QColor, pixmap *QPixmap) *QBrush {
 	rt.CheckThread("NewQBrushWithColorPixmap")
 	p := C.qute_QBrush_new_3(cQColor(color), rt.UseArg(unsafe.Pointer(pixmap), "NewQBrushWithColorPixmap"))
+	runtime.KeepAlive(pixmap)
 	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
@@ -133,6 +135,7 @@ func NewQBrushWithColorPixmap(color QColor, pixmap *QPixmap) *QBrush {
 func NewQBrushWithPixmap(pixmap *QPixmap) *QBrush {
 	rt.CheckThread("NewQBrushWithPixmap")
 	p := C.qute_QBrush_new_4(rt.UseArg(unsafe.Pointer(pixmap), "NewQBrushWithPixmap"))
+	runtime.KeepAlive(pixmap)
 	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
@@ -145,6 +148,7 @@ func NewQBrushWithPixmap(pixmap *QPixmap) *QBrush {
 func NewQBrushWithImage(image *QImage) *QBrush {
 	rt.CheckThread("NewQBrushWithImage")
 	p := C.qute_QBrush_new_5(rt.UseArg(unsafe.Pointer(image), "NewQBrushWithImage"))
+	runtime.KeepAlive(image)
 	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
@@ -157,6 +161,7 @@ func NewQBrushWithImage(image *QImage) *QBrush {
 func NewQBrushWithGradient(gradient *QGradient) *QBrush {
 	rt.CheckThread("NewQBrushWithGradient")
 	p := C.qute_QBrush_new_6(rt.UseArg(unsafe.Pointer(gradient), "NewQBrushWithGradient"))
+	runtime.KeepAlive(gradient)
 	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
@@ -169,6 +174,7 @@ func NewQBrushWithGradient(gradient *QGradient) *QBrush {
 func (this *QBrush) Style() qtcore.BrushStyle {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.Style")
 	r := C.qute_QBrush_style(self)
+	runtime.KeepAlive(this)
 	return qtcore.BrushStyle(r)
 }
 
@@ -180,6 +186,7 @@ func (this *QBrush) Style() qtcore.BrushStyle {
 func (this *QBrush) SetStyle(style qtcore.BrushStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.SetStyle")
 	C.qute_QBrush_setStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // Transform wraps QBrush::transform.
@@ -192,6 +199,7 @@ func (this *QBrush) SetStyle(style qtcore.BrushStyle) {
 func (this *QBrush) Transform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.Transform")
 	r := C.qute_QBrush_transform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -203,6 +211,8 @@ func (this *QBrush) Transform() *QTransform {
 func (this *QBrush) SetTransform(transform *QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.SetTransform")
 	C.qute_QBrush_setTransform(self, rt.UseArg(unsafe.Pointer(transform), "QBrush.SetTransform"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 }
 
 // Texture wraps QBrush::texture.
@@ -215,6 +225,7 @@ func (this *QBrush) SetTransform(transform *QTransform) {
 func (this *QBrush) Texture() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.Texture")
 	r := C.qute_QBrush_texture(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -226,6 +237,8 @@ func (this *QBrush) Texture() *QPixmap {
 func (this *QBrush) SetTexture(pixmap *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.SetTexture")
 	C.qute_QBrush_setTexture(self, rt.UseArg(unsafe.Pointer(pixmap), "QBrush.SetTexture"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // TextureImage wraps QBrush::textureImage.
@@ -238,6 +251,7 @@ func (this *QBrush) SetTexture(pixmap *QPixmap) {
 func (this *QBrush) TextureImage() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.TextureImage")
 	r := C.qute_QBrush_textureImage(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -249,6 +263,8 @@ func (this *QBrush) TextureImage() *QImage {
 func (this *QBrush) SetTextureImage(image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.SetTextureImage")
 	C.qute_QBrush_setTextureImage(self, rt.UseArg(unsafe.Pointer(image), "QBrush.SetTextureImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // Color wraps QBrush::color.
@@ -259,6 +275,7 @@ func (this *QBrush) SetTextureImage(image *QImage) {
 func (this *QBrush) Color() QColor {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.Color")
 	r := C.qute_QBrush_color(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -270,6 +287,7 @@ func (this *QBrush) Color() QColor {
 func (this *QBrush) SetColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.SetColor")
 	C.qute_QBrush_setColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // Gradient wraps QBrush::gradient.
@@ -282,6 +300,7 @@ func (this *QBrush) SetColor(color QColor) {
 func (this *QBrush) Gradient() *QGradient {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.Gradient")
 	r := C.qute_QBrush_gradient(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGradient](rt.WrapClass(r, "QGradient", rt.TakeOwned), r)
 }
 
@@ -293,5 +312,6 @@ func (this *QBrush) Gradient() *QGradient {
 func (this *QBrush) IsOpaque() bool {
 	self := rt.Use(unsafe.Pointer(this), "QBrush.IsOpaque")
 	r := C.qute_QBrush_isOpaque(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

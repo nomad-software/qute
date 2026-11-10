@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQStackedLayout(parent QWidgetLike) *QStackedLayout {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQStackedLayout")
 	}
 	p := C.qute_QStackedLayout_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -85,6 +87,7 @@ func NewQStackedLayoutIn(parentLayout QLayoutLike) *QStackedLayout {
 		parentLayoutPtr = rt.UseArg(unsafe.Pointer(parentLayout.AsQLayout()), "NewQStackedLayoutIn")
 	}
 	p := C.qute_QStackedLayout_new_1(parentLayoutPtr)
+	runtime.KeepAlive(parentLayout)
 	mode := rt.NewOwned
 	if parentLayoutPtr != nil {
 		mode = rt.NewParented
@@ -108,6 +111,8 @@ func (this *QStackedLayout) InsertWidget(index int, w QWidgetLike) int {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QStackedLayout.InsertWidget")
 	}
 	r := C.qute_QStackedLayout_insertWidget(self, C.int(index), wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 	return int(r)
 }
@@ -122,6 +127,7 @@ func (this *QStackedLayout) InsertWidget(index int, w QWidgetLike) int {
 func (this *QStackedLayout) CurrentWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.CurrentWidget")
 	r := C.qute_QStackedLayout_currentWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -133,6 +139,7 @@ func (this *QStackedLayout) CurrentWidget() *QWidget {
 func (this *QStackedLayout) CurrentIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.CurrentIndex")
 	r := C.qute_QStackedLayout_currentIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -146,6 +153,7 @@ func (this *QStackedLayout) CurrentIndex() int {
 func (this *QStackedLayout) Widget(arg0 int) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.Widget")
 	r := C.qute_QStackedLayout_widget(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -157,6 +165,7 @@ func (this *QStackedLayout) Widget(arg0 int) *QWidget {
 func (this *QStackedLayout) StackingMode() QStackedLayoutStackingMode {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.StackingMode")
 	r := C.qute_QStackedLayout_stackingMode(self)
+	runtime.KeepAlive(this)
 	return QStackedLayoutStackingMode(r)
 }
 
@@ -168,6 +177,7 @@ func (this *QStackedLayout) StackingMode() QStackedLayoutStackingMode {
 func (this *QStackedLayout) SetStackingMode(stackingMode QStackedLayoutStackingMode) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.SetStackingMode")
 	C.qute_QStackedLayout_setStackingMode(self, C.int64_t(stackingMode))
+	runtime.KeepAlive(this)
 }
 
 // SizeHint wraps QStackedLayout::sizeHint.
@@ -178,6 +188,7 @@ func (this *QStackedLayout) SetStackingMode(stackingMode QStackedLayoutStackingM
 func (this *QStackedLayout) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.SizeHint")
 	r := C.qute_QStackedLayout_sizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -189,6 +200,7 @@ func (this *QStackedLayout) SizeHint() qtcore.QSize {
 func (this *QStackedLayout) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.HasHeightForWidth")
 	r := C.qute_QStackedLayout_hasHeightForWidth(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -200,6 +212,7 @@ func (this *QStackedLayout) HasHeightForWidth() bool {
 func (this *QStackedLayout) HeightForWidth(width int) int {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.HeightForWidth")
 	r := C.qute_QStackedLayout_heightForWidth(self, C.int(width))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -211,6 +224,7 @@ func (this *QStackedLayout) HeightForWidth(width int) int {
 func (this *QStackedLayout) SetCurrentIndex(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.SetCurrentIndex")
 	C.qute_QStackedLayout_setCurrentIndex(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentWidget wraps QStackedLayout::setCurrentWidget.
@@ -225,6 +239,8 @@ func (this *QStackedLayout) SetCurrentWidget(w QWidgetLike) {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStackedLayout.SetCurrentWidget")
 	}
 	C.qute_QStackedLayout_setCurrentWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 }
 
 // EmitWidgetRemoved wraps emitting the widgetRemoved signal.
@@ -235,6 +251,7 @@ func (this *QStackedLayout) SetCurrentWidget(w QWidgetLike) {
 func (this *QStackedLayout) EmitWidgetRemoved(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.EmitWidgetRemoved")
 	C.qute_QStackedLayout_widgetRemoved_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -245,6 +262,7 @@ func (this *QStackedLayout) EmitWidgetRemoved(index int) {
 func (this *QStackedLayout) EmitCurrentChanged(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.EmitCurrentChanged")
 	C.qute_QStackedLayout_currentChanged_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitWidgetAdded wraps emitting the widgetAdded signal.
@@ -255,6 +273,7 @@ func (this *QStackedLayout) EmitCurrentChanged(index int) {
 func (this *QStackedLayout) EmitWidgetAdded(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.EmitWidgetAdded")
 	C.qute_QStackedLayout_widgetAdded_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // OnWidgetRemoved connects f to the widgetRemoved signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQLCDNumber(parent QWidgetLike) *QLCDNumber {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLCDNumber")
 	}
 	p := C.qute_QLCDNumber_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQLCDNumberWithNumDigits(numDigits uint, parent QWidgetLike) *QLCDNumber 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLCDNumberWithNumDigits")
 	}
 	p := C.qute_QLCDNumber_new_1(C.uint(numDigits), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQLCDNumberWithNumDigits(numDigits uint, parent QWidgetLike) *QLCDNumber 
 func (this *QLCDNumber) SmallDecimalPoint() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SmallDecimalPoint")
 	r := C.qute_QLCDNumber_smallDecimalPoint(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -110,6 +114,7 @@ func (this *QLCDNumber) SmallDecimalPoint() bool {
 func (this *QLCDNumber) DigitCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.DigitCount")
 	r := C.qute_QLCDNumber_digitCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -121,6 +126,7 @@ func (this *QLCDNumber) DigitCount() int {
 func (this *QLCDNumber) SetDigitCount(nDigits int) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetDigitCount")
 	C.qute_QLCDNumber_setDigitCount(self, C.int(nDigits))
+	runtime.KeepAlive(this)
 }
 
 // CheckOverflow wraps QLCDNumber::checkOverflow.
@@ -131,6 +137,7 @@ func (this *QLCDNumber) SetDigitCount(nDigits int) {
 func (this *QLCDNumber) CheckOverflow(num float64) bool {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.CheckOverflow")
 	r := C.qute_QLCDNumber_checkOverflow(self, C.double(num))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -142,6 +149,7 @@ func (this *QLCDNumber) CheckOverflow(num float64) bool {
 func (this *QLCDNumber) CheckOverflowInt(num int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.CheckOverflowInt")
 	r := C.qute_QLCDNumber_checkOverflow_1(self, C.int(num))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -153,6 +161,7 @@ func (this *QLCDNumber) CheckOverflowInt(num int) bool {
 func (this *QLCDNumber) Mode() QLCDNumberMode {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.Mode")
 	r := C.qute_QLCDNumber_mode(self)
+	runtime.KeepAlive(this)
 	return QLCDNumberMode(r)
 }
 
@@ -164,6 +173,7 @@ func (this *QLCDNumber) Mode() QLCDNumberMode {
 func (this *QLCDNumber) SetMode(mode QLCDNumberMode) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetMode")
 	C.qute_QLCDNumber_setMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // SegmentStyle wraps QLCDNumber::segmentStyle.
@@ -174,6 +184,7 @@ func (this *QLCDNumber) SetMode(mode QLCDNumberMode) {
 func (this *QLCDNumber) SegmentStyle() QLCDNumberSegmentStyle {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SegmentStyle")
 	r := C.qute_QLCDNumber_segmentStyle(self)
+	runtime.KeepAlive(this)
 	return QLCDNumberSegmentStyle(r)
 }
 
@@ -185,6 +196,7 @@ func (this *QLCDNumber) SegmentStyle() QLCDNumberSegmentStyle {
 func (this *QLCDNumber) SetSegmentStyle(segmentStyle QLCDNumberSegmentStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetSegmentStyle")
 	C.qute_QLCDNumber_setSegmentStyle(self, C.int64_t(segmentStyle))
+	runtime.KeepAlive(this)
 }
 
 // Value wraps QLCDNumber::value.
@@ -195,6 +207,7 @@ func (this *QLCDNumber) SetSegmentStyle(segmentStyle QLCDNumberSegmentStyle) {
 func (this *QLCDNumber) Value() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.Value")
 	r := C.qute_QLCDNumber_value(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -206,6 +219,7 @@ func (this *QLCDNumber) Value() float64 {
 func (this *QLCDNumber) IntValue() int {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.IntValue")
 	r := C.qute_QLCDNumber_intValue(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -217,6 +231,7 @@ func (this *QLCDNumber) IntValue() int {
 func (this *QLCDNumber) Display(str string) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.Display")
 	C.qute_QLCDNumber_display(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)))
+	runtime.KeepAlive(this)
 }
 
 // DisplayInt wraps QLCDNumber::display.
@@ -227,6 +242,7 @@ func (this *QLCDNumber) Display(str string) {
 func (this *QLCDNumber) DisplayInt(num int) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.DisplayInt")
 	C.qute_QLCDNumber_display_1(self, C.int(num))
+	runtime.KeepAlive(this)
 }
 
 // DisplayFloat wraps QLCDNumber::display.
@@ -237,6 +253,7 @@ func (this *QLCDNumber) DisplayInt(num int) {
 func (this *QLCDNumber) DisplayFloat(num float64) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.DisplayFloat")
 	C.qute_QLCDNumber_display_2(self, C.double(num))
+	runtime.KeepAlive(this)
 }
 
 // SetHexMode wraps QLCDNumber::setHexMode.
@@ -247,6 +264,7 @@ func (this *QLCDNumber) DisplayFloat(num float64) {
 func (this *QLCDNumber) SetHexMode() {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetHexMode")
 	C.qute_QLCDNumber_setHexMode(self)
+	runtime.KeepAlive(this)
 }
 
 // SetDecMode wraps QLCDNumber::setDecMode.
@@ -257,6 +275,7 @@ func (this *QLCDNumber) SetHexMode() {
 func (this *QLCDNumber) SetDecMode() {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetDecMode")
 	C.qute_QLCDNumber_setDecMode(self)
+	runtime.KeepAlive(this)
 }
 
 // SetOctMode wraps QLCDNumber::setOctMode.
@@ -267,6 +286,7 @@ func (this *QLCDNumber) SetDecMode() {
 func (this *QLCDNumber) SetOctMode() {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetOctMode")
 	C.qute_QLCDNumber_setOctMode(self)
+	runtime.KeepAlive(this)
 }
 
 // SetBinMode wraps QLCDNumber::setBinMode.
@@ -277,6 +297,7 @@ func (this *QLCDNumber) SetOctMode() {
 func (this *QLCDNumber) SetBinMode() {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetBinMode")
 	C.qute_QLCDNumber_setBinMode(self)
+	runtime.KeepAlive(this)
 }
 
 // SetSmallDecimalPoint wraps QLCDNumber::setSmallDecimalPoint.
@@ -287,6 +308,7 @@ func (this *QLCDNumber) SetBinMode() {
 func (this *QLCDNumber) SetSmallDecimalPoint(smallDecimalPoint bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.SetSmallDecimalPoint")
 	C.qute_QLCDNumber_setSmallDecimalPoint(self, C.bool(smallDecimalPoint))
+	runtime.KeepAlive(this)
 }
 
 // EmitOverflow wraps emitting the overflow signal.
@@ -297,6 +319,7 @@ func (this *QLCDNumber) SetSmallDecimalPoint(smallDecimalPoint bool) {
 func (this *QLCDNumber) EmitOverflow() {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.EmitOverflow")
 	C.qute_QLCDNumber_overflow_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnOverflow connects f to the overflow signal. The connection ends when the

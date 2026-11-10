@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -120,6 +121,7 @@ func NewQKeyCombinationWithKeyboardModifier(modifiers KeyboardModifiers) *QKeyCo
 func (this *QKeyCombination) KeyboardModifiers() KeyboardModifiers {
 	self := rt.Use(unsafe.Pointer(this), "QKeyCombination.KeyboardModifiers")
 	r := C.qute_QKeyCombination_keyboardModifiers(self)
+	runtime.KeepAlive(this)
 	return KeyboardModifiers(r)
 }
 
@@ -131,6 +133,7 @@ func (this *QKeyCombination) KeyboardModifiers() KeyboardModifiers {
 func (this *QKeyCombination) Key() Key {
 	self := rt.Use(unsafe.Pointer(this), "QKeyCombination.Key")
 	r := C.qute_QKeyCombination_key(self)
+	runtime.KeepAlive(this)
 	return Key(r)
 }
 
@@ -142,6 +145,7 @@ func (this *QKeyCombination) Key() Key {
 func (this *QKeyCombination) ToCombined() int {
 	self := rt.Use(unsafe.Pointer(this), "QKeyCombination.ToCombined")
 	r := C.qute_QKeyCombination_toCombined(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 

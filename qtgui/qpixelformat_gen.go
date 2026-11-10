@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQPixelFormatWithColorModel(colorModel QPixelFormatColorModel, firstSize 
 func (this *QPixelFormat) ColorModel() QPixelFormatColorModel {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.ColorModel")
 	r := C.qute_QPixelFormat_colorModel(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatColorModel(r)
 }
 
@@ -120,6 +122,7 @@ func (this *QPixelFormat) ColorModel() QPixelFormatColorModel {
 func (this *QPixelFormat) ChannelCount() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.ChannelCount")
 	r := C.qute_QPixelFormat_channelCount(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QPixelFormat) ChannelCount() uint8 {
 func (this *QPixelFormat) RedSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.RedSize")
 	r := C.qute_QPixelFormat_redSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -142,6 +146,7 @@ func (this *QPixelFormat) RedSize() uint8 {
 func (this *QPixelFormat) GreenSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.GreenSize")
 	r := C.qute_QPixelFormat_greenSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -153,6 +158,7 @@ func (this *QPixelFormat) GreenSize() uint8 {
 func (this *QPixelFormat) BlueSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.BlueSize")
 	r := C.qute_QPixelFormat_blueSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -164,6 +170,7 @@ func (this *QPixelFormat) BlueSize() uint8 {
 func (this *QPixelFormat) CyanSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.CyanSize")
 	r := C.qute_QPixelFormat_cyanSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -175,6 +182,7 @@ func (this *QPixelFormat) CyanSize() uint8 {
 func (this *QPixelFormat) MagentaSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.MagentaSize")
 	r := C.qute_QPixelFormat_magentaSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -186,6 +194,7 @@ func (this *QPixelFormat) MagentaSize() uint8 {
 func (this *QPixelFormat) YellowSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.YellowSize")
 	r := C.qute_QPixelFormat_yellowSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -197,6 +206,7 @@ func (this *QPixelFormat) YellowSize() uint8 {
 func (this *QPixelFormat) BlackSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.BlackSize")
 	r := C.qute_QPixelFormat_blackSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -208,6 +218,7 @@ func (this *QPixelFormat) BlackSize() uint8 {
 func (this *QPixelFormat) HueSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.HueSize")
 	r := C.qute_QPixelFormat_hueSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -219,6 +230,7 @@ func (this *QPixelFormat) HueSize() uint8 {
 func (this *QPixelFormat) SaturationSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.SaturationSize")
 	r := C.qute_QPixelFormat_saturationSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -230,6 +242,7 @@ func (this *QPixelFormat) SaturationSize() uint8 {
 func (this *QPixelFormat) LightnessSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.LightnessSize")
 	r := C.qute_QPixelFormat_lightnessSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -241,6 +254,7 @@ func (this *QPixelFormat) LightnessSize() uint8 {
 func (this *QPixelFormat) BrightnessSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.BrightnessSize")
 	r := C.qute_QPixelFormat_brightnessSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -252,6 +266,7 @@ func (this *QPixelFormat) BrightnessSize() uint8 {
 func (this *QPixelFormat) AlphaSize() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.AlphaSize")
 	r := C.qute_QPixelFormat_alphaSize(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -263,6 +278,7 @@ func (this *QPixelFormat) AlphaSize() uint8 {
 func (this *QPixelFormat) BitsPerPixel() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.BitsPerPixel")
 	r := C.qute_QPixelFormat_bitsPerPixel(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -274,6 +290,7 @@ func (this *QPixelFormat) BitsPerPixel() uint8 {
 func (this *QPixelFormat) AlphaUsage() QPixelFormatAlphaUsage {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.AlphaUsage")
 	r := C.qute_QPixelFormat_alphaUsage(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatAlphaUsage(r)
 }
 
@@ -285,6 +302,7 @@ func (this *QPixelFormat) AlphaUsage() QPixelFormatAlphaUsage {
 func (this *QPixelFormat) AlphaPosition() QPixelFormatAlphaPosition {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.AlphaPosition")
 	r := C.qute_QPixelFormat_alphaPosition(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatAlphaPosition(r)
 }
 
@@ -296,6 +314,7 @@ func (this *QPixelFormat) AlphaPosition() QPixelFormatAlphaPosition {
 func (this *QPixelFormat) Premultiplied() QPixelFormatAlphaPremultiplied {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.Premultiplied")
 	r := C.qute_QPixelFormat_premultiplied(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatAlphaPremultiplied(r)
 }
 
@@ -307,6 +326,7 @@ func (this *QPixelFormat) Premultiplied() QPixelFormatAlphaPremultiplied {
 func (this *QPixelFormat) TypeInterpretation() QPixelFormatTypeInterpretation {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.TypeInterpretation")
 	r := C.qute_QPixelFormat_typeInterpretation(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatTypeInterpretation(r)
 }
 
@@ -318,6 +338,7 @@ func (this *QPixelFormat) TypeInterpretation() QPixelFormatTypeInterpretation {
 func (this *QPixelFormat) ByteOrder() QPixelFormatByteOrder {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.ByteOrder")
 	r := C.qute_QPixelFormat_byteOrder(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatByteOrder(r)
 }
 
@@ -329,6 +350,7 @@ func (this *QPixelFormat) ByteOrder() QPixelFormatByteOrder {
 func (this *QPixelFormat) YuvLayout() QPixelFormatYUVLayout {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.YuvLayout")
 	r := C.qute_QPixelFormat_yuvLayout(self)
+	runtime.KeepAlive(this)
 	return QPixelFormatYUVLayout(r)
 }
 
@@ -340,5 +362,6 @@ func (this *QPixelFormat) YuvLayout() QPixelFormatYUVLayout {
 func (this *QPixelFormat) SubEnum() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QPixelFormat.SubEnum")
 	r := C.qute_QPixelFormat_subEnum(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }

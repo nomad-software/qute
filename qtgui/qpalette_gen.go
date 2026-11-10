@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -121,6 +122,15 @@ func NewQPaletteWithButtonWindow(button QColor, window QColor) *QPalette {
 func NewQPaletteWithBrush(windowText *QBrush, button *QBrush, light *QBrush, dark *QBrush, mid *QBrush, text *QBrush, bright_text *QBrush, base *QBrush, window *QBrush) *QPalette {
 	rt.CheckThread("NewQPaletteWithBrush")
 	p := C.qute_QPalette_new_3(rt.UseArg(unsafe.Pointer(windowText), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(button), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(light), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(dark), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(mid), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(text), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(bright_text), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(base), "NewQPaletteWithBrush"), rt.UseArg(unsafe.Pointer(window), "NewQPaletteWithBrush"))
+	runtime.KeepAlive(windowText)
+	runtime.KeepAlive(button)
+	runtime.KeepAlive(light)
+	runtime.KeepAlive(dark)
+	runtime.KeepAlive(mid)
+	runtime.KeepAlive(text)
+	runtime.KeepAlive(bright_text)
+	runtime.KeepAlive(base)
+	runtime.KeepAlive(window)
 	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
@@ -145,6 +155,7 @@ func NewQPaletteWithColors(windowText QColor, window QColor, light QColor, dark 
 func (this *QPalette) CurrentColorGroup() QPaletteColorGroup {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.CurrentColorGroup")
 	r := C.qute_QPalette_currentColorGroup(self)
+	runtime.KeepAlive(this)
 	return QPaletteColorGroup(r)
 }
 
@@ -156,6 +167,7 @@ func (this *QPalette) CurrentColorGroup() QPaletteColorGroup {
 func (this *QPalette) SetCurrentColorGroup(cg QPaletteColorGroup) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetCurrentColorGroup")
 	C.qute_QPalette_setCurrentColorGroup(self, C.int64_t(cg))
+	runtime.KeepAlive(this)
 }
 
 // GroupColor wraps QPalette::color.
@@ -166,6 +178,7 @@ func (this *QPalette) SetCurrentColorGroup(cg QPaletteColorGroup) {
 func (this *QPalette) GroupColor(cg QPaletteColorGroup, cr QPaletteColorRole) QColor {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.GroupColor")
 	r := C.qute_QPalette_color(self, C.int64_t(cg), C.int64_t(cr))
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -179,6 +192,7 @@ func (this *QPalette) GroupColor(cg QPaletteColorGroup, cr QPaletteColorRole) QC
 func (this *QPalette) GroupBrush(cg QPaletteColorGroup, cr QPaletteColorRole) *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.GroupBrush")
 	r := C.qute_QPalette_brush(self, C.int64_t(cg), C.int64_t(cr))
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -190,6 +204,7 @@ func (this *QPalette) GroupBrush(cg QPaletteColorGroup, cr QPaletteColorRole) *Q
 func (this *QPalette) SetGroupColor(cg QPaletteColorGroup, cr QPaletteColorRole, color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetGroupColor")
 	C.qute_QPalette_setColor(self, C.int64_t(cg), C.int64_t(cr), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // SetColor wraps QPalette::setColor.
@@ -200,6 +215,7 @@ func (this *QPalette) SetGroupColor(cg QPaletteColorGroup, cr QPaletteColorRole,
 func (this *QPalette) SetColor(cr QPaletteColorRole, color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetColor")
 	C.qute_QPalette_setColor_1(self, C.int64_t(cr), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // SetBrush wraps QPalette::setBrush.
@@ -210,6 +226,8 @@ func (this *QPalette) SetColor(cr QPaletteColorRole, color QColor) {
 func (this *QPalette) SetBrush(cr QPaletteColorRole, brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetBrush")
 	C.qute_QPalette_setBrush(self, C.int64_t(cr), rt.UseArg(unsafe.Pointer(brush), "QPalette.SetBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // IsBrushSet wraps QPalette::isBrushSet.
@@ -220,6 +238,7 @@ func (this *QPalette) SetBrush(cr QPaletteColorRole, brush *QBrush) {
 func (this *QPalette) IsBrushSet(cg QPaletteColorGroup, cr QPaletteColorRole) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.IsBrushSet")
 	r := C.qute_QPalette_isBrushSet(self, C.int64_t(cg), C.int64_t(cr))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -231,6 +250,8 @@ func (this *QPalette) IsBrushSet(cg QPaletteColorGroup, cr QPaletteColorRole) bo
 func (this *QPalette) SetGroupBrush(cg QPaletteColorGroup, cr QPaletteColorRole, brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetGroupBrush")
 	C.qute_QPalette_setBrush_1(self, C.int64_t(cg), C.int64_t(cr), rt.UseArg(unsafe.Pointer(brush), "QPalette.SetGroupBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // SetColorGroup wraps QPalette::setColorGroup.
@@ -241,6 +262,16 @@ func (this *QPalette) SetGroupBrush(cg QPaletteColorGroup, cr QPaletteColorRole,
 func (this *QPalette) SetColorGroup(cr QPaletteColorGroup, windowText *QBrush, button *QBrush, light *QBrush, dark *QBrush, mid *QBrush, text *QBrush, bright_text *QBrush, base *QBrush, window *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetColorGroup")
 	C.qute_QPalette_setColorGroup(self, C.int64_t(cr), rt.UseArg(unsafe.Pointer(windowText), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(button), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(light), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(dark), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(mid), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(text), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(bright_text), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(base), "QPalette.SetColorGroup"), rt.UseArg(unsafe.Pointer(window), "QPalette.SetColorGroup"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(windowText)
+	runtime.KeepAlive(button)
+	runtime.KeepAlive(light)
+	runtime.KeepAlive(dark)
+	runtime.KeepAlive(mid)
+	runtime.KeepAlive(text)
+	runtime.KeepAlive(bright_text)
+	runtime.KeepAlive(base)
+	runtime.KeepAlive(window)
 }
 
 // IsEqual wraps QPalette::isEqual.
@@ -251,6 +282,7 @@ func (this *QPalette) SetColorGroup(cr QPaletteColorGroup, windowText *QBrush, b
 func (this *QPalette) IsEqual(cr1 QPaletteColorGroup, cr2 QPaletteColorGroup) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.IsEqual")
 	r := C.qute_QPalette_isEqual(self, C.int64_t(cr1), C.int64_t(cr2))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -262,6 +294,7 @@ func (this *QPalette) IsEqual(cr1 QPaletteColorGroup, cr2 QPaletteColorGroup) bo
 func (this *QPalette) Color(cr QPaletteColorRole) QColor {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Color")
 	r := C.qute_QPalette_color_1(self, C.int64_t(cr))
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -275,6 +308,7 @@ func (this *QPalette) Color(cr QPaletteColorRole) QColor {
 func (this *QPalette) Brush(cr QPaletteColorRole) *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Brush")
 	r := C.qute_QPalette_brush_1(self, C.int64_t(cr))
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -288,6 +322,7 @@ func (this *QPalette) Brush(cr QPaletteColorRole) *QBrush {
 func (this *QPalette) WindowText() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.WindowText")
 	r := C.qute_QPalette_windowText(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -301,6 +336,7 @@ func (this *QPalette) WindowText() *QBrush {
 func (this *QPalette) Button() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Button")
 	r := C.qute_QPalette_button(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -314,6 +350,7 @@ func (this *QPalette) Button() *QBrush {
 func (this *QPalette) Light() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Light")
 	r := C.qute_QPalette_light(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -327,6 +364,7 @@ func (this *QPalette) Light() *QBrush {
 func (this *QPalette) Dark() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Dark")
 	r := C.qute_QPalette_dark(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -340,6 +378,7 @@ func (this *QPalette) Dark() *QBrush {
 func (this *QPalette) Mid() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Mid")
 	r := C.qute_QPalette_mid(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -353,6 +392,7 @@ func (this *QPalette) Mid() *QBrush {
 func (this *QPalette) Text() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Text")
 	r := C.qute_QPalette_text(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -366,6 +406,7 @@ func (this *QPalette) Text() *QBrush {
 func (this *QPalette) Base() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Base")
 	r := C.qute_QPalette_base(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -379,6 +420,7 @@ func (this *QPalette) Base() *QBrush {
 func (this *QPalette) AlternateBase() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.AlternateBase")
 	r := C.qute_QPalette_alternateBase(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -392,6 +434,7 @@ func (this *QPalette) AlternateBase() *QBrush {
 func (this *QPalette) ToolTipBase() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.ToolTipBase")
 	r := C.qute_QPalette_toolTipBase(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -405,6 +448,7 @@ func (this *QPalette) ToolTipBase() *QBrush {
 func (this *QPalette) ToolTipText() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.ToolTipText")
 	r := C.qute_QPalette_toolTipText(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -418,6 +462,7 @@ func (this *QPalette) ToolTipText() *QBrush {
 func (this *QPalette) Window() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Window")
 	r := C.qute_QPalette_window(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -431,6 +476,7 @@ func (this *QPalette) Window() *QBrush {
 func (this *QPalette) Midlight() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Midlight")
 	r := C.qute_QPalette_midlight(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -444,6 +490,7 @@ func (this *QPalette) Midlight() *QBrush {
 func (this *QPalette) BrightText() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.BrightText")
 	r := C.qute_QPalette_brightText(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -457,6 +504,7 @@ func (this *QPalette) BrightText() *QBrush {
 func (this *QPalette) ButtonText() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.ButtonText")
 	r := C.qute_QPalette_buttonText(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -470,6 +518,7 @@ func (this *QPalette) ButtonText() *QBrush {
 func (this *QPalette) Shadow() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Shadow")
 	r := C.qute_QPalette_shadow(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -483,6 +532,7 @@ func (this *QPalette) Shadow() *QBrush {
 func (this *QPalette) Highlight() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Highlight")
 	r := C.qute_QPalette_highlight(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -496,6 +546,7 @@ func (this *QPalette) Highlight() *QBrush {
 func (this *QPalette) HighlightedText() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.HighlightedText")
 	r := C.qute_QPalette_highlightedText(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -509,6 +560,7 @@ func (this *QPalette) HighlightedText() *QBrush {
 func (this *QPalette) Link() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Link")
 	r := C.qute_QPalette_link(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -522,6 +574,7 @@ func (this *QPalette) Link() *QBrush {
 func (this *QPalette) LinkVisited() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.LinkVisited")
 	r := C.qute_QPalette_linkVisited(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -535,6 +588,7 @@ func (this *QPalette) LinkVisited() *QBrush {
 func (this *QPalette) PlaceholderText() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.PlaceholderText")
 	r := C.qute_QPalette_placeholderText(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -548,6 +602,7 @@ func (this *QPalette) PlaceholderText() *QBrush {
 func (this *QPalette) Accent() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Accent")
 	r := C.qute_QPalette_accent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -559,6 +614,8 @@ func (this *QPalette) Accent() *QBrush {
 func (this *QPalette) IsCopyOf(pArg *QPalette) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.IsCopyOf")
 	r := C.qute_QPalette_isCopyOf(self, rt.UseArg(unsafe.Pointer(pArg), "QPalette.IsCopyOf"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pArg)
 	return bool(r)
 }
 
@@ -570,6 +627,7 @@ func (this *QPalette) IsCopyOf(pArg *QPalette) bool {
 func (this *QPalette) CacheKey() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.CacheKey")
 	r := C.qute_QPalette_cacheKey(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -583,6 +641,8 @@ func (this *QPalette) CacheKey() int64 {
 func (this *QPalette) Resolve(other *QPalette) *QPalette {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.Resolve")
 	r := C.qute_QPalette_resolve(self, rt.UseArg(unsafe.Pointer(other), "QPalette.Resolve"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
 	return rt.View[QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
@@ -594,6 +654,7 @@ func (this *QPalette) Resolve(other *QPalette) *QPalette {
 func (this *QPalette) ResolveMask() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.ResolveMask")
 	r := C.qute_QPalette_resolveMask(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -605,4 +666,5 @@ func (this *QPalette) ResolveMask() uint64 {
 func (this *QPalette) SetResolveMask(maskArg uint64) {
 	self := rt.Use(unsafe.Pointer(this), "QPalette.SetResolveMask")
 	C.qute_QPalette_setResolveMask(self, C.ulonglong(maskArg))
+	runtime.KeepAlive(this)
 }

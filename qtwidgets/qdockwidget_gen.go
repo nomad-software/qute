@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQDockWidget(parent QWidgetLike) *QDockWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDockWidget")
 	}
 	p := C.qute_QDockWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQDockWidgetWithTitle(title string, parent QWidgetLike) *QDockWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDockWidgetWithTitle")
 	}
 	p := C.qute_QDockWidget_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -102,6 +105,7 @@ func NewQDockWidgetWithTitle(title string, parent QWidgetLike) *QDockWidget {
 func (this *QDockWidget) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.Widget")
 	r := C.qute_QDockWidget_widget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -120,6 +124,8 @@ func (this *QDockWidget) SetWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QDockWidget.SetWidget")
 	}
 	C.qute_QDockWidget_setWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -131,6 +137,7 @@ func (this *QDockWidget) SetWidget(widget QWidgetLike) {
 func (this *QDockWidget) SetFeatures(features QDockWidgetDockWidgetFeatures) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.SetFeatures")
 	C.qute_QDockWidget_setFeatures(self, C.int64_t(features))
+	runtime.KeepAlive(this)
 }
 
 // Features wraps QDockWidget::features.
@@ -141,6 +148,7 @@ func (this *QDockWidget) SetFeatures(features QDockWidgetDockWidgetFeatures) {
 func (this *QDockWidget) Features() QDockWidgetDockWidgetFeatures {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.Features")
 	r := C.qute_QDockWidget_features(self)
+	runtime.KeepAlive(this)
 	return QDockWidgetDockWidgetFeatures(r)
 }
 
@@ -152,6 +160,7 @@ func (this *QDockWidget) Features() QDockWidgetDockWidgetFeatures {
 func (this *QDockWidget) SetFloating(floating bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.SetFloating")
 	C.qute_QDockWidget_setFloating(self, C.bool(floating))
+	runtime.KeepAlive(this)
 }
 
 // IsFloating wraps QDockWidget::isFloating.
@@ -162,6 +171,7 @@ func (this *QDockWidget) SetFloating(floating bool) {
 func (this *QDockWidget) IsFloating() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.IsFloating")
 	r := C.qute_QDockWidget_isFloating(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -173,6 +183,7 @@ func (this *QDockWidget) IsFloating() bool {
 func (this *QDockWidget) SetAllowedAreas(areas qtcore.DockWidgetAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.SetAllowedAreas")
 	C.qute_QDockWidget_setAllowedAreas(self, C.int64_t(areas))
+	runtime.KeepAlive(this)
 }
 
 // AllowedAreas wraps QDockWidget::allowedAreas.
@@ -183,6 +194,7 @@ func (this *QDockWidget) SetAllowedAreas(areas qtcore.DockWidgetAreas) {
 func (this *QDockWidget) AllowedAreas() qtcore.DockWidgetAreas {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.AllowedAreas")
 	r := C.qute_QDockWidget_allowedAreas(self)
+	runtime.KeepAlive(this)
 	return qtcore.DockWidgetAreas(r)
 }
 
@@ -201,6 +213,8 @@ func (this *QDockWidget) SetTitleBarWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QDockWidget.SetTitleBarWidget")
 	}
 	C.qute_QDockWidget_setTitleBarWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -214,6 +228,7 @@ func (this *QDockWidget) SetTitleBarWidget(widget QWidgetLike) {
 func (this *QDockWidget) TitleBarWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.TitleBarWidget")
 	r := C.qute_QDockWidget_titleBarWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -225,6 +240,7 @@ func (this *QDockWidget) TitleBarWidget() *QWidget {
 func (this *QDockWidget) SetDockLocation(area qtcore.DockWidgetAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.SetDockLocation")
 	C.qute_QDockWidget_setDockLocation(self, C.int64_t(area))
+	runtime.KeepAlive(this)
 }
 
 // DockLocation wraps QDockWidget::dockLocation.
@@ -235,6 +251,7 @@ func (this *QDockWidget) SetDockLocation(area qtcore.DockWidgetAreas) {
 func (this *QDockWidget) DockLocation() qtcore.DockWidgetAreas {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.DockLocation")
 	r := C.qute_QDockWidget_dockLocation(self)
+	runtime.KeepAlive(this)
 	return qtcore.DockWidgetAreas(r)
 }
 
@@ -246,6 +263,7 @@ func (this *QDockWidget) DockLocation() qtcore.DockWidgetAreas {
 func (this *QDockWidget) IsAreaAllowed(area qtcore.DockWidgetAreas) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.IsAreaAllowed")
 	r := C.qute_QDockWidget_isAreaAllowed(self, C.int64_t(area))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -259,6 +277,7 @@ func (this *QDockWidget) IsAreaAllowed(area qtcore.DockWidgetAreas) bool {
 func (this *QDockWidget) ToggleViewAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.ToggleViewAction")
 	r := C.qute_QDockWidget_toggleViewAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -270,6 +289,7 @@ func (this *QDockWidget) ToggleViewAction() *qtgui.QAction {
 func (this *QDockWidget) EmitFeaturesChanged(features QDockWidgetDockWidgetFeatures) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.EmitFeaturesChanged")
 	C.qute_QDockWidget_featuresChanged_1(self, C.int64_t(features))
+	runtime.KeepAlive(this)
 }
 
 // EmitTopLevelChanged wraps emitting the topLevelChanged signal.
@@ -280,6 +300,7 @@ func (this *QDockWidget) EmitFeaturesChanged(features QDockWidgetDockWidgetFeatu
 func (this *QDockWidget) EmitTopLevelChanged(topLevel bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.EmitTopLevelChanged")
 	C.qute_QDockWidget_topLevelChanged_1(self, C.bool(topLevel))
+	runtime.KeepAlive(this)
 }
 
 // EmitAllowedAreasChanged wraps emitting the allowedAreasChanged signal.
@@ -290,6 +311,7 @@ func (this *QDockWidget) EmitTopLevelChanged(topLevel bool) {
 func (this *QDockWidget) EmitAllowedAreasChanged(allowedAreas qtcore.DockWidgetAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.EmitAllowedAreasChanged")
 	C.qute_QDockWidget_allowedAreasChanged_1(self, C.int64_t(allowedAreas))
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibilityChanged wraps emitting the visibilityChanged signal.
@@ -300,6 +322,7 @@ func (this *QDockWidget) EmitAllowedAreasChanged(allowedAreas qtcore.DockWidgetA
 func (this *QDockWidget) EmitVisibilityChanged(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.EmitVisibilityChanged")
 	C.qute_QDockWidget_visibilityChanged_1(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // EmitDockLocationChanged wraps emitting the dockLocationChanged signal.
@@ -310,6 +333,7 @@ func (this *QDockWidget) EmitVisibilityChanged(visible bool) {
 func (this *QDockWidget) EmitDockLocationChanged(area qtcore.DockWidgetAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QDockWidget.EmitDockLocationChanged")
 	C.qute_QDockWidget_dockLocationChanged_1(self, C.int64_t(area))
+	runtime.KeepAlive(this)
 }
 
 // OnFeaturesChanged connects f to the featuresChanged signal. The connection ends when the

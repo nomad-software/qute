@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -77,6 +78,7 @@ func NewQLinearGradientWithXStart(xStart float64, yStart float64, xFinalStop flo
 func (this *QLinearGradient) Start() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QLinearGradient.Start")
 	r := C.qute_QLinearGradient_start(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -88,6 +90,7 @@ func (this *QLinearGradient) Start() qtcore.QPointF {
 func (this *QLinearGradient) SetStart(start qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QLinearGradient.SetStart")
 	C.qute_QLinearGradient_setStart(self, cQPointF(start))
+	runtime.KeepAlive(this)
 }
 
 // FinalStop wraps QLinearGradient::finalStop.
@@ -98,6 +101,7 @@ func (this *QLinearGradient) SetStart(start qtcore.QPointF) {
 func (this *QLinearGradient) FinalStop() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QLinearGradient.FinalStop")
 	r := C.qute_QLinearGradient_finalStop(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -109,4 +113,5 @@ func (this *QLinearGradient) FinalStop() qtcore.QPointF {
 func (this *QLinearGradient) SetFinalStop(stop qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QLinearGradient.SetFinalStop")
 	C.qute_QLinearGradient_setFinalStop(self, cQPointF(stop))
+	runtime.KeepAlive(this)
 }

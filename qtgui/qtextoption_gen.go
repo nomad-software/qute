@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQTextOptionWithAlignmentFlag(alignment qtcore.Alignment) *QTextOption {
 func (this *QTextOption) SetAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetAlignment")
 	C.qute_QTextOption_setAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QTextOption::alignment.
@@ -119,6 +121,7 @@ func (this *QTextOption) SetAlignment(alignment qtcore.Alignment) {
 func (this *QTextOption) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.Alignment")
 	r := C.qute_QTextOption_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -130,6 +133,7 @@ func (this *QTextOption) Alignment() qtcore.Alignment {
 func (this *QTextOption) SetTextDirection(aDirection qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetTextDirection")
 	C.qute_QTextOption_setTextDirection(self, C.int64_t(aDirection))
+	runtime.KeepAlive(this)
 }
 
 // TextDirection wraps QTextOption::textDirection.
@@ -140,6 +144,7 @@ func (this *QTextOption) SetTextDirection(aDirection qtcore.LayoutDirection) {
 func (this *QTextOption) TextDirection() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.TextDirection")
 	r := C.qute_QTextOption_textDirection(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -151,6 +156,7 @@ func (this *QTextOption) TextDirection() qtcore.LayoutDirection {
 func (this *QTextOption) SetWrapMode(wrap QTextOptionWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetWrapMode")
 	C.qute_QTextOption_setWrapMode(self, C.int64_t(wrap))
+	runtime.KeepAlive(this)
 }
 
 // WrapMode wraps QTextOption::wrapMode.
@@ -161,6 +167,7 @@ func (this *QTextOption) SetWrapMode(wrap QTextOptionWrapMode) {
 func (this *QTextOption) WrapMode() QTextOptionWrapMode {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.WrapMode")
 	r := C.qute_QTextOption_wrapMode(self)
+	runtime.KeepAlive(this)
 	return QTextOptionWrapMode(r)
 }
 
@@ -172,6 +179,7 @@ func (this *QTextOption) WrapMode() QTextOptionWrapMode {
 func (this *QTextOption) SetFlags(flags QTextOptionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetFlags")
 	C.qute_QTextOption_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // Flags wraps QTextOption::flags.
@@ -182,6 +190,7 @@ func (this *QTextOption) SetFlags(flags QTextOptionFlags) {
 func (this *QTextOption) Flags() QTextOptionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.Flags")
 	r := C.qute_QTextOption_flags(self)
+	runtime.KeepAlive(this)
 	return QTextOptionFlags(r)
 }
 
@@ -193,6 +202,7 @@ func (this *QTextOption) Flags() QTextOptionFlags {
 func (this *QTextOption) SetTabStopDistance(tabStopDistance float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetTabStopDistance")
 	C.qute_QTextOption_setTabStopDistance(self, C.double(tabStopDistance))
+	runtime.KeepAlive(this)
 }
 
 // TabStopDistance wraps QTextOption::tabStopDistance.
@@ -203,6 +213,7 @@ func (this *QTextOption) SetTabStopDistance(tabStopDistance float64) {
 func (this *QTextOption) TabStopDistance() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.TabStopDistance")
 	r := C.qute_QTextOption_tabStopDistance(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -218,6 +229,7 @@ func (this *QTextOption) SetTabArray(tabStops []float64) {
 		tabStopsC[i] = C.double(tabStops[i])
 	}
 	C.qute_QTextOption_setTabArray(self, unsafe.Pointer(unsafe.SliceData(tabStopsC)), C.ptrdiff_t(len(tabStops)))
+	runtime.KeepAlive(this)
 }
 
 // TabArray wraps QTextOption::tabArray.
@@ -228,6 +240,7 @@ func (this *QTextOption) SetTabArray(tabStops []float64) {
 func (this *QTextOption) TabArray() []float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.TabArray")
 	r := C.qute_QTextOption_tabArray(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.double) float64 { return float64(e) })
 }
 
@@ -243,6 +256,8 @@ func (this *QTextOption) SetTabs(tabStops []*QTextOptionTab) {
 		tabStopsC[i] = rt.UseArg(unsafe.Pointer(tabStops[i]), "QTextOption.SetTabs")
 	}
 	C.qute_QTextOption_setTabs(self, unsafe.Pointer(unsafe.SliceData(tabStopsC)), C.ptrdiff_t(len(tabStops)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tabStops)
 }
 
 // Tabs wraps QTextOption::tabs.
@@ -253,6 +268,7 @@ func (this *QTextOption) SetTabs(tabStops []*QTextOptionTab) {
 func (this *QTextOption) Tabs() []*QTextOptionTab {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.Tabs")
 	r := C.qute_QTextOption_tabs(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextOptionTab {
 		return rt.View[QTextOptionTab](rt.WrapClass(e, "QTextOptionTab", rt.TakeOwned), e)
 	})
@@ -266,6 +282,7 @@ func (this *QTextOption) Tabs() []*QTextOptionTab {
 func (this *QTextOption) SetUseDesignMetrics(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.SetUseDesignMetrics")
 	C.qute_QTextOption_setUseDesignMetrics(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // UseDesignMetrics wraps QTextOption::useDesignMetrics.
@@ -276,5 +293,6 @@ func (this *QTextOption) SetUseDesignMetrics(bArg bool) {
 func (this *QTextOption) UseDesignMetrics() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextOption.UseDesignMetrics")
 	r := C.qute_QTextOption_useDesignMetrics(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

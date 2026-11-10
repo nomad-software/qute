@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -54,6 +55,7 @@ func QFileDeviceCast(o QObjectLike) *QFileDevice {
 func (this *QFileDevice) Error() QFileDeviceFileError {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Error")
 	r := C.qute_QFileDevice_error(self)
+	runtime.KeepAlive(this)
 	return QFileDeviceFileError(r)
 }
 
@@ -65,6 +67,7 @@ func (this *QFileDevice) Error() QFileDeviceFileError {
 func (this *QFileDevice) UnsetError() {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.UnsetError")
 	C.qute_QFileDevice_unsetError(self)
+	runtime.KeepAlive(this)
 }
 
 // FileName wraps QFileDevice::fileName.
@@ -75,6 +78,7 @@ func (this *QFileDevice) UnsetError() {
 func (this *QFileDevice) FileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.FileName")
 	r := C.qute_QFileDevice_fileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -86,6 +90,7 @@ func (this *QFileDevice) FileName() string {
 func (this *QFileDevice) Flush() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Flush")
 	r := C.qute_QFileDevice_flush(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -97,6 +102,7 @@ func (this *QFileDevice) Flush() bool {
 func (this *QFileDevice) Resize(sz int64) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Resize")
 	r := C.qute_QFileDevice_resize(self, C.longlong(sz))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +114,7 @@ func (this *QFileDevice) Resize(sz int64) bool {
 func (this *QFileDevice) Permissions() QFileDevicePermissions {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Permissions")
 	r := C.qute_QFileDevice_permissions(self)
+	runtime.KeepAlive(this)
 	return QFileDevicePermissions(r)
 }
 
@@ -119,6 +126,7 @@ func (this *QFileDevice) Permissions() QFileDevicePermissions {
 func (this *QFileDevice) SetPermissions(permissionSpec QFileDevicePermissions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.SetPermissions")
 	r := C.qute_QFileDevice_setPermissions(self, C.int64_t(permissionSpec))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +138,7 @@ func (this *QFileDevice) SetPermissions(permissionSpec QFileDevicePermissions) b
 func (this *QFileDevice) Map(offset int64, size int64) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Map")
 	r := C.qute_QFileDevice_map(self, C.longlong(offset), C.longlong(size))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -142,6 +151,7 @@ func (this *QFileDevice) Unmap() (bool, uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Unmap")
 	var addressOut C.uchar
 	r := C.qute_QFileDevice_unmap(self, &addressOut)
+	runtime.KeepAlive(this)
 	return bool(r), uint8(addressOut)
 }
 
@@ -155,6 +165,7 @@ func (this *QFileDevice) Unmap() (bool, uint8) {
 func (this *QFileDevice) FileTime(time QFileDeviceFileTime) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.FileTime")
 	r := C.qute_QFileDevice_fileTime(self, C.int64_t(time))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -166,5 +177,7 @@ func (this *QFileDevice) FileTime(time QFileDeviceFileTime) *QDateTime {
 func (this *QFileDevice) SetFileTime(newDate *QDateTime, fileTime QFileDeviceFileTime) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.SetFileTime")
 	r := C.qute_QFileDevice_setFileTime(self, rt.UseArg(unsafe.Pointer(newDate), "QFileDevice.SetFileTime"), C.int64_t(fileTime))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(newDate)
 	return bool(r)
 }

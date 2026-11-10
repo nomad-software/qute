@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQJsonDocument() *QJsonDocument {
 func NewQJsonDocumentWithJsonObject(object *QJsonObject) *QJsonDocument {
 	rt.CheckThread("NewQJsonDocumentWithJsonObject")
 	p := C.qute_QJsonDocument_new_1(rt.UseArg(unsafe.Pointer(object), "NewQJsonDocumentWithJsonObject"))
+	runtime.KeepAlive(object)
 	h := rt.WrapClass(p, "QJsonDocument", rt.NewOwned)
 	return rt.View[QJsonDocument](h, p)
 }
@@ -108,6 +110,7 @@ func NewQJsonDocumentWithJsonObject(object *QJsonObject) *QJsonDocument {
 func NewQJsonDocumentWithJsonArray(array *QJsonArray) *QJsonDocument {
 	rt.CheckThread("NewQJsonDocumentWithJsonArray")
 	p := C.qute_QJsonDocument_new_2(rt.UseArg(unsafe.Pointer(array), "NewQJsonDocumentWithJsonArray"))
+	runtime.KeepAlive(array)
 	h := rt.WrapClass(p, "QJsonDocument", rt.NewOwned)
 	return rt.View[QJsonDocument](h, p)
 }
@@ -122,6 +125,7 @@ func NewQJsonDocumentWithJsonArray(array *QJsonArray) *QJsonDocument {
 func (this *QJsonDocument) ToVariant() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.ToVariant")
 	r := C.qute_QJsonDocument_toVariant(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -133,6 +137,7 @@ func (this *QJsonDocument) ToVariant() *QVariant {
 func (this *QJsonDocument) ToJson() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.ToJson")
 	r := C.qute_QJsonDocument_toJson(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -144,6 +149,7 @@ func (this *QJsonDocument) ToJson() []byte {
 func (this *QJsonDocument) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.IsEmpty")
 	r := C.qute_QJsonDocument_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -155,6 +161,7 @@ func (this *QJsonDocument) IsEmpty() bool {
 func (this *QJsonDocument) IsArray() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.IsArray")
 	r := C.qute_QJsonDocument_isArray(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -166,6 +173,7 @@ func (this *QJsonDocument) IsArray() bool {
 func (this *QJsonDocument) IsObject() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.IsObject")
 	r := C.qute_QJsonDocument_isObject(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -179,6 +187,7 @@ func (this *QJsonDocument) IsObject() bool {
 func (this *QJsonDocument) Object() *QJsonObject {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.Object")
 	r := C.qute_QJsonDocument_object(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
 }
 
@@ -192,6 +201,7 @@ func (this *QJsonDocument) Object() *QJsonObject {
 func (this *QJsonDocument) Array() *QJsonArray {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.Array")
 	r := C.qute_QJsonDocument_array(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonArray](rt.WrapClass(r, "QJsonArray", rt.TakeOwned), r)
 }
 
@@ -203,6 +213,8 @@ func (this *QJsonDocument) Array() *QJsonArray {
 func (this *QJsonDocument) SetObject(object *QJsonObject) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.SetObject")
 	C.qute_QJsonDocument_setObject(self, rt.UseArg(unsafe.Pointer(object), "QJsonDocument.SetObject"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(object)
 }
 
 // SetArray wraps QJsonDocument::setArray.
@@ -213,6 +225,8 @@ func (this *QJsonDocument) SetObject(object *QJsonObject) {
 func (this *QJsonDocument) SetArray(array *QJsonArray) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.SetArray")
 	C.qute_QJsonDocument_setArray(self, rt.UseArg(unsafe.Pointer(array), "QJsonDocument.SetArray"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(array)
 }
 
 // IsNull wraps QJsonDocument::isNull.
@@ -223,6 +237,7 @@ func (this *QJsonDocument) SetArray(array *QJsonArray) {
 func (this *QJsonDocument) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.IsNull")
 	r := C.qute_QJsonDocument_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -236,6 +251,7 @@ func (this *QJsonDocument) IsNull() bool {
 func QJsonDocumentFromVariant(variant *QVariant) *QJsonDocument {
 	rt.CheckThread("QJsonDocumentFromVariant")
 	r := C.qute_QJsonDocument_fromVariant(rt.UseArg(unsafe.Pointer(variant), "QJsonDocumentFromVariant"))
+	runtime.KeepAlive(variant)
 	return rt.View[QJsonDocument](rt.WrapClass(r, "QJsonDocument", rt.TakeOwned), r)
 }
 

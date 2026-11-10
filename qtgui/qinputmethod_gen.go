@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -57,6 +58,7 @@ func QInputMethodCast(o qtcore.QObjectLike) *QInputMethod {
 func (this *QInputMethod) InputItemTransform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.InputItemTransform")
 	r := C.qute_QInputMethod_inputItemTransform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -68,6 +70,8 @@ func (this *QInputMethod) InputItemTransform() *QTransform {
 func (this *QInputMethod) SetInputItemTransform(transform *QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.SetInputItemTransform")
 	C.qute_QInputMethod_setInputItemTransform(self, rt.UseArg(unsafe.Pointer(transform), "QInputMethod.SetInputItemTransform"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 }
 
 // InputItemRectangle wraps QInputMethod::inputItemRectangle.
@@ -78,6 +82,7 @@ func (this *QInputMethod) SetInputItemTransform(transform *QTransform) {
 func (this *QInputMethod) InputItemRectangle() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.InputItemRectangle")
 	r := C.qute_QInputMethod_inputItemRectangle(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -89,6 +94,7 @@ func (this *QInputMethod) InputItemRectangle() qtcore.QRectF {
 func (this *QInputMethod) SetInputItemRectangle(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.SetInputItemRectangle")
 	C.qute_QInputMethod_setInputItemRectangle(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // CursorRectangle wraps QInputMethod::cursorRectangle.
@@ -99,6 +105,7 @@ func (this *QInputMethod) SetInputItemRectangle(rect qtcore.QRectF) {
 func (this *QInputMethod) CursorRectangle() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.CursorRectangle")
 	r := C.qute_QInputMethod_cursorRectangle(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -110,6 +117,7 @@ func (this *QInputMethod) CursorRectangle() qtcore.QRectF {
 func (this *QInputMethod) AnchorRectangle() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.AnchorRectangle")
 	r := C.qute_QInputMethod_anchorRectangle(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -121,6 +129,7 @@ func (this *QInputMethod) AnchorRectangle() qtcore.QRectF {
 func (this *QInputMethod) KeyboardRectangle() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.KeyboardRectangle")
 	r := C.qute_QInputMethod_keyboardRectangle(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -132,6 +141,7 @@ func (this *QInputMethod) KeyboardRectangle() qtcore.QRectF {
 func (this *QInputMethod) InputItemClipRectangle() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.InputItemClipRectangle")
 	r := C.qute_QInputMethod_inputItemClipRectangle(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -143,6 +153,7 @@ func (this *QInputMethod) InputItemClipRectangle() qtcore.QRectF {
 func (this *QInputMethod) IsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.IsVisible")
 	r := C.qute_QInputMethod_isVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -154,6 +165,7 @@ func (this *QInputMethod) IsVisible() bool {
 func (this *QInputMethod) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.SetVisible")
 	C.qute_QInputMethod_setVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // IsAnimating wraps QInputMethod::isAnimating.
@@ -164,6 +176,7 @@ func (this *QInputMethod) SetVisible(visible bool) {
 func (this *QInputMethod) IsAnimating() bool {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.IsAnimating")
 	r := C.qute_QInputMethod_isAnimating(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -177,6 +190,7 @@ func (this *QInputMethod) IsAnimating() bool {
 func (this *QInputMethod) Locale() *qtcore.QLocale {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.Locale")
 	r := C.qute_QInputMethod_locale(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
 }
 
@@ -188,6 +202,7 @@ func (this *QInputMethod) Locale() *qtcore.QLocale {
 func (this *QInputMethod) InputDirection() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.InputDirection")
 	r := C.qute_QInputMethod_inputDirection(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -199,6 +214,7 @@ func (this *QInputMethod) InputDirection() qtcore.LayoutDirection {
 func (this *QInputMethod) Show() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.Show")
 	C.qute_QInputMethod_show(self)
+	runtime.KeepAlive(this)
 }
 
 // Hide wraps QInputMethod::hide.
@@ -209,6 +225,7 @@ func (this *QInputMethod) Show() {
 func (this *QInputMethod) Hide() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.Hide")
 	C.qute_QInputMethod_hide(self)
+	runtime.KeepAlive(this)
 }
 
 // Update wraps QInputMethod::update.
@@ -219,6 +236,7 @@ func (this *QInputMethod) Hide() {
 func (this *QInputMethod) Update(queries qtcore.InputMethodQueries) {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.Update")
 	C.qute_QInputMethod_update(self, C.int64_t(queries))
+	runtime.KeepAlive(this)
 }
 
 // Reset wraps QInputMethod::reset.
@@ -229,6 +247,7 @@ func (this *QInputMethod) Update(queries qtcore.InputMethodQueries) {
 func (this *QInputMethod) Reset() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.Reset")
 	C.qute_QInputMethod_reset(self)
+	runtime.KeepAlive(this)
 }
 
 // Commit wraps QInputMethod::commit.
@@ -239,6 +258,7 @@ func (this *QInputMethod) Reset() {
 func (this *QInputMethod) Commit() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.Commit")
 	C.qute_QInputMethod_commit(self)
+	runtime.KeepAlive(this)
 }
 
 // InvokeAction wraps QInputMethod::invokeAction.
@@ -249,6 +269,7 @@ func (this *QInputMethod) Commit() {
 func (this *QInputMethod) InvokeAction(aArg QInputMethodAction, cursorPosition int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.InvokeAction")
 	C.qute_QInputMethod_invokeAction(self, C.int64_t(aArg), C.int(cursorPosition))
+	runtime.KeepAlive(this)
 }
 
 // EmitCursorRectangleChanged wraps emitting the cursorRectangleChanged signal.
@@ -259,6 +280,7 @@ func (this *QInputMethod) InvokeAction(aArg QInputMethodAction, cursorPosition i
 func (this *QInputMethod) EmitCursorRectangleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitCursorRectangleChanged")
 	C.qute_QInputMethod_cursorRectangleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitAnchorRectangleChanged wraps emitting the anchorRectangleChanged signal.
@@ -269,6 +291,7 @@ func (this *QInputMethod) EmitCursorRectangleChanged() {
 func (this *QInputMethod) EmitAnchorRectangleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitAnchorRectangleChanged")
 	C.qute_QInputMethod_anchorRectangleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitKeyboardRectangleChanged wraps emitting the keyboardRectangleChanged signal.
@@ -279,6 +302,7 @@ func (this *QInputMethod) EmitAnchorRectangleChanged() {
 func (this *QInputMethod) EmitKeyboardRectangleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitKeyboardRectangleChanged")
 	C.qute_QInputMethod_keyboardRectangleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitInputItemClipRectangleChanged wraps emitting the inputItemClipRectangleChanged signal.
@@ -289,6 +313,7 @@ func (this *QInputMethod) EmitKeyboardRectangleChanged() {
 func (this *QInputMethod) EmitInputItemClipRectangleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitInputItemClipRectangleChanged")
 	C.qute_QInputMethod_inputItemClipRectangleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibleChanged wraps emitting the visibleChanged signal.
@@ -299,6 +324,7 @@ func (this *QInputMethod) EmitInputItemClipRectangleChanged() {
 func (this *QInputMethod) EmitVisibleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitVisibleChanged")
 	C.qute_QInputMethod_visibleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitAnimatingChanged wraps emitting the animatingChanged signal.
@@ -309,6 +335,7 @@ func (this *QInputMethod) EmitVisibleChanged() {
 func (this *QInputMethod) EmitAnimatingChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitAnimatingChanged")
 	C.qute_QInputMethod_animatingChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitLocaleChanged wraps emitting the localeChanged signal.
@@ -319,6 +346,7 @@ func (this *QInputMethod) EmitAnimatingChanged() {
 func (this *QInputMethod) EmitLocaleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitLocaleChanged")
 	C.qute_QInputMethod_localeChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitInputDirectionChanged wraps emitting the inputDirectionChanged signal.
@@ -329,6 +357,7 @@ func (this *QInputMethod) EmitLocaleChanged() {
 func (this *QInputMethod) EmitInputDirectionChanged(newDirection qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QInputMethod.EmitInputDirectionChanged")
 	C.qute_QInputMethod_inputDirectionChanged_1(self, C.int64_t(newDirection))
+	runtime.KeepAlive(this)
 }
 
 // QInputMethodQueryFocusObject wraps QInputMethod::queryFocusObject.
@@ -341,6 +370,7 @@ func (this *QInputMethod) EmitInputDirectionChanged(newDirection qtcore.LayoutDi
 func QInputMethodQueryFocusObject(query qtcore.InputMethodQueries, argument *qtcore.QVariant) *qtcore.QVariant {
 	rt.CheckThread("QInputMethodQueryFocusObject")
 	r := C.qute_QInputMethod_queryFocusObject(C.int64_t(query), rt.UseArg(unsafe.Pointer(argument), "QInputMethodQueryFocusObject"))
+	runtime.KeepAlive(argument)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 

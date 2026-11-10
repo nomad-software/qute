@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QGraphicsEffectCast(o qtcore.QObjectLike) *QGraphicsEffect {
 func (this *QGraphicsEffect) BoundingRectFor(sourceRect qtcore.QRectF) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.BoundingRectFor")
 	r := C.qute_QGraphicsEffect_boundingRectFor(self, cQRectF(sourceRect))
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -66,6 +68,7 @@ func (this *QGraphicsEffect) BoundingRectFor(sourceRect qtcore.QRectF) qtcore.QR
 func (this *QGraphicsEffect) BoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.BoundingRect")
 	r := C.qute_QGraphicsEffect_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -77,6 +80,7 @@ func (this *QGraphicsEffect) BoundingRect() qtcore.QRectF {
 func (this *QGraphicsEffect) IsEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.IsEnabled")
 	r := C.qute_QGraphicsEffect_isEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -88,6 +92,7 @@ func (this *QGraphicsEffect) IsEnabled() bool {
 func (this *QGraphicsEffect) SetEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.SetEnabled")
 	C.qute_QGraphicsEffect_setEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // Update wraps QGraphicsEffect::update.
@@ -98,6 +103,7 @@ func (this *QGraphicsEffect) SetEnabled(enable bool) {
 func (this *QGraphicsEffect) Update() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.Update")
 	C.qute_QGraphicsEffect_update(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitEnabledChanged wraps emitting the enabledChanged signal.
@@ -108,6 +114,7 @@ func (this *QGraphicsEffect) Update() {
 func (this *QGraphicsEffect) EmitEnabledChanged(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.EmitEnabledChanged")
 	C.qute_QGraphicsEffect_enabledChanged_1(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // OnEnabledChanged connects f to the enabledChanged signal. The connection ends when the

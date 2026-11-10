@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,8 @@ func NewQCursorWithCursorShape(shape qtcore.CursorShape) *QCursor {
 func NewQCursorWithBitmap(bitmap *QBitmap, maskArg *QBitmap) *QCursor {
 	rt.CheckThread("NewQCursorWithBitmap")
 	p := C.qute_QCursor_new_2(rt.UseArg(unsafe.Pointer(bitmap), "NewQCursorWithBitmap"), rt.UseArg(unsafe.Pointer(maskArg), "NewQCursorWithBitmap"))
+	runtime.KeepAlive(bitmap)
+	runtime.KeepAlive(maskArg)
 	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
@@ -121,6 +124,7 @@ func NewQCursorWithBitmap(bitmap *QBitmap, maskArg *QBitmap) *QCursor {
 func NewQCursorWithPixmap(pixmap *QPixmap) *QCursor {
 	rt.CheckThread("NewQCursorWithPixmap")
 	p := C.qute_QCursor_new_3(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmap"))
+	runtime.KeepAlive(pixmap)
 	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
@@ -133,6 +137,7 @@ func NewQCursorWithPixmap(pixmap *QPixmap) *QCursor {
 func (this *QCursor) Shape() qtcore.CursorShape {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.Shape")
 	r := C.qute_QCursor_shape(self)
+	runtime.KeepAlive(this)
 	return qtcore.CursorShape(r)
 }
 
@@ -144,6 +149,7 @@ func (this *QCursor) Shape() qtcore.CursorShape {
 func (this *QCursor) SetShape(newShape qtcore.CursorShape) {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.SetShape")
 	C.qute_QCursor_setShape(self, C.int64_t(newShape))
+	runtime.KeepAlive(this)
 }
 
 // Bitmap wraps QCursor::bitmap.
@@ -156,6 +162,7 @@ func (this *QCursor) SetShape(newShape qtcore.CursorShape) {
 func (this *QCursor) Bitmap() *QBitmap {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.Bitmap")
 	r := C.qute_QCursor_bitmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -169,6 +176,7 @@ func (this *QCursor) Bitmap() *QBitmap {
 func (this *QCursor) Mask() *QBitmap {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.Mask")
 	r := C.qute_QCursor_mask(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -182,6 +190,7 @@ func (this *QCursor) Mask() *QBitmap {
 func (this *QCursor) Pixmap() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.Pixmap")
 	r := C.qute_QCursor_pixmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -193,6 +202,7 @@ func (this *QCursor) Pixmap() *QPixmap {
 func (this *QCursor) HotSpot() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QCursor.HotSpot")
 	r := C.qute_QCursor_hotSpot(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -219,6 +229,7 @@ func QCursorPosOn(screen QScreenLike) qtcore.QPoint {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QCursorPosOn")
 	}
 	r := C.qute_QCursor_pos_1(screenPtr)
+	runtime.KeepAlive(screen)
 	return goQPoint(r)
 }
 
@@ -244,4 +255,5 @@ func QCursorSetPosOn(screen QScreenLike, pArg qtcore.QPoint) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QCursorSetPosOn")
 	}
 	C.qute_QCursor_setPos_1(screenPtr, cQPoint(pArg))
+	runtime.KeepAlive(screen)
 }

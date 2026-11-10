@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,7 @@ func NewQFile(parent QObjectLike) *QFile {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFile")
 	}
 	p := C.qute_QFile_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -82,6 +84,7 @@ func NewQFileWithName(name string, parent QObjectLike) *QFile {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileWithName")
 	}
 	p := C.qute_QFile_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -98,6 +101,7 @@ func NewQFileWithName(name string, parent QObjectLike) *QFile {
 func (this *QFile) FilesystemFileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFile.FilesystemFileName")
 	r := C.qute_QFile_filesystemFileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -109,6 +113,7 @@ func (this *QFile) FilesystemFileName() string {
 func (this *QFile) SetFileName(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QFile.SetFileName")
 	C.qute_QFile_setFileName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // Exists wraps QFile::exists.
@@ -119,6 +124,7 @@ func (this *QFile) SetFileName(name string) {
 func (this *QFile) Exists() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.Exists")
 	r := C.qute_QFile_exists(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +136,7 @@ func (this *QFile) Exists() bool {
 func (this *QFile) SymLinkTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFile.SymLinkTarget")
 	r := C.qute_QFile_symLinkTarget(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -141,6 +148,7 @@ func (this *QFile) SymLinkTarget() string {
 func (this *QFile) FilesystemSymLinkTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFile.FilesystemSymLinkTarget")
 	r := C.qute_QFile_filesystemSymLinkTarget(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -152,6 +160,7 @@ func (this *QFile) FilesystemSymLinkTarget() string {
 func (this *QFile) Remove() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.Remove")
 	r := C.qute_QFile_remove(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -163,6 +172,7 @@ func (this *QFile) Remove() bool {
 func (this *QFile) MoveToTrash() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.MoveToTrash")
 	r := C.qute_QFile_moveToTrash(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -174,6 +184,7 @@ func (this *QFile) MoveToTrash() bool {
 func (this *QFile) Rename(newName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.Rename")
 	r := C.qute_QFile_rename(self, (*C.char)(unsafe.Pointer(unsafe.StringData(newName))), C.ptrdiff_t(len(newName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -185,6 +196,7 @@ func (this *QFile) Rename(newName string) bool {
 func (this *QFile) Link(newName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.Link")
 	r := C.qute_QFile_link(self, (*C.char)(unsafe.Pointer(unsafe.StringData(newName))), C.ptrdiff_t(len(newName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -196,6 +208,7 @@ func (this *QFile) Link(newName string) bool {
 func (this *QFile) Copy(newName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.Copy")
 	r := C.qute_QFile_copy(self, (*C.char)(unsafe.Pointer(unsafe.StringData(newName))), C.ptrdiff_t(len(newName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -207,6 +220,7 @@ func (this *QFile) Copy(newName string) bool {
 func (this *QFile) OpenWithPermissions(flags QIODeviceBaseOpenMode, permissions QFileDevicePermissions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.OpenWithPermissions")
 	r := C.qute_QFile_open(self, C.int64_t(flags), C.int64_t(permissions))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -218,6 +232,7 @@ func (this *QFile) OpenWithPermissions(flags QIODeviceBaseOpenMode, permissions 
 func (this *QFile) OpenFd(fd int, ioFlags QIODeviceBaseOpenMode) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.OpenFd")
 	r := C.qute_QFile_open_1(self, C.int(fd), C.int64_t(ioFlags))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 

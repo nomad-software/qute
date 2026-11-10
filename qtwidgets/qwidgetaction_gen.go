@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQWidgetAction(parent qtcore.QObjectLike) *QWidgetAction {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQWidgetAction")
 	}
 	p := C.qute_QWidgetAction_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -85,6 +87,8 @@ func (this *QWidgetAction) SetDefaultWidget(w QWidgetLike) {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QWidgetAction.SetDefaultWidget")
 	}
 	C.qute_QWidgetAction_setDefaultWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 }
 
@@ -98,6 +102,7 @@ func (this *QWidgetAction) SetDefaultWidget(w QWidgetLike) {
 func (this *QWidgetAction) DefaultWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QWidgetAction.DefaultWidget")
 	r := C.qute_QWidgetAction_defaultWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -117,6 +122,8 @@ func (this *QWidgetAction) RequestWidget(parent QWidgetLike) *QWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QWidgetAction.RequestWidget")
 	}
 	r := C.qute_QWidgetAction_requestWidget(self, parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeParented), r)
 }
 
@@ -132,4 +139,6 @@ func (this *QWidgetAction) ReleaseWidget(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QWidgetAction.ReleaseWidget")
 	}
 	C.qute_QWidgetAction_releaseWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }

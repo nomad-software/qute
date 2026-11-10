@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QFocusEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QFocusEvent {
 func (this *QFocusEvent) GotFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFocusEvent.GotFocus")
 	r := C.qute_QFocusEvent_gotFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QFocusEvent) GotFocus() bool {
 func (this *QFocusEvent) LostFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFocusEvent.LostFocus")
 	r := C.qute_QFocusEvent_lostFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -63,5 +66,6 @@ func (this *QFocusEvent) LostFocus() bool {
 func (this *QFocusEvent) Reason() qtcore.FocusReason {
 	self := rt.Use(unsafe.Pointer(this), "QFocusEvent.Reason")
 	r := C.qute_QFocusEvent_reason(self)
+	runtime.KeepAlive(this)
 	return qtcore.FocusReason(r)
 }

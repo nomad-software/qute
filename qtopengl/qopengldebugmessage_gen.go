@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQOpenGLDebugMessage() *QOpenGLDebugMessage {
 func (this *QOpenGLDebugMessage) Source() QOpenGLDebugMessageSources {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugMessage.Source")
 	r := C.qute_QOpenGLDebugMessage_source(self)
+	runtime.KeepAlive(this)
 	return QOpenGLDebugMessageSources(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QOpenGLDebugMessage) Source() QOpenGLDebugMessageSources {
 func (this *QOpenGLDebugMessage) Type() QOpenGLDebugMessageTypes {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugMessage.Type")
 	r := C.qute_QOpenGLDebugMessage_type(self)
+	runtime.KeepAlive(this)
 	return QOpenGLDebugMessageTypes(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QOpenGLDebugMessage) Type() QOpenGLDebugMessageTypes {
 func (this *QOpenGLDebugMessage) Severity() QOpenGLDebugMessageSeverities {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugMessage.Severity")
 	r := C.qute_QOpenGLDebugMessage_severity(self)
+	runtime.KeepAlive(this)
 	return QOpenGLDebugMessageSeverities(r)
 }
 
@@ -130,6 +134,7 @@ func (this *QOpenGLDebugMessage) Severity() QOpenGLDebugMessageSeverities {
 func (this *QOpenGLDebugMessage) Id() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugMessage.Id")
 	r := C.qute_QOpenGLDebugMessage_id(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -141,6 +146,7 @@ func (this *QOpenGLDebugMessage) Id() uint {
 func (this *QOpenGLDebugMessage) Message() string {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugMessage.Message")
 	r := C.qute_QOpenGLDebugMessage_message(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQSpinBox(parent QWidgetLike) *QSpinBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSpinBox")
 	}
 	p := C.qute_QSpinBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQSpinBox(parent QWidgetLike) *QSpinBox {
 func (this *QSpinBox) Value() int {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.Value")
 	r := C.qute_QSpinBox_value(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QSpinBox) Value() int {
 func (this *QSpinBox) Prefix() string {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.Prefix")
 	r := C.qute_QSpinBox_prefix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QSpinBox) Prefix() string {
 func (this *QSpinBox) SetPrefix(prefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetPrefix")
 	C.qute_QSpinBox_setPrefix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)))
+	runtime.KeepAlive(this)
 }
 
 // Suffix wraps QSpinBox::suffix.
@@ -109,6 +114,7 @@ func (this *QSpinBox) SetPrefix(prefix string) {
 func (this *QSpinBox) Suffix() string {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.Suffix")
 	r := C.qute_QSpinBox_suffix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -120,6 +126,7 @@ func (this *QSpinBox) Suffix() string {
 func (this *QSpinBox) SetSuffix(suffix string) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetSuffix")
 	C.qute_QSpinBox_setSuffix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(suffix))), C.ptrdiff_t(len(suffix)))
+	runtime.KeepAlive(this)
 }
 
 // CleanText wraps QSpinBox::cleanText.
@@ -130,6 +137,7 @@ func (this *QSpinBox) SetSuffix(suffix string) {
 func (this *QSpinBox) CleanText() string {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.CleanText")
 	r := C.qute_QSpinBox_cleanText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -141,6 +149,7 @@ func (this *QSpinBox) CleanText() string {
 func (this *QSpinBox) SingleStep() int {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SingleStep")
 	r := C.qute_QSpinBox_singleStep(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -152,6 +161,7 @@ func (this *QSpinBox) SingleStep() int {
 func (this *QSpinBox) SetSingleStep(val int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetSingleStep")
 	C.qute_QSpinBox_setSingleStep(self, C.int(val))
+	runtime.KeepAlive(this)
 }
 
 // Minimum wraps QSpinBox::minimum.
@@ -162,6 +172,7 @@ func (this *QSpinBox) SetSingleStep(val int) {
 func (this *QSpinBox) Minimum() int {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.Minimum")
 	r := C.qute_QSpinBox_minimum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -173,6 +184,7 @@ func (this *QSpinBox) Minimum() int {
 func (this *QSpinBox) SetMinimum(min int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetMinimum")
 	C.qute_QSpinBox_setMinimum(self, C.int(min))
+	runtime.KeepAlive(this)
 }
 
 // Maximum wraps QSpinBox::maximum.
@@ -183,6 +195,7 @@ func (this *QSpinBox) SetMinimum(min int) {
 func (this *QSpinBox) Maximum() int {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.Maximum")
 	r := C.qute_QSpinBox_maximum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -194,6 +207,7 @@ func (this *QSpinBox) Maximum() int {
 func (this *QSpinBox) SetMaximum(max int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetMaximum")
 	C.qute_QSpinBox_setMaximum(self, C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QSpinBox::setRange.
@@ -204,6 +218,7 @@ func (this *QSpinBox) SetMaximum(max int) {
 func (this *QSpinBox) SetRange(min int, max int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetRange")
 	C.qute_QSpinBox_setRange(self, C.int(min), C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // StepType wraps QSpinBox::stepType.
@@ -214,6 +229,7 @@ func (this *QSpinBox) SetRange(min int, max int) {
 func (this *QSpinBox) StepType() QAbstractSpinBoxStepType {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.StepType")
 	r := C.qute_QSpinBox_stepType(self)
+	runtime.KeepAlive(this)
 	return QAbstractSpinBoxStepType(r)
 }
 
@@ -225,6 +241,7 @@ func (this *QSpinBox) StepType() QAbstractSpinBoxStepType {
 func (this *QSpinBox) SetStepType(stepType QAbstractSpinBoxStepType) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetStepType")
 	C.qute_QSpinBox_setStepType(self, C.int64_t(stepType))
+	runtime.KeepAlive(this)
 }
 
 // DisplayIntegerBase wraps QSpinBox::displayIntegerBase.
@@ -235,6 +252,7 @@ func (this *QSpinBox) SetStepType(stepType QAbstractSpinBoxStepType) {
 func (this *QSpinBox) DisplayIntegerBase() int {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.DisplayIntegerBase")
 	r := C.qute_QSpinBox_displayIntegerBase(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -246,6 +264,7 @@ func (this *QSpinBox) DisplayIntegerBase() int {
 func (this *QSpinBox) SetDisplayIntegerBase(base int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetDisplayIntegerBase")
 	C.qute_QSpinBox_setDisplayIntegerBase(self, C.int(base))
+	runtime.KeepAlive(this)
 }
 
 // SetValue wraps QSpinBox::setValue.
@@ -256,6 +275,7 @@ func (this *QSpinBox) SetDisplayIntegerBase(base int) {
 func (this *QSpinBox) SetValue(val int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.SetValue")
 	C.qute_QSpinBox_setValue(self, C.int(val))
+	runtime.KeepAlive(this)
 }
 
 // EmitValueChanged wraps emitting the valueChanged signal.
@@ -266,6 +286,7 @@ func (this *QSpinBox) SetValue(val int) {
 func (this *QSpinBox) EmitValueChanged(arg0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.EmitValueChanged")
 	C.qute_QSpinBox_valueChanged_1(self, C.int(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitTextChanged wraps emitting the textChanged signal.
@@ -276,6 +297,7 @@ func (this *QSpinBox) EmitValueChanged(arg0 int) {
 func (this *QSpinBox) EmitTextChanged(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QSpinBox.EmitTextChanged")
 	C.qute_QSpinBox_textChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // OnValueChanged connects f to the valueChanged signal. The connection ends when the

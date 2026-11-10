@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -56,6 +57,7 @@ func QAbstractButtonCast(o qtcore.QObjectLike) *QAbstractButton {
 func (this *QAbstractButton) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetText")
 	C.qute_QAbstractButton_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QAbstractButton::text.
@@ -66,6 +68,7 @@ func (this *QAbstractButton) SetText(text string) {
 func (this *QAbstractButton) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.Text")
 	r := C.qute_QAbstractButton_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -77,6 +80,8 @@ func (this *QAbstractButton) Text() string {
 func (this *QAbstractButton) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetIcon")
 	C.qute_QAbstractButton_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QAbstractButton.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // Icon wraps QAbstractButton::icon.
@@ -89,6 +94,7 @@ func (this *QAbstractButton) SetIcon(icon *qtgui.QIcon) {
 func (this *QAbstractButton) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.Icon")
 	r := C.qute_QAbstractButton_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -100,6 +106,7 @@ func (this *QAbstractButton) Icon() *qtgui.QIcon {
 func (this *QAbstractButton) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.IconSize")
 	r := C.qute_QAbstractButton_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -111,6 +118,8 @@ func (this *QAbstractButton) IconSize() qtcore.QSize {
 func (this *QAbstractButton) SetShortcut(key *qtgui.QKeySequence) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetShortcut")
 	C.qute_QAbstractButton_setShortcut(self, rt.UseArg(unsafe.Pointer(key), "QAbstractButton.SetShortcut"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(key)
 }
 
 // Shortcut wraps QAbstractButton::shortcut.
@@ -123,6 +132,7 @@ func (this *QAbstractButton) SetShortcut(key *qtgui.QKeySequence) {
 func (this *QAbstractButton) Shortcut() *qtgui.QKeySequence {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.Shortcut")
 	r := C.qute_QAbstractButton_shortcut(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QKeySequence](rt.WrapClass(r, "QKeySequence", rt.TakeOwned), r)
 }
 
@@ -134,6 +144,7 @@ func (this *QAbstractButton) Shortcut() *qtgui.QKeySequence {
 func (this *QAbstractButton) SetCheckable(checkable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetCheckable")
 	C.qute_QAbstractButton_setCheckable(self, C.bool(checkable))
+	runtime.KeepAlive(this)
 }
 
 // IsCheckable wraps QAbstractButton::isCheckable.
@@ -144,6 +155,7 @@ func (this *QAbstractButton) SetCheckable(checkable bool) {
 func (this *QAbstractButton) IsCheckable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.IsCheckable")
 	r := C.qute_QAbstractButton_isCheckable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -155,6 +167,7 @@ func (this *QAbstractButton) IsCheckable() bool {
 func (this *QAbstractButton) IsChecked() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.IsChecked")
 	r := C.qute_QAbstractButton_isChecked(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -166,6 +179,7 @@ func (this *QAbstractButton) IsChecked() bool {
 func (this *QAbstractButton) SetDown(down bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetDown")
 	C.qute_QAbstractButton_setDown(self, C.bool(down))
+	runtime.KeepAlive(this)
 }
 
 // IsDown wraps QAbstractButton::isDown.
@@ -176,6 +190,7 @@ func (this *QAbstractButton) SetDown(down bool) {
 func (this *QAbstractButton) IsDown() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.IsDown")
 	r := C.qute_QAbstractButton_isDown(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -187,6 +202,7 @@ func (this *QAbstractButton) IsDown() bool {
 func (this *QAbstractButton) SetAutoRepeat(autoRepeat bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetAutoRepeat")
 	C.qute_QAbstractButton_setAutoRepeat(self, C.bool(autoRepeat))
+	runtime.KeepAlive(this)
 }
 
 // AutoRepeat wraps QAbstractButton::autoRepeat.
@@ -197,6 +213,7 @@ func (this *QAbstractButton) SetAutoRepeat(autoRepeat bool) {
 func (this *QAbstractButton) AutoRepeat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.AutoRepeat")
 	r := C.qute_QAbstractButton_autoRepeat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -208,6 +225,7 @@ func (this *QAbstractButton) AutoRepeat() bool {
 func (this *QAbstractButton) SetAutoRepeatDelay(autoRepeatDelay int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetAutoRepeatDelay")
 	C.qute_QAbstractButton_setAutoRepeatDelay(self, C.int(autoRepeatDelay))
+	runtime.KeepAlive(this)
 }
 
 // AutoRepeatDelay wraps QAbstractButton::autoRepeatDelay.
@@ -218,6 +236,7 @@ func (this *QAbstractButton) SetAutoRepeatDelay(autoRepeatDelay int) {
 func (this *QAbstractButton) AutoRepeatDelay() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.AutoRepeatDelay")
 	r := C.qute_QAbstractButton_autoRepeatDelay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -229,6 +248,7 @@ func (this *QAbstractButton) AutoRepeatDelay() int {
 func (this *QAbstractButton) SetAutoRepeatInterval(autoRepeatInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetAutoRepeatInterval")
 	C.qute_QAbstractButton_setAutoRepeatInterval(self, C.int(autoRepeatInterval))
+	runtime.KeepAlive(this)
 }
 
 // AutoRepeatInterval wraps QAbstractButton::autoRepeatInterval.
@@ -239,6 +259,7 @@ func (this *QAbstractButton) SetAutoRepeatInterval(autoRepeatInterval int) {
 func (this *QAbstractButton) AutoRepeatInterval() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.AutoRepeatInterval")
 	r := C.qute_QAbstractButton_autoRepeatInterval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -250,6 +271,7 @@ func (this *QAbstractButton) AutoRepeatInterval() int {
 func (this *QAbstractButton) SetAutoExclusive(autoExclusive bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetAutoExclusive")
 	C.qute_QAbstractButton_setAutoExclusive(self, C.bool(autoExclusive))
+	runtime.KeepAlive(this)
 }
 
 // AutoExclusive wraps QAbstractButton::autoExclusive.
@@ -260,6 +282,7 @@ func (this *QAbstractButton) SetAutoExclusive(autoExclusive bool) {
 func (this *QAbstractButton) AutoExclusive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.AutoExclusive")
 	r := C.qute_QAbstractButton_autoExclusive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -273,6 +296,7 @@ func (this *QAbstractButton) AutoExclusive() bool {
 func (this *QAbstractButton) Group() *QButtonGroup {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.Group")
 	r := C.qute_QAbstractButton_group(self)
+	runtime.KeepAlive(this)
 	return rt.View[QButtonGroup](rt.WrapClass(r, "QButtonGroup", rt.KeepOrBorrow), r)
 }
 
@@ -284,6 +308,7 @@ func (this *QAbstractButton) Group() *QButtonGroup {
 func (this *QAbstractButton) SetIconSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetIconSize")
 	C.qute_QAbstractButton_setIconSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // AnimateClick wraps QAbstractButton::animateClick.
@@ -294,6 +319,7 @@ func (this *QAbstractButton) SetIconSize(size qtcore.QSize) {
 func (this *QAbstractButton) AnimateClick() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.AnimateClick")
 	C.qute_QAbstractButton_animateClick(self)
+	runtime.KeepAlive(this)
 }
 
 // Click wraps QAbstractButton::click.
@@ -304,6 +330,7 @@ func (this *QAbstractButton) AnimateClick() {
 func (this *QAbstractButton) Click() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.Click")
 	C.qute_QAbstractButton_click(self)
+	runtime.KeepAlive(this)
 }
 
 // Toggle wraps QAbstractButton::toggle.
@@ -314,6 +341,7 @@ func (this *QAbstractButton) Click() {
 func (this *QAbstractButton) Toggle() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.Toggle")
 	C.qute_QAbstractButton_toggle(self)
+	runtime.KeepAlive(this)
 }
 
 // SetChecked wraps QAbstractButton::setChecked.
@@ -324,6 +352,7 @@ func (this *QAbstractButton) Toggle() {
 func (this *QAbstractButton) SetChecked(checked bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.SetChecked")
 	C.qute_QAbstractButton_setChecked(self, C.bool(checked))
+	runtime.KeepAlive(this)
 }
 
 // EmitPressed wraps emitting the pressed signal.
@@ -334,6 +363,7 @@ func (this *QAbstractButton) SetChecked(checked bool) {
 func (this *QAbstractButton) EmitPressed() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.EmitPressed")
 	C.qute_QAbstractButton_pressed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitReleased wraps emitting the released signal.
@@ -344,6 +374,7 @@ func (this *QAbstractButton) EmitPressed() {
 func (this *QAbstractButton) EmitReleased() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.EmitReleased")
 	C.qute_QAbstractButton_released_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitClicked wraps emitting the clicked signal.
@@ -354,6 +385,7 @@ func (this *QAbstractButton) EmitReleased() {
 func (this *QAbstractButton) EmitClicked() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.EmitClicked")
 	C.qute_QAbstractButton_clicked_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitToggled wraps emitting the toggled signal.
@@ -364,6 +396,7 @@ func (this *QAbstractButton) EmitClicked() {
 func (this *QAbstractButton) EmitToggled(checked bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractButton.EmitToggled")
 	C.qute_QAbstractButton_toggled_1(self, C.bool(checked))
+	runtime.KeepAlive(this)
 }
 
 // OnPressed connects f to the pressed signal. The connection ends when the

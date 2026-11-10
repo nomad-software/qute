@@ -6,6 +6,7 @@ import "C"
 
 import (
 	"fmt"
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -115,6 +116,7 @@ func NewQImageWithFileName(fileName string) *QImage {
 func (this *QImage) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.IsNull")
 	r := C.qute_QImage_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -128,6 +130,7 @@ func (this *QImage) IsNull() bool {
 func (this *QImage) Copy() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Copy")
 	r := C.qute_QImage_copy(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -139,6 +142,7 @@ func (this *QImage) Copy() *QImage {
 func (this *QImage) Format() QImageFormat {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Format")
 	r := C.qute_QImage_format(self)
+	runtime.KeepAlive(this)
 	return QImageFormat(r)
 }
 
@@ -152,6 +156,7 @@ func (this *QImage) Format() QImageFormat {
 func (this *QImage) ConvertToFormat(fArg QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFormat")
 	r := C.qute_QImage_convertToFormat(self, C.int64_t(fArg))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -169,6 +174,7 @@ func (this *QImage) ConvertToFormatWithColorTable(fArg QImageFormat, colorTable 
 		colorTableC[i] = C.uint(colorTable[i])
 	}
 	r := C.qute_QImage_convertToFormat_1(self, C.int64_t(fArg), unsafe.Pointer(unsafe.SliceData(colorTableC)), C.ptrdiff_t(len(colorTable)))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -180,6 +186,7 @@ func (this *QImage) ConvertToFormatWithColorTable(fArg QImageFormat, colorTable 
 func (this *QImage) ReinterpretAsFormat(fArg QImageFormat) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ReinterpretAsFormat")
 	r := C.qute_QImage_reinterpretAsFormat(self, C.int64_t(fArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -193,6 +200,7 @@ func (this *QImage) ReinterpretAsFormat(fArg QImageFormat) bool {
 func (this *QImage) ConvertedTo(fArg QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedTo")
 	r := C.qute_QImage_convertedTo(self, C.int64_t(fArg))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -204,6 +212,7 @@ func (this *QImage) ConvertedTo(fArg QImageFormat) *QImage {
 func (this *QImage) ConvertTo(fArg QImageFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertTo")
 	C.qute_QImage_convertTo(self, C.int64_t(fArg))
+	runtime.KeepAlive(this)
 }
 
 // Size wraps QImage::size.
@@ -214,6 +223,7 @@ func (this *QImage) ConvertTo(fArg QImageFormat) {
 func (this *QImage) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Size")
 	r := C.qute_QImage_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -225,6 +235,7 @@ func (this *QImage) Size() qtcore.QSize {
 func (this *QImage) Rect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Rect")
 	r := C.qute_QImage_rect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -236,6 +247,7 @@ func (this *QImage) Rect() qtcore.QRect {
 func (this *QImage) BitPlaneCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.BitPlaneCount")
 	r := C.qute_QImage_bitPlaneCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -247,6 +259,7 @@ func (this *QImage) BitPlaneCount() int {
 func (this *QImage) Color(iArg int) uint {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Color")
 	r := C.qute_QImage_color(self, C.int(iArg))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -258,6 +271,7 @@ func (this *QImage) Color(iArg int) uint {
 func (this *QImage) SetColor(iArg int, c uint) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetColor")
 	C.qute_QImage_setColor(self, C.int(iArg), C.uint(c))
+	runtime.KeepAlive(this)
 }
 
 // SetColorCount wraps QImage::setColorCount.
@@ -268,6 +282,7 @@ func (this *QImage) SetColor(iArg int, c uint) {
 func (this *QImage) SetColorCount(colorCount int) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetColorCount")
 	C.qute_QImage_setColorCount(self, C.int(colorCount))
+	runtime.KeepAlive(this)
 }
 
 // AllGray wraps QImage::allGray.
@@ -278,6 +293,7 @@ func (this *QImage) SetColorCount(colorCount int) {
 func (this *QImage) AllGray() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.AllGray")
 	r := C.qute_QImage_allGray(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -289,6 +305,7 @@ func (this *QImage) AllGray() bool {
 func (this *QImage) IsGrayscale() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.IsGrayscale")
 	r := C.qute_QImage_isGrayscale(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -300,6 +317,7 @@ func (this *QImage) IsGrayscale() bool {
 func (this *QImage) Bits() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Bits")
 	r := C.qute_QImage_bits(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -311,6 +329,7 @@ func (this *QImage) Bits() unsafe.Pointer {
 func (this *QImage) ConstBits() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConstBits")
 	r := C.qute_QImage_constBits(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -322,6 +341,7 @@ func (this *QImage) ConstBits() unsafe.Pointer {
 func (this *QImage) SizeInBytes() int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SizeInBytes")
 	r := C.qute_QImage_sizeInBytes(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -333,6 +353,7 @@ func (this *QImage) SizeInBytes() int {
 func (this *QImage) ScanLine(arg0 int) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ScanLine")
 	r := C.qute_QImage_scanLine(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -344,6 +365,7 @@ func (this *QImage) ScanLine(arg0 int) unsafe.Pointer {
 func (this *QImage) ConstScanLine(arg0 int) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConstScanLine")
 	r := C.qute_QImage_constScanLine(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -355,6 +377,7 @@ func (this *QImage) ConstScanLine(arg0 int) unsafe.Pointer {
 func (this *QImage) BytesPerLine() int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.BytesPerLine")
 	r := C.qute_QImage_bytesPerLine(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -366,6 +389,7 @@ func (this *QImage) BytesPerLine() int {
 func (this *QImage) Valid(x int, y int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Valid")
 	r := C.qute_QImage_valid(self, C.int(x), C.int(y))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -377,6 +401,7 @@ func (this *QImage) Valid(x int, y int) bool {
 func (this *QImage) PixelIndex(x int, y int) int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.PixelIndex")
 	r := C.qute_QImage_pixelIndex(self, C.int(x), C.int(y))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -388,6 +413,7 @@ func (this *QImage) PixelIndex(x int, y int) int {
 func (this *QImage) Pixel(x int, y int) uint {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Pixel")
 	r := C.qute_QImage_pixel(self, C.int(x), C.int(y))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -399,6 +425,7 @@ func (this *QImage) Pixel(x int, y int) uint {
 func (this *QImage) SetPixel(x int, y int, index_or_rgb uint) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetPixel")
 	C.qute_QImage_setPixel(self, C.int(x), C.int(y), C.uint(index_or_rgb))
+	runtime.KeepAlive(this)
 }
 
 // PixelColor wraps QImage::pixelColor.
@@ -409,6 +436,7 @@ func (this *QImage) SetPixel(x int, y int, index_or_rgb uint) {
 func (this *QImage) PixelColor(x int, y int) QColor {
 	self := rt.Use(unsafe.Pointer(this), "QImage.PixelColor")
 	r := C.qute_QImage_pixelColor(self, C.int(x), C.int(y))
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -420,6 +448,7 @@ func (this *QImage) PixelColor(x int, y int) QColor {
 func (this *QImage) SetPixelColor(x int, y int, c QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetPixelColor")
 	C.qute_QImage_setPixelColor(self, C.int(x), C.int(y), cQColor(c))
+	runtime.KeepAlive(this)
 }
 
 // ColorTable wraps QImage::colorTable.
@@ -430,6 +459,7 @@ func (this *QImage) SetPixelColor(x int, y int, c QColor) {
 func (this *QImage) ColorTable() []uint {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTable")
 	r := C.qute_QImage_colorTable(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.uint) uint { return uint(e) })
 }
 
@@ -445,6 +475,7 @@ func (this *QImage) SetColorTable(colors []uint) {
 		colorsC[i] = C.uint(colors[i])
 	}
 	C.qute_QImage_setColorTable(self, unsafe.Pointer(unsafe.SliceData(colorsC)), C.ptrdiff_t(len(colors)))
+	runtime.KeepAlive(this)
 }
 
 // SetDevicePixelRatio wraps QImage::setDevicePixelRatio.
@@ -455,6 +486,7 @@ func (this *QImage) SetColorTable(colors []uint) {
 func (this *QImage) SetDevicePixelRatio(scaleFactor float64) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetDevicePixelRatio")
 	C.qute_QImage_setDevicePixelRatio(self, C.double(scaleFactor))
+	runtime.KeepAlive(this)
 }
 
 // DeviceIndependentSize wraps QImage::deviceIndependentSize.
@@ -465,6 +497,7 @@ func (this *QImage) SetDevicePixelRatio(scaleFactor float64) {
 func (this *QImage) DeviceIndependentSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QImage.DeviceIndependentSize")
 	r := C.qute_QImage_deviceIndependentSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -476,6 +509,7 @@ func (this *QImage) DeviceIndependentSize() qtcore.QSizeF {
 func (this *QImage) Fill(pixel uint) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Fill")
 	C.qute_QImage_fill(self, C.uint(pixel))
+	runtime.KeepAlive(this)
 }
 
 // FillColor wraps QImage::fill.
@@ -486,6 +520,7 @@ func (this *QImage) Fill(pixel uint) {
 func (this *QImage) FillColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.FillColor")
 	C.qute_QImage_fill_1(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // HasAlphaChannel wraps QImage::hasAlphaChannel.
@@ -496,6 +531,7 @@ func (this *QImage) FillColor(color QColor) {
 func (this *QImage) HasAlphaChannel() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.HasAlphaChannel")
 	r := C.qute_QImage_hasAlphaChannel(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -507,6 +543,8 @@ func (this *QImage) HasAlphaChannel() bool {
 func (this *QImage) SetAlphaChannel(alphaChannel *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetAlphaChannel")
 	C.qute_QImage_setAlphaChannel(self, rt.UseArg(unsafe.Pointer(alphaChannel), "QImage.SetAlphaChannel"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(alphaChannel)
 }
 
 // CreateAlphaMask wraps QImage::createAlphaMask.
@@ -519,6 +557,7 @@ func (this *QImage) SetAlphaChannel(alphaChannel *QImage) {
 func (this *QImage) CreateAlphaMask() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.CreateAlphaMask")
 	r := C.qute_QImage_createAlphaMask(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -532,6 +571,7 @@ func (this *QImage) CreateAlphaMask() *QImage {
 func (this *QImage) CreateHeuristicMask() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.CreateHeuristicMask")
 	r := C.qute_QImage_createHeuristicMask(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -545,6 +585,7 @@ func (this *QImage) CreateHeuristicMask() *QImage {
 func (this *QImage) CreateMaskFromColor(color uint) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.CreateMaskFromColor")
 	r := C.qute_QImage_createMaskFromColor(self, C.uint(color))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -558,6 +599,7 @@ func (this *QImage) CreateMaskFromColor(color uint) *QImage {
 func (this *QImage) Scaled(w int, hArg int) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Scaled")
 	r := C.qute_QImage_scaled(self, C.int(w), C.int(hArg))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -571,6 +613,7 @@ func (this *QImage) Scaled(w int, hArg int) *QImage {
 func (this *QImage) ScaledToWidth(w int) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledToWidth")
 	r := C.qute_QImage_scaledToWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -584,6 +627,7 @@ func (this *QImage) ScaledToWidth(w int) *QImage {
 func (this *QImage) ScaledToHeight(hArg int) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledToHeight")
 	r := C.qute_QImage_scaledToHeight(self, C.int(hArg))
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -597,6 +641,8 @@ func (this *QImage) ScaledToHeight(hArg int) *QImage {
 func (this *QImage) Transformed(matrix *QTransform) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Transformed")
 	r := C.qute_QImage_transformed(self, rt.UseArg(unsafe.Pointer(matrix), "QImage.Transformed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -610,6 +656,7 @@ func (this *QImage) Transformed(matrix *QTransform) *QImage {
 func (this *QImage) RgbSwapped() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.RgbSwapped")
 	r := C.qute_QImage_rgbSwapped(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -623,6 +670,7 @@ func (this *QImage) RgbSwapped() *QImage {
 func (this *QImage) Flipped() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Flipped")
 	r := C.qute_QImage_flipped(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -634,6 +682,7 @@ func (this *QImage) Flipped() *QImage {
 func (this *QImage) Flip() {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Flip")
 	C.qute_QImage_flip(self)
+	runtime.KeepAlive(this)
 }
 
 // RgbSwap wraps QImage::rgbSwap.
@@ -644,6 +693,7 @@ func (this *QImage) Flip() {
 func (this *QImage) RgbSwap() {
 	self := rt.Use(unsafe.Pointer(this), "QImage.RgbSwap")
 	C.qute_QImage_rgbSwap(self)
+	runtime.KeepAlive(this)
 }
 
 // InvertPixels wraps QImage::invertPixels.
@@ -654,6 +704,7 @@ func (this *QImage) RgbSwap() {
 func (this *QImage) InvertPixels() {
 	self := rt.Use(unsafe.Pointer(this), "QImage.InvertPixels")
 	C.qute_QImage_invertPixels(self)
+	runtime.KeepAlive(this)
 }
 
 // ColorSpace wraps QImage::colorSpace.
@@ -666,6 +717,7 @@ func (this *QImage) InvertPixels() {
 func (this *QImage) ColorSpace() *QColorSpace {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ColorSpace")
 	r := C.qute_QImage_colorSpace(self)
+	runtime.KeepAlive(this)
 	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
@@ -679,6 +731,8 @@ func (this *QImage) ColorSpace() *QColorSpace {
 func (this *QImage) ConvertedToColorSpace(colorSpace *QColorSpace) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToColorSpace")
 	r := C.qute_QImage_convertedToColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertedToColorSpace"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -692,6 +746,8 @@ func (this *QImage) ConvertedToColorSpace(colorSpace *QColorSpace) *QImage {
 func (this *QImage) ConvertedToColorSpaceWithFormat(colorSpace *QColorSpace, format QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToColorSpaceWithFormat")
 	r := C.qute_QImage_convertedToColorSpace_1(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertedToColorSpaceWithFormat"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -703,6 +759,8 @@ func (this *QImage) ConvertedToColorSpaceWithFormat(colorSpace *QColorSpace, for
 func (this *QImage) ConvertToColorSpace(colorSpace *QColorSpace) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToColorSpace")
 	C.qute_QImage_convertToColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertToColorSpace"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
 }
 
 // ConvertToColorSpaceWithFormat wraps QImage::convertToColorSpace.
@@ -713,6 +771,8 @@ func (this *QImage) ConvertToColorSpace(colorSpace *QColorSpace) {
 func (this *QImage) ConvertToColorSpaceWithFormat(colorSpace *QColorSpace, format QImageFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToColorSpaceWithFormat")
 	C.qute_QImage_convertToColorSpace_1(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertToColorSpaceWithFormat"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
 }
 
 // SetColorSpace wraps QImage::setColorSpace.
@@ -723,6 +783,8 @@ func (this *QImage) ConvertToColorSpaceWithFormat(colorSpace *QColorSpace, forma
 func (this *QImage) SetColorSpace(colorSpace *QColorSpace) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetColorSpace")
 	C.qute_QImage_setColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.SetColorSpace"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
 }
 
 // ColorTransformed wraps QImage::colorTransformed.
@@ -735,6 +797,8 @@ func (this *QImage) SetColorSpace(colorSpace *QColorSpace) {
 func (this *QImage) ColorTransformed(transform *QColorTransform) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTransformed")
 	r := C.qute_QImage_colorTransformed(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ColorTransformed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -748,6 +812,8 @@ func (this *QImage) ColorTransformed(transform *QColorTransform) *QImage {
 func (this *QImage) ColorTransformedWithFormat(transform *QColorTransform, format QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTransformedWithFormat")
 	r := C.qute_QImage_colorTransformed_1(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ColorTransformedWithFormat"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -759,6 +825,8 @@ func (this *QImage) ColorTransformedWithFormat(transform *QColorTransform, forma
 func (this *QImage) ApplyColorTransform(transform *QColorTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ApplyColorTransform")
 	C.qute_QImage_applyColorTransform(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ApplyColorTransform"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 }
 
 // ApplyColorTransformWithFormat wraps QImage::applyColorTransform.
@@ -769,6 +837,8 @@ func (this *QImage) ApplyColorTransform(transform *QColorTransform) {
 func (this *QImage) ApplyColorTransformWithFormat(transform *QColorTransform, format QImageFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ApplyColorTransformWithFormat")
 	C.qute_QImage_applyColorTransform_1(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ApplyColorTransformWithFormat"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 }
 
 // LoadFrom wraps QImage::load.
@@ -785,6 +855,8 @@ func (this *QImage) LoadFrom(device qtcore.QIODeviceLike, format string) error {
 	formatCStr := C.CString(format)
 	defer C.free(unsafe.Pointer(formatCStr))
 	r := C.qute_QImage_load(self, devicePtr, formatCStr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
 	if !bool(r) {
 		return fmt.Errorf("QImage.LoadFrom: failed")
 	}
@@ -799,6 +871,7 @@ func (this *QImage) LoadFrom(device qtcore.QIODeviceLike, format string) error {
 func (this *QImage) Load(fileName string) error {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Load")
 	r := C.qute_QImage_load_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	if !bool(r) {
 		return fmt.Errorf("QImage.Load: failed")
 	}
@@ -813,6 +886,7 @@ func (this *QImage) Load(fileName string) error {
 func (this *QImage) LoadFromData(data []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.LoadFromData")
 	r := C.qute_QImage_loadFromData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -824,6 +898,7 @@ func (this *QImage) LoadFromData(data []byte) bool {
 func (this *QImage) Save(fileName string) error {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Save")
 	r := C.qute_QImage_save(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	if !bool(r) {
 		return fmt.Errorf("QImage.Save: failed")
 	}
@@ -842,6 +917,8 @@ func (this *QImage) SaveTo(device qtcore.QIODeviceLike) error {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QImage.SaveTo")
 	}
 	r := C.qute_QImage_save_1(self, devicePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
 	if !bool(r) {
 		return fmt.Errorf("QImage.SaveTo: failed")
 	}
@@ -856,6 +933,7 @@ func (this *QImage) SaveTo(device qtcore.QIODeviceLike) error {
 func (this *QImage) CacheKey() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QImage.CacheKey")
 	r := C.qute_QImage_cacheKey(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -867,6 +945,7 @@ func (this *QImage) CacheKey() int64 {
 func (this *QImage) DotsPerMeterX() int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.DotsPerMeterX")
 	r := C.qute_QImage_dotsPerMeterX(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -878,6 +957,7 @@ func (this *QImage) DotsPerMeterX() int {
 func (this *QImage) DotsPerMeterY() int {
 	self := rt.Use(unsafe.Pointer(this), "QImage.DotsPerMeterY")
 	r := C.qute_QImage_dotsPerMeterY(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -889,6 +969,7 @@ func (this *QImage) DotsPerMeterY() int {
 func (this *QImage) SetDotsPerMeterX(dotsPerMeterX int) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetDotsPerMeterX")
 	C.qute_QImage_setDotsPerMeterX(self, C.int(dotsPerMeterX))
+	runtime.KeepAlive(this)
 }
 
 // SetDotsPerMeterY wraps QImage::setDotsPerMeterY.
@@ -899,6 +980,7 @@ func (this *QImage) SetDotsPerMeterX(dotsPerMeterX int) {
 func (this *QImage) SetDotsPerMeterY(dotsPerMeterY int) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetDotsPerMeterY")
 	C.qute_QImage_setDotsPerMeterY(self, C.int(dotsPerMeterY))
+	runtime.KeepAlive(this)
 }
 
 // Offset wraps QImage::offset.
@@ -909,6 +991,7 @@ func (this *QImage) SetDotsPerMeterY(dotsPerMeterY int) {
 func (this *QImage) Offset() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Offset")
 	r := C.qute_QImage_offset(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -920,6 +1003,7 @@ func (this *QImage) Offset() qtcore.QPoint {
 func (this *QImage) SetOffset(offset qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetOffset")
 	C.qute_QImage_setOffset(self, cQPoint(offset))
+	runtime.KeepAlive(this)
 }
 
 // TextKeys wraps QImage::textKeys.
@@ -930,6 +1014,7 @@ func (this *QImage) SetOffset(offset qtcore.QPoint) {
 func (this *QImage) TextKeys() []string {
 	self := rt.Use(unsafe.Pointer(this), "QImage.TextKeys")
 	r := C.qute_QImage_textKeys(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -941,6 +1026,7 @@ func (this *QImage) TextKeys() []string {
 func (this *QImage) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Text")
 	r := C.qute_QImage_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -952,6 +1038,7 @@ func (this *QImage) Text() string {
 func (this *QImage) SetText(key string, value string) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.SetText")
 	C.qute_QImage_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
+	runtime.KeepAlive(this)
 }
 
 // PixelFormat wraps QImage::pixelFormat.
@@ -964,6 +1051,7 @@ func (this *QImage) SetText(key string, value string) {
 func (this *QImage) PixelFormat() *QPixelFormat {
 	self := rt.Use(unsafe.Pointer(this), "QImage.PixelFormat")
 	r := C.qute_QImage_pixelFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixelFormat](rt.WrapClass(r, "QPixelFormat", rt.TakeOwned), r)
 }
 
@@ -977,6 +1065,7 @@ func (this *QImage) PixelFormat() *QPixelFormat {
 func QImageTrueMatrix(transform *QTransform, w int, hArg int) *QTransform {
 	rt.CheckThread("QImageTrueMatrix")
 	r := C.qute_QImage_trueMatrix(rt.UseArg(unsafe.Pointer(transform), "QImageTrueMatrix"), C.int(w), C.int(hArg))
+	runtime.KeepAlive(transform)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -1014,5 +1103,6 @@ func QImageToPixelFormat(format QImageFormat) *QPixelFormat {
 func QImageToImageFormat(format *QPixelFormat) QImageFormat {
 	rt.CheckThread("QImageToImageFormat")
 	r := C.qute_QImage_toImageFormat(rt.UseArg(unsafe.Pointer(format), "QImageToImageFormat"))
+	runtime.KeepAlive(format)
 	return QImageFormat(r)
 }

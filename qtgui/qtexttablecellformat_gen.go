@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQTextTableCellFormat() *QTextTableCellFormat {
 func (this *QTextTableCellFormat) SetTopPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetTopPadding")
 	C.qute_QTextTableCellFormat_setTopPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // TopPadding wraps QTextTableCellFormat::topPadding.
@@ -63,6 +65,7 @@ func (this *QTextTableCellFormat) SetTopPadding(padding float64) {
 func (this *QTextTableCellFormat) TopPadding() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.TopPadding")
 	r := C.qute_QTextTableCellFormat_topPadding(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -74,6 +77,7 @@ func (this *QTextTableCellFormat) TopPadding() float64 {
 func (this *QTextTableCellFormat) SetBottomPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBottomPadding")
 	C.qute_QTextTableCellFormat_setBottomPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // BottomPadding wraps QTextTableCellFormat::bottomPadding.
@@ -84,6 +88,7 @@ func (this *QTextTableCellFormat) SetBottomPadding(padding float64) {
 func (this *QTextTableCellFormat) BottomPadding() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.BottomPadding")
 	r := C.qute_QTextTableCellFormat_bottomPadding(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -95,6 +100,7 @@ func (this *QTextTableCellFormat) BottomPadding() float64 {
 func (this *QTextTableCellFormat) SetLeftPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetLeftPadding")
 	C.qute_QTextTableCellFormat_setLeftPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // LeftPadding wraps QTextTableCellFormat::leftPadding.
@@ -105,6 +111,7 @@ func (this *QTextTableCellFormat) SetLeftPadding(padding float64) {
 func (this *QTextTableCellFormat) LeftPadding() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.LeftPadding")
 	r := C.qute_QTextTableCellFormat_leftPadding(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -116,6 +123,7 @@ func (this *QTextTableCellFormat) LeftPadding() float64 {
 func (this *QTextTableCellFormat) SetRightPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetRightPadding")
 	C.qute_QTextTableCellFormat_setRightPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // RightPadding wraps QTextTableCellFormat::rightPadding.
@@ -126,6 +134,7 @@ func (this *QTextTableCellFormat) SetRightPadding(padding float64) {
 func (this *QTextTableCellFormat) RightPadding() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.RightPadding")
 	r := C.qute_QTextTableCellFormat_rightPadding(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -137,6 +146,7 @@ func (this *QTextTableCellFormat) RightPadding() float64 {
 func (this *QTextTableCellFormat) SetPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetPadding")
 	C.qute_QTextTableCellFormat_setPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // SetTopBorder wraps QTextTableCellFormat::setTopBorder.
@@ -147,6 +157,7 @@ func (this *QTextTableCellFormat) SetPadding(padding float64) {
 func (this *QTextTableCellFormat) SetTopBorder(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetTopBorder")
 	C.qute_QTextTableCellFormat_setTopBorder(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // TopBorder wraps QTextTableCellFormat::topBorder.
@@ -157,6 +168,7 @@ func (this *QTextTableCellFormat) SetTopBorder(width float64) {
 func (this *QTextTableCellFormat) TopBorder() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.TopBorder")
 	r := C.qute_QTextTableCellFormat_topBorder(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -168,6 +180,7 @@ func (this *QTextTableCellFormat) TopBorder() float64 {
 func (this *QTextTableCellFormat) SetBottomBorder(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBottomBorder")
 	C.qute_QTextTableCellFormat_setBottomBorder(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // BottomBorder wraps QTextTableCellFormat::bottomBorder.
@@ -178,6 +191,7 @@ func (this *QTextTableCellFormat) SetBottomBorder(width float64) {
 func (this *QTextTableCellFormat) BottomBorder() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.BottomBorder")
 	r := C.qute_QTextTableCellFormat_bottomBorder(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -189,6 +203,7 @@ func (this *QTextTableCellFormat) BottomBorder() float64 {
 func (this *QTextTableCellFormat) SetLeftBorder(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetLeftBorder")
 	C.qute_QTextTableCellFormat_setLeftBorder(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // LeftBorder wraps QTextTableCellFormat::leftBorder.
@@ -199,6 +214,7 @@ func (this *QTextTableCellFormat) SetLeftBorder(width float64) {
 func (this *QTextTableCellFormat) LeftBorder() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.LeftBorder")
 	r := C.qute_QTextTableCellFormat_leftBorder(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -210,6 +226,7 @@ func (this *QTextTableCellFormat) LeftBorder() float64 {
 func (this *QTextTableCellFormat) SetRightBorder(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetRightBorder")
 	C.qute_QTextTableCellFormat_setRightBorder(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // RightBorder wraps QTextTableCellFormat::rightBorder.
@@ -220,6 +237,7 @@ func (this *QTextTableCellFormat) SetRightBorder(width float64) {
 func (this *QTextTableCellFormat) RightBorder() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.RightBorder")
 	r := C.qute_QTextTableCellFormat_rightBorder(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -231,6 +249,7 @@ func (this *QTextTableCellFormat) RightBorder() float64 {
 func (this *QTextTableCellFormat) SetBorder(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBorder")
 	C.qute_QTextTableCellFormat_setBorder(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // SetTopBorderStyle wraps QTextTableCellFormat::setTopBorderStyle.
@@ -241,6 +260,7 @@ func (this *QTextTableCellFormat) SetBorder(width float64) {
 func (this *QTextTableCellFormat) SetTopBorderStyle(style QTextFrameFormatBorderStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetTopBorderStyle")
 	C.qute_QTextTableCellFormat_setTopBorderStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // TopBorderStyle wraps QTextTableCellFormat::topBorderStyle.
@@ -251,6 +271,7 @@ func (this *QTextTableCellFormat) SetTopBorderStyle(style QTextFrameFormatBorder
 func (this *QTextTableCellFormat) TopBorderStyle() QTextFrameFormatBorderStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.TopBorderStyle")
 	r := C.qute_QTextTableCellFormat_topBorderStyle(self)
+	runtime.KeepAlive(this)
 	return QTextFrameFormatBorderStyle(r)
 }
 
@@ -262,6 +283,7 @@ func (this *QTextTableCellFormat) TopBorderStyle() QTextFrameFormatBorderStyle {
 func (this *QTextTableCellFormat) SetBottomBorderStyle(style QTextFrameFormatBorderStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBottomBorderStyle")
 	C.qute_QTextTableCellFormat_setBottomBorderStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // BottomBorderStyle wraps QTextTableCellFormat::bottomBorderStyle.
@@ -272,6 +294,7 @@ func (this *QTextTableCellFormat) SetBottomBorderStyle(style QTextFrameFormatBor
 func (this *QTextTableCellFormat) BottomBorderStyle() QTextFrameFormatBorderStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.BottomBorderStyle")
 	r := C.qute_QTextTableCellFormat_bottomBorderStyle(self)
+	runtime.KeepAlive(this)
 	return QTextFrameFormatBorderStyle(r)
 }
 
@@ -283,6 +306,7 @@ func (this *QTextTableCellFormat) BottomBorderStyle() QTextFrameFormatBorderStyl
 func (this *QTextTableCellFormat) SetLeftBorderStyle(style QTextFrameFormatBorderStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetLeftBorderStyle")
 	C.qute_QTextTableCellFormat_setLeftBorderStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // LeftBorderStyle wraps QTextTableCellFormat::leftBorderStyle.
@@ -293,6 +317,7 @@ func (this *QTextTableCellFormat) SetLeftBorderStyle(style QTextFrameFormatBorde
 func (this *QTextTableCellFormat) LeftBorderStyle() QTextFrameFormatBorderStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.LeftBorderStyle")
 	r := C.qute_QTextTableCellFormat_leftBorderStyle(self)
+	runtime.KeepAlive(this)
 	return QTextFrameFormatBorderStyle(r)
 }
 
@@ -304,6 +329,7 @@ func (this *QTextTableCellFormat) LeftBorderStyle() QTextFrameFormatBorderStyle 
 func (this *QTextTableCellFormat) SetRightBorderStyle(style QTextFrameFormatBorderStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetRightBorderStyle")
 	C.qute_QTextTableCellFormat_setRightBorderStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // RightBorderStyle wraps QTextTableCellFormat::rightBorderStyle.
@@ -314,6 +340,7 @@ func (this *QTextTableCellFormat) SetRightBorderStyle(style QTextFrameFormatBord
 func (this *QTextTableCellFormat) RightBorderStyle() QTextFrameFormatBorderStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.RightBorderStyle")
 	r := C.qute_QTextTableCellFormat_rightBorderStyle(self)
+	runtime.KeepAlive(this)
 	return QTextFrameFormatBorderStyle(r)
 }
 
@@ -325,6 +352,7 @@ func (this *QTextTableCellFormat) RightBorderStyle() QTextFrameFormatBorderStyle
 func (this *QTextTableCellFormat) SetBorderStyle(style QTextFrameFormatBorderStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBorderStyle")
 	C.qute_QTextTableCellFormat_setBorderStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // SetTopBorderBrush wraps QTextTableCellFormat::setTopBorderBrush.
@@ -335,6 +363,8 @@ func (this *QTextTableCellFormat) SetBorderStyle(style QTextFrameFormatBorderSty
 func (this *QTextTableCellFormat) SetTopBorderBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetTopBorderBrush")
 	C.qute_QTextTableCellFormat_setTopBorderBrush(self, rt.UseArg(unsafe.Pointer(brush), "QTextTableCellFormat.SetTopBorderBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // TopBorderBrush wraps QTextTableCellFormat::topBorderBrush.
@@ -347,6 +377,7 @@ func (this *QTextTableCellFormat) SetTopBorderBrush(brush *QBrush) {
 func (this *QTextTableCellFormat) TopBorderBrush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.TopBorderBrush")
 	r := C.qute_QTextTableCellFormat_topBorderBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -358,6 +389,8 @@ func (this *QTextTableCellFormat) TopBorderBrush() *QBrush {
 func (this *QTextTableCellFormat) SetBottomBorderBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBottomBorderBrush")
 	C.qute_QTextTableCellFormat_setBottomBorderBrush(self, rt.UseArg(unsafe.Pointer(brush), "QTextTableCellFormat.SetBottomBorderBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // BottomBorderBrush wraps QTextTableCellFormat::bottomBorderBrush.
@@ -370,6 +403,7 @@ func (this *QTextTableCellFormat) SetBottomBorderBrush(brush *QBrush) {
 func (this *QTextTableCellFormat) BottomBorderBrush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.BottomBorderBrush")
 	r := C.qute_QTextTableCellFormat_bottomBorderBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -381,6 +415,8 @@ func (this *QTextTableCellFormat) BottomBorderBrush() *QBrush {
 func (this *QTextTableCellFormat) SetLeftBorderBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetLeftBorderBrush")
 	C.qute_QTextTableCellFormat_setLeftBorderBrush(self, rt.UseArg(unsafe.Pointer(brush), "QTextTableCellFormat.SetLeftBorderBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // LeftBorderBrush wraps QTextTableCellFormat::leftBorderBrush.
@@ -393,6 +429,7 @@ func (this *QTextTableCellFormat) SetLeftBorderBrush(brush *QBrush) {
 func (this *QTextTableCellFormat) LeftBorderBrush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.LeftBorderBrush")
 	r := C.qute_QTextTableCellFormat_leftBorderBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -404,6 +441,8 @@ func (this *QTextTableCellFormat) LeftBorderBrush() *QBrush {
 func (this *QTextTableCellFormat) SetRightBorderBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetRightBorderBrush")
 	C.qute_QTextTableCellFormat_setRightBorderBrush(self, rt.UseArg(unsafe.Pointer(brush), "QTextTableCellFormat.SetRightBorderBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // RightBorderBrush wraps QTextTableCellFormat::rightBorderBrush.
@@ -416,6 +455,7 @@ func (this *QTextTableCellFormat) SetRightBorderBrush(brush *QBrush) {
 func (this *QTextTableCellFormat) RightBorderBrush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.RightBorderBrush")
 	r := C.qute_QTextTableCellFormat_rightBorderBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -427,4 +467,6 @@ func (this *QTextTableCellFormat) RightBorderBrush() *QBrush {
 func (this *QTextTableCellFormat) SetBorderBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCellFormat.SetBorderBrush")
 	C.qute_QTextTableCellFormat_setBorderBrush(self, rt.UseArg(unsafe.Pointer(brush), "QTextTableCellFormat.SetBorderBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }

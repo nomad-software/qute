@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -102,6 +103,7 @@ func NewQAbstractFileIconProvider() *QAbstractFileIconProvider {
 func (this *QAbstractFileIconProvider) Icon(arg0 QAbstractFileIconProviderIconType) *QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.Icon")
 	r := C.qute_QAbstractFileIconProvider_icon(self, C.int64_t(arg0))
+	runtime.KeepAlive(this)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -115,6 +117,8 @@ func (this *QAbstractFileIconProvider) Icon(arg0 QAbstractFileIconProviderIconTy
 func (this *QAbstractFileIconProvider) IconFileInfo(fileInfo *qtcore.QFileInfo) *QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.IconFileInfo")
 	r := C.qute_QAbstractFileIconProvider_icon_1(self, rt.UseArg(unsafe.Pointer(fileInfo), "QAbstractFileIconProvider.IconFileInfo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fileInfo)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -126,6 +130,8 @@ func (this *QAbstractFileIconProvider) IconFileInfo(fileInfo *qtcore.QFileInfo) 
 func (this *QAbstractFileIconProvider) Type(fileInfo *qtcore.QFileInfo) string {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.Type")
 	r := C.qute_QAbstractFileIconProvider_type(self, rt.UseArg(unsafe.Pointer(fileInfo), "QAbstractFileIconProvider.Type"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fileInfo)
 	return quteStr(r)
 }
 
@@ -137,6 +143,7 @@ func (this *QAbstractFileIconProvider) Type(fileInfo *qtcore.QFileInfo) string {
 func (this *QAbstractFileIconProvider) SetOptions(options QAbstractFileIconProviderOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.SetOptions")
 	C.qute_QAbstractFileIconProvider_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Options wraps QAbstractFileIconProvider::options.
@@ -147,5 +154,6 @@ func (this *QAbstractFileIconProvider) SetOptions(options QAbstractFileIconProvi
 func (this *QAbstractFileIconProvider) Options() QAbstractFileIconProviderOptions {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.Options")
 	r := C.qute_QAbstractFileIconProvider_options(self)
+	runtime.KeepAlive(this)
 	return QAbstractFileIconProviderOptions(r)
 }

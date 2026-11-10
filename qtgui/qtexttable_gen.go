@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QTextTableCast(o qtcore.QObjectLike) *QTextTable {
 func (this *QTextTable) Resize(rows int, cols int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.Resize")
 	C.qute_QTextTable_resize(self, C.int(rows), C.int(cols))
+	runtime.KeepAlive(this)
 }
 
 // InsertRows wraps QTextTable::insertRows.
@@ -65,6 +67,7 @@ func (this *QTextTable) Resize(rows int, cols int) {
 func (this *QTextTable) InsertRows(pos int, num int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.InsertRows")
 	C.qute_QTextTable_insertRows(self, C.int(pos), C.int(num))
+	runtime.KeepAlive(this)
 }
 
 // InsertColumns wraps QTextTable::insertColumns.
@@ -75,6 +78,7 @@ func (this *QTextTable) InsertRows(pos int, num int) {
 func (this *QTextTable) InsertColumns(pos int, num int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.InsertColumns")
 	C.qute_QTextTable_insertColumns(self, C.int(pos), C.int(num))
+	runtime.KeepAlive(this)
 }
 
 // AppendRows wraps QTextTable::appendRows.
@@ -85,6 +89,7 @@ func (this *QTextTable) InsertColumns(pos int, num int) {
 func (this *QTextTable) AppendRows(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.AppendRows")
 	C.qute_QTextTable_appendRows(self, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // AppendColumns wraps QTextTable::appendColumns.
@@ -95,6 +100,7 @@ func (this *QTextTable) AppendRows(count int) {
 func (this *QTextTable) AppendColumns(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.AppendColumns")
 	C.qute_QTextTable_appendColumns(self, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // RemoveRows wraps QTextTable::removeRows.
@@ -105,6 +111,7 @@ func (this *QTextTable) AppendColumns(count int) {
 func (this *QTextTable) RemoveRows(pos int, num int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.RemoveRows")
 	C.qute_QTextTable_removeRows(self, C.int(pos), C.int(num))
+	runtime.KeepAlive(this)
 }
 
 // RemoveColumns wraps QTextTable::removeColumns.
@@ -115,6 +122,7 @@ func (this *QTextTable) RemoveRows(pos int, num int) {
 func (this *QTextTable) RemoveColumns(pos int, num int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.RemoveColumns")
 	C.qute_QTextTable_removeColumns(self, C.int(pos), C.int(num))
+	runtime.KeepAlive(this)
 }
 
 // MergeCellsRow wraps QTextTable::mergeCells.
@@ -125,6 +133,7 @@ func (this *QTextTable) RemoveColumns(pos int, num int) {
 func (this *QTextTable) MergeCellsRow(row int, col int, numRows int, numCols int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.MergeCellsRow")
 	C.qute_QTextTable_mergeCells(self, C.int(row), C.int(col), C.int(numRows), C.int(numCols))
+	runtime.KeepAlive(this)
 }
 
 // MergeCells wraps QTextTable::mergeCells.
@@ -135,6 +144,8 @@ func (this *QTextTable) MergeCellsRow(row int, col int, numRows int, numCols int
 func (this *QTextTable) MergeCells(cursor *QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.MergeCells")
 	C.qute_QTextTable_mergeCells_1(self, rt.UseArg(unsafe.Pointer(cursor), "QTextTable.MergeCells"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // SplitCell wraps QTextTable::splitCell.
@@ -145,6 +156,7 @@ func (this *QTextTable) MergeCells(cursor *QTextCursor) {
 func (this *QTextTable) SplitCell(row int, col int, numRows int, numCols int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.SplitCell")
 	C.qute_QTextTable_splitCell(self, C.int(row), C.int(col), C.int(numRows), C.int(numCols))
+	runtime.KeepAlive(this)
 }
 
 // Rows wraps QTextTable::rows.
@@ -155,6 +167,7 @@ func (this *QTextTable) SplitCell(row int, col int, numRows int, numCols int) {
 func (this *QTextTable) Rows() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.Rows")
 	r := C.qute_QTextTable_rows(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -166,6 +179,7 @@ func (this *QTextTable) Rows() int {
 func (this *QTextTable) Columns() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.Columns")
 	r := C.qute_QTextTable_columns(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -179,6 +193,7 @@ func (this *QTextTable) Columns() int {
 func (this *QTextTable) CellAtWithCol(row int, col int) *QTextTableCell {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.CellAtWithCol")
 	r := C.qute_QTextTable_cellAt(self, C.int(row), C.int(col))
+	runtime.KeepAlive(this)
 	return rt.View[QTextTableCell](rt.WrapClass(r, "QTextTableCell", rt.TakeOwned), r)
 }
 
@@ -192,6 +207,7 @@ func (this *QTextTable) CellAtWithCol(row int, col int) *QTextTableCell {
 func (this *QTextTable) CellAt(position int) *QTextTableCell {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.CellAt")
 	r := C.qute_QTextTable_cellAt_1(self, C.int(position))
+	runtime.KeepAlive(this)
 	return rt.View[QTextTableCell](rt.WrapClass(r, "QTextTableCell", rt.TakeOwned), r)
 }
 
@@ -205,6 +221,8 @@ func (this *QTextTable) CellAt(position int) *QTextTableCell {
 func (this *QTextTable) CellAtTextCursor(c *QTextCursor) *QTextTableCell {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.CellAtTextCursor")
 	r := C.qute_QTextTable_cellAt_2(self, rt.UseArg(unsafe.Pointer(c), "QTextTable.CellAtTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(c)
 	return rt.View[QTextTableCell](rt.WrapClass(r, "QTextTableCell", rt.TakeOwned), r)
 }
 
@@ -218,6 +236,8 @@ func (this *QTextTable) CellAtTextCursor(c *QTextCursor) *QTextTableCell {
 func (this *QTextTable) RowStart(c *QTextCursor) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.RowStart")
 	r := C.qute_QTextTable_rowStart(self, rt.UseArg(unsafe.Pointer(c), "QTextTable.RowStart"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(c)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -231,6 +251,8 @@ func (this *QTextTable) RowStart(c *QTextCursor) *QTextCursor {
 func (this *QTextTable) RowEnd(c *QTextCursor) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.RowEnd")
 	r := C.qute_QTextTable_rowEnd(self, rt.UseArg(unsafe.Pointer(c), "QTextTable.RowEnd"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(c)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -242,4 +264,6 @@ func (this *QTextTable) RowEnd(c *QTextCursor) *QTextCursor {
 func (this *QTextTable) SetFormat(format *QTextTableFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTable.SetFormat")
 	C.qute_QTextTable_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextTable.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }

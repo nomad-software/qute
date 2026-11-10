@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -63,6 +64,7 @@ func NewQTextFrame(doc QTextDocumentLike) *QTextFrame {
 		docPtr = rt.UseArg(unsafe.Pointer(doc.AsQTextDocument()), "NewQTextFrame")
 	}
 	p := C.qute_QTextFrame_new(docPtr)
+	runtime.KeepAlive(doc)
 	mode := rt.NewOwned
 	if docPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,8 @@ func NewQTextFrame(doc QTextDocumentLike) *QTextFrame {
 func (this *QTextFrame) SetFrameFormat(format *QTextFrameFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.SetFrameFormat")
 	C.qute_QTextFrame_setFrameFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextFrame.SetFrameFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // FrameFormat wraps QTextFrame::frameFormat.
@@ -91,6 +95,7 @@ func (this *QTextFrame) SetFrameFormat(format *QTextFrameFormat) {
 func (this *QTextFrame) FrameFormat() *QTextFrameFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.FrameFormat")
 	r := C.qute_QTextFrame_frameFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextFrameFormat](rt.WrapClass(r, "QTextFrameFormat", rt.TakeOwned), r)
 }
 
@@ -104,6 +109,7 @@ func (this *QTextFrame) FrameFormat() *QTextFrameFormat {
 func (this *QTextFrame) FirstCursorPosition() *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.FirstCursorPosition")
 	r := C.qute_QTextFrame_firstCursorPosition(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -117,6 +123,7 @@ func (this *QTextFrame) FirstCursorPosition() *QTextCursor {
 func (this *QTextFrame) LastCursorPosition() *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.LastCursorPosition")
 	r := C.qute_QTextFrame_lastCursorPosition(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -128,6 +135,7 @@ func (this *QTextFrame) LastCursorPosition() *QTextCursor {
 func (this *QTextFrame) FirstPosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.FirstPosition")
 	r := C.qute_QTextFrame_firstPosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -139,6 +147,7 @@ func (this *QTextFrame) FirstPosition() int {
 func (this *QTextFrame) LastPosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.LastPosition")
 	r := C.qute_QTextFrame_lastPosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -152,6 +161,7 @@ func (this *QTextFrame) LastPosition() int {
 func (this *QTextFrame) ChildFrames() []*QTextFrame {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.ChildFrames")
 	r := C.qute_QTextFrame_childFrames(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextFrame {
 		return rt.View[QTextFrame](rt.WrapClass(e, "QTextFrame", rt.KeepOrBorrow), e)
 	})
@@ -167,5 +177,6 @@ func (this *QTextFrame) ChildFrames() []*QTextFrame {
 func (this *QTextFrame) ParentFrame() *QTextFrame {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrame.ParentFrame")
 	r := C.qute_QTextFrame_parentFrame(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
 }

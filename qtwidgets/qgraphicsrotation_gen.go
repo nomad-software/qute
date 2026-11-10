@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQGraphicsRotation(parent qtcore.QObjectLike) *QGraphicsRotation {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsRotation")
 	}
 	p := C.qute_QGraphicsRotation_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func NewQGraphicsRotation(parent qtcore.QObjectLike) *QGraphicsRotation {
 func (this *QGraphicsRotation) Origin() *qtgui.QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Origin")
 	r := C.qute_QGraphicsRotation_origin(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -91,6 +94,8 @@ func (this *QGraphicsRotation) Origin() *qtgui.QVector3D {
 func (this *QGraphicsRotation) SetOrigin(point *qtgui.QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetOrigin")
 	C.qute_QGraphicsRotation_setOrigin(self, rt.UseArg(unsafe.Pointer(point), "QGraphicsRotation.SetOrigin"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 }
 
 // Angle wraps QGraphicsRotation::angle.
@@ -101,6 +106,7 @@ func (this *QGraphicsRotation) SetOrigin(point *qtgui.QVector3D) {
 func (this *QGraphicsRotation) Angle() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Angle")
 	r := C.qute_QGraphicsRotation_angle(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -112,6 +118,7 @@ func (this *QGraphicsRotation) Angle() float64 {
 func (this *QGraphicsRotation) SetAngle(angle float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetAngle")
 	C.qute_QGraphicsRotation_setAngle(self, C.double(angle))
+	runtime.KeepAlive(this)
 }
 
 // Axis wraps QGraphicsRotation::axis.
@@ -124,6 +131,7 @@ func (this *QGraphicsRotation) SetAngle(angle float64) {
 func (this *QGraphicsRotation) Axis() *qtgui.QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Axis")
 	r := C.qute_QGraphicsRotation_axis(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -135,6 +143,8 @@ func (this *QGraphicsRotation) Axis() *qtgui.QVector3D {
 func (this *QGraphicsRotation) SetAxis(axis *qtgui.QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetAxis")
 	C.qute_QGraphicsRotation_setAxis(self, rt.UseArg(unsafe.Pointer(axis), "QGraphicsRotation.SetAxis"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(axis)
 }
 
 // SetAxisAxis wraps QGraphicsRotation::setAxis.
@@ -145,6 +155,7 @@ func (this *QGraphicsRotation) SetAxis(axis *qtgui.QVector3D) {
 func (this *QGraphicsRotation) SetAxisAxis(axis qtcore.Axis) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.SetAxisAxis")
 	C.qute_QGraphicsRotation_setAxis_1(self, C.int64_t(axis))
+	runtime.KeepAlive(this)
 }
 
 // EmitOriginChanged wraps emitting the originChanged signal.
@@ -155,6 +166,7 @@ func (this *QGraphicsRotation) SetAxisAxis(axis qtcore.Axis) {
 func (this *QGraphicsRotation) EmitOriginChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.EmitOriginChanged")
 	C.qute_QGraphicsRotation_originChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitAngleChanged wraps emitting the angleChanged signal.
@@ -165,6 +177,7 @@ func (this *QGraphicsRotation) EmitOriginChanged() {
 func (this *QGraphicsRotation) EmitAngleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.EmitAngleChanged")
 	C.qute_QGraphicsRotation_angleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitAxisChanged wraps emitting the axisChanged signal.
@@ -175,6 +188,7 @@ func (this *QGraphicsRotation) EmitAngleChanged() {
 func (this *QGraphicsRotation) EmitAxisChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.EmitAxisChanged")
 	C.qute_QGraphicsRotation_axisChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnOriginChanged connects f to the originChanged signal. The connection ends when the

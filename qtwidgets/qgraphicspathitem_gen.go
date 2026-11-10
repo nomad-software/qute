@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -47,6 +48,7 @@ func NewQGraphicsPathItem(parent QGraphicsItemLike) *QGraphicsPathItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPathItem")
 	}
 	p := C.qute_QGraphicsPathItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -69,6 +71,8 @@ func NewQGraphicsPathItemWithPainterPath(path *qtgui.QPainterPath, parent QGraph
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPathItemWithPainterPath")
 	}
 	p := C.qute_QGraphicsPathItem_new_1(rt.UseArg(unsafe.Pointer(path), "NewQGraphicsPathItemWithPainterPath"), parentPtr)
+	runtime.KeepAlive(path)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -87,6 +91,7 @@ func NewQGraphicsPathItemWithPainterPath(path *qtgui.QPainterPath, parent QGraph
 func (this *QGraphicsPathItem) Path() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPathItem.Path")
 	r := C.qute_QGraphicsPathItem_path(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -98,4 +103,6 @@ func (this *QGraphicsPathItem) Path() *qtgui.QPainterPath {
 func (this *QGraphicsPathItem) SetPath(path *qtgui.QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPathItem.SetPath")
 	C.qute_QGraphicsPathItem_setPath(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsPathItem.SetPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 }

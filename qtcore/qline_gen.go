@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -120,6 +121,7 @@ func NewQLineWithX1(x1 int, y1 int, x2 int, y2 int) *QLine {
 func (this *QLine) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLine.IsNull")
 	r := C.qute_QLine_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +133,7 @@ func (this *QLine) IsNull() bool {
 func (this *QLine) P1() QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QLine.P1")
 	r := C.qute_QLine_p1(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -142,6 +145,7 @@ func (this *QLine) P1() QPoint {
 func (this *QLine) P2() QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QLine.P2")
 	r := C.qute_QLine_p2(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -153,6 +157,7 @@ func (this *QLine) P2() QPoint {
 func (this *QLine) X1() int {
 	self := rt.Use(unsafe.Pointer(this), "QLine.X1")
 	r := C.qute_QLine_x1(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -164,6 +169,7 @@ func (this *QLine) X1() int {
 func (this *QLine) Y1() int {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Y1")
 	r := C.qute_QLine_y1(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -175,6 +181,7 @@ func (this *QLine) Y1() int {
 func (this *QLine) X2() int {
 	self := rt.Use(unsafe.Pointer(this), "QLine.X2")
 	r := C.qute_QLine_x2(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -186,6 +193,7 @@ func (this *QLine) X2() int {
 func (this *QLine) Y2() int {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Y2")
 	r := C.qute_QLine_y2(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -197,6 +205,7 @@ func (this *QLine) Y2() int {
 func (this *QLine) Dx() int {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Dx")
 	r := C.qute_QLine_dx(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -208,6 +217,7 @@ func (this *QLine) Dx() int {
 func (this *QLine) Dy() int {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Dy")
 	r := C.qute_QLine_dy(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -219,6 +229,7 @@ func (this *QLine) Dy() int {
 func (this *QLine) Translate(pArg QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Translate")
 	C.qute_QLine_translate(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 }
 
 // Translated wraps QLine::translated.
@@ -231,6 +242,7 @@ func (this *QLine) Translate(pArg QPoint) {
 func (this *QLine) Translated(pArg QPoint) *QLine {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Translated")
 	r := C.qute_QLine_translated(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return rt.View[QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
 }
 
@@ -242,6 +254,7 @@ func (this *QLine) Translated(pArg QPoint) *QLine {
 func (this *QLine) Center() QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QLine.Center")
 	r := C.qute_QLine_center(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -253,6 +266,7 @@ func (this *QLine) Center() QPoint {
 func (this *QLine) SetP1(p1 QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QLine.SetP1")
 	C.qute_QLine_setP1(self, cQPoint(p1))
+	runtime.KeepAlive(this)
 }
 
 // SetP2 wraps QLine::setP2.
@@ -263,6 +277,7 @@ func (this *QLine) SetP1(p1 QPoint) {
 func (this *QLine) SetP2(p2 QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QLine.SetP2")
 	C.qute_QLine_setP2(self, cQPoint(p2))
+	runtime.KeepAlive(this)
 }
 
 // SetPoints wraps QLine::setPoints.
@@ -273,6 +288,7 @@ func (this *QLine) SetP2(p2 QPoint) {
 func (this *QLine) SetPoints(p1 QPoint, p2 QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QLine.SetPoints")
 	C.qute_QLine_setPoints(self, cQPoint(p1), cQPoint(p2))
+	runtime.KeepAlive(this)
 }
 
 // SetLine wraps QLine::setLine.
@@ -283,6 +299,7 @@ func (this *QLine) SetPoints(p1 QPoint, p2 QPoint) {
 func (this *QLine) SetLine(x1 int, y1 int, x2 int, y2 int) {
 	self := rt.Use(unsafe.Pointer(this), "QLine.SetLine")
 	C.qute_QLine_setLine(self, C.int(x1), C.int(y1), C.int(x2), C.int(y2))
+	runtime.KeepAlive(this)
 }
 
 // ToLineF wraps QLine::toLineF.
@@ -295,5 +312,6 @@ func (this *QLine) SetLine(x1 int, y1 int, x2 int, y2 int) {
 func (this *QLine) ToLineF() *QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QLine.ToLineF")
 	r := C.qute_QLine_toLineF(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }

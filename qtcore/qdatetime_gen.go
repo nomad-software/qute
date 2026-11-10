@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -97,6 +98,9 @@ func NewQDateTime() *QDateTime {
 func NewQDateTimeIn(date *QDate, time *QTime, timeZone *QTimeZone) *QDateTime {
 	rt.CheckThread("NewQDateTimeIn")
 	p := C.qute_QDateTime_new_1(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeIn"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeIn"), rt.UseArg(unsafe.Pointer(timeZone), "NewQDateTimeIn"))
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(time)
+	runtime.KeepAlive(timeZone)
 	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
@@ -111,6 +115,8 @@ func NewQDateTimeIn(date *QDate, time *QTime, timeZone *QTimeZone) *QDateTime {
 func NewQDateTimeLocal(date *QDate, time *QTime) *QDateTime {
 	rt.CheckThread("NewQDateTimeLocal")
 	p := C.qute_QDateTime_new_2(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeLocal"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeLocal"))
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(time)
 	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
@@ -123,6 +129,7 @@ func NewQDateTimeLocal(date *QDate, time *QTime) *QDateTime {
 func (this *QDateTime) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.IsNull")
 	r := C.qute_QDateTime_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -134,6 +141,7 @@ func (this *QDateTime) IsNull() bool {
 func (this *QDateTime) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.IsValid")
 	r := C.qute_QDateTime_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -147,6 +155,7 @@ func (this *QDateTime) IsValid() bool {
 func (this *QDateTime) Date() *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.Date")
 	r := C.qute_QDateTime_date(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -160,6 +169,7 @@ func (this *QDateTime) Date() *QDate {
 func (this *QDateTime) Time() *QTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.Time")
 	r := C.qute_QDateTime_time(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -171,6 +181,7 @@ func (this *QDateTime) Time() *QTime {
 func (this *QDateTime) TimeSpec() TimeSpec {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.TimeSpec")
 	r := C.qute_QDateTime_timeSpec(self)
+	runtime.KeepAlive(this)
 	return TimeSpec(r)
 }
 
@@ -182,6 +193,7 @@ func (this *QDateTime) TimeSpec() TimeSpec {
 func (this *QDateTime) OffsetFromUtc() int {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.OffsetFromUtc")
 	r := C.qute_QDateTime_offsetFromUtc(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -195,6 +207,7 @@ func (this *QDateTime) OffsetFromUtc() int {
 func (this *QDateTime) TimeRepresentation() *QTimeZone {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.TimeRepresentation")
 	r := C.qute_QDateTime_timeRepresentation(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
 }
 
@@ -208,6 +221,7 @@ func (this *QDateTime) TimeRepresentation() *QTimeZone {
 func (this *QDateTime) TimeZone() *QTimeZone {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.TimeZone")
 	r := C.qute_QDateTime_timeZone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
 }
 
@@ -219,6 +233,7 @@ func (this *QDateTime) TimeZone() *QTimeZone {
 func (this *QDateTime) TimeZoneAbbreviation() string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.TimeZoneAbbreviation")
 	r := C.qute_QDateTime_timeZoneAbbreviation(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -230,6 +245,7 @@ func (this *QDateTime) TimeZoneAbbreviation() string {
 func (this *QDateTime) IsDaylightTime() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.IsDaylightTime")
 	r := C.qute_QDateTime_isDaylightTime(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -241,6 +257,7 @@ func (this *QDateTime) IsDaylightTime() bool {
 func (this *QDateTime) ToMSecsSinceEpoch() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToMSecsSinceEpoch")
 	r := C.qute_QDateTime_toMSecsSinceEpoch(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -252,6 +269,7 @@ func (this *QDateTime) ToMSecsSinceEpoch() int64 {
 func (this *QDateTime) ToSecsSinceEpoch() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToSecsSinceEpoch")
 	r := C.qute_QDateTime_toSecsSinceEpoch(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -263,6 +281,8 @@ func (this *QDateTime) ToSecsSinceEpoch() int64 {
 func (this *QDateTime) SetDate(date *QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetDate")
 	C.qute_QDateTime_setDate(self, rt.UseArg(unsafe.Pointer(date), "QDateTime.SetDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // SetTime wraps QDateTime::setTime.
@@ -273,6 +293,8 @@ func (this *QDateTime) SetDate(date *QDate) {
 func (this *QDateTime) SetTime(time *QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetTime")
 	C.qute_QDateTime_setTime(self, rt.UseArg(unsafe.Pointer(time), "QDateTime.SetTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
 }
 
 // SetTimeZone wraps QDateTime::setTimeZone.
@@ -283,6 +305,8 @@ func (this *QDateTime) SetTime(time *QTime) {
 func (this *QDateTime) SetTimeZone(toZone *QTimeZone) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetTimeZone")
 	C.qute_QDateTime_setTimeZone(self, rt.UseArg(unsafe.Pointer(toZone), "QDateTime.SetTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toZone)
 }
 
 // SetMSecsSinceEpoch wraps QDateTime::setMSecsSinceEpoch.
@@ -293,6 +317,7 @@ func (this *QDateTime) SetTimeZone(toZone *QTimeZone) {
 func (this *QDateTime) SetMSecsSinceEpoch(msecs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetMSecsSinceEpoch")
 	C.qute_QDateTime_setMSecsSinceEpoch(self, C.longlong(msecs))
+	runtime.KeepAlive(this)
 }
 
 // SetSecsSinceEpoch wraps QDateTime::setSecsSinceEpoch.
@@ -303,6 +328,7 @@ func (this *QDateTime) SetMSecsSinceEpoch(msecs int64) {
 func (this *QDateTime) SetSecsSinceEpoch(secs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetSecsSinceEpoch")
 	C.qute_QDateTime_setSecsSinceEpoch(self, C.longlong(secs))
+	runtime.KeepAlive(this)
 }
 
 // ToString wraps QDateTime::toString.
@@ -313,6 +339,7 @@ func (this *QDateTime) SetSecsSinceEpoch(secs int64) {
 func (this *QDateTime) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToString")
 	r := C.qute_QDateTime_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -324,6 +351,7 @@ func (this *QDateTime) ToString() string {
 func (this *QDateTime) ToStringFormat(format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToStringFormat")
 	r := C.qute_QDateTime_toString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -335,6 +363,8 @@ func (this *QDateTime) ToStringFormat(format string) string {
 func (this *QDateTime) ToStringWithFormat(format string, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToStringWithFormat")
 	r := C.qute_QDateTime_toString_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDateTime.ToStringWithFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return quteStr(r)
 }
 
@@ -348,6 +378,7 @@ func (this *QDateTime) ToStringWithFormat(format string, cal *QCalendar) string 
 func (this *QDateTime) AddDays(days int64) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddDays")
 	r := C.qute_QDateTime_addDays(self, C.longlong(days))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -361,6 +392,7 @@ func (this *QDateTime) AddDays(days int64) *QDateTime {
 func (this *QDateTime) AddMonths(months int) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddMonths")
 	r := C.qute_QDateTime_addMonths(self, C.int(months))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -374,6 +406,7 @@ func (this *QDateTime) AddMonths(months int) *QDateTime {
 func (this *QDateTime) AddYears(years int) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddYears")
 	r := C.qute_QDateTime_addYears(self, C.int(years))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -387,6 +420,7 @@ func (this *QDateTime) AddYears(years int) *QDateTime {
 func (this *QDateTime) AddSecs(secs int64) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddSecs")
 	r := C.qute_QDateTime_addSecs(self, C.longlong(secs))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -400,6 +434,7 @@ func (this *QDateTime) AddSecs(secs int64) *QDateTime {
 func (this *QDateTime) AddMSecs(msecs int64) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddMSecs")
 	r := C.qute_QDateTime_addMSecs(self, C.longlong(msecs))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -413,6 +448,7 @@ func (this *QDateTime) AddMSecs(msecs int64) *QDateTime {
 func (this *QDateTime) AddDuration(msecs time.Duration) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.AddDuration")
 	r := C.qute_QDateTime_addDuration(self, C.int64_t(msecs))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -426,6 +462,7 @@ func (this *QDateTime) AddDuration(msecs time.Duration) *QDateTime {
 func (this *QDateTime) ToLocalTime() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToLocalTime")
 	r := C.qute_QDateTime_toLocalTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -439,6 +476,7 @@ func (this *QDateTime) ToLocalTime() *QDateTime {
 func (this *QDateTime) ToUTC() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToUTC")
 	r := C.qute_QDateTime_toUTC(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -452,6 +490,7 @@ func (this *QDateTime) ToUTC() *QDateTime {
 func (this *QDateTime) ToOffsetFromUtc(offsetSeconds int) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToOffsetFromUtc")
 	r := C.qute_QDateTime_toOffsetFromUtc(self, C.int(offsetSeconds))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -465,6 +504,8 @@ func (this *QDateTime) ToOffsetFromUtc(offsetSeconds int) *QDateTime {
 func (this *QDateTime) ToTimeZone(toZone *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToTimeZone")
 	r := C.qute_QDateTime_toTimeZone(self, rt.UseArg(unsafe.Pointer(toZone), "QDateTime.ToTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toZone)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -476,6 +517,8 @@ func (this *QDateTime) ToTimeZone(toZone *QTimeZone) *QDateTime {
 func (this *QDateTime) DaysTo(dateTime *QDateTime) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.DaysTo")
 	r := C.qute_QDateTime_daysTo(self, rt.UseArg(unsafe.Pointer(dateTime), "QDateTime.DaysTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 	return int64(r)
 }
 
@@ -487,6 +530,8 @@ func (this *QDateTime) DaysTo(dateTime *QDateTime) int64 {
 func (this *QDateTime) SecsTo(dateTime *QDateTime) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SecsTo")
 	r := C.qute_QDateTime_secsTo(self, rt.UseArg(unsafe.Pointer(dateTime), "QDateTime.SecsTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 	return int64(r)
 }
 
@@ -498,6 +543,8 @@ func (this *QDateTime) SecsTo(dateTime *QDateTime) int64 {
 func (this *QDateTime) MsecsTo(dateTime *QDateTime) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.MsecsTo")
 	r := C.qute_QDateTime_msecsTo(self, rt.UseArg(unsafe.Pointer(dateTime), "QDateTime.MsecsTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 	return int64(r)
 }
 
@@ -511,6 +558,7 @@ func (this *QDateTime) MsecsTo(dateTime *QDateTime) int64 {
 func QDateTimeCurrentDateTimeWithTimeZone(zone *QTimeZone) *QDateTime {
 	rt.CheckThread("QDateTimeCurrentDateTimeWithTimeZone")
 	r := C.qute_QDateTime_currentDateTime(rt.UseArg(unsafe.Pointer(zone), "QDateTimeCurrentDateTimeWithTimeZone"))
+	runtime.KeepAlive(zone)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -563,6 +611,7 @@ func QDateTimeFromString(stringArg string) *QDateTime {
 func QDateTimeFromStringFormatCalendar(stringArg string, format string, cal *QCalendar) *QDateTime {
 	rt.CheckThread("QDateTimeFromStringFormatCalendar")
 	r := C.qute_QDateTime_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDateTimeFromStringFormatCalendar"))
+	runtime.KeepAlive(cal)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -576,6 +625,7 @@ func QDateTimeFromStringFormatCalendar(stringArg string, format string, cal *QCa
 func QDateTimeFromStringFormatYearCalendar(stringArg string, format string, baseYear int, cal *QCalendar) *QDateTime {
 	rt.CheckThread("QDateTimeFromStringFormatYearCalendar")
 	r := C.qute_QDateTime_fromString_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear), rt.UseArg(unsafe.Pointer(cal), "QDateTimeFromStringFormatYearCalendar"))
+	runtime.KeepAlive(cal)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -602,6 +652,7 @@ func QDateTimeFromStringFormat(stringArg string, format string) *QDateTime {
 func QDateTimeFromMSecsSinceEpochWithTimeZone(msecs int64, timeZone *QTimeZone) *QDateTime {
 	rt.CheckThread("QDateTimeFromMSecsSinceEpochWithTimeZone")
 	r := C.qute_QDateTime_fromMSecsSinceEpoch(C.longlong(msecs), rt.UseArg(unsafe.Pointer(timeZone), "QDateTimeFromMSecsSinceEpochWithTimeZone"))
+	runtime.KeepAlive(timeZone)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -615,6 +666,7 @@ func QDateTimeFromMSecsSinceEpochWithTimeZone(msecs int64, timeZone *QTimeZone) 
 func QDateTimeFromSecsSinceEpochWithTimeZone(secs int64, timeZone *QTimeZone) *QDateTime {
 	rt.CheckThread("QDateTimeFromSecsSinceEpochWithTimeZone")
 	r := C.qute_QDateTime_fromSecsSinceEpoch(C.longlong(secs), rt.UseArg(unsafe.Pointer(timeZone), "QDateTimeFromSecsSinceEpochWithTimeZone"))
+	runtime.KeepAlive(timeZone)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 

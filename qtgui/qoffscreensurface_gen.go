@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -72,6 +73,8 @@ func NewQOffscreenSurfaceWithScreen(screen QScreenLike, parent qtcore.QObjectLik
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOffscreenSurfaceWithScreen")
 	}
 	p := C.qute_QOffscreenSurface_new(screenPtr, parentPtr)
+	runtime.KeepAlive(screen)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -88,6 +91,7 @@ func NewQOffscreenSurfaceWithScreen(screen QScreenLike, parent qtcore.QObjectLik
 func (this *QOffscreenSurface) SurfaceType() QSurfaceSurfaceType {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.SurfaceType")
 	r := C.qute_QOffscreenSurface_surfaceType(self)
+	runtime.KeepAlive(this)
 	return QSurfaceSurfaceType(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QOffscreenSurface) SurfaceType() QSurfaceSurfaceType {
 func (this *QOffscreenSurface) Create() {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.Create")
 	C.qute_QOffscreenSurface_create(self)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps QOffscreenSurface::destroy.
@@ -109,6 +114,7 @@ func (this *QOffscreenSurface) Create() {
 func (this *QOffscreenSurface) Destroy() {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.Destroy")
 	C.qute_QOffscreenSurface_destroy(self)
+	runtime.KeepAlive(this)
 }
 
 // IsValid wraps QOffscreenSurface::isValid.
@@ -119,6 +125,7 @@ func (this *QOffscreenSurface) Destroy() {
 func (this *QOffscreenSurface) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.IsValid")
 	r := C.qute_QOffscreenSurface_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +137,8 @@ func (this *QOffscreenSurface) IsValid() bool {
 func (this *QOffscreenSurface) SetFormat(format *QSurfaceFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.SetFormat")
 	C.qute_QOffscreenSurface_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QOffscreenSurface.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // Format wraps QOffscreenSurface::format.
@@ -142,6 +151,7 @@ func (this *QOffscreenSurface) SetFormat(format *QSurfaceFormat) {
 func (this *QOffscreenSurface) Format() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.Format")
 	r := C.qute_QOffscreenSurface_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -155,6 +165,7 @@ func (this *QOffscreenSurface) Format() *QSurfaceFormat {
 func (this *QOffscreenSurface) RequestedFormat() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.RequestedFormat")
 	r := C.qute_QOffscreenSurface_requestedFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -166,6 +177,7 @@ func (this *QOffscreenSurface) RequestedFormat() *QSurfaceFormat {
 func (this *QOffscreenSurface) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.Size")
 	r := C.qute_QOffscreenSurface_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -179,6 +191,7 @@ func (this *QOffscreenSurface) Size() qtcore.QSize {
 func (this *QOffscreenSurface) Screen() *QScreen {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.Screen")
 	r := C.qute_QOffscreenSurface_screen(self)
+	runtime.KeepAlive(this)
 	return rt.View[QScreen](rt.WrapClass(r, "QScreen", rt.KeepOrBorrow), r)
 }
 
@@ -194,6 +207,8 @@ func (this *QOffscreenSurface) SetScreen(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QOffscreenSurface.SetScreen")
 	}
 	C.qute_QOffscreenSurface_setScreen(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // EmitScreenChanged wraps emitting the screenChanged signal.
@@ -208,6 +223,8 @@ func (this *QOffscreenSurface) EmitScreenChanged(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QOffscreenSurface.EmitScreenChanged")
 	}
 	C.qute_QOffscreenSurface_screenChanged_1(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // OnScreenChanged connects f to the screenChanged signal. The connection ends when the

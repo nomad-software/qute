@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQPersistentModelIndex() *QPersistentModelIndex {
 func NewQPersistentModelIndexWithModelIndex(index *QModelIndex) *QPersistentModelIndex {
 	rt.CheckThread("NewQPersistentModelIndexWithModelIndex")
 	p := C.qute_QPersistentModelIndex_new_1(rt.UseArg(unsafe.Pointer(index), "NewQPersistentModelIndexWithModelIndex"))
+	runtime.KeepAlive(index)
 	h := rt.WrapClass(p, "QPersistentModelIndex", rt.NewOwned)
 	return rt.View[QPersistentModelIndex](h, p)
 }
@@ -108,6 +110,7 @@ func NewQPersistentModelIndexWithModelIndex(index *QModelIndex) *QPersistentMode
 func (this *QPersistentModelIndex) Row() int {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Row")
 	r := C.qute_QPersistentModelIndex_row(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QPersistentModelIndex) Row() int {
 func (this *QPersistentModelIndex) Column() int {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Column")
 	r := C.qute_QPersistentModelIndex_column(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +134,7 @@ func (this *QPersistentModelIndex) Column() int {
 func (this *QPersistentModelIndex) InternalPointer() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.InternalPointer")
 	r := C.qute_QPersistentModelIndex_internalPointer(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -141,6 +146,7 @@ func (this *QPersistentModelIndex) InternalPointer() unsafe.Pointer {
 func (this *QPersistentModelIndex) ConstInternalPointer() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.ConstInternalPointer")
 	r := C.qute_QPersistentModelIndex_constInternalPointer(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -152,6 +158,7 @@ func (this *QPersistentModelIndex) ConstInternalPointer() unsafe.Pointer {
 func (this *QPersistentModelIndex) InternalId() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.InternalId")
 	r := C.qute_QPersistentModelIndex_internalId(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -165,6 +172,7 @@ func (this *QPersistentModelIndex) InternalId() uint64 {
 func (this *QPersistentModelIndex) Parent() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Parent")
 	r := C.qute_QPersistentModelIndex_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -178,6 +186,7 @@ func (this *QPersistentModelIndex) Parent() *QModelIndex {
 func (this *QPersistentModelIndex) Sibling(row int, column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Sibling")
 	r := C.qute_QPersistentModelIndex_sibling(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -191,6 +200,7 @@ func (this *QPersistentModelIndex) Sibling(row int, column int) *QModelIndex {
 func (this *QPersistentModelIndex) Data() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Data")
 	r := C.qute_QPersistentModelIndex_data(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -202,6 +212,7 @@ func (this *QPersistentModelIndex) Data() *QVariant {
 func (this *QPersistentModelIndex) Flags() ItemFlags {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Flags")
 	r := C.qute_QPersistentModelIndex_flags(self)
+	runtime.KeepAlive(this)
 	return ItemFlags(r)
 }
 
@@ -215,6 +226,7 @@ func (this *QPersistentModelIndex) Flags() ItemFlags {
 func (this *QPersistentModelIndex) Model() *QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Model")
 	r := C.qute_QPersistentModelIndex_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -226,5 +238,6 @@ func (this *QPersistentModelIndex) Model() *QAbstractItemModel {
 func (this *QPersistentModelIndex) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.IsValid")
 	r := C.qute_QPersistentModelIndex_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

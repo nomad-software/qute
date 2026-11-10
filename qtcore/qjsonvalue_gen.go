@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -156,6 +157,7 @@ func NewQJsonValueWithSArg(sArg string) *QJsonValue {
 func NewQJsonValueWithJsonArray(aArg *QJsonArray) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithJsonArray")
 	p := C.qute_QJsonValue_new_6(rt.UseArg(unsafe.Pointer(aArg), "NewQJsonValueWithJsonArray"))
+	runtime.KeepAlive(aArg)
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
@@ -168,6 +170,7 @@ func NewQJsonValueWithJsonArray(aArg *QJsonArray) *QJsonValue {
 func NewQJsonValueWithJsonObject(o *QJsonObject) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithJsonObject")
 	p := C.qute_QJsonValue_new_7(rt.UseArg(unsafe.Pointer(o), "NewQJsonValueWithJsonObject"))
+	runtime.KeepAlive(o)
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
@@ -182,6 +185,7 @@ func NewQJsonValueWithJsonObject(o *QJsonObject) *QJsonValue {
 func (this *QJsonValue) ToVariant() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToVariant")
 	r := C.qute_QJsonValue_toVariant(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -193,6 +197,7 @@ func (this *QJsonValue) ToVariant() *QVariant {
 func (this *QJsonValue) ToJson() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToJson")
 	r := C.qute_QJsonValue_toJson(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -204,6 +209,7 @@ func (this *QJsonValue) ToJson() []byte {
 func (this *QJsonValue) Type() QJsonValueType {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.Type")
 	r := C.qute_QJsonValue_type(self)
+	runtime.KeepAlive(this)
 	return QJsonValueType(r)
 }
 
@@ -215,6 +221,7 @@ func (this *QJsonValue) Type() QJsonValueType {
 func (this *QJsonValue) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsNull")
 	r := C.qute_QJsonValue_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -226,6 +233,7 @@ func (this *QJsonValue) IsNull() bool {
 func (this *QJsonValue) IsBool() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsBool")
 	r := C.qute_QJsonValue_isBool(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -237,6 +245,7 @@ func (this *QJsonValue) IsBool() bool {
 func (this *QJsonValue) IsDouble() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsDouble")
 	r := C.qute_QJsonValue_isDouble(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -248,6 +257,7 @@ func (this *QJsonValue) IsDouble() bool {
 func (this *QJsonValue) IsString() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsString")
 	r := C.qute_QJsonValue_isString(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -259,6 +269,7 @@ func (this *QJsonValue) IsString() bool {
 func (this *QJsonValue) IsArray() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsArray")
 	r := C.qute_QJsonValue_isArray(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -270,6 +281,7 @@ func (this *QJsonValue) IsArray() bool {
 func (this *QJsonValue) IsObject() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsObject")
 	r := C.qute_QJsonValue_isObject(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -281,6 +293,7 @@ func (this *QJsonValue) IsObject() bool {
 func (this *QJsonValue) IsUndefined() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.IsUndefined")
 	r := C.qute_QJsonValue_isUndefined(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -292,6 +305,7 @@ func (this *QJsonValue) IsUndefined() bool {
 func (this *QJsonValue) ToBool() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToBool")
 	r := C.qute_QJsonValue_toBool(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -303,6 +317,7 @@ func (this *QJsonValue) ToBool() bool {
 func (this *QJsonValue) ToInt() int {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToInt")
 	r := C.qute_QJsonValue_toInt(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -314,6 +329,7 @@ func (this *QJsonValue) ToInt() int {
 func (this *QJsonValue) ToInteger() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToInteger")
 	r := C.qute_QJsonValue_toInteger(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -325,6 +341,7 @@ func (this *QJsonValue) ToInteger() int64 {
 func (this *QJsonValue) ToDouble() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToDouble")
 	r := C.qute_QJsonValue_toDouble(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -336,6 +353,7 @@ func (this *QJsonValue) ToDouble() float64 {
 func (this *QJsonValue) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToString")
 	r := C.qute_QJsonValue_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -347,6 +365,7 @@ func (this *QJsonValue) ToString() string {
 func (this *QJsonValue) ToStringWithDefaultValue(defaultValue string) string {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToStringWithDefaultValue")
 	r := C.qute_QJsonValue_toString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(defaultValue))), C.ptrdiff_t(len(defaultValue)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -358,6 +377,7 @@ func (this *QJsonValue) ToStringWithDefaultValue(defaultValue string) string {
 func (this *QJsonValue) ToStringView() string {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToStringView")
 	r := C.qute_QJsonValue_toStringView(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -371,6 +391,7 @@ func (this *QJsonValue) ToStringView() string {
 func (this *QJsonValue) ToArray() *QJsonArray {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToArray")
 	r := C.qute_QJsonValue_toArray(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonArray](rt.WrapClass(r, "QJsonArray", rt.TakeOwned), r)
 }
 
@@ -384,6 +405,8 @@ func (this *QJsonValue) ToArray() *QJsonArray {
 func (this *QJsonValue) ToArrayWithJsonArray(defaultValue *QJsonArray) *QJsonArray {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToArrayWithJsonArray")
 	r := C.qute_QJsonValue_toArray_1(self, rt.UseArg(unsafe.Pointer(defaultValue), "QJsonValue.ToArrayWithJsonArray"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(defaultValue)
 	return rt.View[QJsonArray](rt.WrapClass(r, "QJsonArray", rt.TakeOwned), r)
 }
 
@@ -397,6 +420,7 @@ func (this *QJsonValue) ToArrayWithJsonArray(defaultValue *QJsonArray) *QJsonArr
 func (this *QJsonValue) ToObject() *QJsonObject {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToObject")
 	r := C.qute_QJsonValue_toObject(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
 }
 
@@ -410,6 +434,8 @@ func (this *QJsonValue) ToObject() *QJsonObject {
 func (this *QJsonValue) ToObjectWithJsonObject(defaultValue *QJsonObject) *QJsonObject {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToObjectWithJsonObject")
 	r := C.qute_QJsonValue_toObject_1(self, rt.UseArg(unsafe.Pointer(defaultValue), "QJsonValue.ToObjectWithJsonObject"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(defaultValue)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
 }
 
@@ -423,6 +449,7 @@ func (this *QJsonValue) ToObjectWithJsonObject(defaultValue *QJsonObject) *QJson
 func QJsonValueFromVariant(variant *QVariant) *QJsonValue {
 	rt.CheckThread("QJsonValueFromVariant")
 	r := C.qute_QJsonValue_fromVariant(rt.UseArg(unsafe.Pointer(variant), "QJsonValueFromVariant"))
+	runtime.KeepAlive(variant)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 

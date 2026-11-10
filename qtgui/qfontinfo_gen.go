@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -85,6 +86,7 @@ func (this *QFontInfo) Unkeep() {
 func NewQFontInfoWithFont(font *QFont) *QFontInfo {
 	rt.CheckThread("NewQFontInfoWithFont")
 	p := C.qute_QFontInfo_new(rt.UseArg(unsafe.Pointer(font), "NewQFontInfoWithFont"))
+	runtime.KeepAlive(font)
 	h := rt.WrapClass(p, "QFontInfo", rt.NewOwned)
 	return rt.View[QFontInfo](h, p)
 }
@@ -97,6 +99,7 @@ func NewQFontInfoWithFont(font *QFont) *QFontInfo {
 func (this *QFontInfo) Family() string {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Family")
 	r := C.qute_QFontInfo_family(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -108,6 +111,7 @@ func (this *QFontInfo) Family() string {
 func (this *QFontInfo) StyleName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.StyleName")
 	r := C.qute_QFontInfo_styleName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -119,6 +123,7 @@ func (this *QFontInfo) StyleName() string {
 func (this *QFontInfo) PixelSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.PixelSize")
 	r := C.qute_QFontInfo_pixelSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +135,7 @@ func (this *QFontInfo) PixelSize() int {
 func (this *QFontInfo) PointSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.PointSize")
 	r := C.qute_QFontInfo_pointSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -141,6 +147,7 @@ func (this *QFontInfo) PointSize() int {
 func (this *QFontInfo) PointSizeF() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.PointSizeF")
 	r := C.qute_QFontInfo_pointSizeF(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -152,6 +159,7 @@ func (this *QFontInfo) PointSizeF() float64 {
 func (this *QFontInfo) Italic() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Italic")
 	r := C.qute_QFontInfo_italic(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -163,6 +171,7 @@ func (this *QFontInfo) Italic() bool {
 func (this *QFontInfo) Style() QFontStyle {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Style")
 	r := C.qute_QFontInfo_style(self)
+	runtime.KeepAlive(this)
 	return QFontStyle(r)
 }
 
@@ -174,6 +183,7 @@ func (this *QFontInfo) Style() QFontStyle {
 func (this *QFontInfo) Weight() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Weight")
 	r := C.qute_QFontInfo_weight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -185,6 +195,7 @@ func (this *QFontInfo) Weight() int {
 func (this *QFontInfo) Bold() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Bold")
 	r := C.qute_QFontInfo_bold(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -196,6 +207,7 @@ func (this *QFontInfo) Bold() bool {
 func (this *QFontInfo) Underline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Underline")
 	r := C.qute_QFontInfo_underline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -207,6 +219,7 @@ func (this *QFontInfo) Underline() bool {
 func (this *QFontInfo) Overline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.Overline")
 	r := C.qute_QFontInfo_overline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -218,6 +231,7 @@ func (this *QFontInfo) Overline() bool {
 func (this *QFontInfo) StrikeOut() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.StrikeOut")
 	r := C.qute_QFontInfo_strikeOut(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -229,6 +243,7 @@ func (this *QFontInfo) StrikeOut() bool {
 func (this *QFontInfo) FixedPitch() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.FixedPitch")
 	r := C.qute_QFontInfo_fixedPitch(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -240,6 +255,7 @@ func (this *QFontInfo) FixedPitch() bool {
 func (this *QFontInfo) StyleHint() QFontStyleHint {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.StyleHint")
 	r := C.qute_QFontInfo_styleHint(self)
+	runtime.KeepAlive(this)
 	return QFontStyleHint(r)
 }
 
@@ -251,5 +267,6 @@ func (this *QFontInfo) StyleHint() QFontStyleHint {
 func (this *QFontInfo) ExactMatch() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontInfo.ExactMatch")
 	r := C.qute_QFontInfo_exactMatch(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQProgressBar(parent QWidgetLike) *QProgressBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressBar")
 	}
 	p := C.qute_QProgressBar_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQProgressBar(parent QWidgetLike) *QProgressBar {
 func (this *QProgressBar) Minimum() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Minimum")
 	r := C.qute_QProgressBar_minimum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QProgressBar) Minimum() int {
 func (this *QProgressBar) Maximum() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Maximum")
 	r := C.qute_QProgressBar_maximum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QProgressBar) Maximum() int {
 func (this *QProgressBar) Value() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Value")
 	r := C.qute_QProgressBar_value(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QProgressBar) Value() int {
 func (this *QProgressBar) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Text")
 	r := C.qute_QProgressBar_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -121,6 +127,7 @@ func (this *QProgressBar) Text() string {
 func (this *QProgressBar) SetTextVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetTextVisible")
 	C.qute_QProgressBar_setTextVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // IsTextVisible wraps QProgressBar::isTextVisible.
@@ -131,6 +138,7 @@ func (this *QProgressBar) SetTextVisible(visible bool) {
 func (this *QProgressBar) IsTextVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.IsTextVisible")
 	r := C.qute_QProgressBar_isTextVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -142,6 +150,7 @@ func (this *QProgressBar) IsTextVisible() bool {
 func (this *QProgressBar) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Alignment")
 	r := C.qute_QProgressBar_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -153,6 +162,7 @@ func (this *QProgressBar) Alignment() qtcore.Alignment {
 func (this *QProgressBar) SetAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetAlignment")
 	C.qute_QProgressBar_setAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Orientation wraps QProgressBar::orientation.
@@ -163,6 +173,7 @@ func (this *QProgressBar) SetAlignment(alignment qtcore.Alignment) {
 func (this *QProgressBar) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Orientation")
 	r := C.qute_QProgressBar_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -174,6 +185,7 @@ func (this *QProgressBar) Orientation() qtcore.Orientations {
 func (this *QProgressBar) SetInvertedAppearance(invert bool) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetInvertedAppearance")
 	C.qute_QProgressBar_setInvertedAppearance(self, C.bool(invert))
+	runtime.KeepAlive(this)
 }
 
 // InvertedAppearance wraps QProgressBar::invertedAppearance.
@@ -184,6 +196,7 @@ func (this *QProgressBar) SetInvertedAppearance(invert bool) {
 func (this *QProgressBar) InvertedAppearance() bool {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.InvertedAppearance")
 	r := C.qute_QProgressBar_invertedAppearance(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -195,6 +208,7 @@ func (this *QProgressBar) InvertedAppearance() bool {
 func (this *QProgressBar) SetTextDirection(textDirection QProgressBarDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetTextDirection")
 	C.qute_QProgressBar_setTextDirection(self, C.int64_t(textDirection))
+	runtime.KeepAlive(this)
 }
 
 // TextDirection wraps QProgressBar::textDirection.
@@ -205,6 +219,7 @@ func (this *QProgressBar) SetTextDirection(textDirection QProgressBarDirection) 
 func (this *QProgressBar) TextDirection() QProgressBarDirection {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.TextDirection")
 	r := C.qute_QProgressBar_textDirection(self)
+	runtime.KeepAlive(this)
 	return QProgressBarDirection(r)
 }
 
@@ -216,6 +231,7 @@ func (this *QProgressBar) TextDirection() QProgressBarDirection {
 func (this *QProgressBar) SetFormat(format string) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetFormat")
 	C.qute_QProgressBar_setFormat(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 }
 
 // ResetFormat wraps QProgressBar::resetFormat.
@@ -226,6 +242,7 @@ func (this *QProgressBar) SetFormat(format string) {
 func (this *QProgressBar) ResetFormat() {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.ResetFormat")
 	C.qute_QProgressBar_resetFormat(self)
+	runtime.KeepAlive(this)
 }
 
 // Format wraps QProgressBar::format.
@@ -236,6 +253,7 @@ func (this *QProgressBar) ResetFormat() {
 func (this *QProgressBar) Format() string {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Format")
 	r := C.qute_QProgressBar_format(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -247,6 +265,7 @@ func (this *QProgressBar) Format() string {
 func (this *QProgressBar) Reset() {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.Reset")
 	C.qute_QProgressBar_reset(self)
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QProgressBar::setRange.
@@ -257,6 +276,7 @@ func (this *QProgressBar) Reset() {
 func (this *QProgressBar) SetRange(minimum int, maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetRange")
 	C.qute_QProgressBar_setRange(self, C.int(minimum), C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // SetMinimum wraps QProgressBar::setMinimum.
@@ -267,6 +287,7 @@ func (this *QProgressBar) SetRange(minimum int, maximum int) {
 func (this *QProgressBar) SetMinimum(minimum int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetMinimum")
 	C.qute_QProgressBar_setMinimum(self, C.int(minimum))
+	runtime.KeepAlive(this)
 }
 
 // SetMaximum wraps QProgressBar::setMaximum.
@@ -277,6 +298,7 @@ func (this *QProgressBar) SetMinimum(minimum int) {
 func (this *QProgressBar) SetMaximum(maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetMaximum")
 	C.qute_QProgressBar_setMaximum(self, C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // SetValue wraps QProgressBar::setValue.
@@ -287,6 +309,7 @@ func (this *QProgressBar) SetMaximum(maximum int) {
 func (this *QProgressBar) SetValue(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetValue")
 	C.qute_QProgressBar_setValue(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // SetOrientation wraps QProgressBar::setOrientation.
@@ -297,6 +320,7 @@ func (this *QProgressBar) SetValue(value int) {
 func (this *QProgressBar) SetOrientation(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.SetOrientation")
 	C.qute_QProgressBar_setOrientation(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // EmitValueChanged wraps emitting the valueChanged signal.
@@ -307,6 +331,7 @@ func (this *QProgressBar) SetOrientation(orientation qtcore.Orientations) {
 func (this *QProgressBar) EmitValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressBar.EmitValueChanged")
 	C.qute_QProgressBar_valueChanged_1(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // OnValueChanged connects f to the valueChanged signal. The connection ends when the

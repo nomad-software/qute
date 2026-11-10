@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -145,6 +146,7 @@ func NewQVector4DWithPointF(point qtcore.QPointF) *QVector4D {
 func NewQVector4DWithVector2D(vector *QVector2D) *QVector4D {
 	rt.CheckThread("NewQVector4DWithVector2D")
 	p := C.qute_QVector4D_new_5(rt.UseArg(unsafe.Pointer(vector), "NewQVector4DWithVector2D"))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector4D", rt.NewOwned)
 	return rt.View[QVector4D](h, p)
 }
@@ -157,6 +159,7 @@ func NewQVector4DWithVector2D(vector *QVector2D) *QVector4D {
 func NewQVector4DWithVector2DZpos(vector *QVector2D, zpos float32, wpos float32) *QVector4D {
 	rt.CheckThread("NewQVector4DWithVector2DZpos")
 	p := C.qute_QVector4D_new_6(rt.UseArg(unsafe.Pointer(vector), "NewQVector4DWithVector2DZpos"), C.float(zpos), C.float(wpos))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector4D", rt.NewOwned)
 	return rt.View[QVector4D](h, p)
 }
@@ -169,6 +172,7 @@ func NewQVector4DWithVector2DZpos(vector *QVector2D, zpos float32, wpos float32)
 func NewQVector4DWithVector3D(vector *QVector3D) *QVector4D {
 	rt.CheckThread("NewQVector4DWithVector3D")
 	p := C.qute_QVector4D_new_7(rt.UseArg(unsafe.Pointer(vector), "NewQVector4DWithVector3D"))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector4D", rt.NewOwned)
 	return rt.View[QVector4D](h, p)
 }
@@ -181,6 +185,7 @@ func NewQVector4DWithVector3D(vector *QVector3D) *QVector4D {
 func NewQVector4DWithVector3DWpos(vector *QVector3D, wpos float32) *QVector4D {
 	rt.CheckThread("NewQVector4DWithVector3DWpos")
 	p := C.qute_QVector4D_new_8(rt.UseArg(unsafe.Pointer(vector), "NewQVector4DWithVector3DWpos"), C.float(wpos))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector4D", rt.NewOwned)
 	return rt.View[QVector4D](h, p)
 }
@@ -193,6 +198,7 @@ func NewQVector4DWithVector3DWpos(vector *QVector3D, wpos float32) *QVector4D {
 func (this *QVector4D) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.IsNull")
 	r := C.qute_QVector4D_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -204,6 +210,7 @@ func (this *QVector4D) IsNull() bool {
 func (this *QVector4D) X() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.X")
 	r := C.qute_QVector4D_x(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -215,6 +222,7 @@ func (this *QVector4D) X() float32 {
 func (this *QVector4D) Y() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.Y")
 	r := C.qute_QVector4D_y(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -226,6 +234,7 @@ func (this *QVector4D) Y() float32 {
 func (this *QVector4D) Z() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.Z")
 	r := C.qute_QVector4D_z(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -237,6 +246,7 @@ func (this *QVector4D) Z() float32 {
 func (this *QVector4D) W() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.W")
 	r := C.qute_QVector4D_w(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -248,6 +258,7 @@ func (this *QVector4D) W() float32 {
 func (this *QVector4D) SetX(x float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.SetX")
 	C.qute_QVector4D_setX(self, C.float(x))
+	runtime.KeepAlive(this)
 }
 
 // SetY wraps QVector4D::setY.
@@ -258,6 +269,7 @@ func (this *QVector4D) SetX(x float32) {
 func (this *QVector4D) SetY(y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.SetY")
 	C.qute_QVector4D_setY(self, C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // SetZ wraps QVector4D::setZ.
@@ -268,6 +280,7 @@ func (this *QVector4D) SetY(y float32) {
 func (this *QVector4D) SetZ(z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.SetZ")
 	C.qute_QVector4D_setZ(self, C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // SetW wraps QVector4D::setW.
@@ -278,6 +291,7 @@ func (this *QVector4D) SetZ(z float32) {
 func (this *QVector4D) SetW(w float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.SetW")
 	C.qute_QVector4D_setW(self, C.float(w))
+	runtime.KeepAlive(this)
 }
 
 // Length wraps QVector4D::length.
@@ -288,6 +302,7 @@ func (this *QVector4D) SetW(w float32) {
 func (this *QVector4D) Length() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.Length")
 	r := C.qute_QVector4D_length(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -299,6 +314,7 @@ func (this *QVector4D) Length() float32 {
 func (this *QVector4D) LengthSquared() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.LengthSquared")
 	r := C.qute_QVector4D_lengthSquared(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -312,6 +328,7 @@ func (this *QVector4D) LengthSquared() float32 {
 func (this *QVector4D) Normalized() *QVector4D {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.Normalized")
 	r := C.qute_QVector4D_normalized(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
@@ -323,6 +340,7 @@ func (this *QVector4D) Normalized() *QVector4D {
 func (this *QVector4D) Normalize() {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.Normalize")
 	C.qute_QVector4D_normalize(self)
+	runtime.KeepAlive(this)
 }
 
 // ToVector2D wraps QVector4D::toVector2D.
@@ -335,6 +353,7 @@ func (this *QVector4D) Normalize() {
 func (this *QVector4D) ToVector2D() *QVector2D {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.ToVector2D")
 	r := C.qute_QVector4D_toVector2D(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector2D](rt.WrapClass(r, "QVector2D", rt.TakeOwned), r)
 }
 
@@ -348,6 +367,7 @@ func (this *QVector4D) ToVector2D() *QVector2D {
 func (this *QVector4D) ToVector2DAffine() *QVector2D {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.ToVector2DAffine")
 	r := C.qute_QVector4D_toVector2DAffine(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector2D](rt.WrapClass(r, "QVector2D", rt.TakeOwned), r)
 }
 
@@ -361,6 +381,7 @@ func (this *QVector4D) ToVector2DAffine() *QVector2D {
 func (this *QVector4D) ToVector3D() *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.ToVector3D")
 	r := C.qute_QVector4D_toVector3D(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -374,6 +395,7 @@ func (this *QVector4D) ToVector3D() *QVector3D {
 func (this *QVector4D) ToVector3DAffine() *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.ToVector3DAffine")
 	r := C.qute_QVector4D_toVector3DAffine(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -385,6 +407,7 @@ func (this *QVector4D) ToVector3DAffine() *QVector3D {
 func (this *QVector4D) ToPoint() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.ToPoint")
 	r := C.qute_QVector4D_toPoint(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -396,6 +419,7 @@ func (this *QVector4D) ToPoint() qtcore.QPoint {
 func (this *QVector4D) ToPointF() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QVector4D.ToPointF")
 	r := C.qute_QVector4D_toPointF(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -407,5 +431,7 @@ func (this *QVector4D) ToPointF() qtcore.QPointF {
 func QVector4DDotProduct(v1 *QVector4D, v2 *QVector4D) float32 {
 	rt.CheckThread("QVector4DDotProduct")
 	r := C.qute_QVector4D_dotProduct(rt.UseArg(unsafe.Pointer(v1), "QVector4DDotProduct"), rt.UseArg(unsafe.Pointer(v2), "QVector4DDotProduct"))
+	runtime.KeepAlive(v1)
+	runtime.KeepAlive(v2)
 	return float32(r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -77,6 +78,7 @@ func NewQBitmapWithFileName(fileName string) *QBitmap {
 func (this *QBitmap) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QBitmap.Clear")
 	C.qute_QBitmap_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // Transformed wraps QBitmap::transformed.
@@ -89,6 +91,8 @@ func (this *QBitmap) Clear() {
 func (this *QBitmap) Transformed(matrix *QTransform) *QBitmap {
 	self := rt.Use(unsafe.Pointer(this), "QBitmap.Transformed")
 	r := C.qute_QBitmap_transformed(self, rt.UseArg(unsafe.Pointer(matrix), "QBitmap.Transformed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -102,6 +106,7 @@ func (this *QBitmap) Transformed(matrix *QTransform) *QBitmap {
 func QBitmapFromImage(image *QImage) *QBitmap {
 	rt.CheckThread("QBitmapFromImage")
 	r := C.qute_QBitmap_fromImage(rt.UseArg(unsafe.Pointer(image), "QBitmapFromImage"))
+	runtime.KeepAlive(image)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -128,5 +133,6 @@ func QBitmapFromData(size qtcore.QSize, bits unsafe.Pointer) *QBitmap {
 func QBitmapFromPixmap(pixmap *QPixmap) *QBitmap {
 	rt.CheckThread("QBitmapFromPixmap")
 	r := C.qute_QBitmap_fromPixmap(rt.UseArg(unsafe.Pointer(pixmap), "QBitmapFromPixmap"))
+	runtime.KeepAlive(pixmap)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }

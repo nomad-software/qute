@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -101,6 +102,7 @@ func NewQOpenGLPixelTransferOptions() *QOpenGLPixelTransferOptions {
 func (this *QOpenGLPixelTransferOptions) SetAlignment(alignment int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetAlignment")
 	C.qute_QOpenGLPixelTransferOptions_setAlignment(self, C.int(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QOpenGLPixelTransferOptions::alignment.
@@ -111,6 +113,7 @@ func (this *QOpenGLPixelTransferOptions) SetAlignment(alignment int) {
 func (this *QOpenGLPixelTransferOptions) Alignment() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.Alignment")
 	r := C.qute_QOpenGLPixelTransferOptions_alignment(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -122,6 +125,7 @@ func (this *QOpenGLPixelTransferOptions) Alignment() int {
 func (this *QOpenGLPixelTransferOptions) SetSkipImages(skipImages int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetSkipImages")
 	C.qute_QOpenGLPixelTransferOptions_setSkipImages(self, C.int(skipImages))
+	runtime.KeepAlive(this)
 }
 
 // SkipImages wraps QOpenGLPixelTransferOptions::skipImages.
@@ -132,6 +136,7 @@ func (this *QOpenGLPixelTransferOptions) SetSkipImages(skipImages int) {
 func (this *QOpenGLPixelTransferOptions) SkipImages() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SkipImages")
 	r := C.qute_QOpenGLPixelTransferOptions_skipImages(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -143,6 +148,7 @@ func (this *QOpenGLPixelTransferOptions) SkipImages() int {
 func (this *QOpenGLPixelTransferOptions) SetSkipRows(skipRows int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetSkipRows")
 	C.qute_QOpenGLPixelTransferOptions_setSkipRows(self, C.int(skipRows))
+	runtime.KeepAlive(this)
 }
 
 // SkipRows wraps QOpenGLPixelTransferOptions::skipRows.
@@ -153,6 +159,7 @@ func (this *QOpenGLPixelTransferOptions) SetSkipRows(skipRows int) {
 func (this *QOpenGLPixelTransferOptions) SkipRows() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SkipRows")
 	r := C.qute_QOpenGLPixelTransferOptions_skipRows(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -164,6 +171,7 @@ func (this *QOpenGLPixelTransferOptions) SkipRows() int {
 func (this *QOpenGLPixelTransferOptions) SetSkipPixels(skipPixels int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetSkipPixels")
 	C.qute_QOpenGLPixelTransferOptions_setSkipPixels(self, C.int(skipPixels))
+	runtime.KeepAlive(this)
 }
 
 // SkipPixels wraps QOpenGLPixelTransferOptions::skipPixels.
@@ -174,6 +182,7 @@ func (this *QOpenGLPixelTransferOptions) SetSkipPixels(skipPixels int) {
 func (this *QOpenGLPixelTransferOptions) SkipPixels() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SkipPixels")
 	r := C.qute_QOpenGLPixelTransferOptions_skipPixels(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -185,6 +194,7 @@ func (this *QOpenGLPixelTransferOptions) SkipPixels() int {
 func (this *QOpenGLPixelTransferOptions) SetImageHeight(imageHeight int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetImageHeight")
 	C.qute_QOpenGLPixelTransferOptions_setImageHeight(self, C.int(imageHeight))
+	runtime.KeepAlive(this)
 }
 
 // ImageHeight wraps QOpenGLPixelTransferOptions::imageHeight.
@@ -195,6 +205,7 @@ func (this *QOpenGLPixelTransferOptions) SetImageHeight(imageHeight int) {
 func (this *QOpenGLPixelTransferOptions) ImageHeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.ImageHeight")
 	r := C.qute_QOpenGLPixelTransferOptions_imageHeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -206,6 +217,7 @@ func (this *QOpenGLPixelTransferOptions) ImageHeight() int {
 func (this *QOpenGLPixelTransferOptions) SetRowLength(rowLength int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetRowLength")
 	C.qute_QOpenGLPixelTransferOptions_setRowLength(self, C.int(rowLength))
+	runtime.KeepAlive(this)
 }
 
 // RowLength wraps QOpenGLPixelTransferOptions::rowLength.
@@ -216,6 +228,7 @@ func (this *QOpenGLPixelTransferOptions) SetRowLength(rowLength int) {
 func (this *QOpenGLPixelTransferOptions) RowLength() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.RowLength")
 	r := C.qute_QOpenGLPixelTransferOptions_rowLength(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -227,6 +240,7 @@ func (this *QOpenGLPixelTransferOptions) RowLength() int {
 func (this *QOpenGLPixelTransferOptions) SetLeastSignificantByteFirst(lsbFirst bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetLeastSignificantByteFirst")
 	C.qute_QOpenGLPixelTransferOptions_setLeastSignificantByteFirst(self, C.bool(lsbFirst))
+	runtime.KeepAlive(this)
 }
 
 // IsLeastSignificantBitFirst wraps QOpenGLPixelTransferOptions::isLeastSignificantBitFirst.
@@ -237,6 +251,7 @@ func (this *QOpenGLPixelTransferOptions) SetLeastSignificantByteFirst(lsbFirst b
 func (this *QOpenGLPixelTransferOptions) IsLeastSignificantBitFirst() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.IsLeastSignificantBitFirst")
 	r := C.qute_QOpenGLPixelTransferOptions_isLeastSignificantBitFirst(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -248,6 +263,7 @@ func (this *QOpenGLPixelTransferOptions) IsLeastSignificantBitFirst() bool {
 func (this *QOpenGLPixelTransferOptions) SetSwapBytesEnabled(swapBytes bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.SetSwapBytesEnabled")
 	C.qute_QOpenGLPixelTransferOptions_setSwapBytesEnabled(self, C.bool(swapBytes))
+	runtime.KeepAlive(this)
 }
 
 // IsSwapBytesEnabled wraps QOpenGLPixelTransferOptions::isSwapBytesEnabled.
@@ -258,5 +274,6 @@ func (this *QOpenGLPixelTransferOptions) SetSwapBytesEnabled(swapBytes bool) {
 func (this *QOpenGLPixelTransferOptions) IsSwapBytesEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPixelTransferOptions.IsSwapBytesEnabled")
 	r := C.qute_QOpenGLPixelTransferOptions_isSwapBytesEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

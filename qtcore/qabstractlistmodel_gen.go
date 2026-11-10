@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -485,13 +486,19 @@ type QAbstractListModelSuper struct{ this *QAbstractListModel }
 // Index calls QAbstractListModel::index.
 func (s *QAbstractListModelSuper) Index(row int, column int, parent *QModelIndex) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Index")
-	return rt.View[QModelIndex](rt.WrapClass(C.qute_QAbstractListModel_super_0(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.Index")), "QModelIndex", rt.TakeOwned), C.qute_QAbstractListModel_super_0(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.Index")))
+	r := C.qute_QAbstractListModel_super_0(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.Index"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
 // Sibling calls QAbstractListModel::sibling.
 func (s *QAbstractListModelSuper) Sibling(row int, column int, idx *QModelIndex) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Sibling")
-	return rt.View[QModelIndex](rt.WrapClass(C.qute_QAbstractListModel_super_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QAbstractListModel.Super.Sibling")), "QModelIndex", rt.TakeOwned), C.qute_QAbstractListModel_super_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QAbstractListModel.Super.Sibling")))
+	r := C.qute_QAbstractListModel_super_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QAbstractListModel.Super.Sibling"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(idx)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
 // DropMimeData calls QAbstractListModel::dropMimeData.
@@ -501,31 +508,47 @@ func (s *QAbstractListModelSuper) DropMimeData(data *QMimeData, action DropActio
 	if data != nil {
 		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QAbstractListModel.Super.DropMimeData")
 	}
-	return bool(C.qute_QAbstractListModel_super_2(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.DropMimeData")))
+	r := C.qute_QAbstractListModel_super_2(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.DropMimeData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(data)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // Flags calls QAbstractListModel::flags.
 func (s *QAbstractListModelSuper) Flags(index *QModelIndex) ItemFlags {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Flags")
-	return ItemFlags(C.qute_QAbstractListModel_super_3(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Flags")))
+	r := C.qute_QAbstractListModel_super_3(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Flags"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return ItemFlags(r)
 }
 
 // SetData calls QAbstractItemModel::setData.
 func (s *QAbstractListModelSuper) SetData(index *QModelIndex, value *QVariant, role int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.SetData")
-	return bool(C.qute_QAbstractListModel_super_6(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.SetData"), rt.UseArg(unsafe.Pointer(value), "QAbstractListModel.Super.SetData"), C.int(role)))
+	r := C.qute_QAbstractListModel_super_6(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.SetData"), rt.UseArg(unsafe.Pointer(value), "QAbstractListModel.Super.SetData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(value)
+	return bool(r)
 }
 
 // HeaderData calls QAbstractItemModel::headerData.
 func (s *QAbstractListModelSuper) HeaderData(section int, orientation Orientations, role int) *QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.HeaderData")
-	return rt.View[QVariant](rt.WrapClass(C.qute_QAbstractListModel_super_7(self, C.int(section), C.int64_t(orientation), C.int(role)), "QVariant", rt.TakeOwned), C.qute_QAbstractListModel_super_7(self, C.int(section), C.int64_t(orientation), C.int(role)))
+	r := C.qute_QAbstractListModel_super_7(self, C.int(section), C.int64_t(orientation), C.int(role))
+	runtime.KeepAlive(s.this)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // SetHeaderData calls QAbstractItemModel::setHeaderData.
 func (s *QAbstractListModelSuper) SetHeaderData(section int, orientation Orientations, value *QVariant, role int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.SetHeaderData")
-	return bool(C.qute_QAbstractListModel_super_8(self, C.int(section), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(value), "QAbstractListModel.Super.SetHeaderData"), C.int(role)))
+	r := C.qute_QAbstractListModel_super_8(self, C.int(section), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(value), "QAbstractListModel.Super.SetHeaderData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+	return bool(r)
 }
 
 // SetItemData calls QAbstractItemModel::setItemData.
@@ -537,19 +560,28 @@ func (s *QAbstractListModelSuper) SetItemData(index *QModelIndex, roles map[int]
 		rolesK = append(rolesK, C.int(k))
 		rolesV = append(rolesV, rt.UseArg(unsafe.Pointer(x), "QAbstractListModel.Super.SetItemData"))
 	}
-	return bool(C.qute_QAbstractListModel_super_9(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.SetItemData"), unsafe.Pointer(unsafe.SliceData(rolesK)), unsafe.Pointer(unsafe.SliceData(rolesV)), C.ptrdiff_t(len(roles))))
+	r := C.qute_QAbstractListModel_super_9(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.SetItemData"), unsafe.Pointer(unsafe.SliceData(rolesK)), unsafe.Pointer(unsafe.SliceData(rolesV)), C.ptrdiff_t(len(roles)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(roles)
+	return bool(r)
 }
 
 // ClearItemData calls QAbstractItemModel::clearItemData.
 func (s *QAbstractListModelSuper) ClearItemData(index *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.ClearItemData")
-	return bool(C.qute_QAbstractListModel_super_10(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.ClearItemData")))
+	r := C.qute_QAbstractListModel_super_10(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.ClearItemData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return bool(r)
 }
 
 // MimeTypes calls QAbstractItemModel::mimeTypes.
 func (s *QAbstractListModelSuper) MimeTypes() []string {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.MimeTypes")
-	return quteStrList(C.qute_QAbstractListModel_super_11(self))
+	r := C.qute_QAbstractListModel_super_11(self)
+	runtime.KeepAlive(s.this)
+	return quteStrList(r)
 }
 
 // MimeData calls QAbstractItemModel::mimeData.
@@ -559,7 +591,10 @@ func (s *QAbstractListModelSuper) MimeData(indexes []*QModelIndex) *QMimeData {
 	for i := range indexes {
 		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QAbstractListModel.Super.MimeData")
 	}
-	return rt.View[QMimeData](rt.WrapClass(C.qute_QAbstractListModel_super_12(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes))), "QMimeData", rt.KeepOrBorrow), C.qute_QAbstractListModel_super_12(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes))))
+	r := C.qute_QAbstractListModel_super_12(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(indexes)
+	return rt.View[QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
 }
 
 // CanDropMimeData calls QAbstractItemModel::canDropMimeData.
@@ -569,103 +604,147 @@ func (s *QAbstractListModelSuper) CanDropMimeData(data *QMimeData, action DropAc
 	if data != nil {
 		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QAbstractListModel.Super.CanDropMimeData")
 	}
-	return bool(C.qute_QAbstractListModel_super_13(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.CanDropMimeData")))
+	r := C.qute_QAbstractListModel_super_13(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.CanDropMimeData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(data)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // SupportedDropActions calls QAbstractItemModel::supportedDropActions.
 func (s *QAbstractListModelSuper) SupportedDropActions() DropActions {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.SupportedDropActions")
-	return DropActions(C.qute_QAbstractListModel_super_14(self))
+	r := C.qute_QAbstractListModel_super_14(self)
+	runtime.KeepAlive(s.this)
+	return DropActions(r)
 }
 
 // SupportedDragActions calls QAbstractItemModel::supportedDragActions.
 func (s *QAbstractListModelSuper) SupportedDragActions() DropActions {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.SupportedDragActions")
-	return DropActions(C.qute_QAbstractListModel_super_15(self))
+	r := C.qute_QAbstractListModel_super_15(self)
+	runtime.KeepAlive(s.this)
+	return DropActions(r)
 }
 
 // InsertRows calls QAbstractItemModel::insertRows.
 func (s *QAbstractListModelSuper) InsertRows(row int, count int, parent *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.InsertRows")
-	return bool(C.qute_QAbstractListModel_super_16(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.InsertRows")))
+	r := C.qute_QAbstractListModel_super_16(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.InsertRows"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // InsertColumns calls QAbstractItemModel::insertColumns.
 func (s *QAbstractListModelSuper) InsertColumns(column int, count int, parent *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.InsertColumns")
-	return bool(C.qute_QAbstractListModel_super_17(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.InsertColumns")))
+	r := C.qute_QAbstractListModel_super_17(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.InsertColumns"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // RemoveRows calls QAbstractItemModel::removeRows.
 func (s *QAbstractListModelSuper) RemoveRows(row int, count int, parent *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.RemoveRows")
-	return bool(C.qute_QAbstractListModel_super_18(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.RemoveRows")))
+	r := C.qute_QAbstractListModel_super_18(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.RemoveRows"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // RemoveColumns calls QAbstractItemModel::removeColumns.
 func (s *QAbstractListModelSuper) RemoveColumns(column int, count int, parent *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.RemoveColumns")
-	return bool(C.qute_QAbstractListModel_super_19(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.RemoveColumns")))
+	r := C.qute_QAbstractListModel_super_19(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.RemoveColumns"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // MoveRows calls QAbstractItemModel::moveRows.
 func (s *QAbstractListModelSuper) MoveRows(sourceParent *QModelIndex, sourceRow int, count int, destinationParent *QModelIndex, destinationChild int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.MoveRows")
-	return bool(C.qute_QAbstractListModel_super_20(self, rt.UseArg(unsafe.Pointer(sourceParent), "QAbstractListModel.Super.MoveRows"), C.int(sourceRow), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QAbstractListModel.Super.MoveRows"), C.int(destinationChild)))
+	r := C.qute_QAbstractListModel_super_20(self, rt.UseArg(unsafe.Pointer(sourceParent), "QAbstractListModel.Super.MoveRows"), C.int(sourceRow), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QAbstractListModel.Super.MoveRows"), C.int(destinationChild))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
 }
 
 // MoveColumns calls QAbstractItemModel::moveColumns.
 func (s *QAbstractListModelSuper) MoveColumns(sourceParent *QModelIndex, sourceColumn int, count int, destinationParent *QModelIndex, destinationChild int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.MoveColumns")
-	return bool(C.qute_QAbstractListModel_super_21(self, rt.UseArg(unsafe.Pointer(sourceParent), "QAbstractListModel.Super.MoveColumns"), C.int(sourceColumn), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QAbstractListModel.Super.MoveColumns"), C.int(destinationChild)))
+	r := C.qute_QAbstractListModel_super_21(self, rt.UseArg(unsafe.Pointer(sourceParent), "QAbstractListModel.Super.MoveColumns"), C.int(sourceColumn), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QAbstractListModel.Super.MoveColumns"), C.int(destinationChild))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
 }
 
 // FetchMore calls QAbstractItemModel::fetchMore.
 func (s *QAbstractListModelSuper) FetchMore(parent *QModelIndex) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.FetchMore")
 	C.qute_QAbstractListModel_super_22(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.FetchMore"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
 }
 
 // CanFetchMore calls QAbstractItemModel::canFetchMore.
 func (s *QAbstractListModelSuper) CanFetchMore(parent *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.CanFetchMore")
-	return bool(C.qute_QAbstractListModel_super_23(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.CanFetchMore")))
+	r := C.qute_QAbstractListModel_super_23(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.Super.CanFetchMore"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
 }
 
 // Sort calls QAbstractItemModel::sort.
 func (s *QAbstractListModelSuper) Sort(column int, order SortOrder) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Sort")
 	C.qute_QAbstractListModel_super_24(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(s.this)
 }
 
 // Buddy calls QAbstractItemModel::buddy.
 func (s *QAbstractListModelSuper) Buddy(index *QModelIndex) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Buddy")
-	return rt.View[QModelIndex](rt.WrapClass(C.qute_QAbstractListModel_super_25(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Buddy")), "QModelIndex", rt.TakeOwned), C.qute_QAbstractListModel_super_25(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Buddy")))
+	r := C.qute_QAbstractListModel_super_25(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Buddy"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
 // Span calls QAbstractItemModel::span.
 func (s *QAbstractListModelSuper) Span(index *QModelIndex) QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Span")
-	return goQSize(C.qute_QAbstractListModel_super_26(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Span")))
+	r := C.qute_QAbstractListModel_super_26(self, rt.UseArg(unsafe.Pointer(index), "QAbstractListModel.Super.Span"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return goQSize(r)
 }
 
 // Submit calls QAbstractItemModel::submit.
 func (s *QAbstractListModelSuper) Submit() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Submit")
-	return bool(C.qute_QAbstractListModel_super_27(self))
+	r := C.qute_QAbstractListModel_super_27(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // Revert calls QAbstractItemModel::revert.
 func (s *QAbstractListModelSuper) Revert() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.Revert")
 	C.qute_QAbstractListModel_super_28(self)
+	runtime.KeepAlive(s.this)
 }
 
 // ResetInternalData calls QAbstractItemModel::resetInternalData.
 func (s *QAbstractListModelSuper) ResetInternalData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractListModel.Super.ResetInternalData")
 	C.qute_QAbstractListModel_super_29(self)
+	runtime.KeepAlive(s.this)
 }
 
 // Event calls QObject::event.
@@ -675,7 +754,10 @@ func (s *QAbstractListModelSuper) Event(event *QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractListModel.Super.Event")
 	}
-	return bool(C.qute_QAbstractListModel_super_30(self, eventPtr))
+	r := C.qute_QAbstractListModel_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -689,7 +771,11 @@ func (s *QAbstractListModelSuper) EventFilter(watched *QObject, event *QEvent) b
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractListModel.Super.EventFilter")
 	}
-	return bool(C.qute_QAbstractListModel_super_31(self, watchedPtr, eventPtr))
+	r := C.qute_QAbstractListModel_super_31(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // TimerEvent calls QObject::timerEvent.
@@ -700,6 +786,8 @@ func (s *QAbstractListModelSuper) TimerEvent(event *QTimerEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QAbstractListModel.Super.TimerEvent")
 	}
 	C.qute_QAbstractListModel_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -710,6 +798,8 @@ func (s *QAbstractListModelSuper) ChildEvent(event *QChildEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QAbstractListModel.Super.ChildEvent")
 	}
 	C.qute_QAbstractListModel_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -720,12 +810,15 @@ func (s *QAbstractListModelSuper) CustomEvent(event *QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractListModel.Super.CustomEvent")
 	}
 	C.qute_QAbstractListModel_super_34(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QAbstractListModelBase) CreateIndex(row int, column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.CreateIndex")
 	r := C.qute_QAbstractListModel_prot_createIndex(self, C.int(row), C.int(column))
+	runtime.KeepAlive(b)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -733,6 +826,7 @@ func (b *QAbstractListModelBase) CreateIndex(row int, column int) *QModelIndex {
 func (b *QAbstractListModelBase) CreateIndex2(row int, column int, idArg uint64) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.CreateIndex2")
 	r := C.qute_QAbstractListModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
+	runtime.KeepAlive(b)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -748,6 +842,9 @@ func (b *QAbstractListModelBase) EncodeData(indexes []*QModelIndex, stream QData
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QAbstractListModel.EncodeData")
 	}
 	C.qute_QAbstractListModel_prot_encodeData(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)), streamPtr)
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(indexes)
+	runtime.KeepAlive(stream)
 }
 
 // DecodeData wraps the protected QAbstractItemModel::decodeData for subclasses.
@@ -758,6 +855,9 @@ func (b *QAbstractListModelBase) DecodeData(row int, column int, parent *QModelI
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QAbstractListModel.DecodeData")
 	}
 	r := C.qute_QAbstractListModel_prot_decodeData(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.DecodeData"), streamPtr)
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(stream)
 	return bool(r)
 }
 
@@ -765,30 +865,39 @@ func (b *QAbstractListModelBase) DecodeData(row int, column int, parent *QModelI
 func (b *QAbstractListModelBase) BeginInsertRows(parent *QModelIndex, first int, last int) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginInsertRows")
 	C.qute_QAbstractListModel_prot_beginInsertRows(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.BeginInsertRows"), C.int(first), C.int(last))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(parent)
 }
 
 // EndInsertRows wraps the protected QAbstractItemModel::endInsertRows for subclasses.
 func (b *QAbstractListModelBase) EndInsertRows() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndInsertRows")
 	C.qute_QAbstractListModel_prot_endInsertRows(self)
+	runtime.KeepAlive(b)
 }
 
 // BeginRemoveRows wraps the protected QAbstractItemModel::beginRemoveRows for subclasses.
 func (b *QAbstractListModelBase) BeginRemoveRows(parent *QModelIndex, first int, last int) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginRemoveRows")
 	C.qute_QAbstractListModel_prot_beginRemoveRows(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.BeginRemoveRows"), C.int(first), C.int(last))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(parent)
 }
 
 // EndRemoveRows wraps the protected QAbstractItemModel::endRemoveRows for subclasses.
 func (b *QAbstractListModelBase) EndRemoveRows() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndRemoveRows")
 	C.qute_QAbstractListModel_prot_endRemoveRows(self)
+	runtime.KeepAlive(b)
 }
 
 // BeginMoveRows wraps the protected QAbstractItemModel::beginMoveRows for subclasses.
 func (b *QAbstractListModelBase) BeginMoveRows(sourceParent *QModelIndex, sourceFirst int, sourceLast int, destinationParent *QModelIndex, destinationRow int) bool {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginMoveRows")
 	r := C.qute_QAbstractListModel_prot_beginMoveRows(self, rt.UseArg(unsafe.Pointer(sourceParent), "QAbstractListModel.BeginMoveRows"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QAbstractListModel.BeginMoveRows"), C.int(destinationRow))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
 	return bool(r)
 }
 
@@ -796,36 +905,46 @@ func (b *QAbstractListModelBase) BeginMoveRows(sourceParent *QModelIndex, source
 func (b *QAbstractListModelBase) EndMoveRows() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndMoveRows")
 	C.qute_QAbstractListModel_prot_endMoveRows(self)
+	runtime.KeepAlive(b)
 }
 
 // BeginInsertColumns wraps the protected QAbstractItemModel::beginInsertColumns for subclasses.
 func (b *QAbstractListModelBase) BeginInsertColumns(parent *QModelIndex, first int, last int) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginInsertColumns")
 	C.qute_QAbstractListModel_prot_beginInsertColumns(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.BeginInsertColumns"), C.int(first), C.int(last))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(parent)
 }
 
 // EndInsertColumns wraps the protected QAbstractItemModel::endInsertColumns for subclasses.
 func (b *QAbstractListModelBase) EndInsertColumns() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndInsertColumns")
 	C.qute_QAbstractListModel_prot_endInsertColumns(self)
+	runtime.KeepAlive(b)
 }
 
 // BeginRemoveColumns wraps the protected QAbstractItemModel::beginRemoveColumns for subclasses.
 func (b *QAbstractListModelBase) BeginRemoveColumns(parent *QModelIndex, first int, last int) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginRemoveColumns")
 	C.qute_QAbstractListModel_prot_beginRemoveColumns(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractListModel.BeginRemoveColumns"), C.int(first), C.int(last))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(parent)
 }
 
 // EndRemoveColumns wraps the protected QAbstractItemModel::endRemoveColumns for subclasses.
 func (b *QAbstractListModelBase) EndRemoveColumns() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndRemoveColumns")
 	C.qute_QAbstractListModel_prot_endRemoveColumns(self)
+	runtime.KeepAlive(b)
 }
 
 // BeginMoveColumns wraps the protected QAbstractItemModel::beginMoveColumns for subclasses.
 func (b *QAbstractListModelBase) BeginMoveColumns(sourceParent *QModelIndex, sourceFirst int, sourceLast int, destinationParent *QModelIndex, destinationColumn int) bool {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginMoveColumns")
 	r := C.qute_QAbstractListModel_prot_beginMoveColumns(self, rt.UseArg(unsafe.Pointer(sourceParent), "QAbstractListModel.BeginMoveColumns"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QAbstractListModel.BeginMoveColumns"), C.int(destinationColumn))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
 	return bool(r)
 }
 
@@ -833,24 +952,30 @@ func (b *QAbstractListModelBase) BeginMoveColumns(sourceParent *QModelIndex, sou
 func (b *QAbstractListModelBase) EndMoveColumns() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndMoveColumns")
 	C.qute_QAbstractListModel_prot_endMoveColumns(self)
+	runtime.KeepAlive(b)
 }
 
 // BeginResetModel wraps the protected QAbstractItemModel::beginResetModel for subclasses.
 func (b *QAbstractListModelBase) BeginResetModel() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.BeginResetModel")
 	C.qute_QAbstractListModel_prot_beginResetModel(self)
+	runtime.KeepAlive(b)
 }
 
 // EndResetModel wraps the protected QAbstractItemModel::endResetModel for subclasses.
 func (b *QAbstractListModelBase) EndResetModel() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.EndResetModel")
 	C.qute_QAbstractListModel_prot_endResetModel(self)
+	runtime.KeepAlive(b)
 }
 
 // ChangePersistentIndex wraps the protected QAbstractItemModel::changePersistentIndex for subclasses.
 func (b *QAbstractListModelBase) ChangePersistentIndex(from *QModelIndex, to *QModelIndex) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.ChangePersistentIndex")
 	C.qute_QAbstractListModel_prot_changePersistentIndex(self, rt.UseArg(unsafe.Pointer(from), "QAbstractListModel.ChangePersistentIndex"), rt.UseArg(unsafe.Pointer(to), "QAbstractListModel.ChangePersistentIndex"))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 }
 
 // ChangePersistentIndexList wraps the protected QAbstractItemModel::changePersistentIndexList for subclasses.
@@ -865,12 +990,16 @@ func (b *QAbstractListModelBase) ChangePersistentIndexList(from []*QModelIndex, 
 		toC[i] = rt.UseArg(unsafe.Pointer(to[i]), "QAbstractListModel.ChangePersistentIndexList")
 	}
 	C.qute_QAbstractListModel_prot_changePersistentIndexList(self, unsafe.Pointer(unsafe.SliceData(fromC)), C.ptrdiff_t(len(from)), unsafe.Pointer(unsafe.SliceData(toC)), C.ptrdiff_t(len(to)))
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 }
 
 // PersistentIndexList wraps the protected QAbstractItemModel::persistentIndexList for subclasses.
 func (b *QAbstractListModelBase) PersistentIndexList() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(b.QAbstractListModel), "QAbstractListModel.PersistentIndexList")
 	r := C.qute_QAbstractListModel_prot_persistentIndexList(self)
+	runtime.KeepAlive(b)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})
@@ -890,6 +1019,7 @@ func NewQAbstractListModelWith(v QAbstractListModelSubclass, parent QObjectLike)
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQAbstractListModelWith")
 	}
 	p := C.qute_QAbstractListModel_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

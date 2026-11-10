@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQTextBrowser(parent QWidgetLike) *QTextBrowser {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTextBrowser")
 	}
 	p := C.qute_QTextBrowser_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func NewQTextBrowser(parent QWidgetLike) *QTextBrowser {
 func (this *QTextBrowser) Source() *qtcore.QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Source")
 	r := C.qute_QTextBrowser_source(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -91,6 +94,7 @@ func (this *QTextBrowser) Source() *qtcore.QUrl {
 func (this *QTextBrowser) SourceType() qtgui.QTextDocumentResourceType {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SourceType")
 	r := C.qute_QTextBrowser_sourceType(self)
+	runtime.KeepAlive(this)
 	return qtgui.QTextDocumentResourceType(r)
 }
 
@@ -102,6 +106,7 @@ func (this *QTextBrowser) SourceType() qtgui.QTextDocumentResourceType {
 func (this *QTextBrowser) SearchPaths() []string {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SearchPaths")
 	r := C.qute_QTextBrowser_searchPaths(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -114,6 +119,7 @@ func (this *QTextBrowser) SetSearchPaths(paths []string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetSearchPaths")
 	pathsData, pathsLens := quteStrListArg(paths)
 	C.qute_QTextBrowser_setSearchPaths(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(pathsData))), (*C.ptrdiff_t)(unsafe.SliceData(pathsLens)), C.ptrdiff_t(len(paths)))
+	runtime.KeepAlive(this)
 }
 
 // IsBackwardAvailable wraps QTextBrowser::isBackwardAvailable.
@@ -124,6 +130,7 @@ func (this *QTextBrowser) SetSearchPaths(paths []string) {
 func (this *QTextBrowser) IsBackwardAvailable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.IsBackwardAvailable")
 	r := C.qute_QTextBrowser_isBackwardAvailable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -135,6 +142,7 @@ func (this *QTextBrowser) IsBackwardAvailable() bool {
 func (this *QTextBrowser) IsForwardAvailable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.IsForwardAvailable")
 	r := C.qute_QTextBrowser_isForwardAvailable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -146,6 +154,7 @@ func (this *QTextBrowser) IsForwardAvailable() bool {
 func (this *QTextBrowser) ClearHistory() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.ClearHistory")
 	C.qute_QTextBrowser_clearHistory(self)
+	runtime.KeepAlive(this)
 }
 
 // HistoryTitle wraps QTextBrowser::historyTitle.
@@ -156,6 +165,7 @@ func (this *QTextBrowser) ClearHistory() {
 func (this *QTextBrowser) HistoryTitle(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.HistoryTitle")
 	r := C.qute_QTextBrowser_historyTitle(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -169,6 +179,7 @@ func (this *QTextBrowser) HistoryTitle(arg0 int) string {
 func (this *QTextBrowser) HistoryUrl(arg0 int) *qtcore.QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.HistoryUrl")
 	r := C.qute_QTextBrowser_historyUrl(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -180,6 +191,7 @@ func (this *QTextBrowser) HistoryUrl(arg0 int) *qtcore.QUrl {
 func (this *QTextBrowser) BackwardHistoryCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.BackwardHistoryCount")
 	r := C.qute_QTextBrowser_backwardHistoryCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -191,6 +203,7 @@ func (this *QTextBrowser) BackwardHistoryCount() int {
 func (this *QTextBrowser) ForwardHistoryCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.ForwardHistoryCount")
 	r := C.qute_QTextBrowser_forwardHistoryCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -202,6 +215,7 @@ func (this *QTextBrowser) ForwardHistoryCount() int {
 func (this *QTextBrowser) OpenExternalLinks() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.OpenExternalLinks")
 	r := C.qute_QTextBrowser_openExternalLinks(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -213,6 +227,7 @@ func (this *QTextBrowser) OpenExternalLinks() bool {
 func (this *QTextBrowser) SetOpenExternalLinks(open bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetOpenExternalLinks")
 	C.qute_QTextBrowser_setOpenExternalLinks(self, C.bool(open))
+	runtime.KeepAlive(this)
 }
 
 // OpenLinks wraps QTextBrowser::openLinks.
@@ -223,6 +238,7 @@ func (this *QTextBrowser) SetOpenExternalLinks(open bool) {
 func (this *QTextBrowser) OpenLinks() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.OpenLinks")
 	r := C.qute_QTextBrowser_openLinks(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -234,6 +250,7 @@ func (this *QTextBrowser) OpenLinks() bool {
 func (this *QTextBrowser) SetOpenLinks(open bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetOpenLinks")
 	C.qute_QTextBrowser_setOpenLinks(self, C.bool(open))
+	runtime.KeepAlive(this)
 }
 
 // SetSource wraps QTextBrowser::setSource.
@@ -244,6 +261,8 @@ func (this *QTextBrowser) SetOpenLinks(open bool) {
 func (this *QTextBrowser) SetSource(name *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetSource")
 	C.qute_QTextBrowser_setSource(self, rt.UseArg(unsafe.Pointer(name), "QTextBrowser.SetSource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(name)
 }
 
 // Backward wraps QTextBrowser::backward.
@@ -254,6 +273,7 @@ func (this *QTextBrowser) SetSource(name *qtcore.QUrl) {
 func (this *QTextBrowser) Backward() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Backward")
 	C.qute_QTextBrowser_backward(self)
+	runtime.KeepAlive(this)
 }
 
 // Forward wraps QTextBrowser::forward.
@@ -264,6 +284,7 @@ func (this *QTextBrowser) Backward() {
 func (this *QTextBrowser) Forward() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Forward")
 	C.qute_QTextBrowser_forward(self)
+	runtime.KeepAlive(this)
 }
 
 // Home wraps QTextBrowser::home.
@@ -274,6 +295,7 @@ func (this *QTextBrowser) Forward() {
 func (this *QTextBrowser) Home() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Home")
 	C.qute_QTextBrowser_home(self)
+	runtime.KeepAlive(this)
 }
 
 // Reload wraps QTextBrowser::reload.
@@ -284,6 +306,7 @@ func (this *QTextBrowser) Home() {
 func (this *QTextBrowser) Reload() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Reload")
 	C.qute_QTextBrowser_reload(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitBackwardAvailable wraps emitting the backwardAvailable signal.
@@ -294,6 +317,7 @@ func (this *QTextBrowser) Reload() {
 func (this *QTextBrowser) EmitBackwardAvailable(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.EmitBackwardAvailable")
 	C.qute_QTextBrowser_backwardAvailable_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitForwardAvailable wraps emitting the forwardAvailable signal.
@@ -304,6 +328,7 @@ func (this *QTextBrowser) EmitBackwardAvailable(arg0 bool) {
 func (this *QTextBrowser) EmitForwardAvailable(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.EmitForwardAvailable")
 	C.qute_QTextBrowser_forwardAvailable_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitHistoryChanged wraps emitting the historyChanged signal.
@@ -314,6 +339,7 @@ func (this *QTextBrowser) EmitForwardAvailable(arg0 bool) {
 func (this *QTextBrowser) EmitHistoryChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.EmitHistoryChanged")
 	C.qute_QTextBrowser_historyChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSourceChanged wraps emitting the sourceChanged signal.
@@ -324,6 +350,8 @@ func (this *QTextBrowser) EmitHistoryChanged() {
 func (this *QTextBrowser) EmitSourceChanged(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.EmitSourceChanged")
 	C.qute_QTextBrowser_sourceChanged_1(self, rt.UseArg(unsafe.Pointer(url), "QTextBrowser.EmitSourceChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // EmitHighlighted wraps emitting the highlighted signal.
@@ -334,6 +362,8 @@ func (this *QTextBrowser) EmitSourceChanged(url *qtcore.QUrl) {
 func (this *QTextBrowser) EmitHighlighted(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.EmitHighlighted")
 	C.qute_QTextBrowser_highlighted_1(self, rt.UseArg(unsafe.Pointer(url), "QTextBrowser.EmitHighlighted"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // EmitAnchorClicked wraps emitting the anchorClicked signal.
@@ -344,6 +374,8 @@ func (this *QTextBrowser) EmitHighlighted(url *qtcore.QUrl) {
 func (this *QTextBrowser) EmitAnchorClicked(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.EmitAnchorClicked")
 	C.qute_QTextBrowser_anchorClicked_1(self, rt.UseArg(unsafe.Pointer(url), "QTextBrowser.EmitAnchorClicked"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // OnBackwardAvailable connects f to the backwardAvailable signal. The connection ends when the

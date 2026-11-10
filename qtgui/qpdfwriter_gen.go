@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -78,6 +79,7 @@ func NewQPdfWriterWithIODevice(device qtcore.QIODeviceLike) *QPdfWriter {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "NewQPdfWriterWithIODevice")
 	}
 	p := C.qute_QPdfWriter_new_1(devicePtr)
+	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
 	return rt.View[QPdfWriter](h, p)
 }
@@ -90,6 +92,7 @@ func NewQPdfWriterWithIODevice(device qtcore.QIODeviceLike) *QPdfWriter {
 func (this *QPdfWriter) SetPdfVersion(version QPagedPaintDevicePdfVersion) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetPdfVersion")
 	C.qute_QPdfWriter_setPdfVersion(self, C.int64_t(version))
+	runtime.KeepAlive(this)
 }
 
 // PdfVersion wraps QPdfWriter::pdfVersion.
@@ -100,6 +103,7 @@ func (this *QPdfWriter) SetPdfVersion(version QPagedPaintDevicePdfVersion) {
 func (this *QPdfWriter) PdfVersion() QPagedPaintDevicePdfVersion {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.PdfVersion")
 	r := C.qute_QPdfWriter_pdfVersion(self)
+	runtime.KeepAlive(this)
 	return QPagedPaintDevicePdfVersion(r)
 }
 
@@ -111,6 +115,7 @@ func (this *QPdfWriter) PdfVersion() QPagedPaintDevicePdfVersion {
 func (this *QPdfWriter) Title() string {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.Title")
 	r := C.qute_QPdfWriter_title(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -122,6 +127,7 @@ func (this *QPdfWriter) Title() string {
 func (this *QPdfWriter) SetTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetTitle")
 	C.qute_QPdfWriter_setTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // Creator wraps QPdfWriter::creator.
@@ -132,6 +138,7 @@ func (this *QPdfWriter) SetTitle(title string) {
 func (this *QPdfWriter) Creator() string {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.Creator")
 	r := C.qute_QPdfWriter_creator(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -143,6 +150,7 @@ func (this *QPdfWriter) Creator() string {
 func (this *QPdfWriter) SetCreator(creator string) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetCreator")
 	C.qute_QPdfWriter_setCreator(self, (*C.char)(unsafe.Pointer(unsafe.StringData(creator))), C.ptrdiff_t(len(creator)))
+	runtime.KeepAlive(this)
 }
 
 // DocumentId wraps QPdfWriter::documentId.
@@ -155,6 +163,7 @@ func (this *QPdfWriter) SetCreator(creator string) {
 func (this *QPdfWriter) DocumentId() *qtcore.QUuid {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.DocumentId")
 	r := C.qute_QPdfWriter_documentId(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
 }
 
@@ -166,6 +175,8 @@ func (this *QPdfWriter) DocumentId() *qtcore.QUuid {
 func (this *QPdfWriter) SetDocumentId(documentId *qtcore.QUuid) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetDocumentId")
 	C.qute_QPdfWriter_setDocumentId(self, rt.UseArg(unsafe.Pointer(documentId), "QPdfWriter.SetDocumentId"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(documentId)
 }
 
 // Author wraps QPdfWriter::author.
@@ -176,6 +187,7 @@ func (this *QPdfWriter) SetDocumentId(documentId *qtcore.QUuid) {
 func (this *QPdfWriter) Author() string {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.Author")
 	r := C.qute_QPdfWriter_author(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -187,6 +199,7 @@ func (this *QPdfWriter) Author() string {
 func (this *QPdfWriter) SetAuthor(author string) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetAuthor")
 	C.qute_QPdfWriter_setAuthor(self, (*C.char)(unsafe.Pointer(unsafe.StringData(author))), C.ptrdiff_t(len(author)))
+	runtime.KeepAlive(this)
 }
 
 // NewPage wraps QPdfWriter::newPage.
@@ -197,6 +210,7 @@ func (this *QPdfWriter) SetAuthor(author string) {
 func (this *QPdfWriter) NewPage() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.NewPage")
 	r := C.qute_QPdfWriter_newPage(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -208,6 +222,7 @@ func (this *QPdfWriter) NewPage() bool {
 func (this *QPdfWriter) SetResolution(resolution int) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetResolution")
 	C.qute_QPdfWriter_setResolution(self, C.int(resolution))
+	runtime.KeepAlive(this)
 }
 
 // Resolution wraps QPdfWriter::resolution.
@@ -218,6 +233,7 @@ func (this *QPdfWriter) SetResolution(resolution int) {
 func (this *QPdfWriter) Resolution() int {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.Resolution")
 	r := C.qute_QPdfWriter_resolution(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -229,6 +245,7 @@ func (this *QPdfWriter) Resolution() int {
 func (this *QPdfWriter) SetDocumentXmpMetadata(xmpMetadata []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetDocumentXmpMetadata")
 	C.qute_QPdfWriter_setDocumentXmpMetadata(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(xmpMetadata))), C.ptrdiff_t(len(xmpMetadata)))
+	runtime.KeepAlive(this)
 }
 
 // DocumentXmpMetadata wraps QPdfWriter::documentXmpMetadata.
@@ -239,6 +256,7 @@ func (this *QPdfWriter) SetDocumentXmpMetadata(xmpMetadata []byte) {
 func (this *QPdfWriter) DocumentXmpMetadata() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.DocumentXmpMetadata")
 	r := C.qute_QPdfWriter_documentXmpMetadata(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -250,6 +268,7 @@ func (this *QPdfWriter) DocumentXmpMetadata() []byte {
 func (this *QPdfWriter) AddFileAttachment(fileName string, data []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.AddFileAttachment")
 	C.qute_QPdfWriter_addFileAttachment(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 }
 
 // ColorModel wraps QPdfWriter::colorModel.
@@ -260,6 +279,7 @@ func (this *QPdfWriter) AddFileAttachment(fileName string, data []byte) {
 func (this *QPdfWriter) ColorModel() QPdfWriterColorModel {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.ColorModel")
 	r := C.qute_QPdfWriter_colorModel(self)
+	runtime.KeepAlive(this)
 	return QPdfWriterColorModel(r)
 }
 
@@ -271,4 +291,5 @@ func (this *QPdfWriter) ColorModel() QPdfWriterColorModel {
 func (this *QPdfWriter) SetColorModel(model QPdfWriterColorModel) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetColorModel")
 	C.qute_QPdfWriter_setColorModel(self, C.int64_t(model))
+	runtime.KeepAlive(this)
 }

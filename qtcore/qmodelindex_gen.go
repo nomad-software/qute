@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQModelIndex() *QModelIndex {
 func (this *QModelIndex) Row() int {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Row")
 	r := C.qute_QModelIndex_row(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -107,6 +109,7 @@ func (this *QModelIndex) Row() int {
 func (this *QModelIndex) Column() int {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Column")
 	r := C.qute_QModelIndex_column(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -118,6 +121,7 @@ func (this *QModelIndex) Column() int {
 func (this *QModelIndex) InternalId() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.InternalId")
 	r := C.qute_QModelIndex_internalId(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -129,6 +133,7 @@ func (this *QModelIndex) InternalId() uint64 {
 func (this *QModelIndex) InternalPointer() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.InternalPointer")
 	r := C.qute_QModelIndex_internalPointer(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -140,6 +145,7 @@ func (this *QModelIndex) InternalPointer() unsafe.Pointer {
 func (this *QModelIndex) ConstInternalPointer() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.ConstInternalPointer")
 	r := C.qute_QModelIndex_constInternalPointer(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -153,6 +159,7 @@ func (this *QModelIndex) ConstInternalPointer() unsafe.Pointer {
 func (this *QModelIndex) Parent() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Parent")
 	r := C.qute_QModelIndex_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -166,6 +173,7 @@ func (this *QModelIndex) Parent() *QModelIndex {
 func (this *QModelIndex) Sibling(row int, column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Sibling")
 	r := C.qute_QModelIndex_sibling(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -179,6 +187,7 @@ func (this *QModelIndex) Sibling(row int, column int) *QModelIndex {
 func (this *QModelIndex) SiblingAtColumn(column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.SiblingAtColumn")
 	r := C.qute_QModelIndex_siblingAtColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -192,6 +201,7 @@ func (this *QModelIndex) SiblingAtColumn(column int) *QModelIndex {
 func (this *QModelIndex) SiblingAtRow(row int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.SiblingAtRow")
 	r := C.qute_QModelIndex_siblingAtRow(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -205,6 +215,7 @@ func (this *QModelIndex) SiblingAtRow(row int) *QModelIndex {
 func (this *QModelIndex) Data() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Data")
 	r := C.qute_QModelIndex_data(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -216,6 +227,7 @@ func (this *QModelIndex) Data() *QVariant {
 func (this *QModelIndex) Flags() ItemFlags {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Flags")
 	r := C.qute_QModelIndex_flags(self)
+	runtime.KeepAlive(this)
 	return ItemFlags(r)
 }
 
@@ -229,6 +241,7 @@ func (this *QModelIndex) Flags() ItemFlags {
 func (this *QModelIndex) Model() *QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Model")
 	r := C.qute_QModelIndex_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -240,5 +253,6 @@ func (this *QModelIndex) Model() *QAbstractItemModel {
 func (this *QModelIndex) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.IsValid")
 	r := C.qute_QModelIndex_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -84,6 +85,7 @@ func (this *QTextItem) Unkeep() {
 func (this *QTextItem) Descent() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextItem.Descent")
 	r := C.qute_QTextItem_descent(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -95,6 +97,7 @@ func (this *QTextItem) Descent() float64 {
 func (this *QTextItem) Ascent() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextItem.Ascent")
 	r := C.qute_QTextItem_ascent(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -106,6 +109,7 @@ func (this *QTextItem) Ascent() float64 {
 func (this *QTextItem) Width() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextItem.Width")
 	r := C.qute_QTextItem_width(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -117,6 +121,7 @@ func (this *QTextItem) Width() float64 {
 func (this *QTextItem) RenderFlags() QTextItemRenderFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTextItem.RenderFlags")
 	r := C.qute_QTextItem_renderFlags(self)
+	runtime.KeepAlive(this)
 	return QTextItemRenderFlags(r)
 }
 
@@ -128,6 +133,7 @@ func (this *QTextItem) RenderFlags() QTextItemRenderFlags {
 func (this *QTextItem) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextItem.Text")
 	r := C.qute_QTextItem_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -141,5 +147,6 @@ func (this *QTextItem) Text() string {
 func (this *QTextItem) Font() *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QTextItem.Font")
 	r := C.qute_QTextItem_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }

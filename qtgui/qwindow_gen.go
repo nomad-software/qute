@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -68,6 +69,7 @@ func NewQWindow(parent QWindowLike) *QWindow {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWindow()), "NewQWindow")
 	}
 	p := C.qute_QWindow_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQWindow(parent QWindowLike) *QWindow {
 func (this *QWindow) SetSurfaceType(surfaceType QSurfaceSurfaceType) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetSurfaceType")
 	C.qute_QWindow_setSurfaceType(self, C.int64_t(surfaceType))
+	runtime.KeepAlive(this)
 }
 
 // SurfaceType wraps QWindow::surfaceType.
@@ -94,6 +97,7 @@ func (this *QWindow) SetSurfaceType(surfaceType QSurfaceSurfaceType) {
 func (this *QWindow) SurfaceType() QSurfaceSurfaceType {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SurfaceType")
 	r := C.qute_QWindow_surfaceType(self)
+	runtime.KeepAlive(this)
 	return QSurfaceSurfaceType(r)
 }
 
@@ -105,6 +109,7 @@ func (this *QWindow) SurfaceType() QSurfaceSurfaceType {
 func (this *QWindow) IsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.IsVisible")
 	r := C.qute_QWindow_isVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -116,6 +121,7 @@ func (this *QWindow) IsVisible() bool {
 func (this *QWindow) Visibility() QWindowVisibility {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Visibility")
 	r := C.qute_QWindow_visibility(self)
+	runtime.KeepAlive(this)
 	return QWindowVisibility(r)
 }
 
@@ -127,6 +133,7 @@ func (this *QWindow) Visibility() QWindowVisibility {
 func (this *QWindow) SetVisibility(vArg QWindowVisibility) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetVisibility")
 	C.qute_QWindow_setVisibility(self, C.int64_t(vArg))
+	runtime.KeepAlive(this)
 }
 
 // Create wraps QWindow::create.
@@ -137,6 +144,7 @@ func (this *QWindow) SetVisibility(vArg QWindowVisibility) {
 func (this *QWindow) Create() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Create")
 	C.qute_QWindow_create(self)
+	runtime.KeepAlive(this)
 }
 
 // WinId wraps QWindow::winId.
@@ -147,6 +155,7 @@ func (this *QWindow) Create() {
 func (this *QWindow) WinId() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.WinId")
 	r := C.qute_QWindow_winId(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -160,6 +169,7 @@ func (this *QWindow) WinId() uint64 {
 func (this *QWindow) Parent() *QWindow {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Parent")
 	r := C.qute_QWindow_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
 }
 
@@ -177,6 +187,8 @@ func (this *QWindow) SetParent(parent QWindowLike) {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWindow()), "QWindow.SetParent")
 	}
 	C.qute_QWindow_setParent(self, parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 	rt.RefOf(unsafe.Pointer(this)).H.SetParented(parentPtr != nil)
 }
 
@@ -188,6 +200,7 @@ func (this *QWindow) SetParent(parent QWindowLike) {
 func (this *QWindow) IsTopLevel() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.IsTopLevel")
 	r := C.qute_QWindow_isTopLevel(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -199,6 +212,7 @@ func (this *QWindow) IsTopLevel() bool {
 func (this *QWindow) IsModal() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.IsModal")
 	r := C.qute_QWindow_isModal(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -210,6 +224,7 @@ func (this *QWindow) IsModal() bool {
 func (this *QWindow) Modality() qtcore.WindowModality {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Modality")
 	r := C.qute_QWindow_modality(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowModality(r)
 }
 
@@ -221,6 +236,7 @@ func (this *QWindow) Modality() qtcore.WindowModality {
 func (this *QWindow) SetModality(modality qtcore.WindowModality) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetModality")
 	C.qute_QWindow_setModality(self, C.int64_t(modality))
+	runtime.KeepAlive(this)
 }
 
 // SetFormat wraps QWindow::setFormat.
@@ -231,6 +247,8 @@ func (this *QWindow) SetModality(modality qtcore.WindowModality) {
 func (this *QWindow) SetFormat(format *QSurfaceFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFormat")
 	C.qute_QWindow_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QWindow.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // Format wraps QWindow::format.
@@ -243,6 +261,7 @@ func (this *QWindow) SetFormat(format *QSurfaceFormat) {
 func (this *QWindow) Format() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Format")
 	r := C.qute_QWindow_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -256,6 +275,7 @@ func (this *QWindow) Format() *QSurfaceFormat {
 func (this *QWindow) RequestedFormat() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.RequestedFormat")
 	r := C.qute_QWindow_requestedFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -267,6 +287,7 @@ func (this *QWindow) RequestedFormat() *QSurfaceFormat {
 func (this *QWindow) SetFlags(flags qtcore.WindowFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFlags")
 	C.qute_QWindow_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // Flags wraps QWindow::flags.
@@ -277,6 +298,7 @@ func (this *QWindow) SetFlags(flags qtcore.WindowFlags) {
 func (this *QWindow) Flags() qtcore.WindowFlags {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Flags")
 	r := C.qute_QWindow_flags(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowFlags(r)
 }
 
@@ -288,6 +310,7 @@ func (this *QWindow) Flags() qtcore.WindowFlags {
 func (this *QWindow) SetFlag(arg0 qtcore.WindowFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFlag")
 	C.qute_QWindow_setFlag(self, C.int64_t(arg0))
+	runtime.KeepAlive(this)
 }
 
 // Type wraps QWindow::type.
@@ -298,6 +321,7 @@ func (this *QWindow) SetFlag(arg0 qtcore.WindowFlags) {
 func (this *QWindow) Type() qtcore.WindowFlags {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Type")
 	r := C.qute_QWindow_type(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowFlags(r)
 }
 
@@ -309,6 +333,7 @@ func (this *QWindow) Type() qtcore.WindowFlags {
 func (this *QWindow) Title() string {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Title")
 	r := C.qute_QWindow_title(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -320,6 +345,7 @@ func (this *QWindow) Title() string {
 func (this *QWindow) SetOpacity(level float64) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetOpacity")
 	C.qute_QWindow_setOpacity(self, C.double(level))
+	runtime.KeepAlive(this)
 }
 
 // Opacity wraps QWindow::opacity.
@@ -330,6 +356,7 @@ func (this *QWindow) SetOpacity(level float64) {
 func (this *QWindow) Opacity() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Opacity")
 	r := C.qute_QWindow_opacity(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -341,6 +368,8 @@ func (this *QWindow) Opacity() float64 {
 func (this *QWindow) SetMask(region *QRegion) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMask")
 	C.qute_QWindow_setMask(self, rt.UseArg(unsafe.Pointer(region), "QWindow.SetMask"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(region)
 }
 
 // Mask wraps QWindow::mask.
@@ -353,6 +382,7 @@ func (this *QWindow) SetMask(region *QRegion) {
 func (this *QWindow) Mask() *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Mask")
 	r := C.qute_QWindow_mask(self)
+	runtime.KeepAlive(this)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -364,6 +394,7 @@ func (this *QWindow) Mask() *QRegion {
 func (this *QWindow) IsActive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.IsActive")
 	r := C.qute_QWindow_isActive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -375,6 +406,7 @@ func (this *QWindow) IsActive() bool {
 func (this *QWindow) ReportContentOrientationChange(orientation qtcore.ScreenOrientations) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.ReportContentOrientationChange")
 	C.qute_QWindow_reportContentOrientationChange(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // ContentOrientation wraps QWindow::contentOrientation.
@@ -385,6 +417,7 @@ func (this *QWindow) ReportContentOrientationChange(orientation qtcore.ScreenOri
 func (this *QWindow) ContentOrientation() qtcore.ScreenOrientations {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.ContentOrientation")
 	r := C.qute_QWindow_contentOrientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScreenOrientations(r)
 }
 
@@ -396,6 +429,7 @@ func (this *QWindow) ContentOrientation() qtcore.ScreenOrientations {
 func (this *QWindow) DevicePixelRatio() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.DevicePixelRatio")
 	r := C.qute_QWindow_devicePixelRatio(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -407,6 +441,7 @@ func (this *QWindow) DevicePixelRatio() float64 {
 func (this *QWindow) WindowState() qtcore.WindowStates {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.WindowState")
 	r := C.qute_QWindow_windowState(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowStates(r)
 }
 
@@ -418,6 +453,7 @@ func (this *QWindow) WindowState() qtcore.WindowStates {
 func (this *QWindow) WindowStates() qtcore.WindowStates {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.WindowStates")
 	r := C.qute_QWindow_windowStates(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowStates(r)
 }
 
@@ -429,6 +465,7 @@ func (this *QWindow) WindowStates() qtcore.WindowStates {
 func (this *QWindow) SetWindowState(state qtcore.WindowStates) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetWindowState")
 	C.qute_QWindow_setWindowState(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // SetWindowStates wraps QWindow::setWindowStates.
@@ -439,6 +476,7 @@ func (this *QWindow) SetWindowState(state qtcore.WindowStates) {
 func (this *QWindow) SetWindowStates(states qtcore.WindowStates) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetWindowStates")
 	C.qute_QWindow_setWindowStates(self, C.int64_t(states))
+	runtime.KeepAlive(this)
 }
 
 // SetTransientParent wraps QWindow::setTransientParent.
@@ -453,6 +491,8 @@ func (this *QWindow) SetTransientParent(parent QWindowLike) {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWindow()), "QWindow.SetTransientParent")
 	}
 	C.qute_QWindow_setTransientParent(self, parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 }
 
 // TransientParent wraps QWindow::transientParent.
@@ -465,6 +505,7 @@ func (this *QWindow) SetTransientParent(parent QWindowLike) {
 func (this *QWindow) TransientParent() *QWindow {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.TransientParent")
 	r := C.qute_QWindow_transientParent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
 }
 
@@ -480,6 +521,8 @@ func (this *QWindow) IsAncestorOf(child QWindowLike) bool {
 		childPtr = rt.UseArg(unsafe.Pointer(child.AsQWindow()), "QWindow.IsAncestorOf")
 	}
 	r := C.qute_QWindow_isAncestorOf(self, childPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
 	return bool(r)
 }
 
@@ -491,6 +534,7 @@ func (this *QWindow) IsAncestorOf(child QWindowLike) bool {
 func (this *QWindow) IsExposed() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.IsExposed")
 	r := C.qute_QWindow_isExposed(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -502,6 +546,7 @@ func (this *QWindow) IsExposed() bool {
 func (this *QWindow) MinimumWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MinimumWidth")
 	r := C.qute_QWindow_minimumWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -513,6 +558,7 @@ func (this *QWindow) MinimumWidth() int {
 func (this *QWindow) MinimumHeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MinimumHeight")
 	r := C.qute_QWindow_minimumHeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -524,6 +570,7 @@ func (this *QWindow) MinimumHeight() int {
 func (this *QWindow) MaximumWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MaximumWidth")
 	r := C.qute_QWindow_maximumWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -535,6 +582,7 @@ func (this *QWindow) MaximumWidth() int {
 func (this *QWindow) MaximumHeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MaximumHeight")
 	r := C.qute_QWindow_maximumHeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -546,6 +594,7 @@ func (this *QWindow) MaximumHeight() int {
 func (this *QWindow) MinimumSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MinimumSize")
 	r := C.qute_QWindow_minimumSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -557,6 +606,7 @@ func (this *QWindow) MinimumSize() qtcore.QSize {
 func (this *QWindow) MaximumSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MaximumSize")
 	r := C.qute_QWindow_maximumSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -568,6 +618,7 @@ func (this *QWindow) MaximumSize() qtcore.QSize {
 func (this *QWindow) BaseSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.BaseSize")
 	r := C.qute_QWindow_baseSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -579,6 +630,7 @@ func (this *QWindow) BaseSize() qtcore.QSize {
 func (this *QWindow) SizeIncrement() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SizeIncrement")
 	r := C.qute_QWindow_sizeIncrement(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -590,6 +642,7 @@ func (this *QWindow) SizeIncrement() qtcore.QSize {
 func (this *QWindow) SetMinimumSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMinimumSize")
 	C.qute_QWindow_setMinimumSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // SetMaximumSize wraps QWindow::setMaximumSize.
@@ -600,6 +653,7 @@ func (this *QWindow) SetMinimumSize(size qtcore.QSize) {
 func (this *QWindow) SetMaximumSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMaximumSize")
 	C.qute_QWindow_setMaximumSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // SetBaseSize wraps QWindow::setBaseSize.
@@ -610,6 +664,7 @@ func (this *QWindow) SetMaximumSize(size qtcore.QSize) {
 func (this *QWindow) SetBaseSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetBaseSize")
 	C.qute_QWindow_setBaseSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // SetSizeIncrement wraps QWindow::setSizeIncrement.
@@ -620,6 +675,7 @@ func (this *QWindow) SetBaseSize(size qtcore.QSize) {
 func (this *QWindow) SetSizeIncrement(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetSizeIncrement")
 	C.qute_QWindow_setSizeIncrement(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // Geometry wraps QWindow::geometry.
@@ -630,6 +686,7 @@ func (this *QWindow) SetSizeIncrement(size qtcore.QSize) {
 func (this *QWindow) Geometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Geometry")
 	r := C.qute_QWindow_geometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -641,6 +698,7 @@ func (this *QWindow) Geometry() qtcore.QRect {
 func (this *QWindow) FrameMargins() qtcore.QMargins {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.FrameMargins")
 	r := C.qute_QWindow_frameMargins(self)
+	runtime.KeepAlive(this)
 	return goQMargins(r)
 }
 
@@ -652,6 +710,7 @@ func (this *QWindow) FrameMargins() qtcore.QMargins {
 func (this *QWindow) FrameGeometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.FrameGeometry")
 	r := C.qute_QWindow_frameGeometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -663,6 +722,7 @@ func (this *QWindow) FrameGeometry() qtcore.QRect {
 func (this *QWindow) FramePosition() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.FramePosition")
 	r := C.qute_QWindow_framePosition(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -674,6 +734,7 @@ func (this *QWindow) FramePosition() qtcore.QPoint {
 func (this *QWindow) SetFramePosition(point qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFramePosition")
 	C.qute_QWindow_setFramePosition(self, cQPoint(point))
+	runtime.KeepAlive(this)
 }
 
 // SafeAreaMargins wraps QWindow::safeAreaMargins.
@@ -684,6 +745,7 @@ func (this *QWindow) SetFramePosition(point qtcore.QPoint) {
 func (this *QWindow) SafeAreaMargins() qtcore.QMargins {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SafeAreaMargins")
 	r := C.qute_QWindow_safeAreaMargins(self)
+	runtime.KeepAlive(this)
 	return goQMargins(r)
 }
 
@@ -695,6 +757,7 @@ func (this *QWindow) SafeAreaMargins() qtcore.QMargins {
 func (this *QWindow) Width() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Width")
 	r := C.qute_QWindow_width(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -706,6 +769,7 @@ func (this *QWindow) Width() int {
 func (this *QWindow) Height() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Height")
 	r := C.qute_QWindow_height(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -717,6 +781,7 @@ func (this *QWindow) Height() int {
 func (this *QWindow) X() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.X")
 	r := C.qute_QWindow_x(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -728,6 +793,7 @@ func (this *QWindow) X() int {
 func (this *QWindow) Y() int {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Y")
 	r := C.qute_QWindow_y(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -739,6 +805,7 @@ func (this *QWindow) Y() int {
 func (this *QWindow) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Size")
 	r := C.qute_QWindow_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -750,6 +817,7 @@ func (this *QWindow) Size() qtcore.QSize {
 func (this *QWindow) Position() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Position")
 	r := C.qute_QWindow_position(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -761,6 +829,7 @@ func (this *QWindow) Position() qtcore.QPoint {
 func (this *QWindow) SetPosition(pt qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetPosition")
 	C.qute_QWindow_setPosition(self, cQPoint(pt))
+	runtime.KeepAlive(this)
 }
 
 // Resize wraps QWindow::resize.
@@ -771,6 +840,7 @@ func (this *QWindow) SetPosition(pt qtcore.QPoint) {
 func (this *QWindow) Resize(newSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Resize")
 	C.qute_QWindow_resize(self, cQSize(newSize))
+	runtime.KeepAlive(this)
 }
 
 // SetFilePath wraps QWindow::setFilePath.
@@ -781,6 +851,7 @@ func (this *QWindow) Resize(newSize qtcore.QSize) {
 func (this *QWindow) SetFilePath(filePath string) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFilePath")
 	C.qute_QWindow_setFilePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filePath))), C.ptrdiff_t(len(filePath)))
+	runtime.KeepAlive(this)
 }
 
 // FilePath wraps QWindow::filePath.
@@ -791,6 +862,7 @@ func (this *QWindow) SetFilePath(filePath string) {
 func (this *QWindow) FilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.FilePath")
 	r := C.qute_QWindow_filePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -802,6 +874,8 @@ func (this *QWindow) FilePath() string {
 func (this *QWindow) SetIcon(icon *QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetIcon")
 	C.qute_QWindow_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QWindow.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // Icon wraps QWindow::icon.
@@ -814,6 +888,7 @@ func (this *QWindow) SetIcon(icon *QIcon) {
 func (this *QWindow) Icon() *QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Icon")
 	r := C.qute_QWindow_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -825,6 +900,7 @@ func (this *QWindow) Icon() *QIcon {
 func (this *QWindow) Destroy() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Destroy")
 	C.qute_QWindow_destroy(self)
+	runtime.KeepAlive(this)
 }
 
 // SetKeyboardGrabEnabled wraps QWindow::setKeyboardGrabEnabled.
@@ -835,6 +911,7 @@ func (this *QWindow) Destroy() {
 func (this *QWindow) SetKeyboardGrabEnabled(grab bool) bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetKeyboardGrabEnabled")
 	r := C.qute_QWindow_setKeyboardGrabEnabled(self, C.bool(grab))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -846,6 +923,7 @@ func (this *QWindow) SetKeyboardGrabEnabled(grab bool) bool {
 func (this *QWindow) SetMouseGrabEnabled(grab bool) bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMouseGrabEnabled")
 	r := C.qute_QWindow_setMouseGrabEnabled(self, C.bool(grab))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -859,6 +937,7 @@ func (this *QWindow) SetMouseGrabEnabled(grab bool) bool {
 func (this *QWindow) Screen() *QScreen {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Screen")
 	r := C.qute_QWindow_screen(self)
+	runtime.KeepAlive(this)
 	return rt.View[QScreen](rt.WrapClass(r, "QScreen", rt.KeepOrBorrow), r)
 }
 
@@ -874,6 +953,8 @@ func (this *QWindow) SetScreen(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QWindow.SetScreen")
 	}
 	C.qute_QWindow_setScreen(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // FocusObject wraps QWindow::focusObject.
@@ -886,6 +967,7 @@ func (this *QWindow) SetScreen(screen QScreenLike) {
 func (this *QWindow) FocusObject() *qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.FocusObject")
 	r := C.qute_QWindow_focusObject(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -897,6 +979,7 @@ func (this *QWindow) FocusObject() *qtcore.QObject {
 func (this *QWindow) MapToGlobal(pos qtcore.QPointF) qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MapToGlobal")
 	r := C.qute_QWindow_mapToGlobal(self, cQPointF(pos))
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -908,6 +991,7 @@ func (this *QWindow) MapToGlobal(pos qtcore.QPointF) qtcore.QPointF {
 func (this *QWindow) MapFromGlobal(pos qtcore.QPointF) qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MapFromGlobal")
 	r := C.qute_QWindow_mapFromGlobal(self, cQPointF(pos))
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -919,6 +1003,7 @@ func (this *QWindow) MapFromGlobal(pos qtcore.QPointF) qtcore.QPointF {
 func (this *QWindow) MapToGlobalPoint(pos qtcore.QPoint) qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MapToGlobalPoint")
 	r := C.qute_QWindow_mapToGlobal_1(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -930,6 +1015,7 @@ func (this *QWindow) MapToGlobalPoint(pos qtcore.QPoint) qtcore.QPoint {
 func (this *QWindow) MapFromGlobalPoint(pos qtcore.QPoint) qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.MapFromGlobalPoint")
 	r := C.qute_QWindow_mapFromGlobal_1(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -943,6 +1029,7 @@ func (this *QWindow) MapFromGlobalPoint(pos qtcore.QPoint) qtcore.QPoint {
 func (this *QWindow) Cursor() *QCursor {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Cursor")
 	r := C.qute_QWindow_cursor(self)
+	runtime.KeepAlive(this)
 	return rt.View[QCursor](rt.WrapClass(r, "QCursor", rt.TakeOwned), r)
 }
 
@@ -954,6 +1041,8 @@ func (this *QWindow) Cursor() *QCursor {
 func (this *QWindow) SetCursor(cursor *QCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetCursor")
 	C.qute_QWindow_setCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QWindow.SetCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // UnsetCursor wraps QWindow::unsetCursor.
@@ -964,6 +1053,7 @@ func (this *QWindow) SetCursor(cursor *QCursor) {
 func (this *QWindow) UnsetCursor() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.UnsetCursor")
 	C.qute_QWindow_unsetCursor(self)
+	runtime.KeepAlive(this)
 }
 
 // RequestActivate wraps QWindow::requestActivate.
@@ -974,6 +1064,7 @@ func (this *QWindow) UnsetCursor() {
 func (this *QWindow) RequestActivate() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.RequestActivate")
 	C.qute_QWindow_requestActivate(self)
+	runtime.KeepAlive(this)
 }
 
 // SetVisible wraps QWindow::setVisible.
@@ -984,6 +1075,7 @@ func (this *QWindow) RequestActivate() {
 func (this *QWindow) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetVisible")
 	C.qute_QWindow_setVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // Show wraps QWindow::show.
@@ -994,6 +1086,7 @@ func (this *QWindow) SetVisible(visible bool) {
 func (this *QWindow) Show() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Show")
 	C.qute_QWindow_show(self)
+	runtime.KeepAlive(this)
 }
 
 // Hide wraps QWindow::hide.
@@ -1004,6 +1097,7 @@ func (this *QWindow) Show() {
 func (this *QWindow) Hide() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Hide")
 	C.qute_QWindow_hide(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowMinimized wraps QWindow::showMinimized.
@@ -1014,6 +1108,7 @@ func (this *QWindow) Hide() {
 func (this *QWindow) ShowMinimized() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.ShowMinimized")
 	C.qute_QWindow_showMinimized(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowMaximized wraps QWindow::showMaximized.
@@ -1024,6 +1119,7 @@ func (this *QWindow) ShowMinimized() {
 func (this *QWindow) ShowMaximized() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.ShowMaximized")
 	C.qute_QWindow_showMaximized(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowFullScreen wraps QWindow::showFullScreen.
@@ -1034,6 +1130,7 @@ func (this *QWindow) ShowMaximized() {
 func (this *QWindow) ShowFullScreen() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.ShowFullScreen")
 	C.qute_QWindow_showFullScreen(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowNormal wraps QWindow::showNormal.
@@ -1044,6 +1141,7 @@ func (this *QWindow) ShowFullScreen() {
 func (this *QWindow) ShowNormal() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.ShowNormal")
 	C.qute_QWindow_showNormal(self)
+	runtime.KeepAlive(this)
 }
 
 // Close wraps QWindow::close.
@@ -1054,6 +1152,7 @@ func (this *QWindow) ShowNormal() {
 func (this *QWindow) Close() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Close")
 	r := C.qute_QWindow_close(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -1065,6 +1164,7 @@ func (this *QWindow) Close() bool {
 func (this *QWindow) Raise() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Raise")
 	C.qute_QWindow_raise(self)
+	runtime.KeepAlive(this)
 }
 
 // Lower wraps QWindow::lower.
@@ -1075,6 +1175,7 @@ func (this *QWindow) Raise() {
 func (this *QWindow) Lower() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Lower")
 	C.qute_QWindow_lower(self)
+	runtime.KeepAlive(this)
 }
 
 // StartSystemResize wraps QWindow::startSystemResize.
@@ -1085,6 +1186,7 @@ func (this *QWindow) Lower() {
 func (this *QWindow) StartSystemResize(edges qtcore.Edges) bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.StartSystemResize")
 	r := C.qute_QWindow_startSystemResize(self, C.int64_t(edges))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -1096,6 +1198,7 @@ func (this *QWindow) StartSystemResize(edges qtcore.Edges) bool {
 func (this *QWindow) StartSystemMove() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.StartSystemMove")
 	r := C.qute_QWindow_startSystemMove(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -1107,6 +1210,7 @@ func (this *QWindow) StartSystemMove() bool {
 func (this *QWindow) SetTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetTitle")
 	C.qute_QWindow_setTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // SetX wraps QWindow::setX.
@@ -1117,6 +1221,7 @@ func (this *QWindow) SetTitle(title string) {
 func (this *QWindow) SetX(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetX")
 	C.qute_QWindow_setX(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // SetY wraps QWindow::setY.
@@ -1127,6 +1232,7 @@ func (this *QWindow) SetX(arg int) {
 func (this *QWindow) SetY(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetY")
 	C.qute_QWindow_setY(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // SetWidth wraps QWindow::setWidth.
@@ -1137,6 +1243,7 @@ func (this *QWindow) SetY(arg int) {
 func (this *QWindow) SetWidth(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetWidth")
 	C.qute_QWindow_setWidth(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // SetHeight wraps QWindow::setHeight.
@@ -1147,6 +1254,7 @@ func (this *QWindow) SetWidth(arg int) {
 func (this *QWindow) SetHeight(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetHeight")
 	C.qute_QWindow_setHeight(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // SetGeometry wraps QWindow::setGeometry.
@@ -1157,6 +1265,7 @@ func (this *QWindow) SetHeight(arg int) {
 func (this *QWindow) SetGeometry(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetGeometry")
 	C.qute_QWindow_setGeometry(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // SetMinimumWidth wraps QWindow::setMinimumWidth.
@@ -1167,6 +1276,7 @@ func (this *QWindow) SetGeometry(rect qtcore.QRect) {
 func (this *QWindow) SetMinimumWidth(w int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMinimumWidth")
 	C.qute_QWindow_setMinimumWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 }
 
 // SetMinimumHeight wraps QWindow::setMinimumHeight.
@@ -1177,6 +1287,7 @@ func (this *QWindow) SetMinimumWidth(w int) {
 func (this *QWindow) SetMinimumHeight(hArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMinimumHeight")
 	C.qute_QWindow_setMinimumHeight(self, C.int(hArg))
+	runtime.KeepAlive(this)
 }
 
 // SetMaximumWidth wraps QWindow::setMaximumWidth.
@@ -1187,6 +1298,7 @@ func (this *QWindow) SetMinimumHeight(hArg int) {
 func (this *QWindow) SetMaximumWidth(w int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMaximumWidth")
 	C.qute_QWindow_setMaximumWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 }
 
 // SetMaximumHeight wraps QWindow::setMaximumHeight.
@@ -1197,6 +1309,7 @@ func (this *QWindow) SetMaximumWidth(w int) {
 func (this *QWindow) SetMaximumHeight(hArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetMaximumHeight")
 	C.qute_QWindow_setMaximumHeight(self, C.int(hArg))
+	runtime.KeepAlive(this)
 }
 
 // Alert wraps QWindow::alert.
@@ -1207,6 +1320,7 @@ func (this *QWindow) SetMaximumHeight(hArg int) {
 func (this *QWindow) Alert(msec int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Alert")
 	C.qute_QWindow_alert(self, C.int(msec))
+	runtime.KeepAlive(this)
 }
 
 // RequestUpdate wraps QWindow::requestUpdate.
@@ -1217,6 +1331,7 @@ func (this *QWindow) Alert(msec int) {
 func (this *QWindow) RequestUpdate() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.RequestUpdate")
 	C.qute_QWindow_requestUpdate(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitScreenChanged wraps emitting the screenChanged signal.
@@ -1231,6 +1346,8 @@ func (this *QWindow) EmitScreenChanged(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QWindow.EmitScreenChanged")
 	}
 	C.qute_QWindow_screenChanged_1(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // EmitModalityChanged wraps emitting the modalityChanged signal.
@@ -1241,6 +1358,7 @@ func (this *QWindow) EmitScreenChanged(screen QScreenLike) {
 func (this *QWindow) EmitModalityChanged(modality qtcore.WindowModality) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitModalityChanged")
 	C.qute_QWindow_modalityChanged_1(self, C.int64_t(modality))
+	runtime.KeepAlive(this)
 }
 
 // EmitFlagsChanged wraps emitting the flagsChanged signal.
@@ -1251,6 +1369,7 @@ func (this *QWindow) EmitModalityChanged(modality qtcore.WindowModality) {
 func (this *QWindow) EmitFlagsChanged(flags qtcore.WindowFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitFlagsChanged")
 	C.qute_QWindow_flagsChanged_1(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // EmitWindowStateChanged wraps emitting the windowStateChanged signal.
@@ -1261,6 +1380,7 @@ func (this *QWindow) EmitFlagsChanged(flags qtcore.WindowFlags) {
 func (this *QWindow) EmitWindowStateChanged(windowState qtcore.WindowStates) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitWindowStateChanged")
 	C.qute_QWindow_windowStateChanged_1(self, C.int64_t(windowState))
+	runtime.KeepAlive(this)
 }
 
 // EmitWindowTitleChanged wraps emitting the windowTitleChanged signal.
@@ -1271,6 +1391,7 @@ func (this *QWindow) EmitWindowStateChanged(windowState qtcore.WindowStates) {
 func (this *QWindow) EmitWindowTitleChanged(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitWindowTitleChanged")
 	C.qute_QWindow_windowTitleChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // EmitXChanged wraps emitting the xChanged signal.
@@ -1281,6 +1402,7 @@ func (this *QWindow) EmitWindowTitleChanged(title string) {
 func (this *QWindow) EmitXChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitXChanged")
 	C.qute_QWindow_xChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitYChanged wraps emitting the yChanged signal.
@@ -1291,6 +1413,7 @@ func (this *QWindow) EmitXChanged(arg int) {
 func (this *QWindow) EmitYChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitYChanged")
 	C.qute_QWindow_yChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitWidthChanged wraps emitting the widthChanged signal.
@@ -1301,6 +1424,7 @@ func (this *QWindow) EmitYChanged(arg int) {
 func (this *QWindow) EmitWidthChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitWidthChanged")
 	C.qute_QWindow_widthChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitHeightChanged wraps emitting the heightChanged signal.
@@ -1311,6 +1435,7 @@ func (this *QWindow) EmitWidthChanged(arg int) {
 func (this *QWindow) EmitHeightChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitHeightChanged")
 	C.qute_QWindow_heightChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitMinimumWidthChanged wraps emitting the minimumWidthChanged signal.
@@ -1321,6 +1446,7 @@ func (this *QWindow) EmitHeightChanged(arg int) {
 func (this *QWindow) EmitMinimumWidthChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitMinimumWidthChanged")
 	C.qute_QWindow_minimumWidthChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitMinimumHeightChanged wraps emitting the minimumHeightChanged signal.
@@ -1331,6 +1457,7 @@ func (this *QWindow) EmitMinimumWidthChanged(arg int) {
 func (this *QWindow) EmitMinimumHeightChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitMinimumHeightChanged")
 	C.qute_QWindow_minimumHeightChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitMaximumWidthChanged wraps emitting the maximumWidthChanged signal.
@@ -1341,6 +1468,7 @@ func (this *QWindow) EmitMinimumHeightChanged(arg int) {
 func (this *QWindow) EmitMaximumWidthChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitMaximumWidthChanged")
 	C.qute_QWindow_maximumWidthChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitMaximumHeightChanged wraps emitting the maximumHeightChanged signal.
@@ -1351,6 +1479,7 @@ func (this *QWindow) EmitMaximumWidthChanged(arg int) {
 func (this *QWindow) EmitMaximumHeightChanged(arg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitMaximumHeightChanged")
 	C.qute_QWindow_maximumHeightChanged_1(self, C.int(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitSafeAreaMarginsChanged wraps emitting the safeAreaMarginsChanged signal.
@@ -1361,6 +1490,7 @@ func (this *QWindow) EmitMaximumHeightChanged(arg int) {
 func (this *QWindow) EmitSafeAreaMarginsChanged(arg qtcore.QMargins) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitSafeAreaMarginsChanged")
 	C.qute_QWindow_safeAreaMarginsChanged_1(self, cQMargins(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibleChanged wraps emitting the visibleChanged signal.
@@ -1371,6 +1501,7 @@ func (this *QWindow) EmitSafeAreaMarginsChanged(arg qtcore.QMargins) {
 func (this *QWindow) EmitVisibleChanged(arg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitVisibleChanged")
 	C.qute_QWindow_visibleChanged_1(self, C.bool(arg))
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibilityChanged wraps emitting the visibilityChanged signal.
@@ -1381,6 +1512,7 @@ func (this *QWindow) EmitVisibleChanged(arg bool) {
 func (this *QWindow) EmitVisibilityChanged(visibility QWindowVisibility) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitVisibilityChanged")
 	C.qute_QWindow_visibilityChanged_1(self, C.int64_t(visibility))
+	runtime.KeepAlive(this)
 }
 
 // EmitActiveChanged wraps emitting the activeChanged signal.
@@ -1391,6 +1523,7 @@ func (this *QWindow) EmitVisibilityChanged(visibility QWindowVisibility) {
 func (this *QWindow) EmitActiveChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitActiveChanged")
 	C.qute_QWindow_activeChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitContentOrientationChanged wraps emitting the contentOrientationChanged signal.
@@ -1401,6 +1534,7 @@ func (this *QWindow) EmitActiveChanged() {
 func (this *QWindow) EmitContentOrientationChanged(orientation qtcore.ScreenOrientations) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitContentOrientationChanged")
 	C.qute_QWindow_contentOrientationChanged_1(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // EmitFocusObjectChanged wraps emitting the focusObjectChanged signal.
@@ -1415,6 +1549,8 @@ func (this *QWindow) EmitFocusObjectChanged(object qtcore.QObjectLike) {
 		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QWindow.EmitFocusObjectChanged")
 	}
 	C.qute_QWindow_focusObjectChanged_1(self, objectPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(object)
 }
 
 // EmitOpacityChanged wraps emitting the opacityChanged signal.
@@ -1425,6 +1561,7 @@ func (this *QWindow) EmitFocusObjectChanged(object qtcore.QObjectLike) {
 func (this *QWindow) EmitOpacityChanged(opacity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.EmitOpacityChanged")
 	C.qute_QWindow_opacityChanged_1(self, C.double(opacity))
+	runtime.KeepAlive(this)
 }
 
 // EmitTransientParentChanged wraps emitting the transientParentChanged signal.
@@ -1439,6 +1576,8 @@ func (this *QWindow) EmitTransientParentChanged(transientParent QWindowLike) {
 		transientParentPtr = rt.UseArg(unsafe.Pointer(transientParent.AsQWindow()), "QWindow.EmitTransientParentChanged")
 	}
 	C.qute_QWindow_transientParentChanged_1(self, transientParentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transientParent)
 }
 
 // QWindowFromWinId wraps QWindow::fromWinId.

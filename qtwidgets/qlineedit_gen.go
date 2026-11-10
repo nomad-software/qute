@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQLineEdit(parent QWidgetLike) *QLineEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLineEdit")
 	}
 	p := C.qute_QLineEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQLineEditWithText(stringArg string, parent QWidgetLike) *QLineEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLineEditWithText")
 	}
 	p := C.qute_QLineEdit_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQLineEditWithText(stringArg string, parent QWidgetLike) *QLineEdit {
 func (this *QLineEdit) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Text")
 	r := C.qute_QLineEdit_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -111,6 +115,7 @@ func (this *QLineEdit) Text() string {
 func (this *QLineEdit) DisplayText() string {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.DisplayText")
 	r := C.qute_QLineEdit_displayText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -122,6 +127,7 @@ func (this *QLineEdit) DisplayText() string {
 func (this *QLineEdit) PlaceholderText() string {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.PlaceholderText")
 	r := C.qute_QLineEdit_placeholderText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -133,6 +139,7 @@ func (this *QLineEdit) PlaceholderText() string {
 func (this *QLineEdit) SetPlaceholderText(placeholderText string) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetPlaceholderText")
 	C.qute_QLineEdit_setPlaceholderText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(placeholderText))), C.ptrdiff_t(len(placeholderText)))
+	runtime.KeepAlive(this)
 }
 
 // MaxLength wraps QLineEdit::maxLength.
@@ -143,6 +150,7 @@ func (this *QLineEdit) SetPlaceholderText(placeholderText string) {
 func (this *QLineEdit) MaxLength() int {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.MaxLength")
 	r := C.qute_QLineEdit_maxLength(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -154,6 +162,7 @@ func (this *QLineEdit) MaxLength() int {
 func (this *QLineEdit) SetMaxLength(maxLength int) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetMaxLength")
 	C.qute_QLineEdit_setMaxLength(self, C.int(maxLength))
+	runtime.KeepAlive(this)
 }
 
 // SetFrame wraps QLineEdit::setFrame.
@@ -164,6 +173,7 @@ func (this *QLineEdit) SetMaxLength(maxLength int) {
 func (this *QLineEdit) SetFrame(frame bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetFrame")
 	C.qute_QLineEdit_setFrame(self, C.bool(frame))
+	runtime.KeepAlive(this)
 }
 
 // HasFrame wraps QLineEdit::hasFrame.
@@ -174,6 +184,7 @@ func (this *QLineEdit) SetFrame(frame bool) {
 func (this *QLineEdit) HasFrame() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.HasFrame")
 	r := C.qute_QLineEdit_hasFrame(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -185,6 +196,7 @@ func (this *QLineEdit) HasFrame() bool {
 func (this *QLineEdit) SetClearButtonEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetClearButtonEnabled")
 	C.qute_QLineEdit_setClearButtonEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsClearButtonEnabled wraps QLineEdit::isClearButtonEnabled.
@@ -195,6 +207,7 @@ func (this *QLineEdit) SetClearButtonEnabled(enable bool) {
 func (this *QLineEdit) IsClearButtonEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.IsClearButtonEnabled")
 	r := C.qute_QLineEdit_isClearButtonEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -206,6 +219,7 @@ func (this *QLineEdit) IsClearButtonEnabled() bool {
 func (this *QLineEdit) EchoMode() QLineEditEchoMode {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EchoMode")
 	r := C.qute_QLineEdit_echoMode(self)
+	runtime.KeepAlive(this)
 	return QLineEditEchoMode(r)
 }
 
@@ -217,6 +231,7 @@ func (this *QLineEdit) EchoMode() QLineEditEchoMode {
 func (this *QLineEdit) SetEchoMode(echoMode QLineEditEchoMode) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetEchoMode")
 	C.qute_QLineEdit_setEchoMode(self, C.int64_t(echoMode))
+	runtime.KeepAlive(this)
 }
 
 // IsReadOnly wraps QLineEdit::isReadOnly.
@@ -227,6 +242,7 @@ func (this *QLineEdit) SetEchoMode(echoMode QLineEditEchoMode) {
 func (this *QLineEdit) IsReadOnly() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.IsReadOnly")
 	r := C.qute_QLineEdit_isReadOnly(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -238,6 +254,7 @@ func (this *QLineEdit) IsReadOnly() bool {
 func (this *QLineEdit) SetReadOnly(readOnly bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetReadOnly")
 	C.qute_QLineEdit_setReadOnly(self, C.bool(readOnly))
+	runtime.KeepAlive(this)
 }
 
 // SetValidator wraps QLineEdit::setValidator.
@@ -254,6 +271,8 @@ func (this *QLineEdit) SetValidator(validator qtgui.QValidatorLike) {
 		validatorPtr = rt.UseArg(unsafe.Pointer(validator.AsQValidator()), "QLineEdit.SetValidator")
 	}
 	C.qute_QLineEdit_setValidator(self, validatorPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(validator)
 }
 
 // Validator wraps QLineEdit::validator.
@@ -266,6 +285,7 @@ func (this *QLineEdit) SetValidator(validator qtgui.QValidatorLike) {
 func (this *QLineEdit) Validator() *qtgui.QValidator {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Validator")
 	r := C.qute_QLineEdit_validator(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QValidator](rt.WrapClass(r, "QValidator", rt.KeepOrBorrow), r)
 }
 
@@ -281,6 +301,8 @@ func (this *QLineEdit) SetCompleter(completer QCompleterLike) {
 		completerPtr = rt.UseArg(unsafe.Pointer(completer.AsQCompleter()), "QLineEdit.SetCompleter")
 	}
 	C.qute_QLineEdit_setCompleter(self, completerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(completer)
 }
 
 // Completer wraps QLineEdit::completer.
@@ -293,6 +315,7 @@ func (this *QLineEdit) SetCompleter(completer QCompleterLike) {
 func (this *QLineEdit) Completer() *QCompleter {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Completer")
 	r := C.qute_QLineEdit_completer(self)
+	runtime.KeepAlive(this)
 	return rt.View[QCompleter](rt.WrapClass(r, "QCompleter", rt.KeepOrBorrow), r)
 }
 
@@ -304,6 +327,7 @@ func (this *QLineEdit) Completer() *QCompleter {
 func (this *QLineEdit) CursorPosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorPosition")
 	r := C.qute_QLineEdit_cursorPosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -315,6 +339,7 @@ func (this *QLineEdit) CursorPosition() int {
 func (this *QLineEdit) SetCursorPosition(cursorPosition int) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetCursorPosition")
 	C.qute_QLineEdit_setCursorPosition(self, C.int(cursorPosition))
+	runtime.KeepAlive(this)
 }
 
 // CursorPositionAt wraps QLineEdit::cursorPositionAt.
@@ -325,6 +350,7 @@ func (this *QLineEdit) SetCursorPosition(cursorPosition int) {
 func (this *QLineEdit) CursorPositionAt(pos qtcore.QPoint) int {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorPositionAt")
 	r := C.qute_QLineEdit_cursorPositionAt(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -336,6 +362,7 @@ func (this *QLineEdit) CursorPositionAt(pos qtcore.QPoint) int {
 func (this *QLineEdit) SetAlignment(flag qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetAlignment")
 	C.qute_QLineEdit_setAlignment(self, C.int64_t(flag))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QLineEdit::alignment.
@@ -346,6 +373,7 @@ func (this *QLineEdit) SetAlignment(flag qtcore.Alignment) {
 func (this *QLineEdit) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Alignment")
 	r := C.qute_QLineEdit_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -357,6 +385,7 @@ func (this *QLineEdit) Alignment() qtcore.Alignment {
 func (this *QLineEdit) CursorForward(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorForward")
 	C.qute_QLineEdit_cursorForward(self, C.bool(mark))
+	runtime.KeepAlive(this)
 }
 
 // CursorBackward wraps QLineEdit::cursorBackward.
@@ -367,6 +396,7 @@ func (this *QLineEdit) CursorForward(mark bool) {
 func (this *QLineEdit) CursorBackward(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorBackward")
 	C.qute_QLineEdit_cursorBackward(self, C.bool(mark))
+	runtime.KeepAlive(this)
 }
 
 // CursorWordForward wraps QLineEdit::cursorWordForward.
@@ -377,6 +407,7 @@ func (this *QLineEdit) CursorBackward(mark bool) {
 func (this *QLineEdit) CursorWordForward(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorWordForward")
 	C.qute_QLineEdit_cursorWordForward(self, C.bool(mark))
+	runtime.KeepAlive(this)
 }
 
 // CursorWordBackward wraps QLineEdit::cursorWordBackward.
@@ -387,6 +418,7 @@ func (this *QLineEdit) CursorWordForward(mark bool) {
 func (this *QLineEdit) CursorWordBackward(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorWordBackward")
 	C.qute_QLineEdit_cursorWordBackward(self, C.bool(mark))
+	runtime.KeepAlive(this)
 }
 
 // Backspace wraps QLineEdit::backspace.
@@ -397,6 +429,7 @@ func (this *QLineEdit) CursorWordBackward(mark bool) {
 func (this *QLineEdit) Backspace() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Backspace")
 	C.qute_QLineEdit_backspace(self)
+	runtime.KeepAlive(this)
 }
 
 // Del wraps QLineEdit::del.
@@ -407,6 +440,7 @@ func (this *QLineEdit) Backspace() {
 func (this *QLineEdit) Del() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Del")
 	C.qute_QLineEdit_del(self)
+	runtime.KeepAlive(this)
 }
 
 // Home wraps QLineEdit::home.
@@ -417,6 +451,7 @@ func (this *QLineEdit) Del() {
 func (this *QLineEdit) Home(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Home")
 	C.qute_QLineEdit_home(self, C.bool(mark))
+	runtime.KeepAlive(this)
 }
 
 // End wraps QLineEdit::end.
@@ -427,6 +462,7 @@ func (this *QLineEdit) Home(mark bool) {
 func (this *QLineEdit) End(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.End")
 	C.qute_QLineEdit_end(self, C.bool(mark))
+	runtime.KeepAlive(this)
 }
 
 // IsModified wraps QLineEdit::isModified.
@@ -437,6 +473,7 @@ func (this *QLineEdit) End(mark bool) {
 func (this *QLineEdit) IsModified() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.IsModified")
 	r := C.qute_QLineEdit_isModified(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -448,6 +485,7 @@ func (this *QLineEdit) IsModified() bool {
 func (this *QLineEdit) SetModified(modified bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetModified")
 	C.qute_QLineEdit_setModified(self, C.bool(modified))
+	runtime.KeepAlive(this)
 }
 
 // SetSelection wraps QLineEdit::setSelection.
@@ -458,6 +496,7 @@ func (this *QLineEdit) SetModified(modified bool) {
 func (this *QLineEdit) SetSelection(arg0 int, arg1 int) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetSelection")
 	C.qute_QLineEdit_setSelection(self, C.int(arg0), C.int(arg1))
+	runtime.KeepAlive(this)
 }
 
 // HasSelectedText wraps QLineEdit::hasSelectedText.
@@ -468,6 +507,7 @@ func (this *QLineEdit) SetSelection(arg0 int, arg1 int) {
 func (this *QLineEdit) HasSelectedText() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.HasSelectedText")
 	r := C.qute_QLineEdit_hasSelectedText(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -479,6 +519,7 @@ func (this *QLineEdit) HasSelectedText() bool {
 func (this *QLineEdit) SelectedText() string {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SelectedText")
 	r := C.qute_QLineEdit_selectedText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -490,6 +531,7 @@ func (this *QLineEdit) SelectedText() string {
 func (this *QLineEdit) SelectionStart() int {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SelectionStart")
 	r := C.qute_QLineEdit_selectionStart(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -501,6 +543,7 @@ func (this *QLineEdit) SelectionStart() int {
 func (this *QLineEdit) SelectionEnd() int {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SelectionEnd")
 	r := C.qute_QLineEdit_selectionEnd(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -512,6 +555,7 @@ func (this *QLineEdit) SelectionEnd() int {
 func (this *QLineEdit) SelectionLength() int {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SelectionLength")
 	r := C.qute_QLineEdit_selectionLength(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -523,6 +567,7 @@ func (this *QLineEdit) SelectionLength() int {
 func (this *QLineEdit) IsUndoAvailable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.IsUndoAvailable")
 	r := C.qute_QLineEdit_isUndoAvailable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -534,6 +579,7 @@ func (this *QLineEdit) IsUndoAvailable() bool {
 func (this *QLineEdit) IsRedoAvailable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.IsRedoAvailable")
 	r := C.qute_QLineEdit_isRedoAvailable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -545,6 +591,7 @@ func (this *QLineEdit) IsRedoAvailable() bool {
 func (this *QLineEdit) SetDragEnabled(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetDragEnabled")
 	C.qute_QLineEdit_setDragEnabled(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // DragEnabled wraps QLineEdit::dragEnabled.
@@ -555,6 +602,7 @@ func (this *QLineEdit) SetDragEnabled(bArg bool) {
 func (this *QLineEdit) DragEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.DragEnabled")
 	r := C.qute_QLineEdit_dragEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -566,6 +614,7 @@ func (this *QLineEdit) DragEnabled() bool {
 func (this *QLineEdit) SetCursorMoveStyle(style qtcore.CursorMoveStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetCursorMoveStyle")
 	C.qute_QLineEdit_setCursorMoveStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // CursorMoveStyle wraps QLineEdit::cursorMoveStyle.
@@ -576,6 +625,7 @@ func (this *QLineEdit) SetCursorMoveStyle(style qtcore.CursorMoveStyle) {
 func (this *QLineEdit) CursorMoveStyle() qtcore.CursorMoveStyle {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorMoveStyle")
 	r := C.qute_QLineEdit_cursorMoveStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.CursorMoveStyle(r)
 }
 
@@ -587,6 +637,7 @@ func (this *QLineEdit) CursorMoveStyle() qtcore.CursorMoveStyle {
 func (this *QLineEdit) InputMask() string {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.InputMask")
 	r := C.qute_QLineEdit_inputMask(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -598,6 +649,7 @@ func (this *QLineEdit) InputMask() string {
 func (this *QLineEdit) SetInputMask(inputMask string) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetInputMask")
 	C.qute_QLineEdit_setInputMask(self, (*C.char)(unsafe.Pointer(unsafe.StringData(inputMask))), C.ptrdiff_t(len(inputMask)))
+	runtime.KeepAlive(this)
 }
 
 // HasAcceptableInput wraps QLineEdit::hasAcceptableInput.
@@ -608,6 +660,7 @@ func (this *QLineEdit) SetInputMask(inputMask string) {
 func (this *QLineEdit) HasAcceptableInput() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.HasAcceptableInput")
 	r := C.qute_QLineEdit_hasAcceptableInput(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -619,6 +672,7 @@ func (this *QLineEdit) HasAcceptableInput() bool {
 func (this *QLineEdit) SetTextMargins(margins qtcore.QMargins) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetTextMargins")
 	C.qute_QLineEdit_setTextMargins(self, cQMargins(margins))
+	runtime.KeepAlive(this)
 }
 
 // TextMargins wraps QLineEdit::textMargins.
@@ -629,6 +683,7 @@ func (this *QLineEdit) SetTextMargins(margins qtcore.QMargins) {
 func (this *QLineEdit) TextMargins() qtcore.QMargins {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.TextMargins")
 	r := C.qute_QLineEdit_textMargins(self)
+	runtime.KeepAlive(this)
 	return goQMargins(r)
 }
 
@@ -644,6 +699,8 @@ func (this *QLineEdit) AddActionAt(action qtgui.QActionLike, position QLineEditA
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QLineEdit.AddActionAt")
 	}
 	C.qute_QLineEdit_addAction(self, actionPtr, C.int64_t(position))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // AddActionIcon wraps QLineEdit::addAction.
@@ -656,6 +713,8 @@ func (this *QLineEdit) AddActionAt(action qtgui.QActionLike, position QLineEditA
 func (this *QLineEdit) AddActionIcon(icon *qtgui.QIcon, position QLineEditActionPosition) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.AddActionIcon")
 	r := C.qute_QLineEdit_addAction_1(self, rt.UseArg(unsafe.Pointer(icon), "QLineEdit.AddActionIcon"), C.int64_t(position))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -667,6 +726,7 @@ func (this *QLineEdit) AddActionIcon(icon *qtgui.QIcon, position QLineEditAction
 func (this *QLineEdit) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SetText")
 	C.qute_QLineEdit_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QLineEdit::clear.
@@ -677,6 +737,7 @@ func (this *QLineEdit) SetText(text string) {
 func (this *QLineEdit) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Clear")
 	C.qute_QLineEdit_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectAll wraps QLineEdit::selectAll.
@@ -687,6 +748,7 @@ func (this *QLineEdit) Clear() {
 func (this *QLineEdit) SelectAll() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.SelectAll")
 	C.qute_QLineEdit_selectAll(self)
+	runtime.KeepAlive(this)
 }
 
 // Undo wraps QLineEdit::undo.
@@ -697,6 +759,7 @@ func (this *QLineEdit) SelectAll() {
 func (this *QLineEdit) Undo() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Undo")
 	C.qute_QLineEdit_undo(self)
+	runtime.KeepAlive(this)
 }
 
 // Redo wraps QLineEdit::redo.
@@ -707,6 +770,7 @@ func (this *QLineEdit) Undo() {
 func (this *QLineEdit) Redo() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Redo")
 	C.qute_QLineEdit_redo(self)
+	runtime.KeepAlive(this)
 }
 
 // Cut wraps QLineEdit::cut.
@@ -717,6 +781,7 @@ func (this *QLineEdit) Redo() {
 func (this *QLineEdit) Cut() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Cut")
 	C.qute_QLineEdit_cut(self)
+	runtime.KeepAlive(this)
 }
 
 // Copy wraps QLineEdit::copy.
@@ -727,6 +792,7 @@ func (this *QLineEdit) Cut() {
 func (this *QLineEdit) Copy() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Copy")
 	C.qute_QLineEdit_copy(self)
+	runtime.KeepAlive(this)
 }
 
 // Paste wraps QLineEdit::paste.
@@ -737,6 +803,7 @@ func (this *QLineEdit) Copy() {
 func (this *QLineEdit) Paste() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Paste")
 	C.qute_QLineEdit_paste(self)
+	runtime.KeepAlive(this)
 }
 
 // Deselect wraps QLineEdit::deselect.
@@ -747,6 +814,7 @@ func (this *QLineEdit) Paste() {
 func (this *QLineEdit) Deselect() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Deselect")
 	C.qute_QLineEdit_deselect(self)
+	runtime.KeepAlive(this)
 }
 
 // Insert wraps QLineEdit::insert.
@@ -757,6 +825,7 @@ func (this *QLineEdit) Deselect() {
 func (this *QLineEdit) Insert(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.Insert")
 	C.qute_QLineEdit_insert(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // CreateStandardContextMenu wraps QLineEdit::createStandardContextMenu.
@@ -769,6 +838,7 @@ func (this *QLineEdit) Insert(stringArg string) {
 func (this *QLineEdit) CreateStandardContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CreateStandardContextMenu")
 	r := C.qute_QLineEdit_createStandardContextMenu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
@@ -784,6 +854,8 @@ func (this *QLineEdit) TimerEvent(timerEvent qtcore.QTimerEventLike) {
 		timerEventPtr = rt.UseArg(unsafe.Pointer(timerEvent.AsQTimerEvent()), "QLineEdit.TimerEvent")
 	}
 	C.qute_QLineEdit_timerEvent(self, timerEventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(timerEvent)
 }
 
 // EmitTextChanged wraps emitting the textChanged signal.
@@ -794,6 +866,7 @@ func (this *QLineEdit) TimerEvent(timerEvent qtcore.QTimerEventLike) {
 func (this *QLineEdit) EmitTextChanged(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitTextChanged")
 	C.qute_QLineEdit_textChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitTextEdited wraps emitting the textEdited signal.
@@ -804,6 +877,7 @@ func (this *QLineEdit) EmitTextChanged(stringArg string) {
 func (this *QLineEdit) EmitTextEdited(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitTextEdited")
 	C.qute_QLineEdit_textEdited_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitCursorPositionChanged wraps emitting the cursorPositionChanged signal.
@@ -814,6 +888,7 @@ func (this *QLineEdit) EmitTextEdited(stringArg string) {
 func (this *QLineEdit) EmitCursorPositionChanged(arg0 int, arg1 int) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitCursorPositionChanged")
 	C.qute_QLineEdit_cursorPositionChanged_1(self, C.int(arg0), C.int(arg1))
+	runtime.KeepAlive(this)
 }
 
 // EmitReturnPressed wraps emitting the returnPressed signal.
@@ -824,6 +899,7 @@ func (this *QLineEdit) EmitCursorPositionChanged(arg0 int, arg1 int) {
 func (this *QLineEdit) EmitReturnPressed() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitReturnPressed")
 	C.qute_QLineEdit_returnPressed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitEditingFinished wraps emitting the editingFinished signal.
@@ -834,6 +910,7 @@ func (this *QLineEdit) EmitReturnPressed() {
 func (this *QLineEdit) EmitEditingFinished() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitEditingFinished")
 	C.qute_QLineEdit_editingFinished_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -844,6 +921,7 @@ func (this *QLineEdit) EmitEditingFinished() {
 func (this *QLineEdit) EmitSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitSelectionChanged")
 	C.qute_QLineEdit_selectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitInputRejected wraps emitting the inputRejected signal.
@@ -854,6 +932,7 @@ func (this *QLineEdit) EmitSelectionChanged() {
 func (this *QLineEdit) EmitInputRejected() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitInputRejected")
 	C.qute_QLineEdit_inputRejected_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the

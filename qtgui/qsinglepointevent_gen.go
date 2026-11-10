@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QSinglePointEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSinglePo
 func (this *QSinglePointEvent) Button() qtcore.MouseButtons {
 	self := rt.Use(unsafe.Pointer(this), "QSinglePointEvent.Button")
 	r := C.qute_QSinglePointEvent_button(self)
+	runtime.KeepAlive(this)
 	return qtcore.MouseButtons(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QSinglePointEvent) Button() qtcore.MouseButtons {
 func (this *QSinglePointEvent) Buttons() qtcore.MouseButtons {
 	self := rt.Use(unsafe.Pointer(this), "QSinglePointEvent.Buttons")
 	r := C.qute_QSinglePointEvent_buttons(self)
+	runtime.KeepAlive(this)
 	return qtcore.MouseButtons(r)
 }
 
@@ -63,6 +66,7 @@ func (this *QSinglePointEvent) Buttons() qtcore.MouseButtons {
 func (this *QSinglePointEvent) Position() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QSinglePointEvent.Position")
 	r := C.qute_QSinglePointEvent_position(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -74,6 +78,7 @@ func (this *QSinglePointEvent) Position() qtcore.QPointF {
 func (this *QSinglePointEvent) ScenePosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QSinglePointEvent.ScenePosition")
 	r := C.qute_QSinglePointEvent_scenePosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -85,6 +90,7 @@ func (this *QSinglePointEvent) ScenePosition() qtcore.QPointF {
 func (this *QSinglePointEvent) GlobalPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QSinglePointEvent.GlobalPosition")
 	r := C.qute_QSinglePointEvent_globalPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -98,6 +104,7 @@ func (this *QSinglePointEvent) GlobalPosition() qtcore.QPointF {
 func (this *QSinglePointEvent) ExclusivePointGrabber() *qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QSinglePointEvent.ExclusivePointGrabber")
 	r := C.qute_QSinglePointEvent_exclusivePointGrabber(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -113,4 +120,6 @@ func (this *QSinglePointEvent) SetExclusivePointGrabber(exclusiveGrabber qtcore.
 		exclusiveGrabberPtr = rt.UseArg(unsafe.Pointer(exclusiveGrabber.AsQObject()), "QSinglePointEvent.SetExclusivePointGrabber")
 	}
 	C.qute_QSinglePointEvent_setExclusivePointGrabber(self, exclusiveGrabberPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(exclusiveGrabber)
 }

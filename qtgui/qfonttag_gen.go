@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQFontTag() *QFontTag {
 func (this *QFontTag) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontTag.IsValid")
 	r := C.qute_QFontTag_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QFontTag) IsValid() bool {
 func (this *QFontTag) Value() uint {
 	self := rt.Use(unsafe.Pointer(this), "QFontTag.Value")
 	r := C.qute_QFontTag_value(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QFontTag) Value() uint {
 func (this *QFontTag) ToString() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QFontTag.ToString")
 	r := C.qute_QFontTag_toString(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 

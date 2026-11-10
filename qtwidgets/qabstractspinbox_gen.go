@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQAbstractSpinBox(parent QWidgetLike) *QAbstractSpinBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQAbstractSpinBox")
 	}
 	p := C.qute_QAbstractSpinBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQAbstractSpinBox(parent QWidgetLike) *QAbstractSpinBox {
 func (this *QAbstractSpinBox) ButtonSymbols() QAbstractSpinBoxButtonSymbols {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.ButtonSymbols")
 	r := C.qute_QAbstractSpinBox_buttonSymbols(self)
+	runtime.KeepAlive(this)
 	return QAbstractSpinBoxButtonSymbols(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QAbstractSpinBox) ButtonSymbols() QAbstractSpinBoxButtonSymbols {
 func (this *QAbstractSpinBox) SetButtonSymbols(bs QAbstractSpinBoxButtonSymbols) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetButtonSymbols")
 	C.qute_QAbstractSpinBox_setButtonSymbols(self, C.int64_t(bs))
+	runtime.KeepAlive(this)
 }
 
 // SetCorrectionMode wraps QAbstractSpinBox::setCorrectionMode.
@@ -99,6 +103,7 @@ func (this *QAbstractSpinBox) SetButtonSymbols(bs QAbstractSpinBoxButtonSymbols)
 func (this *QAbstractSpinBox) SetCorrectionMode(cm QAbstractSpinBoxCorrectionMode) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetCorrectionMode")
 	C.qute_QAbstractSpinBox_setCorrectionMode(self, C.int64_t(cm))
+	runtime.KeepAlive(this)
 }
 
 // CorrectionMode wraps QAbstractSpinBox::correctionMode.
@@ -109,6 +114,7 @@ func (this *QAbstractSpinBox) SetCorrectionMode(cm QAbstractSpinBoxCorrectionMod
 func (this *QAbstractSpinBox) CorrectionMode() QAbstractSpinBoxCorrectionMode {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.CorrectionMode")
 	r := C.qute_QAbstractSpinBox_correctionMode(self)
+	runtime.KeepAlive(this)
 	return QAbstractSpinBoxCorrectionMode(r)
 }
 
@@ -120,6 +126,7 @@ func (this *QAbstractSpinBox) CorrectionMode() QAbstractSpinBoxCorrectionMode {
 func (this *QAbstractSpinBox) HasAcceptableInput() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.HasAcceptableInput")
 	r := C.qute_QAbstractSpinBox_hasAcceptableInput(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +138,7 @@ func (this *QAbstractSpinBox) HasAcceptableInput() bool {
 func (this *QAbstractSpinBox) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Text")
 	r := C.qute_QAbstractSpinBox_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -142,6 +150,7 @@ func (this *QAbstractSpinBox) Text() string {
 func (this *QAbstractSpinBox) SpecialValueText() string {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SpecialValueText")
 	r := C.qute_QAbstractSpinBox_specialValueText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -153,6 +162,7 @@ func (this *QAbstractSpinBox) SpecialValueText() string {
 func (this *QAbstractSpinBox) SetSpecialValueText(txt string) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetSpecialValueText")
 	C.qute_QAbstractSpinBox_setSpecialValueText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(txt))), C.ptrdiff_t(len(txt)))
+	runtime.KeepAlive(this)
 }
 
 // Wrapping wraps QAbstractSpinBox::wrapping.
@@ -163,6 +173,7 @@ func (this *QAbstractSpinBox) SetSpecialValueText(txt string) {
 func (this *QAbstractSpinBox) Wrapping() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Wrapping")
 	r := C.qute_QAbstractSpinBox_wrapping(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -174,6 +185,7 @@ func (this *QAbstractSpinBox) Wrapping() bool {
 func (this *QAbstractSpinBox) SetWrapping(w bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetWrapping")
 	C.qute_QAbstractSpinBox_setWrapping(self, C.bool(w))
+	runtime.KeepAlive(this)
 }
 
 // SetReadOnly wraps QAbstractSpinBox::setReadOnly.
@@ -184,6 +196,7 @@ func (this *QAbstractSpinBox) SetWrapping(w bool) {
 func (this *QAbstractSpinBox) SetReadOnly(rArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetReadOnly")
 	C.qute_QAbstractSpinBox_setReadOnly(self, C.bool(rArg))
+	runtime.KeepAlive(this)
 }
 
 // IsReadOnly wraps QAbstractSpinBox::isReadOnly.
@@ -194,6 +207,7 @@ func (this *QAbstractSpinBox) SetReadOnly(rArg bool) {
 func (this *QAbstractSpinBox) IsReadOnly() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.IsReadOnly")
 	r := C.qute_QAbstractSpinBox_isReadOnly(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -205,6 +219,7 @@ func (this *QAbstractSpinBox) IsReadOnly() bool {
 func (this *QAbstractSpinBox) SetKeyboardTracking(kt bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetKeyboardTracking")
 	C.qute_QAbstractSpinBox_setKeyboardTracking(self, C.bool(kt))
+	runtime.KeepAlive(this)
 }
 
 // KeyboardTracking wraps QAbstractSpinBox::keyboardTracking.
@@ -215,6 +230,7 @@ func (this *QAbstractSpinBox) SetKeyboardTracking(kt bool) {
 func (this *QAbstractSpinBox) KeyboardTracking() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.KeyboardTracking")
 	r := C.qute_QAbstractSpinBox_keyboardTracking(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -226,6 +242,7 @@ func (this *QAbstractSpinBox) KeyboardTracking() bool {
 func (this *QAbstractSpinBox) SetAlignment(flag qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetAlignment")
 	C.qute_QAbstractSpinBox_setAlignment(self, C.int64_t(flag))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QAbstractSpinBox::alignment.
@@ -236,6 +253,7 @@ func (this *QAbstractSpinBox) SetAlignment(flag qtcore.Alignment) {
 func (this *QAbstractSpinBox) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Alignment")
 	r := C.qute_QAbstractSpinBox_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -247,6 +265,7 @@ func (this *QAbstractSpinBox) Alignment() qtcore.Alignment {
 func (this *QAbstractSpinBox) SetFrame(frame bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetFrame")
 	C.qute_QAbstractSpinBox_setFrame(self, C.bool(frame))
+	runtime.KeepAlive(this)
 }
 
 // HasFrame wraps QAbstractSpinBox::hasFrame.
@@ -257,6 +276,7 @@ func (this *QAbstractSpinBox) SetFrame(frame bool) {
 func (this *QAbstractSpinBox) HasFrame() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.HasFrame")
 	r := C.qute_QAbstractSpinBox_hasFrame(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -268,6 +288,7 @@ func (this *QAbstractSpinBox) HasFrame() bool {
 func (this *QAbstractSpinBox) SetAccelerated(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetAccelerated")
 	C.qute_QAbstractSpinBox_setAccelerated(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // IsAccelerated wraps QAbstractSpinBox::isAccelerated.
@@ -278,6 +299,7 @@ func (this *QAbstractSpinBox) SetAccelerated(on bool) {
 func (this *QAbstractSpinBox) IsAccelerated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.IsAccelerated")
 	r := C.qute_QAbstractSpinBox_isAccelerated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -289,6 +311,7 @@ func (this *QAbstractSpinBox) IsAccelerated() bool {
 func (this *QAbstractSpinBox) SetGroupSeparatorShown(shown bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SetGroupSeparatorShown")
 	C.qute_QAbstractSpinBox_setGroupSeparatorShown(self, C.bool(shown))
+	runtime.KeepAlive(this)
 }
 
 // IsGroupSeparatorShown wraps QAbstractSpinBox::isGroupSeparatorShown.
@@ -299,6 +322,7 @@ func (this *QAbstractSpinBox) SetGroupSeparatorShown(shown bool) {
 func (this *QAbstractSpinBox) IsGroupSeparatorShown() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.IsGroupSeparatorShown")
 	r := C.qute_QAbstractSpinBox_isGroupSeparatorShown(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -310,6 +334,7 @@ func (this *QAbstractSpinBox) IsGroupSeparatorShown() bool {
 func (this *QAbstractSpinBox) InterpretText() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.InterpretText")
 	C.qute_QAbstractSpinBox_interpretText(self)
+	runtime.KeepAlive(this)
 }
 
 // Validate wraps QAbstractSpinBox::validate.
@@ -322,6 +347,7 @@ func (this *QAbstractSpinBox) Validate(input string, pos int) (qtgui.QValidatorS
 	var inputOut C.qute_str
 	var posOut C.int
 	r := C.qute_QAbstractSpinBox_validate(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut, C.int(pos), &posOut)
+	runtime.KeepAlive(this)
 	return qtgui.QValidatorState(r), quteStr(inputOut), int(posOut)
 }
 
@@ -334,6 +360,7 @@ func (this *QAbstractSpinBox) Fixup(input string) string {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Fixup")
 	var inputOut C.qute_str
 	C.qute_QAbstractSpinBox_fixup(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut)
+	runtime.KeepAlive(this)
 	return quteStr(inputOut)
 }
 
@@ -345,6 +372,7 @@ func (this *QAbstractSpinBox) Fixup(input string) string {
 func (this *QAbstractSpinBox) StepBy(steps int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.StepBy")
 	C.qute_QAbstractSpinBox_stepBy(self, C.int(steps))
+	runtime.KeepAlive(this)
 }
 
 // StepUp wraps QAbstractSpinBox::stepUp.
@@ -355,6 +383,7 @@ func (this *QAbstractSpinBox) StepBy(steps int) {
 func (this *QAbstractSpinBox) StepUp() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.StepUp")
 	C.qute_QAbstractSpinBox_stepUp(self)
+	runtime.KeepAlive(this)
 }
 
 // StepDown wraps QAbstractSpinBox::stepDown.
@@ -365,6 +394,7 @@ func (this *QAbstractSpinBox) StepUp() {
 func (this *QAbstractSpinBox) StepDown() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.StepDown")
 	C.qute_QAbstractSpinBox_stepDown(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectAll wraps QAbstractSpinBox::selectAll.
@@ -375,6 +405,7 @@ func (this *QAbstractSpinBox) StepDown() {
 func (this *QAbstractSpinBox) SelectAll() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.SelectAll")
 	C.qute_QAbstractSpinBox_selectAll(self)
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QAbstractSpinBox::clear.
@@ -385,6 +416,7 @@ func (this *QAbstractSpinBox) SelectAll() {
 func (this *QAbstractSpinBox) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.Clear")
 	C.qute_QAbstractSpinBox_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitEditingFinished wraps emitting the editingFinished signal.
@@ -395,6 +427,7 @@ func (this *QAbstractSpinBox) Clear() {
 func (this *QAbstractSpinBox) EmitEditingFinished() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.EmitEditingFinished")
 	C.qute_QAbstractSpinBox_editingFinished_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitReturnPressed wraps emitting the returnPressed signal.
@@ -405,6 +438,7 @@ func (this *QAbstractSpinBox) EmitEditingFinished() {
 func (this *QAbstractSpinBox) EmitReturnPressed() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.EmitReturnPressed")
 	C.qute_QAbstractSpinBox_returnPressed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnEditingFinished connects f to the editingFinished signal. The connection ends when the

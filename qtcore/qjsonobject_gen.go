@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQJsonObject() *QJsonObject {
 func (this *QJsonObject) ToVariantMap() map[string]*QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.ToVariantMap")
 	r := C.qute_QJsonObject_toVariantMap(self)
+	runtime.KeepAlive(this)
 	return quteMap(r, func(k C.qute_str) string { return quteStr(k) }, func(v unsafe.Pointer) *QVariant {
 		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 	})
@@ -109,6 +111,7 @@ func (this *QJsonObject) ToVariantMap() map[string]*QVariant {
 func (this *QJsonObject) ToVariantHash() map[string]*QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.ToVariantHash")
 	r := C.qute_QJsonObject_toVariantHash(self)
+	runtime.KeepAlive(this)
 	return quteMap(r, func(k C.qute_str) string { return quteStr(k) }, func(v unsafe.Pointer) *QVariant {
 		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 	})
@@ -122,6 +125,7 @@ func (this *QJsonObject) ToVariantHash() map[string]*QVariant {
 func (this *QJsonObject) Keys() []string {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Keys")
 	r := C.qute_QJsonObject_keys(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -133,6 +137,7 @@ func (this *QJsonObject) Keys() []string {
 func (this *QJsonObject) Size() int {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Size")
 	r := C.qute_QJsonObject_size(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -144,6 +149,7 @@ func (this *QJsonObject) Size() int {
 func (this *QJsonObject) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Count")
 	r := C.qute_QJsonObject_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -155,6 +161,7 @@ func (this *QJsonObject) Count() int {
 func (this *QJsonObject) Length() int {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Length")
 	r := C.qute_QJsonObject_length(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -166,6 +173,7 @@ func (this *QJsonObject) Length() int {
 func (this *QJsonObject) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.IsEmpty")
 	r := C.qute_QJsonObject_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -179,6 +187,7 @@ func (this *QJsonObject) IsEmpty() bool {
 func (this *QJsonObject) Value(key string) *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Value")
 	r := C.qute_QJsonObject_value(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -190,6 +199,7 @@ func (this *QJsonObject) Value(key string) *QJsonValue {
 func (this *QJsonObject) Remove(key string) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Remove")
 	C.qute_QJsonObject_remove(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 }
 
 // Take wraps QJsonObject::take.
@@ -202,6 +212,7 @@ func (this *QJsonObject) Remove(key string) {
 func (this *QJsonObject) Take(key string) *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Take")
 	r := C.qute_QJsonObject_take(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -213,6 +224,7 @@ func (this *QJsonObject) Take(key string) *QJsonValue {
 func (this *QJsonObject) Contains(key string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Contains")
 	r := C.qute_QJsonObject_contains(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -224,6 +236,7 @@ func (this *QJsonObject) Contains(key string) bool {
 func (this *QJsonObject) Empty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonObject.Empty")
 	r := C.qute_QJsonObject_empty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -244,6 +257,7 @@ func QJsonObjectFromVariantMap(mapArg map[string]*QVariant) *QJsonObject {
 	}
 	defer quteFreeStrs(mapArgK)
 	r := C.qute_QJsonObject_fromVariantMap(unsafe.Pointer(unsafe.SliceData(mapArgK)), unsafe.Pointer(unsafe.SliceData(mapArgV)), C.ptrdiff_t(len(mapArg)))
+	runtime.KeepAlive(mapArg)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
 }
 
@@ -264,5 +278,6 @@ func QJsonObjectFromVariantHash(mapArg map[string]*QVariant) *QJsonObject {
 	}
 	defer quteFreeStrs(mapArgK)
 	r := C.qute_QJsonObject_fromVariantHash(unsafe.Pointer(unsafe.SliceData(mapArgK)), unsafe.Pointer(unsafe.SliceData(mapArgV)), C.ptrdiff_t(len(mapArg)))
+	runtime.KeepAlive(mapArg)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQActionGroup(parent qtcore.QObjectLike) *QActionGroup {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQActionGroup")
 	}
 	p := C.qute_QActionGroup_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -85,6 +87,8 @@ func (this *QActionGroup) AddAction(aArg QActionLike) *QAction {
 		aArgPtr = rt.UseArg(unsafe.Pointer(aArg.AsQAction()), "QActionGroup.AddAction")
 	}
 	r := C.qute_QActionGroup_addAction(self, aArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(aArg)
 	return rt.View[QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -98,6 +102,7 @@ func (this *QActionGroup) AddAction(aArg QActionLike) *QAction {
 func (this *QActionGroup) AddActionText(text string) *QAction {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.AddActionText")
 	r := C.qute_QActionGroup_addAction_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return rt.View[QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -111,6 +116,8 @@ func (this *QActionGroup) AddActionText(text string) *QAction {
 func (this *QActionGroup) AddActionIcon(icon *QIcon, text string) *QAction {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.AddActionIcon")
 	r := C.qute_QActionGroup_addAction_2(self, rt.UseArg(unsafe.Pointer(icon), "QActionGroup.AddActionIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return rt.View[QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -126,6 +133,8 @@ func (this *QActionGroup) RemoveAction(aArg QActionLike) {
 		aArgPtr = rt.UseArg(unsafe.Pointer(aArg.AsQAction()), "QActionGroup.RemoveAction")
 	}
 	C.qute_QActionGroup_removeAction(self, aArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(aArg)
 }
 
 // Actions wraps QActionGroup::actions.
@@ -138,6 +147,7 @@ func (this *QActionGroup) RemoveAction(aArg QActionLike) {
 func (this *QActionGroup) Actions() []*QAction {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.Actions")
 	r := C.qute_QActionGroup_actions(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QAction {
 		return rt.View[QAction](rt.WrapClass(e, "QAction", rt.KeepOrBorrow), e)
 	})
@@ -153,6 +163,7 @@ func (this *QActionGroup) Actions() []*QAction {
 func (this *QActionGroup) CheckedAction() *QAction {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.CheckedAction")
 	r := C.qute_QActionGroup_checkedAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -164,6 +175,7 @@ func (this *QActionGroup) CheckedAction() *QAction {
 func (this *QActionGroup) IsExclusive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.IsExclusive")
 	r := C.qute_QActionGroup_isExclusive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -175,6 +187,7 @@ func (this *QActionGroup) IsExclusive() bool {
 func (this *QActionGroup) IsEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.IsEnabled")
 	r := C.qute_QActionGroup_isEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -186,6 +199,7 @@ func (this *QActionGroup) IsEnabled() bool {
 func (this *QActionGroup) IsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.IsVisible")
 	r := C.qute_QActionGroup_isVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -197,6 +211,7 @@ func (this *QActionGroup) IsVisible() bool {
 func (this *QActionGroup) ExclusionPolicy() QActionGroupExclusionPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.ExclusionPolicy")
 	r := C.qute_QActionGroup_exclusionPolicy(self)
+	runtime.KeepAlive(this)
 	return QActionGroupExclusionPolicy(r)
 }
 
@@ -208,6 +223,7 @@ func (this *QActionGroup) ExclusionPolicy() QActionGroupExclusionPolicy {
 func (this *QActionGroup) SetEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.SetEnabled")
 	C.qute_QActionGroup_setEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // SetDisabled wraps QActionGroup::setDisabled.
@@ -218,6 +234,7 @@ func (this *QActionGroup) SetEnabled(enabled bool) {
 func (this *QActionGroup) SetDisabled(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.SetDisabled")
 	C.qute_QActionGroup_setDisabled(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetVisible wraps QActionGroup::setVisible.
@@ -228,6 +245,7 @@ func (this *QActionGroup) SetDisabled(bArg bool) {
 func (this *QActionGroup) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.SetVisible")
 	C.qute_QActionGroup_setVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // SetExclusive wraps QActionGroup::setExclusive.
@@ -238,6 +256,7 @@ func (this *QActionGroup) SetVisible(visible bool) {
 func (this *QActionGroup) SetExclusive(exclusive bool) {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.SetExclusive")
 	C.qute_QActionGroup_setExclusive(self, C.bool(exclusive))
+	runtime.KeepAlive(this)
 }
 
 // SetExclusionPolicy wraps QActionGroup::setExclusionPolicy.
@@ -248,6 +267,7 @@ func (this *QActionGroup) SetExclusive(exclusive bool) {
 func (this *QActionGroup) SetExclusionPolicy(policy QActionGroupExclusionPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QActionGroup.SetExclusionPolicy")
 	C.qute_QActionGroup_setExclusionPolicy(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // EmitTriggered wraps emitting the triggered signal.
@@ -262,6 +282,8 @@ func (this *QActionGroup) EmitTriggered(action QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QActionGroup.EmitTriggered")
 	}
 	C.qute_QActionGroup_triggered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // EmitHovered wraps emitting the hovered signal.
@@ -276,6 +298,8 @@ func (this *QActionGroup) EmitHovered(action QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QActionGroup.EmitHovered")
 	}
 	C.qute_QActionGroup_hovered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the

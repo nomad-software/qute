@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQLineFWithPointF(pt1 QPointF, pt2 QPointF) *QLineF {
 func NewQLineFWithLine(line *QLine) *QLineF {
 	rt.CheckThread("NewQLineFWithLine")
 	p := C.qute_QLineF_new_2(rt.UseArg(unsafe.Pointer(line), "NewQLineFWithLine"))
+	runtime.KeepAlive(line)
 	h := rt.WrapClass(p, "QLineF", rt.NewOwned)
 	return rt.View[QLineF](h, p)
 }
@@ -120,6 +122,7 @@ func NewQLineFWithLine(line *QLine) *QLineF {
 func (this *QLineF) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.IsNull")
 	r := C.qute_QLineF_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QLineF) IsNull() bool {
 func (this *QLineF) P1() QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.P1")
 	r := C.qute_QLineF_p1(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -142,6 +146,7 @@ func (this *QLineF) P1() QPointF {
 func (this *QLineF) P2() QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.P2")
 	r := C.qute_QLineF_p2(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -153,6 +158,7 @@ func (this *QLineF) P2() QPointF {
 func (this *QLineF) X1() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.X1")
 	r := C.qute_QLineF_x1(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -164,6 +170,7 @@ func (this *QLineF) X1() float64 {
 func (this *QLineF) Y1() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Y1")
 	r := C.qute_QLineF_y1(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -175,6 +182,7 @@ func (this *QLineF) Y1() float64 {
 func (this *QLineF) X2() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.X2")
 	r := C.qute_QLineF_x2(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -186,6 +194,7 @@ func (this *QLineF) X2() float64 {
 func (this *QLineF) Y2() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Y2")
 	r := C.qute_QLineF_y2(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -197,6 +206,7 @@ func (this *QLineF) Y2() float64 {
 func (this *QLineF) Dx() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Dx")
 	r := C.qute_QLineF_dx(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -208,6 +218,7 @@ func (this *QLineF) Dx() float64 {
 func (this *QLineF) Dy() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Dy")
 	r := C.qute_QLineF_dy(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -219,6 +230,7 @@ func (this *QLineF) Dy() float64 {
 func (this *QLineF) Length() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Length")
 	r := C.qute_QLineF_length(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -230,6 +242,7 @@ func (this *QLineF) Length() float64 {
 func (this *QLineF) SetLength(lenArg float64) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.SetLength")
 	C.qute_QLineF_setLength(self, C.double(lenArg))
+	runtime.KeepAlive(this)
 }
 
 // Angle wraps QLineF::angle.
@@ -240,6 +253,7 @@ func (this *QLineF) SetLength(lenArg float64) {
 func (this *QLineF) Angle() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Angle")
 	r := C.qute_QLineF_angle(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -251,6 +265,7 @@ func (this *QLineF) Angle() float64 {
 func (this *QLineF) SetAngle(angle float64) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.SetAngle")
 	C.qute_QLineF_setAngle(self, C.double(angle))
+	runtime.KeepAlive(this)
 }
 
 // AngleTo wraps QLineF::angleTo.
@@ -261,6 +276,8 @@ func (this *QLineF) SetAngle(angle float64) {
 func (this *QLineF) AngleTo(l *QLineF) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.AngleTo")
 	r := C.qute_QLineF_angleTo(self, rt.UseArg(unsafe.Pointer(l), "QLineF.AngleTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
 	return float64(r)
 }
 
@@ -274,6 +291,7 @@ func (this *QLineF) AngleTo(l *QLineF) float64 {
 func (this *QLineF) UnitVector() *QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.UnitVector")
 	r := C.qute_QLineF_unitVector(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }
 
@@ -287,6 +305,7 @@ func (this *QLineF) UnitVector() *QLineF {
 func (this *QLineF) NormalVector() *QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.NormalVector")
 	r := C.qute_QLineF_normalVector(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }
 
@@ -298,6 +317,8 @@ func (this *QLineF) NormalVector() *QLineF {
 func (this *QLineF) Intersects(l *QLineF) QLineFIntersectionType {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Intersects")
 	r := C.qute_QLineF_intersects(self, rt.UseArg(unsafe.Pointer(l), "QLineF.Intersects"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
 	return QLineFIntersectionType(r)
 }
 
@@ -309,6 +330,7 @@ func (this *QLineF) Intersects(l *QLineF) QLineFIntersectionType {
 func (this *QLineF) PointAt(t float64) QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.PointAt")
 	r := C.qute_QLineF_pointAt(self, C.double(t))
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -320,6 +342,7 @@ func (this *QLineF) PointAt(t float64) QPointF {
 func (this *QLineF) Translate(pArg QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Translate")
 	C.qute_QLineF_translate(self, cQPointF(pArg))
+	runtime.KeepAlive(this)
 }
 
 // Translated wraps QLineF::translated.
@@ -332,6 +355,7 @@ func (this *QLineF) Translate(pArg QPointF) {
 func (this *QLineF) Translated(pArg QPointF) *QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Translated")
 	r := C.qute_QLineF_translated(self, cQPointF(pArg))
+	runtime.KeepAlive(this)
 	return rt.View[QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }
 
@@ -343,6 +367,7 @@ func (this *QLineF) Translated(pArg QPointF) *QLineF {
 func (this *QLineF) Center() QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Center")
 	r := C.qute_QLineF_center(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -354,6 +379,7 @@ func (this *QLineF) Center() QPointF {
 func (this *QLineF) SetP1(p1 QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.SetP1")
 	C.qute_QLineF_setP1(self, cQPointF(p1))
+	runtime.KeepAlive(this)
 }
 
 // SetP2 wraps QLineF::setP2.
@@ -364,6 +390,7 @@ func (this *QLineF) SetP1(p1 QPointF) {
 func (this *QLineF) SetP2(p2 QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.SetP2")
 	C.qute_QLineF_setP2(self, cQPointF(p2))
+	runtime.KeepAlive(this)
 }
 
 // SetPoints wraps QLineF::setPoints.
@@ -374,6 +401,7 @@ func (this *QLineF) SetP2(p2 QPointF) {
 func (this *QLineF) SetPoints(p1 QPointF, p2 QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.SetPoints")
 	C.qute_QLineF_setPoints(self, cQPointF(p1), cQPointF(p2))
+	runtime.KeepAlive(this)
 }
 
 // SetLine wraps QLineF::setLine.
@@ -384,6 +412,7 @@ func (this *QLineF) SetPoints(p1 QPointF, p2 QPointF) {
 func (this *QLineF) SetLine(x1 float64, y1 float64, x2 float64, y2 float64) {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.SetLine")
 	C.qute_QLineF_setLine(self, C.double(x1), C.double(y1), C.double(x2), C.double(y2))
+	runtime.KeepAlive(this)
 }
 
 // ToLine wraps QLineF::toLine.
@@ -396,6 +425,7 @@ func (this *QLineF) SetLine(x1 float64, y1 float64, x2 float64, y2 float64) {
 func (this *QLineF) ToLine() *QLine {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.ToLine")
 	r := C.qute_QLineF_toLine(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
 }
 

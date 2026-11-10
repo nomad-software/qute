@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQJsonArray() *QJsonArray {
 func (this *QJsonArray) ToVariantList() []*QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.ToVariantList")
 	r := C.qute_QJsonArray_toVariantList(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QVariant {
 		return rt.View[QVariant](rt.WrapClass(e, "QVariant", rt.TakeOwned), e)
 	})
@@ -109,6 +111,7 @@ func (this *QJsonArray) ToVariantList() []*QVariant {
 func (this *QJsonArray) Size() int {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Size")
 	r := C.qute_QJsonArray_size(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -120,6 +123,7 @@ func (this *QJsonArray) Size() int {
 func (this *QJsonArray) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Count")
 	r := C.qute_QJsonArray_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -131,6 +135,7 @@ func (this *QJsonArray) Count() int {
 func (this *QJsonArray) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.IsEmpty")
 	r := C.qute_QJsonArray_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -144,6 +149,7 @@ func (this *QJsonArray) IsEmpty() bool {
 func (this *QJsonArray) At(iArg int) *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.At")
 	r := C.qute_QJsonArray_at(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -157,6 +163,7 @@ func (this *QJsonArray) At(iArg int) *QJsonValue {
 func (this *QJsonArray) First() *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.First")
 	r := C.qute_QJsonArray_first(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -170,6 +177,7 @@ func (this *QJsonArray) First() *QJsonValue {
 func (this *QJsonArray) Last() *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Last")
 	r := C.qute_QJsonArray_last(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -181,6 +189,8 @@ func (this *QJsonArray) Last() *QJsonValue {
 func (this *QJsonArray) Prepend(value *QJsonValue) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Prepend")
 	C.qute_QJsonArray_prepend(self, rt.UseArg(unsafe.Pointer(value), "QJsonArray.Prepend"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Append wraps QJsonArray::append.
@@ -191,6 +201,8 @@ func (this *QJsonArray) Prepend(value *QJsonValue) {
 func (this *QJsonArray) Append(value *QJsonValue) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Append")
 	C.qute_QJsonArray_append(self, rt.UseArg(unsafe.Pointer(value), "QJsonArray.Append"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // RemoveAt wraps QJsonArray::removeAt.
@@ -201,6 +213,7 @@ func (this *QJsonArray) Append(value *QJsonValue) {
 func (this *QJsonArray) RemoveAt(iArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.RemoveAt")
 	C.qute_QJsonArray_removeAt(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 }
 
 // TakeAt wraps QJsonArray::takeAt.
@@ -213,6 +226,7 @@ func (this *QJsonArray) RemoveAt(iArg int) {
 func (this *QJsonArray) TakeAt(iArg int) *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.TakeAt")
 	r := C.qute_QJsonArray_takeAt(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -224,6 +238,7 @@ func (this *QJsonArray) TakeAt(iArg int) *QJsonValue {
 func (this *QJsonArray) RemoveFirst() {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.RemoveFirst")
 	C.qute_QJsonArray_removeFirst(self)
+	runtime.KeepAlive(this)
 }
 
 // RemoveLast wraps QJsonArray::removeLast.
@@ -234,6 +249,7 @@ func (this *QJsonArray) RemoveFirst() {
 func (this *QJsonArray) RemoveLast() {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.RemoveLast")
 	C.qute_QJsonArray_removeLast(self)
+	runtime.KeepAlive(this)
 }
 
 // Insert wraps QJsonArray::insert.
@@ -244,6 +260,8 @@ func (this *QJsonArray) RemoveLast() {
 func (this *QJsonArray) Insert(iArg int, value *QJsonValue) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Insert")
 	C.qute_QJsonArray_insert(self, C.longlong(iArg), rt.UseArg(unsafe.Pointer(value), "QJsonArray.Insert"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Replace wraps QJsonArray::replace.
@@ -254,6 +272,8 @@ func (this *QJsonArray) Insert(iArg int, value *QJsonValue) {
 func (this *QJsonArray) Replace(iArg int, value *QJsonValue) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Replace")
 	C.qute_QJsonArray_replace(self, C.longlong(iArg), rt.UseArg(unsafe.Pointer(value), "QJsonArray.Replace"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Contains wraps QJsonArray::contains.
@@ -264,6 +284,8 @@ func (this *QJsonArray) Replace(iArg int, value *QJsonValue) {
 func (this *QJsonArray) Contains(element *QJsonValue) bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Contains")
 	r := C.qute_QJsonArray_contains(self, rt.UseArg(unsafe.Pointer(element), "QJsonArray.Contains"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(element)
 	return bool(r)
 }
 
@@ -275,6 +297,8 @@ func (this *QJsonArray) Contains(element *QJsonValue) bool {
 func (this *QJsonArray) Push_back(t *QJsonValue) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Push_back")
 	C.qute_QJsonArray_push_back(self, rt.UseArg(unsafe.Pointer(t), "QJsonArray.Push_back"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(t)
 }
 
 // Push_front wraps QJsonArray::push_front.
@@ -285,6 +309,8 @@ func (this *QJsonArray) Push_back(t *QJsonValue) {
 func (this *QJsonArray) Push_front(t *QJsonValue) {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Push_front")
 	C.qute_QJsonArray_push_front(self, rt.UseArg(unsafe.Pointer(t), "QJsonArray.Push_front"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(t)
 }
 
 // Pop_front wraps QJsonArray::pop_front.
@@ -295,6 +321,7 @@ func (this *QJsonArray) Push_front(t *QJsonValue) {
 func (this *QJsonArray) Pop_front() {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Pop_front")
 	C.qute_QJsonArray_pop_front(self)
+	runtime.KeepAlive(this)
 }
 
 // Pop_back wraps QJsonArray::pop_back.
@@ -305,6 +332,7 @@ func (this *QJsonArray) Pop_front() {
 func (this *QJsonArray) Pop_back() {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Pop_back")
 	C.qute_QJsonArray_pop_back(self)
+	runtime.KeepAlive(this)
 }
 
 // Empty wraps QJsonArray::empty.
@@ -315,6 +343,7 @@ func (this *QJsonArray) Pop_back() {
 func (this *QJsonArray) Empty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonArray.Empty")
 	r := C.qute_QJsonArray_empty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -346,5 +375,6 @@ func QJsonArrayFromVariantList(list []*QVariant) *QJsonArray {
 		listC[i] = rt.UseArg(unsafe.Pointer(list[i]), "QJsonArrayFromVariantList")
 	}
 	r := C.qute_QJsonArray_fromVariantList(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
+	runtime.KeepAlive(list)
 	return rt.View[QJsonArray](rt.WrapClass(r, "QJsonArray", rt.TakeOwned), r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQStandardItemWithText(text string) *QStandardItem {
 func NewQStandardItemWithIcon(icon *QIcon, text string) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithIcon")
 	p := C.qute_QStandardItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQStandardItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(icon)
 	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
@@ -134,6 +136,7 @@ func NewQStandardItemWithRows(rows int) *QStandardItem {
 func (this *QStandardItem) Data() *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Data")
 	r := C.qute_QStandardItem_data(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -145,6 +148,8 @@ func (this *QStandardItem) Data() *qtcore.QVariant {
 func (this *QStandardItem) SetData(value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetData")
 	C.qute_QStandardItem_setData(self, rt.UseArg(unsafe.Pointer(value), "QStandardItem.SetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // ClearData wraps QStandardItem::clearData.
@@ -155,6 +160,7 @@ func (this *QStandardItem) SetData(value *qtcore.QVariant) {
 func (this *QStandardItem) ClearData() {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.ClearData")
 	C.qute_QStandardItem_clearData(self)
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QStandardItem::text.
@@ -165,6 +171,7 @@ func (this *QStandardItem) ClearData() {
 func (this *QStandardItem) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Text")
 	r := C.qute_QStandardItem_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -176,6 +183,7 @@ func (this *QStandardItem) Text() string {
 func (this *QStandardItem) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetText")
 	C.qute_QStandardItem_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps QStandardItem::icon.
@@ -188,6 +196,7 @@ func (this *QStandardItem) SetText(text string) {
 func (this *QStandardItem) Icon() *QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Icon")
 	r := C.qute_QStandardItem_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -199,6 +208,8 @@ func (this *QStandardItem) Icon() *QIcon {
 func (this *QStandardItem) SetIcon(icon *QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetIcon")
 	C.qute_QStandardItem_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QStandardItem.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // ToolTip wraps QStandardItem::toolTip.
@@ -209,6 +220,7 @@ func (this *QStandardItem) SetIcon(icon *QIcon) {
 func (this *QStandardItem) ToolTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.ToolTip")
 	r := C.qute_QStandardItem_toolTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -220,6 +232,7 @@ func (this *QStandardItem) ToolTip() string {
 func (this *QStandardItem) SetToolTip(toolTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetToolTip")
 	C.qute_QStandardItem_setToolTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(toolTip))), C.ptrdiff_t(len(toolTip)))
+	runtime.KeepAlive(this)
 }
 
 // StatusTip wraps QStandardItem::statusTip.
@@ -230,6 +243,7 @@ func (this *QStandardItem) SetToolTip(toolTip string) {
 func (this *QStandardItem) StatusTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.StatusTip")
 	r := C.qute_QStandardItem_statusTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -241,6 +255,7 @@ func (this *QStandardItem) StatusTip() string {
 func (this *QStandardItem) SetStatusTip(statusTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetStatusTip")
 	C.qute_QStandardItem_setStatusTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(statusTip))), C.ptrdiff_t(len(statusTip)))
+	runtime.KeepAlive(this)
 }
 
 // WhatsThis wraps QStandardItem::whatsThis.
@@ -251,6 +266,7 @@ func (this *QStandardItem) SetStatusTip(statusTip string) {
 func (this *QStandardItem) WhatsThis() string {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.WhatsThis")
 	r := C.qute_QStandardItem_whatsThis(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -262,6 +278,7 @@ func (this *QStandardItem) WhatsThis() string {
 func (this *QStandardItem) SetWhatsThis(whatsThis string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetWhatsThis")
 	C.qute_QStandardItem_setWhatsThis(self, (*C.char)(unsafe.Pointer(unsafe.StringData(whatsThis))), C.ptrdiff_t(len(whatsThis)))
+	runtime.KeepAlive(this)
 }
 
 // SizeHint wraps QStandardItem::sizeHint.
@@ -272,6 +289,7 @@ func (this *QStandardItem) SetWhatsThis(whatsThis string) {
 func (this *QStandardItem) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SizeHint")
 	r := C.qute_QStandardItem_sizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -283,6 +301,7 @@ func (this *QStandardItem) SizeHint() qtcore.QSize {
 func (this *QStandardItem) SetSizeHint(sizeHint qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetSizeHint")
 	C.qute_QStandardItem_setSizeHint(self, cQSize(sizeHint))
+	runtime.KeepAlive(this)
 }
 
 // Font wraps QStandardItem::font.
@@ -295,6 +314,7 @@ func (this *QStandardItem) SetSizeHint(sizeHint qtcore.QSize) {
 func (this *QStandardItem) Font() *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Font")
 	r := C.qute_QStandardItem_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -306,6 +326,8 @@ func (this *QStandardItem) Font() *QFont {
 func (this *QStandardItem) SetFont(font *QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetFont")
 	C.qute_QStandardItem_setFont(self, rt.UseArg(unsafe.Pointer(font), "QStandardItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // TextAlignment wraps QStandardItem::textAlignment.
@@ -316,6 +338,7 @@ func (this *QStandardItem) SetFont(font *QFont) {
 func (this *QStandardItem) TextAlignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.TextAlignment")
 	r := C.qute_QStandardItem_textAlignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -327,6 +350,7 @@ func (this *QStandardItem) TextAlignment() qtcore.Alignment {
 func (this *QStandardItem) SetTextAlignment(textAlignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetTextAlignment")
 	C.qute_QStandardItem_setTextAlignment(self, C.int64_t(textAlignment))
+	runtime.KeepAlive(this)
 }
 
 // Background wraps QStandardItem::background.
@@ -339,6 +363,7 @@ func (this *QStandardItem) SetTextAlignment(textAlignment qtcore.Alignment) {
 func (this *QStandardItem) Background() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Background")
 	r := C.qute_QStandardItem_background(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -350,6 +375,8 @@ func (this *QStandardItem) Background() *QBrush {
 func (this *QStandardItem) SetBackground(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetBackground")
 	C.qute_QStandardItem_setBackground(self, rt.UseArg(unsafe.Pointer(brush), "QStandardItem.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Foreground wraps QStandardItem::foreground.
@@ -362,6 +389,7 @@ func (this *QStandardItem) SetBackground(brush *QBrush) {
 func (this *QStandardItem) Foreground() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Foreground")
 	r := C.qute_QStandardItem_foreground(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -373,6 +401,8 @@ func (this *QStandardItem) Foreground() *QBrush {
 func (this *QStandardItem) SetForeground(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetForeground")
 	C.qute_QStandardItem_setForeground(self, rt.UseArg(unsafe.Pointer(brush), "QStandardItem.SetForeground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // CheckState wraps QStandardItem::checkState.
@@ -383,6 +413,7 @@ func (this *QStandardItem) SetForeground(brush *QBrush) {
 func (this *QStandardItem) CheckState() qtcore.CheckState {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.CheckState")
 	r := C.qute_QStandardItem_checkState(self)
+	runtime.KeepAlive(this)
 	return qtcore.CheckState(r)
 }
 
@@ -394,6 +425,7 @@ func (this *QStandardItem) CheckState() qtcore.CheckState {
 func (this *QStandardItem) SetCheckState(checkState qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetCheckState")
 	C.qute_QStandardItem_setCheckState(self, C.int64_t(checkState))
+	runtime.KeepAlive(this)
 }
 
 // AccessibleText wraps QStandardItem::accessibleText.
@@ -404,6 +436,7 @@ func (this *QStandardItem) SetCheckState(checkState qtcore.CheckState) {
 func (this *QStandardItem) AccessibleText() string {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.AccessibleText")
 	r := C.qute_QStandardItem_accessibleText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -415,6 +448,7 @@ func (this *QStandardItem) AccessibleText() string {
 func (this *QStandardItem) SetAccessibleText(accessibleText string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetAccessibleText")
 	C.qute_QStandardItem_setAccessibleText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(accessibleText))), C.ptrdiff_t(len(accessibleText)))
+	runtime.KeepAlive(this)
 }
 
 // AccessibleDescription wraps QStandardItem::accessibleDescription.
@@ -425,6 +459,7 @@ func (this *QStandardItem) SetAccessibleText(accessibleText string) {
 func (this *QStandardItem) AccessibleDescription() string {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.AccessibleDescription")
 	r := C.qute_QStandardItem_accessibleDescription(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -436,6 +471,7 @@ func (this *QStandardItem) AccessibleDescription() string {
 func (this *QStandardItem) SetAccessibleDescription(accessibleDescription string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetAccessibleDescription")
 	C.qute_QStandardItem_setAccessibleDescription(self, (*C.char)(unsafe.Pointer(unsafe.StringData(accessibleDescription))), C.ptrdiff_t(len(accessibleDescription)))
+	runtime.KeepAlive(this)
 }
 
 // Flags wraps QStandardItem::flags.
@@ -446,6 +482,7 @@ func (this *QStandardItem) SetAccessibleDescription(accessibleDescription string
 func (this *QStandardItem) Flags() qtcore.ItemFlags {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Flags")
 	r := C.qute_QStandardItem_flags(self)
+	runtime.KeepAlive(this)
 	return qtcore.ItemFlags(r)
 }
 
@@ -457,6 +494,7 @@ func (this *QStandardItem) Flags() qtcore.ItemFlags {
 func (this *QStandardItem) SetFlags(flags qtcore.ItemFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetFlags")
 	C.qute_QStandardItem_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // IsEnabled wraps QStandardItem::isEnabled.
@@ -467,6 +505,7 @@ func (this *QStandardItem) SetFlags(flags qtcore.ItemFlags) {
 func (this *QStandardItem) IsEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsEnabled")
 	r := C.qute_QStandardItem_isEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -478,6 +517,7 @@ func (this *QStandardItem) IsEnabled() bool {
 func (this *QStandardItem) SetEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetEnabled")
 	C.qute_QStandardItem_setEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsEditable wraps QStandardItem::isEditable.
@@ -488,6 +528,7 @@ func (this *QStandardItem) SetEnabled(enabled bool) {
 func (this *QStandardItem) IsEditable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsEditable")
 	r := C.qute_QStandardItem_isEditable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -499,6 +540,7 @@ func (this *QStandardItem) IsEditable() bool {
 func (this *QStandardItem) SetEditable(editable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetEditable")
 	C.qute_QStandardItem_setEditable(self, C.bool(editable))
+	runtime.KeepAlive(this)
 }
 
 // IsSelectable wraps QStandardItem::isSelectable.
@@ -509,6 +551,7 @@ func (this *QStandardItem) SetEditable(editable bool) {
 func (this *QStandardItem) IsSelectable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsSelectable")
 	r := C.qute_QStandardItem_isSelectable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -520,6 +563,7 @@ func (this *QStandardItem) IsSelectable() bool {
 func (this *QStandardItem) SetSelectable(selectable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetSelectable")
 	C.qute_QStandardItem_setSelectable(self, C.bool(selectable))
+	runtime.KeepAlive(this)
 }
 
 // IsCheckable wraps QStandardItem::isCheckable.
@@ -530,6 +574,7 @@ func (this *QStandardItem) SetSelectable(selectable bool) {
 func (this *QStandardItem) IsCheckable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsCheckable")
 	r := C.qute_QStandardItem_isCheckable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -541,6 +586,7 @@ func (this *QStandardItem) IsCheckable() bool {
 func (this *QStandardItem) SetCheckable(checkable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetCheckable")
 	C.qute_QStandardItem_setCheckable(self, C.bool(checkable))
+	runtime.KeepAlive(this)
 }
 
 // IsAutoTristate wraps QStandardItem::isAutoTristate.
@@ -551,6 +597,7 @@ func (this *QStandardItem) SetCheckable(checkable bool) {
 func (this *QStandardItem) IsAutoTristate() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsAutoTristate")
 	r := C.qute_QStandardItem_isAutoTristate(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -562,6 +609,7 @@ func (this *QStandardItem) IsAutoTristate() bool {
 func (this *QStandardItem) SetAutoTristate(tristate bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetAutoTristate")
 	C.qute_QStandardItem_setAutoTristate(self, C.bool(tristate))
+	runtime.KeepAlive(this)
 }
 
 // IsUserTristate wraps QStandardItem::isUserTristate.
@@ -572,6 +620,7 @@ func (this *QStandardItem) SetAutoTristate(tristate bool) {
 func (this *QStandardItem) IsUserTristate() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsUserTristate")
 	r := C.qute_QStandardItem_isUserTristate(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -583,6 +632,7 @@ func (this *QStandardItem) IsUserTristate() bool {
 func (this *QStandardItem) SetUserTristate(tristate bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetUserTristate")
 	C.qute_QStandardItem_setUserTristate(self, C.bool(tristate))
+	runtime.KeepAlive(this)
 }
 
 // IsDragEnabled wraps QStandardItem::isDragEnabled.
@@ -593,6 +643,7 @@ func (this *QStandardItem) SetUserTristate(tristate bool) {
 func (this *QStandardItem) IsDragEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsDragEnabled")
 	r := C.qute_QStandardItem_isDragEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -604,6 +655,7 @@ func (this *QStandardItem) IsDragEnabled() bool {
 func (this *QStandardItem) SetDragEnabled(dragEnabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetDragEnabled")
 	C.qute_QStandardItem_setDragEnabled(self, C.bool(dragEnabled))
+	runtime.KeepAlive(this)
 }
 
 // IsDropEnabled wraps QStandardItem::isDropEnabled.
@@ -614,6 +666,7 @@ func (this *QStandardItem) SetDragEnabled(dragEnabled bool) {
 func (this *QStandardItem) IsDropEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.IsDropEnabled")
 	r := C.qute_QStandardItem_isDropEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -625,6 +678,7 @@ func (this *QStandardItem) IsDropEnabled() bool {
 func (this *QStandardItem) SetDropEnabled(dropEnabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetDropEnabled")
 	C.qute_QStandardItem_setDropEnabled(self, C.bool(dropEnabled))
+	runtime.KeepAlive(this)
 }
 
 // Parent wraps QStandardItem::parent.
@@ -637,6 +691,7 @@ func (this *QStandardItem) SetDropEnabled(dropEnabled bool) {
 func (this *QStandardItem) Parent() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Parent")
 	r := C.qute_QStandardItem_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -648,6 +703,7 @@ func (this *QStandardItem) Parent() *QStandardItem {
 func (this *QStandardItem) Row() int {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Row")
 	r := C.qute_QStandardItem_row(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -659,6 +715,7 @@ func (this *QStandardItem) Row() int {
 func (this *QStandardItem) Column() int {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Column")
 	r := C.qute_QStandardItem_column(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -672,6 +729,7 @@ func (this *QStandardItem) Column() int {
 func (this *QStandardItem) Index() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Index")
 	r := C.qute_QStandardItem_index(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -685,6 +743,7 @@ func (this *QStandardItem) Index() *qtcore.QModelIndex {
 func (this *QStandardItem) Model() *QStandardItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Model")
 	r := C.qute_QStandardItem_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItemModel](rt.WrapClass(r, "QStandardItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -696,6 +755,7 @@ func (this *QStandardItem) Model() *QStandardItemModel {
 func (this *QStandardItem) RowCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.RowCount")
 	r := C.qute_QStandardItem_rowCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -707,6 +767,7 @@ func (this *QStandardItem) RowCount() int {
 func (this *QStandardItem) SetRowCount(rows int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetRowCount")
 	C.qute_QStandardItem_setRowCount(self, C.int(rows))
+	runtime.KeepAlive(this)
 }
 
 // ColumnCount wraps QStandardItem::columnCount.
@@ -717,6 +778,7 @@ func (this *QStandardItem) SetRowCount(rows int) {
 func (this *QStandardItem) ColumnCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.ColumnCount")
 	r := C.qute_QStandardItem_columnCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -728,6 +790,7 @@ func (this *QStandardItem) ColumnCount() int {
 func (this *QStandardItem) SetColumnCount(columns int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetColumnCount")
 	C.qute_QStandardItem_setColumnCount(self, C.int(columns))
+	runtime.KeepAlive(this)
 }
 
 // HasChildren wraps QStandardItem::hasChildren.
@@ -738,6 +801,7 @@ func (this *QStandardItem) SetColumnCount(columns int) {
 func (this *QStandardItem) HasChildren() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.HasChildren")
 	r := C.qute_QStandardItem_hasChildren(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -751,6 +815,7 @@ func (this *QStandardItem) HasChildren() bool {
 func (this *QStandardItem) Child(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Child")
 	r := C.qute_QStandardItem_child(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -769,6 +834,8 @@ func (this *QStandardItem) SetChild(row int, column int, item QStandardItemLike)
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItem.SetChild")
 	}
 	C.qute_QStandardItem_setChild(self, C.int(row), C.int(column), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -787,6 +854,8 @@ func (this *QStandardItem) SetChildRow(row int, item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItem.SetChildRow")
 	}
 	C.qute_QStandardItem_setChild_1(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -804,6 +873,8 @@ func (this *QStandardItem) InsertRowItems(row int, items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItem.InsertRowItems")
 	}
 	C.qute_QStandardItem_insertRow(self, C.int(row), unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -825,6 +896,8 @@ func (this *QStandardItem) InsertColumn(column int, items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItem.InsertColumn")
 	}
 	C.qute_QStandardItem_insertColumn(self, C.int(column), unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -846,6 +919,8 @@ func (this *QStandardItem) InsertRowsItems(row int, items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItem.InsertRowsItems")
 	}
 	C.qute_QStandardItem_insertRows(self, C.int(row), unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -861,6 +936,7 @@ func (this *QStandardItem) InsertRowsItems(row int, items []*QStandardItem) {
 func (this *QStandardItem) InsertRows(row int, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.InsertRows")
 	C.qute_QStandardItem_insertRows_1(self, C.int(row), C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // InsertColumns wraps QStandardItem::insertColumns.
@@ -871,6 +947,7 @@ func (this *QStandardItem) InsertRows(row int, count int) {
 func (this *QStandardItem) InsertColumns(column int, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.InsertColumns")
 	C.qute_QStandardItem_insertColumns(self, C.int(column), C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // RemoveRow wraps QStandardItem::removeRow.
@@ -881,6 +958,7 @@ func (this *QStandardItem) InsertColumns(column int, count int) {
 func (this *QStandardItem) RemoveRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.RemoveRow")
 	C.qute_QStandardItem_removeRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // RemoveColumn wraps QStandardItem::removeColumn.
@@ -891,6 +969,7 @@ func (this *QStandardItem) RemoveRow(row int) {
 func (this *QStandardItem) RemoveColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.RemoveColumn")
 	C.qute_QStandardItem_removeColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // RemoveRows wraps QStandardItem::removeRows.
@@ -901,6 +980,7 @@ func (this *QStandardItem) RemoveColumn(column int) {
 func (this *QStandardItem) RemoveRows(row int, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.RemoveRows")
 	C.qute_QStandardItem_removeRows(self, C.int(row), C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // RemoveColumns wraps QStandardItem::removeColumns.
@@ -911,6 +991,7 @@ func (this *QStandardItem) RemoveRows(row int, count int) {
 func (this *QStandardItem) RemoveColumns(column int, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.RemoveColumns")
 	C.qute_QStandardItem_removeColumns(self, C.int(column), C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // AppendRowItems wraps QStandardItem::appendRow.
@@ -927,6 +1008,8 @@ func (this *QStandardItem) AppendRowItems(items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItem.AppendRowItems")
 	}
 	C.qute_QStandardItem_appendRow(self, unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -948,6 +1031,8 @@ func (this *QStandardItem) AppendRows(items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItem.AppendRows")
 	}
 	C.qute_QStandardItem_appendRows(self, unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -969,6 +1054,8 @@ func (this *QStandardItem) AppendColumn(items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItem.AppendColumn")
 	}
 	C.qute_QStandardItem_appendColumn(self, unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -991,6 +1078,8 @@ func (this *QStandardItem) InsertRowItem(row int, item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItem.InsertRowItem")
 	}
 	C.qute_QStandardItem_insertRow_1(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -1009,6 +1098,8 @@ func (this *QStandardItem) AppendRow(item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItem.AppendRow")
 	}
 	C.qute_QStandardItem_appendRow_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -1022,6 +1113,7 @@ func (this *QStandardItem) AppendRow(item QStandardItemLike) {
 func (this *QStandardItem) TakeChild(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.TakeChild")
 	r := C.qute_QStandardItem_takeChild(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
 }
 
@@ -1035,6 +1127,7 @@ func (this *QStandardItem) TakeChild(row int) *QStandardItem {
 func (this *QStandardItem) TakeRow(row int) []*QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.TakeRow")
 	r := C.qute_QStandardItem_takeRow(self, C.int(row))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
 		return rt.View[QStandardItem](rt.WrapClass(e, "QStandardItem", rt.TakeOwned), e)
 	})
@@ -1050,6 +1143,7 @@ func (this *QStandardItem) TakeRow(row int) []*QStandardItem {
 func (this *QStandardItem) TakeColumn(column int) []*QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.TakeColumn")
 	r := C.qute_QStandardItem_takeColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
 		return rt.View[QStandardItem](rt.WrapClass(e, "QStandardItem", rt.TakeOwned), e)
 	})
@@ -1063,6 +1157,7 @@ func (this *QStandardItem) TakeColumn(column int) []*QStandardItem {
 func (this *QStandardItem) SortChildren(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SortChildren")
 	C.qute_QStandardItem_sortChildren(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // Clone wraps QStandardItem::clone.
@@ -1075,6 +1170,7 @@ func (this *QStandardItem) SortChildren(column int) {
 func (this *QStandardItem) Clone() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Clone")
 	r := C.qute_QStandardItem_clone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
 }
 
@@ -1086,6 +1182,7 @@ func (this *QStandardItem) Clone() *QStandardItem {
 func (this *QStandardItem) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Type")
 	r := C.qute_QStandardItem_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -1101,6 +1198,8 @@ func (this *QStandardItem) Read(in qtcore.QDataStreamLike) {
 		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QStandardItem.Read")
 	}
 	C.qute_QStandardItem_read(self, inPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(in)
 }
 
 // Write wraps QStandardItem::write.
@@ -1115,4 +1214,6 @@ func (this *QStandardItem) Write(out qtcore.QDataStreamLike) {
 		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QStandardItem.Write")
 	}
 	C.qute_QStandardItem_write(self, outPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(out)
 }

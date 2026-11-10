@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -140,6 +141,7 @@ func QToolTipPalette() *qtgui.QPalette {
 func QToolTipSetPalette(palette *qtgui.QPalette) {
 	rt.CheckThread("QToolTipSetPalette")
 	C.qute_QToolTip_setPalette(rt.UseArg(unsafe.Pointer(palette), "QToolTipSetPalette"))
+	runtime.KeepAlive(palette)
 }
 
 // QToolTipFont wraps QToolTip::font.
@@ -163,4 +165,5 @@ func QToolTipFont() *qtgui.QFont {
 func QToolTipSetFont(font *qtgui.QFont) {
 	rt.CheckThread("QToolTipSetFont")
 	C.qute_QToolTip_setFont(rt.UseArg(unsafe.Pointer(font), "QToolTipSetFont"))
+	runtime.KeepAlive(font)
 }

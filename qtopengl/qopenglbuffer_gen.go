@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQOpenGLBufferWithType(typeArg QOpenGLBufferType) *QOpenGLBuffer {
 func (this *QOpenGLBuffer) Type() QOpenGLBufferType {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Type")
 	r := C.qute_QOpenGLBuffer_type(self)
+	runtime.KeepAlive(this)
 	return QOpenGLBufferType(r)
 }
 
@@ -120,6 +122,7 @@ func (this *QOpenGLBuffer) Type() QOpenGLBufferType {
 func (this *QOpenGLBuffer) UsagePattern() QOpenGLBufferUsagePattern {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.UsagePattern")
 	r := C.qute_QOpenGLBuffer_usagePattern(self)
+	runtime.KeepAlive(this)
 	return QOpenGLBufferUsagePattern(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QOpenGLBuffer) UsagePattern() QOpenGLBufferUsagePattern {
 func (this *QOpenGLBuffer) SetUsagePattern(value QOpenGLBufferUsagePattern) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.SetUsagePattern")
 	C.qute_QOpenGLBuffer_setUsagePattern(self, C.int64_t(value))
+	runtime.KeepAlive(this)
 }
 
 // Create wraps QOpenGLBuffer::create.
@@ -141,6 +145,7 @@ func (this *QOpenGLBuffer) SetUsagePattern(value QOpenGLBufferUsagePattern) {
 func (this *QOpenGLBuffer) Create() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Create")
 	r := C.qute_QOpenGLBuffer_create(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -152,6 +157,7 @@ func (this *QOpenGLBuffer) Create() bool {
 func (this *QOpenGLBuffer) IsCreated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.IsCreated")
 	r := C.qute_QOpenGLBuffer_isCreated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -163,6 +169,7 @@ func (this *QOpenGLBuffer) IsCreated() bool {
 func (this *QOpenGLBuffer) Destroy() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Destroy")
 	C.qute_QOpenGLBuffer_destroy(self)
+	runtime.KeepAlive(this)
 }
 
 // Bind wraps QOpenGLBuffer::bind.
@@ -173,6 +180,7 @@ func (this *QOpenGLBuffer) Destroy() {
 func (this *QOpenGLBuffer) Bind() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Bind")
 	r := C.qute_QOpenGLBuffer_bind(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -184,6 +192,7 @@ func (this *QOpenGLBuffer) Bind() bool {
 func (this *QOpenGLBuffer) Release() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Release")
 	C.qute_QOpenGLBuffer_release(self)
+	runtime.KeepAlive(this)
 }
 
 // BufferId wraps QOpenGLBuffer::bufferId.
@@ -194,6 +203,7 @@ func (this *QOpenGLBuffer) Release() {
 func (this *QOpenGLBuffer) BufferId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.BufferId")
 	r := C.qute_QOpenGLBuffer_bufferId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -205,6 +215,7 @@ func (this *QOpenGLBuffer) BufferId() uint {
 func (this *QOpenGLBuffer) Size() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Size")
 	r := C.qute_QOpenGLBuffer_size(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -216,6 +227,7 @@ func (this *QOpenGLBuffer) Size() int {
 func (this *QOpenGLBuffer) Read(offset int, data unsafe.Pointer, count int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Read")
 	r := C.qute_QOpenGLBuffer_read(self, C.int(offset), data, C.int(count))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -227,6 +239,7 @@ func (this *QOpenGLBuffer) Read(offset int, data unsafe.Pointer, count int) bool
 func (this *QOpenGLBuffer) Write(offset int, data unsafe.Pointer, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Write")
 	C.qute_QOpenGLBuffer_write(self, C.int(offset), data, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // AllocatePtr wraps QOpenGLBuffer::allocate.
@@ -237,6 +250,7 @@ func (this *QOpenGLBuffer) Write(offset int, data unsafe.Pointer, count int) {
 func (this *QOpenGLBuffer) AllocatePtr(data unsafe.Pointer, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.AllocatePtr")
 	C.qute_QOpenGLBuffer_allocate(self, data, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // Allocate wraps QOpenGLBuffer::allocate.
@@ -247,6 +261,7 @@ func (this *QOpenGLBuffer) AllocatePtr(data unsafe.Pointer, count int) {
 func (this *QOpenGLBuffer) Allocate(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Allocate")
 	C.qute_QOpenGLBuffer_allocate_1(self, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // Map wraps QOpenGLBuffer::map.
@@ -257,6 +272,7 @@ func (this *QOpenGLBuffer) Allocate(count int) {
 func (this *QOpenGLBuffer) Map(access QOpenGLBufferAccess) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Map")
 	r := C.qute_QOpenGLBuffer_map(self, C.int64_t(access))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -268,6 +284,7 @@ func (this *QOpenGLBuffer) Map(access QOpenGLBufferAccess) unsafe.Pointer {
 func (this *QOpenGLBuffer) MapRange(offset int, count int, access QOpenGLBufferRangeAccessFlags) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.MapRange")
 	r := C.qute_QOpenGLBuffer_mapRange(self, C.int(offset), C.int(count), C.int64_t(access))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -279,6 +296,7 @@ func (this *QOpenGLBuffer) MapRange(offset int, count int, access QOpenGLBufferR
 func (this *QOpenGLBuffer) Unmap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLBuffer.Unmap")
 	r := C.qute_QOpenGLBuffer_unmap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 

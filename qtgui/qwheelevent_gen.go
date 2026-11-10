@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QWheelEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QWheelEvent {
 func (this *QWheelEvent) PixelDelta() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.PixelDelta")
 	r := C.qute_QWheelEvent_pixelDelta(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QWheelEvent) PixelDelta() qtcore.QPoint {
 func (this *QWheelEvent) AngleDelta() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.AngleDelta")
 	r := C.qute_QWheelEvent_angleDelta(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -63,6 +66,7 @@ func (this *QWheelEvent) AngleDelta() qtcore.QPoint {
 func (this *QWheelEvent) Phase() qtcore.ScrollPhase {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.Phase")
 	r := C.qute_QWheelEvent_phase(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScrollPhase(r)
 }
 
@@ -74,6 +78,7 @@ func (this *QWheelEvent) Phase() qtcore.ScrollPhase {
 func (this *QWheelEvent) Inverted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.Inverted")
 	r := C.qute_QWheelEvent_inverted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -85,6 +90,7 @@ func (this *QWheelEvent) Inverted() bool {
 func (this *QWheelEvent) IsInverted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.IsInverted")
 	r := C.qute_QWheelEvent_isInverted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -96,6 +102,7 @@ func (this *QWheelEvent) IsInverted() bool {
 func (this *QWheelEvent) HasPixelDelta() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.HasPixelDelta")
 	r := C.qute_QWheelEvent_hasPixelDelta(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -107,5 +114,6 @@ func (this *QWheelEvent) HasPixelDelta() bool {
 func (this *QWheelEvent) Source() qtcore.MouseEventSource {
 	self := rt.Use(unsafe.Pointer(this), "QWheelEvent.Source")
 	r := C.qute_QWheelEvent_source(self)
+	runtime.KeepAlive(this)
 	return qtcore.MouseEventSource(r)
 }

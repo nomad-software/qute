@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQShortcut(parent qtcore.QObjectLike) *QShortcut {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcut")
 	}
 	p := C.qute_QShortcut_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,8 @@ func NewQShortcutWithKeySequence(key *QKeySequence, parent qtcore.QObjectLike) *
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutWithKeySequence")
 	}
 	p := C.qute_QShortcut_new_1(rt.UseArg(unsafe.Pointer(key), "NewQShortcutWithKeySequence"), parentPtr)
+	runtime.KeepAlive(key)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -105,6 +109,7 @@ func NewQShortcutStandard(key QKeySequenceStandardKey, parent qtcore.QObjectLike
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutStandard")
 	}
 	p := C.qute_QShortcut_new_2(C.int64_t(key), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -121,6 +126,8 @@ func NewQShortcutStandard(key QKeySequenceStandardKey, parent qtcore.QObjectLike
 func (this *QShortcut) SetKey(key *QKeySequence) {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.SetKey")
 	C.qute_QShortcut_setKey(self, rt.UseArg(unsafe.Pointer(key), "QShortcut.SetKey"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(key)
 }
 
 // Key wraps QShortcut::key.
@@ -133,6 +140,7 @@ func (this *QShortcut) SetKey(key *QKeySequence) {
 func (this *QShortcut) Key() *QKeySequence {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.Key")
 	r := C.qute_QShortcut_key(self)
+	runtime.KeepAlive(this)
 	return rt.View[QKeySequence](rt.WrapClass(r, "QKeySequence", rt.TakeOwned), r)
 }
 
@@ -144,6 +152,7 @@ func (this *QShortcut) Key() *QKeySequence {
 func (this *QShortcut) SetStandardKeys(key QKeySequenceStandardKey) {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.SetStandardKeys")
 	C.qute_QShortcut_setKeys(self, C.int64_t(key))
+	runtime.KeepAlive(this)
 }
 
 // SetKeys wraps QShortcut::setKeys.
@@ -158,6 +167,8 @@ func (this *QShortcut) SetKeys(keys []*QKeySequence) {
 		keysC[i] = rt.UseArg(unsafe.Pointer(keys[i]), "QShortcut.SetKeys")
 	}
 	C.qute_QShortcut_setKeys_1(self, unsafe.Pointer(unsafe.SliceData(keysC)), C.ptrdiff_t(len(keys)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(keys)
 }
 
 // Keys wraps QShortcut::keys.
@@ -168,6 +179,7 @@ func (this *QShortcut) SetKeys(keys []*QKeySequence) {
 func (this *QShortcut) Keys() []*QKeySequence {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.Keys")
 	r := C.qute_QShortcut_keys(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QKeySequence {
 		return rt.View[QKeySequence](rt.WrapClass(e, "QKeySequence", rt.TakeOwned), e)
 	})
@@ -181,6 +193,7 @@ func (this *QShortcut) Keys() []*QKeySequence {
 func (this *QShortcut) SetEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.SetEnabled")
 	C.qute_QShortcut_setEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsEnabled wraps QShortcut::isEnabled.
@@ -191,6 +204,7 @@ func (this *QShortcut) SetEnabled(enable bool) {
 func (this *QShortcut) IsEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.IsEnabled")
 	r := C.qute_QShortcut_isEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -202,6 +216,7 @@ func (this *QShortcut) IsEnabled() bool {
 func (this *QShortcut) SetContext(context qtcore.ShortcutContext) {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.SetContext")
 	C.qute_QShortcut_setContext(self, C.int64_t(context))
+	runtime.KeepAlive(this)
 }
 
 // Context wraps QShortcut::context.
@@ -212,6 +227,7 @@ func (this *QShortcut) SetContext(context qtcore.ShortcutContext) {
 func (this *QShortcut) Context() qtcore.ShortcutContext {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.Context")
 	r := C.qute_QShortcut_context(self)
+	runtime.KeepAlive(this)
 	return qtcore.ShortcutContext(r)
 }
 
@@ -223,6 +239,7 @@ func (this *QShortcut) Context() qtcore.ShortcutContext {
 func (this *QShortcut) SetAutoRepeat(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.SetAutoRepeat")
 	C.qute_QShortcut_setAutoRepeat(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // AutoRepeat wraps QShortcut::autoRepeat.
@@ -233,6 +250,7 @@ func (this *QShortcut) SetAutoRepeat(on bool) {
 func (this *QShortcut) AutoRepeat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.AutoRepeat")
 	r := C.qute_QShortcut_autoRepeat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -244,6 +262,7 @@ func (this *QShortcut) AutoRepeat() bool {
 func (this *QShortcut) SetWhatsThis(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.SetWhatsThis")
 	C.qute_QShortcut_setWhatsThis(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // WhatsThis wraps QShortcut::whatsThis.
@@ -254,6 +273,7 @@ func (this *QShortcut) SetWhatsThis(text string) {
 func (this *QShortcut) WhatsThis() string {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.WhatsThis")
 	r := C.qute_QShortcut_whatsThis(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -265,6 +285,7 @@ func (this *QShortcut) WhatsThis() string {
 func (this *QShortcut) EmitActivated() {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.EmitActivated")
 	C.qute_QShortcut_activated_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitActivatedAmbiguously wraps emitting the activatedAmbiguously signal.
@@ -275,6 +296,7 @@ func (this *QShortcut) EmitActivated() {
 func (this *QShortcut) EmitActivatedAmbiguously() {
 	self := rt.Use(unsafe.Pointer(this), "QShortcut.EmitActivatedAmbiguously")
 	C.qute_QShortcut_activatedAmbiguously_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the

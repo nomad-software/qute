@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQUrlQuery() *QUrlQuery {
 func NewQUrlQueryWithUrl(url *QUrl) *QUrlQuery {
 	rt.CheckThread("NewQUrlQueryWithUrl")
 	p := C.qute_QUrlQuery_new_1(rt.UseArg(unsafe.Pointer(url), "NewQUrlQueryWithUrl"))
+	runtime.KeepAlive(url)
 	h := rt.WrapClass(p, "QUrlQuery", rt.NewOwned)
 	return rt.View[QUrlQuery](h, p)
 }
@@ -120,6 +122,7 @@ func NewQUrlQueryWithQueryString(queryString string) *QUrlQuery {
 func (this *QUrlQuery) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.IsEmpty")
 	r := C.qute_QUrlQuery_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QUrlQuery) IsEmpty() bool {
 func (this *QUrlQuery) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.Clear")
 	C.qute_QUrlQuery_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // Query wraps QUrlQuery::query.
@@ -141,6 +145,7 @@ func (this *QUrlQuery) Clear() {
 func (this *QUrlQuery) Query() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.Query")
 	r := C.qute_QUrlQuery_query(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -152,6 +157,7 @@ func (this *QUrlQuery) Query() string {
 func (this *QUrlQuery) SetQuery(queryString string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.SetQuery")
 	C.qute_QUrlQuery_setQuery(self, (*C.char)(unsafe.Pointer(unsafe.StringData(queryString))), C.ptrdiff_t(len(queryString)))
+	runtime.KeepAlive(this)
 }
 
 // ToString wraps QUrlQuery::toString.
@@ -162,6 +168,7 @@ func (this *QUrlQuery) SetQuery(queryString string) {
 func (this *QUrlQuery) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.ToString")
 	r := C.qute_QUrlQuery_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -173,6 +180,7 @@ func (this *QUrlQuery) ToString() string {
 func (this *QUrlQuery) SetQueryDelimiters(valueDelimiter rune, pairDelimiter rune) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.SetQueryDelimiters")
 	C.qute_QUrlQuery_setQueryDelimiters(self, C.uint(valueDelimiter), C.uint(pairDelimiter))
+	runtime.KeepAlive(this)
 }
 
 // QueryValueDelimiter wraps QUrlQuery::queryValueDelimiter.
@@ -183,6 +191,7 @@ func (this *QUrlQuery) SetQueryDelimiters(valueDelimiter rune, pairDelimiter run
 func (this *QUrlQuery) QueryValueDelimiter() rune {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryValueDelimiter")
 	r := C.qute_QUrlQuery_queryValueDelimiter(self)
+	runtime.KeepAlive(this)
 	return rune(r)
 }
 
@@ -194,6 +203,7 @@ func (this *QUrlQuery) QueryValueDelimiter() rune {
 func (this *QUrlQuery) QueryPairDelimiter() rune {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryPairDelimiter")
 	r := C.qute_QUrlQuery_queryPairDelimiter(self)
+	runtime.KeepAlive(this)
 	return rune(r)
 }
 
@@ -214,6 +224,7 @@ func (this *QUrlQuery) SetQueryItems(query []Pair[string, string]) {
 	defer quteFreeStrs(queryK)
 	defer quteFreeStrs(queryV)
 	C.qute_QUrlQuery_setQueryItems(self, unsafe.Pointer(unsafe.SliceData(queryK)), unsafe.Pointer(unsafe.SliceData(queryV)), C.ptrdiff_t(len(query)))
+	runtime.KeepAlive(this)
 }
 
 // QueryItems wraps QUrlQuery::queryItems.
@@ -224,6 +235,7 @@ func (this *QUrlQuery) SetQueryItems(query []Pair[string, string]) {
 func (this *QUrlQuery) QueryItems() []Pair[string, string] {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItems")
 	r := C.qute_QUrlQuery_queryItems(self)
+	runtime.KeepAlive(this)
 	return qutePairs(r, func(k C.qute_str) string { return quteStr(k) }, func(v C.qute_str) string { return quteStr(v) }, func(a string, b string) Pair[string, string] { return Pair[string, string]{First: a, Second: b} })
 }
 
@@ -235,6 +247,7 @@ func (this *QUrlQuery) QueryItems() []Pair[string, string] {
 func (this *QUrlQuery) HasQueryItem(key string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.HasQueryItem")
 	r := C.qute_QUrlQuery_hasQueryItem(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -246,6 +259,7 @@ func (this *QUrlQuery) HasQueryItem(key string) bool {
 func (this *QUrlQuery) AddQueryItem(key string, value string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.AddQueryItem")
 	C.qute_QUrlQuery_addQueryItem(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
+	runtime.KeepAlive(this)
 }
 
 // RemoveQueryItem wraps QUrlQuery::removeQueryItem.
@@ -256,6 +270,7 @@ func (this *QUrlQuery) AddQueryItem(key string, value string) {
 func (this *QUrlQuery) RemoveQueryItem(key string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.RemoveQueryItem")
 	C.qute_QUrlQuery_removeQueryItem(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 }
 
 // QueryItemValue wraps QUrlQuery::queryItemValue.
@@ -266,6 +281,7 @@ func (this *QUrlQuery) RemoveQueryItem(key string) {
 func (this *QUrlQuery) QueryItemValue(key string) string {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItemValue")
 	r := C.qute_QUrlQuery_queryItemValue(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -277,6 +293,7 @@ func (this *QUrlQuery) QueryItemValue(key string) string {
 func (this *QUrlQuery) AllQueryItemValues(key string) []string {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.AllQueryItemValues")
 	r := C.qute_QUrlQuery_allQueryItemValues(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -288,6 +305,7 @@ func (this *QUrlQuery) AllQueryItemValues(key string) []string {
 func (this *QUrlQuery) RemoveAllQueryItems(key string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.RemoveAllQueryItems")
 	C.qute_QUrlQuery_removeAllQueryItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 }
 
 // QUrlQueryDefaultQueryValueDelimiter wraps QUrlQuery::defaultQueryValueDelimiter.

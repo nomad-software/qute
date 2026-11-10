@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -66,6 +67,7 @@ func NewQGraphicsColorizeEffect(parent qtcore.QObjectLike) *QGraphicsColorizeEff
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsColorizeEffect")
 	}
 	p := C.qute_QGraphicsColorizeEffect_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -82,6 +84,7 @@ func NewQGraphicsColorizeEffect(parent qtcore.QObjectLike) *QGraphicsColorizeEff
 func (this *QGraphicsColorizeEffect) Color() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsColorizeEffect.Color")
 	r := C.qute_QGraphicsColorizeEffect_color(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -93,6 +96,7 @@ func (this *QGraphicsColorizeEffect) Color() qtgui.QColor {
 func (this *QGraphicsColorizeEffect) Strength() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsColorizeEffect.Strength")
 	r := C.qute_QGraphicsColorizeEffect_strength(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -104,6 +108,7 @@ func (this *QGraphicsColorizeEffect) Strength() float64 {
 func (this *QGraphicsColorizeEffect) SetColor(c qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsColorizeEffect.SetColor")
 	C.qute_QGraphicsColorizeEffect_setColor(self, cQColor(c))
+	runtime.KeepAlive(this)
 }
 
 // SetStrength wraps QGraphicsColorizeEffect::setStrength.
@@ -114,6 +119,7 @@ func (this *QGraphicsColorizeEffect) SetColor(c qtgui.QColor) {
 func (this *QGraphicsColorizeEffect) SetStrength(strength float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsColorizeEffect.SetStrength")
 	C.qute_QGraphicsColorizeEffect_setStrength(self, C.double(strength))
+	runtime.KeepAlive(this)
 }
 
 // EmitColorChanged wraps emitting the colorChanged signal.
@@ -124,6 +130,7 @@ func (this *QGraphicsColorizeEffect) SetStrength(strength float64) {
 func (this *QGraphicsColorizeEffect) EmitColorChanged(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsColorizeEffect.EmitColorChanged")
 	C.qute_QGraphicsColorizeEffect_colorChanged_1(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // EmitStrengthChanged wraps emitting the strengthChanged signal.
@@ -134,6 +141,7 @@ func (this *QGraphicsColorizeEffect) EmitColorChanged(color qtgui.QColor) {
 func (this *QGraphicsColorizeEffect) EmitStrengthChanged(strength float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsColorizeEffect.EmitStrengthChanged")
 	C.qute_QGraphicsColorizeEffect_strengthChanged_1(self, C.double(strength))
+	runtime.KeepAlive(this)
 }
 
 // OnColorChanged connects f to the colorChanged signal. The connection ends when the

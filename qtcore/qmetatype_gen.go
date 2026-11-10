@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQMetaType() *QMetaType {
 func (this *QMetaType) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsValid")
 	r := C.qute_QMetaType_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -119,6 +121,7 @@ func (this *QMetaType) IsValid() bool {
 func (this *QMetaType) IsRegistered() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsRegistered")
 	r := C.qute_QMetaType_isRegistered(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +133,7 @@ func (this *QMetaType) IsRegistered() bool {
 func (this *QMetaType) RegisterType() {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.RegisterType")
 	C.qute_QMetaType_registerType(self)
+	runtime.KeepAlive(this)
 }
 
 // Id wraps QMetaType::id.
@@ -140,6 +144,7 @@ func (this *QMetaType) RegisterType() {
 func (this *QMetaType) Id() int {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Id")
 	r := C.qute_QMetaType_id(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -151,6 +156,7 @@ func (this *QMetaType) Id() int {
 func (this *QMetaType) RawId() int {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.RawId")
 	r := C.qute_QMetaType_rawId(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -162,6 +168,7 @@ func (this *QMetaType) RawId() int {
 func (this *QMetaType) SizeOf() int {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.SizeOf")
 	r := C.qute_QMetaType_sizeOf(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -173,6 +180,7 @@ func (this *QMetaType) SizeOf() int {
 func (this *QMetaType) AlignOf() int {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.AlignOf")
 	r := C.qute_QMetaType_alignOf(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -184,6 +192,7 @@ func (this *QMetaType) AlignOf() int {
 func (this *QMetaType) Flags() QMetaTypeTypeFlags {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Flags")
 	r := C.qute_QMetaType_flags(self)
+	runtime.KeepAlive(this)
 	return QMetaTypeTypeFlags(r)
 }
 
@@ -195,6 +204,7 @@ func (this *QMetaType) Flags() QMetaTypeTypeFlags {
 func (this *QMetaType) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Name")
 	r := C.qute_QMetaType_name(self)
+	runtime.KeepAlive(this)
 	return C.GoString(r)
 }
 
@@ -206,6 +216,7 @@ func (this *QMetaType) Name() string {
 func (this *QMetaType) Create() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Create")
 	r := C.qute_QMetaType_create(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -217,6 +228,7 @@ func (this *QMetaType) Create() unsafe.Pointer {
 func (this *QMetaType) Destroy(data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Destroy")
 	C.qute_QMetaType_destroy(self, data)
+	runtime.KeepAlive(this)
 }
 
 // Construct wraps QMetaType::construct.
@@ -227,6 +239,7 @@ func (this *QMetaType) Destroy(data unsafe.Pointer) {
 func (this *QMetaType) Construct(where unsafe.Pointer) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Construct")
 	r := C.qute_QMetaType_construct(self, where)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -238,6 +251,7 @@ func (this *QMetaType) Construct(where unsafe.Pointer) unsafe.Pointer {
 func (this *QMetaType) Destruct(data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Destruct")
 	C.qute_QMetaType_destruct(self, data)
+	runtime.KeepAlive(this)
 }
 
 // Compare wraps QMetaType::compare.
@@ -250,6 +264,7 @@ func (this *QMetaType) Destruct(data unsafe.Pointer) {
 func (this *QMetaType) Compare(lhs unsafe.Pointer, rhs unsafe.Pointer) *QPartialOrdering {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Compare")
 	r := C.qute_QMetaType_compare(self, lhs, rhs)
+	runtime.KeepAlive(this)
 	return rt.View[QPartialOrdering](rt.WrapClass(r, "QPartialOrdering", rt.TakeOwned), r)
 }
 
@@ -261,6 +276,7 @@ func (this *QMetaType) Compare(lhs unsafe.Pointer, rhs unsafe.Pointer) *QPartial
 func (this *QMetaType) Equals(lhs unsafe.Pointer, rhs unsafe.Pointer) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Equals")
 	r := C.qute_QMetaType_equals(self, lhs, rhs)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -272,6 +288,7 @@ func (this *QMetaType) Equals(lhs unsafe.Pointer, rhs unsafe.Pointer) bool {
 func (this *QMetaType) IsDefaultConstructible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsDefaultConstructible")
 	r := C.qute_QMetaType_isDefaultConstructible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -283,6 +300,7 @@ func (this *QMetaType) IsDefaultConstructible() bool {
 func (this *QMetaType) IsCopyConstructible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsCopyConstructible")
 	r := C.qute_QMetaType_isCopyConstructible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -294,6 +312,7 @@ func (this *QMetaType) IsCopyConstructible() bool {
 func (this *QMetaType) IsMoveConstructible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsMoveConstructible")
 	r := C.qute_QMetaType_isMoveConstructible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -305,6 +324,7 @@ func (this *QMetaType) IsMoveConstructible() bool {
 func (this *QMetaType) IsDestructible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsDestructible")
 	r := C.qute_QMetaType_isDestructible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -316,6 +336,7 @@ func (this *QMetaType) IsDestructible() bool {
 func (this *QMetaType) IsEqualityComparable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsEqualityComparable")
 	r := C.qute_QMetaType_isEqualityComparable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -327,6 +348,7 @@ func (this *QMetaType) IsEqualityComparable() bool {
 func (this *QMetaType) IsOrdered() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.IsOrdered")
 	r := C.qute_QMetaType_isOrdered(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -342,6 +364,8 @@ func (this *QMetaType) Save(stream QDataStreamLike, data unsafe.Pointer) bool {
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QMetaType.Save")
 	}
 	r := C.qute_QMetaType_save(self, streamPtr, data)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(stream)
 	return bool(r)
 }
 
@@ -357,6 +381,8 @@ func (this *QMetaType) Load(stream QDataStreamLike, data unsafe.Pointer) bool {
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QMetaType.Load")
 	}
 	r := C.qute_QMetaType_load(self, streamPtr, data)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(stream)
 	return bool(r)
 }
 
@@ -368,6 +394,7 @@ func (this *QMetaType) Load(stream QDataStreamLike, data unsafe.Pointer) bool {
 func (this *QMetaType) HasRegisteredDataStreamOperators() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.HasRegisteredDataStreamOperators")
 	r := C.qute_QMetaType_hasRegisteredDataStreamOperators(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -381,6 +408,7 @@ func (this *QMetaType) HasRegisteredDataStreamOperators() bool {
 func (this *QMetaType) UnderlyingType() *QMetaType {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.UnderlyingType")
 	r := C.qute_QMetaType_underlyingType(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMetaType](rt.WrapClass(r, "QMetaType", rt.TakeOwned), r)
 }
 
@@ -392,6 +420,7 @@ func (this *QMetaType) UnderlyingType() *QMetaType {
 func (this *QMetaType) HasRegisteredDebugStreamOperator() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.HasRegisteredDebugStreamOperator")
 	r := C.qute_QMetaType_hasRegisteredDebugStreamOperator(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -403,6 +432,7 @@ func (this *QMetaType) HasRegisteredDebugStreamOperator() bool {
 func QMetaTypeRegisterNormalizedTypedef(normalizedTypeName []byte, typeArg *QMetaType) {
 	rt.CheckThread("QMetaTypeRegisterNormalizedTypedef")
 	C.qute_QMetaType_registerNormalizedTypedef((*C.char)(unsafe.Pointer(unsafe.SliceData(normalizedTypeName))), C.ptrdiff_t(len(normalizedTypeName)), rt.UseArg(unsafe.Pointer(typeArg), "QMetaTypeRegisterNormalizedTypedef"))
+	runtime.KeepAlive(typeArg)
 }
 
 // QMetaTypeIsRegistered wraps QMetaType::isRegistered.
@@ -437,6 +467,8 @@ func QMetaTypeFromName(name []byte) *QMetaType {
 func QMetaTypeConvert(fromType *QMetaType, from unsafe.Pointer, toType *QMetaType, to unsafe.Pointer) bool {
 	rt.CheckThread("QMetaTypeConvert")
 	r := C.qute_QMetaType_convert(rt.UseArg(unsafe.Pointer(fromType), "QMetaTypeConvert"), from, rt.UseArg(unsafe.Pointer(toType), "QMetaTypeConvert"), to)
+	runtime.KeepAlive(fromType)
+	runtime.KeepAlive(toType)
 	return bool(r)
 }
 
@@ -448,6 +480,8 @@ func QMetaTypeConvert(fromType *QMetaType, from unsafe.Pointer, toType *QMetaTyp
 func QMetaTypeCanConvert(fromType *QMetaType, toType *QMetaType) bool {
 	rt.CheckThread("QMetaTypeCanConvert")
 	r := C.qute_QMetaType_canConvert(rt.UseArg(unsafe.Pointer(fromType), "QMetaTypeCanConvert"), rt.UseArg(unsafe.Pointer(toType), "QMetaTypeCanConvert"))
+	runtime.KeepAlive(fromType)
+	runtime.KeepAlive(toType)
 	return bool(r)
 }
 
@@ -459,6 +493,8 @@ func QMetaTypeCanConvert(fromType *QMetaType, toType *QMetaType) bool {
 func QMetaTypeView(fromType *QMetaType, from unsafe.Pointer, toType *QMetaType, to unsafe.Pointer) bool {
 	rt.CheckThread("QMetaTypeView")
 	r := C.qute_QMetaType_view(rt.UseArg(unsafe.Pointer(fromType), "QMetaTypeView"), from, rt.UseArg(unsafe.Pointer(toType), "QMetaTypeView"), to)
+	runtime.KeepAlive(fromType)
+	runtime.KeepAlive(toType)
 	return bool(r)
 }
 
@@ -470,6 +506,8 @@ func QMetaTypeView(fromType *QMetaType, from unsafe.Pointer, toType *QMetaType, 
 func QMetaTypeCanView(fromType *QMetaType, toType *QMetaType) bool {
 	rt.CheckThread("QMetaTypeCanView")
 	r := C.qute_QMetaType_canView(rt.UseArg(unsafe.Pointer(fromType), "QMetaTypeCanView"), rt.UseArg(unsafe.Pointer(toType), "QMetaTypeCanView"))
+	runtime.KeepAlive(fromType)
+	runtime.KeepAlive(toType)
 	return bool(r)
 }
 
@@ -481,6 +519,8 @@ func QMetaTypeCanView(fromType *QMetaType, toType *QMetaType) bool {
 func QMetaTypeHasRegisteredConverterFunction(fromType *QMetaType, toType *QMetaType) bool {
 	rt.CheckThread("QMetaTypeHasRegisteredConverterFunction")
 	r := C.qute_QMetaType_hasRegisteredConverterFunction(rt.UseArg(unsafe.Pointer(fromType), "QMetaTypeHasRegisteredConverterFunction"), rt.UseArg(unsafe.Pointer(toType), "QMetaTypeHasRegisteredConverterFunction"))
+	runtime.KeepAlive(fromType)
+	runtime.KeepAlive(toType)
 	return bool(r)
 }
 
@@ -492,6 +532,8 @@ func QMetaTypeHasRegisteredConverterFunction(fromType *QMetaType, toType *QMetaT
 func QMetaTypeHasRegisteredMutableViewFunction(fromType *QMetaType, toType *QMetaType) bool {
 	rt.CheckThread("QMetaTypeHasRegisteredMutableViewFunction")
 	r := C.qute_QMetaType_hasRegisteredMutableViewFunction(rt.UseArg(unsafe.Pointer(fromType), "QMetaTypeHasRegisteredMutableViewFunction"), rt.UseArg(unsafe.Pointer(toType), "QMetaTypeHasRegisteredMutableViewFunction"))
+	runtime.KeepAlive(fromType)
+	runtime.KeepAlive(toType)
 	return bool(r)
 }
 
@@ -510,6 +552,8 @@ func QMetaTypeRegisterConverterFunction(fArg func(unsafe.Pointer, unsafe.Pointer
 		*(*C.bool)(ret) = C.bool(r)
 	})
 	r := C.qute_QMetaType_registerConverterFunction(C.uintptr_t(fArgID), rt.UseArg(unsafe.Pointer(from), "QMetaTypeRegisterConverterFunction"), rt.UseArg(unsafe.Pointer(to), "QMetaTypeRegisterConverterFunction"))
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 	return bool(r)
 }
 
@@ -521,6 +565,8 @@ func QMetaTypeRegisterConverterFunction(fArg func(unsafe.Pointer, unsafe.Pointer
 func QMetaTypeUnregisterConverterFunction(from *QMetaType, to *QMetaType) {
 	rt.CheckThread("QMetaTypeUnregisterConverterFunction")
 	C.qute_QMetaType_unregisterConverterFunction(rt.UseArg(unsafe.Pointer(from), "QMetaTypeUnregisterConverterFunction"), rt.UseArg(unsafe.Pointer(to), "QMetaTypeUnregisterConverterFunction"))
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 }
 
 // QMetaTypeRegisterMutableViewFunction wraps QMetaType::registerMutableViewFunction.
@@ -538,6 +584,8 @@ func QMetaTypeRegisterMutableViewFunction(fArg func(unsafe.Pointer, unsafe.Point
 		*(*C.bool)(ret) = C.bool(r)
 	})
 	r := C.qute_QMetaType_registerMutableViewFunction(C.uintptr_t(fArgID), rt.UseArg(unsafe.Pointer(from), "QMetaTypeRegisterMutableViewFunction"), rt.UseArg(unsafe.Pointer(to), "QMetaTypeRegisterMutableViewFunction"))
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 	return bool(r)
 }
 
@@ -549,6 +597,8 @@ func QMetaTypeRegisterMutableViewFunction(fArg func(unsafe.Pointer, unsafe.Point
 func QMetaTypeUnregisterMutableViewFunction(from *QMetaType, to *QMetaType) {
 	rt.CheckThread("QMetaTypeUnregisterMutableViewFunction")
 	C.qute_QMetaType_unregisterMutableViewFunction(rt.UseArg(unsafe.Pointer(from), "QMetaTypeUnregisterMutableViewFunction"), rt.UseArg(unsafe.Pointer(to), "QMetaTypeUnregisterMutableViewFunction"))
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 }
 
 // QMetaTypeUnregisterMetaType wraps QMetaType::unregisterMetaType.
@@ -559,4 +609,5 @@ func QMetaTypeUnregisterMutableViewFunction(from *QMetaType, to *QMetaType) {
 func QMetaTypeUnregisterMetaType(typeArg *QMetaType) {
 	rt.CheckThread("QMetaTypeUnregisterMetaType")
 	C.qute_QMetaType_unregisterMetaType(rt.UseArg(unsafe.Pointer(typeArg), "QMetaTypeUnregisterMetaType"))
+	runtime.KeepAlive(typeArg)
 }

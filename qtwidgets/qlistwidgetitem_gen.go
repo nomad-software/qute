@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -91,6 +92,7 @@ func NewQListWidgetItem(listview QListWidgetLike) *QListWidgetItem {
 		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItem")
 	}
 	p := C.qute_QListWidgetItem_new(listviewPtr)
+	runtime.KeepAlive(listview)
 	mode := rt.NewOwned
 	if listviewPtr != nil {
 		mode = rt.NewParented
@@ -113,6 +115,7 @@ func NewQListWidgetItemWithText(text string, listview QListWidgetLike) *QListWid
 		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithText")
 	}
 	p := C.qute_QListWidgetItem_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr)
+	runtime.KeepAlive(listview)
 	mode := rt.NewOwned
 	if listviewPtr != nil {
 		mode = rt.NewParented
@@ -135,6 +138,8 @@ func NewQListWidgetItemWithIcon(icon *qtgui.QIcon, text string, listview QListWi
 		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithIcon")
 	}
 	p := C.qute_QListWidgetItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQListWidgetItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(listview)
 	mode := rt.NewOwned
 	if listviewPtr != nil {
 		mode = rt.NewParented
@@ -153,6 +158,7 @@ func NewQListWidgetItemWithIcon(icon *qtgui.QIcon, text string, listview QListWi
 func (this *QListWidgetItem) Clone() *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Clone")
 	r := C.qute_QListWidgetItem_clone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.TakeOwned), r)
 }
 
@@ -166,6 +172,7 @@ func (this *QListWidgetItem) Clone() *QListWidgetItem {
 func (this *QListWidgetItem) ListWidget() *QListWidget {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.ListWidget")
 	r := C.qute_QListWidgetItem_listWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QListWidget](rt.WrapClass(r, "QListWidget", rt.KeepOrBorrow), r)
 }
 
@@ -177,6 +184,7 @@ func (this *QListWidgetItem) ListWidget() *QListWidget {
 func (this *QListWidgetItem) SetSelected(selectArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetSelected")
 	C.qute_QListWidgetItem_setSelected(self, C.bool(selectArg))
+	runtime.KeepAlive(this)
 }
 
 // IsSelected wraps QListWidgetItem::isSelected.
@@ -187,6 +195,7 @@ func (this *QListWidgetItem) SetSelected(selectArg bool) {
 func (this *QListWidgetItem) IsSelected() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.IsSelected")
 	r := C.qute_QListWidgetItem_isSelected(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -198,6 +207,7 @@ func (this *QListWidgetItem) IsSelected() bool {
 func (this *QListWidgetItem) SetHidden(hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetHidden")
 	C.qute_QListWidgetItem_setHidden(self, C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // IsHidden wraps QListWidgetItem::isHidden.
@@ -208,6 +218,7 @@ func (this *QListWidgetItem) SetHidden(hide bool) {
 func (this *QListWidgetItem) IsHidden() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.IsHidden")
 	r := C.qute_QListWidgetItem_isHidden(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -219,6 +230,7 @@ func (this *QListWidgetItem) IsHidden() bool {
 func (this *QListWidgetItem) Flags() qtcore.ItemFlags {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Flags")
 	r := C.qute_QListWidgetItem_flags(self)
+	runtime.KeepAlive(this)
 	return qtcore.ItemFlags(r)
 }
 
@@ -230,6 +242,7 @@ func (this *QListWidgetItem) Flags() qtcore.ItemFlags {
 func (this *QListWidgetItem) SetFlags(flags qtcore.ItemFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetFlags")
 	C.qute_QListWidgetItem_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QListWidgetItem::text.
@@ -240,6 +253,7 @@ func (this *QListWidgetItem) SetFlags(flags qtcore.ItemFlags) {
 func (this *QListWidgetItem) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Text")
 	r := C.qute_QListWidgetItem_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -251,6 +265,7 @@ func (this *QListWidgetItem) Text() string {
 func (this *QListWidgetItem) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetText")
 	C.qute_QListWidgetItem_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps QListWidgetItem::icon.
@@ -263,6 +278,7 @@ func (this *QListWidgetItem) SetText(text string) {
 func (this *QListWidgetItem) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Icon")
 	r := C.qute_QListWidgetItem_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -274,6 +290,8 @@ func (this *QListWidgetItem) Icon() *qtgui.QIcon {
 func (this *QListWidgetItem) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetIcon")
 	C.qute_QListWidgetItem_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QListWidgetItem.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // StatusTip wraps QListWidgetItem::statusTip.
@@ -284,6 +302,7 @@ func (this *QListWidgetItem) SetIcon(icon *qtgui.QIcon) {
 func (this *QListWidgetItem) StatusTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.StatusTip")
 	r := C.qute_QListWidgetItem_statusTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -295,6 +314,7 @@ func (this *QListWidgetItem) StatusTip() string {
 func (this *QListWidgetItem) SetStatusTip(statusTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetStatusTip")
 	C.qute_QListWidgetItem_setStatusTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(statusTip))), C.ptrdiff_t(len(statusTip)))
+	runtime.KeepAlive(this)
 }
 
 // ToolTip wraps QListWidgetItem::toolTip.
@@ -305,6 +325,7 @@ func (this *QListWidgetItem) SetStatusTip(statusTip string) {
 func (this *QListWidgetItem) ToolTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.ToolTip")
 	r := C.qute_QListWidgetItem_toolTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -316,6 +337,7 @@ func (this *QListWidgetItem) ToolTip() string {
 func (this *QListWidgetItem) SetToolTip(toolTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetToolTip")
 	C.qute_QListWidgetItem_setToolTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(toolTip))), C.ptrdiff_t(len(toolTip)))
+	runtime.KeepAlive(this)
 }
 
 // WhatsThis wraps QListWidgetItem::whatsThis.
@@ -326,6 +348,7 @@ func (this *QListWidgetItem) SetToolTip(toolTip string) {
 func (this *QListWidgetItem) WhatsThis() string {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.WhatsThis")
 	r := C.qute_QListWidgetItem_whatsThis(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -337,6 +360,7 @@ func (this *QListWidgetItem) WhatsThis() string {
 func (this *QListWidgetItem) SetWhatsThis(whatsThis string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetWhatsThis")
 	C.qute_QListWidgetItem_setWhatsThis(self, (*C.char)(unsafe.Pointer(unsafe.StringData(whatsThis))), C.ptrdiff_t(len(whatsThis)))
+	runtime.KeepAlive(this)
 }
 
 // Font wraps QListWidgetItem::font.
@@ -349,6 +373,7 @@ func (this *QListWidgetItem) SetWhatsThis(whatsThis string) {
 func (this *QListWidgetItem) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Font")
 	r := C.qute_QListWidgetItem_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -360,6 +385,8 @@ func (this *QListWidgetItem) Font() *qtgui.QFont {
 func (this *QListWidgetItem) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetFont")
 	C.qute_QListWidgetItem_setFont(self, rt.UseArg(unsafe.Pointer(font), "QListWidgetItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // TextAlignment wraps QListWidgetItem::textAlignment.
@@ -370,6 +397,7 @@ func (this *QListWidgetItem) SetFont(font *qtgui.QFont) {
 func (this *QListWidgetItem) TextAlignment() int {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.TextAlignment")
 	r := C.qute_QListWidgetItem_textAlignment(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -381,6 +409,7 @@ func (this *QListWidgetItem) TextAlignment() int {
 func (this *QListWidgetItem) SetTextAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetTextAlignment")
 	C.qute_QListWidgetItem_setTextAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Background wraps QListWidgetItem::background.
@@ -393,6 +422,7 @@ func (this *QListWidgetItem) SetTextAlignment(alignment qtcore.Alignment) {
 func (this *QListWidgetItem) Background() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Background")
 	r := C.qute_QListWidgetItem_background(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -404,6 +434,8 @@ func (this *QListWidgetItem) Background() *qtgui.QBrush {
 func (this *QListWidgetItem) SetBackground(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetBackground")
 	C.qute_QListWidgetItem_setBackground(self, rt.UseArg(unsafe.Pointer(brush), "QListWidgetItem.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Foreground wraps QListWidgetItem::foreground.
@@ -416,6 +448,7 @@ func (this *QListWidgetItem) SetBackground(brush *qtgui.QBrush) {
 func (this *QListWidgetItem) Foreground() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Foreground")
 	r := C.qute_QListWidgetItem_foreground(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -427,6 +460,8 @@ func (this *QListWidgetItem) Foreground() *qtgui.QBrush {
 func (this *QListWidgetItem) SetForeground(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetForeground")
 	C.qute_QListWidgetItem_setForeground(self, rt.UseArg(unsafe.Pointer(brush), "QListWidgetItem.SetForeground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // CheckState wraps QListWidgetItem::checkState.
@@ -437,6 +472,7 @@ func (this *QListWidgetItem) SetForeground(brush *qtgui.QBrush) {
 func (this *QListWidgetItem) CheckState() qtcore.CheckState {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.CheckState")
 	r := C.qute_QListWidgetItem_checkState(self)
+	runtime.KeepAlive(this)
 	return qtcore.CheckState(r)
 }
 
@@ -448,6 +484,7 @@ func (this *QListWidgetItem) CheckState() qtcore.CheckState {
 func (this *QListWidgetItem) SetCheckState(state qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetCheckState")
 	C.qute_QListWidgetItem_setCheckState(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // SizeHint wraps QListWidgetItem::sizeHint.
@@ -458,6 +495,7 @@ func (this *QListWidgetItem) SetCheckState(state qtcore.CheckState) {
 func (this *QListWidgetItem) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SizeHint")
 	r := C.qute_QListWidgetItem_sizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -469,6 +507,7 @@ func (this *QListWidgetItem) SizeHint() qtcore.QSize {
 func (this *QListWidgetItem) SetSizeHint(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetSizeHint")
 	C.qute_QListWidgetItem_setSizeHint(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // Data wraps QListWidgetItem::data.
@@ -481,6 +520,7 @@ func (this *QListWidgetItem) SetSizeHint(size qtcore.QSize) {
 func (this *QListWidgetItem) Data(role int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Data")
 	r := C.qute_QListWidgetItem_data(self, C.int(role))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -492,6 +532,8 @@ func (this *QListWidgetItem) Data(role int) *qtcore.QVariant {
 func (this *QListWidgetItem) SetData(role int, value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.SetData")
 	C.qute_QListWidgetItem_setData(self, C.int(role), rt.UseArg(unsafe.Pointer(value), "QListWidgetItem.SetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Read wraps QListWidgetItem::read.
@@ -506,6 +548,8 @@ func (this *QListWidgetItem) Read(in qtcore.QDataStreamLike) {
 		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QListWidgetItem.Read")
 	}
 	C.qute_QListWidgetItem_read(self, inPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(in)
 }
 
 // Write wraps QListWidgetItem::write.
@@ -520,6 +564,8 @@ func (this *QListWidgetItem) Write(out qtcore.QDataStreamLike) {
 		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QListWidgetItem.Write")
 	}
 	C.qute_QListWidgetItem_write(self, outPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(out)
 }
 
 // Type wraps QListWidgetItem::type.
@@ -530,5 +576,6 @@ func (this *QListWidgetItem) Write(out qtcore.QDataStreamLike) {
 func (this *QListWidgetItem) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QListWidgetItem.Type")
 	r := C.qute_QListWidgetItem_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QScreenCast(o qtcore.QObjectLike) *QScreen {
 func (this *QScreen) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Name")
 	r := C.qute_QScreen_name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -66,6 +68,7 @@ func (this *QScreen) Name() string {
 func (this *QScreen) Manufacturer() string {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Manufacturer")
 	r := C.qute_QScreen_manufacturer(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -77,6 +80,7 @@ func (this *QScreen) Manufacturer() string {
 func (this *QScreen) Model() string {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Model")
 	r := C.qute_QScreen_model(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -88,6 +92,7 @@ func (this *QScreen) Model() string {
 func (this *QScreen) SerialNumber() string {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.SerialNumber")
 	r := C.qute_QScreen_serialNumber(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -99,6 +104,7 @@ func (this *QScreen) SerialNumber() string {
 func (this *QScreen) Depth() int {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Depth")
 	r := C.qute_QScreen_depth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -110,6 +116,7 @@ func (this *QScreen) Depth() int {
 func (this *QScreen) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Size")
 	r := C.qute_QScreen_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -121,6 +128,7 @@ func (this *QScreen) Size() qtcore.QSize {
 func (this *QScreen) Geometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Geometry")
 	r := C.qute_QScreen_geometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -132,6 +140,7 @@ func (this *QScreen) Geometry() qtcore.QRect {
 func (this *QScreen) PhysicalSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.PhysicalSize")
 	r := C.qute_QScreen_physicalSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -143,6 +152,7 @@ func (this *QScreen) PhysicalSize() qtcore.QSizeF {
 func (this *QScreen) PhysicalDotsPerInchX() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.PhysicalDotsPerInchX")
 	r := C.qute_QScreen_physicalDotsPerInchX(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -154,6 +164,7 @@ func (this *QScreen) PhysicalDotsPerInchX() float64 {
 func (this *QScreen) PhysicalDotsPerInchY() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.PhysicalDotsPerInchY")
 	r := C.qute_QScreen_physicalDotsPerInchY(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -165,6 +176,7 @@ func (this *QScreen) PhysicalDotsPerInchY() float64 {
 func (this *QScreen) PhysicalDotsPerInch() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.PhysicalDotsPerInch")
 	r := C.qute_QScreen_physicalDotsPerInch(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -176,6 +188,7 @@ func (this *QScreen) PhysicalDotsPerInch() float64 {
 func (this *QScreen) LogicalDotsPerInchX() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.LogicalDotsPerInchX")
 	r := C.qute_QScreen_logicalDotsPerInchX(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -187,6 +200,7 @@ func (this *QScreen) LogicalDotsPerInchX() float64 {
 func (this *QScreen) LogicalDotsPerInchY() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.LogicalDotsPerInchY")
 	r := C.qute_QScreen_logicalDotsPerInchY(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -198,6 +212,7 @@ func (this *QScreen) LogicalDotsPerInchY() float64 {
 func (this *QScreen) LogicalDotsPerInch() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.LogicalDotsPerInch")
 	r := C.qute_QScreen_logicalDotsPerInch(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -209,6 +224,7 @@ func (this *QScreen) LogicalDotsPerInch() float64 {
 func (this *QScreen) DevicePixelRatio() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.DevicePixelRatio")
 	r := C.qute_QScreen_devicePixelRatio(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -220,6 +236,7 @@ func (this *QScreen) DevicePixelRatio() float64 {
 func (this *QScreen) AvailableSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.AvailableSize")
 	r := C.qute_QScreen_availableSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -231,6 +248,7 @@ func (this *QScreen) AvailableSize() qtcore.QSize {
 func (this *QScreen) AvailableGeometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.AvailableGeometry")
 	r := C.qute_QScreen_availableGeometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -244,6 +262,7 @@ func (this *QScreen) AvailableGeometry() qtcore.QRect {
 func (this *QScreen) VirtualSiblings() []*QScreen {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.VirtualSiblings")
 	r := C.qute_QScreen_virtualSiblings(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QScreen {
 		return rt.View[QScreen](rt.WrapClass(e, "QScreen", rt.KeepOrBorrow), e)
 	})
@@ -259,6 +278,7 @@ func (this *QScreen) VirtualSiblings() []*QScreen {
 func (this *QScreen) VirtualSiblingAt(point qtcore.QPoint) *QScreen {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.VirtualSiblingAt")
 	r := C.qute_QScreen_virtualSiblingAt(self, cQPoint(point))
+	runtime.KeepAlive(this)
 	return rt.View[QScreen](rt.WrapClass(r, "QScreen", rt.KeepOrBorrow), r)
 }
 
@@ -270,6 +290,7 @@ func (this *QScreen) VirtualSiblingAt(point qtcore.QPoint) *QScreen {
 func (this *QScreen) VirtualSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.VirtualSize")
 	r := C.qute_QScreen_virtualSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -281,6 +302,7 @@ func (this *QScreen) VirtualSize() qtcore.QSize {
 func (this *QScreen) VirtualGeometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.VirtualGeometry")
 	r := C.qute_QScreen_virtualGeometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -292,6 +314,7 @@ func (this *QScreen) VirtualGeometry() qtcore.QRect {
 func (this *QScreen) AvailableVirtualSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.AvailableVirtualSize")
 	r := C.qute_QScreen_availableVirtualSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -303,6 +326,7 @@ func (this *QScreen) AvailableVirtualSize() qtcore.QSize {
 func (this *QScreen) AvailableVirtualGeometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.AvailableVirtualGeometry")
 	r := C.qute_QScreen_availableVirtualGeometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -314,6 +338,7 @@ func (this *QScreen) AvailableVirtualGeometry() qtcore.QRect {
 func (this *QScreen) PrimaryOrientation() qtcore.ScreenOrientations {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.PrimaryOrientation")
 	r := C.qute_QScreen_primaryOrientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScreenOrientations(r)
 }
 
@@ -325,6 +350,7 @@ func (this *QScreen) PrimaryOrientation() qtcore.ScreenOrientations {
 func (this *QScreen) Orientation() qtcore.ScreenOrientations {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.Orientation")
 	r := C.qute_QScreen_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScreenOrientations(r)
 }
 
@@ -336,6 +362,7 @@ func (this *QScreen) Orientation() qtcore.ScreenOrientations {
 func (this *QScreen) NativeOrientation() qtcore.ScreenOrientations {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.NativeOrientation")
 	r := C.qute_QScreen_nativeOrientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScreenOrientations(r)
 }
 
@@ -347,6 +374,7 @@ func (this *QScreen) NativeOrientation() qtcore.ScreenOrientations {
 func (this *QScreen) AngleBetween(aArg qtcore.ScreenOrientations, bArg qtcore.ScreenOrientations) int {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.AngleBetween")
 	r := C.qute_QScreen_angleBetween(self, C.int64_t(aArg), C.int64_t(bArg))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -360,6 +388,7 @@ func (this *QScreen) AngleBetween(aArg qtcore.ScreenOrientations, bArg qtcore.Sc
 func (this *QScreen) TransformBetween(aArg qtcore.ScreenOrientations, bArg qtcore.ScreenOrientations, target qtcore.QRect) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.TransformBetween")
 	r := C.qute_QScreen_transformBetween(self, C.int64_t(aArg), C.int64_t(bArg), cQRect(target))
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -371,6 +400,7 @@ func (this *QScreen) TransformBetween(aArg qtcore.ScreenOrientations, bArg qtcor
 func (this *QScreen) MapBetween(aArg qtcore.ScreenOrientations, bArg qtcore.ScreenOrientations, rect qtcore.QRect) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.MapBetween")
 	r := C.qute_QScreen_mapBetween(self, C.int64_t(aArg), C.int64_t(bArg), cQRect(rect))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -382,6 +412,7 @@ func (this *QScreen) MapBetween(aArg qtcore.ScreenOrientations, bArg qtcore.Scre
 func (this *QScreen) IsPortrait(orientation qtcore.ScreenOrientations) bool {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.IsPortrait")
 	r := C.qute_QScreen_isPortrait(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -393,6 +424,7 @@ func (this *QScreen) IsPortrait(orientation qtcore.ScreenOrientations) bool {
 func (this *QScreen) IsLandscape(orientation qtcore.ScreenOrientations) bool {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.IsLandscape")
 	r := C.qute_QScreen_isLandscape(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -406,6 +438,7 @@ func (this *QScreen) IsLandscape(orientation qtcore.ScreenOrientations) bool {
 func (this *QScreen) GrabWindow() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.GrabWindow")
 	r := C.qute_QScreen_grabWindow(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -417,6 +450,7 @@ func (this *QScreen) GrabWindow() *QPixmap {
 func (this *QScreen) RefreshRate() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.RefreshRate")
 	r := C.qute_QScreen_refreshRate(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -428,6 +462,7 @@ func (this *QScreen) RefreshRate() float64 {
 func (this *QScreen) EmitGeometryChanged(geometry qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitGeometryChanged")
 	C.qute_QScreen_geometryChanged_1(self, cQRect(geometry))
+	runtime.KeepAlive(this)
 }
 
 // EmitAvailableGeometryChanged wraps emitting the availableGeometryChanged signal.
@@ -438,6 +473,7 @@ func (this *QScreen) EmitGeometryChanged(geometry qtcore.QRect) {
 func (this *QScreen) EmitAvailableGeometryChanged(geometry qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitAvailableGeometryChanged")
 	C.qute_QScreen_availableGeometryChanged_1(self, cQRect(geometry))
+	runtime.KeepAlive(this)
 }
 
 // EmitPhysicalSizeChanged wraps emitting the physicalSizeChanged signal.
@@ -448,6 +484,7 @@ func (this *QScreen) EmitAvailableGeometryChanged(geometry qtcore.QRect) {
 func (this *QScreen) EmitPhysicalSizeChanged(size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitPhysicalSizeChanged")
 	C.qute_QScreen_physicalSizeChanged_1(self, cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // EmitPhysicalDotsPerInchChanged wraps emitting the physicalDotsPerInchChanged signal.
@@ -458,6 +495,7 @@ func (this *QScreen) EmitPhysicalSizeChanged(size qtcore.QSizeF) {
 func (this *QScreen) EmitPhysicalDotsPerInchChanged(dpi float64) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitPhysicalDotsPerInchChanged")
 	C.qute_QScreen_physicalDotsPerInchChanged_1(self, C.double(dpi))
+	runtime.KeepAlive(this)
 }
 
 // EmitLogicalDotsPerInchChanged wraps emitting the logicalDotsPerInchChanged signal.
@@ -468,6 +506,7 @@ func (this *QScreen) EmitPhysicalDotsPerInchChanged(dpi float64) {
 func (this *QScreen) EmitLogicalDotsPerInchChanged(dpi float64) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitLogicalDotsPerInchChanged")
 	C.qute_QScreen_logicalDotsPerInchChanged_1(self, C.double(dpi))
+	runtime.KeepAlive(this)
 }
 
 // EmitVirtualGeometryChanged wraps emitting the virtualGeometryChanged signal.
@@ -478,6 +517,7 @@ func (this *QScreen) EmitLogicalDotsPerInchChanged(dpi float64) {
 func (this *QScreen) EmitVirtualGeometryChanged(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitVirtualGeometryChanged")
 	C.qute_QScreen_virtualGeometryChanged_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // EmitPrimaryOrientationChanged wraps emitting the primaryOrientationChanged signal.
@@ -488,6 +528,7 @@ func (this *QScreen) EmitVirtualGeometryChanged(rect qtcore.QRect) {
 func (this *QScreen) EmitPrimaryOrientationChanged(orientation qtcore.ScreenOrientations) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitPrimaryOrientationChanged")
 	C.qute_QScreen_primaryOrientationChanged_1(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // EmitOrientationChanged wraps emitting the orientationChanged signal.
@@ -498,6 +539,7 @@ func (this *QScreen) EmitPrimaryOrientationChanged(orientation qtcore.ScreenOrie
 func (this *QScreen) EmitOrientationChanged(orientation qtcore.ScreenOrientations) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitOrientationChanged")
 	C.qute_QScreen_orientationChanged_1(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // EmitRefreshRateChanged wraps emitting the refreshRateChanged signal.
@@ -508,6 +550,7 @@ func (this *QScreen) EmitOrientationChanged(orientation qtcore.ScreenOrientation
 func (this *QScreen) EmitRefreshRateChanged(refreshRate float64) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitRefreshRateChanged")
 	C.qute_QScreen_refreshRateChanged_1(self, C.double(refreshRate))
+	runtime.KeepAlive(this)
 }
 
 // OnGeometryChanged connects f to the geometryChanged signal. The connection ends when the

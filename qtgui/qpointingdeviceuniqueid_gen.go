@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -101,6 +102,7 @@ func NewQPointingDeviceUniqueId() *QPointingDeviceUniqueId {
 func (this *QPointingDeviceUniqueId) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPointingDeviceUniqueId.IsValid")
 	r := C.qute_QPointingDeviceUniqueId_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -112,6 +114,7 @@ func (this *QPointingDeviceUniqueId) IsValid() bool {
 func (this *QPointingDeviceUniqueId) NumericId() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QPointingDeviceUniqueId.NumericId")
 	r := C.qute_QPointingDeviceUniqueId_numericId(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQCalendarYearMonthDayWithY(y int) *QCalendarYearMonthDay {
 func (this *QCalendarYearMonthDay) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.IsValid")
 	r := C.qute_QCalendarYearMonthDay_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -119,6 +121,7 @@ func (this *QCalendarYearMonthDay) IsValid() bool {
 func (this *QCalendarYearMonthDay) Year() int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.Year")
 	r := C.qute_QCalendarYearMonthDay_get_year(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -132,6 +135,7 @@ func (this *QCalendarYearMonthDay) Year() int {
 func (this *QCalendarYearMonthDay) SetYear(year int) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.SetYear")
 	C.qute_QCalendarYearMonthDay_set_year(self, C.int(year))
+	runtime.KeepAlive(this)
 }
 
 // Month wraps the public field QCalendar::YearMonthDay::month.
@@ -142,6 +146,7 @@ func (this *QCalendarYearMonthDay) SetYear(year int) {
 func (this *QCalendarYearMonthDay) Month() int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.Month")
 	r := C.qute_QCalendarYearMonthDay_get_month(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -155,6 +160,7 @@ func (this *QCalendarYearMonthDay) Month() int {
 func (this *QCalendarYearMonthDay) SetMonth(month int) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.SetMonth")
 	C.qute_QCalendarYearMonthDay_set_month(self, C.int(month))
+	runtime.KeepAlive(this)
 }
 
 // Day wraps the public field QCalendar::YearMonthDay::day.
@@ -165,6 +171,7 @@ func (this *QCalendarYearMonthDay) SetMonth(month int) {
 func (this *QCalendarYearMonthDay) Day() int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.Day")
 	r := C.qute_QCalendarYearMonthDay_get_day(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -178,4 +185,5 @@ func (this *QCalendarYearMonthDay) Day() int {
 func (this *QCalendarYearMonthDay) SetDay(day int) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarYearMonthDay.SetDay")
 	C.qute_QCalendarYearMonthDay_set_day(self, C.int(day))
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -66,6 +67,7 @@ func NewQMimeData() *QMimeData {
 func (this *QMimeData) Urls() []*QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.Urls")
 	r := C.qute_QMimeData_urls(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QUrl { return rt.View[QUrl](rt.WrapClass(e, "QUrl", rt.TakeOwned), e) })
 }
 
@@ -81,6 +83,8 @@ func (this *QMimeData) SetUrls(urls []*QUrl) {
 		urlsC[i] = rt.UseArg(unsafe.Pointer(urls[i]), "QMimeData.SetUrls")
 	}
 	C.qute_QMimeData_setUrls(self, unsafe.Pointer(unsafe.SliceData(urlsC)), C.ptrdiff_t(len(urls)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(urls)
 }
 
 // HasUrls wraps QMimeData::hasUrls.
@@ -91,6 +95,7 @@ func (this *QMimeData) SetUrls(urls []*QUrl) {
 func (this *QMimeData) HasUrls() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.HasUrls")
 	r := C.qute_QMimeData_hasUrls(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -102,6 +107,7 @@ func (this *QMimeData) HasUrls() bool {
 func (this *QMimeData) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.Text")
 	r := C.qute_QMimeData_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -113,6 +119,7 @@ func (this *QMimeData) Text() string {
 func (this *QMimeData) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.SetText")
 	C.qute_QMimeData_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // HasText wraps QMimeData::hasText.
@@ -123,6 +130,7 @@ func (this *QMimeData) SetText(text string) {
 func (this *QMimeData) HasText() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.HasText")
 	r := C.qute_QMimeData_hasText(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -134,6 +142,7 @@ func (this *QMimeData) HasText() bool {
 func (this *QMimeData) Html() string {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.Html")
 	r := C.qute_QMimeData_html(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -145,6 +154,7 @@ func (this *QMimeData) Html() string {
 func (this *QMimeData) SetHtml(html string) {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.SetHtml")
 	C.qute_QMimeData_setHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(html))), C.ptrdiff_t(len(html)))
+	runtime.KeepAlive(this)
 }
 
 // HasHtml wraps QMimeData::hasHtml.
@@ -155,6 +165,7 @@ func (this *QMimeData) SetHtml(html string) {
 func (this *QMimeData) HasHtml() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.HasHtml")
 	r := C.qute_QMimeData_hasHtml(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -168,6 +179,7 @@ func (this *QMimeData) HasHtml() bool {
 func (this *QMimeData) ImageData() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.ImageData")
 	r := C.qute_QMimeData_imageData(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -179,6 +191,8 @@ func (this *QMimeData) ImageData() *QVariant {
 func (this *QMimeData) SetImageData(image *QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.SetImageData")
 	C.qute_QMimeData_setImageData(self, rt.UseArg(unsafe.Pointer(image), "QMimeData.SetImageData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // HasImage wraps QMimeData::hasImage.
@@ -189,6 +203,7 @@ func (this *QMimeData) SetImageData(image *QVariant) {
 func (this *QMimeData) HasImage() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.HasImage")
 	r := C.qute_QMimeData_hasImage(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -202,6 +217,7 @@ func (this *QMimeData) HasImage() bool {
 func (this *QMimeData) ColorData() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.ColorData")
 	r := C.qute_QMimeData_colorData(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -213,6 +229,8 @@ func (this *QMimeData) ColorData() *QVariant {
 func (this *QMimeData) SetColorData(color *QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.SetColorData")
 	C.qute_QMimeData_setColorData(self, rt.UseArg(unsafe.Pointer(color), "QMimeData.SetColorData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(color)
 }
 
 // HasColor wraps QMimeData::hasColor.
@@ -223,6 +241,7 @@ func (this *QMimeData) SetColorData(color *QVariant) {
 func (this *QMimeData) HasColor() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.HasColor")
 	r := C.qute_QMimeData_hasColor(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -234,6 +253,7 @@ func (this *QMimeData) HasColor() bool {
 func (this *QMimeData) Data(mimetype string) []byte {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.Data")
 	r := C.qute_QMimeData_data(self, (*C.char)(unsafe.Pointer(unsafe.StringData(mimetype))), C.ptrdiff_t(len(mimetype)))
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -245,6 +265,7 @@ func (this *QMimeData) Data(mimetype string) []byte {
 func (this *QMimeData) SetData(mimetype string, data []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.SetData")
 	C.qute_QMimeData_setData(self, (*C.char)(unsafe.Pointer(unsafe.StringData(mimetype))), C.ptrdiff_t(len(mimetype)), (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 }
 
 // RemoveFormat wraps QMimeData::removeFormat.
@@ -255,6 +276,7 @@ func (this *QMimeData) SetData(mimetype string, data []byte) {
 func (this *QMimeData) RemoveFormat(mimetype string) {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.RemoveFormat")
 	C.qute_QMimeData_removeFormat(self, (*C.char)(unsafe.Pointer(unsafe.StringData(mimetype))), C.ptrdiff_t(len(mimetype)))
+	runtime.KeepAlive(this)
 }
 
 // HasFormat wraps QMimeData::hasFormat.
@@ -265,6 +287,7 @@ func (this *QMimeData) RemoveFormat(mimetype string) {
 func (this *QMimeData) HasFormat(mimetype string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.HasFormat")
 	r := C.qute_QMimeData_hasFormat(self, (*C.char)(unsafe.Pointer(unsafe.StringData(mimetype))), C.ptrdiff_t(len(mimetype)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -276,6 +299,7 @@ func (this *QMimeData) HasFormat(mimetype string) bool {
 func (this *QMimeData) Formats() []string {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.Formats")
 	r := C.qute_QMimeData_formats(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -287,4 +311,5 @@ func (this *QMimeData) Formats() []string {
 func (this *QMimeData) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QMimeData.Clear")
 	C.qute_QMimeData_clear(self)
+	runtime.KeepAlive(this)
 }

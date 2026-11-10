@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -113,6 +114,7 @@ func NewQTableWidgetSelectionRangeWithTop(top int, left int, bottom int, right i
 func (this *QTableWidgetSelectionRange) TopRow() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetSelectionRange.TopRow")
 	r := C.qute_QTableWidgetSelectionRange_topRow(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -124,6 +126,7 @@ func (this *QTableWidgetSelectionRange) TopRow() int {
 func (this *QTableWidgetSelectionRange) BottomRow() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetSelectionRange.BottomRow")
 	r := C.qute_QTableWidgetSelectionRange_bottomRow(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -135,6 +138,7 @@ func (this *QTableWidgetSelectionRange) BottomRow() int {
 func (this *QTableWidgetSelectionRange) LeftColumn() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetSelectionRange.LeftColumn")
 	r := C.qute_QTableWidgetSelectionRange_leftColumn(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -146,6 +150,7 @@ func (this *QTableWidgetSelectionRange) LeftColumn() int {
 func (this *QTableWidgetSelectionRange) RightColumn() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetSelectionRange.RightColumn")
 	r := C.qute_QTableWidgetSelectionRange_rightColumn(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -157,6 +162,7 @@ func (this *QTableWidgetSelectionRange) RightColumn() int {
 func (this *QTableWidgetSelectionRange) RowCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetSelectionRange.RowCount")
 	r := C.qute_QTableWidgetSelectionRange_rowCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -168,5 +174,6 @@ func (this *QTableWidgetSelectionRange) RowCount() int {
 func (this *QTableWidgetSelectionRange) ColumnCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetSelectionRange.ColumnCount")
 	r := C.qute_QTableWidgetSelectionRange_columnCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

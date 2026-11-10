@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -101,6 +102,7 @@ func NewQColorSpacePrimaryPoints() *QColorSpacePrimaryPoints {
 func (this *QColorSpacePrimaryPoints) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.IsValid")
 	r := C.qute_QColorSpacePrimaryPoints_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -112,6 +114,7 @@ func (this *QColorSpacePrimaryPoints) IsValid() bool {
 func (this *QColorSpacePrimaryPoints) WhitePoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.WhitePoint")
 	r := C.qute_QColorSpacePrimaryPoints_get_whitePoint(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -125,6 +128,7 @@ func (this *QColorSpacePrimaryPoints) WhitePoint() qtcore.QPointF {
 func (this *QColorSpacePrimaryPoints) SetWhitePoint(whitePoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.SetWhitePoint")
 	C.qute_QColorSpacePrimaryPoints_set_whitePoint(self, cQPointF(whitePoint))
+	runtime.KeepAlive(this)
 }
 
 // RedPoint wraps the public field QColorSpace::PrimaryPoints::redPoint.
@@ -135,6 +139,7 @@ func (this *QColorSpacePrimaryPoints) SetWhitePoint(whitePoint qtcore.QPointF) {
 func (this *QColorSpacePrimaryPoints) RedPoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.RedPoint")
 	r := C.qute_QColorSpacePrimaryPoints_get_redPoint(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -148,6 +153,7 @@ func (this *QColorSpacePrimaryPoints) RedPoint() qtcore.QPointF {
 func (this *QColorSpacePrimaryPoints) SetRedPoint(redPoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.SetRedPoint")
 	C.qute_QColorSpacePrimaryPoints_set_redPoint(self, cQPointF(redPoint))
+	runtime.KeepAlive(this)
 }
 
 // GreenPoint wraps the public field QColorSpace::PrimaryPoints::greenPoint.
@@ -158,6 +164,7 @@ func (this *QColorSpacePrimaryPoints) SetRedPoint(redPoint qtcore.QPointF) {
 func (this *QColorSpacePrimaryPoints) GreenPoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.GreenPoint")
 	r := C.qute_QColorSpacePrimaryPoints_get_greenPoint(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -171,6 +178,7 @@ func (this *QColorSpacePrimaryPoints) GreenPoint() qtcore.QPointF {
 func (this *QColorSpacePrimaryPoints) SetGreenPoint(greenPoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.SetGreenPoint")
 	C.qute_QColorSpacePrimaryPoints_set_greenPoint(self, cQPointF(greenPoint))
+	runtime.KeepAlive(this)
 }
 
 // BluePoint wraps the public field QColorSpace::PrimaryPoints::bluePoint.
@@ -181,6 +189,7 @@ func (this *QColorSpacePrimaryPoints) SetGreenPoint(greenPoint qtcore.QPointF) {
 func (this *QColorSpacePrimaryPoints) BluePoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.BluePoint")
 	r := C.qute_QColorSpacePrimaryPoints_get_bluePoint(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -194,6 +203,7 @@ func (this *QColorSpacePrimaryPoints) BluePoint() qtcore.QPointF {
 func (this *QColorSpacePrimaryPoints) SetBluePoint(bluePoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpacePrimaryPoints.SetBluePoint")
 	C.qute_QColorSpacePrimaryPoints_set_bluePoint(self, cQPointF(bluePoint))
+	runtime.KeepAlive(this)
 }
 
 // QColorSpacePrimaryPointsFromPrimaries wraps QColorSpacePrimaryPoints::fromPrimaries.

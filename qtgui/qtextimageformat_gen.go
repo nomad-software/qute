@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQTextImageFormat() *QTextImageFormat {
 func (this *QTextImageFormat) SetName(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.SetName")
 	C.qute_QTextImageFormat_setName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // Name wraps QTextImageFormat::name.
@@ -63,6 +65,7 @@ func (this *QTextImageFormat) SetName(name string) {
 func (this *QTextImageFormat) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.Name")
 	r := C.qute_QTextImageFormat_name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -74,6 +77,7 @@ func (this *QTextImageFormat) Name() string {
 func (this *QTextImageFormat) SetWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.SetWidth")
 	C.qute_QTextImageFormat_setWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // Width wraps QTextImageFormat::width.
@@ -84,6 +88,7 @@ func (this *QTextImageFormat) SetWidth(width float64) {
 func (this *QTextImageFormat) Width() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.Width")
 	r := C.qute_QTextImageFormat_width(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -95,6 +100,8 @@ func (this *QTextImageFormat) Width() float64 {
 func (this *QTextImageFormat) SetMaximumWidth(maxWidth *QTextLength) {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.SetMaximumWidth")
 	C.qute_QTextImageFormat_setMaximumWidth(self, rt.UseArg(unsafe.Pointer(maxWidth), "QTextImageFormat.SetMaximumWidth"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(maxWidth)
 }
 
 // MaximumWidth wraps QTextImageFormat::maximumWidth.
@@ -107,6 +114,7 @@ func (this *QTextImageFormat) SetMaximumWidth(maxWidth *QTextLength) {
 func (this *QTextImageFormat) MaximumWidth() *QTextLength {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.MaximumWidth")
 	r := C.qute_QTextImageFormat_maximumWidth(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
 }
 
@@ -118,6 +126,7 @@ func (this *QTextImageFormat) MaximumWidth() *QTextLength {
 func (this *QTextImageFormat) SetHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.SetHeight")
 	C.qute_QTextImageFormat_setHeight(self, C.double(height))
+	runtime.KeepAlive(this)
 }
 
 // Height wraps QTextImageFormat::height.
@@ -128,6 +137,7 @@ func (this *QTextImageFormat) SetHeight(height float64) {
 func (this *QTextImageFormat) Height() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.Height")
 	r := C.qute_QTextImageFormat_height(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -139,6 +149,7 @@ func (this *QTextImageFormat) Height() float64 {
 func (this *QTextImageFormat) SetQuality(quality int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.SetQuality")
 	C.qute_QTextImageFormat_setQuality(self, C.int(quality))
+	runtime.KeepAlive(this)
 }
 
 // Quality wraps QTextImageFormat::quality.
@@ -149,5 +160,6 @@ func (this *QTextImageFormat) SetQuality(quality int) {
 func (this *QTextImageFormat) Quality() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextImageFormat.Quality")
 	r := C.qute_QTextImageFormat_quality(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

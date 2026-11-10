@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QContextMenuEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QContextM
 func (this *QContextMenuEvent) X() int {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.X")
 	r := C.qute_QContextMenuEvent_x(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QContextMenuEvent) X() int {
 func (this *QContextMenuEvent) Y() int {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.Y")
 	r := C.qute_QContextMenuEvent_y(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -63,6 +66,7 @@ func (this *QContextMenuEvent) Y() int {
 func (this *QContextMenuEvent) GlobalX() int {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.GlobalX")
 	r := C.qute_QContextMenuEvent_globalX(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -74,6 +78,7 @@ func (this *QContextMenuEvent) GlobalX() int {
 func (this *QContextMenuEvent) GlobalY() int {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.GlobalY")
 	r := C.qute_QContextMenuEvent_globalY(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -85,6 +90,7 @@ func (this *QContextMenuEvent) GlobalY() int {
 func (this *QContextMenuEvent) Pos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.Pos")
 	r := C.qute_QContextMenuEvent_pos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -96,6 +102,7 @@ func (this *QContextMenuEvent) Pos() qtcore.QPoint {
 func (this *QContextMenuEvent) GlobalPos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.GlobalPos")
 	r := C.qute_QContextMenuEvent_globalPos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -107,5 +114,6 @@ func (this *QContextMenuEvent) GlobalPos() qtcore.QPoint {
 func (this *QContextMenuEvent) Reason() QContextMenuEventReason {
 	self := rt.Use(unsafe.Pointer(this), "QContextMenuEvent.Reason")
 	r := C.qute_QContextMenuEvent_reason(self)
+	runtime.KeepAlive(this)
 	return QContextMenuEventReason(r)
 }

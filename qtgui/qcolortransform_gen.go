@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQColorTransform() *QColorTransform {
 func (this *QColorTransform) IsIdentity() bool {
 	self := rt.Use(unsafe.Pointer(this), "QColorTransform.IsIdentity")
 	r := C.qute_QColorTransform_isIdentity(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QColorTransform) IsIdentity() bool {
 func (this *QColorTransform) Map(argb uint) uint {
 	self := rt.Use(unsafe.Pointer(this), "QColorTransform.Map")
 	r := C.qute_QColorTransform_map(self, C.uint(argb))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -121,6 +124,8 @@ func (this *QColorTransform) Map(argb uint) uint {
 func (this *QColorTransform) MapRgba64(rgba64 *QRgba64) *QRgba64 {
 	self := rt.Use(unsafe.Pointer(this), "QColorTransform.MapRgba64")
 	r := C.qute_QColorTransform_map_1(self, rt.UseArg(unsafe.Pointer(rgba64), "QColorTransform.MapRgba64"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rgba64)
 	return rt.View[QRgba64](rt.WrapClass(r, "QRgba64", rt.TakeOwned), r)
 }
 
@@ -132,5 +137,6 @@ func (this *QColorTransform) MapRgba64(rgba64 *QRgba64) *QRgba64 {
 func (this *QColorTransform) MapColor(color QColor) QColor {
 	self := rt.Use(unsafe.Pointer(this), "QColorTransform.MapColor")
 	r := C.qute_QColorTransform_map_2(self, cQColor(color))
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }

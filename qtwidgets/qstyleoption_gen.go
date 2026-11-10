@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -102,6 +103,8 @@ func (this *QStyleOption) InitFrom(w QWidgetLike) {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStyleOption.InitFrom")
 	}
 	C.qute_QStyleOption_initFrom(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 }
 
 // Version wraps the public field QStyleOption::version.
@@ -112,6 +115,7 @@ func (this *QStyleOption) InitFrom(w QWidgetLike) {
 func (this *QStyleOption) Version() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.Version")
 	r := C.qute_QStyleOption_get_version(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -125,6 +129,7 @@ func (this *QStyleOption) Version() int {
 func (this *QStyleOption) SetVersion(version int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetVersion")
 	C.qute_QStyleOption_set_version(self, C.int(version))
+	runtime.KeepAlive(this)
 }
 
 // Type wraps the public field QStyleOption::type.
@@ -135,6 +140,7 @@ func (this *QStyleOption) SetVersion(version int) {
 func (this *QStyleOption) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.Type")
 	r := C.qute_QStyleOption_get_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -148,6 +154,7 @@ func (this *QStyleOption) Type() int {
 func (this *QStyleOption) SetType(typeArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetType")
 	C.qute_QStyleOption_set_type(self, C.int(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // State wraps the public field QStyleOption::state.
@@ -158,6 +165,7 @@ func (this *QStyleOption) SetType(typeArg int) {
 func (this *QStyleOption) State() QStyleState {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.State")
 	r := C.qute_QStyleOption_get_state(self)
+	runtime.KeepAlive(this)
 	return QStyleState(r)
 }
 
@@ -171,6 +179,7 @@ func (this *QStyleOption) State() QStyleState {
 func (this *QStyleOption) SetState(state QStyleState) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetState")
 	C.qute_QStyleOption_set_state(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // Direction wraps the public field QStyleOption::direction.
@@ -181,6 +190,7 @@ func (this *QStyleOption) SetState(state QStyleState) {
 func (this *QStyleOption) Direction() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.Direction")
 	r := C.qute_QStyleOption_get_direction(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -194,6 +204,7 @@ func (this *QStyleOption) Direction() qtcore.LayoutDirection {
 func (this *QStyleOption) SetDirection(direction qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetDirection")
 	C.qute_QStyleOption_set_direction(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 }
 
 // Rect wraps the public field QStyleOption::rect.
@@ -204,6 +215,7 @@ func (this *QStyleOption) SetDirection(direction qtcore.LayoutDirection) {
 func (this *QStyleOption) Rect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.Rect")
 	r := C.qute_QStyleOption_get_rect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -217,6 +229,7 @@ func (this *QStyleOption) Rect() qtcore.QRect {
 func (this *QStyleOption) SetRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetRect")
 	C.qute_QStyleOption_set_rect(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // FontMetrics wraps the public field QStyleOption::fontMetrics.
@@ -229,6 +242,7 @@ func (this *QStyleOption) SetRect(rect qtcore.QRect) {
 func (this *QStyleOption) FontMetrics() *qtgui.QFontMetrics {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.FontMetrics")
 	r := C.qute_QStyleOption_get_fontMetrics(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFontMetrics](rt.WrapClass(r, "QFontMetrics", rt.TakeOwned), r)
 }
 
@@ -242,6 +256,8 @@ func (this *QStyleOption) FontMetrics() *qtgui.QFontMetrics {
 func (this *QStyleOption) SetFontMetrics(fontMetrics *qtgui.QFontMetrics) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetFontMetrics")
 	C.qute_QStyleOption_set_fontMetrics(self, rt.Use(unsafe.Pointer(fontMetrics), "QStyleOption.SetFontMetrics"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fontMetrics)
 }
 
 // Palette wraps the public field QStyleOption::palette.
@@ -254,6 +270,7 @@ func (this *QStyleOption) SetFontMetrics(fontMetrics *qtgui.QFontMetrics) {
 func (this *QStyleOption) Palette() *qtgui.QPalette {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.Palette")
 	r := C.qute_QStyleOption_get_palette(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
@@ -267,6 +284,8 @@ func (this *QStyleOption) Palette() *qtgui.QPalette {
 func (this *QStyleOption) SetPalette(palette *qtgui.QPalette) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.SetPalette")
 	C.qute_QStyleOption_set_palette(self, rt.UseArg(unsafe.Pointer(palette), "QStyleOption.SetPalette"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(palette)
 }
 
 // StyleObject wraps the public field QStyleOption::styleObject.
@@ -279,6 +298,7 @@ func (this *QStyleOption) SetPalette(palette *qtgui.QPalette) {
 func (this *QStyleOption) StyleObject() *qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOption.StyleObject")
 	r := C.qute_QStyleOption_get_styleObject(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -296,4 +316,6 @@ func (this *QStyleOption) SetStyleObject(styleObject qtcore.QObjectLike) {
 		styleObjectPtr = rt.UseArg(unsafe.Pointer(styleObject.AsQObject()), "QStyleOption.SetStyleObject")
 	}
 	C.qute_QStyleOption_set_styleObject(self, styleObjectPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(styleObject)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQSystemTrayIcon(parent qtcore.QObjectLike) *QSystemTrayIcon {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSystemTrayIcon")
 	}
 	p := C.qute_QSystemTrayIcon_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func NewQSystemTrayIconWithIcon(icon *qtgui.QIcon, parent qtcore.QObjectLike) *Q
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSystemTrayIconWithIcon")
 	}
 	p := C.qute_QSystemTrayIcon_new_1(rt.UseArg(unsafe.Pointer(icon), "NewQSystemTrayIconWithIcon"), parentPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -106,6 +110,8 @@ func (this *QSystemTrayIcon) SetContextMenu(menu QMenuLike) {
 		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QSystemTrayIcon.SetContextMenu")
 	}
 	C.qute_QSystemTrayIcon_setContextMenu(self, menuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(menu)
 }
 
 // ContextMenu wraps QSystemTrayIcon::contextMenu.
@@ -118,6 +124,7 @@ func (this *QSystemTrayIcon) SetContextMenu(menu QMenuLike) {
 func (this *QSystemTrayIcon) ContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ContextMenu")
 	r := C.qute_QSystemTrayIcon_contextMenu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
 }
 
@@ -131,6 +138,7 @@ func (this *QSystemTrayIcon) ContextMenu() *QMenu {
 func (this *QSystemTrayIcon) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.Icon")
 	r := C.qute_QSystemTrayIcon_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -142,6 +150,8 @@ func (this *QSystemTrayIcon) Icon() *qtgui.QIcon {
 func (this *QSystemTrayIcon) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.SetIcon")
 	C.qute_QSystemTrayIcon_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QSystemTrayIcon.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // ToolTip wraps QSystemTrayIcon::toolTip.
@@ -152,6 +162,7 @@ func (this *QSystemTrayIcon) SetIcon(icon *qtgui.QIcon) {
 func (this *QSystemTrayIcon) ToolTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ToolTip")
 	r := C.qute_QSystemTrayIcon_toolTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -163,6 +174,7 @@ func (this *QSystemTrayIcon) ToolTip() string {
 func (this *QSystemTrayIcon) SetToolTip(tip string) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.SetToolTip")
 	C.qute_QSystemTrayIcon_setToolTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(tip))), C.ptrdiff_t(len(tip)))
+	runtime.KeepAlive(this)
 }
 
 // Geometry wraps QSystemTrayIcon::geometry.
@@ -173,6 +185,7 @@ func (this *QSystemTrayIcon) SetToolTip(tip string) {
 func (this *QSystemTrayIcon) Geometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.Geometry")
 	r := C.qute_QSystemTrayIcon_geometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -184,6 +197,7 @@ func (this *QSystemTrayIcon) Geometry() qtcore.QRect {
 func (this *QSystemTrayIcon) IsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.IsVisible")
 	r := C.qute_QSystemTrayIcon_isVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -195,6 +209,7 @@ func (this *QSystemTrayIcon) IsVisible() bool {
 func (this *QSystemTrayIcon) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.SetVisible")
 	C.qute_QSystemTrayIcon_setVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // Show wraps QSystemTrayIcon::show.
@@ -205,6 +220,7 @@ func (this *QSystemTrayIcon) SetVisible(visible bool) {
 func (this *QSystemTrayIcon) Show() {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.Show")
 	C.qute_QSystemTrayIcon_show(self)
+	runtime.KeepAlive(this)
 }
 
 // Hide wraps QSystemTrayIcon::hide.
@@ -215,6 +231,7 @@ func (this *QSystemTrayIcon) Show() {
 func (this *QSystemTrayIcon) Hide() {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.Hide")
 	C.qute_QSystemTrayIcon_hide(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowMessageIcon wraps QSystemTrayIcon::showMessage.
@@ -225,6 +242,8 @@ func (this *QSystemTrayIcon) Hide() {
 func (this *QSystemTrayIcon) ShowMessageIcon(title string, msg string, icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessageIcon")
 	C.qute_QSystemTrayIcon_showMessage(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)), rt.UseArg(unsafe.Pointer(icon), "QSystemTrayIcon.ShowMessageIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // ShowMessage wraps QSystemTrayIcon::showMessage.
@@ -235,6 +254,7 @@ func (this *QSystemTrayIcon) ShowMessageIcon(title string, msg string, icon *qtg
 func (this *QSystemTrayIcon) ShowMessage(title string, msg string) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessage")
 	C.qute_QSystemTrayIcon_showMessage_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitActivated wraps emitting the activated signal.
@@ -245,6 +265,7 @@ func (this *QSystemTrayIcon) ShowMessage(title string, msg string) {
 func (this *QSystemTrayIcon) EmitActivated(reason QSystemTrayIconActivationReason) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.EmitActivated")
 	C.qute_QSystemTrayIcon_activated_1(self, C.int64_t(reason))
+	runtime.KeepAlive(this)
 }
 
 // EmitMessageClicked wraps emitting the messageClicked signal.
@@ -255,6 +276,7 @@ func (this *QSystemTrayIcon) EmitActivated(reason QSystemTrayIconActivationReaso
 func (this *QSystemTrayIcon) EmitMessageClicked() {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.EmitMessageClicked")
 	C.qute_QSystemTrayIcon_messageClicked_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QSystemTrayIconIsSystemTrayAvailable wraps QSystemTrayIcon::isSystemTrayAvailable.

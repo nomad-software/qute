@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QMoveEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QMoveEvent {
 func (this *QMoveEvent) Pos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QMoveEvent.Pos")
 	r := C.qute_QMoveEvent_pos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -52,5 +54,6 @@ func (this *QMoveEvent) Pos() qtcore.QPoint {
 func (this *QMoveEvent) OldPos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QMoveEvent.OldPos")
 	r := C.qute_QMoveEvent_oldPos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -189,6 +190,7 @@ func NewQColorSpaceWithPointFPointF(whitePoint qtcore.QPointF, redPoint qtcore.Q
 func NewQColorSpaceWithColorSpacePrimaryPoints(primaryPoints *QColorSpacePrimaryPoints, transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithColorSpacePrimaryPoints")
 	p := C.qute_QColorSpace_new_8(rt.UseArg(unsafe.Pointer(primaryPoints), "NewQColorSpaceWithColorSpacePrimaryPoints"), C.int64_t(transferFunction))
+	runtime.KeepAlive(primaryPoints)
 	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
@@ -241,6 +243,7 @@ func NewQColorSpaceWithPointFPointFPointFPointF(whitePoint qtcore.QPointF, redPo
 func (this *QColorSpace) Primaries() QColorSpacePrimaries {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.Primaries")
 	r := C.qute_QColorSpace_primaries(self)
+	runtime.KeepAlive(this)
 	return QColorSpacePrimaries(r)
 }
 
@@ -252,6 +255,7 @@ func (this *QColorSpace) Primaries() QColorSpacePrimaries {
 func (this *QColorSpace) TransferFunction() QColorSpaceTransferFunction {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.TransferFunction")
 	r := C.qute_QColorSpace_transferFunction(self)
+	runtime.KeepAlive(this)
 	return QColorSpaceTransferFunction(r)
 }
 
@@ -263,6 +267,7 @@ func (this *QColorSpace) TransferFunction() QColorSpaceTransferFunction {
 func (this *QColorSpace) Gamma() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.Gamma")
 	r := C.qute_QColorSpace_gamma(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -274,6 +279,7 @@ func (this *QColorSpace) Gamma() float32 {
 func (this *QColorSpace) Description() string {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.Description")
 	r := C.qute_QColorSpace_description(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -285,6 +291,7 @@ func (this *QColorSpace) Description() string {
 func (this *QColorSpace) SetDescription(description string) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetDescription")
 	C.qute_QColorSpace_setDescription(self, (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)))
+	runtime.KeepAlive(this)
 }
 
 // SetTransferFunction wraps QColorSpace::setTransferFunction.
@@ -295,6 +302,7 @@ func (this *QColorSpace) SetDescription(description string) {
 func (this *QColorSpace) SetTransferFunction(transferFunction QColorSpaceTransferFunction) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetTransferFunction")
 	C.qute_QColorSpace_setTransferFunction(self, C.int64_t(transferFunction))
+	runtime.KeepAlive(this)
 }
 
 // SetTransferFunctionTransferFunctionTables wraps QColorSpace::setTransferFunction.
@@ -309,6 +317,7 @@ func (this *QColorSpace) SetTransferFunctionTransferFunctionTables(transferFunct
 		transferFunctionTableC[i] = C.ushort(transferFunctionTable[i])
 	}
 	C.qute_QColorSpace_setTransferFunction_1(self, unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
+	runtime.KeepAlive(this)
 }
 
 // SetTransferFunctions wraps QColorSpace::setTransferFunctions.
@@ -331,6 +340,7 @@ func (this *QColorSpace) SetTransferFunctions(redTransferFunctionTable []uint16,
 		blueTransferFunctionTableC[i] = C.ushort(blueTransferFunctionTable[i])
 	}
 	C.qute_QColorSpace_setTransferFunctions(self, unsafe.Pointer(unsafe.SliceData(redTransferFunctionTableC)), C.ptrdiff_t(len(redTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(greenTransferFunctionTableC)), C.ptrdiff_t(len(greenTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(blueTransferFunctionTableC)), C.ptrdiff_t(len(blueTransferFunctionTable)))
+	runtime.KeepAlive(this)
 }
 
 // WithTransferFunction wraps QColorSpace::withTransferFunction.
@@ -343,6 +353,7 @@ func (this *QColorSpace) SetTransferFunctions(redTransferFunctionTable []uint16,
 func (this *QColorSpace) WithTransferFunction(transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.WithTransferFunction")
 	r := C.qute_QColorSpace_withTransferFunction(self, C.int64_t(transferFunction))
+	runtime.KeepAlive(this)
 	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
@@ -360,6 +371,7 @@ func (this *QColorSpace) WithTransferFunctionTransferFunctionTables(transferFunc
 		transferFunctionTableC[i] = C.ushort(transferFunctionTable[i])
 	}
 	r := C.qute_QColorSpace_withTransferFunction_1(self, unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
+	runtime.KeepAlive(this)
 	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
@@ -385,6 +397,7 @@ func (this *QColorSpace) WithTransferFunctions(redTransferFunctionTable []uint16
 		blueTransferFunctionTableC[i] = C.ushort(blueTransferFunctionTable[i])
 	}
 	r := C.qute_QColorSpace_withTransferFunctions(self, unsafe.Pointer(unsafe.SliceData(redTransferFunctionTableC)), C.ptrdiff_t(len(redTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(greenTransferFunctionTableC)), C.ptrdiff_t(len(greenTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(blueTransferFunctionTableC)), C.ptrdiff_t(len(blueTransferFunctionTable)))
+	runtime.KeepAlive(this)
 	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
@@ -396,6 +409,7 @@ func (this *QColorSpace) WithTransferFunctions(redTransferFunctionTable []uint16
 func (this *QColorSpace) SetPrimaries(primariesId QColorSpacePrimaries) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetPrimaries")
 	C.qute_QColorSpace_setPrimaries(self, C.int64_t(primariesId))
+	runtime.KeepAlive(this)
 }
 
 // SetPrimariesPointF wraps QColorSpace::setPrimaries.
@@ -406,6 +420,7 @@ func (this *QColorSpace) SetPrimaries(primariesId QColorSpacePrimaries) {
 func (this *QColorSpace) SetPrimariesPointF(whitePoint qtcore.QPointF, redPoint qtcore.QPointF, greenPoint qtcore.QPointF, bluePoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetPrimariesPointF")
 	C.qute_QColorSpace_setPrimaries_1(self, cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint))
+	runtime.KeepAlive(this)
 }
 
 // SetWhitePoint wraps QColorSpace::setWhitePoint.
@@ -416,6 +431,7 @@ func (this *QColorSpace) SetPrimariesPointF(whitePoint qtcore.QPointF, redPoint 
 func (this *QColorSpace) SetWhitePoint(whitePoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetWhitePoint")
 	C.qute_QColorSpace_setWhitePoint(self, cQPointF(whitePoint))
+	runtime.KeepAlive(this)
 }
 
 // WhitePoint wraps QColorSpace::whitePoint.
@@ -426,6 +442,7 @@ func (this *QColorSpace) SetWhitePoint(whitePoint qtcore.QPointF) {
 func (this *QColorSpace) WhitePoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.WhitePoint")
 	r := C.qute_QColorSpace_whitePoint(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -437,6 +454,8 @@ func (this *QColorSpace) WhitePoint() qtcore.QPointF {
 func (this *QColorSpace) SetPrimaryPoints(primaryPoints *QColorSpacePrimaryPoints) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetPrimaryPoints")
 	C.qute_QColorSpace_setPrimaryPoints(self, rt.UseArg(unsafe.Pointer(primaryPoints), "QColorSpace.SetPrimaryPoints"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(primaryPoints)
 }
 
 // PrimaryPoints wraps QColorSpace::primaryPoints.
@@ -449,6 +468,7 @@ func (this *QColorSpace) SetPrimaryPoints(primaryPoints *QColorSpacePrimaryPoint
 func (this *QColorSpace) PrimaryPoints() *QColorSpacePrimaryPoints {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.PrimaryPoints")
 	r := C.qute_QColorSpace_primaryPoints(self)
+	runtime.KeepAlive(this)
 	return rt.View[QColorSpacePrimaryPoints](rt.WrapClass(r, "QColorSpacePrimaryPoints", rt.TakeOwned), r)
 }
 
@@ -460,6 +480,7 @@ func (this *QColorSpace) PrimaryPoints() *QColorSpacePrimaryPoints {
 func (this *QColorSpace) TransformModel() QColorSpaceTransformModel {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.TransformModel")
 	r := C.qute_QColorSpace_transformModel(self)
+	runtime.KeepAlive(this)
 	return QColorSpaceTransformModel(r)
 }
 
@@ -471,6 +492,7 @@ func (this *QColorSpace) TransformModel() QColorSpaceTransformModel {
 func (this *QColorSpace) ColorModel() QColorSpaceColorModel {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.ColorModel")
 	r := C.qute_QColorSpace_colorModel(self)
+	runtime.KeepAlive(this)
 	return QColorSpaceColorModel(r)
 }
 
@@ -482,6 +504,7 @@ func (this *QColorSpace) ColorModel() QColorSpaceColorModel {
 func (this *QColorSpace) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.IsValid")
 	r := C.qute_QColorSpace_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -493,6 +516,7 @@ func (this *QColorSpace) IsValid() bool {
 func (this *QColorSpace) IsValidTarget() bool {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.IsValidTarget")
 	r := C.qute_QColorSpace_isValidTarget(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -504,6 +528,7 @@ func (this *QColorSpace) IsValidTarget() bool {
 func (this *QColorSpace) IccProfile() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.IccProfile")
 	r := C.qute_QColorSpace_iccProfile(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -517,6 +542,8 @@ func (this *QColorSpace) IccProfile() []byte {
 func (this *QColorSpace) TransformationToColorSpace(colorspace *QColorSpace) *QColorTransform {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.TransformationToColorSpace")
 	r := C.qute_QColorSpace_transformationToColorSpace(self, rt.UseArg(unsafe.Pointer(colorspace), "QColorSpace.TransformationToColorSpace"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorspace)
 	return rt.View[QColorTransform](rt.WrapClass(r, "QColorTransform", rt.TakeOwned), r)
 }
 

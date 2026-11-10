@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -99,6 +100,7 @@ func NewQPainterPixmapFragment() *QPainterPixmapFragment {
 func (this *QPainterPixmapFragment) X() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.X")
 	r := C.qute_QPainterPixmapFragment_get_x(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -112,6 +114,7 @@ func (this *QPainterPixmapFragment) X() float64 {
 func (this *QPainterPixmapFragment) SetX(x float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetX")
 	C.qute_QPainterPixmapFragment_set_x(self, C.double(x))
+	runtime.KeepAlive(this)
 }
 
 // Y wraps the public field QPainter::PixmapFragment::y.
@@ -122,6 +125,7 @@ func (this *QPainterPixmapFragment) SetX(x float64) {
 func (this *QPainterPixmapFragment) Y() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.Y")
 	r := C.qute_QPainterPixmapFragment_get_y(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -135,6 +139,7 @@ func (this *QPainterPixmapFragment) Y() float64 {
 func (this *QPainterPixmapFragment) SetY(y float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetY")
 	C.qute_QPainterPixmapFragment_set_y(self, C.double(y))
+	runtime.KeepAlive(this)
 }
 
 // SourceLeft wraps the public field QPainter::PixmapFragment::sourceLeft.
@@ -145,6 +150,7 @@ func (this *QPainterPixmapFragment) SetY(y float64) {
 func (this *QPainterPixmapFragment) SourceLeft() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SourceLeft")
 	r := C.qute_QPainterPixmapFragment_get_sourceLeft(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -158,6 +164,7 @@ func (this *QPainterPixmapFragment) SourceLeft() float64 {
 func (this *QPainterPixmapFragment) SetSourceLeft(sourceLeft float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetSourceLeft")
 	C.qute_QPainterPixmapFragment_set_sourceLeft(self, C.double(sourceLeft))
+	runtime.KeepAlive(this)
 }
 
 // SourceTop wraps the public field QPainter::PixmapFragment::sourceTop.
@@ -168,6 +175,7 @@ func (this *QPainterPixmapFragment) SetSourceLeft(sourceLeft float64) {
 func (this *QPainterPixmapFragment) SourceTop() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SourceTop")
 	r := C.qute_QPainterPixmapFragment_get_sourceTop(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -181,6 +189,7 @@ func (this *QPainterPixmapFragment) SourceTop() float64 {
 func (this *QPainterPixmapFragment) SetSourceTop(sourceTop float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetSourceTop")
 	C.qute_QPainterPixmapFragment_set_sourceTop(self, C.double(sourceTop))
+	runtime.KeepAlive(this)
 }
 
 // Width wraps the public field QPainter::PixmapFragment::width.
@@ -191,6 +200,7 @@ func (this *QPainterPixmapFragment) SetSourceTop(sourceTop float64) {
 func (this *QPainterPixmapFragment) Width() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.Width")
 	r := C.qute_QPainterPixmapFragment_get_width(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -204,6 +214,7 @@ func (this *QPainterPixmapFragment) Width() float64 {
 func (this *QPainterPixmapFragment) SetWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetWidth")
 	C.qute_QPainterPixmapFragment_set_width(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // Height wraps the public field QPainter::PixmapFragment::height.
@@ -214,6 +225,7 @@ func (this *QPainterPixmapFragment) SetWidth(width float64) {
 func (this *QPainterPixmapFragment) Height() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.Height")
 	r := C.qute_QPainterPixmapFragment_get_height(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -227,6 +239,7 @@ func (this *QPainterPixmapFragment) Height() float64 {
 func (this *QPainterPixmapFragment) SetHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetHeight")
 	C.qute_QPainterPixmapFragment_set_height(self, C.double(height))
+	runtime.KeepAlive(this)
 }
 
 // ScaleX wraps the public field QPainter::PixmapFragment::scaleX.
@@ -237,6 +250,7 @@ func (this *QPainterPixmapFragment) SetHeight(height float64) {
 func (this *QPainterPixmapFragment) ScaleX() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.ScaleX")
 	r := C.qute_QPainterPixmapFragment_get_scaleX(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -250,6 +264,7 @@ func (this *QPainterPixmapFragment) ScaleX() float64 {
 func (this *QPainterPixmapFragment) SetScaleX(scaleX float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetScaleX")
 	C.qute_QPainterPixmapFragment_set_scaleX(self, C.double(scaleX))
+	runtime.KeepAlive(this)
 }
 
 // ScaleY wraps the public field QPainter::PixmapFragment::scaleY.
@@ -260,6 +275,7 @@ func (this *QPainterPixmapFragment) SetScaleX(scaleX float64) {
 func (this *QPainterPixmapFragment) ScaleY() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.ScaleY")
 	r := C.qute_QPainterPixmapFragment_get_scaleY(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -273,6 +289,7 @@ func (this *QPainterPixmapFragment) ScaleY() float64 {
 func (this *QPainterPixmapFragment) SetScaleY(scaleY float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetScaleY")
 	C.qute_QPainterPixmapFragment_set_scaleY(self, C.double(scaleY))
+	runtime.KeepAlive(this)
 }
 
 // Rotation wraps the public field QPainter::PixmapFragment::rotation.
@@ -283,6 +300,7 @@ func (this *QPainterPixmapFragment) SetScaleY(scaleY float64) {
 func (this *QPainterPixmapFragment) Rotation() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.Rotation")
 	r := C.qute_QPainterPixmapFragment_get_rotation(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -296,6 +314,7 @@ func (this *QPainterPixmapFragment) Rotation() float64 {
 func (this *QPainterPixmapFragment) SetRotation(rotation float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetRotation")
 	C.qute_QPainterPixmapFragment_set_rotation(self, C.double(rotation))
+	runtime.KeepAlive(this)
 }
 
 // Opacity wraps the public field QPainter::PixmapFragment::opacity.
@@ -306,6 +325,7 @@ func (this *QPainterPixmapFragment) SetRotation(rotation float64) {
 func (this *QPainterPixmapFragment) Opacity() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.Opacity")
 	r := C.qute_QPainterPixmapFragment_get_opacity(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -319,6 +339,7 @@ func (this *QPainterPixmapFragment) Opacity() float64 {
 func (this *QPainterPixmapFragment) SetOpacity(opacity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPixmapFragment.SetOpacity")
 	C.qute_QPainterPixmapFragment_set_opacity(self, C.double(opacity))
+	runtime.KeepAlive(this)
 }
 
 // QPainterPixmapFragmentCreate wraps QPainterPixmapFragment::create.

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQPointingDevice(parent qtcore.QObjectLike) *QPointingDevice {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQPointingDevice")
 	}
 	p := C.qute_QPointingDevice_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,8 @@ func NewQPointingDeviceWithName(name string, systemId int64, devType QInputDevic
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQPointingDeviceWithName")
 	}
 	p := C.qute_QPointingDevice_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), C.longlong(systemId), C.int64_t(devType), C.int64_t(pType), C.int64_t(caps), C.int(maxPoints), C.int(buttonCount), (*C.char)(unsafe.Pointer(unsafe.StringData(seatName))), C.ptrdiff_t(len(seatName)), rt.UseArg(unsafe.Pointer(uniqueId), "NewQPointingDeviceWithName"), parentPtr)
+	runtime.KeepAlive(uniqueId)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +103,7 @@ func NewQPointingDeviceWithName(name string, systemId int64, devType QInputDevic
 func (this *QPointingDevice) PointerType() QPointingDevicePointerTypes {
 	self := rt.Use(unsafe.Pointer(this), "QPointingDevice.PointerType")
 	r := C.qute_QPointingDevice_pointerType(self)
+	runtime.KeepAlive(this)
 	return QPointingDevicePointerTypes(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QPointingDevice) PointerType() QPointingDevicePointerTypes {
 func (this *QPointingDevice) MaximumPoints() int {
 	self := rt.Use(unsafe.Pointer(this), "QPointingDevice.MaximumPoints")
 	r := C.qute_QPointingDevice_maximumPoints(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -121,6 +127,7 @@ func (this *QPointingDevice) MaximumPoints() int {
 func (this *QPointingDevice) ButtonCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPointingDevice.ButtonCount")
 	r := C.qute_QPointingDevice_buttonCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -134,6 +141,7 @@ func (this *QPointingDevice) ButtonCount() int {
 func (this *QPointingDevice) UniqueId() *QPointingDeviceUniqueId {
 	self := rt.Use(unsafe.Pointer(this), "QPointingDevice.UniqueId")
 	r := C.qute_QPointingDevice_uniqueId(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPointingDeviceUniqueId](rt.WrapClass(r, "QPointingDeviceUniqueId", rt.TakeOwned), r)
 }
 
@@ -153,6 +161,10 @@ func (this *QPointingDevice) EmitGrabChanged(grabber qtcore.QObjectLike, transit
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPointerEvent()), "QPointingDevice.EmitGrabChanged")
 	}
 	C.qute_QPointingDevice_grabChanged_1(self, grabberPtr, C.int64_t(transition), eventPtr, rt.UseArg(unsafe.Pointer(point), "QPointingDevice.EmitGrabChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(grabber)
+	runtime.KeepAlive(event)
+	runtime.KeepAlive(point)
 }
 
 // QPointingDevicePrimaryPointingDevice wraps QPointingDevice::primaryPointingDevice.

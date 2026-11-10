@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -64,6 +65,7 @@ func NewQGraphicsOpacityEffect(parent qtcore.QObjectLike) *QGraphicsOpacityEffec
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsOpacityEffect")
 	}
 	p := C.qute_QGraphicsOpacityEffect_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func NewQGraphicsOpacityEffect(parent qtcore.QObjectLike) *QGraphicsOpacityEffec
 func (this *QGraphicsOpacityEffect) Opacity() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.Opacity")
 	r := C.qute_QGraphicsOpacityEffect_opacity(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -93,6 +96,7 @@ func (this *QGraphicsOpacityEffect) Opacity() float64 {
 func (this *QGraphicsOpacityEffect) OpacityMask() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.OpacityMask")
 	r := C.qute_QGraphicsOpacityEffect_opacityMask(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -104,6 +108,7 @@ func (this *QGraphicsOpacityEffect) OpacityMask() *qtgui.QBrush {
 func (this *QGraphicsOpacityEffect) SetOpacity(opacity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.SetOpacity")
 	C.qute_QGraphicsOpacityEffect_setOpacity(self, C.double(opacity))
+	runtime.KeepAlive(this)
 }
 
 // SetOpacityMask wraps QGraphicsOpacityEffect::setOpacityMask.
@@ -114,6 +119,8 @@ func (this *QGraphicsOpacityEffect) SetOpacity(opacity float64) {
 func (this *QGraphicsOpacityEffect) SetOpacityMask(maskArg *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.SetOpacityMask")
 	C.qute_QGraphicsOpacityEffect_setOpacityMask(self, rt.UseArg(unsafe.Pointer(maskArg), "QGraphicsOpacityEffect.SetOpacityMask"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(maskArg)
 }
 
 // EmitOpacityChanged wraps emitting the opacityChanged signal.
@@ -124,6 +131,7 @@ func (this *QGraphicsOpacityEffect) SetOpacityMask(maskArg *qtgui.QBrush) {
 func (this *QGraphicsOpacityEffect) EmitOpacityChanged(opacity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.EmitOpacityChanged")
 	C.qute_QGraphicsOpacityEffect_opacityChanged_1(self, C.double(opacity))
+	runtime.KeepAlive(this)
 }
 
 // EmitOpacityMaskChanged wraps emitting the opacityMaskChanged signal.
@@ -134,6 +142,8 @@ func (this *QGraphicsOpacityEffect) EmitOpacityChanged(opacity float64) {
 func (this *QGraphicsOpacityEffect) EmitOpacityMaskChanged(maskArg *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.EmitOpacityMaskChanged")
 	C.qute_QGraphicsOpacityEffect_opacityMaskChanged_1(self, rt.UseArg(unsafe.Pointer(maskArg), "QGraphicsOpacityEffect.EmitOpacityMaskChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(maskArg)
 }
 
 // OnOpacityChanged connects f to the opacityChanged signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQStackedWidget(parent QWidgetLike) *QStackedWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQStackedWidget")
 	}
 	p := C.qute_QStackedWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func (this *QStackedWidget) AddWidget(w QWidgetLike) int {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QStackedWidget.AddWidget")
 	}
 	r := C.qute_QStackedWidget_addWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 	return int(r)
 }
@@ -103,6 +107,8 @@ func (this *QStackedWidget) InsertWidget(index int, w QWidgetLike) int {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QStackedWidget.InsertWidget")
 	}
 	r := C.qute_QStackedWidget_insertWidget(self, C.int(index), wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 	return int(r)
 }
@@ -121,6 +127,8 @@ func (this *QStackedWidget) RemoveWidget(w QWidgetLike) {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStackedWidget.RemoveWidget")
 	}
 	C.qute_QStackedWidget_removeWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 }
 
 // CurrentWidget wraps QStackedWidget::currentWidget.
@@ -133,6 +141,7 @@ func (this *QStackedWidget) RemoveWidget(w QWidgetLike) {
 func (this *QStackedWidget) CurrentWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.CurrentWidget")
 	r := C.qute_QStackedWidget_currentWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -144,6 +153,7 @@ func (this *QStackedWidget) CurrentWidget() *QWidget {
 func (this *QStackedWidget) CurrentIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.CurrentIndex")
 	r := C.qute_QStackedWidget_currentIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -159,6 +169,8 @@ func (this *QStackedWidget) IndexOf(widget QWidgetLike) int {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStackedWidget.IndexOf")
 	}
 	r := C.qute_QStackedWidget_indexOf(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	return int(r)
 }
 
@@ -172,6 +184,7 @@ func (this *QStackedWidget) IndexOf(widget QWidgetLike) int {
 func (this *QStackedWidget) Widget(arg0 int) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.Widget")
 	r := C.qute_QStackedWidget_widget(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -183,6 +196,7 @@ func (this *QStackedWidget) Widget(arg0 int) *QWidget {
 func (this *QStackedWidget) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.Count")
 	r := C.qute_QStackedWidget_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -194,6 +208,7 @@ func (this *QStackedWidget) Count() int {
 func (this *QStackedWidget) SetCurrentIndex(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.SetCurrentIndex")
 	C.qute_QStackedWidget_setCurrentIndex(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentWidget wraps QStackedWidget::setCurrentWidget.
@@ -208,6 +223,8 @@ func (this *QStackedWidget) SetCurrentWidget(w QWidgetLike) {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStackedWidget.SetCurrentWidget")
 	}
 	C.qute_QStackedWidget_setCurrentWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -218,6 +235,7 @@ func (this *QStackedWidget) SetCurrentWidget(w QWidgetLike) {
 func (this *QStackedWidget) EmitCurrentChanged(arg0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.EmitCurrentChanged")
 	C.qute_QStackedWidget_currentChanged_1(self, C.int(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitWidgetRemoved wraps emitting the widgetRemoved signal.
@@ -228,6 +246,7 @@ func (this *QStackedWidget) EmitCurrentChanged(arg0 int) {
 func (this *QStackedWidget) EmitWidgetRemoved(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.EmitWidgetRemoved")
 	C.qute_QStackedWidget_widgetRemoved_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitWidgetAdded wraps emitting the widgetAdded signal.
@@ -238,6 +257,7 @@ func (this *QStackedWidget) EmitWidgetRemoved(index int) {
 func (this *QStackedWidget) EmitWidgetAdded(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QStackedWidget.EmitWidgetAdded")
 	C.qute_QStackedWidget_widgetAdded_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the

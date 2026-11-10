@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQSlider(parent QWidgetLike) *QSlider {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSlider")
 	}
 	p := C.qute_QSlider_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQSliderWithOrientation(orientation qtcore.Orientations, parent QWidgetLi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSliderWithOrientation")
 	}
 	p := C.qute_QSlider_new_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQSliderWithOrientation(orientation qtcore.Orientations, parent QWidgetLi
 func (this *QSlider) SetTickPosition(position QSliderTickPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QSlider.SetTickPosition")
 	C.qute_QSlider_setTickPosition(self, C.int64_t(position))
+	runtime.KeepAlive(this)
 }
 
 // TickPosition wraps QSlider::tickPosition.
@@ -109,6 +113,7 @@ func (this *QSlider) SetTickPosition(position QSliderTickPosition) {
 func (this *QSlider) TickPosition() QSliderTickPosition {
 	self := rt.Use(unsafe.Pointer(this), "QSlider.TickPosition")
 	r := C.qute_QSlider_tickPosition(self)
+	runtime.KeepAlive(this)
 	return QSliderTickPosition(r)
 }
 
@@ -120,6 +125,7 @@ func (this *QSlider) TickPosition() QSliderTickPosition {
 func (this *QSlider) SetTickInterval(ti int) {
 	self := rt.Use(unsafe.Pointer(this), "QSlider.SetTickInterval")
 	C.qute_QSlider_setTickInterval(self, C.int(ti))
+	runtime.KeepAlive(this)
 }
 
 // TickInterval wraps QSlider::tickInterval.
@@ -130,5 +136,6 @@ func (this *QSlider) SetTickInterval(ti int) {
 func (this *QSlider) TickInterval() int {
 	self := rt.Use(unsafe.Pointer(this), "QSlider.TickInterval")
 	r := C.qute_QSlider_tickInterval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

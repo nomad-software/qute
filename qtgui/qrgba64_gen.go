@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQRgba64() *QRgba64 {
 func (this *QRgba64) IsOpaque() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.IsOpaque")
 	r := C.qute_QRgba64_isOpaque(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QRgba64) IsOpaque() bool {
 func (this *QRgba64) IsTransparent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.IsTransparent")
 	r := C.qute_QRgba64_isTransparent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QRgba64) IsTransparent() bool {
 func (this *QRgba64) Red() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Red")
 	r := C.qute_QRgba64_red(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -130,6 +134,7 @@ func (this *QRgba64) Red() uint16 {
 func (this *QRgba64) Green() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Green")
 	r := C.qute_QRgba64_green(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -141,6 +146,7 @@ func (this *QRgba64) Green() uint16 {
 func (this *QRgba64) Blue() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Blue")
 	r := C.qute_QRgba64_blue(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -152,6 +158,7 @@ func (this *QRgba64) Blue() uint16 {
 func (this *QRgba64) Alpha() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Alpha")
 	r := C.qute_QRgba64_alpha(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -163,6 +170,7 @@ func (this *QRgba64) Alpha() uint16 {
 func (this *QRgba64) SetRed(_red uint16) {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.SetRed")
 	C.qute_QRgba64_setRed(self, C.ushort(_red))
+	runtime.KeepAlive(this)
 }
 
 // SetGreen wraps QRgba64::setGreen.
@@ -173,6 +181,7 @@ func (this *QRgba64) SetRed(_red uint16) {
 func (this *QRgba64) SetGreen(_green uint16) {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.SetGreen")
 	C.qute_QRgba64_setGreen(self, C.ushort(_green))
+	runtime.KeepAlive(this)
 }
 
 // SetBlue wraps QRgba64::setBlue.
@@ -183,6 +192,7 @@ func (this *QRgba64) SetGreen(_green uint16) {
 func (this *QRgba64) SetBlue(_blue uint16) {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.SetBlue")
 	C.qute_QRgba64_setBlue(self, C.ushort(_blue))
+	runtime.KeepAlive(this)
 }
 
 // SetAlpha wraps QRgba64::setAlpha.
@@ -193,6 +203,7 @@ func (this *QRgba64) SetBlue(_blue uint16) {
 func (this *QRgba64) SetAlpha(_alpha uint16) {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.SetAlpha")
 	C.qute_QRgba64_setAlpha(self, C.ushort(_alpha))
+	runtime.KeepAlive(this)
 }
 
 // Red8 wraps QRgba64::red8.
@@ -203,6 +214,7 @@ func (this *QRgba64) SetAlpha(_alpha uint16) {
 func (this *QRgba64) Red8() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Red8")
 	r := C.qute_QRgba64_red8(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -214,6 +226,7 @@ func (this *QRgba64) Red8() uint8 {
 func (this *QRgba64) Green8() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Green8")
 	r := C.qute_QRgba64_green8(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -225,6 +238,7 @@ func (this *QRgba64) Green8() uint8 {
 func (this *QRgba64) Blue8() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Blue8")
 	r := C.qute_QRgba64_blue8(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -236,6 +250,7 @@ func (this *QRgba64) Blue8() uint8 {
 func (this *QRgba64) Alpha8() uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Alpha8")
 	r := C.qute_QRgba64_alpha8(self)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -247,6 +262,7 @@ func (this *QRgba64) Alpha8() uint8 {
 func (this *QRgba64) ToArgb32() uint {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.ToArgb32")
 	r := C.qute_QRgba64_toArgb32(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -258,6 +274,7 @@ func (this *QRgba64) ToArgb32() uint {
 func (this *QRgba64) ToRgb16() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.ToRgb16")
 	r := C.qute_QRgba64_toRgb16(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -271,6 +288,7 @@ func (this *QRgba64) ToRgb16() uint16 {
 func (this *QRgba64) Premultiplied() *QRgba64 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Premultiplied")
 	r := C.qute_QRgba64_premultiplied(self)
+	runtime.KeepAlive(this)
 	return rt.View[QRgba64](rt.WrapClass(r, "QRgba64", rt.TakeOwned), r)
 }
 
@@ -284,6 +302,7 @@ func (this *QRgba64) Premultiplied() *QRgba64 {
 func (this *QRgba64) Unpremultiplied() *QRgba64 {
 	self := rt.Use(unsafe.Pointer(this), "QRgba64.Unpremultiplied")
 	r := C.qute_QRgba64_unpremultiplied(self)
+	runtime.KeepAlive(this)
 	return rt.View[QRgba64](rt.WrapClass(r, "QRgba64", rt.TakeOwned), r)
 }
 

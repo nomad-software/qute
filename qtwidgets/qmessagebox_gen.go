@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQMessageBox(parent QWidgetLike) *QMessageBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMessageBox")
 	}
 	p := C.qute_QMessageBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQMessageBoxWithIcon(icon QMessageBoxIcon, title string, text string, but
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMessageBoxWithIcon")
 	}
 	p := C.qute_QMessageBox_new_1(C.int64_t(icon), (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -107,6 +110,8 @@ func (this *QMessageBox) AddButton(button QAbstractButtonLike, role QMessageBoxB
 		buttonPtr, buttonH = rt.Arg(unsafe.Pointer(button.AsQAbstractButton()), "QMessageBox.AddButton")
 	}
 	C.qute_QMessageBox_addButton(self, buttonPtr, C.int64_t(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	buttonH.TransferToCpp()
 }
 
@@ -120,6 +125,7 @@ func (this *QMessageBox) AddButton(button QAbstractButtonLike, role QMessageBoxB
 func (this *QMessageBox) AddButtonText(text string, role QMessageBoxButtonRole) *QPushButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.AddButtonText")
 	r := C.qute_QMessageBox_addButton_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(role))
+	runtime.KeepAlive(this)
 	return rt.View[QPushButton](rt.WrapClass(r, "QPushButton", rt.TakeParented), r)
 }
 
@@ -133,6 +139,7 @@ func (this *QMessageBox) AddButtonText(text string, role QMessageBoxButtonRole) 
 func (this *QMessageBox) AddStandardButton(button QMessageBoxStandardButtons) *QPushButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.AddStandardButton")
 	r := C.qute_QMessageBox_addButton_2(self, C.int64_t(button))
+	runtime.KeepAlive(this)
 	return rt.View[QPushButton](rt.WrapClass(r, "QPushButton", rt.TakeParented), r)
 }
 
@@ -153,6 +160,8 @@ func (this *QMessageBox) RemoveButton(button QAbstractButtonLike) {
 		buttonPtr, buttonH = rt.Arg(unsafe.Pointer(button.AsQAbstractButton()), "QMessageBox.RemoveButton")
 	}
 	C.qute_QMessageBox_removeButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	buttonH.TransferToGo()
 }
 
@@ -166,6 +175,7 @@ func (this *QMessageBox) RemoveButton(button QAbstractButtonLike) {
 func (this *QMessageBox) Buttons() []*QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.Buttons")
 	r := C.qute_QMessageBox_buttons(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QAbstractButton {
 		return rt.View[QAbstractButton](rt.WrapClass(e, "QAbstractButton", rt.KeepOrBorrow), e)
 	})
@@ -183,6 +193,8 @@ func (this *QMessageBox) ButtonRole(button QAbstractButtonLike) QMessageBoxButto
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QMessageBox.ButtonRole")
 	}
 	r := C.qute_QMessageBox_buttonRole(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	return QMessageBoxButtonRole(r)
 }
 
@@ -194,6 +206,7 @@ func (this *QMessageBox) ButtonRole(button QAbstractButtonLike) QMessageBoxButto
 func (this *QMessageBox) SetStandardButtons(buttons QMessageBoxStandardButtons) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetStandardButtons")
 	C.qute_QMessageBox_setStandardButtons(self, C.int64_t(buttons))
+	runtime.KeepAlive(this)
 }
 
 // StandardButtons wraps QMessageBox::standardButtons.
@@ -204,6 +217,7 @@ func (this *QMessageBox) SetStandardButtons(buttons QMessageBoxStandardButtons) 
 func (this *QMessageBox) StandardButtons() QMessageBoxStandardButtons {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.StandardButtons")
 	r := C.qute_QMessageBox_standardButtons(self)
+	runtime.KeepAlive(this)
 	return QMessageBoxStandardButtons(r)
 }
 
@@ -219,6 +233,8 @@ func (this *QMessageBox) StandardButton(button QAbstractButtonLike) QMessageBoxS
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QMessageBox.StandardButton")
 	}
 	r := C.qute_QMessageBox_standardButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	return QMessageBoxStandardButtons(r)
 }
 
@@ -232,6 +248,7 @@ func (this *QMessageBox) StandardButton(button QAbstractButtonLike) QMessageBoxS
 func (this *QMessageBox) Button(which QMessageBoxStandardButtons) *QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.Button")
 	r := C.qute_QMessageBox_button(self, C.int64_t(which))
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractButton](rt.WrapClass(r, "QAbstractButton", rt.KeepOrBorrow), r)
 }
 
@@ -245,6 +262,7 @@ func (this *QMessageBox) Button(which QMessageBoxStandardButtons) *QAbstractButt
 func (this *QMessageBox) DefaultButton() *QPushButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.DefaultButton")
 	r := C.qute_QMessageBox_defaultButton(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPushButton](rt.WrapClass(r, "QPushButton", rt.KeepOrBorrow), r)
 }
 
@@ -260,6 +278,8 @@ func (this *QMessageBox) SetDefaultButton(button QPushButtonLike) {
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQPushButton()), "QMessageBox.SetDefaultButton")
 	}
 	C.qute_QMessageBox_setDefaultButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 }
 
 // SetDefaultStandardButton wraps QMessageBox::setDefaultButton.
@@ -270,6 +290,7 @@ func (this *QMessageBox) SetDefaultButton(button QPushButtonLike) {
 func (this *QMessageBox) SetDefaultStandardButton(button QMessageBoxStandardButtons) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetDefaultStandardButton")
 	C.qute_QMessageBox_setDefaultButton_1(self, C.int64_t(button))
+	runtime.KeepAlive(this)
 }
 
 // EscapeButton wraps QMessageBox::escapeButton.
@@ -282,6 +303,7 @@ func (this *QMessageBox) SetDefaultStandardButton(button QMessageBoxStandardButt
 func (this *QMessageBox) EscapeButton() *QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.EscapeButton")
 	r := C.qute_QMessageBox_escapeButton(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractButton](rt.WrapClass(r, "QAbstractButton", rt.KeepOrBorrow), r)
 }
 
@@ -297,6 +319,8 @@ func (this *QMessageBox) SetEscapeButton(button QAbstractButtonLike) {
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QMessageBox.SetEscapeButton")
 	}
 	C.qute_QMessageBox_setEscapeButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 }
 
 // SetEscapeStandardButton wraps QMessageBox::setEscapeButton.
@@ -307,6 +331,7 @@ func (this *QMessageBox) SetEscapeButton(button QAbstractButtonLike) {
 func (this *QMessageBox) SetEscapeStandardButton(button QMessageBoxStandardButtons) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetEscapeStandardButton")
 	C.qute_QMessageBox_setEscapeButton_1(self, C.int64_t(button))
+	runtime.KeepAlive(this)
 }
 
 // ClickedButton wraps QMessageBox::clickedButton.
@@ -319,6 +344,7 @@ func (this *QMessageBox) SetEscapeStandardButton(button QMessageBoxStandardButto
 func (this *QMessageBox) ClickedButton() *QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.ClickedButton")
 	r := C.qute_QMessageBox_clickedButton(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractButton](rt.WrapClass(r, "QAbstractButton", rt.KeepOrBorrow), r)
 }
 
@@ -330,6 +356,7 @@ func (this *QMessageBox) ClickedButton() *QAbstractButton {
 func (this *QMessageBox) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.Text")
 	r := C.qute_QMessageBox_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -341,6 +368,7 @@ func (this *QMessageBox) Text() string {
 func (this *QMessageBox) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetText")
 	C.qute_QMessageBox_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps QMessageBox::icon.
@@ -351,6 +379,7 @@ func (this *QMessageBox) SetText(text string) {
 func (this *QMessageBox) Icon() QMessageBoxIcon {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.Icon")
 	r := C.qute_QMessageBox_icon(self)
+	runtime.KeepAlive(this)
 	return QMessageBoxIcon(r)
 }
 
@@ -362,6 +391,7 @@ func (this *QMessageBox) Icon() QMessageBoxIcon {
 func (this *QMessageBox) SetIcon(icon QMessageBoxIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetIcon")
 	C.qute_QMessageBox_setIcon(self, C.int64_t(icon))
+	runtime.KeepAlive(this)
 }
 
 // IconPixmap wraps QMessageBox::iconPixmap.
@@ -374,6 +404,7 @@ func (this *QMessageBox) SetIcon(icon QMessageBoxIcon) {
 func (this *QMessageBox) IconPixmap() *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.IconPixmap")
 	r := C.qute_QMessageBox_iconPixmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -385,6 +416,8 @@ func (this *QMessageBox) IconPixmap() *qtgui.QPixmap {
 func (this *QMessageBox) SetIconPixmap(pixmap *qtgui.QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetIconPixmap")
 	C.qute_QMessageBox_setIconPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QMessageBox.SetIconPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // TextFormat wraps QMessageBox::textFormat.
@@ -395,6 +428,7 @@ func (this *QMessageBox) SetIconPixmap(pixmap *qtgui.QPixmap) {
 func (this *QMessageBox) TextFormat() qtcore.TextFormat {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.TextFormat")
 	r := C.qute_QMessageBox_textFormat(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextFormat(r)
 }
 
@@ -406,6 +440,7 @@ func (this *QMessageBox) TextFormat() qtcore.TextFormat {
 func (this *QMessageBox) SetTextFormat(format qtcore.TextFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetTextFormat")
 	C.qute_QMessageBox_setTextFormat(self, C.int64_t(format))
+	runtime.KeepAlive(this)
 }
 
 // SetTextInteractionFlags wraps QMessageBox::setTextInteractionFlags.
@@ -416,6 +451,7 @@ func (this *QMessageBox) SetTextFormat(format qtcore.TextFormat) {
 func (this *QMessageBox) SetTextInteractionFlags(flags qtcore.TextInteractionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetTextInteractionFlags")
 	C.qute_QMessageBox_setTextInteractionFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // TextInteractionFlags wraps QMessageBox::textInteractionFlags.
@@ -426,6 +462,7 @@ func (this *QMessageBox) SetTextInteractionFlags(flags qtcore.TextInteractionFla
 func (this *QMessageBox) TextInteractionFlags() qtcore.TextInteractionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.TextInteractionFlags")
 	r := C.qute_QMessageBox_textInteractionFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextInteractionFlags(r)
 }
 
@@ -444,6 +481,8 @@ func (this *QMessageBox) SetCheckBox(cb QCheckBoxLike) {
 		cbPtr, cbH = rt.Arg(unsafe.Pointer(cb.AsQCheckBox()), "QMessageBox.SetCheckBox")
 	}
 	C.qute_QMessageBox_setCheckBox(self, cbPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cb)
 	cbH.TransferToCpp()
 }
 
@@ -457,6 +496,7 @@ func (this *QMessageBox) SetCheckBox(cb QCheckBoxLike) {
 func (this *QMessageBox) CheckBox() *QCheckBox {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.CheckBox")
 	r := C.qute_QMessageBox_checkBox(self)
+	runtime.KeepAlive(this)
 	return rt.View[QCheckBox](rt.WrapClass(r, "QCheckBox", rt.KeepOrBorrow), r)
 }
 
@@ -468,6 +508,7 @@ func (this *QMessageBox) CheckBox() *QCheckBox {
 func (this *QMessageBox) SetOption(option QMessageBoxOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetOption")
 	C.qute_QMessageBox_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QMessageBox::testOption.
@@ -478,6 +519,7 @@ func (this *QMessageBox) SetOption(option QMessageBoxOptions) {
 func (this *QMessageBox) TestOption(option QMessageBoxOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.TestOption")
 	r := C.qute_QMessageBox_testOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -489,6 +531,7 @@ func (this *QMessageBox) TestOption(option QMessageBoxOptions) bool {
 func (this *QMessageBox) SetOptions(options QMessageBoxOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetOptions")
 	C.qute_QMessageBox_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Options wraps QMessageBox::options.
@@ -499,6 +542,7 @@ func (this *QMessageBox) SetOptions(options QMessageBoxOptions) {
 func (this *QMessageBox) Options() QMessageBoxOptions {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.Options")
 	r := C.qute_QMessageBox_options(self)
+	runtime.KeepAlive(this)
 	return QMessageBoxOptions(r)
 }
 
@@ -510,6 +554,7 @@ func (this *QMessageBox) Options() QMessageBoxOptions {
 func (this *QMessageBox) InformativeText() string {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.InformativeText")
 	r := C.qute_QMessageBox_informativeText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -521,6 +566,7 @@ func (this *QMessageBox) InformativeText() string {
 func (this *QMessageBox) SetInformativeText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetInformativeText")
 	C.qute_QMessageBox_setInformativeText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // DetailedText wraps QMessageBox::detailedText.
@@ -531,6 +577,7 @@ func (this *QMessageBox) SetInformativeText(text string) {
 func (this *QMessageBox) DetailedText() string {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.DetailedText")
 	r := C.qute_QMessageBox_detailedText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -542,6 +589,7 @@ func (this *QMessageBox) DetailedText() string {
 func (this *QMessageBox) SetDetailedText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetDetailedText")
 	C.qute_QMessageBox_setDetailedText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // EmitButtonClicked wraps emitting the buttonClicked signal.
@@ -556,6 +604,8 @@ func (this *QMessageBox) EmitButtonClicked(button QAbstractButtonLike) {
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QMessageBox.EmitButtonClicked")
 	}
 	C.qute_QMessageBox_buttonClicked_1(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 }
 
 // QMessageBoxInformation wraps QMessageBox::information.
@@ -570,6 +620,7 @@ func QMessageBoxInformation(parent QWidgetLike, title string, text string) QMess
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxInformation")
 	}
 	r := C.qute_QMessageBox_information(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(parent)
 	return QMessageBoxStandardButtons(r)
 }
 
@@ -585,6 +636,7 @@ func QMessageBoxQuestion(parent QWidgetLike, title string, text string) QMessage
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxQuestion")
 	}
 	r := C.qute_QMessageBox_question(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(parent)
 	return QMessageBoxStandardButtons(r)
 }
 
@@ -600,6 +652,7 @@ func QMessageBoxWarning(parent QWidgetLike, title string, text string) QMessageB
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxWarning")
 	}
 	r := C.qute_QMessageBox_warning(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(parent)
 	return QMessageBoxStandardButtons(r)
 }
 
@@ -615,6 +668,7 @@ func QMessageBoxCritical(parent QWidgetLike, title string, text string) QMessage
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxCritical")
 	}
 	r := C.qute_QMessageBox_critical(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(parent)
 	return QMessageBoxStandardButtons(r)
 }
 
@@ -630,6 +684,7 @@ func QMessageBoxAbout(parent QWidgetLike, title string, text string) {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxAbout")
 	}
 	C.qute_QMessageBox_about(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(parent)
 }
 
 // QMessageBoxAboutQt wraps QMessageBox::aboutQt.
@@ -644,6 +699,7 @@ func QMessageBoxAboutQt(parent QWidgetLike) {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxAboutQt")
 	}
 	C.qute_QMessageBox_aboutQt(parentPtr)
+	runtime.KeepAlive(parent)
 }
 
 // OnButtonClicked connects f to the buttonClicked signal. The connection ends when the

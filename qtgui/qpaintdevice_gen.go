@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -84,6 +85,7 @@ func (this *QPaintDevice) Unkeep() {
 func (this *QPaintDevice) PaintingActive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.PaintingActive")
 	r := C.qute_QPaintDevice_paintingActive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -95,6 +97,7 @@ func (this *QPaintDevice) PaintingActive() bool {
 func (this *QPaintDevice) Width() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.Width")
 	r := C.qute_QPaintDevice_width(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -106,6 +109,7 @@ func (this *QPaintDevice) Width() int {
 func (this *QPaintDevice) Height() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.Height")
 	r := C.qute_QPaintDevice_height(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -117,6 +121,7 @@ func (this *QPaintDevice) Height() int {
 func (this *QPaintDevice) WidthMM() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.WidthMM")
 	r := C.qute_QPaintDevice_widthMM(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -128,6 +133,7 @@ func (this *QPaintDevice) WidthMM() int {
 func (this *QPaintDevice) HeightMM() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.HeightMM")
 	r := C.qute_QPaintDevice_heightMM(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -139,6 +145,7 @@ func (this *QPaintDevice) HeightMM() int {
 func (this *QPaintDevice) LogicalDpiX() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.LogicalDpiX")
 	r := C.qute_QPaintDevice_logicalDpiX(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -150,6 +157,7 @@ func (this *QPaintDevice) LogicalDpiX() int {
 func (this *QPaintDevice) LogicalDpiY() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.LogicalDpiY")
 	r := C.qute_QPaintDevice_logicalDpiY(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -161,6 +169,7 @@ func (this *QPaintDevice) LogicalDpiY() int {
 func (this *QPaintDevice) PhysicalDpiX() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.PhysicalDpiX")
 	r := C.qute_QPaintDevice_physicalDpiX(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -172,6 +181,7 @@ func (this *QPaintDevice) PhysicalDpiX() int {
 func (this *QPaintDevice) PhysicalDpiY() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.PhysicalDpiY")
 	r := C.qute_QPaintDevice_physicalDpiY(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -183,6 +193,7 @@ func (this *QPaintDevice) PhysicalDpiY() int {
 func (this *QPaintDevice) DevicePixelRatio() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.DevicePixelRatio")
 	r := C.qute_QPaintDevice_devicePixelRatio(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -194,6 +205,7 @@ func (this *QPaintDevice) DevicePixelRatio() float64 {
 func (this *QPaintDevice) DevicePixelRatioF() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.DevicePixelRatioF")
 	r := C.qute_QPaintDevice_devicePixelRatioF(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -205,6 +217,7 @@ func (this *QPaintDevice) DevicePixelRatioF() float64 {
 func (this *QPaintDevice) ColorCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.ColorCount")
 	r := C.qute_QPaintDevice_colorCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -216,6 +229,7 @@ func (this *QPaintDevice) ColorCount() int {
 func (this *QPaintDevice) Depth() int {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDevice.Depth")
 	r := C.qute_QPaintDevice_depth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 

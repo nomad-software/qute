@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -65,6 +66,7 @@ func NewQConicalGradientWithPointF(center qtcore.QPointF, startAngle float64) *Q
 func (this *QConicalGradient) Center() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QConicalGradient.Center")
 	r := C.qute_QConicalGradient_center(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -76,6 +78,7 @@ func (this *QConicalGradient) Center() qtcore.QPointF {
 func (this *QConicalGradient) SetCenter(center qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QConicalGradient.SetCenter")
 	C.qute_QConicalGradient_setCenter(self, cQPointF(center))
+	runtime.KeepAlive(this)
 }
 
 // Angle wraps QConicalGradient::angle.
@@ -86,6 +89,7 @@ func (this *QConicalGradient) SetCenter(center qtcore.QPointF) {
 func (this *QConicalGradient) Angle() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QConicalGradient.Angle")
 	r := C.qute_QConicalGradient_angle(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -97,4 +101,5 @@ func (this *QConicalGradient) Angle() float64 {
 func (this *QConicalGradient) SetAngle(angle float64) {
 	self := rt.Use(unsafe.Pointer(this), "QConicalGradient.SetAngle")
 	C.qute_QConicalGradient_setAngle(self, C.double(angle))
+	runtime.KeepAlive(this)
 }

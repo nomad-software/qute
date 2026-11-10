@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQPainterPathWithPointF(startPoint qtcore.QPointF) *QPainterPath {
 func (this *QPainterPath) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Clear")
 	C.qute_QPainterPath_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // Reserve wraps QPainterPath::reserve.
@@ -119,6 +121,7 @@ func (this *QPainterPath) Clear() {
 func (this *QPainterPath) Reserve(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Reserve")
 	C.qute_QPainterPath_reserve(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // Capacity wraps QPainterPath::capacity.
@@ -129,6 +132,7 @@ func (this *QPainterPath) Reserve(size int) {
 func (this *QPainterPath) Capacity() int {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Capacity")
 	r := C.qute_QPainterPath_capacity(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -140,6 +144,7 @@ func (this *QPainterPath) Capacity() int {
 func (this *QPainterPath) CloseSubpath() {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.CloseSubpath")
 	C.qute_QPainterPath_closeSubpath(self)
+	runtime.KeepAlive(this)
 }
 
 // MoveTo wraps QPainterPath::moveTo.
@@ -150,6 +155,7 @@ func (this *QPainterPath) CloseSubpath() {
 func (this *QPainterPath) MoveTo(pArg qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.MoveTo")
 	C.qute_QPainterPath_moveTo(self, cQPointF(pArg))
+	runtime.KeepAlive(this)
 }
 
 // LineTo wraps QPainterPath::lineTo.
@@ -160,6 +166,7 @@ func (this *QPainterPath) MoveTo(pArg qtcore.QPointF) {
 func (this *QPainterPath) LineTo(pArg qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.LineTo")
 	C.qute_QPainterPath_lineTo(self, cQPointF(pArg))
+	runtime.KeepAlive(this)
 }
 
 // ArcMoveTo wraps QPainterPath::arcMoveTo.
@@ -170,6 +177,7 @@ func (this *QPainterPath) LineTo(pArg qtcore.QPointF) {
 func (this *QPainterPath) ArcMoveTo(rect qtcore.QRectF, angle float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ArcMoveTo")
 	C.qute_QPainterPath_arcMoveTo(self, cQRectF(rect), C.double(angle))
+	runtime.KeepAlive(this)
 }
 
 // ArcTo wraps QPainterPath::arcTo.
@@ -180,6 +188,7 @@ func (this *QPainterPath) ArcMoveTo(rect qtcore.QRectF, angle float64) {
 func (this *QPainterPath) ArcTo(rect qtcore.QRectF, startAngle float64, arcLength float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ArcTo")
 	C.qute_QPainterPath_arcTo(self, cQRectF(rect), C.double(startAngle), C.double(arcLength))
+	runtime.KeepAlive(this)
 }
 
 // CubicTo wraps QPainterPath::cubicTo.
@@ -190,6 +199,7 @@ func (this *QPainterPath) ArcTo(rect qtcore.QRectF, startAngle float64, arcLengt
 func (this *QPainterPath) CubicTo(ctrlPt1 qtcore.QPointF, ctrlPt2 qtcore.QPointF, endPt qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.CubicTo")
 	C.qute_QPainterPath_cubicTo(self, cQPointF(ctrlPt1), cQPointF(ctrlPt2), cQPointF(endPt))
+	runtime.KeepAlive(this)
 }
 
 // QuadTo wraps QPainterPath::quadTo.
@@ -200,6 +210,7 @@ func (this *QPainterPath) CubicTo(ctrlPt1 qtcore.QPointF, ctrlPt2 qtcore.QPointF
 func (this *QPainterPath) QuadTo(ctrlPt qtcore.QPointF, endPt qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.QuadTo")
 	C.qute_QPainterPath_quadTo(self, cQPointF(ctrlPt), cQPointF(endPt))
+	runtime.KeepAlive(this)
 }
 
 // CurrentPosition wraps QPainterPath::currentPosition.
@@ -210,6 +221,7 @@ func (this *QPainterPath) QuadTo(ctrlPt qtcore.QPointF, endPt qtcore.QPointF) {
 func (this *QPainterPath) CurrentPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.CurrentPosition")
 	r := C.qute_QPainterPath_currentPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -221,6 +233,7 @@ func (this *QPainterPath) CurrentPosition() qtcore.QPointF {
 func (this *QPainterPath) AddRect(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRect")
 	C.qute_QPainterPath_addRect(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // AddEllipse wraps QPainterPath::addEllipse.
@@ -231,6 +244,7 @@ func (this *QPainterPath) AddRect(rect qtcore.QRectF) {
 func (this *QPainterPath) AddEllipse(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddEllipse")
 	C.qute_QPainterPath_addEllipse(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // AddEllipseAt wraps QPainterPath::addEllipse.
@@ -241,6 +255,7 @@ func (this *QPainterPath) AddEllipse(rect qtcore.QRectF) {
 func (this *QPainterPath) AddEllipseAt(center qtcore.QPointF, rx float64, ry float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddEllipseAt")
 	C.qute_QPainterPath_addEllipse_1(self, cQPointF(center), C.double(rx), C.double(ry))
+	runtime.KeepAlive(this)
 }
 
 // AddPolygon wraps QPainterPath::addPolygon.
@@ -255,6 +270,7 @@ func (this *QPainterPath) AddPolygon(polygon []qtcore.QPointF) {
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	C.qute_QPainterPath_addPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // AddText wraps QPainterPath::addText.
@@ -265,6 +281,8 @@ func (this *QPainterPath) AddPolygon(polygon []qtcore.QPointF) {
 func (this *QPainterPath) AddText(point qtcore.QPointF, fArg *QFont, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddText")
 	C.qute_QPainterPath_addText(self, cQPointF(point), rt.UseArg(unsafe.Pointer(fArg), "QPainterPath.AddText"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fArg)
 }
 
 // AddPath wraps QPainterPath::addPath.
@@ -275,6 +293,8 @@ func (this *QPainterPath) AddText(point qtcore.QPointF, fArg *QFont, text string
 func (this *QPainterPath) AddPath(path *QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddPath")
 	C.qute_QPainterPath_addPath(self, rt.UseArg(unsafe.Pointer(path), "QPainterPath.AddPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 }
 
 // AddRegion wraps QPainterPath::addRegion.
@@ -285,6 +305,8 @@ func (this *QPainterPath) AddPath(path *QPainterPath) {
 func (this *QPainterPath) AddRegion(region *QRegion) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRegion")
 	C.qute_QPainterPath_addRegion(self, rt.UseArg(unsafe.Pointer(region), "QPainterPath.AddRegion"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(region)
 }
 
 // AddRoundedRect wraps QPainterPath::addRoundedRect.
@@ -295,6 +317,7 @@ func (this *QPainterPath) AddRegion(region *QRegion) {
 func (this *QPainterPath) AddRoundedRect(rect qtcore.QRectF, xRadius float64, yRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRoundedRect")
 	C.qute_QPainterPath_addRoundedRect(self, cQRectF(rect), C.double(xRadius), C.double(yRadius))
+	runtime.KeepAlive(this)
 }
 
 // ConnectPath wraps QPainterPath::connectPath.
@@ -305,6 +328,8 @@ func (this *QPainterPath) AddRoundedRect(rect qtcore.QRectF, xRadius float64, yR
 func (this *QPainterPath) ConnectPath(path *QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ConnectPath")
 	C.qute_QPainterPath_connectPath(self, rt.UseArg(unsafe.Pointer(path), "QPainterPath.ConnectPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 }
 
 // Contains wraps QPainterPath::contains.
@@ -315,6 +340,7 @@ func (this *QPainterPath) ConnectPath(path *QPainterPath) {
 func (this *QPainterPath) Contains(pt qtcore.QPointF) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Contains")
 	r := C.qute_QPainterPath_contains(self, cQPointF(pt))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -326,6 +352,7 @@ func (this *QPainterPath) Contains(pt qtcore.QPointF) bool {
 func (this *QPainterPath) ContainsRect(rect qtcore.QRectF) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ContainsRect")
 	r := C.qute_QPainterPath_contains_1(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -337,6 +364,7 @@ func (this *QPainterPath) ContainsRect(rect qtcore.QRectF) bool {
 func (this *QPainterPath) Intersects(rect qtcore.QRectF) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Intersects")
 	r := C.qute_QPainterPath_intersects(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -348,6 +376,7 @@ func (this *QPainterPath) Intersects(rect qtcore.QRectF) bool {
 func (this *QPainterPath) Translate(offset qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translate")
 	C.qute_QPainterPath_translate(self, cQPointF(offset))
+	runtime.KeepAlive(this)
 }
 
 // Translated wraps QPainterPath::translated.
@@ -360,6 +389,7 @@ func (this *QPainterPath) Translate(offset qtcore.QPointF) {
 func (this *QPainterPath) Translated(offset qtcore.QPointF) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Translated")
 	r := C.qute_QPainterPath_translated(self, cQPointF(offset))
+	runtime.KeepAlive(this)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -371,6 +401,7 @@ func (this *QPainterPath) Translated(offset qtcore.QPointF) *QPainterPath {
 func (this *QPainterPath) BoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.BoundingRect")
 	r := C.qute_QPainterPath_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -382,6 +413,7 @@ func (this *QPainterPath) BoundingRect() qtcore.QRectF {
 func (this *QPainterPath) ControlPointRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ControlPointRect")
 	r := C.qute_QPainterPath_controlPointRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -393,6 +425,7 @@ func (this *QPainterPath) ControlPointRect() qtcore.QRectF {
 func (this *QPainterPath) FillRule() qtcore.FillRule {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.FillRule")
 	r := C.qute_QPainterPath_fillRule(self)
+	runtime.KeepAlive(this)
 	return qtcore.FillRule(r)
 }
 
@@ -404,6 +437,7 @@ func (this *QPainterPath) FillRule() qtcore.FillRule {
 func (this *QPainterPath) SetFillRule(fillRule qtcore.FillRule) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.SetFillRule")
 	C.qute_QPainterPath_setFillRule(self, C.int64_t(fillRule))
+	runtime.KeepAlive(this)
 }
 
 // IsEmpty wraps QPainterPath::isEmpty.
@@ -414,6 +448,7 @@ func (this *QPainterPath) SetFillRule(fillRule qtcore.FillRule) {
 func (this *QPainterPath) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.IsEmpty")
 	r := C.qute_QPainterPath_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -427,6 +462,7 @@ func (this *QPainterPath) IsEmpty() bool {
 func (this *QPainterPath) ToReversed() *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToReversed")
 	r := C.qute_QPainterPath_toReversed(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -438,6 +474,7 @@ func (this *QPainterPath) ToReversed() *QPainterPath {
 func (this *QPainterPath) ToSubpathPolygons() [][]qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToSubpathPolygons")
 	r := C.qute_QPainterPath_toSubpathPolygons(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_list) []qtcore.QPointF {
 		return quteList(e, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 	})
@@ -451,6 +488,7 @@ func (this *QPainterPath) ToSubpathPolygons() [][]qtcore.QPointF {
 func (this *QPainterPath) ToFillPolygons() [][]qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToFillPolygons")
 	r := C.qute_QPainterPath_toFillPolygons(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_list) []qtcore.QPointF {
 		return quteList(e, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 	})
@@ -464,6 +502,7 @@ func (this *QPainterPath) ToFillPolygons() [][]qtcore.QPointF {
 func (this *QPainterPath) ToFillPolygon() []qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToFillPolygon")
 	r := C.qute_QPainterPath_toFillPolygon(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
@@ -475,6 +514,7 @@ func (this *QPainterPath) ToFillPolygon() []qtcore.QPointF {
 func (this *QPainterPath) ElementCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ElementCount")
 	r := C.qute_QPainterPath_elementCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -488,6 +528,7 @@ func (this *QPainterPath) ElementCount() int {
 func (this *QPainterPath) ElementAt(iArg int) *QPainterPathElement {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ElementAt")
 	r := C.qute_QPainterPath_elementAt(self, C.int(iArg))
+	runtime.KeepAlive(this)
 	return rt.View[QPainterPathElement](rt.WrapClass(r, "QPainterPathElement", rt.TakeOwned), r)
 }
 
@@ -499,6 +540,7 @@ func (this *QPainterPath) ElementAt(iArg int) *QPainterPathElement {
 func (this *QPainterPath) SetElementPositionAt(iArg int, x float64, y float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.SetElementPositionAt")
 	C.qute_QPainterPath_setElementPositionAt(self, C.int(iArg), C.double(x), C.double(y))
+	runtime.KeepAlive(this)
 }
 
 // IsCachingEnabled wraps QPainterPath::isCachingEnabled.
@@ -509,6 +551,7 @@ func (this *QPainterPath) SetElementPositionAt(iArg int, x float64, y float64) {
 func (this *QPainterPath) IsCachingEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.IsCachingEnabled")
 	r := C.qute_QPainterPath_isCachingEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -520,6 +563,7 @@ func (this *QPainterPath) IsCachingEnabled() bool {
 func (this *QPainterPath) SetCachingEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.SetCachingEnabled")
 	C.qute_QPainterPath_setCachingEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // Length wraps QPainterPath::length.
@@ -530,6 +574,7 @@ func (this *QPainterPath) SetCachingEnabled(enabled bool) {
 func (this *QPainterPath) Length() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Length")
 	r := C.qute_QPainterPath_length(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -541,6 +586,7 @@ func (this *QPainterPath) Length() float64 {
 func (this *QPainterPath) PercentAtLength(lenArg float64) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.PercentAtLength")
 	r := C.qute_QPainterPath_percentAtLength(self, C.double(lenArg))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -552,6 +598,7 @@ func (this *QPainterPath) PercentAtLength(lenArg float64) float64 {
 func (this *QPainterPath) PointAtPercent(t float64) qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.PointAtPercent")
 	r := C.qute_QPainterPath_pointAtPercent(self, C.double(t))
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -563,6 +610,7 @@ func (this *QPainterPath) PointAtPercent(t float64) qtcore.QPointF {
 func (this *QPainterPath) AngleAtPercent(t float64) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AngleAtPercent")
 	r := C.qute_QPainterPath_angleAtPercent(self, C.double(t))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -574,6 +622,7 @@ func (this *QPainterPath) AngleAtPercent(t float64) float64 {
 func (this *QPainterPath) SlopeAtPercent(t float64) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.SlopeAtPercent")
 	r := C.qute_QPainterPath_slopeAtPercent(self, C.double(t))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -587,6 +636,7 @@ func (this *QPainterPath) SlopeAtPercent(t float64) float64 {
 func (this *QPainterPath) Trimmed(fromFraction float64, toFraction float64) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Trimmed")
 	r := C.qute_QPainterPath_trimmed(self, C.double(fromFraction), C.double(toFraction))
+	runtime.KeepAlive(this)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -598,6 +648,8 @@ func (this *QPainterPath) Trimmed(fromFraction float64, toFraction float64) *QPa
 func (this *QPainterPath) IntersectsPath(pArg *QPainterPath) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.IntersectsPath")
 	r := C.qute_QPainterPath_intersects_1(self, rt.UseArg(unsafe.Pointer(pArg), "QPainterPath.IntersectsPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pArg)
 	return bool(r)
 }
 
@@ -609,6 +661,8 @@ func (this *QPainterPath) IntersectsPath(pArg *QPainterPath) bool {
 func (this *QPainterPath) ContainsPath(pArg *QPainterPath) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ContainsPath")
 	r := C.qute_QPainterPath_contains_2(self, rt.UseArg(unsafe.Pointer(pArg), "QPainterPath.ContainsPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pArg)
 	return bool(r)
 }
 
@@ -622,6 +676,8 @@ func (this *QPainterPath) ContainsPath(pArg *QPainterPath) bool {
 func (this *QPainterPath) United(rArg *QPainterPath) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.United")
 	r := C.qute_QPainterPath_united(self, rt.UseArg(unsafe.Pointer(rArg), "QPainterPath.United"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -635,6 +691,8 @@ func (this *QPainterPath) United(rArg *QPainterPath) *QPainterPath {
 func (this *QPainterPath) Intersected(rArg *QPainterPath) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Intersected")
 	r := C.qute_QPainterPath_intersected(self, rt.UseArg(unsafe.Pointer(rArg), "QPainterPath.Intersected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -648,6 +706,8 @@ func (this *QPainterPath) Intersected(rArg *QPainterPath) *QPainterPath {
 func (this *QPainterPath) Subtracted(rArg *QPainterPath) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Subtracted")
 	r := C.qute_QPainterPath_subtracted(self, rt.UseArg(unsafe.Pointer(rArg), "QPainterPath.Subtracted"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -661,5 +721,6 @@ func (this *QPainterPath) Subtracted(rArg *QPainterPath) *QPainterPath {
 func (this *QPainterPath) Simplified() *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Simplified")
 	r := C.qute_QPainterPath_simplified(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }

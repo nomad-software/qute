@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQHeaderViewWithOrientation(orientation qtcore.Orientations, parent QWidg
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQHeaderViewWithOrientation")
 	}
 	p := C.qute_QHeaderView_new(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQHeaderViewWithOrientation(orientation qtcore.Orientations, parent QWidg
 func (this *QHeaderView) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.Orientation")
 	r := C.qute_QHeaderView_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QHeaderView) Orientation() qtcore.Orientations {
 func (this *QHeaderView) Offset() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.Offset")
 	r := C.qute_QHeaderView_offset(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QHeaderView) Offset() int {
 func (this *QHeaderView) Length() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.Length")
 	r := C.qute_QHeaderView_length(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QHeaderView) Length() int {
 func (this *QHeaderView) SectionSizeHint(logicalIndex int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionSizeHint")
 	r := C.qute_QHeaderView_sectionSizeHint(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -121,6 +127,7 @@ func (this *QHeaderView) SectionSizeHint(logicalIndex int) int {
 func (this *QHeaderView) VisualIndexAt(position int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.VisualIndexAt")
 	r := C.qute_QHeaderView_visualIndexAt(self, C.int(position))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -132,6 +139,7 @@ func (this *QHeaderView) VisualIndexAt(position int) int {
 func (this *QHeaderView) LogicalIndexAt(position int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.LogicalIndexAt")
 	r := C.qute_QHeaderView_logicalIndexAt(self, C.int(position))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -143,6 +151,7 @@ func (this *QHeaderView) LogicalIndexAt(position int) int {
 func (this *QHeaderView) LogicalIndexAtPoint(pos qtcore.QPoint) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.LogicalIndexAtPoint")
 	r := C.qute_QHeaderView_logicalIndexAt_1(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -154,6 +163,7 @@ func (this *QHeaderView) LogicalIndexAtPoint(pos qtcore.QPoint) int {
 func (this *QHeaderView) SectionSize(logicalIndex int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionSize")
 	r := C.qute_QHeaderView_sectionSize(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -165,6 +175,7 @@ func (this *QHeaderView) SectionSize(logicalIndex int) int {
 func (this *QHeaderView) SectionPosition(logicalIndex int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionPosition")
 	r := C.qute_QHeaderView_sectionPosition(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -176,6 +187,7 @@ func (this *QHeaderView) SectionPosition(logicalIndex int) int {
 func (this *QHeaderView) SectionViewportPosition(logicalIndex int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionViewportPosition")
 	r := C.qute_QHeaderView_sectionViewportPosition(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -187,6 +199,7 @@ func (this *QHeaderView) SectionViewportPosition(logicalIndex int) int {
 func (this *QHeaderView) MoveSection(from int, to int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.MoveSection")
 	C.qute_QHeaderView_moveSection(self, C.int(from), C.int(to))
+	runtime.KeepAlive(this)
 }
 
 // SwapSections wraps QHeaderView::swapSections.
@@ -197,6 +210,7 @@ func (this *QHeaderView) MoveSection(from int, to int) {
 func (this *QHeaderView) SwapSections(first int, second int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SwapSections")
 	C.qute_QHeaderView_swapSections(self, C.int(first), C.int(second))
+	runtime.KeepAlive(this)
 }
 
 // ResizeSection wraps QHeaderView::resizeSection.
@@ -207,6 +221,7 @@ func (this *QHeaderView) SwapSections(first int, second int) {
 func (this *QHeaderView) ResizeSection(logicalIndex int, size int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.ResizeSection")
 	C.qute_QHeaderView_resizeSection(self, C.int(logicalIndex), C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // ResizeSections wraps QHeaderView::resizeSections.
@@ -217,6 +232,7 @@ func (this *QHeaderView) ResizeSection(logicalIndex int, size int) {
 func (this *QHeaderView) ResizeSections(mode QHeaderViewResizeMode) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.ResizeSections")
 	C.qute_QHeaderView_resizeSections(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // IsSectionHidden wraps QHeaderView::isSectionHidden.
@@ -227,6 +243,7 @@ func (this *QHeaderView) ResizeSections(mode QHeaderViewResizeMode) {
 func (this *QHeaderView) IsSectionHidden(logicalIndex int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.IsSectionHidden")
 	r := C.qute_QHeaderView_isSectionHidden(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -238,6 +255,7 @@ func (this *QHeaderView) IsSectionHidden(logicalIndex int) bool {
 func (this *QHeaderView) SetSectionHidden(logicalIndex int, hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionHidden")
 	C.qute_QHeaderView_setSectionHidden(self, C.int(logicalIndex), C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // HiddenSectionCount wraps QHeaderView::hiddenSectionCount.
@@ -248,6 +266,7 @@ func (this *QHeaderView) SetSectionHidden(logicalIndex int, hide bool) {
 func (this *QHeaderView) HiddenSectionCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.HiddenSectionCount")
 	r := C.qute_QHeaderView_hiddenSectionCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -259,6 +278,7 @@ func (this *QHeaderView) HiddenSectionCount() int {
 func (this *QHeaderView) HideSection(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.HideSection")
 	C.qute_QHeaderView_hideSection(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // ShowSection wraps QHeaderView::showSection.
@@ -269,6 +289,7 @@ func (this *QHeaderView) HideSection(logicalIndex int) {
 func (this *QHeaderView) ShowSection(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.ShowSection")
 	C.qute_QHeaderView_showSection(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // Count wraps QHeaderView::count.
@@ -279,6 +300,7 @@ func (this *QHeaderView) ShowSection(logicalIndex int) {
 func (this *QHeaderView) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.Count")
 	r := C.qute_QHeaderView_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -290,6 +312,7 @@ func (this *QHeaderView) Count() int {
 func (this *QHeaderView) VisualIndex(logicalIndex int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.VisualIndex")
 	r := C.qute_QHeaderView_visualIndex(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -301,6 +324,7 @@ func (this *QHeaderView) VisualIndex(logicalIndex int) int {
 func (this *QHeaderView) LogicalIndex(visualIndex int) int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.LogicalIndex")
 	r := C.qute_QHeaderView_logicalIndex(self, C.int(visualIndex))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -312,6 +336,7 @@ func (this *QHeaderView) LogicalIndex(visualIndex int) int {
 func (this *QHeaderView) SetSectionsMovable(movable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionsMovable")
 	C.qute_QHeaderView_setSectionsMovable(self, C.bool(movable))
+	runtime.KeepAlive(this)
 }
 
 // SectionsMovable wraps QHeaderView::sectionsMovable.
@@ -322,6 +347,7 @@ func (this *QHeaderView) SetSectionsMovable(movable bool) {
 func (this *QHeaderView) SectionsMovable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionsMovable")
 	r := C.qute_QHeaderView_sectionsMovable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -333,6 +359,7 @@ func (this *QHeaderView) SectionsMovable() bool {
 func (this *QHeaderView) SetFirstSectionMovable(movable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetFirstSectionMovable")
 	C.qute_QHeaderView_setFirstSectionMovable(self, C.bool(movable))
+	runtime.KeepAlive(this)
 }
 
 // IsFirstSectionMovable wraps QHeaderView::isFirstSectionMovable.
@@ -343,6 +370,7 @@ func (this *QHeaderView) SetFirstSectionMovable(movable bool) {
 func (this *QHeaderView) IsFirstSectionMovable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.IsFirstSectionMovable")
 	r := C.qute_QHeaderView_isFirstSectionMovable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -354,6 +382,7 @@ func (this *QHeaderView) IsFirstSectionMovable() bool {
 func (this *QHeaderView) SetSectionsClickable(clickable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionsClickable")
 	C.qute_QHeaderView_setSectionsClickable(self, C.bool(clickable))
+	runtime.KeepAlive(this)
 }
 
 // SectionsClickable wraps QHeaderView::sectionsClickable.
@@ -364,6 +393,7 @@ func (this *QHeaderView) SetSectionsClickable(clickable bool) {
 func (this *QHeaderView) SectionsClickable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionsClickable")
 	r := C.qute_QHeaderView_sectionsClickable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -375,6 +405,7 @@ func (this *QHeaderView) SectionsClickable() bool {
 func (this *QHeaderView) SetHighlightSections(highlight bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetHighlightSections")
 	C.qute_QHeaderView_setHighlightSections(self, C.bool(highlight))
+	runtime.KeepAlive(this)
 }
 
 // HighlightSections wraps QHeaderView::highlightSections.
@@ -385,6 +416,7 @@ func (this *QHeaderView) SetHighlightSections(highlight bool) {
 func (this *QHeaderView) HighlightSections() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.HighlightSections")
 	r := C.qute_QHeaderView_highlightSections(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -396,6 +428,7 @@ func (this *QHeaderView) HighlightSections() bool {
 func (this *QHeaderView) SectionResizeMode(logicalIndex int) QHeaderViewResizeMode {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionResizeMode")
 	r := C.qute_QHeaderView_sectionResizeMode(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 	return QHeaderViewResizeMode(r)
 }
 
@@ -407,6 +440,7 @@ func (this *QHeaderView) SectionResizeMode(logicalIndex int) QHeaderViewResizeMo
 func (this *QHeaderView) SetSectionResizeModeAll(mode QHeaderViewResizeMode) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionResizeModeAll")
 	C.qute_QHeaderView_setSectionResizeMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // SetSectionResizeMode wraps QHeaderView::setSectionResizeMode.
@@ -417,6 +451,7 @@ func (this *QHeaderView) SetSectionResizeModeAll(mode QHeaderViewResizeMode) {
 func (this *QHeaderView) SetSectionResizeMode(logicalIndex int, mode QHeaderViewResizeMode) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSectionResizeMode")
 	C.qute_QHeaderView_setSectionResizeMode_1(self, C.int(logicalIndex), C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // SetResizeContentsPrecision wraps QHeaderView::setResizeContentsPrecision.
@@ -427,6 +462,7 @@ func (this *QHeaderView) SetSectionResizeMode(logicalIndex int, mode QHeaderView
 func (this *QHeaderView) SetResizeContentsPrecision(precision int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetResizeContentsPrecision")
 	C.qute_QHeaderView_setResizeContentsPrecision(self, C.int(precision))
+	runtime.KeepAlive(this)
 }
 
 // ResizeContentsPrecision wraps QHeaderView::resizeContentsPrecision.
@@ -437,6 +473,7 @@ func (this *QHeaderView) SetResizeContentsPrecision(precision int) {
 func (this *QHeaderView) ResizeContentsPrecision() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.ResizeContentsPrecision")
 	r := C.qute_QHeaderView_resizeContentsPrecision(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -448,6 +485,7 @@ func (this *QHeaderView) ResizeContentsPrecision() int {
 func (this *QHeaderView) StretchSectionCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.StretchSectionCount")
 	r := C.qute_QHeaderView_stretchSectionCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -459,6 +497,7 @@ func (this *QHeaderView) StretchSectionCount() int {
 func (this *QHeaderView) SetSortIndicatorShown(show bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSortIndicatorShown")
 	C.qute_QHeaderView_setSortIndicatorShown(self, C.bool(show))
+	runtime.KeepAlive(this)
 }
 
 // IsSortIndicatorShown wraps QHeaderView::isSortIndicatorShown.
@@ -469,6 +508,7 @@ func (this *QHeaderView) SetSortIndicatorShown(show bool) {
 func (this *QHeaderView) IsSortIndicatorShown() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.IsSortIndicatorShown")
 	r := C.qute_QHeaderView_isSortIndicatorShown(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -480,6 +520,7 @@ func (this *QHeaderView) IsSortIndicatorShown() bool {
 func (this *QHeaderView) SetSortIndicator(logicalIndex int, order qtcore.SortOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSortIndicator")
 	C.qute_QHeaderView_setSortIndicator(self, C.int(logicalIndex), C.int64_t(order))
+	runtime.KeepAlive(this)
 }
 
 // SortIndicatorSection wraps QHeaderView::sortIndicatorSection.
@@ -490,6 +531,7 @@ func (this *QHeaderView) SetSortIndicator(logicalIndex int, order qtcore.SortOrd
 func (this *QHeaderView) SortIndicatorSection() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SortIndicatorSection")
 	r := C.qute_QHeaderView_sortIndicatorSection(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -501,6 +543,7 @@ func (this *QHeaderView) SortIndicatorSection() int {
 func (this *QHeaderView) SortIndicatorOrder() qtcore.SortOrder {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SortIndicatorOrder")
 	r := C.qute_QHeaderView_sortIndicatorOrder(self)
+	runtime.KeepAlive(this)
 	return qtcore.SortOrder(r)
 }
 
@@ -512,6 +555,7 @@ func (this *QHeaderView) SortIndicatorOrder() qtcore.SortOrder {
 func (this *QHeaderView) SetSortIndicatorClearable(clearable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetSortIndicatorClearable")
 	C.qute_QHeaderView_setSortIndicatorClearable(self, C.bool(clearable))
+	runtime.KeepAlive(this)
 }
 
 // IsSortIndicatorClearable wraps QHeaderView::isSortIndicatorClearable.
@@ -522,6 +566,7 @@ func (this *QHeaderView) SetSortIndicatorClearable(clearable bool) {
 func (this *QHeaderView) IsSortIndicatorClearable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.IsSortIndicatorClearable")
 	r := C.qute_QHeaderView_isSortIndicatorClearable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -533,6 +578,7 @@ func (this *QHeaderView) IsSortIndicatorClearable() bool {
 func (this *QHeaderView) StretchLastSection() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.StretchLastSection")
 	r := C.qute_QHeaderView_stretchLastSection(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -544,6 +590,7 @@ func (this *QHeaderView) StretchLastSection() bool {
 func (this *QHeaderView) SetStretchLastSection(stretch bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetStretchLastSection")
 	C.qute_QHeaderView_setStretchLastSection(self, C.bool(stretch))
+	runtime.KeepAlive(this)
 }
 
 // CascadingSectionResizes wraps QHeaderView::cascadingSectionResizes.
@@ -554,6 +601,7 @@ func (this *QHeaderView) SetStretchLastSection(stretch bool) {
 func (this *QHeaderView) CascadingSectionResizes() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.CascadingSectionResizes")
 	r := C.qute_QHeaderView_cascadingSectionResizes(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -565,6 +613,7 @@ func (this *QHeaderView) CascadingSectionResizes() bool {
 func (this *QHeaderView) SetCascadingSectionResizes(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetCascadingSectionResizes")
 	C.qute_QHeaderView_setCascadingSectionResizes(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // DefaultSectionSize wraps QHeaderView::defaultSectionSize.
@@ -575,6 +624,7 @@ func (this *QHeaderView) SetCascadingSectionResizes(enable bool) {
 func (this *QHeaderView) DefaultSectionSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.DefaultSectionSize")
 	r := C.qute_QHeaderView_defaultSectionSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -586,6 +636,7 @@ func (this *QHeaderView) DefaultSectionSize() int {
 func (this *QHeaderView) SetDefaultSectionSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetDefaultSectionSize")
 	C.qute_QHeaderView_setDefaultSectionSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // ResetDefaultSectionSize wraps QHeaderView::resetDefaultSectionSize.
@@ -596,6 +647,7 @@ func (this *QHeaderView) SetDefaultSectionSize(size int) {
 func (this *QHeaderView) ResetDefaultSectionSize() {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.ResetDefaultSectionSize")
 	C.qute_QHeaderView_resetDefaultSectionSize(self)
+	runtime.KeepAlive(this)
 }
 
 // MinimumSectionSize wraps QHeaderView::minimumSectionSize.
@@ -606,6 +658,7 @@ func (this *QHeaderView) ResetDefaultSectionSize() {
 func (this *QHeaderView) MinimumSectionSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.MinimumSectionSize")
 	r := C.qute_QHeaderView_minimumSectionSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -617,6 +670,7 @@ func (this *QHeaderView) MinimumSectionSize() int {
 func (this *QHeaderView) SetMinimumSectionSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetMinimumSectionSize")
 	C.qute_QHeaderView_setMinimumSectionSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // MaximumSectionSize wraps QHeaderView::maximumSectionSize.
@@ -627,6 +681,7 @@ func (this *QHeaderView) SetMinimumSectionSize(size int) {
 func (this *QHeaderView) MaximumSectionSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.MaximumSectionSize")
 	r := C.qute_QHeaderView_maximumSectionSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -638,6 +693,7 @@ func (this *QHeaderView) MaximumSectionSize() int {
 func (this *QHeaderView) SetMaximumSectionSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetMaximumSectionSize")
 	C.qute_QHeaderView_setMaximumSectionSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // DefaultAlignment wraps QHeaderView::defaultAlignment.
@@ -648,6 +704,7 @@ func (this *QHeaderView) SetMaximumSectionSize(size int) {
 func (this *QHeaderView) DefaultAlignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.DefaultAlignment")
 	r := C.qute_QHeaderView_defaultAlignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -659,6 +716,7 @@ func (this *QHeaderView) DefaultAlignment() qtcore.Alignment {
 func (this *QHeaderView) SetDefaultAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetDefaultAlignment")
 	C.qute_QHeaderView_setDefaultAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // SectionsMoved wraps QHeaderView::sectionsMoved.
@@ -669,6 +727,7 @@ func (this *QHeaderView) SetDefaultAlignment(alignment qtcore.Alignment) {
 func (this *QHeaderView) SectionsMoved() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionsMoved")
 	r := C.qute_QHeaderView_sectionsMoved(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -680,6 +739,7 @@ func (this *QHeaderView) SectionsMoved() bool {
 func (this *QHeaderView) SectionsHidden() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SectionsHidden")
 	r := C.qute_QHeaderView_sectionsHidden(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -691,6 +751,7 @@ func (this *QHeaderView) SectionsHidden() bool {
 func (this *QHeaderView) SaveState() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SaveState")
 	r := C.qute_QHeaderView_saveState(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -702,6 +763,7 @@ func (this *QHeaderView) SaveState() []byte {
 func (this *QHeaderView) RestoreState(state []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.RestoreState")
 	r := C.qute_QHeaderView_restoreState(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(state))), C.ptrdiff_t(len(state)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -713,6 +775,7 @@ func (this *QHeaderView) RestoreState(state []byte) bool {
 func (this *QHeaderView) SetOffset(offset int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetOffset")
 	C.qute_QHeaderView_setOffset(self, C.int(offset))
+	runtime.KeepAlive(this)
 }
 
 // SetOffsetToSectionPosition wraps QHeaderView::setOffsetToSectionPosition.
@@ -723,6 +786,7 @@ func (this *QHeaderView) SetOffset(offset int) {
 func (this *QHeaderView) SetOffsetToSectionPosition(visualIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetOffsetToSectionPosition")
 	C.qute_QHeaderView_setOffsetToSectionPosition(self, C.int(visualIndex))
+	runtime.KeepAlive(this)
 }
 
 // SetOffsetToLastSection wraps QHeaderView::setOffsetToLastSection.
@@ -733,6 +797,7 @@ func (this *QHeaderView) SetOffsetToSectionPosition(visualIndex int) {
 func (this *QHeaderView) SetOffsetToLastSection() {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.SetOffsetToLastSection")
 	C.qute_QHeaderView_setOffsetToLastSection(self)
+	runtime.KeepAlive(this)
 }
 
 // HeaderDataChanged wraps QHeaderView::headerDataChanged.
@@ -743,6 +808,7 @@ func (this *QHeaderView) SetOffsetToLastSection() {
 func (this *QHeaderView) HeaderDataChanged(orientation qtcore.Orientations, logicalFirst int, logicalLast int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.HeaderDataChanged")
 	C.qute_QHeaderView_headerDataChanged(self, C.int64_t(orientation), C.int(logicalFirst), C.int(logicalLast))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionMoved wraps emitting the sectionMoved signal.
@@ -753,6 +819,7 @@ func (this *QHeaderView) HeaderDataChanged(orientation qtcore.Orientations, logi
 func (this *QHeaderView) EmitSectionMoved(logicalIndex int, oldVisualIndex int, newVisualIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionMoved")
 	C.qute_QHeaderView_sectionMoved_1(self, C.int(logicalIndex), C.int(oldVisualIndex), C.int(newVisualIndex))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionResized wraps emitting the sectionResized signal.
@@ -763,6 +830,7 @@ func (this *QHeaderView) EmitSectionMoved(logicalIndex int, oldVisualIndex int, 
 func (this *QHeaderView) EmitSectionResized(logicalIndex int, oldSize int, newSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionResized")
 	C.qute_QHeaderView_sectionResized_1(self, C.int(logicalIndex), C.int(oldSize), C.int(newSize))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionPressed wraps emitting the sectionPressed signal.
@@ -773,6 +841,7 @@ func (this *QHeaderView) EmitSectionResized(logicalIndex int, oldSize int, newSi
 func (this *QHeaderView) EmitSectionPressed(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionPressed")
 	C.qute_QHeaderView_sectionPressed_1(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionClicked wraps emitting the sectionClicked signal.
@@ -783,6 +852,7 @@ func (this *QHeaderView) EmitSectionPressed(logicalIndex int) {
 func (this *QHeaderView) EmitSectionClicked(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionClicked")
 	C.qute_QHeaderView_sectionClicked_1(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionEntered wraps emitting the sectionEntered signal.
@@ -793,6 +863,7 @@ func (this *QHeaderView) EmitSectionClicked(logicalIndex int) {
 func (this *QHeaderView) EmitSectionEntered(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionEntered")
 	C.qute_QHeaderView_sectionEntered_1(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionDoubleClicked wraps emitting the sectionDoubleClicked signal.
@@ -803,6 +874,7 @@ func (this *QHeaderView) EmitSectionEntered(logicalIndex int) {
 func (this *QHeaderView) EmitSectionDoubleClicked(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionDoubleClicked")
 	C.qute_QHeaderView_sectionDoubleClicked_1(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionCountChanged wraps emitting the sectionCountChanged signal.
@@ -813,6 +885,7 @@ func (this *QHeaderView) EmitSectionDoubleClicked(logicalIndex int) {
 func (this *QHeaderView) EmitSectionCountChanged(oldCount int, newCount int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionCountChanged")
 	C.qute_QHeaderView_sectionCountChanged_1(self, C.int(oldCount), C.int(newCount))
+	runtime.KeepAlive(this)
 }
 
 // EmitSectionHandleDoubleClicked wraps emitting the sectionHandleDoubleClicked signal.
@@ -823,6 +896,7 @@ func (this *QHeaderView) EmitSectionCountChanged(oldCount int, newCount int) {
 func (this *QHeaderView) EmitSectionHandleDoubleClicked(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSectionHandleDoubleClicked")
 	C.qute_QHeaderView_sectionHandleDoubleClicked_1(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // EmitGeometriesChanged wraps emitting the geometriesChanged signal.
@@ -833,6 +907,7 @@ func (this *QHeaderView) EmitSectionHandleDoubleClicked(logicalIndex int) {
 func (this *QHeaderView) EmitGeometriesChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitGeometriesChanged")
 	C.qute_QHeaderView_geometriesChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSortIndicatorChanged wraps emitting the sortIndicatorChanged signal.
@@ -843,6 +918,7 @@ func (this *QHeaderView) EmitGeometriesChanged() {
 func (this *QHeaderView) EmitSortIndicatorChanged(logicalIndex int, order qtcore.SortOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSortIndicatorChanged")
 	C.qute_QHeaderView_sortIndicatorChanged_1(self, C.int(logicalIndex), C.int64_t(order))
+	runtime.KeepAlive(this)
 }
 
 // EmitSortIndicatorClearableChanged wraps emitting the sortIndicatorClearableChanged signal.
@@ -853,6 +929,7 @@ func (this *QHeaderView) EmitSortIndicatorChanged(logicalIndex int, order qtcore
 func (this *QHeaderView) EmitSortIndicatorClearableChanged(clearable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.EmitSortIndicatorClearableChanged")
 	C.qute_QHeaderView_sortIndicatorClearableChanged_1(self, C.bool(clearable))
+	runtime.KeepAlive(this)
 }
 
 // OnSectionMoved connects f to the sectionMoved signal. The connection ends when the

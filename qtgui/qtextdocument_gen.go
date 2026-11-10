@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQTextDocument(parent qtcore.QObjectLike) *QTextDocument {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTextDocument")
 	}
 	p := C.qute_QTextDocument_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQTextDocumentWithText(text string, parent qtcore.QObjectLike) *QTextDocu
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTextDocumentWithText")
 	}
 	p := C.qute_QTextDocument_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -101,6 +104,7 @@ func NewQTextDocumentWithText(text string, parent qtcore.QObjectLike) *QTextDocu
 func (this *QTextDocument) Clone() *QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Clone")
 	r := C.qute_QTextDocument_clone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.TakeOwned), r)
 }
 
@@ -112,6 +116,7 @@ func (this *QTextDocument) Clone() *QTextDocument {
 func (this *QTextDocument) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IsEmpty")
 	r := C.qute_QTextDocument_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -123,6 +128,7 @@ func (this *QTextDocument) IsEmpty() bool {
 func (this *QTextDocument) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Clear")
 	C.qute_QTextDocument_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SetUndoRedoEnabled wraps QTextDocument::setUndoRedoEnabled.
@@ -133,6 +139,7 @@ func (this *QTextDocument) Clear() {
 func (this *QTextDocument) SetUndoRedoEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetUndoRedoEnabled")
 	C.qute_QTextDocument_setUndoRedoEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsUndoRedoEnabled wraps QTextDocument::isUndoRedoEnabled.
@@ -143,6 +150,7 @@ func (this *QTextDocument) SetUndoRedoEnabled(enable bool) {
 func (this *QTextDocument) IsUndoRedoEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IsUndoRedoEnabled")
 	r := C.qute_QTextDocument_isUndoRedoEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -154,6 +162,7 @@ func (this *QTextDocument) IsUndoRedoEnabled() bool {
 func (this *QTextDocument) IsUndoAvailable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IsUndoAvailable")
 	r := C.qute_QTextDocument_isUndoAvailable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -165,6 +174,7 @@ func (this *QTextDocument) IsUndoAvailable() bool {
 func (this *QTextDocument) IsRedoAvailable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IsRedoAvailable")
 	r := C.qute_QTextDocument_isRedoAvailable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -176,6 +186,7 @@ func (this *QTextDocument) IsRedoAvailable() bool {
 func (this *QTextDocument) AvailableUndoSteps() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AvailableUndoSteps")
 	r := C.qute_QTextDocument_availableUndoSteps(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -187,6 +198,7 @@ func (this *QTextDocument) AvailableUndoSteps() int {
 func (this *QTextDocument) AvailableRedoSteps() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AvailableRedoSteps")
 	r := C.qute_QTextDocument_availableRedoSteps(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -198,6 +210,7 @@ func (this *QTextDocument) AvailableRedoSteps() int {
 func (this *QTextDocument) Revision() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Revision")
 	r := C.qute_QTextDocument_revision(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -209,6 +222,7 @@ func (this *QTextDocument) Revision() int {
 func (this *QTextDocument) SetMetaInformation(info QTextDocumentMetaInformation, stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetMetaInformation")
 	C.qute_QTextDocument_setMetaInformation(self, C.int64_t(info), (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // MetaInformation wraps QTextDocument::metaInformation.
@@ -219,6 +233,7 @@ func (this *QTextDocument) SetMetaInformation(info QTextDocumentMetaInformation,
 func (this *QTextDocument) MetaInformation(info QTextDocumentMetaInformation) string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.MetaInformation")
 	r := C.qute_QTextDocument_metaInformation(self, C.int64_t(info))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -230,6 +245,7 @@ func (this *QTextDocument) MetaInformation(info QTextDocumentMetaInformation) st
 func (this *QTextDocument) ToHtml() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ToHtml")
 	r := C.qute_QTextDocument_toHtml(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -241,6 +257,7 @@ func (this *QTextDocument) ToHtml() string {
 func (this *QTextDocument) SetHtml(html string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetHtml")
 	C.qute_QTextDocument_setHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(html))), C.ptrdiff_t(len(html)))
+	runtime.KeepAlive(this)
 }
 
 // ToMarkdown wraps QTextDocument::toMarkdown.
@@ -251,6 +268,7 @@ func (this *QTextDocument) SetHtml(html string) {
 func (this *QTextDocument) ToMarkdown() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ToMarkdown")
 	r := C.qute_QTextDocument_toMarkdown(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -262,6 +280,7 @@ func (this *QTextDocument) ToMarkdown() string {
 func (this *QTextDocument) SetMarkdown(markdown string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetMarkdown")
 	C.qute_QTextDocument_setMarkdown(self, (*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)))
+	runtime.KeepAlive(this)
 }
 
 // ToRawText wraps QTextDocument::toRawText.
@@ -272,6 +291,7 @@ func (this *QTextDocument) SetMarkdown(markdown string) {
 func (this *QTextDocument) ToRawText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ToRawText")
 	r := C.qute_QTextDocument_toRawText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -283,6 +303,7 @@ func (this *QTextDocument) ToRawText() string {
 func (this *QTextDocument) ToPlainText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ToPlainText")
 	r := C.qute_QTextDocument_toPlainText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -294,6 +315,7 @@ func (this *QTextDocument) ToPlainText() string {
 func (this *QTextDocument) SetPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetPlainText")
 	C.qute_QTextDocument_setPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // CharacterAt wraps QTextDocument::characterAt.
@@ -304,6 +326,7 @@ func (this *QTextDocument) SetPlainText(text string) {
 func (this *QTextDocument) CharacterAt(pos int) rune {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.CharacterAt")
 	r := C.qute_QTextDocument_characterAt(self, C.int(pos))
+	runtime.KeepAlive(this)
 	return rune(r)
 }
 
@@ -317,6 +340,7 @@ func (this *QTextDocument) CharacterAt(pos int) rune {
 func (this *QTextDocument) Find(subString string) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Find")
 	r := C.qute_QTextDocument_find(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)))
+	runtime.KeepAlive(this)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -330,6 +354,8 @@ func (this *QTextDocument) Find(subString string) *QTextCursor {
 func (this *QTextDocument) FindWithTextCursor(subString string, cursor *QTextCursor) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindWithTextCursor")
 	r := C.qute_QTextDocument_find_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)), rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.FindWithTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -343,6 +369,8 @@ func (this *QTextDocument) FindWithTextCursor(subString string, cursor *QTextCur
 func (this *QTextDocument) FindRegularExpression(expr *qtcore.QRegularExpression) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpression")
 	r := C.qute_QTextDocument_find_2(self, rt.UseArg(unsafe.Pointer(expr), "QTextDocument.FindRegularExpression"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(expr)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -356,6 +384,9 @@ func (this *QTextDocument) FindRegularExpression(expr *qtcore.QRegularExpression
 func (this *QTextDocument) FindRegularExpressionTextCursor(expr *qtcore.QRegularExpression, cursor *QTextCursor) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpressionTextCursor")
 	r := C.qute_QTextDocument_find_3(self, rt.UseArg(unsafe.Pointer(expr), "QTextDocument.FindRegularExpressionTextCursor"), rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.FindRegularExpressionTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(expr)
+	runtime.KeepAlive(cursor)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -369,6 +400,7 @@ func (this *QTextDocument) FindRegularExpressionTextCursor(expr *qtcore.QRegular
 func (this *QTextDocument) FrameAt(pos int) *QTextFrame {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FrameAt")
 	r := C.qute_QTextDocument_frameAt(self, C.int(pos))
+	runtime.KeepAlive(this)
 	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
 }
 
@@ -382,6 +414,7 @@ func (this *QTextDocument) FrameAt(pos int) *QTextFrame {
 func (this *QTextDocument) RootFrame() *QTextFrame {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.RootFrame")
 	r := C.qute_QTextDocument_rootFrame(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
 }
 
@@ -395,6 +428,7 @@ func (this *QTextDocument) RootFrame() *QTextFrame {
 func (this *QTextDocument) Object(objectIndex int) *QTextObject {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Object")
 	r := C.qute_QTextDocument_object(self, C.int(objectIndex))
+	runtime.KeepAlive(this)
 	return rt.View[QTextObject](rt.WrapClass(r, "QTextObject", rt.KeepOrBorrow), r)
 }
 
@@ -408,6 +442,8 @@ func (this *QTextDocument) Object(objectIndex int) *QTextObject {
 func (this *QTextDocument) ObjectForFormat(textFormat *QTextFormat) *QTextObject {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ObjectForFormat")
 	r := C.qute_QTextDocument_objectForFormat(self, rt.UseArg(unsafe.Pointer(textFormat), "QTextDocument.ObjectForFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textFormat)
 	return rt.View[QTextObject](rt.WrapClass(r, "QTextObject", rt.KeepOrBorrow), r)
 }
 
@@ -421,6 +457,7 @@ func (this *QTextDocument) ObjectForFormat(textFormat *QTextFormat) *QTextObject
 func (this *QTextDocument) FindBlock(pos int) *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindBlock")
 	r := C.qute_QTextDocument_findBlock(self, C.int(pos))
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -434,6 +471,7 @@ func (this *QTextDocument) FindBlock(pos int) *QTextBlock {
 func (this *QTextDocument) FindBlockByNumber(blockNumber int) *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindBlockByNumber")
 	r := C.qute_QTextDocument_findBlockByNumber(self, C.int(blockNumber))
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -447,6 +485,7 @@ func (this *QTextDocument) FindBlockByNumber(blockNumber int) *QTextBlock {
 func (this *QTextDocument) FindBlockByLineNumber(blockNumber int) *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindBlockByLineNumber")
 	r := C.qute_QTextDocument_findBlockByLineNumber(self, C.int(blockNumber))
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -460,6 +499,7 @@ func (this *QTextDocument) FindBlockByLineNumber(blockNumber int) *QTextBlock {
 func (this *QTextDocument) Begin() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Begin")
 	r := C.qute_QTextDocument_begin(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -473,6 +513,7 @@ func (this *QTextDocument) Begin() *QTextBlock {
 func (this *QTextDocument) End() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.End")
 	r := C.qute_QTextDocument_end(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -486,6 +527,7 @@ func (this *QTextDocument) End() *QTextBlock {
 func (this *QTextDocument) FirstBlock() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FirstBlock")
 	r := C.qute_QTextDocument_firstBlock(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -499,6 +541,7 @@ func (this *QTextDocument) FirstBlock() *QTextBlock {
 func (this *QTextDocument) LastBlock() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.LastBlock")
 	r := C.qute_QTextDocument_lastBlock(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -510,6 +553,7 @@ func (this *QTextDocument) LastBlock() *QTextBlock {
 func (this *QTextDocument) SetPageSize(size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetPageSize")
 	C.qute_QTextDocument_setPageSize(self, cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // PageSize wraps QTextDocument::pageSize.
@@ -520,6 +564,7 @@ func (this *QTextDocument) SetPageSize(size qtcore.QSizeF) {
 func (this *QTextDocument) PageSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.PageSize")
 	r := C.qute_QTextDocument_pageSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -531,6 +576,8 @@ func (this *QTextDocument) PageSize() qtcore.QSizeF {
 func (this *QTextDocument) SetDefaultFont(font *QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetDefaultFont")
 	C.qute_QTextDocument_setDefaultFont(self, rt.UseArg(unsafe.Pointer(font), "QTextDocument.SetDefaultFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // DefaultFont wraps QTextDocument::defaultFont.
@@ -543,6 +590,7 @@ func (this *QTextDocument) SetDefaultFont(font *QFont) {
 func (this *QTextDocument) DefaultFont() *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DefaultFont")
 	r := C.qute_QTextDocument_defaultFont(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -554,6 +602,7 @@ func (this *QTextDocument) DefaultFont() *QFont {
 func (this *QTextDocument) SetSuperScriptBaseline(baseline float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetSuperScriptBaseline")
 	C.qute_QTextDocument_setSuperScriptBaseline(self, C.double(baseline))
+	runtime.KeepAlive(this)
 }
 
 // SuperScriptBaseline wraps QTextDocument::superScriptBaseline.
@@ -564,6 +613,7 @@ func (this *QTextDocument) SetSuperScriptBaseline(baseline float64) {
 func (this *QTextDocument) SuperScriptBaseline() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SuperScriptBaseline")
 	r := C.qute_QTextDocument_superScriptBaseline(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -575,6 +625,7 @@ func (this *QTextDocument) SuperScriptBaseline() float64 {
 func (this *QTextDocument) SetSubScriptBaseline(baseline float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetSubScriptBaseline")
 	C.qute_QTextDocument_setSubScriptBaseline(self, C.double(baseline))
+	runtime.KeepAlive(this)
 }
 
 // SubScriptBaseline wraps QTextDocument::subScriptBaseline.
@@ -585,6 +636,7 @@ func (this *QTextDocument) SetSubScriptBaseline(baseline float64) {
 func (this *QTextDocument) SubScriptBaseline() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SubScriptBaseline")
 	r := C.qute_QTextDocument_subScriptBaseline(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -596,6 +648,7 @@ func (this *QTextDocument) SubScriptBaseline() float64 {
 func (this *QTextDocument) SetBaselineOffset(baseline float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetBaselineOffset")
 	C.qute_QTextDocument_setBaselineOffset(self, C.double(baseline))
+	runtime.KeepAlive(this)
 }
 
 // BaselineOffset wraps QTextDocument::baselineOffset.
@@ -606,6 +659,7 @@ func (this *QTextDocument) SetBaselineOffset(baseline float64) {
 func (this *QTextDocument) BaselineOffset() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.BaselineOffset")
 	r := C.qute_QTextDocument_baselineOffset(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -617,6 +671,7 @@ func (this *QTextDocument) BaselineOffset() float64 {
 func (this *QTextDocument) PageCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.PageCount")
 	r := C.qute_QTextDocument_pageCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -628,6 +683,7 @@ func (this *QTextDocument) PageCount() int {
 func (this *QTextDocument) IsModified() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IsModified")
 	r := C.qute_QTextDocument_isModified(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -643,6 +699,8 @@ func (this *QTextDocument) Print(printer QPagedPaintDeviceLike) {
 		printerPtr = rt.UseArg(unsafe.Pointer(printer.AsQPagedPaintDevice()), "QTextDocument.Print")
 	}
 	C.qute_QTextDocument_print(self, printerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(printer)
 }
 
 // Resource wraps QTextDocument::resource.
@@ -655,6 +713,8 @@ func (this *QTextDocument) Print(printer QPagedPaintDeviceLike) {
 func (this *QTextDocument) Resource(typeArg int, name *qtcore.QUrl) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Resource")
 	r := C.qute_QTextDocument_resource(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QTextDocument.Resource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(name)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -666,6 +726,9 @@ func (this *QTextDocument) Resource(typeArg int, name *qtcore.QUrl) *qtcore.QVar
 func (this *QTextDocument) AddResource(typeArg int, name *qtcore.QUrl, resource *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AddResource")
 	C.qute_QTextDocument_addResource(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QTextDocument.AddResource"), rt.UseArg(unsafe.Pointer(resource), "QTextDocument.AddResource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(name)
+	runtime.KeepAlive(resource)
 }
 
 // SetResourceProvider wraps QTextDocument::setResourceProvider.
@@ -682,6 +745,7 @@ func (this *QTextDocument) SetResourceProvider(provider func(*qtcore.QUrl) *qtco
 		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocument.SetResourceProvider")
 	})
 	C.qute_QTextDocument_setResourceProvider(self, C.uintptr_t(providerID))
+	runtime.KeepAlive(this)
 }
 
 // AllFormats wraps QTextDocument::allFormats.
@@ -692,6 +756,7 @@ func (this *QTextDocument) SetResourceProvider(provider func(*qtcore.QUrl) *qtco
 func (this *QTextDocument) AllFormats() []*QTextFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AllFormats")
 	r := C.qute_QTextDocument_allFormats(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextFormat {
 		return rt.View[QTextFormat](rt.WrapClass(e, "QTextFormat", rt.TakeOwned), e)
 	})
@@ -705,6 +770,7 @@ func (this *QTextDocument) AllFormats() []*QTextFormat {
 func (this *QTextDocument) MarkContentsDirty(from int, length int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.MarkContentsDirty")
 	C.qute_QTextDocument_markContentsDirty(self, C.int(from), C.int(length))
+	runtime.KeepAlive(this)
 }
 
 // SetUseDesignMetrics wraps QTextDocument::setUseDesignMetrics.
@@ -715,6 +781,7 @@ func (this *QTextDocument) MarkContentsDirty(from int, length int) {
 func (this *QTextDocument) SetUseDesignMetrics(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetUseDesignMetrics")
 	C.qute_QTextDocument_setUseDesignMetrics(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // UseDesignMetrics wraps QTextDocument::useDesignMetrics.
@@ -725,6 +792,7 @@ func (this *QTextDocument) SetUseDesignMetrics(bArg bool) {
 func (this *QTextDocument) UseDesignMetrics() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.UseDesignMetrics")
 	r := C.qute_QTextDocument_useDesignMetrics(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -736,6 +804,7 @@ func (this *QTextDocument) UseDesignMetrics() bool {
 func (this *QTextDocument) SetLayoutEnabled(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetLayoutEnabled")
 	C.qute_QTextDocument_setLayoutEnabled(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // IsLayoutEnabled wraps QTextDocument::isLayoutEnabled.
@@ -746,6 +815,7 @@ func (this *QTextDocument) SetLayoutEnabled(bArg bool) {
 func (this *QTextDocument) IsLayoutEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IsLayoutEnabled")
 	r := C.qute_QTextDocument_isLayoutEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -761,6 +831,8 @@ func (this *QTextDocument) DrawContents(painter QPainterLike) {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTextDocument.DrawContents")
 	}
 	C.qute_QTextDocument_drawContents(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
 }
 
 // SetTextWidth wraps QTextDocument::setTextWidth.
@@ -771,6 +843,7 @@ func (this *QTextDocument) DrawContents(painter QPainterLike) {
 func (this *QTextDocument) SetTextWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetTextWidth")
 	C.qute_QTextDocument_setTextWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // TextWidth wraps QTextDocument::textWidth.
@@ -781,6 +854,7 @@ func (this *QTextDocument) SetTextWidth(width float64) {
 func (this *QTextDocument) TextWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.TextWidth")
 	r := C.qute_QTextDocument_textWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -792,6 +866,7 @@ func (this *QTextDocument) TextWidth() float64 {
 func (this *QTextDocument) IdealWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IdealWidth")
 	r := C.qute_QTextDocument_idealWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -803,6 +878,7 @@ func (this *QTextDocument) IdealWidth() float64 {
 func (this *QTextDocument) IndentWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.IndentWidth")
 	r := C.qute_QTextDocument_indentWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -814,6 +890,7 @@ func (this *QTextDocument) IndentWidth() float64 {
 func (this *QTextDocument) SetIndentWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetIndentWidth")
 	C.qute_QTextDocument_setIndentWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // DocumentMargin wraps QTextDocument::documentMargin.
@@ -824,6 +901,7 @@ func (this *QTextDocument) SetIndentWidth(width float64) {
 func (this *QTextDocument) DocumentMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DocumentMargin")
 	r := C.qute_QTextDocument_documentMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -835,6 +913,7 @@ func (this *QTextDocument) DocumentMargin() float64 {
 func (this *QTextDocument) SetDocumentMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetDocumentMargin")
 	C.qute_QTextDocument_setDocumentMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // AdjustSize wraps QTextDocument::adjustSize.
@@ -845,6 +924,7 @@ func (this *QTextDocument) SetDocumentMargin(margin float64) {
 func (this *QTextDocument) AdjustSize() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.AdjustSize")
 	C.qute_QTextDocument_adjustSize(self)
+	runtime.KeepAlive(this)
 }
 
 // Size wraps QTextDocument::size.
@@ -855,6 +935,7 @@ func (this *QTextDocument) AdjustSize() {
 func (this *QTextDocument) Size() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Size")
 	r := C.qute_QTextDocument_size(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -866,6 +947,7 @@ func (this *QTextDocument) Size() qtcore.QSizeF {
 func (this *QTextDocument) BlockCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.BlockCount")
 	r := C.qute_QTextDocument_blockCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -877,6 +959,7 @@ func (this *QTextDocument) BlockCount() int {
 func (this *QTextDocument) LineCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.LineCount")
 	r := C.qute_QTextDocument_lineCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -888,6 +971,7 @@ func (this *QTextDocument) LineCount() int {
 func (this *QTextDocument) CharacterCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.CharacterCount")
 	r := C.qute_QTextDocument_characterCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -899,6 +983,7 @@ func (this *QTextDocument) CharacterCount() int {
 func (this *QTextDocument) SetDefaultStyleSheet(sheet string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetDefaultStyleSheet")
 	C.qute_QTextDocument_setDefaultStyleSheet(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sheet))), C.ptrdiff_t(len(sheet)))
+	runtime.KeepAlive(this)
 }
 
 // DefaultStyleSheet wraps QTextDocument::defaultStyleSheet.
@@ -909,6 +994,7 @@ func (this *QTextDocument) SetDefaultStyleSheet(sheet string) {
 func (this *QTextDocument) DefaultStyleSheet() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DefaultStyleSheet")
 	r := C.qute_QTextDocument_defaultStyleSheet(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -920,6 +1006,8 @@ func (this *QTextDocument) DefaultStyleSheet() string {
 func (this *QTextDocument) UndoWithTextCursor(cursor *QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.UndoWithTextCursor")
 	C.qute_QTextDocument_undo(self, rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.UndoWithTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // RedoWithTextCursor wraps QTextDocument::redo.
@@ -930,6 +1018,8 @@ func (this *QTextDocument) UndoWithTextCursor(cursor *QTextCursor) {
 func (this *QTextDocument) RedoWithTextCursor(cursor *QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.RedoWithTextCursor")
 	C.qute_QTextDocument_redo(self, rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.RedoWithTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // ClearUndoRedoStacks wraps QTextDocument::clearUndoRedoStacks.
@@ -940,6 +1030,7 @@ func (this *QTextDocument) RedoWithTextCursor(cursor *QTextCursor) {
 func (this *QTextDocument) ClearUndoRedoStacks() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ClearUndoRedoStacks")
 	C.qute_QTextDocument_clearUndoRedoStacks(self)
+	runtime.KeepAlive(this)
 }
 
 // MaximumBlockCount wraps QTextDocument::maximumBlockCount.
@@ -950,6 +1041,7 @@ func (this *QTextDocument) ClearUndoRedoStacks() {
 func (this *QTextDocument) MaximumBlockCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.MaximumBlockCount")
 	r := C.qute_QTextDocument_maximumBlockCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -961,6 +1053,7 @@ func (this *QTextDocument) MaximumBlockCount() int {
 func (this *QTextDocument) SetMaximumBlockCount(maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetMaximumBlockCount")
 	C.qute_QTextDocument_setMaximumBlockCount(self, C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // DefaultTextOption wraps QTextDocument::defaultTextOption.
@@ -973,6 +1066,7 @@ func (this *QTextDocument) SetMaximumBlockCount(maximum int) {
 func (this *QTextDocument) DefaultTextOption() *QTextOption {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DefaultTextOption")
 	r := C.qute_QTextDocument_defaultTextOption(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextOption](rt.WrapClass(r, "QTextOption", rt.TakeOwned), r)
 }
 
@@ -984,6 +1078,8 @@ func (this *QTextDocument) DefaultTextOption() *QTextOption {
 func (this *QTextDocument) SetDefaultTextOption(option *QTextOption) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetDefaultTextOption")
 	C.qute_QTextDocument_setDefaultTextOption(self, rt.UseArg(unsafe.Pointer(option), "QTextDocument.SetDefaultTextOption"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
 }
 
 // BaseUrl wraps QTextDocument::baseUrl.
@@ -996,6 +1092,7 @@ func (this *QTextDocument) SetDefaultTextOption(option *QTextOption) {
 func (this *QTextDocument) BaseUrl() *qtcore.QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.BaseUrl")
 	r := C.qute_QTextDocument_baseUrl(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -1007,6 +1104,8 @@ func (this *QTextDocument) BaseUrl() *qtcore.QUrl {
 func (this *QTextDocument) SetBaseUrl(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetBaseUrl")
 	C.qute_QTextDocument_setBaseUrl(self, rt.UseArg(unsafe.Pointer(url), "QTextDocument.SetBaseUrl"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // DefaultCursorMoveStyle wraps QTextDocument::defaultCursorMoveStyle.
@@ -1017,6 +1116,7 @@ func (this *QTextDocument) SetBaseUrl(url *qtcore.QUrl) {
 func (this *QTextDocument) DefaultCursorMoveStyle() qtcore.CursorMoveStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DefaultCursorMoveStyle")
 	r := C.qute_QTextDocument_defaultCursorMoveStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.CursorMoveStyle(r)
 }
 
@@ -1028,6 +1128,7 @@ func (this *QTextDocument) DefaultCursorMoveStyle() qtcore.CursorMoveStyle {
 func (this *QTextDocument) SetDefaultCursorMoveStyle(style qtcore.CursorMoveStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetDefaultCursorMoveStyle")
 	C.qute_QTextDocument_setDefaultCursorMoveStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // Undo wraps QTextDocument::undo.
@@ -1038,6 +1139,7 @@ func (this *QTextDocument) SetDefaultCursorMoveStyle(style qtcore.CursorMoveStyl
 func (this *QTextDocument) Undo() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Undo")
 	C.qute_QTextDocument_undo_1(self)
+	runtime.KeepAlive(this)
 }
 
 // Redo wraps QTextDocument::redo.
@@ -1048,6 +1150,7 @@ func (this *QTextDocument) Undo() {
 func (this *QTextDocument) Redo() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Redo")
 	C.qute_QTextDocument_redo_1(self)
+	runtime.KeepAlive(this)
 }
 
 // SetModified wraps QTextDocument::setModified.
@@ -1058,6 +1161,7 @@ func (this *QTextDocument) Redo() {
 func (this *QTextDocument) SetModified() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetModified")
 	C.qute_QTextDocument_setModified(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitContentsChange wraps emitting the contentsChange signal.
@@ -1068,6 +1172,7 @@ func (this *QTextDocument) SetModified() {
 func (this *QTextDocument) EmitContentsChange(from int, charsRemoved int, charsAdded int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitContentsChange")
 	C.qute_QTextDocument_contentsChange_1(self, C.int(from), C.int(charsRemoved), C.int(charsAdded))
+	runtime.KeepAlive(this)
 }
 
 // EmitContentsChanged wraps emitting the contentsChanged signal.
@@ -1078,6 +1183,7 @@ func (this *QTextDocument) EmitContentsChange(from int, charsRemoved int, charsA
 func (this *QTextDocument) EmitContentsChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitContentsChanged")
 	C.qute_QTextDocument_contentsChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitUndoAvailable wraps emitting the undoAvailable signal.
@@ -1088,6 +1194,7 @@ func (this *QTextDocument) EmitContentsChanged() {
 func (this *QTextDocument) EmitUndoAvailable(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitUndoAvailable")
 	C.qute_QTextDocument_undoAvailable_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitRedoAvailable wraps emitting the redoAvailable signal.
@@ -1098,6 +1205,7 @@ func (this *QTextDocument) EmitUndoAvailable(arg0 bool) {
 func (this *QTextDocument) EmitRedoAvailable(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitRedoAvailable")
 	C.qute_QTextDocument_redoAvailable_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitUndoCommandAdded wraps emitting the undoCommandAdded signal.
@@ -1108,6 +1216,7 @@ func (this *QTextDocument) EmitRedoAvailable(arg0 bool) {
 func (this *QTextDocument) EmitUndoCommandAdded() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitUndoCommandAdded")
 	C.qute_QTextDocument_undoCommandAdded_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitModificationChanged wraps emitting the modificationChanged signal.
@@ -1118,6 +1227,7 @@ func (this *QTextDocument) EmitUndoCommandAdded() {
 func (this *QTextDocument) EmitModificationChanged(m bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitModificationChanged")
 	C.qute_QTextDocument_modificationChanged_1(self, C.bool(m))
+	runtime.KeepAlive(this)
 }
 
 // EmitCursorPositionChanged wraps emitting the cursorPositionChanged signal.
@@ -1128,6 +1238,8 @@ func (this *QTextDocument) EmitModificationChanged(m bool) {
 func (this *QTextDocument) EmitCursorPositionChanged(cursor *QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitCursorPositionChanged")
 	C.qute_QTextDocument_cursorPositionChanged_1(self, rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.EmitCursorPositionChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // EmitBlockCountChanged wraps emitting the blockCountChanged signal.
@@ -1138,6 +1250,7 @@ func (this *QTextDocument) EmitCursorPositionChanged(cursor *QTextCursor) {
 func (this *QTextDocument) EmitBlockCountChanged(newBlockCount int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitBlockCountChanged")
 	C.qute_QTextDocument_blockCountChanged_1(self, C.int(newBlockCount))
+	runtime.KeepAlive(this)
 }
 
 // EmitBaseUrlChanged wraps emitting the baseUrlChanged signal.
@@ -1148,6 +1261,8 @@ func (this *QTextDocument) EmitBlockCountChanged(newBlockCount int) {
 func (this *QTextDocument) EmitBaseUrlChanged(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitBaseUrlChanged")
 	C.qute_QTextDocument_baseUrlChanged_1(self, rt.UseArg(unsafe.Pointer(url), "QTextDocument.EmitBaseUrlChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // EmitDocumentLayoutChanged wraps emitting the documentLayoutChanged signal.
@@ -1158,6 +1273,7 @@ func (this *QTextDocument) EmitBaseUrlChanged(url *qtcore.QUrl) {
 func (this *QTextDocument) EmitDocumentLayoutChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitDocumentLayoutChanged")
 	C.qute_QTextDocument_documentLayoutChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QTextDocumentSetDefaultResourceProvider wraps QTextDocument::setDefaultResourceProvider.

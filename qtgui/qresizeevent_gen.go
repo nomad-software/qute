@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QResizeEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QResizeEvent {
 func (this *QResizeEvent) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QResizeEvent.Size")
 	r := C.qute_QResizeEvent_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -52,5 +54,6 @@ func (this *QResizeEvent) Size() qtcore.QSize {
 func (this *QResizeEvent) OldSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QResizeEvent.OldSize")
 	r := C.qute_QResizeEvent_oldSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }

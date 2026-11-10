@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -48,6 +49,7 @@ func NewQGraphicsLinearLayout(parent QGraphicsLayoutItemLike) *QGraphicsLinearLa
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsLayoutItem()), "NewQGraphicsLinearLayout")
 	}
 	p := C.qute_QGraphicsLinearLayout_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -72,6 +74,7 @@ func NewQGraphicsLinearLayoutWithOrientation(orientation qtcore.Orientations, pa
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsLayoutItem()), "NewQGraphicsLinearLayoutWithOrientation")
 	}
 	p := C.qute_QGraphicsLinearLayout_new_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -88,6 +91,7 @@ func NewQGraphicsLinearLayoutWithOrientation(orientation qtcore.Orientations, pa
 func (this *QGraphicsLinearLayout) SetOrientation(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SetOrientation")
 	C.qute_QGraphicsLinearLayout_setOrientation(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // Orientation wraps QGraphicsLinearLayout::orientation.
@@ -98,6 +102,7 @@ func (this *QGraphicsLinearLayout) SetOrientation(orientation qtcore.Orientation
 func (this *QGraphicsLinearLayout) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.Orientation")
 	r := C.qute_QGraphicsLinearLayout_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -118,6 +123,8 @@ func (this *QGraphicsLinearLayout) AddItem(item QGraphicsLayoutItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.AddItem")
 	}
 	C.qute_QGraphicsLinearLayout_addItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -129,6 +136,7 @@ func (this *QGraphicsLinearLayout) AddItem(item QGraphicsLayoutItemLike) {
 func (this *QGraphicsLinearLayout) AddStretch() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.AddStretch")
 	C.qute_QGraphicsLinearLayout_addStretch(self)
+	runtime.KeepAlive(this)
 }
 
 // InsertItem wraps QGraphicsLinearLayout::insertItem.
@@ -146,6 +154,8 @@ func (this *QGraphicsLinearLayout) InsertItem(index int, item QGraphicsLayoutIte
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.InsertItem")
 	}
 	C.qute_QGraphicsLinearLayout_insertItem(self, C.int(index), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -157,6 +167,7 @@ func (this *QGraphicsLinearLayout) InsertItem(index int, item QGraphicsLayoutIte
 func (this *QGraphicsLinearLayout) InsertStretch(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.InsertStretch")
 	C.qute_QGraphicsLinearLayout_insertStretch(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // RemoveItem wraps QGraphicsLinearLayout::removeItem.
@@ -176,6 +187,8 @@ func (this *QGraphicsLinearLayout) RemoveItem(item QGraphicsLayoutItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.RemoveItem")
 	}
 	C.qute_QGraphicsLinearLayout_removeItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToGo()
 }
 
@@ -187,6 +200,7 @@ func (this *QGraphicsLinearLayout) RemoveItem(item QGraphicsLayoutItemLike) {
 func (this *QGraphicsLinearLayout) SetSpacing(spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SetSpacing")
 	C.qute_QGraphicsLinearLayout_setSpacing(self, C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // Spacing wraps QGraphicsLinearLayout::spacing.
@@ -197,6 +211,7 @@ func (this *QGraphicsLinearLayout) SetSpacing(spacing float64) {
 func (this *QGraphicsLinearLayout) Spacing() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.Spacing")
 	r := C.qute_QGraphicsLinearLayout_spacing(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -208,6 +223,7 @@ func (this *QGraphicsLinearLayout) Spacing() float64 {
 func (this *QGraphicsLinearLayout) SetItemSpacing(index int, spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SetItemSpacing")
 	C.qute_QGraphicsLinearLayout_setItemSpacing(self, C.int(index), C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // ItemSpacing wraps QGraphicsLinearLayout::itemSpacing.
@@ -218,6 +234,7 @@ func (this *QGraphicsLinearLayout) SetItemSpacing(index int, spacing float64) {
 func (this *QGraphicsLinearLayout) ItemSpacing(index int) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.ItemSpacing")
 	r := C.qute_QGraphicsLinearLayout_itemSpacing(self, C.int(index))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -233,6 +250,8 @@ func (this *QGraphicsLinearLayout) SetStretchFactor(item QGraphicsLayoutItemLike
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.SetStretchFactor")
 	}
 	C.qute_QGraphicsLinearLayout_setStretchFactor(self, itemPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // StretchFactor wraps QGraphicsLinearLayout::stretchFactor.
@@ -247,6 +266,8 @@ func (this *QGraphicsLinearLayout) StretchFactor(item QGraphicsLayoutItemLike) i
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.StretchFactor")
 	}
 	r := C.qute_QGraphicsLinearLayout_stretchFactor(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return int(r)
 }
 
@@ -262,6 +283,8 @@ func (this *QGraphicsLinearLayout) SetAlignment(item QGraphicsLayoutItemLike, al
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.SetAlignment")
 	}
 	C.qute_QGraphicsLinearLayout_setAlignment(self, itemPtr, C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // Alignment wraps QGraphicsLinearLayout::alignment.
@@ -276,6 +299,8 @@ func (this *QGraphicsLinearLayout) Alignment(item QGraphicsLayoutItemLike) qtcor
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.Alignment")
 	}
 	r := C.qute_QGraphicsLinearLayout_alignment(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return qtcore.Alignment(r)
 }
 
@@ -287,6 +312,7 @@ func (this *QGraphicsLinearLayout) Alignment(item QGraphicsLayoutItemLike) qtcor
 func (this *QGraphicsLinearLayout) SizeHint(which qtcore.SizeHint) qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SizeHint")
 	r := C.qute_QGraphicsLinearLayout_sizeHint(self, C.int64_t(which))
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -298,4 +324,5 @@ func (this *QGraphicsLinearLayout) SizeHint(which qtcore.SizeHint) qtcore.QSizeF
 func (this *QGraphicsLinearLayout) Dump() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.Dump")
 	C.qute_QGraphicsLinearLayout_dump(self)
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQEasingCurve() *QEasingCurve {
 func (this *QEasingCurve) Amplitude() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.Amplitude")
 	r := C.qute_QEasingCurve_amplitude(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -107,6 +109,7 @@ func (this *QEasingCurve) Amplitude() float64 {
 func (this *QEasingCurve) SetAmplitude(amplitude float64) {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.SetAmplitude")
 	C.qute_QEasingCurve_setAmplitude(self, C.double(amplitude))
+	runtime.KeepAlive(this)
 }
 
 // Period wraps QEasingCurve::period.
@@ -117,6 +120,7 @@ func (this *QEasingCurve) SetAmplitude(amplitude float64) {
 func (this *QEasingCurve) Period() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.Period")
 	r := C.qute_QEasingCurve_period(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -128,6 +132,7 @@ func (this *QEasingCurve) Period() float64 {
 func (this *QEasingCurve) SetPeriod(period float64) {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.SetPeriod")
 	C.qute_QEasingCurve_setPeriod(self, C.double(period))
+	runtime.KeepAlive(this)
 }
 
 // Overshoot wraps QEasingCurve::overshoot.
@@ -138,6 +143,7 @@ func (this *QEasingCurve) SetPeriod(period float64) {
 func (this *QEasingCurve) Overshoot() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.Overshoot")
 	r := C.qute_QEasingCurve_overshoot(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -149,6 +155,7 @@ func (this *QEasingCurve) Overshoot() float64 {
 func (this *QEasingCurve) SetOvershoot(overshoot float64) {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.SetOvershoot")
 	C.qute_QEasingCurve_setOvershoot(self, C.double(overshoot))
+	runtime.KeepAlive(this)
 }
 
 // AddCubicBezierSegment wraps QEasingCurve::addCubicBezierSegment.
@@ -159,6 +166,7 @@ func (this *QEasingCurve) SetOvershoot(overshoot float64) {
 func (this *QEasingCurve) AddCubicBezierSegment(c1 QPointF, c2 QPointF, endPoint QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.AddCubicBezierSegment")
 	C.qute_QEasingCurve_addCubicBezierSegment(self, cQPointF(c1), cQPointF(c2), cQPointF(endPoint))
+	runtime.KeepAlive(this)
 }
 
 // AddTCBSegment wraps QEasingCurve::addTCBSegment.
@@ -169,6 +177,7 @@ func (this *QEasingCurve) AddCubicBezierSegment(c1 QPointF, c2 QPointF, endPoint
 func (this *QEasingCurve) AddTCBSegment(nextPoint QPointF, t float64, c float64, bArg float64) {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.AddTCBSegment")
 	C.qute_QEasingCurve_addTCBSegment(self, cQPointF(nextPoint), C.double(t), C.double(c), C.double(bArg))
+	runtime.KeepAlive(this)
 }
 
 // ToCubicSpline wraps QEasingCurve::toCubicSpline.
@@ -179,6 +188,7 @@ func (this *QEasingCurve) AddTCBSegment(nextPoint QPointF, t float64, c float64,
 func (this *QEasingCurve) ToCubicSpline() []QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.ToCubicSpline")
 	r := C.qute_QEasingCurve_toCubicSpline(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_pointf) QPointF { return goQPointF(e) })
 }
 
@@ -190,6 +200,7 @@ func (this *QEasingCurve) ToCubicSpline() []QPointF {
 func (this *QEasingCurve) Type() QEasingCurveType {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.Type")
 	r := C.qute_QEasingCurve_type(self)
+	runtime.KeepAlive(this)
 	return QEasingCurveType(r)
 }
 
@@ -201,6 +212,7 @@ func (this *QEasingCurve) Type() QEasingCurveType {
 func (this *QEasingCurve) SetType(typeArg QEasingCurveType) {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.SetType")
 	C.qute_QEasingCurve_setType(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // ValueForProgress wraps QEasingCurve::valueForProgress.
@@ -211,6 +223,7 @@ func (this *QEasingCurve) SetType(typeArg QEasingCurveType) {
 func (this *QEasingCurve) ValueForProgress(progress float64) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEasingCurve.ValueForProgress")
 	r := C.qute_QEasingCurve_valueForProgress(self, C.double(progress))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

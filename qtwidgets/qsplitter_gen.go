@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQSplitter(parent QWidgetLike) *QSplitter {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSplitter")
 	}
 	p := C.qute_QSplitter_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQSplitterWithOrientation(arg0 qtcore.Orientations, parent QWidgetLike) *
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSplitterWithOrientation")
 	}
 	p := C.qute_QSplitter_new_1(C.int64_t(arg0), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -106,6 +109,8 @@ func (this *QSplitter) AddWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QSplitter.AddWidget")
 	}
 	C.qute_QSplitter_addWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -124,6 +129,8 @@ func (this *QSplitter) InsertWidget(index int, widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QSplitter.InsertWidget")
 	}
 	C.qute_QSplitter_insertWidget(self, C.int(index), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -144,6 +151,8 @@ func (this *QSplitter) ReplaceWidget(index int, widget QWidgetLike) *QWidget {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QSplitter.ReplaceWidget")
 	}
 	r := C.qute_QSplitter_replaceWidget(self, C.int(index), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeOwned), r)
 }
@@ -156,6 +165,7 @@ func (this *QSplitter) ReplaceWidget(index int, widget QWidgetLike) *QWidget {
 func (this *QSplitter) SetOrientation(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetOrientation")
 	C.qute_QSplitter_setOrientation(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // Orientation wraps QSplitter::orientation.
@@ -166,6 +176,7 @@ func (this *QSplitter) SetOrientation(orientation qtcore.Orientations) {
 func (this *QSplitter) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.Orientation")
 	r := C.qute_QSplitter_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -177,6 +188,7 @@ func (this *QSplitter) Orientation() qtcore.Orientations {
 func (this *QSplitter) SetChildrenCollapsible(childrenCollapsible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetChildrenCollapsible")
 	C.qute_QSplitter_setChildrenCollapsible(self, C.bool(childrenCollapsible))
+	runtime.KeepAlive(this)
 }
 
 // ChildrenCollapsible wraps QSplitter::childrenCollapsible.
@@ -187,6 +199,7 @@ func (this *QSplitter) SetChildrenCollapsible(childrenCollapsible bool) {
 func (this *QSplitter) ChildrenCollapsible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.ChildrenCollapsible")
 	r := C.qute_QSplitter_childrenCollapsible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -198,6 +211,7 @@ func (this *QSplitter) ChildrenCollapsible() bool {
 func (this *QSplitter) SetCollapsible(index int, arg1 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetCollapsible")
 	C.qute_QSplitter_setCollapsible(self, C.int(index), C.bool(arg1))
+	runtime.KeepAlive(this)
 }
 
 // IsCollapsible wraps QSplitter::isCollapsible.
@@ -208,6 +222,7 @@ func (this *QSplitter) SetCollapsible(index int, arg1 bool) {
 func (this *QSplitter) IsCollapsible(index int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.IsCollapsible")
 	r := C.qute_QSplitter_isCollapsible(self, C.int(index))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -219,6 +234,7 @@ func (this *QSplitter) IsCollapsible(index int) bool {
 func (this *QSplitter) SetOpaqueResize() {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetOpaqueResize")
 	C.qute_QSplitter_setOpaqueResize(self)
+	runtime.KeepAlive(this)
 }
 
 // OpaqueResize wraps QSplitter::opaqueResize.
@@ -229,6 +245,7 @@ func (this *QSplitter) SetOpaqueResize() {
 func (this *QSplitter) OpaqueResize() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.OpaqueResize")
 	r := C.qute_QSplitter_opaqueResize(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -240,6 +257,7 @@ func (this *QSplitter) OpaqueResize() bool {
 func (this *QSplitter) Refresh() {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.Refresh")
 	C.qute_QSplitter_refresh(self)
+	runtime.KeepAlive(this)
 }
 
 // Sizes wraps QSplitter::sizes.
@@ -250,6 +268,7 @@ func (this *QSplitter) Refresh() {
 func (this *QSplitter) Sizes() []int {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.Sizes")
 	r := C.qute_QSplitter_sizes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.int) int { return int(e) })
 }
 
@@ -265,6 +284,7 @@ func (this *QSplitter) SetSizes(list []int) {
 		listC[i] = C.int(list[i])
 	}
 	C.qute_QSplitter_setSizes(self, unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
+	runtime.KeepAlive(this)
 }
 
 // SaveState wraps QSplitter::saveState.
@@ -275,6 +295,7 @@ func (this *QSplitter) SetSizes(list []int) {
 func (this *QSplitter) SaveState() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SaveState")
 	r := C.qute_QSplitter_saveState(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -286,6 +307,7 @@ func (this *QSplitter) SaveState() []byte {
 func (this *QSplitter) RestoreState(state []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.RestoreState")
 	r := C.qute_QSplitter_restoreState(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(state))), C.ptrdiff_t(len(state)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -297,6 +319,7 @@ func (this *QSplitter) RestoreState(state []byte) bool {
 func (this *QSplitter) HandleWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.HandleWidth")
 	r := C.qute_QSplitter_handleWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -308,6 +331,7 @@ func (this *QSplitter) HandleWidth() int {
 func (this *QSplitter) SetHandleWidth(handleWidth int) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetHandleWidth")
 	C.qute_QSplitter_setHandleWidth(self, C.int(handleWidth))
+	runtime.KeepAlive(this)
 }
 
 // IndexOf wraps QSplitter::indexOf.
@@ -322,6 +346,8 @@ func (this *QSplitter) IndexOf(w QWidgetLike) int {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QSplitter.IndexOf")
 	}
 	r := C.qute_QSplitter_indexOf(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	return int(r)
 }
 
@@ -335,6 +361,7 @@ func (this *QSplitter) IndexOf(w QWidgetLike) int {
 func (this *QSplitter) Widget(index int) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.Widget")
 	r := C.qute_QSplitter_widget(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -346,6 +373,7 @@ func (this *QSplitter) Widget(index int) *QWidget {
 func (this *QSplitter) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.Count")
 	r := C.qute_QSplitter_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -359,6 +387,7 @@ func (this *QSplitter) GetRange(index int) (int, int) {
 	var arg1Out C.int
 	var arg2Out C.int
 	C.qute_QSplitter_getRange(self, C.int(index), &arg1Out, &arg2Out)
+	runtime.KeepAlive(this)
 	return int(arg1Out), int(arg2Out)
 }
 
@@ -370,6 +399,7 @@ func (this *QSplitter) GetRange(index int) (int, int) {
 func (this *QSplitter) SetStretchFactor(index int, stretch int) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetStretchFactor")
 	C.qute_QSplitter_setStretchFactor(self, C.int(index), C.int(stretch))
+	runtime.KeepAlive(this)
 }
 
 // EmitSplitterMoved wraps emitting the splitterMoved signal.
@@ -380,6 +410,7 @@ func (this *QSplitter) SetStretchFactor(index int, stretch int) {
 func (this *QSplitter) EmitSplitterMoved(pos int, index int) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.EmitSplitterMoved")
 	C.qute_QSplitter_splitterMoved_1(self, C.int(pos), C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // OnSplitterMoved connects f to the splitterMoved signal. The connection ends when the

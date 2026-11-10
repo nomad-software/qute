@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQMenuBar(parent QWidgetLike) *QMenuBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMenuBar")
 	}
 	p := C.qute_QMenuBar_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -86,6 +88,8 @@ func (this *QMenuBar) AddMenu(menu QMenuLike) *qtgui.QAction {
 		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QMenuBar.AddMenu")
 	}
 	r := C.qute_QMenuBar_addMenu(self, menuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(menu)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -99,6 +103,7 @@ func (this *QMenuBar) AddMenu(menu QMenuLike) *qtgui.QAction {
 func (this *QMenuBar) AddMenuTitle(title string) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.AddMenuTitle")
 	r := C.qute_QMenuBar_addMenu_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
@@ -112,6 +117,8 @@ func (this *QMenuBar) AddMenuTitle(title string) *QMenu {
 func (this *QMenuBar) AddMenuIcon(icon *qtgui.QIcon, title string) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.AddMenuIcon")
 	r := C.qute_QMenuBar_addMenu_2(self, rt.UseArg(unsafe.Pointer(icon), "QMenuBar.AddMenuIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
@@ -125,6 +132,7 @@ func (this *QMenuBar) AddMenuIcon(icon *qtgui.QIcon, title string) *QMenu {
 func (this *QMenuBar) AddSeparator() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.AddSeparator")
 	r := C.qute_QMenuBar_addSeparator(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -142,6 +150,8 @@ func (this *QMenuBar) InsertSeparator(before qtgui.QActionLike) *qtgui.QAction {
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QMenuBar.InsertSeparator")
 	}
 	r := C.qute_QMenuBar_insertSeparator(self, beforePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -163,6 +173,9 @@ func (this *QMenuBar) InsertMenu(before qtgui.QActionLike, menu QMenuLike) *qtgu
 		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QMenuBar.InsertMenu")
 	}
 	r := C.qute_QMenuBar_insertMenu(self, beforePtr, menuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(menu)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -174,6 +187,7 @@ func (this *QMenuBar) InsertMenu(before qtgui.QActionLike, menu QMenuLike) *qtgu
 func (this *QMenuBar) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.Clear")
 	C.qute_QMenuBar_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // ActiveAction wraps QMenuBar::activeAction.
@@ -186,6 +200,7 @@ func (this *QMenuBar) Clear() {
 func (this *QMenuBar) ActiveAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.ActiveAction")
 	r := C.qute_QMenuBar_activeAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -201,6 +216,8 @@ func (this *QMenuBar) SetActiveAction(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenuBar.SetActiveAction")
 	}
 	C.qute_QMenuBar_setActiveAction(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // SetDefaultUp wraps QMenuBar::setDefaultUp.
@@ -211,6 +228,7 @@ func (this *QMenuBar) SetActiveAction(action qtgui.QActionLike) {
 func (this *QMenuBar) SetDefaultUp(defaultUp bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.SetDefaultUp")
 	C.qute_QMenuBar_setDefaultUp(self, C.bool(defaultUp))
+	runtime.KeepAlive(this)
 }
 
 // IsDefaultUp wraps QMenuBar::isDefaultUp.
@@ -221,6 +239,7 @@ func (this *QMenuBar) SetDefaultUp(defaultUp bool) {
 func (this *QMenuBar) IsDefaultUp() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.IsDefaultUp")
 	r := C.qute_QMenuBar_isDefaultUp(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -236,6 +255,8 @@ func (this *QMenuBar) ActionGeometry(action qtgui.QActionLike) qtcore.QRect {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenuBar.ActionGeometry")
 	}
 	r := C.qute_QMenuBar_actionGeometry(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 	return goQRect(r)
 }
 
@@ -249,6 +270,7 @@ func (this *QMenuBar) ActionGeometry(action qtgui.QActionLike) qtcore.QRect {
 func (this *QMenuBar) ActionAt(point qtcore.QPoint) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.ActionAt")
 	r := C.qute_QMenuBar_actionAt(self, cQPoint(point))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -267,6 +289,8 @@ func (this *QMenuBar) SetCornerWidget(w QWidgetLike) {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QMenuBar.SetCornerWidget")
 	}
 	C.qute_QMenuBar_setCornerWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 }
 
@@ -280,6 +304,7 @@ func (this *QMenuBar) SetCornerWidget(w QWidgetLike) {
 func (this *QMenuBar) CornerWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.CornerWidget")
 	r := C.qute_QMenuBar_cornerWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -291,6 +316,7 @@ func (this *QMenuBar) CornerWidget() *QWidget {
 func (this *QMenuBar) IsNativeMenuBar() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.IsNativeMenuBar")
 	r := C.qute_QMenuBar_isNativeMenuBar(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -302,6 +328,7 @@ func (this *QMenuBar) IsNativeMenuBar() bool {
 func (this *QMenuBar) SetNativeMenuBar(nativeMenuBar bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.SetNativeMenuBar")
 	C.qute_QMenuBar_setNativeMenuBar(self, C.bool(nativeMenuBar))
+	runtime.KeepAlive(this)
 }
 
 // EmitTriggered wraps emitting the triggered signal.
@@ -316,6 +343,8 @@ func (this *QMenuBar) EmitTriggered(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenuBar.EmitTriggered")
 	}
 	C.qute_QMenuBar_triggered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // EmitHovered wraps emitting the hovered signal.
@@ -330,6 +359,8 @@ func (this *QMenuBar) EmitHovered(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenuBar.EmitHovered")
 	}
 	C.qute_QMenuBar_hovered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the

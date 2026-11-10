@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQFileDialog(parent QWidgetLike) *QFileDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFileDialog")
 	}
 	p := C.qute_QFileDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQFileDialogWithWidget(parent QWidgetLike, fArg qtcore.WindowFlags) *QFil
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFileDialogWithWidget")
 	}
 	p := C.qute_QFileDialog_new_1(parentPtr, C.int64_t(fArg))
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQFileDialogWithWidget(parent QWidgetLike, fArg qtcore.WindowFlags) *QFil
 func (this *QFileDialog) SetDirectory(directory string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetDirectory")
 	C.qute_QFileDialog_setDirectory(self, (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)))
+	runtime.KeepAlive(this)
 }
 
 // SetDirectoryDir wraps QFileDialog::setDirectory.
@@ -110,6 +114,8 @@ func (this *QFileDialog) SetDirectory(directory string) {
 func (this *QFileDialog) SetDirectoryDir(directory *qtcore.QDir) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetDirectoryDir")
 	C.qute_QFileDialog_setDirectory_1(self, rt.UseArg(unsafe.Pointer(directory), "QFileDialog.SetDirectoryDir"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(directory)
 }
 
 // Directory wraps QFileDialog::directory.
@@ -122,6 +128,7 @@ func (this *QFileDialog) SetDirectoryDir(directory *qtcore.QDir) {
 func (this *QFileDialog) Directory() *qtcore.QDir {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.Directory")
 	r := C.qute_QFileDialog_directory(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDir](rt.WrapClass(r, "QDir", rt.TakeOwned), r)
 }
 
@@ -133,6 +140,8 @@ func (this *QFileDialog) Directory() *qtcore.QDir {
 func (this *QFileDialog) SetDirectoryUrl(directory *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetDirectoryUrl")
 	C.qute_QFileDialog_setDirectoryUrl(self, rt.UseArg(unsafe.Pointer(directory), "QFileDialog.SetDirectoryUrl"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(directory)
 }
 
 // DirectoryUrl wraps QFileDialog::directoryUrl.
@@ -145,6 +154,7 @@ func (this *QFileDialog) SetDirectoryUrl(directory *qtcore.QUrl) {
 func (this *QFileDialog) DirectoryUrl() *qtcore.QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.DirectoryUrl")
 	r := C.qute_QFileDialog_directoryUrl(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -156,6 +166,7 @@ func (this *QFileDialog) DirectoryUrl() *qtcore.QUrl {
 func (this *QFileDialog) SelectFile(filename string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectFile")
 	C.qute_QFileDialog_selectFile(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)))
+	runtime.KeepAlive(this)
 }
 
 // SelectedFiles wraps QFileDialog::selectedFiles.
@@ -166,6 +177,7 @@ func (this *QFileDialog) SelectFile(filename string) {
 func (this *QFileDialog) SelectedFiles() []string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectedFiles")
 	r := C.qute_QFileDialog_selectedFiles(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -177,6 +189,8 @@ func (this *QFileDialog) SelectedFiles() []string {
 func (this *QFileDialog) SelectUrl(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectUrl")
 	C.qute_QFileDialog_selectUrl(self, rt.UseArg(unsafe.Pointer(url), "QFileDialog.SelectUrl"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // SelectedUrls wraps QFileDialog::selectedUrls.
@@ -187,6 +201,7 @@ func (this *QFileDialog) SelectUrl(url *qtcore.QUrl) {
 func (this *QFileDialog) SelectedUrls() []*qtcore.QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectedUrls")
 	r := C.qute_QFileDialog_selectedUrls(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QUrl {
 		return rt.View[qtcore.QUrl](rt.WrapClass(e, "QUrl", rt.TakeOwned), e)
 	})
@@ -200,6 +215,7 @@ func (this *QFileDialog) SelectedUrls() []*qtcore.QUrl {
 func (this *QFileDialog) SetNameFilter(filter string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetNameFilter")
 	C.qute_QFileDialog_setNameFilter(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filter))), C.ptrdiff_t(len(filter)))
+	runtime.KeepAlive(this)
 }
 
 // SetNameFilters wraps QFileDialog::setNameFilters.
@@ -211,6 +227,7 @@ func (this *QFileDialog) SetNameFilters(filters []string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetNameFilters")
 	filtersData, filtersLens := quteStrListArg(filters)
 	C.qute_QFileDialog_setNameFilters(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(filtersData))), (*C.ptrdiff_t)(unsafe.SliceData(filtersLens)), C.ptrdiff_t(len(filters)))
+	runtime.KeepAlive(this)
 }
 
 // NameFilters wraps QFileDialog::nameFilters.
@@ -221,6 +238,7 @@ func (this *QFileDialog) SetNameFilters(filters []string) {
 func (this *QFileDialog) NameFilters() []string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.NameFilters")
 	r := C.qute_QFileDialog_nameFilters(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -232,6 +250,7 @@ func (this *QFileDialog) NameFilters() []string {
 func (this *QFileDialog) SelectNameFilter(filter string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectNameFilter")
 	C.qute_QFileDialog_selectNameFilter(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filter))), C.ptrdiff_t(len(filter)))
+	runtime.KeepAlive(this)
 }
 
 // SelectedMimeTypeFilter wraps QFileDialog::selectedMimeTypeFilter.
@@ -242,6 +261,7 @@ func (this *QFileDialog) SelectNameFilter(filter string) {
 func (this *QFileDialog) SelectedMimeTypeFilter() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectedMimeTypeFilter")
 	r := C.qute_QFileDialog_selectedMimeTypeFilter(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -253,6 +273,7 @@ func (this *QFileDialog) SelectedMimeTypeFilter() string {
 func (this *QFileDialog) SelectedNameFilter() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectedNameFilter")
 	r := C.qute_QFileDialog_selectedNameFilter(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -265,6 +286,7 @@ func (this *QFileDialog) SetMimeTypeFilters(filters []string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetMimeTypeFilters")
 	filtersData, filtersLens := quteStrListArg(filters)
 	C.qute_QFileDialog_setMimeTypeFilters(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(filtersData))), (*C.ptrdiff_t)(unsafe.SliceData(filtersLens)), C.ptrdiff_t(len(filters)))
+	runtime.KeepAlive(this)
 }
 
 // MimeTypeFilters wraps QFileDialog::mimeTypeFilters.
@@ -275,6 +297,7 @@ func (this *QFileDialog) SetMimeTypeFilters(filters []string) {
 func (this *QFileDialog) MimeTypeFilters() []string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.MimeTypeFilters")
 	r := C.qute_QFileDialog_mimeTypeFilters(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -286,6 +309,7 @@ func (this *QFileDialog) MimeTypeFilters() []string {
 func (this *QFileDialog) SelectMimeTypeFilter(filter string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SelectMimeTypeFilter")
 	C.qute_QFileDialog_selectMimeTypeFilter(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filter))), C.ptrdiff_t(len(filter)))
+	runtime.KeepAlive(this)
 }
 
 // Filter wraps QFileDialog::filter.
@@ -296,6 +320,7 @@ func (this *QFileDialog) SelectMimeTypeFilter(filter string) {
 func (this *QFileDialog) Filter() qtcore.QDirFilters {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.Filter")
 	r := C.qute_QFileDialog_filter(self)
+	runtime.KeepAlive(this)
 	return qtcore.QDirFilters(r)
 }
 
@@ -307,6 +332,7 @@ func (this *QFileDialog) Filter() qtcore.QDirFilters {
 func (this *QFileDialog) SetFilter(filters qtcore.QDirFilters) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetFilter")
 	C.qute_QFileDialog_setFilter(self, C.int64_t(filters))
+	runtime.KeepAlive(this)
 }
 
 // SetViewMode wraps QFileDialog::setViewMode.
@@ -317,6 +343,7 @@ func (this *QFileDialog) SetFilter(filters qtcore.QDirFilters) {
 func (this *QFileDialog) SetViewMode(mode QFileDialogViewMode) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetViewMode")
 	C.qute_QFileDialog_setViewMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // ViewMode wraps QFileDialog::viewMode.
@@ -327,6 +354,7 @@ func (this *QFileDialog) SetViewMode(mode QFileDialogViewMode) {
 func (this *QFileDialog) ViewMode() QFileDialogViewMode {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.ViewMode")
 	r := C.qute_QFileDialog_viewMode(self)
+	runtime.KeepAlive(this)
 	return QFileDialogViewMode(r)
 }
 
@@ -338,6 +366,7 @@ func (this *QFileDialog) ViewMode() QFileDialogViewMode {
 func (this *QFileDialog) SetFileMode(mode QFileDialogFileMode) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetFileMode")
 	C.qute_QFileDialog_setFileMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // FileMode wraps QFileDialog::fileMode.
@@ -348,6 +377,7 @@ func (this *QFileDialog) SetFileMode(mode QFileDialogFileMode) {
 func (this *QFileDialog) FileMode() QFileDialogFileMode {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.FileMode")
 	r := C.qute_QFileDialog_fileMode(self)
+	runtime.KeepAlive(this)
 	return QFileDialogFileMode(r)
 }
 
@@ -359,6 +389,7 @@ func (this *QFileDialog) FileMode() QFileDialogFileMode {
 func (this *QFileDialog) SetAcceptMode(mode QFileDialogAcceptMode) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetAcceptMode")
 	C.qute_QFileDialog_setAcceptMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // AcceptMode wraps QFileDialog::acceptMode.
@@ -369,6 +400,7 @@ func (this *QFileDialog) SetAcceptMode(mode QFileDialogAcceptMode) {
 func (this *QFileDialog) AcceptMode() QFileDialogAcceptMode {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.AcceptMode")
 	r := C.qute_QFileDialog_acceptMode(self)
+	runtime.KeepAlive(this)
 	return QFileDialogAcceptMode(r)
 }
 
@@ -384,6 +416,8 @@ func (this *QFileDialog) SetSidebarUrls(urls []*qtcore.QUrl) {
 		urlsC[i] = rt.UseArg(unsafe.Pointer(urls[i]), "QFileDialog.SetSidebarUrls")
 	}
 	C.qute_QFileDialog_setSidebarUrls(self, unsafe.Pointer(unsafe.SliceData(urlsC)), C.ptrdiff_t(len(urls)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(urls)
 }
 
 // SidebarUrls wraps QFileDialog::sidebarUrls.
@@ -394,6 +428,7 @@ func (this *QFileDialog) SetSidebarUrls(urls []*qtcore.QUrl) {
 func (this *QFileDialog) SidebarUrls() []*qtcore.QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SidebarUrls")
 	r := C.qute_QFileDialog_sidebarUrls(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QUrl {
 		return rt.View[qtcore.QUrl](rt.WrapClass(e, "QUrl", rt.TakeOwned), e)
 	})
@@ -407,6 +442,7 @@ func (this *QFileDialog) SidebarUrls() []*qtcore.QUrl {
 func (this *QFileDialog) SaveState() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SaveState")
 	r := C.qute_QFileDialog_saveState(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -418,6 +454,7 @@ func (this *QFileDialog) SaveState() []byte {
 func (this *QFileDialog) RestoreState(state []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.RestoreState")
 	r := C.qute_QFileDialog_restoreState(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(state))), C.ptrdiff_t(len(state)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -429,6 +466,7 @@ func (this *QFileDialog) RestoreState(state []byte) bool {
 func (this *QFileDialog) SetDefaultSuffix(suffix string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetDefaultSuffix")
 	C.qute_QFileDialog_setDefaultSuffix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(suffix))), C.ptrdiff_t(len(suffix)))
+	runtime.KeepAlive(this)
 }
 
 // DefaultSuffix wraps QFileDialog::defaultSuffix.
@@ -439,6 +477,7 @@ func (this *QFileDialog) SetDefaultSuffix(suffix string) {
 func (this *QFileDialog) DefaultSuffix() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.DefaultSuffix")
 	r := C.qute_QFileDialog_defaultSuffix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -451,6 +490,7 @@ func (this *QFileDialog) SetHistory(paths []string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetHistory")
 	pathsData, pathsLens := quteStrListArg(paths)
 	C.qute_QFileDialog_setHistory(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(pathsData))), (*C.ptrdiff_t)(unsafe.SliceData(pathsLens)), C.ptrdiff_t(len(paths)))
+	runtime.KeepAlive(this)
 }
 
 // History wraps QFileDialog::history.
@@ -461,6 +501,7 @@ func (this *QFileDialog) SetHistory(paths []string) {
 func (this *QFileDialog) History() []string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.History")
 	r := C.qute_QFileDialog_history(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -478,6 +519,8 @@ func (this *QFileDialog) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QFileDialog.SetItemDelegate")
 	}
 	C.qute_QFileDialog_setItemDelegate(self, delegatePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(delegate)
 }
 
 // ItemDelegate wraps QFileDialog::itemDelegate.
@@ -490,6 +533,7 @@ func (this *QFileDialog) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 func (this *QFileDialog) ItemDelegate() *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.ItemDelegate")
 	r := C.qute_QFileDialog_itemDelegate(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
@@ -507,6 +551,8 @@ func (this *QFileDialog) SetIconProvider(provider qtgui.QAbstractFileIconProvide
 		providerPtr = rt.UseArg(unsafe.Pointer(provider.AsQAbstractFileIconProvider()), "QFileDialog.SetIconProvider")
 	}
 	C.qute_QFileDialog_setIconProvider(self, providerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(provider)
 }
 
 // IconProvider wraps QFileDialog::iconProvider.
@@ -519,6 +565,7 @@ func (this *QFileDialog) SetIconProvider(provider qtgui.QAbstractFileIconProvide
 func (this *QFileDialog) IconProvider() *qtgui.QAbstractFileIconProvider {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.IconProvider")
 	r := C.qute_QFileDialog_iconProvider(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAbstractFileIconProvider](rt.WrapClass(r, "QAbstractFileIconProvider", rt.KeepOrBorrow), r)
 }
 
@@ -530,6 +577,7 @@ func (this *QFileDialog) IconProvider() *qtgui.QAbstractFileIconProvider {
 func (this *QFileDialog) SetLabelText(label QFileDialogDialogLabel, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetLabelText")
 	C.qute_QFileDialog_setLabelText(self, C.int64_t(label), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // LabelText wraps QFileDialog::labelText.
@@ -540,6 +588,7 @@ func (this *QFileDialog) SetLabelText(label QFileDialogDialogLabel, text string)
 func (this *QFileDialog) LabelText(label QFileDialogDialogLabel) string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.LabelText")
 	r := C.qute_QFileDialog_labelText(self, C.int64_t(label))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -552,6 +601,7 @@ func (this *QFileDialog) SetSupportedSchemes(schemes []string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetSupportedSchemes")
 	schemesData, schemesLens := quteStrListArg(schemes)
 	C.qute_QFileDialog_setSupportedSchemes(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(schemesData))), (*C.ptrdiff_t)(unsafe.SliceData(schemesLens)), C.ptrdiff_t(len(schemes)))
+	runtime.KeepAlive(this)
 }
 
 // SupportedSchemes wraps QFileDialog::supportedSchemes.
@@ -562,6 +612,7 @@ func (this *QFileDialog) SetSupportedSchemes(schemes []string) {
 func (this *QFileDialog) SupportedSchemes() []string {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SupportedSchemes")
 	r := C.qute_QFileDialog_supportedSchemes(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -582,6 +633,8 @@ func (this *QFileDialog) SetProxyModel(model qtcore.QAbstractProxyModelLike) {
 		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractProxyModel()), "QFileDialog.SetProxyModel")
 	}
 	C.qute_QFileDialog_setProxyModel(self, modelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(model)
 	modelH.TransferToCpp()
 }
 
@@ -595,6 +648,7 @@ func (this *QFileDialog) SetProxyModel(model qtcore.QAbstractProxyModelLike) {
 func (this *QFileDialog) ProxyModel() *qtcore.QAbstractProxyModel {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.ProxyModel")
 	r := C.qute_QFileDialog_proxyModel(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QAbstractProxyModel](rt.WrapClass(r, "QAbstractProxyModel", rt.KeepOrBorrow), r)
 }
 
@@ -606,6 +660,7 @@ func (this *QFileDialog) ProxyModel() *qtcore.QAbstractProxyModel {
 func (this *QFileDialog) SetOption(option QFileDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetOption")
 	C.qute_QFileDialog_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QFileDialog::testOption.
@@ -616,6 +671,7 @@ func (this *QFileDialog) SetOption(option QFileDialogOptions) {
 func (this *QFileDialog) TestOption(option QFileDialogOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.TestOption")
 	r := C.qute_QFileDialog_testOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -627,6 +683,7 @@ func (this *QFileDialog) TestOption(option QFileDialogOptions) bool {
 func (this *QFileDialog) SetOptions(options QFileDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetOptions")
 	C.qute_QFileDialog_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Options wraps QFileDialog::options.
@@ -637,6 +694,7 @@ func (this *QFileDialog) SetOptions(options QFileDialogOptions) {
 func (this *QFileDialog) Options() QFileDialogOptions {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.Options")
 	r := C.qute_QFileDialog_options(self)
+	runtime.KeepAlive(this)
 	return QFileDialogOptions(r)
 }
 
@@ -648,6 +706,7 @@ func (this *QFileDialog) Options() QFileDialogOptions {
 func (this *QFileDialog) EmitFileSelected(file string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitFileSelected")
 	C.qute_QFileDialog_fileSelected_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
+	runtime.KeepAlive(this)
 }
 
 // EmitFilesSelected wraps emitting the filesSelected signal.
@@ -659,6 +718,7 @@ func (this *QFileDialog) EmitFilesSelected(files []string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitFilesSelected")
 	filesData, filesLens := quteStrListArg(files)
 	C.qute_QFileDialog_filesSelected_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(filesData))), (*C.ptrdiff_t)(unsafe.SliceData(filesLens)), C.ptrdiff_t(len(files)))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -669,6 +729,7 @@ func (this *QFileDialog) EmitFilesSelected(files []string) {
 func (this *QFileDialog) EmitCurrentChanged(path string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitCurrentChanged")
 	C.qute_QFileDialog_currentChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	runtime.KeepAlive(this)
 }
 
 // EmitDirectoryEntered wraps emitting the directoryEntered signal.
@@ -679,6 +740,7 @@ func (this *QFileDialog) EmitCurrentChanged(path string) {
 func (this *QFileDialog) EmitDirectoryEntered(directory string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitDirectoryEntered")
 	C.qute_QFileDialog_directoryEntered_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)))
+	runtime.KeepAlive(this)
 }
 
 // EmitUrlSelected wraps emitting the urlSelected signal.
@@ -689,6 +751,8 @@ func (this *QFileDialog) EmitDirectoryEntered(directory string) {
 func (this *QFileDialog) EmitUrlSelected(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitUrlSelected")
 	C.qute_QFileDialog_urlSelected_1(self, rt.UseArg(unsafe.Pointer(url), "QFileDialog.EmitUrlSelected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // EmitUrlsSelected wraps emitting the urlsSelected signal.
@@ -703,6 +767,8 @@ func (this *QFileDialog) EmitUrlsSelected(urls []*qtcore.QUrl) {
 		urlsC[i] = rt.UseArg(unsafe.Pointer(urls[i]), "QFileDialog.EmitUrlsSelected")
 	}
 	C.qute_QFileDialog_urlsSelected_1(self, unsafe.Pointer(unsafe.SliceData(urlsC)), C.ptrdiff_t(len(urls)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(urls)
 }
 
 // EmitCurrentUrlChanged wraps emitting the currentUrlChanged signal.
@@ -713,6 +779,8 @@ func (this *QFileDialog) EmitUrlsSelected(urls []*qtcore.QUrl) {
 func (this *QFileDialog) EmitCurrentUrlChanged(url *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitCurrentUrlChanged")
 	C.qute_QFileDialog_currentUrlChanged_1(self, rt.UseArg(unsafe.Pointer(url), "QFileDialog.EmitCurrentUrlChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(url)
 }
 
 // EmitDirectoryUrlEntered wraps emitting the directoryUrlEntered signal.
@@ -723,6 +791,8 @@ func (this *QFileDialog) EmitCurrentUrlChanged(url *qtcore.QUrl) {
 func (this *QFileDialog) EmitDirectoryUrlEntered(directory *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitDirectoryUrlEntered")
 	C.qute_QFileDialog_directoryUrlEntered_1(self, rt.UseArg(unsafe.Pointer(directory), "QFileDialog.EmitDirectoryUrlEntered"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(directory)
 }
 
 // EmitFilterSelected wraps emitting the filterSelected signal.
@@ -733,6 +803,7 @@ func (this *QFileDialog) EmitDirectoryUrlEntered(directory *qtcore.QUrl) {
 func (this *QFileDialog) EmitFilterSelected(filter string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.EmitFilterSelected")
 	C.qute_QFileDialog_filterSelected_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filter))), C.ptrdiff_t(len(filter)))
+	runtime.KeepAlive(this)
 }
 
 // QFileDialogGetOpenFileName wraps QFileDialog::getOpenFileName.

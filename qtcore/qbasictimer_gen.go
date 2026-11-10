@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -96,6 +97,7 @@ func NewQBasicTimer() *QBasicTimer {
 func (this *QBasicTimer) IsActive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QBasicTimer.IsActive")
 	r := C.qute_QBasicTimer_isActive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -107,6 +109,7 @@ func (this *QBasicTimer) IsActive() bool {
 func (this *QBasicTimer) TimerId() int {
 	self := rt.Use(unsafe.Pointer(this), "QBasicTimer.TimerId")
 	r := C.qute_QBasicTimer_timerId(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -118,6 +121,7 @@ func (this *QBasicTimer) TimerId() int {
 func (this *QBasicTimer) Id() TimerId {
 	self := rt.Use(unsafe.Pointer(this), "QBasicTimer.Id")
 	r := C.qute_QBasicTimer_id(self)
+	runtime.KeepAlive(this)
 	return TimerId(r)
 }
 
@@ -133,6 +137,8 @@ func (this *QBasicTimer) Start(msec int, obj QObjectLike) {
 		objPtr = rt.UseArg(unsafe.Pointer(obj.AsQObject()), "QBasicTimer.Start")
 	}
 	C.qute_QBasicTimer_start(self, C.int(msec), objPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(obj)
 }
 
 // StartTimerType wraps QBasicTimer::start.
@@ -147,6 +153,8 @@ func (this *QBasicTimer) StartTimerType(msec int, timerType TimerType, obj QObje
 		objPtr = rt.UseArg(unsafe.Pointer(obj.AsQObject()), "QBasicTimer.StartTimerType")
 	}
 	C.qute_QBasicTimer_start_1(self, C.int(msec), C.int64_t(timerType), objPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(obj)
 }
 
 // StartDuration wraps QBasicTimer::start.
@@ -161,6 +169,8 @@ func (this *QBasicTimer) StartDuration(duration time.Duration, obj QObjectLike) 
 		objPtr = rt.UseArg(unsafe.Pointer(obj.AsQObject()), "QBasicTimer.StartDuration")
 	}
 	C.qute_QBasicTimer_start_2(self, C.int64_t(duration), objPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(obj)
 }
 
 // StartDurationTimerType wraps QBasicTimer::start.
@@ -175,6 +185,8 @@ func (this *QBasicTimer) StartDurationTimerType(duration time.Duration, timerTyp
 		objPtr = rt.UseArg(unsafe.Pointer(obj.AsQObject()), "QBasicTimer.StartDurationTimerType")
 	}
 	C.qute_QBasicTimer_start_3(self, C.int64_t(duration), C.int64_t(timerType), objPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(obj)
 }
 
 // Stop wraps QBasicTimer::stop.
@@ -185,4 +197,5 @@ func (this *QBasicTimer) StartDurationTimerType(duration time.Duration, timerTyp
 func (this *QBasicTimer) Stop() {
 	self := rt.Use(unsafe.Pointer(this), "QBasicTimer.Stop")
 	C.qute_QBasicTimer_stop(self)
+	runtime.KeepAlive(this)
 }

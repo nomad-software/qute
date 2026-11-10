@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -113,6 +114,7 @@ func NewQOpenGLFramebufferObjectWithSizeAttachment(size qtcore.QSize, attachment
 func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcore.QSize, format *QOpenGLFramebufferObjectFormat) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat")
 	p := C.qute_QOpenGLFramebufferObject_new_2(cQSize(size), rt.UseArg(unsafe.Pointer(format), "NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat"))
+	runtime.KeepAlive(format)
 	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
@@ -125,6 +127,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcor
 func (this *QOpenGLFramebufferObject) AddColorAttachment(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.AddColorAttachment")
 	C.qute_QOpenGLFramebufferObject_addColorAttachment(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // Format wraps QOpenGLFramebufferObject::format.
@@ -137,6 +140,7 @@ func (this *QOpenGLFramebufferObject) AddColorAttachment(size qtcore.QSize) {
 func (this *QOpenGLFramebufferObject) Format() *QOpenGLFramebufferObjectFormat {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Format")
 	r := C.qute_QOpenGLFramebufferObject_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QOpenGLFramebufferObjectFormat](rt.WrapClass(r, "QOpenGLFramebufferObjectFormat", rt.TakeOwned), r)
 }
 
@@ -148,6 +152,7 @@ func (this *QOpenGLFramebufferObject) Format() *QOpenGLFramebufferObjectFormat {
 func (this *QOpenGLFramebufferObject) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.IsValid")
 	r := C.qute_QOpenGLFramebufferObject_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -159,6 +164,7 @@ func (this *QOpenGLFramebufferObject) IsValid() bool {
 func (this *QOpenGLFramebufferObject) IsBound() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.IsBound")
 	r := C.qute_QOpenGLFramebufferObject_isBound(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -170,6 +176,7 @@ func (this *QOpenGLFramebufferObject) IsBound() bool {
 func (this *QOpenGLFramebufferObject) Bind() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Bind")
 	r := C.qute_QOpenGLFramebufferObject_bind(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -181,6 +188,7 @@ func (this *QOpenGLFramebufferObject) Bind() bool {
 func (this *QOpenGLFramebufferObject) Release() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Release")
 	r := C.qute_QOpenGLFramebufferObject_release(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -192,6 +200,7 @@ func (this *QOpenGLFramebufferObject) Release() bool {
 func (this *QOpenGLFramebufferObject) Width() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Width")
 	r := C.qute_QOpenGLFramebufferObject_width(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -203,6 +212,7 @@ func (this *QOpenGLFramebufferObject) Width() int {
 func (this *QOpenGLFramebufferObject) Height() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Height")
 	r := C.qute_QOpenGLFramebufferObject_height(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -214,6 +224,7 @@ func (this *QOpenGLFramebufferObject) Height() int {
 func (this *QOpenGLFramebufferObject) Texture() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Texture")
 	r := C.qute_QOpenGLFramebufferObject_texture(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -225,6 +236,7 @@ func (this *QOpenGLFramebufferObject) Texture() uint {
 func (this *QOpenGLFramebufferObject) Textures() []uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Textures")
 	r := C.qute_QOpenGLFramebufferObject_textures(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.uint) uint { return uint(e) })
 }
 
@@ -236,6 +248,7 @@ func (this *QOpenGLFramebufferObject) Textures() []uint {
 func (this *QOpenGLFramebufferObject) TakeTexture() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.TakeTexture")
 	r := C.qute_QOpenGLFramebufferObject_takeTexture(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -247,6 +260,7 @@ func (this *QOpenGLFramebufferObject) TakeTexture() uint {
 func (this *QOpenGLFramebufferObject) TakeTextureWithColorAttachmentIndex(colorAttachmentIndex int) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.TakeTextureWithColorAttachmentIndex")
 	r := C.qute_QOpenGLFramebufferObject_takeTexture_1(self, C.int(colorAttachmentIndex))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -258,6 +272,7 @@ func (this *QOpenGLFramebufferObject) TakeTextureWithColorAttachmentIndex(colorA
 func (this *QOpenGLFramebufferObject) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Size")
 	r := C.qute_QOpenGLFramebufferObject_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -269,6 +284,7 @@ func (this *QOpenGLFramebufferObject) Size() qtcore.QSize {
 func (this *QOpenGLFramebufferObject) Sizes() []qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Sizes")
 	r := C.qute_QOpenGLFramebufferObject_sizes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_size) qtcore.QSize { return goQSize(e) })
 }
 
@@ -282,6 +298,7 @@ func (this *QOpenGLFramebufferObject) Sizes() []qtcore.QSize {
 func (this *QOpenGLFramebufferObject) ToImage() *qtgui.QImage {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.ToImage")
 	r := C.qute_QOpenGLFramebufferObject_toImage(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -295,6 +312,7 @@ func (this *QOpenGLFramebufferObject) ToImage() *qtgui.QImage {
 func (this *QOpenGLFramebufferObject) ToImageWithFlipped(flipped bool, colorAttachmentIndex int) *qtgui.QImage {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.ToImageWithFlipped")
 	r := C.qute_QOpenGLFramebufferObject_toImage_1(self, C.bool(flipped), C.int(colorAttachmentIndex))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -306,6 +324,7 @@ func (this *QOpenGLFramebufferObject) ToImageWithFlipped(flipped bool, colorAtta
 func (this *QOpenGLFramebufferObject) Attachment() QOpenGLFramebufferObjectAttachment {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Attachment")
 	r := C.qute_QOpenGLFramebufferObject_attachment(self)
+	runtime.KeepAlive(this)
 	return QOpenGLFramebufferObjectAttachment(r)
 }
 
@@ -317,6 +336,7 @@ func (this *QOpenGLFramebufferObject) Attachment() QOpenGLFramebufferObjectAttac
 func (this *QOpenGLFramebufferObject) SetAttachment(attachment QOpenGLFramebufferObjectAttachment) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.SetAttachment")
 	C.qute_QOpenGLFramebufferObject_setAttachment(self, C.int64_t(attachment))
+	runtime.KeepAlive(this)
 }
 
 // QOpenGLFramebufferObjectBindDefault wraps QOpenGLFramebufferObject::bindDefault.
@@ -368,6 +388,8 @@ func QOpenGLFramebufferObjectBlitFramebufferRectOpenGLFramebufferObjectRect(targ
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferRectOpenGLFramebufferObjectRect")
 	}
 	C.qute_QOpenGLFramebufferObject_blitFramebuffer(targetPtr, cQRect(targetRect), sourcePtr, cQRect(sourceRect), C.uint(buffers), C.uint(filter), C.int(readColorAttachmentIndex), C.int(drawColorAttachmentIndex), C.int64_t(restorePolicy))
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(source)
 }
 
 // QOpenGLFramebufferObjectBlitFramebufferRectOpenGLFramebufferObject wraps QOpenGLFramebufferObject::blitFramebuffer.
@@ -386,6 +408,8 @@ func QOpenGLFramebufferObjectBlitFramebufferRectOpenGLFramebufferObject(target Q
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferRectOpenGLFramebufferObject")
 	}
 	C.qute_QOpenGLFramebufferObject_blitFramebuffer_1(targetPtr, cQRect(targetRect), sourcePtr, cQRect(sourceRect), C.uint(buffers), C.uint(filter), C.int(readColorAttachmentIndex), C.int(drawColorAttachmentIndex))
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(source)
 }
 
 // QOpenGLFramebufferObjectBlitFramebufferRect wraps QOpenGLFramebufferObject::blitFramebuffer.
@@ -404,6 +428,8 @@ func QOpenGLFramebufferObjectBlitFramebufferRect(target QOpenGLFramebufferObject
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferRect")
 	}
 	C.qute_QOpenGLFramebufferObject_blitFramebuffer_2(targetPtr, cQRect(targetRect), sourcePtr, cQRect(sourceRect))
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(source)
 }
 
 // QOpenGLFramebufferObjectBlitFramebuffer wraps QOpenGLFramebufferObject::blitFramebuffer.
@@ -422,4 +448,6 @@ func QOpenGLFramebufferObjectBlitFramebuffer(target QOpenGLFramebufferObjectLike
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebuffer")
 	}
 	C.qute_QOpenGLFramebufferObject_blitFramebuffer_3(targetPtr, sourcePtr)
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(source)
 }

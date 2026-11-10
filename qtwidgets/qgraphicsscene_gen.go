@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQGraphicsScene(parent qtcore.QObjectLike) *QGraphicsScene {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsScene")
 	}
 	p := C.qute_QGraphicsScene_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQGraphicsSceneWithRectF(sceneRect qtcore.QRectF, parent qtcore.QObjectLi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsSceneWithRectF")
 	}
 	p := C.qute_QGraphicsScene_new_1(cQRectF(sceneRect), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQGraphicsSceneWithRectF(sceneRect qtcore.QRectF, parent qtcore.QObjectLi
 func (this *QGraphicsScene) SceneRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SceneRect")
 	r := C.qute_QGraphicsScene_sceneRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -111,6 +115,7 @@ func (this *QGraphicsScene) SceneRect() qtcore.QRectF {
 func (this *QGraphicsScene) Width() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Width")
 	r := C.qute_QGraphicsScene_width(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -122,6 +127,7 @@ func (this *QGraphicsScene) Width() float64 {
 func (this *QGraphicsScene) Height() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Height")
 	r := C.qute_QGraphicsScene_height(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -133,6 +139,7 @@ func (this *QGraphicsScene) Height() float64 {
 func (this *QGraphicsScene) SetSceneRect(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSceneRect")
 	C.qute_QGraphicsScene_setSceneRect(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // Render wraps QGraphicsScene::render.
@@ -147,6 +154,8 @@ func (this *QGraphicsScene) Render(painter qtgui.QPainterLike) {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsScene.Render")
 	}
 	C.qute_QGraphicsScene_render(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
 }
 
 // ItemIndexMethod wraps QGraphicsScene::itemIndexMethod.
@@ -157,6 +166,7 @@ func (this *QGraphicsScene) Render(painter qtgui.QPainterLike) {
 func (this *QGraphicsScene) ItemIndexMethod() QGraphicsSceneItemIndexMethod {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemIndexMethod")
 	r := C.qute_QGraphicsScene_itemIndexMethod(self)
+	runtime.KeepAlive(this)
 	return QGraphicsSceneItemIndexMethod(r)
 }
 
@@ -168,6 +178,7 @@ func (this *QGraphicsScene) ItemIndexMethod() QGraphicsSceneItemIndexMethod {
 func (this *QGraphicsScene) SetItemIndexMethod(method QGraphicsSceneItemIndexMethod) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetItemIndexMethod")
 	C.qute_QGraphicsScene_setItemIndexMethod(self, C.int64_t(method))
+	runtime.KeepAlive(this)
 }
 
 // BspTreeDepth wraps QGraphicsScene::bspTreeDepth.
@@ -178,6 +189,7 @@ func (this *QGraphicsScene) SetItemIndexMethod(method QGraphicsSceneItemIndexMet
 func (this *QGraphicsScene) BspTreeDepth() int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.BspTreeDepth")
 	r := C.qute_QGraphicsScene_bspTreeDepth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -189,6 +201,7 @@ func (this *QGraphicsScene) BspTreeDepth() int {
 func (this *QGraphicsScene) SetBspTreeDepth(depth int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetBspTreeDepth")
 	C.qute_QGraphicsScene_setBspTreeDepth(self, C.int(depth))
+	runtime.KeepAlive(this)
 }
 
 // ItemsBoundingRect wraps QGraphicsScene::itemsBoundingRect.
@@ -199,6 +212,7 @@ func (this *QGraphicsScene) SetBspTreeDepth(depth int) {
 func (this *QGraphicsScene) ItemsBoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsBoundingRect")
 	r := C.qute_QGraphicsScene_itemsBoundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -212,6 +226,7 @@ func (this *QGraphicsScene) ItemsBoundingRect() qtcore.QRectF {
 func (this *QGraphicsScene) Items() []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items")
 	r := C.qute_QGraphicsScene_items(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -227,6 +242,7 @@ func (this *QGraphicsScene) Items() []*QGraphicsItem {
 func (this *QGraphicsScene) ItemsAt(pos qtcore.QPointF) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsAt")
 	r := C.qute_QGraphicsScene_items_1(self, cQPointF(pos))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -242,6 +258,7 @@ func (this *QGraphicsScene) ItemsAt(pos qtcore.QPointF) []*QGraphicsItem {
 func (this *QGraphicsScene) ItemsIn(rect qtcore.QRectF) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsIn")
 	r := C.qute_QGraphicsScene_items_2(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -261,6 +278,7 @@ func (this *QGraphicsScene) ItemsInPolygon(polygon []qtcore.QPointF) []*QGraphic
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	r := C.qute_QGraphicsScene_items_3(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -276,6 +294,8 @@ func (this *QGraphicsScene) ItemsInPolygon(polygon []qtcore.QPointF) []*QGraphic
 func (this *QGraphicsScene) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInPath")
 	r := C.qute_QGraphicsScene_items_4(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.ItemsInPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -295,6 +315,8 @@ func (this *QGraphicsScene) CollidingItems(item QGraphicsItemLike) []*QGraphicsI
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.CollidingItems")
 	}
 	r := C.qute_QGraphicsScene_collidingItems(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -310,6 +332,8 @@ func (this *QGraphicsScene) CollidingItems(item QGraphicsItemLike) []*QGraphicsI
 func (this *QGraphicsScene) ItemAt(pos qtcore.QPointF, deviceTransform *qtgui.QTransform) *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemAt")
 	r := C.qute_QGraphicsScene_itemAt(self, cQPointF(pos), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemAt"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(deviceTransform)
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
@@ -323,6 +347,7 @@ func (this *QGraphicsScene) ItemAt(pos qtcore.QPointF, deviceTransform *qtgui.QT
 func (this *QGraphicsScene) SelectedItems() []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SelectedItems")
 	r := C.qute_QGraphicsScene_selectedItems(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
 		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
 	})
@@ -338,6 +363,7 @@ func (this *QGraphicsScene) SelectedItems() []*QGraphicsItem {
 func (this *QGraphicsScene) SelectionArea() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SelectionArea")
 	r := C.qute_QGraphicsScene_selectionArea(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -349,6 +375,9 @@ func (this *QGraphicsScene) SelectionArea() *qtgui.QPainterPath {
 func (this *QGraphicsScene) SetSelectionArea(path *qtgui.QPainterPath, deviceTransform *qtgui.QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSelectionArea")
 	C.qute_QGraphicsScene_setSelectionArea(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.SetSelectionArea"), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.SetSelectionArea"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	runtime.KeepAlive(deviceTransform)
 }
 
 // SetSelectionAreaWith wraps QGraphicsScene::setSelectionArea.
@@ -359,6 +388,8 @@ func (this *QGraphicsScene) SetSelectionArea(path *qtgui.QPainterPath, deviceTra
 func (this *QGraphicsScene) SetSelectionAreaWith(path *qtgui.QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSelectionAreaWith")
 	C.qute_QGraphicsScene_setSelectionArea_1(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.SetSelectionAreaWith"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 }
 
 // AddItem wraps QGraphicsScene::addItem.
@@ -376,6 +407,8 @@ func (this *QGraphicsScene) AddItem(item QGraphicsItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.AddItem")
 	}
 	C.qute_QGraphicsScene_addItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -389,6 +422,7 @@ func (this *QGraphicsScene) AddItem(item QGraphicsItemLike) {
 func (this *QGraphicsScene) AddEllipse(rect qtcore.QRectF) *QGraphicsEllipseItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddEllipse")
 	r := C.qute_QGraphicsScene_addEllipse(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsEllipseItem](rt.WrapClass(r, "QGraphicsEllipseItem", rt.NewParented), r)
 }
 
@@ -402,6 +436,8 @@ func (this *QGraphicsScene) AddEllipse(rect qtcore.QRectF) *QGraphicsEllipseItem
 func (this *QGraphicsScene) AddLine(line *qtcore.QLineF) *QGraphicsLineItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddLine")
 	r := C.qute_QGraphicsScene_addLine(self, rt.UseArg(unsafe.Pointer(line), "QGraphicsScene.AddLine"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(line)
 	return rt.View[QGraphicsLineItem](rt.WrapClass(r, "QGraphicsLineItem", rt.NewParented), r)
 }
 
@@ -415,6 +451,8 @@ func (this *QGraphicsScene) AddLine(line *qtcore.QLineF) *QGraphicsLineItem {
 func (this *QGraphicsScene) AddPath(path *qtgui.QPainterPath) *QGraphicsPathItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPath")
 	r := C.qute_QGraphicsScene_addPath(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.AddPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 	return rt.View[QGraphicsPathItem](rt.WrapClass(r, "QGraphicsPathItem", rt.NewParented), r)
 }
 
@@ -428,6 +466,8 @@ func (this *QGraphicsScene) AddPath(path *qtgui.QPainterPath) *QGraphicsPathItem
 func (this *QGraphicsScene) AddPixmap(pixmap *qtgui.QPixmap) *QGraphicsPixmapItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddPixmap")
 	r := C.qute_QGraphicsScene_addPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QGraphicsScene.AddPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 	return rt.View[QGraphicsPixmapItem](rt.WrapClass(r, "QGraphicsPixmapItem", rt.NewParented), r)
 }
 
@@ -445,6 +485,7 @@ func (this *QGraphicsScene) AddPolygon(polygon []qtcore.QPointF) *QGraphicsPolyg
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	r := C.qute_QGraphicsScene_addPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsPolygonItem](rt.WrapClass(r, "QGraphicsPolygonItem", rt.NewParented), r)
 }
 
@@ -458,6 +499,7 @@ func (this *QGraphicsScene) AddPolygon(polygon []qtcore.QPointF) *QGraphicsPolyg
 func (this *QGraphicsScene) AddRect(rect qtcore.QRectF) *QGraphicsRectItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddRect")
 	r := C.qute_QGraphicsScene_addRect(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsRectItem](rt.WrapClass(r, "QGraphicsRectItem", rt.NewParented), r)
 }
 
@@ -471,6 +513,7 @@ func (this *QGraphicsScene) AddRect(rect qtcore.QRectF) *QGraphicsRectItem {
 func (this *QGraphicsScene) AddText(text string) *QGraphicsTextItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddText")
 	r := C.qute_QGraphicsScene_addText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsTextItem](rt.WrapClass(r, "QGraphicsTextItem", rt.TakeParented), r)
 }
 
@@ -484,6 +527,7 @@ func (this *QGraphicsScene) AddText(text string) *QGraphicsTextItem {
 func (this *QGraphicsScene) AddSimpleText(text string) *QGraphicsSimpleTextItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddSimpleText")
 	r := C.qute_QGraphicsScene_addSimpleText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsSimpleTextItem](rt.WrapClass(r, "QGraphicsSimpleTextItem", rt.NewParented), r)
 }
 
@@ -504,6 +548,8 @@ func (this *QGraphicsScene) AddWidget(widget QWidgetLike) *QGraphicsProxyWidget 
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsScene.AddWidget")
 	}
 	r := C.qute_QGraphicsScene_addWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return rt.View[QGraphicsProxyWidget](rt.WrapClass(r, "QGraphicsProxyWidget", rt.TakeParented), r)
 }
@@ -525,6 +571,8 @@ func (this *QGraphicsScene) RemoveItem(item QGraphicsItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.RemoveItem")
 	}
 	C.qute_QGraphicsScene_removeItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToGo()
 }
 
@@ -538,6 +586,7 @@ func (this *QGraphicsScene) RemoveItem(item QGraphicsItemLike) {
 func (this *QGraphicsScene) FocusItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.FocusItem")
 	r := C.qute_QGraphicsScene_focusItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
@@ -553,6 +602,8 @@ func (this *QGraphicsScene) SetFocusItem(item QGraphicsItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.SetFocusItem")
 	}
 	C.qute_QGraphicsScene_setFocusItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // HasFocus wraps QGraphicsScene::hasFocus.
@@ -563,6 +614,7 @@ func (this *QGraphicsScene) SetFocusItem(item QGraphicsItemLike) {
 func (this *QGraphicsScene) HasFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.HasFocus")
 	r := C.qute_QGraphicsScene_hasFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -574,6 +626,7 @@ func (this *QGraphicsScene) HasFocus() bool {
 func (this *QGraphicsScene) SetFocus() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetFocus")
 	C.qute_QGraphicsScene_setFocus(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearFocus wraps QGraphicsScene::clearFocus.
@@ -584,6 +637,7 @@ func (this *QGraphicsScene) SetFocus() {
 func (this *QGraphicsScene) ClearFocus() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ClearFocus")
 	C.qute_QGraphicsScene_clearFocus(self)
+	runtime.KeepAlive(this)
 }
 
 // SetStickyFocus wraps QGraphicsScene::setStickyFocus.
@@ -594,6 +648,7 @@ func (this *QGraphicsScene) ClearFocus() {
 func (this *QGraphicsScene) SetStickyFocus(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetStickyFocus")
 	C.qute_QGraphicsScene_setStickyFocus(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // StickyFocus wraps QGraphicsScene::stickyFocus.
@@ -604,6 +659,7 @@ func (this *QGraphicsScene) SetStickyFocus(enabled bool) {
 func (this *QGraphicsScene) StickyFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.StickyFocus")
 	r := C.qute_QGraphicsScene_stickyFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -617,6 +673,7 @@ func (this *QGraphicsScene) StickyFocus() bool {
 func (this *QGraphicsScene) MouseGrabberItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.MouseGrabberItem")
 	r := C.qute_QGraphicsScene_mouseGrabberItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
@@ -630,6 +687,7 @@ func (this *QGraphicsScene) MouseGrabberItem() *QGraphicsItem {
 func (this *QGraphicsScene) BackgroundBrush() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.BackgroundBrush")
 	r := C.qute_QGraphicsScene_backgroundBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -641,6 +699,8 @@ func (this *QGraphicsScene) BackgroundBrush() *qtgui.QBrush {
 func (this *QGraphicsScene) SetBackgroundBrush(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetBackgroundBrush")
 	C.qute_QGraphicsScene_setBackgroundBrush(self, rt.UseArg(unsafe.Pointer(brush), "QGraphicsScene.SetBackgroundBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // ForegroundBrush wraps QGraphicsScene::foregroundBrush.
@@ -653,6 +713,7 @@ func (this *QGraphicsScene) SetBackgroundBrush(brush *qtgui.QBrush) {
 func (this *QGraphicsScene) ForegroundBrush() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ForegroundBrush")
 	r := C.qute_QGraphicsScene_foregroundBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -664,6 +725,8 @@ func (this *QGraphicsScene) ForegroundBrush() *qtgui.QBrush {
 func (this *QGraphicsScene) SetForegroundBrush(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetForegroundBrush")
 	C.qute_QGraphicsScene_setForegroundBrush(self, rt.UseArg(unsafe.Pointer(brush), "QGraphicsScene.SetForegroundBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Views wraps QGraphicsScene::views.
@@ -676,6 +739,7 @@ func (this *QGraphicsScene) SetForegroundBrush(brush *qtgui.QBrush) {
 func (this *QGraphicsScene) Views() []*QGraphicsView {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Views")
 	r := C.qute_QGraphicsScene_views(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsView {
 		return rt.View[QGraphicsView](rt.WrapClass(e, "QGraphicsView", rt.KeepOrBorrow), e)
 	})
@@ -691,6 +755,7 @@ func (this *QGraphicsScene) Views() []*QGraphicsView {
 func (this *QGraphicsScene) Style() *QStyle {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Style")
 	r := C.qute_QGraphicsScene_style(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStyle](rt.WrapClass(r, "QStyle", rt.KeepOrBorrow), r)
 }
 
@@ -706,6 +771,8 @@ func (this *QGraphicsScene) SetStyle(style QStyleLike) {
 		stylePtr = rt.UseArg(unsafe.Pointer(style.AsQStyle()), "QGraphicsScene.SetStyle")
 	}
 	C.qute_QGraphicsScene_setStyle(self, stylePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(style)
 }
 
 // Font wraps QGraphicsScene::font.
@@ -718,6 +785,7 @@ func (this *QGraphicsScene) SetStyle(style QStyleLike) {
 func (this *QGraphicsScene) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Font")
 	r := C.qute_QGraphicsScene_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -729,6 +797,8 @@ func (this *QGraphicsScene) Font() *qtgui.QFont {
 func (this *QGraphicsScene) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetFont")
 	C.qute_QGraphicsScene_setFont(self, rt.UseArg(unsafe.Pointer(font), "QGraphicsScene.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // Palette wraps QGraphicsScene::palette.
@@ -741,6 +811,7 @@ func (this *QGraphicsScene) SetFont(font *qtgui.QFont) {
 func (this *QGraphicsScene) Palette() *qtgui.QPalette {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Palette")
 	r := C.qute_QGraphicsScene_palette(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
@@ -752,6 +823,8 @@ func (this *QGraphicsScene) Palette() *qtgui.QPalette {
 func (this *QGraphicsScene) SetPalette(palette *qtgui.QPalette) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetPalette")
 	C.qute_QGraphicsScene_setPalette(self, rt.UseArg(unsafe.Pointer(palette), "QGraphicsScene.SetPalette"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(palette)
 }
 
 // IsActive wraps QGraphicsScene::isActive.
@@ -762,6 +835,7 @@ func (this *QGraphicsScene) SetPalette(palette *qtgui.QPalette) {
 func (this *QGraphicsScene) IsActive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.IsActive")
 	r := C.qute_QGraphicsScene_isActive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -775,6 +849,7 @@ func (this *QGraphicsScene) IsActive() bool {
 func (this *QGraphicsScene) ActivePanel() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ActivePanel")
 	r := C.qute_QGraphicsScene_activePanel(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
@@ -790,6 +865,8 @@ func (this *QGraphicsScene) SetActivePanel(item QGraphicsItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.SetActivePanel")
 	}
 	C.qute_QGraphicsScene_setActivePanel(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // ActiveWindow wraps QGraphicsScene::activeWindow.
@@ -802,6 +879,7 @@ func (this *QGraphicsScene) SetActivePanel(item QGraphicsItemLike) {
 func (this *QGraphicsScene) ActiveWindow() *QGraphicsWidget {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ActiveWindow")
 	r := C.qute_QGraphicsScene_activeWindow(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsWidget](rt.WrapClass(r, "QGraphicsWidget", rt.KeepOrBorrow), r)
 }
 
@@ -817,6 +895,8 @@ func (this *QGraphicsScene) SetActiveWindow(widget QGraphicsWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQGraphicsWidget()), "QGraphicsScene.SetActiveWindow")
 	}
 	C.qute_QGraphicsScene_setActiveWindow(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // SendEvent wraps QGraphicsScene::sendEvent.
@@ -835,6 +915,9 @@ func (this *QGraphicsScene) SendEvent(item QGraphicsItemLike, event qtcore.QEven
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsScene.SendEvent")
 	}
 	r := C.qute_QGraphicsScene_sendEvent(self, itemPtr, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	runtime.KeepAlive(event)
 	return bool(r)
 }
 
@@ -846,6 +929,7 @@ func (this *QGraphicsScene) SendEvent(item QGraphicsItemLike, event qtcore.QEven
 func (this *QGraphicsScene) MinimumRenderSize() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.MinimumRenderSize")
 	r := C.qute_QGraphicsScene_minimumRenderSize(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -857,6 +941,7 @@ func (this *QGraphicsScene) MinimumRenderSize() float64 {
 func (this *QGraphicsScene) SetMinimumRenderSize(minSize float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetMinimumRenderSize")
 	C.qute_QGraphicsScene_setMinimumRenderSize(self, C.double(minSize))
+	runtime.KeepAlive(this)
 }
 
 // FocusOnTouch wraps QGraphicsScene::focusOnTouch.
@@ -867,6 +952,7 @@ func (this *QGraphicsScene) SetMinimumRenderSize(minSize float64) {
 func (this *QGraphicsScene) FocusOnTouch() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.FocusOnTouch")
 	r := C.qute_QGraphicsScene_focusOnTouch(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -878,6 +964,7 @@ func (this *QGraphicsScene) FocusOnTouch() bool {
 func (this *QGraphicsScene) SetFocusOnTouch(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetFocusOnTouch")
 	C.qute_QGraphicsScene_setFocusOnTouch(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // Update wraps QGraphicsScene::update.
@@ -888,6 +975,7 @@ func (this *QGraphicsScene) SetFocusOnTouch(enabled bool) {
 func (this *QGraphicsScene) Update() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Update")
 	C.qute_QGraphicsScene_update(self)
+	runtime.KeepAlive(this)
 }
 
 // UpdateRect wraps QGraphicsScene::update.
@@ -898,6 +986,7 @@ func (this *QGraphicsScene) Update() {
 func (this *QGraphicsScene) UpdateRect(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.UpdateRect")
 	C.qute_QGraphicsScene_update_1(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // Invalidate wraps QGraphicsScene::invalidate.
@@ -908,6 +997,7 @@ func (this *QGraphicsScene) UpdateRect(rect qtcore.QRectF) {
 func (this *QGraphicsScene) Invalidate() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Invalidate")
 	C.qute_QGraphicsScene_invalidate(self)
+	runtime.KeepAlive(this)
 }
 
 // InvalidateRect wraps QGraphicsScene::invalidate.
@@ -918,6 +1008,7 @@ func (this *QGraphicsScene) Invalidate() {
 func (this *QGraphicsScene) InvalidateRect(rect qtcore.QRectF, layers QGraphicsSceneSceneLayers) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.InvalidateRect")
 	C.qute_QGraphicsScene_invalidate_1(self, cQRectF(rect), C.int64_t(layers))
+	runtime.KeepAlive(this)
 }
 
 // Advance wraps QGraphicsScene::advance.
@@ -928,6 +1019,7 @@ func (this *QGraphicsScene) InvalidateRect(rect qtcore.QRectF, layers QGraphicsS
 func (this *QGraphicsScene) Advance() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Advance")
 	C.qute_QGraphicsScene_advance(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearSelection wraps QGraphicsScene::clearSelection.
@@ -938,6 +1030,7 @@ func (this *QGraphicsScene) Advance() {
 func (this *QGraphicsScene) ClearSelection() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ClearSelection")
 	C.qute_QGraphicsScene_clearSelection(self)
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QGraphicsScene::clear.
@@ -948,6 +1041,7 @@ func (this *QGraphicsScene) ClearSelection() {
 func (this *QGraphicsScene) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Clear")
 	C.qute_QGraphicsScene_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitChanged wraps emitting the changed signal.
@@ -962,6 +1056,7 @@ func (this *QGraphicsScene) EmitChanged(region []qtcore.QRectF) {
 		regionC[i] = cQRectF(region[i])
 	}
 	C.qute_QGraphicsScene_changed_1(self, unsafe.Pointer(unsafe.SliceData(regionC)), C.ptrdiff_t(len(region)))
+	runtime.KeepAlive(this)
 }
 
 // EmitSceneRectChanged wraps emitting the sceneRectChanged signal.
@@ -972,6 +1067,7 @@ func (this *QGraphicsScene) EmitChanged(region []qtcore.QRectF) {
 func (this *QGraphicsScene) EmitSceneRectChanged(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.EmitSceneRectChanged")
 	C.qute_QGraphicsScene_sceneRectChanged_1(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -982,6 +1078,7 @@ func (this *QGraphicsScene) EmitSceneRectChanged(rect qtcore.QRectF) {
 func (this *QGraphicsScene) EmitSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.EmitSelectionChanged")
 	C.qute_QGraphicsScene_selectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitFocusItemChanged wraps emitting the focusItemChanged signal.
@@ -1000,6 +1097,9 @@ func (this *QGraphicsScene) EmitFocusItemChanged(newFocus QGraphicsItemLike, old
 		oldFocusPtr = rt.UseArg(unsafe.Pointer(oldFocus.AsQGraphicsItem()), "QGraphicsScene.EmitFocusItemChanged")
 	}
 	C.qute_QGraphicsScene_focusItemChanged_1(self, newFocusPtr, oldFocusPtr, C.int64_t(reason))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(newFocus)
+	runtime.KeepAlive(oldFocus)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

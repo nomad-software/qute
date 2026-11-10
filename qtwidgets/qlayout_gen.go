@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func (this *QLayout) AsQLayoutItem() *QLayoutItem {
 func (this *QLayout) Spacing() int {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Spacing")
 	r := C.qute_QLayout_spacing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -73,6 +75,7 @@ func (this *QLayout) Spacing() int {
 func (this *QLayout) SetSpacing(spacing int) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetSpacing")
 	C.qute_QLayout_setSpacing(self, C.int(spacing))
+	runtime.KeepAlive(this)
 }
 
 // SetContentsMargins wraps QLayout::setContentsMargins.
@@ -83,6 +86,7 @@ func (this *QLayout) SetSpacing(spacing int) {
 func (this *QLayout) SetContentsMargins(margins qtcore.QMargins) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetContentsMargins")
 	C.qute_QLayout_setContentsMargins(self, cQMargins(margins))
+	runtime.KeepAlive(this)
 }
 
 // UnsetContentsMargins wraps QLayout::unsetContentsMargins.
@@ -93,6 +97,7 @@ func (this *QLayout) SetContentsMargins(margins qtcore.QMargins) {
 func (this *QLayout) UnsetContentsMargins() {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.UnsetContentsMargins")
 	C.qute_QLayout_unsetContentsMargins(self)
+	runtime.KeepAlive(this)
 }
 
 // GetContentsMargins wraps QLayout::getContentsMargins.
@@ -107,6 +112,7 @@ func (this *QLayout) GetContentsMargins() (int, int, int, int) {
 	var rightOut C.int
 	var bottomOut C.int
 	C.qute_QLayout_getContentsMargins(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(this)
 	return int(leftOut), int(topOut), int(rightOut), int(bottomOut)
 }
 
@@ -118,6 +124,7 @@ func (this *QLayout) GetContentsMargins() (int, int, int, int) {
 func (this *QLayout) ContentsMargins() qtcore.QMargins {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ContentsMargins")
 	r := C.qute_QLayout_contentsMargins(self)
+	runtime.KeepAlive(this)
 	return goQMargins(r)
 }
 
@@ -129,6 +136,7 @@ func (this *QLayout) ContentsMargins() qtcore.QMargins {
 func (this *QLayout) ContentsRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ContentsRect")
 	r := C.qute_QLayout_contentsRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -144,6 +152,8 @@ func (this *QLayout) SetWidgetAlignment(w QWidgetLike, alignment qtcore.Alignmen
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QLayout.SetWidgetAlignment")
 	}
 	r := C.qute_QLayout_setAlignment(self, wPtr, C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	return bool(r)
 }
 
@@ -159,6 +169,8 @@ func (this *QLayout) SetLayoutAlignment(l QLayoutLike, alignment qtcore.Alignmen
 		lPtr = rt.UseArg(unsafe.Pointer(l.AsQLayout()), "QLayout.SetLayoutAlignment")
 	}
 	r := C.qute_QLayout_setAlignment_1(self, lPtr, C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
 	return bool(r)
 }
 
@@ -170,6 +182,7 @@ func (this *QLayout) SetLayoutAlignment(l QLayoutLike, alignment qtcore.Alignmen
 func (this *QLayout) SetSizeConstraint(constraint QLayoutSizeConstraint) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetSizeConstraint")
 	C.qute_QLayout_setSizeConstraint(self, C.int64_t(constraint))
+	runtime.KeepAlive(this)
 }
 
 // SizeConstraint wraps QLayout::sizeConstraint.
@@ -180,6 +193,7 @@ func (this *QLayout) SetSizeConstraint(constraint QLayoutSizeConstraint) {
 func (this *QLayout) SizeConstraint() QLayoutSizeConstraint {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SizeConstraint")
 	r := C.qute_QLayout_sizeConstraint(self)
+	runtime.KeepAlive(this)
 	return QLayoutSizeConstraint(r)
 }
 
@@ -191,6 +205,7 @@ func (this *QLayout) SizeConstraint() QLayoutSizeConstraint {
 func (this *QLayout) SetSizeConstraints(horizontal QLayoutSizeConstraint, vertical QLayoutSizeConstraint) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetSizeConstraints")
 	C.qute_QLayout_setSizeConstraints(self, C.int64_t(horizontal), C.int64_t(vertical))
+	runtime.KeepAlive(this)
 }
 
 // SetHorizontalSizeConstraint wraps QLayout::setHorizontalSizeConstraint.
@@ -201,6 +216,7 @@ func (this *QLayout) SetSizeConstraints(horizontal QLayoutSizeConstraint, vertic
 func (this *QLayout) SetHorizontalSizeConstraint(constraint QLayoutSizeConstraint) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetHorizontalSizeConstraint")
 	C.qute_QLayout_setHorizontalSizeConstraint(self, C.int64_t(constraint))
+	runtime.KeepAlive(this)
 }
 
 // HorizontalSizeConstraint wraps QLayout::horizontalSizeConstraint.
@@ -211,6 +227,7 @@ func (this *QLayout) SetHorizontalSizeConstraint(constraint QLayoutSizeConstrain
 func (this *QLayout) HorizontalSizeConstraint() QLayoutSizeConstraint {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.HorizontalSizeConstraint")
 	r := C.qute_QLayout_horizontalSizeConstraint(self)
+	runtime.KeepAlive(this)
 	return QLayoutSizeConstraint(r)
 }
 
@@ -222,6 +239,7 @@ func (this *QLayout) HorizontalSizeConstraint() QLayoutSizeConstraint {
 func (this *QLayout) SetVerticalSizeConstraint(constraint QLayoutSizeConstraint) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetVerticalSizeConstraint")
 	C.qute_QLayout_setVerticalSizeConstraint(self, C.int64_t(constraint))
+	runtime.KeepAlive(this)
 }
 
 // VerticalSizeConstraint wraps QLayout::verticalSizeConstraint.
@@ -232,6 +250,7 @@ func (this *QLayout) SetVerticalSizeConstraint(constraint QLayoutSizeConstraint)
 func (this *QLayout) VerticalSizeConstraint() QLayoutSizeConstraint {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.VerticalSizeConstraint")
 	r := C.qute_QLayout_verticalSizeConstraint(self)
+	runtime.KeepAlive(this)
 	return QLayoutSizeConstraint(r)
 }
 
@@ -250,6 +269,8 @@ func (this *QLayout) SetMenuBar(w QWidgetLike) {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QLayout.SetMenuBar")
 	}
 	C.qute_QLayout_setMenuBar(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 }
 
@@ -263,6 +284,7 @@ func (this *QLayout) SetMenuBar(w QWidgetLike) {
 func (this *QLayout) MenuBar() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.MenuBar")
 	r := C.qute_QLayout_menuBar(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -276,6 +298,7 @@ func (this *QLayout) MenuBar() *QWidget {
 func (this *QLayout) ParentWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ParentWidget")
 	r := C.qute_QLayout_parentWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -287,6 +310,7 @@ func (this *QLayout) ParentWidget() *QWidget {
 func (this *QLayout) Invalidate() {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Invalidate")
 	C.qute_QLayout_invalidate(self)
+	runtime.KeepAlive(this)
 }
 
 // Geometry wraps QLayout::geometry.
@@ -297,6 +321,7 @@ func (this *QLayout) Invalidate() {
 func (this *QLayout) Geometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Geometry")
 	r := C.qute_QLayout_geometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -308,6 +333,7 @@ func (this *QLayout) Geometry() qtcore.QRect {
 func (this *QLayout) Activate() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Activate")
 	r := C.qute_QLayout_activate(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -319,6 +345,7 @@ func (this *QLayout) Activate() bool {
 func (this *QLayout) Update() {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Update")
 	C.qute_QLayout_update(self)
+	runtime.KeepAlive(this)
 }
 
 // AddWidget wraps QLayout::addWidget.
@@ -336,6 +363,8 @@ func (this *QLayout) AddWidget(w QWidgetLike) {
 		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QLayout.AddWidget")
 	}
 	C.qute_QLayout_addWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	wH.TransferToCpp()
 }
 
@@ -354,6 +383,8 @@ func (this *QLayout) AddItem(layoutItem QLayoutItemLike) {
 		layoutItemPtr, layoutItemH = rt.Arg(unsafe.Pointer(layoutItem.AsQLayoutItem()), "QLayout.AddItem")
 	}
 	C.qute_QLayout_addItem(self, layoutItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layoutItem)
 	layoutItemH.TransferToCpp()
 }
 
@@ -371,6 +402,8 @@ func (this *QLayout) RemoveWidget(w QWidgetLike) {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QLayout.RemoveWidget")
 	}
 	C.qute_QLayout_removeWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 }
 
 // RemoveItem wraps QLayout::removeItem.
@@ -390,6 +423,8 @@ func (this *QLayout) RemoveItem(layoutItem QLayoutItemLike) {
 		layoutItemPtr, layoutItemH = rt.Arg(unsafe.Pointer(layoutItem.AsQLayoutItem()), "QLayout.RemoveItem")
 	}
 	C.qute_QLayout_removeItem(self, layoutItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layoutItem)
 	layoutItemH.TransferToGo()
 }
 
@@ -401,6 +436,7 @@ func (this *QLayout) RemoveItem(layoutItem QLayoutItemLike) {
 func (this *QLayout) ExpandingDirections() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ExpandingDirections")
 	r := C.qute_QLayout_expandingDirections(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -412,6 +448,7 @@ func (this *QLayout) ExpandingDirections() qtcore.Orientations {
 func (this *QLayout) MinimumSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.MinimumSize")
 	r := C.qute_QLayout_minimumSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -423,6 +460,7 @@ func (this *QLayout) MinimumSize() qtcore.QSize {
 func (this *QLayout) MaximumSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.MaximumSize")
 	r := C.qute_QLayout_maximumSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -434,6 +472,7 @@ func (this *QLayout) MaximumSize() qtcore.QSize {
 func (this *QLayout) SetGeometry(geometry qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetGeometry")
 	C.qute_QLayout_setGeometry(self, cQRect(geometry))
+	runtime.KeepAlive(this)
 }
 
 // ItemAt wraps QLayout::itemAt.
@@ -446,6 +485,7 @@ func (this *QLayout) SetGeometry(geometry qtcore.QRect) {
 func (this *QLayout) ItemAt(index int) *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ItemAt")
 	r := C.qute_QLayout_itemAt(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
 }
 
@@ -459,6 +499,7 @@ func (this *QLayout) ItemAt(index int) *QLayoutItem {
 func (this *QLayout) TakeAt(index int) *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.TakeAt")
 	r := C.qute_QLayout_takeAt(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.TakeOwned), r)
 }
 
@@ -474,6 +515,8 @@ func (this *QLayout) IndexOf(widget QWidgetLike) int {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QLayout.IndexOf")
 	}
 	r := C.qute_QLayout_indexOf(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	return int(r)
 }
 
@@ -489,6 +532,8 @@ func (this *QLayout) IndexOfItem(layoutItem QLayoutItemLike) int {
 		layoutItemPtr = rt.UseArg(unsafe.Pointer(layoutItem.AsQLayoutItem()), "QLayout.IndexOfItem")
 	}
 	r := C.qute_QLayout_indexOf_1(self, layoutItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layoutItem)
 	return int(r)
 }
 
@@ -500,6 +545,7 @@ func (this *QLayout) IndexOfItem(layoutItem QLayoutItemLike) int {
 func (this *QLayout) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Count")
 	r := C.qute_QLayout_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -511,6 +557,7 @@ func (this *QLayout) Count() int {
 func (this *QLayout) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.IsEmpty")
 	r := C.qute_QLayout_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -522,6 +569,7 @@ func (this *QLayout) IsEmpty() bool {
 func (this *QLayout) ControlTypes() QSizePolicyControlTypes {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ControlTypes")
 	r := C.qute_QLayout_controlTypes(self)
+	runtime.KeepAlive(this)
 	return QSizePolicyControlTypes(r)
 }
 
@@ -544,6 +592,9 @@ func (this *QLayout) ReplaceWidget(from QWidgetLike, to QWidgetLike) *QLayoutIte
 		toPtr, toH = rt.Arg(unsafe.Pointer(to.AsQWidget()), "QLayout.ReplaceWidget")
 	}
 	r := C.qute_QLayout_replaceWidget(self, fromPtr, toPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 	toH.TransferToCpp()
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.TakeOwned), r)
 }
@@ -556,6 +607,7 @@ func (this *QLayout) ReplaceWidget(from QWidgetLike, to QWidgetLike) *QLayoutIte
 func (this *QLayout) TotalMinimumHeightForWidth(w int) int {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.TotalMinimumHeightForWidth")
 	r := C.qute_QLayout_totalMinimumHeightForWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -567,6 +619,7 @@ func (this *QLayout) TotalMinimumHeightForWidth(w int) int {
 func (this *QLayout) TotalHeightForWidth(w int) int {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.TotalHeightForWidth")
 	r := C.qute_QLayout_totalHeightForWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -578,6 +631,7 @@ func (this *QLayout) TotalHeightForWidth(w int) int {
 func (this *QLayout) TotalMinimumSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.TotalMinimumSize")
 	r := C.qute_QLayout_totalMinimumSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -589,6 +643,7 @@ func (this *QLayout) TotalMinimumSize() qtcore.QSize {
 func (this *QLayout) TotalMaximumSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.TotalMaximumSize")
 	r := C.qute_QLayout_totalMaximumSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -600,6 +655,7 @@ func (this *QLayout) TotalMaximumSize() qtcore.QSize {
 func (this *QLayout) TotalSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.TotalSizeHint")
 	r := C.qute_QLayout_totalSizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -613,6 +669,7 @@ func (this *QLayout) TotalSizeHint() qtcore.QSize {
 func (this *QLayout) Layout() *QLayout {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.Layout")
 	r := C.qute_QLayout_layout(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLayout](rt.WrapClass(r, "QLayout", rt.KeepOrBorrow), r)
 }
 
@@ -624,6 +681,7 @@ func (this *QLayout) Layout() *QLayout {
 func (this *QLayout) SetEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.SetEnabled")
 	C.qute_QLayout_setEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsEnabled wraps QLayout::isEnabled.
@@ -634,6 +692,7 @@ func (this *QLayout) SetEnabled(enabled bool) {
 func (this *QLayout) IsEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.IsEnabled")
 	r := C.qute_QLayout_isEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -649,5 +708,6 @@ func QLayoutClosestAcceptableSize(w QWidgetLike, sArg qtcore.QSize) qtcore.QSize
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QLayoutClosestAcceptableSize")
 	}
 	r := C.qute_QLayout_closestAcceptableSize(wPtr, cQSize(sArg))
+	runtime.KeepAlive(w)
 	return goQSize(r)
 }

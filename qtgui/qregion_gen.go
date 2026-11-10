@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -125,6 +126,7 @@ func NewQRegionWithPoints(pa []qtcore.QPoint) *QRegion {
 func NewQRegionWithBitmap(bitmap *QBitmap) *QRegion {
 	rt.CheckThread("NewQRegionWithBitmap")
 	p := C.qute_QRegion_new_3(rt.UseArg(unsafe.Pointer(bitmap), "NewQRegionWithBitmap"))
+	runtime.KeepAlive(bitmap)
 	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
@@ -137,6 +139,7 @@ func NewQRegionWithBitmap(bitmap *QBitmap) *QRegion {
 func (this *QRegion) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.IsEmpty")
 	r := C.qute_QRegion_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -148,6 +151,7 @@ func (this *QRegion) IsEmpty() bool {
 func (this *QRegion) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.IsNull")
 	r := C.qute_QRegion_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -159,6 +163,7 @@ func (this *QRegion) IsNull() bool {
 func (this *QRegion) Contains(pArg qtcore.QPoint) bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Contains")
 	r := C.qute_QRegion_contains(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -170,6 +175,7 @@ func (this *QRegion) Contains(pArg qtcore.QPoint) bool {
 func (this *QRegion) ContainsRect(rArg qtcore.QRect) bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.ContainsRect")
 	r := C.qute_QRegion_contains_1(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -181,6 +187,7 @@ func (this *QRegion) ContainsRect(rArg qtcore.QRect) bool {
 func (this *QRegion) Translate(pArg qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Translate")
 	C.qute_QRegion_translate(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 }
 
 // Translated wraps QRegion::translated.
@@ -193,6 +200,7 @@ func (this *QRegion) Translate(pArg qtcore.QPoint) {
 func (this *QRegion) Translated(pArg qtcore.QPoint) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Translated")
 	r := C.qute_QRegion_translated(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -206,6 +214,8 @@ func (this *QRegion) Translated(pArg qtcore.QPoint) *QRegion {
 func (this *QRegion) United(rArg *QRegion) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.United")
 	r := C.qute_QRegion_united(self, rt.UseArg(unsafe.Pointer(rArg), "QRegion.United"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -219,6 +229,7 @@ func (this *QRegion) United(rArg *QRegion) *QRegion {
 func (this *QRegion) UnitedRect(rArg qtcore.QRect) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.UnitedRect")
 	r := C.qute_QRegion_united_1(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -232,6 +243,8 @@ func (this *QRegion) UnitedRect(rArg qtcore.QRect) *QRegion {
 func (this *QRegion) Intersected(rArg *QRegion) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Intersected")
 	r := C.qute_QRegion_intersected(self, rt.UseArg(unsafe.Pointer(rArg), "QRegion.Intersected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -245,6 +258,7 @@ func (this *QRegion) Intersected(rArg *QRegion) *QRegion {
 func (this *QRegion) IntersectedRect(rArg qtcore.QRect) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.IntersectedRect")
 	r := C.qute_QRegion_intersected_1(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -258,6 +272,8 @@ func (this *QRegion) IntersectedRect(rArg qtcore.QRect) *QRegion {
 func (this *QRegion) Subtracted(rArg *QRegion) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Subtracted")
 	r := C.qute_QRegion_subtracted(self, rt.UseArg(unsafe.Pointer(rArg), "QRegion.Subtracted"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -271,6 +287,8 @@ func (this *QRegion) Subtracted(rArg *QRegion) *QRegion {
 func (this *QRegion) Xored(rArg *QRegion) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Xored")
 	r := C.qute_QRegion_xored(self, rt.UseArg(unsafe.Pointer(rArg), "QRegion.Xored"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -282,6 +300,8 @@ func (this *QRegion) Xored(rArg *QRegion) *QRegion {
 func (this *QRegion) Intersects(rArg *QRegion) bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Intersects")
 	r := C.qute_QRegion_intersects(self, rt.UseArg(unsafe.Pointer(rArg), "QRegion.Intersects"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return bool(r)
 }
 
@@ -293,6 +313,7 @@ func (this *QRegion) Intersects(rArg *QRegion) bool {
 func (this *QRegion) IntersectsRect(rArg qtcore.QRect) bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.IntersectsRect")
 	r := C.qute_QRegion_intersects_1(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -304,6 +325,7 @@ func (this *QRegion) IntersectsRect(rArg qtcore.QRect) bool {
 func (this *QRegion) BoundingRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.BoundingRect")
 	r := C.qute_QRegion_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -319,6 +341,7 @@ func (this *QRegion) SetRects(rect []qtcore.QRect) {
 		rectC[i] = cQRect(rect[i])
 	}
 	C.qute_QRegion_setRects(self, unsafe.Pointer(unsafe.SliceData(rectC)), C.ptrdiff_t(len(rect)))
+	runtime.KeepAlive(this)
 }
 
 // Rects wraps QRegion::rects.
@@ -329,6 +352,7 @@ func (this *QRegion) SetRects(rect []qtcore.QRect) {
 func (this *QRegion) Rects() []qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.Rects")
 	r := C.qute_QRegion_rects(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_rect) qtcore.QRect { return goQRect(e) })
 }
 
@@ -340,5 +364,6 @@ func (this *QRegion) Rects() []qtcore.QRect {
 func (this *QRegion) RectCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QRegion.RectCount")
 	r := C.qute_QRegion_rectCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

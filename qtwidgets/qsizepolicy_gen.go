@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQSizePolicyWithPolicy(horizontal QSizePolicyPolicy, vertical QSizePolicy
 func (this *QSizePolicy) HorizontalPolicy() QSizePolicyPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.HorizontalPolicy")
 	r := C.qute_QSizePolicy_horizontalPolicy(self)
+	runtime.KeepAlive(this)
 	return QSizePolicyPolicy(r)
 }
 
@@ -120,6 +122,7 @@ func (this *QSizePolicy) HorizontalPolicy() QSizePolicyPolicy {
 func (this *QSizePolicy) VerticalPolicy() QSizePolicyPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.VerticalPolicy")
 	r := C.qute_QSizePolicy_verticalPolicy(self)
+	runtime.KeepAlive(this)
 	return QSizePolicyPolicy(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QSizePolicy) VerticalPolicy() QSizePolicyPolicy {
 func (this *QSizePolicy) ControlType() QSizePolicyControlTypes {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.ControlType")
 	r := C.qute_QSizePolicy_controlType(self)
+	runtime.KeepAlive(this)
 	return QSizePolicyControlTypes(r)
 }
 
@@ -142,6 +146,7 @@ func (this *QSizePolicy) ControlType() QSizePolicyControlTypes {
 func (this *QSizePolicy) SetHorizontalPolicy(d QSizePolicyPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetHorizontalPolicy")
 	C.qute_QSizePolicy_setHorizontalPolicy(self, C.int64_t(d))
+	runtime.KeepAlive(this)
 }
 
 // SetVerticalPolicy wraps QSizePolicy::setVerticalPolicy.
@@ -152,6 +157,7 @@ func (this *QSizePolicy) SetHorizontalPolicy(d QSizePolicyPolicy) {
 func (this *QSizePolicy) SetVerticalPolicy(d QSizePolicyPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetVerticalPolicy")
 	C.qute_QSizePolicy_setVerticalPolicy(self, C.int64_t(d))
+	runtime.KeepAlive(this)
 }
 
 // SetControlType wraps QSizePolicy::setControlType.
@@ -162,6 +168,7 @@ func (this *QSizePolicy) SetVerticalPolicy(d QSizePolicyPolicy) {
 func (this *QSizePolicy) SetControlType(typeArg QSizePolicyControlTypes) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetControlType")
 	C.qute_QSizePolicy_setControlType(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // ExpandingDirections wraps QSizePolicy::expandingDirections.
@@ -172,6 +179,7 @@ func (this *QSizePolicy) SetControlType(typeArg QSizePolicyControlTypes) {
 func (this *QSizePolicy) ExpandingDirections() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.ExpandingDirections")
 	r := C.qute_QSizePolicy_expandingDirections(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -183,6 +191,7 @@ func (this *QSizePolicy) ExpandingDirections() qtcore.Orientations {
 func (this *QSizePolicy) SetHeightForWidth(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetHeightForWidth")
 	C.qute_QSizePolicy_setHeightForWidth(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // HasHeightForWidth wraps QSizePolicy::hasHeightForWidth.
@@ -193,6 +202,7 @@ func (this *QSizePolicy) SetHeightForWidth(bArg bool) {
 func (this *QSizePolicy) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.HasHeightForWidth")
 	r := C.qute_QSizePolicy_hasHeightForWidth(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -204,6 +214,7 @@ func (this *QSizePolicy) HasHeightForWidth() bool {
 func (this *QSizePolicy) SetWidthForHeight(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetWidthForHeight")
 	C.qute_QSizePolicy_setWidthForHeight(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // HasWidthForHeight wraps QSizePolicy::hasWidthForHeight.
@@ -214,6 +225,7 @@ func (this *QSizePolicy) SetWidthForHeight(bArg bool) {
 func (this *QSizePolicy) HasWidthForHeight() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.HasWidthForHeight")
 	r := C.qute_QSizePolicy_hasWidthForHeight(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -225,6 +237,7 @@ func (this *QSizePolicy) HasWidthForHeight() bool {
 func (this *QSizePolicy) HorizontalStretch() int {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.HorizontalStretch")
 	r := C.qute_QSizePolicy_horizontalStretch(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -236,6 +249,7 @@ func (this *QSizePolicy) HorizontalStretch() int {
 func (this *QSizePolicy) VerticalStretch() int {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.VerticalStretch")
 	r := C.qute_QSizePolicy_verticalStretch(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -247,6 +261,7 @@ func (this *QSizePolicy) VerticalStretch() int {
 func (this *QSizePolicy) SetHorizontalStretch(stretchFactor int) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetHorizontalStretch")
 	C.qute_QSizePolicy_setHorizontalStretch(self, C.int(stretchFactor))
+	runtime.KeepAlive(this)
 }
 
 // SetVerticalStretch wraps QSizePolicy::setVerticalStretch.
@@ -257,6 +272,7 @@ func (this *QSizePolicy) SetHorizontalStretch(stretchFactor int) {
 func (this *QSizePolicy) SetVerticalStretch(stretchFactor int) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetVerticalStretch")
 	C.qute_QSizePolicy_setVerticalStretch(self, C.int(stretchFactor))
+	runtime.KeepAlive(this)
 }
 
 // RetainSizeWhenHidden wraps QSizePolicy::retainSizeWhenHidden.
@@ -267,6 +283,7 @@ func (this *QSizePolicy) SetVerticalStretch(stretchFactor int) {
 func (this *QSizePolicy) RetainSizeWhenHidden() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.RetainSizeWhenHidden")
 	r := C.qute_QSizePolicy_retainSizeWhenHidden(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -278,6 +295,7 @@ func (this *QSizePolicy) RetainSizeWhenHidden() bool {
 func (this *QSizePolicy) SetRetainSizeWhenHidden(retainSize bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.SetRetainSizeWhenHidden")
 	C.qute_QSizePolicy_setRetainSizeWhenHidden(self, C.bool(retainSize))
+	runtime.KeepAlive(this)
 }
 
 // Transpose wraps QSizePolicy::transpose.
@@ -288,6 +306,7 @@ func (this *QSizePolicy) SetRetainSizeWhenHidden(retainSize bool) {
 func (this *QSizePolicy) Transpose() {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.Transpose")
 	C.qute_QSizePolicy_transpose(self)
+	runtime.KeepAlive(this)
 }
 
 // Transposed wraps QSizePolicy::transposed.
@@ -300,5 +319,6 @@ func (this *QSizePolicy) Transpose() {
 func (this *QSizePolicy) Transposed() *QSizePolicy {
 	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.Transposed")
 	r := C.qute_QSizePolicy_transposed(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSizePolicy](rt.WrapClass(r, "QSizePolicy", rt.TakeOwned), r)
 }

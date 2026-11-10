@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQTextBlock() *QTextBlock {
 func (this *QTextBlock) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.IsValid")
 	r := C.qute_QTextBlock_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QTextBlock) IsValid() bool {
 func (this *QTextBlock) Position() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Position")
 	r := C.qute_QTextBlock_position(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QTextBlock) Position() int {
 func (this *QTextBlock) Length() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Length")
 	r := C.qute_QTextBlock_length(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +134,7 @@ func (this *QTextBlock) Length() int {
 func (this *QTextBlock) Contains(position int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Contains")
 	r := C.qute_QTextBlock_contains(self, C.int(position))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -141,6 +146,7 @@ func (this *QTextBlock) Contains(position int) bool {
 func (this *QTextBlock) ClearLayout() {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.ClearLayout")
 	C.qute_QTextBlock_clearLayout(self)
+	runtime.KeepAlive(this)
 }
 
 // BlockFormat wraps QTextBlock::blockFormat.
@@ -153,6 +159,7 @@ func (this *QTextBlock) ClearLayout() {
 func (this *QTextBlock) BlockFormat() *QTextBlockFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.BlockFormat")
 	r := C.qute_QTextBlock_blockFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlockFormat](rt.WrapClass(r, "QTextBlockFormat", rt.TakeOwned), r)
 }
 
@@ -164,6 +171,7 @@ func (this *QTextBlock) BlockFormat() *QTextBlockFormat {
 func (this *QTextBlock) BlockFormatIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.BlockFormatIndex")
 	r := C.qute_QTextBlock_blockFormatIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -177,6 +185,7 @@ func (this *QTextBlock) BlockFormatIndex() int {
 func (this *QTextBlock) CharFormat() *QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.CharFormat")
 	r := C.qute_QTextBlock_charFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -188,6 +197,7 @@ func (this *QTextBlock) CharFormat() *QTextCharFormat {
 func (this *QTextBlock) CharFormatIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.CharFormatIndex")
 	r := C.qute_QTextBlock_charFormatIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -199,6 +209,7 @@ func (this *QTextBlock) CharFormatIndex() int {
 func (this *QTextBlock) TextDirection() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.TextDirection")
 	r := C.qute_QTextBlock_textDirection(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -210,6 +221,7 @@ func (this *QTextBlock) TextDirection() qtcore.LayoutDirection {
 func (this *QTextBlock) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Text")
 	r := C.qute_QTextBlock_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -223,6 +235,7 @@ func (this *QTextBlock) Text() string {
 func (this *QTextBlock) Document() *QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Document")
 	r := C.qute_QTextBlock_document(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }
 
@@ -236,6 +249,7 @@ func (this *QTextBlock) Document() *QTextDocument {
 func (this *QTextBlock) TextList() *QTextList {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.TextList")
 	r := C.qute_QTextBlock_textList(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.KeepOrBorrow), r)
 }
 
@@ -247,6 +261,7 @@ func (this *QTextBlock) TextList() *QTextList {
 func (this *QTextBlock) UserState() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.UserState")
 	r := C.qute_QTextBlock_userState(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -258,6 +273,7 @@ func (this *QTextBlock) UserState() int {
 func (this *QTextBlock) SetUserState(state int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.SetUserState")
 	C.qute_QTextBlock_setUserState(self, C.int(state))
+	runtime.KeepAlive(this)
 }
 
 // Revision wraps QTextBlock::revision.
@@ -268,6 +284,7 @@ func (this *QTextBlock) SetUserState(state int) {
 func (this *QTextBlock) Revision() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Revision")
 	r := C.qute_QTextBlock_revision(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -279,6 +296,7 @@ func (this *QTextBlock) Revision() int {
 func (this *QTextBlock) SetRevision(rev int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.SetRevision")
 	C.qute_QTextBlock_setRevision(self, C.int(rev))
+	runtime.KeepAlive(this)
 }
 
 // IsVisible wraps QTextBlock::isVisible.
@@ -289,6 +307,7 @@ func (this *QTextBlock) SetRevision(rev int) {
 func (this *QTextBlock) IsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.IsVisible")
 	r := C.qute_QTextBlock_isVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -300,6 +319,7 @@ func (this *QTextBlock) IsVisible() bool {
 func (this *QTextBlock) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.SetVisible")
 	C.qute_QTextBlock_setVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // BlockNumber wraps QTextBlock::blockNumber.
@@ -310,6 +330,7 @@ func (this *QTextBlock) SetVisible(visible bool) {
 func (this *QTextBlock) BlockNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.BlockNumber")
 	r := C.qute_QTextBlock_blockNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -321,6 +342,7 @@ func (this *QTextBlock) BlockNumber() int {
 func (this *QTextBlock) FirstLineNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.FirstLineNumber")
 	r := C.qute_QTextBlock_firstLineNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -332,6 +354,7 @@ func (this *QTextBlock) FirstLineNumber() int {
 func (this *QTextBlock) SetLineCount(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.SetLineCount")
 	C.qute_QTextBlock_setLineCount(self, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // LineCount wraps QTextBlock::lineCount.
@@ -342,6 +365,7 @@ func (this *QTextBlock) SetLineCount(count int) {
 func (this *QTextBlock) LineCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.LineCount")
 	r := C.qute_QTextBlock_lineCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -355,6 +379,7 @@ func (this *QTextBlock) LineCount() int {
 func (this *QTextBlock) Next() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Next")
 	r := C.qute_QTextBlock_next(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -368,6 +393,7 @@ func (this *QTextBlock) Next() *QTextBlock {
 func (this *QTextBlock) Previous() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.Previous")
 	r := C.qute_QTextBlock_previous(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -379,5 +405,6 @@ func (this *QTextBlock) Previous() *QTextBlock {
 func (this *QTextBlock) FragmentIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlock.FragmentIndex")
 	r := C.qute_QTextBlock_fragmentIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQGraphicsProxyWidget(parent QGraphicsItemLike) *QGraphicsProxyWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsProxyWidget")
 	}
 	p := C.qute_QGraphicsProxyWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -86,6 +88,8 @@ func (this *QGraphicsProxyWidget) SetWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsProxyWidget.SetWidget")
 	}
 	C.qute_QGraphicsProxyWidget_setWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -99,6 +103,7 @@ func (this *QGraphicsProxyWidget) SetWidget(widget QWidgetLike) {
 func (this *QGraphicsProxyWidget) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsProxyWidget.Widget")
 	r := C.qute_QGraphicsProxyWidget_widget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -114,6 +119,8 @@ func (this *QGraphicsProxyWidget) SubWidgetRect(widget QWidgetLike) qtcore.QRect
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsProxyWidget.SubWidgetRect")
 	}
 	r := C.qute_QGraphicsProxyWidget_subWidgetRect(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	return goQRectF(r)
 }
 
@@ -133,5 +140,7 @@ func (this *QGraphicsProxyWidget) CreateProxyForChildWidget(child QWidgetLike) *
 		childPtr = rt.UseArg(unsafe.Pointer(child.AsQWidget()), "QGraphicsProxyWidget.CreateProxyForChildWidget")
 	}
 	r := C.qute_QGraphicsProxyWidget_createProxyForChildWidget(self, childPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
 	return rt.View[QGraphicsProxyWidget](rt.WrapClass(r, "QGraphicsProxyWidget", rt.TakeParented), r)
 }

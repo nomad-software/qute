@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQDateWithY(y int, m int, d int) *QDate {
 func NewQDateWithYCalendar(y int, m int, d int, cal *QCalendar) *QDate {
 	rt.CheckThread("NewQDateWithYCalendar")
 	p := C.qute_QDate_new_2(C.int(y), C.int(m), C.int(d), rt.UseArg(unsafe.Pointer(cal), "NewQDateWithYCalendar"))
+	runtime.KeepAlive(cal)
 	h := rt.WrapClass(p, "QDate", rt.NewOwned)
 	return rt.View[QDate](h, p)
 }
@@ -120,6 +122,7 @@ func NewQDateWithYCalendar(y int, m int, d int, cal *QCalendar) *QDate {
 func (this *QDate) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDate.IsNull")
 	r := C.qute_QDate_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QDate) IsNull() bool {
 func (this *QDate) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDate.IsValid")
 	r := C.qute_QDate_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -142,6 +146,7 @@ func (this *QDate) IsValid() bool {
 func (this *QDate) Year() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.Year")
 	r := C.qute_QDate_year(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -153,6 +158,7 @@ func (this *QDate) Year() int {
 func (this *QDate) Month() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.Month")
 	r := C.qute_QDate_month(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -164,6 +170,7 @@ func (this *QDate) Month() int {
 func (this *QDate) Day() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.Day")
 	r := C.qute_QDate_day(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -175,6 +182,7 @@ func (this *QDate) Day() int {
 func (this *QDate) DayOfWeek() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DayOfWeek")
 	r := C.qute_QDate_dayOfWeek(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -186,6 +194,7 @@ func (this *QDate) DayOfWeek() int {
 func (this *QDate) DayOfYear() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DayOfYear")
 	r := C.qute_QDate_dayOfYear(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -197,6 +206,7 @@ func (this *QDate) DayOfYear() int {
 func (this *QDate) DaysInMonth() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DaysInMonth")
 	r := C.qute_QDate_daysInMonth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -208,6 +218,7 @@ func (this *QDate) DaysInMonth() int {
 func (this *QDate) DaysInYear() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DaysInYear")
 	r := C.qute_QDate_daysInYear(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -219,6 +230,7 @@ func (this *QDate) DaysInYear() int {
 func (this *QDate) WeekNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.WeekNumber")
 	r := C.qute_QDate_weekNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -230,6 +242,8 @@ func (this *QDate) WeekNumber() int {
 func (this *QDate) YearWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.YearWithCalendar")
 	r := C.qute_QDate_year_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.YearWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -241,6 +255,8 @@ func (this *QDate) YearWithCalendar(cal *QCalendar) int {
 func (this *QDate) MonthWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.MonthWithCalendar")
 	r := C.qute_QDate_month_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.MonthWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -252,6 +268,8 @@ func (this *QDate) MonthWithCalendar(cal *QCalendar) int {
 func (this *QDate) DayWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DayWithCalendar")
 	r := C.qute_QDate_day_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DayWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -263,6 +281,8 @@ func (this *QDate) DayWithCalendar(cal *QCalendar) int {
 func (this *QDate) DayOfWeekWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DayOfWeekWithCalendar")
 	r := C.qute_QDate_dayOfWeek_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DayOfWeekWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -274,6 +294,8 @@ func (this *QDate) DayOfWeekWithCalendar(cal *QCalendar) int {
 func (this *QDate) DayOfYearWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DayOfYearWithCalendar")
 	r := C.qute_QDate_dayOfYear_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DayOfYearWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -285,6 +307,8 @@ func (this *QDate) DayOfYearWithCalendar(cal *QCalendar) int {
 func (this *QDate) DaysInMonthWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DaysInMonthWithCalendar")
 	r := C.qute_QDate_daysInMonth_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DaysInMonthWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -296,6 +320,8 @@ func (this *QDate) DaysInMonthWithCalendar(cal *QCalendar) int {
 func (this *QDate) DaysInYearWithCalendar(cal *QCalendar) int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DaysInYearWithCalendar")
 	r := C.qute_QDate_daysInYear_1(self, rt.UseArg(unsafe.Pointer(cal), "QDate.DaysInYearWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return int(r)
 }
 
@@ -309,6 +335,8 @@ func (this *QDate) DaysInYearWithCalendar(cal *QCalendar) int {
 func (this *QDate) StartOfDayWithTimeZone(zone *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDate.StartOfDayWithTimeZone")
 	r := C.qute_QDate_startOfDay(self, rt.UseArg(unsafe.Pointer(zone), "QDate.StartOfDayWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(zone)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -322,6 +350,8 @@ func (this *QDate) StartOfDayWithTimeZone(zone *QTimeZone) *QDateTime {
 func (this *QDate) EndOfDayWithTimeZone(zone *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDate.EndOfDayWithTimeZone")
 	r := C.qute_QDate_endOfDay(self, rt.UseArg(unsafe.Pointer(zone), "QDate.EndOfDayWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(zone)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -335,6 +365,7 @@ func (this *QDate) EndOfDayWithTimeZone(zone *QTimeZone) *QDateTime {
 func (this *QDate) StartOfDay() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDate.StartOfDay")
 	r := C.qute_QDate_startOfDay_1(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -348,6 +379,7 @@ func (this *QDate) StartOfDay() *QDateTime {
 func (this *QDate) EndOfDay() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDate.EndOfDay")
 	r := C.qute_QDate_endOfDay_1(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -359,6 +391,7 @@ func (this *QDate) EndOfDay() *QDateTime {
 func (this *QDate) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QDate.ToString")
 	r := C.qute_QDate_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -370,6 +403,7 @@ func (this *QDate) ToString() string {
 func (this *QDate) ToStringFormat(format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QDate.ToStringFormat")
 	r := C.qute_QDate_toString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -381,6 +415,8 @@ func (this *QDate) ToStringFormat(format string) string {
 func (this *QDate) ToStringWithFormat(format string, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QDate.ToStringWithFormat")
 	r := C.qute_QDate_toString_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDate.ToStringWithFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return quteStr(r)
 }
 
@@ -392,6 +428,7 @@ func (this *QDate) ToStringWithFormat(format string, cal *QCalendar) string {
 func (this *QDate) SetDate(year int, month int, day int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDate.SetDate")
 	r := C.qute_QDate_setDate(self, C.int(year), C.int(month), C.int(day))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -403,6 +440,8 @@ func (this *QDate) SetDate(year int, month int, day int) bool {
 func (this *QDate) SetDateWithCalendar(year int, month int, day int, cal *QCalendar) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDate.SetDateWithCalendar")
 	r := C.qute_QDate_setDate_1(self, C.int(year), C.int(month), C.int(day), rt.UseArg(unsafe.Pointer(cal), "QDate.SetDateWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return bool(r)
 }
 
@@ -417,6 +456,7 @@ func (this *QDate) GetDate() (int, int, int) {
 	var monthOut C.int
 	var dayOut C.int
 	C.qute_QDate_getDate(self, &yearOut, &monthOut, &dayOut)
+	runtime.KeepAlive(this)
 	return int(yearOut), int(monthOut), int(dayOut)
 }
 
@@ -430,6 +470,7 @@ func (this *QDate) GetDate() (int, int, int) {
 func (this *QDate) AddDays(days int64) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDate.AddDays")
 	r := C.qute_QDate_addDays(self, C.longlong(days))
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -443,6 +484,7 @@ func (this *QDate) AddDays(days int64) *QDate {
 func (this *QDate) AddMonths(months int) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDate.AddMonths")
 	r := C.qute_QDate_addMonths(self, C.int(months))
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -456,6 +498,7 @@ func (this *QDate) AddMonths(months int) *QDate {
 func (this *QDate) AddYears(years int) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDate.AddYears")
 	r := C.qute_QDate_addYears(self, C.int(years))
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -469,6 +512,8 @@ func (this *QDate) AddYears(years int) *QDate {
 func (this *QDate) AddMonthsWithCalendar(months int, cal *QCalendar) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDate.AddMonthsWithCalendar")
 	r := C.qute_QDate_addMonths_1(self, C.int(months), rt.UseArg(unsafe.Pointer(cal), "QDate.AddMonthsWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -482,6 +527,8 @@ func (this *QDate) AddMonthsWithCalendar(months int, cal *QCalendar) *QDate {
 func (this *QDate) AddYearsWithCalendar(years int, cal *QCalendar) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDate.AddYearsWithCalendar")
 	r := C.qute_QDate_addYears_1(self, C.int(years), rt.UseArg(unsafe.Pointer(cal), "QDate.AddYearsWithCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -493,6 +540,8 @@ func (this *QDate) AddYearsWithCalendar(years int, cal *QCalendar) *QDate {
 func (this *QDate) DaysTo(d *QDate) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDate.DaysTo")
 	r := C.qute_QDate_daysTo(self, rt.UseArg(unsafe.Pointer(d), "QDate.DaysTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(d)
 	return int64(r)
 }
 
@@ -504,6 +553,7 @@ func (this *QDate) DaysTo(d *QDate) int64 {
 func (this *QDate) ToJulianDay() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDate.ToJulianDay")
 	r := C.qute_QDate_toJulianDay(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -543,6 +593,7 @@ func QDateFromString(stringArg string) *QDate {
 func QDateFromStringFormatCalendar(stringArg string, format string, cal *QCalendar) *QDate {
 	rt.CheckThread("QDateFromStringFormatCalendar")
 	r := C.qute_QDate_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QDateFromStringFormatCalendar"))
+	runtime.KeepAlive(cal)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -556,6 +607,7 @@ func QDateFromStringFormatCalendar(stringArg string, format string, cal *QCalend
 func QDateFromStringFormatYearCalendar(stringArg string, format string, baseYear int, cal *QCalendar) *QDate {
 	rt.CheckThread("QDateFromStringFormatYearCalendar")
 	r := C.qute_QDate_fromString_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear), rt.UseArg(unsafe.Pointer(cal), "QDateFromStringFormatYearCalendar"))
+	runtime.KeepAlive(cal)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 

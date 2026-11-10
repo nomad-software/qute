@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQTableWidgetItemWithText(text string) *QTableWidgetItem {
 func NewQTableWidgetItemWithIcon(icon *qtgui.QIcon, text string) *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItemWithIcon")
 	p := C.qute_QTableWidgetItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(icon)
 	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
@@ -123,6 +125,7 @@ func NewQTableWidgetItemWithIcon(icon *qtgui.QIcon, text string) *QTableWidgetIt
 func (this *QTableWidgetItem) Clone() *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Clone")
 	r := C.qute_QTableWidgetItem_clone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.TakeOwned), r)
 }
 
@@ -136,6 +139,7 @@ func (this *QTableWidgetItem) Clone() *QTableWidgetItem {
 func (this *QTableWidgetItem) TableWidget() *QTableWidget {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.TableWidget")
 	r := C.qute_QTableWidgetItem_tableWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidget](rt.WrapClass(r, "QTableWidget", rt.KeepOrBorrow), r)
 }
 
@@ -147,6 +151,7 @@ func (this *QTableWidgetItem) TableWidget() *QTableWidget {
 func (this *QTableWidgetItem) Row() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Row")
 	r := C.qute_QTableWidgetItem_row(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -158,6 +163,7 @@ func (this *QTableWidgetItem) Row() int {
 func (this *QTableWidgetItem) Column() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Column")
 	r := C.qute_QTableWidgetItem_column(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -169,6 +175,7 @@ func (this *QTableWidgetItem) Column() int {
 func (this *QTableWidgetItem) SetSelected(selectArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetSelected")
 	C.qute_QTableWidgetItem_setSelected(self, C.bool(selectArg))
+	runtime.KeepAlive(this)
 }
 
 // IsSelected wraps QTableWidgetItem::isSelected.
@@ -179,6 +186,7 @@ func (this *QTableWidgetItem) SetSelected(selectArg bool) {
 func (this *QTableWidgetItem) IsSelected() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.IsSelected")
 	r := C.qute_QTableWidgetItem_isSelected(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -190,6 +198,7 @@ func (this *QTableWidgetItem) IsSelected() bool {
 func (this *QTableWidgetItem) Flags() qtcore.ItemFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Flags")
 	r := C.qute_QTableWidgetItem_flags(self)
+	runtime.KeepAlive(this)
 	return qtcore.ItemFlags(r)
 }
 
@@ -201,6 +210,7 @@ func (this *QTableWidgetItem) Flags() qtcore.ItemFlags {
 func (this *QTableWidgetItem) SetFlags(flags qtcore.ItemFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetFlags")
 	C.qute_QTableWidgetItem_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QTableWidgetItem::text.
@@ -211,6 +221,7 @@ func (this *QTableWidgetItem) SetFlags(flags qtcore.ItemFlags) {
 func (this *QTableWidgetItem) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Text")
 	r := C.qute_QTableWidgetItem_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -222,6 +233,7 @@ func (this *QTableWidgetItem) Text() string {
 func (this *QTableWidgetItem) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetText")
 	C.qute_QTableWidgetItem_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps QTableWidgetItem::icon.
@@ -234,6 +246,7 @@ func (this *QTableWidgetItem) SetText(text string) {
 func (this *QTableWidgetItem) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Icon")
 	r := C.qute_QTableWidgetItem_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -245,6 +258,8 @@ func (this *QTableWidgetItem) Icon() *qtgui.QIcon {
 func (this *QTableWidgetItem) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetIcon")
 	C.qute_QTableWidgetItem_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QTableWidgetItem.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // StatusTip wraps QTableWidgetItem::statusTip.
@@ -255,6 +270,7 @@ func (this *QTableWidgetItem) SetIcon(icon *qtgui.QIcon) {
 func (this *QTableWidgetItem) StatusTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.StatusTip")
 	r := C.qute_QTableWidgetItem_statusTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -266,6 +282,7 @@ func (this *QTableWidgetItem) StatusTip() string {
 func (this *QTableWidgetItem) SetStatusTip(statusTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetStatusTip")
 	C.qute_QTableWidgetItem_setStatusTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(statusTip))), C.ptrdiff_t(len(statusTip)))
+	runtime.KeepAlive(this)
 }
 
 // ToolTip wraps QTableWidgetItem::toolTip.
@@ -276,6 +293,7 @@ func (this *QTableWidgetItem) SetStatusTip(statusTip string) {
 func (this *QTableWidgetItem) ToolTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.ToolTip")
 	r := C.qute_QTableWidgetItem_toolTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -287,6 +305,7 @@ func (this *QTableWidgetItem) ToolTip() string {
 func (this *QTableWidgetItem) SetToolTip(toolTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetToolTip")
 	C.qute_QTableWidgetItem_setToolTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(toolTip))), C.ptrdiff_t(len(toolTip)))
+	runtime.KeepAlive(this)
 }
 
 // WhatsThis wraps QTableWidgetItem::whatsThis.
@@ -297,6 +316,7 @@ func (this *QTableWidgetItem) SetToolTip(toolTip string) {
 func (this *QTableWidgetItem) WhatsThis() string {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.WhatsThis")
 	r := C.qute_QTableWidgetItem_whatsThis(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -308,6 +328,7 @@ func (this *QTableWidgetItem) WhatsThis() string {
 func (this *QTableWidgetItem) SetWhatsThis(whatsThis string) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetWhatsThis")
 	C.qute_QTableWidgetItem_setWhatsThis(self, (*C.char)(unsafe.Pointer(unsafe.StringData(whatsThis))), C.ptrdiff_t(len(whatsThis)))
+	runtime.KeepAlive(this)
 }
 
 // Font wraps QTableWidgetItem::font.
@@ -320,6 +341,7 @@ func (this *QTableWidgetItem) SetWhatsThis(whatsThis string) {
 func (this *QTableWidgetItem) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Font")
 	r := C.qute_QTableWidgetItem_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -331,6 +353,8 @@ func (this *QTableWidgetItem) Font() *qtgui.QFont {
 func (this *QTableWidgetItem) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetFont")
 	C.qute_QTableWidgetItem_setFont(self, rt.UseArg(unsafe.Pointer(font), "QTableWidgetItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // TextAlignment wraps QTableWidgetItem::textAlignment.
@@ -341,6 +365,7 @@ func (this *QTableWidgetItem) SetFont(font *qtgui.QFont) {
 func (this *QTableWidgetItem) TextAlignment() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.TextAlignment")
 	r := C.qute_QTableWidgetItem_textAlignment(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -352,6 +377,7 @@ func (this *QTableWidgetItem) TextAlignment() int {
 func (this *QTableWidgetItem) SetTextAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetTextAlignment")
 	C.qute_QTableWidgetItem_setTextAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Background wraps QTableWidgetItem::background.
@@ -364,6 +390,7 @@ func (this *QTableWidgetItem) SetTextAlignment(alignment qtcore.Alignment) {
 func (this *QTableWidgetItem) Background() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Background")
 	r := C.qute_QTableWidgetItem_background(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -375,6 +402,8 @@ func (this *QTableWidgetItem) Background() *qtgui.QBrush {
 func (this *QTableWidgetItem) SetBackground(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetBackground")
 	C.qute_QTableWidgetItem_setBackground(self, rt.UseArg(unsafe.Pointer(brush), "QTableWidgetItem.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Foreground wraps QTableWidgetItem::foreground.
@@ -387,6 +416,7 @@ func (this *QTableWidgetItem) SetBackground(brush *qtgui.QBrush) {
 func (this *QTableWidgetItem) Foreground() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Foreground")
 	r := C.qute_QTableWidgetItem_foreground(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -398,6 +428,8 @@ func (this *QTableWidgetItem) Foreground() *qtgui.QBrush {
 func (this *QTableWidgetItem) SetForeground(brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetForeground")
 	C.qute_QTableWidgetItem_setForeground(self, rt.UseArg(unsafe.Pointer(brush), "QTableWidgetItem.SetForeground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // CheckState wraps QTableWidgetItem::checkState.
@@ -408,6 +440,7 @@ func (this *QTableWidgetItem) SetForeground(brush *qtgui.QBrush) {
 func (this *QTableWidgetItem) CheckState() qtcore.CheckState {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.CheckState")
 	r := C.qute_QTableWidgetItem_checkState(self)
+	runtime.KeepAlive(this)
 	return qtcore.CheckState(r)
 }
 
@@ -419,6 +452,7 @@ func (this *QTableWidgetItem) CheckState() qtcore.CheckState {
 func (this *QTableWidgetItem) SetCheckState(state qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetCheckState")
 	C.qute_QTableWidgetItem_setCheckState(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // SizeHint wraps QTableWidgetItem::sizeHint.
@@ -429,6 +463,7 @@ func (this *QTableWidgetItem) SetCheckState(state qtcore.CheckState) {
 func (this *QTableWidgetItem) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SizeHint")
 	r := C.qute_QTableWidgetItem_sizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -440,6 +475,7 @@ func (this *QTableWidgetItem) SizeHint() qtcore.QSize {
 func (this *QTableWidgetItem) SetSizeHint(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetSizeHint")
 	C.qute_QTableWidgetItem_setSizeHint(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // Data wraps QTableWidgetItem::data.
@@ -452,6 +488,7 @@ func (this *QTableWidgetItem) SetSizeHint(size qtcore.QSize) {
 func (this *QTableWidgetItem) Data(role int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Data")
 	r := C.qute_QTableWidgetItem_data(self, C.int(role))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -463,6 +500,8 @@ func (this *QTableWidgetItem) Data(role int) *qtcore.QVariant {
 func (this *QTableWidgetItem) SetData(role int, value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.SetData")
 	C.qute_QTableWidgetItem_setData(self, C.int(role), rt.UseArg(unsafe.Pointer(value), "QTableWidgetItem.SetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Read wraps QTableWidgetItem::read.
@@ -477,6 +516,8 @@ func (this *QTableWidgetItem) Read(in qtcore.QDataStreamLike) {
 		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QTableWidgetItem.Read")
 	}
 	C.qute_QTableWidgetItem_read(self, inPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(in)
 }
 
 // Write wraps QTableWidgetItem::write.
@@ -491,6 +532,8 @@ func (this *QTableWidgetItem) Write(out qtcore.QDataStreamLike) {
 		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QTableWidgetItem.Write")
 	}
 	C.qute_QTableWidgetItem_write(self, outPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(out)
 }
 
 // Type wraps QTableWidgetItem::type.
@@ -501,5 +544,6 @@ func (this *QTableWidgetItem) Write(out qtcore.QDataStreamLike) {
 func (this *QTableWidgetItem) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidgetItem.Type")
 	r := C.qute_QTableWidgetItem_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

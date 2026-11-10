@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQAction(parent qtcore.QObjectLike) *QAction {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQAction")
 	}
 	p := C.qute_QAction_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQActionWithText(text string, parent qtcore.QObjectLike) *QAction {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQActionWithText")
 	}
 	p := C.qute_QAction_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -105,6 +108,8 @@ func NewQActionWithIcon(icon *QIcon, text string, parent qtcore.QObjectLike) *QA
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQActionWithIcon")
 	}
 	p := C.qute_QAction_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQActionWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -123,6 +128,7 @@ func NewQActionWithIcon(icon *QIcon, text string, parent qtcore.QObjectLike) *QA
 func (this *QAction) AssociatedObjects() []*qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QAction.AssociatedObjects")
 	r := C.qute_QAction_associatedObjects(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QObject {
 		return rt.View[qtcore.QObject](rt.WrapClass(e, "QObject", rt.KeepOrBorrow), e)
 	})
@@ -140,6 +146,8 @@ func (this *QAction) SetActionGroup(group QActionGroupLike) {
 		groupPtr = rt.UseArg(unsafe.Pointer(group.AsQActionGroup()), "QAction.SetActionGroup")
 	}
 	C.qute_QAction_setActionGroup(self, groupPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(group)
 }
 
 // ActionGroup wraps QAction::actionGroup.
@@ -152,6 +160,7 @@ func (this *QAction) SetActionGroup(group QActionGroupLike) {
 func (this *QAction) ActionGroup() *QActionGroup {
 	self := rt.Use(unsafe.Pointer(this), "QAction.ActionGroup")
 	r := C.qute_QAction_actionGroup(self)
+	runtime.KeepAlive(this)
 	return rt.View[QActionGroup](rt.WrapClass(r, "QActionGroup", rt.KeepOrBorrow), r)
 }
 
@@ -163,6 +172,8 @@ func (this *QAction) ActionGroup() *QActionGroup {
 func (this *QAction) SetIcon(icon *QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetIcon")
 	C.qute_QAction_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QAction.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // Icon wraps QAction::icon.
@@ -175,6 +186,7 @@ func (this *QAction) SetIcon(icon *QIcon) {
 func (this *QAction) Icon() *QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Icon")
 	r := C.qute_QAction_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -186,6 +198,7 @@ func (this *QAction) Icon() *QIcon {
 func (this *QAction) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetText")
 	C.qute_QAction_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QAction::text.
@@ -196,6 +209,7 @@ func (this *QAction) SetText(text string) {
 func (this *QAction) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Text")
 	r := C.qute_QAction_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -207,6 +221,7 @@ func (this *QAction) Text() string {
 func (this *QAction) SetIconText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetIconText")
 	C.qute_QAction_setIconText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // IconText wraps QAction::iconText.
@@ -217,6 +232,7 @@ func (this *QAction) SetIconText(text string) {
 func (this *QAction) IconText() string {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IconText")
 	r := C.qute_QAction_iconText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -228,6 +244,7 @@ func (this *QAction) IconText() string {
 func (this *QAction) SetToolTip(tip string) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetToolTip")
 	C.qute_QAction_setToolTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(tip))), C.ptrdiff_t(len(tip)))
+	runtime.KeepAlive(this)
 }
 
 // ToolTip wraps QAction::toolTip.
@@ -238,6 +255,7 @@ func (this *QAction) SetToolTip(tip string) {
 func (this *QAction) ToolTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QAction.ToolTip")
 	r := C.qute_QAction_toolTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -249,6 +267,7 @@ func (this *QAction) ToolTip() string {
 func (this *QAction) SetStatusTip(statusTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetStatusTip")
 	C.qute_QAction_setStatusTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(statusTip))), C.ptrdiff_t(len(statusTip)))
+	runtime.KeepAlive(this)
 }
 
 // StatusTip wraps QAction::statusTip.
@@ -259,6 +278,7 @@ func (this *QAction) SetStatusTip(statusTip string) {
 func (this *QAction) StatusTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QAction.StatusTip")
 	r := C.qute_QAction_statusTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -270,6 +290,7 @@ func (this *QAction) StatusTip() string {
 func (this *QAction) SetWhatsThis(what string) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetWhatsThis")
 	C.qute_QAction_setWhatsThis(self, (*C.char)(unsafe.Pointer(unsafe.StringData(what))), C.ptrdiff_t(len(what)))
+	runtime.KeepAlive(this)
 }
 
 // WhatsThis wraps QAction::whatsThis.
@@ -280,6 +301,7 @@ func (this *QAction) SetWhatsThis(what string) {
 func (this *QAction) WhatsThis() string {
 	self := rt.Use(unsafe.Pointer(this), "QAction.WhatsThis")
 	r := C.qute_QAction_whatsThis(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -291,6 +313,7 @@ func (this *QAction) WhatsThis() string {
 func (this *QAction) SetPriority(priority QActionPriority) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetPriority")
 	C.qute_QAction_setPriority(self, C.int64_t(priority))
+	runtime.KeepAlive(this)
 }
 
 // Priority wraps QAction::priority.
@@ -301,6 +324,7 @@ func (this *QAction) SetPriority(priority QActionPriority) {
 func (this *QAction) Priority() QActionPriority {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Priority")
 	r := C.qute_QAction_priority(self)
+	runtime.KeepAlive(this)
 	return QActionPriority(r)
 }
 
@@ -312,6 +336,7 @@ func (this *QAction) Priority() QActionPriority {
 func (this *QAction) SetSeparator(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetSeparator")
 	C.qute_QAction_setSeparator(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // IsSeparator wraps QAction::isSeparator.
@@ -322,6 +347,7 @@ func (this *QAction) SetSeparator(bArg bool) {
 func (this *QAction) IsSeparator() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsSeparator")
 	r := C.qute_QAction_isSeparator(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -333,6 +359,8 @@ func (this *QAction) IsSeparator() bool {
 func (this *QAction) SetShortcut(shortcut *QKeySequence) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetShortcut")
 	C.qute_QAction_setShortcut(self, rt.UseArg(unsafe.Pointer(shortcut), "QAction.SetShortcut"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(shortcut)
 }
 
 // Shortcut wraps QAction::shortcut.
@@ -345,6 +373,7 @@ func (this *QAction) SetShortcut(shortcut *QKeySequence) {
 func (this *QAction) Shortcut() *QKeySequence {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Shortcut")
 	r := C.qute_QAction_shortcut(self)
+	runtime.KeepAlive(this)
 	return rt.View[QKeySequence](rt.WrapClass(r, "QKeySequence", rt.TakeOwned), r)
 }
 
@@ -360,6 +389,8 @@ func (this *QAction) SetShortcuts(shortcuts []*QKeySequence) {
 		shortcutsC[i] = rt.UseArg(unsafe.Pointer(shortcuts[i]), "QAction.SetShortcuts")
 	}
 	C.qute_QAction_setShortcuts(self, unsafe.Pointer(unsafe.SliceData(shortcutsC)), C.ptrdiff_t(len(shortcuts)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(shortcuts)
 }
 
 // SetStandardShortcuts wraps QAction::setShortcuts.
@@ -370,6 +401,7 @@ func (this *QAction) SetShortcuts(shortcuts []*QKeySequence) {
 func (this *QAction) SetStandardShortcuts(shortcuts QKeySequenceStandardKey) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetStandardShortcuts")
 	C.qute_QAction_setShortcuts_1(self, C.int64_t(shortcuts))
+	runtime.KeepAlive(this)
 }
 
 // Shortcuts wraps QAction::shortcuts.
@@ -380,6 +412,7 @@ func (this *QAction) SetStandardShortcuts(shortcuts QKeySequenceStandardKey) {
 func (this *QAction) Shortcuts() []*QKeySequence {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Shortcuts")
 	r := C.qute_QAction_shortcuts(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QKeySequence {
 		return rt.View[QKeySequence](rt.WrapClass(e, "QKeySequence", rt.TakeOwned), e)
 	})
@@ -393,6 +426,7 @@ func (this *QAction) Shortcuts() []*QKeySequence {
 func (this *QAction) SetShortcutContext(context qtcore.ShortcutContext) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetShortcutContext")
 	C.qute_QAction_setShortcutContext(self, C.int64_t(context))
+	runtime.KeepAlive(this)
 }
 
 // ShortcutContext wraps QAction::shortcutContext.
@@ -403,6 +437,7 @@ func (this *QAction) SetShortcutContext(context qtcore.ShortcutContext) {
 func (this *QAction) ShortcutContext() qtcore.ShortcutContext {
 	self := rt.Use(unsafe.Pointer(this), "QAction.ShortcutContext")
 	r := C.qute_QAction_shortcutContext(self)
+	runtime.KeepAlive(this)
 	return qtcore.ShortcutContext(r)
 }
 
@@ -414,6 +449,7 @@ func (this *QAction) ShortcutContext() qtcore.ShortcutContext {
 func (this *QAction) SetAutoRepeat(autoRepeat bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetAutoRepeat")
 	C.qute_QAction_setAutoRepeat(self, C.bool(autoRepeat))
+	runtime.KeepAlive(this)
 }
 
 // AutoRepeat wraps QAction::autoRepeat.
@@ -424,6 +460,7 @@ func (this *QAction) SetAutoRepeat(autoRepeat bool) {
 func (this *QAction) AutoRepeat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.AutoRepeat")
 	r := C.qute_QAction_autoRepeat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -435,6 +472,8 @@ func (this *QAction) AutoRepeat() bool {
 func (this *QAction) SetFont(font *QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetFont")
 	C.qute_QAction_setFont(self, rt.UseArg(unsafe.Pointer(font), "QAction.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // Font wraps QAction::font.
@@ -447,6 +486,7 @@ func (this *QAction) SetFont(font *QFont) {
 func (this *QAction) Font() *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Font")
 	r := C.qute_QAction_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -458,6 +498,7 @@ func (this *QAction) Font() *QFont {
 func (this *QAction) SetCheckable(checkable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetCheckable")
 	C.qute_QAction_setCheckable(self, C.bool(checkable))
+	runtime.KeepAlive(this)
 }
 
 // IsCheckable wraps QAction::isCheckable.
@@ -468,6 +509,7 @@ func (this *QAction) SetCheckable(checkable bool) {
 func (this *QAction) IsCheckable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsCheckable")
 	r := C.qute_QAction_isCheckable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -481,6 +523,7 @@ func (this *QAction) IsCheckable() bool {
 func (this *QAction) Data() *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Data")
 	r := C.qute_QAction_data(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -492,6 +535,8 @@ func (this *QAction) Data() *qtcore.QVariant {
 func (this *QAction) SetData(varArg *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetData")
 	C.qute_QAction_setData(self, rt.UseArg(unsafe.Pointer(varArg), "QAction.SetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(varArg)
 }
 
 // IsChecked wraps QAction::isChecked.
@@ -502,6 +547,7 @@ func (this *QAction) SetData(varArg *qtcore.QVariant) {
 func (this *QAction) IsChecked() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsChecked")
 	r := C.qute_QAction_isChecked(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -513,6 +559,7 @@ func (this *QAction) IsChecked() bool {
 func (this *QAction) IsEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsEnabled")
 	r := C.qute_QAction_isEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -524,6 +571,7 @@ func (this *QAction) IsEnabled() bool {
 func (this *QAction) IsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsVisible")
 	r := C.qute_QAction_isVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -535,6 +583,7 @@ func (this *QAction) IsVisible() bool {
 func (this *QAction) Activate(event QActionActionEvent) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Activate")
 	C.qute_QAction_activate(self, C.int64_t(event))
+	runtime.KeepAlive(this)
 }
 
 // SetMenuRole wraps QAction::setMenuRole.
@@ -545,6 +594,7 @@ func (this *QAction) Activate(event QActionActionEvent) {
 func (this *QAction) SetMenuRole(menuRole QActionMenuRole) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetMenuRole")
 	C.qute_QAction_setMenuRole(self, C.int64_t(menuRole))
+	runtime.KeepAlive(this)
 }
 
 // MenuRole wraps QAction::menuRole.
@@ -555,6 +605,7 @@ func (this *QAction) SetMenuRole(menuRole QActionMenuRole) {
 func (this *QAction) MenuRole() QActionMenuRole {
 	self := rt.Use(unsafe.Pointer(this), "QAction.MenuRole")
 	r := C.qute_QAction_menuRole(self)
+	runtime.KeepAlive(this)
 	return QActionMenuRole(r)
 }
 
@@ -566,6 +617,7 @@ func (this *QAction) MenuRole() QActionMenuRole {
 func (this *QAction) SetIconVisibleInMenu(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetIconVisibleInMenu")
 	C.qute_QAction_setIconVisibleInMenu(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // IsIconVisibleInMenu wraps QAction::isIconVisibleInMenu.
@@ -576,6 +628,7 @@ func (this *QAction) SetIconVisibleInMenu(visible bool) {
 func (this *QAction) IsIconVisibleInMenu() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsIconVisibleInMenu")
 	r := C.qute_QAction_isIconVisibleInMenu(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -587,6 +640,7 @@ func (this *QAction) IsIconVisibleInMenu() bool {
 func (this *QAction) SetShortcutVisibleInContextMenu(show bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetShortcutVisibleInContextMenu")
 	C.qute_QAction_setShortcutVisibleInContextMenu(self, C.bool(show))
+	runtime.KeepAlive(this)
 }
 
 // IsShortcutVisibleInContextMenu wraps QAction::isShortcutVisibleInContextMenu.
@@ -597,6 +651,7 @@ func (this *QAction) SetShortcutVisibleInContextMenu(show bool) {
 func (this *QAction) IsShortcutVisibleInContextMenu() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.IsShortcutVisibleInContextMenu")
 	r := C.qute_QAction_isShortcutVisibleInContextMenu(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -608,6 +663,7 @@ func (this *QAction) IsShortcutVisibleInContextMenu() bool {
 func (this *QAction) ShowStatusText() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.ShowStatusText")
 	r := C.qute_QAction_showStatusText(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -619,6 +675,7 @@ func (this *QAction) ShowStatusText() bool {
 func (this *QAction) Trigger() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Trigger")
 	C.qute_QAction_trigger(self)
+	runtime.KeepAlive(this)
 }
 
 // Hover wraps QAction::hover.
@@ -629,6 +686,7 @@ func (this *QAction) Trigger() {
 func (this *QAction) Hover() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Hover")
 	C.qute_QAction_hover(self)
+	runtime.KeepAlive(this)
 }
 
 // SetChecked wraps QAction::setChecked.
@@ -639,6 +697,7 @@ func (this *QAction) Hover() {
 func (this *QAction) SetChecked(checked bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetChecked")
 	C.qute_QAction_setChecked(self, C.bool(checked))
+	runtime.KeepAlive(this)
 }
 
 // Toggle wraps QAction::toggle.
@@ -649,6 +708,7 @@ func (this *QAction) SetChecked(checked bool) {
 func (this *QAction) Toggle() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.Toggle")
 	C.qute_QAction_toggle(self)
+	runtime.KeepAlive(this)
 }
 
 // SetEnabled wraps QAction::setEnabled.
@@ -659,6 +719,7 @@ func (this *QAction) Toggle() {
 func (this *QAction) SetEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetEnabled")
 	C.qute_QAction_setEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // ResetEnabled wraps QAction::resetEnabled.
@@ -669,6 +730,7 @@ func (this *QAction) SetEnabled(enabled bool) {
 func (this *QAction) ResetEnabled() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.ResetEnabled")
 	C.qute_QAction_resetEnabled(self)
+	runtime.KeepAlive(this)
 }
 
 // SetDisabled wraps QAction::setDisabled.
@@ -679,6 +741,7 @@ func (this *QAction) ResetEnabled() {
 func (this *QAction) SetDisabled(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetDisabled")
 	C.qute_QAction_setDisabled(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetVisible wraps QAction::setVisible.
@@ -689,6 +752,7 @@ func (this *QAction) SetDisabled(bArg bool) {
 func (this *QAction) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.SetVisible")
 	C.qute_QAction_setVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // EmitChanged wraps emitting the changed signal.
@@ -699,6 +763,7 @@ func (this *QAction) SetVisible(visible bool) {
 func (this *QAction) EmitChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitChanged")
 	C.qute_QAction_changed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitEnabledChanged wraps emitting the enabledChanged signal.
@@ -709,6 +774,7 @@ func (this *QAction) EmitChanged() {
 func (this *QAction) EmitEnabledChanged(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitEnabledChanged")
 	C.qute_QAction_enabledChanged_1(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // EmitCheckableChanged wraps emitting the checkableChanged signal.
@@ -719,6 +785,7 @@ func (this *QAction) EmitEnabledChanged(enabled bool) {
 func (this *QAction) EmitCheckableChanged(checkable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitCheckableChanged")
 	C.qute_QAction_checkableChanged_1(self, C.bool(checkable))
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibleChanged wraps emitting the visibleChanged signal.
@@ -729,6 +796,7 @@ func (this *QAction) EmitCheckableChanged(checkable bool) {
 func (this *QAction) EmitVisibleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitVisibleChanged")
 	C.qute_QAction_visibleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitTriggered wraps emitting the triggered signal.
@@ -739,6 +807,7 @@ func (this *QAction) EmitVisibleChanged() {
 func (this *QAction) EmitTriggered() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitTriggered")
 	C.qute_QAction_triggered_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitHovered wraps emitting the hovered signal.
@@ -749,6 +818,7 @@ func (this *QAction) EmitTriggered() {
 func (this *QAction) EmitHovered() {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitHovered")
 	C.qute_QAction_hovered_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitToggled wraps emitting the toggled signal.
@@ -759,6 +829,7 @@ func (this *QAction) EmitHovered() {
 func (this *QAction) EmitToggled(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitToggled")
 	C.qute_QAction_toggled_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

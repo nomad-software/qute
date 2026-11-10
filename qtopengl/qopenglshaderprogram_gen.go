@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQOpenGLShaderProgram(parent qtcore.QObjectLike) *QOpenGLShaderProgram {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLShaderProgram")
 	}
 	p := C.qute_QOpenGLShaderProgram_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func (this *QOpenGLShaderProgram) AddShader(shader QOpenGLShaderLike) bool {
 		shaderPtr = rt.UseArg(unsafe.Pointer(shader.AsQOpenGLShader()), "QOpenGLShaderProgram.AddShader")
 	}
 	r := C.qute_QOpenGLShaderProgram_addShader(self, shaderPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(shader)
 	return bool(r)
 }
 
@@ -99,6 +103,8 @@ func (this *QOpenGLShaderProgram) RemoveShader(shader QOpenGLShaderLike) {
 		shaderPtr = rt.UseArg(unsafe.Pointer(shader.AsQOpenGLShader()), "QOpenGLShaderProgram.RemoveShader")
 	}
 	C.qute_QOpenGLShaderProgram_removeShader(self, shaderPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(shader)
 }
 
 // Shaders wraps QOpenGLShaderProgram::shaders.
@@ -111,6 +117,7 @@ func (this *QOpenGLShaderProgram) RemoveShader(shader QOpenGLShaderLike) {
 func (this *QOpenGLShaderProgram) Shaders() []*QOpenGLShader {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.Shaders")
 	r := C.qute_QOpenGLShaderProgram_shaders(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QOpenGLShader {
 		return rt.View[QOpenGLShader](rt.WrapClass(e, "QOpenGLShader", rt.KeepOrBorrow), e)
 	})
@@ -126,6 +133,7 @@ func (this *QOpenGLShaderProgram) AddShaderFromSourceCode(typeArg QOpenGLShaderS
 	sourceCStr := C.CString(source)
 	defer C.free(unsafe.Pointer(sourceCStr))
 	r := C.qute_QOpenGLShaderProgram_addShaderFromSourceCode(self, C.int64_t(typeArg), sourceCStr)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -137,6 +145,7 @@ func (this *QOpenGLShaderProgram) AddShaderFromSourceCode(typeArg QOpenGLShaderS
 func (this *QOpenGLShaderProgram) AddShaderFromSourceCodeBytes(typeArg QOpenGLShaderShaderType, source []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.AddShaderFromSourceCodeBytes")
 	r := C.qute_QOpenGLShaderProgram_addShaderFromSourceCode_1(self, C.int64_t(typeArg), (*C.char)(unsafe.Pointer(unsafe.SliceData(source))), C.ptrdiff_t(len(source)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -148,6 +157,7 @@ func (this *QOpenGLShaderProgram) AddShaderFromSourceCodeBytes(typeArg QOpenGLSh
 func (this *QOpenGLShaderProgram) AddShaderFromSourceFile(typeArg QOpenGLShaderShaderType, fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.AddShaderFromSourceFile")
 	r := C.qute_QOpenGLShaderProgram_addShaderFromSourceFile(self, C.int64_t(typeArg), (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -161,6 +171,7 @@ func (this *QOpenGLShaderProgram) AddCacheableShaderFromSourceCode(typeArg QOpen
 	sourceCStr := C.CString(source)
 	defer C.free(unsafe.Pointer(sourceCStr))
 	r := C.qute_QOpenGLShaderProgram_addCacheableShaderFromSourceCode(self, C.int64_t(typeArg), sourceCStr)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -172,6 +183,7 @@ func (this *QOpenGLShaderProgram) AddCacheableShaderFromSourceCode(typeArg QOpen
 func (this *QOpenGLShaderProgram) AddCacheableShaderFromSourceCodeBytes(typeArg QOpenGLShaderShaderType, source []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.AddCacheableShaderFromSourceCodeBytes")
 	r := C.qute_QOpenGLShaderProgram_addCacheableShaderFromSourceCode_1(self, C.int64_t(typeArg), (*C.char)(unsafe.Pointer(unsafe.SliceData(source))), C.ptrdiff_t(len(source)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -183,6 +195,7 @@ func (this *QOpenGLShaderProgram) AddCacheableShaderFromSourceCodeBytes(typeArg 
 func (this *QOpenGLShaderProgram) AddCacheableShaderFromSourceFile(typeArg QOpenGLShaderShaderType, fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.AddCacheableShaderFromSourceFile")
 	r := C.qute_QOpenGLShaderProgram_addCacheableShaderFromSourceFile(self, C.int64_t(typeArg), (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -194,6 +207,7 @@ func (this *QOpenGLShaderProgram) AddCacheableShaderFromSourceFile(typeArg QOpen
 func (this *QOpenGLShaderProgram) RemoveAllShaders() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.RemoveAllShaders")
 	C.qute_QOpenGLShaderProgram_removeAllShaders(self)
+	runtime.KeepAlive(this)
 }
 
 // Link wraps QOpenGLShaderProgram::link.
@@ -204,6 +218,7 @@ func (this *QOpenGLShaderProgram) RemoveAllShaders() {
 func (this *QOpenGLShaderProgram) Link() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.Link")
 	r := C.qute_QOpenGLShaderProgram_link(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -215,6 +230,7 @@ func (this *QOpenGLShaderProgram) Link() bool {
 func (this *QOpenGLShaderProgram) IsLinked() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.IsLinked")
 	r := C.qute_QOpenGLShaderProgram_isLinked(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -226,6 +242,7 @@ func (this *QOpenGLShaderProgram) IsLinked() bool {
 func (this *QOpenGLShaderProgram) Log() string {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.Log")
 	r := C.qute_QOpenGLShaderProgram_log(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -237,6 +254,7 @@ func (this *QOpenGLShaderProgram) Log() string {
 func (this *QOpenGLShaderProgram) Bind() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.Bind")
 	r := C.qute_QOpenGLShaderProgram_bind(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -248,6 +266,7 @@ func (this *QOpenGLShaderProgram) Bind() bool {
 func (this *QOpenGLShaderProgram) Release() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.Release")
 	C.qute_QOpenGLShaderProgram_release(self)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps QOpenGLShaderProgram::create.
@@ -258,6 +277,7 @@ func (this *QOpenGLShaderProgram) Release() {
 func (this *QOpenGLShaderProgram) Create() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.Create")
 	r := C.qute_QOpenGLShaderProgram_create(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -269,6 +289,7 @@ func (this *QOpenGLShaderProgram) Create() bool {
 func (this *QOpenGLShaderProgram) ProgramId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.ProgramId")
 	r := C.qute_QOpenGLShaderProgram_programId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -280,6 +301,7 @@ func (this *QOpenGLShaderProgram) ProgramId() uint {
 func (this *QOpenGLShaderProgram) MaxGeometryOutputVertices() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.MaxGeometryOutputVertices")
 	r := C.qute_QOpenGLShaderProgram_maxGeometryOutputVertices(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -291,6 +313,7 @@ func (this *QOpenGLShaderProgram) MaxGeometryOutputVertices() int {
 func (this *QOpenGLShaderProgram) SetPatchVertexCount(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetPatchVertexCount")
 	C.qute_QOpenGLShaderProgram_setPatchVertexCount(self, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // PatchVertexCount wraps QOpenGLShaderProgram::patchVertexCount.
@@ -301,6 +324,7 @@ func (this *QOpenGLShaderProgram) SetPatchVertexCount(count int) {
 func (this *QOpenGLShaderProgram) PatchVertexCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.PatchVertexCount")
 	r := C.qute_QOpenGLShaderProgram_patchVertexCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -316,6 +340,7 @@ func (this *QOpenGLShaderProgram) SetDefaultOuterTessellationLevels(levels []flo
 		levelsC[i] = C.float(levels[i])
 	}
 	C.qute_QOpenGLShaderProgram_setDefaultOuterTessellationLevels(self, unsafe.Pointer(unsafe.SliceData(levelsC)), C.ptrdiff_t(len(levels)))
+	runtime.KeepAlive(this)
 }
 
 // DefaultOuterTessellationLevels wraps QOpenGLShaderProgram::defaultOuterTessellationLevels.
@@ -326,6 +351,7 @@ func (this *QOpenGLShaderProgram) SetDefaultOuterTessellationLevels(levels []flo
 func (this *QOpenGLShaderProgram) DefaultOuterTessellationLevels() []float32 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.DefaultOuterTessellationLevels")
 	r := C.qute_QOpenGLShaderProgram_defaultOuterTessellationLevels(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.float) float32 { return float32(e) })
 }
 
@@ -341,6 +367,7 @@ func (this *QOpenGLShaderProgram) SetDefaultInnerTessellationLevels(levels []flo
 		levelsC[i] = C.float(levels[i])
 	}
 	C.qute_QOpenGLShaderProgram_setDefaultInnerTessellationLevels(self, unsafe.Pointer(unsafe.SliceData(levelsC)), C.ptrdiff_t(len(levels)))
+	runtime.KeepAlive(this)
 }
 
 // DefaultInnerTessellationLevels wraps QOpenGLShaderProgram::defaultInnerTessellationLevels.
@@ -351,6 +378,7 @@ func (this *QOpenGLShaderProgram) SetDefaultInnerTessellationLevels(levels []flo
 func (this *QOpenGLShaderProgram) DefaultInnerTessellationLevels() []float32 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.DefaultInnerTessellationLevels")
 	r := C.qute_QOpenGLShaderProgram_defaultInnerTessellationLevels(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.float) float32 { return float32(e) })
 }
 
@@ -364,6 +392,7 @@ func (this *QOpenGLShaderProgram) BindAttributeLocation(name string, location in
 	nameCStr := C.CString(name)
 	defer C.free(unsafe.Pointer(nameCStr))
 	C.qute_QOpenGLShaderProgram_bindAttributeLocation(self, nameCStr, C.int(location))
+	runtime.KeepAlive(this)
 }
 
 // BindAttributeLocationBytes wraps QOpenGLShaderProgram::bindAttributeLocation.
@@ -374,6 +403,7 @@ func (this *QOpenGLShaderProgram) BindAttributeLocation(name string, location in
 func (this *QOpenGLShaderProgram) BindAttributeLocationBytes(name []byte, location int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.BindAttributeLocationBytes")
 	C.qute_QOpenGLShaderProgram_bindAttributeLocation_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(name))), C.ptrdiff_t(len(name)), C.int(location))
+	runtime.KeepAlive(this)
 }
 
 // AttributeLocation wraps QOpenGLShaderProgram::attributeLocation.
@@ -386,6 +416,7 @@ func (this *QOpenGLShaderProgram) AttributeLocation(name string) int {
 	nameCStr := C.CString(name)
 	defer C.free(unsafe.Pointer(nameCStr))
 	r := C.qute_QOpenGLShaderProgram_attributeLocation(self, nameCStr)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -397,6 +428,7 @@ func (this *QOpenGLShaderProgram) AttributeLocation(name string) int {
 func (this *QOpenGLShaderProgram) AttributeLocationBytes(name []byte) int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.AttributeLocationBytes")
 	r := C.qute_QOpenGLShaderProgram_attributeLocation_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -408,6 +440,7 @@ func (this *QOpenGLShaderProgram) AttributeLocationBytes(name []byte) int {
 func (this *QOpenGLShaderProgram) SetAttributeFloat(location int, value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeFloat")
 	C.qute_QOpenGLShaderProgram_setAttributeValue(self, C.int(location), C.float(value))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeFloat2 wraps QOpenGLShaderProgram::setAttributeValue.
@@ -418,6 +451,7 @@ func (this *QOpenGLShaderProgram) SetAttributeFloat(location int, value float32)
 func (this *QOpenGLShaderProgram) SetAttributeFloat2(location int, x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeFloat2")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_1(self, C.int(location), C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeFloat3 wraps QOpenGLShaderProgram::setAttributeValue.
@@ -428,6 +462,7 @@ func (this *QOpenGLShaderProgram) SetAttributeFloat2(location int, x float32, y 
 func (this *QOpenGLShaderProgram) SetAttributeFloat3(location int, x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeFloat3")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_2(self, C.int(location), C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeFloat4 wraps QOpenGLShaderProgram::setAttributeValue.
@@ -438,6 +473,7 @@ func (this *QOpenGLShaderProgram) SetAttributeFloat3(location int, x float32, y 
 func (this *QOpenGLShaderProgram) SetAttributeFloat4(location int, x float32, y float32, z float32, w float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeFloat4")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_3(self, C.int(location), C.float(x), C.float(y), C.float(z), C.float(w))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeVector2D wraps QOpenGLShaderProgram::setAttributeValue.
@@ -448,6 +484,8 @@ func (this *QOpenGLShaderProgram) SetAttributeFloat4(location int, x float32, y 
 func (this *QOpenGLShaderProgram) SetAttributeVector2D(location int, value *qtgui.QVector2D) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeVector2D")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_4(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetAttributeVector2D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetAttributeVector3D wraps QOpenGLShaderProgram::setAttributeValue.
@@ -458,6 +496,8 @@ func (this *QOpenGLShaderProgram) SetAttributeVector2D(location int, value *qtgu
 func (this *QOpenGLShaderProgram) SetAttributeVector3D(location int, value *qtgui.QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeVector3D")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_5(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetAttributeVector3D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetAttributeVector4D wraps QOpenGLShaderProgram::setAttributeValue.
@@ -468,6 +508,8 @@ func (this *QOpenGLShaderProgram) SetAttributeVector3D(location int, value *qtgu
 func (this *QOpenGLShaderProgram) SetAttributeVector4D(location int, value *qtgui.QVector4D) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeVector4D")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_6(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetAttributeVector4D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetAttributeColor wraps QOpenGLShaderProgram::setAttributeValue.
@@ -478,6 +520,7 @@ func (this *QOpenGLShaderProgram) SetAttributeVector4D(location int, value *qtgu
 func (this *QOpenGLShaderProgram) SetAttributeColor(location int, value qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeColor")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_7(self, C.int(location), cQColor(value))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeValues wraps QOpenGLShaderProgram::setAttributeValue.
@@ -488,6 +531,7 @@ func (this *QOpenGLShaderProgram) SetAttributeColor(location int, value qtgui.QC
 func (this *QOpenGLShaderProgram) SetAttributeValues(location int, values unsafe.Pointer, columns int, rows int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeValues")
 	C.qute_QOpenGLShaderProgram_setAttributeValue_8(self, C.int(location), values, C.int(columns), C.int(rows))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeArray wraps QOpenGLShaderProgram::setAttributeArray.
@@ -500,6 +544,7 @@ func (this *QOpenGLShaderProgram) SetAttributeValues(location int, values unsafe
 func (this *QOpenGLShaderProgram) SetAttributeArray(location int, values unsafe.Pointer, tupleSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeArray")
 	C.qute_QOpenGLShaderProgram_setAttributeArray(self, C.int(location), values, C.int(tupleSize))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeArrayType wraps QOpenGLShaderProgram::setAttributeArray.
@@ -512,6 +557,7 @@ func (this *QOpenGLShaderProgram) SetAttributeArray(location int, values unsafe.
 func (this *QOpenGLShaderProgram) SetAttributeArrayType(location int, typeArg uint, values unsafe.Pointer, tupleSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeArrayType")
 	C.qute_QOpenGLShaderProgram_setAttributeArray_1(self, C.int(location), C.uint(typeArg), values, C.int(tupleSize))
+	runtime.KeepAlive(this)
 }
 
 // SetAttributeBuffer wraps QOpenGLShaderProgram::setAttributeBuffer.
@@ -522,6 +568,7 @@ func (this *QOpenGLShaderProgram) SetAttributeArrayType(location int, typeArg ui
 func (this *QOpenGLShaderProgram) SetAttributeBuffer(location int, typeArg uint, offset int, tupleSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeBuffer")
 	C.qute_QOpenGLShaderProgram_setAttributeBuffer(self, C.int(location), C.uint(typeArg), C.int(offset), C.int(tupleSize))
+	runtime.KeepAlive(this)
 }
 
 // EnableAttributeArray wraps QOpenGLShaderProgram::enableAttributeArray.
@@ -532,6 +579,7 @@ func (this *QOpenGLShaderProgram) SetAttributeBuffer(location int, typeArg uint,
 func (this *QOpenGLShaderProgram) EnableAttributeArray(location int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.EnableAttributeArray")
 	C.qute_QOpenGLShaderProgram_enableAttributeArray(self, C.int(location))
+	runtime.KeepAlive(this)
 }
 
 // DisableAttributeArray wraps QOpenGLShaderProgram::disableAttributeArray.
@@ -542,6 +590,7 @@ func (this *QOpenGLShaderProgram) EnableAttributeArray(location int) {
 func (this *QOpenGLShaderProgram) DisableAttributeArray(location int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.DisableAttributeArray")
 	C.qute_QOpenGLShaderProgram_disableAttributeArray(self, C.int(location))
+	runtime.KeepAlive(this)
 }
 
 // UniformLocation wraps QOpenGLShaderProgram::uniformLocation.
@@ -554,6 +603,7 @@ func (this *QOpenGLShaderProgram) UniformLocation(name string) int {
 	nameCStr := C.CString(name)
 	defer C.free(unsafe.Pointer(nameCStr))
 	r := C.qute_QOpenGLShaderProgram_uniformLocation(self, nameCStr)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -565,6 +615,7 @@ func (this *QOpenGLShaderProgram) UniformLocation(name string) int {
 func (this *QOpenGLShaderProgram) UniformLocationBytes(name []byte) int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.UniformLocationBytes")
 	r := C.qute_QOpenGLShaderProgram_uniformLocation_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -576,6 +627,7 @@ func (this *QOpenGLShaderProgram) UniformLocationBytes(name []byte) int {
 func (this *QOpenGLShaderProgram) SetUniformFloat(location int, value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformFloat")
 	C.qute_QOpenGLShaderProgram_setUniformValue(self, C.int(location), C.float(value))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformInt wraps QOpenGLShaderProgram::setUniformValue.
@@ -586,6 +638,7 @@ func (this *QOpenGLShaderProgram) SetUniformFloat(location int, value float32) {
 func (this *QOpenGLShaderProgram) SetUniformInt(location int, value int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformInt")
 	C.qute_QOpenGLShaderProgram_setUniformValue_1(self, C.int(location), C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformUint wraps QOpenGLShaderProgram::setUniformValue.
@@ -596,6 +649,7 @@ func (this *QOpenGLShaderProgram) SetUniformInt(location int, value int) {
 func (this *QOpenGLShaderProgram) SetUniformUint(location int, value uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformUint")
 	C.qute_QOpenGLShaderProgram_setUniformValue_2(self, C.int(location), C.uint(value))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformFloat2 wraps QOpenGLShaderProgram::setUniformValue.
@@ -606,6 +660,7 @@ func (this *QOpenGLShaderProgram) SetUniformUint(location int, value uint) {
 func (this *QOpenGLShaderProgram) SetUniformFloat2(location int, x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformFloat2")
 	C.qute_QOpenGLShaderProgram_setUniformValue_3(self, C.int(location), C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformFloat3 wraps QOpenGLShaderProgram::setUniformValue.
@@ -616,6 +671,7 @@ func (this *QOpenGLShaderProgram) SetUniformFloat2(location int, x float32, y fl
 func (this *QOpenGLShaderProgram) SetUniformFloat3(location int, x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformFloat3")
 	C.qute_QOpenGLShaderProgram_setUniformValue_4(self, C.int(location), C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformFloat4 wraps QOpenGLShaderProgram::setUniformValue.
@@ -626,6 +682,7 @@ func (this *QOpenGLShaderProgram) SetUniformFloat3(location int, x float32, y fl
 func (this *QOpenGLShaderProgram) SetUniformFloat4(location int, x float32, y float32, z float32, w float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformFloat4")
 	C.qute_QOpenGLShaderProgram_setUniformValue_5(self, C.int(location), C.float(x), C.float(y), C.float(z), C.float(w))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformVector2D wraps QOpenGLShaderProgram::setUniformValue.
@@ -636,6 +693,8 @@ func (this *QOpenGLShaderProgram) SetUniformFloat4(location int, x float32, y fl
 func (this *QOpenGLShaderProgram) SetUniformVector2D(location int, value *qtgui.QVector2D) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformVector2D")
 	C.qute_QOpenGLShaderProgram_setUniformValue_6(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetUniformVector2D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetUniformVector3D wraps QOpenGLShaderProgram::setUniformValue.
@@ -646,6 +705,8 @@ func (this *QOpenGLShaderProgram) SetUniformVector2D(location int, value *qtgui.
 func (this *QOpenGLShaderProgram) SetUniformVector3D(location int, value *qtgui.QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformVector3D")
 	C.qute_QOpenGLShaderProgram_setUniformValue_7(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetUniformVector3D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetUniformVector4D wraps QOpenGLShaderProgram::setUniformValue.
@@ -656,6 +717,8 @@ func (this *QOpenGLShaderProgram) SetUniformVector3D(location int, value *qtgui.
 func (this *QOpenGLShaderProgram) SetUniformVector4D(location int, value *qtgui.QVector4D) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformVector4D")
 	C.qute_QOpenGLShaderProgram_setUniformValue_8(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetUniformVector4D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetUniformColor wraps QOpenGLShaderProgram::setUniformValue.
@@ -666,6 +729,7 @@ func (this *QOpenGLShaderProgram) SetUniformVector4D(location int, value *qtgui.
 func (this *QOpenGLShaderProgram) SetUniformColor(location int, color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformColor")
 	C.qute_QOpenGLShaderProgram_setUniformValue_9(self, C.int(location), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformPoint wraps QOpenGLShaderProgram::setUniformValue.
@@ -676,6 +740,7 @@ func (this *QOpenGLShaderProgram) SetUniformColor(location int, color qtgui.QCol
 func (this *QOpenGLShaderProgram) SetUniformPoint(location int, point qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformPoint")
 	C.qute_QOpenGLShaderProgram_setUniformValue_10(self, C.int(location), cQPoint(point))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformPointF wraps QOpenGLShaderProgram::setUniformValue.
@@ -686,6 +751,7 @@ func (this *QOpenGLShaderProgram) SetUniformPoint(location int, point qtcore.QPo
 func (this *QOpenGLShaderProgram) SetUniformPointF(location int, point qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformPointF")
 	C.qute_QOpenGLShaderProgram_setUniformValue_11(self, C.int(location), cQPointF(point))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformSize wraps QOpenGLShaderProgram::setUniformValue.
@@ -696,6 +762,7 @@ func (this *QOpenGLShaderProgram) SetUniformPointF(location int, point qtcore.QP
 func (this *QOpenGLShaderProgram) SetUniformSize(location int, size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformSize")
 	C.qute_QOpenGLShaderProgram_setUniformValue_12(self, C.int(location), cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformSizeF wraps QOpenGLShaderProgram::setUniformValue.
@@ -706,6 +773,7 @@ func (this *QOpenGLShaderProgram) SetUniformSize(location int, size qtcore.QSize
 func (this *QOpenGLShaderProgram) SetUniformSizeF(location int, size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformSizeF")
 	C.qute_QOpenGLShaderProgram_setUniformValue_13(self, C.int(location), cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformMatrix4x4 wraps QOpenGLShaderProgram::setUniformValue.
@@ -716,6 +784,8 @@ func (this *QOpenGLShaderProgram) SetUniformSizeF(location int, size qtcore.QSiz
 func (this *QOpenGLShaderProgram) SetUniformMatrix4x4(location int, value *qtgui.QMatrix4x4) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformMatrix4x4")
 	C.qute_QOpenGLShaderProgram_setUniformValue_14(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetUniformMatrix4x4"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetUniformTransform wraps QOpenGLShaderProgram::setUniformValue.
@@ -726,6 +796,8 @@ func (this *QOpenGLShaderProgram) SetUniformMatrix4x4(location int, value *qtgui
 func (this *QOpenGLShaderProgram) SetUniformTransform(location int, value *qtgui.QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformTransform")
 	C.qute_QOpenGLShaderProgram_setUniformValue_15(self, C.int(location), rt.UseArg(unsafe.Pointer(value), "QOpenGLShaderProgram.SetUniformTransform"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // SetUniformFloatArray wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -736,6 +808,7 @@ func (this *QOpenGLShaderProgram) SetUniformTransform(location int, value *qtgui
 func (this *QOpenGLShaderProgram) SetUniformFloatArray(location int, values unsafe.Pointer, count int, tupleSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformFloatArray")
 	C.qute_QOpenGLShaderProgram_setUniformValueArray(self, C.int(location), values, C.int(count), C.int(tupleSize))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformIntArray wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -746,6 +819,7 @@ func (this *QOpenGLShaderProgram) SetUniformFloatArray(location int, values unsa
 func (this *QOpenGLShaderProgram) SetUniformIntArray(location int, values unsafe.Pointer, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformIntArray")
 	C.qute_QOpenGLShaderProgram_setUniformValueArray_1(self, C.int(location), values, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformUintArray wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -756,6 +830,7 @@ func (this *QOpenGLShaderProgram) SetUniformIntArray(location int, values unsafe
 func (this *QOpenGLShaderProgram) SetUniformUintArray(location int, values unsafe.Pointer, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetUniformUintArray")
 	C.qute_QOpenGLShaderProgram_setUniformValueArray_2(self, C.int(location), values, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // SetUniformVector2DArray wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -770,6 +845,8 @@ func (this *QOpenGLShaderProgram) SetUniformVector2DArray(location int, values [
 		valuesC[i] = rt.UseArg(unsafe.Pointer(values[i]), "QOpenGLShaderProgram.SetUniformVector2DArray")
 	}
 	C.qute_QOpenGLShaderProgram_setUniformValueArray_3(self, C.int(location), unsafe.Pointer(unsafe.SliceData(valuesC)), C.ptrdiff_t(len(values)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(values)
 }
 
 // SetUniformVector3DArray wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -784,6 +861,8 @@ func (this *QOpenGLShaderProgram) SetUniformVector3DArray(location int, values [
 		valuesC[i] = rt.UseArg(unsafe.Pointer(values[i]), "QOpenGLShaderProgram.SetUniformVector3DArray")
 	}
 	C.qute_QOpenGLShaderProgram_setUniformValueArray_4(self, C.int(location), unsafe.Pointer(unsafe.SliceData(valuesC)), C.ptrdiff_t(len(values)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(values)
 }
 
 // SetUniformVector4DArray wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -798,6 +877,8 @@ func (this *QOpenGLShaderProgram) SetUniformVector4DArray(location int, values [
 		valuesC[i] = rt.UseArg(unsafe.Pointer(values[i]), "QOpenGLShaderProgram.SetUniformVector4DArray")
 	}
 	C.qute_QOpenGLShaderProgram_setUniformValueArray_5(self, C.int(location), unsafe.Pointer(unsafe.SliceData(valuesC)), C.ptrdiff_t(len(values)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(values)
 }
 
 // SetUniformMatrix4x4Array wraps QOpenGLShaderProgram::setUniformValueArray.
@@ -812,6 +893,8 @@ func (this *QOpenGLShaderProgram) SetUniformMatrix4x4Array(location int, values 
 		valuesC[i] = rt.UseArg(unsafe.Pointer(values[i]), "QOpenGLShaderProgram.SetUniformMatrix4x4Array")
 	}
 	C.qute_QOpenGLShaderProgram_setUniformValueArray_6(self, C.int(location), unsafe.Pointer(unsafe.SliceData(valuesC)), C.ptrdiff_t(len(values)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(values)
 }
 
 // QOpenGLShaderProgramHasOpenGLShaderPrograms wraps QOpenGLShaderProgram::hasOpenGLShaderPrograms.

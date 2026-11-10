@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQTableWidget(parent QWidgetLike) *QTableWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTableWidget")
 	}
 	p := C.qute_QTableWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQTableWidgetWithRows(rows int, columns int, parent QWidgetLike) *QTableW
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTableWidgetWithRows")
 	}
 	p := C.qute_QTableWidget_new_1(C.int(rows), C.int(columns), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQTableWidgetWithRows(rows int, columns int, parent QWidgetLike) *QTableW
 func (this *QTableWidget) SetRowCount(rows int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetRowCount")
 	C.qute_QTableWidget_setRowCount(self, C.int(rows))
+	runtime.KeepAlive(this)
 }
 
 // RowCount wraps QTableWidget::rowCount.
@@ -109,6 +113,7 @@ func (this *QTableWidget) SetRowCount(rows int) {
 func (this *QTableWidget) RowCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.RowCount")
 	r := C.qute_QTableWidget_rowCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -120,6 +125,7 @@ func (this *QTableWidget) RowCount() int {
 func (this *QTableWidget) SetColumnCount(columns int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetColumnCount")
 	C.qute_QTableWidget_setColumnCount(self, C.int(columns))
+	runtime.KeepAlive(this)
 }
 
 // ColumnCount wraps QTableWidget::columnCount.
@@ -130,6 +136,7 @@ func (this *QTableWidget) SetColumnCount(columns int) {
 func (this *QTableWidget) ColumnCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ColumnCount")
 	r := C.qute_QTableWidget_columnCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -145,6 +152,8 @@ func (this *QTableWidget) Row(item QTableWidgetItemLike) int {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.Row")
 	}
 	r := C.qute_QTableWidget_row(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return int(r)
 }
 
@@ -160,6 +169,8 @@ func (this *QTableWidget) Column(item QTableWidgetItemLike) int {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.Column")
 	}
 	r := C.qute_QTableWidget_column(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return int(r)
 }
 
@@ -173,6 +184,7 @@ func (this *QTableWidget) Column(item QTableWidgetItemLike) int {
 func (this *QTableWidget) Item(row int, column int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.Item")
 	r := C.qute_QTableWidget_item(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -191,6 +203,8 @@ func (this *QTableWidget) SetItem(row int, column int, item QTableWidgetItemLike
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.SetItem")
 	}
 	C.qute_QTableWidget_setItem(self, C.int(row), C.int(column), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -204,6 +218,7 @@ func (this *QTableWidget) SetItem(row int, column int, item QTableWidgetItemLike
 func (this *QTableWidget) TakeItem(row int, column int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.TakeItem")
 	r := C.qute_QTableWidget_takeItem(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.TakeOwned), r)
 }
 
@@ -221,6 +236,8 @@ func (this *QTableWidget) Items(data qtcore.QMimeDataLike) []*QTableWidgetItem {
 		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QTableWidget.Items")
 	}
 	r := C.qute_QTableWidget_items(self, dataPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetItem {
 		return rt.View[QTableWidgetItem](rt.WrapClass(e, "QTableWidgetItem", rt.KeepOrBorrow), e)
 	})
@@ -240,6 +257,8 @@ func (this *QTableWidget) IndexFromItem(item QTableWidgetItemLike) *qtcore.QMode
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.IndexFromItem")
 	}
 	r := C.qute_QTableWidget_indexFromItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -253,6 +272,8 @@ func (this *QTableWidget) IndexFromItem(item QTableWidgetItemLike) *qtcore.QMode
 func (this *QTableWidget) ItemFromIndex(index *qtcore.QModelIndex) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ItemFromIndex")
 	r := C.qute_QTableWidget_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QTableWidget.ItemFromIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -266,6 +287,7 @@ func (this *QTableWidget) ItemFromIndex(index *qtcore.QModelIndex) *QTableWidget
 func (this *QTableWidget) VerticalHeaderItem(row int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.VerticalHeaderItem")
 	r := C.qute_QTableWidget_verticalHeaderItem(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -284,6 +306,8 @@ func (this *QTableWidget) SetVerticalHeaderItem(row int, item QTableWidgetItemLi
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.SetVerticalHeaderItem")
 	}
 	C.qute_QTableWidget_setVerticalHeaderItem(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -297,6 +321,7 @@ func (this *QTableWidget) SetVerticalHeaderItem(row int, item QTableWidgetItemLi
 func (this *QTableWidget) TakeVerticalHeaderItem(row int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.TakeVerticalHeaderItem")
 	r := C.qute_QTableWidget_takeVerticalHeaderItem(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.TakeOwned), r)
 }
 
@@ -310,6 +335,7 @@ func (this *QTableWidget) TakeVerticalHeaderItem(row int) *QTableWidgetItem {
 func (this *QTableWidget) HorizontalHeaderItem(column int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.HorizontalHeaderItem")
 	r := C.qute_QTableWidget_horizontalHeaderItem(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -328,6 +354,8 @@ func (this *QTableWidget) SetHorizontalHeaderItem(column int, item QTableWidgetI
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.SetHorizontalHeaderItem")
 	}
 	C.qute_QTableWidget_setHorizontalHeaderItem(self, C.int(column), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -341,6 +369,7 @@ func (this *QTableWidget) SetHorizontalHeaderItem(column int, item QTableWidgetI
 func (this *QTableWidget) TakeHorizontalHeaderItem(column int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.TakeHorizontalHeaderItem")
 	r := C.qute_QTableWidget_takeHorizontalHeaderItem(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.TakeOwned), r)
 }
 
@@ -353,6 +382,7 @@ func (this *QTableWidget) SetVerticalHeaderLabels(labels []string) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetVerticalHeaderLabels")
 	labelsData, labelsLens := quteStrListArg(labels)
 	C.qute_QTableWidget_setVerticalHeaderLabels(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(labelsData))), (*C.ptrdiff_t)(unsafe.SliceData(labelsLens)), C.ptrdiff_t(len(labels)))
+	runtime.KeepAlive(this)
 }
 
 // SetHorizontalHeaderLabels wraps QTableWidget::setHorizontalHeaderLabels.
@@ -364,6 +394,7 @@ func (this *QTableWidget) SetHorizontalHeaderLabels(labels []string) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetHorizontalHeaderLabels")
 	labelsData, labelsLens := quteStrListArg(labels)
 	C.qute_QTableWidget_setHorizontalHeaderLabels(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(labelsData))), (*C.ptrdiff_t)(unsafe.SliceData(labelsLens)), C.ptrdiff_t(len(labels)))
+	runtime.KeepAlive(this)
 }
 
 // CurrentRow wraps QTableWidget::currentRow.
@@ -374,6 +405,7 @@ func (this *QTableWidget) SetHorizontalHeaderLabels(labels []string) {
 func (this *QTableWidget) CurrentRow() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.CurrentRow")
 	r := C.qute_QTableWidget_currentRow(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -385,6 +417,7 @@ func (this *QTableWidget) CurrentRow() int {
 func (this *QTableWidget) CurrentColumn() int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.CurrentColumn")
 	r := C.qute_QTableWidget_currentColumn(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -398,6 +431,7 @@ func (this *QTableWidget) CurrentColumn() int {
 func (this *QTableWidget) CurrentItem() *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.CurrentItem")
 	r := C.qute_QTableWidget_currentItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -413,6 +447,8 @@ func (this *QTableWidget) SetCurrentItem(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.SetCurrentItem")
 	}
 	C.qute_QTableWidget_setCurrentItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // SetCurrentItemWith wraps QTableWidget::setCurrentItem.
@@ -427,6 +463,8 @@ func (this *QTableWidget) SetCurrentItemWith(item QTableWidgetItemLike, command 
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.SetCurrentItemWith")
 	}
 	C.qute_QTableWidget_setCurrentItem_1(self, itemPtr, C.int64_t(command))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // SetCurrentCell wraps QTableWidget::setCurrentCell.
@@ -437,6 +475,7 @@ func (this *QTableWidget) SetCurrentItemWith(item QTableWidgetItemLike, command 
 func (this *QTableWidget) SetCurrentCell(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetCurrentCell")
 	C.qute_QTableWidget_setCurrentCell(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentCellWith wraps QTableWidget::setCurrentCell.
@@ -447,6 +486,7 @@ func (this *QTableWidget) SetCurrentCell(row int, column int) {
 func (this *QTableWidget) SetCurrentCellWith(row int, column int, command qtcore.QItemSelectionModelSelectionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetCurrentCellWith")
 	C.qute_QTableWidget_setCurrentCell_1(self, C.int(row), C.int(column), C.int64_t(command))
+	runtime.KeepAlive(this)
 }
 
 // SortItems wraps QTableWidget::sortItems.
@@ -457,6 +497,7 @@ func (this *QTableWidget) SetCurrentCellWith(row int, column int, command qtcore
 func (this *QTableWidget) SortItems(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SortItems")
 	C.qute_QTableWidget_sortItems(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EditItem wraps QTableWidget::editItem.
@@ -471,6 +512,8 @@ func (this *QTableWidget) EditItem(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EditItem")
 	}
 	C.qute_QTableWidget_editItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // OpenPersistentEditor wraps QTableWidget::openPersistentEditor.
@@ -485,6 +528,8 @@ func (this *QTableWidget) OpenPersistentEditor(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.OpenPersistentEditor")
 	}
 	C.qute_QTableWidget_openPersistentEditor(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // ClosePersistentEditor wraps QTableWidget::closePersistentEditor.
@@ -499,6 +544,8 @@ func (this *QTableWidget) ClosePersistentEditor(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.ClosePersistentEditor")
 	}
 	C.qute_QTableWidget_closePersistentEditor(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // IsPersistentEditorOpen wraps QTableWidget::isPersistentEditorOpen.
@@ -513,6 +560,8 @@ func (this *QTableWidget) IsPersistentEditorOpen(item QTableWidgetItemLike) bool
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.IsPersistentEditorOpen")
 	}
 	r := C.qute_QTableWidget_isPersistentEditorOpen(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return bool(r)
 }
 
@@ -526,6 +575,7 @@ func (this *QTableWidget) IsPersistentEditorOpen(item QTableWidgetItemLike) bool
 func (this *QTableWidget) CellWidget(row int, column int) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.CellWidget")
 	r := C.qute_QTableWidget_cellWidget(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -544,6 +594,8 @@ func (this *QTableWidget) SetCellWidget(row int, column int, widget QWidgetLike)
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QTableWidget.SetCellWidget")
 	}
 	C.qute_QTableWidget_setCellWidget(self, C.int(row), C.int(column), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -557,6 +609,7 @@ func (this *QTableWidget) SetCellWidget(row int, column int, widget QWidgetLike)
 func (this *QTableWidget) RemoveCellWidget(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.RemoveCellWidget")
 	C.qute_QTableWidget_removeCellWidget(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // SetRangeSelected wraps QTableWidget::setRangeSelected.
@@ -567,6 +620,8 @@ func (this *QTableWidget) RemoveCellWidget(row int, column int) {
 func (this *QTableWidget) SetRangeSelected(rangeArg *QTableWidgetSelectionRange, selectArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetRangeSelected")
 	C.qute_QTableWidget_setRangeSelected(self, rt.UseArg(unsafe.Pointer(rangeArg), "QTableWidget.SetRangeSelected"), C.bool(selectArg))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rangeArg)
 }
 
 // SelectedRanges wraps QTableWidget::selectedRanges.
@@ -577,6 +632,7 @@ func (this *QTableWidget) SetRangeSelected(rangeArg *QTableWidgetSelectionRange,
 func (this *QTableWidget) SelectedRanges() []*QTableWidgetSelectionRange {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SelectedRanges")
 	r := C.qute_QTableWidget_selectedRanges(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetSelectionRange {
 		return rt.View[QTableWidgetSelectionRange](rt.WrapClass(e, "QTableWidgetSelectionRange", rt.TakeOwned), e)
 	})
@@ -592,6 +648,7 @@ func (this *QTableWidget) SelectedRanges() []*QTableWidgetSelectionRange {
 func (this *QTableWidget) SelectedItems() []*QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SelectedItems")
 	r := C.qute_QTableWidget_selectedItems(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetItem {
 		return rt.View[QTableWidgetItem](rt.WrapClass(e, "QTableWidgetItem", rt.KeepOrBorrow), e)
 	})
@@ -607,6 +664,7 @@ func (this *QTableWidget) SelectedItems() []*QTableWidgetItem {
 func (this *QTableWidget) FindItems(text string, flags qtcore.MatchFlags) []*QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.FindItems")
 	r := C.qute_QTableWidget_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetItem {
 		return rt.View[QTableWidgetItem](rt.WrapClass(e, "QTableWidgetItem", rt.KeepOrBorrow), e)
 	})
@@ -620,6 +678,7 @@ func (this *QTableWidget) FindItems(text string, flags qtcore.MatchFlags) []*QTa
 func (this *QTableWidget) VisualRow(logicalRow int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.VisualRow")
 	r := C.qute_QTableWidget_visualRow(self, C.int(logicalRow))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -631,6 +690,7 @@ func (this *QTableWidget) VisualRow(logicalRow int) int {
 func (this *QTableWidget) VisualColumn(logicalColumn int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.VisualColumn")
 	r := C.qute_QTableWidget_visualColumn(self, C.int(logicalColumn))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -644,6 +704,7 @@ func (this *QTableWidget) VisualColumn(logicalColumn int) int {
 func (this *QTableWidget) ItemAt(pArg qtcore.QPoint) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ItemAt")
 	r := C.qute_QTableWidget_itemAt(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -659,6 +720,8 @@ func (this *QTableWidget) VisualItemRect(item QTableWidgetItemLike) qtcore.QRect
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.VisualItemRect")
 	}
 	r := C.qute_QTableWidget_visualItemRect(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return goQRect(r)
 }
 
@@ -672,6 +735,7 @@ func (this *QTableWidget) VisualItemRect(item QTableWidgetItemLike) qtcore.QRect
 func (this *QTableWidget) ItemPrototype() *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ItemPrototype")
 	r := C.qute_QTableWidget_itemPrototype(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -690,6 +754,8 @@ func (this *QTableWidget) SetItemPrototype(item QTableWidgetItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.SetItemPrototype")
 	}
 	C.qute_QTableWidget_setItemPrototype(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -701,6 +767,7 @@ func (this *QTableWidget) SetItemPrototype(item QTableWidgetItemLike) {
 func (this *QTableWidget) SupportedDragActions() qtcore.DropActions {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SupportedDragActions")
 	r := C.qute_QTableWidget_supportedDragActions(self)
+	runtime.KeepAlive(this)
 	return qtcore.DropActions(r)
 }
 
@@ -712,6 +779,7 @@ func (this *QTableWidget) SupportedDragActions() qtcore.DropActions {
 func (this *QTableWidget) SetSupportedDragActions(actions qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SetSupportedDragActions")
 	C.qute_QTableWidget_setSupportedDragActions(self, C.int64_t(actions))
+	runtime.KeepAlive(this)
 }
 
 // ScrollToItem wraps QTableWidget::scrollToItem.
@@ -726,6 +794,8 @@ func (this *QTableWidget) ScrollToItem(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.ScrollToItem")
 	}
 	C.qute_QTableWidget_scrollToItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // InsertRow wraps QTableWidget::insertRow.
@@ -736,6 +806,7 @@ func (this *QTableWidget) ScrollToItem(item QTableWidgetItemLike) {
 func (this *QTableWidget) InsertRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.InsertRow")
 	C.qute_QTableWidget_insertRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // InsertColumn wraps QTableWidget::insertColumn.
@@ -746,6 +817,7 @@ func (this *QTableWidget) InsertRow(row int) {
 func (this *QTableWidget) InsertColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.InsertColumn")
 	C.qute_QTableWidget_insertColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // RemoveRow wraps QTableWidget::removeRow.
@@ -756,6 +828,7 @@ func (this *QTableWidget) InsertColumn(column int) {
 func (this *QTableWidget) RemoveRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.RemoveRow")
 	C.qute_QTableWidget_removeRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // RemoveColumn wraps QTableWidget::removeColumn.
@@ -766,6 +839,7 @@ func (this *QTableWidget) RemoveRow(row int) {
 func (this *QTableWidget) RemoveColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.RemoveColumn")
 	C.qute_QTableWidget_removeColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QTableWidget::clear.
@@ -776,6 +850,7 @@ func (this *QTableWidget) RemoveColumn(column int) {
 func (this *QTableWidget) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.Clear")
 	C.qute_QTableWidget_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearContents wraps QTableWidget::clearContents.
@@ -786,6 +861,7 @@ func (this *QTableWidget) Clear() {
 func (this *QTableWidget) ClearContents() {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ClearContents")
 	C.qute_QTableWidget_clearContents(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitItemPressed wraps emitting the itemPressed signal.
@@ -800,6 +876,8 @@ func (this *QTableWidget) EmitItemPressed(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EmitItemPressed")
 	}
 	C.qute_QTableWidget_itemPressed_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemClicked wraps emitting the itemClicked signal.
@@ -814,6 +892,8 @@ func (this *QTableWidget) EmitItemClicked(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EmitItemClicked")
 	}
 	C.qute_QTableWidget_itemClicked_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemDoubleClicked wraps emitting the itemDoubleClicked signal.
@@ -828,6 +908,8 @@ func (this *QTableWidget) EmitItemDoubleClicked(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EmitItemDoubleClicked")
 	}
 	C.qute_QTableWidget_itemDoubleClicked_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemActivated wraps emitting the itemActivated signal.
@@ -842,6 +924,8 @@ func (this *QTableWidget) EmitItemActivated(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EmitItemActivated")
 	}
 	C.qute_QTableWidget_itemActivated_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemEntered wraps emitting the itemEntered signal.
@@ -856,6 +940,8 @@ func (this *QTableWidget) EmitItemEntered(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EmitItemEntered")
 	}
 	C.qute_QTableWidget_itemEntered_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemChanged wraps emitting the itemChanged signal.
@@ -870,6 +956,8 @@ func (this *QTableWidget) EmitItemChanged(item QTableWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.EmitItemChanged")
 	}
 	C.qute_QTableWidget_itemChanged_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitCurrentItemChanged wraps emitting the currentItemChanged signal.
@@ -888,6 +976,9 @@ func (this *QTableWidget) EmitCurrentItemChanged(current QTableWidgetItemLike, p
 		previousPtr = rt.UseArg(unsafe.Pointer(previous.AsQTableWidgetItem()), "QTableWidget.EmitCurrentItemChanged")
 	}
 	C.qute_QTableWidget_currentItemChanged_1(self, currentPtr, previousPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(current)
+	runtime.KeepAlive(previous)
 }
 
 // EmitItemSelectionChanged wraps emitting the itemSelectionChanged signal.
@@ -898,6 +989,7 @@ func (this *QTableWidget) EmitCurrentItemChanged(current QTableWidgetItemLike, p
 func (this *QTableWidget) EmitItemSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitItemSelectionChanged")
 	C.qute_QTableWidget_itemSelectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitCellPressed wraps emitting the cellPressed signal.
@@ -908,6 +1000,7 @@ func (this *QTableWidget) EmitItemSelectionChanged() {
 func (this *QTableWidget) EmitCellPressed(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCellPressed")
 	C.qute_QTableWidget_cellPressed_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EmitCellClicked wraps emitting the cellClicked signal.
@@ -918,6 +1011,7 @@ func (this *QTableWidget) EmitCellPressed(row int, column int) {
 func (this *QTableWidget) EmitCellClicked(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCellClicked")
 	C.qute_QTableWidget_cellClicked_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EmitCellDoubleClicked wraps emitting the cellDoubleClicked signal.
@@ -928,6 +1022,7 @@ func (this *QTableWidget) EmitCellClicked(row int, column int) {
 func (this *QTableWidget) EmitCellDoubleClicked(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCellDoubleClicked")
 	C.qute_QTableWidget_cellDoubleClicked_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EmitCellActivated wraps emitting the cellActivated signal.
@@ -938,6 +1033,7 @@ func (this *QTableWidget) EmitCellDoubleClicked(row int, column int) {
 func (this *QTableWidget) EmitCellActivated(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCellActivated")
 	C.qute_QTableWidget_cellActivated_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EmitCellEntered wraps emitting the cellEntered signal.
@@ -948,6 +1044,7 @@ func (this *QTableWidget) EmitCellActivated(row int, column int) {
 func (this *QTableWidget) EmitCellEntered(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCellEntered")
 	C.qute_QTableWidget_cellEntered_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EmitCellChanged wraps emitting the cellChanged signal.
@@ -958,6 +1055,7 @@ func (this *QTableWidget) EmitCellEntered(row int, column int) {
 func (this *QTableWidget) EmitCellChanged(row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCellChanged")
 	C.qute_QTableWidget_cellChanged_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentCellChanged wraps emitting the currentCellChanged signal.
@@ -968,6 +1066,7 @@ func (this *QTableWidget) EmitCellChanged(row int, column int) {
 func (this *QTableWidget) EmitCurrentCellChanged(currentRow int, currentColumn int, previousRow int, previousColumn int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCurrentCellChanged")
 	C.qute_QTableWidget_currentCellChanged_1(self, C.int(currentRow), C.int(currentColumn), C.int(previousRow), C.int(previousColumn))
+	runtime.KeepAlive(this)
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the

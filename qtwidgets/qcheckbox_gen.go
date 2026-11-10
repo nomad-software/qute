@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQCheckBox(parent QWidgetLike) *QCheckBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCheckBox")
 	}
 	p := C.qute_QCheckBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQCheckBoxWithText(text string, parent QWidgetLike) *QCheckBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCheckBoxWithText")
 	}
 	p := C.qute_QCheckBox_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQCheckBoxWithText(text string, parent QWidgetLike) *QCheckBox {
 func (this *QCheckBox) SetTristate() {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.SetTristate")
 	C.qute_QCheckBox_setTristate(self)
+	runtime.KeepAlive(this)
 }
 
 // IsTristate wraps QCheckBox::isTristate.
@@ -109,6 +113,7 @@ func (this *QCheckBox) SetTristate() {
 func (this *QCheckBox) IsTristate() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.IsTristate")
 	r := C.qute_QCheckBox_isTristate(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -120,6 +125,7 @@ func (this *QCheckBox) IsTristate() bool {
 func (this *QCheckBox) CheckState() qtcore.CheckState {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.CheckState")
 	r := C.qute_QCheckBox_checkState(self)
+	runtime.KeepAlive(this)
 	return qtcore.CheckState(r)
 }
 
@@ -131,6 +137,7 @@ func (this *QCheckBox) CheckState() qtcore.CheckState {
 func (this *QCheckBox) SetCheckState(state qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.SetCheckState")
 	C.qute_QCheckBox_setCheckState(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // EmitCheckStateChanged wraps emitting the checkStateChanged signal.
@@ -141,6 +148,7 @@ func (this *QCheckBox) SetCheckState(state qtcore.CheckState) {
 func (this *QCheckBox) EmitCheckStateChanged(arg0 qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.EmitCheckStateChanged")
 	C.qute_QCheckBox_checkStateChanged_1(self, C.int64_t(arg0))
+	runtime.KeepAlive(this)
 }
 
 // OnCheckStateChanged connects f to the checkStateChanged signal. The connection ends when the

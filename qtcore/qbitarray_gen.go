@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQBitArrayWithSize(size int) *QBitArray {
 func (this *QBitArray) Size() int {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Size")
 	r := C.qute_QBitArray_size(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -119,6 +121,7 @@ func (this *QBitArray) Size() int {
 func (this *QBitArray) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Count")
 	r := C.qute_QBitArray_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +133,7 @@ func (this *QBitArray) Count() int {
 func (this *QBitArray) CountWithBool(on bool) int {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.CountWithBool")
 	r := C.qute_QBitArray_count_1(self, C.bool(on))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -141,6 +145,7 @@ func (this *QBitArray) CountWithBool(on bool) int {
 func (this *QBitArray) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.IsEmpty")
 	r := C.qute_QBitArray_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -152,6 +157,7 @@ func (this *QBitArray) IsEmpty() bool {
 func (this *QBitArray) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.IsNull")
 	r := C.qute_QBitArray_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -163,6 +169,7 @@ func (this *QBitArray) IsNull() bool {
 func (this *QBitArray) Resize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Resize")
 	C.qute_QBitArray_resize(self, C.longlong(size))
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QBitArray::clear.
@@ -173,6 +180,7 @@ func (this *QBitArray) Resize(size int) {
 func (this *QBitArray) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Clear")
 	C.qute_QBitArray_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // TestBit wraps QBitArray::testBit.
@@ -183,6 +191,7 @@ func (this *QBitArray) Clear() {
 func (this *QBitArray) TestBit(iArg int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.TestBit")
 	r := C.qute_QBitArray_testBit(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -194,6 +203,7 @@ func (this *QBitArray) TestBit(iArg int) bool {
 func (this *QBitArray) SetBit(iArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.SetBit")
 	C.qute_QBitArray_setBit(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 }
 
 // SetBitWithVal wraps QBitArray::setBit.
@@ -204,6 +214,7 @@ func (this *QBitArray) SetBit(iArg int) {
 func (this *QBitArray) SetBitWithVal(iArg int, val bool) {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.SetBitWithVal")
 	C.qute_QBitArray_setBit_1(self, C.longlong(iArg), C.bool(val))
+	runtime.KeepAlive(this)
 }
 
 // ClearBit wraps QBitArray::clearBit.
@@ -214,6 +225,7 @@ func (this *QBitArray) SetBitWithVal(iArg int, val bool) {
 func (this *QBitArray) ClearBit(iArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.ClearBit")
 	C.qute_QBitArray_clearBit(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 }
 
 // ToggleBit wraps QBitArray::toggleBit.
@@ -224,6 +236,7 @@ func (this *QBitArray) ClearBit(iArg int) {
 func (this *QBitArray) ToggleBit(iArg int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.ToggleBit")
 	r := C.qute_QBitArray_toggleBit(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -235,6 +248,7 @@ func (this *QBitArray) ToggleBit(iArg int) bool {
 func (this *QBitArray) At(iArg int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.At")
 	r := C.qute_QBitArray_at(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -246,6 +260,7 @@ func (this *QBitArray) At(iArg int) bool {
 func (this *QBitArray) Fill(aval bool) bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Fill")
 	r := C.qute_QBitArray_fill(self, C.bool(aval))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -257,6 +272,7 @@ func (this *QBitArray) Fill(aval bool) bool {
 func (this *QBitArray) FillWithFirst(val bool, first int, last int) {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.FillWithFirst")
 	C.qute_QBitArray_fill_1(self, C.bool(val), C.longlong(first), C.longlong(last))
+	runtime.KeepAlive(this)
 }
 
 // Truncate wraps QBitArray::truncate.
@@ -267,6 +283,7 @@ func (this *QBitArray) FillWithFirst(val bool, first int, last int) {
 func (this *QBitArray) Truncate(pos int) {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Truncate")
 	C.qute_QBitArray_truncate(self, C.longlong(pos))
+	runtime.KeepAlive(this)
 }
 
 // Bits wraps QBitArray::bits.
@@ -277,6 +294,7 @@ func (this *QBitArray) Truncate(pos int) {
 func (this *QBitArray) Bits() string {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Bits")
 	r := C.qute_QBitArray_bits(self)
+	runtime.KeepAlive(this)
 	return C.GoString(r)
 }
 
@@ -288,6 +306,7 @@ func (this *QBitArray) Bits() string {
 func (this *QBitArray) ToUInt32(endianness QSysInfoEndian) uint {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.ToUInt32")
 	r := C.qute_QBitArray_toUInt32(self, C.int64_t(endianness))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQStyledItemDelegate(parent qtcore.QObjectLike) *QStyledItemDelegate {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStyledItemDelegate")
 	}
 	p := C.qute_QStyledItemDelegate_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,7 @@ func NewQStyledItemDelegate(parent qtcore.QObjectLike) *QStyledItemDelegate {
 func (this *QStyledItemDelegate) ItemEditorFactory() *QItemEditorFactory {
 	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.ItemEditorFactory")
 	r := C.qute_QStyledItemDelegate_itemEditorFactory(self)
+	runtime.KeepAlive(this)
 	return rt.View[QItemEditorFactory](rt.WrapClass(r, "QItemEditorFactory", rt.KeepOrBorrow), r)
 }
 
@@ -96,6 +99,8 @@ func (this *QStyledItemDelegate) SetItemEditorFactory(factory QItemEditorFactory
 		factoryPtr = rt.UseArg(unsafe.Pointer(factory.AsQItemEditorFactory()), "QStyledItemDelegate.SetItemEditorFactory")
 	}
 	C.qute_QStyledItemDelegate_setItemEditorFactory(self, factoryPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(factory)
 }
 
 // DisplayText wraps QStyledItemDelegate::displayText.
@@ -106,5 +111,8 @@ func (this *QStyledItemDelegate) SetItemEditorFactory(factory QItemEditorFactory
 func (this *QStyledItemDelegate) DisplayText(value *qtcore.QVariant, locale *qtcore.QLocale) string {
 	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.DisplayText")
 	r := C.qute_QStyledItemDelegate_displayText(self, rt.UseArg(unsafe.Pointer(value), "QStyledItemDelegate.DisplayText"), rt.UseArg(unsafe.Pointer(locale), "QStyledItemDelegate.DisplayText"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
+	runtime.KeepAlive(locale)
 	return quteStr(r)
 }

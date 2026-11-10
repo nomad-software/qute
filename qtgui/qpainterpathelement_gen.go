@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQPainterPathElement() *QPainterPathElement {
 func (this *QPainterPathElement) IsMoveTo() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.IsMoveTo")
 	r := C.qute_QPainterPathElement_isMoveTo(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QPainterPathElement) IsMoveTo() bool {
 func (this *QPainterPathElement) IsLineTo() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.IsLineTo")
 	r := C.qute_QPainterPathElement_isLineTo(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QPainterPathElement) IsLineTo() bool {
 func (this *QPainterPathElement) IsCurveTo() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.IsCurveTo")
 	r := C.qute_QPainterPathElement_isCurveTo(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +134,7 @@ func (this *QPainterPathElement) IsCurveTo() bool {
 func (this *QPainterPathElement) X() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.X")
 	r := C.qute_QPainterPathElement_get_x(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -143,6 +148,7 @@ func (this *QPainterPathElement) X() float64 {
 func (this *QPainterPathElement) SetX(x float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.SetX")
 	C.qute_QPainterPathElement_set_x(self, C.double(x))
+	runtime.KeepAlive(this)
 }
 
 // Y wraps the public field QPainterPath::Element::y.
@@ -153,6 +159,7 @@ func (this *QPainterPathElement) SetX(x float64) {
 func (this *QPainterPathElement) Y() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.Y")
 	r := C.qute_QPainterPathElement_get_y(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -166,6 +173,7 @@ func (this *QPainterPathElement) Y() float64 {
 func (this *QPainterPathElement) SetY(y float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.SetY")
 	C.qute_QPainterPathElement_set_y(self, C.double(y))
+	runtime.KeepAlive(this)
 }
 
 // Type wraps the public field QPainterPath::Element::type.
@@ -176,6 +184,7 @@ func (this *QPainterPathElement) SetY(y float64) {
 func (this *QPainterPathElement) Type() QPainterPathElementType {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.Type")
 	r := C.qute_QPainterPathElement_get_type(self)
+	runtime.KeepAlive(this)
 	return QPainterPathElementType(r)
 }
 
@@ -189,4 +198,5 @@ func (this *QPainterPathElement) Type() QPainterPathElementType {
 func (this *QPainterPathElement) SetType(typeArg QPainterPathElementType) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPathElement.SetType")
 	C.qute_QPainterPathElement_set_type(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }

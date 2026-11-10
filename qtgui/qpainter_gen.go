@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -104,6 +105,7 @@ func NewQPainterOn(paintDevice QPaintDeviceLike) *QPainter {
 		paintDevicePtr = rt.UseArg(unsafe.Pointer(paintDevice.AsQPaintDevice()), "NewQPainterOn")
 	}
 	p := C.qute_QPainter_new_1(paintDevicePtr)
+	runtime.KeepAlive(paintDevice)
 	h := rt.WrapClass(p, "QPainter", rt.NewOwned)
 	return rt.View[QPainter](h, p)
 }
@@ -118,6 +120,7 @@ func NewQPainterOn(paintDevice QPaintDeviceLike) *QPainter {
 func (this *QPainter) Device() *QPaintDevice {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Device")
 	r := C.qute_QPainter_device(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPaintDevice](rt.WrapClass(r, "QPaintDevice", rt.KeepOrBorrow), r)
 }
 
@@ -133,6 +136,8 @@ func (this *QPainter) Begin(paintDevice QPaintDeviceLike) bool {
 		paintDevicePtr = rt.UseArg(unsafe.Pointer(paintDevice.AsQPaintDevice()), "QPainter.Begin")
 	}
 	r := C.qute_QPainter_begin(self, paintDevicePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(paintDevice)
 	return bool(r)
 }
 
@@ -144,6 +149,7 @@ func (this *QPainter) Begin(paintDevice QPaintDeviceLike) bool {
 func (this *QPainter) End() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.End")
 	r := C.qute_QPainter_end(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -155,6 +161,7 @@ func (this *QPainter) End() bool {
 func (this *QPainter) IsActive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.IsActive")
 	r := C.qute_QPainter_isActive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -166,6 +173,7 @@ func (this *QPainter) IsActive() bool {
 func (this *QPainter) SetCompositionMode(mode QPainterCompositionMode) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetCompositionMode")
 	C.qute_QPainter_setCompositionMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // CompositionMode wraps QPainter::compositionMode.
@@ -176,6 +184,7 @@ func (this *QPainter) SetCompositionMode(mode QPainterCompositionMode) {
 func (this *QPainter) CompositionMode() QPainterCompositionMode {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.CompositionMode")
 	r := C.qute_QPainter_compositionMode(self)
+	runtime.KeepAlive(this)
 	return QPainterCompositionMode(r)
 }
 
@@ -189,6 +198,7 @@ func (this *QPainter) CompositionMode() QPainterCompositionMode {
 func (this *QPainter) Font() *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Font")
 	r := C.qute_QPainter_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -200,6 +210,8 @@ func (this *QPainter) Font() *QFont {
 func (this *QPainter) SetFont(fArg *QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetFont")
 	C.qute_QPainter_setFont(self, rt.UseArg(unsafe.Pointer(fArg), "QPainter.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fArg)
 }
 
 // FontMetrics wraps QPainter::fontMetrics.
@@ -212,6 +224,7 @@ func (this *QPainter) SetFont(fArg *QFont) {
 func (this *QPainter) FontMetrics() *QFontMetrics {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FontMetrics")
 	r := C.qute_QPainter_fontMetrics(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFontMetrics](rt.WrapClass(r, "QFontMetrics", rt.TakeOwned), r)
 }
 
@@ -225,6 +238,7 @@ func (this *QPainter) FontMetrics() *QFontMetrics {
 func (this *QPainter) FontInfo() *QFontInfo {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FontInfo")
 	r := C.qute_QPainter_fontInfo(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFontInfo](rt.WrapClass(r, "QFontInfo", rt.TakeOwned), r)
 }
 
@@ -236,6 +250,7 @@ func (this *QPainter) FontInfo() *QFontInfo {
 func (this *QPainter) SetPenColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetPenColor")
 	C.qute_QPainter_setPen(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // SetPen wraps QPainter::setPen.
@@ -246,6 +261,8 @@ func (this *QPainter) SetPenColor(color QColor) {
 func (this *QPainter) SetPen(pen *QPen) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetPen")
 	C.qute_QPainter_setPen_1(self, rt.UseArg(unsafe.Pointer(pen), "QPainter.SetPen"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pen)
 }
 
 // SetPenStyle wraps QPainter::setPen.
@@ -256,6 +273,7 @@ func (this *QPainter) SetPen(pen *QPen) {
 func (this *QPainter) SetPenStyle(style qtcore.PenStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetPenStyle")
 	C.qute_QPainter_setPen_2(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // Pen wraps QPainter::pen.
@@ -268,6 +286,7 @@ func (this *QPainter) SetPenStyle(style qtcore.PenStyle) {
 func (this *QPainter) Pen() *QPen {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Pen")
 	r := C.qute_QPainter_pen(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPen](rt.WrapClass(r, "QPen", rt.TakeOwned), r)
 }
 
@@ -279,6 +298,8 @@ func (this *QPainter) Pen() *QPen {
 func (this *QPainter) SetBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBrush")
 	C.qute_QPainter_setBrush(self, rt.UseArg(unsafe.Pointer(brush), "QPainter.SetBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // SetBrushStyle wraps QPainter::setBrush.
@@ -289,6 +310,7 @@ func (this *QPainter) SetBrush(brush *QBrush) {
 func (this *QPainter) SetBrushStyle(style qtcore.BrushStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBrushStyle")
 	C.qute_QPainter_setBrush_1(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // SetBrushColor wraps QPainter::setBrush.
@@ -299,6 +321,7 @@ func (this *QPainter) SetBrushStyle(style qtcore.BrushStyle) {
 func (this *QPainter) SetBrushColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBrushColor")
 	C.qute_QPainter_setBrush_2(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // Brush wraps QPainter::brush.
@@ -311,6 +334,7 @@ func (this *QPainter) SetBrushColor(color QColor) {
 func (this *QPainter) Brush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Brush")
 	r := C.qute_QPainter_brush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -322,6 +346,7 @@ func (this *QPainter) Brush() *QBrush {
 func (this *QPainter) SetBackgroundMode(mode qtcore.BGMode) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBackgroundMode")
 	C.qute_QPainter_setBackgroundMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // BackgroundMode wraps QPainter::backgroundMode.
@@ -332,6 +357,7 @@ func (this *QPainter) SetBackgroundMode(mode qtcore.BGMode) {
 func (this *QPainter) BackgroundMode() qtcore.BGMode {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BackgroundMode")
 	r := C.qute_QPainter_backgroundMode(self)
+	runtime.KeepAlive(this)
 	return qtcore.BGMode(r)
 }
 
@@ -343,6 +369,7 @@ func (this *QPainter) BackgroundMode() qtcore.BGMode {
 func (this *QPainter) BrushOrigin() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BrushOrigin")
 	r := C.qute_QPainter_brushOrigin(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -354,6 +381,7 @@ func (this *QPainter) BrushOrigin() qtcore.QPoint {
 func (this *QPainter) BrushOriginF() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BrushOriginF")
 	r := C.qute_QPainter_brushOriginF(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -365,6 +393,7 @@ func (this *QPainter) BrushOriginF() qtcore.QPointF {
 func (this *QPainter) SetBrushOrigin(brushOrigin qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBrushOrigin")
 	C.qute_QPainter_setBrushOrigin(self, cQPoint(brushOrigin))
+	runtime.KeepAlive(this)
 }
 
 // SetBrushOriginF wraps QPainter::setBrushOrigin.
@@ -375,6 +404,7 @@ func (this *QPainter) SetBrushOrigin(brushOrigin qtcore.QPoint) {
 func (this *QPainter) SetBrushOriginF(brushOrigin qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBrushOriginF")
 	C.qute_QPainter_setBrushOrigin_1(self, cQPointF(brushOrigin))
+	runtime.KeepAlive(this)
 }
 
 // SetBackground wraps QPainter::setBackground.
@@ -385,6 +415,8 @@ func (this *QPainter) SetBrushOriginF(brushOrigin qtcore.QPointF) {
 func (this *QPainter) SetBackground(bg *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetBackground")
 	C.qute_QPainter_setBackground(self, rt.UseArg(unsafe.Pointer(bg), "QPainter.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(bg)
 }
 
 // Background wraps QPainter::background.
@@ -397,6 +429,7 @@ func (this *QPainter) SetBackground(bg *QBrush) {
 func (this *QPainter) Background() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Background")
 	r := C.qute_QPainter_background(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -408,6 +441,7 @@ func (this *QPainter) Background() *QBrush {
 func (this *QPainter) Opacity() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Opacity")
 	r := C.qute_QPainter_opacity(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -419,6 +453,7 @@ func (this *QPainter) Opacity() float64 {
 func (this *QPainter) SetOpacity(opacity float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetOpacity")
 	C.qute_QPainter_setOpacity(self, C.double(opacity))
+	runtime.KeepAlive(this)
 }
 
 // ClipRegion wraps QPainter::clipRegion.
@@ -431,6 +466,7 @@ func (this *QPainter) SetOpacity(opacity float64) {
 func (this *QPainter) ClipRegion() *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.ClipRegion")
 	r := C.qute_QPainter_clipRegion(self)
+	runtime.KeepAlive(this)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -444,6 +480,7 @@ func (this *QPainter) ClipRegion() *QRegion {
 func (this *QPainter) ClipPath() *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.ClipPath")
 	r := C.qute_QPainter_clipPath(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -455,6 +492,7 @@ func (this *QPainter) ClipPath() *QPainterPath {
 func (this *QPainter) SetClipRectF(rectF qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRectF")
 	C.qute_QPainter_setClipRect(self, cQRectF(rectF))
+	runtime.KeepAlive(this)
 }
 
 // SetClipRect wraps QPainter::setClipRect.
@@ -465,6 +503,7 @@ func (this *QPainter) SetClipRectF(rectF qtcore.QRectF) {
 func (this *QPainter) SetClipRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRect")
 	C.qute_QPainter_setClipRect_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // SetClipRegion wraps QPainter::setClipRegion.
@@ -475,6 +514,8 @@ func (this *QPainter) SetClipRect(rect qtcore.QRect) {
 func (this *QPainter) SetClipRegion(region *QRegion) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRegion")
 	C.qute_QPainter_setClipRegion(self, rt.UseArg(unsafe.Pointer(region), "QPainter.SetClipRegion"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(region)
 }
 
 // SetClipPath wraps QPainter::setClipPath.
@@ -485,6 +526,8 @@ func (this *QPainter) SetClipRegion(region *QRegion) {
 func (this *QPainter) SetClipPath(path *QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipPath")
 	C.qute_QPainter_setClipPath(self, rt.UseArg(unsafe.Pointer(path), "QPainter.SetClipPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 }
 
 // SetClipping wraps QPainter::setClipping.
@@ -495,6 +538,7 @@ func (this *QPainter) SetClipPath(path *QPainterPath) {
 func (this *QPainter) SetClipping(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipping")
 	C.qute_QPainter_setClipping(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // HasClipping wraps QPainter::hasClipping.
@@ -505,6 +549,7 @@ func (this *QPainter) SetClipping(enable bool) {
 func (this *QPainter) HasClipping() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.HasClipping")
 	r := C.qute_QPainter_hasClipping(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -516,6 +561,7 @@ func (this *QPainter) HasClipping() bool {
 func (this *QPainter) ClipBoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.ClipBoundingRect")
 	r := C.qute_QPainter_clipBoundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -527,6 +573,7 @@ func (this *QPainter) ClipBoundingRect() qtcore.QRectF {
 func (this *QPainter) Save() {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Save")
 	C.qute_QPainter_save(self)
+	runtime.KeepAlive(this)
 }
 
 // Restore wraps QPainter::restore.
@@ -537,6 +584,7 @@ func (this *QPainter) Save() {
 func (this *QPainter) Restore() {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Restore")
 	C.qute_QPainter_restore(self)
+	runtime.KeepAlive(this)
 }
 
 // SetTransform wraps QPainter::setTransform.
@@ -547,6 +595,8 @@ func (this *QPainter) Restore() {
 func (this *QPainter) SetTransform(transform *QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetTransform")
 	C.qute_QPainter_setTransform(self, rt.UseArg(unsafe.Pointer(transform), "QPainter.SetTransform"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 }
 
 // Transform wraps QPainter::transform.
@@ -559,6 +609,7 @@ func (this *QPainter) SetTransform(transform *QTransform) {
 func (this *QPainter) Transform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Transform")
 	r := C.qute_QPainter_transform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -572,6 +623,7 @@ func (this *QPainter) Transform() *QTransform {
 func (this *QPainter) DeviceTransform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DeviceTransform")
 	r := C.qute_QPainter_deviceTransform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -583,6 +635,7 @@ func (this *QPainter) DeviceTransform() *QTransform {
 func (this *QPainter) ResetTransform() {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.ResetTransform")
 	C.qute_QPainter_resetTransform(self)
+	runtime.KeepAlive(this)
 }
 
 // SetWorldTransform wraps QPainter::setWorldTransform.
@@ -593,6 +646,8 @@ func (this *QPainter) ResetTransform() {
 func (this *QPainter) SetWorldTransform(matrix *QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetWorldTransform")
 	C.qute_QPainter_setWorldTransform(self, rt.UseArg(unsafe.Pointer(matrix), "QPainter.SetWorldTransform"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
 }
 
 // WorldTransform wraps QPainter::worldTransform.
@@ -605,6 +660,7 @@ func (this *QPainter) SetWorldTransform(matrix *QTransform) {
 func (this *QPainter) WorldTransform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.WorldTransform")
 	r := C.qute_QPainter_worldTransform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -618,6 +674,7 @@ func (this *QPainter) WorldTransform() *QTransform {
 func (this *QPainter) CombinedTransform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.CombinedTransform")
 	r := C.qute_QPainter_combinedTransform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -629,6 +686,7 @@ func (this *QPainter) CombinedTransform() *QTransform {
 func (this *QPainter) SetWorldMatrixEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetWorldMatrixEnabled")
 	C.qute_QPainter_setWorldMatrixEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // WorldMatrixEnabled wraps QPainter::worldMatrixEnabled.
@@ -639,6 +697,7 @@ func (this *QPainter) SetWorldMatrixEnabled(enabled bool) {
 func (this *QPainter) WorldMatrixEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.WorldMatrixEnabled")
 	r := C.qute_QPainter_worldMatrixEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -650,6 +709,7 @@ func (this *QPainter) WorldMatrixEnabled() bool {
 func (this *QPainter) Scale(sx float64, sy float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Scale")
 	C.qute_QPainter_scale(self, C.double(sx), C.double(sy))
+	runtime.KeepAlive(this)
 }
 
 // Shear wraps QPainter::shear.
@@ -660,6 +720,7 @@ func (this *QPainter) Scale(sx float64, sy float64) {
 func (this *QPainter) Shear(sh float64, sv float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Shear")
 	C.qute_QPainter_shear(self, C.double(sh), C.double(sv))
+	runtime.KeepAlive(this)
 }
 
 // Rotate wraps QPainter::rotate.
@@ -670,6 +731,7 @@ func (this *QPainter) Shear(sh float64, sv float64) {
 func (this *QPainter) Rotate(aArg float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Rotate")
 	C.qute_QPainter_rotate(self, C.double(aArg))
+	runtime.KeepAlive(this)
 }
 
 // TranslateF wraps QPainter::translate.
@@ -680,6 +742,7 @@ func (this *QPainter) Rotate(aArg float64) {
 func (this *QPainter) TranslateF(offset qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.TranslateF")
 	C.qute_QPainter_translate(self, cQPointF(offset))
+	runtime.KeepAlive(this)
 }
 
 // TranslatePoint wraps QPainter::translate.
@@ -690,6 +753,7 @@ func (this *QPainter) TranslateF(offset qtcore.QPointF) {
 func (this *QPainter) TranslatePoint(offset qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.TranslatePoint")
 	C.qute_QPainter_translate_1(self, cQPoint(offset))
+	runtime.KeepAlive(this)
 }
 
 // Translate wraps QPainter::translate.
@@ -700,6 +764,7 @@ func (this *QPainter) TranslatePoint(offset qtcore.QPoint) {
 func (this *QPainter) Translate(dx float64, dy float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Translate")
 	C.qute_QPainter_translate_2(self, C.double(dx), C.double(dy))
+	runtime.KeepAlive(this)
 }
 
 // Window wraps QPainter::window.
@@ -710,6 +775,7 @@ func (this *QPainter) Translate(dx float64, dy float64) {
 func (this *QPainter) Window() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Window")
 	r := C.qute_QPainter_window(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -721,6 +787,7 @@ func (this *QPainter) Window() qtcore.QRect {
 func (this *QPainter) SetWindow(window qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetWindow")
 	C.qute_QPainter_setWindow(self, cQRect(window))
+	runtime.KeepAlive(this)
 }
 
 // Viewport wraps QPainter::viewport.
@@ -731,6 +798,7 @@ func (this *QPainter) SetWindow(window qtcore.QRect) {
 func (this *QPainter) Viewport() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Viewport")
 	r := C.qute_QPainter_viewport(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -742,6 +810,7 @@ func (this *QPainter) Viewport() qtcore.QRect {
 func (this *QPainter) SetViewport(viewport qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetViewport")
 	C.qute_QPainter_setViewport(self, cQRect(viewport))
+	runtime.KeepAlive(this)
 }
 
 // SetViewTransformEnabled wraps QPainter::setViewTransformEnabled.
@@ -752,6 +821,7 @@ func (this *QPainter) SetViewport(viewport qtcore.QRect) {
 func (this *QPainter) SetViewTransformEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetViewTransformEnabled")
 	C.qute_QPainter_setViewTransformEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // ViewTransformEnabled wraps QPainter::viewTransformEnabled.
@@ -762,6 +832,7 @@ func (this *QPainter) SetViewTransformEnabled(enable bool) {
 func (this *QPainter) ViewTransformEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.ViewTransformEnabled")
 	r := C.qute_QPainter_viewTransformEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -773,6 +844,9 @@ func (this *QPainter) ViewTransformEnabled() bool {
 func (this *QPainter) StrokePath(path *QPainterPath, pen *QPen) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.StrokePath")
 	C.qute_QPainter_strokePath(self, rt.UseArg(unsafe.Pointer(path), "QPainter.StrokePath"), rt.UseArg(unsafe.Pointer(pen), "QPainter.StrokePath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	runtime.KeepAlive(pen)
 }
 
 // FillPath wraps QPainter::fillPath.
@@ -783,6 +857,9 @@ func (this *QPainter) StrokePath(path *QPainterPath, pen *QPen) {
 func (this *QPainter) FillPath(path *QPainterPath, brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillPath")
 	C.qute_QPainter_fillPath(self, rt.UseArg(unsafe.Pointer(path), "QPainter.FillPath"), rt.UseArg(unsafe.Pointer(brush), "QPainter.FillPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	runtime.KeepAlive(brush)
 }
 
 // DrawPath wraps QPainter::drawPath.
@@ -793,6 +870,8 @@ func (this *QPainter) FillPath(path *QPainterPath, brush *QBrush) {
 func (this *QPainter) DrawPath(path *QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPath")
 	C.qute_QPainter_drawPath(self, rt.UseArg(unsafe.Pointer(path), "QPainter.DrawPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
 }
 
 // DrawPointF wraps QPainter::drawPoint.
@@ -803,6 +882,7 @@ func (this *QPainter) DrawPath(path *QPainterPath) {
 func (this *QPainter) DrawPointF(pt qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPointF")
 	C.qute_QPainter_drawPoint(self, cQPointF(pt))
+	runtime.KeepAlive(this)
 }
 
 // DrawPoint wraps QPainter::drawPoint.
@@ -813,6 +893,7 @@ func (this *QPainter) DrawPointF(pt qtcore.QPointF) {
 func (this *QPainter) DrawPoint(pArg qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPoint")
 	C.qute_QPainter_drawPoint_1(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 }
 
 // DrawPointsF wraps QPainter::drawPoints.
@@ -827,6 +908,7 @@ func (this *QPainter) DrawPointsF(points []qtcore.QPointF) {
 		pointsC[i] = cQPointF(points[i])
 	}
 	C.qute_QPainter_drawPoints(self, unsafe.Pointer(unsafe.SliceData(pointsC)), C.ptrdiff_t(len(points)))
+	runtime.KeepAlive(this)
 }
 
 // DrawPoints wraps QPainter::drawPoints.
@@ -841,6 +923,7 @@ func (this *QPainter) DrawPoints(points []qtcore.QPoint) {
 		pointsC[i] = cQPoint(points[i])
 	}
 	C.qute_QPainter_drawPoints_1(self, unsafe.Pointer(unsafe.SliceData(pointsC)), C.ptrdiff_t(len(points)))
+	runtime.KeepAlive(this)
 }
 
 // DrawLine wraps QPainter::drawLine.
@@ -851,6 +934,7 @@ func (this *QPainter) DrawPoints(points []qtcore.QPoint) {
 func (this *QPainter) DrawLine(x1 int, y1 int, x2 int, y2 int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawLine")
 	C.qute_QPainter_drawLine(self, C.int(x1), C.int(y1), C.int(x2), C.int(y2))
+	runtime.KeepAlive(this)
 }
 
 // DrawLinePoints wraps QPainter::drawLine.
@@ -861,6 +945,7 @@ func (this *QPainter) DrawLine(x1 int, y1 int, x2 int, y2 int) {
 func (this *QPainter) DrawLinePoints(p1 qtcore.QPoint, p2 qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawLinePoints")
 	C.qute_QPainter_drawLine_1(self, cQPoint(p1), cQPoint(p2))
+	runtime.KeepAlive(this)
 }
 
 // DrawLineF wraps QPainter::drawLine.
@@ -871,6 +956,7 @@ func (this *QPainter) DrawLinePoints(p1 qtcore.QPoint, p2 qtcore.QPoint) {
 func (this *QPainter) DrawLineF(p1 qtcore.QPointF, p2 qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawLineF")
 	C.qute_QPainter_drawLine_2(self, cQPointF(p1), cQPointF(p2))
+	runtime.KeepAlive(this)
 }
 
 // DrawLineSegmentsF wraps QPainter::drawLines.
@@ -885,6 +971,8 @@ func (this *QPainter) DrawLineSegmentsF(lines []*qtcore.QLineF) {
 		linesC[i] = rt.UseArg(unsafe.Pointer(lines[i]), "QPainter.DrawLineSegmentsF")
 	}
 	C.qute_QPainter_drawLines(self, unsafe.Pointer(unsafe.SliceData(linesC)), C.ptrdiff_t(len(lines)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(lines)
 }
 
 // DrawLinesF wraps QPainter::drawLines.
@@ -899,6 +987,7 @@ func (this *QPainter) DrawLinesF(pointPairs []qtcore.QPointF) {
 		pointPairsC[i] = cQPointF(pointPairs[i])
 	}
 	C.qute_QPainter_drawLines_1(self, unsafe.Pointer(unsafe.SliceData(pointPairsC)), C.ptrdiff_t(len(pointPairs)))
+	runtime.KeepAlive(this)
 }
 
 // DrawLineSegments wraps QPainter::drawLines.
@@ -913,6 +1002,8 @@ func (this *QPainter) DrawLineSegments(lines []*qtcore.QLine) {
 		linesC[i] = rt.UseArg(unsafe.Pointer(lines[i]), "QPainter.DrawLineSegments")
 	}
 	C.qute_QPainter_drawLines_2(self, unsafe.Pointer(unsafe.SliceData(linesC)), C.ptrdiff_t(len(lines)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(lines)
 }
 
 // DrawLines wraps QPainter::drawLines.
@@ -927,6 +1018,7 @@ func (this *QPainter) DrawLines(pointPairs []qtcore.QPoint) {
 		pointPairsC[i] = cQPoint(pointPairs[i])
 	}
 	C.qute_QPainter_drawLines_3(self, unsafe.Pointer(unsafe.SliceData(pointPairsC)), C.ptrdiff_t(len(pointPairs)))
+	runtime.KeepAlive(this)
 }
 
 // DrawRectF wraps QPainter::drawRect.
@@ -937,6 +1029,7 @@ func (this *QPainter) DrawLines(pointPairs []qtcore.QPoint) {
 func (this *QPainter) DrawRectF(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRectF")
 	C.qute_QPainter_drawRect(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // DrawRect wraps QPainter::drawRect.
@@ -947,6 +1040,7 @@ func (this *QPainter) DrawRectF(rect qtcore.QRectF) {
 func (this *QPainter) DrawRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRect")
 	C.qute_QPainter_drawRect_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // DrawRectsF wraps QPainter::drawRects.
@@ -961,6 +1055,7 @@ func (this *QPainter) DrawRectsF(rectangles []qtcore.QRectF) {
 		rectanglesC[i] = cQRectF(rectangles[i])
 	}
 	C.qute_QPainter_drawRects(self, unsafe.Pointer(unsafe.SliceData(rectanglesC)), C.ptrdiff_t(len(rectangles)))
+	runtime.KeepAlive(this)
 }
 
 // DrawRects wraps QPainter::drawRects.
@@ -975,6 +1070,7 @@ func (this *QPainter) DrawRects(rectangles []qtcore.QRect) {
 		rectanglesC[i] = cQRect(rectangles[i])
 	}
 	C.qute_QPainter_drawRects_1(self, unsafe.Pointer(unsafe.SliceData(rectanglesC)), C.ptrdiff_t(len(rectangles)))
+	runtime.KeepAlive(this)
 }
 
 // DrawEllipseF wraps QPainter::drawEllipse.
@@ -985,6 +1081,7 @@ func (this *QPainter) DrawRects(rectangles []qtcore.QRect) {
 func (this *QPainter) DrawEllipseF(rArg qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawEllipseF")
 	C.qute_QPainter_drawEllipse(self, cQRectF(rArg))
+	runtime.KeepAlive(this)
 }
 
 // DrawEllipse wraps QPainter::drawEllipse.
@@ -995,6 +1092,7 @@ func (this *QPainter) DrawEllipseF(rArg qtcore.QRectF) {
 func (this *QPainter) DrawEllipse(rArg qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawEllipse")
 	C.qute_QPainter_drawEllipse_1(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 }
 
 // DrawEllipseAtF wraps QPainter::drawEllipse.
@@ -1005,6 +1103,7 @@ func (this *QPainter) DrawEllipse(rArg qtcore.QRect) {
 func (this *QPainter) DrawEllipseAtF(center qtcore.QPointF, rx float64, ry float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawEllipseAtF")
 	C.qute_QPainter_drawEllipse_2(self, cQPointF(center), C.double(rx), C.double(ry))
+	runtime.KeepAlive(this)
 }
 
 // DrawEllipseAt wraps QPainter::drawEllipse.
@@ -1015,6 +1114,7 @@ func (this *QPainter) DrawEllipseAtF(center qtcore.QPointF, rx float64, ry float
 func (this *QPainter) DrawEllipseAt(center qtcore.QPoint, rx int, ry int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawEllipseAt")
 	C.qute_QPainter_drawEllipse_3(self, cQPoint(center), C.int(rx), C.int(ry))
+	runtime.KeepAlive(this)
 }
 
 // DrawPolylineF wraps QPainter::drawPolyline.
@@ -1029,6 +1129,7 @@ func (this *QPainter) DrawPolylineF(polyline []qtcore.QPointF) {
 		polylineC[i] = cQPointF(polyline[i])
 	}
 	C.qute_QPainter_drawPolyline(self, unsafe.Pointer(unsafe.SliceData(polylineC)), C.ptrdiff_t(len(polyline)))
+	runtime.KeepAlive(this)
 }
 
 // DrawPolyline wraps QPainter::drawPolyline.
@@ -1043,6 +1144,7 @@ func (this *QPainter) DrawPolyline(polygon []qtcore.QPoint) {
 		polygonC[i] = cQPoint(polygon[i])
 	}
 	C.qute_QPainter_drawPolyline_1(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // DrawPolygonF wraps QPainter::drawPolygon.
@@ -1057,6 +1159,7 @@ func (this *QPainter) DrawPolygonF(polygon []qtcore.QPointF) {
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	C.qute_QPainter_drawPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // DrawPolygon wraps QPainter::drawPolygon.
@@ -1071,6 +1174,7 @@ func (this *QPainter) DrawPolygon(polygon []qtcore.QPoint) {
 		polygonC[i] = cQPoint(polygon[i])
 	}
 	C.qute_QPainter_drawPolygon_1(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // DrawConvexPolygonF wraps QPainter::drawConvexPolygon.
@@ -1085,6 +1189,7 @@ func (this *QPainter) DrawConvexPolygonF(polygon []qtcore.QPointF) {
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	C.qute_QPainter_drawConvexPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // DrawConvexPolygon wraps QPainter::drawConvexPolygon.
@@ -1099,6 +1204,7 @@ func (this *QPainter) DrawConvexPolygon(polygon []qtcore.QPoint) {
 		polygonC[i] = cQPoint(polygon[i])
 	}
 	C.qute_QPainter_drawConvexPolygon_1(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // DrawArcF wraps QPainter::drawArc.
@@ -1109,6 +1215,7 @@ func (this *QPainter) DrawConvexPolygon(polygon []qtcore.QPoint) {
 func (this *QPainter) DrawArcF(rect qtcore.QRectF, aArg int, alen int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawArcF")
 	C.qute_QPainter_drawArc(self, cQRectF(rect), C.int(aArg), C.int(alen))
+	runtime.KeepAlive(this)
 }
 
 // DrawArc wraps QPainter::drawArc.
@@ -1119,6 +1226,7 @@ func (this *QPainter) DrawArcF(rect qtcore.QRectF, aArg int, alen int) {
 func (this *QPainter) DrawArc(rect qtcore.QRect, aArg int, alen int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawArc")
 	C.qute_QPainter_drawArc_1(self, cQRect(rect), C.int(aArg), C.int(alen))
+	runtime.KeepAlive(this)
 }
 
 // DrawPieF wraps QPainter::drawPie.
@@ -1129,6 +1237,7 @@ func (this *QPainter) DrawArc(rect qtcore.QRect, aArg int, alen int) {
 func (this *QPainter) DrawPieF(rect qtcore.QRectF, aArg int, alen int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPieF")
 	C.qute_QPainter_drawPie(self, cQRectF(rect), C.int(aArg), C.int(alen))
+	runtime.KeepAlive(this)
 }
 
 // DrawPie wraps QPainter::drawPie.
@@ -1139,6 +1248,7 @@ func (this *QPainter) DrawPieF(rect qtcore.QRectF, aArg int, alen int) {
 func (this *QPainter) DrawPie(rect qtcore.QRect, aArg int, alen int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPie")
 	C.qute_QPainter_drawPie_1(self, cQRect(rect), C.int(aArg), C.int(alen))
+	runtime.KeepAlive(this)
 }
 
 // DrawChordF wraps QPainter::drawChord.
@@ -1149,6 +1259,7 @@ func (this *QPainter) DrawPie(rect qtcore.QRect, aArg int, alen int) {
 func (this *QPainter) DrawChordF(rect qtcore.QRectF, aArg int, alen int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawChordF")
 	C.qute_QPainter_drawChord(self, cQRectF(rect), C.int(aArg), C.int(alen))
+	runtime.KeepAlive(this)
 }
 
 // DrawChord wraps QPainter::drawChord.
@@ -1159,6 +1270,7 @@ func (this *QPainter) DrawChordF(rect qtcore.QRectF, aArg int, alen int) {
 func (this *QPainter) DrawChord(rect qtcore.QRect, aArg int, alen int) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawChord")
 	C.qute_QPainter_drawChord_1(self, cQRect(rect), C.int(aArg), C.int(alen))
+	runtime.KeepAlive(this)
 }
 
 // DrawRoundedRectF wraps QPainter::drawRoundedRect.
@@ -1169,6 +1281,7 @@ func (this *QPainter) DrawChord(rect qtcore.QRect, aArg int, alen int) {
 func (this *QPainter) DrawRoundedRectF(rect qtcore.QRectF, xRadius float64, yRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRoundedRectF")
 	C.qute_QPainter_drawRoundedRect(self, cQRectF(rect), C.double(xRadius), C.double(yRadius))
+	runtime.KeepAlive(this)
 }
 
 // DrawRoundedRect wraps QPainter::drawRoundedRect.
@@ -1179,6 +1292,7 @@ func (this *QPainter) DrawRoundedRectF(rect qtcore.QRectF, xRadius float64, yRad
 func (this *QPainter) DrawRoundedRect(rect qtcore.QRect, xRadius float64, yRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRoundedRect")
 	C.qute_QPainter_drawRoundedRect_1(self, cQRect(rect), C.double(xRadius), C.double(yRadius))
+	runtime.KeepAlive(this)
 }
 
 // DrawTiledPixmapF wraps QPainter::drawTiledPixmap.
@@ -1189,6 +1303,8 @@ func (this *QPainter) DrawRoundedRect(rect qtcore.QRect, xRadius float64, yRadiu
 func (this *QPainter) DrawTiledPixmapF(rect qtcore.QRectF, pm *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTiledPixmapF")
 	C.qute_QPainter_drawTiledPixmap(self, cQRectF(rect), rt.UseArg(unsafe.Pointer(pm), "QPainter.DrawTiledPixmapF"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pm)
 }
 
 // DrawTiledPixmap wraps QPainter::drawTiledPixmap.
@@ -1199,6 +1315,8 @@ func (this *QPainter) DrawTiledPixmapF(rect qtcore.QRectF, pm *QPixmap) {
 func (this *QPainter) DrawTiledPixmap(rect qtcore.QRect, pixmap *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTiledPixmap")
 	C.qute_QPainter_drawTiledPixmap_1(self, cQRect(rect), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawTiledPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // DrawPicture wraps QPainter::drawPicture.
@@ -1209,6 +1327,8 @@ func (this *QPainter) DrawTiledPixmap(rect qtcore.QRect, pixmap *QPixmap) {
 func (this *QPainter) DrawPicture(pArg qtcore.QPointF, picture *QPicture) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPicture")
 	C.qute_QPainter_drawPicture(self, cQPointF(pArg), rt.UseArg(unsafe.Pointer(picture), "QPainter.DrawPicture"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(picture)
 }
 
 // DrawPicturePoint wraps QPainter::drawPicture.
@@ -1219,6 +1339,8 @@ func (this *QPainter) DrawPicture(pArg qtcore.QPointF, picture *QPicture) {
 func (this *QPainter) DrawPicturePoint(pArg qtcore.QPoint, picture *QPicture) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPicturePoint")
 	C.qute_QPainter_drawPicture_1(self, cQPoint(pArg), rt.UseArg(unsafe.Pointer(picture), "QPainter.DrawPicturePoint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(picture)
 }
 
 // DrawPixmapPartF wraps QPainter::drawPixmap.
@@ -1229,6 +1351,8 @@ func (this *QPainter) DrawPicturePoint(pArg qtcore.QPoint, picture *QPicture) {
 func (this *QPainter) DrawPixmapPartF(targetRect qtcore.QRectF, pixmap *QPixmap, sourceRect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapPartF")
 	C.qute_QPainter_drawPixmap(self, cQRectF(targetRect), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawPixmapPartF"), cQRectF(sourceRect))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // DrawPixmapPart wraps QPainter::drawPixmap.
@@ -1239,6 +1363,8 @@ func (this *QPainter) DrawPixmapPartF(targetRect qtcore.QRectF, pixmap *QPixmap,
 func (this *QPainter) DrawPixmapPart(targetRect qtcore.QRect, pixmap *QPixmap, sourceRect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapPart")
 	C.qute_QPainter_drawPixmap_1(self, cQRect(targetRect), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawPixmapPart"), cQRect(sourceRect))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // DrawPixmapF wraps QPainter::drawPixmap.
@@ -1249,6 +1375,8 @@ func (this *QPainter) DrawPixmapPart(targetRect qtcore.QRect, pixmap *QPixmap, s
 func (this *QPainter) DrawPixmapF(pArg qtcore.QPointF, pm *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapF")
 	C.qute_QPainter_drawPixmap_2(self, cQPointF(pArg), rt.UseArg(unsafe.Pointer(pm), "QPainter.DrawPixmapF"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pm)
 }
 
 // DrawPixmap wraps QPainter::drawPixmap.
@@ -1259,6 +1387,8 @@ func (this *QPainter) DrawPixmapF(pArg qtcore.QPointF, pm *QPixmap) {
 func (this *QPainter) DrawPixmap(pArg qtcore.QPoint, pm *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmap")
 	C.qute_QPainter_drawPixmap_3(self, cQPoint(pArg), rt.UseArg(unsafe.Pointer(pm), "QPainter.DrawPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pm)
 }
 
 // DrawPixmapIn wraps QPainter::drawPixmap.
@@ -1269,6 +1399,8 @@ func (this *QPainter) DrawPixmap(pArg qtcore.QPoint, pm *QPixmap) {
 func (this *QPainter) DrawPixmapIn(rArg qtcore.QRect, pm *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapIn")
 	C.qute_QPainter_drawPixmap_4(self, cQRect(rArg), rt.UseArg(unsafe.Pointer(pm), "QPainter.DrawPixmapIn"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pm)
 }
 
 // DrawPixmapFragments wraps QPainter::drawPixmapFragments.
@@ -1283,6 +1415,9 @@ func (this *QPainter) DrawPixmapFragments(fragments []*QPainterPixmapFragment, p
 		fragmentsC[i] = rt.UseArg(unsafe.Pointer(fragments[i]), "QPainter.DrawPixmapFragments")
 	}
 	C.qute_QPainter_drawPixmapFragments(self, unsafe.Pointer(unsafe.SliceData(fragmentsC)), C.ptrdiff_t(len(fragments)), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawPixmapFragments"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fragments)
+	runtime.KeepAlive(pixmap)
 }
 
 // DrawImagePartF wraps QPainter::drawImage.
@@ -1293,6 +1428,8 @@ func (this *QPainter) DrawPixmapFragments(fragments []*QPainterPixmapFragment, p
 func (this *QPainter) DrawImagePartF(targetRect qtcore.QRectF, image *QImage, sourceRect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImagePartF")
 	C.qute_QPainter_drawImage(self, cQRectF(targetRect), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImagePartF"), cQRectF(sourceRect))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // DrawImagePart wraps QPainter::drawImage.
@@ -1303,6 +1440,8 @@ func (this *QPainter) DrawImagePartF(targetRect qtcore.QRectF, image *QImage, so
 func (this *QPainter) DrawImagePart(targetRect qtcore.QRect, image *QImage, sourceRect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImagePart")
 	C.qute_QPainter_drawImage_1(self, cQRect(targetRect), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImagePart"), cQRect(sourceRect))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // DrawImageInF wraps QPainter::drawImage.
@@ -1313,6 +1452,8 @@ func (this *QPainter) DrawImagePart(targetRect qtcore.QRect, image *QImage, sour
 func (this *QPainter) DrawImageInF(rArg qtcore.QRectF, image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImageInF")
 	C.qute_QPainter_drawImage_2(self, cQRectF(rArg), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImageInF"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // DrawImageIn wraps QPainter::drawImage.
@@ -1323,6 +1464,8 @@ func (this *QPainter) DrawImageInF(rArg qtcore.QRectF, image *QImage) {
 func (this *QPainter) DrawImageIn(rArg qtcore.QRect, image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImageIn")
 	C.qute_QPainter_drawImage_3(self, cQRect(rArg), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImageIn"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // DrawImageF wraps QPainter::drawImage.
@@ -1333,6 +1476,8 @@ func (this *QPainter) DrawImageIn(rArg qtcore.QRect, image *QImage) {
 func (this *QPainter) DrawImageF(pArg qtcore.QPointF, image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImageF")
 	C.qute_QPainter_drawImage_4(self, cQPointF(pArg), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImageF"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // DrawImage wraps QPainter::drawImage.
@@ -1343,6 +1488,8 @@ func (this *QPainter) DrawImageF(pArg qtcore.QPointF, image *QImage) {
 func (this *QPainter) DrawImage(pArg qtcore.QPoint, image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImage")
 	C.qute_QPainter_drawImage_5(self, cQPoint(pArg), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // SetLayoutDirection wraps QPainter::setLayoutDirection.
@@ -1353,6 +1500,7 @@ func (this *QPainter) DrawImage(pArg qtcore.QPoint, image *QImage) {
 func (this *QPainter) SetLayoutDirection(direction qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetLayoutDirection")
 	C.qute_QPainter_setLayoutDirection(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 }
 
 // LayoutDirection wraps QPainter::layoutDirection.
@@ -1363,6 +1511,7 @@ func (this *QPainter) SetLayoutDirection(direction qtcore.LayoutDirection) {
 func (this *QPainter) LayoutDirection() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.LayoutDirection")
 	r := C.qute_QPainter_layoutDirection(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -1374,6 +1523,8 @@ func (this *QPainter) LayoutDirection() qtcore.LayoutDirection {
 func (this *QPainter) DrawGlyphRun(position qtcore.QPointF, glyphRun *QGlyphRun) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawGlyphRun")
 	C.qute_QPainter_drawGlyphRun(self, cQPointF(position), rt.UseArg(unsafe.Pointer(glyphRun), "QPainter.DrawGlyphRun"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(glyphRun)
 }
 
 // DrawStaticText wraps QPainter::drawStaticText.
@@ -1384,6 +1535,8 @@ func (this *QPainter) DrawGlyphRun(position qtcore.QPointF, glyphRun *QGlyphRun)
 func (this *QPainter) DrawStaticText(topLeftPosition qtcore.QPointF, staticText *QStaticText) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawStaticText")
 	C.qute_QPainter_drawStaticText(self, cQPointF(topLeftPosition), rt.UseArg(unsafe.Pointer(staticText), "QPainter.DrawStaticText"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(staticText)
 }
 
 // DrawStaticTextPoint wraps QPainter::drawStaticText.
@@ -1394,6 +1547,8 @@ func (this *QPainter) DrawStaticText(topLeftPosition qtcore.QPointF, staticText 
 func (this *QPainter) DrawStaticTextPoint(topLeftPosition qtcore.QPoint, staticText *QStaticText) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawStaticTextPoint")
 	C.qute_QPainter_drawStaticText_1(self, cQPoint(topLeftPosition), rt.UseArg(unsafe.Pointer(staticText), "QPainter.DrawStaticTextPoint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(staticText)
 }
 
 // DrawTextF wraps QPainter::drawText.
@@ -1404,6 +1559,7 @@ func (this *QPainter) DrawStaticTextPoint(topLeftPosition qtcore.QPoint, staticT
 func (this *QPainter) DrawTextF(pArg qtcore.QPointF, sArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextF")
 	C.qute_QPainter_drawText(self, cQPointF(pArg), (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 }
 
 // DrawText wraps QPainter::drawText.
@@ -1414,6 +1570,7 @@ func (this *QPainter) DrawTextF(pArg qtcore.QPointF, sArg string) {
 func (this *QPainter) DrawText(pArg qtcore.QPoint, sArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawText")
 	C.qute_QPainter_drawText_1(self, cQPoint(pArg), (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 }
 
 // DrawTextInF wraps QPainter::drawText.
@@ -1424,6 +1581,7 @@ func (this *QPainter) DrawText(pArg qtcore.QPoint, sArg string) {
 func (this *QPainter) DrawTextInF(rArg qtcore.QRectF, flags int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextInF")
 	C.qute_QPainter_drawText_2(self, cQRectF(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // DrawTextIn wraps QPainter::drawText.
@@ -1434,6 +1592,7 @@ func (this *QPainter) DrawTextInF(rArg qtcore.QRectF, flags int, text string) {
 func (this *QPainter) DrawTextIn(rArg qtcore.QRect, flags int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextIn")
 	C.qute_QPainter_drawText_3(self, cQRect(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // BoundingRectF wraps QPainter::boundingRect.
@@ -1444,6 +1603,7 @@ func (this *QPainter) DrawTextIn(rArg qtcore.QRect, flags int, text string) {
 func (this *QPainter) BoundingRectF(rect qtcore.QRectF, flags int, text string) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRectF")
 	r := C.qute_QPainter_boundingRect(self, cQRectF(rect), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -1455,6 +1615,7 @@ func (this *QPainter) BoundingRectF(rect qtcore.QRectF, flags int, text string) 
 func (this *QPainter) BoundingRect(rect qtcore.QRect, flags int, text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRect")
 	r := C.qute_QPainter_boundingRect_1(self, cQRect(rect), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -1466,6 +1627,7 @@ func (this *QPainter) BoundingRect(rect qtcore.QRect, flags int, text string) qt
 func (this *QPainter) BoundingRectTextF(rect qtcore.QRectF, text string) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRectTextF")
 	r := C.qute_QPainter_boundingRect_2(self, cQRectF(rect), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -1481,6 +1643,8 @@ func (this *QPainter) DrawTextItem(pArg qtcore.QPointF, ti QTextItemLike) {
 		tiPtr = rt.UseArg(unsafe.Pointer(ti.AsQTextItem()), "QPainter.DrawTextItem")
 	}
 	C.qute_QPainter_drawTextItem(self, cQPointF(pArg), tiPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(ti)
 }
 
 // DrawTextItemPoint wraps QPainter::drawTextItem.
@@ -1495,6 +1659,8 @@ func (this *QPainter) DrawTextItemPoint(pArg qtcore.QPoint, ti QTextItemLike) {
 		tiPtr = rt.UseArg(unsafe.Pointer(ti.AsQTextItem()), "QPainter.DrawTextItemPoint")
 	}
 	C.qute_QPainter_drawTextItem_1(self, cQPoint(pArg), tiPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(ti)
 }
 
 // FillRectBrushF wraps QPainter::fillRect.
@@ -1505,6 +1671,8 @@ func (this *QPainter) DrawTextItemPoint(pArg qtcore.QPoint, ti QTextItemLike) {
 func (this *QPainter) FillRectBrushF(rectF qtcore.QRectF, brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectBrushF")
 	C.qute_QPainter_fillRect(self, cQRectF(rectF), rt.UseArg(unsafe.Pointer(brush), "QPainter.FillRectBrushF"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // FillRectBrush wraps QPainter::fillRect.
@@ -1515,6 +1683,8 @@ func (this *QPainter) FillRectBrushF(rectF qtcore.QRectF, brush *QBrush) {
 func (this *QPainter) FillRectBrush(rect qtcore.QRect, brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectBrush")
 	C.qute_QPainter_fillRect_1(self, cQRect(rect), rt.UseArg(unsafe.Pointer(brush), "QPainter.FillRectBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // FillRectF wraps QPainter::fillRect.
@@ -1525,6 +1695,7 @@ func (this *QPainter) FillRectBrush(rect qtcore.QRect, brush *QBrush) {
 func (this *QPainter) FillRectF(rectF qtcore.QRectF, color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectF")
 	C.qute_QPainter_fillRect_2(self, cQRectF(rectF), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // FillRect wraps QPainter::fillRect.
@@ -1535,6 +1706,7 @@ func (this *QPainter) FillRectF(rectF qtcore.QRectF, color QColor) {
 func (this *QPainter) FillRect(rect qtcore.QRect, color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRect")
 	C.qute_QPainter_fillRect_3(self, cQRect(rect), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // FillRectPreset wraps QPainter::fillRect.
@@ -1545,6 +1717,7 @@ func (this *QPainter) FillRect(rect qtcore.QRect, color QColor) {
 func (this *QPainter) FillRectPreset(rArg qtcore.QRect, preset QGradientPreset) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectPreset")
 	C.qute_QPainter_fillRect_4(self, cQRect(rArg), C.int64_t(preset))
+	runtime.KeepAlive(this)
 }
 
 // FillRectPresetF wraps QPainter::fillRect.
@@ -1555,6 +1728,7 @@ func (this *QPainter) FillRectPreset(rArg qtcore.QRect, preset QGradientPreset) 
 func (this *QPainter) FillRectPresetF(rArg qtcore.QRectF, preset QGradientPreset) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.FillRectPresetF")
 	C.qute_QPainter_fillRect_5(self, cQRectF(rArg), C.int64_t(preset))
+	runtime.KeepAlive(this)
 }
 
 // EraseRectF wraps QPainter::eraseRect.
@@ -1565,6 +1739,7 @@ func (this *QPainter) FillRectPresetF(rArg qtcore.QRectF, preset QGradientPreset
 func (this *QPainter) EraseRectF(rectF qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.EraseRectF")
 	C.qute_QPainter_eraseRect(self, cQRectF(rectF))
+	runtime.KeepAlive(this)
 }
 
 // EraseRect wraps QPainter::eraseRect.
@@ -1575,6 +1750,7 @@ func (this *QPainter) EraseRectF(rectF qtcore.QRectF) {
 func (this *QPainter) EraseRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.EraseRect")
 	C.qute_QPainter_eraseRect_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // SetRenderHint wraps QPainter::setRenderHint.
@@ -1585,6 +1761,7 @@ func (this *QPainter) EraseRect(rect qtcore.QRect) {
 func (this *QPainter) SetRenderHint(hint QPainterRenderHints) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetRenderHint")
 	C.qute_QPainter_setRenderHint(self, C.int64_t(hint))
+	runtime.KeepAlive(this)
 }
 
 // SetRenderHints wraps QPainter::setRenderHints.
@@ -1595,6 +1772,7 @@ func (this *QPainter) SetRenderHint(hint QPainterRenderHints) {
 func (this *QPainter) SetRenderHints(hints QPainterRenderHints) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetRenderHints")
 	C.qute_QPainter_setRenderHints(self, C.int64_t(hints))
+	runtime.KeepAlive(this)
 }
 
 // RenderHints wraps QPainter::renderHints.
@@ -1605,6 +1783,7 @@ func (this *QPainter) SetRenderHints(hints QPainterRenderHints) {
 func (this *QPainter) RenderHints() QPainterRenderHints {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.RenderHints")
 	r := C.qute_QPainter_renderHints(self)
+	runtime.KeepAlive(this)
 	return QPainterRenderHints(r)
 }
 
@@ -1616,6 +1795,7 @@ func (this *QPainter) RenderHints() QPainterRenderHints {
 func (this *QPainter) TestRenderHint(hint QPainterRenderHints) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.TestRenderHint")
 	r := C.qute_QPainter_testRenderHint(self, C.int64_t(hint))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -1627,6 +1807,7 @@ func (this *QPainter) TestRenderHint(hint QPainterRenderHints) bool {
 func (this *QPainter) BeginNativePainting() {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BeginNativePainting")
 	C.qute_QPainter_beginNativePainting(self)
+	runtime.KeepAlive(this)
 }
 
 // EndNativePainting wraps QPainter::endNativePainting.
@@ -1637,4 +1818,5 @@ func (this *QPainter) BeginNativePainting() {
 func (this *QPainter) EndNativePainting() {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.EndNativePainting")
 	C.qute_QPainter_endNativePainting(self)
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -46,6 +47,7 @@ func NewQWidgetItemWithWidget(w QWidgetLike) *QWidgetItem {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "NewQWidgetItemWithWidget")
 	}
 	p := C.qute_QWidgetItem_new(wPtr)
+	runtime.KeepAlive(w)
 	h := rt.WrapClass(p, "QWidgetItem", rt.NewOwned)
 	return rt.View[QWidgetItem](h, p)
 }

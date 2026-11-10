@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQBoxLayoutWithDirection(arg0 QBoxLayoutDirection, parent QWidgetLike) *Q
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQBoxLayoutWithDirection")
 	}
 	p := C.qute_QBoxLayout_new(C.int64_t(arg0), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQBoxLayoutWithDirection(arg0 QBoxLayoutDirection, parent QWidgetLike) *Q
 func (this *QBoxLayout) Direction() QBoxLayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.Direction")
 	r := C.qute_QBoxLayout_direction(self)
+	runtime.KeepAlive(this)
 	return QBoxLayoutDirection(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QBoxLayout) Direction() QBoxLayoutDirection {
 func (this *QBoxLayout) SetDirection(direction QBoxLayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.SetDirection")
 	C.qute_QBoxLayout_setDirection(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 }
 
 // AddSpacing wraps QBoxLayout::addSpacing.
@@ -98,6 +102,7 @@ func (this *QBoxLayout) SetDirection(direction QBoxLayoutDirection) {
 func (this *QBoxLayout) AddSpacing(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddSpacing")
 	C.qute_QBoxLayout_addSpacing(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // AddStretch wraps QBoxLayout::addStretch.
@@ -108,6 +113,7 @@ func (this *QBoxLayout) AddSpacing(size int) {
 func (this *QBoxLayout) AddStretch() {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddStretch")
 	C.qute_QBoxLayout_addStretch(self)
+	runtime.KeepAlive(this)
 }
 
 // AddSpacerItem wraps QBoxLayout::addSpacerItem.
@@ -125,6 +131,8 @@ func (this *QBoxLayout) AddSpacerItem(spacerItem QSpacerItemLike) {
 		spacerItemPtr, spacerItemH = rt.Arg(unsafe.Pointer(spacerItem.AsQSpacerItem()), "QBoxLayout.AddSpacerItem")
 	}
 	C.qute_QBoxLayout_addSpacerItem(self, spacerItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(spacerItem)
 	spacerItemH.TransferToCpp()
 }
 
@@ -143,6 +151,8 @@ func (this *QBoxLayout) AddWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QBoxLayout.AddWidget")
 	}
 	C.qute_QBoxLayout_addWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -161,6 +171,8 @@ func (this *QBoxLayout) AddLayout(layout QLayoutLike) {
 		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QBoxLayout.AddLayout")
 	}
 	C.qute_QBoxLayout_addLayout(self, layoutPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
 	layoutH.TransferToCpp()
 }
 
@@ -172,6 +184,7 @@ func (this *QBoxLayout) AddLayout(layout QLayoutLike) {
 func (this *QBoxLayout) AddStrut(arg0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddStrut")
 	C.qute_QBoxLayout_addStrut(self, C.int(arg0))
+	runtime.KeepAlive(this)
 }
 
 // InsertSpacing wraps QBoxLayout::insertSpacing.
@@ -182,6 +195,7 @@ func (this *QBoxLayout) AddStrut(arg0 int) {
 func (this *QBoxLayout) InsertSpacing(index int, size int) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.InsertSpacing")
 	C.qute_QBoxLayout_insertSpacing(self, C.int(index), C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // InsertStretch wraps QBoxLayout::insertStretch.
@@ -192,6 +206,7 @@ func (this *QBoxLayout) InsertSpacing(index int, size int) {
 func (this *QBoxLayout) InsertStretch(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.InsertStretch")
 	C.qute_QBoxLayout_insertStretch(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // InsertSpacerItem wraps QBoxLayout::insertSpacerItem.
@@ -209,6 +224,8 @@ func (this *QBoxLayout) InsertSpacerItem(index int, spacerItem QSpacerItemLike) 
 		spacerItemPtr, spacerItemH = rt.Arg(unsafe.Pointer(spacerItem.AsQSpacerItem()), "QBoxLayout.InsertSpacerItem")
 	}
 	C.qute_QBoxLayout_insertSpacerItem(self, C.int(index), spacerItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(spacerItem)
 	spacerItemH.TransferToCpp()
 }
 
@@ -227,6 +244,8 @@ func (this *QBoxLayout) InsertWidget(index int, widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QBoxLayout.InsertWidget")
 	}
 	C.qute_QBoxLayout_insertWidget(self, C.int(index), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -245,6 +264,8 @@ func (this *QBoxLayout) InsertLayout(index int, layout QLayoutLike) {
 		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QBoxLayout.InsertLayout")
 	}
 	C.qute_QBoxLayout_insertLayout(self, C.int(index), layoutPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
 	layoutH.TransferToCpp()
 }
 
@@ -263,6 +284,8 @@ func (this *QBoxLayout) InsertItem(index int, layoutItem QLayoutItemLike) {
 		layoutItemPtr, layoutItemH = rt.Arg(unsafe.Pointer(layoutItem.AsQLayoutItem()), "QBoxLayout.InsertItem")
 	}
 	C.qute_QBoxLayout_insertItem(self, C.int(index), layoutItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layoutItem)
 	layoutItemH.TransferToCpp()
 }
 
@@ -278,6 +301,8 @@ func (this *QBoxLayout) SetStretchFactor(w QWidgetLike, stretch int) bool {
 		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QBoxLayout.SetStretchFactor")
 	}
 	r := C.qute_QBoxLayout_setStretchFactor(self, wPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
 	return bool(r)
 }
 
@@ -293,6 +318,8 @@ func (this *QBoxLayout) SetLayoutStretchFactor(l QLayoutLike, stretch int) bool 
 		lPtr = rt.UseArg(unsafe.Pointer(l.AsQLayout()), "QBoxLayout.SetLayoutStretchFactor")
 	}
 	r := C.qute_QBoxLayout_setStretchFactor_1(self, lPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
 	return bool(r)
 }
 
@@ -304,6 +331,7 @@ func (this *QBoxLayout) SetLayoutStretchFactor(l QLayoutLike, stretch int) bool 
 func (this *QBoxLayout) SetStretch(index int, stretch int) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.SetStretch")
 	C.qute_QBoxLayout_setStretch(self, C.int(index), C.int(stretch))
+	runtime.KeepAlive(this)
 }
 
 // Stretch wraps QBoxLayout::stretch.
@@ -314,6 +342,7 @@ func (this *QBoxLayout) SetStretch(index int, stretch int) {
 func (this *QBoxLayout) Stretch(index int) int {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.Stretch")
 	r := C.qute_QBoxLayout_stretch(self, C.int(index))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -325,6 +354,7 @@ func (this *QBoxLayout) Stretch(index int) int {
 func (this *QBoxLayout) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.SizeHint")
 	r := C.qute_QBoxLayout_sizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -336,6 +366,7 @@ func (this *QBoxLayout) SizeHint() qtcore.QSize {
 func (this *QBoxLayout) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.HasHeightForWidth")
 	r := C.qute_QBoxLayout_hasHeightForWidth(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -347,6 +378,7 @@ func (this *QBoxLayout) HasHeightForWidth() bool {
 func (this *QBoxLayout) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.HeightForWidth")
 	r := C.qute_QBoxLayout_heightForWidth(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -358,5 +390,6 @@ func (this *QBoxLayout) HeightForWidth(arg0 int) int {
 func (this *QBoxLayout) MinimumHeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.MinimumHeightForWidth")
 	r := C.qute_QBoxLayout_minimumHeightForWidth(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return int(r)
 }

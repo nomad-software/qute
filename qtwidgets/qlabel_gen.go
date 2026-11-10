@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQLabel(parent QWidgetLike) *QLabel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabel")
 	}
 	p := C.qute_QLabel_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQLabelWithText(text string, parent QWidgetLike) *QLabel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelWithText")
 	}
 	p := C.qute_QLabel_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQLabelWithText(text string, parent QWidgetLike) *QLabel {
 func (this *QLabel) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Text")
 	r := C.qute_QLabel_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -113,6 +117,7 @@ func (this *QLabel) Text() string {
 func (this *QLabel) Pixmap() *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Pixmap")
 	r := C.qute_QLabel_pixmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -126,6 +131,7 @@ func (this *QLabel) Pixmap() *qtgui.QPixmap {
 func (this *QLabel) Picture() *qtgui.QPicture {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Picture")
 	r := C.qute_QLabel_picture(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPicture](rt.WrapClass(r, "QPicture", rt.TakeOwned), r)
 }
 
@@ -139,6 +145,7 @@ func (this *QLabel) Picture() *qtgui.QPicture {
 func (this *QLabel) Movie() *qtgui.QMovie {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Movie")
 	r := C.qute_QLabel_movie(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QMovie](rt.WrapClass(r, "QMovie", rt.KeepOrBorrow), r)
 }
 
@@ -150,6 +157,7 @@ func (this *QLabel) Movie() *qtgui.QMovie {
 func (this *QLabel) TextFormat() qtcore.TextFormat {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.TextFormat")
 	r := C.qute_QLabel_textFormat(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextFormat(r)
 }
 
@@ -161,6 +169,7 @@ func (this *QLabel) TextFormat() qtcore.TextFormat {
 func (this *QLabel) SetTextFormat(textFormat qtcore.TextFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetTextFormat")
 	C.qute_QLabel_setTextFormat(self, C.int64_t(textFormat))
+	runtime.KeepAlive(this)
 }
 
 // SetResourceProvider wraps QLabel::setResourceProvider.
@@ -177,6 +186,7 @@ func (this *QLabel) SetResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVar
 		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLabel.SetResourceProvider")
 	})
 	C.qute_QLabel_setResourceProvider(self, C.uintptr_t(providerID))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QLabel::alignment.
@@ -187,6 +197,7 @@ func (this *QLabel) SetResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVar
 func (this *QLabel) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Alignment")
 	r := C.qute_QLabel_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -198,6 +209,7 @@ func (this *QLabel) Alignment() qtcore.Alignment {
 func (this *QLabel) SetAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetAlignment")
 	C.qute_QLabel_setAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // SetWordWrap wraps QLabel::setWordWrap.
@@ -208,6 +220,7 @@ func (this *QLabel) SetAlignment(alignment qtcore.Alignment) {
 func (this *QLabel) SetWordWrap(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetWordWrap")
 	C.qute_QLabel_setWordWrap(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // WordWrap wraps QLabel::wordWrap.
@@ -218,6 +231,7 @@ func (this *QLabel) SetWordWrap(on bool) {
 func (this *QLabel) WordWrap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.WordWrap")
 	r := C.qute_QLabel_wordWrap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -229,6 +243,7 @@ func (this *QLabel) WordWrap() bool {
 func (this *QLabel) Indent() int {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Indent")
 	r := C.qute_QLabel_indent(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -240,6 +255,7 @@ func (this *QLabel) Indent() int {
 func (this *QLabel) SetIndent(indent int) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetIndent")
 	C.qute_QLabel_setIndent(self, C.int(indent))
+	runtime.KeepAlive(this)
 }
 
 // Margin wraps QLabel::margin.
@@ -250,6 +266,7 @@ func (this *QLabel) SetIndent(indent int) {
 func (this *QLabel) Margin() int {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Margin")
 	r := C.qute_QLabel_margin(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -261,6 +278,7 @@ func (this *QLabel) Margin() int {
 func (this *QLabel) SetMargin(margin int) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetMargin")
 	C.qute_QLabel_setMargin(self, C.int(margin))
+	runtime.KeepAlive(this)
 }
 
 // HasScaledContents wraps QLabel::hasScaledContents.
@@ -271,6 +289,7 @@ func (this *QLabel) SetMargin(margin int) {
 func (this *QLabel) HasScaledContents() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.HasScaledContents")
 	r := C.qute_QLabel_hasScaledContents(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -282,6 +301,7 @@ func (this *QLabel) HasScaledContents() bool {
 func (this *QLabel) SetScaledContents(scaledContents bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetScaledContents")
 	C.qute_QLabel_setScaledContents(self, C.bool(scaledContents))
+	runtime.KeepAlive(this)
 }
 
 // SetBuddy wraps QLabel::setBuddy.
@@ -296,6 +316,8 @@ func (this *QLabel) SetBuddy(buddy QWidgetLike) {
 		buddyPtr = rt.UseArg(unsafe.Pointer(buddy.AsQWidget()), "QLabel.SetBuddy")
 	}
 	C.qute_QLabel_setBuddy(self, buddyPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(buddy)
 }
 
 // Buddy wraps QLabel::buddy.
@@ -308,6 +330,7 @@ func (this *QLabel) SetBuddy(buddy QWidgetLike) {
 func (this *QLabel) Buddy() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Buddy")
 	r := C.qute_QLabel_buddy(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -319,6 +342,7 @@ func (this *QLabel) Buddy() *QWidget {
 func (this *QLabel) OpenExternalLinks() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.OpenExternalLinks")
 	r := C.qute_QLabel_openExternalLinks(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -330,6 +354,7 @@ func (this *QLabel) OpenExternalLinks() bool {
 func (this *QLabel) SetOpenExternalLinks(open bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetOpenExternalLinks")
 	C.qute_QLabel_setOpenExternalLinks(self, C.bool(open))
+	runtime.KeepAlive(this)
 }
 
 // SetTextInteractionFlags wraps QLabel::setTextInteractionFlags.
@@ -340,6 +365,7 @@ func (this *QLabel) SetOpenExternalLinks(open bool) {
 func (this *QLabel) SetTextInteractionFlags(flags qtcore.TextInteractionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetTextInteractionFlags")
 	C.qute_QLabel_setTextInteractionFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // TextInteractionFlags wraps QLabel::textInteractionFlags.
@@ -350,6 +376,7 @@ func (this *QLabel) SetTextInteractionFlags(flags qtcore.TextInteractionFlags) {
 func (this *QLabel) TextInteractionFlags() qtcore.TextInteractionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.TextInteractionFlags")
 	r := C.qute_QLabel_textInteractionFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextInteractionFlags(r)
 }
 
@@ -361,6 +388,7 @@ func (this *QLabel) TextInteractionFlags() qtcore.TextInteractionFlags {
 func (this *QLabel) SetSelection(arg0 int, arg1 int) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetSelection")
 	C.qute_QLabel_setSelection(self, C.int(arg0), C.int(arg1))
+	runtime.KeepAlive(this)
 }
 
 // HasSelectedText wraps QLabel::hasSelectedText.
@@ -371,6 +399,7 @@ func (this *QLabel) SetSelection(arg0 int, arg1 int) {
 func (this *QLabel) HasSelectedText() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.HasSelectedText")
 	r := C.qute_QLabel_hasSelectedText(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -382,6 +411,7 @@ func (this *QLabel) HasSelectedText() bool {
 func (this *QLabel) SelectedText() string {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SelectedText")
 	r := C.qute_QLabel_selectedText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -393,6 +423,7 @@ func (this *QLabel) SelectedText() string {
 func (this *QLabel) SelectionStart() int {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SelectionStart")
 	r := C.qute_QLabel_selectionStart(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -404,6 +435,7 @@ func (this *QLabel) SelectionStart() int {
 func (this *QLabel) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetText")
 	C.qute_QLabel_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetPixmap wraps QLabel::setPixmap.
@@ -414,6 +446,8 @@ func (this *QLabel) SetText(text string) {
 func (this *QLabel) SetPixmap(pixmap *qtgui.QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetPixmap")
 	C.qute_QLabel_setPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QLabel.SetPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // SetPicture wraps QLabel::setPicture.
@@ -424,6 +458,8 @@ func (this *QLabel) SetPixmap(pixmap *qtgui.QPixmap) {
 func (this *QLabel) SetPicture(picture *qtgui.QPicture) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetPicture")
 	C.qute_QLabel_setPicture(self, rt.UseArg(unsafe.Pointer(picture), "QLabel.SetPicture"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(picture)
 }
 
 // SetMovie wraps QLabel::setMovie.
@@ -440,6 +476,8 @@ func (this *QLabel) SetMovie(movie qtgui.QMovieLike) {
 		moviePtr = rt.UseArg(unsafe.Pointer(movie.AsQMovie()), "QLabel.SetMovie")
 	}
 	C.qute_QLabel_setMovie(self, moviePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(movie)
 }
 
 // SetNum wraps QLabel::setNum.
@@ -450,6 +488,7 @@ func (this *QLabel) SetMovie(movie qtgui.QMovieLike) {
 func (this *QLabel) SetNum(num int) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetNum")
 	C.qute_QLabel_setNum(self, C.int(num))
+	runtime.KeepAlive(this)
 }
 
 // SetNumFloat wraps QLabel::setNum.
@@ -460,6 +499,7 @@ func (this *QLabel) SetNum(num int) {
 func (this *QLabel) SetNumFloat(num float64) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetNumFloat")
 	C.qute_QLabel_setNum_1(self, C.double(num))
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QLabel::clear.
@@ -470,6 +510,7 @@ func (this *QLabel) SetNumFloat(num float64) {
 func (this *QLabel) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.Clear")
 	C.qute_QLabel_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitLinkActivated wraps emitting the linkActivated signal.
@@ -480,6 +521,7 @@ func (this *QLabel) Clear() {
 func (this *QLabel) EmitLinkActivated(link string) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.EmitLinkActivated")
 	C.qute_QLabel_linkActivated_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(link))), C.ptrdiff_t(len(link)))
+	runtime.KeepAlive(this)
 }
 
 // EmitLinkHovered wraps emitting the linkHovered signal.
@@ -490,6 +532,7 @@ func (this *QLabel) EmitLinkActivated(link string) {
 func (this *QLabel) EmitLinkHovered(link string) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.EmitLinkHovered")
 	C.qute_QLabel_linkHovered_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(link))), C.ptrdiff_t(len(link)))
+	runtime.KeepAlive(this)
 }
 
 // OnLinkActivated connects f to the linkActivated signal. The connection ends when the
@@ -857,19 +900,25 @@ type QLabelSuper struct{ this *QLabel }
 // SizeHint calls QLabel::sizeHint.
 func (s *QLabelSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QLabel.Super.SizeHint")
-	return goQSize(C.qute_QLabel_super_0(self))
+	r := C.qute_QLabel_super_0(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // MinimumSizeHint calls QLabel::minimumSizeHint.
 func (s *QLabelSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QLabel.Super.MinimumSizeHint")
-	return goQSize(C.qute_QLabel_super_1(self))
+	r := C.qute_QLabel_super_1(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // HeightForWidth calls QLabel::heightForWidth.
 func (s *QLabelSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QLabel.Super.HeightForWidth")
-	return int(C.qute_QLabel_super_2(self, C.int(arg0)))
+	r := C.qute_QLabel_super_2(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // Event calls QLabel::event.
@@ -879,7 +928,10 @@ func (s *QLabelSuper) Event(eArg *qtcore.QEvent) bool {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QLabel.Super.Event")
 	}
-	return bool(C.qute_QLabel_super_3(self, eArgPtr))
+	r := C.qute_QLabel_super_3(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+	return bool(r)
 }
 
 // KeyPressEvent calls QLabel::keyPressEvent.
@@ -890,6 +942,8 @@ func (s *QLabelSuper) KeyPressEvent(ev *qtgui.QKeyEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQKeyEvent()), "QLabel.Super.KeyPressEvent")
 	}
 	C.qute_QLabel_super_4(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // PaintEvent calls QLabel::paintEvent.
@@ -900,6 +954,8 @@ func (s *QLabelSuper) PaintEvent(paintEvent *qtgui.QPaintEvent) {
 		paintEventPtr = rt.UseArg(unsafe.Pointer(paintEvent.AsQPaintEvent()), "QLabel.Super.PaintEvent")
 	}
 	C.qute_QLabel_super_5(self, paintEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(paintEvent)
 }
 
 // ChangeEvent calls QLabel::changeEvent.
@@ -910,6 +966,8 @@ func (s *QLabelSuper) ChangeEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLabel.Super.ChangeEvent")
 	}
 	C.qute_QLabel_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MousePressEvent calls QLabel::mousePressEvent.
@@ -920,6 +978,8 @@ func (s *QLabelSuper) MousePressEvent(ev *qtgui.QMouseEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQMouseEvent()), "QLabel.Super.MousePressEvent")
 	}
 	C.qute_QLabel_super_7(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // MouseMoveEvent calls QLabel::mouseMoveEvent.
@@ -930,6 +990,8 @@ func (s *QLabelSuper) MouseMoveEvent(ev *qtgui.QMouseEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQMouseEvent()), "QLabel.Super.MouseMoveEvent")
 	}
 	C.qute_QLabel_super_8(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // MouseReleaseEvent calls QLabel::mouseReleaseEvent.
@@ -940,6 +1002,8 @@ func (s *QLabelSuper) MouseReleaseEvent(ev *qtgui.QMouseEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQMouseEvent()), "QLabel.Super.MouseReleaseEvent")
 	}
 	C.qute_QLabel_super_9(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // ContextMenuEvent calls QLabel::contextMenuEvent.
@@ -950,6 +1014,8 @@ func (s *QLabelSuper) ContextMenuEvent(ev *qtgui.QContextMenuEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQContextMenuEvent()), "QLabel.Super.ContextMenuEvent")
 	}
 	C.qute_QLabel_super_10(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // FocusInEvent calls QLabel::focusInEvent.
@@ -960,6 +1026,8 @@ func (s *QLabelSuper) FocusInEvent(ev *qtgui.QFocusEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQFocusEvent()), "QLabel.Super.FocusInEvent")
 	}
 	C.qute_QLabel_super_11(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // FocusOutEvent calls QLabel::focusOutEvent.
@@ -970,24 +1038,31 @@ func (s *QLabelSuper) FocusOutEvent(ev *qtgui.QFocusEvent) {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQFocusEvent()), "QLabel.Super.FocusOutEvent")
 	}
 	C.qute_QLabel_super_12(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
 }
 
 // FocusNextPrevChild calls QLabel::focusNextPrevChild.
 func (s *QLabelSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QLabel.Super.FocusNextPrevChild")
-	return bool(C.qute_QLabel_super_13(self, C.bool(next)))
+	r := C.qute_QLabel_super_13(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // SetVisible calls QWidget::setVisible.
 func (s *QLabelSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QLabel.Super.SetVisible")
 	C.qute_QLabel_super_14(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
 }
 
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QLabelSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QLabel.Super.HasHeightForWidth")
-	return bool(C.qute_QLabel_super_15(self))
+	r := C.qute_QLabel_super_15(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // MouseDoubleClickEvent calls QWidget::mouseDoubleClickEvent.
@@ -998,6 +1073,8 @@ func (s *QLabelSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QLabel.Super.MouseDoubleClickEvent")
 	}
 	C.qute_QLabel_super_16(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // WheelEvent calls QWidget::wheelEvent.
@@ -1008,6 +1085,8 @@ func (s *QLabelSuper) WheelEvent(event *qtgui.QWheelEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QLabel.Super.WheelEvent")
 	}
 	C.qute_QLabel_super_17(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // KeyReleaseEvent calls QWidget::keyReleaseEvent.
@@ -1018,6 +1097,8 @@ func (s *QLabelSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QLabel.Super.KeyReleaseEvent")
 	}
 	C.qute_QLabel_super_18(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // EnterEvent calls QWidget::enterEvent.
@@ -1028,6 +1109,8 @@ func (s *QLabelSuper) EnterEvent(event *qtgui.QEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QLabel.Super.EnterEvent")
 	}
 	C.qute_QLabel_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // LeaveEvent calls QWidget::leaveEvent.
@@ -1038,6 +1121,8 @@ func (s *QLabelSuper) LeaveEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLabel.Super.LeaveEvent")
 	}
 	C.qute_QLabel_super_20(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MoveEvent calls QWidget::moveEvent.
@@ -1048,6 +1133,8 @@ func (s *QLabelSuper) MoveEvent(event *qtgui.QMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QLabel.Super.MoveEvent")
 	}
 	C.qute_QLabel_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ResizeEvent calls QWidget::resizeEvent.
@@ -1058,6 +1145,8 @@ func (s *QLabelSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QLabel.Super.ResizeEvent")
 	}
 	C.qute_QLabel_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CloseEvent calls QWidget::closeEvent.
@@ -1068,6 +1157,8 @@ func (s *QLabelSuper) CloseEvent(event *qtgui.QCloseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QLabel.Super.CloseEvent")
 	}
 	C.qute_QLabel_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragEnterEvent calls QWidget::dragEnterEvent.
@@ -1078,6 +1169,8 @@ func (s *QLabelSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QLabel.Super.DragEnterEvent")
 	}
 	C.qute_QLabel_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragMoveEvent calls QWidget::dragMoveEvent.
@@ -1088,6 +1181,8 @@ func (s *QLabelSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QLabel.Super.DragMoveEvent")
 	}
 	C.qute_QLabel_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragLeaveEvent calls QWidget::dragLeaveEvent.
@@ -1098,6 +1193,8 @@ func (s *QLabelSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QLabel.Super.DragLeaveEvent")
 	}
 	C.qute_QLabel_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DropEvent calls QWidget::dropEvent.
@@ -1108,6 +1205,8 @@ func (s *QLabelSuper) DropEvent(event *qtgui.QDropEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QLabel.Super.DropEvent")
 	}
 	C.qute_QLabel_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ShowEvent calls QWidget::showEvent.
@@ -1118,6 +1217,8 @@ func (s *QLabelSuper) ShowEvent(event *qtgui.QShowEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QLabel.Super.ShowEvent")
 	}
 	C.qute_QLabel_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // HideEvent calls QWidget::hideEvent.
@@ -1128,6 +1229,8 @@ func (s *QLabelSuper) HideEvent(event *qtgui.QHideEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QLabel.Super.HideEvent")
 	}
 	C.qute_QLabel_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -1141,7 +1244,11 @@ func (s *QLabelSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLabel.Super.EventFilter")
 	}
-	return bool(C.qute_QLabel_super_30(self, watchedPtr, eventPtr))
+	r := C.qute_QLabel_super_30(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // TimerEvent calls QObject::timerEvent.
@@ -1152,6 +1259,8 @@ func (s *QLabelSuper) TimerEvent(event *qtcore.QTimerEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QLabel.Super.TimerEvent")
 	}
 	C.qute_QLabel_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -1162,6 +1271,8 @@ func (s *QLabelSuper) ChildEvent(event *qtcore.QChildEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QLabel.Super.ChildEvent")
 	}
 	C.qute_QLabel_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -1172,6 +1283,8 @@ func (s *QLabelSuper) CustomEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLabel.Super.CustomEvent")
 	}
 	C.qute_QLabel_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DrawFrame wraps the protected QFrame::drawFrame for subclasses.
@@ -1182,30 +1295,36 @@ func (b *QLabelBase) DrawFrame(painter qtgui.QPainterLike) {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QLabel.DrawFrame")
 	}
 	C.qute_QLabel_prot_drawFrame(self, painterPtr)
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(painter)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QLabelBase) UpdateMicroFocus() {
 	self := rt.Use(unsafe.Pointer(b.QLabel), "QLabel.UpdateMicroFocus")
 	C.qute_QLabel_prot_updateMicroFocus(self)
+	runtime.KeepAlive(b)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QLabelBase) Create() {
 	self := rt.Use(unsafe.Pointer(b.QLabel), "QLabel.Create")
 	C.qute_QLabel_prot_create(self)
+	runtime.KeepAlive(b)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QLabelBase) Destroy() {
 	self := rt.Use(unsafe.Pointer(b.QLabel), "QLabel.Destroy")
 	C.qute_QLabel_prot_destroy(self)
+	runtime.KeepAlive(b)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QLabelBase) FocusNextChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QLabel), "QLabel.FocusNextChild")
 	r := C.qute_QLabel_prot_focusNextChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1213,6 +1332,7 @@ func (b *QLabelBase) FocusNextChild() bool {
 func (b *QLabelBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QLabel), "QLabel.FocusPreviousChild")
 	r := C.qute_QLabel_prot_focusPreviousChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1220,6 +1340,7 @@ func (b *QLabelBase) FocusPreviousChild() bool {
 func (b *QLabelBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
 	self := rt.Use(unsafe.Pointer(b.QLabel), "QLabel.GetDecodedMetricF")
 	r := C.qute_QLabel_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(b)
 	return float64(r)
 }
 
@@ -1237,6 +1358,7 @@ func NewQLabelWith(v QLabelSubclass, parent QWidgetLike) *QLabel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelWith")
 	}
 	p := C.qute_QLabel_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQGraphicsTextItem(parent QGraphicsItemLike) *QGraphicsTextItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsTextItem")
 	}
 	p := C.qute_QGraphicsTextItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQGraphicsTextItemWithText(text string, parent QGraphicsItemLike) *QGraph
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsTextItemWithText")
 	}
 	p := C.qute_QGraphicsTextItem_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQGraphicsTextItemWithText(text string, parent QGraphicsItemLike) *QGraph
 func (this *QGraphicsTextItem) ToHtml() string {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.ToHtml")
 	r := C.qute_QGraphicsTextItem_toHtml(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -111,6 +115,7 @@ func (this *QGraphicsTextItem) ToHtml() string {
 func (this *QGraphicsTextItem) SetHtml(html string) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetHtml")
 	C.qute_QGraphicsTextItem_setHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(html))), C.ptrdiff_t(len(html)))
+	runtime.KeepAlive(this)
 }
 
 // ToPlainText wraps QGraphicsTextItem::toPlainText.
@@ -121,6 +126,7 @@ func (this *QGraphicsTextItem) SetHtml(html string) {
 func (this *QGraphicsTextItem) ToPlainText() string {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.ToPlainText")
 	r := C.qute_QGraphicsTextItem_toPlainText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -132,6 +138,7 @@ func (this *QGraphicsTextItem) ToPlainText() string {
 func (this *QGraphicsTextItem) SetPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetPlainText")
 	C.qute_QGraphicsTextItem_setPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Font wraps QGraphicsTextItem::font.
@@ -144,6 +151,7 @@ func (this *QGraphicsTextItem) SetPlainText(text string) {
 func (this *QGraphicsTextItem) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.Font")
 	r := C.qute_QGraphicsTextItem_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -155,6 +163,8 @@ func (this *QGraphicsTextItem) Font() *qtgui.QFont {
 func (this *QGraphicsTextItem) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetFont")
 	C.qute_QGraphicsTextItem_setFont(self, rt.UseArg(unsafe.Pointer(font), "QGraphicsTextItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // SetDefaultTextColor wraps QGraphicsTextItem::setDefaultTextColor.
@@ -165,6 +175,7 @@ func (this *QGraphicsTextItem) SetFont(font *qtgui.QFont) {
 func (this *QGraphicsTextItem) SetDefaultTextColor(c qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetDefaultTextColor")
 	C.qute_QGraphicsTextItem_setDefaultTextColor(self, cQColor(c))
+	runtime.KeepAlive(this)
 }
 
 // DefaultTextColor wraps QGraphicsTextItem::defaultTextColor.
@@ -175,6 +186,7 @@ func (this *QGraphicsTextItem) SetDefaultTextColor(c qtgui.QColor) {
 func (this *QGraphicsTextItem) DefaultTextColor() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.DefaultTextColor")
 	r := C.qute_QGraphicsTextItem_defaultTextColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -186,6 +198,7 @@ func (this *QGraphicsTextItem) DefaultTextColor() qtgui.QColor {
 func (this *QGraphicsTextItem) BoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.BoundingRect")
 	r := C.qute_QGraphicsTextItem_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -199,6 +212,7 @@ func (this *QGraphicsTextItem) BoundingRect() qtcore.QRectF {
 func (this *QGraphicsTextItem) Shape() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.Shape")
 	r := C.qute_QGraphicsTextItem_shape(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -210,6 +224,7 @@ func (this *QGraphicsTextItem) Shape() *qtgui.QPainterPath {
 func (this *QGraphicsTextItem) Contains(point qtcore.QPointF) bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.Contains")
 	r := C.qute_QGraphicsTextItem_contains(self, cQPointF(point))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -229,6 +244,10 @@ func (this *QGraphicsTextItem) Paint(painter qtgui.QPainterLike, option *QStyleO
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsTextItem.Paint")
 	}
 	C.qute_QGraphicsTextItem_paint(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsTextItem.Paint"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
 }
 
 // IsObscuredBy wraps QGraphicsTextItem::isObscuredBy.
@@ -243,6 +262,8 @@ func (this *QGraphicsTextItem) IsObscuredBy(item QGraphicsItemLike) bool {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsTextItem.IsObscuredBy")
 	}
 	r := C.qute_QGraphicsTextItem_isObscuredBy(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return bool(r)
 }
 
@@ -256,6 +277,7 @@ func (this *QGraphicsTextItem) IsObscuredBy(item QGraphicsItemLike) bool {
 func (this *QGraphicsTextItem) OpaqueArea() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.OpaqueArea")
 	r := C.qute_QGraphicsTextItem_opaqueArea(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -267,6 +289,7 @@ func (this *QGraphicsTextItem) OpaqueArea() *qtgui.QPainterPath {
 func (this *QGraphicsTextItem) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.Type")
 	r := C.qute_QGraphicsTextItem_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -278,6 +301,7 @@ func (this *QGraphicsTextItem) Type() int {
 func (this *QGraphicsTextItem) SetTextWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetTextWidth")
 	C.qute_QGraphicsTextItem_setTextWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // TextWidth wraps QGraphicsTextItem::textWidth.
@@ -288,6 +312,7 @@ func (this *QGraphicsTextItem) SetTextWidth(width float64) {
 func (this *QGraphicsTextItem) TextWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.TextWidth")
 	r := C.qute_QGraphicsTextItem_textWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -299,6 +324,7 @@ func (this *QGraphicsTextItem) TextWidth() float64 {
 func (this *QGraphicsTextItem) AdjustSize() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.AdjustSize")
 	C.qute_QGraphicsTextItem_adjustSize(self)
+	runtime.KeepAlive(this)
 }
 
 // SetDocument wraps QGraphicsTextItem::setDocument.
@@ -315,6 +341,8 @@ func (this *QGraphicsTextItem) SetDocument(document qtgui.QTextDocumentLike) {
 		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "QGraphicsTextItem.SetDocument")
 	}
 	C.qute_QGraphicsTextItem_setDocument(self, documentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(document)
 }
 
 // Document wraps QGraphicsTextItem::document.
@@ -327,6 +355,7 @@ func (this *QGraphicsTextItem) SetDocument(document qtgui.QTextDocumentLike) {
 func (this *QGraphicsTextItem) Document() *qtgui.QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.Document")
 	r := C.qute_QGraphicsTextItem_document(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }
 
@@ -338,6 +367,7 @@ func (this *QGraphicsTextItem) Document() *qtgui.QTextDocument {
 func (this *QGraphicsTextItem) SetTextInteractionFlags(flags qtcore.TextInteractionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetTextInteractionFlags")
 	C.qute_QGraphicsTextItem_setTextInteractionFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // TextInteractionFlags wraps QGraphicsTextItem::textInteractionFlags.
@@ -348,6 +378,7 @@ func (this *QGraphicsTextItem) SetTextInteractionFlags(flags qtcore.TextInteract
 func (this *QGraphicsTextItem) TextInteractionFlags() qtcore.TextInteractionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.TextInteractionFlags")
 	r := C.qute_QGraphicsTextItem_textInteractionFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextInteractionFlags(r)
 }
 
@@ -359,6 +390,7 @@ func (this *QGraphicsTextItem) TextInteractionFlags() qtcore.TextInteractionFlag
 func (this *QGraphicsTextItem) SetTabChangesFocus(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetTabChangesFocus")
 	C.qute_QGraphicsTextItem_setTabChangesFocus(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // TabChangesFocus wraps QGraphicsTextItem::tabChangesFocus.
@@ -369,6 +401,7 @@ func (this *QGraphicsTextItem) SetTabChangesFocus(bArg bool) {
 func (this *QGraphicsTextItem) TabChangesFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.TabChangesFocus")
 	r := C.qute_QGraphicsTextItem_tabChangesFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -380,6 +413,7 @@ func (this *QGraphicsTextItem) TabChangesFocus() bool {
 func (this *QGraphicsTextItem) SetOpenExternalLinks(open bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetOpenExternalLinks")
 	C.qute_QGraphicsTextItem_setOpenExternalLinks(self, C.bool(open))
+	runtime.KeepAlive(this)
 }
 
 // OpenExternalLinks wraps QGraphicsTextItem::openExternalLinks.
@@ -390,6 +424,7 @@ func (this *QGraphicsTextItem) SetOpenExternalLinks(open bool) {
 func (this *QGraphicsTextItem) OpenExternalLinks() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.OpenExternalLinks")
 	r := C.qute_QGraphicsTextItem_openExternalLinks(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -401,6 +436,8 @@ func (this *QGraphicsTextItem) OpenExternalLinks() bool {
 func (this *QGraphicsTextItem) SetTextCursor(cursor *qtgui.QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.SetTextCursor")
 	C.qute_QGraphicsTextItem_setTextCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QGraphicsTextItem.SetTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // TextCursor wraps QGraphicsTextItem::textCursor.
@@ -413,6 +450,7 @@ func (this *QGraphicsTextItem) SetTextCursor(cursor *qtgui.QTextCursor) {
 func (this *QGraphicsTextItem) TextCursor() *qtgui.QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.TextCursor")
 	r := C.qute_QGraphicsTextItem_textCursor(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -424,6 +462,7 @@ func (this *QGraphicsTextItem) TextCursor() *qtgui.QTextCursor {
 func (this *QGraphicsTextItem) EmitLinkActivated(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.EmitLinkActivated")
 	C.qute_QGraphicsTextItem_linkActivated_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitLinkHovered wraps emitting the linkHovered signal.
@@ -434,6 +473,7 @@ func (this *QGraphicsTextItem) EmitLinkActivated(stringArg string) {
 func (this *QGraphicsTextItem) EmitLinkHovered(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.EmitLinkHovered")
 	C.qute_QGraphicsTextItem_linkHovered_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // OnLinkActivated connects f to the linkActivated signal. The connection ends when the

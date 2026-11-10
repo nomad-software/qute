@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQStaticTextWithText(text string) *QStaticText {
 func (this *QStaticText) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.SetText")
 	C.qute_QStaticText_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QStaticText::text.
@@ -119,6 +121,7 @@ func (this *QStaticText) SetText(text string) {
 func (this *QStaticText) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.Text")
 	r := C.qute_QStaticText_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -130,6 +133,7 @@ func (this *QStaticText) Text() string {
 func (this *QStaticText) SetTextFormat(textFormat qtcore.TextFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.SetTextFormat")
 	C.qute_QStaticText_setTextFormat(self, C.int64_t(textFormat))
+	runtime.KeepAlive(this)
 }
 
 // TextFormat wraps QStaticText::textFormat.
@@ -140,6 +144,7 @@ func (this *QStaticText) SetTextFormat(textFormat qtcore.TextFormat) {
 func (this *QStaticText) TextFormat() qtcore.TextFormat {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.TextFormat")
 	r := C.qute_QStaticText_textFormat(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextFormat(r)
 }
 
@@ -151,6 +156,7 @@ func (this *QStaticText) TextFormat() qtcore.TextFormat {
 func (this *QStaticText) SetTextWidth(textWidth float64) {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.SetTextWidth")
 	C.qute_QStaticText_setTextWidth(self, C.double(textWidth))
+	runtime.KeepAlive(this)
 }
 
 // TextWidth wraps QStaticText::textWidth.
@@ -161,6 +167,7 @@ func (this *QStaticText) SetTextWidth(textWidth float64) {
 func (this *QStaticText) TextWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.TextWidth")
 	r := C.qute_QStaticText_textWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -172,6 +179,8 @@ func (this *QStaticText) TextWidth() float64 {
 func (this *QStaticText) SetTextOption(textOption *QTextOption) {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.SetTextOption")
 	C.qute_QStaticText_setTextOption(self, rt.UseArg(unsafe.Pointer(textOption), "QStaticText.SetTextOption"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textOption)
 }
 
 // TextOption wraps QStaticText::textOption.
@@ -184,6 +193,7 @@ func (this *QStaticText) SetTextOption(textOption *QTextOption) {
 func (this *QStaticText) TextOption() *QTextOption {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.TextOption")
 	r := C.qute_QStaticText_textOption(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextOption](rt.WrapClass(r, "QTextOption", rt.TakeOwned), r)
 }
 
@@ -195,6 +205,7 @@ func (this *QStaticText) TextOption() *QTextOption {
 func (this *QStaticText) Size() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.Size")
 	r := C.qute_QStaticText_size(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -206,6 +217,7 @@ func (this *QStaticText) Size() qtcore.QSizeF {
 func (this *QStaticText) Prepare() {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.Prepare")
 	C.qute_QStaticText_prepare(self)
+	runtime.KeepAlive(this)
 }
 
 // SetPerformanceHint wraps QStaticText::setPerformanceHint.
@@ -216,6 +228,7 @@ func (this *QStaticText) Prepare() {
 func (this *QStaticText) SetPerformanceHint(performanceHint QStaticTextPerformanceHint) {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.SetPerformanceHint")
 	C.qute_QStaticText_setPerformanceHint(self, C.int64_t(performanceHint))
+	runtime.KeepAlive(this)
 }
 
 // PerformanceHint wraps QStaticText::performanceHint.
@@ -226,5 +239,6 @@ func (this *QStaticText) SetPerformanceHint(performanceHint QStaticTextPerforman
 func (this *QStaticText) PerformanceHint() QStaticTextPerformanceHint {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.PerformanceHint")
 	r := C.qute_QStaticText_performanceHint(self)
+	runtime.KeepAlive(this)
 	return QStaticTextPerformanceHint(r)
 }

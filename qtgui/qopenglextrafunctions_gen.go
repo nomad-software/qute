@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -58,6 +59,7 @@ func NewQOpenGLExtraFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpe
 		contextPtr = rt.UseArg(unsafe.Pointer(context.AsQOpenGLContext()), "NewQOpenGLExtraFunctionsWithOpenGLContext")
 	}
 	p := C.qute_QOpenGLExtraFunctions_new_1(contextPtr)
+	runtime.KeepAlive(context)
 	h := rt.WrapClass(p, "QOpenGLExtraFunctions", rt.NewOwned)
 	return rt.View[QOpenGLExtraFunctions](h, p)
 }
@@ -70,6 +72,7 @@ func NewQOpenGLExtraFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpe
 func (this *QOpenGLExtraFunctions) GlReadBuffer(mode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlReadBuffer")
 	C.qute_QOpenGLExtraFunctions_glReadBuffer(self, C.uint(mode))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawRangeElements wraps QOpenGLExtraFunctions::glDrawRangeElements.
@@ -80,6 +83,7 @@ func (this *QOpenGLExtraFunctions) GlReadBuffer(mode uint) {
 func (this *QOpenGLExtraFunctions) GlDrawRangeElements(mode uint, start uint, end uint, count int, typeArg uint, indices unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawRangeElements")
 	C.qute_QOpenGLExtraFunctions_glDrawRangeElements(self, C.uint(mode), C.uint(start), C.uint(end), C.int(count), C.uint(typeArg), indices)
+	runtime.KeepAlive(this)
 }
 
 // GlTexImage3D wraps QOpenGLExtraFunctions::glTexImage3D.
@@ -90,6 +94,7 @@ func (this *QOpenGLExtraFunctions) GlDrawRangeElements(mode uint, start uint, en
 func (this *QOpenGLExtraFunctions) GlTexImage3D(target uint, level int, internalformat int, width int, height int, depth int, border int, format uint, typeArg uint, pixels unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexImage3D")
 	C.qute_QOpenGLExtraFunctions_glTexImage3D(self, C.uint(target), C.int(level), C.int(internalformat), C.int(width), C.int(height), C.int(depth), C.int(border), C.uint(format), C.uint(typeArg), pixels)
+	runtime.KeepAlive(this)
 }
 
 // GlTexSubImage3D wraps QOpenGLExtraFunctions::glTexSubImage3D.
@@ -100,6 +105,7 @@ func (this *QOpenGLExtraFunctions) GlTexImage3D(target uint, level int, internal
 func (this *QOpenGLExtraFunctions) GlTexSubImage3D(target uint, level int, xoffset int, yoffset int, zoffset int, width int, height int, depth int, format uint, typeArg uint, pixels unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexSubImage3D")
 	C.qute_QOpenGLExtraFunctions_glTexSubImage3D(self, C.uint(target), C.int(level), C.int(xoffset), C.int(yoffset), C.int(zoffset), C.int(width), C.int(height), C.int(depth), C.uint(format), C.uint(typeArg), pixels)
+	runtime.KeepAlive(this)
 }
 
 // GlCopyTexSubImage3D wraps QOpenGLExtraFunctions::glCopyTexSubImage3D.
@@ -110,6 +116,7 @@ func (this *QOpenGLExtraFunctions) GlTexSubImage3D(target uint, level int, xoffs
 func (this *QOpenGLExtraFunctions) GlCopyTexSubImage3D(target uint, level int, xoffset int, yoffset int, zoffset int, x int, y int, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlCopyTexSubImage3D")
 	C.qute_QOpenGLExtraFunctions_glCopyTexSubImage3D(self, C.uint(target), C.int(level), C.int(xoffset), C.int(yoffset), C.int(zoffset), C.int(x), C.int(y), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlCompressedTexImage3D wraps QOpenGLExtraFunctions::glCompressedTexImage3D.
@@ -120,6 +127,7 @@ func (this *QOpenGLExtraFunctions) GlCopyTexSubImage3D(target uint, level int, x
 func (this *QOpenGLExtraFunctions) GlCompressedTexImage3D(target uint, level int, internalformat uint, width int, height int, depth int, border int, imageSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlCompressedTexImage3D")
 	C.qute_QOpenGLExtraFunctions_glCompressedTexImage3D(self, C.uint(target), C.int(level), C.uint(internalformat), C.int(width), C.int(height), C.int(depth), C.int(border), C.int(imageSize), data)
+	runtime.KeepAlive(this)
 }
 
 // GlCompressedTexSubImage3D wraps QOpenGLExtraFunctions::glCompressedTexSubImage3D.
@@ -130,6 +138,7 @@ func (this *QOpenGLExtraFunctions) GlCompressedTexImage3D(target uint, level int
 func (this *QOpenGLExtraFunctions) GlCompressedTexSubImage3D(target uint, level int, xoffset int, yoffset int, zoffset int, width int, height int, depth int, format uint, imageSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlCompressedTexSubImage3D")
 	C.qute_QOpenGLExtraFunctions_glCompressedTexSubImage3D(self, C.uint(target), C.int(level), C.int(xoffset), C.int(yoffset), C.int(zoffset), C.int(width), C.int(height), C.int(depth), C.uint(format), C.int(imageSize), data)
+	runtime.KeepAlive(this)
 }
 
 // GlGenQueries wraps QOpenGLExtraFunctions::glGenQueries.
@@ -140,6 +149,7 @@ func (this *QOpenGLExtraFunctions) GlCompressedTexSubImage3D(target uint, level 
 func (this *QOpenGLExtraFunctions) GlGenQueries(n int, ids unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGenQueries")
 	C.qute_QOpenGLExtraFunctions_glGenQueries(self, C.int(n), ids)
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteQueries wraps QOpenGLExtraFunctions::glDeleteQueries.
@@ -150,6 +160,7 @@ func (this *QOpenGLExtraFunctions) GlGenQueries(n int, ids unsafe.Pointer) {
 func (this *QOpenGLExtraFunctions) GlDeleteQueries(n int, ids unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDeleteQueries")
 	C.qute_QOpenGLExtraFunctions_glDeleteQueries(self, C.int(n), ids)
+	runtime.KeepAlive(this)
 }
 
 // GlIsQuery wraps QOpenGLExtraFunctions::glIsQuery.
@@ -160,6 +171,7 @@ func (this *QOpenGLExtraFunctions) GlDeleteQueries(n int, ids unsafe.Pointer) {
 func (this *QOpenGLExtraFunctions) GlIsQuery(idArg uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsQuery")
 	r := C.qute_QOpenGLExtraFunctions_glIsQuery(self, C.uint(idArg))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -171,6 +183,7 @@ func (this *QOpenGLExtraFunctions) GlIsQuery(idArg uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlBeginQuery(target uint, idArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBeginQuery")
 	C.qute_QOpenGLExtraFunctions_glBeginQuery(self, C.uint(target), C.uint(idArg))
+	runtime.KeepAlive(this)
 }
 
 // GlEndQuery wraps QOpenGLExtraFunctions::glEndQuery.
@@ -181,6 +194,7 @@ func (this *QOpenGLExtraFunctions) GlBeginQuery(target uint, idArg uint) {
 func (this *QOpenGLExtraFunctions) GlEndQuery(target uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlEndQuery")
 	C.qute_QOpenGLExtraFunctions_glEndQuery(self, C.uint(target))
+	runtime.KeepAlive(this)
 }
 
 // GlGetQueryiv wraps QOpenGLExtraFunctions::glGetQueryiv.
@@ -191,6 +205,7 @@ func (this *QOpenGLExtraFunctions) GlEndQuery(target uint) {
 func (this *QOpenGLExtraFunctions) GlGetQueryiv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetQueryiv")
 	C.qute_QOpenGLExtraFunctions_glGetQueryiv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetQueryObjectuiv wraps QOpenGLExtraFunctions::glGetQueryObjectuiv.
@@ -201,6 +216,7 @@ func (this *QOpenGLExtraFunctions) GlGetQueryiv(target uint, pname uint, params 
 func (this *QOpenGLExtraFunctions) GlGetQueryObjectuiv(idArg uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetQueryObjectuiv")
 	C.qute_QOpenGLExtraFunctions_glGetQueryObjectuiv(self, C.uint(idArg), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlUnmapBuffer wraps QOpenGLExtraFunctions::glUnmapBuffer.
@@ -211,6 +227,7 @@ func (this *QOpenGLExtraFunctions) GlGetQueryObjectuiv(idArg uint, pname uint, p
 func (this *QOpenGLExtraFunctions) GlUnmapBuffer(target uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUnmapBuffer")
 	r := C.qute_QOpenGLExtraFunctions_glUnmapBuffer(self, C.uint(target))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -222,6 +239,7 @@ func (this *QOpenGLExtraFunctions) GlUnmapBuffer(target uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlGetBufferPointerv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetBufferPointerv")
 	C.qute_QOpenGLExtraFunctions_glGetBufferPointerv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlDrawBuffers wraps QOpenGLExtraFunctions::glDrawBuffers.
@@ -232,6 +250,7 @@ func (this *QOpenGLExtraFunctions) GlGetBufferPointerv(target uint, pname uint, 
 func (this *QOpenGLExtraFunctions) GlDrawBuffers(n int, bufs unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawBuffers")
 	C.qute_QOpenGLExtraFunctions_glDrawBuffers(self, C.int(n), bufs)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix2x3fv wraps QOpenGLExtraFunctions::glUniformMatrix2x3fv.
@@ -242,6 +261,7 @@ func (this *QOpenGLExtraFunctions) GlDrawBuffers(n int, bufs unsafe.Pointer) {
 func (this *QOpenGLExtraFunctions) GlUniformMatrix2x3fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformMatrix2x3fv")
 	C.qute_QOpenGLExtraFunctions_glUniformMatrix2x3fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix3x2fv wraps QOpenGLExtraFunctions::glUniformMatrix3x2fv.
@@ -252,6 +272,7 @@ func (this *QOpenGLExtraFunctions) GlUniformMatrix2x3fv(location int, count int,
 func (this *QOpenGLExtraFunctions) GlUniformMatrix3x2fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformMatrix3x2fv")
 	C.qute_QOpenGLExtraFunctions_glUniformMatrix3x2fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix2x4fv wraps QOpenGLExtraFunctions::glUniformMatrix2x4fv.
@@ -262,6 +283,7 @@ func (this *QOpenGLExtraFunctions) GlUniformMatrix3x2fv(location int, count int,
 func (this *QOpenGLExtraFunctions) GlUniformMatrix2x4fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformMatrix2x4fv")
 	C.qute_QOpenGLExtraFunctions_glUniformMatrix2x4fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix4x2fv wraps QOpenGLExtraFunctions::glUniformMatrix4x2fv.
@@ -272,6 +294,7 @@ func (this *QOpenGLExtraFunctions) GlUniformMatrix2x4fv(location int, count int,
 func (this *QOpenGLExtraFunctions) GlUniformMatrix4x2fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformMatrix4x2fv")
 	C.qute_QOpenGLExtraFunctions_glUniformMatrix4x2fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix3x4fv wraps QOpenGLExtraFunctions::glUniformMatrix3x4fv.
@@ -282,6 +305,7 @@ func (this *QOpenGLExtraFunctions) GlUniformMatrix4x2fv(location int, count int,
 func (this *QOpenGLExtraFunctions) GlUniformMatrix3x4fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformMatrix3x4fv")
 	C.qute_QOpenGLExtraFunctions_glUniformMatrix3x4fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix4x3fv wraps QOpenGLExtraFunctions::glUniformMatrix4x3fv.
@@ -292,6 +316,7 @@ func (this *QOpenGLExtraFunctions) GlUniformMatrix3x4fv(location int, count int,
 func (this *QOpenGLExtraFunctions) GlUniformMatrix4x3fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformMatrix4x3fv")
 	C.qute_QOpenGLExtraFunctions_glUniformMatrix4x3fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlBlitFramebuffer wraps QOpenGLExtraFunctions::glBlitFramebuffer.
@@ -302,6 +327,7 @@ func (this *QOpenGLExtraFunctions) GlUniformMatrix4x3fv(location int, count int,
 func (this *QOpenGLExtraFunctions) GlBlitFramebuffer(srcX0 int, srcY0 int, srcX1 int, srcY1 int, dstX0 int, dstY0 int, dstX1 int, dstY1 int, maskArg uint, filter uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBlitFramebuffer")
 	C.qute_QOpenGLExtraFunctions_glBlitFramebuffer(self, C.int(srcX0), C.int(srcY0), C.int(srcX1), C.int(srcY1), C.int(dstX0), C.int(dstY0), C.int(dstX1), C.int(dstY1), C.uint(maskArg), C.uint(filter))
+	runtime.KeepAlive(this)
 }
 
 // GlRenderbufferStorageMultisample wraps QOpenGLExtraFunctions::glRenderbufferStorageMultisample.
@@ -312,6 +338,7 @@ func (this *QOpenGLExtraFunctions) GlBlitFramebuffer(srcX0 int, srcY0 int, srcX1
 func (this *QOpenGLExtraFunctions) GlRenderbufferStorageMultisample(target uint, samples int, internalformat uint, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlRenderbufferStorageMultisample")
 	C.qute_QOpenGLExtraFunctions_glRenderbufferStorageMultisample(self, C.uint(target), C.int(samples), C.uint(internalformat), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlFramebufferTextureLayer wraps QOpenGLExtraFunctions::glFramebufferTextureLayer.
@@ -322,6 +349,7 @@ func (this *QOpenGLExtraFunctions) GlRenderbufferStorageMultisample(target uint,
 func (this *QOpenGLExtraFunctions) GlFramebufferTextureLayer(target uint, attachment uint, texture uint, level int, layer int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlFramebufferTextureLayer")
 	C.qute_QOpenGLExtraFunctions_glFramebufferTextureLayer(self, C.uint(target), C.uint(attachment), C.uint(texture), C.int(level), C.int(layer))
+	runtime.KeepAlive(this)
 }
 
 // GlMapBufferRange wraps QOpenGLExtraFunctions::glMapBufferRange.
@@ -332,6 +360,7 @@ func (this *QOpenGLExtraFunctions) GlFramebufferTextureLayer(target uint, attach
 func (this *QOpenGLExtraFunctions) GlMapBufferRange(target uint, offset int64, length int64, access uint) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlMapBufferRange")
 	r := C.qute_QOpenGLExtraFunctions_glMapBufferRange(self, C.uint(target), C.long(offset), C.long(length), C.uint(access))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -343,6 +372,7 @@ func (this *QOpenGLExtraFunctions) GlMapBufferRange(target uint, offset int64, l
 func (this *QOpenGLExtraFunctions) GlFlushMappedBufferRange(target uint, offset int64, length int64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlFlushMappedBufferRange")
 	C.qute_QOpenGLExtraFunctions_glFlushMappedBufferRange(self, C.uint(target), C.long(offset), C.long(length))
+	runtime.KeepAlive(this)
 }
 
 // GlBindVertexArray wraps QOpenGLExtraFunctions::glBindVertexArray.
@@ -353,6 +383,7 @@ func (this *QOpenGLExtraFunctions) GlFlushMappedBufferRange(target uint, offset 
 func (this *QOpenGLExtraFunctions) GlBindVertexArray(array uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindVertexArray")
 	C.qute_QOpenGLExtraFunctions_glBindVertexArray(self, C.uint(array))
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteVertexArrays wraps QOpenGLExtraFunctions::glDeleteVertexArrays.
@@ -363,6 +394,7 @@ func (this *QOpenGLExtraFunctions) GlBindVertexArray(array uint) {
 func (this *QOpenGLExtraFunctions) GlDeleteVertexArrays(n int, arrays unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDeleteVertexArrays")
 	C.qute_QOpenGLExtraFunctions_glDeleteVertexArrays(self, C.int(n), arrays)
+	runtime.KeepAlive(this)
 }
 
 // GlGenVertexArrays wraps QOpenGLExtraFunctions::glGenVertexArrays.
@@ -373,6 +405,7 @@ func (this *QOpenGLExtraFunctions) GlDeleteVertexArrays(n int, arrays unsafe.Poi
 func (this *QOpenGLExtraFunctions) GlGenVertexArrays(n int, arrays unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGenVertexArrays")
 	C.qute_QOpenGLExtraFunctions_glGenVertexArrays(self, C.int(n), arrays)
+	runtime.KeepAlive(this)
 }
 
 // GlIsVertexArray wraps QOpenGLExtraFunctions::glIsVertexArray.
@@ -383,6 +416,7 @@ func (this *QOpenGLExtraFunctions) GlGenVertexArrays(n int, arrays unsafe.Pointe
 func (this *QOpenGLExtraFunctions) GlIsVertexArray(array uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsVertexArray")
 	r := C.qute_QOpenGLExtraFunctions_glIsVertexArray(self, C.uint(array))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -394,6 +428,7 @@ func (this *QOpenGLExtraFunctions) GlIsVertexArray(array uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlGetIntegeri_v(target uint, index uint, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetIntegeri_v")
 	C.qute_QOpenGLExtraFunctions_glGetIntegeri_v(self, C.uint(target), C.uint(index), data)
+	runtime.KeepAlive(this)
 }
 
 // GlBeginTransformFeedback wraps QOpenGLExtraFunctions::glBeginTransformFeedback.
@@ -404,6 +439,7 @@ func (this *QOpenGLExtraFunctions) GlGetIntegeri_v(target uint, index uint, data
 func (this *QOpenGLExtraFunctions) GlBeginTransformFeedback(primitiveMode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBeginTransformFeedback")
 	C.qute_QOpenGLExtraFunctions_glBeginTransformFeedback(self, C.uint(primitiveMode))
+	runtime.KeepAlive(this)
 }
 
 // GlEndTransformFeedback wraps QOpenGLExtraFunctions::glEndTransformFeedback.
@@ -414,6 +450,7 @@ func (this *QOpenGLExtraFunctions) GlBeginTransformFeedback(primitiveMode uint) 
 func (this *QOpenGLExtraFunctions) GlEndTransformFeedback() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlEndTransformFeedback")
 	C.qute_QOpenGLExtraFunctions_glEndTransformFeedback(self)
+	runtime.KeepAlive(this)
 }
 
 // GlBindBufferRange wraps QOpenGLExtraFunctions::glBindBufferRange.
@@ -424,6 +461,7 @@ func (this *QOpenGLExtraFunctions) GlEndTransformFeedback() {
 func (this *QOpenGLExtraFunctions) GlBindBufferRange(target uint, index uint, buffer uint, offset int64, size int64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindBufferRange")
 	C.qute_QOpenGLExtraFunctions_glBindBufferRange(self, C.uint(target), C.uint(index), C.uint(buffer), C.long(offset), C.long(size))
+	runtime.KeepAlive(this)
 }
 
 // GlBindBufferBase wraps QOpenGLExtraFunctions::glBindBufferBase.
@@ -434,6 +472,7 @@ func (this *QOpenGLExtraFunctions) GlBindBufferRange(target uint, index uint, bu
 func (this *QOpenGLExtraFunctions) GlBindBufferBase(target uint, index uint, buffer uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindBufferBase")
 	C.qute_QOpenGLExtraFunctions_glBindBufferBase(self, C.uint(target), C.uint(index), C.uint(buffer))
+	runtime.KeepAlive(this)
 }
 
 // GlTransformFeedbackVaryings wraps QOpenGLExtraFunctions::glTransformFeedbackVaryings.
@@ -444,6 +483,7 @@ func (this *QOpenGLExtraFunctions) GlBindBufferBase(target uint, index uint, buf
 func (this *QOpenGLExtraFunctions) GlTransformFeedbackVaryings(program uint, count int, varyings unsafe.Pointer, bufferMode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTransformFeedbackVaryings")
 	C.qute_QOpenGLExtraFunctions_glTransformFeedbackVaryings(self, C.uint(program), C.int(count), varyings, C.uint(bufferMode))
+	runtime.KeepAlive(this)
 }
 
 // GlGetTransformFeedbackVarying wraps QOpenGLExtraFunctions::glGetTransformFeedbackVarying.
@@ -454,6 +494,7 @@ func (this *QOpenGLExtraFunctions) GlTransformFeedbackVaryings(program uint, cou
 func (this *QOpenGLExtraFunctions) GlGetTransformFeedbackVarying(program uint, index uint, bufSize int, length unsafe.Pointer, size unsafe.Pointer, typeArg unsafe.Pointer, name unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetTransformFeedbackVarying")
 	C.qute_QOpenGLExtraFunctions_glGetTransformFeedbackVarying(self, C.uint(program), C.uint(index), C.int(bufSize), length, size, typeArg, name)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribIPointer wraps QOpenGLExtraFunctions::glVertexAttribIPointer.
@@ -464,6 +505,7 @@ func (this *QOpenGLExtraFunctions) GlGetTransformFeedbackVarying(program uint, i
 func (this *QOpenGLExtraFunctions) GlVertexAttribIPointer(index uint, size int, typeArg uint, stride int, pointer unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribIPointer")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribIPointer(self, C.uint(index), C.int(size), C.uint(typeArg), C.int(stride), pointer)
+	runtime.KeepAlive(this)
 }
 
 // GlGetVertexAttribIiv wraps QOpenGLExtraFunctions::glGetVertexAttribIiv.
@@ -474,6 +516,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribIPointer(index uint, size int, 
 func (this *QOpenGLExtraFunctions) GlGetVertexAttribIiv(index uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetVertexAttribIiv")
 	C.qute_QOpenGLExtraFunctions_glGetVertexAttribIiv(self, C.uint(index), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetVertexAttribIuiv wraps QOpenGLExtraFunctions::glGetVertexAttribIuiv.
@@ -484,6 +527,7 @@ func (this *QOpenGLExtraFunctions) GlGetVertexAttribIiv(index uint, pname uint, 
 func (this *QOpenGLExtraFunctions) GlGetVertexAttribIuiv(index uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetVertexAttribIuiv")
 	C.qute_QOpenGLExtraFunctions_glGetVertexAttribIuiv(self, C.uint(index), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribI4i wraps QOpenGLExtraFunctions::glVertexAttribI4i.
@@ -494,6 +538,7 @@ func (this *QOpenGLExtraFunctions) GlGetVertexAttribIuiv(index uint, pname uint,
 func (this *QOpenGLExtraFunctions) GlVertexAttribI4i(index uint, x int, y int, z int, w int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribI4i")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribI4i(self, C.uint(index), C.int(x), C.int(y), C.int(z), C.int(w))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribI4ui wraps QOpenGLExtraFunctions::glVertexAttribI4ui.
@@ -504,6 +549,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribI4i(index uint, x int, y int, z
 func (this *QOpenGLExtraFunctions) GlVertexAttribI4ui(index uint, x uint, y uint, z uint, w uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribI4ui")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribI4ui(self, C.uint(index), C.uint(x), C.uint(y), C.uint(z), C.uint(w))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribI4iv wraps QOpenGLExtraFunctions::glVertexAttribI4iv.
@@ -514,6 +560,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribI4ui(index uint, x uint, y uint
 func (this *QOpenGLExtraFunctions) GlVertexAttribI4iv(index uint, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribI4iv")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribI4iv(self, C.uint(index), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribI4uiv wraps QOpenGLExtraFunctions::glVertexAttribI4uiv.
@@ -524,6 +571,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribI4iv(index uint, vArg unsafe.Po
 func (this *QOpenGLExtraFunctions) GlVertexAttribI4uiv(index uint, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribI4uiv")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribI4uiv(self, C.uint(index), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlGetUniformuiv wraps QOpenGLExtraFunctions::glGetUniformuiv.
@@ -534,6 +582,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribI4uiv(index uint, vArg unsafe.P
 func (this *QOpenGLExtraFunctions) GlGetUniformuiv(program uint, location int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetUniformuiv")
 	C.qute_QOpenGLExtraFunctions_glGetUniformuiv(self, C.uint(program), C.int(location), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetFragDataLocation wraps QOpenGLExtraFunctions::glGetFragDataLocation.
@@ -544,6 +593,7 @@ func (this *QOpenGLExtraFunctions) GlGetUniformuiv(program uint, location int, p
 func (this *QOpenGLExtraFunctions) GlGetFragDataLocation(program uint, name unsafe.Pointer) int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetFragDataLocation")
 	r := C.qute_QOpenGLExtraFunctions_glGetFragDataLocation(self, C.uint(program), name)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -555,6 +605,7 @@ func (this *QOpenGLExtraFunctions) GlGetFragDataLocation(program uint, name unsa
 func (this *QOpenGLExtraFunctions) GlUniform1ui(location int, v0 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform1ui")
 	C.qute_QOpenGLExtraFunctions_glUniform1ui(self, C.int(location), C.uint(v0))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform2ui wraps QOpenGLExtraFunctions::glUniform2ui.
@@ -565,6 +616,7 @@ func (this *QOpenGLExtraFunctions) GlUniform1ui(location int, v0 uint) {
 func (this *QOpenGLExtraFunctions) GlUniform2ui(location int, v0 uint, v1 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform2ui")
 	C.qute_QOpenGLExtraFunctions_glUniform2ui(self, C.int(location), C.uint(v0), C.uint(v1))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform3ui wraps QOpenGLExtraFunctions::glUniform3ui.
@@ -575,6 +627,7 @@ func (this *QOpenGLExtraFunctions) GlUniform2ui(location int, v0 uint, v1 uint) 
 func (this *QOpenGLExtraFunctions) GlUniform3ui(location int, v0 uint, v1 uint, v2 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform3ui")
 	C.qute_QOpenGLExtraFunctions_glUniform3ui(self, C.int(location), C.uint(v0), C.uint(v1), C.uint(v2))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform4ui wraps QOpenGLExtraFunctions::glUniform4ui.
@@ -585,6 +638,7 @@ func (this *QOpenGLExtraFunctions) GlUniform3ui(location int, v0 uint, v1 uint, 
 func (this *QOpenGLExtraFunctions) GlUniform4ui(location int, v0 uint, v1 uint, v2 uint, v3 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform4ui")
 	C.qute_QOpenGLExtraFunctions_glUniform4ui(self, C.int(location), C.uint(v0), C.uint(v1), C.uint(v2), C.uint(v3))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform1uiv wraps QOpenGLExtraFunctions::glUniform1uiv.
@@ -595,6 +649,7 @@ func (this *QOpenGLExtraFunctions) GlUniform4ui(location int, v0 uint, v1 uint, 
 func (this *QOpenGLExtraFunctions) GlUniform1uiv(location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform1uiv")
 	C.qute_QOpenGLExtraFunctions_glUniform1uiv(self, C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform2uiv wraps QOpenGLExtraFunctions::glUniform2uiv.
@@ -605,6 +660,7 @@ func (this *QOpenGLExtraFunctions) GlUniform1uiv(location int, count int, value 
 func (this *QOpenGLExtraFunctions) GlUniform2uiv(location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform2uiv")
 	C.qute_QOpenGLExtraFunctions_glUniform2uiv(self, C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform3uiv wraps QOpenGLExtraFunctions::glUniform3uiv.
@@ -615,6 +671,7 @@ func (this *QOpenGLExtraFunctions) GlUniform2uiv(location int, count int, value 
 func (this *QOpenGLExtraFunctions) GlUniform3uiv(location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform3uiv")
 	C.qute_QOpenGLExtraFunctions_glUniform3uiv(self, C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform4uiv wraps QOpenGLExtraFunctions::glUniform4uiv.
@@ -625,6 +682,7 @@ func (this *QOpenGLExtraFunctions) GlUniform3uiv(location int, count int, value 
 func (this *QOpenGLExtraFunctions) GlUniform4uiv(location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniform4uiv")
 	C.qute_QOpenGLExtraFunctions_glUniform4uiv(self, C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlClearBufferiv wraps QOpenGLExtraFunctions::glClearBufferiv.
@@ -635,6 +693,7 @@ func (this *QOpenGLExtraFunctions) GlUniform4uiv(location int, count int, value 
 func (this *QOpenGLExtraFunctions) GlClearBufferiv(buffer uint, drawbuffer int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlClearBufferiv")
 	C.qute_QOpenGLExtraFunctions_glClearBufferiv(self, C.uint(buffer), C.int(drawbuffer), value)
+	runtime.KeepAlive(this)
 }
 
 // GlClearBufferuiv wraps QOpenGLExtraFunctions::glClearBufferuiv.
@@ -645,6 +704,7 @@ func (this *QOpenGLExtraFunctions) GlClearBufferiv(buffer uint, drawbuffer int, 
 func (this *QOpenGLExtraFunctions) GlClearBufferuiv(buffer uint, drawbuffer int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlClearBufferuiv")
 	C.qute_QOpenGLExtraFunctions_glClearBufferuiv(self, C.uint(buffer), C.int(drawbuffer), value)
+	runtime.KeepAlive(this)
 }
 
 // GlClearBufferfv wraps QOpenGLExtraFunctions::glClearBufferfv.
@@ -655,6 +715,7 @@ func (this *QOpenGLExtraFunctions) GlClearBufferuiv(buffer uint, drawbuffer int,
 func (this *QOpenGLExtraFunctions) GlClearBufferfv(buffer uint, drawbuffer int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlClearBufferfv")
 	C.qute_QOpenGLExtraFunctions_glClearBufferfv(self, C.uint(buffer), C.int(drawbuffer), value)
+	runtime.KeepAlive(this)
 }
 
 // GlClearBufferfi wraps QOpenGLExtraFunctions::glClearBufferfi.
@@ -665,6 +726,7 @@ func (this *QOpenGLExtraFunctions) GlClearBufferfv(buffer uint, drawbuffer int, 
 func (this *QOpenGLExtraFunctions) GlClearBufferfi(buffer uint, drawbuffer int, depth float32, stencil int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlClearBufferfi")
 	C.qute_QOpenGLExtraFunctions_glClearBufferfi(self, C.uint(buffer), C.int(drawbuffer), C.float(depth), C.int(stencil))
+	runtime.KeepAlive(this)
 }
 
 // GlGetStringi wraps QOpenGLExtraFunctions::glGetStringi.
@@ -675,6 +737,7 @@ func (this *QOpenGLExtraFunctions) GlClearBufferfi(buffer uint, drawbuffer int, 
 func (this *QOpenGLExtraFunctions) GlGetStringi(name uint, index uint) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetStringi")
 	r := C.qute_QOpenGLExtraFunctions_glGetStringi(self, C.uint(name), C.uint(index))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -686,6 +749,7 @@ func (this *QOpenGLExtraFunctions) GlGetStringi(name uint, index uint) unsafe.Po
 func (this *QOpenGLExtraFunctions) GlCopyBufferSubData(readTarget uint, writeTarget uint, readOffset int64, writeOffset int64, size int64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlCopyBufferSubData")
 	C.qute_QOpenGLExtraFunctions_glCopyBufferSubData(self, C.uint(readTarget), C.uint(writeTarget), C.long(readOffset), C.long(writeOffset), C.long(size))
+	runtime.KeepAlive(this)
 }
 
 // GlGetUniformIndices wraps QOpenGLExtraFunctions::glGetUniformIndices.
@@ -696,6 +760,7 @@ func (this *QOpenGLExtraFunctions) GlCopyBufferSubData(readTarget uint, writeTar
 func (this *QOpenGLExtraFunctions) GlGetUniformIndices(program uint, uniformCount int, uniformNames unsafe.Pointer, uniformIndices unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetUniformIndices")
 	C.qute_QOpenGLExtraFunctions_glGetUniformIndices(self, C.uint(program), C.int(uniformCount), uniformNames, uniformIndices)
+	runtime.KeepAlive(this)
 }
 
 // GlGetActiveUniformsiv wraps QOpenGLExtraFunctions::glGetActiveUniformsiv.
@@ -706,6 +771,7 @@ func (this *QOpenGLExtraFunctions) GlGetUniformIndices(program uint, uniformCoun
 func (this *QOpenGLExtraFunctions) GlGetActiveUniformsiv(program uint, uniformCount int, uniformIndices unsafe.Pointer, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetActiveUniformsiv")
 	C.qute_QOpenGLExtraFunctions_glGetActiveUniformsiv(self, C.uint(program), C.int(uniformCount), uniformIndices, C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetUniformBlockIndex wraps QOpenGLExtraFunctions::glGetUniformBlockIndex.
@@ -716,6 +782,7 @@ func (this *QOpenGLExtraFunctions) GlGetActiveUniformsiv(program uint, uniformCo
 func (this *QOpenGLExtraFunctions) GlGetUniformBlockIndex(program uint, uniformBlockName unsafe.Pointer) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetUniformBlockIndex")
 	r := C.qute_QOpenGLExtraFunctions_glGetUniformBlockIndex(self, C.uint(program), uniformBlockName)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -727,6 +794,7 @@ func (this *QOpenGLExtraFunctions) GlGetUniformBlockIndex(program uint, uniformB
 func (this *QOpenGLExtraFunctions) GlGetActiveUniformBlockiv(program uint, uniformBlockIndex uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetActiveUniformBlockiv")
 	C.qute_QOpenGLExtraFunctions_glGetActiveUniformBlockiv(self, C.uint(program), C.uint(uniformBlockIndex), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetActiveUniformBlockName wraps QOpenGLExtraFunctions::glGetActiveUniformBlockName.
@@ -737,6 +805,7 @@ func (this *QOpenGLExtraFunctions) GlGetActiveUniformBlockiv(program uint, unifo
 func (this *QOpenGLExtraFunctions) GlGetActiveUniformBlockName(program uint, uniformBlockIndex uint, bufSize int, length unsafe.Pointer, uniformBlockName unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetActiveUniformBlockName")
 	C.qute_QOpenGLExtraFunctions_glGetActiveUniformBlockName(self, C.uint(program), C.uint(uniformBlockIndex), C.int(bufSize), length, uniformBlockName)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformBlockBinding wraps QOpenGLExtraFunctions::glUniformBlockBinding.
@@ -747,6 +816,7 @@ func (this *QOpenGLExtraFunctions) GlGetActiveUniformBlockName(program uint, uni
 func (this *QOpenGLExtraFunctions) GlUniformBlockBinding(program uint, uniformBlockIndex uint, uniformBlockBinding uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUniformBlockBinding")
 	C.qute_QOpenGLExtraFunctions_glUniformBlockBinding(self, C.uint(program), C.uint(uniformBlockIndex), C.uint(uniformBlockBinding))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawArraysInstanced wraps QOpenGLExtraFunctions::glDrawArraysInstanced.
@@ -757,6 +827,7 @@ func (this *QOpenGLExtraFunctions) GlUniformBlockBinding(program uint, uniformBl
 func (this *QOpenGLExtraFunctions) GlDrawArraysInstanced(mode uint, first int, count int, instancecount int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawArraysInstanced")
 	C.qute_QOpenGLExtraFunctions_glDrawArraysInstanced(self, C.uint(mode), C.int(first), C.int(count), C.int(instancecount))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawElementsInstanced wraps QOpenGLExtraFunctions::glDrawElementsInstanced.
@@ -767,6 +838,7 @@ func (this *QOpenGLExtraFunctions) GlDrawArraysInstanced(mode uint, first int, c
 func (this *QOpenGLExtraFunctions) GlDrawElementsInstanced(mode uint, count int, typeArg uint, indices unsafe.Pointer, instancecount int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawElementsInstanced")
 	C.qute_QOpenGLExtraFunctions_glDrawElementsInstanced(self, C.uint(mode), C.int(count), C.uint(typeArg), indices, C.int(instancecount))
+	runtime.KeepAlive(this)
 }
 
 // GlFenceSync wraps QOpenGLExtraFunctions::glFenceSync.
@@ -777,6 +849,7 @@ func (this *QOpenGLExtraFunctions) GlDrawElementsInstanced(mode uint, count int,
 func (this *QOpenGLExtraFunctions) GlFenceSync(condition uint, flags uint) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlFenceSync")
 	r := C.qute_QOpenGLExtraFunctions_glFenceSync(self, C.uint(condition), C.uint(flags))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -788,6 +861,7 @@ func (this *QOpenGLExtraFunctions) GlFenceSync(condition uint, flags uint) unsaf
 func (this *QOpenGLExtraFunctions) GlIsSync(sync unsafe.Pointer) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsSync")
 	r := C.qute_QOpenGLExtraFunctions_glIsSync(self, sync)
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -799,6 +873,7 @@ func (this *QOpenGLExtraFunctions) GlIsSync(sync unsafe.Pointer) uint8 {
 func (this *QOpenGLExtraFunctions) GlDeleteSync(sync unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDeleteSync")
 	C.qute_QOpenGLExtraFunctions_glDeleteSync(self, sync)
+	runtime.KeepAlive(this)
 }
 
 // GlClientWaitSync wraps QOpenGLExtraFunctions::glClientWaitSync.
@@ -809,6 +884,7 @@ func (this *QOpenGLExtraFunctions) GlDeleteSync(sync unsafe.Pointer) {
 func (this *QOpenGLExtraFunctions) GlClientWaitSync(sync unsafe.Pointer, flags uint, timeout uint64) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlClientWaitSync")
 	r := C.qute_QOpenGLExtraFunctions_glClientWaitSync(self, sync, C.uint(flags), C.ulong(timeout))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -820,6 +896,7 @@ func (this *QOpenGLExtraFunctions) GlClientWaitSync(sync unsafe.Pointer, flags u
 func (this *QOpenGLExtraFunctions) GlWaitSync(sync unsafe.Pointer, flags uint, timeout uint64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlWaitSync")
 	C.qute_QOpenGLExtraFunctions_glWaitSync(self, sync, C.uint(flags), C.ulong(timeout))
+	runtime.KeepAlive(this)
 }
 
 // GlGetInteger64v wraps QOpenGLExtraFunctions::glGetInteger64v.
@@ -830,6 +907,7 @@ func (this *QOpenGLExtraFunctions) GlWaitSync(sync unsafe.Pointer, flags uint, t
 func (this *QOpenGLExtraFunctions) GlGetInteger64v(pname uint, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetInteger64v")
 	C.qute_QOpenGLExtraFunctions_glGetInteger64v(self, C.uint(pname), data)
+	runtime.KeepAlive(this)
 }
 
 // GlGetSynciv wraps QOpenGLExtraFunctions::glGetSynciv.
@@ -840,6 +918,7 @@ func (this *QOpenGLExtraFunctions) GlGetInteger64v(pname uint, data unsafe.Point
 func (this *QOpenGLExtraFunctions) GlGetSynciv(sync unsafe.Pointer, pname uint, bufSize int, length unsafe.Pointer, values unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetSynciv")
 	C.qute_QOpenGLExtraFunctions_glGetSynciv(self, sync, C.uint(pname), C.int(bufSize), length, values)
+	runtime.KeepAlive(this)
 }
 
 // GlGetInteger64i_v wraps QOpenGLExtraFunctions::glGetInteger64i_v.
@@ -850,6 +929,7 @@ func (this *QOpenGLExtraFunctions) GlGetSynciv(sync unsafe.Pointer, pname uint, 
 func (this *QOpenGLExtraFunctions) GlGetInteger64i_v(target uint, index uint, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetInteger64i_v")
 	C.qute_QOpenGLExtraFunctions_glGetInteger64i_v(self, C.uint(target), C.uint(index), data)
+	runtime.KeepAlive(this)
 }
 
 // GlGetBufferParameteri64v wraps QOpenGLExtraFunctions::glGetBufferParameteri64v.
@@ -860,6 +940,7 @@ func (this *QOpenGLExtraFunctions) GlGetInteger64i_v(target uint, index uint, da
 func (this *QOpenGLExtraFunctions) GlGetBufferParameteri64v(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetBufferParameteri64v")
 	C.qute_QOpenGLExtraFunctions_glGetBufferParameteri64v(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGenSamplers wraps QOpenGLExtraFunctions::glGenSamplers.
@@ -870,6 +951,7 @@ func (this *QOpenGLExtraFunctions) GlGetBufferParameteri64v(target uint, pname u
 func (this *QOpenGLExtraFunctions) GlGenSamplers(count int, samplers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGenSamplers")
 	C.qute_QOpenGLExtraFunctions_glGenSamplers(self, C.int(count), samplers)
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteSamplers wraps QOpenGLExtraFunctions::glDeleteSamplers.
@@ -880,6 +962,7 @@ func (this *QOpenGLExtraFunctions) GlGenSamplers(count int, samplers unsafe.Poin
 func (this *QOpenGLExtraFunctions) GlDeleteSamplers(count int, samplers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDeleteSamplers")
 	C.qute_QOpenGLExtraFunctions_glDeleteSamplers(self, C.int(count), samplers)
+	runtime.KeepAlive(this)
 }
 
 // GlIsSampler wraps QOpenGLExtraFunctions::glIsSampler.
@@ -890,6 +973,7 @@ func (this *QOpenGLExtraFunctions) GlDeleteSamplers(count int, samplers unsafe.P
 func (this *QOpenGLExtraFunctions) GlIsSampler(sampler uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsSampler")
 	r := C.qute_QOpenGLExtraFunctions_glIsSampler(self, C.uint(sampler))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -901,6 +985,7 @@ func (this *QOpenGLExtraFunctions) GlIsSampler(sampler uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlBindSampler(unit uint, sampler uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindSampler")
 	C.qute_QOpenGLExtraFunctions_glBindSampler(self, C.uint(unit), C.uint(sampler))
+	runtime.KeepAlive(this)
 }
 
 // GlSamplerParameteri wraps QOpenGLExtraFunctions::glSamplerParameteri.
@@ -911,6 +996,7 @@ func (this *QOpenGLExtraFunctions) GlBindSampler(unit uint, sampler uint) {
 func (this *QOpenGLExtraFunctions) GlSamplerParameteri(sampler uint, pname uint, param int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSamplerParameteri")
 	C.qute_QOpenGLExtraFunctions_glSamplerParameteri(self, C.uint(sampler), C.uint(pname), C.int(param))
+	runtime.KeepAlive(this)
 }
 
 // GlSamplerParameteriv wraps QOpenGLExtraFunctions::glSamplerParameteriv.
@@ -921,6 +1007,7 @@ func (this *QOpenGLExtraFunctions) GlSamplerParameteri(sampler uint, pname uint,
 func (this *QOpenGLExtraFunctions) GlSamplerParameteriv(sampler uint, pname uint, param unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSamplerParameteriv")
 	C.qute_QOpenGLExtraFunctions_glSamplerParameteriv(self, C.uint(sampler), C.uint(pname), param)
+	runtime.KeepAlive(this)
 }
 
 // GlSamplerParameterf wraps QOpenGLExtraFunctions::glSamplerParameterf.
@@ -931,6 +1018,7 @@ func (this *QOpenGLExtraFunctions) GlSamplerParameteriv(sampler uint, pname uint
 func (this *QOpenGLExtraFunctions) GlSamplerParameterf(sampler uint, pname uint, param float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSamplerParameterf")
 	C.qute_QOpenGLExtraFunctions_glSamplerParameterf(self, C.uint(sampler), C.uint(pname), C.float(param))
+	runtime.KeepAlive(this)
 }
 
 // GlSamplerParameterfv wraps QOpenGLExtraFunctions::glSamplerParameterfv.
@@ -941,6 +1029,7 @@ func (this *QOpenGLExtraFunctions) GlSamplerParameterf(sampler uint, pname uint,
 func (this *QOpenGLExtraFunctions) GlSamplerParameterfv(sampler uint, pname uint, param unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSamplerParameterfv")
 	C.qute_QOpenGLExtraFunctions_glSamplerParameterfv(self, C.uint(sampler), C.uint(pname), param)
+	runtime.KeepAlive(this)
 }
 
 // GlGetSamplerParameteriv wraps QOpenGLExtraFunctions::glGetSamplerParameteriv.
@@ -951,6 +1040,7 @@ func (this *QOpenGLExtraFunctions) GlSamplerParameterfv(sampler uint, pname uint
 func (this *QOpenGLExtraFunctions) GlGetSamplerParameteriv(sampler uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetSamplerParameteriv")
 	C.qute_QOpenGLExtraFunctions_glGetSamplerParameteriv(self, C.uint(sampler), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetSamplerParameterfv wraps QOpenGLExtraFunctions::glGetSamplerParameterfv.
@@ -961,6 +1051,7 @@ func (this *QOpenGLExtraFunctions) GlGetSamplerParameteriv(sampler uint, pname u
 func (this *QOpenGLExtraFunctions) GlGetSamplerParameterfv(sampler uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetSamplerParameterfv")
 	C.qute_QOpenGLExtraFunctions_glGetSamplerParameterfv(self, C.uint(sampler), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribDivisor wraps QOpenGLExtraFunctions::glVertexAttribDivisor.
@@ -971,6 +1062,7 @@ func (this *QOpenGLExtraFunctions) GlGetSamplerParameterfv(sampler uint, pname u
 func (this *QOpenGLExtraFunctions) GlVertexAttribDivisor(index uint, divisor uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribDivisor")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribDivisor(self, C.uint(index), C.uint(divisor))
+	runtime.KeepAlive(this)
 }
 
 // GlBindTransformFeedback wraps QOpenGLExtraFunctions::glBindTransformFeedback.
@@ -981,6 +1073,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribDivisor(index uint, divisor uin
 func (this *QOpenGLExtraFunctions) GlBindTransformFeedback(target uint, idArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindTransformFeedback")
 	C.qute_QOpenGLExtraFunctions_glBindTransformFeedback(self, C.uint(target), C.uint(idArg))
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteTransformFeedbacks wraps QOpenGLExtraFunctions::glDeleteTransformFeedbacks.
@@ -991,6 +1084,7 @@ func (this *QOpenGLExtraFunctions) GlBindTransformFeedback(target uint, idArg ui
 func (this *QOpenGLExtraFunctions) GlDeleteTransformFeedbacks(n int, ids unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDeleteTransformFeedbacks")
 	C.qute_QOpenGLExtraFunctions_glDeleteTransformFeedbacks(self, C.int(n), ids)
+	runtime.KeepAlive(this)
 }
 
 // GlGenTransformFeedbacks wraps QOpenGLExtraFunctions::glGenTransformFeedbacks.
@@ -1001,6 +1095,7 @@ func (this *QOpenGLExtraFunctions) GlDeleteTransformFeedbacks(n int, ids unsafe.
 func (this *QOpenGLExtraFunctions) GlGenTransformFeedbacks(n int, ids unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGenTransformFeedbacks")
 	C.qute_QOpenGLExtraFunctions_glGenTransformFeedbacks(self, C.int(n), ids)
+	runtime.KeepAlive(this)
 }
 
 // GlIsTransformFeedback wraps QOpenGLExtraFunctions::glIsTransformFeedback.
@@ -1011,6 +1106,7 @@ func (this *QOpenGLExtraFunctions) GlGenTransformFeedbacks(n int, ids unsafe.Poi
 func (this *QOpenGLExtraFunctions) GlIsTransformFeedback(idArg uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsTransformFeedback")
 	r := C.qute_QOpenGLExtraFunctions_glIsTransformFeedback(self, C.uint(idArg))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1022,6 +1118,7 @@ func (this *QOpenGLExtraFunctions) GlIsTransformFeedback(idArg uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlPauseTransformFeedback() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlPauseTransformFeedback")
 	C.qute_QOpenGLExtraFunctions_glPauseTransformFeedback(self)
+	runtime.KeepAlive(this)
 }
 
 // GlResumeTransformFeedback wraps QOpenGLExtraFunctions::glResumeTransformFeedback.
@@ -1032,6 +1129,7 @@ func (this *QOpenGLExtraFunctions) GlPauseTransformFeedback() {
 func (this *QOpenGLExtraFunctions) GlResumeTransformFeedback() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlResumeTransformFeedback")
 	C.qute_QOpenGLExtraFunctions_glResumeTransformFeedback(self)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramBinary wraps QOpenGLExtraFunctions::glGetProgramBinary.
@@ -1042,6 +1140,7 @@ func (this *QOpenGLExtraFunctions) GlResumeTransformFeedback() {
 func (this *QOpenGLExtraFunctions) GlGetProgramBinary(program uint, bufSize int, length unsafe.Pointer, binaryFormat unsafe.Pointer, binary unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramBinary")
 	C.qute_QOpenGLExtraFunctions_glGetProgramBinary(self, C.uint(program), C.int(bufSize), length, binaryFormat, binary)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramBinary wraps QOpenGLExtraFunctions::glProgramBinary.
@@ -1052,6 +1151,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramBinary(program uint, bufSize int,
 func (this *QOpenGLExtraFunctions) GlProgramBinary(program uint, binaryFormat uint, binary unsafe.Pointer, length int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramBinary")
 	C.qute_QOpenGLExtraFunctions_glProgramBinary(self, C.uint(program), C.uint(binaryFormat), binary, C.int(length))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramParameteri wraps QOpenGLExtraFunctions::glProgramParameteri.
@@ -1062,6 +1162,7 @@ func (this *QOpenGLExtraFunctions) GlProgramBinary(program uint, binaryFormat ui
 func (this *QOpenGLExtraFunctions) GlProgramParameteri(program uint, pname uint, value int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramParameteri")
 	C.qute_QOpenGLExtraFunctions_glProgramParameteri(self, C.uint(program), C.uint(pname), C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // GlInvalidateFramebuffer wraps QOpenGLExtraFunctions::glInvalidateFramebuffer.
@@ -1072,6 +1173,7 @@ func (this *QOpenGLExtraFunctions) GlProgramParameteri(program uint, pname uint,
 func (this *QOpenGLExtraFunctions) GlInvalidateFramebuffer(target uint, numAttachments int, attachments unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlInvalidateFramebuffer")
 	C.qute_QOpenGLExtraFunctions_glInvalidateFramebuffer(self, C.uint(target), C.int(numAttachments), attachments)
+	runtime.KeepAlive(this)
 }
 
 // GlInvalidateSubFramebuffer wraps QOpenGLExtraFunctions::glInvalidateSubFramebuffer.
@@ -1082,6 +1184,7 @@ func (this *QOpenGLExtraFunctions) GlInvalidateFramebuffer(target uint, numAttac
 func (this *QOpenGLExtraFunctions) GlInvalidateSubFramebuffer(target uint, numAttachments int, attachments unsafe.Pointer, x int, y int, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlInvalidateSubFramebuffer")
 	C.qute_QOpenGLExtraFunctions_glInvalidateSubFramebuffer(self, C.uint(target), C.int(numAttachments), attachments, C.int(x), C.int(y), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlTexStorage2D wraps QOpenGLExtraFunctions::glTexStorage2D.
@@ -1092,6 +1195,7 @@ func (this *QOpenGLExtraFunctions) GlInvalidateSubFramebuffer(target uint, numAt
 func (this *QOpenGLExtraFunctions) GlTexStorage2D(target uint, levels int, internalformat uint, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexStorage2D")
 	C.qute_QOpenGLExtraFunctions_glTexStorage2D(self, C.uint(target), C.int(levels), C.uint(internalformat), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlTexStorage3D wraps QOpenGLExtraFunctions::glTexStorage3D.
@@ -1102,6 +1206,7 @@ func (this *QOpenGLExtraFunctions) GlTexStorage2D(target uint, levels int, inter
 func (this *QOpenGLExtraFunctions) GlTexStorage3D(target uint, levels int, internalformat uint, width int, height int, depth int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexStorage3D")
 	C.qute_QOpenGLExtraFunctions_glTexStorage3D(self, C.uint(target), C.int(levels), C.uint(internalformat), C.int(width), C.int(height), C.int(depth))
+	runtime.KeepAlive(this)
 }
 
 // GlGetInternalformativ wraps QOpenGLExtraFunctions::glGetInternalformativ.
@@ -1112,6 +1217,7 @@ func (this *QOpenGLExtraFunctions) GlTexStorage3D(target uint, levels int, inter
 func (this *QOpenGLExtraFunctions) GlGetInternalformativ(target uint, internalformat uint, pname uint, bufSize int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetInternalformativ")
 	C.qute_QOpenGLExtraFunctions_glGetInternalformativ(self, C.uint(target), C.uint(internalformat), C.uint(pname), C.int(bufSize), params)
+	runtime.KeepAlive(this)
 }
 
 // GlDispatchCompute wraps QOpenGLExtraFunctions::glDispatchCompute.
@@ -1122,6 +1228,7 @@ func (this *QOpenGLExtraFunctions) GlGetInternalformativ(target uint, internalfo
 func (this *QOpenGLExtraFunctions) GlDispatchCompute(num_groups_x uint, num_groups_y uint, num_groups_z uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDispatchCompute")
 	C.qute_QOpenGLExtraFunctions_glDispatchCompute(self, C.uint(num_groups_x), C.uint(num_groups_y), C.uint(num_groups_z))
+	runtime.KeepAlive(this)
 }
 
 // GlDispatchComputeIndirect wraps QOpenGLExtraFunctions::glDispatchComputeIndirect.
@@ -1132,6 +1239,7 @@ func (this *QOpenGLExtraFunctions) GlDispatchCompute(num_groups_x uint, num_grou
 func (this *QOpenGLExtraFunctions) GlDispatchComputeIndirect(indirect int64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDispatchComputeIndirect")
 	C.qute_QOpenGLExtraFunctions_glDispatchComputeIndirect(self, C.long(indirect))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawArraysIndirect wraps QOpenGLExtraFunctions::glDrawArraysIndirect.
@@ -1142,6 +1250,7 @@ func (this *QOpenGLExtraFunctions) GlDispatchComputeIndirect(indirect int64) {
 func (this *QOpenGLExtraFunctions) GlDrawArraysIndirect(mode uint, indirect unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawArraysIndirect")
 	C.qute_QOpenGLExtraFunctions_glDrawArraysIndirect(self, C.uint(mode), indirect)
+	runtime.KeepAlive(this)
 }
 
 // GlDrawElementsIndirect wraps QOpenGLExtraFunctions::glDrawElementsIndirect.
@@ -1152,6 +1261,7 @@ func (this *QOpenGLExtraFunctions) GlDrawArraysIndirect(mode uint, indirect unsa
 func (this *QOpenGLExtraFunctions) GlDrawElementsIndirect(mode uint, typeArg uint, indirect unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawElementsIndirect")
 	C.qute_QOpenGLExtraFunctions_glDrawElementsIndirect(self, C.uint(mode), C.uint(typeArg), indirect)
+	runtime.KeepAlive(this)
 }
 
 // GlFramebufferParameteri wraps QOpenGLExtraFunctions::glFramebufferParameteri.
@@ -1162,6 +1272,7 @@ func (this *QOpenGLExtraFunctions) GlDrawElementsIndirect(mode uint, typeArg uin
 func (this *QOpenGLExtraFunctions) GlFramebufferParameteri(target uint, pname uint, param int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlFramebufferParameteri")
 	C.qute_QOpenGLExtraFunctions_glFramebufferParameteri(self, C.uint(target), C.uint(pname), C.int(param))
+	runtime.KeepAlive(this)
 }
 
 // GlGetFramebufferParameteriv wraps QOpenGLExtraFunctions::glGetFramebufferParameteriv.
@@ -1172,6 +1283,7 @@ func (this *QOpenGLExtraFunctions) GlFramebufferParameteri(target uint, pname ui
 func (this *QOpenGLExtraFunctions) GlGetFramebufferParameteriv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetFramebufferParameteriv")
 	C.qute_QOpenGLExtraFunctions_glGetFramebufferParameteriv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramInterfaceiv wraps QOpenGLExtraFunctions::glGetProgramInterfaceiv.
@@ -1182,6 +1294,7 @@ func (this *QOpenGLExtraFunctions) GlGetFramebufferParameteriv(target uint, pnam
 func (this *QOpenGLExtraFunctions) GlGetProgramInterfaceiv(program uint, programInterface uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramInterfaceiv")
 	C.qute_QOpenGLExtraFunctions_glGetProgramInterfaceiv(self, C.uint(program), C.uint(programInterface), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramResourceIndex wraps QOpenGLExtraFunctions::glGetProgramResourceIndex.
@@ -1192,6 +1305,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramInterfaceiv(program uint, program
 func (this *QOpenGLExtraFunctions) GlGetProgramResourceIndex(program uint, programInterface uint, name unsafe.Pointer) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramResourceIndex")
 	r := C.qute_QOpenGLExtraFunctions_glGetProgramResourceIndex(self, C.uint(program), C.uint(programInterface), name)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -1203,6 +1317,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramResourceIndex(program uint, progr
 func (this *QOpenGLExtraFunctions) GlGetProgramResourceName(program uint, programInterface uint, index uint, bufSize int, length unsafe.Pointer, name unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramResourceName")
 	C.qute_QOpenGLExtraFunctions_glGetProgramResourceName(self, C.uint(program), C.uint(programInterface), C.uint(index), C.int(bufSize), length, name)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramResourceiv wraps QOpenGLExtraFunctions::glGetProgramResourceiv.
@@ -1213,6 +1328,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramResourceName(program uint, progra
 func (this *QOpenGLExtraFunctions) GlGetProgramResourceiv(program uint, programInterface uint, index uint, propCount int, props unsafe.Pointer, bufSize int, length unsafe.Pointer, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramResourceiv")
 	C.qute_QOpenGLExtraFunctions_glGetProgramResourceiv(self, C.uint(program), C.uint(programInterface), C.uint(index), C.int(propCount), props, C.int(bufSize), length, params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramResourceLocation wraps QOpenGLExtraFunctions::glGetProgramResourceLocation.
@@ -1223,6 +1339,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramResourceiv(program uint, programI
 func (this *QOpenGLExtraFunctions) GlGetProgramResourceLocation(program uint, programInterface uint, name unsafe.Pointer) int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramResourceLocation")
 	r := C.qute_QOpenGLExtraFunctions_glGetProgramResourceLocation(self, C.uint(program), C.uint(programInterface), name)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -1234,6 +1351,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramResourceLocation(program uint, pr
 func (this *QOpenGLExtraFunctions) GlUseProgramStages(pipeline uint, stages uint, program uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlUseProgramStages")
 	C.qute_QOpenGLExtraFunctions_glUseProgramStages(self, C.uint(pipeline), C.uint(stages), C.uint(program))
+	runtime.KeepAlive(this)
 }
 
 // GlActiveShaderProgram wraps QOpenGLExtraFunctions::glActiveShaderProgram.
@@ -1244,6 +1362,7 @@ func (this *QOpenGLExtraFunctions) GlUseProgramStages(pipeline uint, stages uint
 func (this *QOpenGLExtraFunctions) GlActiveShaderProgram(pipeline uint, program uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlActiveShaderProgram")
 	C.qute_QOpenGLExtraFunctions_glActiveShaderProgram(self, C.uint(pipeline), C.uint(program))
+	runtime.KeepAlive(this)
 }
 
 // GlCreateShaderProgramv wraps QOpenGLExtraFunctions::glCreateShaderProgramv.
@@ -1254,6 +1373,7 @@ func (this *QOpenGLExtraFunctions) GlActiveShaderProgram(pipeline uint, program 
 func (this *QOpenGLExtraFunctions) GlCreateShaderProgramv(typeArg uint, count int, strings unsafe.Pointer) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlCreateShaderProgramv")
 	r := C.qute_QOpenGLExtraFunctions_glCreateShaderProgramv(self, C.uint(typeArg), C.int(count), strings)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -1265,6 +1385,7 @@ func (this *QOpenGLExtraFunctions) GlCreateShaderProgramv(typeArg uint, count in
 func (this *QOpenGLExtraFunctions) GlBindProgramPipeline(pipeline uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindProgramPipeline")
 	C.qute_QOpenGLExtraFunctions_glBindProgramPipeline(self, C.uint(pipeline))
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteProgramPipelines wraps QOpenGLExtraFunctions::glDeleteProgramPipelines.
@@ -1275,6 +1396,7 @@ func (this *QOpenGLExtraFunctions) GlBindProgramPipeline(pipeline uint) {
 func (this *QOpenGLExtraFunctions) GlDeleteProgramPipelines(n int, pipelines unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDeleteProgramPipelines")
 	C.qute_QOpenGLExtraFunctions_glDeleteProgramPipelines(self, C.int(n), pipelines)
+	runtime.KeepAlive(this)
 }
 
 // GlGenProgramPipelines wraps QOpenGLExtraFunctions::glGenProgramPipelines.
@@ -1285,6 +1407,7 @@ func (this *QOpenGLExtraFunctions) GlDeleteProgramPipelines(n int, pipelines uns
 func (this *QOpenGLExtraFunctions) GlGenProgramPipelines(n int, pipelines unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGenProgramPipelines")
 	C.qute_QOpenGLExtraFunctions_glGenProgramPipelines(self, C.int(n), pipelines)
+	runtime.KeepAlive(this)
 }
 
 // GlIsProgramPipeline wraps QOpenGLExtraFunctions::glIsProgramPipeline.
@@ -1295,6 +1418,7 @@ func (this *QOpenGLExtraFunctions) GlGenProgramPipelines(n int, pipelines unsafe
 func (this *QOpenGLExtraFunctions) GlIsProgramPipeline(pipeline uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsProgramPipeline")
 	r := C.qute_QOpenGLExtraFunctions_glIsProgramPipeline(self, C.uint(pipeline))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1306,6 +1430,7 @@ func (this *QOpenGLExtraFunctions) GlIsProgramPipeline(pipeline uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlGetProgramPipelineiv(pipeline uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramPipelineiv")
 	C.qute_QOpenGLExtraFunctions_glGetProgramPipelineiv(self, C.uint(pipeline), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform1i wraps QOpenGLExtraFunctions::glProgramUniform1i.
@@ -1316,6 +1441,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramPipelineiv(pipeline uint, pname u
 func (this *QOpenGLExtraFunctions) GlProgramUniform1i(program uint, location int, v0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform1i")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform1i(self, C.uint(program), C.int(location), C.int(v0))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform2i wraps QOpenGLExtraFunctions::glProgramUniform2i.
@@ -1326,6 +1452,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform1i(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform2i(program uint, location int, v0 int, v1 int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform2i")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform2i(self, C.uint(program), C.int(location), C.int(v0), C.int(v1))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform3i wraps QOpenGLExtraFunctions::glProgramUniform3i.
@@ -1336,6 +1463,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform2i(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform3i(program uint, location int, v0 int, v1 int, v2 int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform3i")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform3i(self, C.uint(program), C.int(location), C.int(v0), C.int(v1), C.int(v2))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform4i wraps QOpenGLExtraFunctions::glProgramUniform4i.
@@ -1346,6 +1474,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform3i(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform4i(program uint, location int, v0 int, v1 int, v2 int, v3 int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform4i")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform4i(self, C.uint(program), C.int(location), C.int(v0), C.int(v1), C.int(v2), C.int(v3))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform1ui wraps QOpenGLExtraFunctions::glProgramUniform1ui.
@@ -1356,6 +1485,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform4i(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform1ui(program uint, location int, v0 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform1ui")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform1ui(self, C.uint(program), C.int(location), C.uint(v0))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform2ui wraps QOpenGLExtraFunctions::glProgramUniform2ui.
@@ -1366,6 +1496,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform1ui(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform2ui(program uint, location int, v0 uint, v1 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform2ui")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform2ui(self, C.uint(program), C.int(location), C.uint(v0), C.uint(v1))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform3ui wraps QOpenGLExtraFunctions::glProgramUniform3ui.
@@ -1376,6 +1507,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform2ui(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform3ui(program uint, location int, v0 uint, v1 uint, v2 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform3ui")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform3ui(self, C.uint(program), C.int(location), C.uint(v0), C.uint(v1), C.uint(v2))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform4ui wraps QOpenGLExtraFunctions::glProgramUniform4ui.
@@ -1386,6 +1518,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform3ui(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform4ui(program uint, location int, v0 uint, v1 uint, v2 uint, v3 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform4ui")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform4ui(self, C.uint(program), C.int(location), C.uint(v0), C.uint(v1), C.uint(v2), C.uint(v3))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform1f wraps QOpenGLExtraFunctions::glProgramUniform1f.
@@ -1396,6 +1529,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform4ui(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform1f(program uint, location int, v0 float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform1f")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform1f(self, C.uint(program), C.int(location), C.float(v0))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform2f wraps QOpenGLExtraFunctions::glProgramUniform2f.
@@ -1406,6 +1540,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform1f(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform2f(program uint, location int, v0 float32, v1 float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform2f")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform2f(self, C.uint(program), C.int(location), C.float(v0), C.float(v1))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform3f wraps QOpenGLExtraFunctions::glProgramUniform3f.
@@ -1416,6 +1551,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform2f(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform3f(program uint, location int, v0 float32, v1 float32, v2 float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform3f")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform3f(self, C.uint(program), C.int(location), C.float(v0), C.float(v1), C.float(v2))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform4f wraps QOpenGLExtraFunctions::glProgramUniform4f.
@@ -1426,6 +1562,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform3f(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform4f(program uint, location int, v0 float32, v1 float32, v2 float32, v3 float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform4f")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform4f(self, C.uint(program), C.int(location), C.float(v0), C.float(v1), C.float(v2), C.float(v3))
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform1iv wraps QOpenGLExtraFunctions::glProgramUniform1iv.
@@ -1436,6 +1573,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform4f(program uint, location int
 func (this *QOpenGLExtraFunctions) GlProgramUniform1iv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform1iv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform1iv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform2iv wraps QOpenGLExtraFunctions::glProgramUniform2iv.
@@ -1446,6 +1584,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform1iv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform2iv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform2iv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform2iv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform3iv wraps QOpenGLExtraFunctions::glProgramUniform3iv.
@@ -1456,6 +1595,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform2iv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform3iv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform3iv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform3iv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform4iv wraps QOpenGLExtraFunctions::glProgramUniform4iv.
@@ -1466,6 +1606,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform3iv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform4iv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform4iv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform4iv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform1uiv wraps QOpenGLExtraFunctions::glProgramUniform1uiv.
@@ -1476,6 +1617,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform4iv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform1uiv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform1uiv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform1uiv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform2uiv wraps QOpenGLExtraFunctions::glProgramUniform2uiv.
@@ -1486,6 +1628,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform1uiv(program uint, location i
 func (this *QOpenGLExtraFunctions) GlProgramUniform2uiv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform2uiv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform2uiv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform3uiv wraps QOpenGLExtraFunctions::glProgramUniform3uiv.
@@ -1496,6 +1639,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform2uiv(program uint, location i
 func (this *QOpenGLExtraFunctions) GlProgramUniform3uiv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform3uiv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform3uiv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform4uiv wraps QOpenGLExtraFunctions::glProgramUniform4uiv.
@@ -1506,6 +1650,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform3uiv(program uint, location i
 func (this *QOpenGLExtraFunctions) GlProgramUniform4uiv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform4uiv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform4uiv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform1fv wraps QOpenGLExtraFunctions::glProgramUniform1fv.
@@ -1516,6 +1661,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform4uiv(program uint, location i
 func (this *QOpenGLExtraFunctions) GlProgramUniform1fv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform1fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform1fv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform2fv wraps QOpenGLExtraFunctions::glProgramUniform2fv.
@@ -1526,6 +1672,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform1fv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform2fv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform2fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform2fv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform3fv wraps QOpenGLExtraFunctions::glProgramUniform3fv.
@@ -1536,6 +1683,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform2fv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform3fv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform3fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform3fv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniform4fv wraps QOpenGLExtraFunctions::glProgramUniform4fv.
@@ -1546,6 +1694,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform3fv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniform4fv(program uint, location int, count int, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniform4fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniform4fv(self, C.uint(program), C.int(location), C.int(count), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix2fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix2fv.
@@ -1556,6 +1705,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniform4fv(program uint, location in
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix2fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix2fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix2fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix3fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix3fv.
@@ -1566,6 +1716,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix2fv(program uint, locat
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix3fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix3fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix3fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix4fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix4fv.
@@ -1576,6 +1727,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix3fv(program uint, locat
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix4fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix4fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix4fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix2x3fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix2x3fv.
@@ -1586,6 +1738,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix4fv(program uint, locat
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix2x3fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix2x3fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix2x3fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix3x2fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix3x2fv.
@@ -1596,6 +1749,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix2x3fv(program uint, loc
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix3x2fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix3x2fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix3x2fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix2x4fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix2x4fv.
@@ -1606,6 +1760,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix3x2fv(program uint, loc
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix2x4fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix2x4fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix2x4fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix4x2fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix4x2fv.
@@ -1616,6 +1771,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix2x4fv(program uint, loc
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix4x2fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix4x2fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix4x2fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix3x4fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix3x4fv.
@@ -1626,6 +1782,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix4x2fv(program uint, loc
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix3x4fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix3x4fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix3x4fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlProgramUniformMatrix4x3fv wraps QOpenGLExtraFunctions::glProgramUniformMatrix4x3fv.
@@ -1636,6 +1793,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix3x4fv(program uint, loc
 func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix4x3fv(program uint, location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlProgramUniformMatrix4x3fv")
 	C.qute_QOpenGLExtraFunctions_glProgramUniformMatrix4x3fv(self, C.uint(program), C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlValidateProgramPipeline wraps QOpenGLExtraFunctions::glValidateProgramPipeline.
@@ -1646,6 +1804,7 @@ func (this *QOpenGLExtraFunctions) GlProgramUniformMatrix4x3fv(program uint, loc
 func (this *QOpenGLExtraFunctions) GlValidateProgramPipeline(pipeline uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlValidateProgramPipeline")
 	C.qute_QOpenGLExtraFunctions_glValidateProgramPipeline(self, C.uint(pipeline))
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramPipelineInfoLog wraps QOpenGLExtraFunctions::glGetProgramPipelineInfoLog.
@@ -1656,6 +1815,7 @@ func (this *QOpenGLExtraFunctions) GlValidateProgramPipeline(pipeline uint) {
 func (this *QOpenGLExtraFunctions) GlGetProgramPipelineInfoLog(pipeline uint, bufSize int, length unsafe.Pointer, infoLog unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetProgramPipelineInfoLog")
 	C.qute_QOpenGLExtraFunctions_glGetProgramPipelineInfoLog(self, C.uint(pipeline), C.int(bufSize), length, infoLog)
+	runtime.KeepAlive(this)
 }
 
 // GlBindImageTexture wraps QOpenGLExtraFunctions::glBindImageTexture.
@@ -1666,6 +1826,7 @@ func (this *QOpenGLExtraFunctions) GlGetProgramPipelineInfoLog(pipeline uint, bu
 func (this *QOpenGLExtraFunctions) GlBindImageTexture(unit uint, texture uint, level int, layered uint8, layer int, access uint, format uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindImageTexture")
 	C.qute_QOpenGLExtraFunctions_glBindImageTexture(self, C.uint(unit), C.uint(texture), C.int(level), C.uchar(layered), C.int(layer), C.uint(access), C.uint(format))
+	runtime.KeepAlive(this)
 }
 
 // GlGetBooleani_v wraps QOpenGLExtraFunctions::glGetBooleani_v.
@@ -1676,6 +1837,7 @@ func (this *QOpenGLExtraFunctions) GlBindImageTexture(unit uint, texture uint, l
 func (this *QOpenGLExtraFunctions) GlGetBooleani_v(target uint, index uint, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetBooleani_v")
 	C.qute_QOpenGLExtraFunctions_glGetBooleani_v(self, C.uint(target), C.uint(index), data)
+	runtime.KeepAlive(this)
 }
 
 // GlMemoryBarrier wraps QOpenGLExtraFunctions::glMemoryBarrier.
@@ -1686,6 +1848,7 @@ func (this *QOpenGLExtraFunctions) GlGetBooleani_v(target uint, index uint, data
 func (this *QOpenGLExtraFunctions) GlMemoryBarrier(barriers uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlMemoryBarrier")
 	C.qute_QOpenGLExtraFunctions_glMemoryBarrier(self, C.uint(barriers))
+	runtime.KeepAlive(this)
 }
 
 // GlMemoryBarrierByRegion wraps QOpenGLExtraFunctions::glMemoryBarrierByRegion.
@@ -1696,6 +1859,7 @@ func (this *QOpenGLExtraFunctions) GlMemoryBarrier(barriers uint) {
 func (this *QOpenGLExtraFunctions) GlMemoryBarrierByRegion(barriers uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlMemoryBarrierByRegion")
 	C.qute_QOpenGLExtraFunctions_glMemoryBarrierByRegion(self, C.uint(barriers))
+	runtime.KeepAlive(this)
 }
 
 // GlTexStorage2DMultisample wraps QOpenGLExtraFunctions::glTexStorage2DMultisample.
@@ -1706,6 +1870,7 @@ func (this *QOpenGLExtraFunctions) GlMemoryBarrierByRegion(barriers uint) {
 func (this *QOpenGLExtraFunctions) GlTexStorage2DMultisample(target uint, samples int, internalformat uint, width int, height int, fixedsamplelocations uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexStorage2DMultisample")
 	C.qute_QOpenGLExtraFunctions_glTexStorage2DMultisample(self, C.uint(target), C.int(samples), C.uint(internalformat), C.int(width), C.int(height), C.uchar(fixedsamplelocations))
+	runtime.KeepAlive(this)
 }
 
 // GlGetMultisamplefv wraps QOpenGLExtraFunctions::glGetMultisamplefv.
@@ -1716,6 +1881,7 @@ func (this *QOpenGLExtraFunctions) GlTexStorage2DMultisample(target uint, sample
 func (this *QOpenGLExtraFunctions) GlGetMultisamplefv(pname uint, index uint, val unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetMultisamplefv")
 	C.qute_QOpenGLExtraFunctions_glGetMultisamplefv(self, C.uint(pname), C.uint(index), val)
+	runtime.KeepAlive(this)
 }
 
 // GlSampleMaski wraps QOpenGLExtraFunctions::glSampleMaski.
@@ -1726,6 +1892,7 @@ func (this *QOpenGLExtraFunctions) GlGetMultisamplefv(pname uint, index uint, va
 func (this *QOpenGLExtraFunctions) GlSampleMaski(maskNumber uint, maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSampleMaski")
 	C.qute_QOpenGLExtraFunctions_glSampleMaski(self, C.uint(maskNumber), C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // GlGetTexLevelParameteriv wraps QOpenGLExtraFunctions::glGetTexLevelParameteriv.
@@ -1736,6 +1903,7 @@ func (this *QOpenGLExtraFunctions) GlSampleMaski(maskNumber uint, maskArg uint) 
 func (this *QOpenGLExtraFunctions) GlGetTexLevelParameteriv(target uint, level int, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetTexLevelParameteriv")
 	C.qute_QOpenGLExtraFunctions_glGetTexLevelParameteriv(self, C.uint(target), C.int(level), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetTexLevelParameterfv wraps QOpenGLExtraFunctions::glGetTexLevelParameterfv.
@@ -1746,6 +1914,7 @@ func (this *QOpenGLExtraFunctions) GlGetTexLevelParameteriv(target uint, level i
 func (this *QOpenGLExtraFunctions) GlGetTexLevelParameterfv(target uint, level int, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetTexLevelParameterfv")
 	C.qute_QOpenGLExtraFunctions_glGetTexLevelParameterfv(self, C.uint(target), C.int(level), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlBindVertexBuffer wraps QOpenGLExtraFunctions::glBindVertexBuffer.
@@ -1756,6 +1925,7 @@ func (this *QOpenGLExtraFunctions) GlGetTexLevelParameterfv(target uint, level i
 func (this *QOpenGLExtraFunctions) GlBindVertexBuffer(bindingindex uint, buffer uint, offset int64, stride int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBindVertexBuffer")
 	C.qute_QOpenGLExtraFunctions_glBindVertexBuffer(self, C.uint(bindingindex), C.uint(buffer), C.long(offset), C.int(stride))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribFormat wraps QOpenGLExtraFunctions::glVertexAttribFormat.
@@ -1766,6 +1936,7 @@ func (this *QOpenGLExtraFunctions) GlBindVertexBuffer(bindingindex uint, buffer 
 func (this *QOpenGLExtraFunctions) GlVertexAttribFormat(attribindex uint, size int, typeArg uint, normalized uint8, relativeoffset uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribFormat")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribFormat(self, C.uint(attribindex), C.int(size), C.uint(typeArg), C.uchar(normalized), C.uint(relativeoffset))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribIFormat wraps QOpenGLExtraFunctions::glVertexAttribIFormat.
@@ -1776,6 +1947,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribFormat(attribindex uint, size i
 func (this *QOpenGLExtraFunctions) GlVertexAttribIFormat(attribindex uint, size int, typeArg uint, relativeoffset uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribIFormat")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribIFormat(self, C.uint(attribindex), C.int(size), C.uint(typeArg), C.uint(relativeoffset))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribBinding wraps QOpenGLExtraFunctions::glVertexAttribBinding.
@@ -1786,6 +1958,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribIFormat(attribindex uint, size 
 func (this *QOpenGLExtraFunctions) GlVertexAttribBinding(attribindex uint, bindingindex uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexAttribBinding")
 	C.qute_QOpenGLExtraFunctions_glVertexAttribBinding(self, C.uint(attribindex), C.uint(bindingindex))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexBindingDivisor wraps QOpenGLExtraFunctions::glVertexBindingDivisor.
@@ -1796,6 +1969,7 @@ func (this *QOpenGLExtraFunctions) GlVertexAttribBinding(attribindex uint, bindi
 func (this *QOpenGLExtraFunctions) GlVertexBindingDivisor(bindingindex uint, divisor uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlVertexBindingDivisor")
 	C.qute_QOpenGLExtraFunctions_glVertexBindingDivisor(self, C.uint(bindingindex), C.uint(divisor))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendBarrier wraps QOpenGLExtraFunctions::glBlendBarrier.
@@ -1806,6 +1980,7 @@ func (this *QOpenGLExtraFunctions) GlVertexBindingDivisor(bindingindex uint, div
 func (this *QOpenGLExtraFunctions) GlBlendBarrier() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBlendBarrier")
 	C.qute_QOpenGLExtraFunctions_glBlendBarrier(self)
+	runtime.KeepAlive(this)
 }
 
 // GlCopyImageSubData wraps QOpenGLExtraFunctions::glCopyImageSubData.
@@ -1816,6 +1991,7 @@ func (this *QOpenGLExtraFunctions) GlBlendBarrier() {
 func (this *QOpenGLExtraFunctions) GlCopyImageSubData(srcName uint, srcTarget uint, srcLevel int, srcX int, srcY int, srcZ int, dstName uint, dstTarget uint, dstLevel int, dstX int, dstY int, dstZ int, srcWidth int, srcHeight int, srcDepth int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlCopyImageSubData")
 	C.qute_QOpenGLExtraFunctions_glCopyImageSubData(self, C.uint(srcName), C.uint(srcTarget), C.int(srcLevel), C.int(srcX), C.int(srcY), C.int(srcZ), C.uint(dstName), C.uint(dstTarget), C.int(dstLevel), C.int(dstX), C.int(dstY), C.int(dstZ), C.int(srcWidth), C.int(srcHeight), C.int(srcDepth))
+	runtime.KeepAlive(this)
 }
 
 // GlDebugMessageControl wraps QOpenGLExtraFunctions::glDebugMessageControl.
@@ -1826,6 +2002,7 @@ func (this *QOpenGLExtraFunctions) GlCopyImageSubData(srcName uint, srcTarget ui
 func (this *QOpenGLExtraFunctions) GlDebugMessageControl(source uint, typeArg uint, severity uint, count int, ids unsafe.Pointer, enabled uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDebugMessageControl")
 	C.qute_QOpenGLExtraFunctions_glDebugMessageControl(self, C.uint(source), C.uint(typeArg), C.uint(severity), C.int(count), ids, C.uchar(enabled))
+	runtime.KeepAlive(this)
 }
 
 // GlDebugMessageInsert wraps QOpenGLExtraFunctions::glDebugMessageInsert.
@@ -1836,6 +2013,7 @@ func (this *QOpenGLExtraFunctions) GlDebugMessageControl(source uint, typeArg ui
 func (this *QOpenGLExtraFunctions) GlDebugMessageInsert(source uint, typeArg uint, idArg uint, severity uint, length int, buf unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDebugMessageInsert")
 	C.qute_QOpenGLExtraFunctions_glDebugMessageInsert(self, C.uint(source), C.uint(typeArg), C.uint(idArg), C.uint(severity), C.int(length), buf)
+	runtime.KeepAlive(this)
 }
 
 // GlGetDebugMessageLog wraps QOpenGLExtraFunctions::glGetDebugMessageLog.
@@ -1846,6 +2024,7 @@ func (this *QOpenGLExtraFunctions) GlDebugMessageInsert(source uint, typeArg uin
 func (this *QOpenGLExtraFunctions) GlGetDebugMessageLog(count uint, bufSize int, sources unsafe.Pointer, types unsafe.Pointer, ids unsafe.Pointer, severities unsafe.Pointer, lengths unsafe.Pointer, messageLog unsafe.Pointer) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetDebugMessageLog")
 	r := C.qute_QOpenGLExtraFunctions_glGetDebugMessageLog(self, C.uint(count), C.int(bufSize), sources, types, ids, severities, lengths, messageLog)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -1857,6 +2036,7 @@ func (this *QOpenGLExtraFunctions) GlGetDebugMessageLog(count uint, bufSize int,
 func (this *QOpenGLExtraFunctions) GlPushDebugGroup(source uint, idArg uint, length int, message unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlPushDebugGroup")
 	C.qute_QOpenGLExtraFunctions_glPushDebugGroup(self, C.uint(source), C.uint(idArg), C.int(length), message)
+	runtime.KeepAlive(this)
 }
 
 // GlPopDebugGroup wraps QOpenGLExtraFunctions::glPopDebugGroup.
@@ -1867,6 +2047,7 @@ func (this *QOpenGLExtraFunctions) GlPushDebugGroup(source uint, idArg uint, len
 func (this *QOpenGLExtraFunctions) GlPopDebugGroup() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlPopDebugGroup")
 	C.qute_QOpenGLExtraFunctions_glPopDebugGroup(self)
+	runtime.KeepAlive(this)
 }
 
 // GlObjectLabel wraps QOpenGLExtraFunctions::glObjectLabel.
@@ -1877,6 +2058,7 @@ func (this *QOpenGLExtraFunctions) GlPopDebugGroup() {
 func (this *QOpenGLExtraFunctions) GlObjectLabel(identifier uint, name uint, length int, label unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlObjectLabel")
 	C.qute_QOpenGLExtraFunctions_glObjectLabel(self, C.uint(identifier), C.uint(name), C.int(length), label)
+	runtime.KeepAlive(this)
 }
 
 // GlGetObjectLabel wraps QOpenGLExtraFunctions::glGetObjectLabel.
@@ -1887,6 +2069,7 @@ func (this *QOpenGLExtraFunctions) GlObjectLabel(identifier uint, name uint, len
 func (this *QOpenGLExtraFunctions) GlGetObjectLabel(identifier uint, name uint, bufSize int, length unsafe.Pointer, label unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetObjectLabel")
 	C.qute_QOpenGLExtraFunctions_glGetObjectLabel(self, C.uint(identifier), C.uint(name), C.int(bufSize), length, label)
+	runtime.KeepAlive(this)
 }
 
 // GlObjectPtrLabel wraps QOpenGLExtraFunctions::glObjectPtrLabel.
@@ -1897,6 +2080,7 @@ func (this *QOpenGLExtraFunctions) GlGetObjectLabel(identifier uint, name uint, 
 func (this *QOpenGLExtraFunctions) GlObjectPtrLabel(ptr unsafe.Pointer, length int, label unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlObjectPtrLabel")
 	C.qute_QOpenGLExtraFunctions_glObjectPtrLabel(self, ptr, C.int(length), label)
+	runtime.KeepAlive(this)
 }
 
 // GlGetObjectPtrLabel wraps QOpenGLExtraFunctions::glGetObjectPtrLabel.
@@ -1907,6 +2091,7 @@ func (this *QOpenGLExtraFunctions) GlObjectPtrLabel(ptr unsafe.Pointer, length i
 func (this *QOpenGLExtraFunctions) GlGetObjectPtrLabel(ptr unsafe.Pointer, bufSize int, length unsafe.Pointer, label unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetObjectPtrLabel")
 	C.qute_QOpenGLExtraFunctions_glGetObjectPtrLabel(self, ptr, C.int(bufSize), length, label)
+	runtime.KeepAlive(this)
 }
 
 // GlGetPointerv wraps QOpenGLExtraFunctions::glGetPointerv.
@@ -1917,6 +2102,7 @@ func (this *QOpenGLExtraFunctions) GlGetObjectPtrLabel(ptr unsafe.Pointer, bufSi
 func (this *QOpenGLExtraFunctions) GlGetPointerv(pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetPointerv")
 	C.qute_QOpenGLExtraFunctions_glGetPointerv(self, C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlEnablei wraps QOpenGLExtraFunctions::glEnablei.
@@ -1927,6 +2113,7 @@ func (this *QOpenGLExtraFunctions) GlGetPointerv(pname uint, params unsafe.Point
 func (this *QOpenGLExtraFunctions) GlEnablei(target uint, index uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlEnablei")
 	C.qute_QOpenGLExtraFunctions_glEnablei(self, C.uint(target), C.uint(index))
+	runtime.KeepAlive(this)
 }
 
 // GlDisablei wraps QOpenGLExtraFunctions::glDisablei.
@@ -1937,6 +2124,7 @@ func (this *QOpenGLExtraFunctions) GlEnablei(target uint, index uint) {
 func (this *QOpenGLExtraFunctions) GlDisablei(target uint, index uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDisablei")
 	C.qute_QOpenGLExtraFunctions_glDisablei(self, C.uint(target), C.uint(index))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendEquationi wraps QOpenGLExtraFunctions::glBlendEquationi.
@@ -1947,6 +2135,7 @@ func (this *QOpenGLExtraFunctions) GlDisablei(target uint, index uint) {
 func (this *QOpenGLExtraFunctions) GlBlendEquationi(buf uint, mode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBlendEquationi")
 	C.qute_QOpenGLExtraFunctions_glBlendEquationi(self, C.uint(buf), C.uint(mode))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendEquationSeparatei wraps QOpenGLExtraFunctions::glBlendEquationSeparatei.
@@ -1957,6 +2146,7 @@ func (this *QOpenGLExtraFunctions) GlBlendEquationi(buf uint, mode uint) {
 func (this *QOpenGLExtraFunctions) GlBlendEquationSeparatei(buf uint, modeRGB uint, modeAlpha uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBlendEquationSeparatei")
 	C.qute_QOpenGLExtraFunctions_glBlendEquationSeparatei(self, C.uint(buf), C.uint(modeRGB), C.uint(modeAlpha))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendFunci wraps QOpenGLExtraFunctions::glBlendFunci.
@@ -1967,6 +2157,7 @@ func (this *QOpenGLExtraFunctions) GlBlendEquationSeparatei(buf uint, modeRGB ui
 func (this *QOpenGLExtraFunctions) GlBlendFunci(buf uint, src uint, dst uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBlendFunci")
 	C.qute_QOpenGLExtraFunctions_glBlendFunci(self, C.uint(buf), C.uint(src), C.uint(dst))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendFuncSeparatei wraps QOpenGLExtraFunctions::glBlendFuncSeparatei.
@@ -1977,6 +2168,7 @@ func (this *QOpenGLExtraFunctions) GlBlendFunci(buf uint, src uint, dst uint) {
 func (this *QOpenGLExtraFunctions) GlBlendFuncSeparatei(buf uint, srcRGB uint, dstRGB uint, srcAlpha uint, dstAlpha uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlBlendFuncSeparatei")
 	C.qute_QOpenGLExtraFunctions_glBlendFuncSeparatei(self, C.uint(buf), C.uint(srcRGB), C.uint(dstRGB), C.uint(srcAlpha), C.uint(dstAlpha))
+	runtime.KeepAlive(this)
 }
 
 // GlColorMaski wraps QOpenGLExtraFunctions::glColorMaski.
@@ -1987,6 +2179,7 @@ func (this *QOpenGLExtraFunctions) GlBlendFuncSeparatei(buf uint, srcRGB uint, d
 func (this *QOpenGLExtraFunctions) GlColorMaski(index uint, rArg uint8, g uint8, bArg uint8, aArg uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlColorMaski")
 	C.qute_QOpenGLExtraFunctions_glColorMaski(self, C.uint(index), C.uchar(rArg), C.uchar(g), C.uchar(bArg), C.uchar(aArg))
+	runtime.KeepAlive(this)
 }
 
 // GlIsEnabledi wraps QOpenGLExtraFunctions::glIsEnabledi.
@@ -1997,6 +2190,7 @@ func (this *QOpenGLExtraFunctions) GlColorMaski(index uint, rArg uint8, g uint8,
 func (this *QOpenGLExtraFunctions) GlIsEnabledi(target uint, index uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlIsEnabledi")
 	r := C.qute_QOpenGLExtraFunctions_glIsEnabledi(self, C.uint(target), C.uint(index))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -2008,6 +2202,7 @@ func (this *QOpenGLExtraFunctions) GlIsEnabledi(target uint, index uint) uint8 {
 func (this *QOpenGLExtraFunctions) GlDrawElementsBaseVertex(mode uint, count int, typeArg uint, indices unsafe.Pointer, basevertex int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawElementsBaseVertex")
 	C.qute_QOpenGLExtraFunctions_glDrawElementsBaseVertex(self, C.uint(mode), C.int(count), C.uint(typeArg), indices, C.int(basevertex))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawRangeElementsBaseVertex wraps QOpenGLExtraFunctions::glDrawRangeElementsBaseVertex.
@@ -2018,6 +2213,7 @@ func (this *QOpenGLExtraFunctions) GlDrawElementsBaseVertex(mode uint, count int
 func (this *QOpenGLExtraFunctions) GlDrawRangeElementsBaseVertex(mode uint, start uint, end uint, count int, typeArg uint, indices unsafe.Pointer, basevertex int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawRangeElementsBaseVertex")
 	C.qute_QOpenGLExtraFunctions_glDrawRangeElementsBaseVertex(self, C.uint(mode), C.uint(start), C.uint(end), C.int(count), C.uint(typeArg), indices, C.int(basevertex))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawElementsInstancedBaseVertex wraps QOpenGLExtraFunctions::glDrawElementsInstancedBaseVertex.
@@ -2028,6 +2224,7 @@ func (this *QOpenGLExtraFunctions) GlDrawRangeElementsBaseVertex(mode uint, star
 func (this *QOpenGLExtraFunctions) GlDrawElementsInstancedBaseVertex(mode uint, count int, typeArg uint, indices unsafe.Pointer, instancecount int, basevertex int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlDrawElementsInstancedBaseVertex")
 	C.qute_QOpenGLExtraFunctions_glDrawElementsInstancedBaseVertex(self, C.uint(mode), C.int(count), C.uint(typeArg), indices, C.int(instancecount), C.int(basevertex))
+	runtime.KeepAlive(this)
 }
 
 // GlFramebufferTexture wraps QOpenGLExtraFunctions::glFramebufferTexture.
@@ -2038,6 +2235,7 @@ func (this *QOpenGLExtraFunctions) GlDrawElementsInstancedBaseVertex(mode uint, 
 func (this *QOpenGLExtraFunctions) GlFramebufferTexture(target uint, attachment uint, texture uint, level int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlFramebufferTexture")
 	C.qute_QOpenGLExtraFunctions_glFramebufferTexture(self, C.uint(target), C.uint(attachment), C.uint(texture), C.int(level))
+	runtime.KeepAlive(this)
 }
 
 // GlPrimitiveBoundingBox wraps QOpenGLExtraFunctions::glPrimitiveBoundingBox.
@@ -2048,6 +2246,7 @@ func (this *QOpenGLExtraFunctions) GlFramebufferTexture(target uint, attachment 
 func (this *QOpenGLExtraFunctions) GlPrimitiveBoundingBox(minX float32, minY float32, minZ float32, minW float32, maxX float32, maxY float32, maxZ float32, maxW float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlPrimitiveBoundingBox")
 	C.qute_QOpenGLExtraFunctions_glPrimitiveBoundingBox(self, C.float(minX), C.float(minY), C.float(minZ), C.float(minW), C.float(maxX), C.float(maxY), C.float(maxZ), C.float(maxW))
+	runtime.KeepAlive(this)
 }
 
 // GlGetGraphicsResetStatus wraps QOpenGLExtraFunctions::glGetGraphicsResetStatus.
@@ -2058,6 +2257,7 @@ func (this *QOpenGLExtraFunctions) GlPrimitiveBoundingBox(minX float32, minY flo
 func (this *QOpenGLExtraFunctions) GlGetGraphicsResetStatus() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetGraphicsResetStatus")
 	r := C.qute_QOpenGLExtraFunctions_glGetGraphicsResetStatus(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -2069,6 +2269,7 @@ func (this *QOpenGLExtraFunctions) GlGetGraphicsResetStatus() uint {
 func (this *QOpenGLExtraFunctions) GlReadnPixels(x int, y int, width int, height int, format uint, typeArg uint, bufSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlReadnPixels")
 	C.qute_QOpenGLExtraFunctions_glReadnPixels(self, C.int(x), C.int(y), C.int(width), C.int(height), C.uint(format), C.uint(typeArg), C.int(bufSize), data)
+	runtime.KeepAlive(this)
 }
 
 // GlGetnUniformfv wraps QOpenGLExtraFunctions::glGetnUniformfv.
@@ -2079,6 +2280,7 @@ func (this *QOpenGLExtraFunctions) GlReadnPixels(x int, y int, width int, height
 func (this *QOpenGLExtraFunctions) GlGetnUniformfv(program uint, location int, bufSize int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetnUniformfv")
 	C.qute_QOpenGLExtraFunctions_glGetnUniformfv(self, C.uint(program), C.int(location), C.int(bufSize), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetnUniformiv wraps QOpenGLExtraFunctions::glGetnUniformiv.
@@ -2089,6 +2291,7 @@ func (this *QOpenGLExtraFunctions) GlGetnUniformfv(program uint, location int, b
 func (this *QOpenGLExtraFunctions) GlGetnUniformiv(program uint, location int, bufSize int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetnUniformiv")
 	C.qute_QOpenGLExtraFunctions_glGetnUniformiv(self, C.uint(program), C.int(location), C.int(bufSize), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetnUniformuiv wraps QOpenGLExtraFunctions::glGetnUniformuiv.
@@ -2099,6 +2302,7 @@ func (this *QOpenGLExtraFunctions) GlGetnUniformiv(program uint, location int, b
 func (this *QOpenGLExtraFunctions) GlGetnUniformuiv(program uint, location int, bufSize int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetnUniformuiv")
 	C.qute_QOpenGLExtraFunctions_glGetnUniformuiv(self, C.uint(program), C.int(location), C.int(bufSize), params)
+	runtime.KeepAlive(this)
 }
 
 // GlMinSampleShading wraps QOpenGLExtraFunctions::glMinSampleShading.
@@ -2109,6 +2313,7 @@ func (this *QOpenGLExtraFunctions) GlGetnUniformuiv(program uint, location int, 
 func (this *QOpenGLExtraFunctions) GlMinSampleShading(value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlMinSampleShading")
 	C.qute_QOpenGLExtraFunctions_glMinSampleShading(self, C.float(value))
+	runtime.KeepAlive(this)
 }
 
 // GlPatchParameteri wraps QOpenGLExtraFunctions::glPatchParameteri.
@@ -2119,6 +2324,7 @@ func (this *QOpenGLExtraFunctions) GlMinSampleShading(value float32) {
 func (this *QOpenGLExtraFunctions) GlPatchParameteri(pname uint, value int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlPatchParameteri")
 	C.qute_QOpenGLExtraFunctions_glPatchParameteri(self, C.uint(pname), C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // GlTexParameterIiv wraps QOpenGLExtraFunctions::glTexParameterIiv.
@@ -2129,6 +2335,7 @@ func (this *QOpenGLExtraFunctions) GlPatchParameteri(pname uint, value int) {
 func (this *QOpenGLExtraFunctions) GlTexParameterIiv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexParameterIiv")
 	C.qute_QOpenGLExtraFunctions_glTexParameterIiv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlTexParameterIuiv wraps QOpenGLExtraFunctions::glTexParameterIuiv.
@@ -2139,6 +2346,7 @@ func (this *QOpenGLExtraFunctions) GlTexParameterIiv(target uint, pname uint, pa
 func (this *QOpenGLExtraFunctions) GlTexParameterIuiv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexParameterIuiv")
 	C.qute_QOpenGLExtraFunctions_glTexParameterIuiv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetTexParameterIiv wraps QOpenGLExtraFunctions::glGetTexParameterIiv.
@@ -2149,6 +2357,7 @@ func (this *QOpenGLExtraFunctions) GlTexParameterIuiv(target uint, pname uint, p
 func (this *QOpenGLExtraFunctions) GlGetTexParameterIiv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetTexParameterIiv")
 	C.qute_QOpenGLExtraFunctions_glGetTexParameterIiv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetTexParameterIuiv wraps QOpenGLExtraFunctions::glGetTexParameterIuiv.
@@ -2159,6 +2368,7 @@ func (this *QOpenGLExtraFunctions) GlGetTexParameterIiv(target uint, pname uint,
 func (this *QOpenGLExtraFunctions) GlGetTexParameterIuiv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetTexParameterIuiv")
 	C.qute_QOpenGLExtraFunctions_glGetTexParameterIuiv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlSamplerParameterIiv wraps QOpenGLExtraFunctions::glSamplerParameterIiv.
@@ -2169,6 +2379,7 @@ func (this *QOpenGLExtraFunctions) GlGetTexParameterIuiv(target uint, pname uint
 func (this *QOpenGLExtraFunctions) GlSamplerParameterIiv(sampler uint, pname uint, param unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSamplerParameterIiv")
 	C.qute_QOpenGLExtraFunctions_glSamplerParameterIiv(self, C.uint(sampler), C.uint(pname), param)
+	runtime.KeepAlive(this)
 }
 
 // GlSamplerParameterIuiv wraps QOpenGLExtraFunctions::glSamplerParameterIuiv.
@@ -2179,6 +2390,7 @@ func (this *QOpenGLExtraFunctions) GlSamplerParameterIiv(sampler uint, pname uin
 func (this *QOpenGLExtraFunctions) GlSamplerParameterIuiv(sampler uint, pname uint, param unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlSamplerParameterIuiv")
 	C.qute_QOpenGLExtraFunctions_glSamplerParameterIuiv(self, C.uint(sampler), C.uint(pname), param)
+	runtime.KeepAlive(this)
 }
 
 // GlGetSamplerParameterIiv wraps QOpenGLExtraFunctions::glGetSamplerParameterIiv.
@@ -2189,6 +2401,7 @@ func (this *QOpenGLExtraFunctions) GlSamplerParameterIuiv(sampler uint, pname ui
 func (this *QOpenGLExtraFunctions) GlGetSamplerParameterIiv(sampler uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetSamplerParameterIiv")
 	C.qute_QOpenGLExtraFunctions_glGetSamplerParameterIiv(self, C.uint(sampler), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetSamplerParameterIuiv wraps QOpenGLExtraFunctions::glGetSamplerParameterIuiv.
@@ -2199,6 +2412,7 @@ func (this *QOpenGLExtraFunctions) GlGetSamplerParameterIiv(sampler uint, pname 
 func (this *QOpenGLExtraFunctions) GlGetSamplerParameterIuiv(sampler uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlGetSamplerParameterIuiv")
 	C.qute_QOpenGLExtraFunctions_glGetSamplerParameterIuiv(self, C.uint(sampler), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlTexBuffer wraps QOpenGLExtraFunctions::glTexBuffer.
@@ -2209,6 +2423,7 @@ func (this *QOpenGLExtraFunctions) GlGetSamplerParameterIuiv(sampler uint, pname
 func (this *QOpenGLExtraFunctions) GlTexBuffer(target uint, internalformat uint, buffer uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexBuffer")
 	C.qute_QOpenGLExtraFunctions_glTexBuffer(self, C.uint(target), C.uint(internalformat), C.uint(buffer))
+	runtime.KeepAlive(this)
 }
 
 // GlTexBufferRange wraps QOpenGLExtraFunctions::glTexBufferRange.
@@ -2219,6 +2434,7 @@ func (this *QOpenGLExtraFunctions) GlTexBuffer(target uint, internalformat uint,
 func (this *QOpenGLExtraFunctions) GlTexBufferRange(target uint, internalformat uint, buffer uint, offset int64, size int64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexBufferRange")
 	C.qute_QOpenGLExtraFunctions_glTexBufferRange(self, C.uint(target), C.uint(internalformat), C.uint(buffer), C.long(offset), C.long(size))
+	runtime.KeepAlive(this)
 }
 
 // GlTexStorage3DMultisample wraps QOpenGLExtraFunctions::glTexStorage3DMultisample.
@@ -2229,4 +2445,5 @@ func (this *QOpenGLExtraFunctions) GlTexBufferRange(target uint, internalformat 
 func (this *QOpenGLExtraFunctions) GlTexStorage3DMultisample(target uint, samples int, internalformat uint, width int, height int, depth int, fixedsamplelocations uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLExtraFunctions.GlTexStorage3DMultisample")
 	C.qute_QOpenGLExtraFunctions_glTexStorage3DMultisample(self, C.uint(target), C.int(samples), C.uint(internalformat), C.int(width), C.int(height), C.int(depth), C.uchar(fixedsamplelocations))
+	runtime.KeepAlive(this)
 }

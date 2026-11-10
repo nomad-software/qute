@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -112,6 +113,7 @@ func NewQFileInfoFor(file QFileDeviceLike) *QFileInfo {
 		filePtr = rt.UseArg(unsafe.Pointer(file.AsQFileDevice()), "NewQFileInfoFor")
 	}
 	p := C.qute_QFileInfo_new_2(filePtr)
+	runtime.KeepAlive(file)
 	h := rt.WrapClass(p, "QFileInfo", rt.NewOwned)
 	return rt.View[QFileInfo](h, p)
 }
@@ -124,6 +126,7 @@ func NewQFileInfoFor(file QFileDeviceLike) *QFileInfo {
 func NewQFileInfoWithDir(dir *QDir, file string) *QFileInfo {
 	rt.CheckThread("NewQFileInfoWithDir")
 	p := C.qute_QFileInfo_new_3(rt.UseArg(unsafe.Pointer(dir), "NewQFileInfoWithDir"), (*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
+	runtime.KeepAlive(dir)
 	h := rt.WrapClass(p, "QFileInfo", rt.NewOwned)
 	return rt.View[QFileInfo](h, p)
 }
@@ -136,6 +139,7 @@ func NewQFileInfoWithDir(dir *QDir, file string) *QFileInfo {
 func (this *QFileInfo) SetFile(file string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.SetFile")
 	C.qute_QFileInfo_setFile(self, (*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
+	runtime.KeepAlive(this)
 }
 
 // SetFileFor wraps QFileInfo::setFile.
@@ -150,6 +154,8 @@ func (this *QFileInfo) SetFileFor(file QFileDeviceLike) {
 		filePtr = rt.UseArg(unsafe.Pointer(file.AsQFileDevice()), "QFileInfo.SetFileFor")
 	}
 	C.qute_QFileInfo_setFile_1(self, filePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(file)
 }
 
 // SetFileDir wraps QFileInfo::setFile.
@@ -160,6 +166,8 @@ func (this *QFileInfo) SetFileFor(file QFileDeviceLike) {
 func (this *QFileInfo) SetFileDir(dir *QDir, file string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.SetFileDir")
 	C.qute_QFileInfo_setFile_2(self, rt.UseArg(unsafe.Pointer(dir), "QFileInfo.SetFileDir"), (*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dir)
 }
 
 // Exists wraps QFileInfo::exists.
@@ -170,6 +178,7 @@ func (this *QFileInfo) SetFileDir(dir *QDir, file string) {
 func (this *QFileInfo) Exists() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Exists")
 	r := C.qute_QFileInfo_exists(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -181,6 +190,7 @@ func (this *QFileInfo) Exists() bool {
 func (this *QFileInfo) Refresh() {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Refresh")
 	C.qute_QFileInfo_refresh(self)
+	runtime.KeepAlive(this)
 }
 
 // FilePath wraps QFileInfo::filePath.
@@ -191,6 +201,7 @@ func (this *QFileInfo) Refresh() {
 func (this *QFileInfo) FilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilePath")
 	r := C.qute_QFileInfo_filePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -202,6 +213,7 @@ func (this *QFileInfo) FilePath() string {
 func (this *QFileInfo) AbsoluteFilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.AbsoluteFilePath")
 	r := C.qute_QFileInfo_absoluteFilePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -213,6 +225,7 @@ func (this *QFileInfo) AbsoluteFilePath() string {
 func (this *QFileInfo) CanonicalFilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.CanonicalFilePath")
 	r := C.qute_QFileInfo_canonicalFilePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -224,6 +237,7 @@ func (this *QFileInfo) CanonicalFilePath() string {
 func (this *QFileInfo) FilesystemFilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemFilePath")
 	r := C.qute_QFileInfo_filesystemFilePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -235,6 +249,7 @@ func (this *QFileInfo) FilesystemFilePath() string {
 func (this *QFileInfo) FilesystemAbsoluteFilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemAbsoluteFilePath")
 	r := C.qute_QFileInfo_filesystemAbsoluteFilePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -246,6 +261,7 @@ func (this *QFileInfo) FilesystemAbsoluteFilePath() string {
 func (this *QFileInfo) FilesystemCanonicalFilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemCanonicalFilePath")
 	r := C.qute_QFileInfo_filesystemCanonicalFilePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -257,6 +273,7 @@ func (this *QFileInfo) FilesystemCanonicalFilePath() string {
 func (this *QFileInfo) FileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FileName")
 	r := C.qute_QFileInfo_fileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -268,6 +285,7 @@ func (this *QFileInfo) FileName() string {
 func (this *QFileInfo) BaseName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.BaseName")
 	r := C.qute_QFileInfo_baseName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -279,6 +297,7 @@ func (this *QFileInfo) BaseName() string {
 func (this *QFileInfo) CompleteBaseName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.CompleteBaseName")
 	r := C.qute_QFileInfo_completeBaseName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -290,6 +309,7 @@ func (this *QFileInfo) CompleteBaseName() string {
 func (this *QFileInfo) Suffix() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Suffix")
 	r := C.qute_QFileInfo_suffix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -301,6 +321,7 @@ func (this *QFileInfo) Suffix() string {
 func (this *QFileInfo) BundleName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.BundleName")
 	r := C.qute_QFileInfo_bundleName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -312,6 +333,7 @@ func (this *QFileInfo) BundleName() string {
 func (this *QFileInfo) CompleteSuffix() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.CompleteSuffix")
 	r := C.qute_QFileInfo_completeSuffix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -323,6 +345,7 @@ func (this *QFileInfo) CompleteSuffix() string {
 func (this *QFileInfo) Path() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Path")
 	r := C.qute_QFileInfo_path(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -334,6 +357,7 @@ func (this *QFileInfo) Path() string {
 func (this *QFileInfo) AbsolutePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.AbsolutePath")
 	r := C.qute_QFileInfo_absolutePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -345,6 +369,7 @@ func (this *QFileInfo) AbsolutePath() string {
 func (this *QFileInfo) CanonicalPath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.CanonicalPath")
 	r := C.qute_QFileInfo_canonicalPath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -356,6 +381,7 @@ func (this *QFileInfo) CanonicalPath() string {
 func (this *QFileInfo) FilesystemPath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemPath")
 	r := C.qute_QFileInfo_filesystemPath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -367,6 +393,7 @@ func (this *QFileInfo) FilesystemPath() string {
 func (this *QFileInfo) FilesystemAbsolutePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemAbsolutePath")
 	r := C.qute_QFileInfo_filesystemAbsolutePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -378,6 +405,7 @@ func (this *QFileInfo) FilesystemAbsolutePath() string {
 func (this *QFileInfo) FilesystemCanonicalPath() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemCanonicalPath")
 	r := C.qute_QFileInfo_filesystemCanonicalPath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -391,6 +419,7 @@ func (this *QFileInfo) FilesystemCanonicalPath() string {
 func (this *QFileInfo) Dir() *QDir {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Dir")
 	r := C.qute_QFileInfo_dir(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDir](rt.WrapClass(r, "QDir", rt.TakeOwned), r)
 }
 
@@ -404,6 +433,7 @@ func (this *QFileInfo) Dir() *QDir {
 func (this *QFileInfo) AbsoluteDir() *QDir {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.AbsoluteDir")
 	r := C.qute_QFileInfo_absoluteDir(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDir](rt.WrapClass(r, "QDir", rt.TakeOwned), r)
 }
 
@@ -415,6 +445,7 @@ func (this *QFileInfo) AbsoluteDir() *QDir {
 func (this *QFileInfo) IsReadable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsReadable")
 	r := C.qute_QFileInfo_isReadable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -426,6 +457,7 @@ func (this *QFileInfo) IsReadable() bool {
 func (this *QFileInfo) IsWritable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsWritable")
 	r := C.qute_QFileInfo_isWritable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -437,6 +469,7 @@ func (this *QFileInfo) IsWritable() bool {
 func (this *QFileInfo) IsExecutable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsExecutable")
 	r := C.qute_QFileInfo_isExecutable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -448,6 +481,7 @@ func (this *QFileInfo) IsExecutable() bool {
 func (this *QFileInfo) IsHidden() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsHidden")
 	r := C.qute_QFileInfo_isHidden(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -459,6 +493,7 @@ func (this *QFileInfo) IsHidden() bool {
 func (this *QFileInfo) IsNativePath() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsNativePath")
 	r := C.qute_QFileInfo_isNativePath(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -470,6 +505,7 @@ func (this *QFileInfo) IsNativePath() bool {
 func (this *QFileInfo) IsRelative() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsRelative")
 	r := C.qute_QFileInfo_isRelative(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -481,6 +517,7 @@ func (this *QFileInfo) IsRelative() bool {
 func (this *QFileInfo) IsAbsolute() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsAbsolute")
 	r := C.qute_QFileInfo_isAbsolute(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -492,6 +529,7 @@ func (this *QFileInfo) IsAbsolute() bool {
 func (this *QFileInfo) MakeAbsolute() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.MakeAbsolute")
 	r := C.qute_QFileInfo_makeAbsolute(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -503,6 +541,7 @@ func (this *QFileInfo) MakeAbsolute() bool {
 func (this *QFileInfo) IsFile() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsFile")
 	r := C.qute_QFileInfo_isFile(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -514,6 +553,7 @@ func (this *QFileInfo) IsFile() bool {
 func (this *QFileInfo) IsDir() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsDir")
 	r := C.qute_QFileInfo_isDir(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -525,6 +565,7 @@ func (this *QFileInfo) IsDir() bool {
 func (this *QFileInfo) IsSymLink() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsSymLink")
 	r := C.qute_QFileInfo_isSymLink(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -536,6 +577,7 @@ func (this *QFileInfo) IsSymLink() bool {
 func (this *QFileInfo) IsSymbolicLink() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsSymbolicLink")
 	r := C.qute_QFileInfo_isSymbolicLink(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -547,6 +589,7 @@ func (this *QFileInfo) IsSymbolicLink() bool {
 func (this *QFileInfo) IsOther() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsOther")
 	r := C.qute_QFileInfo_isOther(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -558,6 +601,7 @@ func (this *QFileInfo) IsOther() bool {
 func (this *QFileInfo) IsShortcut() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsShortcut")
 	r := C.qute_QFileInfo_isShortcut(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -569,6 +613,7 @@ func (this *QFileInfo) IsShortcut() bool {
 func (this *QFileInfo) IsAlias() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsAlias")
 	r := C.qute_QFileInfo_isAlias(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -580,6 +625,7 @@ func (this *QFileInfo) IsAlias() bool {
 func (this *QFileInfo) IsJunction() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsJunction")
 	r := C.qute_QFileInfo_isJunction(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -591,6 +637,7 @@ func (this *QFileInfo) IsJunction() bool {
 func (this *QFileInfo) IsRoot() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsRoot")
 	r := C.qute_QFileInfo_isRoot(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -602,6 +649,7 @@ func (this *QFileInfo) IsRoot() bool {
 func (this *QFileInfo) IsBundle() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.IsBundle")
 	r := C.qute_QFileInfo_isBundle(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -613,6 +661,7 @@ func (this *QFileInfo) IsBundle() bool {
 func (this *QFileInfo) SymLinkTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.SymLinkTarget")
 	r := C.qute_QFileInfo_symLinkTarget(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -624,6 +673,7 @@ func (this *QFileInfo) SymLinkTarget() string {
 func (this *QFileInfo) ReadSymLink() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.ReadSymLink")
 	r := C.qute_QFileInfo_readSymLink(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -635,6 +685,7 @@ func (this *QFileInfo) ReadSymLink() string {
 func (this *QFileInfo) JunctionTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.JunctionTarget")
 	r := C.qute_QFileInfo_junctionTarget(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -646,6 +697,7 @@ func (this *QFileInfo) JunctionTarget() string {
 func (this *QFileInfo) FilesystemSymLinkTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemSymLinkTarget")
 	r := C.qute_QFileInfo_filesystemSymLinkTarget(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -657,6 +709,7 @@ func (this *QFileInfo) FilesystemSymLinkTarget() string {
 func (this *QFileInfo) FilesystemReadSymLink() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemReadSymLink")
 	r := C.qute_QFileInfo_filesystemReadSymLink(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -668,6 +721,7 @@ func (this *QFileInfo) FilesystemReadSymLink() string {
 func (this *QFileInfo) FilesystemJunctionTarget() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FilesystemJunctionTarget")
 	r := C.qute_QFileInfo_filesystemJunctionTarget(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -679,6 +733,7 @@ func (this *QFileInfo) FilesystemJunctionTarget() string {
 func (this *QFileInfo) Owner() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Owner")
 	r := C.qute_QFileInfo_owner(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -690,6 +745,7 @@ func (this *QFileInfo) Owner() string {
 func (this *QFileInfo) OwnerId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.OwnerId")
 	r := C.qute_QFileInfo_ownerId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -701,6 +757,7 @@ func (this *QFileInfo) OwnerId() uint {
 func (this *QFileInfo) Group() string {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Group")
 	r := C.qute_QFileInfo_group(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -712,6 +769,7 @@ func (this *QFileInfo) Group() string {
 func (this *QFileInfo) GroupId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.GroupId")
 	r := C.qute_QFileInfo_groupId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -723,6 +781,7 @@ func (this *QFileInfo) GroupId() uint {
 func (this *QFileInfo) Permission(permissions QFileDevicePermissions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Permission")
 	r := C.qute_QFileInfo_permission(self, C.int64_t(permissions))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -734,6 +793,7 @@ func (this *QFileInfo) Permission(permissions QFileDevicePermissions) bool {
 func (this *QFileInfo) Permissions() QFileDevicePermissions {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Permissions")
 	r := C.qute_QFileInfo_permissions(self)
+	runtime.KeepAlive(this)
 	return QFileDevicePermissions(r)
 }
 
@@ -745,6 +805,7 @@ func (this *QFileInfo) Permissions() QFileDevicePermissions {
 func (this *QFileInfo) Size() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Size")
 	r := C.qute_QFileInfo_size(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -758,6 +819,7 @@ func (this *QFileInfo) Size() int64 {
 func (this *QFileInfo) BirthTime() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.BirthTime")
 	r := C.qute_QFileInfo_birthTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -771,6 +833,7 @@ func (this *QFileInfo) BirthTime() *QDateTime {
 func (this *QFileInfo) MetadataChangeTime() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.MetadataChangeTime")
 	r := C.qute_QFileInfo_metadataChangeTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -784,6 +847,7 @@ func (this *QFileInfo) MetadataChangeTime() *QDateTime {
 func (this *QFileInfo) LastModified() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.LastModified")
 	r := C.qute_QFileInfo_lastModified(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -797,6 +861,7 @@ func (this *QFileInfo) LastModified() *QDateTime {
 func (this *QFileInfo) LastRead() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.LastRead")
 	r := C.qute_QFileInfo_lastRead(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -810,6 +875,7 @@ func (this *QFileInfo) LastRead() *QDateTime {
 func (this *QFileInfo) FileTime(time QFileDeviceFileTime) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FileTime")
 	r := C.qute_QFileInfo_fileTime(self, C.int64_t(time))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -823,6 +889,8 @@ func (this *QFileInfo) FileTime(time QFileDeviceFileTime) *QDateTime {
 func (this *QFileInfo) BirthTimeWithTimeZone(tz *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.BirthTimeWithTimeZone")
 	r := C.qute_QFileInfo_birthTime_1(self, rt.UseArg(unsafe.Pointer(tz), "QFileInfo.BirthTimeWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tz)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -836,6 +904,8 @@ func (this *QFileInfo) BirthTimeWithTimeZone(tz *QTimeZone) *QDateTime {
 func (this *QFileInfo) MetadataChangeTimeWithTimeZone(tz *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.MetadataChangeTimeWithTimeZone")
 	r := C.qute_QFileInfo_metadataChangeTime_1(self, rt.UseArg(unsafe.Pointer(tz), "QFileInfo.MetadataChangeTimeWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tz)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -849,6 +919,8 @@ func (this *QFileInfo) MetadataChangeTimeWithTimeZone(tz *QTimeZone) *QDateTime 
 func (this *QFileInfo) LastModifiedWithTimeZone(tz *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.LastModifiedWithTimeZone")
 	r := C.qute_QFileInfo_lastModified_1(self, rt.UseArg(unsafe.Pointer(tz), "QFileInfo.LastModifiedWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tz)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -862,6 +934,8 @@ func (this *QFileInfo) LastModifiedWithTimeZone(tz *QTimeZone) *QDateTime {
 func (this *QFileInfo) LastReadWithTimeZone(tz *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.LastReadWithTimeZone")
 	r := C.qute_QFileInfo_lastRead_1(self, rt.UseArg(unsafe.Pointer(tz), "QFileInfo.LastReadWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tz)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -875,6 +949,8 @@ func (this *QFileInfo) LastReadWithTimeZone(tz *QTimeZone) *QDateTime {
 func (this *QFileInfo) FileTimeWithTimeZone(time QFileDeviceFileTime, tz *QTimeZone) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.FileTimeWithTimeZone")
 	r := C.qute_QFileInfo_fileTime_1(self, C.int64_t(time), rt.UseArg(unsafe.Pointer(tz), "QFileInfo.FileTimeWithTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tz)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -886,6 +962,7 @@ func (this *QFileInfo) FileTimeWithTimeZone(time QFileDeviceFileTime, tz *QTimeZ
 func (this *QFileInfo) Caching() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Caching")
 	r := C.qute_QFileInfo_caching(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -897,6 +974,7 @@ func (this *QFileInfo) Caching() bool {
 func (this *QFileInfo) SetCaching(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.SetCaching")
 	C.qute_QFileInfo_setCaching(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // Stat wraps QFileInfo::stat.
@@ -907,6 +985,7 @@ func (this *QFileInfo) SetCaching(on bool) {
 func (this *QFileInfo) Stat() {
 	self := rt.Use(unsafe.Pointer(this), "QFileInfo.Stat")
 	C.qute_QFileInfo_stat(self)
+	runtime.KeepAlive(this)
 }
 
 // QFileInfoExists wraps QFileInfo::exists.

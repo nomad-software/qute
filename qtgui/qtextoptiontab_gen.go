@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQTextOptionTabWithPos(pos float64, tabType QTextOptionTabType) *QTextOpt
 func (this *QTextOptionTab) Position() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextOptionTab.Position")
 	r := C.qute_QTextOptionTab_get_position(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -122,6 +124,7 @@ func (this *QTextOptionTab) Position() float64 {
 func (this *QTextOptionTab) SetPosition(position float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOptionTab.SetPosition")
 	C.qute_QTextOptionTab_set_position(self, C.double(position))
+	runtime.KeepAlive(this)
 }
 
 // Type wraps the public field QTextOption::Tab::type.
@@ -132,6 +135,7 @@ func (this *QTextOptionTab) SetPosition(position float64) {
 func (this *QTextOptionTab) Type() QTextOptionTabType {
 	self := rt.Use(unsafe.Pointer(this), "QTextOptionTab.Type")
 	r := C.qute_QTextOptionTab_get_type(self)
+	runtime.KeepAlive(this)
 	return QTextOptionTabType(r)
 }
 
@@ -145,6 +149,7 @@ func (this *QTextOptionTab) Type() QTextOptionTabType {
 func (this *QTextOptionTab) SetType(typeArg QTextOptionTabType) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOptionTab.SetType")
 	C.qute_QTextOptionTab_set_type(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // Delimiter wraps the public field QTextOption::Tab::delimiter.
@@ -155,6 +160,7 @@ func (this *QTextOptionTab) SetType(typeArg QTextOptionTabType) {
 func (this *QTextOptionTab) Delimiter() rune {
 	self := rt.Use(unsafe.Pointer(this), "QTextOptionTab.Delimiter")
 	r := C.qute_QTextOptionTab_get_delimiter(self)
+	runtime.KeepAlive(this)
 	return rune(r)
 }
 
@@ -168,4 +174,5 @@ func (this *QTextOptionTab) Delimiter() rune {
 func (this *QTextOptionTab) SetDelimiter(delimiter rune) {
 	self := rt.Use(unsafe.Pointer(this), "QTextOptionTab.SetDelimiter")
 	C.qute_QTextOptionTab_set_delimiter(self, C.uint(delimiter))
+	runtime.KeepAlive(this)
 }

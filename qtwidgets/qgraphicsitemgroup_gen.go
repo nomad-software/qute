@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -46,6 +47,7 @@ func NewQGraphicsItemGroup(parent QGraphicsItemLike) *QGraphicsItemGroup {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsItemGroup")
 	}
 	p := C.qute_QGraphicsItemGroup_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -71,6 +73,8 @@ func (this *QGraphicsItemGroup) AddToGroup(item QGraphicsItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItemGroup.AddToGroup")
 	}
 	C.qute_QGraphicsItemGroup_addToGroup(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -88,4 +92,6 @@ func (this *QGraphicsItemGroup) RemoveFromGroup(item QGraphicsItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsItemGroup.RemoveFromGroup")
 	}
 	C.qute_QGraphicsItemGroup_removeFromGroup(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }

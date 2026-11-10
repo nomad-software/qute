@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QSessionManagerCast(o qtcore.QObjectLike) *QSessionManager {
 func (this *QSessionManager) SessionId() string {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SessionId")
 	r := C.qute_QSessionManager_sessionId(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -66,6 +68,7 @@ func (this *QSessionManager) SessionId() string {
 func (this *QSessionManager) SessionKey() string {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SessionKey")
 	r := C.qute_QSessionManager_sessionKey(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -77,6 +80,7 @@ func (this *QSessionManager) SessionKey() string {
 func (this *QSessionManager) AllowsInteraction() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.AllowsInteraction")
 	r := C.qute_QSessionManager_allowsInteraction(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -88,6 +92,7 @@ func (this *QSessionManager) AllowsInteraction() bool {
 func (this *QSessionManager) AllowsErrorInteraction() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.AllowsErrorInteraction")
 	r := C.qute_QSessionManager_allowsErrorInteraction(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -99,6 +104,7 @@ func (this *QSessionManager) AllowsErrorInteraction() bool {
 func (this *QSessionManager) Release() {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.Release")
 	C.qute_QSessionManager_release(self)
+	runtime.KeepAlive(this)
 }
 
 // Cancel wraps QSessionManager::cancel.
@@ -109,6 +115,7 @@ func (this *QSessionManager) Release() {
 func (this *QSessionManager) Cancel() {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.Cancel")
 	C.qute_QSessionManager_cancel(self)
+	runtime.KeepAlive(this)
 }
 
 // SetRestartHint wraps QSessionManager::setRestartHint.
@@ -119,6 +126,7 @@ func (this *QSessionManager) Cancel() {
 func (this *QSessionManager) SetRestartHint(restartHint QSessionManagerRestartHint) {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SetRestartHint")
 	C.qute_QSessionManager_setRestartHint(self, C.int64_t(restartHint))
+	runtime.KeepAlive(this)
 }
 
 // RestartHint wraps QSessionManager::restartHint.
@@ -129,6 +137,7 @@ func (this *QSessionManager) SetRestartHint(restartHint QSessionManagerRestartHi
 func (this *QSessionManager) RestartHint() QSessionManagerRestartHint {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.RestartHint")
 	r := C.qute_QSessionManager_restartHint(self)
+	runtime.KeepAlive(this)
 	return QSessionManagerRestartHint(r)
 }
 
@@ -141,6 +150,7 @@ func (this *QSessionManager) SetRestartCommand(restartCommand []string) {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SetRestartCommand")
 	restartCommandData, restartCommandLens := quteStrListArg(restartCommand)
 	C.qute_QSessionManager_setRestartCommand(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(restartCommandData))), (*C.ptrdiff_t)(unsafe.SliceData(restartCommandLens)), C.ptrdiff_t(len(restartCommand)))
+	runtime.KeepAlive(this)
 }
 
 // RestartCommand wraps QSessionManager::restartCommand.
@@ -151,6 +161,7 @@ func (this *QSessionManager) SetRestartCommand(restartCommand []string) {
 func (this *QSessionManager) RestartCommand() []string {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.RestartCommand")
 	r := C.qute_QSessionManager_restartCommand(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -163,6 +174,7 @@ func (this *QSessionManager) SetDiscardCommand(discardCommand []string) {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SetDiscardCommand")
 	discardCommandData, discardCommandLens := quteStrListArg(discardCommand)
 	C.qute_QSessionManager_setDiscardCommand(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(discardCommandData))), (*C.ptrdiff_t)(unsafe.SliceData(discardCommandLens)), C.ptrdiff_t(len(discardCommand)))
+	runtime.KeepAlive(this)
 }
 
 // DiscardCommand wraps QSessionManager::discardCommand.
@@ -173,6 +185,7 @@ func (this *QSessionManager) SetDiscardCommand(discardCommand []string) {
 func (this *QSessionManager) DiscardCommand() []string {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.DiscardCommand")
 	r := C.qute_QSessionManager_discardCommand(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -184,6 +197,7 @@ func (this *QSessionManager) DiscardCommand() []string {
 func (this *QSessionManager) SetManagerProperty(name string, value string) {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SetManagerProperty")
 	C.qute_QSessionManager_setManagerProperty(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
+	runtime.KeepAlive(this)
 }
 
 // SetManagerPropertyValue wraps QSessionManager::setManagerProperty.
@@ -195,6 +209,7 @@ func (this *QSessionManager) SetManagerPropertyValue(name string, value []string
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.SetManagerPropertyValue")
 	valueData, valueLens := quteStrListArg(value)
 	C.qute_QSessionManager_setManagerProperty_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.SliceData(valueData))), (*C.ptrdiff_t)(unsafe.SliceData(valueLens)), C.ptrdiff_t(len(value)))
+	runtime.KeepAlive(this)
 }
 
 // IsPhase2 wraps QSessionManager::isPhase2.
@@ -205,6 +220,7 @@ func (this *QSessionManager) SetManagerPropertyValue(name string, value []string
 func (this *QSessionManager) IsPhase2() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.IsPhase2")
 	r := C.qute_QSessionManager_isPhase2(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -216,4 +232,5 @@ func (this *QSessionManager) IsPhase2() bool {
 func (this *QSessionManager) RequestPhase2() {
 	self := rt.Use(unsafe.Pointer(this), "QSessionManager.RequestPhase2")
 	C.qute_QSessionManager_requestPhase2(self)
+	runtime.KeepAlive(this)
 }

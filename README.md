@@ -168,6 +168,8 @@ Each handle is in one state, changed only by annotated methods:
   `Delete()` it when done (`qute vet` flags ones that never are).
 - GC cleanups never run `delete` on a GC goroutine. They queue onto the GUI
   thread, and after the event loop exits, queued cleanups are dropped.
+- Every call keeps its receiver and arguments alive until it returns, so GC
+  can't free them during a call that runs a nested event loop.
 - `Ownership()`, `Alive()`, `Delete()`, `Keep()`, `Unkeep()` and `Ptr()` exist
   on every object. `XFromPtr(p, qtcore.Borrowed)` is the unsafe escape hatch.
 

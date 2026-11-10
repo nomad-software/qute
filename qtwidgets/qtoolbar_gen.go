@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQToolBar(parent QWidgetLike) *QToolBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolBar")
 	}
 	p := C.qute_QToolBar_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQToolBarWithTitle(title string, parent QWidgetLike) *QToolBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolBarWithTitle")
 	}
 	p := C.qute_QToolBar_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQToolBarWithTitle(title string, parent QWidgetLike) *QToolBar {
 func (this *QToolBar) SetMovable(movable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.SetMovable")
 	C.qute_QToolBar_setMovable(self, C.bool(movable))
+	runtime.KeepAlive(this)
 }
 
 // IsMovable wraps QToolBar::isMovable.
@@ -110,6 +114,7 @@ func (this *QToolBar) SetMovable(movable bool) {
 func (this *QToolBar) IsMovable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.IsMovable")
 	r := C.qute_QToolBar_isMovable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -121,6 +126,7 @@ func (this *QToolBar) IsMovable() bool {
 func (this *QToolBar) SetAllowedAreas(areas qtcore.ToolBarAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.SetAllowedAreas")
 	C.qute_QToolBar_setAllowedAreas(self, C.int64_t(areas))
+	runtime.KeepAlive(this)
 }
 
 // AllowedAreas wraps QToolBar::allowedAreas.
@@ -131,6 +137,7 @@ func (this *QToolBar) SetAllowedAreas(areas qtcore.ToolBarAreas) {
 func (this *QToolBar) AllowedAreas() qtcore.ToolBarAreas {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.AllowedAreas")
 	r := C.qute_QToolBar_allowedAreas(self)
+	runtime.KeepAlive(this)
 	return qtcore.ToolBarAreas(r)
 }
 
@@ -142,6 +149,7 @@ func (this *QToolBar) AllowedAreas() qtcore.ToolBarAreas {
 func (this *QToolBar) IsAreaAllowed(area qtcore.ToolBarAreas) bool {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.IsAreaAllowed")
 	r := C.qute_QToolBar_isAreaAllowed(self, C.int64_t(area))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -153,6 +161,7 @@ func (this *QToolBar) IsAreaAllowed(area qtcore.ToolBarAreas) bool {
 func (this *QToolBar) SetOrientation(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.SetOrientation")
 	C.qute_QToolBar_setOrientation(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // Orientation wraps QToolBar::orientation.
@@ -163,6 +172,7 @@ func (this *QToolBar) SetOrientation(orientation qtcore.Orientations) {
 func (this *QToolBar) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.Orientation")
 	r := C.qute_QToolBar_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -174,6 +184,7 @@ func (this *QToolBar) Orientation() qtcore.Orientations {
 func (this *QToolBar) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.Clear")
 	C.qute_QToolBar_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // AddSeparator wraps QToolBar::addSeparator.
@@ -186,6 +197,7 @@ func (this *QToolBar) Clear() {
 func (this *QToolBar) AddSeparator() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.AddSeparator")
 	r := C.qute_QToolBar_addSeparator(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -203,6 +215,8 @@ func (this *QToolBar) InsertSeparator(before qtgui.QActionLike) *qtgui.QAction {
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QToolBar.InsertSeparator")
 	}
 	r := C.qute_QToolBar_insertSeparator(self, beforePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -221,6 +235,8 @@ func (this *QToolBar) AddWidget(widget QWidgetLike) *qtgui.QAction {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QToolBar.AddWidget")
 	}
 	r := C.qute_QToolBar_addWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
@@ -244,6 +260,9 @@ func (this *QToolBar) InsertWidget(before qtgui.QActionLike, widget QWidgetLike)
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QToolBar.InsertWidget")
 	}
 	r := C.qute_QToolBar_insertWidget(self, beforePtr, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
@@ -260,6 +279,8 @@ func (this *QToolBar) ActionGeometry(action qtgui.QActionLike) qtcore.QRect {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QToolBar.ActionGeometry")
 	}
 	r := C.qute_QToolBar_actionGeometry(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 	return goQRect(r)
 }
 
@@ -273,6 +294,7 @@ func (this *QToolBar) ActionGeometry(action qtgui.QActionLike) qtcore.QRect {
 func (this *QToolBar) ActionAt(pArg qtcore.QPoint) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.ActionAt")
 	r := C.qute_QToolBar_actionAt(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -286,6 +308,7 @@ func (this *QToolBar) ActionAt(pArg qtcore.QPoint) *qtgui.QAction {
 func (this *QToolBar) ToggleViewAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.ToggleViewAction")
 	r := C.qute_QToolBar_toggleViewAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -297,6 +320,7 @@ func (this *QToolBar) ToggleViewAction() *qtgui.QAction {
 func (this *QToolBar) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.IconSize")
 	r := C.qute_QToolBar_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -308,6 +332,7 @@ func (this *QToolBar) IconSize() qtcore.QSize {
 func (this *QToolBar) ToolButtonStyle() qtcore.ToolButtonStyle {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.ToolButtonStyle")
 	r := C.qute_QToolBar_toolButtonStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.ToolButtonStyle(r)
 }
 
@@ -325,6 +350,8 @@ func (this *QToolBar) WidgetForAction(action qtgui.QActionLike) *QWidget {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QToolBar.WidgetForAction")
 	}
 	r := C.qute_QToolBar_widgetForAction(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -336,6 +363,7 @@ func (this *QToolBar) WidgetForAction(action qtgui.QActionLike) *QWidget {
 func (this *QToolBar) IsFloatable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.IsFloatable")
 	r := C.qute_QToolBar_isFloatable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -347,6 +375,7 @@ func (this *QToolBar) IsFloatable() bool {
 func (this *QToolBar) SetFloatable(floatable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.SetFloatable")
 	C.qute_QToolBar_setFloatable(self, C.bool(floatable))
+	runtime.KeepAlive(this)
 }
 
 // IsFloating wraps QToolBar::isFloating.
@@ -357,6 +386,7 @@ func (this *QToolBar) SetFloatable(floatable bool) {
 func (this *QToolBar) IsFloating() bool {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.IsFloating")
 	r := C.qute_QToolBar_isFloating(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -368,6 +398,7 @@ func (this *QToolBar) IsFloating() bool {
 func (this *QToolBar) SetIconSize(iconSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.SetIconSize")
 	C.qute_QToolBar_setIconSize(self, cQSize(iconSize))
+	runtime.KeepAlive(this)
 }
 
 // SetToolButtonStyle wraps QToolBar::setToolButtonStyle.
@@ -378,6 +409,7 @@ func (this *QToolBar) SetIconSize(iconSize qtcore.QSize) {
 func (this *QToolBar) SetToolButtonStyle(toolButtonStyle qtcore.ToolButtonStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.SetToolButtonStyle")
 	C.qute_QToolBar_setToolButtonStyle(self, C.int64_t(toolButtonStyle))
+	runtime.KeepAlive(this)
 }
 
 // EmitActionTriggered wraps emitting the actionTriggered signal.
@@ -392,6 +424,8 @@ func (this *QToolBar) EmitActionTriggered(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QToolBar.EmitActionTriggered")
 	}
 	C.qute_QToolBar_actionTriggered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // EmitMovableChanged wraps emitting the movableChanged signal.
@@ -402,6 +436,7 @@ func (this *QToolBar) EmitActionTriggered(action qtgui.QActionLike) {
 func (this *QToolBar) EmitMovableChanged(movable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitMovableChanged")
 	C.qute_QToolBar_movableChanged_1(self, C.bool(movable))
+	runtime.KeepAlive(this)
 }
 
 // EmitAllowedAreasChanged wraps emitting the allowedAreasChanged signal.
@@ -412,6 +447,7 @@ func (this *QToolBar) EmitMovableChanged(movable bool) {
 func (this *QToolBar) EmitAllowedAreasChanged(allowedAreas qtcore.ToolBarAreas) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitAllowedAreasChanged")
 	C.qute_QToolBar_allowedAreasChanged_1(self, C.int64_t(allowedAreas))
+	runtime.KeepAlive(this)
 }
 
 // EmitOrientationChanged wraps emitting the orientationChanged signal.
@@ -422,6 +458,7 @@ func (this *QToolBar) EmitAllowedAreasChanged(allowedAreas qtcore.ToolBarAreas) 
 func (this *QToolBar) EmitOrientationChanged(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitOrientationChanged")
 	C.qute_QToolBar_orientationChanged_1(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // EmitIconSizeChanged wraps emitting the iconSizeChanged signal.
@@ -432,6 +469,7 @@ func (this *QToolBar) EmitOrientationChanged(orientation qtcore.Orientations) {
 func (this *QToolBar) EmitIconSizeChanged(iconSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitIconSizeChanged")
 	C.qute_QToolBar_iconSizeChanged_1(self, cQSize(iconSize))
+	runtime.KeepAlive(this)
 }
 
 // EmitToolButtonStyleChanged wraps emitting the toolButtonStyleChanged signal.
@@ -442,6 +480,7 @@ func (this *QToolBar) EmitIconSizeChanged(iconSize qtcore.QSize) {
 func (this *QToolBar) EmitToolButtonStyleChanged(toolButtonStyle qtcore.ToolButtonStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitToolButtonStyleChanged")
 	C.qute_QToolBar_toolButtonStyleChanged_1(self, C.int64_t(toolButtonStyle))
+	runtime.KeepAlive(this)
 }
 
 // EmitTopLevelChanged wraps emitting the topLevelChanged signal.
@@ -452,6 +491,7 @@ func (this *QToolBar) EmitToolButtonStyleChanged(toolButtonStyle qtcore.ToolButt
 func (this *QToolBar) EmitTopLevelChanged(topLevel bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitTopLevelChanged")
 	C.qute_QToolBar_topLevelChanged_1(self, C.bool(topLevel))
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibilityChanged wraps emitting the visibilityChanged signal.
@@ -462,6 +502,7 @@ func (this *QToolBar) EmitTopLevelChanged(topLevel bool) {
 func (this *QToolBar) EmitVisibilityChanged(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBar.EmitVisibilityChanged")
 	C.qute_QToolBar_visibilityChanged_1(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // OnActionTriggered connects f to the actionTriggered signal. The connection ends when the

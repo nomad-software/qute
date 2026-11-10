@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQListView(parent QWidgetLike) *QListView {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQListView")
 	}
 	p := C.qute_QListView_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQListView(parent QWidgetLike) *QListView {
 func (this *QListView) SetMovement(movement QListViewMovement) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetMovement")
 	C.qute_QListView_setMovement(self, C.int64_t(movement))
+	runtime.KeepAlive(this)
 }
 
 // Movement wraps QListView::movement.
@@ -87,6 +90,7 @@ func (this *QListView) SetMovement(movement QListViewMovement) {
 func (this *QListView) Movement() QListViewMovement {
 	self := rt.Use(unsafe.Pointer(this), "QListView.Movement")
 	r := C.qute_QListView_movement(self)
+	runtime.KeepAlive(this)
 	return QListViewMovement(r)
 }
 
@@ -98,6 +102,7 @@ func (this *QListView) Movement() QListViewMovement {
 func (this *QListView) SetFlow(flow QListViewFlow) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetFlow")
 	C.qute_QListView_setFlow(self, C.int64_t(flow))
+	runtime.KeepAlive(this)
 }
 
 // Flow wraps QListView::flow.
@@ -108,6 +113,7 @@ func (this *QListView) SetFlow(flow QListViewFlow) {
 func (this *QListView) Flow() QListViewFlow {
 	self := rt.Use(unsafe.Pointer(this), "QListView.Flow")
 	r := C.qute_QListView_flow(self)
+	runtime.KeepAlive(this)
 	return QListViewFlow(r)
 }
 
@@ -119,6 +125,7 @@ func (this *QListView) Flow() QListViewFlow {
 func (this *QListView) SetWrapping(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetWrapping")
 	C.qute_QListView_setWrapping(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsWrapping wraps QListView::isWrapping.
@@ -129,6 +136,7 @@ func (this *QListView) SetWrapping(enable bool) {
 func (this *QListView) IsWrapping() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListView.IsWrapping")
 	r := C.qute_QListView_isWrapping(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -140,6 +148,7 @@ func (this *QListView) IsWrapping() bool {
 func (this *QListView) SetResizeMode(mode QListViewResizeMode) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetResizeMode")
 	C.qute_QListView_setResizeMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // ResizeMode wraps QListView::resizeMode.
@@ -150,6 +159,7 @@ func (this *QListView) SetResizeMode(mode QListViewResizeMode) {
 func (this *QListView) ResizeMode() QListViewResizeMode {
 	self := rt.Use(unsafe.Pointer(this), "QListView.ResizeMode")
 	r := C.qute_QListView_resizeMode(self)
+	runtime.KeepAlive(this)
 	return QListViewResizeMode(r)
 }
 
@@ -161,6 +171,7 @@ func (this *QListView) ResizeMode() QListViewResizeMode {
 func (this *QListView) SetLayoutMode(mode QListViewLayoutMode) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetLayoutMode")
 	C.qute_QListView_setLayoutMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // LayoutMode wraps QListView::layoutMode.
@@ -171,6 +182,7 @@ func (this *QListView) SetLayoutMode(mode QListViewLayoutMode) {
 func (this *QListView) LayoutMode() QListViewLayoutMode {
 	self := rt.Use(unsafe.Pointer(this), "QListView.LayoutMode")
 	r := C.qute_QListView_layoutMode(self)
+	runtime.KeepAlive(this)
 	return QListViewLayoutMode(r)
 }
 
@@ -182,6 +194,7 @@ func (this *QListView) LayoutMode() QListViewLayoutMode {
 func (this *QListView) SetSpacing(space int) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetSpacing")
 	C.qute_QListView_setSpacing(self, C.int(space))
+	runtime.KeepAlive(this)
 }
 
 // Spacing wraps QListView::spacing.
@@ -192,6 +205,7 @@ func (this *QListView) SetSpacing(space int) {
 func (this *QListView) Spacing() int {
 	self := rt.Use(unsafe.Pointer(this), "QListView.Spacing")
 	r := C.qute_QListView_spacing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -203,6 +217,7 @@ func (this *QListView) Spacing() int {
 func (this *QListView) SetBatchSize(batchSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetBatchSize")
 	C.qute_QListView_setBatchSize(self, C.int(batchSize))
+	runtime.KeepAlive(this)
 }
 
 // BatchSize wraps QListView::batchSize.
@@ -213,6 +228,7 @@ func (this *QListView) SetBatchSize(batchSize int) {
 func (this *QListView) BatchSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QListView.BatchSize")
 	r := C.qute_QListView_batchSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -224,6 +240,7 @@ func (this *QListView) BatchSize() int {
 func (this *QListView) SetGridSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetGridSize")
 	C.qute_QListView_setGridSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // GridSize wraps QListView::gridSize.
@@ -234,6 +251,7 @@ func (this *QListView) SetGridSize(size qtcore.QSize) {
 func (this *QListView) GridSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QListView.GridSize")
 	r := C.qute_QListView_gridSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -245,6 +263,7 @@ func (this *QListView) GridSize() qtcore.QSize {
 func (this *QListView) SetViewMode(mode QListViewViewMode) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetViewMode")
 	C.qute_QListView_setViewMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // ViewMode wraps QListView::viewMode.
@@ -255,6 +274,7 @@ func (this *QListView) SetViewMode(mode QListViewViewMode) {
 func (this *QListView) ViewMode() QListViewViewMode {
 	self := rt.Use(unsafe.Pointer(this), "QListView.ViewMode")
 	r := C.qute_QListView_viewMode(self)
+	runtime.KeepAlive(this)
 	return QListViewViewMode(r)
 }
 
@@ -266,6 +286,7 @@ func (this *QListView) ViewMode() QListViewViewMode {
 func (this *QListView) ClearPropertyFlags() {
 	self := rt.Use(unsafe.Pointer(this), "QListView.ClearPropertyFlags")
 	C.qute_QListView_clearPropertyFlags(self)
+	runtime.KeepAlive(this)
 }
 
 // IsRowHidden wraps QListView::isRowHidden.
@@ -276,6 +297,7 @@ func (this *QListView) ClearPropertyFlags() {
 func (this *QListView) IsRowHidden(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QListView.IsRowHidden")
 	r := C.qute_QListView_isRowHidden(self, C.int(row))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -287,6 +309,7 @@ func (this *QListView) IsRowHidden(row int) bool {
 func (this *QListView) SetRowHidden(row int, hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetRowHidden")
 	C.qute_QListView_setRowHidden(self, C.int(row), C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // SetModelColumn wraps QListView::setModelColumn.
@@ -297,6 +320,7 @@ func (this *QListView) SetRowHidden(row int, hide bool) {
 func (this *QListView) SetModelColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetModelColumn")
 	C.qute_QListView_setModelColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // ModelColumn wraps QListView::modelColumn.
@@ -307,6 +331,7 @@ func (this *QListView) SetModelColumn(column int) {
 func (this *QListView) ModelColumn() int {
 	self := rt.Use(unsafe.Pointer(this), "QListView.ModelColumn")
 	r := C.qute_QListView_modelColumn(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -318,6 +343,7 @@ func (this *QListView) ModelColumn() int {
 func (this *QListView) SetUniformItemSizes(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetUniformItemSizes")
 	C.qute_QListView_setUniformItemSizes(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // UniformItemSizes wraps QListView::uniformItemSizes.
@@ -328,6 +354,7 @@ func (this *QListView) SetUniformItemSizes(enable bool) {
 func (this *QListView) UniformItemSizes() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListView.UniformItemSizes")
 	r := C.qute_QListView_uniformItemSizes(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -339,6 +366,7 @@ func (this *QListView) UniformItemSizes() bool {
 func (this *QListView) SetWordWrap(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetWordWrap")
 	C.qute_QListView_setWordWrap(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // WordWrap wraps QListView::wordWrap.
@@ -349,6 +377,7 @@ func (this *QListView) SetWordWrap(on bool) {
 func (this *QListView) WordWrap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListView.WordWrap")
 	r := C.qute_QListView_wordWrap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -360,6 +389,7 @@ func (this *QListView) WordWrap() bool {
 func (this *QListView) SetSelectionRectVisible(show bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetSelectionRectVisible")
 	C.qute_QListView_setSelectionRectVisible(self, C.bool(show))
+	runtime.KeepAlive(this)
 }
 
 // IsSelectionRectVisible wraps QListView::isSelectionRectVisible.
@@ -370,6 +400,7 @@ func (this *QListView) SetSelectionRectVisible(show bool) {
 func (this *QListView) IsSelectionRectVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListView.IsSelectionRectVisible")
 	r := C.qute_QListView_isSelectionRectVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -381,6 +412,7 @@ func (this *QListView) IsSelectionRectVisible() bool {
 func (this *QListView) SetItemAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QListView.SetItemAlignment")
 	C.qute_QListView_setItemAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // ItemAlignment wraps QListView::itemAlignment.
@@ -391,6 +423,7 @@ func (this *QListView) SetItemAlignment(alignment qtcore.Alignment) {
 func (this *QListView) ItemAlignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QListView.ItemAlignment")
 	r := C.qute_QListView_itemAlignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -406,6 +439,8 @@ func (this *QListView) EmitIndexesMoved(indexes []*qtcore.QModelIndex) {
 		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QListView.EmitIndexesMoved")
 	}
 	C.qute_QListView_indexesMoved_1(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(indexes)
 }
 
 // OnIndexesMoved connects f to the indexesMoved signal. The connection ends when the

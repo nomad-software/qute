@@ -6,6 +6,7 @@ import "C"
 
 import (
 	"fmt"
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -78,6 +79,7 @@ func NewQPixmapWithFileName(fileName string) *QPixmap {
 func (this *QPixmap) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.IsNull")
 	r := C.qute_QPixmap_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -89,6 +91,7 @@ func (this *QPixmap) IsNull() bool {
 func (this *QPixmap) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Size")
 	r := C.qute_QPixmap_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -100,6 +103,7 @@ func (this *QPixmap) Size() qtcore.QSize {
 func (this *QPixmap) Rect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Rect")
 	r := C.qute_QPixmap_rect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -111,6 +115,7 @@ func (this *QPixmap) Rect() qtcore.QRect {
 func (this *QPixmap) Fill() {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Fill")
 	C.qute_QPixmap_fill(self)
+	runtime.KeepAlive(this)
 }
 
 // Mask wraps QPixmap::mask.
@@ -123,6 +128,7 @@ func (this *QPixmap) Fill() {
 func (this *QPixmap) Mask() *QBitmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Mask")
 	r := C.qute_QPixmap_mask(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -134,6 +140,8 @@ func (this *QPixmap) Mask() *QBitmap {
 func (this *QPixmap) SetMask(maskArg *QBitmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.SetMask")
 	C.qute_QPixmap_setMask(self, rt.UseArg(unsafe.Pointer(maskArg), "QPixmap.SetMask"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(maskArg)
 }
 
 // SetDevicePixelRatio wraps QPixmap::setDevicePixelRatio.
@@ -144,6 +152,7 @@ func (this *QPixmap) SetMask(maskArg *QBitmap) {
 func (this *QPixmap) SetDevicePixelRatio(scaleFactor float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.SetDevicePixelRatio")
 	C.qute_QPixmap_setDevicePixelRatio(self, C.double(scaleFactor))
+	runtime.KeepAlive(this)
 }
 
 // DeviceIndependentSize wraps QPixmap::deviceIndependentSize.
@@ -154,6 +163,7 @@ func (this *QPixmap) SetDevicePixelRatio(scaleFactor float64) {
 func (this *QPixmap) DeviceIndependentSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.DeviceIndependentSize")
 	r := C.qute_QPixmap_deviceIndependentSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -165,6 +175,7 @@ func (this *QPixmap) DeviceIndependentSize() qtcore.QSizeF {
 func (this *QPixmap) HasAlpha() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.HasAlpha")
 	r := C.qute_QPixmap_hasAlpha(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -176,6 +187,7 @@ func (this *QPixmap) HasAlpha() bool {
 func (this *QPixmap) HasAlphaChannel() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.HasAlphaChannel")
 	r := C.qute_QPixmap_hasAlphaChannel(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -189,6 +201,7 @@ func (this *QPixmap) HasAlphaChannel() bool {
 func (this *QPixmap) CreateHeuristicMask() *QBitmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.CreateHeuristicMask")
 	r := C.qute_QPixmap_createHeuristicMask(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -202,6 +215,7 @@ func (this *QPixmap) CreateHeuristicMask() *QBitmap {
 func (this *QPixmap) CreateMaskFromColor(maskColor QColor) *QBitmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.CreateMaskFromColor")
 	r := C.qute_QPixmap_createMaskFromColor(self, cQColor(maskColor))
+	runtime.KeepAlive(this)
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
@@ -215,6 +229,7 @@ func (this *QPixmap) CreateMaskFromColor(maskColor QColor) *QBitmap {
 func (this *QPixmap) Scaled(w int, hArg int) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Scaled")
 	r := C.qute_QPixmap_scaled(self, C.int(w), C.int(hArg))
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -228,6 +243,7 @@ func (this *QPixmap) Scaled(w int, hArg int) *QPixmap {
 func (this *QPixmap) ScaledToWidth(w int) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.ScaledToWidth")
 	r := C.qute_QPixmap_scaledToWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -241,6 +257,7 @@ func (this *QPixmap) ScaledToWidth(w int) *QPixmap {
 func (this *QPixmap) ScaledToHeight(hArg int) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.ScaledToHeight")
 	r := C.qute_QPixmap_scaledToHeight(self, C.int(hArg))
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -254,6 +271,8 @@ func (this *QPixmap) ScaledToHeight(hArg int) *QPixmap {
 func (this *QPixmap) Transformed(transform *QTransform) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Transformed")
 	r := C.qute_QPixmap_transformed(self, rt.UseArg(unsafe.Pointer(transform), "QPixmap.Transformed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -267,6 +286,7 @@ func (this *QPixmap) Transformed(transform *QTransform) *QPixmap {
 func (this *QPixmap) ToImage() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.ToImage")
 	r := C.qute_QPixmap_toImage(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -278,6 +298,7 @@ func (this *QPixmap) ToImage() *QImage {
 func (this *QPixmap) Load(fileName string) error {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Load")
 	r := C.qute_QPixmap_load(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	if !bool(r) {
 		return fmt.Errorf("QPixmap.Load: failed")
 	}
@@ -292,6 +313,7 @@ func (this *QPixmap) Load(fileName string) error {
 func (this *QPixmap) LoadFromData(buf []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.LoadFromData")
 	r := C.qute_QPixmap_loadFromData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(buf))), C.ptrdiff_t(len(buf)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -303,6 +325,7 @@ func (this *QPixmap) LoadFromData(buf []byte) bool {
 func (this *QPixmap) Save(fileName string) error {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Save")
 	r := C.qute_QPixmap_save(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	if !bool(r) {
 		return fmt.Errorf("QPixmap.Save: failed")
 	}
@@ -321,6 +344,8 @@ func (this *QPixmap) SaveTo(device qtcore.QIODeviceLike) error {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QPixmap.SaveTo")
 	}
 	r := C.qute_QPixmap_save_1(self, devicePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
 	if !bool(r) {
 		return fmt.Errorf("QPixmap.SaveTo: failed")
 	}
@@ -335,6 +360,8 @@ func (this *QPixmap) SaveTo(device qtcore.QIODeviceLike) error {
 func (this *QPixmap) ConvertFromImage(img *QImage) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.ConvertFromImage")
 	r := C.qute_QPixmap_convertFromImage(self, rt.UseArg(unsafe.Pointer(img), "QPixmap.ConvertFromImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(img)
 	return bool(r)
 }
 
@@ -348,6 +375,7 @@ func (this *QPixmap) ConvertFromImage(img *QImage) bool {
 func (this *QPixmap) Copy() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Copy")
 	r := C.qute_QPixmap_copy(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -359,6 +387,7 @@ func (this *QPixmap) Copy() *QPixmap {
 func (this *QPixmap) Scroll(dx int, dy int, rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.Scroll")
 	C.qute_QPixmap_scroll(self, C.int(dx), C.int(dy), cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // CacheKey wraps QPixmap::cacheKey.
@@ -369,6 +398,7 @@ func (this *QPixmap) Scroll(dx int, dy int, rect qtcore.QRect) {
 func (this *QPixmap) CacheKey() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.CacheKey")
 	r := C.qute_QPixmap_cacheKey(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -380,6 +410,7 @@ func (this *QPixmap) CacheKey() int64 {
 func (this *QPixmap) IsQBitmap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPixmap.IsQBitmap")
 	r := C.qute_QPixmap_isQBitmap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -404,6 +435,7 @@ func QPixmapDefaultDepth() int {
 func QPixmapTrueMatrix(m *QTransform, w int, hArg int) *QTransform {
 	rt.CheckThread("QPixmapTrueMatrix")
 	r := C.qute_QPixmap_trueMatrix(rt.UseArg(unsafe.Pointer(m), "QPixmapTrueMatrix"), C.int(w), C.int(hArg))
+	runtime.KeepAlive(m)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -417,6 +449,7 @@ func QPixmapTrueMatrix(m *QTransform, w int, hArg int) *QTransform {
 func QPixmapFromImage(image *QImage) *QPixmap {
 	rt.CheckThread("QPixmapFromImage")
 	r := C.qute_QPixmap_fromImage(rt.UseArg(unsafe.Pointer(image), "QPixmapFromImage"))
+	runtime.KeepAlive(image)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -434,5 +467,6 @@ func QPixmapFromImageReader(imageReader QImageReaderLike) *QPixmap {
 		imageReaderPtr = rt.UseArg(unsafe.Pointer(imageReader.AsQImageReader()), "QPixmapFromImageReader")
 	}
 	r := C.qute_QPixmap_fromImageReader(imageReaderPtr)
+	runtime.KeepAlive(imageReader)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }

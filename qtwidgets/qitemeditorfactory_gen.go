@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -104,6 +105,8 @@ func (this *QItemEditorFactory) CreateEditor(userType int, parent QWidgetLike) *
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QItemEditorFactory.CreateEditor")
 	}
 	r := C.qute_QItemEditorFactory_createEditor(self, C.int(userType), parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeParented), r)
 }
 
@@ -115,6 +118,7 @@ func (this *QItemEditorFactory) CreateEditor(userType int, parent QWidgetLike) *
 func (this *QItemEditorFactory) ValuePropertyName(userType int) []byte {
 	self := rt.Use(unsafe.Pointer(this), "QItemEditorFactory.ValuePropertyName")
 	r := C.qute_QItemEditorFactory_valuePropertyName(self, C.int(userType))
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -148,5 +152,6 @@ func QItemEditorFactorySetDefaultFactory(factory QItemEditorFactoryLike) {
 		factoryPtr, factoryH = rt.Arg(unsafe.Pointer(factory.AsQItemEditorFactory()), "QItemEditorFactorySetDefaultFactory")
 	}
 	C.qute_QItemEditorFactory_setDefaultFactory(factoryPtr)
+	runtime.KeepAlive(factory)
 	factoryH.TransferToCpp()
 }

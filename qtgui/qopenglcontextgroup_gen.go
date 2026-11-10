@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -57,6 +58,7 @@ func QOpenGLContextGroupCast(o qtcore.QObjectLike) *QOpenGLContextGroup {
 func (this *QOpenGLContextGroup) Shares() []*QOpenGLContext {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContextGroup.Shares")
 	r := C.qute_QOpenGLContextGroup_shares(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QOpenGLContext {
 		return rt.View[QOpenGLContext](rt.WrapClass(e, "QOpenGLContext", rt.KeepOrBorrow), e)
 	})

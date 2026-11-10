@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQTextBlockFormat() *QTextBlockFormat {
 func (this *QTextBlockFormat) SetAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetAlignment")
 	C.qute_QTextBlockFormat_setAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QTextBlockFormat::alignment.
@@ -63,6 +65,7 @@ func (this *QTextBlockFormat) SetAlignment(alignment qtcore.Alignment) {
 func (this *QTextBlockFormat) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.Alignment")
 	r := C.qute_QTextBlockFormat_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -74,6 +77,7 @@ func (this *QTextBlockFormat) Alignment() qtcore.Alignment {
 func (this *QTextBlockFormat) SetTopMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetTopMargin")
 	C.qute_QTextBlockFormat_setTopMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // TopMargin wraps QTextBlockFormat::topMargin.
@@ -84,6 +88,7 @@ func (this *QTextBlockFormat) SetTopMargin(margin float64) {
 func (this *QTextBlockFormat) TopMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.TopMargin")
 	r := C.qute_QTextBlockFormat_topMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -95,6 +100,7 @@ func (this *QTextBlockFormat) TopMargin() float64 {
 func (this *QTextBlockFormat) SetBottomMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetBottomMargin")
 	C.qute_QTextBlockFormat_setBottomMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // BottomMargin wraps QTextBlockFormat::bottomMargin.
@@ -105,6 +111,7 @@ func (this *QTextBlockFormat) SetBottomMargin(margin float64) {
 func (this *QTextBlockFormat) BottomMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.BottomMargin")
 	r := C.qute_QTextBlockFormat_bottomMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -116,6 +123,7 @@ func (this *QTextBlockFormat) BottomMargin() float64 {
 func (this *QTextBlockFormat) SetLeftMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetLeftMargin")
 	C.qute_QTextBlockFormat_setLeftMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // LeftMargin wraps QTextBlockFormat::leftMargin.
@@ -126,6 +134,7 @@ func (this *QTextBlockFormat) SetLeftMargin(margin float64) {
 func (this *QTextBlockFormat) LeftMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.LeftMargin")
 	r := C.qute_QTextBlockFormat_leftMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -137,6 +146,7 @@ func (this *QTextBlockFormat) LeftMargin() float64 {
 func (this *QTextBlockFormat) SetRightMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetRightMargin")
 	C.qute_QTextBlockFormat_setRightMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // RightMargin wraps QTextBlockFormat::rightMargin.
@@ -147,6 +157,7 @@ func (this *QTextBlockFormat) SetRightMargin(margin float64) {
 func (this *QTextBlockFormat) RightMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.RightMargin")
 	r := C.qute_QTextBlockFormat_rightMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -158,6 +169,7 @@ func (this *QTextBlockFormat) RightMargin() float64 {
 func (this *QTextBlockFormat) SetTextIndent(aindent float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetTextIndent")
 	C.qute_QTextBlockFormat_setTextIndent(self, C.double(aindent))
+	runtime.KeepAlive(this)
 }
 
 // TextIndent wraps QTextBlockFormat::textIndent.
@@ -168,6 +180,7 @@ func (this *QTextBlockFormat) SetTextIndent(aindent float64) {
 func (this *QTextBlockFormat) TextIndent() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.TextIndent")
 	r := C.qute_QTextBlockFormat_textIndent(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -179,6 +192,7 @@ func (this *QTextBlockFormat) TextIndent() float64 {
 func (this *QTextBlockFormat) SetIndent(indent int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetIndent")
 	C.qute_QTextBlockFormat_setIndent(self, C.int(indent))
+	runtime.KeepAlive(this)
 }
 
 // Indent wraps QTextBlockFormat::indent.
@@ -189,6 +203,7 @@ func (this *QTextBlockFormat) SetIndent(indent int) {
 func (this *QTextBlockFormat) Indent() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.Indent")
 	r := C.qute_QTextBlockFormat_indent(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -200,6 +215,7 @@ func (this *QTextBlockFormat) Indent() int {
 func (this *QTextBlockFormat) SetHeadingLevel(alevel int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetHeadingLevel")
 	C.qute_QTextBlockFormat_setHeadingLevel(self, C.int(alevel))
+	runtime.KeepAlive(this)
 }
 
 // HeadingLevel wraps QTextBlockFormat::headingLevel.
@@ -210,6 +226,7 @@ func (this *QTextBlockFormat) SetHeadingLevel(alevel int) {
 func (this *QTextBlockFormat) HeadingLevel() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.HeadingLevel")
 	r := C.qute_QTextBlockFormat_headingLevel(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -221,6 +238,7 @@ func (this *QTextBlockFormat) HeadingLevel() int {
 func (this *QTextBlockFormat) SetLineHeight(height float64, heightType int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetLineHeight")
 	C.qute_QTextBlockFormat_setLineHeight(self, C.double(height), C.int(heightType))
+	runtime.KeepAlive(this)
 }
 
 // LineHeightWithScriptLineHeight wraps QTextBlockFormat::lineHeight.
@@ -231,6 +249,7 @@ func (this *QTextBlockFormat) SetLineHeight(height float64, heightType int) {
 func (this *QTextBlockFormat) LineHeightWithScriptLineHeight(scriptLineHeight float64, scaling float64) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.LineHeightWithScriptLineHeight")
 	r := C.qute_QTextBlockFormat_lineHeight(self, C.double(scriptLineHeight), C.double(scaling))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -242,6 +261,7 @@ func (this *QTextBlockFormat) LineHeightWithScriptLineHeight(scriptLineHeight fl
 func (this *QTextBlockFormat) LineHeight() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.LineHeight")
 	r := C.qute_QTextBlockFormat_lineHeight_1(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -253,6 +273,7 @@ func (this *QTextBlockFormat) LineHeight() float64 {
 func (this *QTextBlockFormat) LineHeightType() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.LineHeightType")
 	r := C.qute_QTextBlockFormat_lineHeightType(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -264,6 +285,7 @@ func (this *QTextBlockFormat) LineHeightType() int {
 func (this *QTextBlockFormat) SetNonBreakableLines(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetNonBreakableLines")
 	C.qute_QTextBlockFormat_setNonBreakableLines(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // NonBreakableLines wraps QTextBlockFormat::nonBreakableLines.
@@ -274,6 +296,7 @@ func (this *QTextBlockFormat) SetNonBreakableLines(bArg bool) {
 func (this *QTextBlockFormat) NonBreakableLines() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.NonBreakableLines")
 	r := C.qute_QTextBlockFormat_nonBreakableLines(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -285,6 +308,7 @@ func (this *QTextBlockFormat) NonBreakableLines() bool {
 func (this *QTextBlockFormat) SetPageBreakPolicy(flags QTextFormatPageBreakFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetPageBreakPolicy")
 	C.qute_QTextBlockFormat_setPageBreakPolicy(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // PageBreakPolicy wraps QTextBlockFormat::pageBreakPolicy.
@@ -295,6 +319,7 @@ func (this *QTextBlockFormat) SetPageBreakPolicy(flags QTextFormatPageBreakFlags
 func (this *QTextBlockFormat) PageBreakPolicy() QTextFormatPageBreakFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.PageBreakPolicy")
 	r := C.qute_QTextBlockFormat_pageBreakPolicy(self)
+	runtime.KeepAlive(this)
 	return QTextFormatPageBreakFlags(r)
 }
 
@@ -310,6 +335,8 @@ func (this *QTextBlockFormat) SetTabPositions(tabs []*QTextOptionTab) {
 		tabsC[i] = rt.UseArg(unsafe.Pointer(tabs[i]), "QTextBlockFormat.SetTabPositions")
 	}
 	C.qute_QTextBlockFormat_setTabPositions(self, unsafe.Pointer(unsafe.SliceData(tabsC)), C.ptrdiff_t(len(tabs)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tabs)
 }
 
 // TabPositions wraps QTextBlockFormat::tabPositions.
@@ -320,6 +347,7 @@ func (this *QTextBlockFormat) SetTabPositions(tabs []*QTextOptionTab) {
 func (this *QTextBlockFormat) TabPositions() []*QTextOptionTab {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.TabPositions")
 	r := C.qute_QTextBlockFormat_tabPositions(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextOptionTab {
 		return rt.View[QTextOptionTab](rt.WrapClass(e, "QTextOptionTab", rt.TakeOwned), e)
 	})
@@ -333,6 +361,7 @@ func (this *QTextBlockFormat) TabPositions() []*QTextOptionTab {
 func (this *QTextBlockFormat) SetMarker(marker QTextBlockFormatMarkerType) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.SetMarker")
 	C.qute_QTextBlockFormat_setMarker(self, C.int64_t(marker))
+	runtime.KeepAlive(this)
 }
 
 // Marker wraps QTextBlockFormat::marker.
@@ -343,5 +372,6 @@ func (this *QTextBlockFormat) SetMarker(marker QTextBlockFormatMarkerType) {
 func (this *QTextBlockFormat) Marker() QTextBlockFormatMarkerType {
 	self := rt.Use(unsafe.Pointer(this), "QTextBlockFormat.Marker")
 	r := C.qute_QTextBlockFormat_marker(self)
+	runtime.KeepAlive(this)
 	return QTextBlockFormatMarkerType(r)
 }

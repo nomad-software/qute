@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QPaintEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPaintEvent {
 func (this *QPaintEvent) Rect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPaintEvent.Rect")
 	r := C.qute_QPaintEvent_rect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -54,5 +56,6 @@ func (this *QPaintEvent) Rect() qtcore.QRect {
 func (this *QPaintEvent) Region() *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QPaintEvent.Region")
 	r := C.qute_QPaintEvent_region(self)
+	runtime.KeepAlive(this)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }

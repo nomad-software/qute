@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -51,6 +52,7 @@ func NewQGraphicsSimpleTextItem(parent QGraphicsItemLike) *QGraphicsSimpleTextIt
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsSimpleTextItem")
 	}
 	p := C.qute_QGraphicsSimpleTextItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -73,6 +75,7 @@ func NewQGraphicsSimpleTextItemWithText(text string, parent QGraphicsItemLike) *
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsSimpleTextItemWithText")
 	}
 	p := C.qute_QGraphicsSimpleTextItem_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -89,6 +92,7 @@ func NewQGraphicsSimpleTextItemWithText(text string, parent QGraphicsItemLike) *
 func (this *QGraphicsSimpleTextItem) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsSimpleTextItem.SetText")
 	C.qute_QGraphicsSimpleTextItem_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QGraphicsSimpleTextItem::text.
@@ -99,6 +103,7 @@ func (this *QGraphicsSimpleTextItem) SetText(text string) {
 func (this *QGraphicsSimpleTextItem) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsSimpleTextItem.Text")
 	r := C.qute_QGraphicsSimpleTextItem_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -110,6 +115,8 @@ func (this *QGraphicsSimpleTextItem) Text() string {
 func (this *QGraphicsSimpleTextItem) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsSimpleTextItem.SetFont")
 	C.qute_QGraphicsSimpleTextItem_setFont(self, rt.UseArg(unsafe.Pointer(font), "QGraphicsSimpleTextItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // Font wraps QGraphicsSimpleTextItem::font.
@@ -122,5 +129,6 @@ func (this *QGraphicsSimpleTextItem) SetFont(font *qtgui.QFont) {
 func (this *QGraphicsSimpleTextItem) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsSimpleTextItem.Font")
 	r := C.qute_QGraphicsSimpleTextItem_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }

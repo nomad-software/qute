@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQProgressDialog(parent QWidgetLike) *QProgressDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressDialog")
 	}
 	p := C.qute_QProgressDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQProgressDialogWithLabelText(labelText string, cancelButtonText string, 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressDialogWithLabelText")
 	}
 	p := C.qute_QProgressDialog_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), (*C.char)(unsafe.Pointer(unsafe.StringData(cancelButtonText))), C.ptrdiff_t(len(cancelButtonText)), C.int(minimum), C.int(maximum), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -106,6 +109,8 @@ func (this *QProgressDialog) SetLabel(label QLabelLike) {
 		labelPtr, labelH = rt.Arg(unsafe.Pointer(label.AsQLabel()), "QProgressDialog.SetLabel")
 	}
 	C.qute_QProgressDialog_setLabel(self, labelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(label)
 	labelH.TransferToCpp()
 }
 
@@ -124,6 +129,8 @@ func (this *QProgressDialog) SetCancelButton(button QPushButtonLike) {
 		buttonPtr, buttonH = rt.Arg(unsafe.Pointer(button.AsQPushButton()), "QProgressDialog.SetCancelButton")
 	}
 	C.qute_QProgressDialog_setCancelButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	buttonH.TransferToCpp()
 }
 
@@ -142,6 +149,8 @@ func (this *QProgressDialog) SetBar(bar QProgressBarLike) {
 		barPtr, barH = rt.Arg(unsafe.Pointer(bar.AsQProgressBar()), "QProgressDialog.SetBar")
 	}
 	C.qute_QProgressDialog_setBar(self, barPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(bar)
 	barH.TransferToCpp()
 }
 
@@ -153,6 +162,7 @@ func (this *QProgressDialog) SetBar(bar QProgressBarLike) {
 func (this *QProgressDialog) WasCanceled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.WasCanceled")
 	r := C.qute_QProgressDialog_wasCanceled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -164,6 +174,7 @@ func (this *QProgressDialog) WasCanceled() bool {
 func (this *QProgressDialog) Minimum() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.Minimum")
 	r := C.qute_QProgressDialog_minimum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -175,6 +186,7 @@ func (this *QProgressDialog) Minimum() int {
 func (this *QProgressDialog) Maximum() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.Maximum")
 	r := C.qute_QProgressDialog_maximum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -186,6 +198,7 @@ func (this *QProgressDialog) Maximum() int {
 func (this *QProgressDialog) Value() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.Value")
 	r := C.qute_QProgressDialog_value(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -197,6 +210,7 @@ func (this *QProgressDialog) Value() int {
 func (this *QProgressDialog) LabelText() string {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.LabelText")
 	r := C.qute_QProgressDialog_labelText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -208,6 +222,7 @@ func (this *QProgressDialog) LabelText() string {
 func (this *QProgressDialog) MinimumDuration() int {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.MinimumDuration")
 	r := C.qute_QProgressDialog_minimumDuration(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -219,6 +234,7 @@ func (this *QProgressDialog) MinimumDuration() int {
 func (this *QProgressDialog) SetAutoReset(reset bool) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetAutoReset")
 	C.qute_QProgressDialog_setAutoReset(self, C.bool(reset))
+	runtime.KeepAlive(this)
 }
 
 // AutoReset wraps QProgressDialog::autoReset.
@@ -229,6 +245,7 @@ func (this *QProgressDialog) SetAutoReset(reset bool) {
 func (this *QProgressDialog) AutoReset() bool {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.AutoReset")
 	r := C.qute_QProgressDialog_autoReset(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -240,6 +257,7 @@ func (this *QProgressDialog) AutoReset() bool {
 func (this *QProgressDialog) SetAutoClose(close bool) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetAutoClose")
 	C.qute_QProgressDialog_setAutoClose(self, C.bool(close))
+	runtime.KeepAlive(this)
 }
 
 // AutoClose wraps QProgressDialog::autoClose.
@@ -250,6 +268,7 @@ func (this *QProgressDialog) SetAutoClose(close bool) {
 func (this *QProgressDialog) AutoClose() bool {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.AutoClose")
 	r := C.qute_QProgressDialog_autoClose(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -261,6 +280,7 @@ func (this *QProgressDialog) AutoClose() bool {
 func (this *QProgressDialog) Cancel() {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.Cancel")
 	C.qute_QProgressDialog_cancel(self)
+	runtime.KeepAlive(this)
 }
 
 // Reset wraps QProgressDialog::reset.
@@ -271,6 +291,7 @@ func (this *QProgressDialog) Cancel() {
 func (this *QProgressDialog) Reset() {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.Reset")
 	C.qute_QProgressDialog_reset(self)
+	runtime.KeepAlive(this)
 }
 
 // SetMaximum wraps QProgressDialog::setMaximum.
@@ -281,6 +302,7 @@ func (this *QProgressDialog) Reset() {
 func (this *QProgressDialog) SetMaximum(maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetMaximum")
 	C.qute_QProgressDialog_setMaximum(self, C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // SetMinimum wraps QProgressDialog::setMinimum.
@@ -291,6 +313,7 @@ func (this *QProgressDialog) SetMaximum(maximum int) {
 func (this *QProgressDialog) SetMinimum(minimum int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetMinimum")
 	C.qute_QProgressDialog_setMinimum(self, C.int(minimum))
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QProgressDialog::setRange.
@@ -301,6 +324,7 @@ func (this *QProgressDialog) SetMinimum(minimum int) {
 func (this *QProgressDialog) SetRange(minimum int, maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetRange")
 	C.qute_QProgressDialog_setRange(self, C.int(minimum), C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // SetValue wraps QProgressDialog::setValue.
@@ -311,6 +335,7 @@ func (this *QProgressDialog) SetRange(minimum int, maximum int) {
 func (this *QProgressDialog) SetValue(progress int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetValue")
 	C.qute_QProgressDialog_setValue(self, C.int(progress))
+	runtime.KeepAlive(this)
 }
 
 // SetLabelText wraps QProgressDialog::setLabelText.
@@ -321,6 +346,7 @@ func (this *QProgressDialog) SetValue(progress int) {
 func (this *QProgressDialog) SetLabelText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetLabelText")
 	C.qute_QProgressDialog_setLabelText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetCancelButtonText wraps QProgressDialog::setCancelButtonText.
@@ -331,6 +357,7 @@ func (this *QProgressDialog) SetLabelText(text string) {
 func (this *QProgressDialog) SetCancelButtonText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetCancelButtonText")
 	C.qute_QProgressDialog_setCancelButtonText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetMinimumDuration wraps QProgressDialog::setMinimumDuration.
@@ -341,6 +368,7 @@ func (this *QProgressDialog) SetCancelButtonText(text string) {
 func (this *QProgressDialog) SetMinimumDuration(ms int) {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.SetMinimumDuration")
 	C.qute_QProgressDialog_setMinimumDuration(self, C.int(ms))
+	runtime.KeepAlive(this)
 }
 
 // EmitCanceled wraps emitting the canceled signal.
@@ -351,6 +379,7 @@ func (this *QProgressDialog) SetMinimumDuration(ms int) {
 func (this *QProgressDialog) EmitCanceled() {
 	self := rt.Use(unsafe.Pointer(this), "QProgressDialog.EmitCanceled")
 	C.qute_QProgressDialog_canceled_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnCanceled connects f to the canceled signal. The connection ends when the

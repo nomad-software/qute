@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQMenu(parent QWidgetLike) *QMenu {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMenu")
 	}
 	p := C.qute_QMenu_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQMenuWithTitle(title string, parent QWidgetLike) *QMenu {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMenuWithTitle")
 	}
 	p := C.qute_QMenu_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -108,6 +111,8 @@ func (this *QMenu) AddMenu(menu QMenuLike) *qtgui.QAction {
 		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QMenu.AddMenu")
 	}
 	r := C.qute_QMenu_addMenu(self, menuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(menu)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -121,6 +126,7 @@ func (this *QMenu) AddMenu(menu QMenuLike) *qtgui.QAction {
 func (this *QMenu) AddMenuTitle(title string) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.AddMenuTitle")
 	r := C.qute_QMenu_addMenu_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
@@ -134,6 +140,8 @@ func (this *QMenu) AddMenuTitle(title string) *QMenu {
 func (this *QMenu) AddMenuIcon(icon *qtgui.QIcon, title string) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.AddMenuIcon")
 	r := C.qute_QMenu_addMenu_2(self, rt.UseArg(unsafe.Pointer(icon), "QMenu.AddMenuIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeParented), r)
 }
 
@@ -147,6 +155,7 @@ func (this *QMenu) AddMenuIcon(icon *qtgui.QIcon, title string) *QMenu {
 func (this *QMenu) AddSeparator() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.AddSeparator")
 	r := C.qute_QMenu_addSeparator(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -160,6 +169,7 @@ func (this *QMenu) AddSeparator() *qtgui.QAction {
 func (this *QMenu) AddSection(text string) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.AddSection")
 	r := C.qute_QMenu_addSection(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -173,6 +183,8 @@ func (this *QMenu) AddSection(text string) *qtgui.QAction {
 func (this *QMenu) AddSectionIcon(icon *qtgui.QIcon, text string) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.AddSectionIcon")
 	r := C.qute_QMenu_addSection_1(self, rt.UseArg(unsafe.Pointer(icon), "QMenu.AddSectionIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -194,6 +206,9 @@ func (this *QMenu) InsertMenu(before qtgui.QActionLike, menu QMenuLike) *qtgui.Q
 		menuPtr = rt.UseArg(unsafe.Pointer(menu.AsQMenu()), "QMenu.InsertMenu")
 	}
 	r := C.qute_QMenu_insertMenu(self, beforePtr, menuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(menu)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -211,6 +226,8 @@ func (this *QMenu) InsertSeparator(before qtgui.QActionLike) *qtgui.QAction {
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QMenu.InsertSeparator")
 	}
 	r := C.qute_QMenu_insertSeparator(self, beforePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -228,6 +245,8 @@ func (this *QMenu) InsertSection(before qtgui.QActionLike, text string) *qtgui.Q
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QMenu.InsertSection")
 	}
 	r := C.qute_QMenu_insertSection(self, beforePtr, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -245,6 +264,9 @@ func (this *QMenu) InsertSectionIcon(before qtgui.QActionLike, icon *qtgui.QIcon
 		beforePtr = rt.UseArg(unsafe.Pointer(before.AsQAction()), "QMenu.InsertSectionIcon")
 	}
 	r := C.qute_QMenu_insertSection_1(self, beforePtr, rt.UseArg(unsafe.Pointer(icon), "QMenu.InsertSectionIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(icon)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -256,6 +278,7 @@ func (this *QMenu) InsertSectionIcon(before qtgui.QActionLike, icon *qtgui.QIcon
 func (this *QMenu) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.IsEmpty")
 	r := C.qute_QMenu_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -267,6 +290,7 @@ func (this *QMenu) IsEmpty() bool {
 func (this *QMenu) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.Clear")
 	C.qute_QMenu_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SetTearOffEnabled wraps QMenu::setTearOffEnabled.
@@ -277,6 +301,7 @@ func (this *QMenu) Clear() {
 func (this *QMenu) SetTearOffEnabled(tearOffEnabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.SetTearOffEnabled")
 	C.qute_QMenu_setTearOffEnabled(self, C.bool(tearOffEnabled))
+	runtime.KeepAlive(this)
 }
 
 // IsTearOffEnabled wraps QMenu::isTearOffEnabled.
@@ -287,6 +312,7 @@ func (this *QMenu) SetTearOffEnabled(tearOffEnabled bool) {
 func (this *QMenu) IsTearOffEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.IsTearOffEnabled")
 	r := C.qute_QMenu_isTearOffEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -298,6 +324,7 @@ func (this *QMenu) IsTearOffEnabled() bool {
 func (this *QMenu) IsTearOffMenuVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.IsTearOffMenuVisible")
 	r := C.qute_QMenu_isTearOffMenuVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -309,6 +336,7 @@ func (this *QMenu) IsTearOffMenuVisible() bool {
 func (this *QMenu) ShowTearOffMenu() {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.ShowTearOffMenu")
 	C.qute_QMenu_showTearOffMenu(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowTearOffMenuAt wraps QMenu::showTearOffMenu.
@@ -319,6 +347,7 @@ func (this *QMenu) ShowTearOffMenu() {
 func (this *QMenu) ShowTearOffMenuAt(pos qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.ShowTearOffMenuAt")
 	C.qute_QMenu_showTearOffMenu_1(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 }
 
 // HideTearOffMenu wraps QMenu::hideTearOffMenu.
@@ -329,6 +358,7 @@ func (this *QMenu) ShowTearOffMenuAt(pos qtcore.QPoint) {
 func (this *QMenu) HideTearOffMenu() {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.HideTearOffMenu")
 	C.qute_QMenu_hideTearOffMenu(self)
+	runtime.KeepAlive(this)
 }
 
 // SetDefaultAction wraps QMenu::setDefaultAction.
@@ -343,6 +373,8 @@ func (this *QMenu) SetDefaultAction(defaultAction qtgui.QActionLike) {
 		defaultActionPtr = rt.UseArg(unsafe.Pointer(defaultAction.AsQAction()), "QMenu.SetDefaultAction")
 	}
 	C.qute_QMenu_setDefaultAction(self, defaultActionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(defaultAction)
 }
 
 // DefaultAction wraps QMenu::defaultAction.
@@ -355,6 +387,7 @@ func (this *QMenu) SetDefaultAction(defaultAction qtgui.QActionLike) {
 func (this *QMenu) DefaultAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.DefaultAction")
 	r := C.qute_QMenu_defaultAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -370,6 +403,8 @@ func (this *QMenu) SetActiveAction(act qtgui.QActionLike) {
 		actPtr = rt.UseArg(unsafe.Pointer(act.AsQAction()), "QMenu.SetActiveAction")
 	}
 	C.qute_QMenu_setActiveAction(self, actPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(act)
 }
 
 // ActiveAction wraps QMenu::activeAction.
@@ -382,6 +417,7 @@ func (this *QMenu) SetActiveAction(act qtgui.QActionLike) {
 func (this *QMenu) ActiveAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.ActiveAction")
 	r := C.qute_QMenu_activeAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -393,6 +429,7 @@ func (this *QMenu) ActiveAction() *qtgui.QAction {
 func (this *QMenu) Popup(pos qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.Popup")
 	C.qute_QMenu_popup(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 }
 
 // Exec wraps QMenu::exec.
@@ -405,6 +442,7 @@ func (this *QMenu) Popup(pos qtcore.QPoint) {
 func (this *QMenu) Exec() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.Exec")
 	r := C.qute_QMenu_exec(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -418,6 +456,7 @@ func (this *QMenu) Exec() *qtgui.QAction {
 func (this *QMenu) ExecAt(pos qtcore.QPoint) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.ExecAt")
 	r := C.qute_QMenu_exec_1(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -433,6 +472,8 @@ func (this *QMenu) ActionGeometry(action qtgui.QActionLike) qtcore.QRect {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenu.ActionGeometry")
 	}
 	r := C.qute_QMenu_actionGeometry(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 	return goQRect(r)
 }
 
@@ -446,6 +487,7 @@ func (this *QMenu) ActionGeometry(action qtgui.QActionLike) qtcore.QRect {
 func (this *QMenu) ActionAt(point qtcore.QPoint) *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.ActionAt")
 	r := C.qute_QMenu_actionAt(self, cQPoint(point))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -459,6 +501,7 @@ func (this *QMenu) ActionAt(point qtcore.QPoint) *qtgui.QAction {
 func (this *QMenu) MenuAction() *qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.MenuAction")
 	r := C.qute_QMenu_menuAction(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -470,6 +513,7 @@ func (this *QMenu) MenuAction() *qtgui.QAction {
 func (this *QMenu) Title() string {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.Title")
 	r := C.qute_QMenu_title(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -481,6 +525,7 @@ func (this *QMenu) Title() string {
 func (this *QMenu) SetTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.SetTitle")
 	C.qute_QMenu_setTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps QMenu::icon.
@@ -493,6 +538,7 @@ func (this *QMenu) SetTitle(title string) {
 func (this *QMenu) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.Icon")
 	r := C.qute_QMenu_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -504,6 +550,8 @@ func (this *QMenu) Icon() *qtgui.QIcon {
 func (this *QMenu) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.SetIcon")
 	C.qute_QMenu_setIcon(self, rt.UseArg(unsafe.Pointer(icon), "QMenu.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // SetNoReplayFor wraps QMenu::setNoReplayFor.
@@ -518,6 +566,8 @@ func (this *QMenu) SetNoReplayFor(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QMenu.SetNoReplayFor")
 	}
 	C.qute_QMenu_setNoReplayFor(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // SeparatorsCollapsible wraps QMenu::separatorsCollapsible.
@@ -528,6 +578,7 @@ func (this *QMenu) SetNoReplayFor(widget QWidgetLike) {
 func (this *QMenu) SeparatorsCollapsible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.SeparatorsCollapsible")
 	r := C.qute_QMenu_separatorsCollapsible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -539,6 +590,7 @@ func (this *QMenu) SeparatorsCollapsible() bool {
 func (this *QMenu) SetSeparatorsCollapsible(collapse bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.SetSeparatorsCollapsible")
 	C.qute_QMenu_setSeparatorsCollapsible(self, C.bool(collapse))
+	runtime.KeepAlive(this)
 }
 
 // ToolTipsVisible wraps QMenu::toolTipsVisible.
@@ -549,6 +601,7 @@ func (this *QMenu) SetSeparatorsCollapsible(collapse bool) {
 func (this *QMenu) ToolTipsVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.ToolTipsVisible")
 	r := C.qute_QMenu_toolTipsVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -560,6 +613,7 @@ func (this *QMenu) ToolTipsVisible() bool {
 func (this *QMenu) SetToolTipsVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.SetToolTipsVisible")
 	C.qute_QMenu_setToolTipsVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // EmitAboutToShow wraps emitting the aboutToShow signal.
@@ -570,6 +624,7 @@ func (this *QMenu) SetToolTipsVisible(visible bool) {
 func (this *QMenu) EmitAboutToShow() {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.EmitAboutToShow")
 	C.qute_QMenu_aboutToShow_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitAboutToHide wraps emitting the aboutToHide signal.
@@ -580,6 +635,7 @@ func (this *QMenu) EmitAboutToShow() {
 func (this *QMenu) EmitAboutToHide() {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.EmitAboutToHide")
 	C.qute_QMenu_aboutToHide_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitTriggered wraps emitting the triggered signal.
@@ -594,6 +650,8 @@ func (this *QMenu) EmitTriggered(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenu.EmitTriggered")
 	}
 	C.qute_QMenu_triggered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // EmitHovered wraps emitting the hovered signal.
@@ -608,6 +666,8 @@ func (this *QMenu) EmitHovered(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenu.EmitHovered")
 	}
 	C.qute_QMenu_hovered_1(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // QMenuExecActions wraps QMenu::exec.
@@ -624,6 +684,7 @@ func QMenuExecActions(actions []*qtgui.QAction, pos qtcore.QPoint) *qtgui.QActio
 		actionsC[i] = rt.UseArg(unsafe.Pointer(actions[i]), "QMenuExecActions")
 	}
 	r := C.qute_QMenu_exec_2(unsafe.Pointer(unsafe.SliceData(actionsC)), C.ptrdiff_t(len(actions)), cQPoint(pos))
+	runtime.KeepAlive(actions)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
@@ -641,6 +702,7 @@ func QMenuMenuInAction(action qtgui.QActionLike) *QMenu {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QMenuMenuInAction")
 	}
 	r := C.qute_QMenu_menuInAction(actionPtr)
+	runtime.KeepAlive(action)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
 }
 

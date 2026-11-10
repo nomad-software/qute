@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQCompleter(parent qtcore.QObjectLike) *QCompleter {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleter")
 	}
 	p := C.qute_QCompleter_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -87,6 +89,8 @@ func NewQCompleterWithModel(model qtcore.QAbstractItemModelLike, parent qtcore.Q
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleterWithModel")
 	}
 	p := C.qute_QCompleter_new_1(modelPtr, parentPtr)
+	runtime.KeepAlive(model)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -110,6 +114,7 @@ func NewQCompleterWithCompletions(completions []string, parent qtcore.QObjectLik
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleterWithCompletions")
 	}
 	p := C.qute_QCompleter_new_2((*C.char)(unsafe.Pointer(unsafe.SliceData(completionsData))), (*C.ptrdiff_t)(unsafe.SliceData(completionsLens)), C.ptrdiff_t(len(completions)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -130,6 +135,8 @@ func (this *QCompleter) SetWidget(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QCompleter.SetWidget")
 	}
 	C.qute_QCompleter_setWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // Widget wraps QCompleter::widget.
@@ -142,6 +149,7 @@ func (this *QCompleter) SetWidget(widget QWidgetLike) {
 func (this *QCompleter) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.Widget")
 	r := C.qute_QCompleter_widget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -157,6 +165,8 @@ func (this *QCompleter) SetModel(c qtcore.QAbstractItemModelLike) {
 		cPtr = rt.UseArg(unsafe.Pointer(c.AsQAbstractItemModel()), "QCompleter.SetModel")
 	}
 	C.qute_QCompleter_setModel(self, cPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(c)
 }
 
 // Model wraps QCompleter::model.
@@ -169,6 +179,7 @@ func (this *QCompleter) SetModel(c qtcore.QAbstractItemModelLike) {
 func (this *QCompleter) Model() *qtcore.QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.Model")
 	r := C.qute_QCompleter_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -180,6 +191,7 @@ func (this *QCompleter) Model() *qtcore.QAbstractItemModel {
 func (this *QCompleter) SetCompletionMode(mode QCompleterCompletionMode) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetCompletionMode")
 	C.qute_QCompleter_setCompletionMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // CompletionMode wraps QCompleter::completionMode.
@@ -190,6 +202,7 @@ func (this *QCompleter) SetCompletionMode(mode QCompleterCompletionMode) {
 func (this *QCompleter) CompletionMode() QCompleterCompletionMode {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompletionMode")
 	r := C.qute_QCompleter_completionMode(self)
+	runtime.KeepAlive(this)
 	return QCompleterCompletionMode(r)
 }
 
@@ -201,6 +214,7 @@ func (this *QCompleter) CompletionMode() QCompleterCompletionMode {
 func (this *QCompleter) SetFilterMode(filterMode qtcore.MatchFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetFilterMode")
 	C.qute_QCompleter_setFilterMode(self, C.int64_t(filterMode))
+	runtime.KeepAlive(this)
 }
 
 // FilterMode wraps QCompleter::filterMode.
@@ -211,6 +225,7 @@ func (this *QCompleter) SetFilterMode(filterMode qtcore.MatchFlags) {
 func (this *QCompleter) FilterMode() qtcore.MatchFlags {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.FilterMode")
 	r := C.qute_QCompleter_filterMode(self)
+	runtime.KeepAlive(this)
 	return qtcore.MatchFlags(r)
 }
 
@@ -224,6 +239,7 @@ func (this *QCompleter) FilterMode() qtcore.MatchFlags {
 func (this *QCompleter) Popup() *QAbstractItemView {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.Popup")
 	r := C.qute_QCompleter_popup(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemView](rt.WrapClass(r, "QAbstractItemView", rt.KeepOrBorrow), r)
 }
 
@@ -242,6 +258,8 @@ func (this *QCompleter) SetPopup(popup QAbstractItemViewLike) {
 		popupPtr, popupH = rt.Arg(unsafe.Pointer(popup.AsQAbstractItemView()), "QCompleter.SetPopup")
 	}
 	C.qute_QCompleter_setPopup(self, popupPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(popup)
 	popupH.TransferToCpp()
 }
 
@@ -253,6 +271,7 @@ func (this *QCompleter) SetPopup(popup QAbstractItemViewLike) {
 func (this *QCompleter) SetCaseSensitivity(caseSensitivity qtcore.CaseSensitivity) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetCaseSensitivity")
 	C.qute_QCompleter_setCaseSensitivity(self, C.int64_t(caseSensitivity))
+	runtime.KeepAlive(this)
 }
 
 // CaseSensitivity wraps QCompleter::caseSensitivity.
@@ -263,6 +282,7 @@ func (this *QCompleter) SetCaseSensitivity(caseSensitivity qtcore.CaseSensitivit
 func (this *QCompleter) CaseSensitivity() qtcore.CaseSensitivity {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CaseSensitivity")
 	r := C.qute_QCompleter_caseSensitivity(self)
+	runtime.KeepAlive(this)
 	return qtcore.CaseSensitivity(r)
 }
 
@@ -274,6 +294,7 @@ func (this *QCompleter) CaseSensitivity() qtcore.CaseSensitivity {
 func (this *QCompleter) SetModelSorting(sorting QCompleterModelSorting) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetModelSorting")
 	C.qute_QCompleter_setModelSorting(self, C.int64_t(sorting))
+	runtime.KeepAlive(this)
 }
 
 // ModelSorting wraps QCompleter::modelSorting.
@@ -284,6 +305,7 @@ func (this *QCompleter) SetModelSorting(sorting QCompleterModelSorting) {
 func (this *QCompleter) ModelSorting() QCompleterModelSorting {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.ModelSorting")
 	r := C.qute_QCompleter_modelSorting(self)
+	runtime.KeepAlive(this)
 	return QCompleterModelSorting(r)
 }
 
@@ -295,6 +317,7 @@ func (this *QCompleter) ModelSorting() QCompleterModelSorting {
 func (this *QCompleter) SetCompletionColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetCompletionColumn")
 	C.qute_QCompleter_setCompletionColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // CompletionColumn wraps QCompleter::completionColumn.
@@ -305,6 +328,7 @@ func (this *QCompleter) SetCompletionColumn(column int) {
 func (this *QCompleter) CompletionColumn() int {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompletionColumn")
 	r := C.qute_QCompleter_completionColumn(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -316,6 +340,7 @@ func (this *QCompleter) CompletionColumn() int {
 func (this *QCompleter) SetCompletionRole(role int) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetCompletionRole")
 	C.qute_QCompleter_setCompletionRole(self, C.int(role))
+	runtime.KeepAlive(this)
 }
 
 // CompletionRole wraps QCompleter::completionRole.
@@ -326,6 +351,7 @@ func (this *QCompleter) SetCompletionRole(role int) {
 func (this *QCompleter) CompletionRole() int {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompletionRole")
 	r := C.qute_QCompleter_completionRole(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -337,6 +363,7 @@ func (this *QCompleter) CompletionRole() int {
 func (this *QCompleter) WrapAround() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.WrapAround")
 	r := C.qute_QCompleter_wrapAround(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -348,6 +375,7 @@ func (this *QCompleter) WrapAround() bool {
 func (this *QCompleter) MaxVisibleItems() int {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.MaxVisibleItems")
 	r := C.qute_QCompleter_maxVisibleItems(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -359,6 +387,7 @@ func (this *QCompleter) MaxVisibleItems() int {
 func (this *QCompleter) SetMaxVisibleItems(maxItems int) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetMaxVisibleItems")
 	C.qute_QCompleter_setMaxVisibleItems(self, C.int(maxItems))
+	runtime.KeepAlive(this)
 }
 
 // CompletionCount wraps QCompleter::completionCount.
@@ -369,6 +398,7 @@ func (this *QCompleter) SetMaxVisibleItems(maxItems int) {
 func (this *QCompleter) CompletionCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompletionCount")
 	r := C.qute_QCompleter_completionCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -380,6 +410,7 @@ func (this *QCompleter) CompletionCount() int {
 func (this *QCompleter) SetCurrentRow(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetCurrentRow")
 	r := C.qute_QCompleter_setCurrentRow(self, C.int(row))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -391,6 +422,7 @@ func (this *QCompleter) SetCurrentRow(row int) bool {
 func (this *QCompleter) CurrentRow() int {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CurrentRow")
 	r := C.qute_QCompleter_currentRow(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -404,6 +436,7 @@ func (this *QCompleter) CurrentRow() int {
 func (this *QCompleter) CurrentIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CurrentIndex")
 	r := C.qute_QCompleter_currentIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -415,6 +448,7 @@ func (this *QCompleter) CurrentIndex() *qtcore.QModelIndex {
 func (this *QCompleter) CurrentCompletion() string {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CurrentCompletion")
 	r := C.qute_QCompleter_currentCompletion(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -428,6 +462,7 @@ func (this *QCompleter) CurrentCompletion() string {
 func (this *QCompleter) CompletionModel() *qtcore.QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompletionModel")
 	r := C.qute_QCompleter_completionModel(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -439,6 +474,7 @@ func (this *QCompleter) CompletionModel() *qtcore.QAbstractItemModel {
 func (this *QCompleter) CompletionPrefix() string {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompletionPrefix")
 	r := C.qute_QCompleter_completionPrefix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -450,6 +486,7 @@ func (this *QCompleter) CompletionPrefix() string {
 func (this *QCompleter) SetCompletionPrefix(prefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetCompletionPrefix")
 	C.qute_QCompleter_setCompletionPrefix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)))
+	runtime.KeepAlive(this)
 }
 
 // Complete wraps QCompleter::complete.
@@ -460,6 +497,7 @@ func (this *QCompleter) SetCompletionPrefix(prefix string) {
 func (this *QCompleter) Complete() {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.Complete")
 	C.qute_QCompleter_complete(self)
+	runtime.KeepAlive(this)
 }
 
 // SetWrapAround wraps QCompleter::setWrapAround.
@@ -470,6 +508,7 @@ func (this *QCompleter) Complete() {
 func (this *QCompleter) SetWrapAround(wrap bool) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SetWrapAround")
 	C.qute_QCompleter_setWrapAround(self, C.bool(wrap))
+	runtime.KeepAlive(this)
 }
 
 // PathFromIndex wraps QCompleter::pathFromIndex.
@@ -480,6 +519,8 @@ func (this *QCompleter) SetWrapAround(wrap bool) {
 func (this *QCompleter) PathFromIndex(index *qtcore.QModelIndex) string {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.PathFromIndex")
 	r := C.qute_QCompleter_pathFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.PathFromIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return quteStr(r)
 }
 
@@ -491,6 +532,7 @@ func (this *QCompleter) PathFromIndex(index *qtcore.QModelIndex) string {
 func (this *QCompleter) SplitPath(path string) []string {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.SplitPath")
 	r := C.qute_QCompleter_splitPath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -502,6 +544,7 @@ func (this *QCompleter) SplitPath(path string) []string {
 func (this *QCompleter) EmitActivated(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitActivated")
 	C.qute_QCompleter_activated_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // EmitActivatedIndex wraps emitting the activated signal.
@@ -512,6 +555,8 @@ func (this *QCompleter) EmitActivated(text string) {
 func (this *QCompleter) EmitActivatedIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitActivatedIndex")
 	C.qute_QCompleter_activated_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitActivatedIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitHighlighted wraps emitting the highlighted signal.
@@ -522,6 +567,7 @@ func (this *QCompleter) EmitActivatedIndex(index *qtcore.QModelIndex) {
 func (this *QCompleter) EmitHighlighted(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitHighlighted")
 	C.qute_QCompleter_highlighted_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // EmitHighlightedIndex wraps emitting the highlighted signal.
@@ -532,6 +578,8 @@ func (this *QCompleter) EmitHighlighted(text string) {
 func (this *QCompleter) EmitHighlightedIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.EmitHighlightedIndex")
 	C.qute_QCompleter_highlighted_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitHighlightedIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQDateEdit(parent QWidgetLike) *QDateEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateEdit")
 	}
 	p := C.qute_QDateEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,8 @@ func NewQDateEditWithDate(date *qtcore.QDate, parent QWidgetLike) *QDateEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateEditWithDate")
 	}
 	p := C.qute_QDateEdit_new_1(rt.UseArg(unsafe.Pointer(date), "NewQDateEditWithDate"), parentPtr)
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +103,8 @@ func NewQDateEditWithDate(date *qtcore.QDate, parent QWidgetLike) *QDateEdit {
 func (this *QDateEdit) EmitUserDateChanged(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateEdit.EmitUserDateChanged")
 	C.qute_QDateEdit_userDateChanged_1(self, rt.UseArg(unsafe.Pointer(date), "QDateEdit.EmitUserDateChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // OnUserDateChanged connects f to the userDateChanged signal. The connection ends when the

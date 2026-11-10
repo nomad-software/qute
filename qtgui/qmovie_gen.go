@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQMovie(parent qtcore.QObjectLike) *QMovie {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQMovie")
 	}
 	p := C.qute_QMovie_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -89,6 +91,8 @@ func NewQMovieWithDevice(device qtcore.QIODeviceLike, format []byte, parent qtco
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQMovieWithDevice")
 	}
 	p := C.qute_QMovie_new_1(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)), parentPtr)
+	runtime.KeepAlive(device)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -111,6 +115,7 @@ func NewQMovieWithFileName(fileName string, format []byte, parent qtcore.QObject
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQMovieWithFileName")
 	}
 	p := C.qute_QMovie_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -131,6 +136,8 @@ func (this *QMovie) SetDevice(device qtcore.QIODeviceLike) {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QMovie.SetDevice")
 	}
 	C.qute_QMovie_setDevice(self, devicePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
 }
 
 // Device wraps QMovie::device.
@@ -143,6 +150,7 @@ func (this *QMovie) SetDevice(device qtcore.QIODeviceLike) {
 func (this *QMovie) Device() *qtcore.QIODevice {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.Device")
 	r := C.qute_QMovie_device(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QIODevice](rt.WrapClass(r, "QIODevice", rt.KeepOrBorrow), r)
 }
 
@@ -154,6 +162,7 @@ func (this *QMovie) Device() *qtcore.QIODevice {
 func (this *QMovie) SetFileName(fileName string) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetFileName")
 	C.qute_QMovie_setFileName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 }
 
 // FileName wraps QMovie::fileName.
@@ -164,6 +173,7 @@ func (this *QMovie) SetFileName(fileName string) {
 func (this *QMovie) FileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.FileName")
 	r := C.qute_QMovie_fileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -175,6 +185,7 @@ func (this *QMovie) FileName() string {
 func (this *QMovie) SetFormat(format []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetFormat")
 	C.qute_QMovie_setFormat(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 }
 
 // Format wraps QMovie::format.
@@ -185,6 +196,7 @@ func (this *QMovie) SetFormat(format []byte) {
 func (this *QMovie) Format() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.Format")
 	r := C.qute_QMovie_format(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -196,6 +208,7 @@ func (this *QMovie) Format() []byte {
 func (this *QMovie) SetBackgroundColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetBackgroundColor")
 	C.qute_QMovie_setBackgroundColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // BackgroundColor wraps QMovie::backgroundColor.
@@ -206,6 +219,7 @@ func (this *QMovie) SetBackgroundColor(color QColor) {
 func (this *QMovie) BackgroundColor() QColor {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.BackgroundColor")
 	r := C.qute_QMovie_backgroundColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -217,6 +231,7 @@ func (this *QMovie) BackgroundColor() QColor {
 func (this *QMovie) State() QMovieMovieState {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.State")
 	r := C.qute_QMovie_state(self)
+	runtime.KeepAlive(this)
 	return QMovieMovieState(r)
 }
 
@@ -228,6 +243,7 @@ func (this *QMovie) State() QMovieMovieState {
 func (this *QMovie) FrameRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.FrameRect")
 	r := C.qute_QMovie_frameRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -241,6 +257,7 @@ func (this *QMovie) FrameRect() qtcore.QRect {
 func (this *QMovie) CurrentImage() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.CurrentImage")
 	r := C.qute_QMovie_currentImage(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -254,6 +271,7 @@ func (this *QMovie) CurrentImage() *QImage {
 func (this *QMovie) CurrentPixmap() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.CurrentPixmap")
 	r := C.qute_QMovie_currentPixmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -265,6 +283,7 @@ func (this *QMovie) CurrentPixmap() *QPixmap {
 func (this *QMovie) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.IsValid")
 	r := C.qute_QMovie_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -276,6 +295,7 @@ func (this *QMovie) IsValid() bool {
 func (this *QMovie) LastError() QImageReaderImageReaderError {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.LastError")
 	r := C.qute_QMovie_lastError(self)
+	runtime.KeepAlive(this)
 	return QImageReaderImageReaderError(r)
 }
 
@@ -287,6 +307,7 @@ func (this *QMovie) LastError() QImageReaderImageReaderError {
 func (this *QMovie) LastErrorString() string {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.LastErrorString")
 	r := C.qute_QMovie_lastErrorString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -298,6 +319,7 @@ func (this *QMovie) LastErrorString() string {
 func (this *QMovie) JumpToFrame(frameNumber int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.JumpToFrame")
 	r := C.qute_QMovie_jumpToFrame(self, C.int(frameNumber))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -309,6 +331,7 @@ func (this *QMovie) JumpToFrame(frameNumber int) bool {
 func (this *QMovie) LoopCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.LoopCount")
 	r := C.qute_QMovie_loopCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -320,6 +343,7 @@ func (this *QMovie) LoopCount() int {
 func (this *QMovie) FrameCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.FrameCount")
 	r := C.qute_QMovie_frameCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -331,6 +355,7 @@ func (this *QMovie) FrameCount() int {
 func (this *QMovie) NextFrameDelay() int {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.NextFrameDelay")
 	r := C.qute_QMovie_nextFrameDelay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -342,6 +367,7 @@ func (this *QMovie) NextFrameDelay() int {
 func (this *QMovie) CurrentFrameNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.CurrentFrameNumber")
 	r := C.qute_QMovie_currentFrameNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -353,6 +379,7 @@ func (this *QMovie) CurrentFrameNumber() int {
 func (this *QMovie) Speed() int {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.Speed")
 	r := C.qute_QMovie_speed(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -364,6 +391,7 @@ func (this *QMovie) Speed() int {
 func (this *QMovie) ScaledSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.ScaledSize")
 	r := C.qute_QMovie_scaledSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -375,6 +403,7 @@ func (this *QMovie) ScaledSize() qtcore.QSize {
 func (this *QMovie) SetScaledSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetScaledSize")
 	C.qute_QMovie_setScaledSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // CacheMode wraps QMovie::cacheMode.
@@ -385,6 +414,7 @@ func (this *QMovie) SetScaledSize(size qtcore.QSize) {
 func (this *QMovie) CacheMode() QMovieCacheMode {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.CacheMode")
 	r := C.qute_QMovie_cacheMode(self)
+	runtime.KeepAlive(this)
 	return QMovieCacheMode(r)
 }
 
@@ -396,6 +426,7 @@ func (this *QMovie) CacheMode() QMovieCacheMode {
 func (this *QMovie) SetCacheMode(mode QMovieCacheMode) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetCacheMode")
 	C.qute_QMovie_setCacheMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // Start wraps QMovie::start.
@@ -406,6 +437,7 @@ func (this *QMovie) SetCacheMode(mode QMovieCacheMode) {
 func (this *QMovie) Start() {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.Start")
 	C.qute_QMovie_start(self)
+	runtime.KeepAlive(this)
 }
 
 // JumpToNextFrame wraps QMovie::jumpToNextFrame.
@@ -416,6 +448,7 @@ func (this *QMovie) Start() {
 func (this *QMovie) JumpToNextFrame() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.JumpToNextFrame")
 	r := C.qute_QMovie_jumpToNextFrame(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -427,6 +460,7 @@ func (this *QMovie) JumpToNextFrame() bool {
 func (this *QMovie) SetPaused(paused bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetPaused")
 	C.qute_QMovie_setPaused(self, C.bool(paused))
+	runtime.KeepAlive(this)
 }
 
 // Stop wraps QMovie::stop.
@@ -437,6 +471,7 @@ func (this *QMovie) SetPaused(paused bool) {
 func (this *QMovie) Stop() {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.Stop")
 	C.qute_QMovie_stop(self)
+	runtime.KeepAlive(this)
 }
 
 // SetSpeed wraps QMovie::setSpeed.
@@ -447,6 +482,7 @@ func (this *QMovie) Stop() {
 func (this *QMovie) SetSpeed(percentSpeed int) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.SetSpeed")
 	C.qute_QMovie_setSpeed(self, C.int(percentSpeed))
+	runtime.KeepAlive(this)
 }
 
 // EmitStarted wraps emitting the started signal.
@@ -457,6 +493,7 @@ func (this *QMovie) SetSpeed(percentSpeed int) {
 func (this *QMovie) EmitStarted() {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitStarted")
 	C.qute_QMovie_started_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitResized wraps emitting the resized signal.
@@ -467,6 +504,7 @@ func (this *QMovie) EmitStarted() {
 func (this *QMovie) EmitResized(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitResized")
 	C.qute_QMovie_resized_1(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // EmitUpdated wraps emitting the updated signal.
@@ -477,6 +515,7 @@ func (this *QMovie) EmitResized(size qtcore.QSize) {
 func (this *QMovie) EmitUpdated(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitUpdated")
 	C.qute_QMovie_updated_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // EmitStateChanged wraps emitting the stateChanged signal.
@@ -487,6 +526,7 @@ func (this *QMovie) EmitUpdated(rect qtcore.QRect) {
 func (this *QMovie) EmitStateChanged(state QMovieMovieState) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitStateChanged")
 	C.qute_QMovie_stateChanged_1(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // EmitError wraps emitting the error signal.
@@ -497,6 +537,7 @@ func (this *QMovie) EmitStateChanged(state QMovieMovieState) {
 func (this *QMovie) EmitError(errorArg QImageReaderImageReaderError) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitError")
 	C.qute_QMovie_error_1(self, C.int64_t(errorArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitFinished wraps emitting the finished signal.
@@ -507,6 +548,7 @@ func (this *QMovie) EmitError(errorArg QImageReaderImageReaderError) {
 func (this *QMovie) EmitFinished() {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitFinished")
 	C.qute_QMovie_finished_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitFrameChanged wraps emitting the frameChanged signal.
@@ -517,6 +559,7 @@ func (this *QMovie) EmitFinished() {
 func (this *QMovie) EmitFrameChanged(frameNumber int) {
 	self := rt.Use(unsafe.Pointer(this), "QMovie.EmitFrameChanged")
 	C.qute_QMovie_frameChanged_1(self, C.int(frameNumber))
+	runtime.KeepAlive(this)
 }
 
 // QMovieSupportedFormats wraps QMovie::supportedFormats.

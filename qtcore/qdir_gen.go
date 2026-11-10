@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -106,6 +107,7 @@ func NewQDirWithPath(path string, nameFilter string) *QDir {
 func (this *QDir) SetPath(path string) {
 	self := rt.Use(unsafe.Pointer(this), "QDir.SetPath")
 	C.qute_QDir_setPath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	runtime.KeepAlive(this)
 }
 
 // Path wraps QDir::path.
@@ -116,6 +118,7 @@ func (this *QDir) SetPath(path string) {
 func (this *QDir) Path() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Path")
 	r := C.qute_QDir_path(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -127,6 +130,7 @@ func (this *QDir) Path() string {
 func (this *QDir) AbsolutePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.AbsolutePath")
 	r := C.qute_QDir_absolutePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -138,6 +142,7 @@ func (this *QDir) AbsolutePath() string {
 func (this *QDir) CanonicalPath() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.CanonicalPath")
 	r := C.qute_QDir_canonicalPath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -149,6 +154,7 @@ func (this *QDir) CanonicalPath() string {
 func (this *QDir) FilesystemPath() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.FilesystemPath")
 	r := C.qute_QDir_filesystemPath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -160,6 +166,7 @@ func (this *QDir) FilesystemPath() string {
 func (this *QDir) FilesystemAbsolutePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.FilesystemAbsolutePath")
 	r := C.qute_QDir_filesystemAbsolutePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -171,6 +178,7 @@ func (this *QDir) FilesystemAbsolutePath() string {
 func (this *QDir) FilesystemCanonicalPath() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.FilesystemCanonicalPath")
 	r := C.qute_QDir_filesystemCanonicalPath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -182,6 +190,7 @@ func (this *QDir) FilesystemCanonicalPath() string {
 func (this *QDir) DirName() string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.DirName")
 	r := C.qute_QDir_dirName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -193,6 +202,7 @@ func (this *QDir) DirName() string {
 func (this *QDir) FilePath(fileName string) string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.FilePath")
 	r := C.qute_QDir_filePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -204,6 +214,7 @@ func (this *QDir) FilePath(fileName string) string {
 func (this *QDir) AbsoluteFilePath(fileName string) string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.AbsoluteFilePath")
 	r := C.qute_QDir_absoluteFilePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -215,6 +226,7 @@ func (this *QDir) AbsoluteFilePath(fileName string) string {
 func (this *QDir) RelativeFilePath(fileName string) string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.RelativeFilePath")
 	r := C.qute_QDir_relativeFilePath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -226,6 +238,7 @@ func (this *QDir) RelativeFilePath(fileName string) string {
 func (this *QDir) Cd(dirName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Cd")
 	r := C.qute_QDir_cd(self, (*C.char)(unsafe.Pointer(unsafe.StringData(dirName))), C.ptrdiff_t(len(dirName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -237,6 +250,7 @@ func (this *QDir) Cd(dirName string) bool {
 func (this *QDir) CdUp() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.CdUp")
 	r := C.qute_QDir_cdUp(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -248,6 +262,7 @@ func (this *QDir) CdUp() bool {
 func (this *QDir) NameFilters() []string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.NameFilters")
 	r := C.qute_QDir_nameFilters(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -260,6 +275,7 @@ func (this *QDir) SetNameFilters(nameFilters []string) {
 	self := rt.Use(unsafe.Pointer(this), "QDir.SetNameFilters")
 	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
 	C.qute_QDir_setNameFilters(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)))
+	runtime.KeepAlive(this)
 }
 
 // Filter wraps QDir::filter.
@@ -270,6 +286,7 @@ func (this *QDir) SetNameFilters(nameFilters []string) {
 func (this *QDir) Filter() QDirFilters {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Filter")
 	r := C.qute_QDir_filter(self)
+	runtime.KeepAlive(this)
 	return QDirFilters(r)
 }
 
@@ -281,6 +298,7 @@ func (this *QDir) Filter() QDirFilters {
 func (this *QDir) SetFilter(filter QDirFilters) {
 	self := rt.Use(unsafe.Pointer(this), "QDir.SetFilter")
 	C.qute_QDir_setFilter(self, C.int64_t(filter))
+	runtime.KeepAlive(this)
 }
 
 // Sorting wraps QDir::sorting.
@@ -291,6 +309,7 @@ func (this *QDir) SetFilter(filter QDirFilters) {
 func (this *QDir) Sorting() QDirSortFlags {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Sorting")
 	r := C.qute_QDir_sorting(self)
+	runtime.KeepAlive(this)
 	return QDirSortFlags(r)
 }
 
@@ -302,6 +321,7 @@ func (this *QDir) Sorting() QDirSortFlags {
 func (this *QDir) SetSorting(sort QDirSortFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QDir.SetSorting")
 	C.qute_QDir_setSorting(self, C.int64_t(sort))
+	runtime.KeepAlive(this)
 }
 
 // Count wraps QDir::count.
@@ -312,6 +332,7 @@ func (this *QDir) SetSorting(sort QDirSortFlags) {
 func (this *QDir) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Count")
 	r := C.qute_QDir_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -323,6 +344,7 @@ func (this *QDir) Count() int {
 func (this *QDir) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.IsEmpty")
 	r := C.qute_QDir_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -334,6 +356,7 @@ func (this *QDir) IsEmpty() bool {
 func (this *QDir) EntryList() []string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.EntryList")
 	r := C.qute_QDir_entryList(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -346,6 +369,7 @@ func (this *QDir) EntryListWithNameFilters(nameFilters []string) []string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.EntryListWithNameFilters")
 	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
 	r := C.qute_QDir_entryList_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)))
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -357,6 +381,7 @@ func (this *QDir) EntryListWithNameFilters(nameFilters []string) []string {
 func (this *QDir) EntryInfoList() []*QFileInfo {
 	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoList")
 	r := C.qute_QDir_entryInfoList(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
 		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
 	})
@@ -371,6 +396,7 @@ func (this *QDir) EntryInfoListWithNameFilters(nameFilters []string) []*QFileInf
 	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoListWithNameFilters")
 	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
 	r := C.qute_QDir_entryInfoList_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
 		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
 	})
@@ -384,6 +410,7 @@ func (this *QDir) EntryInfoListWithNameFilters(nameFilters []string) []*QFileInf
 func (this *QDir) Mkdir(dirName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Mkdir")
 	r := C.qute_QDir_mkdir(self, (*C.char)(unsafe.Pointer(unsafe.StringData(dirName))), C.ptrdiff_t(len(dirName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -395,6 +422,7 @@ func (this *QDir) Mkdir(dirName string) bool {
 func (this *QDir) Rmdir(dirName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Rmdir")
 	r := C.qute_QDir_rmdir(self, (*C.char)(unsafe.Pointer(unsafe.StringData(dirName))), C.ptrdiff_t(len(dirName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -406,6 +434,7 @@ func (this *QDir) Rmdir(dirName string) bool {
 func (this *QDir) Mkpath(dirPath string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Mkpath")
 	r := C.qute_QDir_mkpath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(dirPath))), C.ptrdiff_t(len(dirPath)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -417,6 +446,7 @@ func (this *QDir) Mkpath(dirPath string) bool {
 func (this *QDir) Rmpath(dirPath string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Rmpath")
 	r := C.qute_QDir_rmpath(self, (*C.char)(unsafe.Pointer(unsafe.StringData(dirPath))), C.ptrdiff_t(len(dirPath)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -428,6 +458,7 @@ func (this *QDir) Rmpath(dirPath string) bool {
 func (this *QDir) RemoveRecursively() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.RemoveRecursively")
 	r := C.qute_QDir_removeRecursively(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -439,6 +470,7 @@ func (this *QDir) RemoveRecursively() bool {
 func (this *QDir) IsReadable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.IsReadable")
 	r := C.qute_QDir_isReadable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -450,6 +482,7 @@ func (this *QDir) IsReadable() bool {
 func (this *QDir) Exists() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Exists")
 	r := C.qute_QDir_exists(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -461,6 +494,7 @@ func (this *QDir) Exists() bool {
 func (this *QDir) IsRoot() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.IsRoot")
 	r := C.qute_QDir_isRoot(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -472,6 +506,7 @@ func (this *QDir) IsRoot() bool {
 func (this *QDir) IsRelative() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.IsRelative")
 	r := C.qute_QDir_isRelative(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -483,6 +518,7 @@ func (this *QDir) IsRelative() bool {
 func (this *QDir) IsAbsolute() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.IsAbsolute")
 	r := C.qute_QDir_isAbsolute(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -494,6 +530,7 @@ func (this *QDir) IsAbsolute() bool {
 func (this *QDir) MakeAbsolute() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.MakeAbsolute")
 	r := C.qute_QDir_makeAbsolute(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -505,6 +542,7 @@ func (this *QDir) MakeAbsolute() bool {
 func (this *QDir) Remove(fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Remove")
 	r := C.qute_QDir_remove(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -516,6 +554,7 @@ func (this *QDir) Remove(fileName string) bool {
 func (this *QDir) Rename(oldName string, newName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Rename")
 	r := C.qute_QDir_rename(self, (*C.char)(unsafe.Pointer(unsafe.StringData(oldName))), C.ptrdiff_t(len(oldName)), (*C.char)(unsafe.Pointer(unsafe.StringData(newName))), C.ptrdiff_t(len(newName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -527,6 +566,7 @@ func (this *QDir) Rename(oldName string, newName string) bool {
 func (this *QDir) ExistsWithName(name string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.ExistsWithName")
 	r := C.qute_QDir_exists_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -538,6 +578,7 @@ func (this *QDir) ExistsWithName(name string) bool {
 func (this *QDir) Refresh() {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Refresh")
 	C.qute_QDir_refresh(self)
+	runtime.KeepAlive(this)
 }
 
 // QDirSetSearchPaths wraps QDir::setSearchPaths.

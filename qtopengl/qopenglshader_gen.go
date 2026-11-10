@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQOpenGLShaderWithShaderTypeBit(typeArg QOpenGLShaderShaderType, parent q
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLShaderWithShaderTypeBit")
 	}
 	p := C.qute_QOpenGLShader_new(C.int64_t(typeArg), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQOpenGLShaderWithShaderTypeBit(typeArg QOpenGLShaderShaderType, parent q
 func (this *QOpenGLShader) ShaderType() QOpenGLShaderShaderType {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.ShaderType")
 	r := C.qute_QOpenGLShader_shaderType(self)
+	runtime.KeepAlive(this)
 	return QOpenGLShaderShaderType(r)
 }
 
@@ -90,6 +93,7 @@ func (this *QOpenGLShader) CompileSourceCode(source string) bool {
 	sourceCStr := C.CString(source)
 	defer C.free(unsafe.Pointer(sourceCStr))
 	r := C.qute_QOpenGLShader_compileSourceCode(self, sourceCStr)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -101,6 +105,7 @@ func (this *QOpenGLShader) CompileSourceCode(source string) bool {
 func (this *QOpenGLShader) CompileSourceCodeBytes(source []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.CompileSourceCodeBytes")
 	r := C.qute_QOpenGLShader_compileSourceCode_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(source))), C.ptrdiff_t(len(source)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -112,6 +117,7 @@ func (this *QOpenGLShader) CompileSourceCodeBytes(source []byte) bool {
 func (this *QOpenGLShader) CompileSourceFile(fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.CompileSourceFile")
 	r := C.qute_QOpenGLShader_compileSourceFile(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -123,6 +129,7 @@ func (this *QOpenGLShader) CompileSourceFile(fileName string) bool {
 func (this *QOpenGLShader) SourceCode() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.SourceCode")
 	r := C.qute_QOpenGLShader_sourceCode(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -134,6 +141,7 @@ func (this *QOpenGLShader) SourceCode() []byte {
 func (this *QOpenGLShader) IsCompiled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.IsCompiled")
 	r := C.qute_QOpenGLShader_isCompiled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -145,6 +153,7 @@ func (this *QOpenGLShader) IsCompiled() bool {
 func (this *QOpenGLShader) Log() string {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.Log")
 	r := C.qute_QOpenGLShader_log(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -156,6 +165,7 @@ func (this *QOpenGLShader) Log() string {
 func (this *QOpenGLShader) ShaderId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShader.ShaderId")
 	r := C.qute_QOpenGLShader_shaderId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 

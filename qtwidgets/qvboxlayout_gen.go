@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQVBoxLayout(parent QWidgetLike) *QVBoxLayout {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQVBoxLayout")
 	}
 	p := C.qute_QVBoxLayout_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQAbstractSlider(parent QWidgetLike) *QAbstractSlider {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQAbstractSlider")
 	}
 	p := C.qute_QAbstractSlider_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQAbstractSlider(parent QWidgetLike) *QAbstractSlider {
 func (this *QAbstractSlider) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.Orientation")
 	r := C.qute_QAbstractSlider_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QAbstractSlider) Orientation() qtcore.Orientations {
 func (this *QAbstractSlider) SetMinimum(minimum int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetMinimum")
 	C.qute_QAbstractSlider_setMinimum(self, C.int(minimum))
+	runtime.KeepAlive(this)
 }
 
 // Minimum wraps QAbstractSlider::minimum.
@@ -98,6 +102,7 @@ func (this *QAbstractSlider) SetMinimum(minimum int) {
 func (this *QAbstractSlider) Minimum() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.Minimum")
 	r := C.qute_QAbstractSlider_minimum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -109,6 +114,7 @@ func (this *QAbstractSlider) Minimum() int {
 func (this *QAbstractSlider) SetMaximum(maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetMaximum")
 	C.qute_QAbstractSlider_setMaximum(self, C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // Maximum wraps QAbstractSlider::maximum.
@@ -119,6 +125,7 @@ func (this *QAbstractSlider) SetMaximum(maximum int) {
 func (this *QAbstractSlider) Maximum() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.Maximum")
 	r := C.qute_QAbstractSlider_maximum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +137,7 @@ func (this *QAbstractSlider) Maximum() int {
 func (this *QAbstractSlider) SetSingleStep(singleStep int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetSingleStep")
 	C.qute_QAbstractSlider_setSingleStep(self, C.int(singleStep))
+	runtime.KeepAlive(this)
 }
 
 // SingleStep wraps QAbstractSlider::singleStep.
@@ -140,6 +148,7 @@ func (this *QAbstractSlider) SetSingleStep(singleStep int) {
 func (this *QAbstractSlider) SingleStep() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SingleStep")
 	r := C.qute_QAbstractSlider_singleStep(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -151,6 +160,7 @@ func (this *QAbstractSlider) SingleStep() int {
 func (this *QAbstractSlider) SetPageStep(pageStep int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetPageStep")
 	C.qute_QAbstractSlider_setPageStep(self, C.int(pageStep))
+	runtime.KeepAlive(this)
 }
 
 // PageStep wraps QAbstractSlider::pageStep.
@@ -161,6 +171,7 @@ func (this *QAbstractSlider) SetPageStep(pageStep int) {
 func (this *QAbstractSlider) PageStep() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.PageStep")
 	r := C.qute_QAbstractSlider_pageStep(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -172,6 +183,7 @@ func (this *QAbstractSlider) PageStep() int {
 func (this *QAbstractSlider) SetTracking(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetTracking")
 	C.qute_QAbstractSlider_setTracking(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // HasTracking wraps QAbstractSlider::hasTracking.
@@ -182,6 +194,7 @@ func (this *QAbstractSlider) SetTracking(enable bool) {
 func (this *QAbstractSlider) HasTracking() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.HasTracking")
 	r := C.qute_QAbstractSlider_hasTracking(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -193,6 +206,7 @@ func (this *QAbstractSlider) HasTracking() bool {
 func (this *QAbstractSlider) SetSliderDown(sliderDown bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetSliderDown")
 	C.qute_QAbstractSlider_setSliderDown(self, C.bool(sliderDown))
+	runtime.KeepAlive(this)
 }
 
 // IsSliderDown wraps QAbstractSlider::isSliderDown.
@@ -203,6 +217,7 @@ func (this *QAbstractSlider) SetSliderDown(sliderDown bool) {
 func (this *QAbstractSlider) IsSliderDown() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.IsSliderDown")
 	r := C.qute_QAbstractSlider_isSliderDown(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -214,6 +229,7 @@ func (this *QAbstractSlider) IsSliderDown() bool {
 func (this *QAbstractSlider) SetSliderPosition(sliderPosition int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetSliderPosition")
 	C.qute_QAbstractSlider_setSliderPosition(self, C.int(sliderPosition))
+	runtime.KeepAlive(this)
 }
 
 // SliderPosition wraps QAbstractSlider::sliderPosition.
@@ -224,6 +240,7 @@ func (this *QAbstractSlider) SetSliderPosition(sliderPosition int) {
 func (this *QAbstractSlider) SliderPosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SliderPosition")
 	r := C.qute_QAbstractSlider_sliderPosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -235,6 +252,7 @@ func (this *QAbstractSlider) SliderPosition() int {
 func (this *QAbstractSlider) SetInvertedAppearance(invertedAppearance bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetInvertedAppearance")
 	C.qute_QAbstractSlider_setInvertedAppearance(self, C.bool(invertedAppearance))
+	runtime.KeepAlive(this)
 }
 
 // InvertedAppearance wraps QAbstractSlider::invertedAppearance.
@@ -245,6 +263,7 @@ func (this *QAbstractSlider) SetInvertedAppearance(invertedAppearance bool) {
 func (this *QAbstractSlider) InvertedAppearance() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.InvertedAppearance")
 	r := C.qute_QAbstractSlider_invertedAppearance(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -256,6 +275,7 @@ func (this *QAbstractSlider) InvertedAppearance() bool {
 func (this *QAbstractSlider) SetInvertedControls(invertedControls bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetInvertedControls")
 	C.qute_QAbstractSlider_setInvertedControls(self, C.bool(invertedControls))
+	runtime.KeepAlive(this)
 }
 
 // InvertedControls wraps QAbstractSlider::invertedControls.
@@ -266,6 +286,7 @@ func (this *QAbstractSlider) SetInvertedControls(invertedControls bool) {
 func (this *QAbstractSlider) InvertedControls() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.InvertedControls")
 	r := C.qute_QAbstractSlider_invertedControls(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -277,6 +298,7 @@ func (this *QAbstractSlider) InvertedControls() bool {
 func (this *QAbstractSlider) Value() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.Value")
 	r := C.qute_QAbstractSlider_value(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -288,6 +310,7 @@ func (this *QAbstractSlider) Value() int {
 func (this *QAbstractSlider) TriggerAction(action QAbstractSliderSliderAction) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.TriggerAction")
 	C.qute_QAbstractSlider_triggerAction(self, C.int64_t(action))
+	runtime.KeepAlive(this)
 }
 
 // SetValue wraps QAbstractSlider::setValue.
@@ -298,6 +321,7 @@ func (this *QAbstractSlider) TriggerAction(action QAbstractSliderSliderAction) {
 func (this *QAbstractSlider) SetValue(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetValue")
 	C.qute_QAbstractSlider_setValue(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // SetOrientation wraps QAbstractSlider::setOrientation.
@@ -308,6 +332,7 @@ func (this *QAbstractSlider) SetValue(value int) {
 func (this *QAbstractSlider) SetOrientation(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetOrientation")
 	C.qute_QAbstractSlider_setOrientation(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QAbstractSlider::setRange.
@@ -318,6 +343,7 @@ func (this *QAbstractSlider) SetOrientation(orientation qtcore.Orientations) {
 func (this *QAbstractSlider) SetRange(min int, max int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.SetRange")
 	C.qute_QAbstractSlider_setRange(self, C.int(min), C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // EmitValueChanged wraps emitting the valueChanged signal.
@@ -328,6 +354,7 @@ func (this *QAbstractSlider) SetRange(min int, max int) {
 func (this *QAbstractSlider) EmitValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.EmitValueChanged")
 	C.qute_QAbstractSlider_valueChanged_1(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // EmitSliderPressed wraps emitting the sliderPressed signal.
@@ -338,6 +365,7 @@ func (this *QAbstractSlider) EmitValueChanged(value int) {
 func (this *QAbstractSlider) EmitSliderPressed() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.EmitSliderPressed")
 	C.qute_QAbstractSlider_sliderPressed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSliderMoved wraps emitting the sliderMoved signal.
@@ -348,6 +376,7 @@ func (this *QAbstractSlider) EmitSliderPressed() {
 func (this *QAbstractSlider) EmitSliderMoved(position int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.EmitSliderMoved")
 	C.qute_QAbstractSlider_sliderMoved_1(self, C.int(position))
+	runtime.KeepAlive(this)
 }
 
 // EmitSliderReleased wraps emitting the sliderReleased signal.
@@ -358,6 +387,7 @@ func (this *QAbstractSlider) EmitSliderMoved(position int) {
 func (this *QAbstractSlider) EmitSliderReleased() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.EmitSliderReleased")
 	C.qute_QAbstractSlider_sliderReleased_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitRangeChanged wraps emitting the rangeChanged signal.
@@ -368,6 +398,7 @@ func (this *QAbstractSlider) EmitSliderReleased() {
 func (this *QAbstractSlider) EmitRangeChanged(min int, max int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.EmitRangeChanged")
 	C.qute_QAbstractSlider_rangeChanged_1(self, C.int(min), C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // EmitActionTriggered wraps emitting the actionTriggered signal.
@@ -378,6 +409,7 @@ func (this *QAbstractSlider) EmitRangeChanged(min int, max int) {
 func (this *QAbstractSlider) EmitActionTriggered(action int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSlider.EmitActionTriggered")
 	C.qute_QAbstractSlider_actionTriggered_1(self, C.int(action))
+	runtime.KeepAlive(this)
 }
 
 // OnValueChanged connects f to the valueChanged signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -119,6 +120,7 @@ func NewQPenWithColor(color QColor) *QPen {
 func NewQPenWithBrush(brush *QBrush, width float64) *QPen {
 	rt.CheckThread("NewQPenWithBrush")
 	p := C.qute_QPen_new_3(rt.UseArg(unsafe.Pointer(brush), "NewQPenWithBrush"), C.double(width))
+	runtime.KeepAlive(brush)
 	h := rt.WrapClass(p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
@@ -131,6 +133,7 @@ func NewQPenWithBrush(brush *QBrush, width float64) *QPen {
 func (this *QPen) Style() qtcore.PenStyle {
 	self := rt.Use(unsafe.Pointer(this), "QPen.Style")
 	r := C.qute_QPen_style(self)
+	runtime.KeepAlive(this)
 	return qtcore.PenStyle(r)
 }
 
@@ -142,6 +145,7 @@ func (this *QPen) Style() qtcore.PenStyle {
 func (this *QPen) SetStyle(style qtcore.PenStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetStyle")
 	C.qute_QPen_setStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // DashPattern wraps QPen::dashPattern.
@@ -152,6 +156,7 @@ func (this *QPen) SetStyle(style qtcore.PenStyle) {
 func (this *QPen) DashPattern() []float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPen.DashPattern")
 	r := C.qute_QPen_dashPattern(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.double) float64 { return float64(e) })
 }
 
@@ -167,6 +172,7 @@ func (this *QPen) SetDashPattern(pattern []float64) {
 		patternC[i] = C.double(pattern[i])
 	}
 	C.qute_QPen_setDashPattern(self, unsafe.Pointer(unsafe.SliceData(patternC)), C.ptrdiff_t(len(pattern)))
+	runtime.KeepAlive(this)
 }
 
 // DashOffset wraps QPen::dashOffset.
@@ -177,6 +183,7 @@ func (this *QPen) SetDashPattern(pattern []float64) {
 func (this *QPen) DashOffset() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPen.DashOffset")
 	r := C.qute_QPen_dashOffset(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -188,6 +195,7 @@ func (this *QPen) DashOffset() float64 {
 func (this *QPen) SetDashOffset(doffset float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetDashOffset")
 	C.qute_QPen_setDashOffset(self, C.double(doffset))
+	runtime.KeepAlive(this)
 }
 
 // MiterLimit wraps QPen::miterLimit.
@@ -198,6 +206,7 @@ func (this *QPen) SetDashOffset(doffset float64) {
 func (this *QPen) MiterLimit() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPen.MiterLimit")
 	r := C.qute_QPen_miterLimit(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -209,6 +218,7 @@ func (this *QPen) MiterLimit() float64 {
 func (this *QPen) SetMiterLimit(limit float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetMiterLimit")
 	C.qute_QPen_setMiterLimit(self, C.double(limit))
+	runtime.KeepAlive(this)
 }
 
 // WidthF wraps QPen::widthF.
@@ -219,6 +229,7 @@ func (this *QPen) SetMiterLimit(limit float64) {
 func (this *QPen) WidthF() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPen.WidthF")
 	r := C.qute_QPen_widthF(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -230,6 +241,7 @@ func (this *QPen) WidthF() float64 {
 func (this *QPen) SetWidthF(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetWidthF")
 	C.qute_QPen_setWidthF(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // Width wraps QPen::width.
@@ -240,6 +252,7 @@ func (this *QPen) SetWidthF(width float64) {
 func (this *QPen) Width() int {
 	self := rt.Use(unsafe.Pointer(this), "QPen.Width")
 	r := C.qute_QPen_width(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -251,6 +264,7 @@ func (this *QPen) Width() int {
 func (this *QPen) SetWidth(width int) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetWidth")
 	C.qute_QPen_setWidth(self, C.int(width))
+	runtime.KeepAlive(this)
 }
 
 // Color wraps QPen::color.
@@ -261,6 +275,7 @@ func (this *QPen) SetWidth(width int) {
 func (this *QPen) Color() QColor {
 	self := rt.Use(unsafe.Pointer(this), "QPen.Color")
 	r := C.qute_QPen_color(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -272,6 +287,7 @@ func (this *QPen) Color() QColor {
 func (this *QPen) SetColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetColor")
 	C.qute_QPen_setColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // Brush wraps QPen::brush.
@@ -284,6 +300,7 @@ func (this *QPen) SetColor(color QColor) {
 func (this *QPen) Brush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QPen.Brush")
 	r := C.qute_QPen_brush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -295,6 +312,8 @@ func (this *QPen) Brush() *QBrush {
 func (this *QPen) SetBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetBrush")
 	C.qute_QPen_setBrush(self, rt.UseArg(unsafe.Pointer(brush), "QPen.SetBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // IsSolid wraps QPen::isSolid.
@@ -305,6 +324,7 @@ func (this *QPen) SetBrush(brush *QBrush) {
 func (this *QPen) IsSolid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPen.IsSolid")
 	r := C.qute_QPen_isSolid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -316,6 +336,7 @@ func (this *QPen) IsSolid() bool {
 func (this *QPen) CapStyle() qtcore.PenCapStyle {
 	self := rt.Use(unsafe.Pointer(this), "QPen.CapStyle")
 	r := C.qute_QPen_capStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.PenCapStyle(r)
 }
 
@@ -327,6 +348,7 @@ func (this *QPen) CapStyle() qtcore.PenCapStyle {
 func (this *QPen) SetCapStyle(pcs qtcore.PenCapStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetCapStyle")
 	C.qute_QPen_setCapStyle(self, C.int64_t(pcs))
+	runtime.KeepAlive(this)
 }
 
 // JoinStyle wraps QPen::joinStyle.
@@ -337,6 +359,7 @@ func (this *QPen) SetCapStyle(pcs qtcore.PenCapStyle) {
 func (this *QPen) JoinStyle() qtcore.PenJoinStyle {
 	self := rt.Use(unsafe.Pointer(this), "QPen.JoinStyle")
 	r := C.qute_QPen_joinStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.PenJoinStyle(r)
 }
 
@@ -348,6 +371,7 @@ func (this *QPen) JoinStyle() qtcore.PenJoinStyle {
 func (this *QPen) SetJoinStyle(pcs qtcore.PenJoinStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetJoinStyle")
 	C.qute_QPen_setJoinStyle(self, C.int64_t(pcs))
+	runtime.KeepAlive(this)
 }
 
 // IsCosmetic wraps QPen::isCosmetic.
@@ -358,6 +382,7 @@ func (this *QPen) SetJoinStyle(pcs qtcore.PenJoinStyle) {
 func (this *QPen) IsCosmetic() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPen.IsCosmetic")
 	r := C.qute_QPen_isCosmetic(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -369,4 +394,5 @@ func (this *QPen) IsCosmetic() bool {
 func (this *QPen) SetCosmetic(cosmetic bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPen.SetCosmetic")
 	C.qute_QPen_setCosmetic(self, C.bool(cosmetic))
+	runtime.KeepAlive(this)
 }

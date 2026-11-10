@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQTextTableFormat() *QTextTableFormat {
 func (this *QTextTableFormat) Columns() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.Columns")
 	r := C.qute_QTextTableFormat_columns(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -64,6 +66,7 @@ func (this *QTextTableFormat) Columns() int {
 func (this *QTextTableFormat) SetColumns(columns int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.SetColumns")
 	C.qute_QTextTableFormat_setColumns(self, C.int(columns))
+	runtime.KeepAlive(this)
 }
 
 // SetColumnWidthConstraints wraps QTextTableFormat::setColumnWidthConstraints.
@@ -78,6 +81,8 @@ func (this *QTextTableFormat) SetColumnWidthConstraints(constraints []*QTextLeng
 		constraintsC[i] = rt.UseArg(unsafe.Pointer(constraints[i]), "QTextTableFormat.SetColumnWidthConstraints")
 	}
 	C.qute_QTextTableFormat_setColumnWidthConstraints(self, unsafe.Pointer(unsafe.SliceData(constraintsC)), C.ptrdiff_t(len(constraints)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(constraints)
 }
 
 // ColumnWidthConstraints wraps QTextTableFormat::columnWidthConstraints.
@@ -88,6 +93,7 @@ func (this *QTextTableFormat) SetColumnWidthConstraints(constraints []*QTextLeng
 func (this *QTextTableFormat) ColumnWidthConstraints() []*QTextLength {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.ColumnWidthConstraints")
 	r := C.qute_QTextTableFormat_columnWidthConstraints(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextLength {
 		return rt.View[QTextLength](rt.WrapClass(e, "QTextLength", rt.TakeOwned), e)
 	})
@@ -101,6 +107,7 @@ func (this *QTextTableFormat) ColumnWidthConstraints() []*QTextLength {
 func (this *QTextTableFormat) ClearColumnWidthConstraints() {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.ClearColumnWidthConstraints")
 	C.qute_QTextTableFormat_clearColumnWidthConstraints(self)
+	runtime.KeepAlive(this)
 }
 
 // CellSpacing wraps QTextTableFormat::cellSpacing.
@@ -111,6 +118,7 @@ func (this *QTextTableFormat) ClearColumnWidthConstraints() {
 func (this *QTextTableFormat) CellSpacing() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.CellSpacing")
 	r := C.qute_QTextTableFormat_cellSpacing(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -122,6 +130,7 @@ func (this *QTextTableFormat) CellSpacing() float64 {
 func (this *QTextTableFormat) SetCellSpacing(spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.SetCellSpacing")
 	C.qute_QTextTableFormat_setCellSpacing(self, C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // CellPadding wraps QTextTableFormat::cellPadding.
@@ -132,6 +141,7 @@ func (this *QTextTableFormat) SetCellSpacing(spacing float64) {
 func (this *QTextTableFormat) CellPadding() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.CellPadding")
 	r := C.qute_QTextTableFormat_cellPadding(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -143,6 +153,7 @@ func (this *QTextTableFormat) CellPadding() float64 {
 func (this *QTextTableFormat) SetCellPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.SetCellPadding")
 	C.qute_QTextTableFormat_setCellPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // SetAlignment wraps QTextTableFormat::setAlignment.
@@ -153,6 +164,7 @@ func (this *QTextTableFormat) SetCellPadding(padding float64) {
 func (this *QTextTableFormat) SetAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.SetAlignment")
 	C.qute_QTextTableFormat_setAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QTextTableFormat::alignment.
@@ -163,6 +175,7 @@ func (this *QTextTableFormat) SetAlignment(alignment qtcore.Alignment) {
 func (this *QTextTableFormat) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.Alignment")
 	r := C.qute_QTextTableFormat_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -174,6 +187,7 @@ func (this *QTextTableFormat) Alignment() qtcore.Alignment {
 func (this *QTextTableFormat) SetHeaderRowCount(count int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.SetHeaderRowCount")
 	C.qute_QTextTableFormat_setHeaderRowCount(self, C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // HeaderRowCount wraps QTextTableFormat::headerRowCount.
@@ -184,6 +198,7 @@ func (this *QTextTableFormat) SetHeaderRowCount(count int) {
 func (this *QTextTableFormat) HeaderRowCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.HeaderRowCount")
 	r := C.qute_QTextTableFormat_headerRowCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -195,6 +210,7 @@ func (this *QTextTableFormat) HeaderRowCount() int {
 func (this *QTextTableFormat) SetBorderCollapse(borderCollapse bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.SetBorderCollapse")
 	C.qute_QTextTableFormat_setBorderCollapse(self, C.bool(borderCollapse))
+	runtime.KeepAlive(this)
 }
 
 // BorderCollapse wraps QTextTableFormat::borderCollapse.
@@ -205,5 +221,6 @@ func (this *QTextTableFormat) SetBorderCollapse(borderCollapse bool) {
 func (this *QTextTableFormat) BorderCollapse() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableFormat.BorderCollapse")
 	r := C.qute_QTextTableFormat_borderCollapse(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

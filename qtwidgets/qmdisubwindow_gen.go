@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQMdiSubWindow(parent QWidgetLike) *QMdiSubWindow {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMdiSubWindow")
 	}
 	p := C.qute_QMdiSubWindow_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func (this *QMdiSubWindow) SetWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QMdiSubWindow.SetWidget")
 	}
 	C.qute_QMdiSubWindow_setWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -97,6 +101,7 @@ func (this *QMdiSubWindow) SetWidget(widget QWidgetLike) {
 func (this *QMdiSubWindow) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.Widget")
 	r := C.qute_QMdiSubWindow_widget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -110,6 +115,7 @@ func (this *QMdiSubWindow) Widget() *QWidget {
 func (this *QMdiSubWindow) MaximizedButtonsWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.MaximizedButtonsWidget")
 	r := C.qute_QMdiSubWindow_maximizedButtonsWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -123,6 +129,7 @@ func (this *QMdiSubWindow) MaximizedButtonsWidget() *QWidget {
 func (this *QMdiSubWindow) MaximizedSystemMenuIconWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.MaximizedSystemMenuIconWidget")
 	r := C.qute_QMdiSubWindow_maximizedSystemMenuIconWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -134,6 +141,7 @@ func (this *QMdiSubWindow) MaximizedSystemMenuIconWidget() *QWidget {
 func (this *QMdiSubWindow) IsShaded() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.IsShaded")
 	r := C.qute_QMdiSubWindow_isShaded(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -145,6 +153,7 @@ func (this *QMdiSubWindow) IsShaded() bool {
 func (this *QMdiSubWindow) SetOption(option QMdiSubWindowSubWindowOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.SetOption")
 	C.qute_QMdiSubWindow_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QMdiSubWindow::testOption.
@@ -155,6 +164,7 @@ func (this *QMdiSubWindow) SetOption(option QMdiSubWindowSubWindowOptions) {
 func (this *QMdiSubWindow) TestOption(arg0 QMdiSubWindowSubWindowOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.TestOption")
 	r := C.qute_QMdiSubWindow_testOption(self, C.int64_t(arg0))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -166,6 +176,7 @@ func (this *QMdiSubWindow) TestOption(arg0 QMdiSubWindowSubWindowOptions) bool {
 func (this *QMdiSubWindow) SetKeyboardSingleStep(step int) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.SetKeyboardSingleStep")
 	C.qute_QMdiSubWindow_setKeyboardSingleStep(self, C.int(step))
+	runtime.KeepAlive(this)
 }
 
 // KeyboardSingleStep wraps QMdiSubWindow::keyboardSingleStep.
@@ -176,6 +187,7 @@ func (this *QMdiSubWindow) SetKeyboardSingleStep(step int) {
 func (this *QMdiSubWindow) KeyboardSingleStep() int {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.KeyboardSingleStep")
 	r := C.qute_QMdiSubWindow_keyboardSingleStep(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -187,6 +199,7 @@ func (this *QMdiSubWindow) KeyboardSingleStep() int {
 func (this *QMdiSubWindow) SetKeyboardPageStep(step int) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.SetKeyboardPageStep")
 	C.qute_QMdiSubWindow_setKeyboardPageStep(self, C.int(step))
+	runtime.KeepAlive(this)
 }
 
 // KeyboardPageStep wraps QMdiSubWindow::keyboardPageStep.
@@ -197,6 +210,7 @@ func (this *QMdiSubWindow) SetKeyboardPageStep(step int) {
 func (this *QMdiSubWindow) KeyboardPageStep() int {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.KeyboardPageStep")
 	r := C.qute_QMdiSubWindow_keyboardPageStep(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -215,6 +229,8 @@ func (this *QMdiSubWindow) SetSystemMenu(systemMenu QMenuLike) {
 		systemMenuPtr, systemMenuH = rt.Arg(unsafe.Pointer(systemMenu.AsQMenu()), "QMdiSubWindow.SetSystemMenu")
 	}
 	C.qute_QMdiSubWindow_setSystemMenu(self, systemMenuPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(systemMenu)
 	systemMenuH.TransferToCpp()
 }
 
@@ -228,6 +244,7 @@ func (this *QMdiSubWindow) SetSystemMenu(systemMenu QMenuLike) {
 func (this *QMdiSubWindow) SystemMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.SystemMenu")
 	r := C.qute_QMdiSubWindow_systemMenu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
 }
 
@@ -241,6 +258,7 @@ func (this *QMdiSubWindow) SystemMenu() *QMenu {
 func (this *QMdiSubWindow) MdiArea() *QMdiArea {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.MdiArea")
 	r := C.qute_QMdiSubWindow_mdiArea(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMdiArea](rt.WrapClass(r, "QMdiArea", rt.KeepOrBorrow), r)
 }
 
@@ -252,6 +270,7 @@ func (this *QMdiSubWindow) MdiArea() *QMdiArea {
 func (this *QMdiSubWindow) ShowSystemMenu() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.ShowSystemMenu")
 	C.qute_QMdiSubWindow_showSystemMenu(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowShaded wraps QMdiSubWindow::showShaded.
@@ -262,6 +281,7 @@ func (this *QMdiSubWindow) ShowSystemMenu() {
 func (this *QMdiSubWindow) ShowShaded() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.ShowShaded")
 	C.qute_QMdiSubWindow_showShaded(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitWindowStateChanged wraps emitting the windowStateChanged signal.
@@ -272,6 +292,7 @@ func (this *QMdiSubWindow) ShowShaded() {
 func (this *QMdiSubWindow) EmitWindowStateChanged(oldState qtcore.WindowStates, newState qtcore.WindowStates) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.EmitWindowStateChanged")
 	C.qute_QMdiSubWindow_windowStateChanged_1(self, C.int64_t(oldState), C.int64_t(newState))
+	runtime.KeepAlive(this)
 }
 
 // EmitAboutToActivate wraps emitting the aboutToActivate signal.
@@ -282,6 +303,7 @@ func (this *QMdiSubWindow) EmitWindowStateChanged(oldState qtcore.WindowStates, 
 func (this *QMdiSubWindow) EmitAboutToActivate() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.EmitAboutToActivate")
 	C.qute_QMdiSubWindow_aboutToActivate_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnWindowStateChanged connects f to the windowStateChanged signal. The connection ends when the

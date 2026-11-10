@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQTimeZoneOffsetData() *QTimeZoneOffsetData {
 func (this *QTimeZoneOffsetData) Abbreviation() string {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.Abbreviation")
 	r := C.qute_QTimeZoneOffsetData_get_abbreviation(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -109,6 +111,7 @@ func (this *QTimeZoneOffsetData) Abbreviation() string {
 func (this *QTimeZoneOffsetData) SetAbbreviation(abbreviation string) {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.SetAbbreviation")
 	C.qute_QTimeZoneOffsetData_set_abbreviation(self, (*C.char)(unsafe.Pointer(unsafe.StringData(abbreviation))), C.ptrdiff_t(len(abbreviation)))
+	runtime.KeepAlive(this)
 }
 
 // AtUtc wraps the public field QTimeZone::OffsetData::atUtc.
@@ -121,6 +124,7 @@ func (this *QTimeZoneOffsetData) SetAbbreviation(abbreviation string) {
 func (this *QTimeZoneOffsetData) AtUtc() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.AtUtc")
 	r := C.qute_QTimeZoneOffsetData_get_atUtc(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -134,6 +138,8 @@ func (this *QTimeZoneOffsetData) AtUtc() *QDateTime {
 func (this *QTimeZoneOffsetData) SetAtUtc(atUtc *QDateTime) {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.SetAtUtc")
 	C.qute_QTimeZoneOffsetData_set_atUtc(self, rt.UseArg(unsafe.Pointer(atUtc), "QTimeZoneOffsetData.SetAtUtc"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atUtc)
 }
 
 // OffsetFromUtc wraps the public field QTimeZone::OffsetData::offsetFromUtc.
@@ -144,6 +150,7 @@ func (this *QTimeZoneOffsetData) SetAtUtc(atUtc *QDateTime) {
 func (this *QTimeZoneOffsetData) OffsetFromUtc() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.OffsetFromUtc")
 	r := C.qute_QTimeZoneOffsetData_get_offsetFromUtc(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -157,6 +164,7 @@ func (this *QTimeZoneOffsetData) OffsetFromUtc() int {
 func (this *QTimeZoneOffsetData) SetOffsetFromUtc(offsetFromUtc int) {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.SetOffsetFromUtc")
 	C.qute_QTimeZoneOffsetData_set_offsetFromUtc(self, C.int(offsetFromUtc))
+	runtime.KeepAlive(this)
 }
 
 // StandardTimeOffset wraps the public field QTimeZone::OffsetData::standardTimeOffset.
@@ -167,6 +175,7 @@ func (this *QTimeZoneOffsetData) SetOffsetFromUtc(offsetFromUtc int) {
 func (this *QTimeZoneOffsetData) StandardTimeOffset() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.StandardTimeOffset")
 	r := C.qute_QTimeZoneOffsetData_get_standardTimeOffset(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -180,6 +189,7 @@ func (this *QTimeZoneOffsetData) StandardTimeOffset() int {
 func (this *QTimeZoneOffsetData) SetStandardTimeOffset(standardTimeOffset int) {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.SetStandardTimeOffset")
 	C.qute_QTimeZoneOffsetData_set_standardTimeOffset(self, C.int(standardTimeOffset))
+	runtime.KeepAlive(this)
 }
 
 // DaylightTimeOffset wraps the public field QTimeZone::OffsetData::daylightTimeOffset.
@@ -190,6 +200,7 @@ func (this *QTimeZoneOffsetData) SetStandardTimeOffset(standardTimeOffset int) {
 func (this *QTimeZoneOffsetData) DaylightTimeOffset() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.DaylightTimeOffset")
 	r := C.qute_QTimeZoneOffsetData_get_daylightTimeOffset(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -203,4 +214,5 @@ func (this *QTimeZoneOffsetData) DaylightTimeOffset() int {
 func (this *QTimeZoneOffsetData) SetDaylightTimeOffset(daylightTimeOffset int) {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZoneOffsetData.SetDaylightTimeOffset")
 	C.qute_QTimeZoneOffsetData_set_daylightTimeOffset(self, C.int(daylightTimeOffset))
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -54,6 +55,7 @@ func NewQStyleOptionButton() *QStyleOptionButton {
 func (this *QStyleOptionButton) Features() QStyleOptionButtonButtonFeatures {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.Features")
 	r := C.qute_QStyleOptionButton_get_features(self)
+	runtime.KeepAlive(this)
 	return QStyleOptionButtonButtonFeatures(r)
 }
 
@@ -67,6 +69,7 @@ func (this *QStyleOptionButton) Features() QStyleOptionButtonButtonFeatures {
 func (this *QStyleOptionButton) SetFeatures(features QStyleOptionButtonButtonFeatures) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.SetFeatures")
 	C.qute_QStyleOptionButton_set_features(self, C.int64_t(features))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps the public field QStyleOptionButton::text.
@@ -77,6 +80,7 @@ func (this *QStyleOptionButton) SetFeatures(features QStyleOptionButtonButtonFea
 func (this *QStyleOptionButton) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.Text")
 	r := C.qute_QStyleOptionButton_get_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -90,6 +94,7 @@ func (this *QStyleOptionButton) Text() string {
 func (this *QStyleOptionButton) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.SetText")
 	C.qute_QStyleOptionButton_set_text(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps the public field QStyleOptionButton::icon.
@@ -102,6 +107,7 @@ func (this *QStyleOptionButton) SetText(text string) {
 func (this *QStyleOptionButton) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.Icon")
 	r := C.qute_QStyleOptionButton_get_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -115,6 +121,8 @@ func (this *QStyleOptionButton) Icon() *qtgui.QIcon {
 func (this *QStyleOptionButton) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.SetIcon")
 	C.qute_QStyleOptionButton_set_icon(self, rt.UseArg(unsafe.Pointer(icon), "QStyleOptionButton.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // IconSize wraps the public field QStyleOptionButton::iconSize.
@@ -125,6 +133,7 @@ func (this *QStyleOptionButton) SetIcon(icon *qtgui.QIcon) {
 func (this *QStyleOptionButton) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.IconSize")
 	r := C.qute_QStyleOptionButton_get_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -138,4 +147,5 @@ func (this *QStyleOptionButton) IconSize() qtcore.QSize {
 func (this *QStyleOptionButton) SetIconSize(iconSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionButton.SetIconSize")
 	C.qute_QStyleOptionButton_set_iconSize(self, cQSize(iconSize))
+	runtime.KeepAlive(this)
 }

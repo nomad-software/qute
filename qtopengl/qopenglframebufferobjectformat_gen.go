@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -103,6 +104,7 @@ func NewQOpenGLFramebufferObjectFormat() *QOpenGLFramebufferObjectFormat {
 func (this *QOpenGLFramebufferObjectFormat) SetSamples(samples int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.SetSamples")
 	C.qute_QOpenGLFramebufferObjectFormat_setSamples(self, C.int(samples))
+	runtime.KeepAlive(this)
 }
 
 // Samples wraps QOpenGLFramebufferObjectFormat::samples.
@@ -113,6 +115,7 @@ func (this *QOpenGLFramebufferObjectFormat) SetSamples(samples int) {
 func (this *QOpenGLFramebufferObjectFormat) Samples() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.Samples")
 	r := C.qute_QOpenGLFramebufferObjectFormat_samples(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -124,6 +127,7 @@ func (this *QOpenGLFramebufferObjectFormat) Samples() int {
 func (this *QOpenGLFramebufferObjectFormat) SetMipmap(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.SetMipmap")
 	C.qute_QOpenGLFramebufferObjectFormat_setMipmap(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // Mipmap wraps QOpenGLFramebufferObjectFormat::mipmap.
@@ -134,6 +138,7 @@ func (this *QOpenGLFramebufferObjectFormat) SetMipmap(enabled bool) {
 func (this *QOpenGLFramebufferObjectFormat) Mipmap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.Mipmap")
 	r := C.qute_QOpenGLFramebufferObjectFormat_mipmap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -145,6 +150,7 @@ func (this *QOpenGLFramebufferObjectFormat) Mipmap() bool {
 func (this *QOpenGLFramebufferObjectFormat) SetAttachment(attachment QOpenGLFramebufferObjectAttachment) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.SetAttachment")
 	C.qute_QOpenGLFramebufferObjectFormat_setAttachment(self, C.int64_t(attachment))
+	runtime.KeepAlive(this)
 }
 
 // Attachment wraps QOpenGLFramebufferObjectFormat::attachment.
@@ -155,6 +161,7 @@ func (this *QOpenGLFramebufferObjectFormat) SetAttachment(attachment QOpenGLFram
 func (this *QOpenGLFramebufferObjectFormat) Attachment() QOpenGLFramebufferObjectAttachment {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.Attachment")
 	r := C.qute_QOpenGLFramebufferObjectFormat_attachment(self)
+	runtime.KeepAlive(this)
 	return QOpenGLFramebufferObjectAttachment(r)
 }
 
@@ -166,6 +173,7 @@ func (this *QOpenGLFramebufferObjectFormat) Attachment() QOpenGLFramebufferObjec
 func (this *QOpenGLFramebufferObjectFormat) SetTextureTarget(target uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.SetTextureTarget")
 	C.qute_QOpenGLFramebufferObjectFormat_setTextureTarget(self, C.uint(target))
+	runtime.KeepAlive(this)
 }
 
 // TextureTarget wraps QOpenGLFramebufferObjectFormat::textureTarget.
@@ -176,6 +184,7 @@ func (this *QOpenGLFramebufferObjectFormat) SetTextureTarget(target uint) {
 func (this *QOpenGLFramebufferObjectFormat) TextureTarget() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.TextureTarget")
 	r := C.qute_QOpenGLFramebufferObjectFormat_textureTarget(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -187,6 +196,7 @@ func (this *QOpenGLFramebufferObjectFormat) TextureTarget() uint {
 func (this *QOpenGLFramebufferObjectFormat) SetInternalTextureFormat(internalTextureFormat uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.SetInternalTextureFormat")
 	C.qute_QOpenGLFramebufferObjectFormat_setInternalTextureFormat(self, C.uint(internalTextureFormat))
+	runtime.KeepAlive(this)
 }
 
 // InternalTextureFormat wraps QOpenGLFramebufferObjectFormat::internalTextureFormat.
@@ -197,5 +207,6 @@ func (this *QOpenGLFramebufferObjectFormat) SetInternalTextureFormat(internalTex
 func (this *QOpenGLFramebufferObjectFormat) InternalTextureFormat() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObjectFormat.InternalTextureFormat")
 	r := C.qute_QOpenGLFramebufferObjectFormat_internalTextureFormat(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQTextFrameFormat() *QTextFrameFormat {
 func (this *QTextFrameFormat) SetPosition(fArg QTextFrameFormatPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetPosition")
 	C.qute_QTextFrameFormat_setPosition(self, C.int64_t(fArg))
+	runtime.KeepAlive(this)
 }
 
 // Position wraps QTextFrameFormat::position.
@@ -63,6 +65,7 @@ func (this *QTextFrameFormat) SetPosition(fArg QTextFrameFormatPosition) {
 func (this *QTextFrameFormat) Position() QTextFrameFormatPosition {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Position")
 	r := C.qute_QTextFrameFormat_position(self)
+	runtime.KeepAlive(this)
 	return QTextFrameFormatPosition(r)
 }
 
@@ -74,6 +77,7 @@ func (this *QTextFrameFormat) Position() QTextFrameFormatPosition {
 func (this *QTextFrameFormat) SetBorder(border float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetBorder")
 	C.qute_QTextFrameFormat_setBorder(self, C.double(border))
+	runtime.KeepAlive(this)
 }
 
 // Border wraps QTextFrameFormat::border.
@@ -84,6 +88,7 @@ func (this *QTextFrameFormat) SetBorder(border float64) {
 func (this *QTextFrameFormat) Border() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Border")
 	r := C.qute_QTextFrameFormat_border(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -95,6 +100,8 @@ func (this *QTextFrameFormat) Border() float64 {
 func (this *QTextFrameFormat) SetBorderBrush(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetBorderBrush")
 	C.qute_QTextFrameFormat_setBorderBrush(self, rt.UseArg(unsafe.Pointer(brush), "QTextFrameFormat.SetBorderBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // BorderBrush wraps QTextFrameFormat::borderBrush.
@@ -107,6 +114,7 @@ func (this *QTextFrameFormat) SetBorderBrush(brush *QBrush) {
 func (this *QTextFrameFormat) BorderBrush() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.BorderBrush")
 	r := C.qute_QTextFrameFormat_borderBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -118,6 +126,7 @@ func (this *QTextFrameFormat) BorderBrush() *QBrush {
 func (this *QTextFrameFormat) SetBorderStyle(style QTextFrameFormatBorderStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetBorderStyle")
 	C.qute_QTextFrameFormat_setBorderStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // BorderStyle wraps QTextFrameFormat::borderStyle.
@@ -128,6 +137,7 @@ func (this *QTextFrameFormat) SetBorderStyle(style QTextFrameFormatBorderStyle) 
 func (this *QTextFrameFormat) BorderStyle() QTextFrameFormatBorderStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.BorderStyle")
 	r := C.qute_QTextFrameFormat_borderStyle(self)
+	runtime.KeepAlive(this)
 	return QTextFrameFormatBorderStyle(r)
 }
 
@@ -139,6 +149,7 @@ func (this *QTextFrameFormat) BorderStyle() QTextFrameFormatBorderStyle {
 func (this *QTextFrameFormat) SetMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetMargin")
 	C.qute_QTextFrameFormat_setMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // Margin wraps QTextFrameFormat::margin.
@@ -149,6 +160,7 @@ func (this *QTextFrameFormat) SetMargin(margin float64) {
 func (this *QTextFrameFormat) Margin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Margin")
 	r := C.qute_QTextFrameFormat_margin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -160,6 +172,7 @@ func (this *QTextFrameFormat) Margin() float64 {
 func (this *QTextFrameFormat) SetTopMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetTopMargin")
 	C.qute_QTextFrameFormat_setTopMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // TopMargin wraps QTextFrameFormat::topMargin.
@@ -170,6 +183,7 @@ func (this *QTextFrameFormat) SetTopMargin(margin float64) {
 func (this *QTextFrameFormat) TopMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.TopMargin")
 	r := C.qute_QTextFrameFormat_topMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -181,6 +195,7 @@ func (this *QTextFrameFormat) TopMargin() float64 {
 func (this *QTextFrameFormat) SetBottomMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetBottomMargin")
 	C.qute_QTextFrameFormat_setBottomMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // BottomMargin wraps QTextFrameFormat::bottomMargin.
@@ -191,6 +206,7 @@ func (this *QTextFrameFormat) SetBottomMargin(margin float64) {
 func (this *QTextFrameFormat) BottomMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.BottomMargin")
 	r := C.qute_QTextFrameFormat_bottomMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -202,6 +218,7 @@ func (this *QTextFrameFormat) BottomMargin() float64 {
 func (this *QTextFrameFormat) SetLeftMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetLeftMargin")
 	C.qute_QTextFrameFormat_setLeftMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // LeftMargin wraps QTextFrameFormat::leftMargin.
@@ -212,6 +229,7 @@ func (this *QTextFrameFormat) SetLeftMargin(margin float64) {
 func (this *QTextFrameFormat) LeftMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.LeftMargin")
 	r := C.qute_QTextFrameFormat_leftMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -223,6 +241,7 @@ func (this *QTextFrameFormat) LeftMargin() float64 {
 func (this *QTextFrameFormat) SetRightMargin(margin float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetRightMargin")
 	C.qute_QTextFrameFormat_setRightMargin(self, C.double(margin))
+	runtime.KeepAlive(this)
 }
 
 // RightMargin wraps QTextFrameFormat::rightMargin.
@@ -233,6 +252,7 @@ func (this *QTextFrameFormat) SetRightMargin(margin float64) {
 func (this *QTextFrameFormat) RightMargin() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.RightMargin")
 	r := C.qute_QTextFrameFormat_rightMargin(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -244,6 +264,7 @@ func (this *QTextFrameFormat) RightMargin() float64 {
 func (this *QTextFrameFormat) SetPadding(padding float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetPadding")
 	C.qute_QTextFrameFormat_setPadding(self, C.double(padding))
+	runtime.KeepAlive(this)
 }
 
 // Padding wraps QTextFrameFormat::padding.
@@ -254,6 +275,7 @@ func (this *QTextFrameFormat) SetPadding(padding float64) {
 func (this *QTextFrameFormat) Padding() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Padding")
 	r := C.qute_QTextFrameFormat_padding(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -265,6 +287,7 @@ func (this *QTextFrameFormat) Padding() float64 {
 func (this *QTextFrameFormat) SetWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetWidth")
 	C.qute_QTextFrameFormat_setWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // SetWidthTextLength wraps QTextFrameFormat::setWidth.
@@ -275,6 +298,8 @@ func (this *QTextFrameFormat) SetWidth(width float64) {
 func (this *QTextFrameFormat) SetWidthTextLength(length *QTextLength) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetWidthTextLength")
 	C.qute_QTextFrameFormat_setWidth_1(self, rt.UseArg(unsafe.Pointer(length), "QTextFrameFormat.SetWidthTextLength"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(length)
 }
 
 // Width wraps QTextFrameFormat::width.
@@ -287,6 +312,7 @@ func (this *QTextFrameFormat) SetWidthTextLength(length *QTextLength) {
 func (this *QTextFrameFormat) Width() *QTextLength {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Width")
 	r := C.qute_QTextFrameFormat_width(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
 }
 
@@ -298,6 +324,7 @@ func (this *QTextFrameFormat) Width() *QTextLength {
 func (this *QTextFrameFormat) SetHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetHeight")
 	C.qute_QTextFrameFormat_setHeight(self, C.double(height))
+	runtime.KeepAlive(this)
 }
 
 // SetHeightTextLength wraps QTextFrameFormat::setHeight.
@@ -308,6 +335,8 @@ func (this *QTextFrameFormat) SetHeight(height float64) {
 func (this *QTextFrameFormat) SetHeightTextLength(height *QTextLength) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetHeightTextLength")
 	C.qute_QTextFrameFormat_setHeight_1(self, rt.UseArg(unsafe.Pointer(height), "QTextFrameFormat.SetHeightTextLength"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(height)
 }
 
 // Height wraps QTextFrameFormat::height.
@@ -320,6 +349,7 @@ func (this *QTextFrameFormat) SetHeightTextLength(height *QTextLength) {
 func (this *QTextFrameFormat) Height() *QTextLength {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.Height")
 	r := C.qute_QTextFrameFormat_height(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
 }
 
@@ -331,6 +361,7 @@ func (this *QTextFrameFormat) Height() *QTextLength {
 func (this *QTextFrameFormat) SetPageBreakPolicy(flags QTextFormatPageBreakFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.SetPageBreakPolicy")
 	C.qute_QTextFrameFormat_setPageBreakPolicy(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // PageBreakPolicy wraps QTextFrameFormat::pageBreakPolicy.
@@ -341,5 +372,6 @@ func (this *QTextFrameFormat) SetPageBreakPolicy(flags QTextFormatPageBreakFlags
 func (this *QTextFrameFormat) PageBreakPolicy() QTextFormatPageBreakFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTextFrameFormat.PageBreakPolicy")
 	r := C.qute_QTextFrameFormat_pageBreakPolicy(self)
+	runtime.KeepAlive(this)
 	return QTextFormatPageBreakFlags(r)
 }

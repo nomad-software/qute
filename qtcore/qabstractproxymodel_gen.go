@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,8 @@ func (this *QAbstractProxyModel) SetSourceModel(sourceModel QAbstractItemModelLi
 		sourceModelPtr = rt.UseArg(unsafe.Pointer(sourceModel.AsQAbstractItemModel()), "QAbstractProxyModel.SetSourceModel")
 	}
 	C.qute_QAbstractProxyModel_setSourceModel(self, sourceModelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sourceModel)
 }
 
 // SourceModel wraps QAbstractProxyModel::sourceModel.
@@ -72,6 +75,7 @@ func (this *QAbstractProxyModel) SetSourceModel(sourceModel QAbstractItemModelLi
 func (this *QAbstractProxyModel) SourceModel() *QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.SourceModel")
 	r := C.qute_QAbstractProxyModel_sourceModel(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -85,6 +89,8 @@ func (this *QAbstractProxyModel) SourceModel() *QAbstractItemModel {
 func (this *QAbstractProxyModel) MapToSource(proxyIndex *QModelIndex) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.MapToSource")
 	r := C.qute_QAbstractProxyModel_mapToSource(self, rt.UseArg(unsafe.Pointer(proxyIndex), "QAbstractProxyModel.MapToSource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(proxyIndex)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -98,6 +104,8 @@ func (this *QAbstractProxyModel) MapToSource(proxyIndex *QModelIndex) *QModelInd
 func (this *QAbstractProxyModel) MapFromSource(sourceIndex *QModelIndex) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.MapFromSource")
 	r := C.qute_QAbstractProxyModel_mapFromSource(self, rt.UseArg(unsafe.Pointer(sourceIndex), "QAbstractProxyModel.MapFromSource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sourceIndex)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -111,6 +119,8 @@ func (this *QAbstractProxyModel) MapFromSource(sourceIndex *QModelIndex) *QModel
 func (this *QAbstractProxyModel) MapSelectionToSource(selection *QItemSelection) *QItemSelection {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.MapSelectionToSource")
 	r := C.qute_QAbstractProxyModel_mapSelectionToSource(self, rt.Use(unsafe.Pointer(selection), "QAbstractProxyModel.MapSelectionToSource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selection)
 	return rt.View[QItemSelection](rt.WrapClass(r, "QItemSelection", rt.TakeOwned), r)
 }
 
@@ -124,6 +134,8 @@ func (this *QAbstractProxyModel) MapSelectionToSource(selection *QItemSelection)
 func (this *QAbstractProxyModel) MapSelectionFromSource(selection *QItemSelection) *QItemSelection {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractProxyModel.MapSelectionFromSource")
 	r := C.qute_QAbstractProxyModel_mapSelectionFromSource(self, rt.Use(unsafe.Pointer(selection), "QAbstractProxyModel.MapSelectionFromSource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selection)
 	return rt.View[QItemSelection](rt.WrapClass(r, "QItemSelection", rt.TakeOwned), r)
 }
 

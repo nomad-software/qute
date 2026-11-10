@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQGradientWithPreset(arg0 QGradientPreset) *QGradient {
 func (this *QGradient) Type() QGradientType {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.Type")
 	r := C.qute_QGradient_type(self)
+	runtime.KeepAlive(this)
 	return QGradientType(r)
 }
 
@@ -120,6 +122,7 @@ func (this *QGradient) Type() QGradientType {
 func (this *QGradient) SetSpread(spread QGradientSpread) {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.SetSpread")
 	C.qute_QGradient_setSpread(self, C.int64_t(spread))
+	runtime.KeepAlive(this)
 }
 
 // Spread wraps QGradient::spread.
@@ -130,6 +133,7 @@ func (this *QGradient) SetSpread(spread QGradientSpread) {
 func (this *QGradient) Spread() QGradientSpread {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.Spread")
 	r := C.qute_QGradient_spread(self)
+	runtime.KeepAlive(this)
 	return QGradientSpread(r)
 }
 
@@ -141,6 +145,7 @@ func (this *QGradient) Spread() QGradientSpread {
 func (this *QGradient) SetColorAt(pos float64, color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.SetColorAt")
 	C.qute_QGradient_setColorAt(self, C.double(pos), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // SetStops wraps QGradient::setStops.
@@ -158,6 +163,7 @@ func (this *QGradient) SetStops(stops []qtcore.Pair[float64, QColor]) {
 		stopsV = append(stopsV, cQColor(x))
 	}
 	C.qute_QGradient_setStops(self, unsafe.Pointer(unsafe.SliceData(stopsK)), unsafe.Pointer(unsafe.SliceData(stopsV)), C.ptrdiff_t(len(stops)))
+	runtime.KeepAlive(this)
 }
 
 // Stops wraps QGradient::stops.
@@ -168,6 +174,7 @@ func (this *QGradient) SetStops(stops []qtcore.Pair[float64, QColor]) {
 func (this *QGradient) Stops() []qtcore.Pair[float64, QColor] {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.Stops")
 	r := C.qute_QGradient_stops(self)
+	runtime.KeepAlive(this)
 	return qutePairs(r, func(k C.double) float64 { return float64(k) }, func(v C.qute_color) QColor { return goQColor(v) }, func(a float64, b QColor) qtcore.Pair[float64, QColor] {
 		return qtcore.Pair[float64, QColor]{First: a, Second: b}
 	})
@@ -181,6 +188,7 @@ func (this *QGradient) Stops() []qtcore.Pair[float64, QColor] {
 func (this *QGradient) CoordinateMode() QGradientCoordinateMode {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.CoordinateMode")
 	r := C.qute_QGradient_coordinateMode(self)
+	runtime.KeepAlive(this)
 	return QGradientCoordinateMode(r)
 }
 
@@ -192,6 +200,7 @@ func (this *QGradient) CoordinateMode() QGradientCoordinateMode {
 func (this *QGradient) SetCoordinateMode(mode QGradientCoordinateMode) {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.SetCoordinateMode")
 	C.qute_QGradient_setCoordinateMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // InterpolationMode wraps QGradient::interpolationMode.
@@ -202,6 +211,7 @@ func (this *QGradient) SetCoordinateMode(mode QGradientCoordinateMode) {
 func (this *QGradient) InterpolationMode() QGradientInterpolationMode {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.InterpolationMode")
 	r := C.qute_QGradient_interpolationMode(self)
+	runtime.KeepAlive(this)
 	return QGradientInterpolationMode(r)
 }
 
@@ -213,4 +223,5 @@ func (this *QGradient) InterpolationMode() QGradientInterpolationMode {
 func (this *QGradient) SetInterpolationMode(mode QGradientInterpolationMode) {
 	self := rt.Use(unsafe.Pointer(this), "QGradient.SetInterpolationMode")
 	C.qute_QGradient_setInterpolationMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }

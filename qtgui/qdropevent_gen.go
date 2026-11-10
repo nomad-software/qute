@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QDropEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QDropEvent {
 func (this *QDropEvent) Position() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.Position")
 	r := C.qute_QDropEvent_position(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QDropEvent) Position() qtcore.QPointF {
 func (this *QDropEvent) Buttons() qtcore.MouseButtons {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.Buttons")
 	r := C.qute_QDropEvent_buttons(self)
+	runtime.KeepAlive(this)
 	return qtcore.MouseButtons(r)
 }
 
@@ -63,6 +66,7 @@ func (this *QDropEvent) Buttons() qtcore.MouseButtons {
 func (this *QDropEvent) Modifiers() qtcore.KeyboardModifiers {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.Modifiers")
 	r := C.qute_QDropEvent_modifiers(self)
+	runtime.KeepAlive(this)
 	return qtcore.KeyboardModifiers(r)
 }
 
@@ -74,6 +78,7 @@ func (this *QDropEvent) Modifiers() qtcore.KeyboardModifiers {
 func (this *QDropEvent) PossibleActions() qtcore.DropActions {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.PossibleActions")
 	r := C.qute_QDropEvent_possibleActions(self)
+	runtime.KeepAlive(this)
 	return qtcore.DropActions(r)
 }
 
@@ -85,6 +90,7 @@ func (this *QDropEvent) PossibleActions() qtcore.DropActions {
 func (this *QDropEvent) ProposedAction() qtcore.DropActions {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.ProposedAction")
 	r := C.qute_QDropEvent_proposedAction(self)
+	runtime.KeepAlive(this)
 	return qtcore.DropActions(r)
 }
 
@@ -96,6 +102,7 @@ func (this *QDropEvent) ProposedAction() qtcore.DropActions {
 func (this *QDropEvent) AcceptProposedAction() {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.AcceptProposedAction")
 	C.qute_QDropEvent_acceptProposedAction(self)
+	runtime.KeepAlive(this)
 }
 
 // DropAction wraps QDropEvent::dropAction.
@@ -106,6 +113,7 @@ func (this *QDropEvent) AcceptProposedAction() {
 func (this *QDropEvent) DropAction() qtcore.DropActions {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.DropAction")
 	r := C.qute_QDropEvent_dropAction(self)
+	runtime.KeepAlive(this)
 	return qtcore.DropActions(r)
 }
 
@@ -117,6 +125,7 @@ func (this *QDropEvent) DropAction() qtcore.DropActions {
 func (this *QDropEvent) SetDropAction(action qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.SetDropAction")
 	C.qute_QDropEvent_setDropAction(self, C.int64_t(action))
+	runtime.KeepAlive(this)
 }
 
 // Source wraps QDropEvent::source.
@@ -129,6 +138,7 @@ func (this *QDropEvent) SetDropAction(action qtcore.DropActions) {
 func (this *QDropEvent) Source() *qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.Source")
 	r := C.qute_QDropEvent_source(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -142,5 +152,6 @@ func (this *QDropEvent) Source() *qtcore.QObject {
 func (this *QDropEvent) MimeData() *qtcore.QMimeData {
 	self := rt.Use(unsafe.Pointer(this), "QDropEvent.MimeData")
 	r := C.qute_QDropEvent_mimeData(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQMdiArea(parent QWidgetLike) *QMdiArea {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMdiArea")
 	}
 	p := C.qute_QMdiArea_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func NewQMdiArea(parent QWidgetLike) *QMdiArea {
 func (this *QMdiArea) CurrentSubWindow() *QMdiSubWindow {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.CurrentSubWindow")
 	r := C.qute_QMdiArea_currentSubWindow(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMdiSubWindow](rt.WrapClass(r, "QMdiSubWindow", rt.KeepOrBorrow), r)
 }
 
@@ -93,6 +96,7 @@ func (this *QMdiArea) CurrentSubWindow() *QMdiSubWindow {
 func (this *QMdiArea) ActiveSubWindow() *QMdiSubWindow {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.ActiveSubWindow")
 	r := C.qute_QMdiArea_activeSubWindow(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMdiSubWindow](rt.WrapClass(r, "QMdiSubWindow", rt.KeepOrBorrow), r)
 }
 
@@ -106,6 +110,7 @@ func (this *QMdiArea) ActiveSubWindow() *QMdiSubWindow {
 func (this *QMdiArea) SubWindowList() []*QMdiSubWindow {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SubWindowList")
 	r := C.qute_QMdiArea_subWindowList(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QMdiSubWindow {
 		return rt.View[QMdiSubWindow](rt.WrapClass(e, "QMdiSubWindow", rt.KeepOrBorrow), e)
 	})
@@ -126,6 +131,8 @@ func (this *QMdiArea) AddSubWindow(widget QWidgetLike) *QMdiSubWindow {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QMdiArea.AddSubWindow")
 	}
 	r := C.qute_QMdiArea_addSubWindow(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return rt.View[QMdiSubWindow](rt.WrapClass(r, "QMdiSubWindow", rt.TakeParented), r)
 }
@@ -145,6 +152,8 @@ func (this *QMdiArea) RemoveSubWindow(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QMdiArea.RemoveSubWindow")
 	}
 	C.qute_QMdiArea_removeSubWindow(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToGo()
 }
 
@@ -158,6 +167,7 @@ func (this *QMdiArea) RemoveSubWindow(widget QWidgetLike) {
 func (this *QMdiArea) Background() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.Background")
 	r := C.qute_QMdiArea_background(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -169,6 +179,8 @@ func (this *QMdiArea) Background() *qtgui.QBrush {
 func (this *QMdiArea) SetBackground(background *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetBackground")
 	C.qute_QMdiArea_setBackground(self, rt.UseArg(unsafe.Pointer(background), "QMdiArea.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(background)
 }
 
 // ActivationOrder wraps QMdiArea::activationOrder.
@@ -179,6 +191,7 @@ func (this *QMdiArea) SetBackground(background *qtgui.QBrush) {
 func (this *QMdiArea) ActivationOrder() QMdiAreaWindowOrder {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.ActivationOrder")
 	r := C.qute_QMdiArea_activationOrder(self)
+	runtime.KeepAlive(this)
 	return QMdiAreaWindowOrder(r)
 }
 
@@ -190,6 +203,7 @@ func (this *QMdiArea) ActivationOrder() QMdiAreaWindowOrder {
 func (this *QMdiArea) SetActivationOrder(order QMdiAreaWindowOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetActivationOrder")
 	C.qute_QMdiArea_setActivationOrder(self, C.int64_t(order))
+	runtime.KeepAlive(this)
 }
 
 // SetOption wraps QMdiArea::setOption.
@@ -200,6 +214,7 @@ func (this *QMdiArea) SetActivationOrder(order QMdiAreaWindowOrder) {
 func (this *QMdiArea) SetOption(option QMdiAreaAreaOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetOption")
 	C.qute_QMdiArea_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QMdiArea::testOption.
@@ -210,6 +225,7 @@ func (this *QMdiArea) SetOption(option QMdiAreaAreaOptions) {
 func (this *QMdiArea) TestOption(opton QMdiAreaAreaOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.TestOption")
 	r := C.qute_QMdiArea_testOption(self, C.int64_t(opton))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -221,6 +237,7 @@ func (this *QMdiArea) TestOption(opton QMdiAreaAreaOptions) bool {
 func (this *QMdiArea) SetViewMode(mode QMdiAreaViewMode) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetViewMode")
 	C.qute_QMdiArea_setViewMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // ViewMode wraps QMdiArea::viewMode.
@@ -231,6 +248,7 @@ func (this *QMdiArea) SetViewMode(mode QMdiAreaViewMode) {
 func (this *QMdiArea) ViewMode() QMdiAreaViewMode {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.ViewMode")
 	r := C.qute_QMdiArea_viewMode(self)
+	runtime.KeepAlive(this)
 	return QMdiAreaViewMode(r)
 }
 
@@ -242,6 +260,7 @@ func (this *QMdiArea) ViewMode() QMdiAreaViewMode {
 func (this *QMdiArea) DocumentMode() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.DocumentMode")
 	r := C.qute_QMdiArea_documentMode(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -253,6 +272,7 @@ func (this *QMdiArea) DocumentMode() bool {
 func (this *QMdiArea) SetDocumentMode(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetDocumentMode")
 	C.qute_QMdiArea_setDocumentMode(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // SetTabsClosable wraps QMdiArea::setTabsClosable.
@@ -263,6 +283,7 @@ func (this *QMdiArea) SetDocumentMode(enabled bool) {
 func (this *QMdiArea) SetTabsClosable(closable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetTabsClosable")
 	C.qute_QMdiArea_setTabsClosable(self, C.bool(closable))
+	runtime.KeepAlive(this)
 }
 
 // TabsClosable wraps QMdiArea::tabsClosable.
@@ -273,6 +294,7 @@ func (this *QMdiArea) SetTabsClosable(closable bool) {
 func (this *QMdiArea) TabsClosable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.TabsClosable")
 	r := C.qute_QMdiArea_tabsClosable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -284,6 +306,7 @@ func (this *QMdiArea) TabsClosable() bool {
 func (this *QMdiArea) SetTabsMovable(movable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetTabsMovable")
 	C.qute_QMdiArea_setTabsMovable(self, C.bool(movable))
+	runtime.KeepAlive(this)
 }
 
 // TabsMovable wraps QMdiArea::tabsMovable.
@@ -294,6 +317,7 @@ func (this *QMdiArea) SetTabsMovable(movable bool) {
 func (this *QMdiArea) TabsMovable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.TabsMovable")
 	r := C.qute_QMdiArea_tabsMovable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -305,6 +329,7 @@ func (this *QMdiArea) TabsMovable() bool {
 func (this *QMdiArea) SetTabShape(shape QTabWidgetTabShape) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetTabShape")
 	C.qute_QMdiArea_setTabShape(self, C.int64_t(shape))
+	runtime.KeepAlive(this)
 }
 
 // TabShape wraps QMdiArea::tabShape.
@@ -315,6 +340,7 @@ func (this *QMdiArea) SetTabShape(shape QTabWidgetTabShape) {
 func (this *QMdiArea) TabShape() QTabWidgetTabShape {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.TabShape")
 	r := C.qute_QMdiArea_tabShape(self)
+	runtime.KeepAlive(this)
 	return QTabWidgetTabShape(r)
 }
 
@@ -326,6 +352,7 @@ func (this *QMdiArea) TabShape() QTabWidgetTabShape {
 func (this *QMdiArea) SetTabPosition(position QTabWidgetTabPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetTabPosition")
 	C.qute_QMdiArea_setTabPosition(self, C.int64_t(position))
+	runtime.KeepAlive(this)
 }
 
 // TabPosition wraps QMdiArea::tabPosition.
@@ -336,6 +363,7 @@ func (this *QMdiArea) SetTabPosition(position QTabWidgetTabPosition) {
 func (this *QMdiArea) TabPosition() QTabWidgetTabPosition {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.TabPosition")
 	r := C.qute_QMdiArea_tabPosition(self)
+	runtime.KeepAlive(this)
 	return QTabWidgetTabPosition(r)
 }
 
@@ -351,6 +379,8 @@ func (this *QMdiArea) SetActiveSubWindow(window QMdiSubWindowLike) {
 		windowPtr = rt.UseArg(unsafe.Pointer(window.AsQMdiSubWindow()), "QMdiArea.SetActiveSubWindow")
 	}
 	C.qute_QMdiArea_setActiveSubWindow(self, windowPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(window)
 }
 
 // TileSubWindows wraps QMdiArea::tileSubWindows.
@@ -361,6 +391,7 @@ func (this *QMdiArea) SetActiveSubWindow(window QMdiSubWindowLike) {
 func (this *QMdiArea) TileSubWindows() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.TileSubWindows")
 	C.qute_QMdiArea_tileSubWindows(self)
+	runtime.KeepAlive(this)
 }
 
 // CascadeSubWindows wraps QMdiArea::cascadeSubWindows.
@@ -371,6 +402,7 @@ func (this *QMdiArea) TileSubWindows() {
 func (this *QMdiArea) CascadeSubWindows() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.CascadeSubWindows")
 	C.qute_QMdiArea_cascadeSubWindows(self)
+	runtime.KeepAlive(this)
 }
 
 // CloseActiveSubWindow wraps QMdiArea::closeActiveSubWindow.
@@ -381,6 +413,7 @@ func (this *QMdiArea) CascadeSubWindows() {
 func (this *QMdiArea) CloseActiveSubWindow() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.CloseActiveSubWindow")
 	C.qute_QMdiArea_closeActiveSubWindow(self)
+	runtime.KeepAlive(this)
 }
 
 // CloseAllSubWindows wraps QMdiArea::closeAllSubWindows.
@@ -391,6 +424,7 @@ func (this *QMdiArea) CloseActiveSubWindow() {
 func (this *QMdiArea) CloseAllSubWindows() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.CloseAllSubWindows")
 	C.qute_QMdiArea_closeAllSubWindows(self)
+	runtime.KeepAlive(this)
 }
 
 // ActivateNextSubWindow wraps QMdiArea::activateNextSubWindow.
@@ -401,6 +435,7 @@ func (this *QMdiArea) CloseAllSubWindows() {
 func (this *QMdiArea) ActivateNextSubWindow() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.ActivateNextSubWindow")
 	C.qute_QMdiArea_activateNextSubWindow(self)
+	runtime.KeepAlive(this)
 }
 
 // ActivatePreviousSubWindow wraps QMdiArea::activatePreviousSubWindow.
@@ -411,6 +446,7 @@ func (this *QMdiArea) ActivateNextSubWindow() {
 func (this *QMdiArea) ActivatePreviousSubWindow() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.ActivatePreviousSubWindow")
 	C.qute_QMdiArea_activatePreviousSubWindow(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSubWindowActivated wraps emitting the subWindowActivated signal.
@@ -425,6 +461,8 @@ func (this *QMdiArea) EmitSubWindowActivated(mdiSubWindow QMdiSubWindowLike) {
 		mdiSubWindowPtr = rt.UseArg(unsafe.Pointer(mdiSubWindow.AsQMdiSubWindow()), "QMdiArea.EmitSubWindowActivated")
 	}
 	C.qute_QMdiArea_subWindowActivated_1(self, mdiSubWindowPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(mdiSubWindow)
 }
 
 // OnSubWindowActivated connects f to the subWindowActivated signal. The connection ends when the

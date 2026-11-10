@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQCalendarSystemId() *QCalendarSystemId {
 func (this *QCalendarSystemId) Index() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarSystemId.Index")
 	r := C.qute_QCalendarSystemId_index(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -107,5 +109,6 @@ func (this *QCalendarSystemId) Index() uint64 {
 func (this *QCalendarSystemId) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarSystemId.IsValid")
 	r := C.qute_QCalendarSystemId_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQIntValidator(parent qtcore.QObjectLike) *QIntValidator {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQIntValidator")
 	}
 	p := C.qute_QIntValidator_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQIntValidatorWithBottom(bottom int, top int, parent qtcore.QObjectLike) 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQIntValidatorWithBottom")
 	}
 	p := C.qute_QIntValidator_new_1(C.int(bottom), C.int(top), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQIntValidatorWithBottom(bottom int, top int, parent qtcore.QObjectLike) 
 func (this *QIntValidator) SetBottom(bottom int) {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.SetBottom")
 	C.qute_QIntValidator_setBottom(self, C.int(bottom))
+	runtime.KeepAlive(this)
 }
 
 // SetTop wraps QIntValidator::setTop.
@@ -109,6 +113,7 @@ func (this *QIntValidator) SetBottom(bottom int) {
 func (this *QIntValidator) SetTop(top int) {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.SetTop")
 	C.qute_QIntValidator_setTop(self, C.int(top))
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QIntValidator::setRange.
@@ -119,6 +124,7 @@ func (this *QIntValidator) SetTop(top int) {
 func (this *QIntValidator) SetRange(bottom int, top int) {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.SetRange")
 	C.qute_QIntValidator_setRange(self, C.int(bottom), C.int(top))
+	runtime.KeepAlive(this)
 }
 
 // Bottom wraps QIntValidator::bottom.
@@ -129,6 +135,7 @@ func (this *QIntValidator) SetRange(bottom int, top int) {
 func (this *QIntValidator) Bottom() int {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.Bottom")
 	r := C.qute_QIntValidator_bottom(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -140,6 +147,7 @@ func (this *QIntValidator) Bottom() int {
 func (this *QIntValidator) Top() int {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.Top")
 	r := C.qute_QIntValidator_top(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -151,6 +159,7 @@ func (this *QIntValidator) Top() int {
 func (this *QIntValidator) EmitBottomChanged(bottom int) {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.EmitBottomChanged")
 	C.qute_QIntValidator_bottomChanged_1(self, C.int(bottom))
+	runtime.KeepAlive(this)
 }
 
 // EmitTopChanged wraps emitting the topChanged signal.
@@ -161,6 +170,7 @@ func (this *QIntValidator) EmitBottomChanged(bottom int) {
 func (this *QIntValidator) EmitTopChanged(top int) {
 	self := rt.Use(unsafe.Pointer(this), "QIntValidator.EmitTopChanged")
 	C.qute_QIntValidator_topChanged_1(self, C.int(top))
+	runtime.KeepAlive(this)
 }
 
 // OnBottomChanged connects f to the bottomChanged signal. The connection ends when the

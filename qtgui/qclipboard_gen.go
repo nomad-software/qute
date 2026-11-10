@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QClipboardCast(o qtcore.QObjectLike) *QClipboard {
 func (this *QClipboard) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Clear")
 	C.qute_QClipboard_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SupportsSelection wraps QClipboard::supportsSelection.
@@ -65,6 +67,7 @@ func (this *QClipboard) Clear() {
 func (this *QClipboard) SupportsSelection() bool {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SupportsSelection")
 	r := C.qute_QClipboard_supportsSelection(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -76,6 +79,7 @@ func (this *QClipboard) SupportsSelection() bool {
 func (this *QClipboard) SupportsFindBuffer() bool {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SupportsFindBuffer")
 	r := C.qute_QClipboard_supportsFindBuffer(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -87,6 +91,7 @@ func (this *QClipboard) SupportsFindBuffer() bool {
 func (this *QClipboard) OwnsSelection() bool {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.OwnsSelection")
 	r := C.qute_QClipboard_ownsSelection(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -98,6 +103,7 @@ func (this *QClipboard) OwnsSelection() bool {
 func (this *QClipboard) OwnsClipboard() bool {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.OwnsClipboard")
 	r := C.qute_QClipboard_ownsClipboard(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -109,6 +115,7 @@ func (this *QClipboard) OwnsClipboard() bool {
 func (this *QClipboard) OwnsFindBuffer() bool {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.OwnsFindBuffer")
 	r := C.qute_QClipboard_ownsFindBuffer(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -120,6 +127,7 @@ func (this *QClipboard) OwnsFindBuffer() bool {
 func (this *QClipboard) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Text")
 	r := C.qute_QClipboard_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -132,6 +140,7 @@ func (this *QClipboard) TextWithSubtype(subtype string) (string, string) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.TextWithSubtype")
 	var subtypeOut C.qute_str
 	r := C.qute_QClipboard_text_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subtype))), C.ptrdiff_t(len(subtype)), &subtypeOut)
+	runtime.KeepAlive(this)
 	return quteStr(r), quteStr(subtypeOut)
 }
 
@@ -143,6 +152,7 @@ func (this *QClipboard) TextWithSubtype(subtype string) (string, string) {
 func (this *QClipboard) SetText(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetText")
 	C.qute_QClipboard_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // MimeData wraps QClipboard::mimeData.
@@ -155,6 +165,7 @@ func (this *QClipboard) SetText(stringArg string) {
 func (this *QClipboard) MimeData() *qtcore.QMimeData {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.MimeData")
 	r := C.qute_QClipboard_mimeData(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
 }
 
@@ -175,6 +186,8 @@ func (this *QClipboard) SetMimeData(data qtcore.QMimeDataLike) {
 		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "QClipboard.SetMimeData")
 	}
 	C.qute_QClipboard_setMimeData(self, dataPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
 	dataH.TransferToCpp()
 }
 
@@ -188,6 +201,7 @@ func (this *QClipboard) SetMimeData(data qtcore.QMimeDataLike) {
 func (this *QClipboard) Image() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Image")
 	r := C.qute_QClipboard_image(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -201,6 +215,7 @@ func (this *QClipboard) Image() *QImage {
 func (this *QClipboard) Pixmap() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Pixmap")
 	r := C.qute_QClipboard_pixmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -212,6 +227,8 @@ func (this *QClipboard) Pixmap() *QPixmap {
 func (this *QClipboard) SetImage(image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetImage")
 	C.qute_QClipboard_setImage(self, rt.UseArg(unsafe.Pointer(image), "QClipboard.SetImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // SetPixmap wraps QClipboard::setPixmap.
@@ -222,6 +239,8 @@ func (this *QClipboard) SetImage(image *QImage) {
 func (this *QClipboard) SetPixmap(pixmap *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetPixmap")
 	C.qute_QClipboard_setPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QClipboard.SetPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // EmitChanged wraps emitting the changed signal.
@@ -232,6 +251,7 @@ func (this *QClipboard) SetPixmap(pixmap *QPixmap) {
 func (this *QClipboard) EmitChanged(mode QClipboardMode) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.EmitChanged")
 	C.qute_QClipboard_changed_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -242,6 +262,7 @@ func (this *QClipboard) EmitChanged(mode QClipboardMode) {
 func (this *QClipboard) EmitSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.EmitSelectionChanged")
 	C.qute_QClipboard_selectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitFindBufferChanged wraps emitting the findBufferChanged signal.
@@ -252,6 +273,7 @@ func (this *QClipboard) EmitSelectionChanged() {
 func (this *QClipboard) EmitFindBufferChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.EmitFindBufferChanged")
 	C.qute_QClipboard_findBufferChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitDataChanged wraps emitting the dataChanged signal.
@@ -262,6 +284,7 @@ func (this *QClipboard) EmitFindBufferChanged() {
 func (this *QClipboard) EmitDataChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.EmitDataChanged")
 	C.qute_QClipboard_dataChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

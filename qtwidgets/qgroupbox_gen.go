@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQGroupBox(parent QWidgetLike) *QGroupBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQGroupBox")
 	}
 	p := C.qute_QGroupBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQGroupBoxWithTitle(title string, parent QWidgetLike) *QGroupBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQGroupBoxWithTitle")
 	}
 	p := C.qute_QGroupBox_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQGroupBoxWithTitle(title string, parent QWidgetLike) *QGroupBox {
 func (this *QGroupBox) Title() string {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.Title")
 	r := C.qute_QGroupBox_title(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -110,6 +114,7 @@ func (this *QGroupBox) Title() string {
 func (this *QGroupBox) SetTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.SetTitle")
 	C.qute_QGroupBox_setTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // Alignment wraps QGroupBox::alignment.
@@ -120,6 +125,7 @@ func (this *QGroupBox) SetTitle(title string) {
 func (this *QGroupBox) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.Alignment")
 	r := C.qute_QGroupBox_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -131,6 +137,7 @@ func (this *QGroupBox) Alignment() qtcore.Alignment {
 func (this *QGroupBox) SetAlignment(alignment int) {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.SetAlignment")
 	C.qute_QGroupBox_setAlignment(self, C.int(alignment))
+	runtime.KeepAlive(this)
 }
 
 // IsFlat wraps QGroupBox::isFlat.
@@ -141,6 +148,7 @@ func (this *QGroupBox) SetAlignment(alignment int) {
 func (this *QGroupBox) IsFlat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.IsFlat")
 	r := C.qute_QGroupBox_isFlat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -152,6 +160,7 @@ func (this *QGroupBox) IsFlat() bool {
 func (this *QGroupBox) SetFlat(flat bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.SetFlat")
 	C.qute_QGroupBox_setFlat(self, C.bool(flat))
+	runtime.KeepAlive(this)
 }
 
 // IsCheckable wraps QGroupBox::isCheckable.
@@ -162,6 +171,7 @@ func (this *QGroupBox) SetFlat(flat bool) {
 func (this *QGroupBox) IsCheckable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.IsCheckable")
 	r := C.qute_QGroupBox_isCheckable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -173,6 +183,7 @@ func (this *QGroupBox) IsCheckable() bool {
 func (this *QGroupBox) SetCheckable(checkable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.SetCheckable")
 	C.qute_QGroupBox_setCheckable(self, C.bool(checkable))
+	runtime.KeepAlive(this)
 }
 
 // IsChecked wraps QGroupBox::isChecked.
@@ -183,6 +194,7 @@ func (this *QGroupBox) SetCheckable(checkable bool) {
 func (this *QGroupBox) IsChecked() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.IsChecked")
 	r := C.qute_QGroupBox_isChecked(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -194,6 +206,7 @@ func (this *QGroupBox) IsChecked() bool {
 func (this *QGroupBox) SetChecked(checked bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.SetChecked")
 	C.qute_QGroupBox_setChecked(self, C.bool(checked))
+	runtime.KeepAlive(this)
 }
 
 // EmitClicked wraps emitting the clicked signal.
@@ -204,6 +217,7 @@ func (this *QGroupBox) SetChecked(checked bool) {
 func (this *QGroupBox) EmitClicked() {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.EmitClicked")
 	C.qute_QGroupBox_clicked_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitToggled wraps emitting the toggled signal.
@@ -214,6 +228,7 @@ func (this *QGroupBox) EmitClicked() {
 func (this *QGroupBox) EmitToggled(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGroupBox.EmitToggled")
 	C.qute_QGroupBox_toggled_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // OnClicked connects f to the clicked signal. The connection ends when the

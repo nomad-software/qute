@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQAbstractScrollArea(parent QWidgetLike) *QAbstractScrollArea {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQAbstractScrollArea")
 	}
 	p := C.qute_QAbstractScrollArea_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQAbstractScrollArea(parent QWidgetLike) *QAbstractScrollArea {
 func (this *QAbstractScrollArea) VerticalScrollBarPolicy() qtcore.ScrollBarPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.VerticalScrollBarPolicy")
 	r := C.qute_QAbstractScrollArea_verticalScrollBarPolicy(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScrollBarPolicy(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QAbstractScrollArea) VerticalScrollBarPolicy() qtcore.ScrollBarPolic
 func (this *QAbstractScrollArea) SetVerticalScrollBarPolicy(verticalScrollBarPolicy qtcore.ScrollBarPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.SetVerticalScrollBarPolicy")
 	C.qute_QAbstractScrollArea_setVerticalScrollBarPolicy(self, C.int64_t(verticalScrollBarPolicy))
+	runtime.KeepAlive(this)
 }
 
 // VerticalScrollBar wraps QAbstractScrollArea::verticalScrollBar.
@@ -101,6 +105,7 @@ func (this *QAbstractScrollArea) SetVerticalScrollBarPolicy(verticalScrollBarPol
 func (this *QAbstractScrollArea) VerticalScrollBar() *QScrollBar {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.VerticalScrollBar")
 	r := C.qute_QAbstractScrollArea_verticalScrollBar(self)
+	runtime.KeepAlive(this)
 	return rt.View[QScrollBar](rt.WrapClass(r, "QScrollBar", rt.KeepOrBorrow), r)
 }
 
@@ -119,6 +124,8 @@ func (this *QAbstractScrollArea) SetVerticalScrollBar(scrollbar QScrollBarLike) 
 		scrollbarPtr, scrollbarH = rt.Arg(unsafe.Pointer(scrollbar.AsQScrollBar()), "QAbstractScrollArea.SetVerticalScrollBar")
 	}
 	C.qute_QAbstractScrollArea_setVerticalScrollBar(self, scrollbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(scrollbar)
 	scrollbarH.TransferToCpp()
 }
 
@@ -130,6 +137,7 @@ func (this *QAbstractScrollArea) SetVerticalScrollBar(scrollbar QScrollBarLike) 
 func (this *QAbstractScrollArea) HorizontalScrollBarPolicy() qtcore.ScrollBarPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.HorizontalScrollBarPolicy")
 	r := C.qute_QAbstractScrollArea_horizontalScrollBarPolicy(self)
+	runtime.KeepAlive(this)
 	return qtcore.ScrollBarPolicy(r)
 }
 
@@ -141,6 +149,7 @@ func (this *QAbstractScrollArea) HorizontalScrollBarPolicy() qtcore.ScrollBarPol
 func (this *QAbstractScrollArea) SetHorizontalScrollBarPolicy(horizontalScrollBarPolicy qtcore.ScrollBarPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.SetHorizontalScrollBarPolicy")
 	C.qute_QAbstractScrollArea_setHorizontalScrollBarPolicy(self, C.int64_t(horizontalScrollBarPolicy))
+	runtime.KeepAlive(this)
 }
 
 // HorizontalScrollBar wraps QAbstractScrollArea::horizontalScrollBar.
@@ -153,6 +162,7 @@ func (this *QAbstractScrollArea) SetHorizontalScrollBarPolicy(horizontalScrollBa
 func (this *QAbstractScrollArea) HorizontalScrollBar() *QScrollBar {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.HorizontalScrollBar")
 	r := C.qute_QAbstractScrollArea_horizontalScrollBar(self)
+	runtime.KeepAlive(this)
 	return rt.View[QScrollBar](rt.WrapClass(r, "QScrollBar", rt.KeepOrBorrow), r)
 }
 
@@ -171,6 +181,8 @@ func (this *QAbstractScrollArea) SetHorizontalScrollBar(scrollbar QScrollBarLike
 		scrollbarPtr, scrollbarH = rt.Arg(unsafe.Pointer(scrollbar.AsQScrollBar()), "QAbstractScrollArea.SetHorizontalScrollBar")
 	}
 	C.qute_QAbstractScrollArea_setHorizontalScrollBar(self, scrollbarPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(scrollbar)
 	scrollbarH.TransferToCpp()
 }
 
@@ -184,6 +196,7 @@ func (this *QAbstractScrollArea) SetHorizontalScrollBar(scrollbar QScrollBarLike
 func (this *QAbstractScrollArea) CornerWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.CornerWidget")
 	r := C.qute_QAbstractScrollArea_cornerWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -202,6 +215,8 @@ func (this *QAbstractScrollArea) SetCornerWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QAbstractScrollArea.SetCornerWidget")
 	}
 	C.qute_QAbstractScrollArea_setCornerWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -220,6 +235,8 @@ func (this *QAbstractScrollArea) AddScrollBarWidget(widget QWidgetLike, alignmen
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QAbstractScrollArea.AddScrollBarWidget")
 	}
 	C.qute_QAbstractScrollArea_addScrollBarWidget(self, widgetPtr, C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -233,6 +250,7 @@ func (this *QAbstractScrollArea) AddScrollBarWidget(widget QWidgetLike, alignmen
 func (this *QAbstractScrollArea) ScrollBarWidgets(alignment qtcore.Alignment) []*QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.ScrollBarWidgets")
 	r := C.qute_QAbstractScrollArea_scrollBarWidgets(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QWidget {
 		return rt.View[QWidget](rt.WrapClass(e, "QWidget", rt.KeepOrBorrow), e)
 	})
@@ -248,6 +266,7 @@ func (this *QAbstractScrollArea) ScrollBarWidgets(alignment qtcore.Alignment) []
 func (this *QAbstractScrollArea) Viewport() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.Viewport")
 	r := C.qute_QAbstractScrollArea_viewport(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -266,6 +285,8 @@ func (this *QAbstractScrollArea) SetViewport(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QAbstractScrollArea.SetViewport")
 	}
 	C.qute_QAbstractScrollArea_setViewport(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -277,6 +298,7 @@ func (this *QAbstractScrollArea) SetViewport(widget QWidgetLike) {
 func (this *QAbstractScrollArea) MaximumViewportSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.MaximumViewportSize")
 	r := C.qute_QAbstractScrollArea_maximumViewportSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -292,6 +314,8 @@ func (this *QAbstractScrollArea) SetupViewport(viewport QWidgetLike) {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QAbstractScrollArea.SetupViewport")
 	}
 	C.qute_QAbstractScrollArea_setupViewport(self, viewportPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(viewport)
 }
 
 // SizeAdjustPolicy wraps QAbstractScrollArea::sizeAdjustPolicy.
@@ -302,6 +326,7 @@ func (this *QAbstractScrollArea) SetupViewport(viewport QWidgetLike) {
 func (this *QAbstractScrollArea) SizeAdjustPolicy() QAbstractScrollAreaSizeAdjustPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.SizeAdjustPolicy")
 	r := C.qute_QAbstractScrollArea_sizeAdjustPolicy(self)
+	runtime.KeepAlive(this)
 	return QAbstractScrollAreaSizeAdjustPolicy(r)
 }
 
@@ -313,6 +338,7 @@ func (this *QAbstractScrollArea) SizeAdjustPolicy() QAbstractScrollAreaSizeAdjus
 func (this *QAbstractScrollArea) SetSizeAdjustPolicy(policy QAbstractScrollAreaSizeAdjustPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.SetSizeAdjustPolicy")
 	C.qute_QAbstractScrollArea_setSizeAdjustPolicy(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 var qAbstractScrollAreaVTable = []rt.Virtual{
@@ -681,13 +707,17 @@ type QAbstractScrollAreaSuper struct{ this *QAbstractScrollArea }
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QAbstractScrollAreaSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.MinimumSizeHint")
-	return goQSize(C.qute_QAbstractScrollArea_super_0(self))
+	r := C.qute_QAbstractScrollArea_super_0(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // SizeHint calls QAbstractScrollArea::sizeHint.
 func (s *QAbstractScrollAreaSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.SizeHint")
-	return goQSize(C.qute_QAbstractScrollArea_super_1(self))
+	r := C.qute_QAbstractScrollArea_super_1(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // SetupViewport calls QAbstractScrollArea::setupViewport.
@@ -698,6 +728,8 @@ func (s *QAbstractScrollAreaSuper) SetupViewport(viewport *QWidget) {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QAbstractScrollArea.Super.SetupViewport")
 	}
 	C.qute_QAbstractScrollArea_super_2(self, viewportPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(viewport)
 }
 
 // EventFilter calls QAbstractScrollArea::eventFilter.
@@ -711,7 +743,11 @@ func (s *QAbstractScrollAreaSuper) EventFilter(object *qtcore.QObject, event *qt
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.EventFilter")
 	}
-	return bool(C.qute_QAbstractScrollArea_super_3(self, objectPtr, eventPtr))
+	r := C.qute_QAbstractScrollArea_super_3(self, objectPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // Event calls QAbstractScrollArea::event.
@@ -721,7 +757,10 @@ func (s *QAbstractScrollAreaSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.Event")
 	}
-	return bool(C.qute_QAbstractScrollArea_super_4(self, eventPtr))
+	r := C.qute_QAbstractScrollArea_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // ViewportEvent calls QAbstractScrollArea::viewportEvent.
@@ -731,7 +770,10 @@ func (s *QAbstractScrollAreaSuper) ViewportEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.ViewportEvent")
 	}
-	return bool(C.qute_QAbstractScrollArea_super_5(self, eventPtr))
+	r := C.qute_QAbstractScrollArea_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // ResizeEvent calls QAbstractScrollArea::resizeEvent.
@@ -742,6 +784,8 @@ func (s *QAbstractScrollAreaSuper) ResizeEvent(resizeEvent *qtgui.QResizeEvent) 
 		resizeEventPtr = rt.UseArg(unsafe.Pointer(resizeEvent.AsQResizeEvent()), "QAbstractScrollArea.Super.ResizeEvent")
 	}
 	C.qute_QAbstractScrollArea_super_6(self, resizeEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(resizeEvent)
 }
 
 // PaintEvent calls QAbstractScrollArea::paintEvent.
@@ -752,6 +796,8 @@ func (s *QAbstractScrollAreaSuper) PaintEvent(paintEvent *qtgui.QPaintEvent) {
 		paintEventPtr = rt.UseArg(unsafe.Pointer(paintEvent.AsQPaintEvent()), "QAbstractScrollArea.Super.PaintEvent")
 	}
 	C.qute_QAbstractScrollArea_super_7(self, paintEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(paintEvent)
 }
 
 // MousePressEvent calls QAbstractScrollArea::mousePressEvent.
@@ -762,6 +808,8 @@ func (s *QAbstractScrollAreaSuper) MousePressEvent(mouseEvent *qtgui.QMouseEvent
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QAbstractScrollArea.Super.MousePressEvent")
 	}
 	C.qute_QAbstractScrollArea_super_8(self, mouseEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(mouseEvent)
 }
 
 // MouseReleaseEvent calls QAbstractScrollArea::mouseReleaseEvent.
@@ -772,6 +820,8 @@ func (s *QAbstractScrollAreaSuper) MouseReleaseEvent(mouseEvent *qtgui.QMouseEve
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QAbstractScrollArea.Super.MouseReleaseEvent")
 	}
 	C.qute_QAbstractScrollArea_super_9(self, mouseEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(mouseEvent)
 }
 
 // MouseDoubleClickEvent calls QAbstractScrollArea::mouseDoubleClickEvent.
@@ -782,6 +832,8 @@ func (s *QAbstractScrollAreaSuper) MouseDoubleClickEvent(mouseEvent *qtgui.QMous
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QAbstractScrollArea.Super.MouseDoubleClickEvent")
 	}
 	C.qute_QAbstractScrollArea_super_10(self, mouseEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(mouseEvent)
 }
 
 // MouseMoveEvent calls QAbstractScrollArea::mouseMoveEvent.
@@ -792,6 +844,8 @@ func (s *QAbstractScrollAreaSuper) MouseMoveEvent(mouseEvent *qtgui.QMouseEvent)
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QAbstractScrollArea.Super.MouseMoveEvent")
 	}
 	C.qute_QAbstractScrollArea_super_11(self, mouseEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(mouseEvent)
 }
 
 // WheelEvent calls QAbstractScrollArea::wheelEvent.
@@ -802,6 +856,8 @@ func (s *QAbstractScrollAreaSuper) WheelEvent(wheelEvent *qtgui.QWheelEvent) {
 		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QAbstractScrollArea.Super.WheelEvent")
 	}
 	C.qute_QAbstractScrollArea_super_12(self, wheelEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(wheelEvent)
 }
 
 // ContextMenuEvent calls QAbstractScrollArea::contextMenuEvent.
@@ -812,6 +868,8 @@ func (s *QAbstractScrollAreaSuper) ContextMenuEvent(contextMenuEvent *qtgui.QCon
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QAbstractScrollArea.Super.ContextMenuEvent")
 	}
 	C.qute_QAbstractScrollArea_super_13(self, contextMenuEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(contextMenuEvent)
 }
 
 // DragEnterEvent calls QAbstractScrollArea::dragEnterEvent.
@@ -822,6 +880,8 @@ func (s *QAbstractScrollAreaSuper) DragEnterEvent(dragEnterEvent *qtgui.QDragEnt
 		dragEnterEventPtr = rt.UseArg(unsafe.Pointer(dragEnterEvent.AsQDragEnterEvent()), "QAbstractScrollArea.Super.DragEnterEvent")
 	}
 	C.qute_QAbstractScrollArea_super_14(self, dragEnterEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(dragEnterEvent)
 }
 
 // DragMoveEvent calls QAbstractScrollArea::dragMoveEvent.
@@ -832,6 +892,8 @@ func (s *QAbstractScrollAreaSuper) DragMoveEvent(dragMoveEvent *qtgui.QDragMoveE
 		dragMoveEventPtr = rt.UseArg(unsafe.Pointer(dragMoveEvent.AsQDragMoveEvent()), "QAbstractScrollArea.Super.DragMoveEvent")
 	}
 	C.qute_QAbstractScrollArea_super_15(self, dragMoveEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(dragMoveEvent)
 }
 
 // DragLeaveEvent calls QAbstractScrollArea::dragLeaveEvent.
@@ -842,6 +904,8 @@ func (s *QAbstractScrollAreaSuper) DragLeaveEvent(dragLeaveEvent *qtgui.QDragLea
 		dragLeaveEventPtr = rt.UseArg(unsafe.Pointer(dragLeaveEvent.AsQDragLeaveEvent()), "QAbstractScrollArea.Super.DragLeaveEvent")
 	}
 	C.qute_QAbstractScrollArea_super_16(self, dragLeaveEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(dragLeaveEvent)
 }
 
 // DropEvent calls QAbstractScrollArea::dropEvent.
@@ -852,6 +916,8 @@ func (s *QAbstractScrollAreaSuper) DropEvent(dropEvent *qtgui.QDropEvent) {
 		dropEventPtr = rt.UseArg(unsafe.Pointer(dropEvent.AsQDropEvent()), "QAbstractScrollArea.Super.DropEvent")
 	}
 	C.qute_QAbstractScrollArea_super_17(self, dropEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(dropEvent)
 }
 
 // KeyPressEvent calls QAbstractScrollArea::keyPressEvent.
@@ -862,18 +928,23 @@ func (s *QAbstractScrollAreaSuper) KeyPressEvent(keyEvent *qtgui.QKeyEvent) {
 		keyEventPtr = rt.UseArg(unsafe.Pointer(keyEvent.AsQKeyEvent()), "QAbstractScrollArea.Super.KeyPressEvent")
 	}
 	C.qute_QAbstractScrollArea_super_18(self, keyEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(keyEvent)
 }
 
 // ScrollContentsBy calls QAbstractScrollArea::scrollContentsBy.
 func (s *QAbstractScrollAreaSuper) ScrollContentsBy(dx int, dy int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.ScrollContentsBy")
 	C.qute_QAbstractScrollArea_super_19(self, C.int(dx), C.int(dy))
+	runtime.KeepAlive(s.this)
 }
 
 // ViewportSizeHint calls QAbstractScrollArea::viewportSizeHint.
 func (s *QAbstractScrollAreaSuper) ViewportSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.ViewportSizeHint")
-	return goQSize(C.qute_QAbstractScrollArea_super_20(self))
+	r := C.qute_QAbstractScrollArea_super_20(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // ChangeEvent calls QFrame::changeEvent.
@@ -884,24 +955,31 @@ func (s *QAbstractScrollAreaSuper) ChangeEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.ChangeEvent")
 	}
 	C.qute_QAbstractScrollArea_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // SetVisible calls QWidget::setVisible.
 func (s *QAbstractScrollAreaSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.SetVisible")
 	C.qute_QAbstractScrollArea_super_22(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QAbstractScrollAreaSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.HeightForWidth")
-	return int(C.qute_QAbstractScrollArea_super_23(self, C.int(arg0)))
+	r := C.qute_QAbstractScrollArea_super_23(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QAbstractScrollAreaSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.HasHeightForWidth")
-	return bool(C.qute_QAbstractScrollArea_super_24(self))
+	r := C.qute_QAbstractScrollArea_super_24(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // KeyReleaseEvent calls QWidget::keyReleaseEvent.
@@ -912,6 +990,8 @@ func (s *QAbstractScrollAreaSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QAbstractScrollArea.Super.KeyReleaseEvent")
 	}
 	C.qute_QAbstractScrollArea_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusInEvent calls QWidget::focusInEvent.
@@ -922,6 +1002,8 @@ func (s *QAbstractScrollAreaSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractScrollArea.Super.FocusInEvent")
 	}
 	C.qute_QAbstractScrollArea_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusOutEvent calls QWidget::focusOutEvent.
@@ -932,6 +1014,8 @@ func (s *QAbstractScrollAreaSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractScrollArea.Super.FocusOutEvent")
 	}
 	C.qute_QAbstractScrollArea_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // EnterEvent calls QWidget::enterEvent.
@@ -942,6 +1026,8 @@ func (s *QAbstractScrollAreaSuper) EnterEvent(event *qtgui.QEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QAbstractScrollArea.Super.EnterEvent")
 	}
 	C.qute_QAbstractScrollArea_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // LeaveEvent calls QWidget::leaveEvent.
@@ -952,6 +1038,8 @@ func (s *QAbstractScrollAreaSuper) LeaveEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.LeaveEvent")
 	}
 	C.qute_QAbstractScrollArea_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MoveEvent calls QWidget::moveEvent.
@@ -962,6 +1050,8 @@ func (s *QAbstractScrollAreaSuper) MoveEvent(event *qtgui.QMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QAbstractScrollArea.Super.MoveEvent")
 	}
 	C.qute_QAbstractScrollArea_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CloseEvent calls QWidget::closeEvent.
@@ -972,6 +1062,8 @@ func (s *QAbstractScrollAreaSuper) CloseEvent(event *qtgui.QCloseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QAbstractScrollArea.Super.CloseEvent")
 	}
 	C.qute_QAbstractScrollArea_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ShowEvent calls QWidget::showEvent.
@@ -982,6 +1074,8 @@ func (s *QAbstractScrollAreaSuper) ShowEvent(event *qtgui.QShowEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QAbstractScrollArea.Super.ShowEvent")
 	}
 	C.qute_QAbstractScrollArea_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // HideEvent calls QWidget::hideEvent.
@@ -992,12 +1086,16 @@ func (s *QAbstractScrollAreaSuper) HideEvent(event *qtgui.QHideEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QAbstractScrollArea.Super.HideEvent")
 	}
 	C.qute_QAbstractScrollArea_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QAbstractScrollAreaSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.FocusNextPrevChild")
-	return bool(C.qute_QAbstractScrollArea_super_34(self, C.bool(next)))
+	r := C.qute_QAbstractScrollArea_super_34(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // TimerEvent calls QObject::timerEvent.
@@ -1008,6 +1106,8 @@ func (s *QAbstractScrollAreaSuper) TimerEvent(event *qtcore.QTimerEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QAbstractScrollArea.Super.TimerEvent")
 	}
 	C.qute_QAbstractScrollArea_super_35(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -1018,6 +1118,8 @@ func (s *QAbstractScrollAreaSuper) ChildEvent(event *qtcore.QChildEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QAbstractScrollArea.Super.ChildEvent")
 	}
 	C.qute_QAbstractScrollArea_super_36(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -1028,24 +1130,29 @@ func (s *QAbstractScrollAreaSuper) CustomEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.CustomEvent")
 	}
 	C.qute_QAbstractScrollArea_super_37(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // SetViewportMargins wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
 func (b *QAbstractScrollAreaBase) SetViewportMargins(left int, top int, right int, bottom int) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.SetViewportMargins")
 	C.qute_QAbstractScrollArea_prot_setViewportMargins(self, C.int(left), C.int(top), C.int(right), C.int(bottom))
+	runtime.KeepAlive(b)
 }
 
 // SetViewportMargins2 wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
 func (b *QAbstractScrollAreaBase) SetViewportMargins2(margins qtcore.QMargins) {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.SetViewportMargins2")
 	C.qute_QAbstractScrollArea_prot_setViewportMargins_1(self, cQMargins(margins))
+	runtime.KeepAlive(b)
 }
 
 // ViewportMargins wraps the protected QAbstractScrollArea::viewportMargins for subclasses.
 func (b *QAbstractScrollAreaBase) ViewportMargins() qtcore.QMargins {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.ViewportMargins")
 	r := C.qute_QAbstractScrollArea_prot_viewportMargins(self)
+	runtime.KeepAlive(b)
 	return goQMargins(r)
 }
 
@@ -1057,30 +1164,36 @@ func (b *QAbstractScrollAreaBase) DrawFrame(painter qtgui.QPainterLike) {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QAbstractScrollArea.DrawFrame")
 	}
 	C.qute_QAbstractScrollArea_prot_drawFrame(self, painterPtr)
+	runtime.KeepAlive(b)
+	runtime.KeepAlive(painter)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QAbstractScrollAreaBase) UpdateMicroFocus() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.UpdateMicroFocus")
 	C.qute_QAbstractScrollArea_prot_updateMicroFocus(self)
+	runtime.KeepAlive(b)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QAbstractScrollAreaBase) Create() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.Create")
 	C.qute_QAbstractScrollArea_prot_create(self)
+	runtime.KeepAlive(b)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QAbstractScrollAreaBase) Destroy() {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.Destroy")
 	C.qute_QAbstractScrollArea_prot_destroy(self)
+	runtime.KeepAlive(b)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QAbstractScrollAreaBase) FocusNextChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.FocusNextChild")
 	r := C.qute_QAbstractScrollArea_prot_focusNextChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1088,6 +1201,7 @@ func (b *QAbstractScrollAreaBase) FocusNextChild() bool {
 func (b *QAbstractScrollAreaBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.FocusPreviousChild")
 	r := C.qute_QAbstractScrollArea_prot_focusPreviousChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1095,6 +1209,7 @@ func (b *QAbstractScrollAreaBase) FocusPreviousChild() bool {
 func (b *QAbstractScrollAreaBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
 	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.GetDecodedMetricF")
 	r := C.qute_QAbstractScrollArea_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(b)
 	return float64(r)
 }
 
@@ -1112,6 +1227,7 @@ func NewQAbstractScrollAreaWith(v QAbstractScrollAreaSubclass, parent QWidgetLik
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQAbstractScrollAreaWith")
 	}
 	p := C.qute_QAbstractScrollArea_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -40,6 +41,7 @@ func QGraphicsLayoutFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QGraphicsLa
 func (this *QGraphicsLayout) SetContentsMargins(left float64, top float64, right float64, bottom float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.SetContentsMargins")
 	C.qute_QGraphicsLayout_setContentsMargins(self, C.double(left), C.double(top), C.double(right), C.double(bottom))
+	runtime.KeepAlive(this)
 }
 
 // Activate wraps QGraphicsLayout::activate.
@@ -50,6 +52,7 @@ func (this *QGraphicsLayout) SetContentsMargins(left float64, top float64, right
 func (this *QGraphicsLayout) Activate() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.Activate")
 	C.qute_QGraphicsLayout_activate(self)
+	runtime.KeepAlive(this)
 }
 
 // IsActivated wraps QGraphicsLayout::isActivated.
@@ -60,6 +63,7 @@ func (this *QGraphicsLayout) Activate() {
 func (this *QGraphicsLayout) IsActivated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.IsActivated")
 	r := C.qute_QGraphicsLayout_isActivated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -71,6 +75,7 @@ func (this *QGraphicsLayout) IsActivated() bool {
 func (this *QGraphicsLayout) Invalidate() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.Invalidate")
 	C.qute_QGraphicsLayout_invalidate(self)
+	runtime.KeepAlive(this)
 }
 
 // WidgetEvent wraps QGraphicsLayout::widgetEvent.
@@ -85,6 +90,8 @@ func (this *QGraphicsLayout) WidgetEvent(eArg qtcore.QEventLike) {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QGraphicsLayout.WidgetEvent")
 	}
 	C.qute_QGraphicsLayout_widgetEvent(self, eArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(eArg)
 }
 
 // Count wraps QGraphicsLayout::count.
@@ -95,6 +102,7 @@ func (this *QGraphicsLayout) WidgetEvent(eArg qtcore.QEventLike) {
 func (this *QGraphicsLayout) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.Count")
 	r := C.qute_QGraphicsLayout_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -108,6 +116,7 @@ func (this *QGraphicsLayout) Count() int {
 func (this *QGraphicsLayout) ItemAt(iArg int) *QGraphicsLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.ItemAt")
 	r := C.qute_QGraphicsLayout_itemAt(self, C.int(iArg))
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsLayoutItem](rt.WrapClass(r, "QGraphicsLayoutItem", rt.KeepOrBorrow), r)
 }
 
@@ -119,6 +128,7 @@ func (this *QGraphicsLayout) ItemAt(iArg int) *QGraphicsLayoutItem {
 func (this *QGraphicsLayout) RemoveAt(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.RemoveAt")
 	C.qute_QGraphicsLayout_removeAt(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // QGraphicsLayoutSetInstantInvalidatePropagation wraps QGraphicsLayout::setInstantInvalidatePropagation.

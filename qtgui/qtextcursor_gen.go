@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -101,6 +102,7 @@ func NewQTextCursorWithTextDocument(document QTextDocumentLike) *QTextCursor {
 		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "NewQTextCursorWithTextDocument")
 	}
 	p := C.qute_QTextCursor_new_1(documentPtr)
+	runtime.KeepAlive(document)
 	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
 	return rt.View[QTextCursor](h, p)
 }
@@ -117,6 +119,7 @@ func NewQTextCursorWithTextFrame(frame QTextFrameLike) *QTextCursor {
 		framePtr = rt.UseArg(unsafe.Pointer(frame.AsQTextFrame()), "NewQTextCursorWithTextFrame")
 	}
 	p := C.qute_QTextCursor_new_2(framePtr)
+	runtime.KeepAlive(frame)
 	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
 	return rt.View[QTextCursor](h, p)
 }
@@ -129,6 +132,7 @@ func NewQTextCursorWithTextFrame(frame QTextFrameLike) *QTextCursor {
 func NewQTextCursorWithTextBlock(block *QTextBlock) *QTextCursor {
 	rt.CheckThread("NewQTextCursorWithTextBlock")
 	p := C.qute_QTextCursor_new_3(rt.UseArg(unsafe.Pointer(block), "NewQTextCursorWithTextBlock"))
+	runtime.KeepAlive(block)
 	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
 	return rt.View[QTextCursor](h, p)
 }
@@ -141,6 +145,7 @@ func NewQTextCursorWithTextBlock(block *QTextBlock) *QTextCursor {
 func (this *QTextCursor) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.IsNull")
 	r := C.qute_QTextCursor_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -152,6 +157,7 @@ func (this *QTextCursor) IsNull() bool {
 func (this *QTextCursor) SetPosition(pos int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetPosition")
 	C.qute_QTextCursor_setPosition(self, C.int(pos))
+	runtime.KeepAlive(this)
 }
 
 // Position wraps QTextCursor::position.
@@ -162,6 +168,7 @@ func (this *QTextCursor) SetPosition(pos int) {
 func (this *QTextCursor) Position() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.Position")
 	r := C.qute_QTextCursor_position(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -173,6 +180,7 @@ func (this *QTextCursor) Position() int {
 func (this *QTextCursor) PositionInBlock() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.PositionInBlock")
 	r := C.qute_QTextCursor_positionInBlock(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -184,6 +192,7 @@ func (this *QTextCursor) PositionInBlock() int {
 func (this *QTextCursor) Anchor() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.Anchor")
 	r := C.qute_QTextCursor_anchor(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -195,6 +204,7 @@ func (this *QTextCursor) Anchor() int {
 func (this *QTextCursor) InsertText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertText")
 	C.qute_QTextCursor_insertText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // InsertTextWithTextCharFormat wraps QTextCursor::insertText.
@@ -205,6 +215,8 @@ func (this *QTextCursor) InsertText(text string) {
 func (this *QTextCursor) InsertTextWithTextCharFormat(text string, format *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertTextWithTextCharFormat")
 	C.qute_QTextCursor_insertText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertTextWithTextCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // MovePosition wraps QTextCursor::movePosition.
@@ -215,6 +227,7 @@ func (this *QTextCursor) InsertTextWithTextCharFormat(text string, format *QText
 func (this *QTextCursor) MovePosition(op QTextCursorMoveOperation) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.MovePosition")
 	r := C.qute_QTextCursor_movePosition(self, C.int64_t(op))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -226,6 +239,7 @@ func (this *QTextCursor) MovePosition(op QTextCursorMoveOperation) bool {
 func (this *QTextCursor) VisualNavigation() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.VisualNavigation")
 	r := C.qute_QTextCursor_visualNavigation(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -237,6 +251,7 @@ func (this *QTextCursor) VisualNavigation() bool {
 func (this *QTextCursor) SetVisualNavigation(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetVisualNavigation")
 	C.qute_QTextCursor_setVisualNavigation(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetVerticalMovementX wraps QTextCursor::setVerticalMovementX.
@@ -247,6 +262,7 @@ func (this *QTextCursor) SetVisualNavigation(bArg bool) {
 func (this *QTextCursor) SetVerticalMovementX(x int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetVerticalMovementX")
 	C.qute_QTextCursor_setVerticalMovementX(self, C.int(x))
+	runtime.KeepAlive(this)
 }
 
 // VerticalMovementX wraps QTextCursor::verticalMovementX.
@@ -257,6 +273,7 @@ func (this *QTextCursor) SetVerticalMovementX(x int) {
 func (this *QTextCursor) VerticalMovementX() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.VerticalMovementX")
 	r := C.qute_QTextCursor_verticalMovementX(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -268,6 +285,7 @@ func (this *QTextCursor) VerticalMovementX() int {
 func (this *QTextCursor) SetKeepPositionOnInsert(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetKeepPositionOnInsert")
 	C.qute_QTextCursor_setKeepPositionOnInsert(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // KeepPositionOnInsert wraps QTextCursor::keepPositionOnInsert.
@@ -278,6 +296,7 @@ func (this *QTextCursor) SetKeepPositionOnInsert(bArg bool) {
 func (this *QTextCursor) KeepPositionOnInsert() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.KeepPositionOnInsert")
 	r := C.qute_QTextCursor_keepPositionOnInsert(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -289,6 +308,7 @@ func (this *QTextCursor) KeepPositionOnInsert() bool {
 func (this *QTextCursor) DeleteChar() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.DeleteChar")
 	C.qute_QTextCursor_deleteChar(self)
+	runtime.KeepAlive(this)
 }
 
 // DeletePreviousChar wraps QTextCursor::deletePreviousChar.
@@ -299,6 +319,7 @@ func (this *QTextCursor) DeleteChar() {
 func (this *QTextCursor) DeletePreviousChar() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.DeletePreviousChar")
 	C.qute_QTextCursor_deletePreviousChar(self)
+	runtime.KeepAlive(this)
 }
 
 // Select wraps QTextCursor::select.
@@ -309,6 +330,7 @@ func (this *QTextCursor) DeletePreviousChar() {
 func (this *QTextCursor) Select(selection QTextCursorSelectionType) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.Select")
 	C.qute_QTextCursor_select(self, C.int64_t(selection))
+	runtime.KeepAlive(this)
 }
 
 // HasSelection wraps QTextCursor::hasSelection.
@@ -319,6 +341,7 @@ func (this *QTextCursor) Select(selection QTextCursorSelectionType) {
 func (this *QTextCursor) HasSelection() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.HasSelection")
 	r := C.qute_QTextCursor_hasSelection(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -330,6 +353,7 @@ func (this *QTextCursor) HasSelection() bool {
 func (this *QTextCursor) HasComplexSelection() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.HasComplexSelection")
 	r := C.qute_QTextCursor_hasComplexSelection(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -341,6 +365,7 @@ func (this *QTextCursor) HasComplexSelection() bool {
 func (this *QTextCursor) RemoveSelectedText() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.RemoveSelectedText")
 	C.qute_QTextCursor_removeSelectedText(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearSelection wraps QTextCursor::clearSelection.
@@ -351,6 +376,7 @@ func (this *QTextCursor) RemoveSelectedText() {
 func (this *QTextCursor) ClearSelection() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.ClearSelection")
 	C.qute_QTextCursor_clearSelection(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectionStart wraps QTextCursor::selectionStart.
@@ -361,6 +387,7 @@ func (this *QTextCursor) ClearSelection() {
 func (this *QTextCursor) SelectionStart() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SelectionStart")
 	r := C.qute_QTextCursor_selectionStart(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -372,6 +399,7 @@ func (this *QTextCursor) SelectionStart() int {
 func (this *QTextCursor) SelectionEnd() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SelectionEnd")
 	r := C.qute_QTextCursor_selectionEnd(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -383,6 +411,7 @@ func (this *QTextCursor) SelectionEnd() int {
 func (this *QTextCursor) SelectedText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SelectedText")
 	r := C.qute_QTextCursor_selectedText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -396,6 +425,7 @@ func (this *QTextCursor) SelectedText() string {
 func (this *QTextCursor) Selection() *QTextDocumentFragment {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.Selection")
 	r := C.qute_QTextCursor_selection(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextDocumentFragment](rt.WrapClass(r, "QTextDocumentFragment", rt.TakeOwned), r)
 }
 
@@ -411,6 +441,7 @@ func (this *QTextCursor) SelectedTableCells() (int, int, int, int) {
 	var firstColumnOut C.int
 	var numColumnsOut C.int
 	C.qute_QTextCursor_selectedTableCells(self, &firstRowOut, &numRowsOut, &firstColumnOut, &numColumnsOut)
+	runtime.KeepAlive(this)
 	return int(firstRowOut), int(numRowsOut), int(firstColumnOut), int(numColumnsOut)
 }
 
@@ -424,6 +455,7 @@ func (this *QTextCursor) SelectedTableCells() (int, int, int, int) {
 func (this *QTextCursor) Block() *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.Block")
 	r := C.qute_QTextCursor_block(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -437,6 +469,7 @@ func (this *QTextCursor) Block() *QTextBlock {
 func (this *QTextCursor) CharFormat() *QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CharFormat")
 	r := C.qute_QTextCursor_charFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -448,6 +481,8 @@ func (this *QTextCursor) CharFormat() *QTextCharFormat {
 func (this *QTextCursor) SetCharFormat(format *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetCharFormat")
 	C.qute_QTextCursor_setCharFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.SetCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // MergeCharFormat wraps QTextCursor::mergeCharFormat.
@@ -458,6 +493,8 @@ func (this *QTextCursor) SetCharFormat(format *QTextCharFormat) {
 func (this *QTextCursor) MergeCharFormat(modifier *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.MergeCharFormat")
 	C.qute_QTextCursor_mergeCharFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QTextCursor.MergeCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modifier)
 }
 
 // BlockFormat wraps QTextCursor::blockFormat.
@@ -470,6 +507,7 @@ func (this *QTextCursor) MergeCharFormat(modifier *QTextCharFormat) {
 func (this *QTextCursor) BlockFormat() *QTextBlockFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.BlockFormat")
 	r := C.qute_QTextCursor_blockFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlockFormat](rt.WrapClass(r, "QTextBlockFormat", rt.TakeOwned), r)
 }
 
@@ -481,6 +519,8 @@ func (this *QTextCursor) BlockFormat() *QTextBlockFormat {
 func (this *QTextCursor) SetBlockFormat(format *QTextBlockFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetBlockFormat")
 	C.qute_QTextCursor_setBlockFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.SetBlockFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // MergeBlockFormat wraps QTextCursor::mergeBlockFormat.
@@ -491,6 +531,8 @@ func (this *QTextCursor) SetBlockFormat(format *QTextBlockFormat) {
 func (this *QTextCursor) MergeBlockFormat(modifier *QTextBlockFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.MergeBlockFormat")
 	C.qute_QTextCursor_mergeBlockFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QTextCursor.MergeBlockFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modifier)
 }
 
 // BlockCharFormat wraps QTextCursor::blockCharFormat.
@@ -503,6 +545,7 @@ func (this *QTextCursor) MergeBlockFormat(modifier *QTextBlockFormat) {
 func (this *QTextCursor) BlockCharFormat() *QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.BlockCharFormat")
 	r := C.qute_QTextCursor_blockCharFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -514,6 +557,8 @@ func (this *QTextCursor) BlockCharFormat() *QTextCharFormat {
 func (this *QTextCursor) SetBlockCharFormat(format *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetBlockCharFormat")
 	C.qute_QTextCursor_setBlockCharFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.SetBlockCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // MergeBlockCharFormat wraps QTextCursor::mergeBlockCharFormat.
@@ -524,6 +569,8 @@ func (this *QTextCursor) SetBlockCharFormat(format *QTextCharFormat) {
 func (this *QTextCursor) MergeBlockCharFormat(modifier *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.MergeBlockCharFormat")
 	C.qute_QTextCursor_mergeBlockCharFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QTextCursor.MergeBlockCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modifier)
 }
 
 // AtBlockStart wraps QTextCursor::atBlockStart.
@@ -534,6 +581,7 @@ func (this *QTextCursor) MergeBlockCharFormat(modifier *QTextCharFormat) {
 func (this *QTextCursor) AtBlockStart() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.AtBlockStart")
 	r := C.qute_QTextCursor_atBlockStart(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -545,6 +593,7 @@ func (this *QTextCursor) AtBlockStart() bool {
 func (this *QTextCursor) AtBlockEnd() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.AtBlockEnd")
 	r := C.qute_QTextCursor_atBlockEnd(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -556,6 +605,7 @@ func (this *QTextCursor) AtBlockEnd() bool {
 func (this *QTextCursor) AtStart() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.AtStart")
 	r := C.qute_QTextCursor_atStart(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -567,6 +617,7 @@ func (this *QTextCursor) AtStart() bool {
 func (this *QTextCursor) AtEnd() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.AtEnd")
 	r := C.qute_QTextCursor_atEnd(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -578,6 +629,7 @@ func (this *QTextCursor) AtEnd() bool {
 func (this *QTextCursor) InsertBlock() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertBlock")
 	C.qute_QTextCursor_insertBlock(self)
+	runtime.KeepAlive(this)
 }
 
 // InsertBlockWithTextBlockFormat wraps QTextCursor::insertBlock.
@@ -588,6 +640,8 @@ func (this *QTextCursor) InsertBlock() {
 func (this *QTextCursor) InsertBlockWithTextBlockFormat(format *QTextBlockFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertBlockWithTextBlockFormat")
 	C.qute_QTextCursor_insertBlock_1(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertBlockWithTextBlockFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // InsertBlockWithTextBlockFormatTextCharFormat wraps QTextCursor::insertBlock.
@@ -598,6 +652,9 @@ func (this *QTextCursor) InsertBlockWithTextBlockFormat(format *QTextBlockFormat
 func (this *QTextCursor) InsertBlockWithTextBlockFormatTextCharFormat(format *QTextBlockFormat, charFormat *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertBlockWithTextBlockFormatTextCharFormat")
 	C.qute_QTextCursor_insertBlock_2(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertBlockWithTextBlockFormatTextCharFormat"), rt.UseArg(unsafe.Pointer(charFormat), "QTextCursor.InsertBlockWithTextBlockFormatTextCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
+	runtime.KeepAlive(charFormat)
 }
 
 // InsertList wraps QTextCursor::insertList.
@@ -612,6 +669,8 @@ func (this *QTextCursor) InsertBlockWithTextBlockFormatTextCharFormat(format *QT
 func (this *QTextCursor) InsertList(format *QTextListFormat) *QTextList {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertList")
 	r := C.qute_QTextCursor_insertList(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertList"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
 }
 
@@ -627,6 +686,7 @@ func (this *QTextCursor) InsertList(format *QTextListFormat) *QTextList {
 func (this *QTextCursor) InsertListStyle(style QTextListFormatStyle) *QTextList {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertListStyle")
 	r := C.qute_QTextCursor_insertList_1(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
 }
 
@@ -642,6 +702,8 @@ func (this *QTextCursor) InsertListStyle(style QTextListFormatStyle) *QTextList 
 func (this *QTextCursor) CreateList(format *QTextListFormat) *QTextList {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CreateList")
 	r := C.qute_QTextCursor_createList(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.CreateList"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
 }
 
@@ -657,6 +719,7 @@ func (this *QTextCursor) CreateList(format *QTextListFormat) *QTextList {
 func (this *QTextCursor) CreateListStyle(style QTextListFormatStyle) *QTextList {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CreateListStyle")
 	r := C.qute_QTextCursor_createList_1(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.TakeParented), r)
 }
 
@@ -670,6 +733,7 @@ func (this *QTextCursor) CreateListStyle(style QTextListFormatStyle) *QTextList 
 func (this *QTextCursor) CurrentList() *QTextList {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CurrentList")
 	r := C.qute_QTextCursor_currentList(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.KeepOrBorrow), r)
 }
 
@@ -685,6 +749,8 @@ func (this *QTextCursor) CurrentList() *QTextList {
 func (this *QTextCursor) InsertTableWithFormat(rows int, cols int, format *QTextTableFormat) *QTextTable {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertTableWithFormat")
 	r := C.qute_QTextCursor_insertTable(self, C.int(rows), C.int(cols), rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertTableWithFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 	return rt.View[QTextTable](rt.WrapClass(r, "QTextTable", rt.TakeParented), r)
 }
 
@@ -700,6 +766,7 @@ func (this *QTextCursor) InsertTableWithFormat(rows int, cols int, format *QText
 func (this *QTextCursor) InsertTable(rows int, cols int) *QTextTable {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertTable")
 	r := C.qute_QTextCursor_insertTable_1(self, C.int(rows), C.int(cols))
+	runtime.KeepAlive(this)
 	return rt.View[QTextTable](rt.WrapClass(r, "QTextTable", rt.TakeParented), r)
 }
 
@@ -713,6 +780,7 @@ func (this *QTextCursor) InsertTable(rows int, cols int) *QTextTable {
 func (this *QTextCursor) CurrentTable() *QTextTable {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CurrentTable")
 	r := C.qute_QTextCursor_currentTable(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextTable](rt.WrapClass(r, "QTextTable", rt.KeepOrBorrow), r)
 }
 
@@ -728,6 +796,8 @@ func (this *QTextCursor) CurrentTable() *QTextTable {
 func (this *QTextCursor) InsertFrame(format *QTextFrameFormat) *QTextFrame {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertFrame")
 	r := C.qute_QTextCursor_insertFrame(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertFrame"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.TakeParented), r)
 }
 
@@ -741,6 +811,7 @@ func (this *QTextCursor) InsertFrame(format *QTextFrameFormat) *QTextFrame {
 func (this *QTextCursor) CurrentFrame() *QTextFrame {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.CurrentFrame")
 	r := C.qute_QTextCursor_currentFrame(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
 }
 
@@ -752,6 +823,8 @@ func (this *QTextCursor) CurrentFrame() *QTextFrame {
 func (this *QTextCursor) InsertFragment(fragment *QTextDocumentFragment) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertFragment")
 	C.qute_QTextCursor_insertFragment(self, rt.UseArg(unsafe.Pointer(fragment), "QTextCursor.InsertFragment"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fragment)
 }
 
 // InsertHtml wraps QTextCursor::insertHtml.
@@ -762,6 +835,7 @@ func (this *QTextCursor) InsertFragment(fragment *QTextDocumentFragment) {
 func (this *QTextCursor) InsertHtml(html string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertHtml")
 	C.qute_QTextCursor_insertHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(html))), C.ptrdiff_t(len(html)))
+	runtime.KeepAlive(this)
 }
 
 // InsertMarkdown wraps QTextCursor::insertMarkdown.
@@ -772,6 +846,7 @@ func (this *QTextCursor) InsertHtml(html string) {
 func (this *QTextCursor) InsertMarkdown(markdown string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertMarkdown")
 	C.qute_QTextCursor_insertMarkdown(self, (*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)))
+	runtime.KeepAlive(this)
 }
 
 // InsertImageWithPosition wraps QTextCursor::insertImage.
@@ -782,6 +857,8 @@ func (this *QTextCursor) InsertMarkdown(markdown string) {
 func (this *QTextCursor) InsertImageWithPosition(format *QTextImageFormat, alignment QTextFrameFormatPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageWithPosition")
 	C.qute_QTextCursor_insertImage(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertImageWithPosition"), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // InsertImage wraps QTextCursor::insertImage.
@@ -792,6 +869,8 @@ func (this *QTextCursor) InsertImageWithPosition(format *QTextImageFormat, align
 func (this *QTextCursor) InsertImage(format *QTextImageFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImage")
 	C.qute_QTextCursor_insertImage_1(self, rt.UseArg(unsafe.Pointer(format), "QTextCursor.InsertImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // InsertImageName wraps QTextCursor::insertImage.
@@ -802,6 +881,7 @@ func (this *QTextCursor) InsertImage(format *QTextImageFormat) {
 func (this *QTextCursor) InsertImageName(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageName")
 	C.qute_QTextCursor_insertImage_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // InsertImageImage wraps QTextCursor::insertImage.
@@ -812,6 +892,8 @@ func (this *QTextCursor) InsertImageName(name string) {
 func (this *QTextCursor) InsertImageImage(image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageImage")
 	C.qute_QTextCursor_insertImage_3(self, rt.UseArg(unsafe.Pointer(image), "QTextCursor.InsertImageImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // BeginEditBlock wraps QTextCursor::beginEditBlock.
@@ -822,6 +904,7 @@ func (this *QTextCursor) InsertImageImage(image *QImage) {
 func (this *QTextCursor) BeginEditBlock() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.BeginEditBlock")
 	C.qute_QTextCursor_beginEditBlock(self)
+	runtime.KeepAlive(this)
 }
 
 // JoinPreviousEditBlock wraps QTextCursor::joinPreviousEditBlock.
@@ -832,6 +915,7 @@ func (this *QTextCursor) BeginEditBlock() {
 func (this *QTextCursor) JoinPreviousEditBlock() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.JoinPreviousEditBlock")
 	C.qute_QTextCursor_joinPreviousEditBlock(self)
+	runtime.KeepAlive(this)
 }
 
 // EndEditBlock wraps QTextCursor::endEditBlock.
@@ -842,6 +926,7 @@ func (this *QTextCursor) JoinPreviousEditBlock() {
 func (this *QTextCursor) EndEditBlock() {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.EndEditBlock")
 	C.qute_QTextCursor_endEditBlock(self)
+	runtime.KeepAlive(this)
 }
 
 // IsCopyOf wraps QTextCursor::isCopyOf.
@@ -852,6 +937,8 @@ func (this *QTextCursor) EndEditBlock() {
 func (this *QTextCursor) IsCopyOf(other *QTextCursor) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.IsCopyOf")
 	r := C.qute_QTextCursor_isCopyOf(self, rt.UseArg(unsafe.Pointer(other), "QTextCursor.IsCopyOf"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
 	return bool(r)
 }
 
@@ -863,6 +950,7 @@ func (this *QTextCursor) IsCopyOf(other *QTextCursor) bool {
 func (this *QTextCursor) BlockNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.BlockNumber")
 	r := C.qute_QTextCursor_blockNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -874,6 +962,7 @@ func (this *QTextCursor) BlockNumber() int {
 func (this *QTextCursor) ColumnNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.ColumnNumber")
 	r := C.qute_QTextCursor_columnNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -887,5 +976,6 @@ func (this *QTextCursor) ColumnNumber() int {
 func (this *QTextCursor) Document() *QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.Document")
 	r := C.qute_QTextCursor_document(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -66,6 +67,7 @@ func NewQGraphicsDropShadowEffect(parent qtcore.QObjectLike) *QGraphicsDropShado
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsDropShadowEffect")
 	}
 	p := C.qute_QGraphicsDropShadowEffect_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -82,6 +84,7 @@ func NewQGraphicsDropShadowEffect(parent qtcore.QObjectLike) *QGraphicsDropShado
 func (this *QGraphicsDropShadowEffect) Offset() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.Offset")
 	r := C.qute_QGraphicsDropShadowEffect_offset(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -93,6 +96,7 @@ func (this *QGraphicsDropShadowEffect) Offset() qtcore.QPointF {
 func (this *QGraphicsDropShadowEffect) XOffset() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.XOffset")
 	r := C.qute_QGraphicsDropShadowEffect_xOffset(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -104,6 +108,7 @@ func (this *QGraphicsDropShadowEffect) XOffset() float64 {
 func (this *QGraphicsDropShadowEffect) YOffset() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.YOffset")
 	r := C.qute_QGraphicsDropShadowEffect_yOffset(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -115,6 +120,7 @@ func (this *QGraphicsDropShadowEffect) YOffset() float64 {
 func (this *QGraphicsDropShadowEffect) BlurRadius() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.BlurRadius")
 	r := C.qute_QGraphicsDropShadowEffect_blurRadius(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -126,6 +132,7 @@ func (this *QGraphicsDropShadowEffect) BlurRadius() float64 {
 func (this *QGraphicsDropShadowEffect) Color() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.Color")
 	r := C.qute_QGraphicsDropShadowEffect_color(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -137,6 +144,7 @@ func (this *QGraphicsDropShadowEffect) Color() qtgui.QColor {
 func (this *QGraphicsDropShadowEffect) SetOffset(ofs qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SetOffset")
 	C.qute_QGraphicsDropShadowEffect_setOffset(self, cQPointF(ofs))
+	runtime.KeepAlive(this)
 }
 
 // SetOffsetFloat64 wraps QGraphicsDropShadowEffect::setOffset.
@@ -147,6 +155,7 @@ func (this *QGraphicsDropShadowEffect) SetOffset(ofs qtcore.QPointF) {
 func (this *QGraphicsDropShadowEffect) SetOffsetFloat64(d float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SetOffsetFloat64")
 	C.qute_QGraphicsDropShadowEffect_setOffset_1(self, C.double(d))
+	runtime.KeepAlive(this)
 }
 
 // SetXOffset wraps QGraphicsDropShadowEffect::setXOffset.
@@ -157,6 +166,7 @@ func (this *QGraphicsDropShadowEffect) SetOffsetFloat64(d float64) {
 func (this *QGraphicsDropShadowEffect) SetXOffset(dx float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SetXOffset")
 	C.qute_QGraphicsDropShadowEffect_setXOffset(self, C.double(dx))
+	runtime.KeepAlive(this)
 }
 
 // SetYOffset wraps QGraphicsDropShadowEffect::setYOffset.
@@ -167,6 +177,7 @@ func (this *QGraphicsDropShadowEffect) SetXOffset(dx float64) {
 func (this *QGraphicsDropShadowEffect) SetYOffset(dy float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SetYOffset")
 	C.qute_QGraphicsDropShadowEffect_setYOffset(self, C.double(dy))
+	runtime.KeepAlive(this)
 }
 
 // SetBlurRadius wraps QGraphicsDropShadowEffect::setBlurRadius.
@@ -177,6 +188,7 @@ func (this *QGraphicsDropShadowEffect) SetYOffset(dy float64) {
 func (this *QGraphicsDropShadowEffect) SetBlurRadius(blurRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SetBlurRadius")
 	C.qute_QGraphicsDropShadowEffect_setBlurRadius(self, C.double(blurRadius))
+	runtime.KeepAlive(this)
 }
 
 // SetColor wraps QGraphicsDropShadowEffect::setColor.
@@ -187,6 +199,7 @@ func (this *QGraphicsDropShadowEffect) SetBlurRadius(blurRadius float64) {
 func (this *QGraphicsDropShadowEffect) SetColor(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SetColor")
 	C.qute_QGraphicsDropShadowEffect_setColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // EmitOffsetChanged wraps emitting the offsetChanged signal.
@@ -197,6 +210,7 @@ func (this *QGraphicsDropShadowEffect) SetColor(color qtgui.QColor) {
 func (this *QGraphicsDropShadowEffect) EmitOffsetChanged(offset qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.EmitOffsetChanged")
 	C.qute_QGraphicsDropShadowEffect_offsetChanged_1(self, cQPointF(offset))
+	runtime.KeepAlive(this)
 }
 
 // EmitBlurRadiusChanged wraps emitting the blurRadiusChanged signal.
@@ -207,6 +221,7 @@ func (this *QGraphicsDropShadowEffect) EmitOffsetChanged(offset qtcore.QPointF) 
 func (this *QGraphicsDropShadowEffect) EmitBlurRadiusChanged(blurRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.EmitBlurRadiusChanged")
 	C.qute_QGraphicsDropShadowEffect_blurRadiusChanged_1(self, C.double(blurRadius))
+	runtime.KeepAlive(this)
 }
 
 // EmitColorChanged wraps emitting the colorChanged signal.
@@ -217,6 +232,7 @@ func (this *QGraphicsDropShadowEffect) EmitBlurRadiusChanged(blurRadius float64)
 func (this *QGraphicsDropShadowEffect) EmitColorChanged(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.EmitColorChanged")
 	C.qute_QGraphicsDropShadowEffect_colorChanged_1(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // OnOffsetChanged connects f to the offsetChanged signal. The connection ends when the

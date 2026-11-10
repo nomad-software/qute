@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQInputDialog(parent QWidgetLike) *QInputDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQInputDialog")
 	}
 	p := C.qute_QInputDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQInputDialog(parent QWidgetLike) *QInputDialog {
 func (this *QInputDialog) SetInputMode(mode QInputDialogInputMode) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetInputMode")
 	C.qute_QInputDialog_setInputMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // InputMode wraps QInputDialog::inputMode.
@@ -87,6 +90,7 @@ func (this *QInputDialog) SetInputMode(mode QInputDialogInputMode) {
 func (this *QInputDialog) InputMode() QInputDialogInputMode {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.InputMode")
 	r := C.qute_QInputDialog_inputMode(self)
+	runtime.KeepAlive(this)
 	return QInputDialogInputMode(r)
 }
 
@@ -98,6 +102,7 @@ func (this *QInputDialog) InputMode() QInputDialogInputMode {
 func (this *QInputDialog) SetLabelText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetLabelText")
 	C.qute_QInputDialog_setLabelText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // LabelText wraps QInputDialog::labelText.
@@ -108,6 +113,7 @@ func (this *QInputDialog) SetLabelText(text string) {
 func (this *QInputDialog) LabelText() string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.LabelText")
 	r := C.qute_QInputDialog_labelText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -119,6 +125,7 @@ func (this *QInputDialog) LabelText() string {
 func (this *QInputDialog) SetOption(option QInputDialogInputDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetOption")
 	C.qute_QInputDialog_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QInputDialog::testOption.
@@ -129,6 +136,7 @@ func (this *QInputDialog) SetOption(option QInputDialogInputDialogOptions) {
 func (this *QInputDialog) TestOption(option QInputDialogInputDialogOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.TestOption")
 	r := C.qute_QInputDialog_testOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -140,6 +148,7 @@ func (this *QInputDialog) TestOption(option QInputDialogInputDialogOptions) bool
 func (this *QInputDialog) SetOptions(options QInputDialogInputDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetOptions")
 	C.qute_QInputDialog_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Options wraps QInputDialog::options.
@@ -150,6 +159,7 @@ func (this *QInputDialog) SetOptions(options QInputDialogInputDialogOptions) {
 func (this *QInputDialog) Options() QInputDialogInputDialogOptions {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.Options")
 	r := C.qute_QInputDialog_options(self)
+	runtime.KeepAlive(this)
 	return QInputDialogInputDialogOptions(r)
 }
 
@@ -161,6 +171,7 @@ func (this *QInputDialog) Options() QInputDialogInputDialogOptions {
 func (this *QInputDialog) SetTextValue(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetTextValue")
 	C.qute_QInputDialog_setTextValue(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // TextValue wraps QInputDialog::textValue.
@@ -171,6 +182,7 @@ func (this *QInputDialog) SetTextValue(text string) {
 func (this *QInputDialog) TextValue() string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.TextValue")
 	r := C.qute_QInputDialog_textValue(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -182,6 +194,7 @@ func (this *QInputDialog) TextValue() string {
 func (this *QInputDialog) SetTextEchoMode(mode QLineEditEchoMode) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetTextEchoMode")
 	C.qute_QInputDialog_setTextEchoMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // TextEchoMode wraps QInputDialog::textEchoMode.
@@ -192,6 +205,7 @@ func (this *QInputDialog) SetTextEchoMode(mode QLineEditEchoMode) {
 func (this *QInputDialog) TextEchoMode() QLineEditEchoMode {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.TextEchoMode")
 	r := C.qute_QInputDialog_textEchoMode(self)
+	runtime.KeepAlive(this)
 	return QLineEditEchoMode(r)
 }
 
@@ -203,6 +217,7 @@ func (this *QInputDialog) TextEchoMode() QLineEditEchoMode {
 func (this *QInputDialog) SetComboBoxEditable(editable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetComboBoxEditable")
 	C.qute_QInputDialog_setComboBoxEditable(self, C.bool(editable))
+	runtime.KeepAlive(this)
 }
 
 // IsComboBoxEditable wraps QInputDialog::isComboBoxEditable.
@@ -213,6 +228,7 @@ func (this *QInputDialog) SetComboBoxEditable(editable bool) {
 func (this *QInputDialog) IsComboBoxEditable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.IsComboBoxEditable")
 	r := C.qute_QInputDialog_isComboBoxEditable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -225,6 +241,7 @@ func (this *QInputDialog) SetComboBoxItems(items []string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetComboBoxItems")
 	itemsData, itemsLens := quteStrListArg(items)
 	C.qute_QInputDialog_setComboBoxItems(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(itemsData))), (*C.ptrdiff_t)(unsafe.SliceData(itemsLens)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
 }
 
 // ComboBoxItems wraps QInputDialog::comboBoxItems.
@@ -235,6 +252,7 @@ func (this *QInputDialog) SetComboBoxItems(items []string) {
 func (this *QInputDialog) ComboBoxItems() []string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.ComboBoxItems")
 	r := C.qute_QInputDialog_comboBoxItems(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -246,6 +264,7 @@ func (this *QInputDialog) ComboBoxItems() []string {
 func (this *QInputDialog) SetIntValue(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetIntValue")
 	C.qute_QInputDialog_setIntValue(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // IntValue wraps QInputDialog::intValue.
@@ -256,6 +275,7 @@ func (this *QInputDialog) SetIntValue(value int) {
 func (this *QInputDialog) IntValue() int {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.IntValue")
 	r := C.qute_QInputDialog_intValue(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -267,6 +287,7 @@ func (this *QInputDialog) IntValue() int {
 func (this *QInputDialog) SetIntMinimum(min int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetIntMinimum")
 	C.qute_QInputDialog_setIntMinimum(self, C.int(min))
+	runtime.KeepAlive(this)
 }
 
 // IntMinimum wraps QInputDialog::intMinimum.
@@ -277,6 +298,7 @@ func (this *QInputDialog) SetIntMinimum(min int) {
 func (this *QInputDialog) IntMinimum() int {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.IntMinimum")
 	r := C.qute_QInputDialog_intMinimum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -288,6 +310,7 @@ func (this *QInputDialog) IntMinimum() int {
 func (this *QInputDialog) SetIntMaximum(max int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetIntMaximum")
 	C.qute_QInputDialog_setIntMaximum(self, C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // IntMaximum wraps QInputDialog::intMaximum.
@@ -298,6 +321,7 @@ func (this *QInputDialog) SetIntMaximum(max int) {
 func (this *QInputDialog) IntMaximum() int {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.IntMaximum")
 	r := C.qute_QInputDialog_intMaximum(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -309,6 +333,7 @@ func (this *QInputDialog) IntMaximum() int {
 func (this *QInputDialog) SetIntRange(min int, max int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetIntRange")
 	C.qute_QInputDialog_setIntRange(self, C.int(min), C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // SetIntStep wraps QInputDialog::setIntStep.
@@ -319,6 +344,7 @@ func (this *QInputDialog) SetIntRange(min int, max int) {
 func (this *QInputDialog) SetIntStep(step int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetIntStep")
 	C.qute_QInputDialog_setIntStep(self, C.int(step))
+	runtime.KeepAlive(this)
 }
 
 // IntStep wraps QInputDialog::intStep.
@@ -329,6 +355,7 @@ func (this *QInputDialog) SetIntStep(step int) {
 func (this *QInputDialog) IntStep() int {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.IntStep")
 	r := C.qute_QInputDialog_intStep(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -340,6 +367,7 @@ func (this *QInputDialog) IntStep() int {
 func (this *QInputDialog) SetDoubleValue(value float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetDoubleValue")
 	C.qute_QInputDialog_setDoubleValue(self, C.double(value))
+	runtime.KeepAlive(this)
 }
 
 // DoubleValue wraps QInputDialog::doubleValue.
@@ -350,6 +378,7 @@ func (this *QInputDialog) SetDoubleValue(value float64) {
 func (this *QInputDialog) DoubleValue() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.DoubleValue")
 	r := C.qute_QInputDialog_doubleValue(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -361,6 +390,7 @@ func (this *QInputDialog) DoubleValue() float64 {
 func (this *QInputDialog) SetDoubleMinimum(min float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetDoubleMinimum")
 	C.qute_QInputDialog_setDoubleMinimum(self, C.double(min))
+	runtime.KeepAlive(this)
 }
 
 // DoubleMinimum wraps QInputDialog::doubleMinimum.
@@ -371,6 +401,7 @@ func (this *QInputDialog) SetDoubleMinimum(min float64) {
 func (this *QInputDialog) DoubleMinimum() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.DoubleMinimum")
 	r := C.qute_QInputDialog_doubleMinimum(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -382,6 +413,7 @@ func (this *QInputDialog) DoubleMinimum() float64 {
 func (this *QInputDialog) SetDoubleMaximum(max float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetDoubleMaximum")
 	C.qute_QInputDialog_setDoubleMaximum(self, C.double(max))
+	runtime.KeepAlive(this)
 }
 
 // DoubleMaximum wraps QInputDialog::doubleMaximum.
@@ -392,6 +424,7 @@ func (this *QInputDialog) SetDoubleMaximum(max float64) {
 func (this *QInputDialog) DoubleMaximum() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.DoubleMaximum")
 	r := C.qute_QInputDialog_doubleMaximum(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -403,6 +436,7 @@ func (this *QInputDialog) DoubleMaximum() float64 {
 func (this *QInputDialog) SetDoubleRange(min float64, max float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetDoubleRange")
 	C.qute_QInputDialog_setDoubleRange(self, C.double(min), C.double(max))
+	runtime.KeepAlive(this)
 }
 
 // SetDoubleDecimals wraps QInputDialog::setDoubleDecimals.
@@ -413,6 +447,7 @@ func (this *QInputDialog) SetDoubleRange(min float64, max float64) {
 func (this *QInputDialog) SetDoubleDecimals(decimals int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetDoubleDecimals")
 	C.qute_QInputDialog_setDoubleDecimals(self, C.int(decimals))
+	runtime.KeepAlive(this)
 }
 
 // DoubleDecimals wraps QInputDialog::doubleDecimals.
@@ -423,6 +458,7 @@ func (this *QInputDialog) SetDoubleDecimals(decimals int) {
 func (this *QInputDialog) DoubleDecimals() int {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.DoubleDecimals")
 	r := C.qute_QInputDialog_doubleDecimals(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -434,6 +470,7 @@ func (this *QInputDialog) DoubleDecimals() int {
 func (this *QInputDialog) SetOkButtonText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetOkButtonText")
 	C.qute_QInputDialog_setOkButtonText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // OkButtonText wraps QInputDialog::okButtonText.
@@ -444,6 +481,7 @@ func (this *QInputDialog) SetOkButtonText(text string) {
 func (this *QInputDialog) OkButtonText() string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.OkButtonText")
 	r := C.qute_QInputDialog_okButtonText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -455,6 +493,7 @@ func (this *QInputDialog) OkButtonText() string {
 func (this *QInputDialog) SetCancelButtonText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetCancelButtonText")
 	C.qute_QInputDialog_setCancelButtonText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // CancelButtonText wraps QInputDialog::cancelButtonText.
@@ -465,6 +504,7 @@ func (this *QInputDialog) SetCancelButtonText(text string) {
 func (this *QInputDialog) CancelButtonText() string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.CancelButtonText")
 	r := C.qute_QInputDialog_cancelButtonText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -476,6 +516,7 @@ func (this *QInputDialog) CancelButtonText() string {
 func (this *QInputDialog) SetDoubleStep(step float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetDoubleStep")
 	C.qute_QInputDialog_setDoubleStep(self, C.double(step))
+	runtime.KeepAlive(this)
 }
 
 // DoubleStep wraps QInputDialog::doubleStep.
@@ -486,6 +527,7 @@ func (this *QInputDialog) SetDoubleStep(step float64) {
 func (this *QInputDialog) DoubleStep() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.DoubleStep")
 	r := C.qute_QInputDialog_doubleStep(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -497,6 +539,7 @@ func (this *QInputDialog) DoubleStep() float64 {
 func (this *QInputDialog) EmitTextValueChanged(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitTextValueChanged")
 	C.qute_QInputDialog_textValueChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // EmitTextValueSelected wraps emitting the textValueSelected signal.
@@ -507,6 +550,7 @@ func (this *QInputDialog) EmitTextValueChanged(text string) {
 func (this *QInputDialog) EmitTextValueSelected(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitTextValueSelected")
 	C.qute_QInputDialog_textValueSelected_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // EmitIntValueChanged wraps emitting the intValueChanged signal.
@@ -517,6 +561,7 @@ func (this *QInputDialog) EmitTextValueSelected(text string) {
 func (this *QInputDialog) EmitIntValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitIntValueChanged")
 	C.qute_QInputDialog_intValueChanged_1(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // EmitIntValueSelected wraps emitting the intValueSelected signal.
@@ -527,6 +572,7 @@ func (this *QInputDialog) EmitIntValueChanged(value int) {
 func (this *QInputDialog) EmitIntValueSelected(value int) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitIntValueSelected")
 	C.qute_QInputDialog_intValueSelected_1(self, C.int(value))
+	runtime.KeepAlive(this)
 }
 
 // EmitDoubleValueChanged wraps emitting the doubleValueChanged signal.
@@ -537,6 +583,7 @@ func (this *QInputDialog) EmitIntValueSelected(value int) {
 func (this *QInputDialog) EmitDoubleValueChanged(value float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitDoubleValueChanged")
 	C.qute_QInputDialog_doubleValueChanged_1(self, C.double(value))
+	runtime.KeepAlive(this)
 }
 
 // EmitDoubleValueSelected wraps emitting the doubleValueSelected signal.
@@ -547,6 +594,7 @@ func (this *QInputDialog) EmitDoubleValueChanged(value float64) {
 func (this *QInputDialog) EmitDoubleValueSelected(value float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitDoubleValueSelected")
 	C.qute_QInputDialog_doubleValueSelected_1(self, C.double(value))
+	runtime.KeepAlive(this)
 }
 
 // QInputDialogGetText wraps QInputDialog::getText.
@@ -561,6 +609,7 @@ func QInputDialogGetText(parent QWidgetLike, title string, label string) string 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetText")
 	}
 	r := C.qute_QInputDialog_getText(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
+	runtime.KeepAlive(parent)
 	return quteStr(r)
 }
 
@@ -576,6 +625,7 @@ func QInputDialogGetMultiLineText(parent QWidgetLike, title string, label string
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetMultiLineText")
 	}
 	r := C.qute_QInputDialog_getMultiLineText(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
+	runtime.KeepAlive(parent)
 	return quteStr(r)
 }
 
@@ -592,6 +642,7 @@ func QInputDialogGetItem(parent QWidgetLike, title string, label string, items [
 	}
 	itemsData, itemsLens := quteStrListArg(items)
 	r := C.qute_QInputDialog_getItem(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)), (*C.char)(unsafe.Pointer(unsafe.SliceData(itemsData))), (*C.ptrdiff_t)(unsafe.SliceData(itemsLens)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(parent)
 	return quteStr(r)
 }
 
@@ -607,6 +658,7 @@ func QInputDialogGetInt(parent QWidgetLike, title string, label string) int {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetInt")
 	}
 	r := C.qute_QInputDialog_getInt(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
+	runtime.KeepAlive(parent)
 	return int(r)
 }
 
@@ -622,6 +674,7 @@ func QInputDialogGetDouble(parent QWidgetLike, title string, label string) float
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetDouble")
 	}
 	r := C.qute_QInputDialog_getDouble(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
+	runtime.KeepAlive(parent)
 	return float64(r)
 }
 

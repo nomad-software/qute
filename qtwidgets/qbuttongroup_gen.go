@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQButtonGroup(parent qtcore.QObjectLike) *QButtonGroup {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQButtonGroup")
 	}
 	p := C.qute_QButtonGroup_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQButtonGroup(parent qtcore.QObjectLike) *QButtonGroup {
 func (this *QButtonGroup) SetExclusive(exclusive bool) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.SetExclusive")
 	C.qute_QButtonGroup_setExclusive(self, C.bool(exclusive))
+	runtime.KeepAlive(this)
 }
 
 // Exclusive wraps QButtonGroup::exclusive.
@@ -87,6 +90,7 @@ func (this *QButtonGroup) SetExclusive(exclusive bool) {
 func (this *QButtonGroup) Exclusive() bool {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.Exclusive")
 	r := C.qute_QButtonGroup_exclusive(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -104,6 +108,8 @@ func (this *QButtonGroup) AddButton(abstractButton QAbstractButtonLike) {
 		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.AddButton")
 	}
 	C.qute_QButtonGroup_addButton(self, abstractButtonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // RemoveButton wraps QButtonGroup::removeButton.
@@ -118,6 +124,8 @@ func (this *QButtonGroup) RemoveButton(abstractButton QAbstractButtonLike) {
 		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.RemoveButton")
 	}
 	C.qute_QButtonGroup_removeButton(self, abstractButtonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // Buttons wraps QButtonGroup::buttons.
@@ -130,6 +138,7 @@ func (this *QButtonGroup) RemoveButton(abstractButton QAbstractButtonLike) {
 func (this *QButtonGroup) Buttons() []*QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.Buttons")
 	r := C.qute_QButtonGroup_buttons(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QAbstractButton {
 		return rt.View[QAbstractButton](rt.WrapClass(e, "QAbstractButton", rt.KeepOrBorrow), e)
 	})
@@ -145,6 +154,7 @@ func (this *QButtonGroup) Buttons() []*QAbstractButton {
 func (this *QButtonGroup) CheckedButton() *QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.CheckedButton")
 	r := C.qute_QButtonGroup_checkedButton(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractButton](rt.WrapClass(r, "QAbstractButton", rt.KeepOrBorrow), r)
 }
 
@@ -158,6 +168,7 @@ func (this *QButtonGroup) CheckedButton() *QAbstractButton {
 func (this *QButtonGroup) Button(idArg int) *QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.Button")
 	r := C.qute_QButtonGroup_button(self, C.int(idArg))
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractButton](rt.WrapClass(r, "QAbstractButton", rt.KeepOrBorrow), r)
 }
 
@@ -173,6 +184,8 @@ func (this *QButtonGroup) SetId(button QAbstractButtonLike, idArg int) {
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QButtonGroup.SetId")
 	}
 	C.qute_QButtonGroup_setId(self, buttonPtr, C.int(idArg))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 }
 
 // Id wraps QButtonGroup::id.
@@ -187,6 +200,8 @@ func (this *QButtonGroup) Id(button QAbstractButtonLike) int {
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QButtonGroup.Id")
 	}
 	r := C.qute_QButtonGroup_id(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	return int(r)
 }
 
@@ -198,6 +213,7 @@ func (this *QButtonGroup) Id(button QAbstractButtonLike) int {
 func (this *QButtonGroup) CheckedId() int {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.CheckedId")
 	r := C.qute_QButtonGroup_checkedId(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -213,6 +229,8 @@ func (this *QButtonGroup) EmitButtonClicked(abstractButton QAbstractButtonLike) 
 		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.EmitButtonClicked")
 	}
 	C.qute_QButtonGroup_buttonClicked_1(self, abstractButtonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // EmitButtonPressed wraps emitting the buttonPressed signal.
@@ -227,6 +245,8 @@ func (this *QButtonGroup) EmitButtonPressed(abstractButton QAbstractButtonLike) 
 		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.EmitButtonPressed")
 	}
 	C.qute_QButtonGroup_buttonPressed_1(self, abstractButtonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // EmitButtonReleased wraps emitting the buttonReleased signal.
@@ -241,6 +261,8 @@ func (this *QButtonGroup) EmitButtonReleased(abstractButton QAbstractButtonLike)
 		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.EmitButtonReleased")
 	}
 	C.qute_QButtonGroup_buttonReleased_1(self, abstractButtonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // EmitButtonToggled wraps emitting the buttonToggled signal.
@@ -255,6 +277,8 @@ func (this *QButtonGroup) EmitButtonToggled(abstractButton QAbstractButtonLike, 
 		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.EmitButtonToggled")
 	}
 	C.qute_QButtonGroup_buttonToggled_1(self, abstractButtonPtr, C.bool(arg1))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // EmitIdClicked wraps emitting the idClicked signal.
@@ -265,6 +289,7 @@ func (this *QButtonGroup) EmitButtonToggled(abstractButton QAbstractButtonLike, 
 func (this *QButtonGroup) EmitIdClicked(arg0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.EmitIdClicked")
 	C.qute_QButtonGroup_idClicked_1(self, C.int(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitIdPressed wraps emitting the idPressed signal.
@@ -275,6 +300,7 @@ func (this *QButtonGroup) EmitIdClicked(arg0 int) {
 func (this *QButtonGroup) EmitIdPressed(arg0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.EmitIdPressed")
 	C.qute_QButtonGroup_idPressed_1(self, C.int(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitIdReleased wraps emitting the idReleased signal.
@@ -285,6 +311,7 @@ func (this *QButtonGroup) EmitIdPressed(arg0 int) {
 func (this *QButtonGroup) EmitIdReleased(arg0 int) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.EmitIdReleased")
 	C.qute_QButtonGroup_idReleased_1(self, C.int(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitIdToggled wraps emitting the idToggled signal.
@@ -295,6 +322,7 @@ func (this *QButtonGroup) EmitIdReleased(arg0 int) {
 func (this *QButtonGroup) EmitIdToggled(arg0 int, arg1 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.EmitIdToggled")
 	C.qute_QButtonGroup_idToggled_1(self, C.int(arg0), C.bool(arg1))
+	runtime.KeepAlive(this)
 }
 
 // OnButtonClicked connects f to the buttonClicked signal. The connection ends when the

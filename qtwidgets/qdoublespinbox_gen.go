@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQDoubleSpinBox(parent QWidgetLike) *QDoubleSpinBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDoubleSpinBox")
 	}
 	p := C.qute_QDoubleSpinBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQDoubleSpinBox(parent QWidgetLike) *QDoubleSpinBox {
 func (this *QDoubleSpinBox) Value() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Value")
 	r := C.qute_QDoubleSpinBox_value(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QDoubleSpinBox) Value() float64 {
 func (this *QDoubleSpinBox) Prefix() string {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Prefix")
 	r := C.qute_QDoubleSpinBox_prefix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QDoubleSpinBox) Prefix() string {
 func (this *QDoubleSpinBox) SetPrefix(prefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetPrefix")
 	C.qute_QDoubleSpinBox_setPrefix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)))
+	runtime.KeepAlive(this)
 }
 
 // Suffix wraps QDoubleSpinBox::suffix.
@@ -109,6 +114,7 @@ func (this *QDoubleSpinBox) SetPrefix(prefix string) {
 func (this *QDoubleSpinBox) Suffix() string {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Suffix")
 	r := C.qute_QDoubleSpinBox_suffix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -120,6 +126,7 @@ func (this *QDoubleSpinBox) Suffix() string {
 func (this *QDoubleSpinBox) SetSuffix(suffix string) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetSuffix")
 	C.qute_QDoubleSpinBox_setSuffix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(suffix))), C.ptrdiff_t(len(suffix)))
+	runtime.KeepAlive(this)
 }
 
 // CleanText wraps QDoubleSpinBox::cleanText.
@@ -130,6 +137,7 @@ func (this *QDoubleSpinBox) SetSuffix(suffix string) {
 func (this *QDoubleSpinBox) CleanText() string {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.CleanText")
 	r := C.qute_QDoubleSpinBox_cleanText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -141,6 +149,7 @@ func (this *QDoubleSpinBox) CleanText() string {
 func (this *QDoubleSpinBox) SingleStep() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SingleStep")
 	r := C.qute_QDoubleSpinBox_singleStep(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -152,6 +161,7 @@ func (this *QDoubleSpinBox) SingleStep() float64 {
 func (this *QDoubleSpinBox) SetSingleStep(val float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetSingleStep")
 	C.qute_QDoubleSpinBox_setSingleStep(self, C.double(val))
+	runtime.KeepAlive(this)
 }
 
 // Minimum wraps QDoubleSpinBox::minimum.
@@ -162,6 +172,7 @@ func (this *QDoubleSpinBox) SetSingleStep(val float64) {
 func (this *QDoubleSpinBox) Minimum() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Minimum")
 	r := C.qute_QDoubleSpinBox_minimum(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -173,6 +184,7 @@ func (this *QDoubleSpinBox) Minimum() float64 {
 func (this *QDoubleSpinBox) SetMinimum(min float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetMinimum")
 	C.qute_QDoubleSpinBox_setMinimum(self, C.double(min))
+	runtime.KeepAlive(this)
 }
 
 // Maximum wraps QDoubleSpinBox::maximum.
@@ -183,6 +195,7 @@ func (this *QDoubleSpinBox) SetMinimum(min float64) {
 func (this *QDoubleSpinBox) Maximum() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Maximum")
 	r := C.qute_QDoubleSpinBox_maximum(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -194,6 +207,7 @@ func (this *QDoubleSpinBox) Maximum() float64 {
 func (this *QDoubleSpinBox) SetMaximum(max float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetMaximum")
 	C.qute_QDoubleSpinBox_setMaximum(self, C.double(max))
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QDoubleSpinBox::setRange.
@@ -204,6 +218,7 @@ func (this *QDoubleSpinBox) SetMaximum(max float64) {
 func (this *QDoubleSpinBox) SetRange(min float64, max float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetRange")
 	C.qute_QDoubleSpinBox_setRange(self, C.double(min), C.double(max))
+	runtime.KeepAlive(this)
 }
 
 // StepType wraps QDoubleSpinBox::stepType.
@@ -214,6 +229,7 @@ func (this *QDoubleSpinBox) SetRange(min float64, max float64) {
 func (this *QDoubleSpinBox) StepType() QAbstractSpinBoxStepType {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.StepType")
 	r := C.qute_QDoubleSpinBox_stepType(self)
+	runtime.KeepAlive(this)
 	return QAbstractSpinBoxStepType(r)
 }
 
@@ -225,6 +241,7 @@ func (this *QDoubleSpinBox) StepType() QAbstractSpinBoxStepType {
 func (this *QDoubleSpinBox) SetStepType(stepType QAbstractSpinBoxStepType) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetStepType")
 	C.qute_QDoubleSpinBox_setStepType(self, C.int64_t(stepType))
+	runtime.KeepAlive(this)
 }
 
 // Decimals wraps QDoubleSpinBox::decimals.
@@ -235,6 +252,7 @@ func (this *QDoubleSpinBox) SetStepType(stepType QAbstractSpinBoxStepType) {
 func (this *QDoubleSpinBox) Decimals() int {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Decimals")
 	r := C.qute_QDoubleSpinBox_decimals(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -246,6 +264,7 @@ func (this *QDoubleSpinBox) Decimals() int {
 func (this *QDoubleSpinBox) SetDecimals(prec int) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetDecimals")
 	C.qute_QDoubleSpinBox_setDecimals(self, C.int(prec))
+	runtime.KeepAlive(this)
 }
 
 // ValueFromText wraps QDoubleSpinBox::valueFromText.
@@ -256,6 +275,7 @@ func (this *QDoubleSpinBox) SetDecimals(prec int) {
 func (this *QDoubleSpinBox) ValueFromText(text string) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.ValueFromText")
 	r := C.qute_QDoubleSpinBox_valueFromText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -267,6 +287,7 @@ func (this *QDoubleSpinBox) ValueFromText(text string) float64 {
 func (this *QDoubleSpinBox) TextFromValue(val float64) string {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.TextFromValue")
 	r := C.qute_QDoubleSpinBox_textFromValue(self, C.double(val))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -278,6 +299,7 @@ func (this *QDoubleSpinBox) TextFromValue(val float64) string {
 func (this *QDoubleSpinBox) SetValue(val float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetValue")
 	C.qute_QDoubleSpinBox_setValue(self, C.double(val))
+	runtime.KeepAlive(this)
 }
 
 // EmitValueChanged wraps emitting the valueChanged signal.
@@ -288,6 +310,7 @@ func (this *QDoubleSpinBox) SetValue(val float64) {
 func (this *QDoubleSpinBox) EmitValueChanged(arg0 float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.EmitValueChanged")
 	C.qute_QDoubleSpinBox_valueChanged_1(self, C.double(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitTextChanged wraps emitting the textChanged signal.
@@ -298,6 +321,7 @@ func (this *QDoubleSpinBox) EmitValueChanged(arg0 float64) {
 func (this *QDoubleSpinBox) EmitTextChanged(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.EmitTextChanged")
 	C.qute_QDoubleSpinBox_textChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // OnValueChanged connects f to the valueChanged signal. The connection ends when the

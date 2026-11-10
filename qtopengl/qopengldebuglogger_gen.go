@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQOpenGLDebugLogger(parent qtcore.QObjectLike) *QOpenGLDebugLogger {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLDebugLogger")
 	}
 	p := C.qute_QOpenGLDebugLogger_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQOpenGLDebugLogger(parent qtcore.QObjectLike) *QOpenGLDebugLogger {
 func (this *QOpenGLDebugLogger) Initialize() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.Initialize")
 	r := C.qute_QOpenGLDebugLogger_initialize(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QOpenGLDebugLogger) Initialize() bool {
 func (this *QOpenGLDebugLogger) IsLogging() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.IsLogging")
 	r := C.qute_QOpenGLDebugLogger_isLogging(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QOpenGLDebugLogger) IsLogging() bool {
 func (this *QOpenGLDebugLogger) LoggingMode() QOpenGLDebugLoggerLoggingMode {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.LoggingMode")
 	r := C.qute_QOpenGLDebugLogger_loggingMode(self)
+	runtime.KeepAlive(this)
 	return QOpenGLDebugLoggerLoggingMode(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QOpenGLDebugLogger) LoggingMode() QOpenGLDebugLoggerLoggingMode {
 func (this *QOpenGLDebugLogger) MaximumMessageLength() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.MaximumMessageLength")
 	r := C.qute_QOpenGLDebugLogger_maximumMessageLength(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -121,6 +127,7 @@ func (this *QOpenGLDebugLogger) MaximumMessageLength() int64 {
 func (this *QOpenGLDebugLogger) PushGroup(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.PushGroup")
 	C.qute_QOpenGLDebugLogger_pushGroup(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // PopGroup wraps QOpenGLDebugLogger::popGroup.
@@ -131,6 +138,7 @@ func (this *QOpenGLDebugLogger) PushGroup(name string) {
 func (this *QOpenGLDebugLogger) PopGroup() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.PopGroup")
 	C.qute_QOpenGLDebugLogger_popGroup(self)
+	runtime.KeepAlive(this)
 }
 
 // EnableMessages wraps QOpenGLDebugLogger::enableMessages.
@@ -141,6 +149,7 @@ func (this *QOpenGLDebugLogger) PopGroup() {
 func (this *QOpenGLDebugLogger) EnableMessages() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.EnableMessages")
 	C.qute_QOpenGLDebugLogger_enableMessages(self)
+	runtime.KeepAlive(this)
 }
 
 // EnableMessagesWithIdss wraps QOpenGLDebugLogger::enableMessages.
@@ -155,6 +164,7 @@ func (this *QOpenGLDebugLogger) EnableMessagesWithIdss(ids []uint) {
 		idsC[i] = C.uint(ids[i])
 	}
 	C.qute_QOpenGLDebugLogger_enableMessages_1(self, unsafe.Pointer(unsafe.SliceData(idsC)), C.ptrdiff_t(len(ids)))
+	runtime.KeepAlive(this)
 }
 
 // DisableMessages wraps QOpenGLDebugLogger::disableMessages.
@@ -165,6 +175,7 @@ func (this *QOpenGLDebugLogger) EnableMessagesWithIdss(ids []uint) {
 func (this *QOpenGLDebugLogger) DisableMessages() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.DisableMessages")
 	C.qute_QOpenGLDebugLogger_disableMessages(self)
+	runtime.KeepAlive(this)
 }
 
 // DisableMessagesWithIdss wraps QOpenGLDebugLogger::disableMessages.
@@ -179,6 +190,7 @@ func (this *QOpenGLDebugLogger) DisableMessagesWithIdss(ids []uint) {
 		idsC[i] = C.uint(ids[i])
 	}
 	C.qute_QOpenGLDebugLogger_disableMessages_1(self, unsafe.Pointer(unsafe.SliceData(idsC)), C.ptrdiff_t(len(ids)))
+	runtime.KeepAlive(this)
 }
 
 // LoggedMessages wraps QOpenGLDebugLogger::loggedMessages.
@@ -189,6 +201,7 @@ func (this *QOpenGLDebugLogger) DisableMessagesWithIdss(ids []uint) {
 func (this *QOpenGLDebugLogger) LoggedMessages() []*QOpenGLDebugMessage {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.LoggedMessages")
 	r := C.qute_QOpenGLDebugLogger_loggedMessages(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QOpenGLDebugMessage {
 		return rt.View[QOpenGLDebugMessage](rt.WrapClass(e, "QOpenGLDebugMessage", rt.TakeOwned), e)
 	})
@@ -202,6 +215,8 @@ func (this *QOpenGLDebugLogger) LoggedMessages() []*QOpenGLDebugMessage {
 func (this *QOpenGLDebugLogger) LogMessage(debugMessage *QOpenGLDebugMessage) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.LogMessage")
 	C.qute_QOpenGLDebugLogger_logMessage(self, rt.UseArg(unsafe.Pointer(debugMessage), "QOpenGLDebugLogger.LogMessage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(debugMessage)
 }
 
 // StartLogging wraps QOpenGLDebugLogger::startLogging.
@@ -212,6 +227,7 @@ func (this *QOpenGLDebugLogger) LogMessage(debugMessage *QOpenGLDebugMessage) {
 func (this *QOpenGLDebugLogger) StartLogging() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.StartLogging")
 	C.qute_QOpenGLDebugLogger_startLogging(self)
+	runtime.KeepAlive(this)
 }
 
 // StopLogging wraps QOpenGLDebugLogger::stopLogging.
@@ -222,6 +238,7 @@ func (this *QOpenGLDebugLogger) StartLogging() {
 func (this *QOpenGLDebugLogger) StopLogging() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.StopLogging")
 	C.qute_QOpenGLDebugLogger_stopLogging(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitMessageLogged wraps emitting the messageLogged signal.
@@ -232,6 +249,8 @@ func (this *QOpenGLDebugLogger) StopLogging() {
 func (this *QOpenGLDebugLogger) EmitMessageLogged(debugMessage *QOpenGLDebugMessage) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.EmitMessageLogged")
 	C.qute_QOpenGLDebugLogger_messageLogged_1(self, rt.UseArg(unsafe.Pointer(debugMessage), "QOpenGLDebugLogger.EmitMessageLogged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(debugMessage)
 }
 
 // OnMessageLogged connects f to the messageLogged signal. The connection ends when the

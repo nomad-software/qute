@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -116,6 +117,7 @@ func NewQTreeWidgetItemIn(treeview QTreeWidgetLike) *QTreeWidgetItem {
 		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemIn")
 	}
 	p := C.qute_QTreeWidgetItem_new_2(treeviewPtr)
+	runtime.KeepAlive(treeview)
 	mode := rt.NewOwned
 	if treeviewPtr != nil {
 		mode = rt.NewParented
@@ -139,6 +141,7 @@ func NewQTreeWidgetItemInWithStrings(treeview QTreeWidgetLike, strings []string)
 	}
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_3(treeviewPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
+	runtime.KeepAlive(treeview)
 	mode := rt.NewOwned
 	if treeviewPtr != nil {
 		mode = rt.NewParented
@@ -165,6 +168,8 @@ func NewQTreeWidgetItemInAfter(treeview QTreeWidgetLike, after QTreeWidgetItemLi
 		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemInAfter")
 	}
 	p := C.qute_QTreeWidgetItem_new_4(treeviewPtr, afterPtr)
+	runtime.KeepAlive(treeview)
+	runtime.KeepAlive(after)
 	mode := rt.NewOwned
 	if treeviewPtr != nil {
 		mode = rt.NewParented
@@ -187,6 +192,7 @@ func NewQTreeWidgetItemUnder(parent QTreeWidgetItemLike) *QTreeWidgetItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnder")
 	}
 	p := C.qute_QTreeWidgetItem_new_5(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -210,6 +216,7 @@ func NewQTreeWidgetItemUnderWithStrings(parent QTreeWidgetItemLike, strings []st
 	}
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_6(parentPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -236,6 +243,8 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderAfter")
 	}
 	p := C.qute_QTreeWidgetItem_new_7(parentPtr, afterPtr)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(after)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -254,6 +263,7 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 func (this *QTreeWidgetItem) Clone() *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Clone")
 	r := C.qute_QTreeWidgetItem_clone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.TakeOwned), r)
 }
 
@@ -267,6 +277,7 @@ func (this *QTreeWidgetItem) Clone() *QTreeWidgetItem {
 func (this *QTreeWidgetItem) TreeWidget() *QTreeWidget {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.TreeWidget")
 	r := C.qute_QTreeWidgetItem_treeWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTreeWidget](rt.WrapClass(r, "QTreeWidget", rt.KeepOrBorrow), r)
 }
 
@@ -278,6 +289,7 @@ func (this *QTreeWidgetItem) TreeWidget() *QTreeWidget {
 func (this *QTreeWidgetItem) SetSelected(selectArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetSelected")
 	C.qute_QTreeWidgetItem_setSelected(self, C.bool(selectArg))
+	runtime.KeepAlive(this)
 }
 
 // IsSelected wraps QTreeWidgetItem::isSelected.
@@ -288,6 +300,7 @@ func (this *QTreeWidgetItem) SetSelected(selectArg bool) {
 func (this *QTreeWidgetItem) IsSelected() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.IsSelected")
 	r := C.qute_QTreeWidgetItem_isSelected(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -299,6 +312,7 @@ func (this *QTreeWidgetItem) IsSelected() bool {
 func (this *QTreeWidgetItem) SetHidden(hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetHidden")
 	C.qute_QTreeWidgetItem_setHidden(self, C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // IsHidden wraps QTreeWidgetItem::isHidden.
@@ -309,6 +323,7 @@ func (this *QTreeWidgetItem) SetHidden(hide bool) {
 func (this *QTreeWidgetItem) IsHidden() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.IsHidden")
 	r := C.qute_QTreeWidgetItem_isHidden(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -320,6 +335,7 @@ func (this *QTreeWidgetItem) IsHidden() bool {
 func (this *QTreeWidgetItem) SetExpanded(expand bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetExpanded")
 	C.qute_QTreeWidgetItem_setExpanded(self, C.bool(expand))
+	runtime.KeepAlive(this)
 }
 
 // IsExpanded wraps QTreeWidgetItem::isExpanded.
@@ -330,6 +346,7 @@ func (this *QTreeWidgetItem) SetExpanded(expand bool) {
 func (this *QTreeWidgetItem) IsExpanded() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.IsExpanded")
 	r := C.qute_QTreeWidgetItem_isExpanded(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -341,6 +358,7 @@ func (this *QTreeWidgetItem) IsExpanded() bool {
 func (this *QTreeWidgetItem) SetFirstColumnSpanned(span bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetFirstColumnSpanned")
 	C.qute_QTreeWidgetItem_setFirstColumnSpanned(self, C.bool(span))
+	runtime.KeepAlive(this)
 }
 
 // IsFirstColumnSpanned wraps QTreeWidgetItem::isFirstColumnSpanned.
@@ -351,6 +369,7 @@ func (this *QTreeWidgetItem) SetFirstColumnSpanned(span bool) {
 func (this *QTreeWidgetItem) IsFirstColumnSpanned() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.IsFirstColumnSpanned")
 	r := C.qute_QTreeWidgetItem_isFirstColumnSpanned(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -362,6 +381,7 @@ func (this *QTreeWidgetItem) IsFirstColumnSpanned() bool {
 func (this *QTreeWidgetItem) SetDisabled(disabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetDisabled")
 	C.qute_QTreeWidgetItem_setDisabled(self, C.bool(disabled))
+	runtime.KeepAlive(this)
 }
 
 // IsDisabled wraps QTreeWidgetItem::isDisabled.
@@ -372,6 +392,7 @@ func (this *QTreeWidgetItem) SetDisabled(disabled bool) {
 func (this *QTreeWidgetItem) IsDisabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.IsDisabled")
 	r := C.qute_QTreeWidgetItem_isDisabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -383,6 +404,7 @@ func (this *QTreeWidgetItem) IsDisabled() bool {
 func (this *QTreeWidgetItem) SetChildIndicatorPolicy(policy QTreeWidgetItemChildIndicatorPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetChildIndicatorPolicy")
 	C.qute_QTreeWidgetItem_setChildIndicatorPolicy(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // ChildIndicatorPolicy wraps QTreeWidgetItem::childIndicatorPolicy.
@@ -393,6 +415,7 @@ func (this *QTreeWidgetItem) SetChildIndicatorPolicy(policy QTreeWidgetItemChild
 func (this *QTreeWidgetItem) ChildIndicatorPolicy() QTreeWidgetItemChildIndicatorPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.ChildIndicatorPolicy")
 	r := C.qute_QTreeWidgetItem_childIndicatorPolicy(self)
+	runtime.KeepAlive(this)
 	return QTreeWidgetItemChildIndicatorPolicy(r)
 }
 
@@ -404,6 +427,7 @@ func (this *QTreeWidgetItem) ChildIndicatorPolicy() QTreeWidgetItemChildIndicato
 func (this *QTreeWidgetItem) Flags() qtcore.ItemFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Flags")
 	r := C.qute_QTreeWidgetItem_flags(self)
+	runtime.KeepAlive(this)
 	return qtcore.ItemFlags(r)
 }
 
@@ -415,6 +439,7 @@ func (this *QTreeWidgetItem) Flags() qtcore.ItemFlags {
 func (this *QTreeWidgetItem) SetFlags(flags qtcore.ItemFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetFlags")
 	C.qute_QTreeWidgetItem_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // Text wraps QTreeWidgetItem::text.
@@ -425,6 +450,7 @@ func (this *QTreeWidgetItem) SetFlags(flags qtcore.ItemFlags) {
 func (this *QTreeWidgetItem) Text(column int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Text")
 	r := C.qute_QTreeWidgetItem_text(self, C.int(column))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -436,6 +462,7 @@ func (this *QTreeWidgetItem) Text(column int) string {
 func (this *QTreeWidgetItem) SetText(column int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetText")
 	C.qute_QTreeWidgetItem_setText(self, C.int(column), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps QTreeWidgetItem::icon.
@@ -448,6 +475,7 @@ func (this *QTreeWidgetItem) SetText(column int, text string) {
 func (this *QTreeWidgetItem) Icon(column int) *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Icon")
 	r := C.qute_QTreeWidgetItem_icon(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -459,6 +487,8 @@ func (this *QTreeWidgetItem) Icon(column int) *qtgui.QIcon {
 func (this *QTreeWidgetItem) SetIcon(column int, icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetIcon")
 	C.qute_QTreeWidgetItem_setIcon(self, C.int(column), rt.UseArg(unsafe.Pointer(icon), "QTreeWidgetItem.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // StatusTip wraps QTreeWidgetItem::statusTip.
@@ -469,6 +499,7 @@ func (this *QTreeWidgetItem) SetIcon(column int, icon *qtgui.QIcon) {
 func (this *QTreeWidgetItem) StatusTip(column int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.StatusTip")
 	r := C.qute_QTreeWidgetItem_statusTip(self, C.int(column))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -480,6 +511,7 @@ func (this *QTreeWidgetItem) StatusTip(column int) string {
 func (this *QTreeWidgetItem) SetStatusTip(column int, statusTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetStatusTip")
 	C.qute_QTreeWidgetItem_setStatusTip(self, C.int(column), (*C.char)(unsafe.Pointer(unsafe.StringData(statusTip))), C.ptrdiff_t(len(statusTip)))
+	runtime.KeepAlive(this)
 }
 
 // ToolTip wraps QTreeWidgetItem::toolTip.
@@ -490,6 +522,7 @@ func (this *QTreeWidgetItem) SetStatusTip(column int, statusTip string) {
 func (this *QTreeWidgetItem) ToolTip(column int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.ToolTip")
 	r := C.qute_QTreeWidgetItem_toolTip(self, C.int(column))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -501,6 +534,7 @@ func (this *QTreeWidgetItem) ToolTip(column int) string {
 func (this *QTreeWidgetItem) SetToolTip(column int, toolTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetToolTip")
 	C.qute_QTreeWidgetItem_setToolTip(self, C.int(column), (*C.char)(unsafe.Pointer(unsafe.StringData(toolTip))), C.ptrdiff_t(len(toolTip)))
+	runtime.KeepAlive(this)
 }
 
 // WhatsThis wraps QTreeWidgetItem::whatsThis.
@@ -511,6 +545,7 @@ func (this *QTreeWidgetItem) SetToolTip(column int, toolTip string) {
 func (this *QTreeWidgetItem) WhatsThis(column int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.WhatsThis")
 	r := C.qute_QTreeWidgetItem_whatsThis(self, C.int(column))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -522,6 +557,7 @@ func (this *QTreeWidgetItem) WhatsThis(column int) string {
 func (this *QTreeWidgetItem) SetWhatsThis(column int, whatsThis string) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetWhatsThis")
 	C.qute_QTreeWidgetItem_setWhatsThis(self, C.int(column), (*C.char)(unsafe.Pointer(unsafe.StringData(whatsThis))), C.ptrdiff_t(len(whatsThis)))
+	runtime.KeepAlive(this)
 }
 
 // Font wraps QTreeWidgetItem::font.
@@ -534,6 +570,7 @@ func (this *QTreeWidgetItem) SetWhatsThis(column int, whatsThis string) {
 func (this *QTreeWidgetItem) Font(column int) *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Font")
 	r := C.qute_QTreeWidgetItem_font(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -545,6 +582,8 @@ func (this *QTreeWidgetItem) Font(column int) *qtgui.QFont {
 func (this *QTreeWidgetItem) SetFont(column int, font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetFont")
 	C.qute_QTreeWidgetItem_setFont(self, C.int(column), rt.UseArg(unsafe.Pointer(font), "QTreeWidgetItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // TextAlignment wraps QTreeWidgetItem::textAlignment.
@@ -555,6 +594,7 @@ func (this *QTreeWidgetItem) SetFont(column int, font *qtgui.QFont) {
 func (this *QTreeWidgetItem) TextAlignment(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.TextAlignment")
 	r := C.qute_QTreeWidgetItem_textAlignment(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -566,6 +606,7 @@ func (this *QTreeWidgetItem) TextAlignment(column int) int {
 func (this *QTreeWidgetItem) SetTextAlignment(column int, alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetTextAlignment")
 	C.qute_QTreeWidgetItem_setTextAlignment(self, C.int(column), C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // Background wraps QTreeWidgetItem::background.
@@ -578,6 +619,7 @@ func (this *QTreeWidgetItem) SetTextAlignment(column int, alignment qtcore.Align
 func (this *QTreeWidgetItem) Background(column int) *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Background")
 	r := C.qute_QTreeWidgetItem_background(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -589,6 +631,8 @@ func (this *QTreeWidgetItem) Background(column int) *qtgui.QBrush {
 func (this *QTreeWidgetItem) SetBackground(column int, brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetBackground")
 	C.qute_QTreeWidgetItem_setBackground(self, C.int(column), rt.UseArg(unsafe.Pointer(brush), "QTreeWidgetItem.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Foreground wraps QTreeWidgetItem::foreground.
@@ -601,6 +645,7 @@ func (this *QTreeWidgetItem) SetBackground(column int, brush *qtgui.QBrush) {
 func (this *QTreeWidgetItem) Foreground(column int) *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Foreground")
 	r := C.qute_QTreeWidgetItem_foreground(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -612,6 +657,8 @@ func (this *QTreeWidgetItem) Foreground(column int) *qtgui.QBrush {
 func (this *QTreeWidgetItem) SetForeground(column int, brush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetForeground")
 	C.qute_QTreeWidgetItem_setForeground(self, C.int(column), rt.UseArg(unsafe.Pointer(brush), "QTreeWidgetItem.SetForeground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // CheckState wraps QTreeWidgetItem::checkState.
@@ -622,6 +669,7 @@ func (this *QTreeWidgetItem) SetForeground(column int, brush *qtgui.QBrush) {
 func (this *QTreeWidgetItem) CheckState(column int) qtcore.CheckState {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.CheckState")
 	r := C.qute_QTreeWidgetItem_checkState(self, C.int(column))
+	runtime.KeepAlive(this)
 	return qtcore.CheckState(r)
 }
 
@@ -633,6 +681,7 @@ func (this *QTreeWidgetItem) CheckState(column int) qtcore.CheckState {
 func (this *QTreeWidgetItem) SetCheckState(column int, state qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetCheckState")
 	C.qute_QTreeWidgetItem_setCheckState(self, C.int(column), C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // SizeHint wraps QTreeWidgetItem::sizeHint.
@@ -643,6 +692,7 @@ func (this *QTreeWidgetItem) SetCheckState(column int, state qtcore.CheckState) 
 func (this *QTreeWidgetItem) SizeHint(column int) qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SizeHint")
 	r := C.qute_QTreeWidgetItem_sizeHint(self, C.int(column))
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -654,6 +704,7 @@ func (this *QTreeWidgetItem) SizeHint(column int) qtcore.QSize {
 func (this *QTreeWidgetItem) SetSizeHint(column int, size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetSizeHint")
 	C.qute_QTreeWidgetItem_setSizeHint(self, C.int(column), cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // Data wraps QTreeWidgetItem::data.
@@ -666,6 +717,7 @@ func (this *QTreeWidgetItem) SetSizeHint(column int, size qtcore.QSize) {
 func (this *QTreeWidgetItem) Data(column int, role int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Data")
 	r := C.qute_QTreeWidgetItem_data(self, C.int(column), C.int(role))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -677,6 +729,8 @@ func (this *QTreeWidgetItem) Data(column int, role int) *qtcore.QVariant {
 func (this *QTreeWidgetItem) SetData(column int, role int, value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SetData")
 	C.qute_QTreeWidgetItem_setData(self, C.int(column), C.int(role), rt.UseArg(unsafe.Pointer(value), "QTreeWidgetItem.SetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Read wraps QTreeWidgetItem::read.
@@ -691,6 +745,8 @@ func (this *QTreeWidgetItem) Read(in qtcore.QDataStreamLike) {
 		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QTreeWidgetItem.Read")
 	}
 	C.qute_QTreeWidgetItem_read(self, inPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(in)
 }
 
 // Write wraps QTreeWidgetItem::write.
@@ -705,6 +761,8 @@ func (this *QTreeWidgetItem) Write(out qtcore.QDataStreamLike) {
 		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QTreeWidgetItem.Write")
 	}
 	C.qute_QTreeWidgetItem_write(self, outPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(out)
 }
 
 // Parent wraps QTreeWidgetItem::parent.
@@ -717,6 +775,7 @@ func (this *QTreeWidgetItem) Write(out qtcore.QDataStreamLike) {
 func (this *QTreeWidgetItem) Parent() *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Parent")
 	r := C.qute_QTreeWidgetItem_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -730,6 +789,7 @@ func (this *QTreeWidgetItem) Parent() *QTreeWidgetItem {
 func (this *QTreeWidgetItem) Child(index int) *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Child")
 	r := C.qute_QTreeWidgetItem_child(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -741,6 +801,7 @@ func (this *QTreeWidgetItem) Child(index int) *QTreeWidgetItem {
 func (this *QTreeWidgetItem) ChildCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.ChildCount")
 	r := C.qute_QTreeWidgetItem_childCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -752,6 +813,7 @@ func (this *QTreeWidgetItem) ChildCount() int {
 func (this *QTreeWidgetItem) ColumnCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.ColumnCount")
 	r := C.qute_QTreeWidgetItem_columnCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -767,6 +829,8 @@ func (this *QTreeWidgetItem) IndexOfChild(child QTreeWidgetItemLike) int {
 		childPtr = rt.UseArg(unsafe.Pointer(child.AsQTreeWidgetItem()), "QTreeWidgetItem.IndexOfChild")
 	}
 	r := C.qute_QTreeWidgetItem_indexOfChild(self, childPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
 	return int(r)
 }
 
@@ -785,6 +849,8 @@ func (this *QTreeWidgetItem) AddChild(child QTreeWidgetItemLike) {
 		childPtr, childH = rt.Arg(unsafe.Pointer(child.AsQTreeWidgetItem()), "QTreeWidgetItem.AddChild")
 	}
 	C.qute_QTreeWidgetItem_addChild(self, childPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
 	childH.TransferToCpp()
 }
 
@@ -803,6 +869,8 @@ func (this *QTreeWidgetItem) InsertChild(index int, child QTreeWidgetItemLike) {
 		childPtr, childH = rt.Arg(unsafe.Pointer(child.AsQTreeWidgetItem()), "QTreeWidgetItem.InsertChild")
 	}
 	C.qute_QTreeWidgetItem_insertChild(self, C.int(index), childPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
 	childH.TransferToCpp()
 }
 
@@ -823,6 +891,8 @@ func (this *QTreeWidgetItem) RemoveChild(child QTreeWidgetItemLike) {
 		childPtr, childH = rt.Arg(unsafe.Pointer(child.AsQTreeWidgetItem()), "QTreeWidgetItem.RemoveChild")
 	}
 	C.qute_QTreeWidgetItem_removeChild(self, childPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
 	childH.TransferToGo()
 }
 
@@ -836,6 +906,7 @@ func (this *QTreeWidgetItem) RemoveChild(child QTreeWidgetItemLike) {
 func (this *QTreeWidgetItem) TakeChild(index int) *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.TakeChild")
 	r := C.qute_QTreeWidgetItem_takeChild(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.TakeOwned), r)
 }
 
@@ -853,6 +924,8 @@ func (this *QTreeWidgetItem) AddChildren(children []*QTreeWidgetItem) {
 		childrenC[i] = rt.UseArg(unsafe.Pointer(children[i]), "QTreeWidgetItem.AddChildren")
 	}
 	C.qute_QTreeWidgetItem_addChildren(self, unsafe.Pointer(unsafe.SliceData(childrenC)), C.ptrdiff_t(len(children)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(children)
 	for _, x := range children {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -874,6 +947,8 @@ func (this *QTreeWidgetItem) InsertChildren(index int, children []*QTreeWidgetIt
 		childrenC[i] = rt.UseArg(unsafe.Pointer(children[i]), "QTreeWidgetItem.InsertChildren")
 	}
 	C.qute_QTreeWidgetItem_insertChildren(self, C.int(index), unsafe.Pointer(unsafe.SliceData(childrenC)), C.ptrdiff_t(len(children)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(children)
 	for _, x := range children {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -891,6 +966,7 @@ func (this *QTreeWidgetItem) InsertChildren(index int, children []*QTreeWidgetIt
 func (this *QTreeWidgetItem) TakeChildren() []*QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.TakeChildren")
 	r := C.qute_QTreeWidgetItem_takeChildren(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTreeWidgetItem {
 		return rt.View[QTreeWidgetItem](rt.WrapClass(e, "QTreeWidgetItem", rt.TakeOwned), e)
 	})
@@ -904,6 +980,7 @@ func (this *QTreeWidgetItem) TakeChildren() []*QTreeWidgetItem {
 func (this *QTreeWidgetItem) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Type")
 	r := C.qute_QTreeWidgetItem_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -915,4 +992,5 @@ func (this *QTreeWidgetItem) Type() int {
 func (this *QTreeWidgetItem) SortChildren(column int, order qtcore.SortOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SortChildren")
 	C.qute_QTreeWidgetItem_sortChildren(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -161,6 +162,7 @@ func QFontDatabaseSmoothSizes(family string, style string) []int {
 func QFontDatabaseStyleString(font *QFont) string {
 	rt.CheckThread("QFontDatabaseStyleString")
 	r := C.qute_QFontDatabase_styleString(rt.UseArg(unsafe.Pointer(font), "QFontDatabaseStyleString"))
+	runtime.KeepAlive(font)
 	return quteStr(r)
 }
 
@@ -172,6 +174,7 @@ func QFontDatabaseStyleString(font *QFont) string {
 func QFontDatabaseStyleStringFontInfo(fontInfo *QFontInfo) string {
 	rt.CheckThread("QFontDatabaseStyleStringFontInfo")
 	r := C.qute_QFontDatabase_styleString_1(rt.Use(unsafe.Pointer(fontInfo), "QFontDatabaseStyleStringFontInfo"))
+	runtime.KeepAlive(fontInfo)
 	return quteStr(r)
 }
 

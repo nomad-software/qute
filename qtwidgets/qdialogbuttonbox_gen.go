@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQDialogButtonBox(parent QWidgetLike) *QDialogButtonBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBox")
 	}
 	p := C.qute_QDialogButtonBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQDialogButtonBoxWithOrientation(orientation qtcore.Orientations, parent 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithOrientation")
 	}
 	p := C.qute_QDialogButtonBox_new_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -106,6 +109,7 @@ func NewQDialogButtonBoxWithStandardButton(buttons QDialogButtonBoxStandardButto
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithStandardButton")
 	}
 	p := C.qute_QDialogButtonBox_new_2(C.int64_t(buttons), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -128,6 +132,7 @@ func NewQDialogButtonBoxWithButtonsOriented(buttons QDialogButtonBoxStandardButt
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithButtonsOriented")
 	}
 	p := C.qute_QDialogButtonBox_new_3(C.int64_t(buttons), C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -144,6 +149,7 @@ func NewQDialogButtonBoxWithButtonsOriented(buttons QDialogButtonBoxStandardButt
 func (this *QDialogButtonBox) SetOrientation(orientation qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.SetOrientation")
 	C.qute_QDialogButtonBox_setOrientation(self, C.int64_t(orientation))
+	runtime.KeepAlive(this)
 }
 
 // Orientation wraps QDialogButtonBox::orientation.
@@ -154,6 +160,7 @@ func (this *QDialogButtonBox) SetOrientation(orientation qtcore.Orientations) {
 func (this *QDialogButtonBox) Orientation() qtcore.Orientations {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.Orientation")
 	r := C.qute_QDialogButtonBox_orientation(self)
+	runtime.KeepAlive(this)
 	return qtcore.Orientations(r)
 }
 
@@ -172,6 +179,8 @@ func (this *QDialogButtonBox) AddButton(button QAbstractButtonLike, role QDialog
 		buttonPtr, buttonH = rt.Arg(unsafe.Pointer(button.AsQAbstractButton()), "QDialogButtonBox.AddButton")
 	}
 	C.qute_QDialogButtonBox_addButton(self, buttonPtr, C.int64_t(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	buttonH.TransferToCpp()
 }
 
@@ -185,6 +194,7 @@ func (this *QDialogButtonBox) AddButton(button QAbstractButtonLike, role QDialog
 func (this *QDialogButtonBox) AddButtonText(text string, role QDialogButtonBoxButtonRole) *QPushButton {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.AddButtonText")
 	r := C.qute_QDialogButtonBox_addButton_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(role))
+	runtime.KeepAlive(this)
 	return rt.View[QPushButton](rt.WrapClass(r, "QPushButton", rt.TakeParented), r)
 }
 
@@ -198,6 +208,7 @@ func (this *QDialogButtonBox) AddButtonText(text string, role QDialogButtonBoxBu
 func (this *QDialogButtonBox) AddStandardButton(button QDialogButtonBoxStandardButtons) *QPushButton {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.AddStandardButton")
 	r := C.qute_QDialogButtonBox_addButton_2(self, C.int64_t(button))
+	runtime.KeepAlive(this)
 	return rt.View[QPushButton](rt.WrapClass(r, "QPushButton", rt.TakeParented), r)
 }
 
@@ -218,6 +229,8 @@ func (this *QDialogButtonBox) RemoveButton(button QAbstractButtonLike) {
 		buttonPtr, buttonH = rt.Arg(unsafe.Pointer(button.AsQAbstractButton()), "QDialogButtonBox.RemoveButton")
 	}
 	C.qute_QDialogButtonBox_removeButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	buttonH.TransferToGo()
 }
 
@@ -229,6 +242,7 @@ func (this *QDialogButtonBox) RemoveButton(button QAbstractButtonLike) {
 func (this *QDialogButtonBox) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.Clear")
 	C.qute_QDialogButtonBox_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // Buttons wraps QDialogButtonBox::buttons.
@@ -241,6 +255,7 @@ func (this *QDialogButtonBox) Clear() {
 func (this *QDialogButtonBox) Buttons() []*QAbstractButton {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.Buttons")
 	r := C.qute_QDialogButtonBox_buttons(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QAbstractButton {
 		return rt.View[QAbstractButton](rt.WrapClass(e, "QAbstractButton", rt.KeepOrBorrow), e)
 	})
@@ -258,6 +273,8 @@ func (this *QDialogButtonBox) ButtonRole(button QAbstractButtonLike) QDialogButt
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QDialogButtonBox.ButtonRole")
 	}
 	r := C.qute_QDialogButtonBox_buttonRole(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	return QDialogButtonBoxButtonRole(r)
 }
 
@@ -269,6 +286,7 @@ func (this *QDialogButtonBox) ButtonRole(button QAbstractButtonLike) QDialogButt
 func (this *QDialogButtonBox) SetStandardButtons(buttons QDialogButtonBoxStandardButtons) {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.SetStandardButtons")
 	C.qute_QDialogButtonBox_setStandardButtons(self, C.int64_t(buttons))
+	runtime.KeepAlive(this)
 }
 
 // StandardButtons wraps QDialogButtonBox::standardButtons.
@@ -279,6 +297,7 @@ func (this *QDialogButtonBox) SetStandardButtons(buttons QDialogButtonBoxStandar
 func (this *QDialogButtonBox) StandardButtons() QDialogButtonBoxStandardButtons {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.StandardButtons")
 	r := C.qute_QDialogButtonBox_standardButtons(self)
+	runtime.KeepAlive(this)
 	return QDialogButtonBoxStandardButtons(r)
 }
 
@@ -294,6 +313,8 @@ func (this *QDialogButtonBox) StandardButton(button QAbstractButtonLike) QDialog
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QDialogButtonBox.StandardButton")
 	}
 	r := C.qute_QDialogButtonBox_standardButton(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 	return QDialogButtonBoxStandardButtons(r)
 }
 
@@ -307,6 +328,7 @@ func (this *QDialogButtonBox) StandardButton(button QAbstractButtonLike) QDialog
 func (this *QDialogButtonBox) Button(which QDialogButtonBoxStandardButtons) *QPushButton {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.Button")
 	r := C.qute_QDialogButtonBox_button(self, C.int64_t(which))
+	runtime.KeepAlive(this)
 	return rt.View[QPushButton](rt.WrapClass(r, "QPushButton", rt.KeepOrBorrow), r)
 }
 
@@ -318,6 +340,7 @@ func (this *QDialogButtonBox) Button(which QDialogButtonBoxStandardButtons) *QPu
 func (this *QDialogButtonBox) SetCenterButtons(center bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.SetCenterButtons")
 	C.qute_QDialogButtonBox_setCenterButtons(self, C.bool(center))
+	runtime.KeepAlive(this)
 }
 
 // CenterButtons wraps QDialogButtonBox::centerButtons.
@@ -328,6 +351,7 @@ func (this *QDialogButtonBox) SetCenterButtons(center bool) {
 func (this *QDialogButtonBox) CenterButtons() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.CenterButtons")
 	r := C.qute_QDialogButtonBox_centerButtons(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -343,6 +367,8 @@ func (this *QDialogButtonBox) EmitClicked(button QAbstractButtonLike) {
 		buttonPtr = rt.UseArg(unsafe.Pointer(button.AsQAbstractButton()), "QDialogButtonBox.EmitClicked")
 	}
 	C.qute_QDialogButtonBox_clicked_1(self, buttonPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(button)
 }
 
 // EmitAccepted wraps emitting the accepted signal.
@@ -353,6 +379,7 @@ func (this *QDialogButtonBox) EmitClicked(button QAbstractButtonLike) {
 func (this *QDialogButtonBox) EmitAccepted() {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.EmitAccepted")
 	C.qute_QDialogButtonBox_accepted_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitHelpRequested wraps emitting the helpRequested signal.
@@ -363,6 +390,7 @@ func (this *QDialogButtonBox) EmitAccepted() {
 func (this *QDialogButtonBox) EmitHelpRequested() {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.EmitHelpRequested")
 	C.qute_QDialogButtonBox_helpRequested_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitRejected wraps emitting the rejected signal.
@@ -373,6 +401,7 @@ func (this *QDialogButtonBox) EmitHelpRequested() {
 func (this *QDialogButtonBox) EmitRejected() {
 	self := rt.Use(unsafe.Pointer(this), "QDialogButtonBox.EmitRejected")
 	C.qute_QDialogButtonBox_rejected_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QDialogButtonBoxStandardButtonText wraps QDialogButtonBox::standardButtonText.

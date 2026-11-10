@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQGridLayout(parent QWidgetLike) *QGridLayout {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQGridLayout")
 	}
 	p := C.qute_QGridLayout_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQGridLayout(parent QWidgetLike) *QGridLayout {
 func (this *QGridLayout) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SizeHint")
 	r := C.qute_QGridLayout_sizeHint(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QGridLayout) SizeHint() qtcore.QSize {
 func (this *QGridLayout) SetHorizontalSpacing(spacing int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetHorizontalSpacing")
 	C.qute_QGridLayout_setHorizontalSpacing(self, C.int(spacing))
+	runtime.KeepAlive(this)
 }
 
 // HorizontalSpacing wraps QGridLayout::horizontalSpacing.
@@ -98,6 +102,7 @@ func (this *QGridLayout) SetHorizontalSpacing(spacing int) {
 func (this *QGridLayout) HorizontalSpacing() int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.HorizontalSpacing")
 	r := C.qute_QGridLayout_horizontalSpacing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -109,6 +114,7 @@ func (this *QGridLayout) HorizontalSpacing() int {
 func (this *QGridLayout) SetVerticalSpacing(spacing int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetVerticalSpacing")
 	C.qute_QGridLayout_setVerticalSpacing(self, C.int(spacing))
+	runtime.KeepAlive(this)
 }
 
 // VerticalSpacing wraps QGridLayout::verticalSpacing.
@@ -119,6 +125,7 @@ func (this *QGridLayout) SetVerticalSpacing(spacing int) {
 func (this *QGridLayout) VerticalSpacing() int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.VerticalSpacing")
 	r := C.qute_QGridLayout_verticalSpacing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +137,7 @@ func (this *QGridLayout) VerticalSpacing() int {
 func (this *QGridLayout) SetRowStretch(row int, stretch int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetRowStretch")
 	C.qute_QGridLayout_setRowStretch(self, C.int(row), C.int(stretch))
+	runtime.KeepAlive(this)
 }
 
 // SetColumnStretch wraps QGridLayout::setColumnStretch.
@@ -140,6 +148,7 @@ func (this *QGridLayout) SetRowStretch(row int, stretch int) {
 func (this *QGridLayout) SetColumnStretch(column int, stretch int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetColumnStretch")
 	C.qute_QGridLayout_setColumnStretch(self, C.int(column), C.int(stretch))
+	runtime.KeepAlive(this)
 }
 
 // RowStretch wraps QGridLayout::rowStretch.
@@ -150,6 +159,7 @@ func (this *QGridLayout) SetColumnStretch(column int, stretch int) {
 func (this *QGridLayout) RowStretch(row int) int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.RowStretch")
 	r := C.qute_QGridLayout_rowStretch(self, C.int(row))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -161,6 +171,7 @@ func (this *QGridLayout) RowStretch(row int) int {
 func (this *QGridLayout) ColumnStretch(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.ColumnStretch")
 	r := C.qute_QGridLayout_columnStretch(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -172,6 +183,7 @@ func (this *QGridLayout) ColumnStretch(column int) int {
 func (this *QGridLayout) SetRowMinimumHeight(row int, minSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetRowMinimumHeight")
 	C.qute_QGridLayout_setRowMinimumHeight(self, C.int(row), C.int(minSize))
+	runtime.KeepAlive(this)
 }
 
 // SetColumnMinimumWidth wraps QGridLayout::setColumnMinimumWidth.
@@ -182,6 +194,7 @@ func (this *QGridLayout) SetRowMinimumHeight(row int, minSize int) {
 func (this *QGridLayout) SetColumnMinimumWidth(column int, minSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetColumnMinimumWidth")
 	C.qute_QGridLayout_setColumnMinimumWidth(self, C.int(column), C.int(minSize))
+	runtime.KeepAlive(this)
 }
 
 // RowMinimumHeight wraps QGridLayout::rowMinimumHeight.
@@ -192,6 +205,7 @@ func (this *QGridLayout) SetColumnMinimumWidth(column int, minSize int) {
 func (this *QGridLayout) RowMinimumHeight(row int) int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.RowMinimumHeight")
 	r := C.qute_QGridLayout_rowMinimumHeight(self, C.int(row))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -203,6 +217,7 @@ func (this *QGridLayout) RowMinimumHeight(row int) int {
 func (this *QGridLayout) ColumnMinimumWidth(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.ColumnMinimumWidth")
 	r := C.qute_QGridLayout_columnMinimumWidth(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -214,6 +229,7 @@ func (this *QGridLayout) ColumnMinimumWidth(column int) int {
 func (this *QGridLayout) ColumnCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.ColumnCount")
 	r := C.qute_QGridLayout_columnCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -225,6 +241,7 @@ func (this *QGridLayout) ColumnCount() int {
 func (this *QGridLayout) RowCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.RowCount")
 	r := C.qute_QGridLayout_rowCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -236,6 +253,7 @@ func (this *QGridLayout) RowCount() int {
 func (this *QGridLayout) CellRect(row int, column int) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.CellRect")
 	r := C.qute_QGridLayout_cellRect(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -247,6 +265,7 @@ func (this *QGridLayout) CellRect(row int, column int) qtcore.QRect {
 func (this *QGridLayout) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.HasHeightForWidth")
 	r := C.qute_QGridLayout_hasHeightForWidth(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -258,6 +277,7 @@ func (this *QGridLayout) HasHeightForWidth() bool {
 func (this *QGridLayout) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.HeightForWidth")
 	r := C.qute_QGridLayout_heightForWidth(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -269,6 +289,7 @@ func (this *QGridLayout) HeightForWidth(arg0 int) int {
 func (this *QGridLayout) MinimumHeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.MinimumHeightForWidth")
 	r := C.qute_QGridLayout_minimumHeightForWidth(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -287,6 +308,8 @@ func (this *QGridLayout) AddWidget(widget QWidgetLike, row int, column int) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGridLayout.AddWidget")
 	}
 	C.qute_QGridLayout_addWidget(self, widgetPtr, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -305,6 +328,8 @@ func (this *QGridLayout) AddWidgetSpan(widget QWidgetLike, row int, column int, 
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGridLayout.AddWidgetSpan")
 	}
 	C.qute_QGridLayout_addWidget_1(self, widgetPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -323,6 +348,8 @@ func (this *QGridLayout) AddLayout(layout QLayoutLike, row int, column int) {
 		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QGridLayout.AddLayout")
 	}
 	C.qute_QGridLayout_addLayout(self, layoutPtr, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
 	layoutH.TransferToCpp()
 }
 
@@ -341,6 +368,8 @@ func (this *QGridLayout) AddLayoutSpan(layout QLayoutLike, row int, column int, 
 		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QGridLayout.AddLayoutSpan")
 	}
 	C.qute_QGridLayout_addLayout_1(self, layoutPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
 	layoutH.TransferToCpp()
 }
 
@@ -352,6 +381,7 @@ func (this *QGridLayout) AddLayoutSpan(layout QLayoutLike, row int, column int, 
 func (this *QGridLayout) SetOriginCorner(originCorner qtcore.Corner) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetOriginCorner")
 	C.qute_QGridLayout_setOriginCorner(self, C.int64_t(originCorner))
+	runtime.KeepAlive(this)
 }
 
 // OriginCorner wraps QGridLayout::originCorner.
@@ -362,6 +392,7 @@ func (this *QGridLayout) SetOriginCorner(originCorner qtcore.Corner) {
 func (this *QGridLayout) OriginCorner() qtcore.Corner {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.OriginCorner")
 	r := C.qute_QGridLayout_originCorner(self)
+	runtime.KeepAlive(this)
 	return qtcore.Corner(r)
 }
 
@@ -375,6 +406,7 @@ func (this *QGridLayout) OriginCorner() qtcore.Corner {
 func (this *QGridLayout) ItemAtPosition(row int, column int) *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.ItemAtPosition")
 	r := C.qute_QGridLayout_itemAtPosition(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
 }
 
@@ -393,6 +425,8 @@ func (this *QGridLayout) AddItemAt(item QLayoutItemLike, row int, column int) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQLayoutItem()), "QGridLayout.AddItemAt")
 	}
 	C.qute_QGridLayout_addItem(self, itemPtr, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -404,6 +438,7 @@ func (this *QGridLayout) AddItemAt(item QLayoutItemLike, row int, column int) {
 func (this *QGridLayout) SetDefaultPositioning(n int, orient qtcore.Orientations) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.SetDefaultPositioning")
 	C.qute_QGridLayout_setDefaultPositioning(self, C.int(n), C.int64_t(orient))
+	runtime.KeepAlive(this)
 }
 
 // GetItemPosition wraps QGridLayout::getItemPosition.
@@ -418,5 +453,6 @@ func (this *QGridLayout) GetItemPosition(idx int) (int, int, int, int) {
 	var rowSpanOut C.int
 	var columnSpanOut C.int
 	C.qute_QGridLayout_getItemPosition(self, C.int(idx), &rowOut, &columnOut, &rowSpanOut, &columnSpanOut)
+	runtime.KeepAlive(this)
 	return int(rowOut), int(columnOut), int(rowSpanOut), int(columnSpanOut)
 }

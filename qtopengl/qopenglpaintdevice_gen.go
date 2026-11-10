@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -67,6 +68,7 @@ func NewQOpenGLPaintDeviceWithSize(size qtcore.QSize) *QOpenGLPaintDevice {
 func (this *QOpenGLPaintDevice) Context() *qtgui.QOpenGLContext {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.Context")
 	r := C.qute_QOpenGLPaintDevice_context(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QOpenGLContext](rt.WrapClass(r, "QOpenGLContext", rt.KeepOrBorrow), r)
 }
 
@@ -78,6 +80,7 @@ func (this *QOpenGLPaintDevice) Context() *qtgui.QOpenGLContext {
 func (this *QOpenGLPaintDevice) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.Size")
 	r := C.qute_QOpenGLPaintDevice_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QOpenGLPaintDevice) Size() qtcore.QSize {
 func (this *QOpenGLPaintDevice) SetSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.SetSize")
 	C.qute_QOpenGLPaintDevice_setSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // SetDevicePixelRatio wraps QOpenGLPaintDevice::setDevicePixelRatio.
@@ -99,6 +103,7 @@ func (this *QOpenGLPaintDevice) SetSize(size qtcore.QSize) {
 func (this *QOpenGLPaintDevice) SetDevicePixelRatio(devicePixelRatio float64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.SetDevicePixelRatio")
 	C.qute_QOpenGLPaintDevice_setDevicePixelRatio(self, C.double(devicePixelRatio))
+	runtime.KeepAlive(this)
 }
 
 // DotsPerMeterX wraps QOpenGLPaintDevice::dotsPerMeterX.
@@ -109,6 +114,7 @@ func (this *QOpenGLPaintDevice) SetDevicePixelRatio(devicePixelRatio float64) {
 func (this *QOpenGLPaintDevice) DotsPerMeterX() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.DotsPerMeterX")
 	r := C.qute_QOpenGLPaintDevice_dotsPerMeterX(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -120,6 +126,7 @@ func (this *QOpenGLPaintDevice) DotsPerMeterX() float64 {
 func (this *QOpenGLPaintDevice) DotsPerMeterY() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.DotsPerMeterY")
 	r := C.qute_QOpenGLPaintDevice_dotsPerMeterY(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -131,6 +138,7 @@ func (this *QOpenGLPaintDevice) DotsPerMeterY() float64 {
 func (this *QOpenGLPaintDevice) SetDotsPerMeterX(dotsPerMeterX float64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.SetDotsPerMeterX")
 	C.qute_QOpenGLPaintDevice_setDotsPerMeterX(self, C.double(dotsPerMeterX))
+	runtime.KeepAlive(this)
 }
 
 // SetDotsPerMeterY wraps QOpenGLPaintDevice::setDotsPerMeterY.
@@ -141,6 +149,7 @@ func (this *QOpenGLPaintDevice) SetDotsPerMeterX(dotsPerMeterX float64) {
 func (this *QOpenGLPaintDevice) SetDotsPerMeterY(dotsPerMeterY float64) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.SetDotsPerMeterY")
 	C.qute_QOpenGLPaintDevice_setDotsPerMeterY(self, C.double(dotsPerMeterY))
+	runtime.KeepAlive(this)
 }
 
 // SetPaintFlipped wraps QOpenGLPaintDevice::setPaintFlipped.
@@ -151,6 +160,7 @@ func (this *QOpenGLPaintDevice) SetDotsPerMeterY(dotsPerMeterY float64) {
 func (this *QOpenGLPaintDevice) SetPaintFlipped(flipped bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.SetPaintFlipped")
 	C.qute_QOpenGLPaintDevice_setPaintFlipped(self, C.bool(flipped))
+	runtime.KeepAlive(this)
 }
 
 // PaintFlipped wraps QOpenGLPaintDevice::paintFlipped.
@@ -161,6 +171,7 @@ func (this *QOpenGLPaintDevice) SetPaintFlipped(flipped bool) {
 func (this *QOpenGLPaintDevice) PaintFlipped() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.PaintFlipped")
 	r := C.qute_QOpenGLPaintDevice_paintFlipped(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -172,4 +183,5 @@ func (this *QOpenGLPaintDevice) PaintFlipped() bool {
 func (this *QOpenGLPaintDevice) EnsureActiveTarget() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.EnsureActiveTarget")
 	C.qute_QOpenGLPaintDevice_ensureActiveTarget(self)
+	runtime.KeepAlive(this)
 }

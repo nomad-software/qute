@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,8 @@ func NewQTextCharFormat() *QTextCharFormat {
 func (this *QTextCharFormat) SetFont(font *QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFont")
 	C.qute_QTextCharFormat_setFont(self, rt.UseArg(unsafe.Pointer(font), "QTextCharFormat.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // Font wraps QTextCharFormat::font.
@@ -65,6 +68,7 @@ func (this *QTextCharFormat) SetFont(font *QFont) {
 func (this *QTextCharFormat) Font() *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.Font")
 	r := C.qute_QTextCharFormat_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -77,6 +81,7 @@ func (this *QTextCharFormat) SetFontFamilies(families []string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontFamilies")
 	familiesData, familiesLens := quteStrListArg(families)
 	C.qute_QTextCharFormat_setFontFamilies(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(familiesData))), (*C.ptrdiff_t)(unsafe.SliceData(familiesLens)), C.ptrdiff_t(len(families)))
+	runtime.KeepAlive(this)
 }
 
 // FontFamilies wraps QTextCharFormat::fontFamilies.
@@ -89,6 +94,7 @@ func (this *QTextCharFormat) SetFontFamilies(families []string) {
 func (this *QTextCharFormat) FontFamilies() *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontFamilies")
 	r := C.qute_QTextCharFormat_fontFamilies(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -100,6 +106,7 @@ func (this *QTextCharFormat) FontFamilies() *qtcore.QVariant {
 func (this *QTextCharFormat) SetFontStyleName(styleName string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStyleName")
 	C.qute_QTextCharFormat_setFontStyleName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(styleName))), C.ptrdiff_t(len(styleName)))
+	runtime.KeepAlive(this)
 }
 
 // FontStyleName wraps QTextCharFormat::fontStyleName.
@@ -112,6 +119,7 @@ func (this *QTextCharFormat) SetFontStyleName(styleName string) {
 func (this *QTextCharFormat) FontStyleName() *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontStyleName")
 	r := C.qute_QTextCharFormat_fontStyleName(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -123,6 +131,7 @@ func (this *QTextCharFormat) FontStyleName() *qtcore.QVariant {
 func (this *QTextCharFormat) SetFontPointSize(size float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontPointSize")
 	C.qute_QTextCharFormat_setFontPointSize(self, C.double(size))
+	runtime.KeepAlive(this)
 }
 
 // FontPointSize wraps QTextCharFormat::fontPointSize.
@@ -133,6 +142,7 @@ func (this *QTextCharFormat) SetFontPointSize(size float64) {
 func (this *QTextCharFormat) FontPointSize() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontPointSize")
 	r := C.qute_QTextCharFormat_fontPointSize(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -144,6 +154,7 @@ func (this *QTextCharFormat) FontPointSize() float64 {
 func (this *QTextCharFormat) SetFontWeight(weight int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontWeight")
 	C.qute_QTextCharFormat_setFontWeight(self, C.int(weight))
+	runtime.KeepAlive(this)
 }
 
 // FontWeight wraps QTextCharFormat::fontWeight.
@@ -154,6 +165,7 @@ func (this *QTextCharFormat) SetFontWeight(weight int) {
 func (this *QTextCharFormat) FontWeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontWeight")
 	r := C.qute_QTextCharFormat_fontWeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -165,6 +177,7 @@ func (this *QTextCharFormat) FontWeight() int {
 func (this *QTextCharFormat) SetFontItalic(italic bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontItalic")
 	C.qute_QTextCharFormat_setFontItalic(self, C.bool(italic))
+	runtime.KeepAlive(this)
 }
 
 // FontItalic wraps QTextCharFormat::fontItalic.
@@ -175,6 +188,7 @@ func (this *QTextCharFormat) SetFontItalic(italic bool) {
 func (this *QTextCharFormat) FontItalic() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontItalic")
 	r := C.qute_QTextCharFormat_fontItalic(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -186,6 +200,7 @@ func (this *QTextCharFormat) FontItalic() bool {
 func (this *QTextCharFormat) SetFontCapitalization(capitalization QFontCapitalization) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontCapitalization")
 	C.qute_QTextCharFormat_setFontCapitalization(self, C.int64_t(capitalization))
+	runtime.KeepAlive(this)
 }
 
 // FontCapitalization wraps QTextCharFormat::fontCapitalization.
@@ -196,6 +211,7 @@ func (this *QTextCharFormat) SetFontCapitalization(capitalization QFontCapitaliz
 func (this *QTextCharFormat) FontCapitalization() QFontCapitalization {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontCapitalization")
 	r := C.qute_QTextCharFormat_fontCapitalization(self)
+	runtime.KeepAlive(this)
 	return QFontCapitalization(r)
 }
 
@@ -207,6 +223,7 @@ func (this *QTextCharFormat) FontCapitalization() QFontCapitalization {
 func (this *QTextCharFormat) SetFontLetterSpacingType(letterSpacingType QFontSpacingType) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontLetterSpacingType")
 	C.qute_QTextCharFormat_setFontLetterSpacingType(self, C.int64_t(letterSpacingType))
+	runtime.KeepAlive(this)
 }
 
 // FontLetterSpacingType wraps QTextCharFormat::fontLetterSpacingType.
@@ -217,6 +234,7 @@ func (this *QTextCharFormat) SetFontLetterSpacingType(letterSpacingType QFontSpa
 func (this *QTextCharFormat) FontLetterSpacingType() QFontSpacingType {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontLetterSpacingType")
 	r := C.qute_QTextCharFormat_fontLetterSpacingType(self)
+	runtime.KeepAlive(this)
 	return QFontSpacingType(r)
 }
 
@@ -228,6 +246,7 @@ func (this *QTextCharFormat) FontLetterSpacingType() QFontSpacingType {
 func (this *QTextCharFormat) SetFontLetterSpacing(spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontLetterSpacing")
 	C.qute_QTextCharFormat_setFontLetterSpacing(self, C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // FontLetterSpacing wraps QTextCharFormat::fontLetterSpacing.
@@ -238,6 +257,7 @@ func (this *QTextCharFormat) SetFontLetterSpacing(spacing float64) {
 func (this *QTextCharFormat) FontLetterSpacing() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontLetterSpacing")
 	r := C.qute_QTextCharFormat_fontLetterSpacing(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -249,6 +269,7 @@ func (this *QTextCharFormat) FontLetterSpacing() float64 {
 func (this *QTextCharFormat) SetFontWordSpacing(spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontWordSpacing")
 	C.qute_QTextCharFormat_setFontWordSpacing(self, C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // FontWordSpacing wraps QTextCharFormat::fontWordSpacing.
@@ -259,6 +280,7 @@ func (this *QTextCharFormat) SetFontWordSpacing(spacing float64) {
 func (this *QTextCharFormat) FontWordSpacing() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontWordSpacing")
 	r := C.qute_QTextCharFormat_fontWordSpacing(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -270,6 +292,7 @@ func (this *QTextCharFormat) FontWordSpacing() float64 {
 func (this *QTextCharFormat) SetFontUnderline(underline bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontUnderline")
 	C.qute_QTextCharFormat_setFontUnderline(self, C.bool(underline))
+	runtime.KeepAlive(this)
 }
 
 // FontUnderline wraps QTextCharFormat::fontUnderline.
@@ -280,6 +303,7 @@ func (this *QTextCharFormat) SetFontUnderline(underline bool) {
 func (this *QTextCharFormat) FontUnderline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontUnderline")
 	r := C.qute_QTextCharFormat_fontUnderline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -291,6 +315,7 @@ func (this *QTextCharFormat) FontUnderline() bool {
 func (this *QTextCharFormat) SetFontOverline(overline bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontOverline")
 	C.qute_QTextCharFormat_setFontOverline(self, C.bool(overline))
+	runtime.KeepAlive(this)
 }
 
 // FontOverline wraps QTextCharFormat::fontOverline.
@@ -301,6 +326,7 @@ func (this *QTextCharFormat) SetFontOverline(overline bool) {
 func (this *QTextCharFormat) FontOverline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontOverline")
 	r := C.qute_QTextCharFormat_fontOverline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -312,6 +338,7 @@ func (this *QTextCharFormat) FontOverline() bool {
 func (this *QTextCharFormat) SetFontStrikeOut(strikeOut bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStrikeOut")
 	C.qute_QTextCharFormat_setFontStrikeOut(self, C.bool(strikeOut))
+	runtime.KeepAlive(this)
 }
 
 // FontStrikeOut wraps QTextCharFormat::fontStrikeOut.
@@ -322,6 +349,7 @@ func (this *QTextCharFormat) SetFontStrikeOut(strikeOut bool) {
 func (this *QTextCharFormat) FontStrikeOut() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontStrikeOut")
 	r := C.qute_QTextCharFormat_fontStrikeOut(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -333,6 +361,7 @@ func (this *QTextCharFormat) FontStrikeOut() bool {
 func (this *QTextCharFormat) SetUnderlineColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetUnderlineColor")
 	C.qute_QTextCharFormat_setUnderlineColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // UnderlineColor wraps QTextCharFormat::underlineColor.
@@ -343,6 +372,7 @@ func (this *QTextCharFormat) SetUnderlineColor(color QColor) {
 func (this *QTextCharFormat) UnderlineColor() QColor {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.UnderlineColor")
 	r := C.qute_QTextCharFormat_underlineColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -354,6 +384,7 @@ func (this *QTextCharFormat) UnderlineColor() QColor {
 func (this *QTextCharFormat) SetFontFixedPitch(fixedPitch bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontFixedPitch")
 	C.qute_QTextCharFormat_setFontFixedPitch(self, C.bool(fixedPitch))
+	runtime.KeepAlive(this)
 }
 
 // FontFixedPitch wraps QTextCharFormat::fontFixedPitch.
@@ -364,6 +395,7 @@ func (this *QTextCharFormat) SetFontFixedPitch(fixedPitch bool) {
 func (this *QTextCharFormat) FontFixedPitch() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontFixedPitch")
 	r := C.qute_QTextCharFormat_fontFixedPitch(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -375,6 +407,7 @@ func (this *QTextCharFormat) FontFixedPitch() bool {
 func (this *QTextCharFormat) SetFontStretch(factor int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStretch")
 	C.qute_QTextCharFormat_setFontStretch(self, C.int(factor))
+	runtime.KeepAlive(this)
 }
 
 // FontStretch wraps QTextCharFormat::fontStretch.
@@ -385,6 +418,7 @@ func (this *QTextCharFormat) SetFontStretch(factor int) {
 func (this *QTextCharFormat) FontStretch() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontStretch")
 	r := C.qute_QTextCharFormat_fontStretch(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -396,6 +430,7 @@ func (this *QTextCharFormat) FontStretch() int {
 func (this *QTextCharFormat) SetFontStyleHint(hint QFontStyleHint) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStyleHint")
 	C.qute_QTextCharFormat_setFontStyleHint(self, C.int64_t(hint))
+	runtime.KeepAlive(this)
 }
 
 // SetFontStyleStrategy wraps QTextCharFormat::setFontStyleStrategy.
@@ -406,6 +441,7 @@ func (this *QTextCharFormat) SetFontStyleHint(hint QFontStyleHint) {
 func (this *QTextCharFormat) SetFontStyleStrategy(strategy QFontStyleStrategy) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStyleStrategy")
 	C.qute_QTextCharFormat_setFontStyleStrategy(self, C.int64_t(strategy))
+	runtime.KeepAlive(this)
 }
 
 // FontStyleHint wraps QTextCharFormat::fontStyleHint.
@@ -416,6 +452,7 @@ func (this *QTextCharFormat) SetFontStyleStrategy(strategy QFontStyleStrategy) {
 func (this *QTextCharFormat) FontStyleHint() QFontStyleHint {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontStyleHint")
 	r := C.qute_QTextCharFormat_fontStyleHint(self)
+	runtime.KeepAlive(this)
 	return QFontStyleHint(r)
 }
 
@@ -427,6 +464,7 @@ func (this *QTextCharFormat) FontStyleHint() QFontStyleHint {
 func (this *QTextCharFormat) FontStyleStrategy() QFontStyleStrategy {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontStyleStrategy")
 	r := C.qute_QTextCharFormat_fontStyleStrategy(self)
+	runtime.KeepAlive(this)
 	return QFontStyleStrategy(r)
 }
 
@@ -438,6 +476,7 @@ func (this *QTextCharFormat) FontStyleStrategy() QFontStyleStrategy {
 func (this *QTextCharFormat) SetFontHintingPreference(hintingPreference QFontHintingPreference) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontHintingPreference")
 	C.qute_QTextCharFormat_setFontHintingPreference(self, C.int64_t(hintingPreference))
+	runtime.KeepAlive(this)
 }
 
 // FontHintingPreference wraps QTextCharFormat::fontHintingPreference.
@@ -448,6 +487,7 @@ func (this *QTextCharFormat) SetFontHintingPreference(hintingPreference QFontHin
 func (this *QTextCharFormat) FontHintingPreference() QFontHintingPreference {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontHintingPreference")
 	r := C.qute_QTextCharFormat_fontHintingPreference(self)
+	runtime.KeepAlive(this)
 	return QFontHintingPreference(r)
 }
 
@@ -459,6 +499,7 @@ func (this *QTextCharFormat) FontHintingPreference() QFontHintingPreference {
 func (this *QTextCharFormat) SetFontKerning(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontKerning")
 	C.qute_QTextCharFormat_setFontKerning(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // FontKerning wraps QTextCharFormat::fontKerning.
@@ -469,6 +510,7 @@ func (this *QTextCharFormat) SetFontKerning(enable bool) {
 func (this *QTextCharFormat) FontKerning() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.FontKerning")
 	r := C.qute_QTextCharFormat_fontKerning(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -480,6 +522,7 @@ func (this *QTextCharFormat) FontKerning() bool {
 func (this *QTextCharFormat) SetUnderlineStyle(style QTextCharFormatUnderlineStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetUnderlineStyle")
 	C.qute_QTextCharFormat_setUnderlineStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // UnderlineStyle wraps QTextCharFormat::underlineStyle.
@@ -490,6 +533,7 @@ func (this *QTextCharFormat) SetUnderlineStyle(style QTextCharFormatUnderlineSty
 func (this *QTextCharFormat) UnderlineStyle() QTextCharFormatUnderlineStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.UnderlineStyle")
 	r := C.qute_QTextCharFormat_underlineStyle(self)
+	runtime.KeepAlive(this)
 	return QTextCharFormatUnderlineStyle(r)
 }
 
@@ -501,6 +545,7 @@ func (this *QTextCharFormat) UnderlineStyle() QTextCharFormatUnderlineStyle {
 func (this *QTextCharFormat) SetVerticalAlignment(alignment QTextCharFormatVerticalAlignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetVerticalAlignment")
 	C.qute_QTextCharFormat_setVerticalAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // VerticalAlignment wraps QTextCharFormat::verticalAlignment.
@@ -511,6 +556,7 @@ func (this *QTextCharFormat) SetVerticalAlignment(alignment QTextCharFormatVerti
 func (this *QTextCharFormat) VerticalAlignment() QTextCharFormatVerticalAlignment {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.VerticalAlignment")
 	r := C.qute_QTextCharFormat_verticalAlignment(self)
+	runtime.KeepAlive(this)
 	return QTextCharFormatVerticalAlignment(r)
 }
 
@@ -522,6 +568,8 @@ func (this *QTextCharFormat) VerticalAlignment() QTextCharFormatVerticalAlignmen
 func (this *QTextCharFormat) SetTextOutline(pen *QPen) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetTextOutline")
 	C.qute_QTextCharFormat_setTextOutline(self, rt.UseArg(unsafe.Pointer(pen), "QTextCharFormat.SetTextOutline"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pen)
 }
 
 // TextOutline wraps QTextCharFormat::textOutline.
@@ -534,6 +582,7 @@ func (this *QTextCharFormat) SetTextOutline(pen *QPen) {
 func (this *QTextCharFormat) TextOutline() *QPen {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.TextOutline")
 	r := C.qute_QTextCharFormat_textOutline(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPen](rt.WrapClass(r, "QPen", rt.TakeOwned), r)
 }
 
@@ -545,6 +594,7 @@ func (this *QTextCharFormat) TextOutline() *QPen {
 func (this *QTextCharFormat) SetToolTip(tip string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetToolTip")
 	C.qute_QTextCharFormat_setToolTip(self, (*C.char)(unsafe.Pointer(unsafe.StringData(tip))), C.ptrdiff_t(len(tip)))
+	runtime.KeepAlive(this)
 }
 
 // ToolTip wraps QTextCharFormat::toolTip.
@@ -555,6 +605,7 @@ func (this *QTextCharFormat) SetToolTip(tip string) {
 func (this *QTextCharFormat) ToolTip() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.ToolTip")
 	r := C.qute_QTextCharFormat_toolTip(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -566,6 +617,7 @@ func (this *QTextCharFormat) ToolTip() string {
 func (this *QTextCharFormat) SetSuperScriptBaseline(baseline float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetSuperScriptBaseline")
 	C.qute_QTextCharFormat_setSuperScriptBaseline(self, C.double(baseline))
+	runtime.KeepAlive(this)
 }
 
 // SuperScriptBaseline wraps QTextCharFormat::superScriptBaseline.
@@ -576,6 +628,7 @@ func (this *QTextCharFormat) SetSuperScriptBaseline(baseline float64) {
 func (this *QTextCharFormat) SuperScriptBaseline() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SuperScriptBaseline")
 	r := C.qute_QTextCharFormat_superScriptBaseline(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -587,6 +640,7 @@ func (this *QTextCharFormat) SuperScriptBaseline() float64 {
 func (this *QTextCharFormat) SetSubScriptBaseline(baseline float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetSubScriptBaseline")
 	C.qute_QTextCharFormat_setSubScriptBaseline(self, C.double(baseline))
+	runtime.KeepAlive(this)
 }
 
 // SubScriptBaseline wraps QTextCharFormat::subScriptBaseline.
@@ -597,6 +651,7 @@ func (this *QTextCharFormat) SetSubScriptBaseline(baseline float64) {
 func (this *QTextCharFormat) SubScriptBaseline() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SubScriptBaseline")
 	r := C.qute_QTextCharFormat_subScriptBaseline(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -608,6 +663,7 @@ func (this *QTextCharFormat) SubScriptBaseline() float64 {
 func (this *QTextCharFormat) SetBaselineOffset(baseline float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetBaselineOffset")
 	C.qute_QTextCharFormat_setBaselineOffset(self, C.double(baseline))
+	runtime.KeepAlive(this)
 }
 
 // BaselineOffset wraps QTextCharFormat::baselineOffset.
@@ -618,6 +674,7 @@ func (this *QTextCharFormat) SetBaselineOffset(baseline float64) {
 func (this *QTextCharFormat) BaselineOffset() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.BaselineOffset")
 	r := C.qute_QTextCharFormat_baselineOffset(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -629,6 +686,7 @@ func (this *QTextCharFormat) BaselineOffset() float64 {
 func (this *QTextCharFormat) SetAnchor(anchor bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetAnchor")
 	C.qute_QTextCharFormat_setAnchor(self, C.bool(anchor))
+	runtime.KeepAlive(this)
 }
 
 // IsAnchor wraps QTextCharFormat::isAnchor.
@@ -639,6 +697,7 @@ func (this *QTextCharFormat) SetAnchor(anchor bool) {
 func (this *QTextCharFormat) IsAnchor() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.IsAnchor")
 	r := C.qute_QTextCharFormat_isAnchor(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -650,6 +709,7 @@ func (this *QTextCharFormat) IsAnchor() bool {
 func (this *QTextCharFormat) SetAnchorHref(value string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetAnchorHref")
 	C.qute_QTextCharFormat_setAnchorHref(self, (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
+	runtime.KeepAlive(this)
 }
 
 // AnchorHref wraps QTextCharFormat::anchorHref.
@@ -660,6 +720,7 @@ func (this *QTextCharFormat) SetAnchorHref(value string) {
 func (this *QTextCharFormat) AnchorHref() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.AnchorHref")
 	r := C.qute_QTextCharFormat_anchorHref(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -672,6 +733,7 @@ func (this *QTextCharFormat) SetAnchorNames(names []string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetAnchorNames")
 	namesData, namesLens := quteStrListArg(names)
 	C.qute_QTextCharFormat_setAnchorNames(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(namesData))), (*C.ptrdiff_t)(unsafe.SliceData(namesLens)), C.ptrdiff_t(len(names)))
+	runtime.KeepAlive(this)
 }
 
 // AnchorNames wraps QTextCharFormat::anchorNames.
@@ -682,6 +744,7 @@ func (this *QTextCharFormat) SetAnchorNames(names []string) {
 func (this *QTextCharFormat) AnchorNames() []string {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.AnchorNames")
 	r := C.qute_QTextCharFormat_anchorNames(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -693,6 +756,7 @@ func (this *QTextCharFormat) AnchorNames() []string {
 func (this *QTextCharFormat) SetTableCellRowSpan(tableCellRowSpan int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetTableCellRowSpan")
 	C.qute_QTextCharFormat_setTableCellRowSpan(self, C.int(tableCellRowSpan))
+	runtime.KeepAlive(this)
 }
 
 // TableCellRowSpan wraps QTextCharFormat::tableCellRowSpan.
@@ -703,6 +767,7 @@ func (this *QTextCharFormat) SetTableCellRowSpan(tableCellRowSpan int) {
 func (this *QTextCharFormat) TableCellRowSpan() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.TableCellRowSpan")
 	r := C.qute_QTextCharFormat_tableCellRowSpan(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -714,6 +779,7 @@ func (this *QTextCharFormat) TableCellRowSpan() int {
 func (this *QTextCharFormat) SetTableCellColumnSpan(tableCellColumnSpan int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetTableCellColumnSpan")
 	C.qute_QTextCharFormat_setTableCellColumnSpan(self, C.int(tableCellColumnSpan))
+	runtime.KeepAlive(this)
 }
 
 // TableCellColumnSpan wraps QTextCharFormat::tableCellColumnSpan.
@@ -724,5 +790,6 @@ func (this *QTextCharFormat) SetTableCellColumnSpan(tableCellColumnSpan int) {
 func (this *QTextCharFormat) TableCellColumnSpan() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.TableCellColumnSpan")
 	r := C.qute_QTextCharFormat_tableCellColumnSpan(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

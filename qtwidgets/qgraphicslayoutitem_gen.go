@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -84,6 +85,8 @@ func (this *QGraphicsLayoutItem) Unkeep() {
 func (this *QGraphicsLayoutItem) SetSizePolicy(policy *QSizePolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetSizePolicy")
 	C.qute_QGraphicsLayoutItem_setSizePolicy(self, rt.UseArg(unsafe.Pointer(policy), "QGraphicsLayoutItem.SetSizePolicy"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(policy)
 }
 
 // SetSizePolicyPolicy wraps QGraphicsLayoutItem::setSizePolicy.
@@ -94,6 +97,7 @@ func (this *QGraphicsLayoutItem) SetSizePolicy(policy *QSizePolicy) {
 func (this *QGraphicsLayoutItem) SetSizePolicyPolicy(hPolicy QSizePolicyPolicy, vPolicy QSizePolicyPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetSizePolicyPolicy")
 	C.qute_QGraphicsLayoutItem_setSizePolicy_1(self, C.int64_t(hPolicy), C.int64_t(vPolicy))
+	runtime.KeepAlive(this)
 }
 
 // SizePolicy wraps QGraphicsLayoutItem::sizePolicy.
@@ -106,6 +110,7 @@ func (this *QGraphicsLayoutItem) SetSizePolicyPolicy(hPolicy QSizePolicyPolicy, 
 func (this *QGraphicsLayoutItem) SizePolicy() *QSizePolicy {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SizePolicy")
 	r := C.qute_QGraphicsLayoutItem_sizePolicy(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSizePolicy](rt.WrapClass(r, "QSizePolicy", rt.TakeOwned), r)
 }
 
@@ -117,6 +122,7 @@ func (this *QGraphicsLayoutItem) SizePolicy() *QSizePolicy {
 func (this *QGraphicsLayoutItem) SetMinimumSize(size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetMinimumSize")
 	C.qute_QGraphicsLayoutItem_setMinimumSize(self, cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // MinimumSize wraps QGraphicsLayoutItem::minimumSize.
@@ -127,6 +133,7 @@ func (this *QGraphicsLayoutItem) SetMinimumSize(size qtcore.QSizeF) {
 func (this *QGraphicsLayoutItem) MinimumSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.MinimumSize")
 	r := C.qute_QGraphicsLayoutItem_minimumSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -138,6 +145,7 @@ func (this *QGraphicsLayoutItem) MinimumSize() qtcore.QSizeF {
 func (this *QGraphicsLayoutItem) SetMinimumWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetMinimumWidth")
 	C.qute_QGraphicsLayoutItem_setMinimumWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // MinimumWidth wraps QGraphicsLayoutItem::minimumWidth.
@@ -148,6 +156,7 @@ func (this *QGraphicsLayoutItem) SetMinimumWidth(width float64) {
 func (this *QGraphicsLayoutItem) MinimumWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.MinimumWidth")
 	r := C.qute_QGraphicsLayoutItem_minimumWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -159,6 +168,7 @@ func (this *QGraphicsLayoutItem) MinimumWidth() float64 {
 func (this *QGraphicsLayoutItem) SetMinimumHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetMinimumHeight")
 	C.qute_QGraphicsLayoutItem_setMinimumHeight(self, C.double(height))
+	runtime.KeepAlive(this)
 }
 
 // MinimumHeight wraps QGraphicsLayoutItem::minimumHeight.
@@ -169,6 +179,7 @@ func (this *QGraphicsLayoutItem) SetMinimumHeight(height float64) {
 func (this *QGraphicsLayoutItem) MinimumHeight() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.MinimumHeight")
 	r := C.qute_QGraphicsLayoutItem_minimumHeight(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -180,6 +191,7 @@ func (this *QGraphicsLayoutItem) MinimumHeight() float64 {
 func (this *QGraphicsLayoutItem) SetPreferredSize(size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetPreferredSize")
 	C.qute_QGraphicsLayoutItem_setPreferredSize(self, cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // PreferredSize wraps QGraphicsLayoutItem::preferredSize.
@@ -190,6 +202,7 @@ func (this *QGraphicsLayoutItem) SetPreferredSize(size qtcore.QSizeF) {
 func (this *QGraphicsLayoutItem) PreferredSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.PreferredSize")
 	r := C.qute_QGraphicsLayoutItem_preferredSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -201,6 +214,7 @@ func (this *QGraphicsLayoutItem) PreferredSize() qtcore.QSizeF {
 func (this *QGraphicsLayoutItem) SetPreferredWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetPreferredWidth")
 	C.qute_QGraphicsLayoutItem_setPreferredWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // PreferredWidth wraps QGraphicsLayoutItem::preferredWidth.
@@ -211,6 +225,7 @@ func (this *QGraphicsLayoutItem) SetPreferredWidth(width float64) {
 func (this *QGraphicsLayoutItem) PreferredWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.PreferredWidth")
 	r := C.qute_QGraphicsLayoutItem_preferredWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -222,6 +237,7 @@ func (this *QGraphicsLayoutItem) PreferredWidth() float64 {
 func (this *QGraphicsLayoutItem) SetPreferredHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetPreferredHeight")
 	C.qute_QGraphicsLayoutItem_setPreferredHeight(self, C.double(height))
+	runtime.KeepAlive(this)
 }
 
 // PreferredHeight wraps QGraphicsLayoutItem::preferredHeight.
@@ -232,6 +248,7 @@ func (this *QGraphicsLayoutItem) SetPreferredHeight(height float64) {
 func (this *QGraphicsLayoutItem) PreferredHeight() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.PreferredHeight")
 	r := C.qute_QGraphicsLayoutItem_preferredHeight(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -243,6 +260,7 @@ func (this *QGraphicsLayoutItem) PreferredHeight() float64 {
 func (this *QGraphicsLayoutItem) SetMaximumSize(size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetMaximumSize")
 	C.qute_QGraphicsLayoutItem_setMaximumSize(self, cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // MaximumSize wraps QGraphicsLayoutItem::maximumSize.
@@ -253,6 +271,7 @@ func (this *QGraphicsLayoutItem) SetMaximumSize(size qtcore.QSizeF) {
 func (this *QGraphicsLayoutItem) MaximumSize() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.MaximumSize")
 	r := C.qute_QGraphicsLayoutItem_maximumSize(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -264,6 +283,7 @@ func (this *QGraphicsLayoutItem) MaximumSize() qtcore.QSizeF {
 func (this *QGraphicsLayoutItem) SetMaximumWidth(width float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetMaximumWidth")
 	C.qute_QGraphicsLayoutItem_setMaximumWidth(self, C.double(width))
+	runtime.KeepAlive(this)
 }
 
 // MaximumWidth wraps QGraphicsLayoutItem::maximumWidth.
@@ -274,6 +294,7 @@ func (this *QGraphicsLayoutItem) SetMaximumWidth(width float64) {
 func (this *QGraphicsLayoutItem) MaximumWidth() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.MaximumWidth")
 	r := C.qute_QGraphicsLayoutItem_maximumWidth(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -285,6 +306,7 @@ func (this *QGraphicsLayoutItem) MaximumWidth() float64 {
 func (this *QGraphicsLayoutItem) SetMaximumHeight(height float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetMaximumHeight")
 	C.qute_QGraphicsLayoutItem_setMaximumHeight(self, C.double(height))
+	runtime.KeepAlive(this)
 }
 
 // MaximumHeight wraps QGraphicsLayoutItem::maximumHeight.
@@ -295,6 +317,7 @@ func (this *QGraphicsLayoutItem) SetMaximumHeight(height float64) {
 func (this *QGraphicsLayoutItem) MaximumHeight() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.MaximumHeight")
 	r := C.qute_QGraphicsLayoutItem_maximumHeight(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -306,6 +329,7 @@ func (this *QGraphicsLayoutItem) MaximumHeight() float64 {
 func (this *QGraphicsLayoutItem) SetGeometry(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetGeometry")
 	C.qute_QGraphicsLayoutItem_setGeometry(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // Geometry wraps QGraphicsLayoutItem::geometry.
@@ -316,6 +340,7 @@ func (this *QGraphicsLayoutItem) SetGeometry(rect qtcore.QRectF) {
 func (this *QGraphicsLayoutItem) Geometry() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.Geometry")
 	r := C.qute_QGraphicsLayoutItem_geometry(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -331,6 +356,7 @@ func (this *QGraphicsLayoutItem) GetContentsMargins() (float64, float64, float64
 	var rightOut C.double
 	var bottomOut C.double
 	C.qute_QGraphicsLayoutItem_getContentsMargins(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(this)
 	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
 }
 
@@ -342,6 +368,7 @@ func (this *QGraphicsLayoutItem) GetContentsMargins() (float64, float64, float64
 func (this *QGraphicsLayoutItem) ContentsRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.ContentsRect")
 	r := C.qute_QGraphicsLayoutItem_contentsRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -353,6 +380,7 @@ func (this *QGraphicsLayoutItem) ContentsRect() qtcore.QRectF {
 func (this *QGraphicsLayoutItem) EffectiveSizeHint(which qtcore.SizeHint) qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.EffectiveSizeHint")
 	r := C.qute_QGraphicsLayoutItem_effectiveSizeHint(self, C.int64_t(which))
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -364,6 +392,7 @@ func (this *QGraphicsLayoutItem) EffectiveSizeHint(which qtcore.SizeHint) qtcore
 func (this *QGraphicsLayoutItem) UpdateGeometry() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.UpdateGeometry")
 	C.qute_QGraphicsLayoutItem_updateGeometry(self)
+	runtime.KeepAlive(this)
 }
 
 // IsEmpty wraps QGraphicsLayoutItem::isEmpty.
@@ -374,6 +403,7 @@ func (this *QGraphicsLayoutItem) UpdateGeometry() {
 func (this *QGraphicsLayoutItem) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.IsEmpty")
 	r := C.qute_QGraphicsLayoutItem_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -387,6 +417,7 @@ func (this *QGraphicsLayoutItem) IsEmpty() bool {
 func (this *QGraphicsLayoutItem) ParentLayoutItem() *QGraphicsLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.ParentLayoutItem")
 	r := C.qute_QGraphicsLayoutItem_parentLayoutItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsLayoutItem](rt.WrapClass(r, "QGraphicsLayoutItem", rt.KeepOrBorrow), r)
 }
 
@@ -402,6 +433,8 @@ func (this *QGraphicsLayoutItem) SetParentLayoutItem(parent QGraphicsLayoutItemL
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsLayoutItem()), "QGraphicsLayoutItem.SetParentLayoutItem")
 	}
 	C.qute_QGraphicsLayoutItem_setParentLayoutItem(self, parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 }
 
 // IsLayout wraps QGraphicsLayoutItem::isLayout.
@@ -412,6 +445,7 @@ func (this *QGraphicsLayoutItem) SetParentLayoutItem(parent QGraphicsLayoutItemL
 func (this *QGraphicsLayoutItem) IsLayout() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.IsLayout")
 	r := C.qute_QGraphicsLayoutItem_isLayout(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -425,6 +459,7 @@ func (this *QGraphicsLayoutItem) IsLayout() bool {
 func (this *QGraphicsLayoutItem) GraphicsItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.GraphicsItem")
 	r := C.qute_QGraphicsLayoutItem_graphicsItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
 }
 
@@ -436,5 +471,6 @@ func (this *QGraphicsLayoutItem) GraphicsItem() *QGraphicsItem {
 func (this *QGraphicsLayoutItem) OwnedByLayout() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.OwnedByLayout")
 	r := C.qute_QGraphicsLayoutItem_ownedByLayout(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

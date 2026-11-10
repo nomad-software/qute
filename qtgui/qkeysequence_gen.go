@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -121,6 +122,7 @@ func NewQKeySequenceWithK1(k1 int) *QKeySequence {
 func NewQKeySequenceWithKeyCombination(k1 *qtcore.QKeyCombination) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceWithKeyCombination")
 	p := C.qute_QKeySequence_new_3(rt.UseArg(unsafe.Pointer(k1), "NewQKeySequenceWithKeyCombination"))
+	runtime.KeepAlive(k1)
 	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
@@ -145,6 +147,7 @@ func NewQKeySequenceStandard(key QKeySequenceStandardKey) *QKeySequence {
 func (this *QKeySequence) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequence.Count")
 	r := C.qute_QKeySequence_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -156,6 +159,7 @@ func (this *QKeySequence) Count() int {
 func (this *QKeySequence) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequence.IsEmpty")
 	r := C.qute_QKeySequence_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -167,6 +171,7 @@ func (this *QKeySequence) IsEmpty() bool {
 func (this *QKeySequence) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequence.ToString")
 	r := C.qute_QKeySequence_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -178,6 +183,8 @@ func (this *QKeySequence) ToString() string {
 func (this *QKeySequence) Matches(seq *QKeySequence) QKeySequenceSequenceMatch {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequence.Matches")
 	r := C.qute_QKeySequence_matches(self, rt.UseArg(unsafe.Pointer(seq), "QKeySequence.Matches"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(seq)
 	return QKeySequenceSequenceMatch(r)
 }
 
@@ -219,6 +226,7 @@ func QKeySequenceListToString(list []*QKeySequence) string {
 		listC[i] = rt.UseArg(unsafe.Pointer(list[i]), "QKeySequenceListToString")
 	}
 	r := C.qute_QKeySequence_listToString(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
+	runtime.KeepAlive(list)
 	return quteStr(r)
 }
 

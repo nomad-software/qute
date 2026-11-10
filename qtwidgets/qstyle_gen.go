@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -56,6 +57,7 @@ func QStyleCast(o qtcore.QObjectLike) *QStyle {
 func (this *QStyle) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.Name")
 	r := C.qute_QStyle_name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -71,6 +73,8 @@ func (this *QStyle) PolishWithWidget(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.PolishWithWidget")
 	}
 	C.qute_QStyle_polish(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // Unpolish wraps QStyle::unpolish.
@@ -85,6 +89,8 @@ func (this *QStyle) Unpolish(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.Unpolish")
 	}
 	C.qute_QStyle_unpolish(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // PolishApplication wraps QStyle::polish.
@@ -99,6 +105,8 @@ func (this *QStyle) PolishApplication(application QApplicationLike) {
 		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.PolishApplication")
 	}
 	C.qute_QStyle_polish_1(self, applicationPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(application)
 }
 
 // UnpolishApplication wraps QStyle::unpolish.
@@ -113,6 +121,8 @@ func (this *QStyle) UnpolishApplication(application QApplicationLike) {
 		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.UnpolishApplication")
 	}
 	C.qute_QStyle_unpolish_1(self, applicationPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(application)
 }
 
 // Polish wraps QStyle::polish.
@@ -124,6 +134,7 @@ func (this *QStyle) Polish() *qtgui.QPalette {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.Polish")
 	var paletteOut unsafe.Pointer
 	C.qute_QStyle_polish_2(self, &paletteOut)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPalette](rt.WrapClass(paletteOut, "QPalette", rt.TakeOwned), paletteOut)
 }
 
@@ -135,6 +146,8 @@ func (this *QStyle) Polish() *qtgui.QPalette {
 func (this *QStyle) ItemTextRect(fm *qtgui.QFontMetrics, rArg qtcore.QRect, flags int, enabled bool, text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.ItemTextRect")
 	r := C.qute_QStyle_itemTextRect(self, rt.Use(unsafe.Pointer(fm), "QStyle.ItemTextRect"), cQRect(rArg), C.int(flags), C.bool(enabled), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fm)
 	return goQRect(r)
 }
 
@@ -146,6 +159,8 @@ func (this *QStyle) ItemTextRect(fm *qtgui.QFontMetrics, rArg qtcore.QRect, flag
 func (this *QStyle) ItemPixmapRect(rArg qtcore.QRect, flags int, pixmap *qtgui.QPixmap) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.ItemPixmapRect")
 	r := C.qute_QStyle_itemPixmapRect(self, cQRect(rArg), C.int(flags), rt.UseArg(unsafe.Pointer(pixmap), "QStyle.ItemPixmapRect"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 	return goQRect(r)
 }
 
@@ -161,6 +176,9 @@ func (this *QStyle) DrawItemText(painter qtgui.QPainterLike, rect qtcore.QRect, 
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QStyle.DrawItemText")
 	}
 	C.qute_QStyle_drawItemText(self, painterPtr, cQRect(rect), C.int(flags), rt.UseArg(unsafe.Pointer(pal), "QStyle.DrawItemText"), C.bool(enabled), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(pal)
 }
 
 // DrawItemPixmap wraps QStyle::drawItemPixmap.
@@ -175,6 +193,9 @@ func (this *QStyle) DrawItemPixmap(painter qtgui.QPainterLike, rect qtcore.QRect
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QStyle.DrawItemPixmap")
 	}
 	C.qute_QStyle_drawItemPixmap(self, painterPtr, cQRect(rect), C.int(alignment), rt.UseArg(unsafe.Pointer(pixmap), "QStyle.DrawItemPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(pixmap)
 }
 
 // StandardPalette wraps QStyle::standardPalette.
@@ -187,6 +208,7 @@ func (this *QStyle) DrawItemPixmap(painter qtgui.QPainterLike, rect qtcore.QRect
 func (this *QStyle) StandardPalette() *qtgui.QPalette {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardPalette")
 	r := C.qute_QStyle_standardPalette(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
@@ -202,6 +224,9 @@ func (this *QStyle) DrawPrimitive(pe QStylePrimitiveElement, opt *QStyleOption, 
 		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawPrimitive")
 	}
 	C.qute_QStyle_drawPrimitive(self, C.int64_t(pe), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawPrimitive"), pArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(pArg)
 }
 
 // DrawControl wraps QStyle::drawControl.
@@ -216,6 +241,9 @@ func (this *QStyle) DrawControl(element QStyleControlElement, opt *QStyleOption,
 		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawControl")
 	}
 	C.qute_QStyle_drawControl(self, C.int64_t(element), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawControl"), pArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(pArg)
 }
 
 // SubElementRect wraps QStyle::subElementRect.
@@ -226,6 +254,8 @@ func (this *QStyle) DrawControl(element QStyleControlElement, opt *QStyleOption,
 func (this *QStyle) SubElementRect(subElement QStyleSubElement, option *QStyleOption) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.SubElementRect")
 	r := C.qute_QStyle_subElementRect(self, C.int64_t(subElement), rt.UseArg(unsafe.Pointer(option), "QStyle.SubElementRect"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
 	return goQRect(r)
 }
 
@@ -241,6 +271,9 @@ func (this *QStyle) DrawComplexControl(cc QStyleComplexControl, opt *QStyleOptio
 		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawComplexControl")
 	}
 	C.qute_QStyle_drawComplexControl(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawComplexControl"), pArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(pArg)
 }
 
 // HitTestComplexControl wraps QStyle::hitTestComplexControl.
@@ -251,6 +284,8 @@ func (this *QStyle) DrawComplexControl(cc QStyleComplexControl, opt *QStyleOptio
 func (this *QStyle) HitTestComplexControl(cc QStyleComplexControl, opt *QStyleOptionComplex, pt qtcore.QPoint) QStyleSubControls {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.HitTestComplexControl")
 	r := C.qute_QStyle_hitTestComplexControl(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.HitTestComplexControl"), cQPoint(pt))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
 	return QStyleSubControls(r)
 }
 
@@ -262,6 +297,8 @@ func (this *QStyle) HitTestComplexControl(cc QStyleComplexControl, opt *QStyleOp
 func (this *QStyle) SubControlRect(cc QStyleComplexControl, opt *QStyleOptionComplex, sc QStyleSubControls) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.SubControlRect")
 	r := C.qute_QStyle_subControlRect(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.SubControlRect"), C.int64_t(sc))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
 	return goQRect(r)
 }
 
@@ -273,6 +310,7 @@ func (this *QStyle) SubControlRect(cc QStyleComplexControl, opt *QStyleOptionCom
 func (this *QStyle) PixelMetric(metric QStylePixelMetric) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.PixelMetric")
 	r := C.qute_QStyle_pixelMetric(self, C.int64_t(metric))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -284,6 +322,8 @@ func (this *QStyle) PixelMetric(metric QStylePixelMetric) int {
 func (this *QStyle) SizeFromContents(ct QStyleContentsType, opt *QStyleOption, contentsSize qtcore.QSize) qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.SizeFromContents")
 	r := C.qute_QStyle_sizeFromContents(self, C.int64_t(ct), rt.UseArg(unsafe.Pointer(opt), "QStyle.SizeFromContents"), cQSize(contentsSize))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
 	return goQSize(r)
 }
 
@@ -295,6 +335,7 @@ func (this *QStyle) SizeFromContents(ct QStyleContentsType, opt *QStyleOption, c
 func (this *QStyle) StyleHint(stylehint QStyleStyleHint) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StyleHint")
 	r := C.qute_QStyle_styleHint(self, C.int64_t(stylehint))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -308,6 +349,7 @@ func (this *QStyle) StyleHint(stylehint QStyleStyleHint) int {
 func (this *QStyle) StandardPixmap(standardPixmap QStyleStandardPixmap) *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardPixmap")
 	r := C.qute_QStyle_standardPixmap(self, C.int64_t(standardPixmap))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -321,6 +363,7 @@ func (this *QStyle) StandardPixmap(standardPixmap QStyleStandardPixmap) *qtgui.Q
 func (this *QStyle) StandardIcon(standardIcon QStyleStandardPixmap) *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardIcon")
 	r := C.qute_QStyle_standardIcon(self, C.int64_t(standardIcon))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -334,6 +377,9 @@ func (this *QStyle) StandardIcon(standardIcon QStyleStandardPixmap) *qtgui.QIcon
 func (this *QStyle) GeneratedIconPixmap(iconMode qtgui.QIconMode, pixmap *qtgui.QPixmap, opt *QStyleOption) *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.GeneratedIconPixmap")
 	r := C.qute_QStyle_generatedIconPixmap(self, C.int64_t(iconMode), rt.UseArg(unsafe.Pointer(pixmap), "QStyle.GeneratedIconPixmap"), rt.UseArg(unsafe.Pointer(opt), "QStyle.GeneratedIconPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
+	runtime.KeepAlive(opt)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -345,6 +391,7 @@ func (this *QStyle) GeneratedIconPixmap(iconMode qtgui.QIconMode, pixmap *qtgui.
 func (this *QStyle) LayoutSpacing(control1 QSizePolicyControlTypes, control2 QSizePolicyControlTypes, orientation qtcore.Orientations) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.LayoutSpacing")
 	r := C.qute_QStyle_layoutSpacing(self, C.int64_t(control1), C.int64_t(control2), C.int64_t(orientation))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -356,6 +403,7 @@ func (this *QStyle) LayoutSpacing(control1 QSizePolicyControlTypes, control2 QSi
 func (this *QStyle) CombinedLayoutSpacing(controls1 QSizePolicyControlTypes, controls2 QSizePolicyControlTypes, orientation qtcore.Orientations) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.CombinedLayoutSpacing")
 	r := C.qute_QStyle_combinedLayoutSpacing(self, C.int64_t(controls1), C.int64_t(controls2), C.int64_t(orientation))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -369,6 +417,7 @@ func (this *QStyle) CombinedLayoutSpacing(controls1 QSizePolicyControlTypes, con
 func (this *QStyle) Proxy() *QStyle {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.Proxy")
 	r := C.qute_QStyle_proxy(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStyle](rt.WrapClass(r, "QStyle", rt.KeepOrBorrow), r)
 }
 

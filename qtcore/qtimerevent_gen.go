@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -40,6 +41,7 @@ func QTimerEventFromPtr(p unsafe.Pointer, own Ownership) *QTimerEvent {
 func (this *QTimerEvent) TimerId() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimerEvent.TimerId")
 	r := C.qute_QTimerEvent_timerId(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -51,6 +53,7 @@ func (this *QTimerEvent) TimerId() int {
 func (this *QTimerEvent) Id() TimerId {
 	self := rt.Use(unsafe.Pointer(this), "QTimerEvent.Id")
 	r := C.qute_QTimerEvent_id(self)
+	runtime.KeepAlive(this)
 	return TimerId(r)
 }
 
@@ -66,5 +69,7 @@ func (this *QTimerEvent) Matches(timer QBasicTimerLike) bool {
 		timerPtr = rt.UseArg(unsafe.Pointer(timer.AsQBasicTimer()), "QTimerEvent.Matches")
 	}
 	r := C.qute_QTimerEvent_matches(self, timerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(timer)
 	return bool(r)
 }

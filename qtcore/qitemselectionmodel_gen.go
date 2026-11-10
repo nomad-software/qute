@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -76,6 +77,8 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQItemSelectionModelWithAbstractItemModel")
 	}
 	p := C.qute_QItemSelectionModel_new_1(modelPtr, parentPtr)
+	runtime.KeepAlive(model)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -94,6 +97,7 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 func (this *QItemSelectionModel) CurrentIndex() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.CurrentIndex")
 	r := C.qute_QItemSelectionModel_currentIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -105,6 +109,8 @@ func (this *QItemSelectionModel) CurrentIndex() *QModelIndex {
 func (this *QItemSelectionModel) IsSelected(index *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsSelected")
 	r := C.qute_QItemSelectionModel_isSelected(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionModel.IsSelected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -116,6 +122,7 @@ func (this *QItemSelectionModel) IsSelected(index *QModelIndex) bool {
 func (this *QItemSelectionModel) IsRowSelected(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsRowSelected")
 	r := C.qute_QItemSelectionModel_isRowSelected(self, C.int(row))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -127,6 +134,7 @@ func (this *QItemSelectionModel) IsRowSelected(row int) bool {
 func (this *QItemSelectionModel) IsColumnSelected(column int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsColumnSelected")
 	r := C.qute_QItemSelectionModel_isColumnSelected(self, C.int(column))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -138,6 +146,7 @@ func (this *QItemSelectionModel) IsColumnSelected(column int) bool {
 func (this *QItemSelectionModel) RowIntersectsSelection(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.RowIntersectsSelection")
 	r := C.qute_QItemSelectionModel_rowIntersectsSelection(self, C.int(row))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -149,6 +158,7 @@ func (this *QItemSelectionModel) RowIntersectsSelection(row int) bool {
 func (this *QItemSelectionModel) ColumnIntersectsSelection(column int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.ColumnIntersectsSelection")
 	r := C.qute_QItemSelectionModel_columnIntersectsSelection(self, C.int(column))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -160,6 +170,7 @@ func (this *QItemSelectionModel) ColumnIntersectsSelection(column int) bool {
 func (this *QItemSelectionModel) HasSelection() bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.HasSelection")
 	r := C.qute_QItemSelectionModel_hasSelection(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -171,6 +182,7 @@ func (this *QItemSelectionModel) HasSelection() bool {
 func (this *QItemSelectionModel) SelectedIndexes() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedIndexes")
 	r := C.qute_QItemSelectionModel_selectedIndexes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})
@@ -184,6 +196,7 @@ func (this *QItemSelectionModel) SelectedIndexes() []*QModelIndex {
 func (this *QItemSelectionModel) SelectedRows() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedRows")
 	r := C.qute_QItemSelectionModel_selectedRows(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})
@@ -197,6 +210,7 @@ func (this *QItemSelectionModel) SelectedRows() []*QModelIndex {
 func (this *QItemSelectionModel) SelectedColumns() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedColumns")
 	r := C.qute_QItemSelectionModel_selectedColumns(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})
@@ -212,6 +226,7 @@ func (this *QItemSelectionModel) SelectedColumns() []*QModelIndex {
 func (this *QItemSelectionModel) Selection() *QItemSelection {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.Selection")
 	r := C.qute_QItemSelectionModel_selection(self)
+	runtime.KeepAlive(this)
 	return rt.View[QItemSelection](rt.WrapClass(r, "QItemSelection", rt.TakeOwned), r)
 }
 
@@ -225,6 +240,7 @@ func (this *QItemSelectionModel) Selection() *QItemSelection {
 func (this *QItemSelectionModel) Model() *QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.Model")
 	r := C.qute_QItemSelectionModel_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -240,6 +256,8 @@ func (this *QItemSelectionModel) SetModel(model QAbstractItemModelLike) {
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QItemSelectionModel.SetModel")
 	}
 	C.qute_QItemSelectionModel_setModel(self, modelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(model)
 }
 
 // SetCurrentIndex wraps QItemSelectionModel::setCurrentIndex.
@@ -250,6 +268,8 @@ func (this *QItemSelectionModel) SetModel(model QAbstractItemModelLike) {
 func (this *QItemSelectionModel) SetCurrentIndex(index *QModelIndex, command QItemSelectionModelSelectionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SetCurrentIndex")
 	C.qute_QItemSelectionModel_setCurrentIndex(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionModel.SetCurrentIndex"), C.int64_t(command))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // Select wraps QItemSelectionModel::select.
@@ -260,6 +280,8 @@ func (this *QItemSelectionModel) SetCurrentIndex(index *QModelIndex, command QIt
 func (this *QItemSelectionModel) Select(index *QModelIndex, command QItemSelectionModelSelectionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.Select")
 	C.qute_QItemSelectionModel_select(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionModel.Select"), C.int64_t(command))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // SelectItemSelection wraps QItemSelectionModel::select.
@@ -270,6 +292,8 @@ func (this *QItemSelectionModel) Select(index *QModelIndex, command QItemSelecti
 func (this *QItemSelectionModel) SelectItemSelection(selection *QItemSelection, command QItemSelectionModelSelectionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectItemSelection")
 	C.qute_QItemSelectionModel_select_1(self, rt.Use(unsafe.Pointer(selection), "QItemSelectionModel.SelectItemSelection"), C.int64_t(command))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selection)
 }
 
 // Clear wraps QItemSelectionModel::clear.
@@ -280,6 +304,7 @@ func (this *QItemSelectionModel) SelectItemSelection(selection *QItemSelection, 
 func (this *QItemSelectionModel) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.Clear")
 	C.qute_QItemSelectionModel_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // Reset wraps QItemSelectionModel::reset.
@@ -290,6 +315,7 @@ func (this *QItemSelectionModel) Clear() {
 func (this *QItemSelectionModel) Reset() {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.Reset")
 	C.qute_QItemSelectionModel_reset(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearSelection wraps QItemSelectionModel::clearSelection.
@@ -300,6 +326,7 @@ func (this *QItemSelectionModel) Reset() {
 func (this *QItemSelectionModel) ClearSelection() {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.ClearSelection")
 	C.qute_QItemSelectionModel_clearSelection(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearCurrentIndex wraps QItemSelectionModel::clearCurrentIndex.
@@ -310,6 +337,7 @@ func (this *QItemSelectionModel) ClearSelection() {
 func (this *QItemSelectionModel) ClearCurrentIndex() {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.ClearCurrentIndex")
 	C.qute_QItemSelectionModel_clearCurrentIndex(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -320,6 +348,9 @@ func (this *QItemSelectionModel) ClearCurrentIndex() {
 func (this *QItemSelectionModel) EmitSelectionChanged(selected *QItemSelection, deselected *QItemSelection) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.EmitSelectionChanged")
 	C.qute_QItemSelectionModel_selectionChanged_1(self, rt.Use(unsafe.Pointer(selected), "QItemSelectionModel.EmitSelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QItemSelectionModel.EmitSelectionChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selected)
+	runtime.KeepAlive(deselected)
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -330,6 +361,9 @@ func (this *QItemSelectionModel) EmitSelectionChanged(selected *QItemSelection, 
 func (this *QItemSelectionModel) EmitCurrentChanged(current *QModelIndex, previous *QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.EmitCurrentChanged")
 	C.qute_QItemSelectionModel_currentChanged_1(self, rt.UseArg(unsafe.Pointer(current), "QItemSelectionModel.EmitCurrentChanged"), rt.UseArg(unsafe.Pointer(previous), "QItemSelectionModel.EmitCurrentChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(current)
+	runtime.KeepAlive(previous)
 }
 
 // EmitCurrentRowChanged wraps emitting the currentRowChanged signal.
@@ -340,6 +374,9 @@ func (this *QItemSelectionModel) EmitCurrentChanged(current *QModelIndex, previo
 func (this *QItemSelectionModel) EmitCurrentRowChanged(current *QModelIndex, previous *QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.EmitCurrentRowChanged")
 	C.qute_QItemSelectionModel_currentRowChanged_1(self, rt.UseArg(unsafe.Pointer(current), "QItemSelectionModel.EmitCurrentRowChanged"), rt.UseArg(unsafe.Pointer(previous), "QItemSelectionModel.EmitCurrentRowChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(current)
+	runtime.KeepAlive(previous)
 }
 
 // EmitCurrentColumnChanged wraps emitting the currentColumnChanged signal.
@@ -350,6 +387,9 @@ func (this *QItemSelectionModel) EmitCurrentRowChanged(current *QModelIndex, pre
 func (this *QItemSelectionModel) EmitCurrentColumnChanged(current *QModelIndex, previous *QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.EmitCurrentColumnChanged")
 	C.qute_QItemSelectionModel_currentColumnChanged_1(self, rt.UseArg(unsafe.Pointer(current), "QItemSelectionModel.EmitCurrentColumnChanged"), rt.UseArg(unsafe.Pointer(previous), "QItemSelectionModel.EmitCurrentColumnChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(current)
+	runtime.KeepAlive(previous)
 }
 
 // EmitModelChanged wraps emitting the modelChanged signal.
@@ -364,6 +404,8 @@ func (this *QItemSelectionModel) EmitModelChanged(model QAbstractItemModelLike) 
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QItemSelectionModel.EmitModelChanged")
 	}
 	C.qute_QItemSelectionModel_modelChanged_1(self, modelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(model)
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the

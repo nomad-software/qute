@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQSurfaceFormatWithFormatOption(options QSurfaceFormatFormatOptions) *QSu
 func (this *QSurfaceFormat) SetDepthBufferSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetDepthBufferSize")
 	C.qute_QSurfaceFormat_setDepthBufferSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // DepthBufferSize wraps QSurfaceFormat::depthBufferSize.
@@ -119,6 +121,7 @@ func (this *QSurfaceFormat) SetDepthBufferSize(size int) {
 func (this *QSurfaceFormat) DepthBufferSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.DepthBufferSize")
 	r := C.qute_QSurfaceFormat_depthBufferSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -130,6 +133,7 @@ func (this *QSurfaceFormat) DepthBufferSize() int {
 func (this *QSurfaceFormat) SetStencilBufferSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetStencilBufferSize")
 	C.qute_QSurfaceFormat_setStencilBufferSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // StencilBufferSize wraps QSurfaceFormat::stencilBufferSize.
@@ -140,6 +144,7 @@ func (this *QSurfaceFormat) SetStencilBufferSize(size int) {
 func (this *QSurfaceFormat) StencilBufferSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.StencilBufferSize")
 	r := C.qute_QSurfaceFormat_stencilBufferSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -151,6 +156,7 @@ func (this *QSurfaceFormat) StencilBufferSize() int {
 func (this *QSurfaceFormat) SetRedBufferSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetRedBufferSize")
 	C.qute_QSurfaceFormat_setRedBufferSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // RedBufferSize wraps QSurfaceFormat::redBufferSize.
@@ -161,6 +167,7 @@ func (this *QSurfaceFormat) SetRedBufferSize(size int) {
 func (this *QSurfaceFormat) RedBufferSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.RedBufferSize")
 	r := C.qute_QSurfaceFormat_redBufferSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -172,6 +179,7 @@ func (this *QSurfaceFormat) RedBufferSize() int {
 func (this *QSurfaceFormat) SetGreenBufferSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetGreenBufferSize")
 	C.qute_QSurfaceFormat_setGreenBufferSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // GreenBufferSize wraps QSurfaceFormat::greenBufferSize.
@@ -182,6 +190,7 @@ func (this *QSurfaceFormat) SetGreenBufferSize(size int) {
 func (this *QSurfaceFormat) GreenBufferSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.GreenBufferSize")
 	r := C.qute_QSurfaceFormat_greenBufferSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -193,6 +202,7 @@ func (this *QSurfaceFormat) GreenBufferSize() int {
 func (this *QSurfaceFormat) SetBlueBufferSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetBlueBufferSize")
 	C.qute_QSurfaceFormat_setBlueBufferSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // BlueBufferSize wraps QSurfaceFormat::blueBufferSize.
@@ -203,6 +213,7 @@ func (this *QSurfaceFormat) SetBlueBufferSize(size int) {
 func (this *QSurfaceFormat) BlueBufferSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.BlueBufferSize")
 	r := C.qute_QSurfaceFormat_blueBufferSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -214,6 +225,7 @@ func (this *QSurfaceFormat) BlueBufferSize() int {
 func (this *QSurfaceFormat) SetAlphaBufferSize(size int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetAlphaBufferSize")
 	C.qute_QSurfaceFormat_setAlphaBufferSize(self, C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // AlphaBufferSize wraps QSurfaceFormat::alphaBufferSize.
@@ -224,6 +236,7 @@ func (this *QSurfaceFormat) SetAlphaBufferSize(size int) {
 func (this *QSurfaceFormat) AlphaBufferSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.AlphaBufferSize")
 	r := C.qute_QSurfaceFormat_alphaBufferSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -235,6 +248,7 @@ func (this *QSurfaceFormat) AlphaBufferSize() int {
 func (this *QSurfaceFormat) SetSamples(numSamples int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetSamples")
 	C.qute_QSurfaceFormat_setSamples(self, C.int(numSamples))
+	runtime.KeepAlive(this)
 }
 
 // Samples wraps QSurfaceFormat::samples.
@@ -245,6 +259,7 @@ func (this *QSurfaceFormat) SetSamples(numSamples int) {
 func (this *QSurfaceFormat) Samples() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.Samples")
 	r := C.qute_QSurfaceFormat_samples(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -256,6 +271,7 @@ func (this *QSurfaceFormat) Samples() int {
 func (this *QSurfaceFormat) SetSwapBehavior(behavior QSurfaceFormatSwapBehavior) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetSwapBehavior")
 	C.qute_QSurfaceFormat_setSwapBehavior(self, C.int64_t(behavior))
+	runtime.KeepAlive(this)
 }
 
 // SwapBehavior wraps QSurfaceFormat::swapBehavior.
@@ -266,6 +282,7 @@ func (this *QSurfaceFormat) SetSwapBehavior(behavior QSurfaceFormatSwapBehavior)
 func (this *QSurfaceFormat) SwapBehavior() QSurfaceFormatSwapBehavior {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SwapBehavior")
 	r := C.qute_QSurfaceFormat_swapBehavior(self)
+	runtime.KeepAlive(this)
 	return QSurfaceFormatSwapBehavior(r)
 }
 
@@ -277,6 +294,7 @@ func (this *QSurfaceFormat) SwapBehavior() QSurfaceFormatSwapBehavior {
 func (this *QSurfaceFormat) HasAlpha() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.HasAlpha")
 	r := C.qute_QSurfaceFormat_hasAlpha(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -288,6 +306,7 @@ func (this *QSurfaceFormat) HasAlpha() bool {
 func (this *QSurfaceFormat) SetProfile(profile QSurfaceFormatOpenGLContextProfile) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetProfile")
 	C.qute_QSurfaceFormat_setProfile(self, C.int64_t(profile))
+	runtime.KeepAlive(this)
 }
 
 // Profile wraps QSurfaceFormat::profile.
@@ -298,6 +317,7 @@ func (this *QSurfaceFormat) SetProfile(profile QSurfaceFormatOpenGLContextProfil
 func (this *QSurfaceFormat) Profile() QSurfaceFormatOpenGLContextProfile {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.Profile")
 	r := C.qute_QSurfaceFormat_profile(self)
+	runtime.KeepAlive(this)
 	return QSurfaceFormatOpenGLContextProfile(r)
 }
 
@@ -309,6 +329,7 @@ func (this *QSurfaceFormat) Profile() QSurfaceFormatOpenGLContextProfile {
 func (this *QSurfaceFormat) SetRenderableType(typeArg QSurfaceFormatRenderableType) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetRenderableType")
 	C.qute_QSurfaceFormat_setRenderableType(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // RenderableType wraps QSurfaceFormat::renderableType.
@@ -319,6 +340,7 @@ func (this *QSurfaceFormat) SetRenderableType(typeArg QSurfaceFormatRenderableTy
 func (this *QSurfaceFormat) RenderableType() QSurfaceFormatRenderableType {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.RenderableType")
 	r := C.qute_QSurfaceFormat_renderableType(self)
+	runtime.KeepAlive(this)
 	return QSurfaceFormatRenderableType(r)
 }
 
@@ -330,6 +352,7 @@ func (this *QSurfaceFormat) RenderableType() QSurfaceFormatRenderableType {
 func (this *QSurfaceFormat) SetMajorVersion(majorVersion int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetMajorVersion")
 	C.qute_QSurfaceFormat_setMajorVersion(self, C.int(majorVersion))
+	runtime.KeepAlive(this)
 }
 
 // MajorVersion wraps QSurfaceFormat::majorVersion.
@@ -340,6 +363,7 @@ func (this *QSurfaceFormat) SetMajorVersion(majorVersion int) {
 func (this *QSurfaceFormat) MajorVersion() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.MajorVersion")
 	r := C.qute_QSurfaceFormat_majorVersion(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -351,6 +375,7 @@ func (this *QSurfaceFormat) MajorVersion() int {
 func (this *QSurfaceFormat) SetMinorVersion(minorVersion int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetMinorVersion")
 	C.qute_QSurfaceFormat_setMinorVersion(self, C.int(minorVersion))
+	runtime.KeepAlive(this)
 }
 
 // MinorVersion wraps QSurfaceFormat::minorVersion.
@@ -361,6 +386,7 @@ func (this *QSurfaceFormat) SetMinorVersion(minorVersion int) {
 func (this *QSurfaceFormat) MinorVersion() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.MinorVersion")
 	r := C.qute_QSurfaceFormat_minorVersion(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -374,6 +400,7 @@ func (this *QSurfaceFormat) Version() (int, int) {
 	var pair0Out C.int
 	var pair1Out C.int
 	C.qute_QSurfaceFormat_version(self, &pair0Out, &pair1Out)
+	runtime.KeepAlive(this)
 	return int(pair0Out), int(pair1Out)
 }
 
@@ -385,6 +412,7 @@ func (this *QSurfaceFormat) Version() (int, int) {
 func (this *QSurfaceFormat) SetVersion(major int, minor int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetVersion")
 	C.qute_QSurfaceFormat_setVersion(self, C.int(major), C.int(minor))
+	runtime.KeepAlive(this)
 }
 
 // Stereo wraps QSurfaceFormat::stereo.
@@ -395,6 +423,7 @@ func (this *QSurfaceFormat) SetVersion(major int, minor int) {
 func (this *QSurfaceFormat) Stereo() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.Stereo")
 	r := C.qute_QSurfaceFormat_stereo(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -406,6 +435,7 @@ func (this *QSurfaceFormat) Stereo() bool {
 func (this *QSurfaceFormat) SetStereo(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetStereo")
 	C.qute_QSurfaceFormat_setStereo(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // SetOptions wraps QSurfaceFormat::setOptions.
@@ -416,6 +446,7 @@ func (this *QSurfaceFormat) SetStereo(enable bool) {
 func (this *QSurfaceFormat) SetOptions(options QSurfaceFormatFormatOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetOptions")
 	C.qute_QSurfaceFormat_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // SetOption wraps QSurfaceFormat::setOption.
@@ -426,6 +457,7 @@ func (this *QSurfaceFormat) SetOptions(options QSurfaceFormatFormatOptions) {
 func (this *QSurfaceFormat) SetOption(option QSurfaceFormatFormatOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetOption")
 	C.qute_QSurfaceFormat_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QSurfaceFormat::testOption.
@@ -436,6 +468,7 @@ func (this *QSurfaceFormat) SetOption(option QSurfaceFormatFormatOptions) {
 func (this *QSurfaceFormat) TestOption(option QSurfaceFormatFormatOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.TestOption")
 	r := C.qute_QSurfaceFormat_testOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -447,6 +480,7 @@ func (this *QSurfaceFormat) TestOption(option QSurfaceFormatFormatOptions) bool 
 func (this *QSurfaceFormat) Options() QSurfaceFormatFormatOptions {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.Options")
 	r := C.qute_QSurfaceFormat_options(self)
+	runtime.KeepAlive(this)
 	return QSurfaceFormatFormatOptions(r)
 }
 
@@ -458,6 +492,7 @@ func (this *QSurfaceFormat) Options() QSurfaceFormatFormatOptions {
 func (this *QSurfaceFormat) SwapInterval() int {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SwapInterval")
 	r := C.qute_QSurfaceFormat_swapInterval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -469,6 +504,7 @@ func (this *QSurfaceFormat) SwapInterval() int {
 func (this *QSurfaceFormat) SetSwapInterval(interval int) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetSwapInterval")
 	C.qute_QSurfaceFormat_setSwapInterval(self, C.int(interval))
+	runtime.KeepAlive(this)
 }
 
 // ColorSpace wraps QSurfaceFormat::colorSpace.
@@ -481,6 +517,7 @@ func (this *QSurfaceFormat) SetSwapInterval(interval int) {
 func (this *QSurfaceFormat) ColorSpace() *QColorSpace {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.ColorSpace")
 	r := C.qute_QSurfaceFormat_colorSpace(self)
+	runtime.KeepAlive(this)
 	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
@@ -492,6 +529,8 @@ func (this *QSurfaceFormat) ColorSpace() *QColorSpace {
 func (this *QSurfaceFormat) SetColorSpace(colorSpace *QColorSpace) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetColorSpace")
 	C.qute_QSurfaceFormat_setColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QSurfaceFormat.SetColorSpace"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
 }
 
 // QSurfaceFormatSetDefaultFormat wraps QSurfaceFormat::setDefaultFormat.
@@ -502,6 +541,7 @@ func (this *QSurfaceFormat) SetColorSpace(colorSpace *QColorSpace) {
 func QSurfaceFormatSetDefaultFormat(format *QSurfaceFormat) {
 	rt.CheckThread("QSurfaceFormatSetDefaultFormat")
 	C.qute_QSurfaceFormat_setDefaultFormat(rt.UseArg(unsafe.Pointer(format), "QSurfaceFormatSetDefaultFormat"))
+	runtime.KeepAlive(format)
 }
 
 // QSurfaceFormatDefaultFormat wraps QSurfaceFormat::defaultFormat.

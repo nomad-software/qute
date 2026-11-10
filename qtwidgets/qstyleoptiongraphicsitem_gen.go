@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -58,6 +59,7 @@ func NewQStyleOptionGraphicsItem() *QStyleOptionGraphicsItem {
 func (this *QStyleOptionGraphicsItem) ExposedRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionGraphicsItem.ExposedRect")
 	r := C.qute_QStyleOptionGraphicsItem_get_exposedRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -71,6 +73,7 @@ func (this *QStyleOptionGraphicsItem) ExposedRect() qtcore.QRectF {
 func (this *QStyleOptionGraphicsItem) SetExposedRect(exposedRect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionGraphicsItem.SetExposedRect")
 	C.qute_QStyleOptionGraphicsItem_set_exposedRect(self, cQRectF(exposedRect))
+	runtime.KeepAlive(this)
 }
 
 // QStyleOptionGraphicsItemLevelOfDetailFromTransform wraps QStyleOptionGraphicsItem::levelOfDetailFromTransform.
@@ -81,5 +84,6 @@ func (this *QStyleOptionGraphicsItem) SetExposedRect(exposedRect qtcore.QRectF) 
 func QStyleOptionGraphicsItemLevelOfDetailFromTransform(worldTransform *qtgui.QTransform) float64 {
 	rt.CheckThread("QStyleOptionGraphicsItemLevelOfDetailFromTransform")
 	r := C.qute_QStyleOptionGraphicsItem_levelOfDetailFromTransform(rt.UseArg(unsafe.Pointer(worldTransform), "QStyleOptionGraphicsItemLevelOfDetailFromTransform"))
+	runtime.KeepAlive(worldTransform)
 	return float64(r)
 }

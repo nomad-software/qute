@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -43,6 +44,7 @@ func QInputEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QInputEvent {
 func (this *QInputEvent) Device() *QInputDevice {
 	self := rt.Use(unsafe.Pointer(this), "QInputEvent.Device")
 	r := C.qute_QInputEvent_device(self)
+	runtime.KeepAlive(this)
 	return rt.View[QInputDevice](rt.WrapClass(r, "QInputDevice", rt.KeepOrBorrow), r)
 }
 
@@ -54,6 +56,7 @@ func (this *QInputEvent) Device() *QInputDevice {
 func (this *QInputEvent) DeviceType() QInputDeviceDeviceTypes {
 	self := rt.Use(unsafe.Pointer(this), "QInputEvent.DeviceType")
 	r := C.qute_QInputEvent_deviceType(self)
+	runtime.KeepAlive(this)
 	return QInputDeviceDeviceTypes(r)
 }
 
@@ -65,6 +68,7 @@ func (this *QInputEvent) DeviceType() QInputDeviceDeviceTypes {
 func (this *QInputEvent) Modifiers() qtcore.KeyboardModifiers {
 	self := rt.Use(unsafe.Pointer(this), "QInputEvent.Modifiers")
 	r := C.qute_QInputEvent_modifiers(self)
+	runtime.KeepAlive(this)
 	return qtcore.KeyboardModifiers(r)
 }
 
@@ -76,6 +80,7 @@ func (this *QInputEvent) Modifiers() qtcore.KeyboardModifiers {
 func (this *QInputEvent) SetModifiers(modifiers qtcore.KeyboardModifiers) {
 	self := rt.Use(unsafe.Pointer(this), "QInputEvent.SetModifiers")
 	C.qute_QInputEvent_setModifiers(self, C.int64_t(modifiers))
+	runtime.KeepAlive(this)
 }
 
 // Timestamp wraps QInputEvent::timestamp.
@@ -86,6 +91,7 @@ func (this *QInputEvent) SetModifiers(modifiers qtcore.KeyboardModifiers) {
 func (this *QInputEvent) Timestamp() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QInputEvent.Timestamp")
 	r := C.qute_QInputEvent_timestamp(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -97,4 +103,5 @@ func (this *QInputEvent) Timestamp() uint64 {
 func (this *QInputEvent) SetTimestamp(timestamp uint64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputEvent.SetTimestamp")
 	C.qute_QInputEvent_setTimestamp(self, C.ulonglong(timestamp))
+	runtime.KeepAlive(this)
 }

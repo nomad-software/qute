@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQCalendarWidget(parent QWidgetLike) *QCalendarWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCalendarWidget")
 	}
 	p := C.qute_QCalendarWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func NewQCalendarWidget(parent QWidgetLike) *QCalendarWidget {
 func (this *QCalendarWidget) SelectedDate() *qtcore.QDate {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SelectedDate")
 	r := C.qute_QCalendarWidget_selectedDate(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -91,6 +94,7 @@ func (this *QCalendarWidget) SelectedDate() *qtcore.QDate {
 func (this *QCalendarWidget) YearShown() int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.YearShown")
 	r := C.qute_QCalendarWidget_yearShown(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -102,6 +106,7 @@ func (this *QCalendarWidget) YearShown() int {
 func (this *QCalendarWidget) MonthShown() int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.MonthShown")
 	r := C.qute_QCalendarWidget_monthShown(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -115,6 +120,7 @@ func (this *QCalendarWidget) MonthShown() int {
 func (this *QCalendarWidget) MinimumDate() *qtcore.QDate {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.MinimumDate")
 	r := C.qute_QCalendarWidget_minimumDate(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -126,6 +132,8 @@ func (this *QCalendarWidget) MinimumDate() *qtcore.QDate {
 func (this *QCalendarWidget) SetMinimumDate(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetMinimumDate")
 	C.qute_QCalendarWidget_setMinimumDate(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.SetMinimumDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // ClearMinimumDate wraps QCalendarWidget::clearMinimumDate.
@@ -136,6 +144,7 @@ func (this *QCalendarWidget) SetMinimumDate(date *qtcore.QDate) {
 func (this *QCalendarWidget) ClearMinimumDate() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ClearMinimumDate")
 	C.qute_QCalendarWidget_clearMinimumDate(self)
+	runtime.KeepAlive(this)
 }
 
 // MaximumDate wraps QCalendarWidget::maximumDate.
@@ -148,6 +157,7 @@ func (this *QCalendarWidget) ClearMinimumDate() {
 func (this *QCalendarWidget) MaximumDate() *qtcore.QDate {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.MaximumDate")
 	r := C.qute_QCalendarWidget_maximumDate(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -159,6 +169,8 @@ func (this *QCalendarWidget) MaximumDate() *qtcore.QDate {
 func (this *QCalendarWidget) SetMaximumDate(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetMaximumDate")
 	C.qute_QCalendarWidget_setMaximumDate(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.SetMaximumDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // ClearMaximumDate wraps QCalendarWidget::clearMaximumDate.
@@ -169,6 +181,7 @@ func (this *QCalendarWidget) SetMaximumDate(date *qtcore.QDate) {
 func (this *QCalendarWidget) ClearMaximumDate() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ClearMaximumDate")
 	C.qute_QCalendarWidget_clearMaximumDate(self)
+	runtime.KeepAlive(this)
 }
 
 // FirstDayOfWeek wraps QCalendarWidget::firstDayOfWeek.
@@ -179,6 +192,7 @@ func (this *QCalendarWidget) ClearMaximumDate() {
 func (this *QCalendarWidget) FirstDayOfWeek() qtcore.DayOfWeek {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.FirstDayOfWeek")
 	r := C.qute_QCalendarWidget_firstDayOfWeek(self)
+	runtime.KeepAlive(this)
 	return qtcore.DayOfWeek(r)
 }
 
@@ -190,6 +204,7 @@ func (this *QCalendarWidget) FirstDayOfWeek() qtcore.DayOfWeek {
 func (this *QCalendarWidget) SetFirstDayOfWeek(dayOfWeek qtcore.DayOfWeek) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetFirstDayOfWeek")
 	C.qute_QCalendarWidget_setFirstDayOfWeek(self, C.int64_t(dayOfWeek))
+	runtime.KeepAlive(this)
 }
 
 // IsNavigationBarVisible wraps QCalendarWidget::isNavigationBarVisible.
@@ -200,6 +215,7 @@ func (this *QCalendarWidget) SetFirstDayOfWeek(dayOfWeek qtcore.DayOfWeek) {
 func (this *QCalendarWidget) IsNavigationBarVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.IsNavigationBarVisible")
 	r := C.qute_QCalendarWidget_isNavigationBarVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -211,6 +227,7 @@ func (this *QCalendarWidget) IsNavigationBarVisible() bool {
 func (this *QCalendarWidget) IsGridVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.IsGridVisible")
 	r := C.qute_QCalendarWidget_isGridVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -224,6 +241,7 @@ func (this *QCalendarWidget) IsGridVisible() bool {
 func (this *QCalendarWidget) Calendar() *qtcore.QCalendar {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.Calendar")
 	r := C.qute_QCalendarWidget_calendar(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QCalendar](rt.WrapClass(r, "QCalendar", rt.TakeOwned), r)
 }
 
@@ -235,6 +253,8 @@ func (this *QCalendarWidget) Calendar() *qtcore.QCalendar {
 func (this *QCalendarWidget) SetCalendar(calendar *qtcore.QCalendar) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetCalendar")
 	C.qute_QCalendarWidget_setCalendar(self, rt.UseArg(unsafe.Pointer(calendar), "QCalendarWidget.SetCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(calendar)
 }
 
 // SelectionMode wraps QCalendarWidget::selectionMode.
@@ -245,6 +265,7 @@ func (this *QCalendarWidget) SetCalendar(calendar *qtcore.QCalendar) {
 func (this *QCalendarWidget) SelectionMode() QCalendarWidgetSelectionMode {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SelectionMode")
 	r := C.qute_QCalendarWidget_selectionMode(self)
+	runtime.KeepAlive(this)
 	return QCalendarWidgetSelectionMode(r)
 }
 
@@ -256,6 +277,7 @@ func (this *QCalendarWidget) SelectionMode() QCalendarWidgetSelectionMode {
 func (this *QCalendarWidget) SetSelectionMode(mode QCalendarWidgetSelectionMode) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetSelectionMode")
 	C.qute_QCalendarWidget_setSelectionMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // HorizontalHeaderFormat wraps QCalendarWidget::horizontalHeaderFormat.
@@ -266,6 +288,7 @@ func (this *QCalendarWidget) SetSelectionMode(mode QCalendarWidgetSelectionMode)
 func (this *QCalendarWidget) HorizontalHeaderFormat() QCalendarWidgetHorizontalHeaderFormat {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.HorizontalHeaderFormat")
 	r := C.qute_QCalendarWidget_horizontalHeaderFormat(self)
+	runtime.KeepAlive(this)
 	return QCalendarWidgetHorizontalHeaderFormat(r)
 }
 
@@ -277,6 +300,7 @@ func (this *QCalendarWidget) HorizontalHeaderFormat() QCalendarWidgetHorizontalH
 func (this *QCalendarWidget) SetHorizontalHeaderFormat(format QCalendarWidgetHorizontalHeaderFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetHorizontalHeaderFormat")
 	C.qute_QCalendarWidget_setHorizontalHeaderFormat(self, C.int64_t(format))
+	runtime.KeepAlive(this)
 }
 
 // VerticalHeaderFormat wraps QCalendarWidget::verticalHeaderFormat.
@@ -287,6 +311,7 @@ func (this *QCalendarWidget) SetHorizontalHeaderFormat(format QCalendarWidgetHor
 func (this *QCalendarWidget) VerticalHeaderFormat() QCalendarWidgetVerticalHeaderFormat {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.VerticalHeaderFormat")
 	r := C.qute_QCalendarWidget_verticalHeaderFormat(self)
+	runtime.KeepAlive(this)
 	return QCalendarWidgetVerticalHeaderFormat(r)
 }
 
@@ -298,6 +323,7 @@ func (this *QCalendarWidget) VerticalHeaderFormat() QCalendarWidgetVerticalHeade
 func (this *QCalendarWidget) SetVerticalHeaderFormat(format QCalendarWidgetVerticalHeaderFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetVerticalHeaderFormat")
 	C.qute_QCalendarWidget_setVerticalHeaderFormat(self, C.int64_t(format))
+	runtime.KeepAlive(this)
 }
 
 // HeaderTextFormat wraps QCalendarWidget::headerTextFormat.
@@ -310,6 +336,7 @@ func (this *QCalendarWidget) SetVerticalHeaderFormat(format QCalendarWidgetVerti
 func (this *QCalendarWidget) HeaderTextFormat() *qtgui.QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.HeaderTextFormat")
 	r := C.qute_QCalendarWidget_headerTextFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -321,6 +348,8 @@ func (this *QCalendarWidget) HeaderTextFormat() *qtgui.QTextCharFormat {
 func (this *QCalendarWidget) SetHeaderTextFormat(format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetHeaderTextFormat")
 	C.qute_QCalendarWidget_setHeaderTextFormat(self, rt.UseArg(unsafe.Pointer(format), "QCalendarWidget.SetHeaderTextFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // WeekdayTextFormat wraps QCalendarWidget::weekdayTextFormat.
@@ -333,6 +362,7 @@ func (this *QCalendarWidget) SetHeaderTextFormat(format *qtgui.QTextCharFormat) 
 func (this *QCalendarWidget) WeekdayTextFormat(dayOfWeek qtcore.DayOfWeek) *qtgui.QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.WeekdayTextFormat")
 	r := C.qute_QCalendarWidget_weekdayTextFormat(self, C.int64_t(dayOfWeek))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -344,6 +374,8 @@ func (this *QCalendarWidget) WeekdayTextFormat(dayOfWeek qtcore.DayOfWeek) *qtgu
 func (this *QCalendarWidget) SetWeekdayTextFormat(dayOfWeek qtcore.DayOfWeek, format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetWeekdayTextFormat")
 	C.qute_QCalendarWidget_setWeekdayTextFormat(self, C.int64_t(dayOfWeek), rt.UseArg(unsafe.Pointer(format), "QCalendarWidget.SetWeekdayTextFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // DateTextFormat wraps QCalendarWidget::dateTextFormat.
@@ -356,6 +388,8 @@ func (this *QCalendarWidget) SetWeekdayTextFormat(dayOfWeek qtcore.DayOfWeek, fo
 func (this *QCalendarWidget) DateTextFormat(date *qtcore.QDate) *qtgui.QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.DateTextFormat")
 	r := C.qute_QCalendarWidget_dateTextFormat(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.DateTextFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -367,6 +401,9 @@ func (this *QCalendarWidget) DateTextFormat(date *qtcore.QDate) *qtgui.QTextChar
 func (this *QCalendarWidget) SetDateTextFormat(date *qtcore.QDate, format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetDateTextFormat")
 	C.qute_QCalendarWidget_setDateTextFormat(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.SetDateTextFormat"), rt.UseArg(unsafe.Pointer(format), "QCalendarWidget.SetDateTextFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(format)
 }
 
 // IsDateEditEnabled wraps QCalendarWidget::isDateEditEnabled.
@@ -377,6 +414,7 @@ func (this *QCalendarWidget) SetDateTextFormat(date *qtcore.QDate, format *qtgui
 func (this *QCalendarWidget) IsDateEditEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.IsDateEditEnabled")
 	r := C.qute_QCalendarWidget_isDateEditEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -388,6 +426,7 @@ func (this *QCalendarWidget) IsDateEditEnabled() bool {
 func (this *QCalendarWidget) SetDateEditEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetDateEditEnabled")
 	C.qute_QCalendarWidget_setDateEditEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // DateEditAcceptDelay wraps QCalendarWidget::dateEditAcceptDelay.
@@ -398,6 +437,7 @@ func (this *QCalendarWidget) SetDateEditEnabled(enable bool) {
 func (this *QCalendarWidget) DateEditAcceptDelay() int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.DateEditAcceptDelay")
 	r := C.qute_QCalendarWidget_dateEditAcceptDelay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -409,6 +449,7 @@ func (this *QCalendarWidget) DateEditAcceptDelay() int {
 func (this *QCalendarWidget) SetDateEditAcceptDelay(delay int) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetDateEditAcceptDelay")
 	C.qute_QCalendarWidget_setDateEditAcceptDelay(self, C.int(delay))
+	runtime.KeepAlive(this)
 }
 
 // SetSelectedDate wraps QCalendarWidget::setSelectedDate.
@@ -419,6 +460,8 @@ func (this *QCalendarWidget) SetDateEditAcceptDelay(delay int) {
 func (this *QCalendarWidget) SetSelectedDate(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetSelectedDate")
 	C.qute_QCalendarWidget_setSelectedDate(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.SetSelectedDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // SetDateRange wraps QCalendarWidget::setDateRange.
@@ -429,6 +472,9 @@ func (this *QCalendarWidget) SetSelectedDate(date *qtcore.QDate) {
 func (this *QCalendarWidget) SetDateRange(min *qtcore.QDate, max *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetDateRange")
 	C.qute_QCalendarWidget_setDateRange(self, rt.UseArg(unsafe.Pointer(min), "QCalendarWidget.SetDateRange"), rt.UseArg(unsafe.Pointer(max), "QCalendarWidget.SetDateRange"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(min)
+	runtime.KeepAlive(max)
 }
 
 // SetCurrentPage wraps QCalendarWidget::setCurrentPage.
@@ -439,6 +485,7 @@ func (this *QCalendarWidget) SetDateRange(min *qtcore.QDate, max *qtcore.QDate) 
 func (this *QCalendarWidget) SetCurrentPage(year int, month int) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetCurrentPage")
 	C.qute_QCalendarWidget_setCurrentPage(self, C.int(year), C.int(month))
+	runtime.KeepAlive(this)
 }
 
 // SetGridVisible wraps QCalendarWidget::setGridVisible.
@@ -449,6 +496,7 @@ func (this *QCalendarWidget) SetCurrentPage(year int, month int) {
 func (this *QCalendarWidget) SetGridVisible(show bool) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetGridVisible")
 	C.qute_QCalendarWidget_setGridVisible(self, C.bool(show))
+	runtime.KeepAlive(this)
 }
 
 // SetNavigationBarVisible wraps QCalendarWidget::setNavigationBarVisible.
@@ -459,6 +507,7 @@ func (this *QCalendarWidget) SetGridVisible(show bool) {
 func (this *QCalendarWidget) SetNavigationBarVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.SetNavigationBarVisible")
 	C.qute_QCalendarWidget_setNavigationBarVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // ShowNextMonth wraps QCalendarWidget::showNextMonth.
@@ -469,6 +518,7 @@ func (this *QCalendarWidget) SetNavigationBarVisible(visible bool) {
 func (this *QCalendarWidget) ShowNextMonth() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ShowNextMonth")
 	C.qute_QCalendarWidget_showNextMonth(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowPreviousMonth wraps QCalendarWidget::showPreviousMonth.
@@ -479,6 +529,7 @@ func (this *QCalendarWidget) ShowNextMonth() {
 func (this *QCalendarWidget) ShowPreviousMonth() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ShowPreviousMonth")
 	C.qute_QCalendarWidget_showPreviousMonth(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowNextYear wraps QCalendarWidget::showNextYear.
@@ -489,6 +540,7 @@ func (this *QCalendarWidget) ShowPreviousMonth() {
 func (this *QCalendarWidget) ShowNextYear() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ShowNextYear")
 	C.qute_QCalendarWidget_showNextYear(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowPreviousYear wraps QCalendarWidget::showPreviousYear.
@@ -499,6 +551,7 @@ func (this *QCalendarWidget) ShowNextYear() {
 func (this *QCalendarWidget) ShowPreviousYear() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ShowPreviousYear")
 	C.qute_QCalendarWidget_showPreviousYear(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowSelectedDate wraps QCalendarWidget::showSelectedDate.
@@ -509,6 +562,7 @@ func (this *QCalendarWidget) ShowPreviousYear() {
 func (this *QCalendarWidget) ShowSelectedDate() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ShowSelectedDate")
 	C.qute_QCalendarWidget_showSelectedDate(self)
+	runtime.KeepAlive(this)
 }
 
 // ShowToday wraps QCalendarWidget::showToday.
@@ -519,6 +573,7 @@ func (this *QCalendarWidget) ShowSelectedDate() {
 func (this *QCalendarWidget) ShowToday() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.ShowToday")
 	C.qute_QCalendarWidget_showToday(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -529,6 +584,7 @@ func (this *QCalendarWidget) ShowToday() {
 func (this *QCalendarWidget) EmitSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.EmitSelectionChanged")
 	C.qute_QCalendarWidget_selectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitClicked wraps emitting the clicked signal.
@@ -539,6 +595,8 @@ func (this *QCalendarWidget) EmitSelectionChanged() {
 func (this *QCalendarWidget) EmitClicked(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.EmitClicked")
 	C.qute_QCalendarWidget_clicked_1(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.EmitClicked"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // EmitActivated wraps emitting the activated signal.
@@ -549,6 +607,8 @@ func (this *QCalendarWidget) EmitClicked(date *qtcore.QDate) {
 func (this *QCalendarWidget) EmitActivated(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.EmitActivated")
 	C.qute_QCalendarWidget_activated_1(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.EmitActivated"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // EmitCurrentPageChanged wraps emitting the currentPageChanged signal.
@@ -559,6 +619,7 @@ func (this *QCalendarWidget) EmitActivated(date *qtcore.QDate) {
 func (this *QCalendarWidget) EmitCurrentPageChanged(year int, month int) {
 	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.EmitCurrentPageChanged")
 	C.qute_QCalendarWidget_currentPageChanged_1(self, C.int(year), C.int(month))
+	runtime.KeepAlive(this)
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the

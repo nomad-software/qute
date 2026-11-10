@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -56,6 +57,7 @@ func QStyleHintsCast(o qtcore.QObjectLike) *QStyleHints {
 func (this *QStyleHints) SetMouseDoubleClickInterval(mouseDoubleClickInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetMouseDoubleClickInterval")
 	C.qute_QStyleHints_setMouseDoubleClickInterval(self, C.int(mouseDoubleClickInterval))
+	runtime.KeepAlive(this)
 }
 
 // MouseDoubleClickInterval wraps QStyleHints::mouseDoubleClickInterval.
@@ -66,6 +68,7 @@ func (this *QStyleHints) SetMouseDoubleClickInterval(mouseDoubleClickInterval in
 func (this *QStyleHints) MouseDoubleClickInterval() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.MouseDoubleClickInterval")
 	r := C.qute_QStyleHints_mouseDoubleClickInterval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -77,6 +80,7 @@ func (this *QStyleHints) MouseDoubleClickInterval() int {
 func (this *QStyleHints) MouseDoubleClickDistance() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.MouseDoubleClickDistance")
 	r := C.qute_QStyleHints_mouseDoubleClickDistance(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -88,6 +92,7 @@ func (this *QStyleHints) MouseDoubleClickDistance() int {
 func (this *QStyleHints) TouchDoubleTapDistance() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.TouchDoubleTapDistance")
 	r := C.qute_QStyleHints_touchDoubleTapDistance(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -99,6 +104,7 @@ func (this *QStyleHints) TouchDoubleTapDistance() int {
 func (this *QStyleHints) SetMousePressAndHoldInterval(mousePressAndHoldInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetMousePressAndHoldInterval")
 	C.qute_QStyleHints_setMousePressAndHoldInterval(self, C.int(mousePressAndHoldInterval))
+	runtime.KeepAlive(this)
 }
 
 // MousePressAndHoldInterval wraps QStyleHints::mousePressAndHoldInterval.
@@ -109,6 +115,7 @@ func (this *QStyleHints) SetMousePressAndHoldInterval(mousePressAndHoldInterval 
 func (this *QStyleHints) MousePressAndHoldInterval() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.MousePressAndHoldInterval")
 	r := C.qute_QStyleHints_mousePressAndHoldInterval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -120,6 +127,7 @@ func (this *QStyleHints) MousePressAndHoldInterval() int {
 func (this *QStyleHints) SetStartDragDistance(startDragDistance int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetStartDragDistance")
 	C.qute_QStyleHints_setStartDragDistance(self, C.int(startDragDistance))
+	runtime.KeepAlive(this)
 }
 
 // StartDragDistance wraps QStyleHints::startDragDistance.
@@ -130,6 +138,7 @@ func (this *QStyleHints) SetStartDragDistance(startDragDistance int) {
 func (this *QStyleHints) StartDragDistance() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.StartDragDistance")
 	r := C.qute_QStyleHints_startDragDistance(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -141,6 +150,7 @@ func (this *QStyleHints) StartDragDistance() int {
 func (this *QStyleHints) SetStartDragTime(startDragTime int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetStartDragTime")
 	C.qute_QStyleHints_setStartDragTime(self, C.int(startDragTime))
+	runtime.KeepAlive(this)
 }
 
 // StartDragTime wraps QStyleHints::startDragTime.
@@ -151,6 +161,7 @@ func (this *QStyleHints) SetStartDragTime(startDragTime int) {
 func (this *QStyleHints) StartDragTime() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.StartDragTime")
 	r := C.qute_QStyleHints_startDragTime(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -162,6 +173,7 @@ func (this *QStyleHints) StartDragTime() int {
 func (this *QStyleHints) StartDragVelocity() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.StartDragVelocity")
 	r := C.qute_QStyleHints_startDragVelocity(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -173,6 +185,7 @@ func (this *QStyleHints) StartDragVelocity() int {
 func (this *QStyleHints) SetKeyboardInputInterval(keyboardInputInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetKeyboardInputInterval")
 	C.qute_QStyleHints_setKeyboardInputInterval(self, C.int(keyboardInputInterval))
+	runtime.KeepAlive(this)
 }
 
 // KeyboardInputInterval wraps QStyleHints::keyboardInputInterval.
@@ -183,6 +196,7 @@ func (this *QStyleHints) SetKeyboardInputInterval(keyboardInputInterval int) {
 func (this *QStyleHints) KeyboardInputInterval() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.KeyboardInputInterval")
 	r := C.qute_QStyleHints_keyboardInputInterval(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -194,6 +208,7 @@ func (this *QStyleHints) KeyboardInputInterval() int {
 func (this *QStyleHints) KeyboardAutoRepeatRateF() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.KeyboardAutoRepeatRateF")
 	r := C.qute_QStyleHints_keyboardAutoRepeatRateF(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -205,6 +220,7 @@ func (this *QStyleHints) KeyboardAutoRepeatRateF() float64 {
 func (this *QStyleHints) SetCursorFlashTime(cursorFlashTime int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetCursorFlashTime")
 	C.qute_QStyleHints_setCursorFlashTime(self, C.int(cursorFlashTime))
+	runtime.KeepAlive(this)
 }
 
 // CursorFlashTime wraps QStyleHints::cursorFlashTime.
@@ -215,6 +231,7 @@ func (this *QStyleHints) SetCursorFlashTime(cursorFlashTime int) {
 func (this *QStyleHints) CursorFlashTime() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.CursorFlashTime")
 	r := C.qute_QStyleHints_cursorFlashTime(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -226,6 +243,7 @@ func (this *QStyleHints) CursorFlashTime() int {
 func (this *QStyleHints) ShowIsFullScreen() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ShowIsFullScreen")
 	r := C.qute_QStyleHints_showIsFullScreen(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -237,6 +255,7 @@ func (this *QStyleHints) ShowIsFullScreen() bool {
 func (this *QStyleHints) ShowIsMaximized() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ShowIsMaximized")
 	r := C.qute_QStyleHints_showIsMaximized(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -248,6 +267,7 @@ func (this *QStyleHints) ShowIsMaximized() bool {
 func (this *QStyleHints) ShowShortcutsInContextMenus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ShowShortcutsInContextMenus")
 	r := C.qute_QStyleHints_showShortcutsInContextMenus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -259,6 +279,7 @@ func (this *QStyleHints) ShowShortcutsInContextMenus() bool {
 func (this *QStyleHints) SetShowShortcutsInContextMenus(showShortcutsInContextMenus bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetShowShortcutsInContextMenus")
 	C.qute_QStyleHints_setShowShortcutsInContextMenus(self, C.bool(showShortcutsInContextMenus))
+	runtime.KeepAlive(this)
 }
 
 // ContextMenuTrigger wraps QStyleHints::contextMenuTrigger.
@@ -269,6 +290,7 @@ func (this *QStyleHints) SetShowShortcutsInContextMenus(showShortcutsInContextMe
 func (this *QStyleHints) ContextMenuTrigger() qtcore.ContextMenuTrigger {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ContextMenuTrigger")
 	r := C.qute_QStyleHints_contextMenuTrigger(self)
+	runtime.KeepAlive(this)
 	return qtcore.ContextMenuTrigger(r)
 }
 
@@ -280,6 +302,7 @@ func (this *QStyleHints) ContextMenuTrigger() qtcore.ContextMenuTrigger {
 func (this *QStyleHints) SetContextMenuTrigger(contextMenuTrigger qtcore.ContextMenuTrigger) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetContextMenuTrigger")
 	C.qute_QStyleHints_setContextMenuTrigger(self, C.int64_t(contextMenuTrigger))
+	runtime.KeepAlive(this)
 }
 
 // MenuSelectionWraps wraps QStyleHints::menuSelectionWraps.
@@ -290,6 +313,7 @@ func (this *QStyleHints) SetContextMenuTrigger(contextMenuTrigger qtcore.Context
 func (this *QStyleHints) MenuSelectionWraps() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.MenuSelectionWraps")
 	r := C.qute_QStyleHints_menuSelectionWraps(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -301,6 +325,7 @@ func (this *QStyleHints) MenuSelectionWraps() bool {
 func (this *QStyleHints) PasswordMaskDelay() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.PasswordMaskDelay")
 	r := C.qute_QStyleHints_passwordMaskDelay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -312,6 +337,7 @@ func (this *QStyleHints) PasswordMaskDelay() int {
 func (this *QStyleHints) PasswordMaskCharacter() rune {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.PasswordMaskCharacter")
 	r := C.qute_QStyleHints_passwordMaskCharacter(self)
+	runtime.KeepAlive(this)
 	return rune(r)
 }
 
@@ -323,6 +349,7 @@ func (this *QStyleHints) PasswordMaskCharacter() rune {
 func (this *QStyleHints) FontSmoothingGamma() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.FontSmoothingGamma")
 	r := C.qute_QStyleHints_fontSmoothingGamma(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -334,6 +361,7 @@ func (this *QStyleHints) FontSmoothingGamma() float64 {
 func (this *QStyleHints) UseRtlExtensions() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.UseRtlExtensions")
 	r := C.qute_QStyleHints_useRtlExtensions(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -345,6 +373,7 @@ func (this *QStyleHints) UseRtlExtensions() bool {
 func (this *QStyleHints) SetFocusOnTouchRelease() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetFocusOnTouchRelease")
 	r := C.qute_QStyleHints_setFocusOnTouchRelease(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -356,6 +385,7 @@ func (this *QStyleHints) SetFocusOnTouchRelease() bool {
 func (this *QStyleHints) TabFocusBehavior() qtcore.TabFocusBehavior {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.TabFocusBehavior")
 	r := C.qute_QStyleHints_tabFocusBehavior(self)
+	runtime.KeepAlive(this)
 	return qtcore.TabFocusBehavior(r)
 }
 
@@ -367,6 +397,7 @@ func (this *QStyleHints) TabFocusBehavior() qtcore.TabFocusBehavior {
 func (this *QStyleHints) SetTabFocusBehavior(tabFocusBehavior qtcore.TabFocusBehavior) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetTabFocusBehavior")
 	C.qute_QStyleHints_setTabFocusBehavior(self, C.int64_t(tabFocusBehavior))
+	runtime.KeepAlive(this)
 }
 
 // SingleClickActivation wraps QStyleHints::singleClickActivation.
@@ -377,6 +408,7 @@ func (this *QStyleHints) SetTabFocusBehavior(tabFocusBehavior qtcore.TabFocusBeh
 func (this *QStyleHints) SingleClickActivation() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SingleClickActivation")
 	r := C.qute_QStyleHints_singleClickActivation(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -388,6 +420,7 @@ func (this *QStyleHints) SingleClickActivation() bool {
 func (this *QStyleHints) UseHoverEffects() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.UseHoverEffects")
 	r := C.qute_QStyleHints_useHoverEffects(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -399,6 +432,7 @@ func (this *QStyleHints) UseHoverEffects() bool {
 func (this *QStyleHints) SetUseHoverEffects(useHoverEffects bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetUseHoverEffects")
 	C.qute_QStyleHints_setUseHoverEffects(self, C.bool(useHoverEffects))
+	runtime.KeepAlive(this)
 }
 
 // WheelScrollLines wraps QStyleHints::wheelScrollLines.
@@ -409,6 +443,7 @@ func (this *QStyleHints) SetUseHoverEffects(useHoverEffects bool) {
 func (this *QStyleHints) WheelScrollLines() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.WheelScrollLines")
 	r := C.qute_QStyleHints_wheelScrollLines(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -420,6 +455,7 @@ func (this *QStyleHints) WheelScrollLines() int {
 func (this *QStyleHints) SetWheelScrollLines(scrollLines int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetWheelScrollLines")
 	C.qute_QStyleHints_setWheelScrollLines(self, C.int(scrollLines))
+	runtime.KeepAlive(this)
 }
 
 // SetMouseQuickSelectionThreshold wraps QStyleHints::setMouseQuickSelectionThreshold.
@@ -430,6 +466,7 @@ func (this *QStyleHints) SetWheelScrollLines(scrollLines int) {
 func (this *QStyleHints) SetMouseQuickSelectionThreshold(threshold int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetMouseQuickSelectionThreshold")
 	C.qute_QStyleHints_setMouseQuickSelectionThreshold(self, C.int(threshold))
+	runtime.KeepAlive(this)
 }
 
 // MouseQuickSelectionThreshold wraps QStyleHints::mouseQuickSelectionThreshold.
@@ -440,6 +477,7 @@ func (this *QStyleHints) SetMouseQuickSelectionThreshold(threshold int) {
 func (this *QStyleHints) MouseQuickSelectionThreshold() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.MouseQuickSelectionThreshold")
 	r := C.qute_QStyleHints_mouseQuickSelectionThreshold(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -451,6 +489,7 @@ func (this *QStyleHints) MouseQuickSelectionThreshold() int {
 func (this *QStyleHints) ColorScheme() qtcore.ColorScheme {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ColorScheme")
 	r := C.qute_QStyleHints_colorScheme(self)
+	runtime.KeepAlive(this)
 	return qtcore.ColorScheme(r)
 }
 
@@ -462,6 +501,7 @@ func (this *QStyleHints) ColorScheme() qtcore.ColorScheme {
 func (this *QStyleHints) SetColorScheme(scheme qtcore.ColorScheme) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetColorScheme")
 	C.qute_QStyleHints_setColorScheme(self, C.int64_t(scheme))
+	runtime.KeepAlive(this)
 }
 
 // UnsetColorScheme wraps QStyleHints::unsetColorScheme.
@@ -472,6 +512,7 @@ func (this *QStyleHints) SetColorScheme(scheme qtcore.ColorScheme) {
 func (this *QStyleHints) UnsetColorScheme() {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.UnsetColorScheme")
 	C.qute_QStyleHints_unsetColorScheme(self)
+	runtime.KeepAlive(this)
 }
 
 // ToolTipWakeUpDelay wraps QStyleHints::toolTipWakeUpDelay.
@@ -482,6 +523,7 @@ func (this *QStyleHints) UnsetColorScheme() {
 func (this *QStyleHints) ToolTipWakeUpDelay() time.Duration {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ToolTipWakeUpDelay")
 	r := C.qute_QStyleHints_toolTipWakeUpDelay(self)
+	runtime.KeepAlive(this)
 	return time.Duration(r)
 }
 
@@ -493,6 +535,7 @@ func (this *QStyleHints) ToolTipWakeUpDelay() time.Duration {
 func (this *QStyleHints) SetToolTipWakeUpDelay(toolTipWakeUpDelay time.Duration) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.SetToolTipWakeUpDelay")
 	C.qute_QStyleHints_setToolTipWakeUpDelay(self, C.int64_t(toolTipWakeUpDelay))
+	runtime.KeepAlive(this)
 }
 
 // ToolTipWakeUpDelayAsMSec wraps QStyleHints::toolTipWakeUpDelayAsMSec.
@@ -503,6 +546,7 @@ func (this *QStyleHints) SetToolTipWakeUpDelay(toolTipWakeUpDelay time.Duration)
 func (this *QStyleHints) ToolTipWakeUpDelayAsMSec() int {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.ToolTipWakeUpDelayAsMSec")
 	r := C.qute_QStyleHints_toolTipWakeUpDelayAsMSec(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -514,6 +558,7 @@ func (this *QStyleHints) ToolTipWakeUpDelayAsMSec() int {
 func (this *QStyleHints) EmitCursorFlashTimeChanged(cursorFlashTime int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitCursorFlashTimeChanged")
 	C.qute_QStyleHints_cursorFlashTimeChanged_1(self, C.int(cursorFlashTime))
+	runtime.KeepAlive(this)
 }
 
 // EmitKeyboardInputIntervalChanged wraps emitting the keyboardInputIntervalChanged signal.
@@ -524,6 +569,7 @@ func (this *QStyleHints) EmitCursorFlashTimeChanged(cursorFlashTime int) {
 func (this *QStyleHints) EmitKeyboardInputIntervalChanged(keyboardInputInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitKeyboardInputIntervalChanged")
 	C.qute_QStyleHints_keyboardInputIntervalChanged_1(self, C.int(keyboardInputInterval))
+	runtime.KeepAlive(this)
 }
 
 // EmitMouseDoubleClickIntervalChanged wraps emitting the mouseDoubleClickIntervalChanged signal.
@@ -534,6 +580,7 @@ func (this *QStyleHints) EmitKeyboardInputIntervalChanged(keyboardInputInterval 
 func (this *QStyleHints) EmitMouseDoubleClickIntervalChanged(mouseDoubleClickInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitMouseDoubleClickIntervalChanged")
 	C.qute_QStyleHints_mouseDoubleClickIntervalChanged_1(self, C.int(mouseDoubleClickInterval))
+	runtime.KeepAlive(this)
 }
 
 // EmitMousePressAndHoldIntervalChanged wraps emitting the mousePressAndHoldIntervalChanged signal.
@@ -544,6 +591,7 @@ func (this *QStyleHints) EmitMouseDoubleClickIntervalChanged(mouseDoubleClickInt
 func (this *QStyleHints) EmitMousePressAndHoldIntervalChanged(mousePressAndHoldInterval int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitMousePressAndHoldIntervalChanged")
 	C.qute_QStyleHints_mousePressAndHoldIntervalChanged_1(self, C.int(mousePressAndHoldInterval))
+	runtime.KeepAlive(this)
 }
 
 // EmitStartDragDistanceChanged wraps emitting the startDragDistanceChanged signal.
@@ -554,6 +602,7 @@ func (this *QStyleHints) EmitMousePressAndHoldIntervalChanged(mousePressAndHoldI
 func (this *QStyleHints) EmitStartDragDistanceChanged(startDragDistance int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitStartDragDistanceChanged")
 	C.qute_QStyleHints_startDragDistanceChanged_1(self, C.int(startDragDistance))
+	runtime.KeepAlive(this)
 }
 
 // EmitStartDragTimeChanged wraps emitting the startDragTimeChanged signal.
@@ -564,6 +613,7 @@ func (this *QStyleHints) EmitStartDragDistanceChanged(startDragDistance int) {
 func (this *QStyleHints) EmitStartDragTimeChanged(startDragTime int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitStartDragTimeChanged")
 	C.qute_QStyleHints_startDragTimeChanged_1(self, C.int(startDragTime))
+	runtime.KeepAlive(this)
 }
 
 // EmitTabFocusBehaviorChanged wraps emitting the tabFocusBehaviorChanged signal.
@@ -574,6 +624,7 @@ func (this *QStyleHints) EmitStartDragTimeChanged(startDragTime int) {
 func (this *QStyleHints) EmitTabFocusBehaviorChanged(tabFocusBehavior qtcore.TabFocusBehavior) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitTabFocusBehaviorChanged")
 	C.qute_QStyleHints_tabFocusBehaviorChanged_1(self, C.int64_t(tabFocusBehavior))
+	runtime.KeepAlive(this)
 }
 
 // EmitUseHoverEffectsChanged wraps emitting the useHoverEffectsChanged signal.
@@ -584,6 +635,7 @@ func (this *QStyleHints) EmitTabFocusBehaviorChanged(tabFocusBehavior qtcore.Tab
 func (this *QStyleHints) EmitUseHoverEffectsChanged(useHoverEffects bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitUseHoverEffectsChanged")
 	C.qute_QStyleHints_useHoverEffectsChanged_1(self, C.bool(useHoverEffects))
+	runtime.KeepAlive(this)
 }
 
 // EmitShowShortcutsInContextMenusChanged wraps emitting the showShortcutsInContextMenusChanged signal.
@@ -594,6 +646,7 @@ func (this *QStyleHints) EmitUseHoverEffectsChanged(useHoverEffects bool) {
 func (this *QStyleHints) EmitShowShortcutsInContextMenusChanged(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitShowShortcutsInContextMenusChanged")
 	C.qute_QStyleHints_showShortcutsInContextMenusChanged_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // EmitContextMenuTriggerChanged wraps emitting the contextMenuTriggerChanged signal.
@@ -604,6 +657,7 @@ func (this *QStyleHints) EmitShowShortcutsInContextMenusChanged(arg0 bool) {
 func (this *QStyleHints) EmitContextMenuTriggerChanged(contextMenuTrigger qtcore.ContextMenuTrigger) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitContextMenuTriggerChanged")
 	C.qute_QStyleHints_contextMenuTriggerChanged_1(self, C.int64_t(contextMenuTrigger))
+	runtime.KeepAlive(this)
 }
 
 // EmitWheelScrollLinesChanged wraps emitting the wheelScrollLinesChanged signal.
@@ -614,6 +668,7 @@ func (this *QStyleHints) EmitContextMenuTriggerChanged(contextMenuTrigger qtcore
 func (this *QStyleHints) EmitWheelScrollLinesChanged(scrollLines int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitWheelScrollLinesChanged")
 	C.qute_QStyleHints_wheelScrollLinesChanged_1(self, C.int(scrollLines))
+	runtime.KeepAlive(this)
 }
 
 // EmitMouseQuickSelectionThresholdChanged wraps emitting the mouseQuickSelectionThresholdChanged signal.
@@ -624,6 +679,7 @@ func (this *QStyleHints) EmitWheelScrollLinesChanged(scrollLines int) {
 func (this *QStyleHints) EmitMouseQuickSelectionThresholdChanged(threshold int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitMouseQuickSelectionThresholdChanged")
 	C.qute_QStyleHints_mouseQuickSelectionThresholdChanged_1(self, C.int(threshold))
+	runtime.KeepAlive(this)
 }
 
 // EmitColorSchemeChanged wraps emitting the colorSchemeChanged signal.
@@ -634,6 +690,7 @@ func (this *QStyleHints) EmitMouseQuickSelectionThresholdChanged(threshold int) 
 func (this *QStyleHints) EmitColorSchemeChanged(colorScheme qtcore.ColorScheme) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitColorSchemeChanged")
 	C.qute_QStyleHints_colorSchemeChanged_1(self, C.int64_t(colorScheme))
+	runtime.KeepAlive(this)
 }
 
 // EmitToolTipWakeUpDelayChanged wraps emitting the toolTipWakeUpDelayChanged signal.
@@ -644,6 +701,7 @@ func (this *QStyleHints) EmitColorSchemeChanged(colorScheme qtcore.ColorScheme) 
 func (this *QStyleHints) EmitToolTipWakeUpDelayChanged(toolTipWakeUpDelay time.Duration) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitToolTipWakeUpDelayChanged")
 	C.qute_QStyleHints_toolTipWakeUpDelayChanged_1(self, C.int64_t(toolTipWakeUpDelay))
+	runtime.KeepAlive(this)
 }
 
 // EmitToolTipWakeUpDelayAsMSecChanged wraps emitting the toolTipWakeUpDelayAsMSecChanged signal.
@@ -654,6 +712,7 @@ func (this *QStyleHints) EmitToolTipWakeUpDelayChanged(toolTipWakeUpDelay time.D
 func (this *QStyleHints) EmitToolTipWakeUpDelayAsMSecChanged(toolTipWakeUpDelay int) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleHints.EmitToolTipWakeUpDelayAsMSecChanged")
 	C.qute_QStyleHints_toolTipWakeUpDelayAsMSecChanged_1(self, C.int(toolTipWakeUpDelay))
+	runtime.KeepAlive(this)
 }
 
 // OnCursorFlashTimeChanged connects f to the cursorFlashTimeChanged signal. The connection ends when the

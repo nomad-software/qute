@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQColorDialog(parent QWidgetLike) *QColorDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQColorDialog")
 	}
 	p := C.qute_QColorDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQColorDialogWithColor(initial qtgui.QColor, parent QWidgetLike) *QColorD
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQColorDialogWithColor")
 	}
 	p := C.qute_QColorDialog_new_1(cQColor(initial), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +103,7 @@ func NewQColorDialogWithColor(initial qtgui.QColor, parent QWidgetLike) *QColorD
 func (this *QColorDialog) SetCurrentColor(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.SetCurrentColor")
 	C.qute_QColorDialog_setCurrentColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // CurrentColor wraps QColorDialog::currentColor.
@@ -110,6 +114,7 @@ func (this *QColorDialog) SetCurrentColor(color qtgui.QColor) {
 func (this *QColorDialog) CurrentColor() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.CurrentColor")
 	r := C.qute_QColorDialog_currentColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -121,6 +126,7 @@ func (this *QColorDialog) CurrentColor() qtgui.QColor {
 func (this *QColorDialog) SelectedColor() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.SelectedColor")
 	r := C.qute_QColorDialog_selectedColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -132,6 +138,7 @@ func (this *QColorDialog) SelectedColor() qtgui.QColor {
 func (this *QColorDialog) SetOption(option QColorDialogColorDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.SetOption")
 	C.qute_QColorDialog_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QColorDialog::testOption.
@@ -142,6 +149,7 @@ func (this *QColorDialog) SetOption(option QColorDialogColorDialogOptions) {
 func (this *QColorDialog) TestOption(option QColorDialogColorDialogOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.TestOption")
 	r := C.qute_QColorDialog_testOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -153,6 +161,7 @@ func (this *QColorDialog) TestOption(option QColorDialogColorDialogOptions) bool
 func (this *QColorDialog) SetOptions(options QColorDialogColorDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.SetOptions")
 	C.qute_QColorDialog_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Options wraps QColorDialog::options.
@@ -163,6 +172,7 @@ func (this *QColorDialog) SetOptions(options QColorDialogColorDialogOptions) {
 func (this *QColorDialog) Options() QColorDialogColorDialogOptions {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.Options")
 	r := C.qute_QColorDialog_options(self)
+	runtime.KeepAlive(this)
 	return QColorDialogColorDialogOptions(r)
 }
 
@@ -174,6 +184,7 @@ func (this *QColorDialog) Options() QColorDialogColorDialogOptions {
 func (this *QColorDialog) EmitCurrentColorChanged(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.EmitCurrentColorChanged")
 	C.qute_QColorDialog_currentColorChanged_1(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // EmitColorSelected wraps emitting the colorSelected signal.
@@ -184,6 +195,7 @@ func (this *QColorDialog) EmitCurrentColorChanged(color qtgui.QColor) {
 func (this *QColorDialog) EmitColorSelected(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.EmitColorSelected")
 	C.qute_QColorDialog_colorSelected_1(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // QColorDialogGetColor wraps QColorDialog::getColor.

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQTextLengthWithType(typeArg QTextLengthType, value float64) *QTextLength
 func (this *QTextLength) Type() QTextLengthType {
 	self := rt.Use(unsafe.Pointer(this), "QTextLength.Type")
 	r := C.qute_QTextLength_type(self)
+	runtime.KeepAlive(this)
 	return QTextLengthType(r)
 }
 
@@ -120,6 +122,7 @@ func (this *QTextLength) Type() QTextLengthType {
 func (this *QTextLength) Value(maximumLength float64) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextLength.Value")
 	r := C.qute_QTextLength_value(self, C.double(maximumLength))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -131,5 +134,6 @@ func (this *QTextLength) Value(maximumLength float64) float64 {
 func (this *QTextLength) RawValue() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextLength.RawValue")
 	r := C.qute_QTextLength_rawValue(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -104,6 +105,7 @@ func NewQTextEditExtraSelection() *QTextEditExtraSelection {
 func (this *QTextEditExtraSelection) Cursor() *qtgui.QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextEditExtraSelection.Cursor")
 	r := C.qute_QTextEditExtraSelection_get_cursor(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -117,6 +119,8 @@ func (this *QTextEditExtraSelection) Cursor() *qtgui.QTextCursor {
 func (this *QTextEditExtraSelection) SetCursor(cursor *qtgui.QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEditExtraSelection.SetCursor")
 	C.qute_QTextEditExtraSelection_set_cursor(self, rt.UseArg(unsafe.Pointer(cursor), "QTextEditExtraSelection.SetCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // Format wraps the public field QTextEdit::ExtraSelection::format.
@@ -129,6 +133,7 @@ func (this *QTextEditExtraSelection) SetCursor(cursor *qtgui.QTextCursor) {
 func (this *QTextEditExtraSelection) Format() *qtgui.QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextEditExtraSelection.Format")
 	r := C.qute_QTextEditExtraSelection_get_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -142,4 +147,6 @@ func (this *QTextEditExtraSelection) Format() *qtgui.QTextCharFormat {
 func (this *QTextEditExtraSelection) SetFormat(format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEditExtraSelection.SetFormat")
 	C.qute_QTextEditExtraSelection_set_format(self, rt.UseArg(unsafe.Pointer(format), "QTextEditExtraSelection.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQScrollBar(parent QWidgetLike) *QScrollBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollBar")
 	}
 	p := C.qute_QScrollBar_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQScrollBarWithOrientation(arg0 qtcore.Orientations, parent QWidgetLike) 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollBarWithOrientation")
 	}
 	p := C.qute_QScrollBar_new_1(C.int64_t(arg0), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -103,5 +106,6 @@ func NewQScrollBarWithOrientation(arg0 qtcore.Orientations, parent QWidgetLike) 
 func (this *QScrollBar) CreateStandardContextMenu(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QScrollBar.CreateStandardContextMenu")
 	r := C.qute_QScrollBar_createStandardContextMenu(self, cQPoint(position))
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }

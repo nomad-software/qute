@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -56,4 +57,6 @@ func QGraphicsTransformCast(o qtcore.QObjectLike) *QGraphicsTransform {
 func (this *QGraphicsTransform) ApplyTo(matrix *qtgui.QMatrix4x4) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTransform.ApplyTo")
 	C.qute_QGraphicsTransform_applyTo(self, rt.UseArg(unsafe.Pointer(matrix), "QGraphicsTransform.ApplyTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
 }

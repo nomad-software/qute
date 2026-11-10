@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQPlainTextEdit(parent QWidgetLike) *QPlainTextEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQPlainTextEdit")
 	}
 	p := C.qute_QPlainTextEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQPlainTextEditWithText(text string, parent QWidgetLike) *QPlainTextEdit 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQPlainTextEditWithText")
 	}
 	p := C.qute_QPlainTextEdit_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -104,6 +107,8 @@ func (this *QPlainTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "QPlainTextEdit.SetDocument")
 	}
 	C.qute_QPlainTextEdit_setDocument(self, documentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(document)
 }
 
 // Document wraps QPlainTextEdit::document.
@@ -116,6 +121,7 @@ func (this *QPlainTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 func (this *QPlainTextEdit) Document() *qtgui.QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Document")
 	r := C.qute_QPlainTextEdit_document(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }
 
@@ -127,6 +133,7 @@ func (this *QPlainTextEdit) Document() *qtgui.QTextDocument {
 func (this *QPlainTextEdit) SetPlaceholderText(placeholderText string) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetPlaceholderText")
 	C.qute_QPlainTextEdit_setPlaceholderText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(placeholderText))), C.ptrdiff_t(len(placeholderText)))
+	runtime.KeepAlive(this)
 }
 
 // PlaceholderText wraps QPlainTextEdit::placeholderText.
@@ -137,6 +144,7 @@ func (this *QPlainTextEdit) SetPlaceholderText(placeholderText string) {
 func (this *QPlainTextEdit) PlaceholderText() string {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.PlaceholderText")
 	r := C.qute_QPlainTextEdit_placeholderText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -148,6 +156,8 @@ func (this *QPlainTextEdit) PlaceholderText() string {
 func (this *QPlainTextEdit) SetTextCursor(cursor *qtgui.QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetTextCursor")
 	C.qute_QPlainTextEdit_setTextCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QPlainTextEdit.SetTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // TextCursor wraps QPlainTextEdit::textCursor.
@@ -160,6 +170,7 @@ func (this *QPlainTextEdit) SetTextCursor(cursor *qtgui.QTextCursor) {
 func (this *QPlainTextEdit) TextCursor() *qtgui.QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.TextCursor")
 	r := C.qute_QPlainTextEdit_textCursor(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -171,6 +182,7 @@ func (this *QPlainTextEdit) TextCursor() *qtgui.QTextCursor {
 func (this *QPlainTextEdit) IsReadOnly() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.IsReadOnly")
 	r := C.qute_QPlainTextEdit_isReadOnly(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -182,6 +194,7 @@ func (this *QPlainTextEdit) IsReadOnly() bool {
 func (this *QPlainTextEdit) SetReadOnly(ro bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetReadOnly")
 	C.qute_QPlainTextEdit_setReadOnly(self, C.bool(ro))
+	runtime.KeepAlive(this)
 }
 
 // SetTextInteractionFlags wraps QPlainTextEdit::setTextInteractionFlags.
@@ -192,6 +205,7 @@ func (this *QPlainTextEdit) SetReadOnly(ro bool) {
 func (this *QPlainTextEdit) SetTextInteractionFlags(flags qtcore.TextInteractionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetTextInteractionFlags")
 	C.qute_QPlainTextEdit_setTextInteractionFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // TextInteractionFlags wraps QPlainTextEdit::textInteractionFlags.
@@ -202,6 +216,7 @@ func (this *QPlainTextEdit) SetTextInteractionFlags(flags qtcore.TextInteraction
 func (this *QPlainTextEdit) TextInteractionFlags() qtcore.TextInteractionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.TextInteractionFlags")
 	r := C.qute_QPlainTextEdit_textInteractionFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextInteractionFlags(r)
 }
 
@@ -213,6 +228,8 @@ func (this *QPlainTextEdit) TextInteractionFlags() qtcore.TextInteractionFlags {
 func (this *QPlainTextEdit) MergeCurrentCharFormat(modifier *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.MergeCurrentCharFormat")
 	C.qute_QPlainTextEdit_mergeCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QPlainTextEdit.MergeCurrentCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modifier)
 }
 
 // SetCurrentCharFormat wraps QPlainTextEdit::setCurrentCharFormat.
@@ -223,6 +240,8 @@ func (this *QPlainTextEdit) MergeCurrentCharFormat(modifier *qtgui.QTextCharForm
 func (this *QPlainTextEdit) SetCurrentCharFormat(format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetCurrentCharFormat")
 	C.qute_QPlainTextEdit_setCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(format), "QPlainTextEdit.SetCurrentCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // CurrentCharFormat wraps QPlainTextEdit::currentCharFormat.
@@ -235,6 +254,7 @@ func (this *QPlainTextEdit) SetCurrentCharFormat(format *qtgui.QTextCharFormat) 
 func (this *QPlainTextEdit) CurrentCharFormat() *qtgui.QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CurrentCharFormat")
 	r := C.qute_QPlainTextEdit_currentCharFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -246,6 +266,7 @@ func (this *QPlainTextEdit) CurrentCharFormat() *qtgui.QTextCharFormat {
 func (this *QPlainTextEdit) TabChangesFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.TabChangesFocus")
 	r := C.qute_QPlainTextEdit_tabChangesFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -257,6 +278,7 @@ func (this *QPlainTextEdit) TabChangesFocus() bool {
 func (this *QPlainTextEdit) SetTabChangesFocus(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetTabChangesFocus")
 	C.qute_QPlainTextEdit_setTabChangesFocus(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetDocumentTitle wraps QPlainTextEdit::setDocumentTitle.
@@ -267,6 +289,7 @@ func (this *QPlainTextEdit) SetTabChangesFocus(bArg bool) {
 func (this *QPlainTextEdit) SetDocumentTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetDocumentTitle")
 	C.qute_QPlainTextEdit_setDocumentTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // DocumentTitle wraps QPlainTextEdit::documentTitle.
@@ -277,6 +300,7 @@ func (this *QPlainTextEdit) SetDocumentTitle(title string) {
 func (this *QPlainTextEdit) DocumentTitle() string {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.DocumentTitle")
 	r := C.qute_QPlainTextEdit_documentTitle(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -288,6 +312,7 @@ func (this *QPlainTextEdit) DocumentTitle() string {
 func (this *QPlainTextEdit) IsUndoRedoEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.IsUndoRedoEnabled")
 	r := C.qute_QPlainTextEdit_isUndoRedoEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -299,6 +324,7 @@ func (this *QPlainTextEdit) IsUndoRedoEnabled() bool {
 func (this *QPlainTextEdit) SetUndoRedoEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetUndoRedoEnabled")
 	C.qute_QPlainTextEdit_setUndoRedoEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // SetMaximumBlockCount wraps QPlainTextEdit::setMaximumBlockCount.
@@ -309,6 +335,7 @@ func (this *QPlainTextEdit) SetUndoRedoEnabled(enable bool) {
 func (this *QPlainTextEdit) SetMaximumBlockCount(maximum int) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetMaximumBlockCount")
 	C.qute_QPlainTextEdit_setMaximumBlockCount(self, C.int(maximum))
+	runtime.KeepAlive(this)
 }
 
 // MaximumBlockCount wraps QPlainTextEdit::maximumBlockCount.
@@ -319,6 +346,7 @@ func (this *QPlainTextEdit) SetMaximumBlockCount(maximum int) {
 func (this *QPlainTextEdit) MaximumBlockCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.MaximumBlockCount")
 	r := C.qute_QPlainTextEdit_maximumBlockCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -330,6 +358,7 @@ func (this *QPlainTextEdit) MaximumBlockCount() int {
 func (this *QPlainTextEdit) LineWrapMode() QPlainTextEditLineWrapMode {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.LineWrapMode")
 	r := C.qute_QPlainTextEdit_lineWrapMode(self)
+	runtime.KeepAlive(this)
 	return QPlainTextEditLineWrapMode(r)
 }
 
@@ -341,6 +370,7 @@ func (this *QPlainTextEdit) LineWrapMode() QPlainTextEditLineWrapMode {
 func (this *QPlainTextEdit) SetLineWrapMode(mode QPlainTextEditLineWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetLineWrapMode")
 	C.qute_QPlainTextEdit_setLineWrapMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // WordWrapMode wraps QPlainTextEdit::wordWrapMode.
@@ -351,6 +381,7 @@ func (this *QPlainTextEdit) SetLineWrapMode(mode QPlainTextEditLineWrapMode) {
 func (this *QPlainTextEdit) WordWrapMode() qtgui.QTextOptionWrapMode {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.WordWrapMode")
 	r := C.qute_QPlainTextEdit_wordWrapMode(self)
+	runtime.KeepAlive(this)
 	return qtgui.QTextOptionWrapMode(r)
 }
 
@@ -362,6 +393,7 @@ func (this *QPlainTextEdit) WordWrapMode() qtgui.QTextOptionWrapMode {
 func (this *QPlainTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetWordWrapMode")
 	C.qute_QPlainTextEdit_setWordWrapMode(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // SetBackgroundVisible wraps QPlainTextEdit::setBackgroundVisible.
@@ -372,6 +404,7 @@ func (this *QPlainTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
 func (this *QPlainTextEdit) SetBackgroundVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetBackgroundVisible")
 	C.qute_QPlainTextEdit_setBackgroundVisible(self, C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // BackgroundVisible wraps QPlainTextEdit::backgroundVisible.
@@ -382,6 +415,7 @@ func (this *QPlainTextEdit) SetBackgroundVisible(visible bool) {
 func (this *QPlainTextEdit) BackgroundVisible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.BackgroundVisible")
 	r := C.qute_QPlainTextEdit_backgroundVisible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -393,6 +427,7 @@ func (this *QPlainTextEdit) BackgroundVisible() bool {
 func (this *QPlainTextEdit) SetCenterOnScroll(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetCenterOnScroll")
 	C.qute_QPlainTextEdit_setCenterOnScroll(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // CenterOnScroll wraps QPlainTextEdit::centerOnScroll.
@@ -403,6 +438,7 @@ func (this *QPlainTextEdit) SetCenterOnScroll(enabled bool) {
 func (this *QPlainTextEdit) CenterOnScroll() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CenterOnScroll")
 	r := C.qute_QPlainTextEdit_centerOnScroll(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -414,6 +450,7 @@ func (this *QPlainTextEdit) CenterOnScroll() bool {
 func (this *QPlainTextEdit) Find(exp string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Find")
 	r := C.qute_QPlainTextEdit_find(self, (*C.char)(unsafe.Pointer(unsafe.StringData(exp))), C.ptrdiff_t(len(exp)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -425,6 +462,8 @@ func (this *QPlainTextEdit) Find(exp string) bool {
 func (this *QPlainTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.FindRegularExpression")
 	r := C.qute_QPlainTextEdit_find_1(self, rt.UseArg(unsafe.Pointer(exp), "QPlainTextEdit.FindRegularExpression"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(exp)
 	return bool(r)
 }
 
@@ -436,6 +475,7 @@ func (this *QPlainTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression
 func (this *QPlainTextEdit) ToPlainText() string {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.ToPlainText")
 	r := C.qute_QPlainTextEdit_toPlainText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -447,6 +487,7 @@ func (this *QPlainTextEdit) ToPlainText() string {
 func (this *QPlainTextEdit) EnsureCursorVisible() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EnsureCursorVisible")
 	C.qute_QPlainTextEdit_ensureCursorVisible(self)
+	runtime.KeepAlive(this)
 }
 
 // LoadResource wraps QPlainTextEdit::loadResource.
@@ -459,6 +500,8 @@ func (this *QPlainTextEdit) EnsureCursorVisible() {
 func (this *QPlainTextEdit) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.LoadResource")
 	r := C.qute_QPlainTextEdit_loadResource(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QPlainTextEdit.LoadResource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(name)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -472,6 +515,7 @@ func (this *QPlainTextEdit) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore
 func (this *QPlainTextEdit) CreateStandardContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CreateStandardContextMenu")
 	r := C.qute_QPlainTextEdit_createStandardContextMenu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
@@ -485,6 +529,7 @@ func (this *QPlainTextEdit) CreateStandardContextMenu() *QMenu {
 func (this *QPlainTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CreateStandardContextMenuAt")
 	r := C.qute_QPlainTextEdit_createStandardContextMenu_1(self, cQPoint(position))
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
@@ -498,6 +543,7 @@ func (this *QPlainTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) 
 func (this *QPlainTextEdit) CursorForPosition(pos qtcore.QPoint) *qtgui.QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorForPosition")
 	r := C.qute_QPlainTextEdit_cursorForPosition(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -509,6 +555,8 @@ func (this *QPlainTextEdit) CursorForPosition(pos qtcore.QPoint) *qtgui.QTextCur
 func (this *QPlainTextEdit) CursorRectWithTextCursor(cursor *qtgui.QTextCursor) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorRectWithTextCursor")
 	r := C.qute_QPlainTextEdit_cursorRect(self, rt.UseArg(unsafe.Pointer(cursor), "QPlainTextEdit.CursorRectWithTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 	return goQRect(r)
 }
 
@@ -520,6 +568,7 @@ func (this *QPlainTextEdit) CursorRectWithTextCursor(cursor *qtgui.QTextCursor) 
 func (this *QPlainTextEdit) CursorRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorRect")
 	r := C.qute_QPlainTextEdit_cursorRect_1(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -531,6 +580,7 @@ func (this *QPlainTextEdit) CursorRect() qtcore.QRect {
 func (this *QPlainTextEdit) AnchorAt(pos qtcore.QPoint) string {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.AnchorAt")
 	r := C.qute_QPlainTextEdit_anchorAt(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -542,6 +592,7 @@ func (this *QPlainTextEdit) AnchorAt(pos qtcore.QPoint) string {
 func (this *QPlainTextEdit) OverwriteMode() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.OverwriteMode")
 	r := C.qute_QPlainTextEdit_overwriteMode(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -553,6 +604,7 @@ func (this *QPlainTextEdit) OverwriteMode() bool {
 func (this *QPlainTextEdit) SetOverwriteMode(overwrite bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetOverwriteMode")
 	C.qute_QPlainTextEdit_setOverwriteMode(self, C.bool(overwrite))
+	runtime.KeepAlive(this)
 }
 
 // TabStopDistance wraps QPlainTextEdit::tabStopDistance.
@@ -563,6 +615,7 @@ func (this *QPlainTextEdit) SetOverwriteMode(overwrite bool) {
 func (this *QPlainTextEdit) TabStopDistance() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.TabStopDistance")
 	r := C.qute_QPlainTextEdit_tabStopDistance(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -574,6 +627,7 @@ func (this *QPlainTextEdit) TabStopDistance() float64 {
 func (this *QPlainTextEdit) SetTabStopDistance(distance float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetTabStopDistance")
 	C.qute_QPlainTextEdit_setTabStopDistance(self, C.double(distance))
+	runtime.KeepAlive(this)
 }
 
 // CursorWidth wraps QPlainTextEdit::cursorWidth.
@@ -584,6 +638,7 @@ func (this *QPlainTextEdit) SetTabStopDistance(distance float64) {
 func (this *QPlainTextEdit) CursorWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CursorWidth")
 	r := C.qute_QPlainTextEdit_cursorWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -595,6 +650,7 @@ func (this *QPlainTextEdit) CursorWidth() int {
 func (this *QPlainTextEdit) SetCursorWidth(width int) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetCursorWidth")
 	C.qute_QPlainTextEdit_setCursorWidth(self, C.int(width))
+	runtime.KeepAlive(this)
 }
 
 // SetExtraSelections wraps QPlainTextEdit::setExtraSelections.
@@ -609,6 +665,8 @@ func (this *QPlainTextEdit) SetExtraSelections(selections []*QTextEditExtraSelec
 		selectionsC[i] = rt.UseArg(unsafe.Pointer(selections[i]), "QPlainTextEdit.SetExtraSelections")
 	}
 	C.qute_QPlainTextEdit_setExtraSelections(self, unsafe.Pointer(unsafe.SliceData(selectionsC)), C.ptrdiff_t(len(selections)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selections)
 }
 
 // ExtraSelections wraps QPlainTextEdit::extraSelections.
@@ -619,6 +677,7 @@ func (this *QPlainTextEdit) SetExtraSelections(selections []*QTextEditExtraSelec
 func (this *QPlainTextEdit) ExtraSelections() []*QTextEditExtraSelection {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.ExtraSelections")
 	r := C.qute_QPlainTextEdit_extraSelections(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextEditExtraSelection {
 		return rt.View[QTextEditExtraSelection](rt.WrapClass(e, "QTextEditExtraSelection", rt.TakeOwned), e)
 	})
@@ -632,6 +691,7 @@ func (this *QPlainTextEdit) ExtraSelections() []*QTextEditExtraSelection {
 func (this *QPlainTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.MoveCursor")
 	C.qute_QPlainTextEdit_moveCursor(self, C.int64_t(operation))
+	runtime.KeepAlive(this)
 }
 
 // CanPaste wraps QPlainTextEdit::canPaste.
@@ -642,6 +702,7 @@ func (this *QPlainTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation)
 func (this *QPlainTextEdit) CanPaste() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CanPaste")
 	r := C.qute_QPlainTextEdit_canPaste(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -657,6 +718,8 @@ func (this *QPlainTextEdit) Print(printer qtgui.QPagedPaintDeviceLike) {
 		printerPtr = rt.UseArg(unsafe.Pointer(printer.AsQPagedPaintDevice()), "QPlainTextEdit.Print")
 	}
 	C.qute_QPlainTextEdit_print(self, printerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(printer)
 }
 
 // BlockCount wraps QPlainTextEdit::blockCount.
@@ -667,6 +730,7 @@ func (this *QPlainTextEdit) Print(printer qtgui.QPagedPaintDeviceLike) {
 func (this *QPlainTextEdit) BlockCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.BlockCount")
 	r := C.qute_QPlainTextEdit_blockCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -678,6 +742,7 @@ func (this *QPlainTextEdit) BlockCount() int {
 func (this *QPlainTextEdit) SetPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SetPlainText")
 	C.qute_QPlainTextEdit_setPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Cut wraps QPlainTextEdit::cut.
@@ -688,6 +753,7 @@ func (this *QPlainTextEdit) SetPlainText(text string) {
 func (this *QPlainTextEdit) Cut() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Cut")
 	C.qute_QPlainTextEdit_cut(self)
+	runtime.KeepAlive(this)
 }
 
 // Copy wraps QPlainTextEdit::copy.
@@ -698,6 +764,7 @@ func (this *QPlainTextEdit) Cut() {
 func (this *QPlainTextEdit) Copy() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Copy")
 	C.qute_QPlainTextEdit_copy(self)
+	runtime.KeepAlive(this)
 }
 
 // Paste wraps QPlainTextEdit::paste.
@@ -708,6 +775,7 @@ func (this *QPlainTextEdit) Copy() {
 func (this *QPlainTextEdit) Paste() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Paste")
 	C.qute_QPlainTextEdit_paste(self)
+	runtime.KeepAlive(this)
 }
 
 // Undo wraps QPlainTextEdit::undo.
@@ -718,6 +786,7 @@ func (this *QPlainTextEdit) Paste() {
 func (this *QPlainTextEdit) Undo() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Undo")
 	C.qute_QPlainTextEdit_undo(self)
+	runtime.KeepAlive(this)
 }
 
 // Redo wraps QPlainTextEdit::redo.
@@ -728,6 +797,7 @@ func (this *QPlainTextEdit) Undo() {
 func (this *QPlainTextEdit) Redo() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Redo")
 	C.qute_QPlainTextEdit_redo(self)
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QPlainTextEdit::clear.
@@ -738,6 +808,7 @@ func (this *QPlainTextEdit) Redo() {
 func (this *QPlainTextEdit) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.Clear")
 	C.qute_QPlainTextEdit_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectAll wraps QPlainTextEdit::selectAll.
@@ -748,6 +819,7 @@ func (this *QPlainTextEdit) Clear() {
 func (this *QPlainTextEdit) SelectAll() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.SelectAll")
 	C.qute_QPlainTextEdit_selectAll(self)
+	runtime.KeepAlive(this)
 }
 
 // InsertPlainText wraps QPlainTextEdit::insertPlainText.
@@ -758,6 +830,7 @@ func (this *QPlainTextEdit) SelectAll() {
 func (this *QPlainTextEdit) InsertPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.InsertPlainText")
 	C.qute_QPlainTextEdit_insertPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // AppendPlainText wraps QPlainTextEdit::appendPlainText.
@@ -768,6 +841,7 @@ func (this *QPlainTextEdit) InsertPlainText(text string) {
 func (this *QPlainTextEdit) AppendPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.AppendPlainText")
 	C.qute_QPlainTextEdit_appendPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // AppendHtml wraps QPlainTextEdit::appendHtml.
@@ -778,6 +852,7 @@ func (this *QPlainTextEdit) AppendPlainText(text string) {
 func (this *QPlainTextEdit) AppendHtml(html string) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.AppendHtml")
 	C.qute_QPlainTextEdit_appendHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(html))), C.ptrdiff_t(len(html)))
+	runtime.KeepAlive(this)
 }
 
 // CenterCursor wraps QPlainTextEdit::centerCursor.
@@ -788,6 +863,7 @@ func (this *QPlainTextEdit) AppendHtml(html string) {
 func (this *QPlainTextEdit) CenterCursor() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.CenterCursor")
 	C.qute_QPlainTextEdit_centerCursor(self)
+	runtime.KeepAlive(this)
 }
 
 // ZoomIn wraps QPlainTextEdit::zoomIn.
@@ -798,6 +874,7 @@ func (this *QPlainTextEdit) CenterCursor() {
 func (this *QPlainTextEdit) ZoomIn() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.ZoomIn")
 	C.qute_QPlainTextEdit_zoomIn(self)
+	runtime.KeepAlive(this)
 }
 
 // ZoomOut wraps QPlainTextEdit::zoomOut.
@@ -808,6 +885,7 @@ func (this *QPlainTextEdit) ZoomIn() {
 func (this *QPlainTextEdit) ZoomOut() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.ZoomOut")
 	C.qute_QPlainTextEdit_zoomOut(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitTextChanged wraps emitting the textChanged signal.
@@ -818,6 +896,7 @@ func (this *QPlainTextEdit) ZoomOut() {
 func (this *QPlainTextEdit) EmitTextChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitTextChanged")
 	C.qute_QPlainTextEdit_textChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitUndoAvailable wraps emitting the undoAvailable signal.
@@ -828,6 +907,7 @@ func (this *QPlainTextEdit) EmitTextChanged() {
 func (this *QPlainTextEdit) EmitUndoAvailable(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitUndoAvailable")
 	C.qute_QPlainTextEdit_undoAvailable_1(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitRedoAvailable wraps emitting the redoAvailable signal.
@@ -838,6 +918,7 @@ func (this *QPlainTextEdit) EmitUndoAvailable(bArg bool) {
 func (this *QPlainTextEdit) EmitRedoAvailable(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitRedoAvailable")
 	C.qute_QPlainTextEdit_redoAvailable_1(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitCopyAvailable wraps emitting the copyAvailable signal.
@@ -848,6 +929,7 @@ func (this *QPlainTextEdit) EmitRedoAvailable(bArg bool) {
 func (this *QPlainTextEdit) EmitCopyAvailable(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitCopyAvailable")
 	C.qute_QPlainTextEdit_copyAvailable_1(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -858,6 +940,7 @@ func (this *QPlainTextEdit) EmitCopyAvailable(bArg bool) {
 func (this *QPlainTextEdit) EmitSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitSelectionChanged")
 	C.qute_QPlainTextEdit_selectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitCursorPositionChanged wraps emitting the cursorPositionChanged signal.
@@ -868,6 +951,7 @@ func (this *QPlainTextEdit) EmitSelectionChanged() {
 func (this *QPlainTextEdit) EmitCursorPositionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitCursorPositionChanged")
 	C.qute_QPlainTextEdit_cursorPositionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitUpdateRequest wraps emitting the updateRequest signal.
@@ -878,6 +962,7 @@ func (this *QPlainTextEdit) EmitCursorPositionChanged() {
 func (this *QPlainTextEdit) EmitUpdateRequest(rect qtcore.QRect, dy int) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitUpdateRequest")
 	C.qute_QPlainTextEdit_updateRequest_1(self, cQRect(rect), C.int(dy))
+	runtime.KeepAlive(this)
 }
 
 // EmitBlockCountChanged wraps emitting the blockCountChanged signal.
@@ -888,6 +973,7 @@ func (this *QPlainTextEdit) EmitUpdateRequest(rect qtcore.QRect, dy int) {
 func (this *QPlainTextEdit) EmitBlockCountChanged(newBlockCount int) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitBlockCountChanged")
 	C.qute_QPlainTextEdit_blockCountChanged_1(self, C.int(newBlockCount))
+	runtime.KeepAlive(this)
 }
 
 // EmitModificationChanged wraps emitting the modificationChanged signal.
@@ -898,6 +984,7 @@ func (this *QPlainTextEdit) EmitBlockCountChanged(newBlockCount int) {
 func (this *QPlainTextEdit) EmitModificationChanged(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.EmitModificationChanged")
 	C.qute_QPlainTextEdit_modificationChanged_1(self, C.bool(arg0))
+	runtime.KeepAlive(this)
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the

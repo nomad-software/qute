@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,9 @@ func (this *QCoreApplication) Notify(object QObjectLike, event QEventLike) bool 
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCoreApplication.Notify")
 	}
 	r := C.qute_QCoreApplication_notify(self, objectPtr, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
 	return bool(r)
 }
 
@@ -73,6 +77,7 @@ func (this *QCoreApplication) Notify(object QObjectLike, event QEventLike) bool 
 func (this *QCoreApplication) EmitOrganizationNameChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QCoreApplication.EmitOrganizationNameChanged")
 	C.qute_QCoreApplication_organizationNameChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitOrganizationDomainChanged wraps emitting the organizationDomainChanged signal.
@@ -83,6 +88,7 @@ func (this *QCoreApplication) EmitOrganizationNameChanged() {
 func (this *QCoreApplication) EmitOrganizationDomainChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QCoreApplication.EmitOrganizationDomainChanged")
 	C.qute_QCoreApplication_organizationDomainChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitApplicationNameChanged wraps emitting the applicationNameChanged signal.
@@ -93,6 +99,7 @@ func (this *QCoreApplication) EmitOrganizationDomainChanged() {
 func (this *QCoreApplication) EmitApplicationNameChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QCoreApplication.EmitApplicationNameChanged")
 	C.qute_QCoreApplication_applicationNameChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitApplicationVersionChanged wraps emitting the applicationVersionChanged signal.
@@ -103,6 +110,7 @@ func (this *QCoreApplication) EmitApplicationNameChanged() {
 func (this *QCoreApplication) EmitApplicationVersionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QCoreApplication.EmitApplicationVersionChanged")
 	C.qute_QCoreApplication_applicationVersionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QCoreApplicationArguments wraps QCoreApplication::arguments.
@@ -305,6 +313,7 @@ func QCoreApplicationProcessEventsWithProcessEventsFlag(flags QEventLoopProcessE
 func QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer(flags QEventLoopProcessEventsFlags, deadline *QDeadlineTimer) {
 	rt.CheckThread("QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer")
 	C.qute_QCoreApplication_processEvents_2(C.int64_t(flags), rt.UseArg(unsafe.Pointer(deadline), "QCoreApplicationProcessEventsWithProcessEventsFlagDeadlineTimer"))
+	runtime.KeepAlive(deadline)
 }
 
 // QCoreApplicationSendEvent wraps QCoreApplication::sendEvent.
@@ -323,6 +332,8 @@ func QCoreApplicationSendEvent(receiver QObjectLike, event QEventLike) bool {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCoreApplicationSendEvent")
 	}
 	r := C.qute_QCoreApplication_sendEvent(receiverPtr, eventPtr)
+	runtime.KeepAlive(receiver)
+	runtime.KeepAlive(event)
 	return bool(r)
 }
 
@@ -347,6 +358,8 @@ func QCoreApplicationPostEvent(receiver QObjectLike, event QEventLike) {
 		eventPtr, eventH = rt.Arg(unsafe.Pointer(event.AsQEvent()), "QCoreApplicationPostEvent")
 	}
 	C.qute_QCoreApplication_postEvent(receiverPtr, eventPtr)
+	runtime.KeepAlive(receiver)
+	runtime.KeepAlive(event)
 	eventH.TransferToCpp()
 }
 
@@ -372,6 +385,7 @@ func QCoreApplicationRemovePostedEvents(receiver QObjectLike) {
 		receiverPtr = rt.UseArg(unsafe.Pointer(receiver.AsQObject()), "QCoreApplicationRemovePostedEvents")
 	}
 	C.qute_QCoreApplication_removePostedEvents(receiverPtr)
+	runtime.KeepAlive(receiver)
 }
 
 // QCoreApplicationStartingUp wraps QCoreApplication::startingUp.
@@ -485,6 +499,7 @@ func QCoreApplicationInstallTranslator(messageFile QTranslatorLike) bool {
 		messageFilePtr = rt.UseArg(unsafe.Pointer(messageFile.AsQTranslator()), "QCoreApplicationInstallTranslator")
 	}
 	r := C.qute_QCoreApplication_installTranslator(messageFilePtr)
+	runtime.KeepAlive(messageFile)
 	return bool(r)
 }
 
@@ -500,6 +515,7 @@ func QCoreApplicationRemoveTranslator(messageFile QTranslatorLike) bool {
 		messageFilePtr = rt.UseArg(unsafe.Pointer(messageFile.AsQTranslator()), "QCoreApplicationRemoveTranslator")
 	}
 	r := C.qute_QCoreApplication_removeTranslator(messageFilePtr)
+	runtime.KeepAlive(messageFile)
 	return bool(r)
 }
 

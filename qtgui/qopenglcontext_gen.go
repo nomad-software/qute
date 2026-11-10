@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQOpenGLContext(parent qtcore.QObjectLike) *QOpenGLContext {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLContext")
 	}
 	p := C.qute_QOpenGLContext_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,8 @@ func NewQOpenGLContext(parent qtcore.QObjectLike) *QOpenGLContext {
 func (this *QOpenGLContext) SetFormat(format *QSurfaceFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.SetFormat")
 	C.qute_QOpenGLContext_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QOpenGLContext.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // SetShareContext wraps QOpenGLContext::setShareContext.
@@ -91,6 +95,8 @@ func (this *QOpenGLContext) SetShareContext(shareContext QOpenGLContextLike) {
 		shareContextPtr = rt.UseArg(unsafe.Pointer(shareContext.AsQOpenGLContext()), "QOpenGLContext.SetShareContext")
 	}
 	C.qute_QOpenGLContext_setShareContext(self, shareContextPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(shareContext)
 }
 
 // SetScreen wraps QOpenGLContext::setScreen.
@@ -105,6 +111,8 @@ func (this *QOpenGLContext) SetScreen(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QOpenGLContext.SetScreen")
 	}
 	C.qute_QOpenGLContext_setScreen(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // Create wraps QOpenGLContext::create.
@@ -115,6 +123,7 @@ func (this *QOpenGLContext) SetScreen(screen QScreenLike) {
 func (this *QOpenGLContext) Create() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Create")
 	r := C.qute_QOpenGLContext_create(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -126,6 +135,7 @@ func (this *QOpenGLContext) Create() bool {
 func (this *QOpenGLContext) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.IsValid")
 	r := C.qute_QOpenGLContext_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -139,6 +149,7 @@ func (this *QOpenGLContext) IsValid() bool {
 func (this *QOpenGLContext) Format() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Format")
 	r := C.qute_QOpenGLContext_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -152,6 +163,7 @@ func (this *QOpenGLContext) Format() *QSurfaceFormat {
 func (this *QOpenGLContext) ShareContext() *QOpenGLContext {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.ShareContext")
 	r := C.qute_QOpenGLContext_shareContext(self)
+	runtime.KeepAlive(this)
 	return rt.View[QOpenGLContext](rt.WrapClass(r, "QOpenGLContext", rt.KeepOrBorrow), r)
 }
 
@@ -165,6 +177,7 @@ func (this *QOpenGLContext) ShareContext() *QOpenGLContext {
 func (this *QOpenGLContext) ShareGroup() *QOpenGLContextGroup {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.ShareGroup")
 	r := C.qute_QOpenGLContext_shareGroup(self)
+	runtime.KeepAlive(this)
 	return rt.View[QOpenGLContextGroup](rt.WrapClass(r, "QOpenGLContextGroup", rt.KeepOrBorrow), r)
 }
 
@@ -178,6 +191,7 @@ func (this *QOpenGLContext) ShareGroup() *QOpenGLContextGroup {
 func (this *QOpenGLContext) Screen() *QScreen {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Screen")
 	r := C.qute_QOpenGLContext_screen(self)
+	runtime.KeepAlive(this)
 	return rt.View[QScreen](rt.WrapClass(r, "QScreen", rt.KeepOrBorrow), r)
 }
 
@@ -189,6 +203,7 @@ func (this *QOpenGLContext) Screen() *QScreen {
 func (this *QOpenGLContext) DefaultFramebufferObject() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.DefaultFramebufferObject")
 	r := C.qute_QOpenGLContext_defaultFramebufferObject(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -204,6 +219,8 @@ func (this *QOpenGLContext) MakeCurrent(surface QSurfaceLike) bool {
 		surfacePtr = rt.UseArg(unsafe.Pointer(surface.AsQSurface()), "QOpenGLContext.MakeCurrent")
 	}
 	r := C.qute_QOpenGLContext_makeCurrent(self, surfacePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(surface)
 	return bool(r)
 }
 
@@ -215,6 +232,7 @@ func (this *QOpenGLContext) MakeCurrent(surface QSurfaceLike) bool {
 func (this *QOpenGLContext) DoneCurrent() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.DoneCurrent")
 	C.qute_QOpenGLContext_doneCurrent(self)
+	runtime.KeepAlive(this)
 }
 
 // SwapBuffers wraps QOpenGLContext::swapBuffers.
@@ -229,6 +247,8 @@ func (this *QOpenGLContext) SwapBuffers(surface QSurfaceLike) {
 		surfacePtr = rt.UseArg(unsafe.Pointer(surface.AsQSurface()), "QOpenGLContext.SwapBuffers")
 	}
 	C.qute_QOpenGLContext_swapBuffers(self, surfacePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(surface)
 }
 
 // Surface wraps QOpenGLContext::surface.
@@ -241,6 +261,7 @@ func (this *QOpenGLContext) SwapBuffers(surface QSurfaceLike) {
 func (this *QOpenGLContext) Surface() *QSurface {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Surface")
 	r := C.qute_QOpenGLContext_surface(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurface](rt.WrapClass(r, "QSurface", rt.KeepOrBorrow), r)
 }
 
@@ -256,6 +277,7 @@ func (this *QOpenGLContext) Surface() *QSurface {
 func (this *QOpenGLContext) Functions() *QOpenGLFunctions {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Functions")
 	r := C.qute_QOpenGLContext_functions(self)
+	runtime.KeepAlive(this)
 	return rt.View[QOpenGLFunctions](rt.WrapClass(r, "QOpenGLFunctions", rt.KeepOrBorrow), r)
 }
 
@@ -271,6 +293,7 @@ func (this *QOpenGLContext) Functions() *QOpenGLFunctions {
 func (this *QOpenGLContext) ExtraFunctions() *QOpenGLExtraFunctions {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.ExtraFunctions")
 	r := C.qute_QOpenGLContext_extraFunctions(self)
+	runtime.KeepAlive(this)
 	return rt.View[QOpenGLExtraFunctions](rt.WrapClass(r, "QOpenGLExtraFunctions", rt.KeepOrBorrow), r)
 }
 
@@ -282,6 +305,7 @@ func (this *QOpenGLContext) ExtraFunctions() *QOpenGLExtraFunctions {
 func (this *QOpenGLContext) Extensions() [][]byte {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Extensions")
 	r := C.qute_QOpenGLContext_extensions(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_str) []byte { return quteBytes(e) })
 }
 
@@ -293,6 +317,7 @@ func (this *QOpenGLContext) Extensions() [][]byte {
 func (this *QOpenGLContext) HasExtension(extension []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.HasExtension")
 	r := C.qute_QOpenGLContext_hasExtension(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(extension))), C.ptrdiff_t(len(extension)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -304,6 +329,7 @@ func (this *QOpenGLContext) HasExtension(extension []byte) bool {
 func (this *QOpenGLContext) IsOpenGLES() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.IsOpenGLES")
 	r := C.qute_QOpenGLContext_isOpenGLES(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -315,6 +341,7 @@ func (this *QOpenGLContext) IsOpenGLES() bool {
 func (this *QOpenGLContext) EmitAboutToBeDestroyed() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.EmitAboutToBeDestroyed")
 	C.qute_QOpenGLContext_aboutToBeDestroyed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QOpenGLContextCurrentContext wraps QOpenGLContext::currentContext.
@@ -346,6 +373,8 @@ func QOpenGLContextAreSharing(first QOpenGLContextLike, second QOpenGLContextLik
 		secondPtr = rt.UseArg(unsafe.Pointer(second.AsQOpenGLContext()), "QOpenGLContextAreSharing")
 	}
 	r := C.qute_QOpenGLContext_areSharing(firstPtr, secondPtr)
+	runtime.KeepAlive(first)
+	runtime.KeepAlive(second)
 	return bool(r)
 }
 

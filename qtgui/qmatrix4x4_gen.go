@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -145,6 +146,7 @@ func NewQMatrix4x4WithPtrCols(values unsafe.Pointer, cols int, rows int) *QMatri
 func NewQMatrix4x4WithTransform(transform *QTransform) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithTransform")
 	p := C.qute_QMatrix4x4_new_5(rt.UseArg(unsafe.Pointer(transform), "NewQMatrix4x4WithTransform"))
+	runtime.KeepAlive(transform)
 	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
@@ -159,6 +161,7 @@ func NewQMatrix4x4WithTransform(transform *QTransform) *QMatrix4x4 {
 func (this *QMatrix4x4) Column(index int) *QVector4D {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Column")
 	r := C.qute_QMatrix4x4_column(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
@@ -170,6 +173,8 @@ func (this *QMatrix4x4) Column(index int) *QVector4D {
 func (this *QMatrix4x4) SetColumn(index int, value *QVector4D) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.SetColumn")
 	C.qute_QMatrix4x4_setColumn(self, C.int(index), rt.UseArg(unsafe.Pointer(value), "QMatrix4x4.SetColumn"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // Row wraps QMatrix4x4::row.
@@ -182,6 +187,7 @@ func (this *QMatrix4x4) SetColumn(index int, value *QVector4D) {
 func (this *QMatrix4x4) Row(index int) *QVector4D {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Row")
 	r := C.qute_QMatrix4x4_row(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
@@ -193,6 +199,8 @@ func (this *QMatrix4x4) Row(index int) *QVector4D {
 func (this *QMatrix4x4) SetRow(index int, value *QVector4D) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.SetRow")
 	C.qute_QMatrix4x4_setRow(self, C.int(index), rt.UseArg(unsafe.Pointer(value), "QMatrix4x4.SetRow"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // IsAffine wraps QMatrix4x4::isAffine.
@@ -203,6 +211,7 @@ func (this *QMatrix4x4) SetRow(index int, value *QVector4D) {
 func (this *QMatrix4x4) IsAffine() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.IsAffine")
 	r := C.qute_QMatrix4x4_isAffine(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -214,6 +223,7 @@ func (this *QMatrix4x4) IsAffine() bool {
 func (this *QMatrix4x4) IsIdentity() bool {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.IsIdentity")
 	r := C.qute_QMatrix4x4_isIdentity(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -225,6 +235,7 @@ func (this *QMatrix4x4) IsIdentity() bool {
 func (this *QMatrix4x4) SetToIdentity() {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.SetToIdentity")
 	C.qute_QMatrix4x4_setToIdentity(self)
+	runtime.KeepAlive(this)
 }
 
 // Fill wraps QMatrix4x4::fill.
@@ -235,6 +246,7 @@ func (this *QMatrix4x4) SetToIdentity() {
 func (this *QMatrix4x4) Fill(value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Fill")
 	C.qute_QMatrix4x4_fill(self, C.float(value))
+	runtime.KeepAlive(this)
 }
 
 // Determinant wraps QMatrix4x4::determinant.
@@ -245,6 +257,7 @@ func (this *QMatrix4x4) Fill(value float32) {
 func (this *QMatrix4x4) Determinant() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Determinant")
 	r := C.qute_QMatrix4x4_determinant(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -258,6 +271,7 @@ func (this *QMatrix4x4) Determinant() float64 {
 func (this *QMatrix4x4) Inverted() *QMatrix4x4 {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Inverted")
 	r := C.qute_QMatrix4x4_inverted(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMatrix4x4](rt.WrapClass(r, "QMatrix4x4", rt.TakeOwned), r)
 }
 
@@ -271,6 +285,7 @@ func (this *QMatrix4x4) Inverted() *QMatrix4x4 {
 func (this *QMatrix4x4) Transposed() *QMatrix4x4 {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Transposed")
 	r := C.qute_QMatrix4x4_transposed(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMatrix4x4](rt.WrapClass(r, "QMatrix4x4", rt.TakeOwned), r)
 }
 
@@ -282,6 +297,8 @@ func (this *QMatrix4x4) Transposed() *QMatrix4x4 {
 func (this *QMatrix4x4) Scale(vector *QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Scale")
 	C.qute_QMatrix4x4_scale(self, rt.UseArg(unsafe.Pointer(vector), "QMatrix4x4.Scale"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vector)
 }
 
 // Translate wraps QMatrix4x4::translate.
@@ -292,6 +309,8 @@ func (this *QMatrix4x4) Scale(vector *QVector3D) {
 func (this *QMatrix4x4) Translate(vector *QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Translate")
 	C.qute_QMatrix4x4_translate(self, rt.UseArg(unsafe.Pointer(vector), "QMatrix4x4.Translate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vector)
 }
 
 // RotateAngle wraps QMatrix4x4::rotate.
@@ -302,6 +321,8 @@ func (this *QMatrix4x4) Translate(vector *QVector3D) {
 func (this *QMatrix4x4) RotateAngle(angle float32, vector *QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.RotateAngle")
 	C.qute_QMatrix4x4_rotate(self, C.float(angle), rt.UseArg(unsafe.Pointer(vector), "QMatrix4x4.RotateAngle"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vector)
 }
 
 // ScaleFloat32 wraps QMatrix4x4::scale.
@@ -312,6 +333,7 @@ func (this *QMatrix4x4) RotateAngle(angle float32, vector *QVector3D) {
 func (this *QMatrix4x4) ScaleFloat32(x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ScaleFloat32")
 	C.qute_QMatrix4x4_scale_1(self, C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // ScaleFloat32Float32 wraps QMatrix4x4::scale.
@@ -322,6 +344,7 @@ func (this *QMatrix4x4) ScaleFloat32(x float32, y float32) {
 func (this *QMatrix4x4) ScaleFloat32Float32(x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ScaleFloat32Float32")
 	C.qute_QMatrix4x4_scale_2(self, C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // ScaleFactor wraps QMatrix4x4::scale.
@@ -332,6 +355,7 @@ func (this *QMatrix4x4) ScaleFloat32Float32(x float32, y float32, z float32) {
 func (this *QMatrix4x4) ScaleFactor(factor float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ScaleFactor")
 	C.qute_QMatrix4x4_scale_3(self, C.float(factor))
+	runtime.KeepAlive(this)
 }
 
 // TranslateFloat32 wraps QMatrix4x4::translate.
@@ -342,6 +366,7 @@ func (this *QMatrix4x4) ScaleFactor(factor float32) {
 func (this *QMatrix4x4) TranslateFloat32(x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.TranslateFloat32")
 	C.qute_QMatrix4x4_translate_1(self, C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // TranslateFloat32Float32 wraps QMatrix4x4::translate.
@@ -352,6 +377,7 @@ func (this *QMatrix4x4) TranslateFloat32(x float32, y float32) {
 func (this *QMatrix4x4) TranslateFloat32Float32(x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.TranslateFloat32Float32")
 	C.qute_QMatrix4x4_translate_2(self, C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // RotateAngleFloat32 wraps QMatrix4x4::rotate.
@@ -362,6 +388,7 @@ func (this *QMatrix4x4) TranslateFloat32Float32(x float32, y float32, z float32)
 func (this *QMatrix4x4) RotateAngleFloat32(angle float32, x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.RotateAngleFloat32")
 	C.qute_QMatrix4x4_rotate_1(self, C.float(angle), C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // Rotate wraps QMatrix4x4::rotate.
@@ -372,6 +399,8 @@ func (this *QMatrix4x4) RotateAngleFloat32(angle float32, x float32, y float32) 
 func (this *QMatrix4x4) Rotate(quaternion *QQuaternion) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Rotate")
 	C.qute_QMatrix4x4_rotate_2(self, rt.UseArg(unsafe.Pointer(quaternion), "QMatrix4x4.Rotate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(quaternion)
 }
 
 // Ortho wraps QMatrix4x4::ortho.
@@ -382,6 +411,7 @@ func (this *QMatrix4x4) Rotate(quaternion *QQuaternion) {
 func (this *QMatrix4x4) Ortho(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Ortho")
 	C.qute_QMatrix4x4_ortho(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // OrthoRectF wraps QMatrix4x4::ortho.
@@ -392,6 +422,7 @@ func (this *QMatrix4x4) Ortho(rect qtcore.QRect) {
 func (this *QMatrix4x4) OrthoRectF(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.OrthoRectF")
 	C.qute_QMatrix4x4_ortho_1(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // OrthoLeft wraps QMatrix4x4::ortho.
@@ -402,6 +433,7 @@ func (this *QMatrix4x4) OrthoRectF(rect qtcore.QRectF) {
 func (this *QMatrix4x4) OrthoLeft(left float32, right float32, bottom float32, top float32, nearPlane float32, farPlane float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.OrthoLeft")
 	C.qute_QMatrix4x4_ortho_2(self, C.float(left), C.float(right), C.float(bottom), C.float(top), C.float(nearPlane), C.float(farPlane))
+	runtime.KeepAlive(this)
 }
 
 // Frustum wraps QMatrix4x4::frustum.
@@ -412,6 +444,7 @@ func (this *QMatrix4x4) OrthoLeft(left float32, right float32, bottom float32, t
 func (this *QMatrix4x4) Frustum(left float32, right float32, bottom float32, top float32, nearPlane float32, farPlane float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Frustum")
 	C.qute_QMatrix4x4_frustum(self, C.float(left), C.float(right), C.float(bottom), C.float(top), C.float(nearPlane), C.float(farPlane))
+	runtime.KeepAlive(this)
 }
 
 // Perspective wraps QMatrix4x4::perspective.
@@ -422,6 +455,7 @@ func (this *QMatrix4x4) Frustum(left float32, right float32, bottom float32, top
 func (this *QMatrix4x4) Perspective(verticalAngle float32, aspectRatio float32, nearPlane float32, farPlane float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Perspective")
 	C.qute_QMatrix4x4_perspective(self, C.float(verticalAngle), C.float(aspectRatio), C.float(nearPlane), C.float(farPlane))
+	runtime.KeepAlive(this)
 }
 
 // LookAt wraps QMatrix4x4::lookAt.
@@ -432,6 +466,10 @@ func (this *QMatrix4x4) Perspective(verticalAngle float32, aspectRatio float32, 
 func (this *QMatrix4x4) LookAt(eye *QVector3D, center *QVector3D, up *QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.LookAt")
 	C.qute_QMatrix4x4_lookAt(self, rt.UseArg(unsafe.Pointer(eye), "QMatrix4x4.LookAt"), rt.UseArg(unsafe.Pointer(center), "QMatrix4x4.LookAt"), rt.UseArg(unsafe.Pointer(up), "QMatrix4x4.LookAt"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(eye)
+	runtime.KeepAlive(center)
+	runtime.KeepAlive(up)
 }
 
 // Viewport wraps QMatrix4x4::viewport.
@@ -442,6 +480,7 @@ func (this *QMatrix4x4) LookAt(eye *QVector3D, center *QVector3D, up *QVector3D)
 func (this *QMatrix4x4) Viewport(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Viewport")
 	C.qute_QMatrix4x4_viewport(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // FlipCoordinates wraps QMatrix4x4::flipCoordinates.
@@ -452,6 +491,7 @@ func (this *QMatrix4x4) Viewport(rect qtcore.QRectF) {
 func (this *QMatrix4x4) FlipCoordinates() {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.FlipCoordinates")
 	C.qute_QMatrix4x4_flipCoordinates(self)
+	runtime.KeepAlive(this)
 }
 
 // CopyDataTo wraps QMatrix4x4::copyDataTo.
@@ -463,6 +503,7 @@ func (this *QMatrix4x4) CopyDataTo() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.CopyDataTo")
 	var valuesOut C.float
 	C.qute_QMatrix4x4_copyDataTo(self, &valuesOut)
+	runtime.KeepAlive(this)
 	return float32(valuesOut)
 }
 
@@ -476,6 +517,7 @@ func (this *QMatrix4x4) CopyDataTo() float32 {
 func (this *QMatrix4x4) ToTransform() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ToTransform")
 	r := C.qute_QMatrix4x4_toTransform(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -489,6 +531,7 @@ func (this *QMatrix4x4) ToTransform() *QTransform {
 func (this *QMatrix4x4) ToTransformWithDistanceToPlane(distanceToPlane float32) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ToTransformWithDistanceToPlane")
 	r := C.qute_QMatrix4x4_toTransform_1(self, C.float(distanceToPlane))
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -500,6 +543,7 @@ func (this *QMatrix4x4) ToTransformWithDistanceToPlane(distanceToPlane float32) 
 func (this *QMatrix4x4) Map(point qtcore.QPoint) qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Map")
 	r := C.qute_QMatrix4x4_map(self, cQPoint(point))
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -511,6 +555,7 @@ func (this *QMatrix4x4) Map(point qtcore.QPoint) qtcore.QPoint {
 func (this *QMatrix4x4) MapPointF(point qtcore.QPointF) qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.MapPointF")
 	r := C.qute_QMatrix4x4_map_1(self, cQPointF(point))
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -524,6 +569,8 @@ func (this *QMatrix4x4) MapPointF(point qtcore.QPointF) qtcore.QPointF {
 func (this *QMatrix4x4) MapVector3D(point *QVector3D) *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.MapVector3D")
 	r := C.qute_QMatrix4x4_map_2(self, rt.UseArg(unsafe.Pointer(point), "QMatrix4x4.MapVector3D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -537,6 +584,8 @@ func (this *QMatrix4x4) MapVector3D(point *QVector3D) *QVector3D {
 func (this *QMatrix4x4) MapVector(vector *QVector3D) *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.MapVector")
 	r := C.qute_QMatrix4x4_mapVector(self, rt.UseArg(unsafe.Pointer(vector), "QMatrix4x4.MapVector"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vector)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -550,6 +599,8 @@ func (this *QMatrix4x4) MapVector(vector *QVector3D) *QVector3D {
 func (this *QMatrix4x4) MapVector4D(point *QVector4D) *QVector4D {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.MapVector4D")
 	r := C.qute_QMatrix4x4_map_3(self, rt.UseArg(unsafe.Pointer(point), "QMatrix4x4.MapVector4D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
@@ -561,6 +612,7 @@ func (this *QMatrix4x4) MapVector4D(point *QVector4D) *QVector4D {
 func (this *QMatrix4x4) MapRect(rect qtcore.QRect) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.MapRect")
 	r := C.qute_QMatrix4x4_mapRect(self, cQRect(rect))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -572,6 +624,7 @@ func (this *QMatrix4x4) MapRect(rect qtcore.QRect) qtcore.QRect {
 func (this *QMatrix4x4) MapRectRectF(rect qtcore.QRectF) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.MapRectRectF")
 	r := C.qute_QMatrix4x4_mapRect_1(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -583,6 +636,7 @@ func (this *QMatrix4x4) MapRectRectF(rect qtcore.QRectF) qtcore.QRectF {
 func (this *QMatrix4x4) Data() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Data")
 	r := C.qute_QMatrix4x4_data(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -594,6 +648,7 @@ func (this *QMatrix4x4) Data() unsafe.Pointer {
 func (this *QMatrix4x4) ConstData() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ConstData")
 	r := C.qute_QMatrix4x4_constData(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -605,6 +660,7 @@ func (this *QMatrix4x4) ConstData() unsafe.Pointer {
 func (this *QMatrix4x4) Optimize() {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Optimize")
 	C.qute_QMatrix4x4_optimize(self)
+	runtime.KeepAlive(this)
 }
 
 // ProjectedRotateWithDistanceToPlane wraps QMatrix4x4::projectedRotate.
@@ -615,6 +671,7 @@ func (this *QMatrix4x4) Optimize() {
 func (this *QMatrix4x4) ProjectedRotateWithDistanceToPlane(angle float32, x float32, y float32, z float32, distanceToPlane float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ProjectedRotateWithDistanceToPlane")
 	C.qute_QMatrix4x4_projectedRotate(self, C.float(angle), C.float(x), C.float(y), C.float(z), C.float(distanceToPlane))
+	runtime.KeepAlive(this)
 }
 
 // ProjectedRotate wraps QMatrix4x4::projectedRotate.
@@ -625,6 +682,7 @@ func (this *QMatrix4x4) ProjectedRotateWithDistanceToPlane(angle float32, x floa
 func (this *QMatrix4x4) ProjectedRotate(angle float32, x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ProjectedRotate")
 	C.qute_QMatrix4x4_projectedRotate_1(self, C.float(angle), C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // Flags wraps QMatrix4x4::flags.
@@ -635,5 +693,6 @@ func (this *QMatrix4x4) ProjectedRotate(angle float32, x float32, y float32, z f
 func (this *QMatrix4x4) Flags() QMatrix4x4Flags {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Flags")
 	r := C.qute_QMatrix4x4_flags(self)
+	runtime.KeepAlive(this)
 	return QMatrix4x4Flags(r)
 }

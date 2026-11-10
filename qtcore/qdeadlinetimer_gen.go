@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -133,6 +134,7 @@ func NewQDeadlineTimerWithMsecs(msecs int64) *QDeadlineTimer {
 func (this *QDeadlineTimer) IsForever() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.IsForever")
 	r := C.qute_QDeadlineTimer_isForever(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -144,6 +146,7 @@ func (this *QDeadlineTimer) IsForever() bool {
 func (this *QDeadlineTimer) HasExpired() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.HasExpired")
 	r := C.qute_QDeadlineTimer_hasExpired(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -155,6 +158,7 @@ func (this *QDeadlineTimer) HasExpired() bool {
 func (this *QDeadlineTimer) TimerType() TimerType {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.TimerType")
 	r := C.qute_QDeadlineTimer_timerType(self)
+	runtime.KeepAlive(this)
 	return TimerType(r)
 }
 
@@ -166,6 +170,7 @@ func (this *QDeadlineTimer) TimerType() TimerType {
 func (this *QDeadlineTimer) SetTimerType(typeArg TimerType) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetTimerType")
 	C.qute_QDeadlineTimer_setTimerType(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // RemainingTime wraps QDeadlineTimer::remainingTime.
@@ -176,6 +181,7 @@ func (this *QDeadlineTimer) SetTimerType(typeArg TimerType) {
 func (this *QDeadlineTimer) RemainingTime() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.RemainingTime")
 	r := C.qute_QDeadlineTimer_remainingTime(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -187,6 +193,7 @@ func (this *QDeadlineTimer) RemainingTime() int64 {
 func (this *QDeadlineTimer) RemainingTimeNSecs() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.RemainingTimeNSecs")
 	r := C.qute_QDeadlineTimer_remainingTimeNSecs(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -198,6 +205,7 @@ func (this *QDeadlineTimer) RemainingTimeNSecs() int64 {
 func (this *QDeadlineTimer) SetRemainingTime(msecs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetRemainingTime")
 	C.qute_QDeadlineTimer_setRemainingTime(self, C.longlong(msecs))
+	runtime.KeepAlive(this)
 }
 
 // SetPreciseRemainingTime wraps QDeadlineTimer::setPreciseRemainingTime.
@@ -208,6 +216,7 @@ func (this *QDeadlineTimer) SetRemainingTime(msecs int64) {
 func (this *QDeadlineTimer) SetPreciseRemainingTime(secs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetPreciseRemainingTime")
 	C.qute_QDeadlineTimer_setPreciseRemainingTime(self, C.longlong(secs))
+	runtime.KeepAlive(this)
 }
 
 // Deadline wraps QDeadlineTimer::deadline.
@@ -218,6 +227,7 @@ func (this *QDeadlineTimer) SetPreciseRemainingTime(secs int64) {
 func (this *QDeadlineTimer) Deadline() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.Deadline")
 	r := C.qute_QDeadlineTimer_deadline(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -229,6 +239,7 @@ func (this *QDeadlineTimer) Deadline() int64 {
 func (this *QDeadlineTimer) DeadlineNSecs() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.DeadlineNSecs")
 	r := C.qute_QDeadlineTimer_deadlineNSecs(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -240,6 +251,7 @@ func (this *QDeadlineTimer) DeadlineNSecs() int64 {
 func (this *QDeadlineTimer) SetDeadline(msecs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetDeadline")
 	C.qute_QDeadlineTimer_setDeadline(self, C.longlong(msecs))
+	runtime.KeepAlive(this)
 }
 
 // SetPreciseDeadline wraps QDeadlineTimer::setPreciseDeadline.
@@ -250,6 +262,7 @@ func (this *QDeadlineTimer) SetDeadline(msecs int64) {
 func (this *QDeadlineTimer) SetPreciseDeadline(secs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetPreciseDeadline")
 	C.qute_QDeadlineTimer_setPreciseDeadline(self, C.longlong(secs))
+	runtime.KeepAlive(this)
 }
 
 // RemainingTimeAsDuration wraps QDeadlineTimer::remainingTimeAsDuration.
@@ -260,6 +273,7 @@ func (this *QDeadlineTimer) SetPreciseDeadline(secs int64) {
 func (this *QDeadlineTimer) RemainingTimeAsDuration() time.Duration {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.RemainingTimeAsDuration")
 	r := C.qute_QDeadlineTimer_remainingTimeAsDuration(self)
+	runtime.KeepAlive(this)
 	return time.Duration(r)
 }
 
@@ -273,6 +287,7 @@ func (this *QDeadlineTimer) RemainingTimeAsDuration() time.Duration {
 func QDeadlineTimerAddNSecs(dt *QDeadlineTimer, nsecs int64) *QDeadlineTimer {
 	rt.CheckThread("QDeadlineTimerAddNSecs")
 	r := C.qute_QDeadlineTimer_addNSecs(rt.UseArg(unsafe.Pointer(dt), "QDeadlineTimerAddNSecs"), C.longlong(nsecs))
+	runtime.KeepAlive(dt)
 	return rt.View[QDeadlineTimer](rt.WrapClass(r, "QDeadlineTimer", rt.TakeOwned), r)
 }
 

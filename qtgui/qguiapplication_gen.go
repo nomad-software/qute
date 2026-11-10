@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QGuiApplicationCast(o qtcore.QObjectLike) *QGuiApplication {
 func (this *QGuiApplication) SetBadgeNumber(number int64) {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.SetBadgeNumber")
 	C.qute_QGuiApplication_setBadgeNumber(self, C.longlong(number))
+	runtime.KeepAlive(this)
 }
 
 // DevicePixelRatio wraps QGuiApplication::devicePixelRatio.
@@ -65,6 +67,7 @@ func (this *QGuiApplication) SetBadgeNumber(number int64) {
 func (this *QGuiApplication) DevicePixelRatio() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.DevicePixelRatio")
 	r := C.qute_QGuiApplication_devicePixelRatio(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -76,6 +79,7 @@ func (this *QGuiApplication) DevicePixelRatio() float64 {
 func (this *QGuiApplication) IsSessionRestored() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.IsSessionRestored")
 	r := C.qute_QGuiApplication_isSessionRestored(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -87,6 +91,7 @@ func (this *QGuiApplication) IsSessionRestored() bool {
 func (this *QGuiApplication) SessionId() string {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.SessionId")
 	r := C.qute_QGuiApplication_sessionId(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -98,6 +103,7 @@ func (this *QGuiApplication) SessionId() string {
 func (this *QGuiApplication) SessionKey() string {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.SessionKey")
 	r := C.qute_QGuiApplication_sessionKey(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -109,6 +115,7 @@ func (this *QGuiApplication) SessionKey() string {
 func (this *QGuiApplication) IsSavingSession() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.IsSavingSession")
 	r := C.qute_QGuiApplication_isSavingSession(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -120,6 +127,7 @@ func (this *QGuiApplication) IsSavingSession() bool {
 func (this *QGuiApplication) EmitFontDatabaseChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitFontDatabaseChanged")
 	C.qute_QGuiApplication_fontDatabaseChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitScreenAdded wraps emitting the screenAdded signal.
@@ -134,6 +142,8 @@ func (this *QGuiApplication) EmitScreenAdded(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QGuiApplication.EmitScreenAdded")
 	}
 	C.qute_QGuiApplication_screenAdded_1(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // EmitScreenRemoved wraps emitting the screenRemoved signal.
@@ -148,6 +158,8 @@ func (this *QGuiApplication) EmitScreenRemoved(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QGuiApplication.EmitScreenRemoved")
 	}
 	C.qute_QGuiApplication_screenRemoved_1(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // EmitPrimaryScreenChanged wraps emitting the primaryScreenChanged signal.
@@ -162,6 +174,8 @@ func (this *QGuiApplication) EmitPrimaryScreenChanged(screen QScreenLike) {
 		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "QGuiApplication.EmitPrimaryScreenChanged")
 	}
 	C.qute_QGuiApplication_primaryScreenChanged_1(self, screenPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(screen)
 }
 
 // EmitLastWindowClosed wraps emitting the lastWindowClosed signal.
@@ -172,6 +186,7 @@ func (this *QGuiApplication) EmitPrimaryScreenChanged(screen QScreenLike) {
 func (this *QGuiApplication) EmitLastWindowClosed() {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitLastWindowClosed")
 	C.qute_QGuiApplication_lastWindowClosed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitFocusObjectChanged wraps emitting the focusObjectChanged signal.
@@ -186,6 +201,8 @@ func (this *QGuiApplication) EmitFocusObjectChanged(focusObject qtcore.QObjectLi
 		focusObjectPtr = rt.UseArg(unsafe.Pointer(focusObject.AsQObject()), "QGuiApplication.EmitFocusObjectChanged")
 	}
 	C.qute_QGuiApplication_focusObjectChanged_1(self, focusObjectPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(focusObject)
 }
 
 // EmitFocusWindowChanged wraps emitting the focusWindowChanged signal.
@@ -200,6 +217,8 @@ func (this *QGuiApplication) EmitFocusWindowChanged(focusWindow QWindowLike) {
 		focusWindowPtr = rt.UseArg(unsafe.Pointer(focusWindow.AsQWindow()), "QGuiApplication.EmitFocusWindowChanged")
 	}
 	C.qute_QGuiApplication_focusWindowChanged_1(self, focusWindowPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(focusWindow)
 }
 
 // EmitApplicationStateChanged wraps emitting the applicationStateChanged signal.
@@ -210,6 +229,7 @@ func (this *QGuiApplication) EmitFocusWindowChanged(focusWindow QWindowLike) {
 func (this *QGuiApplication) EmitApplicationStateChanged(state qtcore.ApplicationStates) {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitApplicationStateChanged")
 	C.qute_QGuiApplication_applicationStateChanged_1(self, C.int64_t(state))
+	runtime.KeepAlive(this)
 }
 
 // EmitLayoutDirectionChanged wraps emitting the layoutDirectionChanged signal.
@@ -220,6 +240,7 @@ func (this *QGuiApplication) EmitApplicationStateChanged(state qtcore.Applicatio
 func (this *QGuiApplication) EmitLayoutDirectionChanged(direction qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitLayoutDirectionChanged")
 	C.qute_QGuiApplication_layoutDirectionChanged_1(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 }
 
 // EmitCommitDataRequest wraps emitting the commitDataRequest signal.
@@ -234,6 +255,8 @@ func (this *QGuiApplication) EmitCommitDataRequest(sessionManager QSessionManage
 		sessionManagerPtr = rt.UseArg(unsafe.Pointer(sessionManager.AsQSessionManager()), "QGuiApplication.EmitCommitDataRequest")
 	}
 	C.qute_QGuiApplication_commitDataRequest_1(self, sessionManagerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sessionManager)
 }
 
 // EmitSaveStateRequest wraps emitting the saveStateRequest signal.
@@ -248,6 +271,8 @@ func (this *QGuiApplication) EmitSaveStateRequest(sessionManager QSessionManager
 		sessionManagerPtr = rt.UseArg(unsafe.Pointer(sessionManager.AsQSessionManager()), "QGuiApplication.EmitSaveStateRequest")
 	}
 	C.qute_QGuiApplication_saveStateRequest_1(self, sessionManagerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sessionManager)
 }
 
 // EmitApplicationDisplayNameChanged wraps emitting the applicationDisplayNameChanged signal.
@@ -258,6 +283,7 @@ func (this *QGuiApplication) EmitSaveStateRequest(sessionManager QSessionManager
 func (this *QGuiApplication) EmitApplicationDisplayNameChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGuiApplication.EmitApplicationDisplayNameChanged")
 	C.qute_QGuiApplication_applicationDisplayNameChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QGuiApplicationSetApplicationDisplayName wraps QGuiApplication::setApplicationDisplayName.
@@ -353,6 +379,7 @@ func QGuiApplicationTopLevelAt(pos qtcore.QPoint) *QWindow {
 func QGuiApplicationSetWindowIcon(icon *QIcon) {
 	rt.CheckThread("QGuiApplicationSetWindowIcon")
 	C.qute_QGuiApplication_setWindowIcon(rt.UseArg(unsafe.Pointer(icon), "QGuiApplicationSetWindowIcon"))
+	runtime.KeepAlive(icon)
 }
 
 // QGuiApplicationWindowIcon wraps QGuiApplication::windowIcon.
@@ -480,6 +507,7 @@ func QGuiApplicationOverrideCursor() *QCursor {
 func QGuiApplicationSetOverrideCursor(overrideCursor *QCursor) {
 	rt.CheckThread("QGuiApplicationSetOverrideCursor")
 	C.qute_QGuiApplication_setOverrideCursor(rt.UseArg(unsafe.Pointer(overrideCursor), "QGuiApplicationSetOverrideCursor"))
+	runtime.KeepAlive(overrideCursor)
 }
 
 // QGuiApplicationChangeOverrideCursor wraps QGuiApplication::changeOverrideCursor.
@@ -490,6 +518,7 @@ func QGuiApplicationSetOverrideCursor(overrideCursor *QCursor) {
 func QGuiApplicationChangeOverrideCursor(cursor *QCursor) {
 	rt.CheckThread("QGuiApplicationChangeOverrideCursor")
 	C.qute_QGuiApplication_changeOverrideCursor(rt.UseArg(unsafe.Pointer(cursor), "QGuiApplicationChangeOverrideCursor"))
+	runtime.KeepAlive(cursor)
 }
 
 // QGuiApplicationRestoreOverrideCursor wraps QGuiApplication::restoreOverrideCursor.
@@ -523,6 +552,7 @@ func QGuiApplicationFont() *QFont {
 func QGuiApplicationSetFont(font *QFont) {
 	rt.CheckThread("QGuiApplicationSetFont")
 	C.qute_QGuiApplication_setFont(rt.UseArg(unsafe.Pointer(font), "QGuiApplicationSetFont"))
+	runtime.KeepAlive(font)
 }
 
 // QGuiApplicationClipboard wraps QGuiApplication::clipboard.
@@ -559,6 +589,7 @@ func QGuiApplicationPalette() *QPalette {
 func QGuiApplicationSetPalette(pal *QPalette) {
 	rt.CheckThread("QGuiApplicationSetPalette")
 	C.qute_QGuiApplication_setPalette(rt.UseArg(unsafe.Pointer(pal), "QGuiApplicationSetPalette"))
+	runtime.KeepAlive(pal)
 }
 
 // QGuiApplicationKeyboardModifiers wraps QGuiApplication::keyboardModifiers.

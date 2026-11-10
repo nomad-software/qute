@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func QTextListCast(o qtcore.QObjectLike) *QTextList {
 func (this *QTextList) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.Count")
 	r := C.qute_QTextList_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -68,6 +70,7 @@ func (this *QTextList) Count() int {
 func (this *QTextList) Item(iArg int) *QTextBlock {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.Item")
 	r := C.qute_QTextList_item(self, C.int(iArg))
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlock](rt.WrapClass(r, "QTextBlock", rt.TakeOwned), r)
 }
 
@@ -79,6 +82,8 @@ func (this *QTextList) Item(iArg int) *QTextBlock {
 func (this *QTextList) ItemNumber(textBlock *QTextBlock) int {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.ItemNumber")
 	r := C.qute_QTextList_itemNumber(self, rt.UseArg(unsafe.Pointer(textBlock), "QTextList.ItemNumber"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textBlock)
 	return int(r)
 }
 
@@ -90,6 +95,8 @@ func (this *QTextList) ItemNumber(textBlock *QTextBlock) int {
 func (this *QTextList) ItemText(textBlock *QTextBlock) string {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.ItemText")
 	r := C.qute_QTextList_itemText(self, rt.UseArg(unsafe.Pointer(textBlock), "QTextList.ItemText"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textBlock)
 	return quteStr(r)
 }
 
@@ -101,6 +108,7 @@ func (this *QTextList) ItemText(textBlock *QTextBlock) string {
 func (this *QTextList) RemoveItem(iArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.RemoveItem")
 	C.qute_QTextList_removeItem(self, C.int(iArg))
+	runtime.KeepAlive(this)
 }
 
 // Remove wraps QTextList::remove.
@@ -111,6 +119,8 @@ func (this *QTextList) RemoveItem(iArg int) {
 func (this *QTextList) Remove(textBlock *QTextBlock) {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.Remove")
 	C.qute_QTextList_remove(self, rt.UseArg(unsafe.Pointer(textBlock), "QTextList.Remove"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textBlock)
 }
 
 // Add wraps QTextList::add.
@@ -121,6 +131,8 @@ func (this *QTextList) Remove(textBlock *QTextBlock) {
 func (this *QTextList) Add(block *QTextBlock) {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.Add")
 	C.qute_QTextList_add(self, rt.UseArg(unsafe.Pointer(block), "QTextList.Add"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(block)
 }
 
 // SetFormat wraps QTextList::setFormat.
@@ -131,4 +143,6 @@ func (this *QTextList) Add(block *QTextBlock) {
 func (this *QTextList) SetFormat(format *QTextListFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextList.SetFormat")
 	C.qute_QTextList_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextList.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }

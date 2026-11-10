@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -47,6 +48,7 @@ func NewQGraphicsLineItem(parent QGraphicsItemLike) *QGraphicsLineItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsLineItem")
 	}
 	p := C.qute_QGraphicsLineItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -69,6 +71,8 @@ func NewQGraphicsLineItemWithLineF(line *qtcore.QLineF, parent QGraphicsItemLike
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsLineItemWithLineF")
 	}
 	p := C.qute_QGraphicsLineItem_new_1(rt.UseArg(unsafe.Pointer(line), "NewQGraphicsLineItemWithLineF"), parentPtr)
+	runtime.KeepAlive(line)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -87,6 +91,7 @@ func NewQGraphicsLineItemWithLineF(line *qtcore.QLineF, parent QGraphicsItemLike
 func (this *QGraphicsLineItem) Pen() *qtgui.QPen {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLineItem.Pen")
 	r := C.qute_QGraphicsLineItem_pen(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPen](rt.WrapClass(r, "QPen", rt.TakeOwned), r)
 }
 
@@ -98,6 +103,8 @@ func (this *QGraphicsLineItem) Pen() *qtgui.QPen {
 func (this *QGraphicsLineItem) SetPen(pen *qtgui.QPen) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLineItem.SetPen")
 	C.qute_QGraphicsLineItem_setPen(self, rt.UseArg(unsafe.Pointer(pen), "QGraphicsLineItem.SetPen"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pen)
 }
 
 // Line wraps QGraphicsLineItem::line.
@@ -110,6 +117,7 @@ func (this *QGraphicsLineItem) SetPen(pen *qtgui.QPen) {
 func (this *QGraphicsLineItem) Line() *qtcore.QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLineItem.Line")
 	r := C.qute_QGraphicsLineItem_line(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }
 
@@ -121,4 +129,6 @@ func (this *QGraphicsLineItem) Line() *qtcore.QLineF {
 func (this *QGraphicsLineItem) SetLine(line *qtcore.QLineF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLineItem.SetLine")
 	C.qute_QGraphicsLineItem_setLine(self, rt.UseArg(unsafe.Pointer(line), "QGraphicsLineItem.SetLine"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(line)
 }

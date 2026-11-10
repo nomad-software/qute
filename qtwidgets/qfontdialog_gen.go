@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQFontDialog(parent QWidgetLike) *QFontDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFontDialog")
 	}
 	p := C.qute_QFontDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func NewQFontDialogWithFont(initial *qtgui.QFont, parent QWidgetLike) *QFontDial
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFontDialogWithFont")
 	}
 	p := C.qute_QFontDialog_new_1(rt.UseArg(unsafe.Pointer(initial), "NewQFontDialogWithFont"), parentPtr)
+	runtime.KeepAlive(initial)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -100,6 +104,8 @@ func NewQFontDialogWithFont(initial *qtgui.QFont, parent QWidgetLike) *QFontDial
 func (this *QFontDialog) SetCurrentFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.SetCurrentFont")
 	C.qute_QFontDialog_setCurrentFont(self, rt.UseArg(unsafe.Pointer(font), "QFontDialog.SetCurrentFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // CurrentFont wraps QFontDialog::currentFont.
@@ -112,6 +118,7 @@ func (this *QFontDialog) SetCurrentFont(font *qtgui.QFont) {
 func (this *QFontDialog) CurrentFont() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.CurrentFont")
 	r := C.qute_QFontDialog_currentFont(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -125,6 +132,7 @@ func (this *QFontDialog) CurrentFont() *qtgui.QFont {
 func (this *QFontDialog) SelectedFont() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.SelectedFont")
 	r := C.qute_QFontDialog_selectedFont(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -136,6 +144,7 @@ func (this *QFontDialog) SelectedFont() *qtgui.QFont {
 func (this *QFontDialog) SetOption(option QFontDialogFontDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.SetOption")
 	C.qute_QFontDialog_setOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 }
 
 // TestOption wraps QFontDialog::testOption.
@@ -146,6 +155,7 @@ func (this *QFontDialog) SetOption(option QFontDialogFontDialogOptions) {
 func (this *QFontDialog) TestOption(option QFontDialogFontDialogOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.TestOption")
 	r := C.qute_QFontDialog_testOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -157,6 +167,7 @@ func (this *QFontDialog) TestOption(option QFontDialogFontDialogOptions) bool {
 func (this *QFontDialog) SetOptions(options QFontDialogFontDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.SetOptions")
 	C.qute_QFontDialog_setOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Options wraps QFontDialog::options.
@@ -167,6 +178,7 @@ func (this *QFontDialog) SetOptions(options QFontDialogFontDialogOptions) {
 func (this *QFontDialog) Options() QFontDialogFontDialogOptions {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.Options")
 	r := C.qute_QFontDialog_options(self)
+	runtime.KeepAlive(this)
 	return QFontDialogFontDialogOptions(r)
 }
 
@@ -178,6 +190,8 @@ func (this *QFontDialog) Options() QFontDialogFontDialogOptions {
 func (this *QFontDialog) EmitCurrentFontChanged(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.EmitCurrentFontChanged")
 	C.qute_QFontDialog_currentFontChanged_1(self, rt.UseArg(unsafe.Pointer(font), "QFontDialog.EmitCurrentFontChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // EmitFontSelected wraps emitting the fontSelected signal.
@@ -188,6 +202,8 @@ func (this *QFontDialog) EmitCurrentFontChanged(font *qtgui.QFont) {
 func (this *QFontDialog) EmitFontSelected(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.EmitFontSelected")
 	C.qute_QFontDialog_fontSelected_1(self, rt.UseArg(unsafe.Pointer(font), "QFontDialog.EmitFontSelected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // QFontDialogGetFont wraps QFontDialog::getFont.
@@ -215,6 +231,7 @@ func QFontDialogGetFontWithFont(initial *qtgui.QFont) (*qtgui.QFont, bool) {
 	rt.CheckThread("QFontDialogGetFontWithFont")
 	var okOut C.bool
 	r := C.qute_QFontDialog_getFont_1(&okOut, rt.UseArg(unsafe.Pointer(initial), "QFontDialogGetFontWithFont"))
+	runtime.KeepAlive(initial)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r), bool(okOut)
 }
 

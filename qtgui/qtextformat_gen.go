@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,8 @@ func NewQTextFormatWithTypeArg(typeArg int) *QTextFormat {
 func (this *QTextFormat) Merge(other *QTextFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.Merge")
 	C.qute_QTextFormat_merge(self, rt.UseArg(unsafe.Pointer(other), "QTextFormat.Merge"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
 }
 
 // IsValid wraps QTextFormat::isValid.
@@ -119,6 +122,7 @@ func (this *QTextFormat) Merge(other *QTextFormat) {
 func (this *QTextFormat) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsValid")
 	r := C.qute_QTextFormat_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +134,7 @@ func (this *QTextFormat) IsValid() bool {
 func (this *QTextFormat) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsEmpty")
 	r := C.qute_QTextFormat_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -141,6 +146,7 @@ func (this *QTextFormat) IsEmpty() bool {
 func (this *QTextFormat) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.Type")
 	r := C.qute_QTextFormat_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -152,6 +158,7 @@ func (this *QTextFormat) Type() int {
 func (this *QTextFormat) ObjectIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ObjectIndex")
 	r := C.qute_QTextFormat_objectIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -163,6 +170,7 @@ func (this *QTextFormat) ObjectIndex() int {
 func (this *QTextFormat) SetObjectIndex(object int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetObjectIndex")
 	C.qute_QTextFormat_setObjectIndex(self, C.int(object))
+	runtime.KeepAlive(this)
 }
 
 // Property wraps QTextFormat::property.
@@ -175,6 +183,7 @@ func (this *QTextFormat) SetObjectIndex(object int) {
 func (this *QTextFormat) Property(propertyId int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.Property")
 	r := C.qute_QTextFormat_property(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -186,6 +195,8 @@ func (this *QTextFormat) Property(propertyId int) *qtcore.QVariant {
 func (this *QTextFormat) SetProperty(propertyId int, value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetProperty")
 	C.qute_QTextFormat_setProperty(self, C.int(propertyId), rt.UseArg(unsafe.Pointer(value), "QTextFormat.SetProperty"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // ClearProperty wraps QTextFormat::clearProperty.
@@ -196,6 +207,7 @@ func (this *QTextFormat) SetProperty(propertyId int, value *qtcore.QVariant) {
 func (this *QTextFormat) ClearProperty(propertyId int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ClearProperty")
 	C.qute_QTextFormat_clearProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 }
 
 // HasProperty wraps QTextFormat::hasProperty.
@@ -206,6 +218,7 @@ func (this *QTextFormat) ClearProperty(propertyId int) {
 func (this *QTextFormat) HasProperty(propertyId int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.HasProperty")
 	r := C.qute_QTextFormat_hasProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -217,6 +230,7 @@ func (this *QTextFormat) HasProperty(propertyId int) bool {
 func (this *QTextFormat) BoolProperty(propertyId int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.BoolProperty")
 	r := C.qute_QTextFormat_boolProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -228,6 +242,7 @@ func (this *QTextFormat) BoolProperty(propertyId int) bool {
 func (this *QTextFormat) IntProperty(propertyId int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IntProperty")
 	r := C.qute_QTextFormat_intProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -239,6 +254,7 @@ func (this *QTextFormat) IntProperty(propertyId int) int {
 func (this *QTextFormat) DoubleProperty(propertyId int) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.DoubleProperty")
 	r := C.qute_QTextFormat_doubleProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -250,6 +266,7 @@ func (this *QTextFormat) DoubleProperty(propertyId int) float64 {
 func (this *QTextFormat) StringProperty(propertyId int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.StringProperty")
 	r := C.qute_QTextFormat_stringProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -261,6 +278,7 @@ func (this *QTextFormat) StringProperty(propertyId int) string {
 func (this *QTextFormat) ColorProperty(propertyId int) QColor {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ColorProperty")
 	r := C.qute_QTextFormat_colorProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -274,6 +292,7 @@ func (this *QTextFormat) ColorProperty(propertyId int) QColor {
 func (this *QTextFormat) PenProperty(propertyId int) *QPen {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.PenProperty")
 	r := C.qute_QTextFormat_penProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return rt.View[QPen](rt.WrapClass(r, "QPen", rt.TakeOwned), r)
 }
 
@@ -287,6 +306,7 @@ func (this *QTextFormat) PenProperty(propertyId int) *QPen {
 func (this *QTextFormat) BrushProperty(propertyId int) *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.BrushProperty")
 	r := C.qute_QTextFormat_brushProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -300,6 +320,7 @@ func (this *QTextFormat) BrushProperty(propertyId int) *QBrush {
 func (this *QTextFormat) LengthProperty(propertyId int) *QTextLength {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.LengthProperty")
 	r := C.qute_QTextFormat_lengthProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return rt.View[QTextLength](rt.WrapClass(r, "QTextLength", rt.TakeOwned), r)
 }
 
@@ -311,6 +332,7 @@ func (this *QTextFormat) LengthProperty(propertyId int) *QTextLength {
 func (this *QTextFormat) LengthVectorProperty(propertyId int) []*QTextLength {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.LengthVectorProperty")
 	r := C.qute_QTextFormat_lengthVectorProperty(self, C.int(propertyId))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextLength {
 		return rt.View[QTextLength](rt.WrapClass(e, "QTextLength", rt.TakeOwned), e)
 	})
@@ -328,6 +350,8 @@ func (this *QTextFormat) SetPropertyTextLengths(propertyId int, lengths []*QText
 		lengthsC[i] = rt.UseArg(unsafe.Pointer(lengths[i]), "QTextFormat.SetPropertyTextLengths")
 	}
 	C.qute_QTextFormat_setProperty_1(self, C.int(propertyId), unsafe.Pointer(unsafe.SliceData(lengthsC)), C.ptrdiff_t(len(lengths)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(lengths)
 }
 
 // Properties wraps QTextFormat::properties.
@@ -338,6 +362,7 @@ func (this *QTextFormat) SetPropertyTextLengths(propertyId int, lengths []*QText
 func (this *QTextFormat) Properties() map[int]*qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.Properties")
 	r := C.qute_QTextFormat_properties(self)
+	runtime.KeepAlive(this)
 	return quteMap(r, func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *qtcore.QVariant {
 		return rt.View[qtcore.QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 	})
@@ -351,6 +376,7 @@ func (this *QTextFormat) Properties() map[int]*qtcore.QVariant {
 func (this *QTextFormat) PropertyCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.PropertyCount")
 	r := C.qute_QTextFormat_propertyCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -362,6 +388,7 @@ func (this *QTextFormat) PropertyCount() int {
 func (this *QTextFormat) SetObjectType(typeArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetObjectType")
 	C.qute_QTextFormat_setObjectType(self, C.int(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // ObjectType wraps QTextFormat::objectType.
@@ -372,6 +399,7 @@ func (this *QTextFormat) SetObjectType(typeArg int) {
 func (this *QTextFormat) ObjectType() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ObjectType")
 	r := C.qute_QTextFormat_objectType(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -383,6 +411,7 @@ func (this *QTextFormat) ObjectType() int {
 func (this *QTextFormat) IsCharFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsCharFormat")
 	r := C.qute_QTextFormat_isCharFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -394,6 +423,7 @@ func (this *QTextFormat) IsCharFormat() bool {
 func (this *QTextFormat) IsBlockFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsBlockFormat")
 	r := C.qute_QTextFormat_isBlockFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -405,6 +435,7 @@ func (this *QTextFormat) IsBlockFormat() bool {
 func (this *QTextFormat) IsListFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsListFormat")
 	r := C.qute_QTextFormat_isListFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -416,6 +447,7 @@ func (this *QTextFormat) IsListFormat() bool {
 func (this *QTextFormat) IsFrameFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsFrameFormat")
 	r := C.qute_QTextFormat_isFrameFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -427,6 +459,7 @@ func (this *QTextFormat) IsFrameFormat() bool {
 func (this *QTextFormat) IsImageFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsImageFormat")
 	r := C.qute_QTextFormat_isImageFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -438,6 +471,7 @@ func (this *QTextFormat) IsImageFormat() bool {
 func (this *QTextFormat) IsTableFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsTableFormat")
 	r := C.qute_QTextFormat_isTableFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -449,6 +483,7 @@ func (this *QTextFormat) IsTableFormat() bool {
 func (this *QTextFormat) IsTableCellFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.IsTableCellFormat")
 	r := C.qute_QTextFormat_isTableCellFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -462,6 +497,7 @@ func (this *QTextFormat) IsTableCellFormat() bool {
 func (this *QTextFormat) ToBlockFormat() *QTextBlockFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToBlockFormat")
 	r := C.qute_QTextFormat_toBlockFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextBlockFormat](rt.WrapClass(r, "QTextBlockFormat", rt.TakeOwned), r)
 }
 
@@ -475,6 +511,7 @@ func (this *QTextFormat) ToBlockFormat() *QTextBlockFormat {
 func (this *QTextFormat) ToCharFormat() *QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToCharFormat")
 	r := C.qute_QTextFormat_toCharFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -488,6 +525,7 @@ func (this *QTextFormat) ToCharFormat() *QTextCharFormat {
 func (this *QTextFormat) ToListFormat() *QTextListFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToListFormat")
 	r := C.qute_QTextFormat_toListFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextListFormat](rt.WrapClass(r, "QTextListFormat", rt.TakeOwned), r)
 }
 
@@ -501,6 +539,7 @@ func (this *QTextFormat) ToListFormat() *QTextListFormat {
 func (this *QTextFormat) ToTableFormat() *QTextTableFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToTableFormat")
 	r := C.qute_QTextFormat_toTableFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextTableFormat](rt.WrapClass(r, "QTextTableFormat", rt.TakeOwned), r)
 }
 
@@ -514,6 +553,7 @@ func (this *QTextFormat) ToTableFormat() *QTextTableFormat {
 func (this *QTextFormat) ToFrameFormat() *QTextFrameFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToFrameFormat")
 	r := C.qute_QTextFormat_toFrameFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextFrameFormat](rt.WrapClass(r, "QTextFrameFormat", rt.TakeOwned), r)
 }
 
@@ -527,6 +567,7 @@ func (this *QTextFormat) ToFrameFormat() *QTextFrameFormat {
 func (this *QTextFormat) ToImageFormat() *QTextImageFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToImageFormat")
 	r := C.qute_QTextFormat_toImageFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextImageFormat](rt.WrapClass(r, "QTextImageFormat", rt.TakeOwned), r)
 }
 
@@ -540,6 +581,7 @@ func (this *QTextFormat) ToImageFormat() *QTextImageFormat {
 func (this *QTextFormat) ToTableCellFormat() *QTextTableCellFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToTableCellFormat")
 	r := C.qute_QTextFormat_toTableCellFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextTableCellFormat](rt.WrapClass(r, "QTextTableCellFormat", rt.TakeOwned), r)
 }
 
@@ -551,6 +593,7 @@ func (this *QTextFormat) ToTableCellFormat() *QTextTableCellFormat {
 func (this *QTextFormat) SetLayoutDirection(direction qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetLayoutDirection")
 	C.qute_QTextFormat_setLayoutDirection(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 }
 
 // LayoutDirection wraps QTextFormat::layoutDirection.
@@ -561,6 +604,7 @@ func (this *QTextFormat) SetLayoutDirection(direction qtcore.LayoutDirection) {
 func (this *QTextFormat) LayoutDirection() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.LayoutDirection")
 	r := C.qute_QTextFormat_layoutDirection(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -572,6 +616,8 @@ func (this *QTextFormat) LayoutDirection() qtcore.LayoutDirection {
 func (this *QTextFormat) SetBackground(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetBackground")
 	C.qute_QTextFormat_setBackground(self, rt.UseArg(unsafe.Pointer(brush), "QTextFormat.SetBackground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Background wraps QTextFormat::background.
@@ -584,6 +630,7 @@ func (this *QTextFormat) SetBackground(brush *QBrush) {
 func (this *QTextFormat) Background() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.Background")
 	r := C.qute_QTextFormat_background(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -595,6 +642,7 @@ func (this *QTextFormat) Background() *QBrush {
 func (this *QTextFormat) ClearBackground() {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ClearBackground")
 	C.qute_QTextFormat_clearBackground(self)
+	runtime.KeepAlive(this)
 }
 
 // SetForeground wraps QTextFormat::setForeground.
@@ -605,6 +653,8 @@ func (this *QTextFormat) ClearBackground() {
 func (this *QTextFormat) SetForeground(brush *QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.SetForeground")
 	C.qute_QTextFormat_setForeground(self, rt.UseArg(unsafe.Pointer(brush), "QTextFormat.SetForeground"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(brush)
 }
 
 // Foreground wraps QTextFormat::foreground.
@@ -617,6 +667,7 @@ func (this *QTextFormat) SetForeground(brush *QBrush) {
 func (this *QTextFormat) Foreground() *QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.Foreground")
 	r := C.qute_QTextFormat_foreground(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -628,4 +679,5 @@ func (this *QTextFormat) Foreground() *QBrush {
 func (this *QTextFormat) ClearForeground() {
 	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ClearForeground")
 	C.qute_QTextFormat_clearForeground(self)
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -67,5 +68,6 @@ func NewQRubberBandWithShape(arg0 QRubberBandShape) *QRubberBand {
 func (this *QRubberBand) Shape() QRubberBandShape {
 	self := rt.Use(unsafe.Pointer(this), "QRubberBand.Shape")
 	r := C.qute_QRubberBand_shape(self)
+	runtime.KeepAlive(this)
 	return QRubberBandShape(r)
 }

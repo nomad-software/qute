@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQTimeWithHArg(hArg int, m int) *QTime {
 func (this *QTime) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTime.IsNull")
 	r := C.qute_QTime_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -119,6 +121,7 @@ func (this *QTime) IsNull() bool {
 func (this *QTime) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTime.IsValid")
 	r := C.qute_QTime_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +133,7 @@ func (this *QTime) IsValid() bool {
 func (this *QTime) Hour() int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.Hour")
 	r := C.qute_QTime_hour(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -141,6 +145,7 @@ func (this *QTime) Hour() int {
 func (this *QTime) Minute() int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.Minute")
 	r := C.qute_QTime_minute(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -152,6 +157,7 @@ func (this *QTime) Minute() int {
 func (this *QTime) Second() int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.Second")
 	r := C.qute_QTime_second(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -163,6 +169,7 @@ func (this *QTime) Second() int {
 func (this *QTime) Msec() int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.Msec")
 	r := C.qute_QTime_msec(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -174,6 +181,7 @@ func (this *QTime) Msec() int {
 func (this *QTime) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QTime.ToString")
 	r := C.qute_QTime_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -185,6 +193,7 @@ func (this *QTime) ToString() string {
 func (this *QTime) ToStringFormat(format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QTime.ToStringFormat")
 	r := C.qute_QTime_toString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -196,6 +205,7 @@ func (this *QTime) ToStringFormat(format string) string {
 func (this *QTime) SetHMS(hArg int, m int, sArg int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTime.SetHMS")
 	r := C.qute_QTime_setHMS(self, C.int(hArg), C.int(m), C.int(sArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -209,6 +219,7 @@ func (this *QTime) SetHMS(hArg int, m int, sArg int) bool {
 func (this *QTime) AddSecs(secs int) *QTime {
 	self := rt.Use(unsafe.Pointer(this), "QTime.AddSecs")
 	r := C.qute_QTime_addSecs(self, C.int(secs))
+	runtime.KeepAlive(this)
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -220,6 +231,8 @@ func (this *QTime) AddSecs(secs int) *QTime {
 func (this *QTime) SecsTo(t *QTime) int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.SecsTo")
 	r := C.qute_QTime_secsTo(self, rt.UseArg(unsafe.Pointer(t), "QTime.SecsTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(t)
 	return int(r)
 }
 
@@ -233,6 +246,7 @@ func (this *QTime) SecsTo(t *QTime) int {
 func (this *QTime) AddMSecs(ms int) *QTime {
 	self := rt.Use(unsafe.Pointer(this), "QTime.AddMSecs")
 	r := C.qute_QTime_addMSecs(self, C.int(ms))
+	runtime.KeepAlive(this)
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -244,6 +258,8 @@ func (this *QTime) AddMSecs(ms int) *QTime {
 func (this *QTime) MsecsTo(t *QTime) int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.MsecsTo")
 	r := C.qute_QTime_msecsTo(self, rt.UseArg(unsafe.Pointer(t), "QTime.MsecsTo"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(t)
 	return int(r)
 }
 
@@ -255,6 +271,7 @@ func (this *QTime) MsecsTo(t *QTime) int {
 func (this *QTime) MsecsSinceStartOfDay() int {
 	self := rt.Use(unsafe.Pointer(this), "QTime.MsecsSinceStartOfDay")
 	r := C.qute_QTime_msecsSinceStartOfDay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,8 @@ func NewQTextTableCell() *QTextTableCell {
 func (this *QTextTableCell) SetFormat(format *QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.SetFormat")
 	C.qute_QTextTableCell_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextTableCell.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // Format wraps QTextTableCell::format.
@@ -109,6 +112,7 @@ func (this *QTextTableCell) SetFormat(format *QTextCharFormat) {
 func (this *QTextTableCell) Format() *QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.Format")
 	r := C.qute_QTextTableCell_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -120,6 +124,7 @@ func (this *QTextTableCell) Format() *QTextCharFormat {
 func (this *QTextTableCell) Row() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.Row")
 	r := C.qute_QTextTableCell_row(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -131,6 +136,7 @@ func (this *QTextTableCell) Row() int {
 func (this *QTextTableCell) Column() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.Column")
 	r := C.qute_QTextTableCell_column(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -142,6 +148,7 @@ func (this *QTextTableCell) Column() int {
 func (this *QTextTableCell) RowSpan() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.RowSpan")
 	r := C.qute_QTextTableCell_rowSpan(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -153,6 +160,7 @@ func (this *QTextTableCell) RowSpan() int {
 func (this *QTextTableCell) ColumnSpan() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.ColumnSpan")
 	r := C.qute_QTextTableCell_columnSpan(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -164,6 +172,7 @@ func (this *QTextTableCell) ColumnSpan() int {
 func (this *QTextTableCell) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.IsValid")
 	r := C.qute_QTextTableCell_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -177,6 +186,7 @@ func (this *QTextTableCell) IsValid() bool {
 func (this *QTextTableCell) FirstCursorPosition() *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.FirstCursorPosition")
 	r := C.qute_QTextTableCell_firstCursorPosition(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -190,6 +200,7 @@ func (this *QTextTableCell) FirstCursorPosition() *QTextCursor {
 func (this *QTextTableCell) LastCursorPosition() *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.LastCursorPosition")
 	r := C.qute_QTextTableCell_lastCursorPosition(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -201,6 +212,7 @@ func (this *QTextTableCell) LastCursorPosition() *QTextCursor {
 func (this *QTextTableCell) FirstPosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.FirstPosition")
 	r := C.qute_QTextTableCell_firstPosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -212,6 +224,7 @@ func (this *QTextTableCell) FirstPosition() int {
 func (this *QTextTableCell) LastPosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.LastPosition")
 	r := C.qute_QTextTableCell_lastPosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -223,5 +236,6 @@ func (this *QTextTableCell) LastPosition() int {
 func (this *QTextTableCell) TableCellFormatIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextTableCell.TableCellFormatIndex")
 	r := C.qute_QTextTableCell_tableCellFormatIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

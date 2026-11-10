@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -69,6 +70,7 @@ func NewQGraphicsWidget(parent QGraphicsItemLike) *QGraphicsWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsWidget")
 	}
 	p := C.qute_QGraphicsWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -87,6 +89,7 @@ func NewQGraphicsWidget(parent QGraphicsItemLike) *QGraphicsWidget {
 func (this *QGraphicsWidget) Layout() *QGraphicsLayout {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Layout")
 	r := C.qute_QGraphicsWidget_layout(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsLayout](rt.WrapClass(r, "QGraphicsLayout", rt.KeepOrBorrow), r)
 }
 
@@ -107,6 +110,8 @@ func (this *QGraphicsWidget) SetLayout(layout QGraphicsLayoutLike) {
 		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQGraphicsLayout()), "QGraphicsWidget.SetLayout")
 	}
 	C.qute_QGraphicsWidget_setLayout(self, layoutPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
 	layoutH.TransferToCpp()
 }
 
@@ -118,6 +123,7 @@ func (this *QGraphicsWidget) SetLayout(layout QGraphicsLayoutLike) {
 func (this *QGraphicsWidget) AdjustSize() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.AdjustSize")
 	C.qute_QGraphicsWidget_adjustSize(self)
+	runtime.KeepAlive(this)
 }
 
 // LayoutDirection wraps QGraphicsWidget::layoutDirection.
@@ -128,6 +134,7 @@ func (this *QGraphicsWidget) AdjustSize() {
 func (this *QGraphicsWidget) LayoutDirection() qtcore.LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.LayoutDirection")
 	r := C.qute_QGraphicsWidget_layoutDirection(self)
+	runtime.KeepAlive(this)
 	return qtcore.LayoutDirection(r)
 }
 
@@ -139,6 +146,7 @@ func (this *QGraphicsWidget) LayoutDirection() qtcore.LayoutDirection {
 func (this *QGraphicsWidget) SetLayoutDirection(direction qtcore.LayoutDirection) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetLayoutDirection")
 	C.qute_QGraphicsWidget_setLayoutDirection(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 }
 
 // UnsetLayoutDirection wraps QGraphicsWidget::unsetLayoutDirection.
@@ -149,6 +157,7 @@ func (this *QGraphicsWidget) SetLayoutDirection(direction qtcore.LayoutDirection
 func (this *QGraphicsWidget) UnsetLayoutDirection() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.UnsetLayoutDirection")
 	C.qute_QGraphicsWidget_unsetLayoutDirection(self)
+	runtime.KeepAlive(this)
 }
 
 // Style wraps QGraphicsWidget::style.
@@ -161,6 +170,7 @@ func (this *QGraphicsWidget) UnsetLayoutDirection() {
 func (this *QGraphicsWidget) Style() *QStyle {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Style")
 	r := C.qute_QGraphicsWidget_style(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStyle](rt.WrapClass(r, "QStyle", rt.KeepOrBorrow), r)
 }
 
@@ -176,6 +186,8 @@ func (this *QGraphicsWidget) SetStyle(style QStyleLike) {
 		stylePtr = rt.UseArg(unsafe.Pointer(style.AsQStyle()), "QGraphicsWidget.SetStyle")
 	}
 	C.qute_QGraphicsWidget_setStyle(self, stylePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(style)
 }
 
 // Font wraps QGraphicsWidget::font.
@@ -188,6 +200,7 @@ func (this *QGraphicsWidget) SetStyle(style QStyleLike) {
 func (this *QGraphicsWidget) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Font")
 	r := C.qute_QGraphicsWidget_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -199,6 +212,8 @@ func (this *QGraphicsWidget) Font() *qtgui.QFont {
 func (this *QGraphicsWidget) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetFont")
 	C.qute_QGraphicsWidget_setFont(self, rt.UseArg(unsafe.Pointer(font), "QGraphicsWidget.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // Palette wraps QGraphicsWidget::palette.
@@ -211,6 +226,7 @@ func (this *QGraphicsWidget) SetFont(font *qtgui.QFont) {
 func (this *QGraphicsWidget) Palette() *qtgui.QPalette {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Palette")
 	r := C.qute_QGraphicsWidget_palette(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
@@ -222,6 +238,8 @@ func (this *QGraphicsWidget) Palette() *qtgui.QPalette {
 func (this *QGraphicsWidget) SetPalette(palette *qtgui.QPalette) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetPalette")
 	C.qute_QGraphicsWidget_setPalette(self, rt.UseArg(unsafe.Pointer(palette), "QGraphicsWidget.SetPalette"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(palette)
 }
 
 // AutoFillBackground wraps QGraphicsWidget::autoFillBackground.
@@ -232,6 +250,7 @@ func (this *QGraphicsWidget) SetPalette(palette *qtgui.QPalette) {
 func (this *QGraphicsWidget) AutoFillBackground() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.AutoFillBackground")
 	r := C.qute_QGraphicsWidget_autoFillBackground(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -243,6 +262,7 @@ func (this *QGraphicsWidget) AutoFillBackground() bool {
 func (this *QGraphicsWidget) SetAutoFillBackground(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetAutoFillBackground")
 	C.qute_QGraphicsWidget_setAutoFillBackground(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // Resize wraps QGraphicsWidget::resize.
@@ -253,6 +273,7 @@ func (this *QGraphicsWidget) SetAutoFillBackground(enabled bool) {
 func (this *QGraphicsWidget) Resize(size qtcore.QSizeF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Resize")
 	C.qute_QGraphicsWidget_resize(self, cQSizeF(size))
+	runtime.KeepAlive(this)
 }
 
 // Size wraps QGraphicsWidget::size.
@@ -263,6 +284,7 @@ func (this *QGraphicsWidget) Resize(size qtcore.QSizeF) {
 func (this *QGraphicsWidget) Size() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Size")
 	r := C.qute_QGraphicsWidget_size(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -274,6 +296,7 @@ func (this *QGraphicsWidget) Size() qtcore.QSizeF {
 func (this *QGraphicsWidget) SetGeometry(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetGeometry")
 	C.qute_QGraphicsWidget_setGeometry(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // Rect wraps QGraphicsWidget::rect.
@@ -284,6 +307,7 @@ func (this *QGraphicsWidget) SetGeometry(rect qtcore.QRectF) {
 func (this *QGraphicsWidget) Rect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Rect")
 	r := C.qute_QGraphicsWidget_rect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -295,6 +319,7 @@ func (this *QGraphicsWidget) Rect() qtcore.QRectF {
 func (this *QGraphicsWidget) SetContentsMarginsLeft(left float64, top float64, right float64, bottom float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetContentsMarginsLeft")
 	C.qute_QGraphicsWidget_setContentsMargins(self, C.double(left), C.double(top), C.double(right), C.double(bottom))
+	runtime.KeepAlive(this)
 }
 
 // SetContentsMargins wraps QGraphicsWidget::setContentsMargins.
@@ -305,6 +330,7 @@ func (this *QGraphicsWidget) SetContentsMarginsLeft(left float64, top float64, r
 func (this *QGraphicsWidget) SetContentsMargins(margins qtcore.QMarginsF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetContentsMargins")
 	C.qute_QGraphicsWidget_setContentsMargins_1(self, cQMarginsF(margins))
+	runtime.KeepAlive(this)
 }
 
 // GetContentsMargins wraps QGraphicsWidget::getContentsMargins.
@@ -319,6 +345,7 @@ func (this *QGraphicsWidget) GetContentsMargins() (float64, float64, float64, fl
 	var rightOut C.double
 	var bottomOut C.double
 	C.qute_QGraphicsWidget_getContentsMargins(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(this)
 	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
 }
 
@@ -330,6 +357,7 @@ func (this *QGraphicsWidget) GetContentsMargins() (float64, float64, float64, fl
 func (this *QGraphicsWidget) SetWindowFrameMarginsLeft(left float64, top float64, right float64, bottom float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowFrameMarginsLeft")
 	C.qute_QGraphicsWidget_setWindowFrameMargins(self, C.double(left), C.double(top), C.double(right), C.double(bottom))
+	runtime.KeepAlive(this)
 }
 
 // SetWindowFrameMargins wraps QGraphicsWidget::setWindowFrameMargins.
@@ -340,6 +368,7 @@ func (this *QGraphicsWidget) SetWindowFrameMarginsLeft(left float64, top float64
 func (this *QGraphicsWidget) SetWindowFrameMargins(margins qtcore.QMarginsF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowFrameMargins")
 	C.qute_QGraphicsWidget_setWindowFrameMargins_1(self, cQMarginsF(margins))
+	runtime.KeepAlive(this)
 }
 
 // GetWindowFrameMargins wraps QGraphicsWidget::getWindowFrameMargins.
@@ -354,6 +383,7 @@ func (this *QGraphicsWidget) GetWindowFrameMargins() (float64, float64, float64,
 	var rightOut C.double
 	var bottomOut C.double
 	C.qute_QGraphicsWidget_getWindowFrameMargins(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(this)
 	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
 }
 
@@ -365,6 +395,7 @@ func (this *QGraphicsWidget) GetWindowFrameMargins() (float64, float64, float64,
 func (this *QGraphicsWidget) UnsetWindowFrameMargins() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.UnsetWindowFrameMargins")
 	C.qute_QGraphicsWidget_unsetWindowFrameMargins(self)
+	runtime.KeepAlive(this)
 }
 
 // WindowFrameGeometry wraps QGraphicsWidget::windowFrameGeometry.
@@ -375,6 +406,7 @@ func (this *QGraphicsWidget) UnsetWindowFrameMargins() {
 func (this *QGraphicsWidget) WindowFrameGeometry() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.WindowFrameGeometry")
 	r := C.qute_QGraphicsWidget_windowFrameGeometry(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -386,6 +418,7 @@ func (this *QGraphicsWidget) WindowFrameGeometry() qtcore.QRectF {
 func (this *QGraphicsWidget) WindowFrameRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.WindowFrameRect")
 	r := C.qute_QGraphicsWidget_windowFrameRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -397,6 +430,7 @@ func (this *QGraphicsWidget) WindowFrameRect() qtcore.QRectF {
 func (this *QGraphicsWidget) WindowFlags() qtcore.WindowFlags {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.WindowFlags")
 	r := C.qute_QGraphicsWidget_windowFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowFlags(r)
 }
 
@@ -408,6 +442,7 @@ func (this *QGraphicsWidget) WindowFlags() qtcore.WindowFlags {
 func (this *QGraphicsWidget) WindowType() qtcore.WindowFlags {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.WindowType")
 	r := C.qute_QGraphicsWidget_windowType(self)
+	runtime.KeepAlive(this)
 	return qtcore.WindowFlags(r)
 }
 
@@ -419,6 +454,7 @@ func (this *QGraphicsWidget) WindowType() qtcore.WindowFlags {
 func (this *QGraphicsWidget) SetWindowFlags(wFlags qtcore.WindowFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowFlags")
 	C.qute_QGraphicsWidget_setWindowFlags(self, C.int64_t(wFlags))
+	runtime.KeepAlive(this)
 }
 
 // IsActiveWindow wraps QGraphicsWidget::isActiveWindow.
@@ -429,6 +465,7 @@ func (this *QGraphicsWidget) SetWindowFlags(wFlags qtcore.WindowFlags) {
 func (this *QGraphicsWidget) IsActiveWindow() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.IsActiveWindow")
 	r := C.qute_QGraphicsWidget_isActiveWindow(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -440,6 +477,7 @@ func (this *QGraphicsWidget) IsActiveWindow() bool {
 func (this *QGraphicsWidget) SetWindowTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetWindowTitle")
 	C.qute_QGraphicsWidget_setWindowTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // WindowTitle wraps QGraphicsWidget::windowTitle.
@@ -450,6 +488,7 @@ func (this *QGraphicsWidget) SetWindowTitle(title string) {
 func (this *QGraphicsWidget) WindowTitle() string {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.WindowTitle")
 	r := C.qute_QGraphicsWidget_windowTitle(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -461,6 +500,7 @@ func (this *QGraphicsWidget) WindowTitle() string {
 func (this *QGraphicsWidget) FocusPolicy() qtcore.FocusPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.FocusPolicy")
 	r := C.qute_QGraphicsWidget_focusPolicy(self)
+	runtime.KeepAlive(this)
 	return qtcore.FocusPolicy(r)
 }
 
@@ -472,6 +512,7 @@ func (this *QGraphicsWidget) FocusPolicy() qtcore.FocusPolicy {
 func (this *QGraphicsWidget) SetFocusPolicy(policy qtcore.FocusPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetFocusPolicy")
 	C.qute_QGraphicsWidget_setFocusPolicy(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // FocusWidget wraps QGraphicsWidget::focusWidget.
@@ -484,6 +525,7 @@ func (this *QGraphicsWidget) SetFocusPolicy(policy qtcore.FocusPolicy) {
 func (this *QGraphicsWidget) FocusWidget() *QGraphicsWidget {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.FocusWidget")
 	r := C.qute_QGraphicsWidget_focusWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QGraphicsWidget](rt.WrapClass(r, "QGraphicsWidget", rt.KeepOrBorrow), r)
 }
 
@@ -495,6 +537,8 @@ func (this *QGraphicsWidget) FocusWidget() *QGraphicsWidget {
 func (this *QGraphicsWidget) GrabShortcut(sequence *qtgui.QKeySequence) int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.GrabShortcut")
 	r := C.qute_QGraphicsWidget_grabShortcut(self, rt.UseArg(unsafe.Pointer(sequence), "QGraphicsWidget.GrabShortcut"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sequence)
 	return int(r)
 }
 
@@ -506,6 +550,7 @@ func (this *QGraphicsWidget) GrabShortcut(sequence *qtgui.QKeySequence) int {
 func (this *QGraphicsWidget) ReleaseShortcut(idArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.ReleaseShortcut")
 	C.qute_QGraphicsWidget_releaseShortcut(self, C.int(idArg))
+	runtime.KeepAlive(this)
 }
 
 // SetShortcutEnabled wraps QGraphicsWidget::setShortcutEnabled.
@@ -516,6 +561,7 @@ func (this *QGraphicsWidget) ReleaseShortcut(idArg int) {
 func (this *QGraphicsWidget) SetShortcutEnabled(idArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetShortcutEnabled")
 	C.qute_QGraphicsWidget_setShortcutEnabled(self, C.int(idArg))
+	runtime.KeepAlive(this)
 }
 
 // SetShortcutAutoRepeat wraps QGraphicsWidget::setShortcutAutoRepeat.
@@ -526,6 +572,7 @@ func (this *QGraphicsWidget) SetShortcutEnabled(idArg int) {
 func (this *QGraphicsWidget) SetShortcutAutoRepeat(idArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetShortcutAutoRepeat")
 	C.qute_QGraphicsWidget_setShortcutAutoRepeat(self, C.int(idArg))
+	runtime.KeepAlive(this)
 }
 
 // AddAction wraps QGraphicsWidget::addAction.
@@ -540,6 +587,8 @@ func (this *QGraphicsWidget) AddAction(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.AddAction")
 	}
 	C.qute_QGraphicsWidget_addAction(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // AddActions wraps QGraphicsWidget::addActions.
@@ -554,6 +603,8 @@ func (this *QGraphicsWidget) AddActions(actions []*qtgui.QAction) {
 		actionsC[i] = rt.UseArg(unsafe.Pointer(actions[i]), "QGraphicsWidget.AddActions")
 	}
 	C.qute_QGraphicsWidget_addActions(self, unsafe.Pointer(unsafe.SliceData(actionsC)), C.ptrdiff_t(len(actions)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(actions)
 }
 
 // InsertActions wraps QGraphicsWidget::insertActions.
@@ -572,6 +623,9 @@ func (this *QGraphicsWidget) InsertActions(before qtgui.QActionLike, actions []*
 		actionsC[i] = rt.UseArg(unsafe.Pointer(actions[i]), "QGraphicsWidget.InsertActions")
 	}
 	C.qute_QGraphicsWidget_insertActions(self, beforePtr, unsafe.Pointer(unsafe.SliceData(actionsC)), C.ptrdiff_t(len(actions)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(actions)
 }
 
 // InsertAction wraps QGraphicsWidget::insertAction.
@@ -590,6 +644,9 @@ func (this *QGraphicsWidget) InsertAction(before qtgui.QActionLike, action qtgui
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.InsertAction")
 	}
 	C.qute_QGraphicsWidget_insertAction(self, beforePtr, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(before)
+	runtime.KeepAlive(action)
 }
 
 // RemoveAction wraps QGraphicsWidget::removeAction.
@@ -604,6 +661,8 @@ func (this *QGraphicsWidget) RemoveAction(action qtgui.QActionLike) {
 		actionPtr = rt.UseArg(unsafe.Pointer(action.AsQAction()), "QGraphicsWidget.RemoveAction")
 	}
 	C.qute_QGraphicsWidget_removeAction(self, actionPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(action)
 }
 
 // Actions wraps QGraphicsWidget::actions.
@@ -616,6 +675,7 @@ func (this *QGraphicsWidget) RemoveAction(action qtgui.QActionLike) {
 func (this *QGraphicsWidget) Actions() []*qtgui.QAction {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Actions")
 	r := C.qute_QGraphicsWidget_actions(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *qtgui.QAction {
 		return rt.View[qtgui.QAction](rt.WrapClass(e, "QAction", rt.KeepOrBorrow), e)
 	})
@@ -629,6 +689,7 @@ func (this *QGraphicsWidget) Actions() []*qtgui.QAction {
 func (this *QGraphicsWidget) SetAttribute(attribute qtcore.WidgetAttribute) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetAttribute")
 	C.qute_QGraphicsWidget_setAttribute(self, C.int64_t(attribute))
+	runtime.KeepAlive(this)
 }
 
 // TestAttribute wraps QGraphicsWidget::testAttribute.
@@ -639,6 +700,7 @@ func (this *QGraphicsWidget) SetAttribute(attribute qtcore.WidgetAttribute) {
 func (this *QGraphicsWidget) TestAttribute(attribute qtcore.WidgetAttribute) bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.TestAttribute")
 	r := C.qute_QGraphicsWidget_testAttribute(self, C.int64_t(attribute))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -650,6 +712,7 @@ func (this *QGraphicsWidget) TestAttribute(attribute qtcore.WidgetAttribute) boo
 func (this *QGraphicsWidget) Type() int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Type")
 	r := C.qute_QGraphicsWidget_type(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -665,6 +728,9 @@ func (this *QGraphicsWidget) Paint(painter qtgui.QPainterLike, option *QStyleOpt
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsWidget.Paint")
 	}
 	C.qute_QGraphicsWidget_paint(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.Paint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
 }
 
 // PaintWindowFrame wraps QGraphicsWidget::paintWindowFrame.
@@ -679,6 +745,9 @@ func (this *QGraphicsWidget) PaintWindowFrame(painter qtgui.QPainterLike, option
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsWidget.PaintWindowFrame")
 	}
 	C.qute_QGraphicsWidget_paintWindowFrame(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.PaintWindowFrame"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
 }
 
 // BoundingRect wraps QGraphicsWidget::boundingRect.
@@ -689,6 +758,7 @@ func (this *QGraphicsWidget) PaintWindowFrame(painter qtgui.QPainterLike, option
 func (this *QGraphicsWidget) BoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.BoundingRect")
 	r := C.qute_QGraphicsWidget_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -702,6 +772,7 @@ func (this *QGraphicsWidget) BoundingRect() qtcore.QRectF {
 func (this *QGraphicsWidget) Shape() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Shape")
 	r := C.qute_QGraphicsWidget_shape(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -713,6 +784,7 @@ func (this *QGraphicsWidget) Shape() *qtgui.QPainterPath {
 func (this *QGraphicsWidget) Close() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Close")
 	r := C.qute_QGraphicsWidget_close(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -724,6 +796,7 @@ func (this *QGraphicsWidget) Close() bool {
 func (this *QGraphicsWidget) EmitGeometryChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.EmitGeometryChanged")
 	C.qute_QGraphicsWidget_geometryChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitLayoutChanged wraps emitting the layoutChanged signal.
@@ -734,6 +807,7 @@ func (this *QGraphicsWidget) EmitGeometryChanged() {
 func (this *QGraphicsWidget) EmitLayoutChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.EmitLayoutChanged")
 	C.qute_QGraphicsWidget_layoutChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // QGraphicsWidgetSetTabOrder wraps QGraphicsWidget::setTabOrder.
@@ -752,6 +826,8 @@ func QGraphicsWidgetSetTabOrder(first QGraphicsWidgetLike, second QGraphicsWidge
 		secondPtr = rt.UseArg(unsafe.Pointer(second.AsQGraphicsWidget()), "QGraphicsWidgetSetTabOrder")
 	}
 	C.qute_QGraphicsWidget_setTabOrder(firstPtr, secondPtr)
+	runtime.KeepAlive(first)
+	runtime.KeepAlive(second)
 }
 
 // OnGeometryChanged connects f to the geometryChanged signal. The connection ends when the

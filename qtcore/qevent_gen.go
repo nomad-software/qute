@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -84,6 +85,7 @@ func (this *QEvent) Unkeep() {
 func (this *QEvent) Type() QEventType {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.Type")
 	r := C.qute_QEvent_type(self)
+	runtime.KeepAlive(this)
 	return QEventType(r)
 }
 
@@ -95,6 +97,7 @@ func (this *QEvent) Type() QEventType {
 func (this *QEvent) Spontaneous() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.Spontaneous")
 	r := C.qute_QEvent_spontaneous(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -106,6 +109,7 @@ func (this *QEvent) Spontaneous() bool {
 func (this *QEvent) SetAccepted(accepted bool) {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.SetAccepted")
 	C.qute_QEvent_setAccepted(self, C.bool(accepted))
+	runtime.KeepAlive(this)
 }
 
 // IsAccepted wraps QEvent::isAccepted.
@@ -116,6 +120,7 @@ func (this *QEvent) SetAccepted(accepted bool) {
 func (this *QEvent) IsAccepted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.IsAccepted")
 	r := C.qute_QEvent_isAccepted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -127,6 +132,7 @@ func (this *QEvent) IsAccepted() bool {
 func (this *QEvent) Accept() {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.Accept")
 	C.qute_QEvent_accept(self)
+	runtime.KeepAlive(this)
 }
 
 // Ignore wraps QEvent::ignore.
@@ -137,6 +143,7 @@ func (this *QEvent) Accept() {
 func (this *QEvent) Ignore() {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.Ignore")
 	C.qute_QEvent_ignore(self)
+	runtime.KeepAlive(this)
 }
 
 // IsInputEvent wraps QEvent::isInputEvent.
@@ -147,6 +154,7 @@ func (this *QEvent) Ignore() {
 func (this *QEvent) IsInputEvent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.IsInputEvent")
 	r := C.qute_QEvent_isInputEvent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -158,6 +166,7 @@ func (this *QEvent) IsInputEvent() bool {
 func (this *QEvent) IsPointerEvent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.IsPointerEvent")
 	r := C.qute_QEvent_isPointerEvent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -169,6 +178,7 @@ func (this *QEvent) IsPointerEvent() bool {
 func (this *QEvent) IsSinglePointEvent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.IsSinglePointEvent")
 	r := C.qute_QEvent_isSinglePointEvent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -184,6 +194,7 @@ func (this *QEvent) IsSinglePointEvent() bool {
 func (this *QEvent) Clone() *QEvent {
 	self := rt.Use(unsafe.Pointer(this), "QEvent.Clone")
 	r := C.qute_QEvent_clone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QEvent](rt.WrapClass(r, "QEvent", rt.TakeOwned), r)
 }
 

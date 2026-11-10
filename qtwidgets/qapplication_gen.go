@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -56,6 +57,7 @@ func QApplicationCast(o qtcore.QObjectLike) *QApplication {
 func (this *QApplication) StyleSheet() string {
 	self := rt.Use(unsafe.Pointer(this), "QApplication.StyleSheet")
 	r := C.qute_QApplication_styleSheet(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -67,6 +69,7 @@ func (this *QApplication) StyleSheet() string {
 func (this *QApplication) AutoSipEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QApplication.AutoSipEnabled")
 	r := C.qute_QApplication_autoSipEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -78,6 +81,7 @@ func (this *QApplication) AutoSipEnabled() bool {
 func (this *QApplication) SetStyleSheet(sheet string) {
 	self := rt.Use(unsafe.Pointer(this), "QApplication.SetStyleSheet")
 	C.qute_QApplication_setStyleSheet(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sheet))), C.ptrdiff_t(len(sheet)))
+	runtime.KeepAlive(this)
 }
 
 // SetAutoSipEnabled wraps QApplication::setAutoSipEnabled.
@@ -88,6 +92,7 @@ func (this *QApplication) SetStyleSheet(sheet string) {
 func (this *QApplication) SetAutoSipEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QApplication.SetAutoSipEnabled")
 	C.qute_QApplication_setAutoSipEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // EmitFocusChanged wraps emitting the focusChanged signal.
@@ -106,6 +111,9 @@ func (this *QApplication) EmitFocusChanged(old QWidgetLike, now QWidgetLike) {
 		nowPtr = rt.UseArg(unsafe.Pointer(now.AsQWidget()), "QApplication.EmitFocusChanged")
 	}
 	C.qute_QApplication_focusChanged_1(self, oldPtr, nowPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(old)
+	runtime.KeepAlive(now)
 }
 
 // QApplicationStyle wraps QApplication::style.
@@ -136,6 +144,7 @@ func QApplicationSetStyle(style QStyleLike) {
 		stylePtr, styleH = rt.Arg(unsafe.Pointer(style.AsQStyle()), "QApplicationSetStyle")
 	}
 	C.qute_QApplication_setStyle(stylePtr)
+	runtime.KeepAlive(style)
 	styleH.TransferToCpp()
 }
 
@@ -166,6 +175,7 @@ func QApplicationPaletteFor(widget QWidgetLike) *qtgui.QPalette {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QApplicationPaletteFor")
 	}
 	r := C.qute_QApplication_palette(widgetPtr)
+	runtime.KeepAlive(widget)
 	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
 }
 
@@ -192,6 +202,7 @@ func QApplicationPalette(className string) *qtgui.QPalette {
 func QApplicationSetPalette(palette *qtgui.QPalette) {
 	rt.CheckThread("QApplicationSetPalette")
 	C.qute_QApplication_setPalette(rt.UseArg(unsafe.Pointer(palette), "QApplicationSetPalette"))
+	runtime.KeepAlive(palette)
 }
 
 // QApplicationFont wraps QApplication::font.
@@ -221,6 +232,7 @@ func QApplicationFontFor(widget QWidgetLike) *qtgui.QFont {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QApplicationFontFor")
 	}
 	r := C.qute_QApplication_font_1(widgetPtr)
+	runtime.KeepAlive(widget)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -247,6 +259,7 @@ func QApplicationFontForClass(className string) *qtgui.QFont {
 func QApplicationSetFont(font *qtgui.QFont) {
 	rt.CheckThread("QApplicationSetFont")
 	C.qute_QApplication_setFont(rt.UseArg(unsafe.Pointer(font), "QApplicationSetFont"))
+	runtime.KeepAlive(font)
 }
 
 // QApplicationAllWidgets wraps QApplication::allWidgets.
@@ -379,6 +392,7 @@ func QApplicationAlert(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QApplicationAlert")
 	}
 	C.qute_QApplication_alert(widgetPtr)
+	runtime.KeepAlive(widget)
 }
 
 // QApplicationSetCursorFlashTime wraps QApplication::setCursorFlashTime.

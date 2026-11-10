@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func (this *QGraphicsObject) AsQGraphicsItem() *QGraphicsItem {
 func (this *QGraphicsObject) GrabGesture(typeArg qtcore.GestureType) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.GrabGesture")
 	C.qute_QGraphicsObject_grabGesture(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // UngrabGesture wraps QGraphicsObject::ungrabGesture.
@@ -72,6 +74,7 @@ func (this *QGraphicsObject) GrabGesture(typeArg qtcore.GestureType) {
 func (this *QGraphicsObject) UngrabGesture(typeArg qtcore.GestureType) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.UngrabGesture")
 	C.qute_QGraphicsObject_ungrabGesture(self, C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitParentChanged wraps emitting the parentChanged signal.
@@ -82,6 +85,7 @@ func (this *QGraphicsObject) UngrabGesture(typeArg qtcore.GestureType) {
 func (this *QGraphicsObject) EmitParentChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitParentChanged")
 	C.qute_QGraphicsObject_parentChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitOpacityChanged wraps emitting the opacityChanged signal.
@@ -92,6 +96,7 @@ func (this *QGraphicsObject) EmitParentChanged() {
 func (this *QGraphicsObject) EmitOpacityChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitOpacityChanged")
 	C.qute_QGraphicsObject_opacityChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitVisibleChanged wraps emitting the visibleChanged signal.
@@ -102,6 +107,7 @@ func (this *QGraphicsObject) EmitOpacityChanged() {
 func (this *QGraphicsObject) EmitVisibleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitVisibleChanged")
 	C.qute_QGraphicsObject_visibleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitEnabledChanged wraps emitting the enabledChanged signal.
@@ -112,6 +118,7 @@ func (this *QGraphicsObject) EmitVisibleChanged() {
 func (this *QGraphicsObject) EmitEnabledChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitEnabledChanged")
 	C.qute_QGraphicsObject_enabledChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitXChanged wraps emitting the xChanged signal.
@@ -122,6 +129,7 @@ func (this *QGraphicsObject) EmitEnabledChanged() {
 func (this *QGraphicsObject) EmitXChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitXChanged")
 	C.qute_QGraphicsObject_xChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitYChanged wraps emitting the yChanged signal.
@@ -132,6 +140,7 @@ func (this *QGraphicsObject) EmitXChanged() {
 func (this *QGraphicsObject) EmitYChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitYChanged")
 	C.qute_QGraphicsObject_yChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitZChanged wraps emitting the zChanged signal.
@@ -142,6 +151,7 @@ func (this *QGraphicsObject) EmitYChanged() {
 func (this *QGraphicsObject) EmitZChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitZChanged")
 	C.qute_QGraphicsObject_zChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitRotationChanged wraps emitting the rotationChanged signal.
@@ -152,6 +162,7 @@ func (this *QGraphicsObject) EmitZChanged() {
 func (this *QGraphicsObject) EmitRotationChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitRotationChanged")
 	C.qute_QGraphicsObject_rotationChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitScaleChanged wraps emitting the scaleChanged signal.
@@ -162,6 +173,7 @@ func (this *QGraphicsObject) EmitRotationChanged() {
 func (this *QGraphicsObject) EmitScaleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitScaleChanged")
 	C.qute_QGraphicsObject_scaleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitChildrenChanged wraps emitting the childrenChanged signal.
@@ -172,6 +184,7 @@ func (this *QGraphicsObject) EmitScaleChanged() {
 func (this *QGraphicsObject) EmitChildrenChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitChildrenChanged")
 	C.qute_QGraphicsObject_childrenChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitWidthChanged wraps emitting the widthChanged signal.
@@ -182,6 +195,7 @@ func (this *QGraphicsObject) EmitChildrenChanged() {
 func (this *QGraphicsObject) EmitWidthChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitWidthChanged")
 	C.qute_QGraphicsObject_widthChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitHeightChanged wraps emitting the heightChanged signal.
@@ -192,6 +206,7 @@ func (this *QGraphicsObject) EmitWidthChanged() {
 func (this *QGraphicsObject) EmitHeightChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitHeightChanged")
 	C.qute_QGraphicsObject_heightChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnParentChanged connects f to the parentChanged signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -43,6 +44,7 @@ func QPointerEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPointerEvent
 func (this *QPointerEvent) PointingDevice() *QPointingDevice {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointingDevice")
 	r := C.qute_QPointerEvent_pointingDevice(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPointingDevice](rt.WrapClass(r, "QPointingDevice", rt.KeepOrBorrow), r)
 }
 
@@ -54,6 +56,7 @@ func (this *QPointerEvent) PointingDevice() *QPointingDevice {
 func (this *QPointerEvent) PointerType() QPointingDevicePointerTypes {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointerType")
 	r := C.qute_QPointerEvent_pointerType(self)
+	runtime.KeepAlive(this)
 	return QPointingDevicePointerTypes(r)
 }
 
@@ -65,6 +68,7 @@ func (this *QPointerEvent) PointerType() QPointingDevicePointerTypes {
 func (this *QPointerEvent) PointCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointCount")
 	r := C.qute_QPointerEvent_pointCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -78,6 +82,7 @@ func (this *QPointerEvent) PointCount() int {
 func (this *QPointerEvent) Point(iArg int) *QEventPoint {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.Point")
 	r := C.qute_QPointerEvent_point(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return rt.View[QEventPoint](rt.WrapClass(r, "QEventPoint", rt.TakeOwned), r)
 }
 
@@ -89,6 +94,7 @@ func (this *QPointerEvent) Point(iArg int) *QEventPoint {
 func (this *QPointerEvent) Points() []*QEventPoint {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.Points")
 	r := C.qute_QPointerEvent_points(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QEventPoint {
 		return rt.View[QEventPoint](rt.WrapClass(e, "QEventPoint", rt.TakeOwned), e)
 	})
@@ -104,6 +110,7 @@ func (this *QPointerEvent) Points() []*QEventPoint {
 func (this *QPointerEvent) PointById(idArg int) *QEventPoint {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PointById")
 	r := C.qute_QPointerEvent_pointById(self, C.int(idArg))
+	runtime.KeepAlive(this)
 	return rt.View[QEventPoint](rt.WrapClass(r, "QEventPoint", rt.TakeOwned), r)
 }
 
@@ -115,6 +122,7 @@ func (this *QPointerEvent) PointById(idArg int) *QEventPoint {
 func (this *QPointerEvent) AllPointsGrabbed() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.AllPointsGrabbed")
 	r := C.qute_QPointerEvent_allPointsGrabbed(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -126,6 +134,7 @@ func (this *QPointerEvent) AllPointsGrabbed() bool {
 func (this *QPointerEvent) IsBeginEvent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.IsBeginEvent")
 	r := C.qute_QPointerEvent_isBeginEvent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -137,6 +146,7 @@ func (this *QPointerEvent) IsBeginEvent() bool {
 func (this *QPointerEvent) IsUpdateEvent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.IsUpdateEvent")
 	r := C.qute_QPointerEvent_isUpdateEvent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -148,6 +158,7 @@ func (this *QPointerEvent) IsUpdateEvent() bool {
 func (this *QPointerEvent) IsEndEvent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.IsEndEvent")
 	r := C.qute_QPointerEvent_isEndEvent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -159,6 +170,7 @@ func (this *QPointerEvent) IsEndEvent() bool {
 func (this *QPointerEvent) AllPointsAccepted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.AllPointsAccepted")
 	r := C.qute_QPointerEvent_allPointsAccepted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -172,6 +184,8 @@ func (this *QPointerEvent) AllPointsAccepted() bool {
 func (this *QPointerEvent) ExclusiveGrabber(point *QEventPoint) *qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.ExclusiveGrabber")
 	r := C.qute_QPointerEvent_exclusiveGrabber(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.ExclusiveGrabber"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 	return rt.View[qtcore.QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -187,6 +201,9 @@ func (this *QPointerEvent) SetExclusiveGrabber(point *QEventPoint, exclusiveGrab
 		exclusiveGrabberPtr = rt.UseArg(unsafe.Pointer(exclusiveGrabber.AsQObject()), "QPointerEvent.SetExclusiveGrabber")
 	}
 	C.qute_QPointerEvent_setExclusiveGrabber(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.SetExclusiveGrabber"), exclusiveGrabberPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
+	runtime.KeepAlive(exclusiveGrabber)
 }
 
 // PassiveGrabbers wraps QPointerEvent::passiveGrabbers.
@@ -199,6 +216,8 @@ func (this *QPointerEvent) SetExclusiveGrabber(point *QEventPoint, exclusiveGrab
 func (this *QPointerEvent) PassiveGrabbers(point *QEventPoint) []*qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.PassiveGrabbers")
 	r := C.qute_QPointerEvent_passiveGrabbers(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.PassiveGrabbers"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QObject {
 		return rt.View[qtcore.QObject](rt.WrapClass(e, "QObject", rt.KeepOrBorrow), e)
 	})
@@ -212,6 +231,8 @@ func (this *QPointerEvent) PassiveGrabbers(point *QEventPoint) []*qtcore.QObject
 func (this *QPointerEvent) ClearPassiveGrabbers(point *QEventPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QPointerEvent.ClearPassiveGrabbers")
 	C.qute_QPointerEvent_clearPassiveGrabbers(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.ClearPassiveGrabbers"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 }
 
 // AddPassiveGrabber wraps QPointerEvent::addPassiveGrabber.
@@ -226,6 +247,9 @@ func (this *QPointerEvent) AddPassiveGrabber(point *QEventPoint, grabber qtcore.
 		grabberPtr = rt.UseArg(unsafe.Pointer(grabber.AsQObject()), "QPointerEvent.AddPassiveGrabber")
 	}
 	r := C.qute_QPointerEvent_addPassiveGrabber(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.AddPassiveGrabber"), grabberPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
+	runtime.KeepAlive(grabber)
 	return bool(r)
 }
 
@@ -241,5 +265,8 @@ func (this *QPointerEvent) RemovePassiveGrabber(point *QEventPoint, grabber qtco
 		grabberPtr = rt.UseArg(unsafe.Pointer(grabber.AsQObject()), "QPointerEvent.RemovePassiveGrabber")
 	}
 	r := C.qute_QPointerEvent_removePassiveGrabber(self, rt.UseArg(unsafe.Pointer(point), "QPointerEvent.RemovePassiveGrabber"), grabberPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
+	runtime.KeepAlive(grabber)
 	return bool(r)
 }

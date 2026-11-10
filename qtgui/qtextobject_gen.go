@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -57,6 +58,7 @@ func QTextObjectCast(o qtcore.QObjectLike) *QTextObject {
 func (this *QTextObject) Format() *QTextFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextObject.Format")
 	r := C.qute_QTextObject_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextFormat](rt.WrapClass(r, "QTextFormat", rt.TakeOwned), r)
 }
 
@@ -68,6 +70,7 @@ func (this *QTextObject) Format() *QTextFormat {
 func (this *QTextObject) FormatIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextObject.FormatIndex")
 	r := C.qute_QTextObject_formatIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -81,6 +84,7 @@ func (this *QTextObject) FormatIndex() int {
 func (this *QTextObject) Document() *QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QTextObject.Document")
 	r := C.qute_QTextObject_document(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }
 
@@ -92,5 +96,6 @@ func (this *QTextObject) Document() *QTextDocument {
 func (this *QTextObject) ObjectIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextObject.ObjectIndex")
 	r := C.qute_QTextObject_objectIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

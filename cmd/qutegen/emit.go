@@ -868,6 +868,9 @@ func (g *Gen) emitClass(c *Class) []byte {
 	if bytes.Contains(b.Bytes(), []byte("fmt.")) {
 		std = append([]string{"fmt"}, std...)
 	}
+	if bytes.Contains(b.Bytes(), []byte("runtime.KeepAlive(")) {
+		std = append(std, "runtime")
+	}
 	if timeRef.Match(b.Bytes()) {
 		std = append(std, "time")
 	}
@@ -943,6 +946,37 @@ type goCall struct {
 	post    []string
 	outT    []string // Go types of out and in-out results
 	outExpr []string // Go expressions of out and in-out results
+	keep    []string // Go arguments to keep reachable until the C call returns
+}
+
+// needsKeep reports whether a Go argument of this type holds wrappers whose GC
+// cleanup could free the C++ object while the call still uses it.
+func needsKeep(c *conv) bool {
+	switch c.k {
+	case kObj, kValue:
+		return true
+	case kList:
+		return c.elem.k == kObj || c.elem.k == kValue
+	case kMap:
+		return c.key.k == kObj || c.key.k == kValue || c.elem.k == kObj || c.elem.k == kValue
+	}
+	return false
+}
+
+// keepAlive returns the runtime.KeepAlive statements that go right after the C
+// call. Once rt.Use has handed out the raw pointer nothing else refers to the
+// wrappers, and a call that runs a nested event loop (QEventLoop::exec,
+// QFontDialog::getFont) would let the cleanup queue drain and free the
+// receiver or an argument while Qt still uses it.
+func keepAlive(recv string, gc goCall) []string {
+	var out []string
+	if recv != "" {
+		out = append(out, "runtime.KeepAlive("+recv+")")
+	}
+	for _, k := range gc.keep {
+		out = append(out, "runtime.KeepAlive("+k+")")
+	}
+	return out
 }
 
 func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) goCall {
@@ -957,6 +991,9 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 			}
 			if p.InOut {
 				gc.params = append(gc.params, p.GoName+" "+g.goType(p.T, m, false))
+				if needsKeep(p.T) {
+					gc.keep = append(gc.keep, p.GoName)
+				}
 				pre, args := g.goArg(p.T, p.GoName, method, m)
 				gc.pre = append(gc.pre, pre...)
 				gc.args = append(gc.args, args...)
@@ -972,6 +1009,9 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 			gt = "*" + g.qual(p.T.cls.Module, m, p.T.cls.Name)
 		}
 		gc.params = append(gc.params, p.GoName+" "+gt)
+		if needsKeep(p.T) {
+			gc.keep = append(gc.keep, p.GoName)
+		}
 		if p.T.k == kObj {
 			pp, hh := p.GoName+"Ptr", p.GoName+"H"
 			gc.pre = append(gc.pre, fmt.Sprintf("var %s unsafe.Pointer", pp))
@@ -1040,6 +1080,9 @@ func (g *Gen) emitCtor(c *Class, mm *Method, b *buf) {
 		b.p("\t%s", s)
 	}
 	b.p("\tp := C.%s(%s)", mm.CName, strings.Join(gc.args, ", "))
+	for _, s := range keepAlive("", gc) {
+		b.p("\t%s", s)
+	}
 	mode := "rt.NewOwned"
 	var parentPtr string
 	for _, p := range mm.Params {
@@ -1107,7 +1150,9 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 	}
 	b.p("func %s%s(%s) %s {", recv, mm.GoName, strings.Join(gc.params, ", "), ret)
 	args := gc.args
+	recvName := "this"
 	if static {
+		recvName = ""
 		b.p("\trt.CheckThread(%q)", method)
 	} else {
 		b.p("\tself := rt.Use(unsafe.Pointer(this), %q)", method)
@@ -1117,8 +1162,12 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 		b.p("\t%s", s)
 	}
 	call := fmt.Sprintf("C.%s(%s)", mm.CName, strings.Join(args, ", "))
+	keep := keepAlive(recvName, gc)
 	if mm.Ret.k == kVoid || mm.Ret.k == kSelf {
 		b.p("\t%s", call)
+		for _, s := range keep {
+			b.p("\t%s", s)
+		}
 		for _, s := range gc.post {
 			b.p("\t%s", s)
 		}
@@ -1132,6 +1181,9 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 		return
 	}
 	b.p("\tr := %s", call)
+	for _, s := range keep {
+		b.p("\t%s", s)
+	}
 	for _, s := range gc.post {
 		b.p("\t%s", s)
 	}
@@ -1271,10 +1323,19 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 			b.p("\t%s", x)
 		}
 		call := fmt.Sprintf("C.%s(%s)", v.CName, strings.Join(append([]string{"self"}, gc.args...), ", "))
+		keep := keepAlive("s.this", gc)
 		if v.Ret.k == kVoid {
-			b.p("\t%s\n}\n", call)
+			b.p("\t%s", call)
+			for _, x := range keep {
+				b.p("\t%s", x)
+			}
+			b.p("}\n")
 		} else {
-			b.p("\treturn %s\n}\n", g.goRet(v.Ret, call, "rt.KeepOrBorrow", m))
+			b.p("\tr := %s", call)
+			for _, x := range keep {
+				b.p("\t%s", x)
+			}
+			b.p("\treturn %s\n}\n", g.goRet(v.Ret, "r", "rt.KeepOrBorrow", m))
 		}
 	}
 	for _, v := range c.Protected {
@@ -1287,14 +1348,21 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 			b.p("\t%s", x)
 		}
 		call := fmt.Sprintf("C.%s(%s)", v.CName, strings.Join(append([]string{"self"}, gc.args...), ", "))
+		keep := keepAlive("b", gc)
 		if v.Ret.k == kVoid {
 			b.p("\t%s", call)
+			for _, x := range keep {
+				b.p("\t%s", x)
+			}
 			for _, x := range gc.post {
 				b.p("\t%s", x)
 			}
 			b.p("}\n")
 		} else {
 			b.p("\tr := %s", call)
+			for _, x := range keep {
+				b.p("\t%s", x)
+			}
 			for _, x := range gc.post {
 				b.p("\t%s", x)
 			}
@@ -1314,6 +1382,9 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 		b.p("\t%s", s)
 	}
 	b.p("\tp := C.qute_%s_new_shim(%s)", cls, strings.Join(gc.args, ", "))
+	for _, s := range keepAlive("", gc) {
+		b.p("\t%s", s)
+	}
 	mode := "rt.NewOwned"
 	for _, p := range pc.Params {
 		if p.Rule == "transfer-this" && p.T.k == kObj {

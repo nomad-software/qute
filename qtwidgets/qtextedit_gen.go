@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQTextEdit(parent QWidgetLike) *QTextEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTextEdit")
 	}
 	p := C.qute_QTextEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,7 @@ func NewQTextEditWithText(text string, parent QWidgetLike) *QTextEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTextEditWithText")
 	}
 	p := C.qute_QTextEdit_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -106,6 +109,8 @@ func (this *QTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "QTextEdit.SetDocument")
 	}
 	C.qute_QTextEdit_setDocument(self, documentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(document)
 }
 
 // Document wraps QTextEdit::document.
@@ -118,6 +123,7 @@ func (this *QTextEdit) SetDocument(document qtgui.QTextDocumentLike) {
 func (this *QTextEdit) Document() *qtgui.QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Document")
 	r := C.qute_QTextEdit_document(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
 }
 
@@ -129,6 +135,7 @@ func (this *QTextEdit) Document() *qtgui.QTextDocument {
 func (this *QTextEdit) SetPlaceholderText(placeholderText string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetPlaceholderText")
 	C.qute_QTextEdit_setPlaceholderText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(placeholderText))), C.ptrdiff_t(len(placeholderText)))
+	runtime.KeepAlive(this)
 }
 
 // PlaceholderText wraps QTextEdit::placeholderText.
@@ -139,6 +146,7 @@ func (this *QTextEdit) SetPlaceholderText(placeholderText string) {
 func (this *QTextEdit) PlaceholderText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.PlaceholderText")
 	r := C.qute_QTextEdit_placeholderText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -150,6 +158,8 @@ func (this *QTextEdit) PlaceholderText() string {
 func (this *QTextEdit) SetTextCursor(cursor *qtgui.QTextCursor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTextCursor")
 	C.qute_QTextEdit_setTextCursor(self, rt.UseArg(unsafe.Pointer(cursor), "QTextEdit.SetTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 }
 
 // TextCursor wraps QTextEdit::textCursor.
@@ -162,6 +172,7 @@ func (this *QTextEdit) SetTextCursor(cursor *qtgui.QTextCursor) {
 func (this *QTextEdit) TextCursor() *qtgui.QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TextCursor")
 	r := C.qute_QTextEdit_textCursor(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -173,6 +184,7 @@ func (this *QTextEdit) TextCursor() *qtgui.QTextCursor {
 func (this *QTextEdit) IsReadOnly() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.IsReadOnly")
 	r := C.qute_QTextEdit_isReadOnly(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -184,6 +196,7 @@ func (this *QTextEdit) IsReadOnly() bool {
 func (this *QTextEdit) SetReadOnly(ro bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetReadOnly")
 	C.qute_QTextEdit_setReadOnly(self, C.bool(ro))
+	runtime.KeepAlive(this)
 }
 
 // SetTextInteractionFlags wraps QTextEdit::setTextInteractionFlags.
@@ -194,6 +207,7 @@ func (this *QTextEdit) SetReadOnly(ro bool) {
 func (this *QTextEdit) SetTextInteractionFlags(flags qtcore.TextInteractionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTextInteractionFlags")
 	C.qute_QTextEdit_setTextInteractionFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // TextInteractionFlags wraps QTextEdit::textInteractionFlags.
@@ -204,6 +218,7 @@ func (this *QTextEdit) SetTextInteractionFlags(flags qtcore.TextInteractionFlags
 func (this *QTextEdit) TextInteractionFlags() qtcore.TextInteractionFlags {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TextInteractionFlags")
 	r := C.qute_QTextEdit_textInteractionFlags(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextInteractionFlags(r)
 }
 
@@ -215,6 +230,7 @@ func (this *QTextEdit) TextInteractionFlags() qtcore.TextInteractionFlags {
 func (this *QTextEdit) FontPointSize() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FontPointSize")
 	r := C.qute_QTextEdit_fontPointSize(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -226,6 +242,7 @@ func (this *QTextEdit) FontPointSize() float64 {
 func (this *QTextEdit) FontFamily() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FontFamily")
 	r := C.qute_QTextEdit_fontFamily(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -237,6 +254,7 @@ func (this *QTextEdit) FontFamily() string {
 func (this *QTextEdit) FontWeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FontWeight")
 	r := C.qute_QTextEdit_fontWeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -248,6 +266,7 @@ func (this *QTextEdit) FontWeight() int {
 func (this *QTextEdit) FontUnderline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FontUnderline")
 	r := C.qute_QTextEdit_fontUnderline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -259,6 +278,7 @@ func (this *QTextEdit) FontUnderline() bool {
 func (this *QTextEdit) FontItalic() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FontItalic")
 	r := C.qute_QTextEdit_fontItalic(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -270,6 +290,7 @@ func (this *QTextEdit) FontItalic() bool {
 func (this *QTextEdit) TextColor() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TextColor")
 	r := C.qute_QTextEdit_textColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -281,6 +302,7 @@ func (this *QTextEdit) TextColor() qtgui.QColor {
 func (this *QTextEdit) TextBackgroundColor() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TextBackgroundColor")
 	r := C.qute_QTextEdit_textBackgroundColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -294,6 +316,7 @@ func (this *QTextEdit) TextBackgroundColor() qtgui.QColor {
 func (this *QTextEdit) CurrentFont() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CurrentFont")
 	r := C.qute_QTextEdit_currentFont(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -305,6 +328,7 @@ func (this *QTextEdit) CurrentFont() *qtgui.QFont {
 func (this *QTextEdit) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Alignment")
 	r := C.qute_QTextEdit_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -316,6 +340,8 @@ func (this *QTextEdit) Alignment() qtcore.Alignment {
 func (this *QTextEdit) MergeCurrentCharFormat(modifier *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.MergeCurrentCharFormat")
 	C.qute_QTextEdit_mergeCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(modifier), "QTextEdit.MergeCurrentCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modifier)
 }
 
 // SetCurrentCharFormat wraps QTextEdit::setCurrentCharFormat.
@@ -326,6 +352,8 @@ func (this *QTextEdit) MergeCurrentCharFormat(modifier *qtgui.QTextCharFormat) {
 func (this *QTextEdit) SetCurrentCharFormat(format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetCurrentCharFormat")
 	C.qute_QTextEdit_setCurrentCharFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextEdit.SetCurrentCharFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // CurrentCharFormat wraps QTextEdit::currentCharFormat.
@@ -338,6 +366,7 @@ func (this *QTextEdit) SetCurrentCharFormat(format *qtgui.QTextCharFormat) {
 func (this *QTextEdit) CurrentCharFormat() *qtgui.QTextCharFormat {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CurrentCharFormat")
 	r := C.qute_QTextEdit_currentCharFormat(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCharFormat](rt.WrapClass(r, "QTextCharFormat", rt.TakeOwned), r)
 }
 
@@ -349,6 +378,7 @@ func (this *QTextEdit) CurrentCharFormat() *qtgui.QTextCharFormat {
 func (this *QTextEdit) AutoFormatting() QTextEditAutoFormatting {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.AutoFormatting")
 	r := C.qute_QTextEdit_autoFormatting(self)
+	runtime.KeepAlive(this)
 	return QTextEditAutoFormatting(r)
 }
 
@@ -360,6 +390,7 @@ func (this *QTextEdit) AutoFormatting() QTextEditAutoFormatting {
 func (this *QTextEdit) SetAutoFormatting(features QTextEditAutoFormatting) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetAutoFormatting")
 	C.qute_QTextEdit_setAutoFormatting(self, C.int64_t(features))
+	runtime.KeepAlive(this)
 }
 
 // TabChangesFocus wraps QTextEdit::tabChangesFocus.
@@ -370,6 +401,7 @@ func (this *QTextEdit) SetAutoFormatting(features QTextEditAutoFormatting) {
 func (this *QTextEdit) TabChangesFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TabChangesFocus")
 	r := C.qute_QTextEdit_tabChangesFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -381,6 +413,7 @@ func (this *QTextEdit) TabChangesFocus() bool {
 func (this *QTextEdit) SetTabChangesFocus(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTabChangesFocus")
 	C.qute_QTextEdit_setTabChangesFocus(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetDocumentTitle wraps QTextEdit::setDocumentTitle.
@@ -391,6 +424,7 @@ func (this *QTextEdit) SetTabChangesFocus(bArg bool) {
 func (this *QTextEdit) SetDocumentTitle(title string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetDocumentTitle")
 	C.qute_QTextEdit_setDocumentTitle(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
+	runtime.KeepAlive(this)
 }
 
 // DocumentTitle wraps QTextEdit::documentTitle.
@@ -401,6 +435,7 @@ func (this *QTextEdit) SetDocumentTitle(title string) {
 func (this *QTextEdit) DocumentTitle() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.DocumentTitle")
 	r := C.qute_QTextEdit_documentTitle(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -412,6 +447,7 @@ func (this *QTextEdit) DocumentTitle() string {
 func (this *QTextEdit) IsUndoRedoEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.IsUndoRedoEnabled")
 	r := C.qute_QTextEdit_isUndoRedoEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -423,6 +459,7 @@ func (this *QTextEdit) IsUndoRedoEnabled() bool {
 func (this *QTextEdit) SetUndoRedoEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetUndoRedoEnabled")
 	C.qute_QTextEdit_setUndoRedoEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // LineWrapMode wraps QTextEdit::lineWrapMode.
@@ -433,6 +470,7 @@ func (this *QTextEdit) SetUndoRedoEnabled(enable bool) {
 func (this *QTextEdit) LineWrapMode() QTextEditLineWrapMode {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.LineWrapMode")
 	r := C.qute_QTextEdit_lineWrapMode(self)
+	runtime.KeepAlive(this)
 	return QTextEditLineWrapMode(r)
 }
 
@@ -444,6 +482,7 @@ func (this *QTextEdit) LineWrapMode() QTextEditLineWrapMode {
 func (this *QTextEdit) SetLineWrapMode(mode QTextEditLineWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetLineWrapMode")
 	C.qute_QTextEdit_setLineWrapMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // LineWrapColumnOrWidth wraps QTextEdit::lineWrapColumnOrWidth.
@@ -454,6 +493,7 @@ func (this *QTextEdit) SetLineWrapMode(mode QTextEditLineWrapMode) {
 func (this *QTextEdit) LineWrapColumnOrWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.LineWrapColumnOrWidth")
 	r := C.qute_QTextEdit_lineWrapColumnOrWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -465,6 +505,7 @@ func (this *QTextEdit) LineWrapColumnOrWidth() int {
 func (this *QTextEdit) SetLineWrapColumnOrWidth(w int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetLineWrapColumnOrWidth")
 	C.qute_QTextEdit_setLineWrapColumnOrWidth(self, C.int(w))
+	runtime.KeepAlive(this)
 }
 
 // WordWrapMode wraps QTextEdit::wordWrapMode.
@@ -475,6 +516,7 @@ func (this *QTextEdit) SetLineWrapColumnOrWidth(w int) {
 func (this *QTextEdit) WordWrapMode() qtgui.QTextOptionWrapMode {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.WordWrapMode")
 	r := C.qute_QTextEdit_wordWrapMode(self)
+	runtime.KeepAlive(this)
 	return qtgui.QTextOptionWrapMode(r)
 }
 
@@ -486,6 +528,7 @@ func (this *QTextEdit) WordWrapMode() qtgui.QTextOptionWrapMode {
 func (this *QTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetWordWrapMode")
 	C.qute_QTextEdit_setWordWrapMode(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // Find wraps QTextEdit::find.
@@ -496,6 +539,7 @@ func (this *QTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
 func (this *QTextEdit) Find(exp string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Find")
 	r := C.qute_QTextEdit_find(self, (*C.char)(unsafe.Pointer(unsafe.StringData(exp))), C.ptrdiff_t(len(exp)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -507,6 +551,8 @@ func (this *QTextEdit) Find(exp string) bool {
 func (this *QTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FindRegularExpression")
 	r := C.qute_QTextEdit_find_1(self, rt.UseArg(unsafe.Pointer(exp), "QTextEdit.FindRegularExpression"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(exp)
 	return bool(r)
 }
 
@@ -518,6 +564,7 @@ func (this *QTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression) boo
 func (this *QTextEdit) ToPlainText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ToPlainText")
 	r := C.qute_QTextEdit_toPlainText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -529,6 +576,7 @@ func (this *QTextEdit) ToPlainText() string {
 func (this *QTextEdit) ToHtml() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ToHtml")
 	r := C.qute_QTextEdit_toHtml(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -540,6 +588,7 @@ func (this *QTextEdit) ToHtml() string {
 func (this *QTextEdit) ToMarkdown() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ToMarkdown")
 	r := C.qute_QTextEdit_toMarkdown(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -551,6 +600,7 @@ func (this *QTextEdit) ToMarkdown() string {
 func (this *QTextEdit) EnsureCursorVisible() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EnsureCursorVisible")
 	C.qute_QTextEdit_ensureCursorVisible(self)
+	runtime.KeepAlive(this)
 }
 
 // LoadResource wraps QTextEdit::loadResource.
@@ -563,6 +613,8 @@ func (this *QTextEdit) EnsureCursorVisible() {
 func (this *QTextEdit) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.LoadResource")
 	r := C.qute_QTextEdit_loadResource(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QTextEdit.LoadResource"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(name)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -576,6 +628,7 @@ func (this *QTextEdit) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore.QVar
 func (this *QTextEdit) CreateStandardContextMenu() *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CreateStandardContextMenu")
 	r := C.qute_QTextEdit_createStandardContextMenu(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
@@ -589,6 +642,7 @@ func (this *QTextEdit) CreateStandardContextMenu() *QMenu {
 func (this *QTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMenu {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CreateStandardContextMenuAt")
 	r := C.qute_QTextEdit_createStandardContextMenu_1(self, cQPoint(position))
+	runtime.KeepAlive(this)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.TakeOwned), r)
 }
 
@@ -602,6 +656,7 @@ func (this *QTextEdit) CreateStandardContextMenuAt(position qtcore.QPoint) *QMen
 func (this *QTextEdit) CursorForPosition(pos qtcore.QPoint) *qtgui.QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorForPosition")
 	r := C.qute_QTextEdit_cursorForPosition(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
 }
 
@@ -613,6 +668,8 @@ func (this *QTextEdit) CursorForPosition(pos qtcore.QPoint) *qtgui.QTextCursor {
 func (this *QTextEdit) CursorRectWithTextCursor(cursor *qtgui.QTextCursor) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorRectWithTextCursor")
 	r := C.qute_QTextEdit_cursorRect(self, rt.UseArg(unsafe.Pointer(cursor), "QTextEdit.CursorRectWithTextCursor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
 	return goQRect(r)
 }
 
@@ -624,6 +681,7 @@ func (this *QTextEdit) CursorRectWithTextCursor(cursor *qtgui.QTextCursor) qtcor
 func (this *QTextEdit) CursorRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorRect")
 	r := C.qute_QTextEdit_cursorRect_1(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -635,6 +693,7 @@ func (this *QTextEdit) CursorRect() qtcore.QRect {
 func (this *QTextEdit) AnchorAt(pos qtcore.QPoint) string {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.AnchorAt")
 	r := C.qute_QTextEdit_anchorAt(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -646,6 +705,7 @@ func (this *QTextEdit) AnchorAt(pos qtcore.QPoint) string {
 func (this *QTextEdit) OverwriteMode() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.OverwriteMode")
 	r := C.qute_QTextEdit_overwriteMode(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -657,6 +717,7 @@ func (this *QTextEdit) OverwriteMode() bool {
 func (this *QTextEdit) SetOverwriteMode(overwrite bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetOverwriteMode")
 	C.qute_QTextEdit_setOverwriteMode(self, C.bool(overwrite))
+	runtime.KeepAlive(this)
 }
 
 // TabStopDistance wraps QTextEdit::tabStopDistance.
@@ -667,6 +728,7 @@ func (this *QTextEdit) SetOverwriteMode(overwrite bool) {
 func (this *QTextEdit) TabStopDistance() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.TabStopDistance")
 	r := C.qute_QTextEdit_tabStopDistance(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -678,6 +740,7 @@ func (this *QTextEdit) TabStopDistance() float64 {
 func (this *QTextEdit) SetTabStopDistance(distance float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTabStopDistance")
 	C.qute_QTextEdit_setTabStopDistance(self, C.double(distance))
+	runtime.KeepAlive(this)
 }
 
 // CursorWidth wraps QTextEdit::cursorWidth.
@@ -688,6 +751,7 @@ func (this *QTextEdit) SetTabStopDistance(distance float64) {
 func (this *QTextEdit) CursorWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CursorWidth")
 	r := C.qute_QTextEdit_cursorWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -699,6 +763,7 @@ func (this *QTextEdit) CursorWidth() int {
 func (this *QTextEdit) SetCursorWidth(width int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetCursorWidth")
 	C.qute_QTextEdit_setCursorWidth(self, C.int(width))
+	runtime.KeepAlive(this)
 }
 
 // AcceptRichText wraps QTextEdit::acceptRichText.
@@ -709,6 +774,7 @@ func (this *QTextEdit) SetCursorWidth(width int) {
 func (this *QTextEdit) AcceptRichText() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.AcceptRichText")
 	r := C.qute_QTextEdit_acceptRichText(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -720,6 +786,7 @@ func (this *QTextEdit) AcceptRichText() bool {
 func (this *QTextEdit) SetAcceptRichText(accept bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetAcceptRichText")
 	C.qute_QTextEdit_setAcceptRichText(self, C.bool(accept))
+	runtime.KeepAlive(this)
 }
 
 // SetExtraSelections wraps QTextEdit::setExtraSelections.
@@ -734,6 +801,8 @@ func (this *QTextEdit) SetExtraSelections(selections []*QTextEditExtraSelection)
 		selectionsC[i] = rt.UseArg(unsafe.Pointer(selections[i]), "QTextEdit.SetExtraSelections")
 	}
 	C.qute_QTextEdit_setExtraSelections(self, unsafe.Pointer(unsafe.SliceData(selectionsC)), C.ptrdiff_t(len(selections)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(selections)
 }
 
 // ExtraSelections wraps QTextEdit::extraSelections.
@@ -744,6 +813,7 @@ func (this *QTextEdit) SetExtraSelections(selections []*QTextEditExtraSelection)
 func (this *QTextEdit) ExtraSelections() []*QTextEditExtraSelection {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ExtraSelections")
 	r := C.qute_QTextEdit_extraSelections(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTextEditExtraSelection {
 		return rt.View[QTextEditExtraSelection](rt.WrapClass(e, "QTextEditExtraSelection", rt.TakeOwned), e)
 	})
@@ -757,6 +827,7 @@ func (this *QTextEdit) ExtraSelections() []*QTextEditExtraSelection {
 func (this *QTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.MoveCursor")
 	C.qute_QTextEdit_moveCursor(self, C.int64_t(operation))
+	runtime.KeepAlive(this)
 }
 
 // CanPaste wraps QTextEdit::canPaste.
@@ -767,6 +838,7 @@ func (this *QTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation) {
 func (this *QTextEdit) CanPaste() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.CanPaste")
 	r := C.qute_QTextEdit_canPaste(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -782,6 +854,8 @@ func (this *QTextEdit) Print(printer qtgui.QPagedPaintDeviceLike) {
 		printerPtr = rt.UseArg(unsafe.Pointer(printer.AsQPagedPaintDevice()), "QTextEdit.Print")
 	}
 	C.qute_QTextEdit_print(self, printerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(printer)
 }
 
 // SetFontPointSize wraps QTextEdit::setFontPointSize.
@@ -792,6 +866,7 @@ func (this *QTextEdit) Print(printer qtgui.QPagedPaintDeviceLike) {
 func (this *QTextEdit) SetFontPointSize(sArg float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetFontPointSize")
 	C.qute_QTextEdit_setFontPointSize(self, C.double(sArg))
+	runtime.KeepAlive(this)
 }
 
 // SetFontFamily wraps QTextEdit::setFontFamily.
@@ -802,6 +877,7 @@ func (this *QTextEdit) SetFontPointSize(sArg float64) {
 func (this *QTextEdit) SetFontFamily(fontFamily string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetFontFamily")
 	C.qute_QTextEdit_setFontFamily(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fontFamily))), C.ptrdiff_t(len(fontFamily)))
+	runtime.KeepAlive(this)
 }
 
 // SetFontWeight wraps QTextEdit::setFontWeight.
@@ -812,6 +888,7 @@ func (this *QTextEdit) SetFontFamily(fontFamily string) {
 func (this *QTextEdit) SetFontWeight(w int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetFontWeight")
 	C.qute_QTextEdit_setFontWeight(self, C.int(w))
+	runtime.KeepAlive(this)
 }
 
 // SetFontUnderline wraps QTextEdit::setFontUnderline.
@@ -822,6 +899,7 @@ func (this *QTextEdit) SetFontWeight(w int) {
 func (this *QTextEdit) SetFontUnderline(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetFontUnderline")
 	C.qute_QTextEdit_setFontUnderline(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetFontItalic wraps QTextEdit::setFontItalic.
@@ -832,6 +910,7 @@ func (this *QTextEdit) SetFontUnderline(bArg bool) {
 func (this *QTextEdit) SetFontItalic(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetFontItalic")
 	C.qute_QTextEdit_setFontItalic(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // SetTextColor wraps QTextEdit::setTextColor.
@@ -842,6 +921,7 @@ func (this *QTextEdit) SetFontItalic(bArg bool) {
 func (this *QTextEdit) SetTextColor(c qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTextColor")
 	C.qute_QTextEdit_setTextColor(self, cQColor(c))
+	runtime.KeepAlive(this)
 }
 
 // SetTextBackgroundColor wraps QTextEdit::setTextBackgroundColor.
@@ -852,6 +932,7 @@ func (this *QTextEdit) SetTextColor(c qtgui.QColor) {
 func (this *QTextEdit) SetTextBackgroundColor(c qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetTextBackgroundColor")
 	C.qute_QTextEdit_setTextBackgroundColor(self, cQColor(c))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentFont wraps QTextEdit::setCurrentFont.
@@ -862,6 +943,8 @@ func (this *QTextEdit) SetTextBackgroundColor(c qtgui.QColor) {
 func (this *QTextEdit) SetCurrentFont(fArg *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetCurrentFont")
 	C.qute_QTextEdit_setCurrentFont(self, rt.UseArg(unsafe.Pointer(fArg), "QTextEdit.SetCurrentFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fArg)
 }
 
 // SetAlignment wraps QTextEdit::setAlignment.
@@ -872,6 +955,7 @@ func (this *QTextEdit) SetCurrentFont(fArg *qtgui.QFont) {
 func (this *QTextEdit) SetAlignment(aArg qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetAlignment")
 	C.qute_QTextEdit_setAlignment(self, C.int64_t(aArg))
+	runtime.KeepAlive(this)
 }
 
 // SetPlainText wraps QTextEdit::setPlainText.
@@ -882,6 +966,7 @@ func (this *QTextEdit) SetAlignment(aArg qtcore.Alignment) {
 func (this *QTextEdit) SetPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetPlainText")
 	C.qute_QTextEdit_setPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetHtml wraps QTextEdit::setHtml.
@@ -892,6 +977,7 @@ func (this *QTextEdit) SetPlainText(text string) {
 func (this *QTextEdit) SetHtml(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetHtml")
 	C.qute_QTextEdit_setHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetMarkdown wraps QTextEdit::setMarkdown.
@@ -902,6 +988,7 @@ func (this *QTextEdit) SetHtml(text string) {
 func (this *QTextEdit) SetMarkdown(markdown string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetMarkdown")
 	C.qute_QTextEdit_setMarkdown(self, (*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)))
+	runtime.KeepAlive(this)
 }
 
 // SetText wraps QTextEdit::setText.
@@ -912,6 +999,7 @@ func (this *QTextEdit) SetMarkdown(markdown string) {
 func (this *QTextEdit) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetText")
 	C.qute_QTextEdit_setText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Cut wraps QTextEdit::cut.
@@ -922,6 +1010,7 @@ func (this *QTextEdit) SetText(text string) {
 func (this *QTextEdit) Cut() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Cut")
 	C.qute_QTextEdit_cut(self)
+	runtime.KeepAlive(this)
 }
 
 // Copy wraps QTextEdit::copy.
@@ -932,6 +1021,7 @@ func (this *QTextEdit) Cut() {
 func (this *QTextEdit) Copy() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Copy")
 	C.qute_QTextEdit_copy(self)
+	runtime.KeepAlive(this)
 }
 
 // Paste wraps QTextEdit::paste.
@@ -942,6 +1032,7 @@ func (this *QTextEdit) Copy() {
 func (this *QTextEdit) Paste() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Paste")
 	C.qute_QTextEdit_paste(self)
+	runtime.KeepAlive(this)
 }
 
 // Undo wraps QTextEdit::undo.
@@ -952,6 +1043,7 @@ func (this *QTextEdit) Paste() {
 func (this *QTextEdit) Undo() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Undo")
 	C.qute_QTextEdit_undo(self)
+	runtime.KeepAlive(this)
 }
 
 // Redo wraps QTextEdit::redo.
@@ -962,6 +1054,7 @@ func (this *QTextEdit) Undo() {
 func (this *QTextEdit) Redo() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Redo")
 	C.qute_QTextEdit_redo(self)
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QTextEdit::clear.
@@ -972,6 +1065,7 @@ func (this *QTextEdit) Redo() {
 func (this *QTextEdit) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Clear")
 	C.qute_QTextEdit_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectAll wraps QTextEdit::selectAll.
@@ -982,6 +1076,7 @@ func (this *QTextEdit) Clear() {
 func (this *QTextEdit) SelectAll() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SelectAll")
 	C.qute_QTextEdit_selectAll(self)
+	runtime.KeepAlive(this)
 }
 
 // InsertPlainText wraps QTextEdit::insertPlainText.
@@ -992,6 +1087,7 @@ func (this *QTextEdit) SelectAll() {
 func (this *QTextEdit) InsertPlainText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.InsertPlainText")
 	C.qute_QTextEdit_insertPlainText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // InsertHtml wraps QTextEdit::insertHtml.
@@ -1002,6 +1098,7 @@ func (this *QTextEdit) InsertPlainText(text string) {
 func (this *QTextEdit) InsertHtml(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.InsertHtml")
 	C.qute_QTextEdit_insertHtml(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // Append wraps QTextEdit::append.
@@ -1012,6 +1109,7 @@ func (this *QTextEdit) InsertHtml(text string) {
 func (this *QTextEdit) Append(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Append")
 	C.qute_QTextEdit_append(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // ScrollToAnchor wraps QTextEdit::scrollToAnchor.
@@ -1022,6 +1120,7 @@ func (this *QTextEdit) Append(text string) {
 func (this *QTextEdit) ScrollToAnchor(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ScrollToAnchor")
 	C.qute_QTextEdit_scrollToAnchor(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // ZoomIn wraps QTextEdit::zoomIn.
@@ -1032,6 +1131,7 @@ func (this *QTextEdit) ScrollToAnchor(name string) {
 func (this *QTextEdit) ZoomIn() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ZoomIn")
 	C.qute_QTextEdit_zoomIn(self)
+	runtime.KeepAlive(this)
 }
 
 // ZoomOut wraps QTextEdit::zoomOut.
@@ -1042,6 +1142,7 @@ func (this *QTextEdit) ZoomIn() {
 func (this *QTextEdit) ZoomOut() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ZoomOut")
 	C.qute_QTextEdit_zoomOut(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitTextChanged wraps emitting the textChanged signal.
@@ -1052,6 +1153,7 @@ func (this *QTextEdit) ZoomOut() {
 func (this *QTextEdit) EmitTextChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitTextChanged")
 	C.qute_QTextEdit_textChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitUndoAvailable wraps emitting the undoAvailable signal.
@@ -1062,6 +1164,7 @@ func (this *QTextEdit) EmitTextChanged() {
 func (this *QTextEdit) EmitUndoAvailable(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitUndoAvailable")
 	C.qute_QTextEdit_undoAvailable_1(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitRedoAvailable wraps emitting the redoAvailable signal.
@@ -1072,6 +1175,7 @@ func (this *QTextEdit) EmitUndoAvailable(bArg bool) {
 func (this *QTextEdit) EmitRedoAvailable(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitRedoAvailable")
 	C.qute_QTextEdit_redoAvailable_1(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentCharFormatChanged wraps emitting the currentCharFormatChanged signal.
@@ -1082,6 +1186,8 @@ func (this *QTextEdit) EmitRedoAvailable(bArg bool) {
 func (this *QTextEdit) EmitCurrentCharFormatChanged(format *qtgui.QTextCharFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitCurrentCharFormatChanged")
 	C.qute_QTextEdit_currentCharFormatChanged_1(self, rt.UseArg(unsafe.Pointer(format), "QTextEdit.EmitCurrentCharFormatChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // EmitCopyAvailable wraps emitting the copyAvailable signal.
@@ -1092,6 +1198,7 @@ func (this *QTextEdit) EmitCurrentCharFormatChanged(format *qtgui.QTextCharForma
 func (this *QTextEdit) EmitCopyAvailable(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitCopyAvailable")
 	C.qute_QTextEdit_copyAvailable_1(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // EmitSelectionChanged wraps emitting the selectionChanged signal.
@@ -1102,6 +1209,7 @@ func (this *QTextEdit) EmitCopyAvailable(bArg bool) {
 func (this *QTextEdit) EmitSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitSelectionChanged")
 	C.qute_QTextEdit_selectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitCursorPositionChanged wraps emitting the cursorPositionChanged signal.
@@ -1112,6 +1220,7 @@ func (this *QTextEdit) EmitSelectionChanged() {
 func (this *QTextEdit) EmitCursorPositionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitCursorPositionChanged")
 	C.qute_QTextEdit_cursorPositionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the

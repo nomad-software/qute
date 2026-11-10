@@ -5,6 +5,7 @@ package qtopenglwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -63,6 +64,7 @@ func NewQOpenGLWidget(parent qtwidgets.QWidgetLike) *QOpenGLWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQOpenGLWidget")
 	}
 	p := C.qute_QOpenGLWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,7 @@ func NewQOpenGLWidget(parent qtwidgets.QWidgetLike) *QOpenGLWidget {
 func (this *QOpenGLWidget) SetUpdateBehavior(updateBehavior QOpenGLWidgetUpdateBehavior) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.SetUpdateBehavior")
 	C.qute_QOpenGLWidget_setUpdateBehavior(self, C.int64_t(updateBehavior))
+	runtime.KeepAlive(this)
 }
 
 // UpdateBehavior wraps QOpenGLWidget::updateBehavior.
@@ -89,6 +92,7 @@ func (this *QOpenGLWidget) SetUpdateBehavior(updateBehavior QOpenGLWidgetUpdateB
 func (this *QOpenGLWidget) UpdateBehavior() QOpenGLWidgetUpdateBehavior {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.UpdateBehavior")
 	r := C.qute_QOpenGLWidget_updateBehavior(self)
+	runtime.KeepAlive(this)
 	return QOpenGLWidgetUpdateBehavior(r)
 }
 
@@ -100,6 +104,8 @@ func (this *QOpenGLWidget) UpdateBehavior() QOpenGLWidgetUpdateBehavior {
 func (this *QOpenGLWidget) SetFormat(format *qtgui.QSurfaceFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.SetFormat")
 	C.qute_QOpenGLWidget_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QOpenGLWidget.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
 }
 
 // Format wraps QOpenGLWidget::format.
@@ -112,6 +118,7 @@ func (this *QOpenGLWidget) SetFormat(format *qtgui.QSurfaceFormat) {
 func (this *QOpenGLWidget) Format() *qtgui.QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.Format")
 	r := C.qute_QOpenGLWidget_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -123,6 +130,7 @@ func (this *QOpenGLWidget) Format() *qtgui.QSurfaceFormat {
 func (this *QOpenGLWidget) TextureFormat() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.TextureFormat")
 	r := C.qute_QOpenGLWidget_textureFormat(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -134,6 +142,7 @@ func (this *QOpenGLWidget) TextureFormat() uint {
 func (this *QOpenGLWidget) SetTextureFormat(texFormat uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.SetTextureFormat")
 	C.qute_QOpenGLWidget_setTextureFormat(self, C.uint(texFormat))
+	runtime.KeepAlive(this)
 }
 
 // IsValid wraps QOpenGLWidget::isValid.
@@ -144,6 +153,7 @@ func (this *QOpenGLWidget) SetTextureFormat(texFormat uint) {
 func (this *QOpenGLWidget) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.IsValid")
 	r := C.qute_QOpenGLWidget_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -155,6 +165,7 @@ func (this *QOpenGLWidget) IsValid() bool {
 func (this *QOpenGLWidget) MakeCurrent() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.MakeCurrent")
 	C.qute_QOpenGLWidget_makeCurrent(self)
+	runtime.KeepAlive(this)
 }
 
 // MakeCurrentWithTargetBuffer wraps QOpenGLWidget::makeCurrent.
@@ -165,6 +176,7 @@ func (this *QOpenGLWidget) MakeCurrent() {
 func (this *QOpenGLWidget) MakeCurrentWithTargetBuffer(targetBuffer QOpenGLWidgetTargetBuffer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.MakeCurrentWithTargetBuffer")
 	C.qute_QOpenGLWidget_makeCurrent_1(self, C.int64_t(targetBuffer))
+	runtime.KeepAlive(this)
 }
 
 // DoneCurrent wraps QOpenGLWidget::doneCurrent.
@@ -175,6 +187,7 @@ func (this *QOpenGLWidget) MakeCurrentWithTargetBuffer(targetBuffer QOpenGLWidge
 func (this *QOpenGLWidget) DoneCurrent() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.DoneCurrent")
 	C.qute_QOpenGLWidget_doneCurrent(self)
+	runtime.KeepAlive(this)
 }
 
 // Context wraps QOpenGLWidget::context.
@@ -187,6 +200,7 @@ func (this *QOpenGLWidget) DoneCurrent() {
 func (this *QOpenGLWidget) Context() *qtgui.QOpenGLContext {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.Context")
 	r := C.qute_QOpenGLWidget_context(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QOpenGLContext](rt.WrapClass(r, "QOpenGLContext", rt.KeepOrBorrow), r)
 }
 
@@ -198,6 +212,7 @@ func (this *QOpenGLWidget) Context() *qtgui.QOpenGLContext {
 func (this *QOpenGLWidget) DefaultFramebufferObject() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.DefaultFramebufferObject")
 	r := C.qute_QOpenGLWidget_defaultFramebufferObject(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -209,6 +224,7 @@ func (this *QOpenGLWidget) DefaultFramebufferObject() uint {
 func (this *QOpenGLWidget) DefaultFramebufferObjectWithTargetBuffer(targetBuffer QOpenGLWidgetTargetBuffer) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.DefaultFramebufferObjectWithTargetBuffer")
 	r := C.qute_QOpenGLWidget_defaultFramebufferObject_1(self, C.int64_t(targetBuffer))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -222,6 +238,7 @@ func (this *QOpenGLWidget) DefaultFramebufferObjectWithTargetBuffer(targetBuffer
 func (this *QOpenGLWidget) GrabFramebuffer() *qtgui.QImage {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.GrabFramebuffer")
 	r := C.qute_QOpenGLWidget_grabFramebuffer(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -235,6 +252,7 @@ func (this *QOpenGLWidget) GrabFramebuffer() *qtgui.QImage {
 func (this *QOpenGLWidget) GrabFramebufferWithTargetBuffer(targetBuffer QOpenGLWidgetTargetBuffer) *qtgui.QImage {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.GrabFramebufferWithTargetBuffer")
 	r := C.qute_QOpenGLWidget_grabFramebuffer_1(self, C.int64_t(targetBuffer))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -246,6 +264,7 @@ func (this *QOpenGLWidget) GrabFramebufferWithTargetBuffer(targetBuffer QOpenGLW
 func (this *QOpenGLWidget) CurrentTargetBuffer() QOpenGLWidgetTargetBuffer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.CurrentTargetBuffer")
 	r := C.qute_QOpenGLWidget_currentTargetBuffer(self)
+	runtime.KeepAlive(this)
 	return QOpenGLWidgetTargetBuffer(r)
 }
 
@@ -257,6 +276,7 @@ func (this *QOpenGLWidget) CurrentTargetBuffer() QOpenGLWidgetTargetBuffer {
 func (this *QOpenGLWidget) EmitAboutToCompose() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.EmitAboutToCompose")
 	C.qute_QOpenGLWidget_aboutToCompose_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitFrameSwapped wraps emitting the frameSwapped signal.
@@ -267,6 +287,7 @@ func (this *QOpenGLWidget) EmitAboutToCompose() {
 func (this *QOpenGLWidget) EmitFrameSwapped() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.EmitFrameSwapped")
 	C.qute_QOpenGLWidget_frameSwapped_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitAboutToResize wraps emitting the aboutToResize signal.
@@ -277,6 +298,7 @@ func (this *QOpenGLWidget) EmitFrameSwapped() {
 func (this *QOpenGLWidget) EmitAboutToResize() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.EmitAboutToResize")
 	C.qute_QOpenGLWidget_aboutToResize_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitResized wraps emitting the resized signal.
@@ -287,6 +309,7 @@ func (this *QOpenGLWidget) EmitAboutToResize() {
 func (this *QOpenGLWidget) EmitResized() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.EmitResized")
 	C.qute_QOpenGLWidget_resized_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnAboutToCompose connects f to the aboutToCompose signal. The connection ends when the
@@ -702,18 +725,21 @@ type QOpenGLWidgetSuper struct{ this *QOpenGLWidget }
 func (s *QOpenGLWidgetSuper) InitializeGL() {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.InitializeGL")
 	C.qute_QOpenGLWidget_super_0(self)
+	runtime.KeepAlive(s.this)
 }
 
 // ResizeGL calls QOpenGLWidget::resizeGL.
 func (s *QOpenGLWidgetSuper) ResizeGL(w int, hArg int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.ResizeGL")
 	C.qute_QOpenGLWidget_super_1(self, C.int(w), C.int(hArg))
+	runtime.KeepAlive(s.this)
 }
 
 // PaintGL calls QOpenGLWidget::paintGL.
 func (s *QOpenGLWidgetSuper) PaintGL() {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.PaintGL")
 	C.qute_QOpenGLWidget_super_2(self)
+	runtime.KeepAlive(s.this)
 }
 
 // PaintEvent calls QOpenGLWidget::paintEvent.
@@ -724,6 +750,8 @@ func (s *QOpenGLWidgetSuper) PaintEvent(eArg *qtgui.QPaintEvent) {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQPaintEvent()), "QOpenGLWidget.Super.PaintEvent")
 	}
 	C.qute_QOpenGLWidget_super_3(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
 }
 
 // ResizeEvent calls QOpenGLWidget::resizeEvent.
@@ -734,6 +762,8 @@ func (s *QOpenGLWidgetSuper) ResizeEvent(eArg *qtgui.QResizeEvent) {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQResizeEvent()), "QOpenGLWidget.Super.ResizeEvent")
 	}
 	C.qute_QOpenGLWidget_super_4(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
 }
 
 // Event calls QOpenGLWidget::event.
@@ -743,37 +773,49 @@ func (s *QOpenGLWidgetSuper) Event(eArg *qtcore.QEvent) bool {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QOpenGLWidget.Super.Event")
 	}
-	return bool(C.qute_QOpenGLWidget_super_5(self, eArgPtr))
+	r := C.qute_QOpenGLWidget_super_5(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+	return bool(r)
 }
 
 // SetVisible calls QWidget::setVisible.
 func (s *QOpenGLWidgetSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.SetVisible")
 	C.qute_QOpenGLWidget_super_6(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
 }
 
 // SizeHint calls QWidget::sizeHint.
 func (s *QOpenGLWidgetSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.SizeHint")
-	return goQSize(C.qute_QOpenGLWidget_super_7(self))
+	r := C.qute_QOpenGLWidget_super_7(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // MinimumSizeHint calls QWidget::minimumSizeHint.
 func (s *QOpenGLWidgetSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.MinimumSizeHint")
-	return goQSize(C.qute_QOpenGLWidget_super_8(self))
+	r := C.qute_QOpenGLWidget_super_8(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QOpenGLWidgetSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.HeightForWidth")
-	return int(C.qute_QOpenGLWidget_super_9(self, C.int(arg0)))
+	r := C.qute_QOpenGLWidget_super_9(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QOpenGLWidgetSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.HasHeightForWidth")
-	return bool(C.qute_QOpenGLWidget_super_10(self))
+	r := C.qute_QOpenGLWidget_super_10(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // MousePressEvent calls QWidget::mousePressEvent.
@@ -784,6 +826,8 @@ func (s *QOpenGLWidgetSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MousePressEvent")
 	}
 	C.qute_QOpenGLWidget_super_11(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MouseReleaseEvent calls QWidget::mouseReleaseEvent.
@@ -794,6 +838,8 @@ func (s *QOpenGLWidgetSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MouseReleaseEvent")
 	}
 	C.qute_QOpenGLWidget_super_12(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MouseDoubleClickEvent calls QWidget::mouseDoubleClickEvent.
@@ -804,6 +850,8 @@ func (s *QOpenGLWidgetSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MouseDoubleClickEvent")
 	}
 	C.qute_QOpenGLWidget_super_13(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MouseMoveEvent calls QWidget::mouseMoveEvent.
@@ -814,6 +862,8 @@ func (s *QOpenGLWidgetSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MouseMoveEvent")
 	}
 	C.qute_QOpenGLWidget_super_14(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // WheelEvent calls QWidget::wheelEvent.
@@ -824,6 +874,8 @@ func (s *QOpenGLWidgetSuper) WheelEvent(event *qtgui.QWheelEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QOpenGLWidget.Super.WheelEvent")
 	}
 	C.qute_QOpenGLWidget_super_15(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // KeyPressEvent calls QWidget::keyPressEvent.
@@ -834,6 +886,8 @@ func (s *QOpenGLWidgetSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QOpenGLWidget.Super.KeyPressEvent")
 	}
 	C.qute_QOpenGLWidget_super_16(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // KeyReleaseEvent calls QWidget::keyReleaseEvent.
@@ -844,6 +898,8 @@ func (s *QOpenGLWidgetSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QOpenGLWidget.Super.KeyReleaseEvent")
 	}
 	C.qute_QOpenGLWidget_super_17(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusInEvent calls QWidget::focusInEvent.
@@ -854,6 +910,8 @@ func (s *QOpenGLWidgetSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QOpenGLWidget.Super.FocusInEvent")
 	}
 	C.qute_QOpenGLWidget_super_18(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusOutEvent calls QWidget::focusOutEvent.
@@ -864,6 +922,8 @@ func (s *QOpenGLWidgetSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QOpenGLWidget.Super.FocusOutEvent")
 	}
 	C.qute_QOpenGLWidget_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // EnterEvent calls QWidget::enterEvent.
@@ -874,6 +934,8 @@ func (s *QOpenGLWidgetSuper) EnterEvent(event *qtgui.QEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QOpenGLWidget.Super.EnterEvent")
 	}
 	C.qute_QOpenGLWidget_super_20(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // LeaveEvent calls QWidget::leaveEvent.
@@ -884,6 +946,8 @@ func (s *QOpenGLWidgetSuper) LeaveEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.LeaveEvent")
 	}
 	C.qute_QOpenGLWidget_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // MoveEvent calls QWidget::moveEvent.
@@ -894,6 +958,8 @@ func (s *QOpenGLWidgetSuper) MoveEvent(event *qtgui.QMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QOpenGLWidget.Super.MoveEvent")
 	}
 	C.qute_QOpenGLWidget_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CloseEvent calls QWidget::closeEvent.
@@ -904,6 +970,8 @@ func (s *QOpenGLWidgetSuper) CloseEvent(event *qtgui.QCloseEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QOpenGLWidget.Super.CloseEvent")
 	}
 	C.qute_QOpenGLWidget_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ContextMenuEvent calls QWidget::contextMenuEvent.
@@ -914,6 +982,8 @@ func (s *QOpenGLWidgetSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QOpenGLWidget.Super.ContextMenuEvent")
 	}
 	C.qute_QOpenGLWidget_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragEnterEvent calls QWidget::dragEnterEvent.
@@ -924,6 +994,8 @@ func (s *QOpenGLWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QOpenGLWidget.Super.DragEnterEvent")
 	}
 	C.qute_QOpenGLWidget_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragMoveEvent calls QWidget::dragMoveEvent.
@@ -934,6 +1006,8 @@ func (s *QOpenGLWidgetSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QOpenGLWidget.Super.DragMoveEvent")
 	}
 	C.qute_QOpenGLWidget_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DragLeaveEvent calls QWidget::dragLeaveEvent.
@@ -944,6 +1018,8 @@ func (s *QOpenGLWidgetSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QOpenGLWidget.Super.DragLeaveEvent")
 	}
 	C.qute_QOpenGLWidget_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // DropEvent calls QWidget::dropEvent.
@@ -954,6 +1030,8 @@ func (s *QOpenGLWidgetSuper) DropEvent(event *qtgui.QDropEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QOpenGLWidget.Super.DropEvent")
 	}
 	C.qute_QOpenGLWidget_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ShowEvent calls QWidget::showEvent.
@@ -964,6 +1042,8 @@ func (s *QOpenGLWidgetSuper) ShowEvent(event *qtgui.QShowEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QOpenGLWidget.Super.ShowEvent")
 	}
 	C.qute_QOpenGLWidget_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // HideEvent calls QWidget::hideEvent.
@@ -974,6 +1054,8 @@ func (s *QOpenGLWidgetSuper) HideEvent(event *qtgui.QHideEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QOpenGLWidget.Super.HideEvent")
 	}
 	C.qute_QOpenGLWidget_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChangeEvent calls QWidget::changeEvent.
@@ -984,12 +1066,16 @@ func (s *QOpenGLWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.ChangeEvent")
 	}
 	C.qute_QOpenGLWidget_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QOpenGLWidgetSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.FocusNextPrevChild")
-	return bool(C.qute_QOpenGLWidget_super_32(self, C.bool(next)))
+	r := C.qute_QOpenGLWidget_super_32(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -1003,7 +1089,11 @@ func (s *QOpenGLWidgetSuper) EventFilter(watched *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.EventFilter")
 	}
-	return bool(C.qute_QOpenGLWidget_super_33(self, watchedPtr, eventPtr))
+	r := C.qute_QOpenGLWidget_super_33(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // TimerEvent calls QObject::timerEvent.
@@ -1014,6 +1104,8 @@ func (s *QOpenGLWidgetSuper) TimerEvent(event *qtcore.QTimerEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QOpenGLWidget.Super.TimerEvent")
 	}
 	C.qute_QOpenGLWidget_super_34(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -1024,6 +1116,8 @@ func (s *QOpenGLWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QOpenGLWidget.Super.ChildEvent")
 	}
 	C.qute_QOpenGLWidget_super_35(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -1034,30 +1128,36 @@ func (s *QOpenGLWidgetSuper) CustomEvent(event *qtcore.QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.CustomEvent")
 	}
 	C.qute_QOpenGLWidget_super_36(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QOpenGLWidgetBase) UpdateMicroFocus() {
 	self := rt.Use(unsafe.Pointer(b.QOpenGLWidget), "QOpenGLWidget.UpdateMicroFocus")
 	C.qute_QOpenGLWidget_prot_updateMicroFocus(self)
+	runtime.KeepAlive(b)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QOpenGLWidgetBase) Create() {
 	self := rt.Use(unsafe.Pointer(b.QOpenGLWidget), "QOpenGLWidget.Create")
 	C.qute_QOpenGLWidget_prot_create(self)
+	runtime.KeepAlive(b)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QOpenGLWidgetBase) Destroy() {
 	self := rt.Use(unsafe.Pointer(b.QOpenGLWidget), "QOpenGLWidget.Destroy")
 	C.qute_QOpenGLWidget_prot_destroy(self)
+	runtime.KeepAlive(b)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QOpenGLWidgetBase) FocusNextChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QOpenGLWidget), "QOpenGLWidget.FocusNextChild")
 	r := C.qute_QOpenGLWidget_prot_focusNextChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1065,6 +1165,7 @@ func (b *QOpenGLWidgetBase) FocusNextChild() bool {
 func (b *QOpenGLWidgetBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(b.QOpenGLWidget), "QOpenGLWidget.FocusPreviousChild")
 	r := C.qute_QOpenGLWidget_prot_focusPreviousChild(self)
+	runtime.KeepAlive(b)
 	return bool(r)
 }
 
@@ -1072,6 +1173,7 @@ func (b *QOpenGLWidgetBase) FocusPreviousChild() bool {
 func (b *QOpenGLWidgetBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
 	self := rt.Use(unsafe.Pointer(b.QOpenGLWidget), "QOpenGLWidget.GetDecodedMetricF")
 	r := C.qute_QOpenGLWidget_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(b)
 	return float64(r)
 }
 
@@ -1089,6 +1191,7 @@ func NewQOpenGLWidgetWith(v QOpenGLWidgetSubclass, parent qtwidgets.QWidgetLike)
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQOpenGLWidgetWith")
 	}
 	p := C.qute_QOpenGLWidget_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,8 @@ func NewQItemSelectionRange() *QItemSelectionRange {
 func NewQItemSelectionRangeSpan(topL *QModelIndex, bottomR *QModelIndex) *QItemSelectionRange {
 	rt.CheckThread("NewQItemSelectionRangeSpan")
 	p := C.qute_QItemSelectionRange_new_1(rt.UseArg(unsafe.Pointer(topL), "NewQItemSelectionRangeSpan"), rt.UseArg(unsafe.Pointer(bottomR), "NewQItemSelectionRangeSpan"))
+	runtime.KeepAlive(topL)
+	runtime.KeepAlive(bottomR)
 	h := rt.WrapClass(p, "QItemSelectionRange", rt.NewOwned)
 	return rt.View[QItemSelectionRange](h, p)
 }
@@ -108,6 +111,7 @@ func NewQItemSelectionRangeSpan(topL *QModelIndex, bottomR *QModelIndex) *QItemS
 func NewQItemSelectionRangeOf(index *QModelIndex) *QItemSelectionRange {
 	rt.CheckThread("NewQItemSelectionRangeOf")
 	p := C.qute_QItemSelectionRange_new_2(rt.UseArg(unsafe.Pointer(index), "NewQItemSelectionRangeOf"))
+	runtime.KeepAlive(index)
 	h := rt.WrapClass(p, "QItemSelectionRange", rt.NewOwned)
 	return rt.View[QItemSelectionRange](h, p)
 }
@@ -120,6 +124,7 @@ func NewQItemSelectionRangeOf(index *QModelIndex) *QItemSelectionRange {
 func (this *QItemSelectionRange) Top() int {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Top")
 	r := C.qute_QItemSelectionRange_top(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -131,6 +136,7 @@ func (this *QItemSelectionRange) Top() int {
 func (this *QItemSelectionRange) Left() int {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Left")
 	r := C.qute_QItemSelectionRange_left(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -142,6 +148,7 @@ func (this *QItemSelectionRange) Left() int {
 func (this *QItemSelectionRange) Bottom() int {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Bottom")
 	r := C.qute_QItemSelectionRange_bottom(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -153,6 +160,7 @@ func (this *QItemSelectionRange) Bottom() int {
 func (this *QItemSelectionRange) Right() int {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Right")
 	r := C.qute_QItemSelectionRange_right(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -164,6 +172,7 @@ func (this *QItemSelectionRange) Right() int {
 func (this *QItemSelectionRange) Width() int {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Width")
 	r := C.qute_QItemSelectionRange_width(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -175,6 +184,7 @@ func (this *QItemSelectionRange) Width() int {
 func (this *QItemSelectionRange) Height() int {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Height")
 	r := C.qute_QItemSelectionRange_height(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -188,6 +198,7 @@ func (this *QItemSelectionRange) Height() int {
 func (this *QItemSelectionRange) TopLeft() *QPersistentModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.TopLeft")
 	r := C.qute_QItemSelectionRange_topLeft(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPersistentModelIndex](rt.WrapClass(r, "QPersistentModelIndex", rt.TakeOwned), r)
 }
 
@@ -201,6 +212,7 @@ func (this *QItemSelectionRange) TopLeft() *QPersistentModelIndex {
 func (this *QItemSelectionRange) BottomRight() *QPersistentModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.BottomRight")
 	r := C.qute_QItemSelectionRange_bottomRight(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPersistentModelIndex](rt.WrapClass(r, "QPersistentModelIndex", rt.TakeOwned), r)
 }
 
@@ -214,6 +226,7 @@ func (this *QItemSelectionRange) BottomRight() *QPersistentModelIndex {
 func (this *QItemSelectionRange) Parent() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Parent")
 	r := C.qute_QItemSelectionRange_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -227,6 +240,7 @@ func (this *QItemSelectionRange) Parent() *QModelIndex {
 func (this *QItemSelectionRange) Model() *QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Model")
 	r := C.qute_QItemSelectionRange_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -238,6 +252,8 @@ func (this *QItemSelectionRange) Model() *QAbstractItemModel {
 func (this *QItemSelectionRange) Contains(index *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Contains")
 	r := C.qute_QItemSelectionRange_contains(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionRange.Contains"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -249,6 +265,8 @@ func (this *QItemSelectionRange) Contains(index *QModelIndex) bool {
 func (this *QItemSelectionRange) ContainsRow(row int, column int, parentIndex *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.ContainsRow")
 	r := C.qute_QItemSelectionRange_contains_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parentIndex), "QItemSelectionRange.ContainsRow"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parentIndex)
 	return bool(r)
 }
 
@@ -260,6 +278,8 @@ func (this *QItemSelectionRange) ContainsRow(row int, column int, parentIndex *Q
 func (this *QItemSelectionRange) Intersects(other *QItemSelectionRange) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Intersects")
 	r := C.qute_QItemSelectionRange_intersects(self, rt.UseArg(unsafe.Pointer(other), "QItemSelectionRange.Intersects"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
 	return bool(r)
 }
 
@@ -273,6 +293,8 @@ func (this *QItemSelectionRange) Intersects(other *QItemSelectionRange) bool {
 func (this *QItemSelectionRange) Intersected(other *QItemSelectionRange) *QItemSelectionRange {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Intersected")
 	r := C.qute_QItemSelectionRange_intersected(self, rt.UseArg(unsafe.Pointer(other), "QItemSelectionRange.Intersected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
 	return rt.View[QItemSelectionRange](rt.WrapClass(r, "QItemSelectionRange", rt.TakeOwned), r)
 }
 
@@ -284,6 +306,7 @@ func (this *QItemSelectionRange) Intersected(other *QItemSelectionRange) *QItemS
 func (this *QItemSelectionRange) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.IsValid")
 	r := C.qute_QItemSelectionRange_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -295,6 +318,7 @@ func (this *QItemSelectionRange) IsValid() bool {
 func (this *QItemSelectionRange) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.IsEmpty")
 	r := C.qute_QItemSelectionRange_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -306,6 +330,7 @@ func (this *QItemSelectionRange) IsEmpty() bool {
 func (this *QItemSelectionRange) Indexes() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Indexes")
 	r := C.qute_QItemSelectionRange_indexes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})

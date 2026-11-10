@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQDoubleValidator(parent qtcore.QObjectLike) *QDoubleValidator {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQDoubleValidator")
 	}
 	p := C.qute_QDoubleValidator_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQDoubleValidatorWithBottom(bottom float64, top float64, decimals int, pa
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQDoubleValidatorWithBottom")
 	}
 	p := C.qute_QDoubleValidator_new_1(C.double(bottom), C.double(top), C.int(decimals), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQDoubleValidatorWithBottom(bottom float64, top float64, decimals int, pa
 func (this *QDoubleValidator) SetRangeDecimals(bottom float64, top float64, decimals int) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetRangeDecimals")
 	C.qute_QDoubleValidator_setRange(self, C.double(bottom), C.double(top), C.int(decimals))
+	runtime.KeepAlive(this)
 }
 
 // SetRange wraps QDoubleValidator::setRange.
@@ -109,6 +113,7 @@ func (this *QDoubleValidator) SetRangeDecimals(bottom float64, top float64, deci
 func (this *QDoubleValidator) SetRange(bottom float64, top float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetRange")
 	C.qute_QDoubleValidator_setRange_1(self, C.double(bottom), C.double(top))
+	runtime.KeepAlive(this)
 }
 
 // SetBottom wraps QDoubleValidator::setBottom.
@@ -119,6 +124,7 @@ func (this *QDoubleValidator) SetRange(bottom float64, top float64) {
 func (this *QDoubleValidator) SetBottom(bottom float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetBottom")
 	C.qute_QDoubleValidator_setBottom(self, C.double(bottom))
+	runtime.KeepAlive(this)
 }
 
 // SetTop wraps QDoubleValidator::setTop.
@@ -129,6 +135,7 @@ func (this *QDoubleValidator) SetBottom(bottom float64) {
 func (this *QDoubleValidator) SetTop(top float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetTop")
 	C.qute_QDoubleValidator_setTop(self, C.double(top))
+	runtime.KeepAlive(this)
 }
 
 // SetDecimals wraps QDoubleValidator::setDecimals.
@@ -139,6 +146,7 @@ func (this *QDoubleValidator) SetTop(top float64) {
 func (this *QDoubleValidator) SetDecimals(decimals int) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetDecimals")
 	C.qute_QDoubleValidator_setDecimals(self, C.int(decimals))
+	runtime.KeepAlive(this)
 }
 
 // SetNotation wraps QDoubleValidator::setNotation.
@@ -149,6 +157,7 @@ func (this *QDoubleValidator) SetDecimals(decimals int) {
 func (this *QDoubleValidator) SetNotation(notation QDoubleValidatorNotation) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.SetNotation")
 	C.qute_QDoubleValidator_setNotation(self, C.int64_t(notation))
+	runtime.KeepAlive(this)
 }
 
 // Bottom wraps QDoubleValidator::bottom.
@@ -159,6 +168,7 @@ func (this *QDoubleValidator) SetNotation(notation QDoubleValidatorNotation) {
 func (this *QDoubleValidator) Bottom() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.Bottom")
 	r := C.qute_QDoubleValidator_bottom(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -170,6 +180,7 @@ func (this *QDoubleValidator) Bottom() float64 {
 func (this *QDoubleValidator) Top() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.Top")
 	r := C.qute_QDoubleValidator_top(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -181,6 +192,7 @@ func (this *QDoubleValidator) Top() float64 {
 func (this *QDoubleValidator) Decimals() int {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.Decimals")
 	r := C.qute_QDoubleValidator_decimals(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -192,6 +204,7 @@ func (this *QDoubleValidator) Decimals() int {
 func (this *QDoubleValidator) Notation() QDoubleValidatorNotation {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.Notation")
 	r := C.qute_QDoubleValidator_notation(self)
+	runtime.KeepAlive(this)
 	return QDoubleValidatorNotation(r)
 }
 
@@ -203,6 +216,7 @@ func (this *QDoubleValidator) Notation() QDoubleValidatorNotation {
 func (this *QDoubleValidator) EmitBottomChanged(bottom float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.EmitBottomChanged")
 	C.qute_QDoubleValidator_bottomChanged_1(self, C.double(bottom))
+	runtime.KeepAlive(this)
 }
 
 // EmitTopChanged wraps emitting the topChanged signal.
@@ -213,6 +227,7 @@ func (this *QDoubleValidator) EmitBottomChanged(bottom float64) {
 func (this *QDoubleValidator) EmitTopChanged(top float64) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.EmitTopChanged")
 	C.qute_QDoubleValidator_topChanged_1(self, C.double(top))
+	runtime.KeepAlive(this)
 }
 
 // EmitDecimalsChanged wraps emitting the decimalsChanged signal.
@@ -223,6 +238,7 @@ func (this *QDoubleValidator) EmitTopChanged(top float64) {
 func (this *QDoubleValidator) EmitDecimalsChanged(decimals int) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.EmitDecimalsChanged")
 	C.qute_QDoubleValidator_decimalsChanged_1(self, C.int(decimals))
+	runtime.KeepAlive(this)
 }
 
 // EmitNotationChanged wraps emitting the notationChanged signal.
@@ -233,6 +249,7 @@ func (this *QDoubleValidator) EmitDecimalsChanged(decimals int) {
 func (this *QDoubleValidator) EmitNotationChanged(notation QDoubleValidatorNotation) {
 	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.EmitNotationChanged")
 	C.qute_QDoubleValidator_notationChanged_1(self, C.int64_t(notation))
+	runtime.KeepAlive(this)
 }
 
 // OnBottomChanged connects f to the bottomChanged signal. The connection ends when the

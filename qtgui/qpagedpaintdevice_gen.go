@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -40,6 +41,7 @@ func QPagedPaintDeviceFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPagedPai
 func (this *QPagedPaintDevice) NewPage() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPagedPaintDevice.NewPage")
 	r := C.qute_QPagedPaintDevice_newPage(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -51,5 +53,6 @@ func (this *QPagedPaintDevice) NewPage() bool {
 func (this *QPagedPaintDevice) SetPageMargins(margins qtcore.QMarginsF) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPagedPaintDevice.SetPageMargins")
 	r := C.qute_QPagedPaintDevice_setPageMargins(self, cQMarginsF(margins))
+	runtime.KeepAlive(this)
 	return bool(r)
 }

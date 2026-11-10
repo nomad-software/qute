@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func (this *QIODevice) AsQIODeviceBase() *QIODeviceBase {
 func (this *QIODevice) OpenMode() QIODeviceBaseOpenMode {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.OpenMode")
 	r := C.qute_QIODevice_openMode(self)
+	runtime.KeepAlive(this)
 	return QIODeviceBaseOpenMode(r)
 }
 
@@ -72,6 +74,7 @@ func (this *QIODevice) OpenMode() QIODeviceBaseOpenMode {
 func (this *QIODevice) SetTextModeEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.SetTextModeEnabled")
 	C.qute_QIODevice_setTextModeEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsTextModeEnabled wraps QIODevice::isTextModeEnabled.
@@ -82,6 +85,7 @@ func (this *QIODevice) SetTextModeEnabled(enabled bool) {
 func (this *QIODevice) IsTextModeEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.IsTextModeEnabled")
 	r := C.qute_QIODevice_isTextModeEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -93,6 +97,7 @@ func (this *QIODevice) IsTextModeEnabled() bool {
 func (this *QIODevice) IsOpen() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.IsOpen")
 	r := C.qute_QIODevice_isOpen(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -104,6 +109,7 @@ func (this *QIODevice) IsOpen() bool {
 func (this *QIODevice) IsReadable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.IsReadable")
 	r := C.qute_QIODevice_isReadable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -115,6 +121,7 @@ func (this *QIODevice) IsReadable() bool {
 func (this *QIODevice) IsWritable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.IsWritable")
 	r := C.qute_QIODevice_isWritable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -126,6 +133,7 @@ func (this *QIODevice) IsWritable() bool {
 func (this *QIODevice) IsSequential() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.IsSequential")
 	r := C.qute_QIODevice_isSequential(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -137,6 +145,7 @@ func (this *QIODevice) IsSequential() bool {
 func (this *QIODevice) ReadChannelCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadChannelCount")
 	r := C.qute_QIODevice_readChannelCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -148,6 +157,7 @@ func (this *QIODevice) ReadChannelCount() int {
 func (this *QIODevice) WriteChannelCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.WriteChannelCount")
 	r := C.qute_QIODevice_writeChannelCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -159,6 +169,7 @@ func (this *QIODevice) WriteChannelCount() int {
 func (this *QIODevice) CurrentReadChannel() int {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.CurrentReadChannel")
 	r := C.qute_QIODevice_currentReadChannel(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -170,6 +181,7 @@ func (this *QIODevice) CurrentReadChannel() int {
 func (this *QIODevice) SetCurrentReadChannel(channel int) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.SetCurrentReadChannel")
 	C.qute_QIODevice_setCurrentReadChannel(self, C.int(channel))
+	runtime.KeepAlive(this)
 }
 
 // CurrentWriteChannel wraps QIODevice::currentWriteChannel.
@@ -180,6 +192,7 @@ func (this *QIODevice) SetCurrentReadChannel(channel int) {
 func (this *QIODevice) CurrentWriteChannel() int {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.CurrentWriteChannel")
 	r := C.qute_QIODevice_currentWriteChannel(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -191,6 +204,7 @@ func (this *QIODevice) CurrentWriteChannel() int {
 func (this *QIODevice) SetCurrentWriteChannel(channel int) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.SetCurrentWriteChannel")
 	C.qute_QIODevice_setCurrentWriteChannel(self, C.int(channel))
+	runtime.KeepAlive(this)
 }
 
 // Open wraps QIODevice::open.
@@ -201,6 +215,7 @@ func (this *QIODevice) SetCurrentWriteChannel(channel int) {
 func (this *QIODevice) Open(mode QIODeviceBaseOpenMode) bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Open")
 	r := C.qute_QIODevice_open(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -212,6 +227,7 @@ func (this *QIODevice) Open(mode QIODeviceBaseOpenMode) bool {
 func (this *QIODevice) Close() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Close")
 	C.qute_QIODevice_close(self)
+	runtime.KeepAlive(this)
 }
 
 // Pos wraps QIODevice::pos.
@@ -222,6 +238,7 @@ func (this *QIODevice) Close() {
 func (this *QIODevice) Pos() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Pos")
 	r := C.qute_QIODevice_pos(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -233,6 +250,7 @@ func (this *QIODevice) Pos() int64 {
 func (this *QIODevice) Size() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Size")
 	r := C.qute_QIODevice_size(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -246,6 +264,7 @@ func (this *QIODevice) Size() int64 {
 func (this *QIODevice) SeekTo(pos int64) bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.SeekTo")
 	r := C.qute_QIODevice_seek(self, C.longlong(pos))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -257,6 +276,7 @@ func (this *QIODevice) SeekTo(pos int64) bool {
 func (this *QIODevice) AtEnd() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.AtEnd")
 	r := C.qute_QIODevice_atEnd(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -268,6 +288,7 @@ func (this *QIODevice) AtEnd() bool {
 func (this *QIODevice) Reset() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Reset")
 	r := C.qute_QIODevice_reset(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -279,6 +300,7 @@ func (this *QIODevice) Reset() bool {
 func (this *QIODevice) BytesAvailable() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.BytesAvailable")
 	r := C.qute_QIODevice_bytesAvailable(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -290,6 +312,7 @@ func (this *QIODevice) BytesAvailable() int64 {
 func (this *QIODevice) BytesToWrite() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.BytesToWrite")
 	r := C.qute_QIODevice_bytesToWrite(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -301,6 +324,7 @@ func (this *QIODevice) BytesToWrite() int64 {
 func (this *QIODevice) Read(data []byte) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Read")
 	r := C.qute_QIODevice_read(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -312,6 +336,7 @@ func (this *QIODevice) Read(data []byte) int64 {
 func (this *QIODevice) ReadMaxlen(maxlen int64) []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadMaxlen")
 	r := C.qute_QIODevice_read_1(self, C.longlong(maxlen))
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -323,6 +348,7 @@ func (this *QIODevice) ReadMaxlen(maxlen int64) []byte {
 func (this *QIODevice) ReadAll() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadAll")
 	r := C.qute_QIODevice_readAll(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -334,6 +360,7 @@ func (this *QIODevice) ReadAll() []byte {
 func (this *QIODevice) ReadLineWithBytes(data []byte) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineWithBytes")
 	r := C.qute_QIODevice_readLine(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -345,6 +372,7 @@ func (this *QIODevice) ReadLineWithBytes(data []byte) int64 {
 func (this *QIODevice) ReadLine() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLine")
 	r := C.qute_QIODevice_readLine_1(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -357,6 +385,7 @@ func (this *QIODevice) ReadLineInto() (bool, []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineInto")
 	var resultOut C.qute_str
 	r := C.qute_QIODevice_readLineInto(self, &resultOut)
+	runtime.KeepAlive(this)
 	return bool(r), quteBytes(resultOut)
 }
 
@@ -368,6 +397,7 @@ func (this *QIODevice) ReadLineInto() (bool, []byte) {
 func (this *QIODevice) ReadLineIntoWithBytes(buffer []byte) []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineIntoWithBytes")
 	r := C.qute_QIODevice_readLineInto_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(buffer))), C.ptrdiff_t(len(buffer)))
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -379,6 +409,7 @@ func (this *QIODevice) ReadLineIntoWithBytes(buffer []byte) []byte {
 func (this *QIODevice) CanReadLine() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.CanReadLine")
 	r := C.qute_QIODevice_canReadLine(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -390,6 +421,7 @@ func (this *QIODevice) CanReadLine() bool {
 func (this *QIODevice) StartTransaction() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.StartTransaction")
 	C.qute_QIODevice_startTransaction(self)
+	runtime.KeepAlive(this)
 }
 
 // CommitTransaction wraps QIODevice::commitTransaction.
@@ -400,6 +432,7 @@ func (this *QIODevice) StartTransaction() {
 func (this *QIODevice) CommitTransaction() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.CommitTransaction")
 	C.qute_QIODevice_commitTransaction(self)
+	runtime.KeepAlive(this)
 }
 
 // RollbackTransaction wraps QIODevice::rollbackTransaction.
@@ -410,6 +443,7 @@ func (this *QIODevice) CommitTransaction() {
 func (this *QIODevice) RollbackTransaction() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.RollbackTransaction")
 	C.qute_QIODevice_rollbackTransaction(self)
+	runtime.KeepAlive(this)
 }
 
 // IsTransactionStarted wraps QIODevice::isTransactionStarted.
@@ -420,6 +454,7 @@ func (this *QIODevice) RollbackTransaction() {
 func (this *QIODevice) IsTransactionStarted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.IsTransactionStarted")
 	r := C.qute_QIODevice_isTransactionStarted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -433,6 +468,7 @@ func (this *QIODevice) WriteString(data string) int64 {
 	dataCStr := C.CString(data)
 	defer C.free(unsafe.Pointer(dataCStr))
 	r := C.qute_QIODevice_write(self, dataCStr)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -444,6 +480,7 @@ func (this *QIODevice) WriteString(data string) int64 {
 func (this *QIODevice) Write(data []byte) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Write")
 	r := C.qute_QIODevice_write_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -455,6 +492,7 @@ func (this *QIODevice) Write(data []byte) int64 {
 func (this *QIODevice) Peek(data []byte) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Peek")
 	r := C.qute_QIODevice_peek(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -466,6 +504,7 @@ func (this *QIODevice) Peek(data []byte) int64 {
 func (this *QIODevice) PeekMaxlen(maxlen int64) []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.PeekMaxlen")
 	r := C.qute_QIODevice_peek_1(self, C.longlong(maxlen))
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -477,6 +516,7 @@ func (this *QIODevice) PeekMaxlen(maxlen int64) []byte {
 func (this *QIODevice) Skip(maxSize int64) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.Skip")
 	r := C.qute_QIODevice_skip(self, C.longlong(maxSize))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -488,6 +528,7 @@ func (this *QIODevice) Skip(maxSize int64) int64 {
 func (this *QIODevice) WaitForReadyRead(msecs int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.WaitForReadyRead")
 	r := C.qute_QIODevice_waitForReadyRead(self, C.int(msecs))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -499,6 +540,7 @@ func (this *QIODevice) WaitForReadyRead(msecs int) bool {
 func (this *QIODevice) WaitForBytesWritten(msecs int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.WaitForBytesWritten")
 	r := C.qute_QIODevice_waitForBytesWritten(self, C.int(msecs))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -510,6 +552,7 @@ func (this *QIODevice) WaitForBytesWritten(msecs int) bool {
 func (this *QIODevice) UngetChar(c byte) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.UngetChar")
 	C.qute_QIODevice_ungetChar(self, C.char(c))
+	runtime.KeepAlive(this)
 }
 
 // PutChar wraps QIODevice::putChar.
@@ -520,6 +563,7 @@ func (this *QIODevice) UngetChar(c byte) {
 func (this *QIODevice) PutChar(c byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.PutChar")
 	r := C.qute_QIODevice_putChar(self, C.char(c))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -532,6 +576,7 @@ func (this *QIODevice) GetChar() (bool, byte) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.GetChar")
 	var cOut C.char
 	r := C.qute_QIODevice_getChar(self, &cOut)
+	runtime.KeepAlive(this)
 	return bool(r), byte(cOut)
 }
 
@@ -543,6 +588,7 @@ func (this *QIODevice) GetChar() (bool, byte) {
 func (this *QIODevice) ErrorString() string {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ErrorString")
 	r := C.qute_QIODevice_errorString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -554,6 +600,7 @@ func (this *QIODevice) ErrorString() string {
 func (this *QIODevice) EmitReadyRead() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitReadyRead")
 	C.qute_QIODevice_readyRead_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitChannelReadyRead wraps emitting the channelReadyRead signal.
@@ -564,6 +611,7 @@ func (this *QIODevice) EmitReadyRead() {
 func (this *QIODevice) EmitChannelReadyRead(channel int) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitChannelReadyRead")
 	C.qute_QIODevice_channelReadyRead_1(self, C.int(channel))
+	runtime.KeepAlive(this)
 }
 
 // EmitBytesWritten wraps emitting the bytesWritten signal.
@@ -574,6 +622,7 @@ func (this *QIODevice) EmitChannelReadyRead(channel int) {
 func (this *QIODevice) EmitBytesWritten(bytes int64) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitBytesWritten")
 	C.qute_QIODevice_bytesWritten_1(self, C.longlong(bytes))
+	runtime.KeepAlive(this)
 }
 
 // EmitChannelBytesWritten wraps emitting the channelBytesWritten signal.
@@ -584,6 +633,7 @@ func (this *QIODevice) EmitBytesWritten(bytes int64) {
 func (this *QIODevice) EmitChannelBytesWritten(channel int, bytes int64) {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitChannelBytesWritten")
 	C.qute_QIODevice_channelBytesWritten_1(self, C.int(channel), C.longlong(bytes))
+	runtime.KeepAlive(this)
 }
 
 // EmitAboutToClose wraps emitting the aboutToClose signal.
@@ -594,6 +644,7 @@ func (this *QIODevice) EmitChannelBytesWritten(channel int, bytes int64) {
 func (this *QIODevice) EmitAboutToClose() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitAboutToClose")
 	C.qute_QIODevice_aboutToClose_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitReadChannelFinished wraps emitting the readChannelFinished signal.
@@ -604,6 +655,7 @@ func (this *QIODevice) EmitAboutToClose() {
 func (this *QIODevice) EmitReadChannelFinished() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitReadChannelFinished")
 	C.qute_QIODevice_readChannelFinished_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnReadyRead connects f to the readyRead signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -54,6 +55,7 @@ func NewQStyleOptionViewItem() *QStyleOptionViewItem {
 func (this *QStyleOptionViewItem) DisplayAlignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.DisplayAlignment")
 	r := C.qute_QStyleOptionViewItem_get_displayAlignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -67,6 +69,7 @@ func (this *QStyleOptionViewItem) DisplayAlignment() qtcore.Alignment {
 func (this *QStyleOptionViewItem) SetDisplayAlignment(displayAlignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetDisplayAlignment")
 	C.qute_QStyleOptionViewItem_set_displayAlignment(self, C.int64_t(displayAlignment))
+	runtime.KeepAlive(this)
 }
 
 // DecorationAlignment wraps the public field QStyleOptionViewItem::decorationAlignment.
@@ -77,6 +80,7 @@ func (this *QStyleOptionViewItem) SetDisplayAlignment(displayAlignment qtcore.Al
 func (this *QStyleOptionViewItem) DecorationAlignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.DecorationAlignment")
 	r := C.qute_QStyleOptionViewItem_get_decorationAlignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -90,6 +94,7 @@ func (this *QStyleOptionViewItem) DecorationAlignment() qtcore.Alignment {
 func (this *QStyleOptionViewItem) SetDecorationAlignment(decorationAlignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetDecorationAlignment")
 	C.qute_QStyleOptionViewItem_set_decorationAlignment(self, C.int64_t(decorationAlignment))
+	runtime.KeepAlive(this)
 }
 
 // TextElideMode wraps the public field QStyleOptionViewItem::textElideMode.
@@ -100,6 +105,7 @@ func (this *QStyleOptionViewItem) SetDecorationAlignment(decorationAlignment qtc
 func (this *QStyleOptionViewItem) TextElideMode() qtcore.TextElideMode {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.TextElideMode")
 	r := C.qute_QStyleOptionViewItem_get_textElideMode(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextElideMode(r)
 }
 
@@ -113,6 +119,7 @@ func (this *QStyleOptionViewItem) TextElideMode() qtcore.TextElideMode {
 func (this *QStyleOptionViewItem) SetTextElideMode(textElideMode qtcore.TextElideMode) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetTextElideMode")
 	C.qute_QStyleOptionViewItem_set_textElideMode(self, C.int64_t(textElideMode))
+	runtime.KeepAlive(this)
 }
 
 // DecorationPosition wraps the public field QStyleOptionViewItem::decorationPosition.
@@ -123,6 +130,7 @@ func (this *QStyleOptionViewItem) SetTextElideMode(textElideMode qtcore.TextElid
 func (this *QStyleOptionViewItem) DecorationPosition() QStyleOptionViewItemPosition {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.DecorationPosition")
 	r := C.qute_QStyleOptionViewItem_get_decorationPosition(self)
+	runtime.KeepAlive(this)
 	return QStyleOptionViewItemPosition(r)
 }
 
@@ -136,6 +144,7 @@ func (this *QStyleOptionViewItem) DecorationPosition() QStyleOptionViewItemPosit
 func (this *QStyleOptionViewItem) SetDecorationPosition(decorationPosition QStyleOptionViewItemPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetDecorationPosition")
 	C.qute_QStyleOptionViewItem_set_decorationPosition(self, C.int64_t(decorationPosition))
+	runtime.KeepAlive(this)
 }
 
 // DecorationSize wraps the public field QStyleOptionViewItem::decorationSize.
@@ -146,6 +155,7 @@ func (this *QStyleOptionViewItem) SetDecorationPosition(decorationPosition QStyl
 func (this *QStyleOptionViewItem) DecorationSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.DecorationSize")
 	r := C.qute_QStyleOptionViewItem_get_decorationSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -159,6 +169,7 @@ func (this *QStyleOptionViewItem) DecorationSize() qtcore.QSize {
 func (this *QStyleOptionViewItem) SetDecorationSize(decorationSize qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetDecorationSize")
 	C.qute_QStyleOptionViewItem_set_decorationSize(self, cQSize(decorationSize))
+	runtime.KeepAlive(this)
 }
 
 // Font wraps the public field QStyleOptionViewItem::font.
@@ -171,6 +182,7 @@ func (this *QStyleOptionViewItem) SetDecorationSize(decorationSize qtcore.QSize)
 func (this *QStyleOptionViewItem) Font() *qtgui.QFont {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Font")
 	r := C.qute_QStyleOptionViewItem_get_font(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -184,6 +196,8 @@ func (this *QStyleOptionViewItem) Font() *qtgui.QFont {
 func (this *QStyleOptionViewItem) SetFont(font *qtgui.QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetFont")
 	C.qute_QStyleOptionViewItem_set_font(self, rt.UseArg(unsafe.Pointer(font), "QStyleOptionViewItem.SetFont"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 }
 
 // ShowDecorationSelected wraps the public field QStyleOptionViewItem::showDecorationSelected.
@@ -194,6 +208,7 @@ func (this *QStyleOptionViewItem) SetFont(font *qtgui.QFont) {
 func (this *QStyleOptionViewItem) ShowDecorationSelected() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.ShowDecorationSelected")
 	r := C.qute_QStyleOptionViewItem_get_showDecorationSelected(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -207,6 +222,7 @@ func (this *QStyleOptionViewItem) ShowDecorationSelected() bool {
 func (this *QStyleOptionViewItem) SetShowDecorationSelected(showDecorationSelected bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetShowDecorationSelected")
 	C.qute_QStyleOptionViewItem_set_showDecorationSelected(self, C.bool(showDecorationSelected))
+	runtime.KeepAlive(this)
 }
 
 // Features wraps the public field QStyleOptionViewItem::features.
@@ -217,6 +233,7 @@ func (this *QStyleOptionViewItem) SetShowDecorationSelected(showDecorationSelect
 func (this *QStyleOptionViewItem) Features() QStyleOptionViewItemViewItemFeatures {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Features")
 	r := C.qute_QStyleOptionViewItem_get_features(self)
+	runtime.KeepAlive(this)
 	return QStyleOptionViewItemViewItemFeatures(r)
 }
 
@@ -230,6 +247,7 @@ func (this *QStyleOptionViewItem) Features() QStyleOptionViewItemViewItemFeature
 func (this *QStyleOptionViewItem) SetFeatures(features QStyleOptionViewItemViewItemFeatures) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetFeatures")
 	C.qute_QStyleOptionViewItem_set_features(self, C.int64_t(features))
+	runtime.KeepAlive(this)
 }
 
 // Locale wraps the public field QStyleOptionViewItem::locale.
@@ -242,6 +260,7 @@ func (this *QStyleOptionViewItem) SetFeatures(features QStyleOptionViewItemViewI
 func (this *QStyleOptionViewItem) Locale() *qtcore.QLocale {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Locale")
 	r := C.qute_QStyleOptionViewItem_get_locale(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
 }
 
@@ -255,6 +274,8 @@ func (this *QStyleOptionViewItem) Locale() *qtcore.QLocale {
 func (this *QStyleOptionViewItem) SetLocale(locale *qtcore.QLocale) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetLocale")
 	C.qute_QStyleOptionViewItem_set_locale(self, rt.UseArg(unsafe.Pointer(locale), "QStyleOptionViewItem.SetLocale"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
 }
 
 // Widget wraps the public field QStyleOptionViewItem::widget.
@@ -267,6 +288,7 @@ func (this *QStyleOptionViewItem) SetLocale(locale *qtcore.QLocale) {
 func (this *QStyleOptionViewItem) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Widget")
 	r := C.qute_QStyleOptionViewItem_get_widget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -284,6 +306,8 @@ func (this *QStyleOptionViewItem) SetWidget(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyleOptionViewItem.SetWidget")
 	}
 	C.qute_QStyleOptionViewItem_set_widget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // Index wraps the public field QStyleOptionViewItem::index.
@@ -296,6 +320,7 @@ func (this *QStyleOptionViewItem) SetWidget(widget QWidgetLike) {
 func (this *QStyleOptionViewItem) Index() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Index")
 	r := C.qute_QStyleOptionViewItem_get_index(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -309,6 +334,8 @@ func (this *QStyleOptionViewItem) Index() *qtcore.QModelIndex {
 func (this *QStyleOptionViewItem) SetIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetIndex")
 	C.qute_QStyleOptionViewItem_set_index(self, rt.UseArg(unsafe.Pointer(index), "QStyleOptionViewItem.SetIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // CheckState wraps the public field QStyleOptionViewItem::checkState.
@@ -319,6 +346,7 @@ func (this *QStyleOptionViewItem) SetIndex(index *qtcore.QModelIndex) {
 func (this *QStyleOptionViewItem) CheckState() qtcore.CheckState {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.CheckState")
 	r := C.qute_QStyleOptionViewItem_get_checkState(self)
+	runtime.KeepAlive(this)
 	return qtcore.CheckState(r)
 }
 
@@ -332,6 +360,7 @@ func (this *QStyleOptionViewItem) CheckState() qtcore.CheckState {
 func (this *QStyleOptionViewItem) SetCheckState(checkState qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetCheckState")
 	C.qute_QStyleOptionViewItem_set_checkState(self, C.int64_t(checkState))
+	runtime.KeepAlive(this)
 }
 
 // Icon wraps the public field QStyleOptionViewItem::icon.
@@ -344,6 +373,7 @@ func (this *QStyleOptionViewItem) SetCheckState(checkState qtcore.CheckState) {
 func (this *QStyleOptionViewItem) Icon() *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Icon")
 	r := C.qute_QStyleOptionViewItem_get_icon(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -357,6 +387,8 @@ func (this *QStyleOptionViewItem) Icon() *qtgui.QIcon {
 func (this *QStyleOptionViewItem) SetIcon(icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetIcon")
 	C.qute_QStyleOptionViewItem_set_icon(self, rt.UseArg(unsafe.Pointer(icon), "QStyleOptionViewItem.SetIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // Text wraps the public field QStyleOptionViewItem::text.
@@ -367,6 +399,7 @@ func (this *QStyleOptionViewItem) SetIcon(icon *qtgui.QIcon) {
 func (this *QStyleOptionViewItem) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Text")
 	r := C.qute_QStyleOptionViewItem_get_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -380,6 +413,7 @@ func (this *QStyleOptionViewItem) Text() string {
 func (this *QStyleOptionViewItem) SetText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetText")
 	C.qute_QStyleOptionViewItem_set_text(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // ViewItemPosition wraps the public field QStyleOptionViewItem::viewItemPosition.
@@ -390,6 +424,7 @@ func (this *QStyleOptionViewItem) SetText(text string) {
 func (this *QStyleOptionViewItem) ViewItemPosition() QStyleOptionViewItemViewItemPosition {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.ViewItemPosition")
 	r := C.qute_QStyleOptionViewItem_get_viewItemPosition(self)
+	runtime.KeepAlive(this)
 	return QStyleOptionViewItemViewItemPosition(r)
 }
 
@@ -403,6 +438,7 @@ func (this *QStyleOptionViewItem) ViewItemPosition() QStyleOptionViewItemViewIte
 func (this *QStyleOptionViewItem) SetViewItemPosition(viewItemPosition QStyleOptionViewItemViewItemPosition) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetViewItemPosition")
 	C.qute_QStyleOptionViewItem_set_viewItemPosition(self, C.int64_t(viewItemPosition))
+	runtime.KeepAlive(this)
 }
 
 // BackgroundBrush wraps the public field QStyleOptionViewItem::backgroundBrush.
@@ -415,6 +451,7 @@ func (this *QStyleOptionViewItem) SetViewItemPosition(viewItemPosition QStyleOpt
 func (this *QStyleOptionViewItem) BackgroundBrush() *qtgui.QBrush {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.BackgroundBrush")
 	r := C.qute_QStyleOptionViewItem_get_backgroundBrush(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QBrush](rt.WrapClass(r, "QBrush", rt.TakeOwned), r)
 }
 
@@ -428,4 +465,6 @@ func (this *QStyleOptionViewItem) BackgroundBrush() *qtgui.QBrush {
 func (this *QStyleOptionViewItem) SetBackgroundBrush(backgroundBrush *qtgui.QBrush) {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.SetBackgroundBrush")
 	C.qute_QStyleOptionViewItem_set_backgroundBrush(self, rt.UseArg(unsafe.Pointer(backgroundBrush), "QStyleOptionViewItem.SetBackgroundBrush"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(backgroundBrush)
 }

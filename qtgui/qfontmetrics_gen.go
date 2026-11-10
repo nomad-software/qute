@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -85,6 +86,7 @@ func (this *QFontMetrics) Unkeep() {
 func NewQFontMetricsWithFont(font *QFont) *QFontMetrics {
 	rt.CheckThread("NewQFontMetricsWithFont")
 	p := C.qute_QFontMetrics_new(rt.UseArg(unsafe.Pointer(font), "NewQFontMetricsWithFont"))
+	runtime.KeepAlive(font)
 	h := rt.WrapClass(p, "QFontMetrics", rt.NewOwned)
 	return rt.View[QFontMetrics](h, p)
 }
@@ -101,6 +103,8 @@ func NewQFontMetricsFor(font *QFont, pd QPaintDeviceLike) *QFontMetrics {
 		pdPtr = rt.UseArg(unsafe.Pointer(pd.AsQPaintDevice()), "NewQFontMetricsFor")
 	}
 	p := C.qute_QFontMetrics_new_1(rt.UseArg(unsafe.Pointer(font), "NewQFontMetricsFor"), pdPtr)
+	runtime.KeepAlive(font)
+	runtime.KeepAlive(pd)
 	h := rt.WrapClass(p, "QFontMetrics", rt.NewOwned)
 	return rt.View[QFontMetrics](h, p)
 }
@@ -113,6 +117,7 @@ func NewQFontMetricsFor(font *QFont, pd QPaintDeviceLike) *QFontMetrics {
 func (this *QFontMetrics) Ascent() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.Ascent")
 	r := C.qute_QFontMetrics_ascent(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -124,6 +129,7 @@ func (this *QFontMetrics) Ascent() int {
 func (this *QFontMetrics) CapHeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.CapHeight")
 	r := C.qute_QFontMetrics_capHeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -135,6 +141,7 @@ func (this *QFontMetrics) CapHeight() int {
 func (this *QFontMetrics) Descent() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.Descent")
 	r := C.qute_QFontMetrics_descent(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -146,6 +153,7 @@ func (this *QFontMetrics) Descent() int {
 func (this *QFontMetrics) Height() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.Height")
 	r := C.qute_QFontMetrics_height(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -157,6 +165,7 @@ func (this *QFontMetrics) Height() int {
 func (this *QFontMetrics) Leading() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.Leading")
 	r := C.qute_QFontMetrics_leading(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -168,6 +177,7 @@ func (this *QFontMetrics) Leading() int {
 func (this *QFontMetrics) LineSpacing() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.LineSpacing")
 	r := C.qute_QFontMetrics_lineSpacing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -179,6 +189,7 @@ func (this *QFontMetrics) LineSpacing() int {
 func (this *QFontMetrics) MinLeftBearing() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.MinLeftBearing")
 	r := C.qute_QFontMetrics_minLeftBearing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -190,6 +201,7 @@ func (this *QFontMetrics) MinLeftBearing() int {
 func (this *QFontMetrics) MinRightBearing() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.MinRightBearing")
 	r := C.qute_QFontMetrics_minRightBearing(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -201,6 +213,7 @@ func (this *QFontMetrics) MinRightBearing() int {
 func (this *QFontMetrics) MaxWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.MaxWidth")
 	r := C.qute_QFontMetrics_maxWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -212,6 +225,7 @@ func (this *QFontMetrics) MaxWidth() int {
 func (this *QFontMetrics) XHeight() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.XHeight")
 	r := C.qute_QFontMetrics_xHeight(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -223,6 +237,7 @@ func (this *QFontMetrics) XHeight() int {
 func (this *QFontMetrics) AverageCharWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.AverageCharWidth")
 	r := C.qute_QFontMetrics_averageCharWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -234,6 +249,7 @@ func (this *QFontMetrics) AverageCharWidth() int {
 func (this *QFontMetrics) InFont(char rune) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.InFont")
 	r := C.qute_QFontMetrics_inFont(self, C.uint(char))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -245,6 +261,7 @@ func (this *QFontMetrics) InFont(char rune) bool {
 func (this *QFontMetrics) InFontUcs4(ucs4 uint) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.InFontUcs4")
 	r := C.qute_QFontMetrics_inFontUcs4(self, C.uint(ucs4))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -256,6 +273,7 @@ func (this *QFontMetrics) InFontUcs4(ucs4 uint) bool {
 func (this *QFontMetrics) LeftBearing(char rune) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.LeftBearing")
 	r := C.qute_QFontMetrics_leftBearing(self, C.uint(char))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -267,6 +285,7 @@ func (this *QFontMetrics) LeftBearing(char rune) int {
 func (this *QFontMetrics) RightBearing(char rune) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.RightBearing")
 	r := C.qute_QFontMetrics_rightBearing(self, C.uint(char))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -278,6 +297,7 @@ func (this *QFontMetrics) RightBearing(char rune) int {
 func (this *QFontMetrics) HorizontalAdvance(stringArg string) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvance")
 	r := C.qute_QFontMetrics_horizontalAdvance(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -289,6 +309,8 @@ func (this *QFontMetrics) HorizontalAdvance(stringArg string) int {
 func (this *QFontMetrics) HorizontalAdvanceWithTextOption(stringArg string, textOption *QTextOption) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvanceWithTextOption")
 	r := C.qute_QFontMetrics_horizontalAdvance_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), rt.UseArg(unsafe.Pointer(textOption), "QFontMetrics.HorizontalAdvanceWithTextOption"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textOption)
 	return int(r)
 }
 
@@ -300,6 +322,7 @@ func (this *QFontMetrics) HorizontalAdvanceWithTextOption(stringArg string, text
 func (this *QFontMetrics) HorizontalAdvanceChar(char rune) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvanceChar")
 	r := C.qute_QFontMetrics_horizontalAdvance_2(self, C.uint(char))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -311,6 +334,7 @@ func (this *QFontMetrics) HorizontalAdvanceChar(char rune) int {
 func (this *QFontMetrics) BoundingRectChar(char rune) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.BoundingRectChar")
 	r := C.qute_QFontMetrics_boundingRect(self, C.uint(char))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -322,6 +346,7 @@ func (this *QFontMetrics) BoundingRectChar(char rune) qtcore.QRect {
 func (this *QFontMetrics) BoundingRect(text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.BoundingRect")
 	r := C.qute_QFontMetrics_boundingRect_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -333,6 +358,8 @@ func (this *QFontMetrics) BoundingRect(text string) qtcore.QRect {
 func (this *QFontMetrics) BoundingRectWithOption(text string, textOption *QTextOption) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.BoundingRectWithOption")
 	r := C.qute_QFontMetrics_boundingRect_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(textOption), "QFontMetrics.BoundingRectWithOption"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textOption)
 	return goQRect(r)
 }
 
@@ -344,6 +371,7 @@ func (this *QFontMetrics) BoundingRectWithOption(text string, textOption *QTextO
 func (this *QFontMetrics) BoundingRectIn(rArg qtcore.QRect, flags int, text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.BoundingRectIn")
 	r := C.qute_QFontMetrics_boundingRect_3(self, cQRect(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -355,6 +383,7 @@ func (this *QFontMetrics) BoundingRectIn(rArg qtcore.QRect, flags int, text stri
 func (this *QFontMetrics) Size(flags int, str string) qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.Size")
 	r := C.qute_QFontMetrics_size(self, C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)))
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -366,6 +395,7 @@ func (this *QFontMetrics) Size(flags int, str string) qtcore.QSize {
 func (this *QFontMetrics) TightBoundingRect(text string) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.TightBoundingRect")
 	r := C.qute_QFontMetrics_tightBoundingRect(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -377,6 +407,8 @@ func (this *QFontMetrics) TightBoundingRect(text string) qtcore.QRect {
 func (this *QFontMetrics) TightBoundingRectWithTextOption(text string, textOption *QTextOption) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.TightBoundingRectWithTextOption")
 	r := C.qute_QFontMetrics_tightBoundingRect_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(textOption), "QFontMetrics.TightBoundingRectWithTextOption"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(textOption)
 	return goQRect(r)
 }
 
@@ -388,6 +420,7 @@ func (this *QFontMetrics) TightBoundingRectWithTextOption(text string, textOptio
 func (this *QFontMetrics) ElidedText(text string, mode qtcore.TextElideMode, width int) string {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.ElidedText")
 	r := C.qute_QFontMetrics_elidedText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(mode), C.int(width))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -399,6 +432,7 @@ func (this *QFontMetrics) ElidedText(text string, mode qtcore.TextElideMode, wid
 func (this *QFontMetrics) UnderlinePos() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.UnderlinePos")
 	r := C.qute_QFontMetrics_underlinePos(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -410,6 +444,7 @@ func (this *QFontMetrics) UnderlinePos() int {
 func (this *QFontMetrics) OverlinePos() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.OverlinePos")
 	r := C.qute_QFontMetrics_overlinePos(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -421,6 +456,7 @@ func (this *QFontMetrics) OverlinePos() int {
 func (this *QFontMetrics) StrikeOutPos() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.StrikeOutPos")
 	r := C.qute_QFontMetrics_strikeOutPos(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -432,6 +468,7 @@ func (this *QFontMetrics) StrikeOutPos() int {
 func (this *QFontMetrics) LineWidth() int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.LineWidth")
 	r := C.qute_QFontMetrics_lineWidth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -443,5 +480,6 @@ func (this *QFontMetrics) LineWidth() int {
 func (this *QFontMetrics) FontDpi() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.FontDpi")
 	r := C.qute_QFontMetrics_fontDpi(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }

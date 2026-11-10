@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -100,6 +101,7 @@ func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "NewQImageReaderWithIODevice")
 	}
 	p := C.qute_QImageReader_new_1(devicePtr)
+	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
 	return rt.View[QImageReader](h, p)
 }
@@ -124,6 +126,7 @@ func NewQImageReaderWithFileName(fileName string) *QImageReader {
 func (this *QImageReader) SetFormat(format []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetFormat")
 	C.qute_QImageReader_setFormat(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 }
 
 // Format wraps QImageReader::format.
@@ -134,6 +137,7 @@ func (this *QImageReader) SetFormat(format []byte) {
 func (this *QImageReader) Format() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Format")
 	r := C.qute_QImageReader_format(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -145,6 +149,7 @@ func (this *QImageReader) Format() []byte {
 func (this *QImageReader) SetAutoDetectImageFormat(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetAutoDetectImageFormat")
 	C.qute_QImageReader_setAutoDetectImageFormat(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // AutoDetectImageFormat wraps QImageReader::autoDetectImageFormat.
@@ -155,6 +160,7 @@ func (this *QImageReader) SetAutoDetectImageFormat(enabled bool) {
 func (this *QImageReader) AutoDetectImageFormat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.AutoDetectImageFormat")
 	r := C.qute_QImageReader_autoDetectImageFormat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -166,6 +172,7 @@ func (this *QImageReader) AutoDetectImageFormat() bool {
 func (this *QImageReader) SetDecideFormatFromContent(ignored bool) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetDecideFormatFromContent")
 	C.qute_QImageReader_setDecideFormatFromContent(self, C.bool(ignored))
+	runtime.KeepAlive(this)
 }
 
 // DecideFormatFromContent wraps QImageReader::decideFormatFromContent.
@@ -176,6 +183,7 @@ func (this *QImageReader) SetDecideFormatFromContent(ignored bool) {
 func (this *QImageReader) DecideFormatFromContent() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.DecideFormatFromContent")
 	r := C.qute_QImageReader_decideFormatFromContent(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -191,6 +199,8 @@ func (this *QImageReader) SetDevice(device qtcore.QIODeviceLike) {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QImageReader.SetDevice")
 	}
 	C.qute_QImageReader_setDevice(self, devicePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
 }
 
 // Device wraps QImageReader::device.
@@ -203,6 +213,7 @@ func (this *QImageReader) SetDevice(device qtcore.QIODeviceLike) {
 func (this *QImageReader) Device() *qtcore.QIODevice {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Device")
 	r := C.qute_QImageReader_device(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QIODevice](rt.WrapClass(r, "QIODevice", rt.KeepOrBorrow), r)
 }
 
@@ -214,6 +225,7 @@ func (this *QImageReader) Device() *qtcore.QIODevice {
 func (this *QImageReader) SetFileName(fileName string) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetFileName")
 	C.qute_QImageReader_setFileName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 }
 
 // FileName wraps QImageReader::fileName.
@@ -224,6 +236,7 @@ func (this *QImageReader) SetFileName(fileName string) {
 func (this *QImageReader) FileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.FileName")
 	r := C.qute_QImageReader_fileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -235,6 +248,7 @@ func (this *QImageReader) FileName() string {
 func (this *QImageReader) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Size")
 	r := C.qute_QImageReader_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -246,6 +260,7 @@ func (this *QImageReader) Size() qtcore.QSize {
 func (this *QImageReader) EffectiveSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.EffectiveSize")
 	r := C.qute_QImageReader_effectiveSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -257,6 +272,7 @@ func (this *QImageReader) EffectiveSize() qtcore.QSize {
 func (this *QImageReader) ImageFormat() QImageFormat {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ImageFormat")
 	r := C.qute_QImageReader_imageFormat(self)
+	runtime.KeepAlive(this)
 	return QImageFormat(r)
 }
 
@@ -268,6 +284,7 @@ func (this *QImageReader) ImageFormat() QImageFormat {
 func (this *QImageReader) TextKeys() []string {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.TextKeys")
 	r := C.qute_QImageReader_textKeys(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -279,6 +296,7 @@ func (this *QImageReader) TextKeys() []string {
 func (this *QImageReader) Text(key string) string {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Text")
 	r := C.qute_QImageReader_text(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -290,6 +308,7 @@ func (this *QImageReader) Text(key string) string {
 func (this *QImageReader) SetClipRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetClipRect")
 	C.qute_QImageReader_setClipRect(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // ClipRect wraps QImageReader::clipRect.
@@ -300,6 +319,7 @@ func (this *QImageReader) SetClipRect(rect qtcore.QRect) {
 func (this *QImageReader) ClipRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ClipRect")
 	r := C.qute_QImageReader_clipRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -311,6 +331,7 @@ func (this *QImageReader) ClipRect() qtcore.QRect {
 func (this *QImageReader) SetScaledSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetScaledSize")
 	C.qute_QImageReader_setScaledSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // ScaledSize wraps QImageReader::scaledSize.
@@ -321,6 +342,7 @@ func (this *QImageReader) SetScaledSize(size qtcore.QSize) {
 func (this *QImageReader) ScaledSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ScaledSize")
 	r := C.qute_QImageReader_scaledSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -332,6 +354,7 @@ func (this *QImageReader) ScaledSize() qtcore.QSize {
 func (this *QImageReader) SetQuality(quality int) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetQuality")
 	C.qute_QImageReader_setQuality(self, C.int(quality))
+	runtime.KeepAlive(this)
 }
 
 // Quality wraps QImageReader::quality.
@@ -342,6 +365,7 @@ func (this *QImageReader) SetQuality(quality int) {
 func (this *QImageReader) Quality() int {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Quality")
 	r := C.qute_QImageReader_quality(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -353,6 +377,7 @@ func (this *QImageReader) Quality() int {
 func (this *QImageReader) SetScaledClipRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetScaledClipRect")
 	C.qute_QImageReader_setScaledClipRect(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // ScaledClipRect wraps QImageReader::scaledClipRect.
@@ -363,6 +388,7 @@ func (this *QImageReader) SetScaledClipRect(rect qtcore.QRect) {
 func (this *QImageReader) ScaledClipRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ScaledClipRect")
 	r := C.qute_QImageReader_scaledClipRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -374,6 +400,7 @@ func (this *QImageReader) ScaledClipRect() qtcore.QRect {
 func (this *QImageReader) SetBackgroundColor(color QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetBackgroundColor")
 	C.qute_QImageReader_setBackgroundColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // BackgroundColor wraps QImageReader::backgroundColor.
@@ -384,6 +411,7 @@ func (this *QImageReader) SetBackgroundColor(color QColor) {
 func (this *QImageReader) BackgroundColor() QColor {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.BackgroundColor")
 	r := C.qute_QImageReader_backgroundColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -395,6 +423,7 @@ func (this *QImageReader) BackgroundColor() QColor {
 func (this *QImageReader) SupportsAnimation() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SupportsAnimation")
 	r := C.qute_QImageReader_supportsAnimation(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -406,6 +435,7 @@ func (this *QImageReader) SupportsAnimation() bool {
 func (this *QImageReader) Transformation() QImageIOHandlerTransformations {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Transformation")
 	r := C.qute_QImageReader_transformation(self)
+	runtime.KeepAlive(this)
 	return QImageIOHandlerTransformations(r)
 }
 
@@ -417,6 +447,7 @@ func (this *QImageReader) Transformation() QImageIOHandlerTransformations {
 func (this *QImageReader) SetAutoTransform(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SetAutoTransform")
 	C.qute_QImageReader_setAutoTransform(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // AutoTransform wraps QImageReader::autoTransform.
@@ -427,6 +458,7 @@ func (this *QImageReader) SetAutoTransform(enabled bool) {
 func (this *QImageReader) AutoTransform() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.AutoTransform")
 	r := C.qute_QImageReader_autoTransform(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -438,6 +470,7 @@ func (this *QImageReader) AutoTransform() bool {
 func (this *QImageReader) SubType() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SubType")
 	r := C.qute_QImageReader_subType(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -449,6 +482,7 @@ func (this *QImageReader) SubType() []byte {
 func (this *QImageReader) SupportedSubTypes() [][]byte {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SupportedSubTypes")
 	r := C.qute_QImageReader_supportedSubTypes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_str) []byte { return quteBytes(e) })
 }
 
@@ -460,6 +494,7 @@ func (this *QImageReader) SupportedSubTypes() [][]byte {
 func (this *QImageReader) CanRead() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.CanRead")
 	r := C.qute_QImageReader_canRead(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -473,6 +508,7 @@ func (this *QImageReader) CanRead() bool {
 func (this *QImageReader) Read() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Read")
 	r := C.qute_QImageReader_read(self)
+	runtime.KeepAlive(this)
 	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
@@ -484,6 +520,8 @@ func (this *QImageReader) Read() *QImage {
 func (this *QImageReader) ReadWithImage(image *QImage) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ReadWithImage")
 	r := C.qute_QImageReader_read_1(self, rt.UseArg(unsafe.Pointer(image), "QImageReader.ReadWithImage"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 	return bool(r)
 }
 
@@ -495,6 +533,7 @@ func (this *QImageReader) ReadWithImage(image *QImage) bool {
 func (this *QImageReader) JumpToNextImage() bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.JumpToNextImage")
 	r := C.qute_QImageReader_jumpToNextImage(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -506,6 +545,7 @@ func (this *QImageReader) JumpToNextImage() bool {
 func (this *QImageReader) JumpToImage(imageNumber int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.JumpToImage")
 	r := C.qute_QImageReader_jumpToImage(self, C.int(imageNumber))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -517,6 +557,7 @@ func (this *QImageReader) JumpToImage(imageNumber int) bool {
 func (this *QImageReader) LoopCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.LoopCount")
 	r := C.qute_QImageReader_loopCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -528,6 +569,7 @@ func (this *QImageReader) LoopCount() int {
 func (this *QImageReader) ImageCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ImageCount")
 	r := C.qute_QImageReader_imageCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -539,6 +581,7 @@ func (this *QImageReader) ImageCount() int {
 func (this *QImageReader) NextImageDelay() int {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.NextImageDelay")
 	r := C.qute_QImageReader_nextImageDelay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -550,6 +593,7 @@ func (this *QImageReader) NextImageDelay() int {
 func (this *QImageReader) CurrentImageNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.CurrentImageNumber")
 	r := C.qute_QImageReader_currentImageNumber(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -561,6 +605,7 @@ func (this *QImageReader) CurrentImageNumber() int {
 func (this *QImageReader) CurrentImageRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.CurrentImageRect")
 	r := C.qute_QImageReader_currentImageRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -572,6 +617,7 @@ func (this *QImageReader) CurrentImageRect() qtcore.QRect {
 func (this *QImageReader) Error() QImageReaderImageReaderError {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.Error")
 	r := C.qute_QImageReader_error(self)
+	runtime.KeepAlive(this)
 	return QImageReaderImageReaderError(r)
 }
 
@@ -583,6 +629,7 @@ func (this *QImageReader) Error() QImageReaderImageReaderError {
 func (this *QImageReader) ErrorString() string {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.ErrorString")
 	r := C.qute_QImageReader_errorString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -594,6 +641,7 @@ func (this *QImageReader) ErrorString() string {
 func (this *QImageReader) SupportsOption(option QImageIOHandlerImageOption) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImageReader.SupportsOption")
 	r := C.qute_QImageReader_supportsOption(self, C.int64_t(option))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -620,6 +668,7 @@ func QImageReaderImageFormatIODevice(device qtcore.QIODeviceLike) []byte {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QImageReaderImageFormatIODevice")
 	}
 	r := C.qute_QImageReader_imageFormat_2(devicePtr)
+	runtime.KeepAlive(device)
 	return quteBytes(r)
 }
 

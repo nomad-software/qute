@@ -120,6 +120,14 @@ with connections must be `Delete()`d; `qute vet` flags ones that never are.
   a serial number for the same reason.
 - **Checked calls.** Every generated method does one atomic load; a Dead
   handle panics with class and method name and the fix.
+- **Kept alive for the call.** After the C call, generated methods call
+  `runtime.KeepAlive` on the receiver and on every argument that holds
+  wrappers. Once `rt.Use` has returned the raw pointer nothing else refers to
+  the wrapper, and a call that runs a nested event loop (`QEventLoop::exec`,
+  `QFontDialog::getFont`, a callback that calls `qute.ProcessEvents`) would
+  otherwise let the cleanup queue free it mid-call (miqt #366).
+  `keepalive_test.go` guards this. Values returned from Go overrides are safe
+  without it: the shim copies them before returning to Qt.
 - **Non-QObject classes.** With `notify-dtor` the shim subclass reports death
   from its destructor; only objects built by our constructors are registered.
   Other non-QObjects (`KindPlain`) are never registered and get a fresh handle
@@ -385,6 +393,10 @@ Layout:
   `tests.go`, `report.go`.
 - `features_test.go` checks each extra type kind end to end (out-parameters,
   chaining, buffers, maps, durations, fields, callbacks).
+- `keepalive_test.go` runs the GC inside a call (nested event loop, a
+  synchronous event) and checks the receiver and arguments survive it.
+- Inside `qute.Run`, use `t.Error` and `return`, not `t.Fatal`: `FailNow`
+  ends the GUI goroutine and the test binary hangs.
 - `cmd/qute`: `vet` and `new`. `testdata/bad/bad.go` holds `// want <rule>`
   comments that `vet_test.go` checks.
 

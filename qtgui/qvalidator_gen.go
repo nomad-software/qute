@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,8 @@ func QValidatorCast(o qtcore.QObjectLike) *QValidator {
 func (this *QValidator) SetLocale(locale *qtcore.QLocale) {
 	self := rt.Use(unsafe.Pointer(this), "QValidator.SetLocale")
 	C.qute_QValidator_setLocale(self, rt.UseArg(unsafe.Pointer(locale), "QValidator.SetLocale"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
 }
 
 // Locale wraps QValidator::locale.
@@ -67,6 +70,7 @@ func (this *QValidator) SetLocale(locale *qtcore.QLocale) {
 func (this *QValidator) Locale() *qtcore.QLocale {
 	self := rt.Use(unsafe.Pointer(this), "QValidator.Locale")
 	r := C.qute_QValidator_locale(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
 }
 
@@ -80,6 +84,7 @@ func (this *QValidator) Validate(stringArg string, arg1 int) (QValidatorState, s
 	var stringArgOut C.qute_str
 	var arg1Out C.int
 	r := C.qute_QValidator_validate(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), &stringArgOut, C.int(arg1), &arg1Out)
+	runtime.KeepAlive(this)
 	return QValidatorState(r), quteStr(stringArgOut), int(arg1Out)
 }
 
@@ -92,6 +97,7 @@ func (this *QValidator) Fixup(stringArg string) string {
 	self := rt.Use(unsafe.Pointer(this), "QValidator.Fixup")
 	var stringArgOut C.qute_str
 	C.qute_QValidator_fixup(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), &stringArgOut)
+	runtime.KeepAlive(this)
 	return quteStr(stringArgOut)
 }
 
@@ -103,6 +109,7 @@ func (this *QValidator) Fixup(stringArg string) string {
 func (this *QValidator) EmitChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QValidator.EmitChanged")
 	C.qute_QValidator_changed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

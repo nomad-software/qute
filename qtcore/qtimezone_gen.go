@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -145,6 +146,7 @@ func NewQTimeZoneWithBytesOffsetSeconds(zoneId []byte, offsetSeconds int, name s
 func (this *QTimeZone) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.IsValid")
 	r := C.qute_QTimeZone_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -156,6 +158,7 @@ func (this *QTimeZone) IsValid() bool {
 func (this *QTimeZone) TimeSpec() TimeSpec {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.TimeSpec")
 	r := C.qute_QTimeZone_timeSpec(self)
+	runtime.KeepAlive(this)
 	return TimeSpec(r)
 }
 
@@ -167,6 +170,7 @@ func (this *QTimeZone) TimeSpec() TimeSpec {
 func (this *QTimeZone) FixedSecondsAheadOfUtc() int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.FixedSecondsAheadOfUtc")
 	r := C.qute_QTimeZone_fixedSecondsAheadOfUtc(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -178,6 +182,7 @@ func (this *QTimeZone) FixedSecondsAheadOfUtc() int {
 func (this *QTimeZone) IsUtcOrFixedOffset() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.IsUtcOrFixedOffset")
 	r := C.qute_QTimeZone_isUtcOrFixedOffset(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -191,6 +196,7 @@ func (this *QTimeZone) IsUtcOrFixedOffset() bool {
 func (this *QTimeZone) AsBackendZone() *QTimeZone {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.AsBackendZone")
 	r := C.qute_QTimeZone_asBackendZone(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
 }
 
@@ -202,6 +208,7 @@ func (this *QTimeZone) AsBackendZone() *QTimeZone {
 func (this *QTimeZone) HasAlternativeName(alias []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.HasAlternativeName")
 	r := C.qute_QTimeZone_hasAlternativeName(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(alias))), C.ptrdiff_t(len(alias)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -213,6 +220,7 @@ func (this *QTimeZone) HasAlternativeName(alias []byte) bool {
 func (this *QTimeZone) Id() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.Id")
 	r := C.qute_QTimeZone_id(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -224,6 +232,7 @@ func (this *QTimeZone) Id() []byte {
 func (this *QTimeZone) Territory() QLocaleCountry {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.Territory")
 	r := C.qute_QTimeZone_territory(self)
+	runtime.KeepAlive(this)
 	return QLocaleCountry(r)
 }
 
@@ -235,6 +244,7 @@ func (this *QTimeZone) Territory() QLocaleCountry {
 func (this *QTimeZone) Comment() string {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.Comment")
 	r := C.qute_QTimeZone_comment(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -246,6 +256,8 @@ func (this *QTimeZone) Comment() string {
 func (this *QTimeZone) DisplayName(atDateTime *QDateTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.DisplayName")
 	r := C.qute_QTimeZone_displayName(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.DisplayName"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
 	return quteStr(r)
 }
 
@@ -257,6 +269,7 @@ func (this *QTimeZone) DisplayName(atDateTime *QDateTime) string {
 func (this *QTimeZone) DisplayNameTimeType(timeType QTimeZoneTimeType) string {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.DisplayNameTimeType")
 	r := C.qute_QTimeZone_displayName_1(self, C.int64_t(timeType))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -268,6 +281,8 @@ func (this *QTimeZone) DisplayNameTimeType(timeType QTimeZoneTimeType) string {
 func (this *QTimeZone) Abbreviation(atDateTime *QDateTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.Abbreviation")
 	r := C.qute_QTimeZone_abbreviation(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.Abbreviation"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
 	return quteStr(r)
 }
 
@@ -279,6 +294,8 @@ func (this *QTimeZone) Abbreviation(atDateTime *QDateTime) string {
 func (this *QTimeZone) OffsetFromUtc(atDateTime *QDateTime) int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.OffsetFromUtc")
 	r := C.qute_QTimeZone_offsetFromUtc(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.OffsetFromUtc"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
 	return int(r)
 }
 
@@ -290,6 +307,8 @@ func (this *QTimeZone) OffsetFromUtc(atDateTime *QDateTime) int {
 func (this *QTimeZone) StandardTimeOffset(atDateTime *QDateTime) int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.StandardTimeOffset")
 	r := C.qute_QTimeZone_standardTimeOffset(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.StandardTimeOffset"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
 	return int(r)
 }
 
@@ -301,6 +320,8 @@ func (this *QTimeZone) StandardTimeOffset(atDateTime *QDateTime) int {
 func (this *QTimeZone) DaylightTimeOffset(atDateTime *QDateTime) int {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.DaylightTimeOffset")
 	r := C.qute_QTimeZone_daylightTimeOffset(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.DaylightTimeOffset"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
 	return int(r)
 }
 
@@ -312,6 +333,7 @@ func (this *QTimeZone) DaylightTimeOffset(atDateTime *QDateTime) int {
 func (this *QTimeZone) HasDaylightTime() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.HasDaylightTime")
 	r := C.qute_QTimeZone_hasDaylightTime(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -323,6 +345,8 @@ func (this *QTimeZone) HasDaylightTime() bool {
 func (this *QTimeZone) IsDaylightTime(atDateTime *QDateTime) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.IsDaylightTime")
 	r := C.qute_QTimeZone_isDaylightTime(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.IsDaylightTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
 	return bool(r)
 }
 
@@ -336,6 +360,8 @@ func (this *QTimeZone) IsDaylightTime(atDateTime *QDateTime) bool {
 func (this *QTimeZone) OffsetData(forDateTime *QDateTime) *QTimeZoneOffsetData {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.OffsetData")
 	r := C.qute_QTimeZone_offsetData(self, rt.UseArg(unsafe.Pointer(forDateTime), "QTimeZone.OffsetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(forDateTime)
 	return rt.View[QTimeZoneOffsetData](rt.WrapClass(r, "QTimeZoneOffsetData", rt.TakeOwned), r)
 }
 
@@ -347,6 +373,7 @@ func (this *QTimeZone) OffsetData(forDateTime *QDateTime) *QTimeZoneOffsetData {
 func (this *QTimeZone) HasTransitions() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.HasTransitions")
 	r := C.qute_QTimeZone_hasTransitions(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -360,6 +387,8 @@ func (this *QTimeZone) HasTransitions() bool {
 func (this *QTimeZone) NextTransition(afterDateTime *QDateTime) *QTimeZoneOffsetData {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.NextTransition")
 	r := C.qute_QTimeZone_nextTransition(self, rt.UseArg(unsafe.Pointer(afterDateTime), "QTimeZone.NextTransition"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(afterDateTime)
 	return rt.View[QTimeZoneOffsetData](rt.WrapClass(r, "QTimeZoneOffsetData", rt.TakeOwned), r)
 }
 
@@ -373,6 +402,8 @@ func (this *QTimeZone) NextTransition(afterDateTime *QDateTime) *QTimeZoneOffset
 func (this *QTimeZone) PreviousTransition(beforeDateTime *QDateTime) *QTimeZoneOffsetData {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.PreviousTransition")
 	r := C.qute_QTimeZone_previousTransition(self, rt.UseArg(unsafe.Pointer(beforeDateTime), "QTimeZone.PreviousTransition"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(beforeDateTime)
 	return rt.View[QTimeZoneOffsetData](rt.WrapClass(r, "QTimeZoneOffsetData", rt.TakeOwned), r)
 }
 
@@ -384,6 +415,9 @@ func (this *QTimeZone) PreviousTransition(beforeDateTime *QDateTime) *QTimeZoneO
 func (this *QTimeZone) Transitions(fromDateTime *QDateTime, toDateTime *QDateTime) []*QTimeZoneOffsetData {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.Transitions")
 	r := C.qute_QTimeZone_transitions(self, rt.UseArg(unsafe.Pointer(fromDateTime), "QTimeZone.Transitions"), rt.UseArg(unsafe.Pointer(toDateTime), "QTimeZone.Transitions"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fromDateTime)
+	runtime.KeepAlive(toDateTime)
 	return quteList(r, func(e unsafe.Pointer) *QTimeZoneOffsetData {
 		return rt.View[QTimeZoneOffsetData](rt.WrapClass(e, "QTimeZoneOffsetData", rt.TakeOwned), e)
 	})

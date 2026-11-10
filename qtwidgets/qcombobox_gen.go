@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQComboBox(parent QWidgetLike) *QComboBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQComboBox")
 	}
 	p := C.qute_QComboBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQComboBox(parent QWidgetLike) *QComboBox {
 func (this *QComboBox) MaxVisibleItems() int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.MaxVisibleItems")
 	r := C.qute_QComboBox_maxVisibleItems(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QComboBox) MaxVisibleItems() int {
 func (this *QComboBox) SetMaxVisibleItems(maxItems int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetMaxVisibleItems")
 	C.qute_QComboBox_setMaxVisibleItems(self, C.int(maxItems))
+	runtime.KeepAlive(this)
 }
 
 // Count wraps QComboBox::count.
@@ -99,6 +103,7 @@ func (this *QComboBox) SetMaxVisibleItems(maxItems int) {
 func (this *QComboBox) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.Count")
 	r := C.qute_QComboBox_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -110,6 +115,7 @@ func (this *QComboBox) Count() int {
 func (this *QComboBox) SetMaxCount(max int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetMaxCount")
 	C.qute_QComboBox_setMaxCount(self, C.int(max))
+	runtime.KeepAlive(this)
 }
 
 // MaxCount wraps QComboBox::maxCount.
@@ -120,6 +126,7 @@ func (this *QComboBox) SetMaxCount(max int) {
 func (this *QComboBox) MaxCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.MaxCount")
 	r := C.qute_QComboBox_maxCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -131,6 +138,7 @@ func (this *QComboBox) MaxCount() int {
 func (this *QComboBox) DuplicatesEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.DuplicatesEnabled")
 	r := C.qute_QComboBox_duplicatesEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -142,6 +150,7 @@ func (this *QComboBox) DuplicatesEnabled() bool {
 func (this *QComboBox) SetDuplicatesEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetDuplicatesEnabled")
 	C.qute_QComboBox_setDuplicatesEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // SetFrame wraps QComboBox::setFrame.
@@ -152,6 +161,7 @@ func (this *QComboBox) SetDuplicatesEnabled(enable bool) {
 func (this *QComboBox) SetFrame(frame bool) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetFrame")
 	C.qute_QComboBox_setFrame(self, C.bool(frame))
+	runtime.KeepAlive(this)
 }
 
 // HasFrame wraps QComboBox::hasFrame.
@@ -162,6 +172,7 @@ func (this *QComboBox) SetFrame(frame bool) {
 func (this *QComboBox) HasFrame() bool {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.HasFrame")
 	r := C.qute_QComboBox_hasFrame(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -173,6 +184,7 @@ func (this *QComboBox) HasFrame() bool {
 func (this *QComboBox) FindText(text string) int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.FindText")
 	r := C.qute_QComboBox_findText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -184,6 +196,8 @@ func (this *QComboBox) FindText(text string) int {
 func (this *QComboBox) FindData(data *qtcore.QVariant) int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.FindData")
 	r := C.qute_QComboBox_findData(self, rt.UseArg(unsafe.Pointer(data), "QComboBox.FindData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
 	return int(r)
 }
 
@@ -195,6 +209,7 @@ func (this *QComboBox) FindData(data *qtcore.QVariant) int {
 func (this *QComboBox) InsertPolicy() QComboBoxInsertPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertPolicy")
 	r := C.qute_QComboBox_insertPolicy(self)
+	runtime.KeepAlive(this)
 	return QComboBoxInsertPolicy(r)
 }
 
@@ -206,6 +221,7 @@ func (this *QComboBox) InsertPolicy() QComboBoxInsertPolicy {
 func (this *QComboBox) SetInsertPolicy(policy QComboBoxInsertPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetInsertPolicy")
 	C.qute_QComboBox_setInsertPolicy(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // SizeAdjustPolicy wraps QComboBox::sizeAdjustPolicy.
@@ -216,6 +232,7 @@ func (this *QComboBox) SetInsertPolicy(policy QComboBoxInsertPolicy) {
 func (this *QComboBox) SizeAdjustPolicy() QComboBoxSizeAdjustPolicy {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SizeAdjustPolicy")
 	r := C.qute_QComboBox_sizeAdjustPolicy(self)
+	runtime.KeepAlive(this)
 	return QComboBoxSizeAdjustPolicy(r)
 }
 
@@ -227,6 +244,7 @@ func (this *QComboBox) SizeAdjustPolicy() QComboBoxSizeAdjustPolicy {
 func (this *QComboBox) SetSizeAdjustPolicy(policy QComboBoxSizeAdjustPolicy) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetSizeAdjustPolicy")
 	C.qute_QComboBox_setSizeAdjustPolicy(self, C.int64_t(policy))
+	runtime.KeepAlive(this)
 }
 
 // MinimumContentsLength wraps QComboBox::minimumContentsLength.
@@ -237,6 +255,7 @@ func (this *QComboBox) SetSizeAdjustPolicy(policy QComboBoxSizeAdjustPolicy) {
 func (this *QComboBox) MinimumContentsLength() int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.MinimumContentsLength")
 	r := C.qute_QComboBox_minimumContentsLength(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -248,6 +267,7 @@ func (this *QComboBox) MinimumContentsLength() int {
 func (this *QComboBox) SetMinimumContentsLength(characters int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetMinimumContentsLength")
 	C.qute_QComboBox_setMinimumContentsLength(self, C.int(characters))
+	runtime.KeepAlive(this)
 }
 
 // IconSize wraps QComboBox::iconSize.
@@ -258,6 +278,7 @@ func (this *QComboBox) SetMinimumContentsLength(characters int) {
 func (this *QComboBox) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.IconSize")
 	r := C.qute_QComboBox_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -269,6 +290,7 @@ func (this *QComboBox) IconSize() qtcore.QSize {
 func (this *QComboBox) SetIconSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetIconSize")
 	C.qute_QComboBox_setIconSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // SetPlaceholderText wraps QComboBox::setPlaceholderText.
@@ -279,6 +301,7 @@ func (this *QComboBox) SetIconSize(size qtcore.QSize) {
 func (this *QComboBox) SetPlaceholderText(placeholderText string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetPlaceholderText")
 	C.qute_QComboBox_setPlaceholderText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(placeholderText))), C.ptrdiff_t(len(placeholderText)))
+	runtime.KeepAlive(this)
 }
 
 // PlaceholderText wraps QComboBox::placeholderText.
@@ -289,6 +312,7 @@ func (this *QComboBox) SetPlaceholderText(placeholderText string) {
 func (this *QComboBox) PlaceholderText() string {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.PlaceholderText")
 	r := C.qute_QComboBox_placeholderText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -300,6 +324,7 @@ func (this *QComboBox) PlaceholderText() string {
 func (this *QComboBox) IsEditable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.IsEditable")
 	r := C.qute_QComboBox_isEditable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -311,6 +336,7 @@ func (this *QComboBox) IsEditable() bool {
 func (this *QComboBox) SetEditable(editable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetEditable")
 	C.qute_QComboBox_setEditable(self, C.bool(editable))
+	runtime.KeepAlive(this)
 }
 
 // SetLineEdit wraps QComboBox::setLineEdit.
@@ -328,6 +354,8 @@ func (this *QComboBox) SetLineEdit(edit QLineEditLike) {
 		editPtr, editH = rt.Arg(unsafe.Pointer(edit.AsQLineEdit()), "QComboBox.SetLineEdit")
 	}
 	C.qute_QComboBox_setLineEdit(self, editPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(edit)
 	editH.TransferToCpp()
 }
 
@@ -341,6 +369,7 @@ func (this *QComboBox) SetLineEdit(edit QLineEditLike) {
 func (this *QComboBox) LineEdit() *QLineEdit {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.LineEdit")
 	r := C.qute_QComboBox_lineEdit(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLineEdit](rt.WrapClass(r, "QLineEdit", rt.KeepOrBorrow), r)
 }
 
@@ -356,6 +385,8 @@ func (this *QComboBox) SetValidator(vArg qtgui.QValidatorLike) {
 		vArgPtr = rt.UseArg(unsafe.Pointer(vArg.AsQValidator()), "QComboBox.SetValidator")
 	}
 	C.qute_QComboBox_setValidator(self, vArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vArg)
 }
 
 // Validator wraps QComboBox::validator.
@@ -368,6 +399,7 @@ func (this *QComboBox) SetValidator(vArg qtgui.QValidatorLike) {
 func (this *QComboBox) Validator() *qtgui.QValidator {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.Validator")
 	r := C.qute_QComboBox_validator(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QValidator](rt.WrapClass(r, "QValidator", rt.KeepOrBorrow), r)
 }
 
@@ -383,6 +415,8 @@ func (this *QComboBox) SetCompleter(c QCompleterLike) {
 		cPtr = rt.UseArg(unsafe.Pointer(c.AsQCompleter()), "QComboBox.SetCompleter")
 	}
 	C.qute_QComboBox_setCompleter(self, cPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(c)
 }
 
 // Completer wraps QComboBox::completer.
@@ -395,6 +429,7 @@ func (this *QComboBox) SetCompleter(c QCompleterLike) {
 func (this *QComboBox) Completer() *QCompleter {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.Completer")
 	r := C.qute_QComboBox_completer(self)
+	runtime.KeepAlive(this)
 	return rt.View[QCompleter](rt.WrapClass(r, "QCompleter", rt.KeepOrBorrow), r)
 }
 
@@ -408,6 +443,7 @@ func (this *QComboBox) Completer() *QCompleter {
 func (this *QComboBox) ItemDelegate() *QAbstractItemDelegate {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ItemDelegate")
 	r := C.qute_QComboBox_itemDelegate(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
@@ -423,6 +459,8 @@ func (this *QComboBox) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 		delegatePtr = rt.UseArg(unsafe.Pointer(delegate.AsQAbstractItemDelegate()), "QComboBox.SetItemDelegate")
 	}
 	C.qute_QComboBox_setItemDelegate(self, delegatePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(delegate)
 }
 
 // Model wraps QComboBox::model.
@@ -435,6 +473,7 @@ func (this *QComboBox) SetItemDelegate(delegate QAbstractItemDelegateLike) {
 func (this *QComboBox) Model() *qtcore.QAbstractItemModel {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.Model")
 	r := C.qute_QComboBox_model(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QAbstractItemModel](rt.WrapClass(r, "QAbstractItemModel", rt.KeepOrBorrow), r)
 }
 
@@ -452,6 +491,8 @@ func (this *QComboBox) SetModel(model qtcore.QAbstractItemModelLike) {
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QComboBox.SetModel")
 	}
 	C.qute_QComboBox_setModel(self, modelPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(model)
 }
 
 // RootModelIndex wraps QComboBox::rootModelIndex.
@@ -464,6 +505,7 @@ func (this *QComboBox) SetModel(model qtcore.QAbstractItemModelLike) {
 func (this *QComboBox) RootModelIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.RootModelIndex")
 	r := C.qute_QComboBox_rootModelIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -475,6 +517,8 @@ func (this *QComboBox) RootModelIndex() *qtcore.QModelIndex {
 func (this *QComboBox) SetRootModelIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetRootModelIndex")
 	C.qute_QComboBox_setRootModelIndex(self, rt.UseArg(unsafe.Pointer(index), "QComboBox.SetRootModelIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // ModelColumn wraps QComboBox::modelColumn.
@@ -485,6 +529,7 @@ func (this *QComboBox) SetRootModelIndex(index *qtcore.QModelIndex) {
 func (this *QComboBox) ModelColumn() int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ModelColumn")
 	r := C.qute_QComboBox_modelColumn(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -496,6 +541,7 @@ func (this *QComboBox) ModelColumn() int {
 func (this *QComboBox) SetModelColumn(visibleColumn int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetModelColumn")
 	C.qute_QComboBox_setModelColumn(self, C.int(visibleColumn))
+	runtime.KeepAlive(this)
 }
 
 // LabelDrawingMode wraps QComboBox::labelDrawingMode.
@@ -506,6 +552,7 @@ func (this *QComboBox) SetModelColumn(visibleColumn int) {
 func (this *QComboBox) LabelDrawingMode() QComboBoxLabelDrawingMode {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.LabelDrawingMode")
 	r := C.qute_QComboBox_labelDrawingMode(self)
+	runtime.KeepAlive(this)
 	return QComboBoxLabelDrawingMode(r)
 }
 
@@ -517,6 +564,7 @@ func (this *QComboBox) LabelDrawingMode() QComboBoxLabelDrawingMode {
 func (this *QComboBox) SetLabelDrawingMode(labelDrawing QComboBoxLabelDrawingMode) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetLabelDrawingMode")
 	C.qute_QComboBox_setLabelDrawingMode(self, C.int64_t(labelDrawing))
+	runtime.KeepAlive(this)
 }
 
 // CurrentIndex wraps QComboBox::currentIndex.
@@ -527,6 +575,7 @@ func (this *QComboBox) SetLabelDrawingMode(labelDrawing QComboBoxLabelDrawingMod
 func (this *QComboBox) CurrentIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.CurrentIndex")
 	r := C.qute_QComboBox_currentIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -538,6 +587,7 @@ func (this *QComboBox) CurrentIndex() int {
 func (this *QComboBox) CurrentText() string {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.CurrentText")
 	r := C.qute_QComboBox_currentText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -551,6 +601,7 @@ func (this *QComboBox) CurrentText() string {
 func (this *QComboBox) CurrentData() *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.CurrentData")
 	r := C.qute_QComboBox_currentData(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -562,6 +613,7 @@ func (this *QComboBox) CurrentData() *qtcore.QVariant {
 func (this *QComboBox) ItemText(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ItemText")
 	r := C.qute_QComboBox_itemText(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -575,6 +627,7 @@ func (this *QComboBox) ItemText(index int) string {
 func (this *QComboBox) ItemIcon(index int) *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ItemIcon")
 	r := C.qute_QComboBox_itemIcon(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -588,6 +641,7 @@ func (this *QComboBox) ItemIcon(index int) *qtgui.QIcon {
 func (this *QComboBox) ItemData(index int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ItemData")
 	r := C.qute_QComboBox_itemData(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -599,6 +653,7 @@ func (this *QComboBox) ItemData(index int) *qtcore.QVariant {
 func (this *QComboBox) AddItem(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.AddItem")
 	C.qute_QComboBox_addItem(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // AddItemIcon wraps QComboBox::addItem.
@@ -609,6 +664,8 @@ func (this *QComboBox) AddItem(text string) {
 func (this *QComboBox) AddItemIcon(icon *qtgui.QIcon, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.AddItemIcon")
 	C.qute_QComboBox_addItem_1(self, rt.UseArg(unsafe.Pointer(icon), "QComboBox.AddItemIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // AddItems wraps QComboBox::addItems.
@@ -620,6 +677,7 @@ func (this *QComboBox) AddItems(texts []string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.AddItems")
 	textsData, textsLens := quteStrListArg(texts)
 	C.qute_QComboBox_addItems(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(textsData))), (*C.ptrdiff_t)(unsafe.SliceData(textsLens)), C.ptrdiff_t(len(texts)))
+	runtime.KeepAlive(this)
 }
 
 // InsertItem wraps QComboBox::insertItem.
@@ -630,6 +688,7 @@ func (this *QComboBox) AddItems(texts []string) {
 func (this *QComboBox) InsertItem(index int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertItem")
 	C.qute_QComboBox_insertItem(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // InsertItemIcon wraps QComboBox::insertItem.
@@ -640,6 +699,8 @@ func (this *QComboBox) InsertItem(index int, text string) {
 func (this *QComboBox) InsertItemIcon(index int, icon *qtgui.QIcon, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertItemIcon")
 	C.qute_QComboBox_insertItem_1(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QComboBox.InsertItemIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // InsertItems wraps QComboBox::insertItems.
@@ -651,6 +712,7 @@ func (this *QComboBox) InsertItems(index int, texts []string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertItems")
 	textsData, textsLens := quteStrListArg(texts)
 	C.qute_QComboBox_insertItems(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.SliceData(textsData))), (*C.ptrdiff_t)(unsafe.SliceData(textsLens)), C.ptrdiff_t(len(texts)))
+	runtime.KeepAlive(this)
 }
 
 // InsertSeparator wraps QComboBox::insertSeparator.
@@ -661,6 +723,7 @@ func (this *QComboBox) InsertItems(index int, texts []string) {
 func (this *QComboBox) InsertSeparator(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertSeparator")
 	C.qute_QComboBox_insertSeparator(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // RemoveItem wraps QComboBox::removeItem.
@@ -671,6 +734,7 @@ func (this *QComboBox) InsertSeparator(index int) {
 func (this *QComboBox) RemoveItem(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.RemoveItem")
 	C.qute_QComboBox_removeItem(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // SetItemText wraps QComboBox::setItemText.
@@ -681,6 +745,7 @@ func (this *QComboBox) RemoveItem(index int) {
 func (this *QComboBox) SetItemText(index int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetItemText")
 	C.qute_QComboBox_setItemText(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetItemIcon wraps QComboBox::setItemIcon.
@@ -691,6 +756,8 @@ func (this *QComboBox) SetItemText(index int, text string) {
 func (this *QComboBox) SetItemIcon(index int, icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetItemIcon")
 	C.qute_QComboBox_setItemIcon(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QComboBox.SetItemIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // SetItemData wraps QComboBox::setItemData.
@@ -701,6 +768,8 @@ func (this *QComboBox) SetItemIcon(index int, icon *qtgui.QIcon) {
 func (this *QComboBox) SetItemData(index int, value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetItemData")
 	C.qute_QComboBox_setItemData(self, C.int(index), rt.UseArg(unsafe.Pointer(value), "QComboBox.SetItemData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // View wraps QComboBox::view.
@@ -713,6 +782,7 @@ func (this *QComboBox) SetItemData(index int, value *qtcore.QVariant) {
 func (this *QComboBox) View() *QAbstractItemView {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.View")
 	r := C.qute_QComboBox_view(self)
+	runtime.KeepAlive(this)
 	return rt.View[QAbstractItemView](rt.WrapClass(r, "QAbstractItemView", rt.KeepOrBorrow), r)
 }
 
@@ -731,6 +801,8 @@ func (this *QComboBox) SetView(itemView QAbstractItemViewLike) {
 		itemViewPtr, itemViewH = rt.Arg(unsafe.Pointer(itemView.AsQAbstractItemView()), "QComboBox.SetView")
 	}
 	C.qute_QComboBox_setView(self, itemViewPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(itemView)
 	itemViewH.TransferToCpp()
 }
 
@@ -742,6 +814,7 @@ func (this *QComboBox) SetView(itemView QAbstractItemViewLike) {
 func (this *QComboBox) ShowPopup() {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ShowPopup")
 	C.qute_QComboBox_showPopup(self)
+	runtime.KeepAlive(this)
 }
 
 // HidePopup wraps QComboBox::hidePopup.
@@ -752,6 +825,7 @@ func (this *QComboBox) ShowPopup() {
 func (this *QComboBox) HidePopup() {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.HidePopup")
 	C.qute_QComboBox_hidePopup(self)
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QComboBox::clear.
@@ -762,6 +836,7 @@ func (this *QComboBox) HidePopup() {
 func (this *QComboBox) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.Clear")
 	C.qute_QComboBox_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // ClearEditText wraps QComboBox::clearEditText.
@@ -772,6 +847,7 @@ func (this *QComboBox) Clear() {
 func (this *QComboBox) ClearEditText() {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ClearEditText")
 	C.qute_QComboBox_clearEditText(self)
+	runtime.KeepAlive(this)
 }
 
 // SetEditText wraps QComboBox::setEditText.
@@ -782,6 +858,7 @@ func (this *QComboBox) ClearEditText() {
 func (this *QComboBox) SetEditText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetEditText")
 	C.qute_QComboBox_setEditText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentIndex wraps QComboBox::setCurrentIndex.
@@ -792,6 +869,7 @@ func (this *QComboBox) SetEditText(text string) {
 func (this *QComboBox) SetCurrentIndex(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetCurrentIndex")
 	C.qute_QComboBox_setCurrentIndex(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentText wraps QComboBox::setCurrentText.
@@ -802,6 +880,7 @@ func (this *QComboBox) SetCurrentIndex(index int) {
 func (this *QComboBox) SetCurrentText(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetCurrentText")
 	C.qute_QComboBox_setCurrentText(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // EmitEditTextChanged wraps emitting the editTextChanged signal.
@@ -812,6 +891,7 @@ func (this *QComboBox) SetCurrentText(text string) {
 func (this *QComboBox) EmitEditTextChanged(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitEditTextChanged")
 	C.qute_QComboBox_editTextChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitActivated wraps emitting the activated signal.
@@ -822,6 +902,7 @@ func (this *QComboBox) EmitEditTextChanged(stringArg string) {
 func (this *QComboBox) EmitActivated(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitActivated")
 	C.qute_QComboBox_activated_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitTextActivated wraps emitting the textActivated signal.
@@ -832,6 +913,7 @@ func (this *QComboBox) EmitActivated(index int) {
 func (this *QComboBox) EmitTextActivated(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitTextActivated")
 	C.qute_QComboBox_textActivated_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitHighlighted wraps emitting the highlighted signal.
@@ -842,6 +924,7 @@ func (this *QComboBox) EmitTextActivated(stringArg string) {
 func (this *QComboBox) EmitHighlighted(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitHighlighted")
 	C.qute_QComboBox_highlighted_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitTextHighlighted wraps emitting the textHighlighted signal.
@@ -852,6 +935,7 @@ func (this *QComboBox) EmitHighlighted(index int) {
 func (this *QComboBox) EmitTextHighlighted(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitTextHighlighted")
 	C.qute_QComboBox_textHighlighted_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentIndexChanged wraps emitting the currentIndexChanged signal.
@@ -862,6 +946,7 @@ func (this *QComboBox) EmitTextHighlighted(stringArg string) {
 func (this *QComboBox) EmitCurrentIndexChanged(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitCurrentIndexChanged")
 	C.qute_QComboBox_currentIndexChanged_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentTextChanged wraps emitting the currentTextChanged signal.
@@ -872,6 +957,7 @@ func (this *QComboBox) EmitCurrentIndexChanged(index int) {
 func (this *QComboBox) EmitCurrentTextChanged(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitCurrentTextChanged")
 	C.qute_QComboBox_currentTextChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 }
 
 // OnEditTextChanged connects f to the editTextChanged signal. The connection ends when the

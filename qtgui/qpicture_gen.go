@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQPicture() *QPicture {
 func (this *QPicture) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.IsNull")
 	r := C.qute_QPicture_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -64,6 +66,7 @@ func (this *QPicture) IsNull() bool {
 func (this *QPicture) Size() uint {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.Size")
 	r := C.qute_QPicture_size(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -75,6 +78,7 @@ func (this *QPicture) Size() uint {
 func (this *QPicture) Data() string {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.Data")
 	r := C.qute_QPicture_data(self)
+	runtime.KeepAlive(this)
 	return C.GoString(r)
 }
 
@@ -86,6 +90,7 @@ func (this *QPicture) Data() string {
 func (this *QPicture) SetData(data []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.SetData")
 	C.qute_QPicture_setData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 }
 
 // Play wraps QPicture::play.
@@ -100,6 +105,8 @@ func (this *QPicture) Play(pArg QPainterLike) bool {
 		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QPicture.Play")
 	}
 	r := C.qute_QPicture_play(self, pArgPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pArg)
 	return bool(r)
 }
 
@@ -115,6 +122,8 @@ func (this *QPicture) Load(dev qtcore.QIODeviceLike) bool {
 		devPtr = rt.UseArg(unsafe.Pointer(dev.AsQIODevice()), "QPicture.Load")
 	}
 	r := C.qute_QPicture_load(self, devPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dev)
 	return bool(r)
 }
 
@@ -126,6 +135,7 @@ func (this *QPicture) Load(dev qtcore.QIODeviceLike) bool {
 func (this *QPicture) LoadFileName(fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.LoadFileName")
 	r := C.qute_QPicture_load_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -141,6 +151,8 @@ func (this *QPicture) Save(dev qtcore.QIODeviceLike) bool {
 		devPtr = rt.UseArg(unsafe.Pointer(dev.AsQIODevice()), "QPicture.Save")
 	}
 	r := C.qute_QPicture_save(self, devPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dev)
 	return bool(r)
 }
 
@@ -152,6 +164,7 @@ func (this *QPicture) Save(dev qtcore.QIODeviceLike) bool {
 func (this *QPicture) SaveFileName(fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.SaveFileName")
 	r := C.qute_QPicture_save_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -163,6 +176,7 @@ func (this *QPicture) SaveFileName(fileName string) bool {
 func (this *QPicture) BoundingRect() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.BoundingRect")
 	r := C.qute_QPicture_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -174,4 +188,5 @@ func (this *QPicture) BoundingRect() qtcore.QRect {
 func (this *QPicture) SetBoundingRect(rArg qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.SetBoundingRect")
 	C.qute_QPicture_setBoundingRect(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 }

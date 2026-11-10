@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQStatusBar(parent QWidgetLike) *QStatusBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQStatusBar")
 	}
 	p := C.qute_QStatusBar_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +86,8 @@ func (this *QStatusBar) AddWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.AddWidget")
 	}
 	C.qute_QStatusBar_addWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -102,6 +106,8 @@ func (this *QStatusBar) InsertWidget(index int, widget QWidgetLike) int {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.InsertWidget")
 	}
 	r := C.qute_QStatusBar_insertWidget(self, C.int(index), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return int(r)
 }
@@ -121,6 +127,8 @@ func (this *QStatusBar) AddPermanentWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.AddPermanentWidget")
 	}
 	C.qute_QStatusBar_addPermanentWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -139,6 +147,8 @@ func (this *QStatusBar) InsertPermanentWidget(index int, widget QWidgetLike) int
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.InsertPermanentWidget")
 	}
 	r := C.qute_QStatusBar_insertPermanentWidget(self, C.int(index), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return int(r)
 }
@@ -157,6 +167,8 @@ func (this *QStatusBar) RemoveWidget(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.RemoveWidget")
 	}
 	C.qute_QStatusBar_removeWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // SetSizeGripEnabled wraps QStatusBar::setSizeGripEnabled.
@@ -167,6 +179,7 @@ func (this *QStatusBar) RemoveWidget(widget QWidgetLike) {
 func (this *QStatusBar) SetSizeGripEnabled(sizeGripEnabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.SetSizeGripEnabled")
 	C.qute_QStatusBar_setSizeGripEnabled(self, C.bool(sizeGripEnabled))
+	runtime.KeepAlive(this)
 }
 
 // IsSizeGripEnabled wraps QStatusBar::isSizeGripEnabled.
@@ -177,6 +190,7 @@ func (this *QStatusBar) SetSizeGripEnabled(sizeGripEnabled bool) {
 func (this *QStatusBar) IsSizeGripEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.IsSizeGripEnabled")
 	r := C.qute_QStatusBar_isSizeGripEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -188,6 +202,7 @@ func (this *QStatusBar) IsSizeGripEnabled() bool {
 func (this *QStatusBar) CurrentMessage() string {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.CurrentMessage")
 	r := C.qute_QStatusBar_currentMessage(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -199,6 +214,7 @@ func (this *QStatusBar) CurrentMessage() string {
 func (this *QStatusBar) ShowMessage(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.ShowMessage")
 	C.qute_QStatusBar_showMessage(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // ClearMessage wraps QStatusBar::clearMessage.
@@ -209,6 +225,7 @@ func (this *QStatusBar) ShowMessage(text string) {
 func (this *QStatusBar) ClearMessage() {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.ClearMessage")
 	C.qute_QStatusBar_clearMessage(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitMessageChanged wraps emitting the messageChanged signal.
@@ -219,6 +236,7 @@ func (this *QStatusBar) ClearMessage() {
 func (this *QStatusBar) EmitMessageChanged(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.EmitMessageChanged")
 	C.qute_QStatusBar_messageChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // OnMessageChanged connects f to the messageChanged signal. The connection ends when the

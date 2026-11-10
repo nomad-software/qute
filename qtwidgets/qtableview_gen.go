@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQTableView(parent QWidgetLike) *QTableView {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTableView")
 	}
 	p := C.qute_QTableView_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,7 @@ func NewQTableView(parent QWidgetLike) *QTableView {
 func (this *QTableView) HorizontalHeader() *QHeaderView {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.HorizontalHeader")
 	r := C.qute_QTableView_horizontalHeader(self)
+	runtime.KeepAlive(this)
 	return rt.View[QHeaderView](rt.WrapClass(r, "QHeaderView", rt.KeepOrBorrow), r)
 }
 
@@ -92,6 +95,7 @@ func (this *QTableView) HorizontalHeader() *QHeaderView {
 func (this *QTableView) VerticalHeader() *QHeaderView {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.VerticalHeader")
 	r := C.qute_QTableView_verticalHeader(self)
+	runtime.KeepAlive(this)
 	return rt.View[QHeaderView](rt.WrapClass(r, "QHeaderView", rt.KeepOrBorrow), r)
 }
 
@@ -110,6 +114,8 @@ func (this *QTableView) SetHorizontalHeader(header QHeaderViewLike) {
 		headerPtr, headerH = rt.Arg(unsafe.Pointer(header.AsQHeaderView()), "QTableView.SetHorizontalHeader")
 	}
 	C.qute_QTableView_setHorizontalHeader(self, headerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(header)
 	headerH.TransferToCpp()
 }
 
@@ -128,6 +134,8 @@ func (this *QTableView) SetVerticalHeader(header QHeaderViewLike) {
 		headerPtr, headerH = rt.Arg(unsafe.Pointer(header.AsQHeaderView()), "QTableView.SetVerticalHeader")
 	}
 	C.qute_QTableView_setVerticalHeader(self, headerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(header)
 	headerH.TransferToCpp()
 }
 
@@ -139,6 +147,7 @@ func (this *QTableView) SetVerticalHeader(header QHeaderViewLike) {
 func (this *QTableView) RowViewportPosition(row int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.RowViewportPosition")
 	r := C.qute_QTableView_rowViewportPosition(self, C.int(row))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -150,6 +159,7 @@ func (this *QTableView) RowViewportPosition(row int) int {
 func (this *QTableView) RowAt(y int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.RowAt")
 	r := C.qute_QTableView_rowAt(self, C.int(y))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -161,6 +171,7 @@ func (this *QTableView) RowAt(y int) int {
 func (this *QTableView) SetRowHeight(row int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetRowHeight")
 	C.qute_QTableView_setRowHeight(self, C.int(row), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // RowHeight wraps QTableView::rowHeight.
@@ -171,6 +182,7 @@ func (this *QTableView) SetRowHeight(row int, height int) {
 func (this *QTableView) RowHeight(row int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.RowHeight")
 	r := C.qute_QTableView_rowHeight(self, C.int(row))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -182,6 +194,7 @@ func (this *QTableView) RowHeight(row int) int {
 func (this *QTableView) ColumnViewportPosition(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ColumnViewportPosition")
 	r := C.qute_QTableView_columnViewportPosition(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -193,6 +206,7 @@ func (this *QTableView) ColumnViewportPosition(column int) int {
 func (this *QTableView) ColumnAt(x int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ColumnAt")
 	r := C.qute_QTableView_columnAt(self, C.int(x))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -204,6 +218,7 @@ func (this *QTableView) ColumnAt(x int) int {
 func (this *QTableView) SetColumnWidth(column int, width int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetColumnWidth")
 	C.qute_QTableView_setColumnWidth(self, C.int(column), C.int(width))
+	runtime.KeepAlive(this)
 }
 
 // ColumnWidth wraps QTableView::columnWidth.
@@ -214,6 +229,7 @@ func (this *QTableView) SetColumnWidth(column int, width int) {
 func (this *QTableView) ColumnWidth(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ColumnWidth")
 	r := C.qute_QTableView_columnWidth(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -225,6 +241,7 @@ func (this *QTableView) ColumnWidth(column int) int {
 func (this *QTableView) IsRowHidden(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.IsRowHidden")
 	r := C.qute_QTableView_isRowHidden(self, C.int(row))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -236,6 +253,7 @@ func (this *QTableView) IsRowHidden(row int) bool {
 func (this *QTableView) SetRowHidden(row int, hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetRowHidden")
 	C.qute_QTableView_setRowHidden(self, C.int(row), C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // IsColumnHidden wraps QTableView::isColumnHidden.
@@ -246,6 +264,7 @@ func (this *QTableView) SetRowHidden(row int, hide bool) {
 func (this *QTableView) IsColumnHidden(column int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.IsColumnHidden")
 	r := C.qute_QTableView_isColumnHidden(self, C.int(column))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -257,6 +276,7 @@ func (this *QTableView) IsColumnHidden(column int) bool {
 func (this *QTableView) SetColumnHidden(column int, hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetColumnHidden")
 	C.qute_QTableView_setColumnHidden(self, C.int(column), C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // SetSortingEnabled wraps QTableView::setSortingEnabled.
@@ -267,6 +287,7 @@ func (this *QTableView) SetColumnHidden(column int, hide bool) {
 func (this *QTableView) SetSortingEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetSortingEnabled")
 	C.qute_QTableView_setSortingEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsSortingEnabled wraps QTableView::isSortingEnabled.
@@ -277,6 +298,7 @@ func (this *QTableView) SetSortingEnabled(enable bool) {
 func (this *QTableView) IsSortingEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.IsSortingEnabled")
 	r := C.qute_QTableView_isSortingEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -288,6 +310,7 @@ func (this *QTableView) IsSortingEnabled() bool {
 func (this *QTableView) ShowGrid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ShowGrid")
 	r := C.qute_QTableView_showGrid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -299,6 +322,7 @@ func (this *QTableView) ShowGrid() bool {
 func (this *QTableView) GridStyle() qtcore.PenStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.GridStyle")
 	r := C.qute_QTableView_gridStyle(self)
+	runtime.KeepAlive(this)
 	return qtcore.PenStyle(r)
 }
 
@@ -310,6 +334,7 @@ func (this *QTableView) GridStyle() qtcore.PenStyle {
 func (this *QTableView) SetGridStyle(style qtcore.PenStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetGridStyle")
 	C.qute_QTableView_setGridStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // SetWordWrap wraps QTableView::setWordWrap.
@@ -320,6 +345,7 @@ func (this *QTableView) SetGridStyle(style qtcore.PenStyle) {
 func (this *QTableView) SetWordWrap(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetWordWrap")
 	C.qute_QTableView_setWordWrap(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // WordWrap wraps QTableView::wordWrap.
@@ -330,6 +356,7 @@ func (this *QTableView) SetWordWrap(on bool) {
 func (this *QTableView) WordWrap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.WordWrap")
 	r := C.qute_QTableView_wordWrap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -341,6 +368,7 @@ func (this *QTableView) WordWrap() bool {
 func (this *QTableView) SetCornerButtonEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetCornerButtonEnabled")
 	C.qute_QTableView_setCornerButtonEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsCornerButtonEnabled wraps QTableView::isCornerButtonEnabled.
@@ -351,6 +379,7 @@ func (this *QTableView) SetCornerButtonEnabled(enable bool) {
 func (this *QTableView) IsCornerButtonEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.IsCornerButtonEnabled")
 	r := C.qute_QTableView_isCornerButtonEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -362,6 +391,7 @@ func (this *QTableView) IsCornerButtonEnabled() bool {
 func (this *QTableView) SetSpan(row int, column int, rowSpan int, columnSpan int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetSpan")
 	C.qute_QTableView_setSpan(self, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan))
+	runtime.KeepAlive(this)
 }
 
 // RowSpan wraps QTableView::rowSpan.
@@ -372,6 +402,7 @@ func (this *QTableView) SetSpan(row int, column int, rowSpan int, columnSpan int
 func (this *QTableView) RowSpan(row int, column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.RowSpan")
 	r := C.qute_QTableView_rowSpan(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -383,6 +414,7 @@ func (this *QTableView) RowSpan(row int, column int) int {
 func (this *QTableView) ColumnSpan(row int, column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ColumnSpan")
 	r := C.qute_QTableView_columnSpan(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -394,6 +426,7 @@ func (this *QTableView) ColumnSpan(row int, column int) int {
 func (this *QTableView) ClearSpans() {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ClearSpans")
 	C.qute_QTableView_clearSpans(self)
+	runtime.KeepAlive(this)
 }
 
 // SelectRow wraps QTableView::selectRow.
@@ -404,6 +437,7 @@ func (this *QTableView) ClearSpans() {
 func (this *QTableView) SelectRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SelectRow")
 	C.qute_QTableView_selectRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // SelectColumn wraps QTableView::selectColumn.
@@ -414,6 +448,7 @@ func (this *QTableView) SelectRow(row int) {
 func (this *QTableView) SelectColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SelectColumn")
 	C.qute_QTableView_selectColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // HideRow wraps QTableView::hideRow.
@@ -424,6 +459,7 @@ func (this *QTableView) SelectColumn(column int) {
 func (this *QTableView) HideRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.HideRow")
 	C.qute_QTableView_hideRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // HideColumn wraps QTableView::hideColumn.
@@ -434,6 +470,7 @@ func (this *QTableView) HideRow(row int) {
 func (this *QTableView) HideColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.HideColumn")
 	C.qute_QTableView_hideColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // ShowRow wraps QTableView::showRow.
@@ -444,6 +481,7 @@ func (this *QTableView) HideColumn(column int) {
 func (this *QTableView) ShowRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ShowRow")
 	C.qute_QTableView_showRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // ShowColumn wraps QTableView::showColumn.
@@ -454,6 +492,7 @@ func (this *QTableView) ShowRow(row int) {
 func (this *QTableView) ShowColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ShowColumn")
 	C.qute_QTableView_showColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // ResizeRowToContents wraps QTableView::resizeRowToContents.
@@ -464,6 +503,7 @@ func (this *QTableView) ShowColumn(column int) {
 func (this *QTableView) ResizeRowToContents(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ResizeRowToContents")
 	C.qute_QTableView_resizeRowToContents(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // ResizeRowsToContents wraps QTableView::resizeRowsToContents.
@@ -474,6 +514,7 @@ func (this *QTableView) ResizeRowToContents(row int) {
 func (this *QTableView) ResizeRowsToContents() {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ResizeRowsToContents")
 	C.qute_QTableView_resizeRowsToContents(self)
+	runtime.KeepAlive(this)
 }
 
 // ResizeColumnToContents wraps QTableView::resizeColumnToContents.
@@ -484,6 +525,7 @@ func (this *QTableView) ResizeRowsToContents() {
 func (this *QTableView) ResizeColumnToContents(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ResizeColumnToContents")
 	C.qute_QTableView_resizeColumnToContents(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // ResizeColumnsToContents wraps QTableView::resizeColumnsToContents.
@@ -494,6 +536,7 @@ func (this *QTableView) ResizeColumnToContents(column int) {
 func (this *QTableView) ResizeColumnsToContents() {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.ResizeColumnsToContents")
 	C.qute_QTableView_resizeColumnsToContents(self)
+	runtime.KeepAlive(this)
 }
 
 // SortByColumn wraps QTableView::sortByColumn.
@@ -504,6 +547,7 @@ func (this *QTableView) ResizeColumnsToContents() {
 func (this *QTableView) SortByColumn(column int, order qtcore.SortOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SortByColumn")
 	C.qute_QTableView_sortByColumn(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(this)
 }
 
 // SetShowGrid wraps QTableView::setShowGrid.
@@ -514,4 +558,5 @@ func (this *QTableView) SortByColumn(column int, order qtcore.SortOrder) {
 func (this *QTableView) SetShowGrid(show bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTableView.SetShowGrid")
 	C.qute_QTableView_setShowGrid(self, C.bool(show))
+	runtime.KeepAlive(this)
 }

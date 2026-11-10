@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQTabBar(parent QWidgetLike) *QTabBar {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTabBar")
 	}
 	p := C.qute_QTabBar_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -78,6 +80,7 @@ func NewQTabBar(parent QWidgetLike) *QTabBar {
 func (this *QTabBar) Shape() QTabBarShape {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.Shape")
 	r := C.qute_QTabBar_shape(self)
+	runtime.KeepAlive(this)
 	return QTabBarShape(r)
 }
 
@@ -89,6 +92,7 @@ func (this *QTabBar) Shape() QTabBarShape {
 func (this *QTabBar) SetShape(shape QTabBarShape) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetShape")
 	C.qute_QTabBar_setShape(self, C.int64_t(shape))
+	runtime.KeepAlive(this)
 }
 
 // AddTab wraps QTabBar::addTab.
@@ -99,6 +103,7 @@ func (this *QTabBar) SetShape(shape QTabBarShape) {
 func (this *QTabBar) AddTab(text string) int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.AddTab")
 	r := C.qute_QTabBar_addTab(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -110,6 +115,8 @@ func (this *QTabBar) AddTab(text string) int {
 func (this *QTabBar) AddTabIcon(icon *qtgui.QIcon, text string) int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.AddTabIcon")
 	r := C.qute_QTabBar_addTab_1(self, rt.UseArg(unsafe.Pointer(icon), "QTabBar.AddTabIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return int(r)
 }
 
@@ -121,6 +128,7 @@ func (this *QTabBar) AddTabIcon(icon *qtgui.QIcon, text string) int {
 func (this *QTabBar) InsertTab(index int, text string) int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.InsertTab")
 	r := C.qute_QTabBar_insertTab(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -132,6 +140,8 @@ func (this *QTabBar) InsertTab(index int, text string) int {
 func (this *QTabBar) InsertTabIcon(index int, icon *qtgui.QIcon, text string) int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.InsertTabIcon")
 	r := C.qute_QTabBar_insertTab_1(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QTabBar.InsertTabIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 	return int(r)
 }
 
@@ -143,6 +153,7 @@ func (this *QTabBar) InsertTabIcon(index int, icon *qtgui.QIcon, text string) in
 func (this *QTabBar) RemoveTab(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.RemoveTab")
 	C.qute_QTabBar_removeTab(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // MoveTab wraps QTabBar::moveTab.
@@ -153,6 +164,7 @@ func (this *QTabBar) RemoveTab(index int) {
 func (this *QTabBar) MoveTab(from int, to int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.MoveTab")
 	C.qute_QTabBar_moveTab(self, C.int(from), C.int(to))
+	runtime.KeepAlive(this)
 }
 
 // IsTabEnabled wraps QTabBar::isTabEnabled.
@@ -163,6 +175,7 @@ func (this *QTabBar) MoveTab(from int, to int) {
 func (this *QTabBar) IsTabEnabled(index int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.IsTabEnabled")
 	r := C.qute_QTabBar_isTabEnabled(self, C.int(index))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -174,6 +187,7 @@ func (this *QTabBar) IsTabEnabled(index int) bool {
 func (this *QTabBar) SetTabEnabled(index int, enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabEnabled")
 	C.qute_QTabBar_setTabEnabled(self, C.int(index), C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsTabVisible wraps QTabBar::isTabVisible.
@@ -184,6 +198,7 @@ func (this *QTabBar) SetTabEnabled(index int, enabled bool) {
 func (this *QTabBar) IsTabVisible(index int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.IsTabVisible")
 	r := C.qute_QTabBar_isTabVisible(self, C.int(index))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -195,6 +210,7 @@ func (this *QTabBar) IsTabVisible(index int) bool {
 func (this *QTabBar) SetTabVisible(index int, visible bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabVisible")
 	C.qute_QTabBar_setTabVisible(self, C.int(index), C.bool(visible))
+	runtime.KeepAlive(this)
 }
 
 // TabText wraps QTabBar::tabText.
@@ -205,6 +221,7 @@ func (this *QTabBar) SetTabVisible(index int, visible bool) {
 func (this *QTabBar) TabText(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabText")
 	r := C.qute_QTabBar_tabText(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -216,6 +233,7 @@ func (this *QTabBar) TabText(index int) string {
 func (this *QTabBar) SetTabText(index int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabText")
 	C.qute_QTabBar_setTabText(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // TabTextColor wraps QTabBar::tabTextColor.
@@ -226,6 +244,7 @@ func (this *QTabBar) SetTabText(index int, text string) {
 func (this *QTabBar) TabTextColor(index int) qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabTextColor")
 	r := C.qute_QTabBar_tabTextColor(self, C.int(index))
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -237,6 +256,7 @@ func (this *QTabBar) TabTextColor(index int) qtgui.QColor {
 func (this *QTabBar) SetTabTextColor(index int, color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabTextColor")
 	C.qute_QTabBar_setTabTextColor(self, C.int(index), cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // TabIcon wraps QTabBar::tabIcon.
@@ -249,6 +269,7 @@ func (this *QTabBar) SetTabTextColor(index int, color qtgui.QColor) {
 func (this *QTabBar) TabIcon(index int) *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabIcon")
 	r := C.qute_QTabBar_tabIcon(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -260,6 +281,8 @@ func (this *QTabBar) TabIcon(index int) *qtgui.QIcon {
 func (this *QTabBar) SetTabIcon(index int, icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabIcon")
 	C.qute_QTabBar_setTabIcon(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QTabBar.SetTabIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // ElideMode wraps QTabBar::elideMode.
@@ -270,6 +293,7 @@ func (this *QTabBar) SetTabIcon(index int, icon *qtgui.QIcon) {
 func (this *QTabBar) ElideMode() qtcore.TextElideMode {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.ElideMode")
 	r := C.qute_QTabBar_elideMode(self)
+	runtime.KeepAlive(this)
 	return qtcore.TextElideMode(r)
 }
 
@@ -281,6 +305,7 @@ func (this *QTabBar) ElideMode() qtcore.TextElideMode {
 func (this *QTabBar) SetElideMode(mode qtcore.TextElideMode) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetElideMode")
 	C.qute_QTabBar_setElideMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // SetTabToolTip wraps QTabBar::setTabToolTip.
@@ -291,6 +316,7 @@ func (this *QTabBar) SetElideMode(mode qtcore.TextElideMode) {
 func (this *QTabBar) SetTabToolTip(index int, tip string) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabToolTip")
 	C.qute_QTabBar_setTabToolTip(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(tip))), C.ptrdiff_t(len(tip)))
+	runtime.KeepAlive(this)
 }
 
 // TabToolTip wraps QTabBar::tabToolTip.
@@ -301,6 +327,7 @@ func (this *QTabBar) SetTabToolTip(index int, tip string) {
 func (this *QTabBar) TabToolTip(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabToolTip")
 	r := C.qute_QTabBar_tabToolTip(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -312,6 +339,7 @@ func (this *QTabBar) TabToolTip(index int) string {
 func (this *QTabBar) SetTabWhatsThis(index int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabWhatsThis")
 	C.qute_QTabBar_setTabWhatsThis(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // TabWhatsThis wraps QTabBar::tabWhatsThis.
@@ -322,6 +350,7 @@ func (this *QTabBar) SetTabWhatsThis(index int, text string) {
 func (this *QTabBar) TabWhatsThis(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabWhatsThis")
 	r := C.qute_QTabBar_tabWhatsThis(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -333,6 +362,8 @@ func (this *QTabBar) TabWhatsThis(index int) string {
 func (this *QTabBar) SetTabData(index int, data *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabData")
 	C.qute_QTabBar_setTabData(self, C.int(index), rt.UseArg(unsafe.Pointer(data), "QTabBar.SetTabData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
 }
 
 // TabData wraps QTabBar::tabData.
@@ -345,6 +376,7 @@ func (this *QTabBar) SetTabData(index int, data *qtcore.QVariant) {
 func (this *QTabBar) TabData(index int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabData")
 	r := C.qute_QTabBar_tabData(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -356,6 +388,7 @@ func (this *QTabBar) TabData(index int) *qtcore.QVariant {
 func (this *QTabBar) TabRect(index int) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabRect")
 	r := C.qute_QTabBar_tabRect(self, C.int(index))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -367,6 +400,7 @@ func (this *QTabBar) TabRect(index int) qtcore.QRect {
 func (this *QTabBar) TabAt(pos qtcore.QPoint) int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabAt")
 	r := C.qute_QTabBar_tabAt(self, cQPoint(pos))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -378,6 +412,7 @@ func (this *QTabBar) TabAt(pos qtcore.QPoint) int {
 func (this *QTabBar) CurrentIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.CurrentIndex")
 	r := C.qute_QTabBar_currentIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -389,6 +424,7 @@ func (this *QTabBar) CurrentIndex() int {
 func (this *QTabBar) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.Count")
 	r := C.qute_QTabBar_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -400,6 +436,7 @@ func (this *QTabBar) Count() int {
 func (this *QTabBar) SetDrawBase(drawTheBase bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetDrawBase")
 	C.qute_QTabBar_setDrawBase(self, C.bool(drawTheBase))
+	runtime.KeepAlive(this)
 }
 
 // DrawBase wraps QTabBar::drawBase.
@@ -410,6 +447,7 @@ func (this *QTabBar) SetDrawBase(drawTheBase bool) {
 func (this *QTabBar) DrawBase() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.DrawBase")
 	r := C.qute_QTabBar_drawBase(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -421,6 +459,7 @@ func (this *QTabBar) DrawBase() bool {
 func (this *QTabBar) IconSize() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.IconSize")
 	r := C.qute_QTabBar_iconSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -432,6 +471,7 @@ func (this *QTabBar) IconSize() qtcore.QSize {
 func (this *QTabBar) SetIconSize(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetIconSize")
 	C.qute_QTabBar_setIconSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 }
 
 // UsesScrollButtons wraps QTabBar::usesScrollButtons.
@@ -442,6 +482,7 @@ func (this *QTabBar) SetIconSize(size qtcore.QSize) {
 func (this *QTabBar) UsesScrollButtons() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.UsesScrollButtons")
 	r := C.qute_QTabBar_usesScrollButtons(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -453,6 +494,7 @@ func (this *QTabBar) UsesScrollButtons() bool {
 func (this *QTabBar) SetUsesScrollButtons(useButtons bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetUsesScrollButtons")
 	C.qute_QTabBar_setUsesScrollButtons(self, C.bool(useButtons))
+	runtime.KeepAlive(this)
 }
 
 // TabsClosable wraps QTabBar::tabsClosable.
@@ -463,6 +505,7 @@ func (this *QTabBar) SetUsesScrollButtons(useButtons bool) {
 func (this *QTabBar) TabsClosable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabsClosable")
 	r := C.qute_QTabBar_tabsClosable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -474,6 +517,7 @@ func (this *QTabBar) TabsClosable() bool {
 func (this *QTabBar) SetTabsClosable(closable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetTabsClosable")
 	C.qute_QTabBar_setTabsClosable(self, C.bool(closable))
+	runtime.KeepAlive(this)
 }
 
 // SetTabButton wraps QTabBar::setTabButton.
@@ -493,6 +537,8 @@ func (this *QTabBar) SetTabButton(index int, position QTabBarButtonPosition, wid
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QTabBar.SetTabButton")
 	}
 	C.qute_QTabBar_setTabButton(self, C.int(index), C.int64_t(position), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -506,6 +552,7 @@ func (this *QTabBar) SetTabButton(index int, position QTabBarButtonPosition, wid
 func (this *QTabBar) TabButton(index int, position QTabBarButtonPosition) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.TabButton")
 	r := C.qute_QTabBar_tabButton(self, C.int(index), C.int64_t(position))
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -517,6 +564,7 @@ func (this *QTabBar) TabButton(index int, position QTabBarButtonPosition) *QWidg
 func (this *QTabBar) SelectionBehaviorOnRemove() QTabBarSelectionBehavior {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SelectionBehaviorOnRemove")
 	r := C.qute_QTabBar_selectionBehaviorOnRemove(self)
+	runtime.KeepAlive(this)
 	return QTabBarSelectionBehavior(r)
 }
 
@@ -528,6 +576,7 @@ func (this *QTabBar) SelectionBehaviorOnRemove() QTabBarSelectionBehavior {
 func (this *QTabBar) SetSelectionBehaviorOnRemove(behavior QTabBarSelectionBehavior) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetSelectionBehaviorOnRemove")
 	C.qute_QTabBar_setSelectionBehaviorOnRemove(self, C.int64_t(behavior))
+	runtime.KeepAlive(this)
 }
 
 // Expanding wraps QTabBar::expanding.
@@ -538,6 +587,7 @@ func (this *QTabBar) SetSelectionBehaviorOnRemove(behavior QTabBarSelectionBehav
 func (this *QTabBar) Expanding() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.Expanding")
 	r := C.qute_QTabBar_expanding(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -549,6 +599,7 @@ func (this *QTabBar) Expanding() bool {
 func (this *QTabBar) SetExpanding(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetExpanding")
 	C.qute_QTabBar_setExpanding(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsMovable wraps QTabBar::isMovable.
@@ -559,6 +610,7 @@ func (this *QTabBar) SetExpanding(enabled bool) {
 func (this *QTabBar) IsMovable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.IsMovable")
 	r := C.qute_QTabBar_isMovable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -570,6 +622,7 @@ func (this *QTabBar) IsMovable() bool {
 func (this *QTabBar) SetMovable(movable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetMovable")
 	C.qute_QTabBar_setMovable(self, C.bool(movable))
+	runtime.KeepAlive(this)
 }
 
 // DocumentMode wraps QTabBar::documentMode.
@@ -580,6 +633,7 @@ func (this *QTabBar) SetMovable(movable bool) {
 func (this *QTabBar) DocumentMode() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.DocumentMode")
 	r := C.qute_QTabBar_documentMode(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -591,6 +645,7 @@ func (this *QTabBar) DocumentMode() bool {
 func (this *QTabBar) SetDocumentMode(set bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetDocumentMode")
 	C.qute_QTabBar_setDocumentMode(self, C.bool(set))
+	runtime.KeepAlive(this)
 }
 
 // AutoHide wraps QTabBar::autoHide.
@@ -601,6 +656,7 @@ func (this *QTabBar) SetDocumentMode(set bool) {
 func (this *QTabBar) AutoHide() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.AutoHide")
 	r := C.qute_QTabBar_autoHide(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -612,6 +668,7 @@ func (this *QTabBar) AutoHide() bool {
 func (this *QTabBar) SetAutoHide(hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetAutoHide")
 	C.qute_QTabBar_setAutoHide(self, C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // ChangeCurrentOnDrag wraps QTabBar::changeCurrentOnDrag.
@@ -622,6 +679,7 @@ func (this *QTabBar) SetAutoHide(hide bool) {
 func (this *QTabBar) ChangeCurrentOnDrag() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.ChangeCurrentOnDrag")
 	r := C.qute_QTabBar_changeCurrentOnDrag(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -633,6 +691,7 @@ func (this *QTabBar) ChangeCurrentOnDrag() bool {
 func (this *QTabBar) SetChangeCurrentOnDrag(change bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetChangeCurrentOnDrag")
 	C.qute_QTabBar_setChangeCurrentOnDrag(self, C.bool(change))
+	runtime.KeepAlive(this)
 }
 
 // AccessibleTabName wraps QTabBar::accessibleTabName.
@@ -643,6 +702,7 @@ func (this *QTabBar) SetChangeCurrentOnDrag(change bool) {
 func (this *QTabBar) AccessibleTabName(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.AccessibleTabName")
 	r := C.qute_QTabBar_accessibleTabName(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -654,6 +714,7 @@ func (this *QTabBar) AccessibleTabName(index int) string {
 func (this *QTabBar) SetAccessibleTabName(index int, name string) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetAccessibleTabName")
 	C.qute_QTabBar_setAccessibleTabName(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentIndex wraps QTabBar::setCurrentIndex.
@@ -664,6 +725,7 @@ func (this *QTabBar) SetAccessibleTabName(index int, name string) {
 func (this *QTabBar) SetCurrentIndex(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.SetCurrentIndex")
 	C.qute_QTabBar_setCurrentIndex(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -674,6 +736,7 @@ func (this *QTabBar) SetCurrentIndex(index int) {
 func (this *QTabBar) EmitCurrentChanged(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.EmitCurrentChanged")
 	C.qute_QTabBar_currentChanged_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitTabCloseRequested wraps emitting the tabCloseRequested signal.
@@ -684,6 +747,7 @@ func (this *QTabBar) EmitCurrentChanged(index int) {
 func (this *QTabBar) EmitTabCloseRequested(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.EmitTabCloseRequested")
 	C.qute_QTabBar_tabCloseRequested_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitTabMoved wraps emitting the tabMoved signal.
@@ -694,6 +758,7 @@ func (this *QTabBar) EmitTabCloseRequested(index int) {
 func (this *QTabBar) EmitTabMoved(from int, to int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.EmitTabMoved")
 	C.qute_QTabBar_tabMoved_1(self, C.int(from), C.int(to))
+	runtime.KeepAlive(this)
 }
 
 // EmitTabBarClicked wraps emitting the tabBarClicked signal.
@@ -704,6 +769,7 @@ func (this *QTabBar) EmitTabMoved(from int, to int) {
 func (this *QTabBar) EmitTabBarClicked(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.EmitTabBarClicked")
 	C.qute_QTabBar_tabBarClicked_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // EmitTabBarDoubleClicked wraps emitting the tabBarDoubleClicked signal.
@@ -714,6 +780,7 @@ func (this *QTabBar) EmitTabBarClicked(index int) {
 func (this *QTabBar) EmitTabBarDoubleClicked(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabBar.EmitTabBarDoubleClicked")
 	C.qute_QTabBar_tabBarDoubleClicked_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the

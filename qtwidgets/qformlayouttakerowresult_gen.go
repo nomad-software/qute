@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -103,6 +104,7 @@ func NewQFormLayoutTakeRowResult() *QFormLayoutTakeRowResult {
 func (this *QFormLayoutTakeRowResult) LabelItem() *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QFormLayoutTakeRowResult.LabelItem")
 	r := C.qute_QFormLayoutTakeRowResult_get_labelItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
 }
 
@@ -120,6 +122,8 @@ func (this *QFormLayoutTakeRowResult) SetLabelItem(labelItem QLayoutItemLike) {
 		labelItemPtr = rt.UseArg(unsafe.Pointer(labelItem.AsQLayoutItem()), "QFormLayoutTakeRowResult.SetLabelItem")
 	}
 	C.qute_QFormLayoutTakeRowResult_set_labelItem(self, labelItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(labelItem)
 }
 
 // FieldItem wraps the public field QFormLayout::TakeRowResult::fieldItem.
@@ -132,6 +136,7 @@ func (this *QFormLayoutTakeRowResult) SetLabelItem(labelItem QLayoutItemLike) {
 func (this *QFormLayoutTakeRowResult) FieldItem() *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QFormLayoutTakeRowResult.FieldItem")
 	r := C.qute_QFormLayoutTakeRowResult_get_fieldItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
 }
 
@@ -149,4 +154,6 @@ func (this *QFormLayoutTakeRowResult) SetFieldItem(fieldItem QLayoutItemLike) {
 		fieldItemPtr = rt.UseArg(unsafe.Pointer(fieldItem.AsQLayoutItem()), "QFormLayoutTakeRowResult.SetFieldItem")
 	}
 	C.qute_QFormLayoutTakeRowResult_set_fieldItem(self, fieldItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fieldItem)
 }

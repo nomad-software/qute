@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQOpenGLTextureWithTarget(target QOpenGLTextureTarget) *QOpenGLTexture {
 func NewQOpenGLTextureWithImage(image *qtgui.QImage) *QOpenGLTexture {
 	rt.CheckThread("NewQOpenGLTextureWithImage")
 	p := C.qute_QOpenGLTexture_new_1(rt.UseArg(unsafe.Pointer(image), "NewQOpenGLTextureWithImage"))
+	runtime.KeepAlive(image)
 	h := rt.WrapClass(p, "QOpenGLTexture", rt.NewOwned)
 	return rt.View[QOpenGLTexture](h, p)
 }
@@ -109,6 +111,7 @@ func NewQOpenGLTextureWithImage(image *qtgui.QImage) *QOpenGLTexture {
 func (this *QOpenGLTexture) Target() QOpenGLTextureTarget {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Target")
 	r := C.qute_QOpenGLTexture_target(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureTarget(r)
 }
 
@@ -120,6 +123,7 @@ func (this *QOpenGLTexture) Target() QOpenGLTextureTarget {
 func (this *QOpenGLTexture) Create() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Create")
 	r := C.qute_QOpenGLTexture_create(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -131,6 +135,7 @@ func (this *QOpenGLTexture) Create() bool {
 func (this *QOpenGLTexture) Destroy() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Destroy")
 	C.qute_QOpenGLTexture_destroy(self)
+	runtime.KeepAlive(this)
 }
 
 // IsCreated wraps QOpenGLTexture::isCreated.
@@ -141,6 +146,7 @@ func (this *QOpenGLTexture) Destroy() {
 func (this *QOpenGLTexture) IsCreated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsCreated")
 	r := C.qute_QOpenGLTexture_isCreated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -152,6 +158,7 @@ func (this *QOpenGLTexture) IsCreated() bool {
 func (this *QOpenGLTexture) TextureId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.TextureId")
 	r := C.qute_QOpenGLTexture_textureId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -163,6 +170,7 @@ func (this *QOpenGLTexture) TextureId() uint {
 func (this *QOpenGLTexture) Bind() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Bind")
 	C.qute_QOpenGLTexture_bind(self)
+	runtime.KeepAlive(this)
 }
 
 // BindWithUnit wraps QOpenGLTexture::bind.
@@ -173,6 +181,7 @@ func (this *QOpenGLTexture) Bind() {
 func (this *QOpenGLTexture) BindWithUnit(unit uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BindWithUnit")
 	C.qute_QOpenGLTexture_bind_1(self, C.uint(unit))
+	runtime.KeepAlive(this)
 }
 
 // Release wraps QOpenGLTexture::release.
@@ -183,6 +192,7 @@ func (this *QOpenGLTexture) BindWithUnit(unit uint) {
 func (this *QOpenGLTexture) Release() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Release")
 	C.qute_QOpenGLTexture_release(self)
+	runtime.KeepAlive(this)
 }
 
 // ReleaseWithUnit wraps QOpenGLTexture::release.
@@ -193,6 +203,7 @@ func (this *QOpenGLTexture) Release() {
 func (this *QOpenGLTexture) ReleaseWithUnit(unit uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.ReleaseWithUnit")
 	C.qute_QOpenGLTexture_release_1(self, C.uint(unit))
+	runtime.KeepAlive(this)
 }
 
 // IsBound wraps QOpenGLTexture::isBound.
@@ -203,6 +214,7 @@ func (this *QOpenGLTexture) ReleaseWithUnit(unit uint) {
 func (this *QOpenGLTexture) IsBound() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsBound")
 	r := C.qute_QOpenGLTexture_isBound(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -214,6 +226,7 @@ func (this *QOpenGLTexture) IsBound() bool {
 func (this *QOpenGLTexture) IsBoundWithUnit(unit uint) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsBoundWithUnit")
 	r := C.qute_QOpenGLTexture_isBound_1(self, C.uint(unit))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -225,6 +238,7 @@ func (this *QOpenGLTexture) IsBoundWithUnit(unit uint) bool {
 func (this *QOpenGLTexture) SetFormat(format QOpenGLTextureTextureFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetFormat")
 	C.qute_QOpenGLTexture_setFormat(self, C.int64_t(format))
+	runtime.KeepAlive(this)
 }
 
 // Format wraps QOpenGLTexture::format.
@@ -235,6 +249,7 @@ func (this *QOpenGLTexture) SetFormat(format QOpenGLTextureTextureFormat) {
 func (this *QOpenGLTexture) Format() QOpenGLTextureTextureFormat {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Format")
 	r := C.qute_QOpenGLTexture_format(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureTextureFormat(r)
 }
 
@@ -248,6 +263,7 @@ func (this *QOpenGLTexture) Format() QOpenGLTextureTextureFormat {
 func (this *QOpenGLTexture) SetSize(width int, height int, depth int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetSize")
 	C.qute_QOpenGLTexture_setSize(self, C.int(width), C.int(height), C.int(depth))
+	runtime.KeepAlive(this)
 }
 
 // Width wraps QOpenGLTexture::width.
@@ -258,6 +274,7 @@ func (this *QOpenGLTexture) SetSize(width int, height int, depth int) {
 func (this *QOpenGLTexture) Width() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Width")
 	r := C.qute_QOpenGLTexture_width(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -269,6 +286,7 @@ func (this *QOpenGLTexture) Width() int {
 func (this *QOpenGLTexture) Height() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Height")
 	r := C.qute_QOpenGLTexture_height(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -280,6 +298,7 @@ func (this *QOpenGLTexture) Height() int {
 func (this *QOpenGLTexture) Depth() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Depth")
 	r := C.qute_QOpenGLTexture_depth(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -291,6 +310,7 @@ func (this *QOpenGLTexture) Depth() int {
 func (this *QOpenGLTexture) SetMipLevels(levels int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMipLevels")
 	C.qute_QOpenGLTexture_setMipLevels(self, C.int(levels))
+	runtime.KeepAlive(this)
 }
 
 // MipLevels wraps QOpenGLTexture::mipLevels.
@@ -301,6 +321,7 @@ func (this *QOpenGLTexture) SetMipLevels(levels int) {
 func (this *QOpenGLTexture) MipLevels() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MipLevels")
 	r := C.qute_QOpenGLTexture_mipLevels(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -312,6 +333,7 @@ func (this *QOpenGLTexture) MipLevels() int {
 func (this *QOpenGLTexture) MaximumMipLevels() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MaximumMipLevels")
 	r := C.qute_QOpenGLTexture_maximumMipLevels(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -323,6 +345,7 @@ func (this *QOpenGLTexture) MaximumMipLevels() int {
 func (this *QOpenGLTexture) SetLayers(layers int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetLayers")
 	C.qute_QOpenGLTexture_setLayers(self, C.int(layers))
+	runtime.KeepAlive(this)
 }
 
 // Layers wraps QOpenGLTexture::layers.
@@ -333,6 +356,7 @@ func (this *QOpenGLTexture) SetLayers(layers int) {
 func (this *QOpenGLTexture) Layers() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Layers")
 	r := C.qute_QOpenGLTexture_layers(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -344,6 +368,7 @@ func (this *QOpenGLTexture) Layers() int {
 func (this *QOpenGLTexture) Faces() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Faces")
 	r := C.qute_QOpenGLTexture_faces(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -355,6 +380,7 @@ func (this *QOpenGLTexture) Faces() int {
 func (this *QOpenGLTexture) SetSamples(samples int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetSamples")
 	C.qute_QOpenGLTexture_setSamples(self, C.int(samples))
+	runtime.KeepAlive(this)
 }
 
 // Samples wraps QOpenGLTexture::samples.
@@ -365,6 +391,7 @@ func (this *QOpenGLTexture) SetSamples(samples int) {
 func (this *QOpenGLTexture) Samples() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.Samples")
 	r := C.qute_QOpenGLTexture_samples(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -376,6 +403,7 @@ func (this *QOpenGLTexture) Samples() int {
 func (this *QOpenGLTexture) SetFixedSamplePositions(fixed bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetFixedSamplePositions")
 	C.qute_QOpenGLTexture_setFixedSamplePositions(self, C.bool(fixed))
+	runtime.KeepAlive(this)
 }
 
 // IsFixedSamplePositions wraps QOpenGLTexture::isFixedSamplePositions.
@@ -386,6 +414,7 @@ func (this *QOpenGLTexture) SetFixedSamplePositions(fixed bool) {
 func (this *QOpenGLTexture) IsFixedSamplePositions() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsFixedSamplePositions")
 	r := C.qute_QOpenGLTexture_isFixedSamplePositions(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -397,6 +426,7 @@ func (this *QOpenGLTexture) IsFixedSamplePositions() bool {
 func (this *QOpenGLTexture) AllocateStorage() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.AllocateStorage")
 	C.qute_QOpenGLTexture_allocateStorage(self)
+	runtime.KeepAlive(this)
 }
 
 // AllocateStorageWithPixelFormat wraps QOpenGLTexture::allocateStorage.
@@ -407,6 +437,7 @@ func (this *QOpenGLTexture) AllocateStorage() {
 func (this *QOpenGLTexture) AllocateStorageWithPixelFormat(pixelFormat QOpenGLTexturePixelFormat, pixelType QOpenGLTexturePixelType) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.AllocateStorageWithPixelFormat")
 	C.qute_QOpenGLTexture_allocateStorage_1(self, C.int64_t(pixelFormat), C.int64_t(pixelType))
+	runtime.KeepAlive(this)
 }
 
 // IsStorageAllocated wraps QOpenGLTexture::isStorageAllocated.
@@ -417,6 +448,7 @@ func (this *QOpenGLTexture) AllocateStorageWithPixelFormat(pixelFormat QOpenGLTe
 func (this *QOpenGLTexture) IsStorageAllocated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsStorageAllocated")
 	r := C.qute_QOpenGLTexture_isStorageAllocated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -432,6 +464,7 @@ func (this *QOpenGLTexture) IsStorageAllocated() bool {
 func (this *QOpenGLTexture) CreateTextureView(target QOpenGLTextureTarget, viewFormat QOpenGLTextureTextureFormat, minimumMipmapLevel int, maximumMipmapLevel int, minimumLayer int, maximumLayer int) *QOpenGLTexture {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.CreateTextureView")
 	r := C.qute_QOpenGLTexture_createTextureView(self, C.int64_t(target), C.int64_t(viewFormat), C.int(minimumMipmapLevel), C.int(maximumMipmapLevel), C.int(minimumLayer), C.int(maximumLayer))
+	runtime.KeepAlive(this)
 	return rt.View[QOpenGLTexture](rt.WrapClass(r, "QOpenGLTexture", rt.TakeOwned), r)
 }
 
@@ -443,6 +476,7 @@ func (this *QOpenGLTexture) CreateTextureView(target QOpenGLTextureTarget, viewF
 func (this *QOpenGLTexture) IsTextureView() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsTextureView")
 	r := C.qute_QOpenGLTexture_isTextureView(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -454,6 +488,7 @@ func (this *QOpenGLTexture) IsTextureView() bool {
 func (this *QOpenGLTexture) SetCubeFaceData(mipLevel int, layer int, cubeFace QOpenGLTextureCubeMapFace, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCubeFaceData")
 	C.qute_QOpenGLTexture_setData(self, C.int(mipLevel), C.int(layer), C.int64_t(cubeFace), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetCubeFaceLayersData wraps QOpenGLTexture::setData.
@@ -464,6 +499,7 @@ func (this *QOpenGLTexture) SetCubeFaceData(mipLevel int, layer int, cubeFace QO
 func (this *QOpenGLTexture) SetCubeFaceLayersData(mipLevel int, layer int, layerCount int, cubeFace QOpenGLTextureCubeMapFace, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCubeFaceLayersData")
 	C.qute_QOpenGLTexture_setData_1(self, C.int(mipLevel), C.int(layer), C.int(layerCount), C.int64_t(cubeFace), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetLayerData wraps QOpenGLTexture::setData.
@@ -474,6 +510,7 @@ func (this *QOpenGLTexture) SetCubeFaceLayersData(mipLevel int, layer int, layer
 func (this *QOpenGLTexture) SetLayerData(mipLevel int, layer int, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetLayerData")
 	C.qute_QOpenGLTexture_setData_2(self, C.int(mipLevel), C.int(layer), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetMipLevelData wraps QOpenGLTexture::setData.
@@ -484,6 +521,7 @@ func (this *QOpenGLTexture) SetLayerData(mipLevel int, layer int, sourceFormat Q
 func (this *QOpenGLTexture) SetMipLevelData(mipLevel int, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMipLevelData")
 	C.qute_QOpenGLTexture_setData_3(self, C.int(mipLevel), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetDataRaw wraps QOpenGLTexture::setData.
@@ -494,6 +532,7 @@ func (this *QOpenGLTexture) SetMipLevelData(mipLevel int, sourceFormat QOpenGLTe
 func (this *QOpenGLTexture) SetDataRaw(sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetDataRaw")
 	C.qute_QOpenGLTexture_setData_4(self, C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetRegionData wraps QOpenGLTexture::setData.
@@ -504,6 +543,7 @@ func (this *QOpenGLTexture) SetDataRaw(sourceFormat QOpenGLTexturePixelFormat, s
 func (this *QOpenGLTexture) SetRegionData(xOffset int, yOffset int, zOffset int, width int, height int, depth int, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetRegionData")
 	C.qute_QOpenGLTexture_setData_5(self, C.int(xOffset), C.int(yOffset), C.int(zOffset), C.int(width), C.int(height), C.int(depth), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetRegionMipData wraps QOpenGLTexture::setData.
@@ -514,6 +554,7 @@ func (this *QOpenGLTexture) SetRegionData(xOffset int, yOffset int, zOffset int,
 func (this *QOpenGLTexture) SetRegionMipData(xOffset int, yOffset int, zOffset int, width int, height int, depth int, mipLevel int, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetRegionMipData")
 	C.qute_QOpenGLTexture_setData_6(self, C.int(xOffset), C.int(yOffset), C.int(zOffset), C.int(width), C.int(height), C.int(depth), C.int(mipLevel), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetRegionLayerData wraps QOpenGLTexture::setData.
@@ -524,6 +565,7 @@ func (this *QOpenGLTexture) SetRegionMipData(xOffset int, yOffset int, zOffset i
 func (this *QOpenGLTexture) SetRegionLayerData(xOffset int, yOffset int, zOffset int, width int, height int, depth int, mipLevel int, layer int, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetRegionLayerData")
 	C.qute_QOpenGLTexture_setData_7(self, C.int(xOffset), C.int(yOffset), C.int(zOffset), C.int(width), C.int(height), C.int(depth), C.int(mipLevel), C.int(layer), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetRegionCubeFaceData wraps QOpenGLTexture::setData.
@@ -534,6 +576,7 @@ func (this *QOpenGLTexture) SetRegionLayerData(xOffset int, yOffset int, zOffset
 func (this *QOpenGLTexture) SetRegionCubeFaceData(xOffset int, yOffset int, zOffset int, width int, height int, depth int, mipLevel int, layer int, cubeFace QOpenGLTextureCubeMapFace, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetRegionCubeFaceData")
 	C.qute_QOpenGLTexture_setData_8(self, C.int(xOffset), C.int(yOffset), C.int(zOffset), C.int(width), C.int(height), C.int(depth), C.int(mipLevel), C.int(layer), C.int64_t(cubeFace), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetRegionCubeFaceLayersData wraps QOpenGLTexture::setData.
@@ -544,6 +587,7 @@ func (this *QOpenGLTexture) SetRegionCubeFaceData(xOffset int, yOffset int, zOff
 func (this *QOpenGLTexture) SetRegionCubeFaceLayersData(xOffset int, yOffset int, zOffset int, width int, height int, depth int, mipLevel int, layer int, cubeFace QOpenGLTextureCubeMapFace, layerCount int, sourceFormat QOpenGLTexturePixelFormat, sourceType QOpenGLTexturePixelType, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetRegionCubeFaceLayersData")
 	C.qute_QOpenGLTexture_setData_9(self, C.int(xOffset), C.int(yOffset), C.int(zOffset), C.int(width), C.int(height), C.int(depth), C.int(mipLevel), C.int(layer), C.int64_t(cubeFace), C.int(layerCount), C.int64_t(sourceFormat), C.int64_t(sourceType), data)
+	runtime.KeepAlive(this)
 }
 
 // SetCompressedCubeFaceData wraps QOpenGLTexture::setCompressedData.
@@ -554,6 +598,7 @@ func (this *QOpenGLTexture) SetRegionCubeFaceLayersData(xOffset int, yOffset int
 func (this *QOpenGLTexture) SetCompressedCubeFaceData(mipLevel int, layer int, cubeFace QOpenGLTextureCubeMapFace, dataSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCompressedCubeFaceData")
 	C.qute_QOpenGLTexture_setCompressedData(self, C.int(mipLevel), C.int(layer), C.int64_t(cubeFace), C.int(dataSize), data)
+	runtime.KeepAlive(this)
 }
 
 // SetCompressedCubeFaceLayersData wraps QOpenGLTexture::setCompressedData.
@@ -564,6 +609,7 @@ func (this *QOpenGLTexture) SetCompressedCubeFaceData(mipLevel int, layer int, c
 func (this *QOpenGLTexture) SetCompressedCubeFaceLayersData(mipLevel int, layer int, layerCount int, cubeFace QOpenGLTextureCubeMapFace, dataSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCompressedCubeFaceLayersData")
 	C.qute_QOpenGLTexture_setCompressedData_1(self, C.int(mipLevel), C.int(layer), C.int(layerCount), C.int64_t(cubeFace), C.int(dataSize), data)
+	runtime.KeepAlive(this)
 }
 
 // SetCompressedLayerData wraps QOpenGLTexture::setCompressedData.
@@ -574,6 +620,7 @@ func (this *QOpenGLTexture) SetCompressedCubeFaceLayersData(mipLevel int, layer 
 func (this *QOpenGLTexture) SetCompressedLayerData(mipLevel int, layer int, dataSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCompressedLayerData")
 	C.qute_QOpenGLTexture_setCompressedData_2(self, C.int(mipLevel), C.int(layer), C.int(dataSize), data)
+	runtime.KeepAlive(this)
 }
 
 // SetCompressedMipData wraps QOpenGLTexture::setCompressedData.
@@ -584,6 +631,7 @@ func (this *QOpenGLTexture) SetCompressedLayerData(mipLevel int, layer int, data
 func (this *QOpenGLTexture) SetCompressedMipData(mipLevel int, dataSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCompressedMipData")
 	C.qute_QOpenGLTexture_setCompressedData_3(self, C.int(mipLevel), C.int(dataSize), data)
+	runtime.KeepAlive(this)
 }
 
 // SetCompressedData wraps QOpenGLTexture::setCompressedData.
@@ -594,6 +642,7 @@ func (this *QOpenGLTexture) SetCompressedMipData(mipLevel int, dataSize int, dat
 func (this *QOpenGLTexture) SetCompressedData(dataSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetCompressedData")
 	C.qute_QOpenGLTexture_setCompressedData_4(self, C.int(dataSize), data)
+	runtime.KeepAlive(this)
 }
 
 // SetData wraps QOpenGLTexture::setData.
@@ -604,6 +653,8 @@ func (this *QOpenGLTexture) SetCompressedData(dataSize int, data unsafe.Pointer)
 func (this *QOpenGLTexture) SetData(image *qtgui.QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetData")
 	C.qute_QOpenGLTexture_setData_10(self, rt.UseArg(unsafe.Pointer(image), "QOpenGLTexture.SetData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }
 
 // SetMipBaseLevel wraps QOpenGLTexture::setMipBaseLevel.
@@ -614,6 +665,7 @@ func (this *QOpenGLTexture) SetData(image *qtgui.QImage) {
 func (this *QOpenGLTexture) SetMipBaseLevel(baseLevel int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMipBaseLevel")
 	C.qute_QOpenGLTexture_setMipBaseLevel(self, C.int(baseLevel))
+	runtime.KeepAlive(this)
 }
 
 // MipBaseLevel wraps QOpenGLTexture::mipBaseLevel.
@@ -624,6 +676,7 @@ func (this *QOpenGLTexture) SetMipBaseLevel(baseLevel int) {
 func (this *QOpenGLTexture) MipBaseLevel() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MipBaseLevel")
 	r := C.qute_QOpenGLTexture_mipBaseLevel(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -635,6 +688,7 @@ func (this *QOpenGLTexture) MipBaseLevel() int {
 func (this *QOpenGLTexture) SetMipMaxLevel(maxLevel int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMipMaxLevel")
 	C.qute_QOpenGLTexture_setMipMaxLevel(self, C.int(maxLevel))
+	runtime.KeepAlive(this)
 }
 
 // MipMaxLevel wraps QOpenGLTexture::mipMaxLevel.
@@ -645,6 +699,7 @@ func (this *QOpenGLTexture) SetMipMaxLevel(maxLevel int) {
 func (this *QOpenGLTexture) MipMaxLevel() int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MipMaxLevel")
 	r := C.qute_QOpenGLTexture_mipMaxLevel(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -656,6 +711,7 @@ func (this *QOpenGLTexture) MipMaxLevel() int {
 func (this *QOpenGLTexture) SetMipLevelRange(baseLevel int, maxLevel int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMipLevelRange")
 	C.qute_QOpenGLTexture_setMipLevelRange(self, C.int(baseLevel), C.int(maxLevel))
+	runtime.KeepAlive(this)
 }
 
 // MipLevelRange wraps QOpenGLTexture::mipLevelRange.
@@ -668,6 +724,7 @@ func (this *QOpenGLTexture) MipLevelRange() (int, int) {
 	var pair0Out C.int
 	var pair1Out C.int
 	C.qute_QOpenGLTexture_mipLevelRange(self, &pair0Out, &pair1Out)
+	runtime.KeepAlive(this)
 	return int(pair0Out), int(pair1Out)
 }
 
@@ -679,6 +736,7 @@ func (this *QOpenGLTexture) MipLevelRange() (int, int) {
 func (this *QOpenGLTexture) SetAutoMipMapGenerationEnabled(enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetAutoMipMapGenerationEnabled")
 	C.qute_QOpenGLTexture_setAutoMipMapGenerationEnabled(self, C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsAutoMipMapGenerationEnabled wraps QOpenGLTexture::isAutoMipMapGenerationEnabled.
@@ -689,6 +747,7 @@ func (this *QOpenGLTexture) SetAutoMipMapGenerationEnabled(enabled bool) {
 func (this *QOpenGLTexture) IsAutoMipMapGenerationEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.IsAutoMipMapGenerationEnabled")
 	r := C.qute_QOpenGLTexture_isAutoMipMapGenerationEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -700,6 +759,7 @@ func (this *QOpenGLTexture) IsAutoMipMapGenerationEnabled() bool {
 func (this *QOpenGLTexture) GenerateMipMaps() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.GenerateMipMaps")
 	C.qute_QOpenGLTexture_generateMipMaps(self)
+	runtime.KeepAlive(this)
 }
 
 // GenerateMipMapsWithBaseLevel wraps QOpenGLTexture::generateMipMaps.
@@ -710,6 +770,7 @@ func (this *QOpenGLTexture) GenerateMipMaps() {
 func (this *QOpenGLTexture) GenerateMipMapsWithBaseLevel(baseLevel int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.GenerateMipMapsWithBaseLevel")
 	C.qute_QOpenGLTexture_generateMipMaps_1(self, C.int(baseLevel))
+	runtime.KeepAlive(this)
 }
 
 // SetSwizzleMask wraps QOpenGLTexture::setSwizzleMask.
@@ -720,6 +781,7 @@ func (this *QOpenGLTexture) GenerateMipMapsWithBaseLevel(baseLevel int) {
 func (this *QOpenGLTexture) SetSwizzleMask(component QOpenGLTextureSwizzleComponent, value QOpenGLTextureSwizzleValue) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetSwizzleMask")
 	C.qute_QOpenGLTexture_setSwizzleMask(self, C.int64_t(component), C.int64_t(value))
+	runtime.KeepAlive(this)
 }
 
 // SetSwizzleMaskSwizzleValue wraps QOpenGLTexture::setSwizzleMask.
@@ -730,6 +792,7 @@ func (this *QOpenGLTexture) SetSwizzleMask(component QOpenGLTextureSwizzleCompon
 func (this *QOpenGLTexture) SetSwizzleMaskSwizzleValue(rArg QOpenGLTextureSwizzleValue, g QOpenGLTextureSwizzleValue, bArg QOpenGLTextureSwizzleValue, aArg QOpenGLTextureSwizzleValue) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetSwizzleMaskSwizzleValue")
 	C.qute_QOpenGLTexture_setSwizzleMask_1(self, C.int64_t(rArg), C.int64_t(g), C.int64_t(bArg), C.int64_t(aArg))
+	runtime.KeepAlive(this)
 }
 
 // SwizzleMask wraps QOpenGLTexture::swizzleMask.
@@ -740,6 +803,7 @@ func (this *QOpenGLTexture) SetSwizzleMaskSwizzleValue(rArg QOpenGLTextureSwizzl
 func (this *QOpenGLTexture) SwizzleMask(component QOpenGLTextureSwizzleComponent) QOpenGLTextureSwizzleValue {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SwizzleMask")
 	r := C.qute_QOpenGLTexture_swizzleMask(self, C.int64_t(component))
+	runtime.KeepAlive(this)
 	return QOpenGLTextureSwizzleValue(r)
 }
 
@@ -751,6 +815,7 @@ func (this *QOpenGLTexture) SwizzleMask(component QOpenGLTextureSwizzleComponent
 func (this *QOpenGLTexture) SetDepthStencilMode(mode QOpenGLTextureDepthStencilMode) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetDepthStencilMode")
 	C.qute_QOpenGLTexture_setDepthStencilMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // DepthStencilMode wraps QOpenGLTexture::depthStencilMode.
@@ -761,6 +826,7 @@ func (this *QOpenGLTexture) SetDepthStencilMode(mode QOpenGLTextureDepthStencilM
 func (this *QOpenGLTexture) DepthStencilMode() QOpenGLTextureDepthStencilMode {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.DepthStencilMode")
 	r := C.qute_QOpenGLTexture_depthStencilMode(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureDepthStencilMode(r)
 }
 
@@ -772,6 +838,7 @@ func (this *QOpenGLTexture) DepthStencilMode() QOpenGLTextureDepthStencilMode {
 func (this *QOpenGLTexture) SetComparisonFunction(function QOpenGLTextureComparisonFunction) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetComparisonFunction")
 	C.qute_QOpenGLTexture_setComparisonFunction(self, C.int64_t(function))
+	runtime.KeepAlive(this)
 }
 
 // ComparisonFunction wraps QOpenGLTexture::comparisonFunction.
@@ -782,6 +849,7 @@ func (this *QOpenGLTexture) SetComparisonFunction(function QOpenGLTextureCompari
 func (this *QOpenGLTexture) ComparisonFunction() QOpenGLTextureComparisonFunction {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.ComparisonFunction")
 	r := C.qute_QOpenGLTexture_comparisonFunction(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureComparisonFunction(r)
 }
 
@@ -793,6 +861,7 @@ func (this *QOpenGLTexture) ComparisonFunction() QOpenGLTextureComparisonFunctio
 func (this *QOpenGLTexture) SetComparisonMode(mode QOpenGLTextureComparisonMode) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetComparisonMode")
 	C.qute_QOpenGLTexture_setComparisonMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // ComparisonMode wraps QOpenGLTexture::comparisonMode.
@@ -803,6 +872,7 @@ func (this *QOpenGLTexture) SetComparisonMode(mode QOpenGLTextureComparisonMode)
 func (this *QOpenGLTexture) ComparisonMode() QOpenGLTextureComparisonMode {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.ComparisonMode")
 	r := C.qute_QOpenGLTexture_comparisonMode(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureComparisonMode(r)
 }
 
@@ -814,6 +884,7 @@ func (this *QOpenGLTexture) ComparisonMode() QOpenGLTextureComparisonMode {
 func (this *QOpenGLTexture) SetMinificationFilter(filter QOpenGLTextureFilter) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMinificationFilter")
 	C.qute_QOpenGLTexture_setMinificationFilter(self, C.int64_t(filter))
+	runtime.KeepAlive(this)
 }
 
 // MinificationFilter wraps QOpenGLTexture::minificationFilter.
@@ -824,6 +895,7 @@ func (this *QOpenGLTexture) SetMinificationFilter(filter QOpenGLTextureFilter) {
 func (this *QOpenGLTexture) MinificationFilter() QOpenGLTextureFilter {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MinificationFilter")
 	r := C.qute_QOpenGLTexture_minificationFilter(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureFilter(r)
 }
 
@@ -835,6 +907,7 @@ func (this *QOpenGLTexture) MinificationFilter() QOpenGLTextureFilter {
 func (this *QOpenGLTexture) SetMagnificationFilter(filter QOpenGLTextureFilter) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMagnificationFilter")
 	C.qute_QOpenGLTexture_setMagnificationFilter(self, C.int64_t(filter))
+	runtime.KeepAlive(this)
 }
 
 // MagnificationFilter wraps QOpenGLTexture::magnificationFilter.
@@ -845,6 +918,7 @@ func (this *QOpenGLTexture) SetMagnificationFilter(filter QOpenGLTextureFilter) 
 func (this *QOpenGLTexture) MagnificationFilter() QOpenGLTextureFilter {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MagnificationFilter")
 	r := C.qute_QOpenGLTexture_magnificationFilter(self)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureFilter(r)
 }
 
@@ -856,6 +930,7 @@ func (this *QOpenGLTexture) MagnificationFilter() QOpenGLTextureFilter {
 func (this *QOpenGLTexture) SetMinMagFilters(minificationFilter QOpenGLTextureFilter, magnificationFilter QOpenGLTextureFilter) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMinMagFilters")
 	C.qute_QOpenGLTexture_setMinMagFilters(self, C.int64_t(minificationFilter), C.int64_t(magnificationFilter))
+	runtime.KeepAlive(this)
 }
 
 // MinMagFilters wraps QOpenGLTexture::minMagFilters.
@@ -868,6 +943,7 @@ func (this *QOpenGLTexture) MinMagFilters() (QOpenGLTextureFilter, QOpenGLTextur
 	var pair0Out C.int64_t
 	var pair1Out C.int64_t
 	C.qute_QOpenGLTexture_minMagFilters(self, &pair0Out, &pair1Out)
+	runtime.KeepAlive(this)
 	return QOpenGLTextureFilter(pair0Out), QOpenGLTextureFilter(pair1Out)
 }
 
@@ -879,6 +955,7 @@ func (this *QOpenGLTexture) MinMagFilters() (QOpenGLTextureFilter, QOpenGLTextur
 func (this *QOpenGLTexture) SetMaximumAnisotropy(anisotropy float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMaximumAnisotropy")
 	C.qute_QOpenGLTexture_setMaximumAnisotropy(self, C.float(anisotropy))
+	runtime.KeepAlive(this)
 }
 
 // MaximumAnisotropy wraps QOpenGLTexture::maximumAnisotropy.
@@ -889,6 +966,7 @@ func (this *QOpenGLTexture) SetMaximumAnisotropy(anisotropy float32) {
 func (this *QOpenGLTexture) MaximumAnisotropy() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MaximumAnisotropy")
 	r := C.qute_QOpenGLTexture_maximumAnisotropy(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -900,6 +978,7 @@ func (this *QOpenGLTexture) MaximumAnisotropy() float32 {
 func (this *QOpenGLTexture) SetWrapMode(mode QOpenGLTextureWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetWrapMode")
 	C.qute_QOpenGLTexture_setWrapMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // SetWrapModeCoordinateDirection wraps QOpenGLTexture::setWrapMode.
@@ -910,6 +989,7 @@ func (this *QOpenGLTexture) SetWrapMode(mode QOpenGLTextureWrapMode) {
 func (this *QOpenGLTexture) SetWrapModeCoordinateDirection(direction QOpenGLTextureCoordinateDirection, mode QOpenGLTextureWrapMode) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetWrapModeCoordinateDirection")
 	C.qute_QOpenGLTexture_setWrapMode_1(self, C.int64_t(direction), C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // WrapMode wraps QOpenGLTexture::wrapMode.
@@ -920,6 +1000,7 @@ func (this *QOpenGLTexture) SetWrapModeCoordinateDirection(direction QOpenGLText
 func (this *QOpenGLTexture) WrapMode(direction QOpenGLTextureCoordinateDirection) QOpenGLTextureWrapMode {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.WrapMode")
 	r := C.qute_QOpenGLTexture_wrapMode(self, C.int64_t(direction))
+	runtime.KeepAlive(this)
 	return QOpenGLTextureWrapMode(r)
 }
 
@@ -931,6 +1012,7 @@ func (this *QOpenGLTexture) WrapMode(direction QOpenGLTextureCoordinateDirection
 func (this *QOpenGLTexture) SetBorderColor(color qtgui.QColor) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetBorderColor")
 	C.qute_QOpenGLTexture_setBorderColor(self, cQColor(color))
+	runtime.KeepAlive(this)
 }
 
 // SetBorderColorFloat32 wraps QOpenGLTexture::setBorderColor.
@@ -941,6 +1023,7 @@ func (this *QOpenGLTexture) SetBorderColor(color qtgui.QColor) {
 func (this *QOpenGLTexture) SetBorderColorFloat32(rArg float32, g float32, bArg float32, aArg float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetBorderColorFloat32")
 	C.qute_QOpenGLTexture_setBorderColor_1(self, C.float(rArg), C.float(g), C.float(bArg), C.float(aArg))
+	runtime.KeepAlive(this)
 }
 
 // SetBorderColorInt wraps QOpenGLTexture::setBorderColor.
@@ -951,6 +1034,7 @@ func (this *QOpenGLTexture) SetBorderColorFloat32(rArg float32, g float32, bArg 
 func (this *QOpenGLTexture) SetBorderColorInt(rArg int, g int, bArg int, aArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetBorderColorInt")
 	C.qute_QOpenGLTexture_setBorderColor_2(self, C.int(rArg), C.int(g), C.int(bArg), C.int(aArg))
+	runtime.KeepAlive(this)
 }
 
 // SetBorderColorUint wraps QOpenGLTexture::setBorderColor.
@@ -961,6 +1045,7 @@ func (this *QOpenGLTexture) SetBorderColorInt(rArg int, g int, bArg int, aArg in
 func (this *QOpenGLTexture) SetBorderColorUint(rArg uint, g uint, bArg uint, aArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetBorderColorUint")
 	C.qute_QOpenGLTexture_setBorderColor_3(self, C.uint(rArg), C.uint(g), C.uint(bArg), C.uint(aArg))
+	runtime.KeepAlive(this)
 }
 
 // BorderColor wraps QOpenGLTexture::borderColor.
@@ -971,6 +1056,7 @@ func (this *QOpenGLTexture) SetBorderColorUint(rArg uint, g uint, bArg uint, aAr
 func (this *QOpenGLTexture) BorderColor() qtgui.QColor {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BorderColor")
 	r := C.qute_QOpenGLTexture_borderColor(self)
+	runtime.KeepAlive(this)
 	return goQColor(r)
 }
 
@@ -982,6 +1068,7 @@ func (this *QOpenGLTexture) BorderColor() qtgui.QColor {
 func (this *QOpenGLTexture) BorderColorFloat(border unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BorderColorFloat")
 	C.qute_QOpenGLTexture_borderColor_1(self, border)
+	runtime.KeepAlive(this)
 }
 
 // BorderColorInt wraps QOpenGLTexture::borderColor.
@@ -992,6 +1079,7 @@ func (this *QOpenGLTexture) BorderColorFloat(border unsafe.Pointer) {
 func (this *QOpenGLTexture) BorderColorInt(border unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BorderColorInt")
 	C.qute_QOpenGLTexture_borderColor_2(self, border)
+	runtime.KeepAlive(this)
 }
 
 // BorderColorUint wraps QOpenGLTexture::borderColor.
@@ -1002,6 +1090,7 @@ func (this *QOpenGLTexture) BorderColorInt(border unsafe.Pointer) {
 func (this *QOpenGLTexture) BorderColorUint(border unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BorderColorUint")
 	C.qute_QOpenGLTexture_borderColor_3(self, border)
+	runtime.KeepAlive(this)
 }
 
 // SetMinimumLevelOfDetail wraps QOpenGLTexture::setMinimumLevelOfDetail.
@@ -1012,6 +1101,7 @@ func (this *QOpenGLTexture) BorderColorUint(border unsafe.Pointer) {
 func (this *QOpenGLTexture) SetMinimumLevelOfDetail(value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMinimumLevelOfDetail")
 	C.qute_QOpenGLTexture_setMinimumLevelOfDetail(self, C.float(value))
+	runtime.KeepAlive(this)
 }
 
 // MinimumLevelOfDetail wraps QOpenGLTexture::minimumLevelOfDetail.
@@ -1022,6 +1112,7 @@ func (this *QOpenGLTexture) SetMinimumLevelOfDetail(value float32) {
 func (this *QOpenGLTexture) MinimumLevelOfDetail() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MinimumLevelOfDetail")
 	r := C.qute_QOpenGLTexture_minimumLevelOfDetail(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -1033,6 +1124,7 @@ func (this *QOpenGLTexture) MinimumLevelOfDetail() float32 {
 func (this *QOpenGLTexture) SetMaximumLevelOfDetail(value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetMaximumLevelOfDetail")
 	C.qute_QOpenGLTexture_setMaximumLevelOfDetail(self, C.float(value))
+	runtime.KeepAlive(this)
 }
 
 // MaximumLevelOfDetail wraps QOpenGLTexture::maximumLevelOfDetail.
@@ -1043,6 +1135,7 @@ func (this *QOpenGLTexture) SetMaximumLevelOfDetail(value float32) {
 func (this *QOpenGLTexture) MaximumLevelOfDetail() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.MaximumLevelOfDetail")
 	r := C.qute_QOpenGLTexture_maximumLevelOfDetail(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -1054,6 +1147,7 @@ func (this *QOpenGLTexture) MaximumLevelOfDetail() float32 {
 func (this *QOpenGLTexture) SetLevelOfDetailRange(min float32, max float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetLevelOfDetailRange")
 	C.qute_QOpenGLTexture_setLevelOfDetailRange(self, C.float(min), C.float(max))
+	runtime.KeepAlive(this)
 }
 
 // LevelOfDetailRange wraps QOpenGLTexture::levelOfDetailRange.
@@ -1066,6 +1160,7 @@ func (this *QOpenGLTexture) LevelOfDetailRange() (float32, float32) {
 	var pair0Out C.float
 	var pair1Out C.float
 	C.qute_QOpenGLTexture_levelOfDetailRange(self, &pair0Out, &pair1Out)
+	runtime.KeepAlive(this)
 	return float32(pair0Out), float32(pair1Out)
 }
 
@@ -1077,6 +1172,7 @@ func (this *QOpenGLTexture) LevelOfDetailRange() (float32, float32) {
 func (this *QOpenGLTexture) SetLevelofDetailBias(bias float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetLevelofDetailBias")
 	C.qute_QOpenGLTexture_setLevelofDetailBias(self, C.float(bias))
+	runtime.KeepAlive(this)
 }
 
 // LevelofDetailBias wraps QOpenGLTexture::levelofDetailBias.
@@ -1087,6 +1183,7 @@ func (this *QOpenGLTexture) SetLevelofDetailBias(bias float32) {
 func (this *QOpenGLTexture) LevelofDetailBias() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.LevelofDetailBias")
 	r := C.qute_QOpenGLTexture_levelofDetailBias(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -108,6 +109,7 @@ func NewQRegularExpressionWithPattern(pattern string) *QRegularExpression {
 func (this *QRegularExpression) PatternOptions() QRegularExpressionPatternOptions {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.PatternOptions")
 	r := C.qute_QRegularExpression_patternOptions(self)
+	runtime.KeepAlive(this)
 	return QRegularExpressionPatternOptions(r)
 }
 
@@ -119,6 +121,7 @@ func (this *QRegularExpression) PatternOptions() QRegularExpressionPatternOption
 func (this *QRegularExpression) SetPatternOptions(options QRegularExpressionPatternOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.SetPatternOptions")
 	C.qute_QRegularExpression_setPatternOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // Pattern wraps QRegularExpression::pattern.
@@ -129,6 +132,7 @@ func (this *QRegularExpression) SetPatternOptions(options QRegularExpressionPatt
 func (this *QRegularExpression) Pattern() string {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.Pattern")
 	r := C.qute_QRegularExpression_pattern(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -140,6 +144,7 @@ func (this *QRegularExpression) Pattern() string {
 func (this *QRegularExpression) SetPattern(pattern string) {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.SetPattern")
 	C.qute_QRegularExpression_setPattern(self, (*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)))
+	runtime.KeepAlive(this)
 }
 
 // IsValid wraps QRegularExpression::isValid.
@@ -150,6 +155,7 @@ func (this *QRegularExpression) SetPattern(pattern string) {
 func (this *QRegularExpression) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.IsValid")
 	r := C.qute_QRegularExpression_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -161,6 +167,7 @@ func (this *QRegularExpression) IsValid() bool {
 func (this *QRegularExpression) PatternErrorOffset() int {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.PatternErrorOffset")
 	r := C.qute_QRegularExpression_patternErrorOffset(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -172,6 +179,7 @@ func (this *QRegularExpression) PatternErrorOffset() int {
 func (this *QRegularExpression) ErrorString() string {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.ErrorString")
 	r := C.qute_QRegularExpression_errorString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -183,6 +191,7 @@ func (this *QRegularExpression) ErrorString() string {
 func (this *QRegularExpression) CaptureCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.CaptureCount")
 	r := C.qute_QRegularExpression_captureCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -194,6 +203,7 @@ func (this *QRegularExpression) CaptureCount() int {
 func (this *QRegularExpression) NamedCaptureGroups() []string {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.NamedCaptureGroups")
 	r := C.qute_QRegularExpression_namedCaptureGroups(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -207,6 +217,7 @@ func (this *QRegularExpression) NamedCaptureGroups() []string {
 func (this *QRegularExpression) Match(subject string) *QRegularExpressionMatch {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.Match")
 	r := C.qute_QRegularExpression_match(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subject))), C.ptrdiff_t(len(subject)))
+	runtime.KeepAlive(this)
 	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
 }
 
@@ -220,6 +231,7 @@ func (this *QRegularExpression) Match(subject string) *QRegularExpressionMatch {
 func (this *QRegularExpression) MatchView(subjectView string) *QRegularExpressionMatch {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.MatchView")
 	r := C.qute_QRegularExpression_matchView(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subjectView))), C.ptrdiff_t(len(subjectView)))
+	runtime.KeepAlive(this)
 	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
 }
 
@@ -233,6 +245,7 @@ func (this *QRegularExpression) MatchView(subjectView string) *QRegularExpressio
 func (this *QRegularExpression) GlobalMatch(subject string) *QRegularExpressionMatchIterator {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatch")
 	r := C.qute_QRegularExpression_globalMatch(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subject))), C.ptrdiff_t(len(subject)))
+	runtime.KeepAlive(this)
 	return rt.View[QRegularExpressionMatchIterator](rt.WrapClass(r, "QRegularExpressionMatchIterator", rt.TakeOwned), r)
 }
 
@@ -246,6 +259,7 @@ func (this *QRegularExpression) GlobalMatch(subject string) *QRegularExpressionM
 func (this *QRegularExpression) GlobalMatchView(subjectView string) *QRegularExpressionMatchIterator {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatchView")
 	r := C.qute_QRegularExpression_globalMatchView(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subjectView))), C.ptrdiff_t(len(subjectView)))
+	runtime.KeepAlive(this)
 	return rt.View[QRegularExpressionMatchIterator](rt.WrapClass(r, "QRegularExpressionMatchIterator", rt.TakeOwned), r)
 }
 
@@ -257,6 +271,7 @@ func (this *QRegularExpression) GlobalMatchView(subjectView string) *QRegularExp
 func (this *QRegularExpression) Optimize() {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.Optimize")
 	C.qute_QRegularExpression_optimize(self)
+	runtime.KeepAlive(this)
 }
 
 // QRegularExpressionEscape wraps QRegularExpression::escape.

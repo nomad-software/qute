@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQInputDevice(parent qtcore.QObjectLike) *QInputDevice {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQInputDevice")
 	}
 	p := C.qute_QInputDevice_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQInputDeviceWithName(name string, systemId int64, typeArg QInputDeviceDe
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQInputDeviceWithName")
 	}
 	p := C.qute_QInputDevice_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), C.longlong(systemId), C.int64_t(typeArg), (*C.char)(unsafe.Pointer(unsafe.StringData(seatName))), C.ptrdiff_t(len(seatName)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -99,6 +102,7 @@ func NewQInputDeviceWithName(name string, systemId int64, typeArg QInputDeviceDe
 func (this *QInputDevice) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.Name")
 	r := C.qute_QInputDevice_name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -110,6 +114,7 @@ func (this *QInputDevice) Name() string {
 func (this *QInputDevice) Type() QInputDeviceDeviceTypes {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.Type")
 	r := C.qute_QInputDevice_type(self)
+	runtime.KeepAlive(this)
 	return QInputDeviceDeviceTypes(r)
 }
 
@@ -121,6 +126,7 @@ func (this *QInputDevice) Type() QInputDeviceDeviceTypes {
 func (this *QInputDevice) Capabilities() QInputDeviceCapabilities {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.Capabilities")
 	r := C.qute_QInputDevice_capabilities(self)
+	runtime.KeepAlive(this)
 	return QInputDeviceCapabilities(r)
 }
 
@@ -132,6 +138,7 @@ func (this *QInputDevice) Capabilities() QInputDeviceCapabilities {
 func (this *QInputDevice) HasCapability(cap QInputDeviceCapabilities) bool {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.HasCapability")
 	r := C.qute_QInputDevice_hasCapability(self, C.int64_t(cap))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -143,6 +150,7 @@ func (this *QInputDevice) HasCapability(cap QInputDeviceCapabilities) bool {
 func (this *QInputDevice) SystemId() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.SystemId")
 	r := C.qute_QInputDevice_systemId(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -154,6 +162,7 @@ func (this *QInputDevice) SystemId() int64 {
 func (this *QInputDevice) SeatName() string {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.SeatName")
 	r := C.qute_QInputDevice_seatName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -165,6 +174,7 @@ func (this *QInputDevice) SeatName() string {
 func (this *QInputDevice) AvailableVirtualGeometry() qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.AvailableVirtualGeometry")
 	r := C.qute_QInputDevice_availableVirtualGeometry(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -176,6 +186,7 @@ func (this *QInputDevice) AvailableVirtualGeometry() qtcore.QRect {
 func (this *QInputDevice) EmitAvailableVirtualGeometryChanged(area qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.EmitAvailableVirtualGeometryChanged")
 	C.qute_QInputDevice_availableVirtualGeometryChanged_1(self, cQRect(area))
+	runtime.KeepAlive(this)
 }
 
 // EmitCapabilitiesChanged wraps emitting the capabilitiesChanged signal.
@@ -186,6 +197,7 @@ func (this *QInputDevice) EmitAvailableVirtualGeometryChanged(area qtcore.QRect)
 func (this *QInputDevice) EmitCapabilitiesChanged(capabilities QInputDeviceCapabilities) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDevice.EmitCapabilitiesChanged")
 	C.qute_QInputDevice_capabilitiesChanged_1(self, C.int64_t(capabilities))
+	runtime.KeepAlive(this)
 }
 
 // QInputDeviceSeatNames wraps QInputDevice::seatNames.

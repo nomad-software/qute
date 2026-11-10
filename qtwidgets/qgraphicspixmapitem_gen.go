@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -47,6 +48,7 @@ func NewQGraphicsPixmapItem(parent QGraphicsItemLike) *QGraphicsPixmapItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPixmapItem")
 	}
 	p := C.qute_QGraphicsPixmapItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -69,6 +71,8 @@ func NewQGraphicsPixmapItemWithPixmap(pixmap *qtgui.QPixmap, parent QGraphicsIte
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPixmapItemWithPixmap")
 	}
 	p := C.qute_QGraphicsPixmapItem_new_1(rt.UseArg(unsafe.Pointer(pixmap), "NewQGraphicsPixmapItemWithPixmap"), parentPtr)
+	runtime.KeepAlive(pixmap)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -87,6 +91,7 @@ func NewQGraphicsPixmapItemWithPixmap(pixmap *qtgui.QPixmap, parent QGraphicsIte
 func (this *QGraphicsPixmapItem) Pixmap() *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.Pixmap")
 	r := C.qute_QGraphicsPixmapItem_pixmap(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -98,6 +103,8 @@ func (this *QGraphicsPixmapItem) Pixmap() *qtgui.QPixmap {
 func (this *QGraphicsPixmapItem) SetPixmap(pixmap *qtgui.QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.SetPixmap")
 	C.qute_QGraphicsPixmapItem_setPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QGraphicsPixmapItem.SetPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // TransformationMode wraps QGraphicsPixmapItem::transformationMode.
@@ -108,6 +115,7 @@ func (this *QGraphicsPixmapItem) SetPixmap(pixmap *qtgui.QPixmap) {
 func (this *QGraphicsPixmapItem) TransformationMode() qtcore.TransformationMode {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.TransformationMode")
 	r := C.qute_QGraphicsPixmapItem_transformationMode(self)
+	runtime.KeepAlive(this)
 	return qtcore.TransformationMode(r)
 }
 
@@ -119,6 +127,7 @@ func (this *QGraphicsPixmapItem) TransformationMode() qtcore.TransformationMode 
 func (this *QGraphicsPixmapItem) SetTransformationMode(mode qtcore.TransformationMode) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.SetTransformationMode")
 	C.qute_QGraphicsPixmapItem_setTransformationMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }
 
 // Offset wraps QGraphicsPixmapItem::offset.
@@ -129,6 +138,7 @@ func (this *QGraphicsPixmapItem) SetTransformationMode(mode qtcore.Transformatio
 func (this *QGraphicsPixmapItem) Offset() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.Offset")
 	r := C.qute_QGraphicsPixmapItem_offset(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -140,6 +150,7 @@ func (this *QGraphicsPixmapItem) Offset() qtcore.QPointF {
 func (this *QGraphicsPixmapItem) SetOffset(offset qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.SetOffset")
 	C.qute_QGraphicsPixmapItem_setOffset(self, cQPointF(offset))
+	runtime.KeepAlive(this)
 }
 
 // ShapeMode wraps QGraphicsPixmapItem::shapeMode.
@@ -150,6 +161,7 @@ func (this *QGraphicsPixmapItem) SetOffset(offset qtcore.QPointF) {
 func (this *QGraphicsPixmapItem) ShapeMode() QGraphicsPixmapItemShapeMode {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.ShapeMode")
 	r := C.qute_QGraphicsPixmapItem_shapeMode(self)
+	runtime.KeepAlive(this)
 	return QGraphicsPixmapItemShapeMode(r)
 }
 
@@ -161,4 +173,5 @@ func (this *QGraphicsPixmapItem) ShapeMode() QGraphicsPixmapItemShapeMode {
 func (this *QGraphicsPixmapItem) SetShapeMode(mode QGraphicsPixmapItemShapeMode) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPixmapItem.SetShapeMode")
 	C.qute_QGraphicsPixmapItem_setShapeMode(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
 }

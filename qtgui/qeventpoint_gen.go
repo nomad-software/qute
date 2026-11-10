@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -109,6 +110,7 @@ func NewQEventPointWithPointId(pointId int, state QEventPointStates, scenePositi
 func (this *QEventPoint) Position() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Position")
 	r := C.qute_QEventPoint_position(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -120,6 +122,7 @@ func (this *QEventPoint) Position() qtcore.QPointF {
 func (this *QEventPoint) PressPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.PressPosition")
 	r := C.qute_QEventPoint_pressPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -131,6 +134,7 @@ func (this *QEventPoint) PressPosition() qtcore.QPointF {
 func (this *QEventPoint) GrabPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.GrabPosition")
 	r := C.qute_QEventPoint_grabPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -142,6 +146,7 @@ func (this *QEventPoint) GrabPosition() qtcore.QPointF {
 func (this *QEventPoint) LastPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.LastPosition")
 	r := C.qute_QEventPoint_lastPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -153,6 +158,7 @@ func (this *QEventPoint) LastPosition() qtcore.QPointF {
 func (this *QEventPoint) ScenePosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.ScenePosition")
 	r := C.qute_QEventPoint_scenePosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -164,6 +170,7 @@ func (this *QEventPoint) ScenePosition() qtcore.QPointF {
 func (this *QEventPoint) ScenePressPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.ScenePressPosition")
 	r := C.qute_QEventPoint_scenePressPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -175,6 +182,7 @@ func (this *QEventPoint) ScenePressPosition() qtcore.QPointF {
 func (this *QEventPoint) SceneGrabPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.SceneGrabPosition")
 	r := C.qute_QEventPoint_sceneGrabPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -186,6 +194,7 @@ func (this *QEventPoint) SceneGrabPosition() qtcore.QPointF {
 func (this *QEventPoint) SceneLastPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.SceneLastPosition")
 	r := C.qute_QEventPoint_sceneLastPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -197,6 +206,7 @@ func (this *QEventPoint) SceneLastPosition() qtcore.QPointF {
 func (this *QEventPoint) GlobalPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.GlobalPosition")
 	r := C.qute_QEventPoint_globalPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -208,6 +218,7 @@ func (this *QEventPoint) GlobalPosition() qtcore.QPointF {
 func (this *QEventPoint) GlobalPressPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.GlobalPressPosition")
 	r := C.qute_QEventPoint_globalPressPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -219,6 +230,7 @@ func (this *QEventPoint) GlobalPressPosition() qtcore.QPointF {
 func (this *QEventPoint) GlobalGrabPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.GlobalGrabPosition")
 	r := C.qute_QEventPoint_globalGrabPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -230,6 +242,7 @@ func (this *QEventPoint) GlobalGrabPosition() qtcore.QPointF {
 func (this *QEventPoint) GlobalLastPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.GlobalLastPosition")
 	r := C.qute_QEventPoint_globalLastPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -241,6 +254,7 @@ func (this *QEventPoint) GlobalLastPosition() qtcore.QPointF {
 func (this *QEventPoint) NormalizedPosition() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.NormalizedPosition")
 	r := C.qute_QEventPoint_normalizedPosition(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -254,6 +268,7 @@ func (this *QEventPoint) NormalizedPosition() qtcore.QPointF {
 func (this *QEventPoint) Velocity() *QVector2D {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Velocity")
 	r := C.qute_QEventPoint_velocity(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector2D](rt.WrapClass(r, "QVector2D", rt.TakeOwned), r)
 }
 
@@ -265,6 +280,7 @@ func (this *QEventPoint) Velocity() *QVector2D {
 func (this *QEventPoint) State() QEventPointStates {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.State")
 	r := C.qute_QEventPoint_state(self)
+	runtime.KeepAlive(this)
 	return QEventPointStates(r)
 }
 
@@ -278,6 +294,7 @@ func (this *QEventPoint) State() QEventPointStates {
 func (this *QEventPoint) Device() *QPointingDevice {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Device")
 	r := C.qute_QEventPoint_device(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPointingDevice](rt.WrapClass(r, "QPointingDevice", rt.KeepOrBorrow), r)
 }
 
@@ -289,6 +306,7 @@ func (this *QEventPoint) Device() *QPointingDevice {
 func (this *QEventPoint) Id() int {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Id")
 	r := C.qute_QEventPoint_id(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -302,6 +320,7 @@ func (this *QEventPoint) Id() int {
 func (this *QEventPoint) UniqueId() *QPointingDeviceUniqueId {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.UniqueId")
 	r := C.qute_QEventPoint_uniqueId(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPointingDeviceUniqueId](rt.WrapClass(r, "QPointingDeviceUniqueId", rt.TakeOwned), r)
 }
 
@@ -313,6 +332,7 @@ func (this *QEventPoint) UniqueId() *QPointingDeviceUniqueId {
 func (this *QEventPoint) Timestamp() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Timestamp")
 	r := C.qute_QEventPoint_timestamp(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -324,6 +344,7 @@ func (this *QEventPoint) Timestamp() uint64 {
 func (this *QEventPoint) LastTimestamp() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.LastTimestamp")
 	r := C.qute_QEventPoint_lastTimestamp(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -335,6 +356,7 @@ func (this *QEventPoint) LastTimestamp() uint64 {
 func (this *QEventPoint) PressTimestamp() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.PressTimestamp")
 	r := C.qute_QEventPoint_pressTimestamp(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -346,6 +368,7 @@ func (this *QEventPoint) PressTimestamp() uint64 {
 func (this *QEventPoint) TimeHeld() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.TimeHeld")
 	r := C.qute_QEventPoint_timeHeld(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -357,6 +380,7 @@ func (this *QEventPoint) TimeHeld() float64 {
 func (this *QEventPoint) Pressure() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Pressure")
 	r := C.qute_QEventPoint_pressure(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -368,6 +392,7 @@ func (this *QEventPoint) Pressure() float64 {
 func (this *QEventPoint) Rotation() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.Rotation")
 	r := C.qute_QEventPoint_rotation(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -379,6 +404,7 @@ func (this *QEventPoint) Rotation() float64 {
 func (this *QEventPoint) EllipseDiameters() qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.EllipseDiameters")
 	r := C.qute_QEventPoint_ellipseDiameters(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -390,6 +416,7 @@ func (this *QEventPoint) EllipseDiameters() qtcore.QSizeF {
 func (this *QEventPoint) IsAccepted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.IsAccepted")
 	r := C.qute_QEventPoint_isAccepted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -401,4 +428,5 @@ func (this *QEventPoint) IsAccepted() bool {
 func (this *QEventPoint) SetAccepted() {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.SetAccepted")
 	C.qute_QEventPoint_setAccepted(self)
+	runtime.KeepAlive(this)
 }

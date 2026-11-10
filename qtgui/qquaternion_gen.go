@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -121,6 +122,7 @@ func NewQQuaternionWithScalar(scalar float32, xpos float32, ypos float32, zpos f
 func NewQQuaternionWithScalarVector3D(scalar float32, vector *QVector3D) *QQuaternion {
 	rt.CheckThread("NewQQuaternionWithScalarVector3D")
 	p := C.qute_QQuaternion_new_3(C.float(scalar), rt.UseArg(unsafe.Pointer(vector), "NewQQuaternionWithScalarVector3D"))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
@@ -133,6 +135,7 @@ func NewQQuaternionWithScalarVector3D(scalar float32, vector *QVector3D) *QQuate
 func NewQQuaternionWithVector4D(vector *QVector4D) *QQuaternion {
 	rt.CheckThread("NewQQuaternionWithVector4D")
 	p := C.qute_QQuaternion_new_4(rt.UseArg(unsafe.Pointer(vector), "NewQQuaternionWithVector4D"))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
@@ -145,6 +148,7 @@ func NewQQuaternionWithVector4D(vector *QVector4D) *QQuaternion {
 func (this *QQuaternion) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.IsNull")
 	r := C.qute_QQuaternion_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -156,6 +160,7 @@ func (this *QQuaternion) IsNull() bool {
 func (this *QQuaternion) IsIdentity() bool {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.IsIdentity")
 	r := C.qute_QQuaternion_isIdentity(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -169,6 +174,7 @@ func (this *QQuaternion) IsIdentity() bool {
 func (this *QQuaternion) Vector() *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Vector")
 	r := C.qute_QQuaternion_vector(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -180,6 +186,8 @@ func (this *QQuaternion) Vector() *QVector3D {
 func (this *QQuaternion) SetVector(vector *QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.SetVector")
 	C.qute_QQuaternion_setVector(self, rt.UseArg(unsafe.Pointer(vector), "QQuaternion.SetVector"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vector)
 }
 
 // SetVectorFloat32 wraps QQuaternion::setVector.
@@ -190,6 +198,7 @@ func (this *QQuaternion) SetVector(vector *QVector3D) {
 func (this *QQuaternion) SetVectorFloat32(x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.SetVectorFloat32")
 	C.qute_QQuaternion_setVector_1(self, C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // X wraps QQuaternion::x.
@@ -200,6 +209,7 @@ func (this *QQuaternion) SetVectorFloat32(x float32, y float32, z float32) {
 func (this *QQuaternion) X() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.X")
 	r := C.qute_QQuaternion_x(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -211,6 +221,7 @@ func (this *QQuaternion) X() float32 {
 func (this *QQuaternion) Y() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Y")
 	r := C.qute_QQuaternion_y(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -222,6 +233,7 @@ func (this *QQuaternion) Y() float32 {
 func (this *QQuaternion) Z() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Z")
 	r := C.qute_QQuaternion_z(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -233,6 +245,7 @@ func (this *QQuaternion) Z() float32 {
 func (this *QQuaternion) Scalar() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Scalar")
 	r := C.qute_QQuaternion_scalar(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -244,6 +257,7 @@ func (this *QQuaternion) Scalar() float32 {
 func (this *QQuaternion) SetX(x float32) {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.SetX")
 	C.qute_QQuaternion_setX(self, C.float(x))
+	runtime.KeepAlive(this)
 }
 
 // SetY wraps QQuaternion::setY.
@@ -254,6 +268,7 @@ func (this *QQuaternion) SetX(x float32) {
 func (this *QQuaternion) SetY(y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.SetY")
 	C.qute_QQuaternion_setY(self, C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // SetZ wraps QQuaternion::setZ.
@@ -264,6 +279,7 @@ func (this *QQuaternion) SetY(y float32) {
 func (this *QQuaternion) SetZ(z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.SetZ")
 	C.qute_QQuaternion_setZ(self, C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // SetScalar wraps QQuaternion::setScalar.
@@ -274,6 +290,7 @@ func (this *QQuaternion) SetZ(z float32) {
 func (this *QQuaternion) SetScalar(scalar float32) {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.SetScalar")
 	C.qute_QQuaternion_setScalar(self, C.float(scalar))
+	runtime.KeepAlive(this)
 }
 
 // Length wraps QQuaternion::length.
@@ -284,6 +301,7 @@ func (this *QQuaternion) SetScalar(scalar float32) {
 func (this *QQuaternion) Length() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Length")
 	r := C.qute_QQuaternion_length(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -295,6 +313,7 @@ func (this *QQuaternion) Length() float32 {
 func (this *QQuaternion) LengthSquared() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.LengthSquared")
 	r := C.qute_QQuaternion_lengthSquared(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -308,6 +327,7 @@ func (this *QQuaternion) LengthSquared() float32 {
 func (this *QQuaternion) Normalized() *QQuaternion {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Normalized")
 	r := C.qute_QQuaternion_normalized(self)
+	runtime.KeepAlive(this)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -319,6 +339,7 @@ func (this *QQuaternion) Normalized() *QQuaternion {
 func (this *QQuaternion) Normalize() {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Normalize")
 	C.qute_QQuaternion_normalize(self)
+	runtime.KeepAlive(this)
 }
 
 // Inverted wraps QQuaternion::inverted.
@@ -331,6 +352,7 @@ func (this *QQuaternion) Normalize() {
 func (this *QQuaternion) Inverted() *QQuaternion {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Inverted")
 	r := C.qute_QQuaternion_inverted(self)
+	runtime.KeepAlive(this)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -344,6 +366,7 @@ func (this *QQuaternion) Inverted() *QQuaternion {
 func (this *QQuaternion) Conjugated() *QQuaternion {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.Conjugated")
 	r := C.qute_QQuaternion_conjugated(self)
+	runtime.KeepAlive(this)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -357,6 +380,8 @@ func (this *QQuaternion) Conjugated() *QQuaternion {
 func (this *QQuaternion) RotatedVector(vector *QVector3D) *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.RotatedVector")
 	r := C.qute_QQuaternion_rotatedVector(self, rt.UseArg(unsafe.Pointer(vector), "QQuaternion.RotatedVector"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(vector)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -370,6 +395,7 @@ func (this *QQuaternion) RotatedVector(vector *QVector3D) *QVector3D {
 func (this *QQuaternion) ToVector4D() *QVector4D {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.ToVector4D")
 	r := C.qute_QQuaternion_toVector4D(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
@@ -385,6 +411,7 @@ func (this *QQuaternion) GetAxisAndAngle() (float32, float32, float32, float32) 
 	var zOut C.float
 	var angleOut C.float
 	C.qute_QQuaternion_getAxisAndAngle(self, &xOut, &yOut, &zOut, &angleOut)
+	runtime.KeepAlive(this)
 	return float32(xOut), float32(yOut), float32(zOut), float32(angleOut)
 }
 
@@ -398,6 +425,7 @@ func (this *QQuaternion) GetAxisAndAngle() (float32, float32, float32, float32) 
 func (this *QQuaternion) ToEulerAngles() *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QQuaternion.ToEulerAngles")
 	r := C.qute_QQuaternion_toEulerAngles(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -412,6 +440,7 @@ func (this *QQuaternion) GetEulerAngles() (float32, float32, float32) {
 	var yawOut C.float
 	var rollOut C.float
 	C.qute_QQuaternion_getEulerAngles(self, &pitchOut, &yawOut, &rollOut)
+	runtime.KeepAlive(this)
 	return float32(pitchOut), float32(yawOut), float32(rollOut)
 }
 
@@ -423,6 +452,8 @@ func (this *QQuaternion) GetEulerAngles() (float32, float32, float32) {
 func QQuaternionDotProduct(q1 *QQuaternion, q2 *QQuaternion) float32 {
 	rt.CheckThread("QQuaternionDotProduct")
 	r := C.qute_QQuaternion_dotProduct(rt.UseArg(unsafe.Pointer(q1), "QQuaternionDotProduct"), rt.UseArg(unsafe.Pointer(q2), "QQuaternionDotProduct"))
+	runtime.KeepAlive(q1)
+	runtime.KeepAlive(q2)
 	return float32(r)
 }
 
@@ -436,6 +467,7 @@ func QQuaternionDotProduct(q1 *QQuaternion, q2 *QQuaternion) float32 {
 func QQuaternionFromAxisAndAngle(axis *QVector3D, angle float32) *QQuaternion {
 	rt.CheckThread("QQuaternionFromAxisAndAngle")
 	r := C.qute_QQuaternion_fromAxisAndAngle(rt.UseArg(unsafe.Pointer(axis), "QQuaternionFromAxisAndAngle"), C.float(angle))
+	runtime.KeepAlive(axis)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -475,6 +507,9 @@ func QQuaternionFromEulerAngles(pitch float32, yaw float32, roll float32) *QQuat
 func QQuaternionFromAxes(xAxis *QVector3D, yAxis *QVector3D, zAxis *QVector3D) *QQuaternion {
 	rt.CheckThread("QQuaternionFromAxes")
 	r := C.qute_QQuaternion_fromAxes(rt.UseArg(unsafe.Pointer(xAxis), "QQuaternionFromAxes"), rt.UseArg(unsafe.Pointer(yAxis), "QQuaternionFromAxes"), rt.UseArg(unsafe.Pointer(zAxis), "QQuaternionFromAxes"))
+	runtime.KeepAlive(xAxis)
+	runtime.KeepAlive(yAxis)
+	runtime.KeepAlive(zAxis)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -488,6 +523,8 @@ func QQuaternionFromAxes(xAxis *QVector3D, yAxis *QVector3D, zAxis *QVector3D) *
 func QQuaternionFromDirection(direction *QVector3D, up *QVector3D) *QQuaternion {
 	rt.CheckThread("QQuaternionFromDirection")
 	r := C.qute_QQuaternion_fromDirection(rt.UseArg(unsafe.Pointer(direction), "QQuaternionFromDirection"), rt.UseArg(unsafe.Pointer(up), "QQuaternionFromDirection"))
+	runtime.KeepAlive(direction)
+	runtime.KeepAlive(up)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -501,6 +538,8 @@ func QQuaternionFromDirection(direction *QVector3D, up *QVector3D) *QQuaternion 
 func QQuaternionRotationTo(from *QVector3D, to *QVector3D) *QQuaternion {
 	rt.CheckThread("QQuaternionRotationTo")
 	r := C.qute_QQuaternion_rotationTo(rt.UseArg(unsafe.Pointer(from), "QQuaternionRotationTo"), rt.UseArg(unsafe.Pointer(to), "QQuaternionRotationTo"))
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -514,6 +553,8 @@ func QQuaternionRotationTo(from *QVector3D, to *QVector3D) *QQuaternion {
 func QQuaternionSlerp(q1 *QQuaternion, q2 *QQuaternion, t float32) *QQuaternion {
 	rt.CheckThread("QQuaternionSlerp")
 	r := C.qute_QQuaternion_slerp(rt.UseArg(unsafe.Pointer(q1), "QQuaternionSlerp"), rt.UseArg(unsafe.Pointer(q2), "QQuaternionSlerp"), C.float(t))
+	runtime.KeepAlive(q1)
+	runtime.KeepAlive(q2)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }
 
@@ -527,5 +568,7 @@ func QQuaternionSlerp(q1 *QQuaternion, q2 *QQuaternion, t float32) *QQuaternion 
 func QQuaternionNlerp(q1 *QQuaternion, q2 *QQuaternion, t float32) *QQuaternion {
 	rt.CheckThread("QQuaternionNlerp")
 	r := C.qute_QQuaternion_nlerp(rt.UseArg(unsafe.Pointer(q1), "QQuaternionNlerp"), rt.UseArg(unsafe.Pointer(q2), "QQuaternionNlerp"), C.float(t))
+	runtime.KeepAlive(q1)
+	runtime.KeepAlive(q2)
 	return rt.View[QQuaternion](rt.WrapClass(r, "QQuaternion", rt.TakeOwned), r)
 }

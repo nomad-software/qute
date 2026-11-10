@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQListWidget(parent QWidgetLike) *QListWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQListWidget")
 	}
 	p := C.qute_QListWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,7 @@ func NewQListWidget(parent QWidgetLike) *QListWidget {
 func (this *QListWidget) Item(row int) *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.Item")
 	r := C.qute_QListWidget_item(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -94,6 +97,8 @@ func (this *QListWidget) Row(item QListWidgetItemLike) int {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.Row")
 	}
 	r := C.qute_QListWidget_row(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return int(r)
 }
 
@@ -112,6 +117,8 @@ func (this *QListWidget) InsertItem(row int, item QListWidgetItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.InsertItem")
 	}
 	C.qute_QListWidget_insertItem(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -123,6 +130,7 @@ func (this *QListWidget) InsertItem(row int, item QListWidgetItemLike) {
 func (this *QListWidget) InsertItemText(row int, label string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.InsertItemText")
 	C.qute_QListWidget_insertItem_1(self, C.int(row), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
+	runtime.KeepAlive(this)
 }
 
 // InsertItems wraps QListWidget::insertItems.
@@ -134,6 +142,7 @@ func (this *QListWidget) InsertItems(row int, labels []string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.InsertItems")
 	labelsData, labelsLens := quteStrListArg(labels)
 	C.qute_QListWidget_insertItems(self, C.int(row), (*C.char)(unsafe.Pointer(unsafe.SliceData(labelsData))), (*C.ptrdiff_t)(unsafe.SliceData(labelsLens)), C.ptrdiff_t(len(labels)))
+	runtime.KeepAlive(this)
 }
 
 // AddItemText wraps QListWidget::addItem.
@@ -144,6 +153,7 @@ func (this *QListWidget) InsertItems(row int, labels []string) {
 func (this *QListWidget) AddItemText(label string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.AddItemText")
 	C.qute_QListWidget_addItem(self, (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
+	runtime.KeepAlive(this)
 }
 
 // AddItem wraps QListWidget::addItem.
@@ -161,6 +171,8 @@ func (this *QListWidget) AddItem(item QListWidgetItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.AddItem")
 	}
 	C.qute_QListWidget_addItem_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -173,6 +185,7 @@ func (this *QListWidget) AddItems(labels []string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.AddItems")
 	labelsData, labelsLens := quteStrListArg(labels)
 	C.qute_QListWidget_addItems(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(labelsData))), (*C.ptrdiff_t)(unsafe.SliceData(labelsLens)), C.ptrdiff_t(len(labels)))
+	runtime.KeepAlive(this)
 }
 
 // TakeItem wraps QListWidget::takeItem.
@@ -185,6 +198,7 @@ func (this *QListWidget) AddItems(labels []string) {
 func (this *QListWidget) TakeItem(row int) *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.TakeItem")
 	r := C.qute_QListWidget_takeItem(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.TakeOwned), r)
 }
 
@@ -196,6 +210,7 @@ func (this *QListWidget) TakeItem(row int) *QListWidgetItem {
 func (this *QListWidget) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.Count")
 	r := C.qute_QListWidget_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -209,6 +224,7 @@ func (this *QListWidget) Count() int {
 func (this *QListWidget) CurrentItem() *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.CurrentItem")
 	r := C.qute_QListWidget_currentItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -224,6 +240,8 @@ func (this *QListWidget) SetCurrentItem(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.SetCurrentItem")
 	}
 	C.qute_QListWidget_setCurrentItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // SetCurrentItemWith wraps QListWidget::setCurrentItem.
@@ -238,6 +256,8 @@ func (this *QListWidget) SetCurrentItemWith(item QListWidgetItemLike, command qt
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.SetCurrentItemWith")
 	}
 	C.qute_QListWidget_setCurrentItem_1(self, itemPtr, C.int64_t(command))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // CurrentRow wraps QListWidget::currentRow.
@@ -248,6 +268,7 @@ func (this *QListWidget) SetCurrentItemWith(item QListWidgetItemLike, command qt
 func (this *QListWidget) CurrentRow() int {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.CurrentRow")
 	r := C.qute_QListWidget_currentRow(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -259,6 +280,7 @@ func (this *QListWidget) CurrentRow() int {
 func (this *QListWidget) SetCurrentRow(row int) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SetCurrentRow")
 	C.qute_QListWidget_setCurrentRow(self, C.int(row))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentRowWith wraps QListWidget::setCurrentRow.
@@ -269,6 +291,7 @@ func (this *QListWidget) SetCurrentRow(row int) {
 func (this *QListWidget) SetCurrentRowWith(row int, command qtcore.QItemSelectionModelSelectionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SetCurrentRowWith")
 	C.qute_QListWidget_setCurrentRow_1(self, C.int(row), C.int64_t(command))
+	runtime.KeepAlive(this)
 }
 
 // ItemAt wraps QListWidget::itemAt.
@@ -281,6 +304,7 @@ func (this *QListWidget) SetCurrentRowWith(row int, command qtcore.QItemSelectio
 func (this *QListWidget) ItemAt(pArg qtcore.QPoint) *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.ItemAt")
 	r := C.qute_QListWidget_itemAt(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -296,6 +320,8 @@ func (this *QListWidget) VisualItemRect(item QListWidgetItemLike) qtcore.QRect {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.VisualItemRect")
 	}
 	r := C.qute_QListWidget_visualItemRect(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return goQRect(r)
 }
 
@@ -307,6 +333,7 @@ func (this *QListWidget) VisualItemRect(item QListWidgetItemLike) qtcore.QRect {
 func (this *QListWidget) SortItems() {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SortItems")
 	C.qute_QListWidget_sortItems(self)
+	runtime.KeepAlive(this)
 }
 
 // SetSortingEnabled wraps QListWidget::setSortingEnabled.
@@ -317,6 +344,7 @@ func (this *QListWidget) SortItems() {
 func (this *QListWidget) SetSortingEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SetSortingEnabled")
 	C.qute_QListWidget_setSortingEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsSortingEnabled wraps QListWidget::isSortingEnabled.
@@ -327,6 +355,7 @@ func (this *QListWidget) SetSortingEnabled(enable bool) {
 func (this *QListWidget) IsSortingEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.IsSortingEnabled")
 	r := C.qute_QListWidget_isSortingEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -342,6 +371,8 @@ func (this *QListWidget) EditItem(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EditItem")
 	}
 	C.qute_QListWidget_editItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // OpenPersistentEditor wraps QListWidget::openPersistentEditor.
@@ -356,6 +387,8 @@ func (this *QListWidget) OpenPersistentEditor(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.OpenPersistentEditor")
 	}
 	C.qute_QListWidget_openPersistentEditor(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // ClosePersistentEditor wraps QListWidget::closePersistentEditor.
@@ -370,6 +403,8 @@ func (this *QListWidget) ClosePersistentEditor(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.ClosePersistentEditor")
 	}
 	C.qute_QListWidget_closePersistentEditor(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // IsPersistentEditorOpen wraps QListWidget::isPersistentEditorOpen.
@@ -384,6 +419,8 @@ func (this *QListWidget) IsPersistentEditorOpen(item QListWidgetItemLike) bool {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.IsPersistentEditorOpen")
 	}
 	r := C.qute_QListWidget_isPersistentEditorOpen(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return bool(r)
 }
 
@@ -401,6 +438,8 @@ func (this *QListWidget) ItemWidget(item QListWidgetItemLike) *QWidget {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.ItemWidget")
 	}
 	r := C.qute_QListWidget_itemWidget(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -423,6 +462,9 @@ func (this *QListWidget) SetItemWidget(item QListWidgetItemLike, widget QWidgetL
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QListWidget.SetItemWidget")
 	}
 	C.qute_QListWidget_setItemWidget(self, itemPtr, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -440,6 +482,8 @@ func (this *QListWidget) RemoveItemWidget(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.RemoveItemWidget")
 	}
 	C.qute_QListWidget_removeItemWidget(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // SelectedItems wraps QListWidget::selectedItems.
@@ -452,6 +496,7 @@ func (this *QListWidget) RemoveItemWidget(item QListWidgetItemLike) {
 func (this *QListWidget) SelectedItems() []*QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SelectedItems")
 	r := C.qute_QListWidget_selectedItems(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QListWidgetItem {
 		return rt.View[QListWidgetItem](rt.WrapClass(e, "QListWidgetItem", rt.KeepOrBorrow), e)
 	})
@@ -467,6 +512,7 @@ func (this *QListWidget) SelectedItems() []*QListWidgetItem {
 func (this *QListWidget) FindItems(text string, flags qtcore.MatchFlags) []*QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.FindItems")
 	r := C.qute_QListWidget_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QListWidgetItem {
 		return rt.View[QListWidgetItem](rt.WrapClass(e, "QListWidgetItem", rt.KeepOrBorrow), e)
 	})
@@ -486,6 +532,8 @@ func (this *QListWidget) Items(data qtcore.QMimeDataLike) []*QListWidgetItem {
 		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QListWidget.Items")
 	}
 	r := C.qute_QListWidget_items(self, dataPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
 	return quteList(r, func(e unsafe.Pointer) *QListWidgetItem {
 		return rt.View[QListWidgetItem](rt.WrapClass(e, "QListWidgetItem", rt.KeepOrBorrow), e)
 	})
@@ -505,6 +553,8 @@ func (this *QListWidget) IndexFromItem(item QListWidgetItemLike) *qtcore.QModelI
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.IndexFromItem")
 	}
 	r := C.qute_QListWidget_indexFromItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -518,6 +568,8 @@ func (this *QListWidget) IndexFromItem(item QListWidgetItemLike) *qtcore.QModelI
 func (this *QListWidget) ItemFromIndex(index *qtcore.QModelIndex) *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.ItemFromIndex")
 	r := C.qute_QListWidget_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QListWidget.ItemFromIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
 }
 
@@ -529,6 +581,7 @@ func (this *QListWidget) ItemFromIndex(index *qtcore.QModelIndex) *QListWidgetIt
 func (this *QListWidget) SetSupportedDragActions(actions qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SetSupportedDragActions")
 	C.qute_QListWidget_setSupportedDragActions(self, C.int64_t(actions))
+	runtime.KeepAlive(this)
 }
 
 // SupportedDragActions wraps QListWidget::supportedDragActions.
@@ -539,6 +592,7 @@ func (this *QListWidget) SetSupportedDragActions(actions qtcore.DropActions) {
 func (this *QListWidget) SupportedDragActions() qtcore.DropActions {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.SupportedDragActions")
 	r := C.qute_QListWidget_supportedDragActions(self)
+	runtime.KeepAlive(this)
 	return qtcore.DropActions(r)
 }
 
@@ -554,6 +608,8 @@ func (this *QListWidget) ScrollToItem(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.ScrollToItem")
 	}
 	C.qute_QListWidget_scrollToItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // Clear wraps QListWidget::clear.
@@ -564,6 +620,7 @@ func (this *QListWidget) ScrollToItem(item QListWidgetItemLike) {
 func (this *QListWidget) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.Clear")
 	C.qute_QListWidget_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitItemPressed wraps emitting the itemPressed signal.
@@ -578,6 +635,8 @@ func (this *QListWidget) EmitItemPressed(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EmitItemPressed")
 	}
 	C.qute_QListWidget_itemPressed_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemClicked wraps emitting the itemClicked signal.
@@ -592,6 +651,8 @@ func (this *QListWidget) EmitItemClicked(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EmitItemClicked")
 	}
 	C.qute_QListWidget_itemClicked_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemDoubleClicked wraps emitting the itemDoubleClicked signal.
@@ -606,6 +667,8 @@ func (this *QListWidget) EmitItemDoubleClicked(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EmitItemDoubleClicked")
 	}
 	C.qute_QListWidget_itemDoubleClicked_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemActivated wraps emitting the itemActivated signal.
@@ -620,6 +683,8 @@ func (this *QListWidget) EmitItemActivated(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EmitItemActivated")
 	}
 	C.qute_QListWidget_itemActivated_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemEntered wraps emitting the itemEntered signal.
@@ -634,6 +699,8 @@ func (this *QListWidget) EmitItemEntered(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EmitItemEntered")
 	}
 	C.qute_QListWidget_itemEntered_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitItemChanged wraps emitting the itemChanged signal.
@@ -648,6 +715,8 @@ func (this *QListWidget) EmitItemChanged(item QListWidgetItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.EmitItemChanged")
 	}
 	C.qute_QListWidget_itemChanged_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // EmitCurrentItemChanged wraps emitting the currentItemChanged signal.
@@ -666,6 +735,9 @@ func (this *QListWidget) EmitCurrentItemChanged(current QListWidgetItemLike, pre
 		previousPtr = rt.UseArg(unsafe.Pointer(previous.AsQListWidgetItem()), "QListWidget.EmitCurrentItemChanged")
 	}
 	C.qute_QListWidget_currentItemChanged_1(self, currentPtr, previousPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(current)
+	runtime.KeepAlive(previous)
 }
 
 // EmitCurrentTextChanged wraps emitting the currentTextChanged signal.
@@ -676,6 +748,7 @@ func (this *QListWidget) EmitCurrentItemChanged(current QListWidgetItemLike, pre
 func (this *QListWidget) EmitCurrentTextChanged(currentText string) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.EmitCurrentTextChanged")
 	C.qute_QListWidget_currentTextChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(currentText))), C.ptrdiff_t(len(currentText)))
+	runtime.KeepAlive(this)
 }
 
 // EmitCurrentRowChanged wraps emitting the currentRowChanged signal.
@@ -686,6 +759,7 @@ func (this *QListWidget) EmitCurrentTextChanged(currentText string) {
 func (this *QListWidget) EmitCurrentRowChanged(currentRow int) {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.EmitCurrentRowChanged")
 	C.qute_QListWidget_currentRowChanged_1(self, C.int(currentRow))
+	runtime.KeepAlive(this)
 }
 
 // EmitItemSelectionChanged wraps emitting the itemSelectionChanged signal.
@@ -696,6 +770,7 @@ func (this *QListWidget) EmitCurrentRowChanged(currentRow int) {
 func (this *QListWidget) EmitItemSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.EmitItemSelectionChanged")
 	C.qute_QListWidget_itemSelectionChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the

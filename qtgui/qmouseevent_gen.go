@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QMouseEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QMouseEvent {
 func (this *QMouseEvent) Pos() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QMouseEvent.Pos")
 	r := C.qute_QMouseEvent_pos(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QMouseEvent) Pos() qtcore.QPoint {
 func (this *QMouseEvent) Source() qtcore.MouseEventSource {
 	self := rt.Use(unsafe.Pointer(this), "QMouseEvent.Source")
 	r := C.qute_QMouseEvent_source(self)
+	runtime.KeepAlive(this)
 	return qtcore.MouseEventSource(r)
 }
 
@@ -63,5 +66,6 @@ func (this *QMouseEvent) Source() qtcore.MouseEventSource {
 func (this *QMouseEvent) Flags() qtcore.MouseEventFlags {
 	self := rt.Use(unsafe.Pointer(this), "QMouseEvent.Flags")
 	r := C.qute_QMouseEvent_flags(self)
+	runtime.KeepAlive(this)
 	return qtcore.MouseEventFlags(r)
 }

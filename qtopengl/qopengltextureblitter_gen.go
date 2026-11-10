@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQOpenGLTextureBlitter() *QOpenGLTextureBlitter {
 func (this *QOpenGLTextureBlitter) Create() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.Create")
 	r := C.qute_QOpenGLTextureBlitter_create(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -108,6 +110,7 @@ func (this *QOpenGLTextureBlitter) Create() bool {
 func (this *QOpenGLTextureBlitter) IsCreated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.IsCreated")
 	r := C.qute_QOpenGLTextureBlitter_isCreated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -119,6 +122,7 @@ func (this *QOpenGLTextureBlitter) IsCreated() bool {
 func (this *QOpenGLTextureBlitter) Destroy() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.Destroy")
 	C.qute_QOpenGLTextureBlitter_destroy(self)
+	runtime.KeepAlive(this)
 }
 
 // SupportsExternalOESTarget wraps QOpenGLTextureBlitter::supportsExternalOESTarget.
@@ -129,6 +133,7 @@ func (this *QOpenGLTextureBlitter) Destroy() {
 func (this *QOpenGLTextureBlitter) SupportsExternalOESTarget() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.SupportsExternalOESTarget")
 	r := C.qute_QOpenGLTextureBlitter_supportsExternalOESTarget(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -140,6 +145,7 @@ func (this *QOpenGLTextureBlitter) SupportsExternalOESTarget() bool {
 func (this *QOpenGLTextureBlitter) SupportsRectangleTarget() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.SupportsRectangleTarget")
 	r := C.qute_QOpenGLTextureBlitter_supportsRectangleTarget(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -151,6 +157,7 @@ func (this *QOpenGLTextureBlitter) SupportsRectangleTarget() bool {
 func (this *QOpenGLTextureBlitter) Bind() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.Bind")
 	C.qute_QOpenGLTextureBlitter_bind(self)
+	runtime.KeepAlive(this)
 }
 
 // Release wraps QOpenGLTextureBlitter::release.
@@ -161,6 +168,7 @@ func (this *QOpenGLTextureBlitter) Bind() {
 func (this *QOpenGLTextureBlitter) Release() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.Release")
 	C.qute_QOpenGLTextureBlitter_release(self)
+	runtime.KeepAlive(this)
 }
 
 // SetRedBlueSwizzle wraps QOpenGLTextureBlitter::setRedBlueSwizzle.
@@ -171,6 +179,7 @@ func (this *QOpenGLTextureBlitter) Release() {
 func (this *QOpenGLTextureBlitter) SetRedBlueSwizzle(swizzle bool) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.SetRedBlueSwizzle")
 	C.qute_QOpenGLTextureBlitter_setRedBlueSwizzle(self, C.bool(swizzle))
+	runtime.KeepAlive(this)
 }
 
 // SetOpacity wraps QOpenGLTextureBlitter::setOpacity.
@@ -181,6 +190,7 @@ func (this *QOpenGLTextureBlitter) SetRedBlueSwizzle(swizzle bool) {
 func (this *QOpenGLTextureBlitter) SetOpacity(opacity float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.SetOpacity")
 	C.qute_QOpenGLTextureBlitter_setOpacity(self, C.float(opacity))
+	runtime.KeepAlive(this)
 }
 
 // Blit wraps QOpenGLTextureBlitter::blit.
@@ -191,6 +201,8 @@ func (this *QOpenGLTextureBlitter) SetOpacity(opacity float32) {
 func (this *QOpenGLTextureBlitter) Blit(texture uint, targetTransform *qtgui.QMatrix4x4, sourceOrigin QOpenGLTextureBlitterOrigin) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.Blit")
 	C.qute_QOpenGLTextureBlitter_blit(self, C.uint(texture), rt.UseArg(unsafe.Pointer(targetTransform), "QOpenGLTextureBlitter.Blit"), C.int64_t(sourceOrigin))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(targetTransform)
 }
 
 // QOpenGLTextureBlitterTargetTransform wraps QOpenGLTextureBlitter::targetTransform.

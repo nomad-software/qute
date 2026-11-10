@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -113,6 +114,7 @@ func NewQRadialGradientWithCxFocalRadius(cx float64, cy float64, centerRadius fl
 func (this *QRadialGradient) Center() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.Center")
 	r := C.qute_QRadialGradient_center(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -124,6 +126,7 @@ func (this *QRadialGradient) Center() qtcore.QPointF {
 func (this *QRadialGradient) SetCenter(center qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.SetCenter")
 	C.qute_QRadialGradient_setCenter(self, cQPointF(center))
+	runtime.KeepAlive(this)
 }
 
 // FocalPoint wraps QRadialGradient::focalPoint.
@@ -134,6 +137,7 @@ func (this *QRadialGradient) SetCenter(center qtcore.QPointF) {
 func (this *QRadialGradient) FocalPoint() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.FocalPoint")
 	r := C.qute_QRadialGradient_focalPoint(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -145,6 +149,7 @@ func (this *QRadialGradient) FocalPoint() qtcore.QPointF {
 func (this *QRadialGradient) SetFocalPoint(focalPoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.SetFocalPoint")
 	C.qute_QRadialGradient_setFocalPoint(self, cQPointF(focalPoint))
+	runtime.KeepAlive(this)
 }
 
 // Radius wraps QRadialGradient::radius.
@@ -155,6 +160,7 @@ func (this *QRadialGradient) SetFocalPoint(focalPoint qtcore.QPointF) {
 func (this *QRadialGradient) Radius() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.Radius")
 	r := C.qute_QRadialGradient_radius(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -166,6 +172,7 @@ func (this *QRadialGradient) Radius() float64 {
 func (this *QRadialGradient) SetRadius(radius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.SetRadius")
 	C.qute_QRadialGradient_setRadius(self, C.double(radius))
+	runtime.KeepAlive(this)
 }
 
 // CenterRadius wraps QRadialGradient::centerRadius.
@@ -176,6 +183,7 @@ func (this *QRadialGradient) SetRadius(radius float64) {
 func (this *QRadialGradient) CenterRadius() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.CenterRadius")
 	r := C.qute_QRadialGradient_centerRadius(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -187,6 +195,7 @@ func (this *QRadialGradient) CenterRadius() float64 {
 func (this *QRadialGradient) SetCenterRadius(radius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.SetCenterRadius")
 	C.qute_QRadialGradient_setCenterRadius(self, C.double(radius))
+	runtime.KeepAlive(this)
 }
 
 // FocalRadius wraps QRadialGradient::focalRadius.
@@ -197,6 +206,7 @@ func (this *QRadialGradient) SetCenterRadius(radius float64) {
 func (this *QRadialGradient) FocalRadius() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.FocalRadius")
 	r := C.qute_QRadialGradient_focalRadius(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -208,4 +218,5 @@ func (this *QRadialGradient) FocalRadius() float64 {
 func (this *QRadialGradient) SetFocalRadius(radius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QRadialGradient.SetFocalRadius")
 	C.qute_QRadialGradient_setFocalRadius(self, C.double(radius))
+	runtime.KeepAlive(this)
 }

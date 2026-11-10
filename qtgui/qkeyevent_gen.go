@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -41,6 +42,7 @@ func QKeyEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QKeyEvent {
 func (this *QKeyEvent) Key() int {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.Key")
 	r := C.qute_QKeyEvent_key(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -52,6 +54,7 @@ func (this *QKeyEvent) Key() int {
 func (this *QKeyEvent) Matches(key QKeySequenceStandardKey) bool {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.Matches")
 	r := C.qute_QKeyEvent_matches(self, C.int64_t(key))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -65,6 +68,7 @@ func (this *QKeyEvent) Matches(key QKeySequenceStandardKey) bool {
 func (this *QKeyEvent) KeyCombination() *qtcore.QKeyCombination {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.KeyCombination")
 	r := C.qute_QKeyEvent_keyCombination(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QKeyCombination](rt.WrapClass(r, "QKeyCombination", rt.TakeOwned), r)
 }
 
@@ -76,6 +80,7 @@ func (this *QKeyEvent) KeyCombination() *qtcore.QKeyCombination {
 func (this *QKeyEvent) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.Text")
 	r := C.qute_QKeyEvent_text(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -87,6 +92,7 @@ func (this *QKeyEvent) Text() string {
 func (this *QKeyEvent) IsAutoRepeat() bool {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.IsAutoRepeat")
 	r := C.qute_QKeyEvent_isAutoRepeat(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -98,6 +104,7 @@ func (this *QKeyEvent) IsAutoRepeat() bool {
 func (this *QKeyEvent) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.Count")
 	r := C.qute_QKeyEvent_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -109,6 +116,7 @@ func (this *QKeyEvent) Count() int {
 func (this *QKeyEvent) NativeScanCode() uint {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.NativeScanCode")
 	r := C.qute_QKeyEvent_nativeScanCode(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -120,6 +128,7 @@ func (this *QKeyEvent) NativeScanCode() uint {
 func (this *QKeyEvent) NativeVirtualKey() uint {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.NativeVirtualKey")
 	r := C.qute_QKeyEvent_nativeVirtualKey(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -131,5 +140,6 @@ func (this *QKeyEvent) NativeVirtualKey() uint {
 func (this *QKeyEvent) NativeModifiers() uint {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.NativeModifiers")
 	r := C.qute_QKeyEvent_nativeModifiers(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }

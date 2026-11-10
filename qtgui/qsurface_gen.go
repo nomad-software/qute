@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -84,6 +85,7 @@ func (this *QSurface) Unkeep() {
 func (this *QSurface) SurfaceClass() QSurfaceSurfaceClass {
 	self := rt.Use(unsafe.Pointer(this), "QSurface.SurfaceClass")
 	r := C.qute_QSurface_surfaceClass(self)
+	runtime.KeepAlive(this)
 	return QSurfaceSurfaceClass(r)
 }
 
@@ -97,6 +99,7 @@ func (this *QSurface) SurfaceClass() QSurfaceSurfaceClass {
 func (this *QSurface) Format() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(this), "QSurface.Format")
 	r := C.qute_QSurface_format(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
 
@@ -108,6 +111,7 @@ func (this *QSurface) Format() *QSurfaceFormat {
 func (this *QSurface) SurfaceType() QSurfaceSurfaceType {
 	self := rt.Use(unsafe.Pointer(this), "QSurface.SurfaceType")
 	r := C.qute_QSurface_surfaceType(self)
+	runtime.KeepAlive(this)
 	return QSurfaceSurfaceType(r)
 }
 
@@ -119,6 +123,7 @@ func (this *QSurface) SurfaceType() QSurfaceSurfaceType {
 func (this *QSurface) SupportsOpenGL() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSurface.SupportsOpenGL")
 	r := C.qute_QSurface_supportsOpenGL(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,5 +135,6 @@ func (this *QSurface) SupportsOpenGL() bool {
 func (this *QSurface) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QSurface.Size")
 	r := C.qute_QSurface_size(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }

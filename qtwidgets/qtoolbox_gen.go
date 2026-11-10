@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQToolBox(parent QWidgetLike) *QToolBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolBox")
 	}
 	p := C.qute_QToolBox_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -85,6 +87,8 @@ func (this *QToolBox) AddItem(widget QWidgetLike, text string) int {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QToolBox.AddItem")
 	}
 	r := C.qute_QToolBox_addItem(self, widgetPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return int(r)
 }
@@ -104,6 +108,9 @@ func (this *QToolBox) AddItemIcon(widget QWidgetLike, icon *qtgui.QIcon, text st
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QToolBox.AddItemIcon")
 	}
 	r := C.qute_QToolBox_addItem_1(self, widgetPtr, rt.UseArg(unsafe.Pointer(icon), "QToolBox.AddItemIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	runtime.KeepAlive(icon)
 	widgetH.TransferToCpp()
 	return int(r)
 }
@@ -123,6 +130,8 @@ func (this *QToolBox) InsertItem(index int, widget QWidgetLike, text string) int
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QToolBox.InsertItem")
 	}
 	r := C.qute_QToolBox_insertItem(self, C.int(index), widgetPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 	return int(r)
 }
@@ -142,6 +151,9 @@ func (this *QToolBox) InsertItemIcon(index int, widget QWidgetLike, icon *qtgui.
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QToolBox.InsertItemIcon")
 	}
 	r := C.qute_QToolBox_insertItem_1(self, C.int(index), widgetPtr, rt.UseArg(unsafe.Pointer(icon), "QToolBox.InsertItemIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	runtime.KeepAlive(icon)
 	widgetH.TransferToCpp()
 	return int(r)
 }
@@ -154,6 +166,7 @@ func (this *QToolBox) InsertItemIcon(index int, widget QWidgetLike, icon *qtgui.
 func (this *QToolBox) RemoveItem(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.RemoveItem")
 	C.qute_QToolBox_removeItem(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // SetItemEnabled wraps QToolBox::setItemEnabled.
@@ -164,6 +177,7 @@ func (this *QToolBox) RemoveItem(index int) {
 func (this *QToolBox) SetItemEnabled(index int, enabled bool) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.SetItemEnabled")
 	C.qute_QToolBox_setItemEnabled(self, C.int(index), C.bool(enabled))
+	runtime.KeepAlive(this)
 }
 
 // IsItemEnabled wraps QToolBox::isItemEnabled.
@@ -174,6 +188,7 @@ func (this *QToolBox) SetItemEnabled(index int, enabled bool) {
 func (this *QToolBox) IsItemEnabled(index int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.IsItemEnabled")
 	r := C.qute_QToolBox_isItemEnabled(self, C.int(index))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -185,6 +200,7 @@ func (this *QToolBox) IsItemEnabled(index int) bool {
 func (this *QToolBox) SetItemText(index int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.SetItemText")
 	C.qute_QToolBox_setItemText(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 }
 
 // ItemText wraps QToolBox::itemText.
@@ -195,6 +211,7 @@ func (this *QToolBox) SetItemText(index int, text string) {
 func (this *QToolBox) ItemText(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.ItemText")
 	r := C.qute_QToolBox_itemText(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -206,6 +223,8 @@ func (this *QToolBox) ItemText(index int) string {
 func (this *QToolBox) SetItemIcon(index int, icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.SetItemIcon")
 	C.qute_QToolBox_setItemIcon(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QToolBox.SetItemIcon"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
 }
 
 // ItemIcon wraps QToolBox::itemIcon.
@@ -218,6 +237,7 @@ func (this *QToolBox) SetItemIcon(index int, icon *qtgui.QIcon) {
 func (this *QToolBox) ItemIcon(index int) *qtgui.QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.ItemIcon")
 	r := C.qute_QToolBox_itemIcon(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -229,6 +249,7 @@ func (this *QToolBox) ItemIcon(index int) *qtgui.QIcon {
 func (this *QToolBox) SetItemToolTip(index int, toolTip string) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.SetItemToolTip")
 	C.qute_QToolBox_setItemToolTip(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(toolTip))), C.ptrdiff_t(len(toolTip)))
+	runtime.KeepAlive(this)
 }
 
 // ItemToolTip wraps QToolBox::itemToolTip.
@@ -239,6 +260,7 @@ func (this *QToolBox) SetItemToolTip(index int, toolTip string) {
 func (this *QToolBox) ItemToolTip(index int) string {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.ItemToolTip")
 	r := C.qute_QToolBox_itemToolTip(self, C.int(index))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -250,6 +272,7 @@ func (this *QToolBox) ItemToolTip(index int) string {
 func (this *QToolBox) CurrentIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.CurrentIndex")
 	r := C.qute_QToolBox_currentIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -263,6 +286,7 @@ func (this *QToolBox) CurrentIndex() int {
 func (this *QToolBox) CurrentWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.CurrentWidget")
 	r := C.qute_QToolBox_currentWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -276,6 +300,7 @@ func (this *QToolBox) CurrentWidget() *QWidget {
 func (this *QToolBox) Widget(index int) *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.Widget")
 	r := C.qute_QToolBox_widget(self, C.int(index))
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -291,6 +316,8 @@ func (this *QToolBox) IndexOf(widget QWidgetLike) int {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QToolBox.IndexOf")
 	}
 	r := C.qute_QToolBox_indexOf(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	return int(r)
 }
 
@@ -302,6 +329,7 @@ func (this *QToolBox) IndexOf(widget QWidgetLike) int {
 func (this *QToolBox) Count() int {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.Count")
 	r := C.qute_QToolBox_count(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -313,6 +341,7 @@ func (this *QToolBox) Count() int {
 func (this *QToolBox) SetCurrentIndex(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.SetCurrentIndex")
 	C.qute_QToolBox_setCurrentIndex(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // SetCurrentWidget wraps QToolBox::setCurrentWidget.
@@ -327,6 +356,8 @@ func (this *QToolBox) SetCurrentWidget(widget QWidgetLike) {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QToolBox.SetCurrentWidget")
 	}
 	C.qute_QToolBox_setCurrentWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 }
 
 // EmitCurrentChanged wraps emitting the currentChanged signal.
@@ -337,6 +368,7 @@ func (this *QToolBox) SetCurrentWidget(widget QWidgetLike) {
 func (this *QToolBox) EmitCurrentChanged(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QToolBox.EmitCurrentChanged")
 	C.qute_QToolBox_currentChanged_1(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the

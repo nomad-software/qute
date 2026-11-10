@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,7 @@ func NewQEventLoop(parent QObjectLike) *QEventLoop {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQEventLoop")
 	}
 	p := C.qute_QEventLoop_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -76,6 +78,7 @@ func NewQEventLoop(parent QObjectLike) *QEventLoop {
 func (this *QEventLoop) ProcessEvents() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ProcessEvents")
 	r := C.qute_QEventLoop_processEvents(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -87,6 +90,7 @@ func (this *QEventLoop) ProcessEvents() bool {
 func (this *QEventLoop) ProcessEventsWithProcessEventsFlag(flags QEventLoopProcessEventsFlags, maximumTime int) {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ProcessEventsWithProcessEventsFlag")
 	C.qute_QEventLoop_processEvents_1(self, C.int64_t(flags), C.int(maximumTime))
+	runtime.KeepAlive(this)
 }
 
 // ProcessEventsWithProcessEventsFlagDeadlineTimer wraps QEventLoop::processEvents.
@@ -97,6 +101,8 @@ func (this *QEventLoop) ProcessEventsWithProcessEventsFlag(flags QEventLoopProce
 func (this *QEventLoop) ProcessEventsWithProcessEventsFlagDeadlineTimer(flags QEventLoopProcessEventsFlags, deadline *QDeadlineTimer) {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ProcessEventsWithProcessEventsFlagDeadlineTimer")
 	C.qute_QEventLoop_processEvents_2(self, C.int64_t(flags), rt.UseArg(unsafe.Pointer(deadline), "QEventLoop.ProcessEventsWithProcessEventsFlagDeadlineTimer"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(deadline)
 }
 
 // Exec wraps QEventLoop::exec.
@@ -107,6 +113,7 @@ func (this *QEventLoop) ProcessEventsWithProcessEventsFlagDeadlineTimer(flags QE
 func (this *QEventLoop) Exec() int {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.Exec")
 	r := C.qute_QEventLoop_exec(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -118,6 +125,7 @@ func (this *QEventLoop) Exec() int {
 func (this *QEventLoop) IsRunning() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.IsRunning")
 	r := C.qute_QEventLoop_isRunning(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -129,6 +137,7 @@ func (this *QEventLoop) IsRunning() bool {
 func (this *QEventLoop) WakeUp() {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.WakeUp")
 	C.qute_QEventLoop_wakeUp(self)
+	runtime.KeepAlive(this)
 }
 
 // Exit wraps QEventLoop::exit.
@@ -139,6 +148,7 @@ func (this *QEventLoop) WakeUp() {
 func (this *QEventLoop) Exit() {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.Exit")
 	C.qute_QEventLoop_exit(self)
+	runtime.KeepAlive(this)
 }
 
 // Quit wraps QEventLoop::quit.
@@ -149,4 +159,5 @@ func (this *QEventLoop) Exit() {
 func (this *QEventLoop) Quit() {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.Quit")
 	C.qute_QEventLoop_quit(self)
+	runtime.KeepAlive(this)
 }

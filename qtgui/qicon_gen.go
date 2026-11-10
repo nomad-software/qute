@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQIcon() *QIcon {
 func NewQIconWithPixmap(pixmap *QPixmap) *QIcon {
 	rt.CheckThread("NewQIconWithPixmap")
 	p := C.qute_QIcon_new_1(rt.UseArg(unsafe.Pointer(pixmap), "NewQIconWithPixmap"))
+	runtime.KeepAlive(pixmap)
 	h := rt.WrapClass(p, "QIcon", rt.NewOwned)
 	return rt.View[QIcon](h, p)
 }
@@ -123,6 +125,7 @@ func NewQIconWithFileName(fileName string) *QIcon {
 func (this *QIcon) Pixmap(size qtcore.QSize) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.Pixmap")
 	r := C.qute_QIcon_pixmap(self, cQSize(size))
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -136,6 +139,7 @@ func (this *QIcon) Pixmap(size qtcore.QSize) *QPixmap {
 func (this *QIcon) PixmapExtent(extent int) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.PixmapExtent")
 	r := C.qute_QIcon_pixmap_1(self, C.int(extent))
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -149,6 +153,7 @@ func (this *QIcon) PixmapExtent(extent int) *QPixmap {
 func (this *QIcon) PixmapScaled(size qtcore.QSize, devicePixelRatio float64) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.PixmapScaled")
 	r := C.qute_QIcon_pixmap_2(self, cQSize(size), C.double(devicePixelRatio))
+	runtime.KeepAlive(this)
 	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
@@ -160,6 +165,7 @@ func (this *QIcon) PixmapScaled(size qtcore.QSize, devicePixelRatio float64) *QP
 func (this *QIcon) ActualSize(size qtcore.QSize) qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.ActualSize")
 	r := C.qute_QIcon_actualSize(self, cQSize(size))
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -171,6 +177,7 @@ func (this *QIcon) ActualSize(size qtcore.QSize) qtcore.QSize {
 func (this *QIcon) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.Name")
 	r := C.qute_QIcon_name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -186,6 +193,8 @@ func (this *QIcon) Paint(painter QPainterLike, rect qtcore.QRect) {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QIcon.Paint")
 	}
 	C.qute_QIcon_paint(self, painterPtr, cQRect(rect))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
 }
 
 // IsNull wraps QIcon::isNull.
@@ -196,6 +205,7 @@ func (this *QIcon) Paint(painter QPainterLike, rect qtcore.QRect) {
 func (this *QIcon) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.IsNull")
 	r := C.qute_QIcon_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -207,6 +217,7 @@ func (this *QIcon) IsNull() bool {
 func (this *QIcon) CacheKey() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.CacheKey")
 	r := C.qute_QIcon_cacheKey(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -218,6 +229,8 @@ func (this *QIcon) CacheKey() int64 {
 func (this *QIcon) AddPixmap(pixmap *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.AddPixmap")
 	C.qute_QIcon_addPixmap(self, rt.UseArg(unsafe.Pointer(pixmap), "QIcon.AddPixmap"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // AddFile wraps QIcon::addFile.
@@ -228,6 +241,7 @@ func (this *QIcon) AddPixmap(pixmap *QPixmap) {
 func (this *QIcon) AddFile(fileName string) {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.AddFile")
 	C.qute_QIcon_addFile(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	runtime.KeepAlive(this)
 }
 
 // AvailableSizes wraps QIcon::availableSizes.
@@ -238,6 +252,7 @@ func (this *QIcon) AddFile(fileName string) {
 func (this *QIcon) AvailableSizes() []qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.AvailableSizes")
 	r := C.qute_QIcon_availableSizes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_size) qtcore.QSize { return goQSize(e) })
 }
 
@@ -249,6 +264,7 @@ func (this *QIcon) AvailableSizes() []qtcore.QSize {
 func (this *QIcon) SetIsMask(isMask bool) {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.SetIsMask")
 	C.qute_QIcon_setIsMask(self, C.bool(isMask))
+	runtime.KeepAlive(this)
 }
 
 // IsMask wraps QIcon::isMask.
@@ -259,6 +275,7 @@ func (this *QIcon) SetIsMask(isMask bool) {
 func (this *QIcon) IsMask() bool {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.IsMask")
 	r := C.qute_QIcon_isMask(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -285,6 +302,7 @@ func QIconFromTheme(name string) *QIcon {
 func QIconFromThemeOr(name string, fallback *QIcon) *QIcon {
 	rt.CheckThread("QIconFromThemeOr")
 	r := C.qute_QIcon_fromTheme_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), rt.UseArg(unsafe.Pointer(fallback), "QIconFromThemeOr"))
+	runtime.KeepAlive(fallback)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 
@@ -322,6 +340,7 @@ func QIconFromThemeIcon(icon QIconThemeIcon) *QIcon {
 func QIconFromThemeIconOr(icon QIconThemeIcon, fallback *QIcon) *QIcon {
 	rt.CheckThread("QIconFromThemeIconOr")
 	r := C.qute_QIcon_fromTheme_3(C.int64_t(icon), rt.UseArg(unsafe.Pointer(fallback), "QIconFromThemeIconOr"))
+	runtime.KeepAlive(fallback)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }
 

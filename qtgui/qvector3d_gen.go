@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -145,6 +146,7 @@ func NewQVector3DWithPointF(point qtcore.QPointF) *QVector3D {
 func NewQVector3DWithVector2D(vector *QVector2D) *QVector3D {
 	rt.CheckThread("NewQVector3DWithVector2D")
 	p := C.qute_QVector3D_new_5(rt.UseArg(unsafe.Pointer(vector), "NewQVector3DWithVector2D"))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
@@ -157,6 +159,7 @@ func NewQVector3DWithVector2D(vector *QVector2D) *QVector3D {
 func NewQVector3DWithVector2DZpos(vector *QVector2D, zpos float32) *QVector3D {
 	rt.CheckThread("NewQVector3DWithVector2DZpos")
 	p := C.qute_QVector3D_new_6(rt.UseArg(unsafe.Pointer(vector), "NewQVector3DWithVector2DZpos"), C.float(zpos))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
@@ -169,6 +172,7 @@ func NewQVector3DWithVector2DZpos(vector *QVector2D, zpos float32) *QVector3D {
 func NewQVector3DWithVector4D(vector *QVector4D) *QVector3D {
 	rt.CheckThread("NewQVector3DWithVector4D")
 	p := C.qute_QVector3D_new_7(rt.UseArg(unsafe.Pointer(vector), "NewQVector3DWithVector4D"))
+	runtime.KeepAlive(vector)
 	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
@@ -181,6 +185,7 @@ func NewQVector3DWithVector4D(vector *QVector4D) *QVector3D {
 func (this *QVector3D) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.IsNull")
 	r := C.qute_QVector3D_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -192,6 +197,7 @@ func (this *QVector3D) IsNull() bool {
 func (this *QVector3D) X() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.X")
 	r := C.qute_QVector3D_x(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -203,6 +209,7 @@ func (this *QVector3D) X() float32 {
 func (this *QVector3D) Y() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Y")
 	r := C.qute_QVector3D_y(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -214,6 +221,7 @@ func (this *QVector3D) Y() float32 {
 func (this *QVector3D) Z() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Z")
 	r := C.qute_QVector3D_z(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -225,6 +233,7 @@ func (this *QVector3D) Z() float32 {
 func (this *QVector3D) SetX(x float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.SetX")
 	C.qute_QVector3D_setX(self, C.float(x))
+	runtime.KeepAlive(this)
 }
 
 // SetY wraps QVector3D::setY.
@@ -235,6 +244,7 @@ func (this *QVector3D) SetX(x float32) {
 func (this *QVector3D) SetY(y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.SetY")
 	C.qute_QVector3D_setY(self, C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // SetZ wraps QVector3D::setZ.
@@ -245,6 +255,7 @@ func (this *QVector3D) SetY(y float32) {
 func (this *QVector3D) SetZ(z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.SetZ")
 	C.qute_QVector3D_setZ(self, C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // Length wraps QVector3D::length.
@@ -255,6 +266,7 @@ func (this *QVector3D) SetZ(z float32) {
 func (this *QVector3D) Length() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Length")
 	r := C.qute_QVector3D_length(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -266,6 +278,7 @@ func (this *QVector3D) Length() float32 {
 func (this *QVector3D) LengthSquared() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.LengthSquared")
 	r := C.qute_QVector3D_lengthSquared(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -279,6 +292,7 @@ func (this *QVector3D) LengthSquared() float32 {
 func (this *QVector3D) Normalized() *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Normalized")
 	r := C.qute_QVector3D_normalized(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -290,6 +304,7 @@ func (this *QVector3D) Normalized() *QVector3D {
 func (this *QVector3D) Normalize() {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Normalize")
 	C.qute_QVector3D_normalize(self)
+	runtime.KeepAlive(this)
 }
 
 // Project wraps QVector3D::project.
@@ -302,6 +317,9 @@ func (this *QVector3D) Normalize() {
 func (this *QVector3D) Project(modelView *QMatrix4x4, projection *QMatrix4x4, viewport qtcore.QRect) *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Project")
 	r := C.qute_QVector3D_project(self, rt.UseArg(unsafe.Pointer(modelView), "QVector3D.Project"), rt.UseArg(unsafe.Pointer(projection), "QVector3D.Project"), cQRect(viewport))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modelView)
+	runtime.KeepAlive(projection)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -315,6 +333,9 @@ func (this *QVector3D) Project(modelView *QMatrix4x4, projection *QMatrix4x4, vi
 func (this *QVector3D) Unproject(modelView *QMatrix4x4, projection *QMatrix4x4, viewport qtcore.QRect) *QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.Unproject")
 	r := C.qute_QVector3D_unproject(self, rt.UseArg(unsafe.Pointer(modelView), "QVector3D.Unproject"), rt.UseArg(unsafe.Pointer(projection), "QVector3D.Unproject"), cQRect(viewport))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modelView)
+	runtime.KeepAlive(projection)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -326,6 +347,8 @@ func (this *QVector3D) Unproject(modelView *QMatrix4x4, projection *QMatrix4x4, 
 func (this *QVector3D) DistanceToPoint(point *QVector3D) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.DistanceToPoint")
 	r := C.qute_QVector3D_distanceToPoint(self, rt.UseArg(unsafe.Pointer(point), "QVector3D.DistanceToPoint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 	return float32(r)
 }
 
@@ -337,6 +360,9 @@ func (this *QVector3D) DistanceToPoint(point *QVector3D) float32 {
 func (this *QVector3D) DistanceToPlane(plane *QVector3D, normal *QVector3D) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.DistanceToPlane")
 	r := C.qute_QVector3D_distanceToPlane(self, rt.UseArg(unsafe.Pointer(plane), "QVector3D.DistanceToPlane"), rt.UseArg(unsafe.Pointer(normal), "QVector3D.DistanceToPlane"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(plane)
+	runtime.KeepAlive(normal)
 	return float32(r)
 }
 
@@ -348,6 +374,10 @@ func (this *QVector3D) DistanceToPlane(plane *QVector3D, normal *QVector3D) floa
 func (this *QVector3D) DistanceToPlaneWithVector3D(plane1 *QVector3D, plane2 *QVector3D, plane3 *QVector3D) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.DistanceToPlaneWithVector3D")
 	r := C.qute_QVector3D_distanceToPlane_1(self, rt.UseArg(unsafe.Pointer(plane1), "QVector3D.DistanceToPlaneWithVector3D"), rt.UseArg(unsafe.Pointer(plane2), "QVector3D.DistanceToPlaneWithVector3D"), rt.UseArg(unsafe.Pointer(plane3), "QVector3D.DistanceToPlaneWithVector3D"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(plane1)
+	runtime.KeepAlive(plane2)
+	runtime.KeepAlive(plane3)
 	return float32(r)
 }
 
@@ -359,6 +389,9 @@ func (this *QVector3D) DistanceToPlaneWithVector3D(plane1 *QVector3D, plane2 *QV
 func (this *QVector3D) DistanceToLine(point *QVector3D, direction *QVector3D) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.DistanceToLine")
 	r := C.qute_QVector3D_distanceToLine(self, rt.UseArg(unsafe.Pointer(point), "QVector3D.DistanceToLine"), rt.UseArg(unsafe.Pointer(direction), "QVector3D.DistanceToLine"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
+	runtime.KeepAlive(direction)
 	return float32(r)
 }
 
@@ -372,6 +405,7 @@ func (this *QVector3D) DistanceToLine(point *QVector3D, direction *QVector3D) fl
 func (this *QVector3D) ToVector2D() *QVector2D {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.ToVector2D")
 	r := C.qute_QVector3D_toVector2D(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector2D](rt.WrapClass(r, "QVector2D", rt.TakeOwned), r)
 }
 
@@ -385,6 +419,7 @@ func (this *QVector3D) ToVector2D() *QVector2D {
 func (this *QVector3D) ToVector4D() *QVector4D {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.ToVector4D")
 	r := C.qute_QVector3D_toVector4D(self)
+	runtime.KeepAlive(this)
 	return rt.View[QVector4D](rt.WrapClass(r, "QVector4D", rt.TakeOwned), r)
 }
 
@@ -396,6 +431,7 @@ func (this *QVector3D) ToVector4D() *QVector4D {
 func (this *QVector3D) ToPoint() qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.ToPoint")
 	r := C.qute_QVector3D_toPoint(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -407,6 +443,7 @@ func (this *QVector3D) ToPoint() qtcore.QPoint {
 func (this *QVector3D) ToPointF() qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QVector3D.ToPointF")
 	r := C.qute_QVector3D_toPointF(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -418,6 +455,8 @@ func (this *QVector3D) ToPointF() qtcore.QPointF {
 func QVector3DDotProduct(v1 *QVector3D, v2 *QVector3D) float32 {
 	rt.CheckThread("QVector3DDotProduct")
 	r := C.qute_QVector3D_dotProduct(rt.UseArg(unsafe.Pointer(v1), "QVector3DDotProduct"), rt.UseArg(unsafe.Pointer(v2), "QVector3DDotProduct"))
+	runtime.KeepAlive(v1)
+	runtime.KeepAlive(v2)
 	return float32(r)
 }
 
@@ -431,6 +470,8 @@ func QVector3DDotProduct(v1 *QVector3D, v2 *QVector3D) float32 {
 func QVector3DCrossProduct(v1 *QVector3D, v2 *QVector3D) *QVector3D {
 	rt.CheckThread("QVector3DCrossProduct")
 	r := C.qute_QVector3D_crossProduct(rt.UseArg(unsafe.Pointer(v1), "QVector3DCrossProduct"), rt.UseArg(unsafe.Pointer(v2), "QVector3DCrossProduct"))
+	runtime.KeepAlive(v1)
+	runtime.KeepAlive(v2)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -444,6 +485,8 @@ func QVector3DCrossProduct(v1 *QVector3D, v2 *QVector3D) *QVector3D {
 func QVector3DNormal(v1 *QVector3D, v2 *QVector3D) *QVector3D {
 	rt.CheckThread("QVector3DNormal")
 	r := C.qute_QVector3D_normal(rt.UseArg(unsafe.Pointer(v1), "QVector3DNormal"), rt.UseArg(unsafe.Pointer(v2), "QVector3DNormal"))
+	runtime.KeepAlive(v1)
+	runtime.KeepAlive(v2)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -457,5 +500,8 @@ func QVector3DNormal(v1 *QVector3D, v2 *QVector3D) *QVector3D {
 func QVector3DNormalWithVector3D(v1 *QVector3D, v2 *QVector3D, v3 *QVector3D) *QVector3D {
 	rt.CheckThread("QVector3DNormalWithVector3D")
 	r := C.qute_QVector3D_normal_1(rt.UseArg(unsafe.Pointer(v1), "QVector3DNormalWithVector3D"), rt.UseArg(unsafe.Pointer(v2), "QVector3DNormalWithVector3D"), rt.UseArg(unsafe.Pointer(v3), "QVector3DNormalWithVector3D"))
+	runtime.KeepAlive(v1)
+	runtime.KeepAlive(v2)
+	runtime.KeepAlive(v3)
 	return rt.View[QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }

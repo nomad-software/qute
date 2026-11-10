@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -121,6 +122,7 @@ func NewQTransformAffine(h11 float64, h12 float64, h21 float64, h22 float64, dx 
 func (this *QTransform) IsAffine() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.IsAffine")
 	r := C.qute_QTransform_isAffine(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -132,6 +134,7 @@ func (this *QTransform) IsAffine() bool {
 func (this *QTransform) IsIdentity() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.IsIdentity")
 	r := C.qute_QTransform_isIdentity(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -143,6 +146,7 @@ func (this *QTransform) IsIdentity() bool {
 func (this *QTransform) IsInvertible() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.IsInvertible")
 	r := C.qute_QTransform_isInvertible(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -154,6 +158,7 @@ func (this *QTransform) IsInvertible() bool {
 func (this *QTransform) IsScaling() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.IsScaling")
 	r := C.qute_QTransform_isScaling(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -165,6 +170,7 @@ func (this *QTransform) IsScaling() bool {
 func (this *QTransform) IsRotating() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.IsRotating")
 	r := C.qute_QTransform_isRotating(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -176,6 +182,7 @@ func (this *QTransform) IsRotating() bool {
 func (this *QTransform) IsTranslating() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.IsTranslating")
 	r := C.qute_QTransform_isTranslating(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -187,6 +194,7 @@ func (this *QTransform) IsTranslating() bool {
 func (this *QTransform) Type() QTransformTransformationType {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Type")
 	r := C.qute_QTransform_type(self)
+	runtime.KeepAlive(this)
 	return QTransformTransformationType(r)
 }
 
@@ -198,6 +206,7 @@ func (this *QTransform) Type() QTransformTransformationType {
 func (this *QTransform) Determinant() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Determinant")
 	r := C.qute_QTransform_determinant(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -209,6 +218,7 @@ func (this *QTransform) Determinant() float64 {
 func (this *QTransform) M11() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M11")
 	r := C.qute_QTransform_m11(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -220,6 +230,7 @@ func (this *QTransform) M11() float64 {
 func (this *QTransform) M12() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M12")
 	r := C.qute_QTransform_m12(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -231,6 +242,7 @@ func (this *QTransform) M12() float64 {
 func (this *QTransform) M13() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M13")
 	r := C.qute_QTransform_m13(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -242,6 +254,7 @@ func (this *QTransform) M13() float64 {
 func (this *QTransform) M21() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M21")
 	r := C.qute_QTransform_m21(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -253,6 +266,7 @@ func (this *QTransform) M21() float64 {
 func (this *QTransform) M22() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M22")
 	r := C.qute_QTransform_m22(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -264,6 +278,7 @@ func (this *QTransform) M22() float64 {
 func (this *QTransform) M23() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M23")
 	r := C.qute_QTransform_m23(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -275,6 +290,7 @@ func (this *QTransform) M23() float64 {
 func (this *QTransform) M31() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M31")
 	r := C.qute_QTransform_m31(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -286,6 +302,7 @@ func (this *QTransform) M31() float64 {
 func (this *QTransform) M32() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M32")
 	r := C.qute_QTransform_m32(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -297,6 +314,7 @@ func (this *QTransform) M32() float64 {
 func (this *QTransform) M33() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.M33")
 	r := C.qute_QTransform_m33(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -308,6 +326,7 @@ func (this *QTransform) M33() float64 {
 func (this *QTransform) Dx() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Dx")
 	r := C.qute_QTransform_dx(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -319,6 +338,7 @@ func (this *QTransform) Dx() float64 {
 func (this *QTransform) Dy() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Dy")
 	r := C.qute_QTransform_dy(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -330,6 +350,7 @@ func (this *QTransform) Dy() float64 {
 func (this *QTransform) SetMatrix(m11 float64, m12 float64, m13 float64, m21 float64, m22 float64, m23 float64, m31 float64, m32 float64, m33 float64) {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.SetMatrix")
 	C.qute_QTransform_setMatrix(self, C.double(m11), C.double(m12), C.double(m13), C.double(m21), C.double(m22), C.double(m23), C.double(m31), C.double(m32), C.double(m33))
+	runtime.KeepAlive(this)
 }
 
 // Inverted wraps QTransform::inverted.
@@ -342,6 +363,7 @@ func (this *QTransform) SetMatrix(m11 float64, m12 float64, m13 float64, m21 flo
 func (this *QTransform) Inverted() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Inverted")
 	r := C.qute_QTransform_inverted(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -355,6 +377,7 @@ func (this *QTransform) Inverted() *QTransform {
 func (this *QTransform) Adjoint() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Adjoint")
 	r := C.qute_QTransform_adjoint(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -368,6 +391,7 @@ func (this *QTransform) Adjoint() *QTransform {
 func (this *QTransform) Transposed() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Transposed")
 	r := C.qute_QTransform_transposed(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r)
 }
 
@@ -379,6 +403,7 @@ func (this *QTransform) Transposed() *QTransform {
 func (this *QTransform) Translate(dx float64, dy float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Translate")
 	C.qute_QTransform_translate(self, C.double(dx), C.double(dy))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -390,6 +415,7 @@ func (this *QTransform) Translate(dx float64, dy float64) *QTransform {
 func (this *QTransform) Scale(sx float64, sy float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Scale")
 	C.qute_QTransform_scale(self, C.double(sx), C.double(sy))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -401,6 +427,7 @@ func (this *QTransform) Scale(sx float64, sy float64) *QTransform {
 func (this *QTransform) Shear(sh float64, sv float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Shear")
 	C.qute_QTransform_shear(self, C.double(sh), C.double(sv))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -412,6 +439,7 @@ func (this *QTransform) Shear(sh float64, sv float64) *QTransform {
 func (this *QTransform) RotateWithAxis(aArg float64, axis qtcore.Axis, distanceToPlane float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateWithAxis")
 	C.qute_QTransform_rotate(self, C.double(aArg), C.int64_t(axis), C.double(distanceToPlane))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -423,6 +451,7 @@ func (this *QTransform) RotateWithAxis(aArg float64, axis qtcore.Axis, distanceT
 func (this *QTransform) Rotate(aArg float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Rotate")
 	C.qute_QTransform_rotate_1(self, C.double(aArg))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -434,6 +463,7 @@ func (this *QTransform) Rotate(aArg float64) *QTransform {
 func (this *QTransform) RotateRadiansWithAxis(aArg float64, axis qtcore.Axis, distanceToPlane float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateRadiansWithAxis")
 	C.qute_QTransform_rotateRadians(self, C.double(aArg), C.int64_t(axis), C.double(distanceToPlane))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -445,6 +475,7 @@ func (this *QTransform) RotateRadiansWithAxis(aArg float64, axis qtcore.Axis, di
 func (this *QTransform) RotateRadians(aArg float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateRadians")
 	C.qute_QTransform_rotateRadians_1(self, C.double(aArg))
+	runtime.KeepAlive(this)
 	return this
 }
 
@@ -456,6 +487,7 @@ func (this *QTransform) RotateRadians(aArg float64) *QTransform {
 func (this *QTransform) Reset() {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Reset")
 	C.qute_QTransform_reset(self)
+	runtime.KeepAlive(this)
 }
 
 // Map wraps QTransform::map.
@@ -466,6 +498,7 @@ func (this *QTransform) Reset() {
 func (this *QTransform) Map(pArg qtcore.QPoint) qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Map")
 	r := C.qute_QTransform_map(self, cQPoint(pArg))
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -477,6 +510,7 @@ func (this *QTransform) Map(pArg qtcore.QPoint) qtcore.QPoint {
 func (this *QTransform) MapF(pArg qtcore.QPointF) qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapF")
 	r := C.qute_QTransform_map_1(self, cQPointF(pArg))
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -490,6 +524,8 @@ func (this *QTransform) MapF(pArg qtcore.QPointF) qtcore.QPointF {
 func (this *QTransform) MapLine(l *qtcore.QLine) *qtcore.QLine {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapLine")
 	r := C.qute_QTransform_map_2(self, rt.UseArg(unsafe.Pointer(l), "QTransform.MapLine"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
 	return rt.View[qtcore.QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
 }
 
@@ -503,6 +539,8 @@ func (this *QTransform) MapLine(l *qtcore.QLine) *qtcore.QLine {
 func (this *QTransform) MapLineF(l *qtcore.QLineF) *qtcore.QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapLineF")
 	r := C.qute_QTransform_map_3(self, rt.UseArg(unsafe.Pointer(l), "QTransform.MapLineF"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
 	return rt.View[qtcore.QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }
 
@@ -518,6 +556,7 @@ func (this *QTransform) MapPolygonF(aArg []qtcore.QPointF) []qtcore.QPointF {
 		aArgC[i] = cQPointF(aArg[i])
 	}
 	r := C.qute_QTransform_map_4(self, unsafe.Pointer(unsafe.SliceData(aArgC)), C.ptrdiff_t(len(aArg)))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
@@ -533,6 +572,7 @@ func (this *QTransform) MapPolygon(aArg []qtcore.QPoint) []qtcore.QPoint {
 		aArgC[i] = cQPoint(aArg[i])
 	}
 	r := C.qute_QTransform_map_5(self, unsafe.Pointer(unsafe.SliceData(aArgC)), C.ptrdiff_t(len(aArg)))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
@@ -546,6 +586,8 @@ func (this *QTransform) MapPolygon(aArg []qtcore.QPoint) []qtcore.QPoint {
 func (this *QTransform) MapRegion(rArg *QRegion) *QRegion {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRegion")
 	r := C.qute_QTransform_map_6(self, rt.UseArg(unsafe.Pointer(rArg), "QTransform.MapRegion"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(rArg)
 	return rt.View[QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
 }
 
@@ -559,6 +601,8 @@ func (this *QTransform) MapRegion(rArg *QRegion) *QRegion {
 func (this *QTransform) MapPath(pArg *QPainterPath) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapPath")
 	r := C.qute_QTransform_map_7(self, rt.UseArg(unsafe.Pointer(pArg), "QTransform.MapPath"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pArg)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
 
@@ -570,6 +614,7 @@ func (this *QTransform) MapPath(pArg *QPainterPath) *QPainterPath {
 func (this *QTransform) MapToPolygon(rArg qtcore.QRect) []qtcore.QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapToPolygon")
 	r := C.qute_QTransform_mapToPolygon(self, cQRect(rArg))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_point) qtcore.QPoint { return goQPoint(e) })
 }
 
@@ -581,6 +626,7 @@ func (this *QTransform) MapToPolygon(rArg qtcore.QRect) []qtcore.QPoint {
 func (this *QTransform) MapRect(rect qtcore.QRect) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRect")
 	r := C.qute_QTransform_mapRect(self, cQRect(rect))
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -592,6 +638,7 @@ func (this *QTransform) MapRect(rect qtcore.QRect) qtcore.QRect {
 func (this *QTransform) MapRectF(rectF qtcore.QRectF) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.MapRectF")
 	r := C.qute_QTransform_mapRect_1(self, cQRectF(rectF))
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,7 @@ func NewQTranslator(parent QObjectLike) *QTranslator {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTranslator")
 	}
 	p := C.qute_QTranslator_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func (this *QTranslator) Translate(context string, sourceText string) string {
 	sourceTextCStr := C.CString(sourceText)
 	defer C.free(unsafe.Pointer(sourceTextCStr))
 	r := C.qute_QTranslator_translate(self, contextCStr, sourceTextCStr)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -91,6 +94,7 @@ func (this *QTranslator) Translate(context string, sourceText string) string {
 func (this *QTranslator) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.IsEmpty")
 	r := C.qute_QTranslator_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -102,6 +106,7 @@ func (this *QTranslator) IsEmpty() bool {
 func (this *QTranslator) Language() string {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.Language")
 	r := C.qute_QTranslator_language(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -113,6 +118,7 @@ func (this *QTranslator) Language() string {
 func (this *QTranslator) FilePath() string {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.FilePath")
 	r := C.qute_QTranslator_filePath(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -124,6 +130,7 @@ func (this *QTranslator) FilePath() string {
 func (this *QTranslator) Load(filename string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.Load")
 	r := C.qute_QTranslator_load(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -135,6 +142,8 @@ func (this *QTranslator) Load(filename string) bool {
 func (this *QTranslator) LoadLocale(locale *QLocale, filename string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadLocale")
 	r := C.qute_QTranslator_load_1(self, rt.UseArg(unsafe.Pointer(locale), "QTranslator.LoadLocale"), (*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
 	return bool(r)
 }
 
@@ -146,5 +155,6 @@ func (this *QTranslator) LoadLocale(locale *QLocale, filename string) bool {
 func (this *QTranslator) LoadBytes(data []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadBytes")
 	r := C.qute_QTranslator_load_2(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }

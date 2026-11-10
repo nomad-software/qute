@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -132,6 +133,7 @@ func NewQLocaleWithLanguage(language QLocaleLanguage) *QLocale {
 func (this *QLocale) Language() QLocaleLanguage {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Language")
 	r := C.qute_QLocale_language(self)
+	runtime.KeepAlive(this)
 	return QLocaleLanguage(r)
 }
 
@@ -143,6 +145,7 @@ func (this *QLocale) Language() QLocaleLanguage {
 func (this *QLocale) Script() QLocaleScript {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Script")
 	r := C.qute_QLocale_script(self)
+	runtime.KeepAlive(this)
 	return QLocaleScript(r)
 }
 
@@ -154,6 +157,7 @@ func (this *QLocale) Script() QLocaleScript {
 func (this *QLocale) Territory() QLocaleCountry {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Territory")
 	r := C.qute_QLocale_territory(self)
+	runtime.KeepAlive(this)
 	return QLocaleCountry(r)
 }
 
@@ -165,6 +169,7 @@ func (this *QLocale) Territory() QLocaleCountry {
 func (this *QLocale) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Name")
 	r := C.qute_QLocale_name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -176,6 +181,7 @@ func (this *QLocale) Name() string {
 func (this *QLocale) Bcp47Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Bcp47Name")
 	r := C.qute_QLocale_bcp47Name(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -187,6 +193,7 @@ func (this *QLocale) Bcp47Name() string {
 func (this *QLocale) NativeLanguageName() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.NativeLanguageName")
 	r := C.qute_QLocale_nativeLanguageName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -198,6 +205,7 @@ func (this *QLocale) NativeLanguageName() string {
 func (this *QLocale) NativeTerritoryName() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.NativeTerritoryName")
 	r := C.qute_QLocale_nativeTerritoryName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -209,6 +217,7 @@ func (this *QLocale) NativeTerritoryName() string {
 func (this *QLocale) ToShort(sArg string) int16 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToShort")
 	r := C.qute_QLocale_toShort(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return int16(r)
 }
 
@@ -220,6 +229,7 @@ func (this *QLocale) ToShort(sArg string) int16 {
 func (this *QLocale) ToUShort(sArg string) uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToUShort")
 	r := C.qute_QLocale_toUShort(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -231,6 +241,7 @@ func (this *QLocale) ToUShort(sArg string) uint16 {
 func (this *QLocale) ToInt(sArg string) int {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToInt")
 	r := C.qute_QLocale_toInt(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -242,6 +253,7 @@ func (this *QLocale) ToInt(sArg string) int {
 func (this *QLocale) ToUInt(sArg string) uint {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToUInt")
 	r := C.qute_QLocale_toUInt(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -253,6 +265,7 @@ func (this *QLocale) ToUInt(sArg string) uint {
 func (this *QLocale) ToLong(sArg string) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLong")
 	r := C.qute_QLocale_toLong(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -264,6 +277,7 @@ func (this *QLocale) ToLong(sArg string) int64 {
 func (this *QLocale) ToULong(sArg string) uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToULong")
 	r := C.qute_QLocale_toULong(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -275,6 +289,7 @@ func (this *QLocale) ToULong(sArg string) uint64 {
 func (this *QLocale) ToLongLong(sArg string) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLongLong")
 	r := C.qute_QLocale_toLongLong(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -286,6 +301,7 @@ func (this *QLocale) ToLongLong(sArg string) int64 {
 func (this *QLocale) ToULongLong(sArg string) uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToULongLong")
 	r := C.qute_QLocale_toULongLong(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -297,6 +313,7 @@ func (this *QLocale) ToULongLong(sArg string) uint64 {
 func (this *QLocale) ToFloat(sArg string) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToFloat")
 	r := C.qute_QLocale_toFloat(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -308,6 +325,7 @@ func (this *QLocale) ToFloat(sArg string) float32 {
 func (this *QLocale) ToDouble(sArg string) float64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDouble")
 	r := C.qute_QLocale_toDouble(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -319,6 +337,7 @@ func (this *QLocale) ToDouble(sArg string) float64 {
 func (this *QLocale) ToStringInt64(iArg int64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringInt64")
 	r := C.qute_QLocale_toString(self, C.longlong(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -330,6 +349,7 @@ func (this *QLocale) ToStringInt64(iArg int64) string {
 func (this *QLocale) ToStringUint64(iArg uint64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint64")
 	r := C.qute_QLocale_toString_1(self, C.ulonglong(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -341,6 +361,7 @@ func (this *QLocale) ToStringUint64(iArg uint64) string {
 func (this *QLocale) ToStringInt16(iArg int16) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringInt16")
 	r := C.qute_QLocale_toString_2(self, C.short(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -352,6 +373,7 @@ func (this *QLocale) ToStringInt16(iArg int16) string {
 func (this *QLocale) ToStringUint16(iArg uint16) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint16")
 	r := C.qute_QLocale_toString_3(self, C.ushort(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -363,6 +385,7 @@ func (this *QLocale) ToStringUint16(iArg uint16) string {
 func (this *QLocale) ToString(iArg int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToString")
 	r := C.qute_QLocale_toString_4(self, C.int(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -374,6 +397,7 @@ func (this *QLocale) ToString(iArg int) string {
 func (this *QLocale) ToStringUint(iArg uint) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint")
 	r := C.qute_QLocale_toString_5(self, C.uint(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -385,6 +409,7 @@ func (this *QLocale) ToStringUint(iArg uint) string {
 func (this *QLocale) ToStringInt64Padded(number int64, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringInt64Padded")
 	r := C.qute_QLocale_toString_6(self, C.longlong(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -396,6 +421,7 @@ func (this *QLocale) ToStringInt64Padded(number int64, fieldWidth int, fillChar 
 func (this *QLocale) ToStringUint64Padded(number uint64, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint64Padded")
 	r := C.qute_QLocale_toString_7(self, C.ulonglong(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -407,6 +433,7 @@ func (this *QLocale) ToStringUint64Padded(number uint64, fieldWidth int, fillCha
 func (this *QLocale) ToStringPadded(number int, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringPadded")
 	r := C.qute_QLocale_toString_8(self, C.int(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -418,6 +445,7 @@ func (this *QLocale) ToStringPadded(number int, fieldWidth int, fillChar rune) s
 func (this *QLocale) ToStringUintPadded(number uint, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUintPadded")
 	r := C.qute_QLocale_toString_9(self, C.uint(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -429,6 +457,7 @@ func (this *QLocale) ToStringUintPadded(number uint, fieldWidth int, fillChar ru
 func (this *QLocale) ToStringLongPadded(number int64, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringLongPadded")
 	r := C.qute_QLocale_toString_10(self, C.long(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -440,6 +469,7 @@ func (this *QLocale) ToStringLongPadded(number int64, fieldWidth int, fillChar r
 func (this *QLocale) ToStringUlongPadded(number uint64, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUlongPadded")
 	r := C.qute_QLocale_toString_11(self, C.ulong(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -451,6 +481,7 @@ func (this *QLocale) ToStringUlongPadded(number uint64, fieldWidth int, fillChar
 func (this *QLocale) ToStringInt16Padded(number int16, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringInt16Padded")
 	r := C.qute_QLocale_toString_12(self, C.short(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -462,6 +493,7 @@ func (this *QLocale) ToStringInt16Padded(number int16, fieldWidth int, fillChar 
 func (this *QLocale) ToStringUint16Padded(number uint16, fieldWidth int, fillChar rune) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringUint16Padded")
 	r := C.qute_QLocale_toString_13(self, C.ushort(number), C.int(fieldWidth), C.uint(fillChar))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -473,6 +505,7 @@ func (this *QLocale) ToStringUint16Padded(number uint16, fieldWidth int, fillCha
 func (this *QLocale) ToStringFloat64(fArg float64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat64")
 	r := C.qute_QLocale_toString_14(self, C.double(fArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -484,6 +517,7 @@ func (this *QLocale) ToStringFloat64(fArg float64) string {
 func (this *QLocale) ToStringFloat32(fArg float32) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat32")
 	r := C.qute_QLocale_toString_15(self, C.float(fArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -495,6 +529,8 @@ func (this *QLocale) ToStringFloat32(fArg float32) string {
 func (this *QLocale) ToStringDateFormat(date *QDate, format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFormat")
 	r := C.qute_QLocale_toString_16(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 	return quteStr(r)
 }
 
@@ -506,6 +542,8 @@ func (this *QLocale) ToStringDateFormat(date *QDate, format string) string {
 func (this *QLocale) ToStringTimeFormat(time *QTime, format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringTimeFormat")
 	r := C.qute_QLocale_toString_17(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTimeFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
 	return quteStr(r)
 }
 
@@ -517,6 +555,8 @@ func (this *QLocale) ToStringTimeFormat(time *QTime, format string) string {
 func (this *QLocale) ToStringDateTimeFormat(dateTime *QDateTime, format string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFormat")
 	r := C.qute_QLocale_toString_18(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormat"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 	return quteStr(r)
 }
 
@@ -528,6 +568,8 @@ func (this *QLocale) ToStringDateTimeFormat(dateTime *QDateTime, format string) 
 func (this *QLocale) ToStringDate(date *QDate) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDate")
 	r := C.qute_QLocale_toString_19(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 	return quteStr(r)
 }
 
@@ -539,6 +581,8 @@ func (this *QLocale) ToStringDate(date *QDate) string {
 func (this *QLocale) ToStringTime(time *QTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringTime")
 	r := C.qute_QLocale_toString_20(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
 	return quteStr(r)
 }
 
@@ -550,6 +594,8 @@ func (this *QLocale) ToStringTime(time *QTime) string {
 func (this *QLocale) ToStringDateTime(dateTime *QDateTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTime")
 	r := C.qute_QLocale_toString_21(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 	return quteStr(r)
 }
 
@@ -561,6 +607,9 @@ func (this *QLocale) ToStringDateTime(dateTime *QDateTime) string {
 func (this *QLocale) ToStringDateFormatCalendar(date *QDate, format string, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFormatCalendar")
 	r := C.qute_QLocale_toString_22(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormatCalendar"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateFormatCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(cal)
 	return quteStr(r)
 }
 
@@ -572,6 +621,9 @@ func (this *QLocale) ToStringDateFormatCalendar(date *QDate, format string, cal 
 func (this *QLocale) ToStringDateFormatType(date *QDate, format QLocaleFormatType, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFormatType")
 	r := C.qute_QLocale_toString_23(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFormatType"), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateFormatType"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(cal)
 	return quteStr(r)
 }
 
@@ -583,6 +635,9 @@ func (this *QLocale) ToStringDateFormatType(date *QDate, format QLocaleFormatTyp
 func (this *QLocale) ToStringDateTimeFormatType(dateTime *QDateTime, format QLocaleFormatType, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFormatType")
 	r := C.qute_QLocale_toString_24(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormatType"), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateTimeFormatType"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
+	runtime.KeepAlive(cal)
 	return quteStr(r)
 }
 
@@ -594,6 +649,9 @@ func (this *QLocale) ToStringDateTimeFormatType(dateTime *QDateTime, format QLoc
 func (this *QLocale) ToStringDateTimeFormatCalendar(dateTime *QDateTime, format string, cal *QCalendar) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFormatCalendar")
 	r := C.qute_QLocale_toString_25(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFormatCalendar"), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToStringDateTimeFormatCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
+	runtime.KeepAlive(cal)
 	return quteStr(r)
 }
 
@@ -605,6 +663,7 @@ func (this *QLocale) ToStringDateTimeFormatCalendar(dateTime *QDateTime, format 
 func (this *QLocale) DateFormat() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.DateFormat")
 	r := C.qute_QLocale_dateFormat(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -616,6 +675,7 @@ func (this *QLocale) DateFormat() string {
 func (this *QLocale) TimeFormat() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.TimeFormat")
 	r := C.qute_QLocale_timeFormat(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -627,6 +687,7 @@ func (this *QLocale) TimeFormat() string {
 func (this *QLocale) DateTimeFormat() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.DateTimeFormat")
 	r := C.qute_QLocale_dateTimeFormat(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -640,6 +701,7 @@ func (this *QLocale) DateTimeFormat() string {
 func (this *QLocale) ToTime(stringArg string) *QTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToTime")
 	r := C.qute_QLocale_toTime(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -653,6 +715,7 @@ func (this *QLocale) ToTime(stringArg string) *QTime {
 func (this *QLocale) ToTimeWithFormat(stringArg string, format string) *QTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToTimeWithFormat")
 	r := C.qute_QLocale_toTime_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -666,6 +729,7 @@ func (this *QLocale) ToTimeWithFormat(stringArg string, format string) *QTime {
 func (this *QLocale) ToDate(stringArg string) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDate")
 	r := C.qute_QLocale_toDate(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -679,6 +743,7 @@ func (this *QLocale) ToDate(stringArg string) *QDate {
 func (this *QLocale) ToDateWithFormat(stringArg string, format string) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormat")
 	r := C.qute_QLocale_toDate_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -692,6 +757,7 @@ func (this *QLocale) ToDateWithFormat(stringArg string, format string) *QDate {
 func (this *QLocale) ToDateTime(stringArg string) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTime")
 	r := C.qute_QLocale_toDateTime(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -705,6 +771,7 @@ func (this *QLocale) ToDateTime(stringArg string) *QDateTime {
 func (this *QLocale) ToDateTimeWithFormat(stringArg string, format string) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormat")
 	r := C.qute_QLocale_toDateTime_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -718,6 +785,8 @@ func (this *QLocale) ToDateTimeWithFormat(stringArg string, format string) *QDat
 func (this *QLocale) ToDateWithFormatType(stringArg string, format QLocaleFormatType, cal *QCalendar) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormatType")
 	r := C.qute_QLocale_toDate_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateWithFormatType"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -731,6 +800,8 @@ func (this *QLocale) ToDateWithFormatType(stringArg string, format QLocaleFormat
 func (this *QLocale) ToDateWithFormatCalendar(stringArg string, format string, cal *QCalendar) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormatCalendar")
 	r := C.qute_QLocale_toDate_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateWithFormatCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -744,6 +815,8 @@ func (this *QLocale) ToDateWithFormatCalendar(stringArg string, format string, c
 func (this *QLocale) ToDateTimeWithFormatType(stringArg string, format QLocaleFormatType, cal *QCalendar) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormatType")
 	r := C.qute_QLocale_toDateTime_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateTimeWithFormatType"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -757,6 +830,8 @@ func (this *QLocale) ToDateTimeWithFormatType(stringArg string, format QLocaleFo
 func (this *QLocale) ToDateTimeWithFormatCalendar(stringArg string, format string, cal *QCalendar) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormatCalendar")
 	r := C.qute_QLocale_toDateTime_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateTimeWithFormatCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -768,6 +843,7 @@ func (this *QLocale) ToDateTimeWithFormatCalendar(stringArg string, format strin
 func (this *QLocale) DecimalPoint() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.DecimalPoint")
 	r := C.qute_QLocale_decimalPoint(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -779,6 +855,7 @@ func (this *QLocale) DecimalPoint() string {
 func (this *QLocale) GroupSeparator() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.GroupSeparator")
 	r := C.qute_QLocale_groupSeparator(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -790,6 +867,7 @@ func (this *QLocale) GroupSeparator() string {
 func (this *QLocale) Percent() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Percent")
 	r := C.qute_QLocale_percent(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -801,6 +879,7 @@ func (this *QLocale) Percent() string {
 func (this *QLocale) ZeroDigit() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ZeroDigit")
 	r := C.qute_QLocale_zeroDigit(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -812,6 +891,7 @@ func (this *QLocale) ZeroDigit() string {
 func (this *QLocale) NegativeSign() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.NegativeSign")
 	r := C.qute_QLocale_negativeSign(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -823,6 +903,7 @@ func (this *QLocale) NegativeSign() string {
 func (this *QLocale) PositiveSign() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.PositiveSign")
 	r := C.qute_QLocale_positiveSign(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -834,6 +915,7 @@ func (this *QLocale) PositiveSign() string {
 func (this *QLocale) Exponential() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Exponential")
 	r := C.qute_QLocale_exponential(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -845,6 +927,7 @@ func (this *QLocale) Exponential() string {
 func (this *QLocale) MonthName(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.MonthName")
 	r := C.qute_QLocale_monthName(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -856,6 +939,7 @@ func (this *QLocale) MonthName(arg0 int) string {
 func (this *QLocale) StandaloneMonthName(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.StandaloneMonthName")
 	r := C.qute_QLocale_standaloneMonthName(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -867,6 +951,7 @@ func (this *QLocale) StandaloneMonthName(arg0 int) string {
 func (this *QLocale) DayName(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.DayName")
 	r := C.qute_QLocale_dayName(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -878,6 +963,7 @@ func (this *QLocale) DayName(arg0 int) string {
 func (this *QLocale) StandaloneDayName(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.StandaloneDayName")
 	r := C.qute_QLocale_standaloneDayName(self, C.int(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -889,6 +975,7 @@ func (this *QLocale) StandaloneDayName(arg0 int) string {
 func (this *QLocale) FirstDayOfWeek() DayOfWeek {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.FirstDayOfWeek")
 	r := C.qute_QLocale_firstDayOfWeek(self)
+	runtime.KeepAlive(this)
 	return DayOfWeek(r)
 }
 
@@ -900,6 +987,7 @@ func (this *QLocale) FirstDayOfWeek() DayOfWeek {
 func (this *QLocale) Weekdays() []DayOfWeek {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Weekdays")
 	r := C.qute_QLocale_weekdays(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.int64_t) DayOfWeek { return DayOfWeek(e) })
 }
 
@@ -911,6 +999,7 @@ func (this *QLocale) Weekdays() []DayOfWeek {
 func (this *QLocale) AmText() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.AmText")
 	r := C.qute_QLocale_amText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -922,6 +1011,7 @@ func (this *QLocale) AmText() string {
 func (this *QLocale) PmText() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.PmText")
 	r := C.qute_QLocale_pmText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -933,6 +1023,7 @@ func (this *QLocale) PmText() string {
 func (this *QLocale) MeasurementSystem() QLocaleMeasurementSystem {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.MeasurementSystem")
 	r := C.qute_QLocale_measurementSystem(self)
+	runtime.KeepAlive(this)
 	return QLocaleMeasurementSystem(r)
 }
 
@@ -946,6 +1037,7 @@ func (this *QLocale) MeasurementSystem() QLocaleMeasurementSystem {
 func (this *QLocale) Collation() *QLocale {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Collation")
 	r := C.qute_QLocale_collation(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
 }
 
@@ -957,6 +1049,7 @@ func (this *QLocale) Collation() *QLocale {
 func (this *QLocale) TextDirection() LayoutDirection {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.TextDirection")
 	r := C.qute_QLocale_textDirection(self)
+	runtime.KeepAlive(this)
 	return LayoutDirection(r)
 }
 
@@ -968,6 +1061,7 @@ func (this *QLocale) TextDirection() LayoutDirection {
 func (this *QLocale) ToUpper(str string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToUpper")
 	r := C.qute_QLocale_toUpper(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -979,6 +1073,7 @@ func (this *QLocale) ToUpper(str string) string {
 func (this *QLocale) ToLower(str string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLower")
 	r := C.qute_QLocale_toLower(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -990,6 +1085,7 @@ func (this *QLocale) ToLower(str string) string {
 func (this *QLocale) CurrencySymbol() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.CurrencySymbol")
 	r := C.qute_QLocale_currencySymbol(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1001,6 +1097,7 @@ func (this *QLocale) CurrencySymbol() string {
 func (this *QLocale) ToCurrencyString(arg0 int64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyString")
 	r := C.qute_QLocale_toCurrencyString(self, C.longlong(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1012,6 +1109,7 @@ func (this *QLocale) ToCurrencyString(arg0 int64) string {
 func (this *QLocale) ToCurrencyStringUint64(arg0 uint64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint64")
 	r := C.qute_QLocale_toCurrencyString_1(self, C.ulonglong(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1023,6 +1121,7 @@ func (this *QLocale) ToCurrencyStringUint64(arg0 uint64) string {
 func (this *QLocale) ToCurrencyStringInt16(iArg int16) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringInt16")
 	r := C.qute_QLocale_toCurrencyString_2(self, C.short(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1034,6 +1133,7 @@ func (this *QLocale) ToCurrencyStringInt16(iArg int16) string {
 func (this *QLocale) ToCurrencyStringUint16(iArg uint16) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint16")
 	r := C.qute_QLocale_toCurrencyString_3(self, C.ushort(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1045,6 +1145,7 @@ func (this *QLocale) ToCurrencyStringUint16(iArg uint16) string {
 func (this *QLocale) ToCurrencyStringInt(iArg int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringInt")
 	r := C.qute_QLocale_toCurrencyString_4(self, C.int(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1056,6 +1157,7 @@ func (this *QLocale) ToCurrencyStringInt(iArg int) string {
 func (this *QLocale) ToCurrencyStringUint(iArg uint) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint")
 	r := C.qute_QLocale_toCurrencyString_5(self, C.uint(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1067,6 +1169,7 @@ func (this *QLocale) ToCurrencyStringUint(iArg uint) string {
 func (this *QLocale) ToCurrencyStringFloat64(arg0 float64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringFloat64")
 	r := C.qute_QLocale_toCurrencyString_6(self, C.double(arg0))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1078,6 +1181,7 @@ func (this *QLocale) ToCurrencyStringFloat64(arg0 float64) string {
 func (this *QLocale) ToCurrencyStringFloat32(iArg float32) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringFloat32")
 	r := C.qute_QLocale_toCurrencyString_7(self, C.float(iArg))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1089,6 +1193,7 @@ func (this *QLocale) ToCurrencyStringFloat32(iArg float32) string {
 func (this *QLocale) FormattedDataSize(bytes int64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.FormattedDataSize")
 	r := C.qute_QLocale_formattedDataSize(self, C.longlong(bytes))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1100,6 +1205,7 @@ func (this *QLocale) FormattedDataSize(bytes int64) string {
 func (this *QLocale) UiLanguages() []string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.UiLanguages")
 	r := C.qute_QLocale_uiLanguages(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -1111,6 +1217,7 @@ func (this *QLocale) UiLanguages() []string {
 func (this *QLocale) SetNumberOptions(options QLocaleNumberOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.SetNumberOptions")
 	C.qute_QLocale_setNumberOptions(self, C.int64_t(options))
+	runtime.KeepAlive(this)
 }
 
 // NumberOptions wraps QLocale::numberOptions.
@@ -1121,6 +1228,7 @@ func (this *QLocale) SetNumberOptions(options QLocaleNumberOptions) {
 func (this *QLocale) NumberOptions() QLocaleNumberOptions {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.NumberOptions")
 	r := C.qute_QLocale_numberOptions(self)
+	runtime.KeepAlive(this)
 	return QLocaleNumberOptions(r)
 }
 
@@ -1132,6 +1240,7 @@ func (this *QLocale) NumberOptions() QLocaleNumberOptions {
 func (this *QLocale) QuoteString(str string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.QuoteString")
 	r := C.qute_QLocale_quoteString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1144,6 +1253,7 @@ func (this *QLocale) CreateSeparatedList(strl []string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.CreateSeparatedList")
 	strlData, strlLens := quteStrListArg(strl)
 	r := C.qute_QLocale_createSeparatedList(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(strlData))), (*C.ptrdiff_t)(unsafe.SliceData(strlLens)), C.ptrdiff_t(len(strl)))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -1254,6 +1364,7 @@ func QLocaleScriptToString(script QLocaleScript) string {
 func QLocaleSetDefault(locale *QLocale) {
 	rt.CheckThread("QLocaleSetDefault")
 	C.qute_QLocale_setDefault(rt.UseArg(unsafe.Pointer(locale), "QLocaleSetDefault"))
+	runtime.KeepAlive(locale)
 }
 
 // QLocaleC wraps QLocale::c.

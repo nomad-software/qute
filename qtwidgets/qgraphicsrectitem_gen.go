@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -46,6 +47,7 @@ func NewQGraphicsRectItem(parent QGraphicsItemLike) *QGraphicsRectItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsRectItem")
 	}
 	p := C.qute_QGraphicsRectItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -68,6 +70,7 @@ func NewQGraphicsRectItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLike)
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsRectItemWithRectF")
 	}
 	p := C.qute_QGraphicsRectItem_new_1(cQRectF(rect), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +87,7 @@ func NewQGraphicsRectItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLike)
 func (this *QGraphicsRectItem) Rect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRectItem.Rect")
 	r := C.qute_QGraphicsRectItem_rect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -95,4 +99,5 @@ func (this *QGraphicsRectItem) Rect() qtcore.QRectF {
 func (this *QGraphicsRectItem) SetRect(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRectItem.SetRect")
 	C.qute_QGraphicsRectItem_setRect(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }

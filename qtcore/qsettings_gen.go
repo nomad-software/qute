@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,7 @@ func NewQSettings(parent QObjectLike) *QSettings {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettings")
 	}
 	p := C.qute_QSettings_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -82,6 +84,7 @@ func NewQSettingsWithOrganization(organization string, application string, paren
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithOrganization")
 	}
 	p := C.qute_QSettings_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(organization))), C.ptrdiff_t(len(organization)), (*C.char)(unsafe.Pointer(unsafe.StringData(application))), C.ptrdiff_t(len(application)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -104,6 +107,7 @@ func NewQSettingsWithScope(scope QSettingsScope, organization string, applicatio
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithScope")
 	}
 	p := C.qute_QSettings_new_2(C.int64_t(scope), (*C.char)(unsafe.Pointer(unsafe.StringData(organization))), C.ptrdiff_t(len(organization)), (*C.char)(unsafe.Pointer(unsafe.StringData(application))), C.ptrdiff_t(len(application)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -126,6 +130,7 @@ func NewQSettingsWithFormat(format QSettingsFormat, scope QSettingsScope, organi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithFormat")
 	}
 	p := C.qute_QSettings_new_3(C.int64_t(format), C.int64_t(scope), (*C.char)(unsafe.Pointer(unsafe.StringData(organization))), C.ptrdiff_t(len(organization)), (*C.char)(unsafe.Pointer(unsafe.StringData(application))), C.ptrdiff_t(len(application)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -148,6 +153,7 @@ func NewQSettingsWithFileName(fileName string, format QSettingsFormat, parent QO
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithFileName")
 	}
 	p := C.qute_QSettings_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), C.int64_t(format), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -170,6 +176,7 @@ func NewQSettingsWithScopeOnly(scope QSettingsScope, parent QObjectLike) *QSetti
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithScopeOnly")
 	}
 	p := C.qute_QSettings_new_5(C.int64_t(scope), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -186,6 +193,7 @@ func NewQSettingsWithScopeOnly(scope QSettingsScope, parent QObjectLike) *QSetti
 func (this *QSettings) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Clear")
 	C.qute_QSettings_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // Sync wraps QSettings::sync.
@@ -196,6 +204,7 @@ func (this *QSettings) Clear() {
 func (this *QSettings) Sync() {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Sync")
 	C.qute_QSettings_sync(self)
+	runtime.KeepAlive(this)
 }
 
 // Status wraps QSettings::status.
@@ -206,6 +215,7 @@ func (this *QSettings) Sync() {
 func (this *QSettings) Status() QSettingsStatus {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Status")
 	r := C.qute_QSettings_status(self)
+	runtime.KeepAlive(this)
 	return QSettingsStatus(r)
 }
 
@@ -217,6 +227,7 @@ func (this *QSettings) Status() QSettingsStatus {
 func (this *QSettings) IsAtomicSyncRequired() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.IsAtomicSyncRequired")
 	r := C.qute_QSettings_isAtomicSyncRequired(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -228,6 +239,7 @@ func (this *QSettings) IsAtomicSyncRequired() bool {
 func (this *QSettings) SetAtomicSyncRequired(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.SetAtomicSyncRequired")
 	C.qute_QSettings_setAtomicSyncRequired(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // BeginGroup wraps QSettings::beginGroup.
@@ -238,6 +250,7 @@ func (this *QSettings) SetAtomicSyncRequired(enable bool) {
 func (this *QSettings) BeginGroup(prefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.BeginGroup")
 	C.qute_QSettings_beginGroup(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)))
+	runtime.KeepAlive(this)
 }
 
 // EndGroup wraps QSettings::endGroup.
@@ -248,6 +261,7 @@ func (this *QSettings) BeginGroup(prefix string) {
 func (this *QSettings) EndGroup() {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.EndGroup")
 	C.qute_QSettings_endGroup(self)
+	runtime.KeepAlive(this)
 }
 
 // Group wraps QSettings::group.
@@ -258,6 +272,7 @@ func (this *QSettings) EndGroup() {
 func (this *QSettings) Group() string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Group")
 	r := C.qute_QSettings_group(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -269,6 +284,7 @@ func (this *QSettings) Group() string {
 func (this *QSettings) BeginReadArray(prefix string) int {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.BeginReadArray")
 	r := C.qute_QSettings_beginReadArray(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -280,6 +296,7 @@ func (this *QSettings) BeginReadArray(prefix string) int {
 func (this *QSettings) BeginWriteArray(prefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.BeginWriteArray")
 	C.qute_QSettings_beginWriteArray(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)))
+	runtime.KeepAlive(this)
 }
 
 // EndArray wraps QSettings::endArray.
@@ -290,6 +307,7 @@ func (this *QSettings) BeginWriteArray(prefix string) {
 func (this *QSettings) EndArray() {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.EndArray")
 	C.qute_QSettings_endArray(self)
+	runtime.KeepAlive(this)
 }
 
 // SetArrayIndex wraps QSettings::setArrayIndex.
@@ -300,6 +318,7 @@ func (this *QSettings) EndArray() {
 func (this *QSettings) SetArrayIndex(iArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.SetArrayIndex")
 	C.qute_QSettings_setArrayIndex(self, C.int(iArg))
+	runtime.KeepAlive(this)
 }
 
 // AllKeys wraps QSettings::allKeys.
@@ -310,6 +329,7 @@ func (this *QSettings) SetArrayIndex(iArg int) {
 func (this *QSettings) AllKeys() []string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.AllKeys")
 	r := C.qute_QSettings_allKeys(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -321,6 +341,7 @@ func (this *QSettings) AllKeys() []string {
 func (this *QSettings) ChildKeys() []string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.ChildKeys")
 	r := C.qute_QSettings_childKeys(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -332,6 +353,7 @@ func (this *QSettings) ChildKeys() []string {
 func (this *QSettings) ChildGroups() []string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.ChildGroups")
 	r := C.qute_QSettings_childGroups(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -343,6 +365,7 @@ func (this *QSettings) ChildGroups() []string {
 func (this *QSettings) IsWritable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.IsWritable")
 	r := C.qute_QSettings_isWritable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -354,6 +377,8 @@ func (this *QSettings) IsWritable() bool {
 func (this *QSettings) SetValue(key string, value *QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.SetValue")
 	C.qute_QSettings_setValue(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), rt.UseArg(unsafe.Pointer(value), "QSettings.SetValue"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // ValueOr wraps QSettings::value.
@@ -366,6 +391,8 @@ func (this *QSettings) SetValue(key string, value *QVariant) {
 func (this *QSettings) ValueOr(key string, defaultValue *QVariant) *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.ValueOr")
 	r := C.qute_QSettings_value(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), rt.UseArg(unsafe.Pointer(defaultValue), "QSettings.ValueOr"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(defaultValue)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -379,6 +406,7 @@ func (this *QSettings) ValueOr(key string, defaultValue *QVariant) *QVariant {
 func (this *QSettings) Value(key string) *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Value")
 	r := C.qute_QSettings_value_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -390,6 +418,7 @@ func (this *QSettings) Value(key string) *QVariant {
 func (this *QSettings) Remove(key string) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Remove")
 	C.qute_QSettings_remove(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 }
 
 // Contains wraps QSettings::contains.
@@ -400,6 +429,7 @@ func (this *QSettings) Remove(key string) {
 func (this *QSettings) Contains(key string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Contains")
 	r := C.qute_QSettings_contains(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -411,6 +441,7 @@ func (this *QSettings) Contains(key string) bool {
 func (this *QSettings) SetFallbacksEnabled(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.SetFallbacksEnabled")
 	C.qute_QSettings_setFallbacksEnabled(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // FallbacksEnabled wraps QSettings::fallbacksEnabled.
@@ -421,6 +452,7 @@ func (this *QSettings) SetFallbacksEnabled(bArg bool) {
 func (this *QSettings) FallbacksEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.FallbacksEnabled")
 	r := C.qute_QSettings_fallbacksEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -432,6 +464,7 @@ func (this *QSettings) FallbacksEnabled() bool {
 func (this *QSettings) FileName() string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.FileName")
 	r := C.qute_QSettings_fileName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -443,6 +476,7 @@ func (this *QSettings) FileName() string {
 func (this *QSettings) Format() QSettingsFormat {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Format")
 	r := C.qute_QSettings_format(self)
+	runtime.KeepAlive(this)
 	return QSettingsFormat(r)
 }
 
@@ -454,6 +488,7 @@ func (this *QSettings) Format() QSettingsFormat {
 func (this *QSettings) Scope() QSettingsScope {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.Scope")
 	r := C.qute_QSettings_scope(self)
+	runtime.KeepAlive(this)
 	return QSettingsScope(r)
 }
 
@@ -465,6 +500,7 @@ func (this *QSettings) Scope() QSettingsScope {
 func (this *QSettings) OrganizationName() string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.OrganizationName")
 	r := C.qute_QSettings_organizationName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -476,6 +512,7 @@ func (this *QSettings) OrganizationName() string {
 func (this *QSettings) ApplicationName() string {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.ApplicationName")
 	r := C.qute_QSettings_applicationName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -55,6 +56,7 @@ func NewQDataStreamWithIODevice(iODevice QIODeviceLike) *QDataStream {
 		iODevicePtr = rt.UseArg(unsafe.Pointer(iODevice.AsQIODevice()), "NewQDataStreamWithIODevice")
 	}
 	p := C.qute_QDataStream_new_1(iODevicePtr)
+	runtime.KeepAlive(iODevice)
 	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
 	return rt.View[QDataStream](h, p)
 }
@@ -94,6 +96,7 @@ func NewQDataStreamWithBytesBytes(byteArray []byte) *QDataStream {
 func (this *QDataStream) Device() *QIODevice {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.Device")
 	r := C.qute_QDataStream_device(self)
+	runtime.KeepAlive(this)
 	return rt.View[QIODevice](rt.WrapClass(r, "QIODevice", rt.KeepOrBorrow), r)
 }
 
@@ -109,6 +112,8 @@ func (this *QDataStream) SetDevice(device QIODeviceLike) {
 		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QDataStream.SetDevice")
 	}
 	C.qute_QDataStream_setDevice(self, devicePtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
 }
 
 // AtEnd wraps QDataStream::atEnd.
@@ -119,6 +124,7 @@ func (this *QDataStream) SetDevice(device QIODeviceLike) {
 func (this *QDataStream) AtEnd() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.AtEnd")
 	r := C.qute_QDataStream_atEnd(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -130,6 +136,7 @@ func (this *QDataStream) AtEnd() bool {
 func (this *QDataStream) Status() QDataStreamStatus {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.Status")
 	r := C.qute_QDataStream_status(self)
+	runtime.KeepAlive(this)
 	return QDataStreamStatus(r)
 }
 
@@ -141,6 +148,7 @@ func (this *QDataStream) Status() QDataStreamStatus {
 func (this *QDataStream) SetStatus(status QDataStreamStatus) {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.SetStatus")
 	C.qute_QDataStream_setStatus(self, C.int64_t(status))
+	runtime.KeepAlive(this)
 }
 
 // ResetStatus wraps QDataStream::resetStatus.
@@ -151,6 +159,7 @@ func (this *QDataStream) SetStatus(status QDataStreamStatus) {
 func (this *QDataStream) ResetStatus() {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.ResetStatus")
 	C.qute_QDataStream_resetStatus(self)
+	runtime.KeepAlive(this)
 }
 
 // FloatingPointPrecision wraps QDataStream::floatingPointPrecision.
@@ -161,6 +170,7 @@ func (this *QDataStream) ResetStatus() {
 func (this *QDataStream) FloatingPointPrecision() QDataStreamFloatingPointPrecision {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.FloatingPointPrecision")
 	r := C.qute_QDataStream_floatingPointPrecision(self)
+	runtime.KeepAlive(this)
 	return QDataStreamFloatingPointPrecision(r)
 }
 
@@ -172,6 +182,7 @@ func (this *QDataStream) FloatingPointPrecision() QDataStreamFloatingPointPrecis
 func (this *QDataStream) SetFloatingPointPrecision(precision QDataStreamFloatingPointPrecision) {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.SetFloatingPointPrecision")
 	C.qute_QDataStream_setFloatingPointPrecision(self, C.int64_t(precision))
+	runtime.KeepAlive(this)
 }
 
 // ByteOrder wraps QDataStream::byteOrder.
@@ -182,6 +193,7 @@ func (this *QDataStream) SetFloatingPointPrecision(precision QDataStreamFloating
 func (this *QDataStream) ByteOrder() QDataStreamByteOrder {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.ByteOrder")
 	r := C.qute_QDataStream_byteOrder(self)
+	runtime.KeepAlive(this)
 	return QDataStreamByteOrder(r)
 }
 
@@ -193,6 +205,7 @@ func (this *QDataStream) ByteOrder() QDataStreamByteOrder {
 func (this *QDataStream) SetByteOrder(byteOrder QDataStreamByteOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.SetByteOrder")
 	C.qute_QDataStream_setByteOrder(self, C.int64_t(byteOrder))
+	runtime.KeepAlive(this)
 }
 
 // Version wraps QDataStream::version.
@@ -203,6 +216,7 @@ func (this *QDataStream) SetByteOrder(byteOrder QDataStreamByteOrder) {
 func (this *QDataStream) Version() int {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.Version")
 	r := C.qute_QDataStream_version(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -214,6 +228,7 @@ func (this *QDataStream) Version() int {
 func (this *QDataStream) SetVersion(version int) {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.SetVersion")
 	C.qute_QDataStream_setVersion(self, C.int(version))
+	runtime.KeepAlive(this)
 }
 
 // ReadRawData wraps QDataStream::readRawData.
@@ -224,6 +239,7 @@ func (this *QDataStream) SetVersion(version int) {
 func (this *QDataStream) ReadRawData(arg0 []byte) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.ReadRawData")
 	r := C.qute_QDataStream_readRawData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(arg0))), C.ptrdiff_t(len(arg0)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -237,6 +253,7 @@ func (this *QDataStream) ReadRawData(arg0 []byte) int64 {
 func (this *QDataStream) WriteBytes(arg0 []byte) *QDataStream {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.WriteBytes")
 	r := C.qute_QDataStream_writeBytes(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(arg0))), C.ptrdiff_t(len(arg0)))
+	runtime.KeepAlive(this)
 	return rt.View[QDataStream](rt.WrapClass(r, "QDataStream", rt.KeepOrBorrow), r)
 }
 
@@ -248,6 +265,7 @@ func (this *QDataStream) WriteBytes(arg0 []byte) *QDataStream {
 func (this *QDataStream) WriteRawData(arg0 []byte) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.WriteRawData")
 	r := C.qute_QDataStream_writeRawData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(arg0))), C.ptrdiff_t(len(arg0)))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -259,6 +277,7 @@ func (this *QDataStream) WriteRawData(arg0 []byte) int64 {
 func (this *QDataStream) SkipRawData(lenArg int64) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.SkipRawData")
 	r := C.qute_QDataStream_skipRawData(self, C.longlong(lenArg))
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -270,6 +289,7 @@ func (this *QDataStream) SkipRawData(lenArg int64) int64 {
 func (this *QDataStream) StartTransaction() {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.StartTransaction")
 	C.qute_QDataStream_startTransaction(self)
+	runtime.KeepAlive(this)
 }
 
 // CommitTransaction wraps QDataStream::commitTransaction.
@@ -280,6 +300,7 @@ func (this *QDataStream) StartTransaction() {
 func (this *QDataStream) CommitTransaction() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.CommitTransaction")
 	r := C.qute_QDataStream_commitTransaction(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -291,6 +312,7 @@ func (this *QDataStream) CommitTransaction() bool {
 func (this *QDataStream) RollbackTransaction() {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.RollbackTransaction")
 	C.qute_QDataStream_rollbackTransaction(self)
+	runtime.KeepAlive(this)
 }
 
 // AbortTransaction wraps QDataStream::abortTransaction.
@@ -301,6 +323,7 @@ func (this *QDataStream) RollbackTransaction() {
 func (this *QDataStream) AbortTransaction() {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.AbortTransaction")
 	C.qute_QDataStream_abortTransaction(self)
+	runtime.KeepAlive(this)
 }
 
 // IsDeviceTransactionStarted wraps QDataStream::isDeviceTransactionStarted.
@@ -311,5 +334,6 @@ func (this *QDataStream) AbortTransaction() {
 func (this *QDataStream) IsDeviceTransactionStarted() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.IsDeviceTransactionStarted")
 	r := C.qute_QDataStream_isDeviceTransactionStarted(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

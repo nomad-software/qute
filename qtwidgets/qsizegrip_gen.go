@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQSizeGrip(parent QWidgetLike) *QSizeGrip {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSizeGrip")
 	}
 	p := C.qute_QSizeGrip_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -120,6 +121,7 @@ func NewQUuidWithStringArg(stringArg string) *QUuid {
 func (this *QUuid) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.ToString")
 	r := C.qute_QUuid_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -131,6 +133,7 @@ func (this *QUuid) ToString() string {
 func (this *QUuid) ToByteArray() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.ToByteArray")
 	r := C.qute_QUuid_toByteArray(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -142,6 +145,7 @@ func (this *QUuid) ToByteArray() []byte {
 func (this *QUuid) ToRfc4122() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.ToRfc4122")
 	r := C.qute_QUuid_toRfc4122(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -153,6 +157,7 @@ func (this *QUuid) ToRfc4122() []byte {
 func (this *QUuid) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.IsNull")
 	r := C.qute_QUuid_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -164,6 +169,7 @@ func (this *QUuid) IsNull() bool {
 func (this *QUuid) Variant() QUuidVariant {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.Variant")
 	r := C.qute_QUuid_variant(self)
+	runtime.KeepAlive(this)
 	return QUuidVariant(r)
 }
 
@@ -175,6 +181,7 @@ func (this *QUuid) Variant() QUuidVariant {
 func (this *QUuid) Version() QUuidVersion {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.Version")
 	r := C.qute_QUuid_version(self)
+	runtime.KeepAlive(this)
 	return QUuidVersion(r)
 }
 
@@ -186,6 +193,7 @@ func (this *QUuid) Version() QUuidVersion {
 func (this *QUuid) Data1() uint {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.Data1")
 	r := C.qute_QUuid_get_data1(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -199,6 +207,7 @@ func (this *QUuid) Data1() uint {
 func (this *QUuid) SetData1(data1 uint) {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.SetData1")
 	C.qute_QUuid_set_data1(self, C.uint(data1))
+	runtime.KeepAlive(this)
 }
 
 // Data2 wraps the public field QUuid::data2.
@@ -209,6 +218,7 @@ func (this *QUuid) SetData1(data1 uint) {
 func (this *QUuid) Data2() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.Data2")
 	r := C.qute_QUuid_get_data2(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -222,6 +232,7 @@ func (this *QUuid) Data2() uint16 {
 func (this *QUuid) SetData2(data2 uint16) {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.SetData2")
 	C.qute_QUuid_set_data2(self, C.ushort(data2))
+	runtime.KeepAlive(this)
 }
 
 // Data3 wraps the public field QUuid::data3.
@@ -232,6 +243,7 @@ func (this *QUuid) SetData2(data2 uint16) {
 func (this *QUuid) Data3() uint16 {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.Data3")
 	r := C.qute_QUuid_get_data3(self)
+	runtime.KeepAlive(this)
 	return uint16(r)
 }
 
@@ -245,6 +257,7 @@ func (this *QUuid) Data3() uint16 {
 func (this *QUuid) SetData3(data3 uint16) {
 	self := rt.Use(unsafe.Pointer(this), "QUuid.SetData3")
 	C.qute_QUuid_set_data3(self, C.ushort(data3))
+	runtime.KeepAlive(this)
 }
 
 // QUuidFromString wraps QUuid::fromString.
@@ -309,6 +322,7 @@ func QUuidCreateUuid() *QUuid {
 func QUuidCreateUuidV5(ns *QUuid, baseData []byte) *QUuid {
 	rt.CheckThread("QUuidCreateUuidV5")
 	r := C.qute_QUuid_createUuidV5(rt.UseArg(unsafe.Pointer(ns), "QUuidCreateUuidV5"), (*C.char)(unsafe.Pointer(unsafe.SliceData(baseData))), C.ptrdiff_t(len(baseData)))
+	runtime.KeepAlive(ns)
 	return rt.View[QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
 }
 
@@ -322,6 +336,7 @@ func QUuidCreateUuidV5(ns *QUuid, baseData []byte) *QUuid {
 func QUuidCreateUuidV3(ns *QUuid, baseData []byte) *QUuid {
 	rt.CheckThread("QUuidCreateUuidV3")
 	r := C.qute_QUuid_createUuidV3(rt.UseArg(unsafe.Pointer(ns), "QUuidCreateUuidV3"), (*C.char)(unsafe.Pointer(unsafe.SliceData(baseData))), C.ptrdiff_t(len(baseData)))
+	runtime.KeepAlive(ns)
 	return rt.View[QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
 }
 

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -46,6 +47,7 @@ func NewQGraphicsEllipseItem(parent QGraphicsItemLike) *QGraphicsEllipseItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsEllipseItem")
 	}
 	p := C.qute_QGraphicsEllipseItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -68,6 +70,7 @@ func NewQGraphicsEllipseItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsEllipseItemWithRectF")
 	}
 	p := C.qute_QGraphicsEllipseItem_new_1(cQRectF(rect), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -84,6 +87,7 @@ func NewQGraphicsEllipseItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLi
 func (this *QGraphicsEllipseItem) Rect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.Rect")
 	r := C.qute_QGraphicsEllipseItem_rect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -95,6 +99,7 @@ func (this *QGraphicsEllipseItem) Rect() qtcore.QRectF {
 func (this *QGraphicsEllipseItem) SetRect(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.SetRect")
 	C.qute_QGraphicsEllipseItem_setRect(self, cQRectF(rect))
+	runtime.KeepAlive(this)
 }
 
 // StartAngle wraps QGraphicsEllipseItem::startAngle.
@@ -105,6 +110,7 @@ func (this *QGraphicsEllipseItem) SetRect(rect qtcore.QRectF) {
 func (this *QGraphicsEllipseItem) StartAngle() int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.StartAngle")
 	r := C.qute_QGraphicsEllipseItem_startAngle(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -116,6 +122,7 @@ func (this *QGraphicsEllipseItem) StartAngle() int {
 func (this *QGraphicsEllipseItem) SetStartAngle(angle int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.SetStartAngle")
 	C.qute_QGraphicsEllipseItem_setStartAngle(self, C.int(angle))
+	runtime.KeepAlive(this)
 }
 
 // SpanAngle wraps QGraphicsEllipseItem::spanAngle.
@@ -126,6 +133,7 @@ func (this *QGraphicsEllipseItem) SetStartAngle(angle int) {
 func (this *QGraphicsEllipseItem) SpanAngle() int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.SpanAngle")
 	r := C.qute_QGraphicsEllipseItem_spanAngle(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -137,4 +145,5 @@ func (this *QGraphicsEllipseItem) SpanAngle() int {
 func (this *QGraphicsEllipseItem) SetSpanAngle(angle int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsEllipseItem.SetSpanAngle")
 	C.qute_QGraphicsEllipseItem_setSpanAngle(self, C.int(angle))
+	runtime.KeepAlive(this)
 }

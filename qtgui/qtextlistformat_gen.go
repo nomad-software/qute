@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -53,6 +54,7 @@ func NewQTextListFormat() *QTextListFormat {
 func (this *QTextListFormat) SetStyle(style QTextListFormatStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.SetStyle")
 	C.qute_QTextListFormat_setStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // Style wraps QTextListFormat::style.
@@ -63,6 +65,7 @@ func (this *QTextListFormat) SetStyle(style QTextListFormatStyle) {
 func (this *QTextListFormat) Style() QTextListFormatStyle {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.Style")
 	r := C.qute_QTextListFormat_style(self)
+	runtime.KeepAlive(this)
 	return QTextListFormatStyle(r)
 }
 
@@ -74,6 +77,7 @@ func (this *QTextListFormat) Style() QTextListFormatStyle {
 func (this *QTextListFormat) SetIndent(indent int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.SetIndent")
 	C.qute_QTextListFormat_setIndent(self, C.int(indent))
+	runtime.KeepAlive(this)
 }
 
 // Indent wraps QTextListFormat::indent.
@@ -84,6 +88,7 @@ func (this *QTextListFormat) SetIndent(indent int) {
 func (this *QTextListFormat) Indent() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.Indent")
 	r := C.qute_QTextListFormat_indent(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -95,6 +100,7 @@ func (this *QTextListFormat) Indent() int {
 func (this *QTextListFormat) SetNumberPrefix(numberPrefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.SetNumberPrefix")
 	C.qute_QTextListFormat_setNumberPrefix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(numberPrefix))), C.ptrdiff_t(len(numberPrefix)))
+	runtime.KeepAlive(this)
 }
 
 // NumberPrefix wraps QTextListFormat::numberPrefix.
@@ -105,6 +111,7 @@ func (this *QTextListFormat) SetNumberPrefix(numberPrefix string) {
 func (this *QTextListFormat) NumberPrefix() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.NumberPrefix")
 	r := C.qute_QTextListFormat_numberPrefix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -116,6 +123,7 @@ func (this *QTextListFormat) NumberPrefix() string {
 func (this *QTextListFormat) SetNumberSuffix(numberSuffix string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.SetNumberSuffix")
 	C.qute_QTextListFormat_setNumberSuffix(self, (*C.char)(unsafe.Pointer(unsafe.StringData(numberSuffix))), C.ptrdiff_t(len(numberSuffix)))
+	runtime.KeepAlive(this)
 }
 
 // NumberSuffix wraps QTextListFormat::numberSuffix.
@@ -126,6 +134,7 @@ func (this *QTextListFormat) SetNumberSuffix(numberSuffix string) {
 func (this *QTextListFormat) NumberSuffix() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.NumberSuffix")
 	r := C.qute_QTextListFormat_numberSuffix(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -137,6 +146,7 @@ func (this *QTextListFormat) NumberSuffix() string {
 func (this *QTextListFormat) SetStart(indent int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.SetStart")
 	C.qute_QTextListFormat_setStart(self, C.int(indent))
+	runtime.KeepAlive(this)
 }
 
 // Start wraps QTextListFormat::start.
@@ -147,5 +157,6 @@ func (this *QTextListFormat) SetStart(indent int) {
 func (this *QTextListFormat) Start() int {
 	self := rt.Use(unsafe.Pointer(this), "QTextListFormat.Start")
 	r := C.qute_QTextListFormat_start(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }

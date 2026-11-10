@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func (this *QPaintDeviceWindow) AsQPaintDevice() *QPaintDevice {
 func (this *QPaintDeviceWindow) UpdateWithRect(rect qtcore.QRect) {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDeviceWindow.UpdateWithRect")
 	C.qute_QPaintDeviceWindow_update(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // UpdateWithRegion wraps QPaintDeviceWindow::update.
@@ -72,6 +74,8 @@ func (this *QPaintDeviceWindow) UpdateWithRect(rect qtcore.QRect) {
 func (this *QPaintDeviceWindow) UpdateWithRegion(region *QRegion) {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDeviceWindow.UpdateWithRegion")
 	C.qute_QPaintDeviceWindow_update_1(self, rt.UseArg(unsafe.Pointer(region), "QPaintDeviceWindow.UpdateWithRegion"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(region)
 }
 
 // Update wraps QPaintDeviceWindow::update.
@@ -82,4 +86,5 @@ func (this *QPaintDeviceWindow) UpdateWithRegion(region *QRegion) {
 func (this *QPaintDeviceWindow) Update() {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDeviceWindow.Update")
 	C.qute_QPaintDeviceWindow_update_2(self)
+	runtime.KeepAlive(this)
 }

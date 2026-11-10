@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -97,6 +98,7 @@ func NewQGlyphRun() *QGlyphRun {
 func (this *QGlyphRun) GlyphIndexes() []uint {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.GlyphIndexes")
 	r := C.qute_QGlyphRun_glyphIndexes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.uint) uint { return uint(e) })
 }
 
@@ -112,6 +114,7 @@ func (this *QGlyphRun) SetGlyphIndexes(glyphIndexes []uint) {
 		glyphIndexesC[i] = C.uint(glyphIndexes[i])
 	}
 	C.qute_QGlyphRun_setGlyphIndexes(self, unsafe.Pointer(unsafe.SliceData(glyphIndexesC)), C.ptrdiff_t(len(glyphIndexes)))
+	runtime.KeepAlive(this)
 }
 
 // Positions wraps QGlyphRun::positions.
@@ -122,6 +125,7 @@ func (this *QGlyphRun) SetGlyphIndexes(glyphIndexes []uint) {
 func (this *QGlyphRun) Positions() []qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.Positions")
 	r := C.qute_QGlyphRun_positions(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
@@ -137,6 +141,7 @@ func (this *QGlyphRun) SetPositions(positions []qtcore.QPointF) {
 		positionsC[i] = cQPointF(positions[i])
 	}
 	C.qute_QGlyphRun_setPositions(self, unsafe.Pointer(unsafe.SliceData(positionsC)), C.ptrdiff_t(len(positions)))
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QGlyphRun::clear.
@@ -147,6 +152,7 @@ func (this *QGlyphRun) SetPositions(positions []qtcore.QPointF) {
 func (this *QGlyphRun) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.Clear")
 	C.qute_QGlyphRun_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // SetOverline wraps QGlyphRun::setOverline.
@@ -157,6 +163,7 @@ func (this *QGlyphRun) Clear() {
 func (this *QGlyphRun) SetOverline(overline bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetOverline")
 	C.qute_QGlyphRun_setOverline(self, C.bool(overline))
+	runtime.KeepAlive(this)
 }
 
 // Overline wraps QGlyphRun::overline.
@@ -167,6 +174,7 @@ func (this *QGlyphRun) SetOverline(overline bool) {
 func (this *QGlyphRun) Overline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.Overline")
 	r := C.qute_QGlyphRun_overline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -178,6 +186,7 @@ func (this *QGlyphRun) Overline() bool {
 func (this *QGlyphRun) SetUnderline(underline bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetUnderline")
 	C.qute_QGlyphRun_setUnderline(self, C.bool(underline))
+	runtime.KeepAlive(this)
 }
 
 // Underline wraps QGlyphRun::underline.
@@ -188,6 +197,7 @@ func (this *QGlyphRun) SetUnderline(underline bool) {
 func (this *QGlyphRun) Underline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.Underline")
 	r := C.qute_QGlyphRun_underline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -199,6 +209,7 @@ func (this *QGlyphRun) Underline() bool {
 func (this *QGlyphRun) SetStrikeOut(strikeOut bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetStrikeOut")
 	C.qute_QGlyphRun_setStrikeOut(self, C.bool(strikeOut))
+	runtime.KeepAlive(this)
 }
 
 // StrikeOut wraps QGlyphRun::strikeOut.
@@ -209,6 +220,7 @@ func (this *QGlyphRun) SetStrikeOut(strikeOut bool) {
 func (this *QGlyphRun) StrikeOut() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.StrikeOut")
 	r := C.qute_QGlyphRun_strikeOut(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -220,6 +232,7 @@ func (this *QGlyphRun) StrikeOut() bool {
 func (this *QGlyphRun) SetRightToLeft(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetRightToLeft")
 	C.qute_QGlyphRun_setRightToLeft(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // IsRightToLeft wraps QGlyphRun::isRightToLeft.
@@ -230,6 +243,7 @@ func (this *QGlyphRun) SetRightToLeft(on bool) {
 func (this *QGlyphRun) IsRightToLeft() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.IsRightToLeft")
 	r := C.qute_QGlyphRun_isRightToLeft(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -241,6 +255,7 @@ func (this *QGlyphRun) IsRightToLeft() bool {
 func (this *QGlyphRun) SetFlag(flag QGlyphRunGlyphRunFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetFlag")
 	C.qute_QGlyphRun_setFlag(self, C.int64_t(flag))
+	runtime.KeepAlive(this)
 }
 
 // SetFlags wraps QGlyphRun::setFlags.
@@ -251,6 +266,7 @@ func (this *QGlyphRun) SetFlag(flag QGlyphRunGlyphRunFlags) {
 func (this *QGlyphRun) SetFlags(flags QGlyphRunGlyphRunFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetFlags")
 	C.qute_QGlyphRun_setFlags(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
 }
 
 // Flags wraps QGlyphRun::flags.
@@ -261,6 +277,7 @@ func (this *QGlyphRun) SetFlags(flags QGlyphRunGlyphRunFlags) {
 func (this *QGlyphRun) Flags() QGlyphRunGlyphRunFlags {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.Flags")
 	r := C.qute_QGlyphRun_flags(self)
+	runtime.KeepAlive(this)
 	return QGlyphRunGlyphRunFlags(r)
 }
 
@@ -272,6 +289,7 @@ func (this *QGlyphRun) Flags() QGlyphRunGlyphRunFlags {
 func (this *QGlyphRun) SetBoundingRect(boundingRect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetBoundingRect")
 	C.qute_QGlyphRun_setBoundingRect(self, cQRectF(boundingRect))
+	runtime.KeepAlive(this)
 }
 
 // BoundingRect wraps QGlyphRun::boundingRect.
@@ -282,6 +300,7 @@ func (this *QGlyphRun) SetBoundingRect(boundingRect qtcore.QRectF) {
 func (this *QGlyphRun) BoundingRect() qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.BoundingRect")
 	r := C.qute_QGlyphRun_boundingRect(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -293,6 +312,7 @@ func (this *QGlyphRun) BoundingRect() qtcore.QRectF {
 func (this *QGlyphRun) StringIndexes() []int64 {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.StringIndexes")
 	r := C.qute_QGlyphRun_stringIndexes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.longlong) int64 { return int64(e) })
 }
 
@@ -308,6 +328,7 @@ func (this *QGlyphRun) SetStringIndexes(stringIndexes []int64) {
 		stringIndexesC[i] = C.longlong(stringIndexes[i])
 	}
 	C.qute_QGlyphRun_setStringIndexes(self, unsafe.Pointer(unsafe.SliceData(stringIndexesC)), C.ptrdiff_t(len(stringIndexes)))
+	runtime.KeepAlive(this)
 }
 
 // SetSourceString wraps QGlyphRun::setSourceString.
@@ -318,6 +339,7 @@ func (this *QGlyphRun) SetStringIndexes(stringIndexes []int64) {
 func (this *QGlyphRun) SetSourceString(sourceString string) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetSourceString")
 	C.qute_QGlyphRun_setSourceString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sourceString))), C.ptrdiff_t(len(sourceString)))
+	runtime.KeepAlive(this)
 }
 
 // SourceString wraps QGlyphRun::sourceString.
@@ -328,6 +350,7 @@ func (this *QGlyphRun) SetSourceString(sourceString string) {
 func (this *QGlyphRun) SourceString() string {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SourceString")
 	r := C.qute_QGlyphRun_sourceString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -339,5 +362,6 @@ func (this *QGlyphRun) SourceString() string {
 func (this *QGlyphRun) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.IsEmpty")
 	r := C.qute_QGlyphRun_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -52,6 +53,7 @@ func NewQSpacerItemWithW(w int, hArg int) *QSpacerItem {
 func (this *QSpacerItem) ChangeSize(w int, hArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QSpacerItem.ChangeSize")
 	C.qute_QSpacerItem_changeSize(self, C.int(w), C.int(hArg))
+	runtime.KeepAlive(this)
 }
 
 // SizePolicy wraps QSpacerItem::sizePolicy.
@@ -64,5 +66,6 @@ func (this *QSpacerItem) ChangeSize(w int, hArg int) {
 func (this *QSpacerItem) SizePolicy() *QSizePolicy {
 	self := rt.Use(unsafe.Pointer(this), "QSpacerItem.SizePolicy")
 	r := C.qute_QSpacerItem_sizePolicy(self)
+	runtime.KeepAlive(this)
 	return rt.View[QSizePolicy](rt.WrapClass(r, "QSizePolicy", rt.TakeOwned), r)
 }

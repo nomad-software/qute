@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -101,6 +102,7 @@ func NewQTextDocumentFragmentWithTextDocument(document QTextDocumentLike) *QText
 		documentPtr = rt.UseArg(unsafe.Pointer(document.AsQTextDocument()), "NewQTextDocumentFragmentWithTextDocument")
 	}
 	p := C.qute_QTextDocumentFragment_new_1(documentPtr)
+	runtime.KeepAlive(document)
 	h := rt.WrapClass(p, "QTextDocumentFragment", rt.NewOwned)
 	return rt.View[QTextDocumentFragment](h, p)
 }
@@ -113,6 +115,7 @@ func NewQTextDocumentFragmentWithTextDocument(document QTextDocumentLike) *QText
 func NewQTextDocumentFragmentWithTextCursor(rangeArg *QTextCursor) *QTextDocumentFragment {
 	rt.CheckThread("NewQTextDocumentFragmentWithTextCursor")
 	p := C.qute_QTextDocumentFragment_new_2(rt.UseArg(unsafe.Pointer(rangeArg), "NewQTextDocumentFragmentWithTextCursor"))
+	runtime.KeepAlive(rangeArg)
 	h := rt.WrapClass(p, "QTextDocumentFragment", rt.NewOwned)
 	return rt.View[QTextDocumentFragment](h, p)
 }
@@ -125,6 +128,7 @@ func NewQTextDocumentFragmentWithTextCursor(rangeArg *QTextCursor) *QTextDocumen
 func (this *QTextDocumentFragment) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.IsEmpty")
 	r := C.qute_QTextDocumentFragment_isEmpty(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -136,6 +140,7 @@ func (this *QTextDocumentFragment) IsEmpty() bool {
 func (this *QTextDocumentFragment) ToPlainText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.ToPlainText")
 	r := C.qute_QTextDocumentFragment_toPlainText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -147,6 +152,7 @@ func (this *QTextDocumentFragment) ToPlainText() string {
 func (this *QTextDocumentFragment) ToRawText() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.ToRawText")
 	r := C.qute_QTextDocumentFragment_toRawText(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -158,6 +164,7 @@ func (this *QTextDocumentFragment) ToRawText() string {
 func (this *QTextDocumentFragment) ToHtml() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.ToHtml")
 	r := C.qute_QTextDocumentFragment_toHtml(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -169,6 +176,7 @@ func (this *QTextDocumentFragment) ToHtml() string {
 func (this *QTextDocumentFragment) ToMarkdown() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.ToMarkdown")
 	r := C.qute_QTextDocumentFragment_toMarkdown(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 

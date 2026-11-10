@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQDateTimeEdit(parent QWidgetLike) *QDateTimeEdit {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEdit")
 	}
 	p := C.qute_QDateTimeEdit_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,8 @@ func NewQDateTimeEditWithDateTime(dt *qtcore.QDateTime, parent QWidgetLike) *QDa
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithDateTime")
 	}
 	p := C.qute_QDateTimeEdit_new_1(rt.UseArg(unsafe.Pointer(dt), "NewQDateTimeEditWithDateTime"), parentPtr)
+	runtime.KeepAlive(dt)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -105,6 +109,8 @@ func NewQDateTimeEditWithDate(d *qtcore.QDate, parent QWidgetLike) *QDateTimeEdi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithDate")
 	}
 	p := C.qute_QDateTimeEdit_new_2(rt.UseArg(unsafe.Pointer(d), "NewQDateTimeEditWithDate"), parentPtr)
+	runtime.KeepAlive(d)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -127,6 +133,8 @@ func NewQDateTimeEditWithTime(t *qtcore.QTime, parent QWidgetLike) *QDateTimeEdi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateTimeEditWithTime")
 	}
 	p := C.qute_QDateTimeEdit_new_3(rt.UseArg(unsafe.Pointer(t), "NewQDateTimeEditWithTime"), parentPtr)
+	runtime.KeepAlive(t)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -145,6 +153,7 @@ func NewQDateTimeEditWithTime(t *qtcore.QTime, parent QWidgetLike) *QDateTimeEdi
 func (this *QDateTimeEdit) DateTime() *qtcore.QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.DateTime")
 	r := C.qute_QDateTimeEdit_dateTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -158,6 +167,7 @@ func (this *QDateTimeEdit) DateTime() *qtcore.QDateTime {
 func (this *QDateTimeEdit) Date() *qtcore.QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.Date")
 	r := C.qute_QDateTimeEdit_date(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -171,6 +181,7 @@ func (this *QDateTimeEdit) Date() *qtcore.QDate {
 func (this *QDateTimeEdit) Time() *qtcore.QTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.Time")
 	r := C.qute_QDateTimeEdit_time(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -184,6 +195,7 @@ func (this *QDateTimeEdit) Time() *qtcore.QTime {
 func (this *QDateTimeEdit) Calendar() *qtcore.QCalendar {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.Calendar")
 	r := C.qute_QDateTimeEdit_calendar(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QCalendar](rt.WrapClass(r, "QCalendar", rt.TakeOwned), r)
 }
 
@@ -195,6 +207,8 @@ func (this *QDateTimeEdit) Calendar() *qtcore.QCalendar {
 func (this *QDateTimeEdit) SetCalendar(calendar *qtcore.QCalendar) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCalendar")
 	C.qute_QDateTimeEdit_setCalendar(self, rt.UseArg(unsafe.Pointer(calendar), "QDateTimeEdit.SetCalendar"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(calendar)
 }
 
 // MinimumDateTime wraps QDateTimeEdit::minimumDateTime.
@@ -207,6 +221,7 @@ func (this *QDateTimeEdit) SetCalendar(calendar *qtcore.QCalendar) {
 func (this *QDateTimeEdit) MinimumDateTime() *qtcore.QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.MinimumDateTime")
 	r := C.qute_QDateTimeEdit_minimumDateTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -218,6 +233,7 @@ func (this *QDateTimeEdit) MinimumDateTime() *qtcore.QDateTime {
 func (this *QDateTimeEdit) ClearMinimumDateTime() {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.ClearMinimumDateTime")
 	C.qute_QDateTimeEdit_clearMinimumDateTime(self)
+	runtime.KeepAlive(this)
 }
 
 // SetMinimumDateTime wraps QDateTimeEdit::setMinimumDateTime.
@@ -228,6 +244,8 @@ func (this *QDateTimeEdit) ClearMinimumDateTime() {
 func (this *QDateTimeEdit) SetMinimumDateTime(dt *qtcore.QDateTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetMinimumDateTime")
 	C.qute_QDateTimeEdit_setMinimumDateTime(self, rt.UseArg(unsafe.Pointer(dt), "QDateTimeEdit.SetMinimumDateTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dt)
 }
 
 // MaximumDateTime wraps QDateTimeEdit::maximumDateTime.
@@ -240,6 +258,7 @@ func (this *QDateTimeEdit) SetMinimumDateTime(dt *qtcore.QDateTime) {
 func (this *QDateTimeEdit) MaximumDateTime() *qtcore.QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.MaximumDateTime")
 	r := C.qute_QDateTimeEdit_maximumDateTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -251,6 +270,7 @@ func (this *QDateTimeEdit) MaximumDateTime() *qtcore.QDateTime {
 func (this *QDateTimeEdit) ClearMaximumDateTime() {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.ClearMaximumDateTime")
 	C.qute_QDateTimeEdit_clearMaximumDateTime(self)
+	runtime.KeepAlive(this)
 }
 
 // SetMaximumDateTime wraps QDateTimeEdit::setMaximumDateTime.
@@ -261,6 +281,8 @@ func (this *QDateTimeEdit) ClearMaximumDateTime() {
 func (this *QDateTimeEdit) SetMaximumDateTime(dt *qtcore.QDateTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetMaximumDateTime")
 	C.qute_QDateTimeEdit_setMaximumDateTime(self, rt.UseArg(unsafe.Pointer(dt), "QDateTimeEdit.SetMaximumDateTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dt)
 }
 
 // SetDateTimeRange wraps QDateTimeEdit::setDateTimeRange.
@@ -271,6 +293,9 @@ func (this *QDateTimeEdit) SetMaximumDateTime(dt *qtcore.QDateTime) {
 func (this *QDateTimeEdit) SetDateTimeRange(min *qtcore.QDateTime, max *qtcore.QDateTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetDateTimeRange")
 	C.qute_QDateTimeEdit_setDateTimeRange(self, rt.UseArg(unsafe.Pointer(min), "QDateTimeEdit.SetDateTimeRange"), rt.UseArg(unsafe.Pointer(max), "QDateTimeEdit.SetDateTimeRange"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(min)
+	runtime.KeepAlive(max)
 }
 
 // MinimumDate wraps QDateTimeEdit::minimumDate.
@@ -283,6 +308,7 @@ func (this *QDateTimeEdit) SetDateTimeRange(min *qtcore.QDateTime, max *qtcore.Q
 func (this *QDateTimeEdit) MinimumDate() *qtcore.QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.MinimumDate")
 	r := C.qute_QDateTimeEdit_minimumDate(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -294,6 +320,8 @@ func (this *QDateTimeEdit) MinimumDate() *qtcore.QDate {
 func (this *QDateTimeEdit) SetMinimumDate(min *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetMinimumDate")
 	C.qute_QDateTimeEdit_setMinimumDate(self, rt.UseArg(unsafe.Pointer(min), "QDateTimeEdit.SetMinimumDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(min)
 }
 
 // ClearMinimumDate wraps QDateTimeEdit::clearMinimumDate.
@@ -304,6 +332,7 @@ func (this *QDateTimeEdit) SetMinimumDate(min *qtcore.QDate) {
 func (this *QDateTimeEdit) ClearMinimumDate() {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.ClearMinimumDate")
 	C.qute_QDateTimeEdit_clearMinimumDate(self)
+	runtime.KeepAlive(this)
 }
 
 // MaximumDate wraps QDateTimeEdit::maximumDate.
@@ -316,6 +345,7 @@ func (this *QDateTimeEdit) ClearMinimumDate() {
 func (this *QDateTimeEdit) MaximumDate() *qtcore.QDate {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.MaximumDate")
 	r := C.qute_QDateTimeEdit_maximumDate(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -327,6 +357,8 @@ func (this *QDateTimeEdit) MaximumDate() *qtcore.QDate {
 func (this *QDateTimeEdit) SetMaximumDate(max *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetMaximumDate")
 	C.qute_QDateTimeEdit_setMaximumDate(self, rt.UseArg(unsafe.Pointer(max), "QDateTimeEdit.SetMaximumDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(max)
 }
 
 // ClearMaximumDate wraps QDateTimeEdit::clearMaximumDate.
@@ -337,6 +369,7 @@ func (this *QDateTimeEdit) SetMaximumDate(max *qtcore.QDate) {
 func (this *QDateTimeEdit) ClearMaximumDate() {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.ClearMaximumDate")
 	C.qute_QDateTimeEdit_clearMaximumDate(self)
+	runtime.KeepAlive(this)
 }
 
 // SetDateRange wraps QDateTimeEdit::setDateRange.
@@ -347,6 +380,9 @@ func (this *QDateTimeEdit) ClearMaximumDate() {
 func (this *QDateTimeEdit) SetDateRange(min *qtcore.QDate, max *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetDateRange")
 	C.qute_QDateTimeEdit_setDateRange(self, rt.UseArg(unsafe.Pointer(min), "QDateTimeEdit.SetDateRange"), rt.UseArg(unsafe.Pointer(max), "QDateTimeEdit.SetDateRange"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(min)
+	runtime.KeepAlive(max)
 }
 
 // MinimumTime wraps QDateTimeEdit::minimumTime.
@@ -359,6 +395,7 @@ func (this *QDateTimeEdit) SetDateRange(min *qtcore.QDate, max *qtcore.QDate) {
 func (this *QDateTimeEdit) MinimumTime() *qtcore.QTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.MinimumTime")
 	r := C.qute_QDateTimeEdit_minimumTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -370,6 +407,8 @@ func (this *QDateTimeEdit) MinimumTime() *qtcore.QTime {
 func (this *QDateTimeEdit) SetMinimumTime(min *qtcore.QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetMinimumTime")
 	C.qute_QDateTimeEdit_setMinimumTime(self, rt.UseArg(unsafe.Pointer(min), "QDateTimeEdit.SetMinimumTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(min)
 }
 
 // ClearMinimumTime wraps QDateTimeEdit::clearMinimumTime.
@@ -380,6 +419,7 @@ func (this *QDateTimeEdit) SetMinimumTime(min *qtcore.QTime) {
 func (this *QDateTimeEdit) ClearMinimumTime() {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.ClearMinimumTime")
 	C.qute_QDateTimeEdit_clearMinimumTime(self)
+	runtime.KeepAlive(this)
 }
 
 // MaximumTime wraps QDateTimeEdit::maximumTime.
@@ -392,6 +432,7 @@ func (this *QDateTimeEdit) ClearMinimumTime() {
 func (this *QDateTimeEdit) MaximumTime() *qtcore.QTime {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.MaximumTime")
 	r := C.qute_QDateTimeEdit_maximumTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -403,6 +444,8 @@ func (this *QDateTimeEdit) MaximumTime() *qtcore.QTime {
 func (this *QDateTimeEdit) SetMaximumTime(max *qtcore.QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetMaximumTime")
 	C.qute_QDateTimeEdit_setMaximumTime(self, rt.UseArg(unsafe.Pointer(max), "QDateTimeEdit.SetMaximumTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(max)
 }
 
 // ClearMaximumTime wraps QDateTimeEdit::clearMaximumTime.
@@ -413,6 +456,7 @@ func (this *QDateTimeEdit) SetMaximumTime(max *qtcore.QTime) {
 func (this *QDateTimeEdit) ClearMaximumTime() {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.ClearMaximumTime")
 	C.qute_QDateTimeEdit_clearMaximumTime(self)
+	runtime.KeepAlive(this)
 }
 
 // SetTimeRange wraps QDateTimeEdit::setTimeRange.
@@ -423,6 +467,9 @@ func (this *QDateTimeEdit) ClearMaximumTime() {
 func (this *QDateTimeEdit) SetTimeRange(min *qtcore.QTime, max *qtcore.QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetTimeRange")
 	C.qute_QDateTimeEdit_setTimeRange(self, rt.UseArg(unsafe.Pointer(min), "QDateTimeEdit.SetTimeRange"), rt.UseArg(unsafe.Pointer(max), "QDateTimeEdit.SetTimeRange"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(min)
+	runtime.KeepAlive(max)
 }
 
 // DisplayedSections wraps QDateTimeEdit::displayedSections.
@@ -433,6 +480,7 @@ func (this *QDateTimeEdit) SetTimeRange(min *qtcore.QTime, max *qtcore.QTime) {
 func (this *QDateTimeEdit) DisplayedSections() QDateTimeEditSections {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.DisplayedSections")
 	r := C.qute_QDateTimeEdit_displayedSections(self)
+	runtime.KeepAlive(this)
 	return QDateTimeEditSections(r)
 }
 
@@ -444,6 +492,7 @@ func (this *QDateTimeEdit) DisplayedSections() QDateTimeEditSections {
 func (this *QDateTimeEdit) CurrentSection() QDateTimeEditSections {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.CurrentSection")
 	r := C.qute_QDateTimeEdit_currentSection(self)
+	runtime.KeepAlive(this)
 	return QDateTimeEditSections(r)
 }
 
@@ -455,6 +504,7 @@ func (this *QDateTimeEdit) CurrentSection() QDateTimeEditSections {
 func (this *QDateTimeEdit) SectionAt(index int) QDateTimeEditSections {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SectionAt")
 	r := C.qute_QDateTimeEdit_sectionAt(self, C.int(index))
+	runtime.KeepAlive(this)
 	return QDateTimeEditSections(r)
 }
 
@@ -466,6 +516,7 @@ func (this *QDateTimeEdit) SectionAt(index int) QDateTimeEditSections {
 func (this *QDateTimeEdit) SetCurrentSection(section QDateTimeEditSections) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCurrentSection")
 	C.qute_QDateTimeEdit_setCurrentSection(self, C.int64_t(section))
+	runtime.KeepAlive(this)
 }
 
 // CurrentSectionIndex wraps QDateTimeEdit::currentSectionIndex.
@@ -476,6 +527,7 @@ func (this *QDateTimeEdit) SetCurrentSection(section QDateTimeEditSections) {
 func (this *QDateTimeEdit) CurrentSectionIndex() int {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.CurrentSectionIndex")
 	r := C.qute_QDateTimeEdit_currentSectionIndex(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -487,6 +539,7 @@ func (this *QDateTimeEdit) CurrentSectionIndex() int {
 func (this *QDateTimeEdit) SetCurrentSectionIndex(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCurrentSectionIndex")
 	C.qute_QDateTimeEdit_setCurrentSectionIndex(self, C.int(index))
+	runtime.KeepAlive(this)
 }
 
 // CalendarWidget wraps QDateTimeEdit::calendarWidget.
@@ -499,6 +552,7 @@ func (this *QDateTimeEdit) SetCurrentSectionIndex(index int) {
 func (this *QDateTimeEdit) CalendarWidget() *QCalendarWidget {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.CalendarWidget")
 	r := C.qute_QDateTimeEdit_calendarWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QCalendarWidget](rt.WrapClass(r, "QCalendarWidget", rt.KeepOrBorrow), r)
 }
 
@@ -516,6 +570,8 @@ func (this *QDateTimeEdit) SetCalendarWidget(calendarWidget QCalendarWidgetLike)
 		calendarWidgetPtr = rt.UseArg(unsafe.Pointer(calendarWidget.AsQCalendarWidget()), "QDateTimeEdit.SetCalendarWidget")
 	}
 	C.qute_QDateTimeEdit_setCalendarWidget(self, calendarWidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(calendarWidget)
 }
 
 // SectionCount wraps QDateTimeEdit::sectionCount.
@@ -526,6 +582,7 @@ func (this *QDateTimeEdit) SetCalendarWidget(calendarWidget QCalendarWidgetLike)
 func (this *QDateTimeEdit) SectionCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SectionCount")
 	r := C.qute_QDateTimeEdit_sectionCount(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -537,6 +594,7 @@ func (this *QDateTimeEdit) SectionCount() int {
 func (this *QDateTimeEdit) SetSelectedSection(section QDateTimeEditSections) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetSelectedSection")
 	C.qute_QDateTimeEdit_setSelectedSection(self, C.int64_t(section))
+	runtime.KeepAlive(this)
 }
 
 // SectionText wraps QDateTimeEdit::sectionText.
@@ -547,6 +605,7 @@ func (this *QDateTimeEdit) SetSelectedSection(section QDateTimeEditSections) {
 func (this *QDateTimeEdit) SectionText(section QDateTimeEditSections) string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SectionText")
 	r := C.qute_QDateTimeEdit_sectionText(self, C.int64_t(section))
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -558,6 +617,7 @@ func (this *QDateTimeEdit) SectionText(section QDateTimeEditSections) string {
 func (this *QDateTimeEdit) DisplayFormat() string {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.DisplayFormat")
 	r := C.qute_QDateTimeEdit_displayFormat(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -569,6 +629,7 @@ func (this *QDateTimeEdit) DisplayFormat() string {
 func (this *QDateTimeEdit) SetDisplayFormat(format string) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetDisplayFormat")
 	C.qute_QDateTimeEdit_setDisplayFormat(self, (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(this)
 }
 
 // CalendarPopup wraps QDateTimeEdit::calendarPopup.
@@ -579,6 +640,7 @@ func (this *QDateTimeEdit) SetDisplayFormat(format string) {
 func (this *QDateTimeEdit) CalendarPopup() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.CalendarPopup")
 	r := C.qute_QDateTimeEdit_calendarPopup(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -590,6 +652,7 @@ func (this *QDateTimeEdit) CalendarPopup() bool {
 func (this *QDateTimeEdit) SetCalendarPopup(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetCalendarPopup")
 	C.qute_QDateTimeEdit_setCalendarPopup(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // TimeZone wraps QDateTimeEdit::timeZone.
@@ -602,6 +665,7 @@ func (this *QDateTimeEdit) SetCalendarPopup(enable bool) {
 func (this *QDateTimeEdit) TimeZone() *qtcore.QTimeZone {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.TimeZone")
 	r := C.qute_QDateTimeEdit_timeZone(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtcore.QTimeZone](rt.WrapClass(r, "QTimeZone", rt.TakeOwned), r)
 }
 
@@ -613,6 +677,8 @@ func (this *QDateTimeEdit) TimeZone() *qtcore.QTimeZone {
 func (this *QDateTimeEdit) SetTimeZone(zone *qtcore.QTimeZone) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetTimeZone")
 	C.qute_QDateTimeEdit_setTimeZone(self, rt.UseArg(unsafe.Pointer(zone), "QDateTimeEdit.SetTimeZone"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(zone)
 }
 
 // SetDateTime wraps QDateTimeEdit::setDateTime.
@@ -623,6 +689,8 @@ func (this *QDateTimeEdit) SetTimeZone(zone *qtcore.QTimeZone) {
 func (this *QDateTimeEdit) SetDateTime(dateTime *qtcore.QDateTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetDateTime")
 	C.qute_QDateTimeEdit_setDateTime(self, rt.UseArg(unsafe.Pointer(dateTime), "QDateTimeEdit.SetDateTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 }
 
 // SetDate wraps QDateTimeEdit::setDate.
@@ -633,6 +701,8 @@ func (this *QDateTimeEdit) SetDateTime(dateTime *qtcore.QDateTime) {
 func (this *QDateTimeEdit) SetDate(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetDate")
 	C.qute_QDateTimeEdit_setDate(self, rt.UseArg(unsafe.Pointer(date), "QDateTimeEdit.SetDate"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // SetTime wraps QDateTimeEdit::setTime.
@@ -643,6 +713,8 @@ func (this *QDateTimeEdit) SetDate(date *qtcore.QDate) {
 func (this *QDateTimeEdit) SetTime(time *qtcore.QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.SetTime")
 	C.qute_QDateTimeEdit_setTime(self, rt.UseArg(unsafe.Pointer(time), "QDateTimeEdit.SetTime"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
 }
 
 // EmitDateTimeChanged wraps emitting the dateTimeChanged signal.
@@ -653,6 +725,8 @@ func (this *QDateTimeEdit) SetTime(time *qtcore.QTime) {
 func (this *QDateTimeEdit) EmitDateTimeChanged(dateTime *qtcore.QDateTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.EmitDateTimeChanged")
 	C.qute_QDateTimeEdit_dateTimeChanged_1(self, rt.UseArg(unsafe.Pointer(dateTime), "QDateTimeEdit.EmitDateTimeChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
 }
 
 // EmitTimeChanged wraps emitting the timeChanged signal.
@@ -663,6 +737,8 @@ func (this *QDateTimeEdit) EmitDateTimeChanged(dateTime *qtcore.QDateTime) {
 func (this *QDateTimeEdit) EmitTimeChanged(time *qtcore.QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.EmitTimeChanged")
 	C.qute_QDateTimeEdit_timeChanged_1(self, rt.UseArg(unsafe.Pointer(time), "QDateTimeEdit.EmitTimeChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
 }
 
 // EmitDateChanged wraps emitting the dateChanged signal.
@@ -673,6 +749,8 @@ func (this *QDateTimeEdit) EmitTimeChanged(time *qtcore.QTime) {
 func (this *QDateTimeEdit) EmitDateChanged(date *qtcore.QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.EmitDateChanged")
 	C.qute_QDateTimeEdit_dateChanged_1(self, rt.UseArg(unsafe.Pointer(date), "QDateTimeEdit.EmitDateChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
 }
 
 // OnDateTimeChanged connects f to the dateTimeChanged signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQGraphicsBlurEffect(parent qtcore.QObjectLike) *QGraphicsBlurEffect {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsBlurEffect")
 	}
 	p := C.qute_QGraphicsBlurEffect_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -77,6 +79,7 @@ func NewQGraphicsBlurEffect(parent qtcore.QObjectLike) *QGraphicsBlurEffect {
 func (this *QGraphicsBlurEffect) BlurRadius() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsBlurEffect.BlurRadius")
 	r := C.qute_QGraphicsBlurEffect_blurRadius(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -88,6 +91,7 @@ func (this *QGraphicsBlurEffect) BlurRadius() float64 {
 func (this *QGraphicsBlurEffect) BlurHints() QGraphicsBlurEffectBlurHints {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsBlurEffect.BlurHints")
 	r := C.qute_QGraphicsBlurEffect_blurHints(self)
+	runtime.KeepAlive(this)
 	return QGraphicsBlurEffectBlurHints(r)
 }
 
@@ -99,6 +103,7 @@ func (this *QGraphicsBlurEffect) BlurHints() QGraphicsBlurEffectBlurHints {
 func (this *QGraphicsBlurEffect) SetBlurRadius(blurRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsBlurEffect.SetBlurRadius")
 	C.qute_QGraphicsBlurEffect_setBlurRadius(self, C.double(blurRadius))
+	runtime.KeepAlive(this)
 }
 
 // SetBlurHints wraps QGraphicsBlurEffect::setBlurHints.
@@ -109,6 +114,7 @@ func (this *QGraphicsBlurEffect) SetBlurRadius(blurRadius float64) {
 func (this *QGraphicsBlurEffect) SetBlurHints(hints QGraphicsBlurEffectBlurHints) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsBlurEffect.SetBlurHints")
 	C.qute_QGraphicsBlurEffect_setBlurHints(self, C.int64_t(hints))
+	runtime.KeepAlive(this)
 }
 
 // EmitBlurRadiusChanged wraps emitting the blurRadiusChanged signal.
@@ -119,6 +125,7 @@ func (this *QGraphicsBlurEffect) SetBlurHints(hints QGraphicsBlurEffectBlurHints
 func (this *QGraphicsBlurEffect) EmitBlurRadiusChanged(blurRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsBlurEffect.EmitBlurRadiusChanged")
 	C.qute_QGraphicsBlurEffect_blurRadiusChanged_1(self, C.double(blurRadius))
+	runtime.KeepAlive(this)
 }
 
 // EmitBlurHintsChanged wraps emitting the blurHintsChanged signal.
@@ -129,6 +136,7 @@ func (this *QGraphicsBlurEffect) EmitBlurRadiusChanged(blurRadius float64) {
 func (this *QGraphicsBlurEffect) EmitBlurHintsChanged(hints QGraphicsBlurEffectBlurHints) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsBlurEffect.EmitBlurHintsChanged")
 	C.qute_QGraphicsBlurEffect_blurHintsChanged_1(self, C.int64_t(hints))
+	runtime.KeepAlive(this)
 }
 
 // OnBlurRadiusChanged connects f to the blurRadiusChanged signal. The connection ends when the

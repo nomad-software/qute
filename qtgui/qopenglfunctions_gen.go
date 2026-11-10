@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -102,6 +103,7 @@ func NewQOpenGLFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpenGLFu
 		contextPtr = rt.UseArg(unsafe.Pointer(context.AsQOpenGLContext()), "NewQOpenGLFunctionsWithOpenGLContext")
 	}
 	p := C.qute_QOpenGLFunctions_new_1(contextPtr)
+	runtime.KeepAlive(context)
 	h := rt.WrapClass(p, "QOpenGLFunctions", rt.NewOwned)
 	return rt.View[QOpenGLFunctions](h, p)
 }
@@ -114,6 +116,7 @@ func NewQOpenGLFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpenGLFu
 func (this *QOpenGLFunctions) OpenGLFeatures() QOpenGLFunctionsOpenGLFeatures {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.OpenGLFeatures")
 	r := C.qute_QOpenGLFunctions_openGLFeatures(self)
+	runtime.KeepAlive(this)
 	return QOpenGLFunctionsOpenGLFeatures(r)
 }
 
@@ -125,6 +128,7 @@ func (this *QOpenGLFunctions) OpenGLFeatures() QOpenGLFunctionsOpenGLFeatures {
 func (this *QOpenGLFunctions) HasOpenGLFeature(feature QOpenGLFunctionsOpenGLFeatures) bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.HasOpenGLFeature")
 	r := C.qute_QOpenGLFunctions_hasOpenGLFeature(self, C.int64_t(feature))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -136,6 +140,7 @@ func (this *QOpenGLFunctions) HasOpenGLFeature(feature QOpenGLFunctionsOpenGLFea
 func (this *QOpenGLFunctions) InitializeOpenGLFunctions() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.InitializeOpenGLFunctions")
 	C.qute_QOpenGLFunctions_initializeOpenGLFunctions(self)
+	runtime.KeepAlive(this)
 }
 
 // GlBindTexture wraps QOpenGLFunctions::glBindTexture.
@@ -146,6 +151,7 @@ func (this *QOpenGLFunctions) InitializeOpenGLFunctions() {
 func (this *QOpenGLFunctions) GlBindTexture(target uint, texture uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBindTexture")
 	C.qute_QOpenGLFunctions_glBindTexture(self, C.uint(target), C.uint(texture))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendFunc wraps QOpenGLFunctions::glBlendFunc.
@@ -156,6 +162,7 @@ func (this *QOpenGLFunctions) GlBindTexture(target uint, texture uint) {
 func (this *QOpenGLFunctions) GlBlendFunc(sfactor uint, dfactor uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBlendFunc")
 	C.qute_QOpenGLFunctions_glBlendFunc(self, C.uint(sfactor), C.uint(dfactor))
+	runtime.KeepAlive(this)
 }
 
 // GlClear wraps QOpenGLFunctions::glClear.
@@ -166,6 +173,7 @@ func (this *QOpenGLFunctions) GlBlendFunc(sfactor uint, dfactor uint) {
 func (this *QOpenGLFunctions) GlClear(maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlClear")
 	C.qute_QOpenGLFunctions_glClear(self, C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // GlClearColor wraps QOpenGLFunctions::glClearColor.
@@ -176,6 +184,7 @@ func (this *QOpenGLFunctions) GlClear(maskArg uint) {
 func (this *QOpenGLFunctions) GlClearColor(red float32, green float32, blue float32, alpha float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlClearColor")
 	C.qute_QOpenGLFunctions_glClearColor(self, C.float(red), C.float(green), C.float(blue), C.float(alpha))
+	runtime.KeepAlive(this)
 }
 
 // GlClearStencil wraps QOpenGLFunctions::glClearStencil.
@@ -186,6 +195,7 @@ func (this *QOpenGLFunctions) GlClearColor(red float32, green float32, blue floa
 func (this *QOpenGLFunctions) GlClearStencil(sArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlClearStencil")
 	C.qute_QOpenGLFunctions_glClearStencil(self, C.int(sArg))
+	runtime.KeepAlive(this)
 }
 
 // GlColorMask wraps QOpenGLFunctions::glColorMask.
@@ -196,6 +206,7 @@ func (this *QOpenGLFunctions) GlClearStencil(sArg int) {
 func (this *QOpenGLFunctions) GlColorMask(red uint8, green uint8, blue uint8, alpha uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlColorMask")
 	C.qute_QOpenGLFunctions_glColorMask(self, C.uchar(red), C.uchar(green), C.uchar(blue), C.uchar(alpha))
+	runtime.KeepAlive(this)
 }
 
 // GlCopyTexImage2D wraps QOpenGLFunctions::glCopyTexImage2D.
@@ -206,6 +217,7 @@ func (this *QOpenGLFunctions) GlColorMask(red uint8, green uint8, blue uint8, al
 func (this *QOpenGLFunctions) GlCopyTexImage2D(target uint, level int, internalformat uint, x int, y int, width int, height int, border int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCopyTexImage2D")
 	C.qute_QOpenGLFunctions_glCopyTexImage2D(self, C.uint(target), C.int(level), C.uint(internalformat), C.int(x), C.int(y), C.int(width), C.int(height), C.int(border))
+	runtime.KeepAlive(this)
 }
 
 // GlCopyTexSubImage2D wraps QOpenGLFunctions::glCopyTexSubImage2D.
@@ -216,6 +228,7 @@ func (this *QOpenGLFunctions) GlCopyTexImage2D(target uint, level int, internalf
 func (this *QOpenGLFunctions) GlCopyTexSubImage2D(target uint, level int, xoffset int, yoffset int, x int, y int, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCopyTexSubImage2D")
 	C.qute_QOpenGLFunctions_glCopyTexSubImage2D(self, C.uint(target), C.int(level), C.int(xoffset), C.int(yoffset), C.int(x), C.int(y), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlCullFace wraps QOpenGLFunctions::glCullFace.
@@ -226,6 +239,7 @@ func (this *QOpenGLFunctions) GlCopyTexSubImage2D(target uint, level int, xoffse
 func (this *QOpenGLFunctions) GlCullFace(mode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCullFace")
 	C.qute_QOpenGLFunctions_glCullFace(self, C.uint(mode))
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteTextures wraps QOpenGLFunctions::glDeleteTextures.
@@ -236,6 +250,7 @@ func (this *QOpenGLFunctions) GlCullFace(mode uint) {
 func (this *QOpenGLFunctions) GlDeleteTextures(n int, textures unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDeleteTextures")
 	C.qute_QOpenGLFunctions_glDeleteTextures(self, C.int(n), textures)
+	runtime.KeepAlive(this)
 }
 
 // GlDepthFunc wraps QOpenGLFunctions::glDepthFunc.
@@ -246,6 +261,7 @@ func (this *QOpenGLFunctions) GlDeleteTextures(n int, textures unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlDepthFunc(funcArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDepthFunc")
 	C.qute_QOpenGLFunctions_glDepthFunc(self, C.uint(funcArg))
+	runtime.KeepAlive(this)
 }
 
 // GlDepthMask wraps QOpenGLFunctions::glDepthMask.
@@ -256,6 +272,7 @@ func (this *QOpenGLFunctions) GlDepthFunc(funcArg uint) {
 func (this *QOpenGLFunctions) GlDepthMask(flag uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDepthMask")
 	C.qute_QOpenGLFunctions_glDepthMask(self, C.uchar(flag))
+	runtime.KeepAlive(this)
 }
 
 // GlDisable wraps QOpenGLFunctions::glDisable.
@@ -266,6 +283,7 @@ func (this *QOpenGLFunctions) GlDepthMask(flag uint8) {
 func (this *QOpenGLFunctions) GlDisable(cap uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDisable")
 	C.qute_QOpenGLFunctions_glDisable(self, C.uint(cap))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawArrays wraps QOpenGLFunctions::glDrawArrays.
@@ -276,6 +294,7 @@ func (this *QOpenGLFunctions) GlDisable(cap uint) {
 func (this *QOpenGLFunctions) GlDrawArrays(mode uint, first int, count int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDrawArrays")
 	C.qute_QOpenGLFunctions_glDrawArrays(self, C.uint(mode), C.int(first), C.int(count))
+	runtime.KeepAlive(this)
 }
 
 // GlDrawElements wraps QOpenGLFunctions::glDrawElements.
@@ -286,6 +305,7 @@ func (this *QOpenGLFunctions) GlDrawArrays(mode uint, first int, count int) {
 func (this *QOpenGLFunctions) GlDrawElements(mode uint, count int, typeArg uint, indices unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDrawElements")
 	C.qute_QOpenGLFunctions_glDrawElements(self, C.uint(mode), C.int(count), C.uint(typeArg), indices)
+	runtime.KeepAlive(this)
 }
 
 // GlEnable wraps QOpenGLFunctions::glEnable.
@@ -296,6 +316,7 @@ func (this *QOpenGLFunctions) GlDrawElements(mode uint, count int, typeArg uint,
 func (this *QOpenGLFunctions) GlEnable(cap uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlEnable")
 	C.qute_QOpenGLFunctions_glEnable(self, C.uint(cap))
+	runtime.KeepAlive(this)
 }
 
 // GlFinish wraps QOpenGLFunctions::glFinish.
@@ -306,6 +327,7 @@ func (this *QOpenGLFunctions) GlEnable(cap uint) {
 func (this *QOpenGLFunctions) GlFinish() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlFinish")
 	C.qute_QOpenGLFunctions_glFinish(self)
+	runtime.KeepAlive(this)
 }
 
 // GlFlush wraps QOpenGLFunctions::glFlush.
@@ -316,6 +338,7 @@ func (this *QOpenGLFunctions) GlFinish() {
 func (this *QOpenGLFunctions) GlFlush() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlFlush")
 	C.qute_QOpenGLFunctions_glFlush(self)
+	runtime.KeepAlive(this)
 }
 
 // GlFrontFace wraps QOpenGLFunctions::glFrontFace.
@@ -326,6 +349,7 @@ func (this *QOpenGLFunctions) GlFlush() {
 func (this *QOpenGLFunctions) GlFrontFace(mode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlFrontFace")
 	C.qute_QOpenGLFunctions_glFrontFace(self, C.uint(mode))
+	runtime.KeepAlive(this)
 }
 
 // GlGenTextures wraps QOpenGLFunctions::glGenTextures.
@@ -336,6 +360,7 @@ func (this *QOpenGLFunctions) GlFrontFace(mode uint) {
 func (this *QOpenGLFunctions) GlGenTextures(n int, textures unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGenTextures")
 	C.qute_QOpenGLFunctions_glGenTextures(self, C.int(n), textures)
+	runtime.KeepAlive(this)
 }
 
 // GlGetBooleanv wraps QOpenGLFunctions::glGetBooleanv.
@@ -346,6 +371,7 @@ func (this *QOpenGLFunctions) GlGenTextures(n int, textures unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlGetBooleanv(pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetBooleanv")
 	C.qute_QOpenGLFunctions_glGetBooleanv(self, C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetError wraps QOpenGLFunctions::glGetError.
@@ -356,6 +382,7 @@ func (this *QOpenGLFunctions) GlGetBooleanv(pname uint, params unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlGetError() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetError")
 	r := C.qute_QOpenGLFunctions_glGetError(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -367,6 +394,7 @@ func (this *QOpenGLFunctions) GlGetError() uint {
 func (this *QOpenGLFunctions) GlGetFloatv(pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetFloatv")
 	C.qute_QOpenGLFunctions_glGetFloatv(self, C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetIntegerv wraps QOpenGLFunctions::glGetIntegerv.
@@ -377,6 +405,7 @@ func (this *QOpenGLFunctions) GlGetFloatv(pname uint, params unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlGetIntegerv(pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetIntegerv")
 	C.qute_QOpenGLFunctions_glGetIntegerv(self, C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetString wraps QOpenGLFunctions::glGetString.
@@ -387,6 +416,7 @@ func (this *QOpenGLFunctions) GlGetIntegerv(pname uint, params unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlGetString(name uint) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetString")
 	r := C.qute_QOpenGLFunctions_glGetString(self, C.uint(name))
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -398,6 +428,7 @@ func (this *QOpenGLFunctions) GlGetString(name uint) unsafe.Pointer {
 func (this *QOpenGLFunctions) GlGetTexParameterfv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetTexParameterfv")
 	C.qute_QOpenGLFunctions_glGetTexParameterfv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetTexParameteriv wraps QOpenGLFunctions::glGetTexParameteriv.
@@ -408,6 +439,7 @@ func (this *QOpenGLFunctions) GlGetTexParameterfv(target uint, pname uint, param
 func (this *QOpenGLFunctions) GlGetTexParameteriv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetTexParameteriv")
 	C.qute_QOpenGLFunctions_glGetTexParameteriv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlHint wraps QOpenGLFunctions::glHint.
@@ -418,6 +450,7 @@ func (this *QOpenGLFunctions) GlGetTexParameteriv(target uint, pname uint, param
 func (this *QOpenGLFunctions) GlHint(target uint, mode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlHint")
 	C.qute_QOpenGLFunctions_glHint(self, C.uint(target), C.uint(mode))
+	runtime.KeepAlive(this)
 }
 
 // GlIsEnabled wraps QOpenGLFunctions::glIsEnabled.
@@ -428,6 +461,7 @@ func (this *QOpenGLFunctions) GlHint(target uint, mode uint) {
 func (this *QOpenGLFunctions) GlIsEnabled(cap uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsEnabled")
 	r := C.qute_QOpenGLFunctions_glIsEnabled(self, C.uint(cap))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -439,6 +473,7 @@ func (this *QOpenGLFunctions) GlIsEnabled(cap uint) uint8 {
 func (this *QOpenGLFunctions) GlIsTexture(texture uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsTexture")
 	r := C.qute_QOpenGLFunctions_glIsTexture(self, C.uint(texture))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -450,6 +485,7 @@ func (this *QOpenGLFunctions) GlIsTexture(texture uint) uint8 {
 func (this *QOpenGLFunctions) GlLineWidth(width float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlLineWidth")
 	C.qute_QOpenGLFunctions_glLineWidth(self, C.float(width))
+	runtime.KeepAlive(this)
 }
 
 // GlPixelStorei wraps QOpenGLFunctions::glPixelStorei.
@@ -460,6 +496,7 @@ func (this *QOpenGLFunctions) GlLineWidth(width float32) {
 func (this *QOpenGLFunctions) GlPixelStorei(pname uint, param int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlPixelStorei")
 	C.qute_QOpenGLFunctions_glPixelStorei(self, C.uint(pname), C.int(param))
+	runtime.KeepAlive(this)
 }
 
 // GlPolygonOffset wraps QOpenGLFunctions::glPolygonOffset.
@@ -470,6 +507,7 @@ func (this *QOpenGLFunctions) GlPixelStorei(pname uint, param int) {
 func (this *QOpenGLFunctions) GlPolygonOffset(factor float32, units float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlPolygonOffset")
 	C.qute_QOpenGLFunctions_glPolygonOffset(self, C.float(factor), C.float(units))
+	runtime.KeepAlive(this)
 }
 
 // GlReadPixels wraps QOpenGLFunctions::glReadPixels.
@@ -480,6 +518,7 @@ func (this *QOpenGLFunctions) GlPolygonOffset(factor float32, units float32) {
 func (this *QOpenGLFunctions) GlReadPixels(x int, y int, width int, height int, format uint, typeArg uint, pixels unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlReadPixels")
 	C.qute_QOpenGLFunctions_glReadPixels(self, C.int(x), C.int(y), C.int(width), C.int(height), C.uint(format), C.uint(typeArg), pixels)
+	runtime.KeepAlive(this)
 }
 
 // GlScissor wraps QOpenGLFunctions::glScissor.
@@ -490,6 +529,7 @@ func (this *QOpenGLFunctions) GlReadPixels(x int, y int, width int, height int, 
 func (this *QOpenGLFunctions) GlScissor(x int, y int, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlScissor")
 	C.qute_QOpenGLFunctions_glScissor(self, C.int(x), C.int(y), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlStencilFunc wraps QOpenGLFunctions::glStencilFunc.
@@ -500,6 +540,7 @@ func (this *QOpenGLFunctions) GlScissor(x int, y int, width int, height int) {
 func (this *QOpenGLFunctions) GlStencilFunc(funcArg uint, ref int, maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlStencilFunc")
 	C.qute_QOpenGLFunctions_glStencilFunc(self, C.uint(funcArg), C.int(ref), C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // GlStencilMask wraps QOpenGLFunctions::glStencilMask.
@@ -510,6 +551,7 @@ func (this *QOpenGLFunctions) GlStencilFunc(funcArg uint, ref int, maskArg uint)
 func (this *QOpenGLFunctions) GlStencilMask(maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlStencilMask")
 	C.qute_QOpenGLFunctions_glStencilMask(self, C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // GlStencilOp wraps QOpenGLFunctions::glStencilOp.
@@ -520,6 +562,7 @@ func (this *QOpenGLFunctions) GlStencilMask(maskArg uint) {
 func (this *QOpenGLFunctions) GlStencilOp(fail uint, zfail uint, zpass uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlStencilOp")
 	C.qute_QOpenGLFunctions_glStencilOp(self, C.uint(fail), C.uint(zfail), C.uint(zpass))
+	runtime.KeepAlive(this)
 }
 
 // GlTexImage2D wraps QOpenGLFunctions::glTexImage2D.
@@ -530,6 +573,7 @@ func (this *QOpenGLFunctions) GlStencilOp(fail uint, zfail uint, zpass uint) {
 func (this *QOpenGLFunctions) GlTexImage2D(target uint, level int, internalformat int, width int, height int, border int, format uint, typeArg uint, pixels unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlTexImage2D")
 	C.qute_QOpenGLFunctions_glTexImage2D(self, C.uint(target), C.int(level), C.int(internalformat), C.int(width), C.int(height), C.int(border), C.uint(format), C.uint(typeArg), pixels)
+	runtime.KeepAlive(this)
 }
 
 // GlTexParameterf wraps QOpenGLFunctions::glTexParameterf.
@@ -540,6 +584,7 @@ func (this *QOpenGLFunctions) GlTexImage2D(target uint, level int, internalforma
 func (this *QOpenGLFunctions) GlTexParameterf(target uint, pname uint, param float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlTexParameterf")
 	C.qute_QOpenGLFunctions_glTexParameterf(self, C.uint(target), C.uint(pname), C.float(param))
+	runtime.KeepAlive(this)
 }
 
 // GlTexParameterfv wraps QOpenGLFunctions::glTexParameterfv.
@@ -550,6 +595,7 @@ func (this *QOpenGLFunctions) GlTexParameterf(target uint, pname uint, param flo
 func (this *QOpenGLFunctions) GlTexParameterfv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlTexParameterfv")
 	C.qute_QOpenGLFunctions_glTexParameterfv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlTexParameteri wraps QOpenGLFunctions::glTexParameteri.
@@ -560,6 +606,7 @@ func (this *QOpenGLFunctions) GlTexParameterfv(target uint, pname uint, params u
 func (this *QOpenGLFunctions) GlTexParameteri(target uint, pname uint, param int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlTexParameteri")
 	C.qute_QOpenGLFunctions_glTexParameteri(self, C.uint(target), C.uint(pname), C.int(param))
+	runtime.KeepAlive(this)
 }
 
 // GlTexParameteriv wraps QOpenGLFunctions::glTexParameteriv.
@@ -570,6 +617,7 @@ func (this *QOpenGLFunctions) GlTexParameteri(target uint, pname uint, param int
 func (this *QOpenGLFunctions) GlTexParameteriv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlTexParameteriv")
 	C.qute_QOpenGLFunctions_glTexParameteriv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlTexSubImage2D wraps QOpenGLFunctions::glTexSubImage2D.
@@ -580,6 +628,7 @@ func (this *QOpenGLFunctions) GlTexParameteriv(target uint, pname uint, params u
 func (this *QOpenGLFunctions) GlTexSubImage2D(target uint, level int, xoffset int, yoffset int, width int, height int, format uint, typeArg uint, pixels unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlTexSubImage2D")
 	C.qute_QOpenGLFunctions_glTexSubImage2D(self, C.uint(target), C.int(level), C.int(xoffset), C.int(yoffset), C.int(width), C.int(height), C.uint(format), C.uint(typeArg), pixels)
+	runtime.KeepAlive(this)
 }
 
 // GlViewport wraps QOpenGLFunctions::glViewport.
@@ -590,6 +639,7 @@ func (this *QOpenGLFunctions) GlTexSubImage2D(target uint, level int, xoffset in
 func (this *QOpenGLFunctions) GlViewport(x int, y int, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlViewport")
 	C.qute_QOpenGLFunctions_glViewport(self, C.int(x), C.int(y), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlActiveTexture wraps QOpenGLFunctions::glActiveTexture.
@@ -600,6 +650,7 @@ func (this *QOpenGLFunctions) GlViewport(x int, y int, width int, height int) {
 func (this *QOpenGLFunctions) GlActiveTexture(texture uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlActiveTexture")
 	C.qute_QOpenGLFunctions_glActiveTexture(self, C.uint(texture))
+	runtime.KeepAlive(this)
 }
 
 // GlAttachShader wraps QOpenGLFunctions::glAttachShader.
@@ -610,6 +661,7 @@ func (this *QOpenGLFunctions) GlActiveTexture(texture uint) {
 func (this *QOpenGLFunctions) GlAttachShader(program uint, shader uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlAttachShader")
 	C.qute_QOpenGLFunctions_glAttachShader(self, C.uint(program), C.uint(shader))
+	runtime.KeepAlive(this)
 }
 
 // GlBindAttribLocation wraps QOpenGLFunctions::glBindAttribLocation.
@@ -620,6 +672,7 @@ func (this *QOpenGLFunctions) GlAttachShader(program uint, shader uint) {
 func (this *QOpenGLFunctions) GlBindAttribLocation(program uint, index uint, name unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBindAttribLocation")
 	C.qute_QOpenGLFunctions_glBindAttribLocation(self, C.uint(program), C.uint(index), name)
+	runtime.KeepAlive(this)
 }
 
 // GlBindBuffer wraps QOpenGLFunctions::glBindBuffer.
@@ -630,6 +683,7 @@ func (this *QOpenGLFunctions) GlBindAttribLocation(program uint, index uint, nam
 func (this *QOpenGLFunctions) GlBindBuffer(target uint, buffer uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBindBuffer")
 	C.qute_QOpenGLFunctions_glBindBuffer(self, C.uint(target), C.uint(buffer))
+	runtime.KeepAlive(this)
 }
 
 // GlBindFramebuffer wraps QOpenGLFunctions::glBindFramebuffer.
@@ -640,6 +694,7 @@ func (this *QOpenGLFunctions) GlBindBuffer(target uint, buffer uint) {
 func (this *QOpenGLFunctions) GlBindFramebuffer(target uint, framebuffer uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBindFramebuffer")
 	C.qute_QOpenGLFunctions_glBindFramebuffer(self, C.uint(target), C.uint(framebuffer))
+	runtime.KeepAlive(this)
 }
 
 // GlBindRenderbuffer wraps QOpenGLFunctions::glBindRenderbuffer.
@@ -650,6 +705,7 @@ func (this *QOpenGLFunctions) GlBindFramebuffer(target uint, framebuffer uint) {
 func (this *QOpenGLFunctions) GlBindRenderbuffer(target uint, renderbuffer uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBindRenderbuffer")
 	C.qute_QOpenGLFunctions_glBindRenderbuffer(self, C.uint(target), C.uint(renderbuffer))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendColor wraps QOpenGLFunctions::glBlendColor.
@@ -660,6 +716,7 @@ func (this *QOpenGLFunctions) GlBindRenderbuffer(target uint, renderbuffer uint)
 func (this *QOpenGLFunctions) GlBlendColor(red float32, green float32, blue float32, alpha float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBlendColor")
 	C.qute_QOpenGLFunctions_glBlendColor(self, C.float(red), C.float(green), C.float(blue), C.float(alpha))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendEquation wraps QOpenGLFunctions::glBlendEquation.
@@ -670,6 +727,7 @@ func (this *QOpenGLFunctions) GlBlendColor(red float32, green float32, blue floa
 func (this *QOpenGLFunctions) GlBlendEquation(mode uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBlendEquation")
 	C.qute_QOpenGLFunctions_glBlendEquation(self, C.uint(mode))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendEquationSeparate wraps QOpenGLFunctions::glBlendEquationSeparate.
@@ -680,6 +738,7 @@ func (this *QOpenGLFunctions) GlBlendEquation(mode uint) {
 func (this *QOpenGLFunctions) GlBlendEquationSeparate(modeRGB uint, modeAlpha uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBlendEquationSeparate")
 	C.qute_QOpenGLFunctions_glBlendEquationSeparate(self, C.uint(modeRGB), C.uint(modeAlpha))
+	runtime.KeepAlive(this)
 }
 
 // GlBlendFuncSeparate wraps QOpenGLFunctions::glBlendFuncSeparate.
@@ -690,6 +749,7 @@ func (this *QOpenGLFunctions) GlBlendEquationSeparate(modeRGB uint, modeAlpha ui
 func (this *QOpenGLFunctions) GlBlendFuncSeparate(srcRGB uint, dstRGB uint, srcAlpha uint, dstAlpha uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBlendFuncSeparate")
 	C.qute_QOpenGLFunctions_glBlendFuncSeparate(self, C.uint(srcRGB), C.uint(dstRGB), C.uint(srcAlpha), C.uint(dstAlpha))
+	runtime.KeepAlive(this)
 }
 
 // GlBufferData wraps QOpenGLFunctions::glBufferData.
@@ -700,6 +760,7 @@ func (this *QOpenGLFunctions) GlBlendFuncSeparate(srcRGB uint, dstRGB uint, srcA
 func (this *QOpenGLFunctions) GlBufferData(target uint, size int64, data unsafe.Pointer, usage uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBufferData")
 	C.qute_QOpenGLFunctions_glBufferData(self, C.uint(target), C.long(size), data, C.uint(usage))
+	runtime.KeepAlive(this)
 }
 
 // GlBufferSubData wraps QOpenGLFunctions::glBufferSubData.
@@ -710,6 +771,7 @@ func (this *QOpenGLFunctions) GlBufferData(target uint, size int64, data unsafe.
 func (this *QOpenGLFunctions) GlBufferSubData(target uint, offset int64, size int64, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlBufferSubData")
 	C.qute_QOpenGLFunctions_glBufferSubData(self, C.uint(target), C.long(offset), C.long(size), data)
+	runtime.KeepAlive(this)
 }
 
 // GlCheckFramebufferStatus wraps QOpenGLFunctions::glCheckFramebufferStatus.
@@ -720,6 +782,7 @@ func (this *QOpenGLFunctions) GlBufferSubData(target uint, offset int64, size in
 func (this *QOpenGLFunctions) GlCheckFramebufferStatus(target uint) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCheckFramebufferStatus")
 	r := C.qute_QOpenGLFunctions_glCheckFramebufferStatus(self, C.uint(target))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -731,6 +794,7 @@ func (this *QOpenGLFunctions) GlCheckFramebufferStatus(target uint) uint {
 func (this *QOpenGLFunctions) GlClearDepthf(depth float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlClearDepthf")
 	C.qute_QOpenGLFunctions_glClearDepthf(self, C.float(depth))
+	runtime.KeepAlive(this)
 }
 
 // GlCompileShader wraps QOpenGLFunctions::glCompileShader.
@@ -741,6 +805,7 @@ func (this *QOpenGLFunctions) GlClearDepthf(depth float32) {
 func (this *QOpenGLFunctions) GlCompileShader(shader uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCompileShader")
 	C.qute_QOpenGLFunctions_glCompileShader(self, C.uint(shader))
+	runtime.KeepAlive(this)
 }
 
 // GlCompressedTexImage2D wraps QOpenGLFunctions::glCompressedTexImage2D.
@@ -751,6 +816,7 @@ func (this *QOpenGLFunctions) GlCompileShader(shader uint) {
 func (this *QOpenGLFunctions) GlCompressedTexImage2D(target uint, level int, internalformat uint, width int, height int, border int, imageSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCompressedTexImage2D")
 	C.qute_QOpenGLFunctions_glCompressedTexImage2D(self, C.uint(target), C.int(level), C.uint(internalformat), C.int(width), C.int(height), C.int(border), C.int(imageSize), data)
+	runtime.KeepAlive(this)
 }
 
 // GlCompressedTexSubImage2D wraps QOpenGLFunctions::glCompressedTexSubImage2D.
@@ -761,6 +827,7 @@ func (this *QOpenGLFunctions) GlCompressedTexImage2D(target uint, level int, int
 func (this *QOpenGLFunctions) GlCompressedTexSubImage2D(target uint, level int, xoffset int, yoffset int, width int, height int, format uint, imageSize int, data unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCompressedTexSubImage2D")
 	C.qute_QOpenGLFunctions_glCompressedTexSubImage2D(self, C.uint(target), C.int(level), C.int(xoffset), C.int(yoffset), C.int(width), C.int(height), C.uint(format), C.int(imageSize), data)
+	runtime.KeepAlive(this)
 }
 
 // GlCreateProgram wraps QOpenGLFunctions::glCreateProgram.
@@ -771,6 +838,7 @@ func (this *QOpenGLFunctions) GlCompressedTexSubImage2D(target uint, level int, 
 func (this *QOpenGLFunctions) GlCreateProgram() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCreateProgram")
 	r := C.qute_QOpenGLFunctions_glCreateProgram(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -782,6 +850,7 @@ func (this *QOpenGLFunctions) GlCreateProgram() uint {
 func (this *QOpenGLFunctions) GlCreateShader(typeArg uint) uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlCreateShader")
 	r := C.qute_QOpenGLFunctions_glCreateShader(self, C.uint(typeArg))
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -793,6 +862,7 @@ func (this *QOpenGLFunctions) GlCreateShader(typeArg uint) uint {
 func (this *QOpenGLFunctions) GlDeleteBuffers(n int, buffers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDeleteBuffers")
 	C.qute_QOpenGLFunctions_glDeleteBuffers(self, C.int(n), buffers)
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteFramebuffers wraps QOpenGLFunctions::glDeleteFramebuffers.
@@ -803,6 +873,7 @@ func (this *QOpenGLFunctions) GlDeleteBuffers(n int, buffers unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlDeleteFramebuffers(n int, framebuffers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDeleteFramebuffers")
 	C.qute_QOpenGLFunctions_glDeleteFramebuffers(self, C.int(n), framebuffers)
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteProgram wraps QOpenGLFunctions::glDeleteProgram.
@@ -813,6 +884,7 @@ func (this *QOpenGLFunctions) GlDeleteFramebuffers(n int, framebuffers unsafe.Po
 func (this *QOpenGLFunctions) GlDeleteProgram(program uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDeleteProgram")
 	C.qute_QOpenGLFunctions_glDeleteProgram(self, C.uint(program))
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteRenderbuffers wraps QOpenGLFunctions::glDeleteRenderbuffers.
@@ -823,6 +895,7 @@ func (this *QOpenGLFunctions) GlDeleteProgram(program uint) {
 func (this *QOpenGLFunctions) GlDeleteRenderbuffers(n int, renderbuffers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDeleteRenderbuffers")
 	C.qute_QOpenGLFunctions_glDeleteRenderbuffers(self, C.int(n), renderbuffers)
+	runtime.KeepAlive(this)
 }
 
 // GlDeleteShader wraps QOpenGLFunctions::glDeleteShader.
@@ -833,6 +906,7 @@ func (this *QOpenGLFunctions) GlDeleteRenderbuffers(n int, renderbuffers unsafe.
 func (this *QOpenGLFunctions) GlDeleteShader(shader uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDeleteShader")
 	C.qute_QOpenGLFunctions_glDeleteShader(self, C.uint(shader))
+	runtime.KeepAlive(this)
 }
 
 // GlDepthRangef wraps QOpenGLFunctions::glDepthRangef.
@@ -843,6 +917,7 @@ func (this *QOpenGLFunctions) GlDeleteShader(shader uint) {
 func (this *QOpenGLFunctions) GlDepthRangef(zNear float32, zFar float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDepthRangef")
 	C.qute_QOpenGLFunctions_glDepthRangef(self, C.float(zNear), C.float(zFar))
+	runtime.KeepAlive(this)
 }
 
 // GlDetachShader wraps QOpenGLFunctions::glDetachShader.
@@ -853,6 +928,7 @@ func (this *QOpenGLFunctions) GlDepthRangef(zNear float32, zFar float32) {
 func (this *QOpenGLFunctions) GlDetachShader(program uint, shader uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDetachShader")
 	C.qute_QOpenGLFunctions_glDetachShader(self, C.uint(program), C.uint(shader))
+	runtime.KeepAlive(this)
 }
 
 // GlDisableVertexAttribArray wraps QOpenGLFunctions::glDisableVertexAttribArray.
@@ -863,6 +939,7 @@ func (this *QOpenGLFunctions) GlDetachShader(program uint, shader uint) {
 func (this *QOpenGLFunctions) GlDisableVertexAttribArray(index uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlDisableVertexAttribArray")
 	C.qute_QOpenGLFunctions_glDisableVertexAttribArray(self, C.uint(index))
+	runtime.KeepAlive(this)
 }
 
 // GlEnableVertexAttribArray wraps QOpenGLFunctions::glEnableVertexAttribArray.
@@ -873,6 +950,7 @@ func (this *QOpenGLFunctions) GlDisableVertexAttribArray(index uint) {
 func (this *QOpenGLFunctions) GlEnableVertexAttribArray(index uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlEnableVertexAttribArray")
 	C.qute_QOpenGLFunctions_glEnableVertexAttribArray(self, C.uint(index))
+	runtime.KeepAlive(this)
 }
 
 // GlFramebufferRenderbuffer wraps QOpenGLFunctions::glFramebufferRenderbuffer.
@@ -883,6 +961,7 @@ func (this *QOpenGLFunctions) GlEnableVertexAttribArray(index uint) {
 func (this *QOpenGLFunctions) GlFramebufferRenderbuffer(target uint, attachment uint, renderbuffertarget uint, renderbuffer uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlFramebufferRenderbuffer")
 	C.qute_QOpenGLFunctions_glFramebufferRenderbuffer(self, C.uint(target), C.uint(attachment), C.uint(renderbuffertarget), C.uint(renderbuffer))
+	runtime.KeepAlive(this)
 }
 
 // GlFramebufferTexture2D wraps QOpenGLFunctions::glFramebufferTexture2D.
@@ -893,6 +972,7 @@ func (this *QOpenGLFunctions) GlFramebufferRenderbuffer(target uint, attachment 
 func (this *QOpenGLFunctions) GlFramebufferTexture2D(target uint, attachment uint, textarget uint, texture uint, level int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlFramebufferTexture2D")
 	C.qute_QOpenGLFunctions_glFramebufferTexture2D(self, C.uint(target), C.uint(attachment), C.uint(textarget), C.uint(texture), C.int(level))
+	runtime.KeepAlive(this)
 }
 
 // GlGenBuffers wraps QOpenGLFunctions::glGenBuffers.
@@ -903,6 +983,7 @@ func (this *QOpenGLFunctions) GlFramebufferTexture2D(target uint, attachment uin
 func (this *QOpenGLFunctions) GlGenBuffers(n int, buffers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGenBuffers")
 	C.qute_QOpenGLFunctions_glGenBuffers(self, C.int(n), buffers)
+	runtime.KeepAlive(this)
 }
 
 // GlGenerateMipmap wraps QOpenGLFunctions::glGenerateMipmap.
@@ -913,6 +994,7 @@ func (this *QOpenGLFunctions) GlGenBuffers(n int, buffers unsafe.Pointer) {
 func (this *QOpenGLFunctions) GlGenerateMipmap(target uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGenerateMipmap")
 	C.qute_QOpenGLFunctions_glGenerateMipmap(self, C.uint(target))
+	runtime.KeepAlive(this)
 }
 
 // GlGenFramebuffers wraps QOpenGLFunctions::glGenFramebuffers.
@@ -923,6 +1005,7 @@ func (this *QOpenGLFunctions) GlGenerateMipmap(target uint) {
 func (this *QOpenGLFunctions) GlGenFramebuffers(n int, framebuffers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGenFramebuffers")
 	C.qute_QOpenGLFunctions_glGenFramebuffers(self, C.int(n), framebuffers)
+	runtime.KeepAlive(this)
 }
 
 // GlGenRenderbuffers wraps QOpenGLFunctions::glGenRenderbuffers.
@@ -933,6 +1016,7 @@ func (this *QOpenGLFunctions) GlGenFramebuffers(n int, framebuffers unsafe.Point
 func (this *QOpenGLFunctions) GlGenRenderbuffers(n int, renderbuffers unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGenRenderbuffers")
 	C.qute_QOpenGLFunctions_glGenRenderbuffers(self, C.int(n), renderbuffers)
+	runtime.KeepAlive(this)
 }
 
 // GlGetActiveAttrib wraps QOpenGLFunctions::glGetActiveAttrib.
@@ -943,6 +1027,7 @@ func (this *QOpenGLFunctions) GlGenRenderbuffers(n int, renderbuffers unsafe.Poi
 func (this *QOpenGLFunctions) GlGetActiveAttrib(program uint, index uint, bufsize int, length unsafe.Pointer, size unsafe.Pointer, typeArg unsafe.Pointer, name unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetActiveAttrib")
 	C.qute_QOpenGLFunctions_glGetActiveAttrib(self, C.uint(program), C.uint(index), C.int(bufsize), length, size, typeArg, name)
+	runtime.KeepAlive(this)
 }
 
 // GlGetActiveUniform wraps QOpenGLFunctions::glGetActiveUniform.
@@ -953,6 +1038,7 @@ func (this *QOpenGLFunctions) GlGetActiveAttrib(program uint, index uint, bufsiz
 func (this *QOpenGLFunctions) GlGetActiveUniform(program uint, index uint, bufsize int, length unsafe.Pointer, size unsafe.Pointer, typeArg unsafe.Pointer, name unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetActiveUniform")
 	C.qute_QOpenGLFunctions_glGetActiveUniform(self, C.uint(program), C.uint(index), C.int(bufsize), length, size, typeArg, name)
+	runtime.KeepAlive(this)
 }
 
 // GlGetAttachedShaders wraps QOpenGLFunctions::glGetAttachedShaders.
@@ -963,6 +1049,7 @@ func (this *QOpenGLFunctions) GlGetActiveUniform(program uint, index uint, bufsi
 func (this *QOpenGLFunctions) GlGetAttachedShaders(program uint, maxcount int, count unsafe.Pointer, shaders unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetAttachedShaders")
 	C.qute_QOpenGLFunctions_glGetAttachedShaders(self, C.uint(program), C.int(maxcount), count, shaders)
+	runtime.KeepAlive(this)
 }
 
 // GlGetAttribLocation wraps QOpenGLFunctions::glGetAttribLocation.
@@ -973,6 +1060,7 @@ func (this *QOpenGLFunctions) GlGetAttachedShaders(program uint, maxcount int, c
 func (this *QOpenGLFunctions) GlGetAttribLocation(program uint, name unsafe.Pointer) int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetAttribLocation")
 	r := C.qute_QOpenGLFunctions_glGetAttribLocation(self, C.uint(program), name)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -984,6 +1072,7 @@ func (this *QOpenGLFunctions) GlGetAttribLocation(program uint, name unsafe.Poin
 func (this *QOpenGLFunctions) GlGetBufferParameteriv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetBufferParameteriv")
 	C.qute_QOpenGLFunctions_glGetBufferParameteriv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetFramebufferAttachmentParameteriv wraps QOpenGLFunctions::glGetFramebufferAttachmentParameteriv.
@@ -994,6 +1083,7 @@ func (this *QOpenGLFunctions) GlGetBufferParameteriv(target uint, pname uint, pa
 func (this *QOpenGLFunctions) GlGetFramebufferAttachmentParameteriv(target uint, attachment uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetFramebufferAttachmentParameteriv")
 	C.qute_QOpenGLFunctions_glGetFramebufferAttachmentParameteriv(self, C.uint(target), C.uint(attachment), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramiv wraps QOpenGLFunctions::glGetProgramiv.
@@ -1004,6 +1094,7 @@ func (this *QOpenGLFunctions) GlGetFramebufferAttachmentParameteriv(target uint,
 func (this *QOpenGLFunctions) GlGetProgramiv(program uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetProgramiv")
 	C.qute_QOpenGLFunctions_glGetProgramiv(self, C.uint(program), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetProgramInfoLog wraps QOpenGLFunctions::glGetProgramInfoLog.
@@ -1014,6 +1105,7 @@ func (this *QOpenGLFunctions) GlGetProgramiv(program uint, pname uint, params un
 func (this *QOpenGLFunctions) GlGetProgramInfoLog(program uint, bufsize int, length unsafe.Pointer, infolog unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetProgramInfoLog")
 	C.qute_QOpenGLFunctions_glGetProgramInfoLog(self, C.uint(program), C.int(bufsize), length, infolog)
+	runtime.KeepAlive(this)
 }
 
 // GlGetRenderbufferParameteriv wraps QOpenGLFunctions::glGetRenderbufferParameteriv.
@@ -1024,6 +1116,7 @@ func (this *QOpenGLFunctions) GlGetProgramInfoLog(program uint, bufsize int, len
 func (this *QOpenGLFunctions) GlGetRenderbufferParameteriv(target uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetRenderbufferParameteriv")
 	C.qute_QOpenGLFunctions_glGetRenderbufferParameteriv(self, C.uint(target), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetShaderiv wraps QOpenGLFunctions::glGetShaderiv.
@@ -1034,6 +1127,7 @@ func (this *QOpenGLFunctions) GlGetRenderbufferParameteriv(target uint, pname ui
 func (this *QOpenGLFunctions) GlGetShaderiv(shader uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetShaderiv")
 	C.qute_QOpenGLFunctions_glGetShaderiv(self, C.uint(shader), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetShaderInfoLog wraps QOpenGLFunctions::glGetShaderInfoLog.
@@ -1044,6 +1138,7 @@ func (this *QOpenGLFunctions) GlGetShaderiv(shader uint, pname uint, params unsa
 func (this *QOpenGLFunctions) GlGetShaderInfoLog(shader uint, bufsize int, length unsafe.Pointer, infolog unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetShaderInfoLog")
 	C.qute_QOpenGLFunctions_glGetShaderInfoLog(self, C.uint(shader), C.int(bufsize), length, infolog)
+	runtime.KeepAlive(this)
 }
 
 // GlGetShaderPrecisionFormat wraps QOpenGLFunctions::glGetShaderPrecisionFormat.
@@ -1054,6 +1149,7 @@ func (this *QOpenGLFunctions) GlGetShaderInfoLog(shader uint, bufsize int, lengt
 func (this *QOpenGLFunctions) GlGetShaderPrecisionFormat(shadertype uint, precisiontype uint, rangeArg unsafe.Pointer, precision unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetShaderPrecisionFormat")
 	C.qute_QOpenGLFunctions_glGetShaderPrecisionFormat(self, C.uint(shadertype), C.uint(precisiontype), rangeArg, precision)
+	runtime.KeepAlive(this)
 }
 
 // GlGetShaderSource wraps QOpenGLFunctions::glGetShaderSource.
@@ -1064,6 +1160,7 @@ func (this *QOpenGLFunctions) GlGetShaderPrecisionFormat(shadertype uint, precis
 func (this *QOpenGLFunctions) GlGetShaderSource(shader uint, bufsize int, length unsafe.Pointer, source unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetShaderSource")
 	C.qute_QOpenGLFunctions_glGetShaderSource(self, C.uint(shader), C.int(bufsize), length, source)
+	runtime.KeepAlive(this)
 }
 
 // GlGetUniformfv wraps QOpenGLFunctions::glGetUniformfv.
@@ -1074,6 +1171,7 @@ func (this *QOpenGLFunctions) GlGetShaderSource(shader uint, bufsize int, length
 func (this *QOpenGLFunctions) GlGetUniformfv(program uint, location int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetUniformfv")
 	C.qute_QOpenGLFunctions_glGetUniformfv(self, C.uint(program), C.int(location), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetUniformiv wraps QOpenGLFunctions::glGetUniformiv.
@@ -1084,6 +1182,7 @@ func (this *QOpenGLFunctions) GlGetUniformfv(program uint, location int, params 
 func (this *QOpenGLFunctions) GlGetUniformiv(program uint, location int, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetUniformiv")
 	C.qute_QOpenGLFunctions_glGetUniformiv(self, C.uint(program), C.int(location), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetUniformLocation wraps QOpenGLFunctions::glGetUniformLocation.
@@ -1094,6 +1193,7 @@ func (this *QOpenGLFunctions) GlGetUniformiv(program uint, location int, params 
 func (this *QOpenGLFunctions) GlGetUniformLocation(program uint, name unsafe.Pointer) int {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetUniformLocation")
 	r := C.qute_QOpenGLFunctions_glGetUniformLocation(self, C.uint(program), name)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -1105,6 +1205,7 @@ func (this *QOpenGLFunctions) GlGetUniformLocation(program uint, name unsafe.Poi
 func (this *QOpenGLFunctions) GlGetVertexAttribfv(index uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetVertexAttribfv")
 	C.qute_QOpenGLFunctions_glGetVertexAttribfv(self, C.uint(index), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetVertexAttribiv wraps QOpenGLFunctions::glGetVertexAttribiv.
@@ -1115,6 +1216,7 @@ func (this *QOpenGLFunctions) GlGetVertexAttribfv(index uint, pname uint, params
 func (this *QOpenGLFunctions) GlGetVertexAttribiv(index uint, pname uint, params unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetVertexAttribiv")
 	C.qute_QOpenGLFunctions_glGetVertexAttribiv(self, C.uint(index), C.uint(pname), params)
+	runtime.KeepAlive(this)
 }
 
 // GlGetVertexAttribPointerv wraps QOpenGLFunctions::glGetVertexAttribPointerv.
@@ -1125,6 +1227,7 @@ func (this *QOpenGLFunctions) GlGetVertexAttribiv(index uint, pname uint, params
 func (this *QOpenGLFunctions) GlGetVertexAttribPointerv(index uint, pname uint, pointer unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlGetVertexAttribPointerv")
 	C.qute_QOpenGLFunctions_glGetVertexAttribPointerv(self, C.uint(index), C.uint(pname), pointer)
+	runtime.KeepAlive(this)
 }
 
 // GlIsBuffer wraps QOpenGLFunctions::glIsBuffer.
@@ -1135,6 +1238,7 @@ func (this *QOpenGLFunctions) GlGetVertexAttribPointerv(index uint, pname uint, 
 func (this *QOpenGLFunctions) GlIsBuffer(buffer uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsBuffer")
 	r := C.qute_QOpenGLFunctions_glIsBuffer(self, C.uint(buffer))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1146,6 +1250,7 @@ func (this *QOpenGLFunctions) GlIsBuffer(buffer uint) uint8 {
 func (this *QOpenGLFunctions) GlIsFramebuffer(framebuffer uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsFramebuffer")
 	r := C.qute_QOpenGLFunctions_glIsFramebuffer(self, C.uint(framebuffer))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1157,6 +1262,7 @@ func (this *QOpenGLFunctions) GlIsFramebuffer(framebuffer uint) uint8 {
 func (this *QOpenGLFunctions) GlIsProgram(program uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsProgram")
 	r := C.qute_QOpenGLFunctions_glIsProgram(self, C.uint(program))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1168,6 +1274,7 @@ func (this *QOpenGLFunctions) GlIsProgram(program uint) uint8 {
 func (this *QOpenGLFunctions) GlIsRenderbuffer(renderbuffer uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsRenderbuffer")
 	r := C.qute_QOpenGLFunctions_glIsRenderbuffer(self, C.uint(renderbuffer))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1179,6 +1286,7 @@ func (this *QOpenGLFunctions) GlIsRenderbuffer(renderbuffer uint) uint8 {
 func (this *QOpenGLFunctions) GlIsShader(shader uint) uint8 {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlIsShader")
 	r := C.qute_QOpenGLFunctions_glIsShader(self, C.uint(shader))
+	runtime.KeepAlive(this)
 	return uint8(r)
 }
 
@@ -1190,6 +1298,7 @@ func (this *QOpenGLFunctions) GlIsShader(shader uint) uint8 {
 func (this *QOpenGLFunctions) GlLinkProgram(program uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlLinkProgram")
 	C.qute_QOpenGLFunctions_glLinkProgram(self, C.uint(program))
+	runtime.KeepAlive(this)
 }
 
 // GlReleaseShaderCompiler wraps QOpenGLFunctions::glReleaseShaderCompiler.
@@ -1200,6 +1309,7 @@ func (this *QOpenGLFunctions) GlLinkProgram(program uint) {
 func (this *QOpenGLFunctions) GlReleaseShaderCompiler() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlReleaseShaderCompiler")
 	C.qute_QOpenGLFunctions_glReleaseShaderCompiler(self)
+	runtime.KeepAlive(this)
 }
 
 // GlRenderbufferStorage wraps QOpenGLFunctions::glRenderbufferStorage.
@@ -1210,6 +1320,7 @@ func (this *QOpenGLFunctions) GlReleaseShaderCompiler() {
 func (this *QOpenGLFunctions) GlRenderbufferStorage(target uint, internalformat uint, width int, height int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlRenderbufferStorage")
 	C.qute_QOpenGLFunctions_glRenderbufferStorage(self, C.uint(target), C.uint(internalformat), C.int(width), C.int(height))
+	runtime.KeepAlive(this)
 }
 
 // GlSampleCoverage wraps QOpenGLFunctions::glSampleCoverage.
@@ -1220,6 +1331,7 @@ func (this *QOpenGLFunctions) GlRenderbufferStorage(target uint, internalformat 
 func (this *QOpenGLFunctions) GlSampleCoverage(value float32, invert uint8) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlSampleCoverage")
 	C.qute_QOpenGLFunctions_glSampleCoverage(self, C.float(value), C.uchar(invert))
+	runtime.KeepAlive(this)
 }
 
 // GlShaderBinary wraps QOpenGLFunctions::glShaderBinary.
@@ -1230,6 +1342,7 @@ func (this *QOpenGLFunctions) GlSampleCoverage(value float32, invert uint8) {
 func (this *QOpenGLFunctions) GlShaderBinary(n int, shaders unsafe.Pointer, binaryformat uint, binary unsafe.Pointer, length int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlShaderBinary")
 	C.qute_QOpenGLFunctions_glShaderBinary(self, C.int(n), shaders, C.uint(binaryformat), binary, C.int(length))
+	runtime.KeepAlive(this)
 }
 
 // GlShaderSource wraps QOpenGLFunctions::glShaderSource.
@@ -1240,6 +1353,7 @@ func (this *QOpenGLFunctions) GlShaderBinary(n int, shaders unsafe.Pointer, bina
 func (this *QOpenGLFunctions) GlShaderSource(shader uint, count int, stringArg unsafe.Pointer, length unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlShaderSource")
 	C.qute_QOpenGLFunctions_glShaderSource(self, C.uint(shader), C.int(count), stringArg, length)
+	runtime.KeepAlive(this)
 }
 
 // GlStencilFuncSeparate wraps QOpenGLFunctions::glStencilFuncSeparate.
@@ -1250,6 +1364,7 @@ func (this *QOpenGLFunctions) GlShaderSource(shader uint, count int, stringArg u
 func (this *QOpenGLFunctions) GlStencilFuncSeparate(face uint, funcArg uint, ref int, maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlStencilFuncSeparate")
 	C.qute_QOpenGLFunctions_glStencilFuncSeparate(self, C.uint(face), C.uint(funcArg), C.int(ref), C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // GlStencilMaskSeparate wraps QOpenGLFunctions::glStencilMaskSeparate.
@@ -1260,6 +1375,7 @@ func (this *QOpenGLFunctions) GlStencilFuncSeparate(face uint, funcArg uint, ref
 func (this *QOpenGLFunctions) GlStencilMaskSeparate(face uint, maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlStencilMaskSeparate")
 	C.qute_QOpenGLFunctions_glStencilMaskSeparate(self, C.uint(face), C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // GlStencilOpSeparate wraps QOpenGLFunctions::glStencilOpSeparate.
@@ -1270,6 +1386,7 @@ func (this *QOpenGLFunctions) GlStencilMaskSeparate(face uint, maskArg uint) {
 func (this *QOpenGLFunctions) GlStencilOpSeparate(face uint, fail uint, zfail uint, zpass uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlStencilOpSeparate")
 	C.qute_QOpenGLFunctions_glStencilOpSeparate(self, C.uint(face), C.uint(fail), C.uint(zfail), C.uint(zpass))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform1f wraps QOpenGLFunctions::glUniform1f.
@@ -1280,6 +1397,7 @@ func (this *QOpenGLFunctions) GlStencilOpSeparate(face uint, fail uint, zfail ui
 func (this *QOpenGLFunctions) GlUniform1f(location int, x float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform1f")
 	C.qute_QOpenGLFunctions_glUniform1f(self, C.int(location), C.float(x))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform1fv wraps QOpenGLFunctions::glUniform1fv.
@@ -1290,6 +1408,7 @@ func (this *QOpenGLFunctions) GlUniform1f(location int, x float32) {
 func (this *QOpenGLFunctions) GlUniform1fv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform1fv")
 	C.qute_QOpenGLFunctions_glUniform1fv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform1i wraps QOpenGLFunctions::glUniform1i.
@@ -1300,6 +1419,7 @@ func (this *QOpenGLFunctions) GlUniform1fv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform1i(location int, x int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform1i")
 	C.qute_QOpenGLFunctions_glUniform1i(self, C.int(location), C.int(x))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform1iv wraps QOpenGLFunctions::glUniform1iv.
@@ -1310,6 +1430,7 @@ func (this *QOpenGLFunctions) GlUniform1i(location int, x int) {
 func (this *QOpenGLFunctions) GlUniform1iv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform1iv")
 	C.qute_QOpenGLFunctions_glUniform1iv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform2f wraps QOpenGLFunctions::glUniform2f.
@@ -1320,6 +1441,7 @@ func (this *QOpenGLFunctions) GlUniform1iv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform2f(location int, x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform2f")
 	C.qute_QOpenGLFunctions_glUniform2f(self, C.int(location), C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform2fv wraps QOpenGLFunctions::glUniform2fv.
@@ -1330,6 +1452,7 @@ func (this *QOpenGLFunctions) GlUniform2f(location int, x float32, y float32) {
 func (this *QOpenGLFunctions) GlUniform2fv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform2fv")
 	C.qute_QOpenGLFunctions_glUniform2fv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform2i wraps QOpenGLFunctions::glUniform2i.
@@ -1340,6 +1463,7 @@ func (this *QOpenGLFunctions) GlUniform2fv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform2i(location int, x int, y int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform2i")
 	C.qute_QOpenGLFunctions_glUniform2i(self, C.int(location), C.int(x), C.int(y))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform2iv wraps QOpenGLFunctions::glUniform2iv.
@@ -1350,6 +1474,7 @@ func (this *QOpenGLFunctions) GlUniform2i(location int, x int, y int) {
 func (this *QOpenGLFunctions) GlUniform2iv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform2iv")
 	C.qute_QOpenGLFunctions_glUniform2iv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform3f wraps QOpenGLFunctions::glUniform3f.
@@ -1360,6 +1485,7 @@ func (this *QOpenGLFunctions) GlUniform2iv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform3f(location int, x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform3f")
 	C.qute_QOpenGLFunctions_glUniform3f(self, C.int(location), C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform3fv wraps QOpenGLFunctions::glUniform3fv.
@@ -1370,6 +1496,7 @@ func (this *QOpenGLFunctions) GlUniform3f(location int, x float32, y float32, z 
 func (this *QOpenGLFunctions) GlUniform3fv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform3fv")
 	C.qute_QOpenGLFunctions_glUniform3fv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform3i wraps QOpenGLFunctions::glUniform3i.
@@ -1380,6 +1507,7 @@ func (this *QOpenGLFunctions) GlUniform3fv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform3i(location int, x int, y int, z int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform3i")
 	C.qute_QOpenGLFunctions_glUniform3i(self, C.int(location), C.int(x), C.int(y), C.int(z))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform3iv wraps QOpenGLFunctions::glUniform3iv.
@@ -1390,6 +1518,7 @@ func (this *QOpenGLFunctions) GlUniform3i(location int, x int, y int, z int) {
 func (this *QOpenGLFunctions) GlUniform3iv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform3iv")
 	C.qute_QOpenGLFunctions_glUniform3iv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform4f wraps QOpenGLFunctions::glUniform4f.
@@ -1400,6 +1529,7 @@ func (this *QOpenGLFunctions) GlUniform3iv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform4f(location int, x float32, y float32, z float32, w float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform4f")
 	C.qute_QOpenGLFunctions_glUniform4f(self, C.int(location), C.float(x), C.float(y), C.float(z), C.float(w))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform4fv wraps QOpenGLFunctions::glUniform4fv.
@@ -1410,6 +1540,7 @@ func (this *QOpenGLFunctions) GlUniform4f(location int, x float32, y float32, z 
 func (this *QOpenGLFunctions) GlUniform4fv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform4fv")
 	C.qute_QOpenGLFunctions_glUniform4fv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniform4i wraps QOpenGLFunctions::glUniform4i.
@@ -1420,6 +1551,7 @@ func (this *QOpenGLFunctions) GlUniform4fv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniform4i(location int, x int, y int, z int, w int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform4i")
 	C.qute_QOpenGLFunctions_glUniform4i(self, C.int(location), C.int(x), C.int(y), C.int(z), C.int(w))
+	runtime.KeepAlive(this)
 }
 
 // GlUniform4iv wraps QOpenGLFunctions::glUniform4iv.
@@ -1430,6 +1562,7 @@ func (this *QOpenGLFunctions) GlUniform4i(location int, x int, y int, z int, w i
 func (this *QOpenGLFunctions) GlUniform4iv(location int, count int, vArg unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniform4iv")
 	C.qute_QOpenGLFunctions_glUniform4iv(self, C.int(location), C.int(count), vArg)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix2fv wraps QOpenGLFunctions::glUniformMatrix2fv.
@@ -1440,6 +1573,7 @@ func (this *QOpenGLFunctions) GlUniform4iv(location int, count int, vArg unsafe.
 func (this *QOpenGLFunctions) GlUniformMatrix2fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniformMatrix2fv")
 	C.qute_QOpenGLFunctions_glUniformMatrix2fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix3fv wraps QOpenGLFunctions::glUniformMatrix3fv.
@@ -1450,6 +1584,7 @@ func (this *QOpenGLFunctions) GlUniformMatrix2fv(location int, count int, transp
 func (this *QOpenGLFunctions) GlUniformMatrix3fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniformMatrix3fv")
 	C.qute_QOpenGLFunctions_glUniformMatrix3fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUniformMatrix4fv wraps QOpenGLFunctions::glUniformMatrix4fv.
@@ -1460,6 +1595,7 @@ func (this *QOpenGLFunctions) GlUniformMatrix3fv(location int, count int, transp
 func (this *QOpenGLFunctions) GlUniformMatrix4fv(location int, count int, transpose uint8, value unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUniformMatrix4fv")
 	C.qute_QOpenGLFunctions_glUniformMatrix4fv(self, C.int(location), C.int(count), C.uchar(transpose), value)
+	runtime.KeepAlive(this)
 }
 
 // GlUseProgram wraps QOpenGLFunctions::glUseProgram.
@@ -1470,6 +1606,7 @@ func (this *QOpenGLFunctions) GlUniformMatrix4fv(location int, count int, transp
 func (this *QOpenGLFunctions) GlUseProgram(program uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlUseProgram")
 	C.qute_QOpenGLFunctions_glUseProgram(self, C.uint(program))
+	runtime.KeepAlive(this)
 }
 
 // GlValidateProgram wraps QOpenGLFunctions::glValidateProgram.
@@ -1480,6 +1617,7 @@ func (this *QOpenGLFunctions) GlUseProgram(program uint) {
 func (this *QOpenGLFunctions) GlValidateProgram(program uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlValidateProgram")
 	C.qute_QOpenGLFunctions_glValidateProgram(self, C.uint(program))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib1f wraps QOpenGLFunctions::glVertexAttrib1f.
@@ -1490,6 +1628,7 @@ func (this *QOpenGLFunctions) GlValidateProgram(program uint) {
 func (this *QOpenGLFunctions) GlVertexAttrib1f(indx uint, x float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib1f")
 	C.qute_QOpenGLFunctions_glVertexAttrib1f(self, C.uint(indx), C.float(x))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib1fv wraps QOpenGLFunctions::glVertexAttrib1fv.
@@ -1500,6 +1639,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib1f(indx uint, x float32) {
 func (this *QOpenGLFunctions) GlVertexAttrib1fv(indx uint, values unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib1fv")
 	C.qute_QOpenGLFunctions_glVertexAttrib1fv(self, C.uint(indx), values)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib2f wraps QOpenGLFunctions::glVertexAttrib2f.
@@ -1510,6 +1650,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib1fv(indx uint, values unsafe.Pointer
 func (this *QOpenGLFunctions) GlVertexAttrib2f(indx uint, x float32, y float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib2f")
 	C.qute_QOpenGLFunctions_glVertexAttrib2f(self, C.uint(indx), C.float(x), C.float(y))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib2fv wraps QOpenGLFunctions::glVertexAttrib2fv.
@@ -1520,6 +1661,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib2f(indx uint, x float32, y float32) 
 func (this *QOpenGLFunctions) GlVertexAttrib2fv(indx uint, values unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib2fv")
 	C.qute_QOpenGLFunctions_glVertexAttrib2fv(self, C.uint(indx), values)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib3f wraps QOpenGLFunctions::glVertexAttrib3f.
@@ -1530,6 +1672,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib2fv(indx uint, values unsafe.Pointer
 func (this *QOpenGLFunctions) GlVertexAttrib3f(indx uint, x float32, y float32, z float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib3f")
 	C.qute_QOpenGLFunctions_glVertexAttrib3f(self, C.uint(indx), C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib3fv wraps QOpenGLFunctions::glVertexAttrib3fv.
@@ -1540,6 +1683,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib3f(indx uint, x float32, y float32, 
 func (this *QOpenGLFunctions) GlVertexAttrib3fv(indx uint, values unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib3fv")
 	C.qute_QOpenGLFunctions_glVertexAttrib3fv(self, C.uint(indx), values)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib4f wraps QOpenGLFunctions::glVertexAttrib4f.
@@ -1550,6 +1694,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib3fv(indx uint, values unsafe.Pointer
 func (this *QOpenGLFunctions) GlVertexAttrib4f(indx uint, x float32, y float32, z float32, w float32) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib4f")
 	C.qute_QOpenGLFunctions_glVertexAttrib4f(self, C.uint(indx), C.float(x), C.float(y), C.float(z), C.float(w))
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttrib4fv wraps QOpenGLFunctions::glVertexAttrib4fv.
@@ -1560,6 +1705,7 @@ func (this *QOpenGLFunctions) GlVertexAttrib4f(indx uint, x float32, y float32, 
 func (this *QOpenGLFunctions) GlVertexAttrib4fv(indx uint, values unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttrib4fv")
 	C.qute_QOpenGLFunctions_glVertexAttrib4fv(self, C.uint(indx), values)
+	runtime.KeepAlive(this)
 }
 
 // GlVertexAttribPointer wraps QOpenGLFunctions::glVertexAttribPointer.
@@ -1570,4 +1716,5 @@ func (this *QOpenGLFunctions) GlVertexAttrib4fv(indx uint, values unsafe.Pointer
 func (this *QOpenGLFunctions) GlVertexAttribPointer(indx uint, size int, typeArg uint, normalized uint8, stride int, ptr unsafe.Pointer) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFunctions.GlVertexAttribPointer")
 	C.qute_QOpenGLFunctions_glVertexAttribPointer(self, C.uint(indx), C.int(size), C.uint(typeArg), C.uchar(normalized), C.int(stride), ptr)
+	runtime.KeepAlive(this)
 }

@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -62,6 +63,7 @@ func NewQGraphicsScale(parent qtcore.QObjectLike) *QGraphicsScale {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsScale")
 	}
 	p := C.qute_QGraphicsScale_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -80,6 +82,7 @@ func NewQGraphicsScale(parent qtcore.QObjectLike) *QGraphicsScale {
 func (this *QGraphicsScale) Origin() *qtgui.QVector3D {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.Origin")
 	r := C.qute_QGraphicsScale_origin(self)
+	runtime.KeepAlive(this)
 	return rt.View[qtgui.QVector3D](rt.WrapClass(r, "QVector3D", rt.TakeOwned), r)
 }
 
@@ -91,6 +94,8 @@ func (this *QGraphicsScale) Origin() *qtgui.QVector3D {
 func (this *QGraphicsScale) SetOrigin(point *qtgui.QVector3D) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.SetOrigin")
 	C.qute_QGraphicsScale_setOrigin(self, rt.UseArg(unsafe.Pointer(point), "QGraphicsScale.SetOrigin"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(point)
 }
 
 // XScale wraps QGraphicsScale::xScale.
@@ -101,6 +106,7 @@ func (this *QGraphicsScale) SetOrigin(point *qtgui.QVector3D) {
 func (this *QGraphicsScale) XScale() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.XScale")
 	r := C.qute_QGraphicsScale_xScale(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -112,6 +118,7 @@ func (this *QGraphicsScale) XScale() float64 {
 func (this *QGraphicsScale) SetXScale(xScale float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.SetXScale")
 	C.qute_QGraphicsScale_setXScale(self, C.double(xScale))
+	runtime.KeepAlive(this)
 }
 
 // YScale wraps QGraphicsScale::yScale.
@@ -122,6 +129,7 @@ func (this *QGraphicsScale) SetXScale(xScale float64) {
 func (this *QGraphicsScale) YScale() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.YScale")
 	r := C.qute_QGraphicsScale_yScale(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -133,6 +141,7 @@ func (this *QGraphicsScale) YScale() float64 {
 func (this *QGraphicsScale) SetYScale(yScale float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.SetYScale")
 	C.qute_QGraphicsScale_setYScale(self, C.double(yScale))
+	runtime.KeepAlive(this)
 }
 
 // ZScale wraps QGraphicsScale::zScale.
@@ -143,6 +152,7 @@ func (this *QGraphicsScale) SetYScale(yScale float64) {
 func (this *QGraphicsScale) ZScale() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.ZScale")
 	r := C.qute_QGraphicsScale_zScale(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -154,6 +164,7 @@ func (this *QGraphicsScale) ZScale() float64 {
 func (this *QGraphicsScale) SetZScale(zScale float64) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.SetZScale")
 	C.qute_QGraphicsScale_setZScale(self, C.double(zScale))
+	runtime.KeepAlive(this)
 }
 
 // EmitOriginChanged wraps emitting the originChanged signal.
@@ -164,6 +175,7 @@ func (this *QGraphicsScale) SetZScale(zScale float64) {
 func (this *QGraphicsScale) EmitOriginChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.EmitOriginChanged")
 	C.qute_QGraphicsScale_originChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitXScaleChanged wraps emitting the xScaleChanged signal.
@@ -174,6 +186,7 @@ func (this *QGraphicsScale) EmitOriginChanged() {
 func (this *QGraphicsScale) EmitXScaleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.EmitXScaleChanged")
 	C.qute_QGraphicsScale_xScaleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitYScaleChanged wraps emitting the yScaleChanged signal.
@@ -184,6 +197,7 @@ func (this *QGraphicsScale) EmitXScaleChanged() {
 func (this *QGraphicsScale) EmitYScaleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.EmitYScaleChanged")
 	C.qute_QGraphicsScale_yScaleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitZScaleChanged wraps emitting the zScaleChanged signal.
@@ -194,6 +208,7 @@ func (this *QGraphicsScale) EmitYScaleChanged() {
 func (this *QGraphicsScale) EmitZScaleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.EmitZScaleChanged")
 	C.qute_QGraphicsScale_zScaleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitScaleChanged wraps emitting the scaleChanged signal.
@@ -204,6 +219,7 @@ func (this *QGraphicsScale) EmitZScaleChanged() {
 func (this *QGraphicsScale) EmitScaleChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.EmitScaleChanged")
 	C.qute_QGraphicsScale_scaleChanged_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnOriginChanged connects f to the originChanged signal. The connection ends when the

@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQStandardItemModel(parent qtcore.QObjectLike) *QStandardItemModel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStandardItemModel")
 	}
 	p := C.qute_QStandardItemModel_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQStandardItemModelWithRows(rows int, columns int, parent qtcore.QObjectL
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStandardItemModelWithRows")
 	}
 	p := C.qute_QStandardItemModel_new_1(C.int(rows), C.int(columns), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -106,6 +109,7 @@ func (this *QStandardItemModel) SetItemRoleNames(roleNames map[int][]byte) {
 	}
 	defer quteFreeStrs(roleNamesV)
 	C.qute_QStandardItemModel_setItemRoleNames(self, unsafe.Pointer(unsafe.SliceData(roleNamesK)), unsafe.Pointer(unsafe.SliceData(roleNamesV)), C.ptrdiff_t(len(roleNames)))
+	runtime.KeepAlive(this)
 }
 
 // Clear wraps QStandardItemModel::clear.
@@ -116,6 +120,7 @@ func (this *QStandardItemModel) SetItemRoleNames(roleNames map[int][]byte) {
 func (this *QStandardItemModel) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.Clear")
 	C.qute_QStandardItemModel_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // ItemFromIndex wraps QStandardItemModel::itemFromIndex.
@@ -128,6 +133,8 @@ func (this *QStandardItemModel) Clear() {
 func (this *QStandardItemModel) ItemFromIndex(index *qtcore.QModelIndex) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.ItemFromIndex")
 	r := C.qute_QStandardItemModel_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.ItemFromIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -145,6 +152,8 @@ func (this *QStandardItemModel) IndexFromItem(item QStandardItemLike) *qtcore.QM
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.IndexFromItem")
 	}
 	r := C.qute_QStandardItemModel_indexFromItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -158,6 +167,7 @@ func (this *QStandardItemModel) IndexFromItem(item QStandardItemLike) *qtcore.QM
 func (this *QStandardItemModel) Item(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.Item")
 	r := C.qute_QStandardItemModel_item(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -176,6 +186,8 @@ func (this *QStandardItemModel) SetItem(row int, column int, item QStandardItemL
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.SetItem")
 	}
 	C.qute_QStandardItemModel_setItem(self, C.int(row), C.int(column), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -194,6 +206,8 @@ func (this *QStandardItemModel) SetItemRow(row int, item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.SetItemRow")
 	}
 	C.qute_QStandardItemModel_setItem_1(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -207,6 +221,7 @@ func (this *QStandardItemModel) SetItemRow(row int, item QStandardItemLike) {
 func (this *QStandardItemModel) InvisibleRootItem() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.InvisibleRootItem")
 	r := C.qute_QStandardItemModel_invisibleRootItem(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -220,6 +235,7 @@ func (this *QStandardItemModel) InvisibleRootItem() *QStandardItem {
 func (this *QStandardItemModel) HorizontalHeaderItem(column int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.HorizontalHeaderItem")
 	r := C.qute_QStandardItemModel_horizontalHeaderItem(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -238,6 +254,8 @@ func (this *QStandardItemModel) SetHorizontalHeaderItem(column int, item QStanda
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.SetHorizontalHeaderItem")
 	}
 	C.qute_QStandardItemModel_setHorizontalHeaderItem(self, C.int(column), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -251,6 +269,7 @@ func (this *QStandardItemModel) SetHorizontalHeaderItem(column int, item QStanda
 func (this *QStandardItemModel) VerticalHeaderItem(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.VerticalHeaderItem")
 	r := C.qute_QStandardItemModel_verticalHeaderItem(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -269,6 +288,8 @@ func (this *QStandardItemModel) SetVerticalHeaderItem(row int, item QStandardIte
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.SetVerticalHeaderItem")
 	}
 	C.qute_QStandardItemModel_setVerticalHeaderItem(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -281,6 +302,7 @@ func (this *QStandardItemModel) SetHorizontalHeaderLabels(labels []string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SetHorizontalHeaderLabels")
 	labelsData, labelsLens := quteStrListArg(labels)
 	C.qute_QStandardItemModel_setHorizontalHeaderLabels(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(labelsData))), (*C.ptrdiff_t)(unsafe.SliceData(labelsLens)), C.ptrdiff_t(len(labels)))
+	runtime.KeepAlive(this)
 }
 
 // SetVerticalHeaderLabels wraps QStandardItemModel::setVerticalHeaderLabels.
@@ -292,6 +314,7 @@ func (this *QStandardItemModel) SetVerticalHeaderLabels(labels []string) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SetVerticalHeaderLabels")
 	labelsData, labelsLens := quteStrListArg(labels)
 	C.qute_QStandardItemModel_setVerticalHeaderLabels(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(labelsData))), (*C.ptrdiff_t)(unsafe.SliceData(labelsLens)), C.ptrdiff_t(len(labels)))
+	runtime.KeepAlive(this)
 }
 
 // SetRowCount wraps QStandardItemModel::setRowCount.
@@ -302,6 +325,7 @@ func (this *QStandardItemModel) SetVerticalHeaderLabels(labels []string) {
 func (this *QStandardItemModel) SetRowCount(rows int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SetRowCount")
 	C.qute_QStandardItemModel_setRowCount(self, C.int(rows))
+	runtime.KeepAlive(this)
 }
 
 // SetColumnCount wraps QStandardItemModel::setColumnCount.
@@ -312,6 +336,7 @@ func (this *QStandardItemModel) SetRowCount(rows int) {
 func (this *QStandardItemModel) SetColumnCount(columns int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SetColumnCount")
 	C.qute_QStandardItemModel_setColumnCount(self, C.int(columns))
+	runtime.KeepAlive(this)
 }
 
 // AppendRowItems wraps QStandardItemModel::appendRow.
@@ -328,6 +353,8 @@ func (this *QStandardItemModel) AppendRowItems(items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItemModel.AppendRowItems")
 	}
 	C.qute_QStandardItemModel_appendRow(self, unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -349,6 +376,8 @@ func (this *QStandardItemModel) AppendColumn(items []*QStandardItem) {
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItemModel.AppendColumn")
 	}
 	C.qute_QStandardItemModel_appendColumn(self, unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -371,6 +400,8 @@ func (this *QStandardItemModel) AppendRow(item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.AppendRow")
 	}
 	C.qute_QStandardItemModel_appendRow_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -388,6 +419,8 @@ func (this *QStandardItemModel) InsertRowItems(row int, items []*QStandardItem) 
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItemModel.InsertRowItems")
 	}
 	C.qute_QStandardItemModel_insertRow(self, C.int(row), unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -409,6 +442,8 @@ func (this *QStandardItemModel) InsertColumnItems(column int, items []*QStandard
 		itemsC[i] = rt.UseArg(unsafe.Pointer(items[i]), "QStandardItemModel.InsertColumnItems")
 	}
 	C.qute_QStandardItemModel_insertColumn(self, C.int(column), unsafe.Pointer(unsafe.SliceData(itemsC)), C.ptrdiff_t(len(items)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
 			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
@@ -431,6 +466,8 @@ func (this *QStandardItemModel) InsertRowItem(row int, item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.InsertRowItem")
 	}
 	C.qute_QStandardItemModel_insertRow_1(self, C.int(row), itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -444,6 +481,7 @@ func (this *QStandardItemModel) InsertRowItem(row int, item QStandardItemLike) {
 func (this *QStandardItemModel) TakeItem(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.TakeItem")
 	r := C.qute_QStandardItemModel_takeItem(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
 }
 
@@ -457,6 +495,7 @@ func (this *QStandardItemModel) TakeItem(row int) *QStandardItem {
 func (this *QStandardItemModel) TakeRow(row int) []*QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.TakeRow")
 	r := C.qute_QStandardItemModel_takeRow(self, C.int(row))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
 		return rt.View[QStandardItem](rt.WrapClass(e, "QStandardItem", rt.TakeOwned), e)
 	})
@@ -472,6 +511,7 @@ func (this *QStandardItemModel) TakeRow(row int) []*QStandardItem {
 func (this *QStandardItemModel) TakeColumn(column int) []*QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.TakeColumn")
 	r := C.qute_QStandardItemModel_takeColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
 		return rt.View[QStandardItem](rt.WrapClass(e, "QStandardItem", rt.TakeOwned), e)
 	})
@@ -487,6 +527,7 @@ func (this *QStandardItemModel) TakeColumn(column int) []*QStandardItem {
 func (this *QStandardItemModel) TakeHorizontalHeaderItem(column int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.TakeHorizontalHeaderItem")
 	r := C.qute_QStandardItemModel_takeHorizontalHeaderItem(self, C.int(column))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
 }
 
@@ -500,6 +541,7 @@ func (this *QStandardItemModel) TakeHorizontalHeaderItem(column int) *QStandardI
 func (this *QStandardItemModel) TakeVerticalHeaderItem(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.TakeVerticalHeaderItem")
 	r := C.qute_QStandardItemModel_takeVerticalHeaderItem(self, C.int(row))
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
 }
 
@@ -513,6 +555,7 @@ func (this *QStandardItemModel) TakeVerticalHeaderItem(row int) *QStandardItem {
 func (this *QStandardItemModel) ItemPrototype() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.ItemPrototype")
 	r := C.qute_QStandardItemModel_itemPrototype(self)
+	runtime.KeepAlive(this)
 	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
 }
 
@@ -531,6 +574,8 @@ func (this *QStandardItemModel) SetItemPrototype(item QStandardItemLike) {
 		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.SetItemPrototype")
 	}
 	C.qute_QStandardItemModel_setItemPrototype(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 	itemH.TransferToCpp()
 }
 
@@ -544,6 +589,7 @@ func (this *QStandardItemModel) SetItemPrototype(item QStandardItemLike) {
 func (this *QStandardItemModel) FindItems(text string) []*QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.FindItems")
 	r := C.qute_QStandardItemModel_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
 		return rt.View[QStandardItem](rt.WrapClass(e, "QStandardItem", rt.KeepOrBorrow), e)
 	})
@@ -557,6 +603,7 @@ func (this *QStandardItemModel) FindItems(text string) []*QStandardItem {
 func (this *QStandardItemModel) SortRole() int {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SortRole")
 	r := C.qute_QStandardItemModel_sortRole(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -568,6 +615,7 @@ func (this *QStandardItemModel) SortRole() int {
 func (this *QStandardItemModel) SetSortRole(role int) {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.SetSortRole")
 	C.qute_QStandardItemModel_setSortRole(self, C.int(role))
+	runtime.KeepAlive(this)
 }
 
 // EmitItemChanged wraps emitting the itemChanged signal.
@@ -582,6 +630,8 @@ func (this *QStandardItemModel) EmitItemChanged(item QStandardItemLike) {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQStandardItem()), "QStandardItemModel.EmitItemChanged")
 	}
 	C.qute_QStandardItemModel_itemChanged_1(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // OnItemChanged connects f to the itemChanged signal. The connection ends when the

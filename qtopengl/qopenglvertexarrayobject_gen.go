@@ -5,6 +5,7 @@ package qtopengl
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -65,6 +66,7 @@ func NewQOpenGLVertexArrayObject(parent qtcore.QObjectLike) *QOpenGLVertexArrayO
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLVertexArrayObject")
 	}
 	p := C.qute_QOpenGLVertexArrayObject_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -81,6 +83,7 @@ func NewQOpenGLVertexArrayObject(parent qtcore.QObjectLike) *QOpenGLVertexArrayO
 func (this *QOpenGLVertexArrayObject) Create() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.Create")
 	r := C.qute_QOpenGLVertexArrayObject_create(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -92,6 +95,7 @@ func (this *QOpenGLVertexArrayObject) Create() bool {
 func (this *QOpenGLVertexArrayObject) Destroy() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.Destroy")
 	C.qute_QOpenGLVertexArrayObject_destroy(self)
+	runtime.KeepAlive(this)
 }
 
 // IsCreated wraps QOpenGLVertexArrayObject::isCreated.
@@ -102,6 +106,7 @@ func (this *QOpenGLVertexArrayObject) Destroy() {
 func (this *QOpenGLVertexArrayObject) IsCreated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.IsCreated")
 	r := C.qute_QOpenGLVertexArrayObject_isCreated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -113,6 +118,7 @@ func (this *QOpenGLVertexArrayObject) IsCreated() bool {
 func (this *QOpenGLVertexArrayObject) ObjectId() uint {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.ObjectId")
 	r := C.qute_QOpenGLVertexArrayObject_objectId(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -124,6 +130,7 @@ func (this *QOpenGLVertexArrayObject) ObjectId() uint {
 func (this *QOpenGLVertexArrayObject) Bind() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.Bind")
 	C.qute_QOpenGLVertexArrayObject_bind(self)
+	runtime.KeepAlive(this)
 }
 
 // Release wraps QOpenGLVertexArrayObject::release.
@@ -134,4 +141,5 @@ func (this *QOpenGLVertexArrayObject) Bind() {
 func (this *QOpenGLVertexArrayObject) Release() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.Release")
 	C.qute_QOpenGLVertexArrayObject_release(self)
+	runtime.KeepAlive(this)
 }

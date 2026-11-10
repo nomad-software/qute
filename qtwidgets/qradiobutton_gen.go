@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQRadioButton(parent QWidgetLike) *QRadioButton {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQRadioButton")
 	}
 	p := C.qute_QRadioButton_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQRadioButtonWithText(text string, parent QWidgetLike) *QRadioButton {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQRadioButtonWithText")
 	}
 	p := C.qute_QRadioButton_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

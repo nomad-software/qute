@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQTreeView(parent QWidgetLike) *QTreeView {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTreeView")
 	}
 	p := C.qute_QTreeView_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,7 @@ func NewQTreeView(parent QWidgetLike) *QTreeView {
 func (this *QTreeView) Header() *QHeaderView {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.Header")
 	r := C.qute_QTreeView_header(self)
+	runtime.KeepAlive(this)
 	return rt.View[QHeaderView](rt.WrapClass(r, "QHeaderView", rt.KeepOrBorrow), r)
 }
 
@@ -97,6 +100,8 @@ func (this *QTreeView) SetHeader(header QHeaderViewLike) {
 		headerPtr, headerH = rt.Arg(unsafe.Pointer(header.AsQHeaderView()), "QTreeView.SetHeader")
 	}
 	C.qute_QTreeView_setHeader(self, headerPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(header)
 	headerH.TransferToCpp()
 }
 
@@ -108,6 +113,7 @@ func (this *QTreeView) SetHeader(header QHeaderViewLike) {
 func (this *QTreeView) AutoExpandDelay() int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.AutoExpandDelay")
 	r := C.qute_QTreeView_autoExpandDelay(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -119,6 +125,7 @@ func (this *QTreeView) AutoExpandDelay() int {
 func (this *QTreeView) SetAutoExpandDelay(delay int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetAutoExpandDelay")
 	C.qute_QTreeView_setAutoExpandDelay(self, C.int(delay))
+	runtime.KeepAlive(this)
 }
 
 // Indentation wraps QTreeView::indentation.
@@ -129,6 +136,7 @@ func (this *QTreeView) SetAutoExpandDelay(delay int) {
 func (this *QTreeView) Indentation() int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.Indentation")
 	r := C.qute_QTreeView_indentation(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -140,6 +148,7 @@ func (this *QTreeView) Indentation() int {
 func (this *QTreeView) SetIndentation(iArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetIndentation")
 	C.qute_QTreeView_setIndentation(self, C.int(iArg))
+	runtime.KeepAlive(this)
 }
 
 // ResetIndentation wraps QTreeView::resetIndentation.
@@ -150,6 +159,7 @@ func (this *QTreeView) SetIndentation(iArg int) {
 func (this *QTreeView) ResetIndentation() {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ResetIndentation")
 	C.qute_QTreeView_resetIndentation(self)
+	runtime.KeepAlive(this)
 }
 
 // RootIsDecorated wraps QTreeView::rootIsDecorated.
@@ -160,6 +170,7 @@ func (this *QTreeView) ResetIndentation() {
 func (this *QTreeView) RootIsDecorated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.RootIsDecorated")
 	r := C.qute_QTreeView_rootIsDecorated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -171,6 +182,7 @@ func (this *QTreeView) RootIsDecorated() bool {
 func (this *QTreeView) SetRootIsDecorated(show bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetRootIsDecorated")
 	C.qute_QTreeView_setRootIsDecorated(self, C.bool(show))
+	runtime.KeepAlive(this)
 }
 
 // UniformRowHeights wraps QTreeView::uniformRowHeights.
@@ -181,6 +193,7 @@ func (this *QTreeView) SetRootIsDecorated(show bool) {
 func (this *QTreeView) UniformRowHeights() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.UniformRowHeights")
 	r := C.qute_QTreeView_uniformRowHeights(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -192,6 +205,7 @@ func (this *QTreeView) UniformRowHeights() bool {
 func (this *QTreeView) SetUniformRowHeights(uniform bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetUniformRowHeights")
 	C.qute_QTreeView_setUniformRowHeights(self, C.bool(uniform))
+	runtime.KeepAlive(this)
 }
 
 // ItemsExpandable wraps QTreeView::itemsExpandable.
@@ -202,6 +216,7 @@ func (this *QTreeView) SetUniformRowHeights(uniform bool) {
 func (this *QTreeView) ItemsExpandable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ItemsExpandable")
 	r := C.qute_QTreeView_itemsExpandable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -213,6 +228,7 @@ func (this *QTreeView) ItemsExpandable() bool {
 func (this *QTreeView) SetItemsExpandable(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetItemsExpandable")
 	C.qute_QTreeView_setItemsExpandable(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // ExpandsOnDoubleClick wraps QTreeView::expandsOnDoubleClick.
@@ -223,6 +239,7 @@ func (this *QTreeView) SetItemsExpandable(enable bool) {
 func (this *QTreeView) ExpandsOnDoubleClick() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExpandsOnDoubleClick")
 	r := C.qute_QTreeView_expandsOnDoubleClick(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -234,6 +251,7 @@ func (this *QTreeView) ExpandsOnDoubleClick() bool {
 func (this *QTreeView) SetExpandsOnDoubleClick(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetExpandsOnDoubleClick")
 	C.qute_QTreeView_setExpandsOnDoubleClick(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // ColumnViewportPosition wraps QTreeView::columnViewportPosition.
@@ -244,6 +262,7 @@ func (this *QTreeView) SetExpandsOnDoubleClick(enable bool) {
 func (this *QTreeView) ColumnViewportPosition(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ColumnViewportPosition")
 	r := C.qute_QTreeView_columnViewportPosition(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -255,6 +274,7 @@ func (this *QTreeView) ColumnViewportPosition(column int) int {
 func (this *QTreeView) ColumnWidth(column int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ColumnWidth")
 	r := C.qute_QTreeView_columnWidth(self, C.int(column))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -266,6 +286,7 @@ func (this *QTreeView) ColumnWidth(column int) int {
 func (this *QTreeView) SetColumnWidth(column int, width int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetColumnWidth")
 	C.qute_QTreeView_setColumnWidth(self, C.int(column), C.int(width))
+	runtime.KeepAlive(this)
 }
 
 // ColumnAt wraps QTreeView::columnAt.
@@ -276,6 +297,7 @@ func (this *QTreeView) SetColumnWidth(column int, width int) {
 func (this *QTreeView) ColumnAt(x int) int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ColumnAt")
 	r := C.qute_QTreeView_columnAt(self, C.int(x))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -287,6 +309,7 @@ func (this *QTreeView) ColumnAt(x int) int {
 func (this *QTreeView) IsColumnHidden(column int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsColumnHidden")
 	r := C.qute_QTreeView_isColumnHidden(self, C.int(column))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -298,6 +321,7 @@ func (this *QTreeView) IsColumnHidden(column int) bool {
 func (this *QTreeView) SetColumnHidden(column int, hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetColumnHidden")
 	C.qute_QTreeView_setColumnHidden(self, C.int(column), C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // IsHeaderHidden wraps QTreeView::isHeaderHidden.
@@ -308,6 +332,7 @@ func (this *QTreeView) SetColumnHidden(column int, hide bool) {
 func (this *QTreeView) IsHeaderHidden() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsHeaderHidden")
 	r := C.qute_QTreeView_isHeaderHidden(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -319,6 +344,7 @@ func (this *QTreeView) IsHeaderHidden() bool {
 func (this *QTreeView) SetHeaderHidden(hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetHeaderHidden")
 	C.qute_QTreeView_setHeaderHidden(self, C.bool(hide))
+	runtime.KeepAlive(this)
 }
 
 // IsRowHidden wraps QTreeView::isRowHidden.
@@ -329,6 +355,8 @@ func (this *QTreeView) SetHeaderHidden(hide bool) {
 func (this *QTreeView) IsRowHidden(row int, parent *qtcore.QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsRowHidden")
 	r := C.qute_QTreeView_isRowHidden(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QTreeView.IsRowHidden"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 	return bool(r)
 }
 
@@ -340,6 +368,8 @@ func (this *QTreeView) IsRowHidden(row int, parent *qtcore.QModelIndex) bool {
 func (this *QTreeView) SetRowHidden(row int, parent *qtcore.QModelIndex, hide bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetRowHidden")
 	C.qute_QTreeView_setRowHidden(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QTreeView.SetRowHidden"), C.bool(hide))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 }
 
 // IsFirstColumnSpanned wraps QTreeView::isFirstColumnSpanned.
@@ -350,6 +380,8 @@ func (this *QTreeView) SetRowHidden(row int, parent *qtcore.QModelIndex, hide bo
 func (this *QTreeView) IsFirstColumnSpanned(row int, parent *qtcore.QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsFirstColumnSpanned")
 	r := C.qute_QTreeView_isFirstColumnSpanned(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QTreeView.IsFirstColumnSpanned"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 	return bool(r)
 }
 
@@ -361,6 +393,8 @@ func (this *QTreeView) IsFirstColumnSpanned(row int, parent *qtcore.QModelIndex)
 func (this *QTreeView) SetFirstColumnSpanned(row int, parent *qtcore.QModelIndex, span bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetFirstColumnSpanned")
 	C.qute_QTreeView_setFirstColumnSpanned(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QTreeView.SetFirstColumnSpanned"), C.bool(span))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 }
 
 // IsExpanded wraps QTreeView::isExpanded.
@@ -371,6 +405,8 @@ func (this *QTreeView) SetFirstColumnSpanned(row int, parent *qtcore.QModelIndex
 func (this *QTreeView) IsExpanded(index *qtcore.QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsExpanded")
 	r := C.qute_QTreeView_isExpanded(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.IsExpanded"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -382,6 +418,8 @@ func (this *QTreeView) IsExpanded(index *qtcore.QModelIndex) bool {
 func (this *QTreeView) SetExpanded(index *qtcore.QModelIndex, expand bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetExpanded")
 	C.qute_QTreeView_setExpanded(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.SetExpanded"), C.bool(expand))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // SetSortingEnabled wraps QTreeView::setSortingEnabled.
@@ -392,6 +430,7 @@ func (this *QTreeView) SetExpanded(index *qtcore.QModelIndex, expand bool) {
 func (this *QTreeView) SetSortingEnabled(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetSortingEnabled")
 	C.qute_QTreeView_setSortingEnabled(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsSortingEnabled wraps QTreeView::isSortingEnabled.
@@ -402,6 +441,7 @@ func (this *QTreeView) SetSortingEnabled(enable bool) {
 func (this *QTreeView) IsSortingEnabled() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsSortingEnabled")
 	r := C.qute_QTreeView_isSortingEnabled(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -413,6 +453,7 @@ func (this *QTreeView) IsSortingEnabled() bool {
 func (this *QTreeView) SetAnimated(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetAnimated")
 	C.qute_QTreeView_setAnimated(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // IsAnimated wraps QTreeView::isAnimated.
@@ -423,6 +464,7 @@ func (this *QTreeView) SetAnimated(enable bool) {
 func (this *QTreeView) IsAnimated() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IsAnimated")
 	r := C.qute_QTreeView_isAnimated(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -434,6 +476,7 @@ func (this *QTreeView) IsAnimated() bool {
 func (this *QTreeView) SetAllColumnsShowFocus(enable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetAllColumnsShowFocus")
 	C.qute_QTreeView_setAllColumnsShowFocus(self, C.bool(enable))
+	runtime.KeepAlive(this)
 }
 
 // AllColumnsShowFocus wraps QTreeView::allColumnsShowFocus.
@@ -444,6 +487,7 @@ func (this *QTreeView) SetAllColumnsShowFocus(enable bool) {
 func (this *QTreeView) AllColumnsShowFocus() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.AllColumnsShowFocus")
 	r := C.qute_QTreeView_allColumnsShowFocus(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -455,6 +499,7 @@ func (this *QTreeView) AllColumnsShowFocus() bool {
 func (this *QTreeView) SetWordWrap(on bool) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetWordWrap")
 	C.qute_QTreeView_setWordWrap(self, C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // WordWrap wraps QTreeView::wordWrap.
@@ -465,6 +510,7 @@ func (this *QTreeView) SetWordWrap(on bool) {
 func (this *QTreeView) WordWrap() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.WordWrap")
 	r := C.qute_QTreeView_wordWrap(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -476,6 +522,7 @@ func (this *QTreeView) WordWrap() bool {
 func (this *QTreeView) SetTreePosition(logicalIndex int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetTreePosition")
 	C.qute_QTreeView_setTreePosition(self, C.int(logicalIndex))
+	runtime.KeepAlive(this)
 }
 
 // TreePosition wraps QTreeView::treePosition.
@@ -486,6 +533,7 @@ func (this *QTreeView) SetTreePosition(logicalIndex int) {
 func (this *QTreeView) TreePosition() int {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.TreePosition")
 	r := C.qute_QTreeView_treePosition(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -497,6 +545,8 @@ func (this *QTreeView) TreePosition() int {
 func (this *QTreeView) ItemDecorationRect(index *qtcore.QModelIndex) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ItemDecorationRect")
 	r := C.qute_QTreeView_itemDecorationRect(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.ItemDecorationRect"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return goQRect(r)
 }
 
@@ -510,6 +560,8 @@ func (this *QTreeView) ItemDecorationRect(index *qtcore.QModelIndex) qtcore.QRec
 func (this *QTreeView) IndexAbove(index *qtcore.QModelIndex) *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IndexAbove")
 	r := C.qute_QTreeView_indexAbove(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.IndexAbove"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -523,6 +575,8 @@ func (this *QTreeView) IndexAbove(index *qtcore.QModelIndex) *qtcore.QModelIndex
 func (this *QTreeView) IndexBelow(index *qtcore.QModelIndex) *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.IndexBelow")
 	r := C.qute_QTreeView_indexBelow(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.IndexBelow"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -534,6 +588,9 @@ func (this *QTreeView) IndexBelow(index *qtcore.QModelIndex) *qtcore.QModelIndex
 func (this *QTreeView) DataChanged(topLeft *qtcore.QModelIndex, bottomRight *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.DataChanged")
 	C.qute_QTreeView_dataChanged(self, rt.UseArg(unsafe.Pointer(topLeft), "QTreeView.DataChanged"), rt.UseArg(unsafe.Pointer(bottomRight), "QTreeView.DataChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(topLeft)
+	runtime.KeepAlive(bottomRight)
 }
 
 // HideColumn wraps QTreeView::hideColumn.
@@ -544,6 +601,7 @@ func (this *QTreeView) DataChanged(topLeft *qtcore.QModelIndex, bottomRight *qtc
 func (this *QTreeView) HideColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.HideColumn")
 	C.qute_QTreeView_hideColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // ShowColumn wraps QTreeView::showColumn.
@@ -554,6 +612,7 @@ func (this *QTreeView) HideColumn(column int) {
 func (this *QTreeView) ShowColumn(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ShowColumn")
 	C.qute_QTreeView_showColumn(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // Expand wraps QTreeView::expand.
@@ -564,6 +623,8 @@ func (this *QTreeView) ShowColumn(column int) {
 func (this *QTreeView) Expand(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.Expand")
 	C.qute_QTreeView_expand(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Expand"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // Collapse wraps QTreeView::collapse.
@@ -574,6 +635,8 @@ func (this *QTreeView) Expand(index *qtcore.QModelIndex) {
 func (this *QTreeView) Collapse(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.Collapse")
 	C.qute_QTreeView_collapse(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Collapse"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // ResizeColumnToContents wraps QTreeView::resizeColumnToContents.
@@ -584,6 +647,7 @@ func (this *QTreeView) Collapse(index *qtcore.QModelIndex) {
 func (this *QTreeView) ResizeColumnToContents(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ResizeColumnToContents")
 	C.qute_QTreeView_resizeColumnToContents(self, C.int(column))
+	runtime.KeepAlive(this)
 }
 
 // SortByColumn wraps QTreeView::sortByColumn.
@@ -594,6 +658,7 @@ func (this *QTreeView) ResizeColumnToContents(column int) {
 func (this *QTreeView) SortByColumn(column int, order qtcore.SortOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.SortByColumn")
 	C.qute_QTreeView_sortByColumn(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(this)
 }
 
 // ExpandAll wraps QTreeView::expandAll.
@@ -604,6 +669,7 @@ func (this *QTreeView) SortByColumn(column int, order qtcore.SortOrder) {
 func (this *QTreeView) ExpandAll() {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExpandAll")
 	C.qute_QTreeView_expandAll(self)
+	runtime.KeepAlive(this)
 }
 
 // ExpandRecursively wraps QTreeView::expandRecursively.
@@ -614,6 +680,8 @@ func (this *QTreeView) ExpandAll() {
 func (this *QTreeView) ExpandRecursively(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExpandRecursively")
 	C.qute_QTreeView_expandRecursively(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.ExpandRecursively"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // CollapseAll wraps QTreeView::collapseAll.
@@ -624,6 +692,7 @@ func (this *QTreeView) ExpandRecursively(index *qtcore.QModelIndex) {
 func (this *QTreeView) CollapseAll() {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.CollapseAll")
 	C.qute_QTreeView_collapseAll(self)
+	runtime.KeepAlive(this)
 }
 
 // ExpandToDepth wraps QTreeView::expandToDepth.
@@ -634,6 +703,7 @@ func (this *QTreeView) CollapseAll() {
 func (this *QTreeView) ExpandToDepth(depth int) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExpandToDepth")
 	C.qute_QTreeView_expandToDepth(self, C.int(depth))
+	runtime.KeepAlive(this)
 }
 
 // EmitExpanded wraps emitting the expanded signal.
@@ -644,6 +714,8 @@ func (this *QTreeView) ExpandToDepth(depth int) {
 func (this *QTreeView) EmitExpanded(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.EmitExpanded")
 	C.qute_QTreeView_expanded_1(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.EmitExpanded"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // EmitCollapsed wraps emitting the collapsed signal.
@@ -654,6 +726,8 @@ func (this *QTreeView) EmitExpanded(index *qtcore.QModelIndex) {
 func (this *QTreeView) EmitCollapsed(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.EmitCollapsed")
 	C.qute_QTreeView_collapsed_1(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.EmitCollapsed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // OnExpanded connects f to the expanded signal. The connection ends when the

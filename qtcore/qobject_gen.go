@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"time"
 	"unsafe"
 
@@ -105,6 +106,7 @@ func NewQObject(parent QObjectLike) *QObject {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQObject")
 	}
 	p := C.qute_QObject_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -125,6 +127,8 @@ func (this *QObject) Event(event QEventLike) bool {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QObject.Event")
 	}
 	r := C.qute_QObject_event(self, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(event)
 	return bool(r)
 }
 
@@ -144,6 +148,9 @@ func (this *QObject) EventFilter(watched QObjectLike, event QEventLike) bool {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QObject.EventFilter")
 	}
 	r := C.qute_QObject_eventFilter(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
 	return bool(r)
 }
 
@@ -155,6 +162,7 @@ func (this *QObject) EventFilter(watched QObjectLike, event QEventLike) bool {
 func (this *QObject) ObjectName() string {
 	self := rt.Use(unsafe.Pointer(this), "QObject.ObjectName")
 	r := C.qute_QObject_objectName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -166,6 +174,7 @@ func (this *QObject) ObjectName() string {
 func (this *QObject) SetObjectName(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QObject.SetObjectName")
 	C.qute_QObject_setObjectName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
 }
 
 // IsWidgetType wraps QObject::isWidgetType.
@@ -176,6 +185,7 @@ func (this *QObject) SetObjectName(name string) {
 func (this *QObject) IsWidgetType() bool {
 	self := rt.Use(unsafe.Pointer(this), "QObject.IsWidgetType")
 	r := C.qute_QObject_isWidgetType(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -187,6 +197,7 @@ func (this *QObject) IsWidgetType() bool {
 func (this *QObject) IsWindowType() bool {
 	self := rt.Use(unsafe.Pointer(this), "QObject.IsWindowType")
 	r := C.qute_QObject_isWindowType(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -198,6 +209,7 @@ func (this *QObject) IsWindowType() bool {
 func (this *QObject) IsQuickItemType() bool {
 	self := rt.Use(unsafe.Pointer(this), "QObject.IsQuickItemType")
 	r := C.qute_QObject_isQuickItemType(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -209,6 +221,7 @@ func (this *QObject) IsQuickItemType() bool {
 func (this *QObject) IsQmlExposed() bool {
 	self := rt.Use(unsafe.Pointer(this), "QObject.IsQmlExposed")
 	r := C.qute_QObject_isQmlExposed(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -220,6 +233,7 @@ func (this *QObject) IsQmlExposed() bool {
 func (this *QObject) SignalsBlocked() bool {
 	self := rt.Use(unsafe.Pointer(this), "QObject.SignalsBlocked")
 	r := C.qute_QObject_signalsBlocked(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -231,6 +245,7 @@ func (this *QObject) SignalsBlocked() bool {
 func (this *QObject) BlockSignals(bArg bool) bool {
 	self := rt.Use(unsafe.Pointer(this), "QObject.BlockSignals")
 	r := C.qute_QObject_blockSignals(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -242,6 +257,7 @@ func (this *QObject) BlockSignals(bArg bool) bool {
 func (this *QObject) StartTimer(interval int) int {
 	self := rt.Use(unsafe.Pointer(this), "QObject.StartTimer")
 	r := C.qute_QObject_startTimer(self, C.int(interval))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -253,6 +269,7 @@ func (this *QObject) StartTimer(interval int) int {
 func (this *QObject) StartTimerDuration(time time.Duration) int {
 	self := rt.Use(unsafe.Pointer(this), "QObject.StartTimerDuration")
 	r := C.qute_QObject_startTimer_1(self, C.int64_t(time))
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -264,6 +281,7 @@ func (this *QObject) StartTimerDuration(time time.Duration) int {
 func (this *QObject) KillTimer(idArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QObject.KillTimer")
 	C.qute_QObject_killTimer(self, C.int(idArg))
+	runtime.KeepAlive(this)
 }
 
 // KillTimerID wraps QObject::killTimer.
@@ -274,6 +292,7 @@ func (this *QObject) KillTimer(idArg int) {
 func (this *QObject) KillTimerID(idArg TimerId) {
 	self := rt.Use(unsafe.Pointer(this), "QObject.KillTimerID")
 	C.qute_QObject_killTimer_1(self, C.int64_t(idArg))
+	runtime.KeepAlive(this)
 }
 
 // Children wraps QObject::children.
@@ -286,6 +305,7 @@ func (this *QObject) KillTimerID(idArg TimerId) {
 func (this *QObject) Children() []*QObject {
 	self := rt.Use(unsafe.Pointer(this), "QObject.Children")
 	r := C.qute_QObject_children(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QObject {
 		return rt.View[QObject](rt.WrapClass(e, "QObject", rt.KeepOrBorrow), e)
 	})
@@ -305,6 +325,8 @@ func (this *QObject) SetParent(parent QObjectLike) {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "QObject.SetParent")
 	}
 	C.qute_QObject_setParent(self, parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
 	rt.RefOf(unsafe.Pointer(this)).H.SetParented(parentPtr != nil)
 }
 
@@ -322,6 +344,8 @@ func (this *QObject) InstallEventFilter(filterObj QObjectLike) {
 		filterObjPtr = rt.UseArg(unsafe.Pointer(filterObj.AsQObject()), "QObject.InstallEventFilter")
 	}
 	C.qute_QObject_installEventFilter(self, filterObjPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(filterObj)
 }
 
 // RemoveEventFilter wraps QObject::removeEventFilter.
@@ -336,6 +360,8 @@ func (this *QObject) RemoveEventFilter(obj QObjectLike) {
 		objPtr = rt.UseArg(unsafe.Pointer(obj.AsQObject()), "QObject.RemoveEventFilter")
 	}
 	C.qute_QObject_removeEventFilter(self, objPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(obj)
 }
 
 // SetProperty wraps QObject::setProperty.
@@ -348,6 +374,8 @@ func (this *QObject) SetProperty(name string, value *QVariant) bool {
 	nameCStr := C.CString(name)
 	defer C.free(unsafe.Pointer(nameCStr))
 	r := C.qute_QObject_setProperty(self, nameCStr, rt.UseArg(unsafe.Pointer(value), "QObject.SetProperty"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 	return bool(r)
 }
 
@@ -363,6 +391,7 @@ func (this *QObject) Property(name string) *QVariant {
 	nameCStr := C.CString(name)
 	defer C.free(unsafe.Pointer(nameCStr))
 	r := C.qute_QObject_property(self, nameCStr)
+	runtime.KeepAlive(this)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -374,6 +403,7 @@ func (this *QObject) Property(name string) *QVariant {
 func (this *QObject) DynamicPropertyNames() [][]byte {
 	self := rt.Use(unsafe.Pointer(this), "QObject.DynamicPropertyNames")
 	r := C.qute_QObject_dynamicPropertyNames(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_str) []byte { return quteBytes(e) })
 }
 
@@ -387,6 +417,7 @@ func (this *QObject) DynamicPropertyNames() [][]byte {
 func (this *QObject) Parent() *QObject {
 	self := rt.Use(unsafe.Pointer(this), "QObject.Parent")
 	r := C.qute_QObject_parent(self)
+	runtime.KeepAlive(this)
 	return rt.View[QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -400,6 +431,7 @@ func (this *QObject) Inherits(classname string) bool {
 	classnameCStr := C.CString(classname)
 	defer C.free(unsafe.Pointer(classnameCStr))
 	r := C.qute_QObject_inherits(self, classnameCStr)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -413,6 +445,7 @@ func (this *QObject) Inherits(classname string) bool {
 func (this *QObject) DeleteLater() {
 	self := rt.Use(unsafe.Pointer(this), "QObject.DeleteLater")
 	C.qute_QObject_deleteLater(self)
+	runtime.KeepAlive(this)
 }
 
 // EmitDestroyed wraps emitting the destroyed signal.
@@ -423,6 +456,7 @@ func (this *QObject) DeleteLater() {
 func (this *QObject) EmitDestroyed() {
 	self := rt.Use(unsafe.Pointer(this), "QObject.EmitDestroyed")
 	C.qute_QObject_destroyed_1(self)
+	runtime.KeepAlive(this)
 }
 
 // OnDestroyed connects f to the destroyed signal. The connection ends when the
@@ -535,7 +569,10 @@ func (s *QObjectSuper) Event(event *QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QObject.Super.Event")
 	}
-	return bool(C.qute_QObject_super_0(self, eventPtr))
+	r := C.qute_QObject_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -549,7 +586,11 @@ func (s *QObjectSuper) EventFilter(watched *QObject, event *QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QObject.Super.EventFilter")
 	}
-	return bool(C.qute_QObject_super_1(self, watchedPtr, eventPtr))
+	r := C.qute_QObject_super_1(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
 }
 
 // TimerEvent calls QObject::timerEvent.
@@ -560,6 +601,8 @@ func (s *QObjectSuper) TimerEvent(event *QTimerEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QObject.Super.TimerEvent")
 	}
 	C.qute_QObject_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -570,6 +613,8 @@ func (s *QObjectSuper) ChildEvent(event *QChildEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QObject.Super.ChildEvent")
 	}
 	C.qute_QObject_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // CustomEvent calls QObject::customEvent.
@@ -580,6 +625,8 @@ func (s *QObjectSuper) CustomEvent(event *QEvent) {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QObject.Super.CustomEvent")
 	}
 	C.qute_QObject_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
 }
 
 // NewQObjectWith constructs a QObject whose virtual methods dispatch to v. The
@@ -596,6 +643,7 @@ func NewQObjectWith(v QObjectSubclass, parent QObjectLike) *QObject {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQObjectWith")
 	}
 	p := C.qute_QObject_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented

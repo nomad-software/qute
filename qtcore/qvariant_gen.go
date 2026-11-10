@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -96,6 +97,7 @@ func NewQVariant() *QVariant {
 func NewQVariantWithMetaType(typeArg *QMetaType) *QVariant {
 	rt.CheckThread("NewQVariantWithMetaType")
 	p := C.qute_QVariant_new_1(rt.UseArg(unsafe.Pointer(typeArg), "NewQVariantWithMetaType"))
+	runtime.KeepAlive(typeArg)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -204,6 +206,7 @@ func NewQVariantWithQchar(qchar rune) *QVariant {
 func NewQVariantWithDate(date *QDate) *QVariant {
 	rt.CheckThread("NewQVariantWithDate")
 	p := C.qute_QVariant_new_10(rt.UseArg(unsafe.Pointer(date), "NewQVariantWithDate"))
+	runtime.KeepAlive(date)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -216,6 +219,7 @@ func NewQVariantWithDate(date *QDate) *QVariant {
 func NewQVariantWithTime(time *QTime) *QVariant {
 	rt.CheckThread("NewQVariantWithTime")
 	p := C.qute_QVariant_new_11(rt.UseArg(unsafe.Pointer(time), "NewQVariantWithTime"))
+	runtime.KeepAlive(time)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -228,6 +232,7 @@ func NewQVariantWithTime(time *QTime) *QVariant {
 func NewQVariantWithBitArray(bitarray *QBitArray) *QVariant {
 	rt.CheckThread("NewQVariantWithBitArray")
 	p := C.qute_QVariant_new_12(rt.UseArg(unsafe.Pointer(bitarray), "NewQVariantWithBitArray"))
+	runtime.KeepAlive(bitarray)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -252,6 +257,7 @@ func NewQVariantWithBytes(bytearray []byte) *QVariant {
 func NewQVariantWithDateTime(datetime *QDateTime) *QVariant {
 	rt.CheckThread("NewQVariantWithDateTime")
 	p := C.qute_QVariant_new_14(rt.UseArg(unsafe.Pointer(datetime), "NewQVariantWithDateTime"))
+	runtime.KeepAlive(datetime)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -271,6 +277,7 @@ func NewQVariantWithMap(hash map[string]*QVariant) *QVariant {
 	}
 	defer quteFreeStrs(hashK)
 	p := C.qute_QVariant_new_15(unsafe.Pointer(unsafe.SliceData(hashK)), unsafe.Pointer(unsafe.SliceData(hashV)), C.ptrdiff_t(len(hash)))
+	runtime.KeepAlive(hash)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -283,6 +290,7 @@ func NewQVariantWithMap(hash map[string]*QVariant) *QVariant {
 func NewQVariantWithJsonArray(jsonArray *QJsonArray) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonArray")
 	p := C.qute_QVariant_new_16(rt.UseArg(unsafe.Pointer(jsonArray), "NewQVariantWithJsonArray"))
+	runtime.KeepAlive(jsonArray)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -295,6 +303,7 @@ func NewQVariantWithJsonArray(jsonArray *QJsonArray) *QVariant {
 func NewQVariantWithJsonObject(jsonObject *QJsonObject) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonObject")
 	p := C.qute_QVariant_new_17(rt.UseArg(unsafe.Pointer(jsonObject), "NewQVariantWithJsonObject"))
+	runtime.KeepAlive(jsonObject)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -311,6 +320,7 @@ func NewQVariantWithVariants(list []*QVariant) *QVariant {
 		listC[i] = rt.UseArg(unsafe.Pointer(list[i]), "NewQVariantWithVariants")
 	}
 	p := C.qute_QVariant_new_18(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
+	runtime.KeepAlive(list)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -323,6 +333,7 @@ func NewQVariantWithVariants(list []*QVariant) *QVariant {
 func NewQVariantWithLocale(locale *QLocale) *QVariant {
 	rt.CheckThread("NewQVariantWithLocale")
 	p := C.qute_QVariant_new_19(rt.UseArg(unsafe.Pointer(locale), "NewQVariantWithLocale"))
+	runtime.KeepAlive(locale)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -335,6 +346,7 @@ func NewQVariantWithLocale(locale *QLocale) *QVariant {
 func NewQVariantWithRegularExpression(re *QRegularExpression) *QVariant {
 	rt.CheckThread("NewQVariantWithRegularExpression")
 	p := C.qute_QVariant_new_20(rt.UseArg(unsafe.Pointer(re), "NewQVariantWithRegularExpression"))
+	runtime.KeepAlive(re)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -372,6 +384,7 @@ func NewQVariantWithStringlist(stringlist []string) *QVariant {
 func NewQVariantWithUrl(url *QUrl) *QVariant {
 	rt.CheckThread("NewQVariantWithUrl")
 	p := C.qute_QVariant_new_23(rt.UseArg(unsafe.Pointer(url), "NewQVariantWithUrl"))
+	runtime.KeepAlive(url)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -384,6 +397,7 @@ func NewQVariantWithUrl(url *QUrl) *QVariant {
 func NewQVariantWithJsonValue(jsonValue *QJsonValue) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonValue")
 	p := C.qute_QVariant_new_24(rt.UseArg(unsafe.Pointer(jsonValue), "NewQVariantWithJsonValue"))
+	runtime.KeepAlive(jsonValue)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -396,6 +410,7 @@ func NewQVariantWithJsonValue(jsonValue *QJsonValue) *QVariant {
 func NewQVariantWithModelIndex(modelIndex *QModelIndex) *QVariant {
 	rt.CheckThread("NewQVariantWithModelIndex")
 	p := C.qute_QVariant_new_25(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithModelIndex"))
+	runtime.KeepAlive(modelIndex)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -408,6 +423,7 @@ func NewQVariantWithModelIndex(modelIndex *QModelIndex) *QVariant {
 func NewQVariantWithUuid(uuid *QUuid) *QVariant {
 	rt.CheckThread("NewQVariantWithUuid")
 	p := C.qute_QVariant_new_26(rt.UseArg(unsafe.Pointer(uuid), "NewQVariantWithUuid"))
+	runtime.KeepAlive(uuid)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -468,6 +484,7 @@ func NewQVariantWithPointF(pt QPointF) *QVariant {
 func NewQVariantWithLine(line *QLine) *QVariant {
 	rt.CheckThread("NewQVariantWithLine")
 	p := C.qute_QVariant_new_31(rt.UseArg(unsafe.Pointer(line), "NewQVariantWithLine"))
+	runtime.KeepAlive(line)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -480,6 +497,7 @@ func NewQVariantWithLine(line *QLine) *QVariant {
 func NewQVariantWithLineF(line *QLineF) *QVariant {
 	rt.CheckThread("NewQVariantWithLineF")
 	p := C.qute_QVariant_new_32(rt.UseArg(unsafe.Pointer(line), "NewQVariantWithLineF"))
+	runtime.KeepAlive(line)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -516,6 +534,7 @@ func NewQVariantWithRectF(rect QRectF) *QVariant {
 func NewQVariantWithEasingCurve(easing *QEasingCurve) *QVariant {
 	rt.CheckThread("NewQVariantWithEasingCurve")
 	p := C.qute_QVariant_new_35(rt.UseArg(unsafe.Pointer(easing), "NewQVariantWithEasingCurve"))
+	runtime.KeepAlive(easing)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -528,6 +547,7 @@ func NewQVariantWithEasingCurve(easing *QEasingCurve) *QVariant {
 func NewQVariantWithJsonDocument(jsonDocument *QJsonDocument) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonDocument")
 	p := C.qute_QVariant_new_36(rt.UseArg(unsafe.Pointer(jsonDocument), "NewQVariantWithJsonDocument"))
+	runtime.KeepAlive(jsonDocument)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -540,6 +560,7 @@ func NewQVariantWithJsonDocument(jsonDocument *QJsonDocument) *QVariant {
 func NewQVariantWithPersistentIndex(modelIndex *QPersistentModelIndex) *QVariant {
 	rt.CheckThread("NewQVariantWithPersistentIndex")
 	p := C.qute_QVariant_new_37(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithPersistentIndex"))
+	runtime.KeepAlive(modelIndex)
 	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
@@ -552,6 +573,7 @@ func NewQVariantWithPersistentIndex(modelIndex *QPersistentModelIndex) *QVariant
 func (this *QVariant) UserType() int {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.UserType")
 	r := C.qute_QVariant_userType(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -563,6 +585,7 @@ func (this *QVariant) UserType() int {
 func (this *QVariant) TypeId() int {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.TypeId")
 	r := C.qute_QVariant_typeId(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -574,6 +597,7 @@ func (this *QVariant) TypeId() int {
 func (this *QVariant) TypeName() string {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.TypeName")
 	r := C.qute_QVariant_typeName(self)
+	runtime.KeepAlive(this)
 	return C.GoString(r)
 }
 
@@ -587,6 +611,7 @@ func (this *QVariant) TypeName() string {
 func (this *QVariant) MetaType() *QMetaType {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.MetaType")
 	r := C.qute_QVariant_metaType(self)
+	runtime.KeepAlive(this)
 	return rt.View[QMetaType](rt.WrapClass(r, "QMetaType", rt.TakeOwned), r)
 }
 
@@ -598,6 +623,8 @@ func (this *QVariant) MetaType() *QMetaType {
 func (this *QVariant) CanConvert(targetType *QMetaType) bool {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.CanConvert")
 	r := C.qute_QVariant_canConvert(self, rt.UseArg(unsafe.Pointer(targetType), "QVariant.CanConvert"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(targetType)
 	return bool(r)
 }
 
@@ -609,6 +636,8 @@ func (this *QVariant) CanConvert(targetType *QMetaType) bool {
 func (this *QVariant) Convert(typeArg *QMetaType) bool {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.Convert")
 	r := C.qute_QVariant_convert(self, rt.UseArg(unsafe.Pointer(typeArg), "QVariant.Convert"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(typeArg)
 	return bool(r)
 }
 
@@ -620,6 +649,8 @@ func (this *QVariant) Convert(typeArg *QMetaType) bool {
 func (this *QVariant) CanView(targetType *QMetaType) bool {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.CanView")
 	r := C.qute_QVariant_canView(self, rt.UseArg(unsafe.Pointer(targetType), "QVariant.CanView"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(targetType)
 	return bool(r)
 }
 
@@ -631,6 +662,7 @@ func (this *QVariant) CanView(targetType *QMetaType) bool {
 func (this *QVariant) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.IsValid")
 	r := C.qute_QVariant_isValid(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -642,6 +674,7 @@ func (this *QVariant) IsValid() bool {
 func (this *QVariant) IsNull() bool {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.IsNull")
 	r := C.qute_QVariant_isNull(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -653,6 +686,7 @@ func (this *QVariant) IsNull() bool {
 func (this *QVariant) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.Clear")
 	C.qute_QVariant_clear(self)
+	runtime.KeepAlive(this)
 }
 
 // ToInt wraps QVariant::toInt.
@@ -663,6 +697,7 @@ func (this *QVariant) Clear() {
 func (this *QVariant) ToInt() int {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToInt")
 	r := C.qute_QVariant_toInt(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -674,6 +709,7 @@ func (this *QVariant) ToInt() int {
 func (this *QVariant) ToUInt() uint {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToUInt")
 	r := C.qute_QVariant_toUInt(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -685,6 +721,7 @@ func (this *QVariant) ToUInt() uint {
 func (this *QVariant) ToLongLong() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLongLong")
 	r := C.qute_QVariant_toLongLong(self)
+	runtime.KeepAlive(this)
 	return int64(r)
 }
 
@@ -696,6 +733,7 @@ func (this *QVariant) ToLongLong() int64 {
 func (this *QVariant) ToULongLong() uint64 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToULongLong")
 	r := C.qute_QVariant_toULongLong(self)
+	runtime.KeepAlive(this)
 	return uint64(r)
 }
 
@@ -707,6 +745,7 @@ func (this *QVariant) ToULongLong() uint64 {
 func (this *QVariant) ToBool() bool {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToBool")
 	r := C.qute_QVariant_toBool(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -718,6 +757,7 @@ func (this *QVariant) ToBool() bool {
 func (this *QVariant) ToDouble() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToDouble")
 	r := C.qute_QVariant_toDouble(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -729,6 +769,7 @@ func (this *QVariant) ToDouble() float64 {
 func (this *QVariant) ToFloat() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToFloat")
 	r := C.qute_QVariant_toFloat(self)
+	runtime.KeepAlive(this)
 	return float32(r)
 }
 
@@ -740,6 +781,7 @@ func (this *QVariant) ToFloat() float32 {
 func (this *QVariant) ToReal() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToReal")
 	r := C.qute_QVariant_toReal(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -751,6 +793,7 @@ func (this *QVariant) ToReal() float64 {
 func (this *QVariant) ToByteArray() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToByteArray")
 	r := C.qute_QVariant_toByteArray(self)
+	runtime.KeepAlive(this)
 	return quteBytes(r)
 }
 
@@ -764,6 +807,7 @@ func (this *QVariant) ToByteArray() []byte {
 func (this *QVariant) ToBitArray() *QBitArray {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToBitArray")
 	r := C.qute_QVariant_toBitArray(self)
+	runtime.KeepAlive(this)
 	return rt.View[QBitArray](rt.WrapClass(r, "QBitArray", rt.TakeOwned), r)
 }
 
@@ -775,6 +819,7 @@ func (this *QVariant) ToBitArray() *QBitArray {
 func (this *QVariant) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToString")
 	r := C.qute_QVariant_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -786,6 +831,7 @@ func (this *QVariant) ToString() string {
 func (this *QVariant) ToStringList() []string {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToStringList")
 	r := C.qute_QVariant_toStringList(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -797,6 +843,7 @@ func (this *QVariant) ToStringList() []string {
 func (this *QVariant) ToChar() rune {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToChar")
 	r := C.qute_QVariant_toChar(self)
+	runtime.KeepAlive(this)
 	return rune(r)
 }
 
@@ -810,6 +857,7 @@ func (this *QVariant) ToChar() rune {
 func (this *QVariant) ToDate() *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToDate")
 	r := C.qute_QVariant_toDate(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }
 
@@ -823,6 +871,7 @@ func (this *QVariant) ToDate() *QDate {
 func (this *QVariant) ToTime() *QTime {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToTime")
 	r := C.qute_QVariant_toTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
 }
 
@@ -836,6 +885,7 @@ func (this *QVariant) ToTime() *QTime {
 func (this *QVariant) ToDateTime() *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToDateTime")
 	r := C.qute_QVariant_toDateTime(self)
+	runtime.KeepAlive(this)
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }
 
@@ -847,6 +897,7 @@ func (this *QVariant) ToDateTime() *QDateTime {
 func (this *QVariant) ToList() []*QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToList")
 	r := C.qute_QVariant_toList(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QVariant {
 		return rt.View[QVariant](rt.WrapClass(e, "QVariant", rt.TakeOwned), e)
 	})
@@ -860,6 +911,7 @@ func (this *QVariant) ToList() []*QVariant {
 func (this *QVariant) ToMap() map[string]*QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToMap")
 	r := C.qute_QVariant_toMap(self)
+	runtime.KeepAlive(this)
 	return quteMap(r, func(k C.qute_str) string { return quteStr(k) }, func(v unsafe.Pointer) *QVariant {
 		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 	})
@@ -873,6 +925,7 @@ func (this *QVariant) ToMap() map[string]*QVariant {
 func (this *QVariant) ToHash() map[string]*QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToHash")
 	r := C.qute_QVariant_toHash(self)
+	runtime.KeepAlive(this)
 	return quteMap(r, func(k C.qute_str) string { return quteStr(k) }, func(v unsafe.Pointer) *QVariant {
 		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 	})
@@ -886,6 +939,7 @@ func (this *QVariant) ToHash() map[string]*QVariant {
 func (this *QVariant) ToPoint() QPoint {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToPoint")
 	r := C.qute_QVariant_toPoint(self)
+	runtime.KeepAlive(this)
 	return goQPoint(r)
 }
 
@@ -897,6 +951,7 @@ func (this *QVariant) ToPoint() QPoint {
 func (this *QVariant) ToPointF() QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToPointF")
 	r := C.qute_QVariant_toPointF(self)
+	runtime.KeepAlive(this)
 	return goQPointF(r)
 }
 
@@ -908,6 +963,7 @@ func (this *QVariant) ToPointF() QPointF {
 func (this *QVariant) ToRect() QRect {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToRect")
 	r := C.qute_QVariant_toRect(self)
+	runtime.KeepAlive(this)
 	return goQRect(r)
 }
 
@@ -919,6 +975,7 @@ func (this *QVariant) ToRect() QRect {
 func (this *QVariant) ToSize() QSize {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToSize")
 	r := C.qute_QVariant_toSize(self)
+	runtime.KeepAlive(this)
 	return goQSize(r)
 }
 
@@ -930,6 +987,7 @@ func (this *QVariant) ToSize() QSize {
 func (this *QVariant) ToSizeF() QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToSizeF")
 	r := C.qute_QVariant_toSizeF(self)
+	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }
 
@@ -943,6 +1001,7 @@ func (this *QVariant) ToSizeF() QSizeF {
 func (this *QVariant) ToLine() *QLine {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLine")
 	r := C.qute_QVariant_toLine(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
 }
 
@@ -956,6 +1015,7 @@ func (this *QVariant) ToLine() *QLine {
 func (this *QVariant) ToLineF() *QLineF {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLineF")
 	r := C.qute_QVariant_toLineF(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLineF](rt.WrapClass(r, "QLineF", rt.TakeOwned), r)
 }
 
@@ -967,6 +1027,7 @@ func (this *QVariant) ToLineF() *QLineF {
 func (this *QVariant) ToRectF() QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToRectF")
 	r := C.qute_QVariant_toRectF(self)
+	runtime.KeepAlive(this)
 	return goQRectF(r)
 }
 
@@ -980,6 +1041,7 @@ func (this *QVariant) ToRectF() QRectF {
 func (this *QVariant) ToLocale() *QLocale {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLocale")
 	r := C.qute_QVariant_toLocale(self)
+	runtime.KeepAlive(this)
 	return rt.View[QLocale](rt.WrapClass(r, "QLocale", rt.TakeOwned), r)
 }
 
@@ -993,6 +1055,7 @@ func (this *QVariant) ToLocale() *QLocale {
 func (this *QVariant) ToRegularExpression() *QRegularExpression {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToRegularExpression")
 	r := C.qute_QVariant_toRegularExpression(self)
+	runtime.KeepAlive(this)
 	return rt.View[QRegularExpression](rt.WrapClass(r, "QRegularExpression", rt.TakeOwned), r)
 }
 
@@ -1006,6 +1069,7 @@ func (this *QVariant) ToRegularExpression() *QRegularExpression {
 func (this *QVariant) ToEasingCurve() *QEasingCurve {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToEasingCurve")
 	r := C.qute_QVariant_toEasingCurve(self)
+	runtime.KeepAlive(this)
 	return rt.View[QEasingCurve](rt.WrapClass(r, "QEasingCurve", rt.TakeOwned), r)
 }
 
@@ -1019,6 +1083,7 @@ func (this *QVariant) ToEasingCurve() *QEasingCurve {
 func (this *QVariant) ToUuid() *QUuid {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToUuid")
 	r := C.qute_QVariant_toUuid(self)
+	runtime.KeepAlive(this)
 	return rt.View[QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
 }
 
@@ -1032,6 +1097,7 @@ func (this *QVariant) ToUuid() *QUuid {
 func (this *QVariant) ToUrl() *QUrl {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToUrl")
 	r := C.qute_QVariant_toUrl(self)
+	runtime.KeepAlive(this)
 	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
 }
 
@@ -1045,6 +1111,7 @@ func (this *QVariant) ToUrl() *QUrl {
 func (this *QVariant) ToJsonValue() *QJsonValue {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonValue")
 	r := C.qute_QVariant_toJsonValue(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }
 
@@ -1058,6 +1125,7 @@ func (this *QVariant) ToJsonValue() *QJsonValue {
 func (this *QVariant) ToJsonObject() *QJsonObject {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonObject")
 	r := C.qute_QVariant_toJsonObject(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
 }
 
@@ -1071,6 +1139,7 @@ func (this *QVariant) ToJsonObject() *QJsonObject {
 func (this *QVariant) ToJsonArray() *QJsonArray {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonArray")
 	r := C.qute_QVariant_toJsonArray(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonArray](rt.WrapClass(r, "QJsonArray", rt.TakeOwned), r)
 }
 
@@ -1084,6 +1153,7 @@ func (this *QVariant) ToJsonArray() *QJsonArray {
 func (this *QVariant) ToJsonDocument() *QJsonDocument {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToJsonDocument")
 	r := C.qute_QVariant_toJsonDocument(self)
+	runtime.KeepAlive(this)
 	return rt.View[QJsonDocument](rt.WrapClass(r, "QJsonDocument", rt.TakeOwned), r)
 }
 
@@ -1097,6 +1167,7 @@ func (this *QVariant) ToJsonDocument() *QJsonDocument {
 func (this *QVariant) ToModelIndex() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToModelIndex")
 	r := C.qute_QVariant_toModelIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
@@ -1110,6 +1181,7 @@ func (this *QVariant) ToModelIndex() *QModelIndex {
 func (this *QVariant) ToPersistentModelIndex() *QPersistentModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToPersistentModelIndex")
 	r := C.qute_QVariant_toPersistentModelIndex(self)
+	runtime.KeepAlive(this)
 	return rt.View[QPersistentModelIndex](rt.WrapClass(r, "QPersistentModelIndex", rt.TakeOwned), r)
 }
 
@@ -1125,6 +1197,8 @@ func (this *QVariant) Load(ds QDataStreamLike) {
 		dsPtr = rt.UseArg(unsafe.Pointer(ds.AsQDataStream()), "QVariant.Load")
 	}
 	C.qute_QVariant_load(self, dsPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(ds)
 }
 
 // Save wraps QVariant::save.
@@ -1139,6 +1213,8 @@ func (this *QVariant) Save(ds QDataStreamLike) {
 		dsPtr = rt.UseArg(unsafe.Pointer(ds.AsQDataStream()), "QVariant.Save")
 	}
 	C.qute_QVariant_save(self, dsPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(ds)
 }
 
 // Data wraps QVariant::data.
@@ -1149,6 +1225,7 @@ func (this *QVariant) Save(ds QDataStreamLike) {
 func (this *QVariant) Data() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.Data")
 	r := C.qute_QVariant_data(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -1160,6 +1237,7 @@ func (this *QVariant) Data() unsafe.Pointer {
 func (this *QVariant) ConstData() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ConstData")
 	r := C.qute_QVariant_constData(self)
+	runtime.KeepAlive(this)
 	return r
 }
 
@@ -1171,6 +1249,8 @@ func (this *QVariant) ConstData() unsafe.Pointer {
 func (this *QVariant) SetValue(avalue *QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.SetValue")
 	C.qute_QVariant_setValue(self, rt.UseArg(unsafe.Pointer(avalue), "QVariant.SetValue"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(avalue)
 }
 
 // QVariantFromMetaType wraps QVariant::fromMetaType.
@@ -1183,6 +1263,7 @@ func (this *QVariant) SetValue(avalue *QVariant) {
 func QVariantFromMetaType(typeArg *QMetaType) *QVariant {
 	rt.CheckThread("QVariantFromMetaType")
 	r := C.qute_QVariant_fromMetaType(rt.UseArg(unsafe.Pointer(typeArg), "QVariantFromMetaType"))
+	runtime.KeepAlive(typeArg)
 	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
@@ -1196,5 +1277,7 @@ func QVariantFromMetaType(typeArg *QMetaType) *QVariant {
 func QVariantCompare(lhs *QVariant, rhs *QVariant) *QPartialOrdering {
 	rt.CheckThread("QVariantCompare")
 	r := C.qute_QVariant_compare(rt.UseArg(unsafe.Pointer(lhs), "QVariantCompare"), rt.UseArg(unsafe.Pointer(rhs), "QVariantCompare"))
+	runtime.KeepAlive(lhs)
+	runtime.KeepAlive(rhs)
 	return rt.View[QPartialOrdering](rt.WrapClass(r, "QPartialOrdering", rt.TakeOwned), r)
 }

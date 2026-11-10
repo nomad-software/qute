@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -126,6 +127,8 @@ func NewQFontFor(font *QFont, pd QPaintDeviceLike) *QFont {
 		pdPtr = rt.UseArg(unsafe.Pointer(pd.AsQPaintDevice()), "NewQFontFor")
 	}
 	p := C.qute_QFont_new_3(rt.UseArg(unsafe.Pointer(font), "NewQFontFor"), pdPtr)
+	runtime.KeepAlive(font)
+	runtime.KeepAlive(pd)
 	h := rt.WrapClass(p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
@@ -138,6 +141,7 @@ func NewQFontFor(font *QFont, pd QPaintDeviceLike) *QFont {
 func (this *QFont) Family() string {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Family")
 	r := C.qute_QFont_family(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -149,6 +153,7 @@ func (this *QFont) Family() string {
 func (this *QFont) SetFamily(family string) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetFamily")
 	C.qute_QFont_setFamily(self, (*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)))
+	runtime.KeepAlive(this)
 }
 
 // Families wraps QFont::families.
@@ -159,6 +164,7 @@ func (this *QFont) SetFamily(family string) {
 func (this *QFont) Families() []string {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Families")
 	r := C.qute_QFont_families(self)
+	runtime.KeepAlive(this)
 	return quteStrList(r)
 }
 
@@ -171,6 +177,7 @@ func (this *QFont) SetFamilies(families []string) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetFamilies")
 	familiesData, familiesLens := quteStrListArg(families)
 	C.qute_QFont_setFamilies(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(familiesData))), (*C.ptrdiff_t)(unsafe.SliceData(familiesLens)), C.ptrdiff_t(len(families)))
+	runtime.KeepAlive(this)
 }
 
 // StyleName wraps QFont::styleName.
@@ -181,6 +188,7 @@ func (this *QFont) SetFamilies(families []string) {
 func (this *QFont) StyleName() string {
 	self := rt.Use(unsafe.Pointer(this), "QFont.StyleName")
 	r := C.qute_QFont_styleName(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -192,6 +200,7 @@ func (this *QFont) StyleName() string {
 func (this *QFont) SetStyleName(styleName string) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStyleName")
 	C.qute_QFont_setStyleName(self, (*C.char)(unsafe.Pointer(unsafe.StringData(styleName))), C.ptrdiff_t(len(styleName)))
+	runtime.KeepAlive(this)
 }
 
 // PointSize wraps QFont::pointSize.
@@ -202,6 +211,7 @@ func (this *QFont) SetStyleName(styleName string) {
 func (this *QFont) PointSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QFont.PointSize")
 	r := C.qute_QFont_pointSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -213,6 +223,7 @@ func (this *QFont) PointSize() int {
 func (this *QFont) SetPointSize(pointSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetPointSize")
 	C.qute_QFont_setPointSize(self, C.int(pointSize))
+	runtime.KeepAlive(this)
 }
 
 // PointSizeF wraps QFont::pointSizeF.
@@ -223,6 +234,7 @@ func (this *QFont) SetPointSize(pointSize int) {
 func (this *QFont) PointSizeF() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QFont.PointSizeF")
 	r := C.qute_QFont_pointSizeF(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -234,6 +246,7 @@ func (this *QFont) PointSizeF() float64 {
 func (this *QFont) SetPointSizeF(pointSizeF float64) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetPointSizeF")
 	C.qute_QFont_setPointSizeF(self, C.double(pointSizeF))
+	runtime.KeepAlive(this)
 }
 
 // PixelSize wraps QFont::pixelSize.
@@ -244,6 +257,7 @@ func (this *QFont) SetPointSizeF(pointSizeF float64) {
 func (this *QFont) PixelSize() int {
 	self := rt.Use(unsafe.Pointer(this), "QFont.PixelSize")
 	r := C.qute_QFont_pixelSize(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -255,6 +269,7 @@ func (this *QFont) PixelSize() int {
 func (this *QFont) SetPixelSize(pixelSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetPixelSize")
 	C.qute_QFont_setPixelSize(self, C.int(pixelSize))
+	runtime.KeepAlive(this)
 }
 
 // Weight wraps QFont::weight.
@@ -265,6 +280,7 @@ func (this *QFont) SetPixelSize(pixelSize int) {
 func (this *QFont) Weight() QFontWeight {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Weight")
 	r := C.qute_QFont_weight(self)
+	runtime.KeepAlive(this)
 	return QFontWeight(r)
 }
 
@@ -276,6 +292,7 @@ func (this *QFont) Weight() QFontWeight {
 func (this *QFont) SetWeight(weight QFontWeight) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetWeight")
 	C.qute_QFont_setWeight(self, C.int64_t(weight))
+	runtime.KeepAlive(this)
 }
 
 // Bold wraps QFont::bold.
@@ -286,6 +303,7 @@ func (this *QFont) SetWeight(weight QFontWeight) {
 func (this *QFont) Bold() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Bold")
 	r := C.qute_QFont_bold(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -297,6 +315,7 @@ func (this *QFont) Bold() bool {
 func (this *QFont) SetBold(bold bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetBold")
 	C.qute_QFont_setBold(self, C.bool(bold))
+	runtime.KeepAlive(this)
 }
 
 // SetStyle wraps QFont::setStyle.
@@ -307,6 +326,7 @@ func (this *QFont) SetBold(bold bool) {
 func (this *QFont) SetStyle(style QFontStyle) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStyle")
 	C.qute_QFont_setStyle(self, C.int64_t(style))
+	runtime.KeepAlive(this)
 }
 
 // Style wraps QFont::style.
@@ -317,6 +337,7 @@ func (this *QFont) SetStyle(style QFontStyle) {
 func (this *QFont) Style() QFontStyle {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Style")
 	r := C.qute_QFont_style(self)
+	runtime.KeepAlive(this)
 	return QFontStyle(r)
 }
 
@@ -328,6 +349,7 @@ func (this *QFont) Style() QFontStyle {
 func (this *QFont) Italic() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Italic")
 	r := C.qute_QFont_italic(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -339,6 +361,7 @@ func (this *QFont) Italic() bool {
 func (this *QFont) SetItalic(bArg bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetItalic")
 	C.qute_QFont_setItalic(self, C.bool(bArg))
+	runtime.KeepAlive(this)
 }
 
 // Underline wraps QFont::underline.
@@ -349,6 +372,7 @@ func (this *QFont) SetItalic(bArg bool) {
 func (this *QFont) Underline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Underline")
 	r := C.qute_QFont_underline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -360,6 +384,7 @@ func (this *QFont) Underline() bool {
 func (this *QFont) SetUnderline(underline bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetUnderline")
 	C.qute_QFont_setUnderline(self, C.bool(underline))
+	runtime.KeepAlive(this)
 }
 
 // Overline wraps QFont::overline.
@@ -370,6 +395,7 @@ func (this *QFont) SetUnderline(underline bool) {
 func (this *QFont) Overline() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Overline")
 	r := C.qute_QFont_overline(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -381,6 +407,7 @@ func (this *QFont) Overline() bool {
 func (this *QFont) SetOverline(overline bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetOverline")
 	C.qute_QFont_setOverline(self, C.bool(overline))
+	runtime.KeepAlive(this)
 }
 
 // StrikeOut wraps QFont::strikeOut.
@@ -391,6 +418,7 @@ func (this *QFont) SetOverline(overline bool) {
 func (this *QFont) StrikeOut() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.StrikeOut")
 	r := C.qute_QFont_strikeOut(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -402,6 +430,7 @@ func (this *QFont) StrikeOut() bool {
 func (this *QFont) SetStrikeOut(strikeOut bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStrikeOut")
 	C.qute_QFont_setStrikeOut(self, C.bool(strikeOut))
+	runtime.KeepAlive(this)
 }
 
 // FixedPitch wraps QFont::fixedPitch.
@@ -412,6 +441,7 @@ func (this *QFont) SetStrikeOut(strikeOut bool) {
 func (this *QFont) FixedPitch() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.FixedPitch")
 	r := C.qute_QFont_fixedPitch(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -423,6 +453,7 @@ func (this *QFont) FixedPitch() bool {
 func (this *QFont) SetFixedPitch(fixedPitch bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetFixedPitch")
 	C.qute_QFont_setFixedPitch(self, C.bool(fixedPitch))
+	runtime.KeepAlive(this)
 }
 
 // Kerning wraps QFont::kerning.
@@ -433,6 +464,7 @@ func (this *QFont) SetFixedPitch(fixedPitch bool) {
 func (this *QFont) Kerning() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Kerning")
 	r := C.qute_QFont_kerning(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -444,6 +476,7 @@ func (this *QFont) Kerning() bool {
 func (this *QFont) SetKerning(kerning bool) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetKerning")
 	C.qute_QFont_setKerning(self, C.bool(kerning))
+	runtime.KeepAlive(this)
 }
 
 // StyleHint wraps QFont::styleHint.
@@ -454,6 +487,7 @@ func (this *QFont) SetKerning(kerning bool) {
 func (this *QFont) StyleHint() QFontStyleHint {
 	self := rt.Use(unsafe.Pointer(this), "QFont.StyleHint")
 	r := C.qute_QFont_styleHint(self)
+	runtime.KeepAlive(this)
 	return QFontStyleHint(r)
 }
 
@@ -465,6 +499,7 @@ func (this *QFont) StyleHint() QFontStyleHint {
 func (this *QFont) StyleStrategy() QFontStyleStrategy {
 	self := rt.Use(unsafe.Pointer(this), "QFont.StyleStrategy")
 	r := C.qute_QFont_styleStrategy(self)
+	runtime.KeepAlive(this)
 	return QFontStyleStrategy(r)
 }
 
@@ -476,6 +511,7 @@ func (this *QFont) StyleStrategy() QFontStyleStrategy {
 func (this *QFont) SetStyleHint(arg0 QFontStyleHint) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStyleHint")
 	C.qute_QFont_setStyleHint(self, C.int64_t(arg0))
+	runtime.KeepAlive(this)
 }
 
 // SetStyleStrategy wraps QFont::setStyleStrategy.
@@ -486,6 +522,7 @@ func (this *QFont) SetStyleHint(arg0 QFontStyleHint) {
 func (this *QFont) SetStyleStrategy(sArg QFontStyleStrategy) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStyleStrategy")
 	C.qute_QFont_setStyleStrategy(self, C.int64_t(sArg))
+	runtime.KeepAlive(this)
 }
 
 // Stretch wraps QFont::stretch.
@@ -496,6 +533,7 @@ func (this *QFont) SetStyleStrategy(sArg QFontStyleStrategy) {
 func (this *QFont) Stretch() int {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Stretch")
 	r := C.qute_QFont_stretch(self)
+	runtime.KeepAlive(this)
 	return int(r)
 }
 
@@ -507,6 +545,7 @@ func (this *QFont) Stretch() int {
 func (this *QFont) SetStretch(stretch int) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStretch")
 	C.qute_QFont_setStretch(self, C.int(stretch))
+	runtime.KeepAlive(this)
 }
 
 // LetterSpacing wraps QFont::letterSpacing.
@@ -517,6 +556,7 @@ func (this *QFont) SetStretch(stretch int) {
 func (this *QFont) LetterSpacing() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QFont.LetterSpacing")
 	r := C.qute_QFont_letterSpacing(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -528,6 +568,7 @@ func (this *QFont) LetterSpacing() float64 {
 func (this *QFont) LetterSpacingType() QFontSpacingType {
 	self := rt.Use(unsafe.Pointer(this), "QFont.LetterSpacingType")
 	r := C.qute_QFont_letterSpacingType(self)
+	runtime.KeepAlive(this)
 	return QFontSpacingType(r)
 }
 
@@ -539,6 +580,7 @@ func (this *QFont) LetterSpacingType() QFontSpacingType {
 func (this *QFont) SetLetterSpacing(typeArg QFontSpacingType, spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetLetterSpacing")
 	C.qute_QFont_setLetterSpacing(self, C.int64_t(typeArg), C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // WordSpacing wraps QFont::wordSpacing.
@@ -549,6 +591,7 @@ func (this *QFont) SetLetterSpacing(typeArg QFontSpacingType, spacing float64) {
 func (this *QFont) WordSpacing() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QFont.WordSpacing")
 	r := C.qute_QFont_wordSpacing(self)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 
@@ -560,6 +603,7 @@ func (this *QFont) WordSpacing() float64 {
 func (this *QFont) SetWordSpacing(spacing float64) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetWordSpacing")
 	C.qute_QFont_setWordSpacing(self, C.double(spacing))
+	runtime.KeepAlive(this)
 }
 
 // SetCapitalization wraps QFont::setCapitalization.
@@ -570,6 +614,7 @@ func (this *QFont) SetWordSpacing(spacing float64) {
 func (this *QFont) SetCapitalization(capitalization QFontCapitalization) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetCapitalization")
 	C.qute_QFont_setCapitalization(self, C.int64_t(capitalization))
+	runtime.KeepAlive(this)
 }
 
 // Capitalization wraps QFont::capitalization.
@@ -580,6 +625,7 @@ func (this *QFont) SetCapitalization(capitalization QFontCapitalization) {
 func (this *QFont) Capitalization() QFontCapitalization {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Capitalization")
 	r := C.qute_QFont_capitalization(self)
+	runtime.KeepAlive(this)
 	return QFontCapitalization(r)
 }
 
@@ -591,6 +637,7 @@ func (this *QFont) Capitalization() QFontCapitalization {
 func (this *QFont) SetHintingPreference(hintingPreference QFontHintingPreference) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetHintingPreference")
 	C.qute_QFont_setHintingPreference(self, C.int64_t(hintingPreference))
+	runtime.KeepAlive(this)
 }
 
 // HintingPreference wraps QFont::hintingPreference.
@@ -601,6 +648,7 @@ func (this *QFont) SetHintingPreference(hintingPreference QFontHintingPreference
 func (this *QFont) HintingPreference() QFontHintingPreference {
 	self := rt.Use(unsafe.Pointer(this), "QFont.HintingPreference")
 	r := C.qute_QFont_hintingPreference(self)
+	runtime.KeepAlive(this)
 	return QFontHintingPreference(r)
 }
 
@@ -612,6 +660,8 @@ func (this *QFont) HintingPreference() QFontHintingPreference {
 func (this *QFont) SetFeature(tag *QFontTag, value uint) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetFeature")
 	C.qute_QFont_setFeature(self, rt.UseArg(unsafe.Pointer(tag), "QFont.SetFeature"), C.uint(value))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 }
 
 // UnsetFeature wraps QFont::unsetFeature.
@@ -622,6 +672,8 @@ func (this *QFont) SetFeature(tag *QFontTag, value uint) {
 func (this *QFont) UnsetFeature(tag *QFontTag) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.UnsetFeature")
 	C.qute_QFont_unsetFeature(self, rt.UseArg(unsafe.Pointer(tag), "QFont.UnsetFeature"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 }
 
 // FeatureValue wraps QFont::featureValue.
@@ -632,6 +684,8 @@ func (this *QFont) UnsetFeature(tag *QFontTag) {
 func (this *QFont) FeatureValue(tag *QFontTag) uint {
 	self := rt.Use(unsafe.Pointer(this), "QFont.FeatureValue")
 	r := C.qute_QFont_featureValue(self, rt.UseArg(unsafe.Pointer(tag), "QFont.FeatureValue"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 	return uint(r)
 }
 
@@ -643,6 +697,8 @@ func (this *QFont) FeatureValue(tag *QFontTag) uint {
 func (this *QFont) IsFeatureSet(tag *QFontTag) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.IsFeatureSet")
 	r := C.qute_QFont_isFeatureSet(self, rt.UseArg(unsafe.Pointer(tag), "QFont.IsFeatureSet"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 	return bool(r)
 }
 
@@ -654,6 +710,7 @@ func (this *QFont) IsFeatureSet(tag *QFontTag) bool {
 func (this *QFont) FeatureTags() []*QFontTag {
 	self := rt.Use(unsafe.Pointer(this), "QFont.FeatureTags")
 	r := C.qute_QFont_featureTags(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QFontTag {
 		return rt.View[QFontTag](rt.WrapClass(e, "QFontTag", rt.TakeOwned), e)
 	})
@@ -667,6 +724,7 @@ func (this *QFont) FeatureTags() []*QFontTag {
 func (this *QFont) ClearFeatures() {
 	self := rt.Use(unsafe.Pointer(this), "QFont.ClearFeatures")
 	C.qute_QFont_clearFeatures(self)
+	runtime.KeepAlive(this)
 }
 
 // SetVariableAxis wraps QFont::setVariableAxis.
@@ -677,6 +735,8 @@ func (this *QFont) ClearFeatures() {
 func (this *QFont) SetVariableAxis(tag *QFontTag, value float32) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetVariableAxis")
 	C.qute_QFont_setVariableAxis(self, rt.UseArg(unsafe.Pointer(tag), "QFont.SetVariableAxis"), C.float(value))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 }
 
 // UnsetVariableAxis wraps QFont::unsetVariableAxis.
@@ -687,6 +747,8 @@ func (this *QFont) SetVariableAxis(tag *QFontTag, value float32) {
 func (this *QFont) UnsetVariableAxis(tag *QFontTag) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.UnsetVariableAxis")
 	C.qute_QFont_unsetVariableAxis(self, rt.UseArg(unsafe.Pointer(tag), "QFont.UnsetVariableAxis"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 }
 
 // IsVariableAxisSet wraps QFont::isVariableAxisSet.
@@ -697,6 +759,8 @@ func (this *QFont) UnsetVariableAxis(tag *QFontTag) {
 func (this *QFont) IsVariableAxisSet(tag *QFontTag) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.IsVariableAxisSet")
 	r := C.qute_QFont_isVariableAxisSet(self, rt.UseArg(unsafe.Pointer(tag), "QFont.IsVariableAxisSet"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 	return bool(r)
 }
 
@@ -708,6 +772,8 @@ func (this *QFont) IsVariableAxisSet(tag *QFontTag) bool {
 func (this *QFont) VariableAxisValue(tag *QFontTag) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QFont.VariableAxisValue")
 	r := C.qute_QFont_variableAxisValue(self, rt.UseArg(unsafe.Pointer(tag), "QFont.VariableAxisValue"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(tag)
 	return float32(r)
 }
 
@@ -719,6 +785,7 @@ func (this *QFont) VariableAxisValue(tag *QFontTag) float32 {
 func (this *QFont) ClearVariableAxes() {
 	self := rt.Use(unsafe.Pointer(this), "QFont.ClearVariableAxes")
 	C.qute_QFont_clearVariableAxes(self)
+	runtime.KeepAlive(this)
 }
 
 // VariableAxisTags wraps QFont::variableAxisTags.
@@ -729,6 +796,7 @@ func (this *QFont) ClearVariableAxes() {
 func (this *QFont) VariableAxisTags() []*QFontTag {
 	self := rt.Use(unsafe.Pointer(this), "QFont.VariableAxisTags")
 	r := C.qute_QFont_variableAxisTags(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QFontTag {
 		return rt.View[QFontTag](rt.WrapClass(e, "QFontTag", rt.TakeOwned), e)
 	})
@@ -742,6 +810,7 @@ func (this *QFont) VariableAxisTags() []*QFontTag {
 func (this *QFont) ExactMatch() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.ExactMatch")
 	r := C.qute_QFont_exactMatch(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -753,6 +822,8 @@ func (this *QFont) ExactMatch() bool {
 func (this *QFont) IsCopyOf(font *QFont) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.IsCopyOf")
 	r := C.qute_QFont_isCopyOf(self, rt.UseArg(unsafe.Pointer(font), "QFont.IsCopyOf"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 	return bool(r)
 }
 
@@ -764,6 +835,7 @@ func (this *QFont) IsCopyOf(font *QFont) bool {
 func (this *QFont) Key() string {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Key")
 	r := C.qute_QFont_key(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -775,6 +847,7 @@ func (this *QFont) Key() string {
 func (this *QFont) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QFont.ToString")
 	r := C.qute_QFont_toString(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -786,6 +859,7 @@ func (this *QFont) ToString() string {
 func (this *QFont) FromString(stringArg string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFont.FromString")
 	r := C.qute_QFont_fromString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -797,6 +871,7 @@ func (this *QFont) FromString(stringArg string) bool {
 func (this *QFont) DefaultFamily() string {
 	self := rt.Use(unsafe.Pointer(this), "QFont.DefaultFamily")
 	r := C.qute_QFont_defaultFamily(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -810,6 +885,8 @@ func (this *QFont) DefaultFamily() string {
 func (this *QFont) Resolve(font *QFont) *QFont {
 	self := rt.Use(unsafe.Pointer(this), "QFont.Resolve")
 	r := C.qute_QFont_resolve(self, rt.UseArg(unsafe.Pointer(font), "QFont.Resolve"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
 }
 
@@ -821,6 +898,7 @@ func (this *QFont) Resolve(font *QFont) *QFont {
 func (this *QFont) ResolveMask() uint {
 	self := rt.Use(unsafe.Pointer(this), "QFont.ResolveMask")
 	r := C.qute_QFont_resolveMask(self)
+	runtime.KeepAlive(this)
 	return uint(r)
 }
 
@@ -832,6 +910,7 @@ func (this *QFont) ResolveMask() uint {
 func (this *QFont) SetResolveMask(maskArg uint) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetResolveMask")
 	C.qute_QFont_setResolveMask(self, C.uint(maskArg))
+	runtime.KeepAlive(this)
 }
 
 // QFontSubstitute wraps QFont::substitute.

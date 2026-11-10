@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -84,6 +85,8 @@ func (this *QItemSelection) Unkeep() {
 func NewQItemSelectionWithModelIndex(topLeft *QModelIndex, bottomRight *QModelIndex) *QItemSelection {
 	rt.CheckThread("NewQItemSelectionWithModelIndex")
 	p := C.qute_QItemSelection_new(rt.UseArg(unsafe.Pointer(topLeft), "NewQItemSelectionWithModelIndex"), rt.UseArg(unsafe.Pointer(bottomRight), "NewQItemSelectionWithModelIndex"))
+	runtime.KeepAlive(topLeft)
+	runtime.KeepAlive(bottomRight)
 	h := rt.WrapClass(p, "QItemSelection", rt.NewOwned)
 	return rt.View[QItemSelection](h, p)
 }
@@ -96,6 +99,9 @@ func NewQItemSelectionWithModelIndex(topLeft *QModelIndex, bottomRight *QModelIn
 func (this *QItemSelection) Select(topLeft *QModelIndex, bottomRight *QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelection.Select")
 	C.qute_QItemSelection_select(self, rt.UseArg(unsafe.Pointer(topLeft), "QItemSelection.Select"), rt.UseArg(unsafe.Pointer(bottomRight), "QItemSelection.Select"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(topLeft)
+	runtime.KeepAlive(bottomRight)
 }
 
 // Contains wraps QItemSelection::contains.
@@ -106,6 +112,8 @@ func (this *QItemSelection) Select(topLeft *QModelIndex, bottomRight *QModelInde
 func (this *QItemSelection) Contains(index *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelection.Contains")
 	r := C.qute_QItemSelection_contains(self, rt.UseArg(unsafe.Pointer(index), "QItemSelection.Contains"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -117,6 +125,7 @@ func (this *QItemSelection) Contains(index *QModelIndex) bool {
 func (this *QItemSelection) Indexes() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelection.Indexes")
 	r := C.qute_QItemSelection_indexes(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})
@@ -130,6 +139,8 @@ func (this *QItemSelection) Indexes() []*QModelIndex {
 func (this *QItemSelection) Merge(other *QItemSelection, command QItemSelectionModelSelectionFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelection.Merge")
 	C.qute_QItemSelection_merge(self, rt.Use(unsafe.Pointer(other), "QItemSelection.Merge"), C.int64_t(command))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
 }
 
 // QItemSelectionSplit wraps QItemSelection::split.
@@ -140,4 +151,7 @@ func (this *QItemSelection) Merge(other *QItemSelection, command QItemSelectionM
 func QItemSelectionSplit(rangeArg *QItemSelectionRange, other *QItemSelectionRange, result *QItemSelection) {
 	rt.CheckThread("QItemSelectionSplit")
 	C.qute_QItemSelection_split(rt.UseArg(unsafe.Pointer(rangeArg), "QItemSelectionSplit"), rt.UseArg(unsafe.Pointer(other), "QItemSelectionSplit"), rt.UseArg(unsafe.Pointer(result), "QItemSelectionSplit"))
+	runtime.KeepAlive(rangeArg)
+	runtime.KeepAlive(other)
+	runtime.KeepAlive(result)
 }

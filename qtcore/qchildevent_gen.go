@@ -5,6 +5,7 @@ package qtcore
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -42,6 +43,7 @@ func QChildEventFromPtr(p unsafe.Pointer, own Ownership) *QChildEvent {
 func (this *QChildEvent) Child() *QObject {
 	self := rt.Use(unsafe.Pointer(this), "QChildEvent.Child")
 	r := C.qute_QChildEvent_child(self)
+	runtime.KeepAlive(this)
 	return rt.View[QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
 
@@ -53,6 +55,7 @@ func (this *QChildEvent) Child() *QObject {
 func (this *QChildEvent) Added() bool {
 	self := rt.Use(unsafe.Pointer(this), "QChildEvent.Added")
 	r := C.qute_QChildEvent_added(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -64,6 +67,7 @@ func (this *QChildEvent) Added() bool {
 func (this *QChildEvent) Polished() bool {
 	self := rt.Use(unsafe.Pointer(this), "QChildEvent.Polished")
 	r := C.qute_QChildEvent_polished(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -75,5 +79,6 @@ func (this *QChildEvent) Polished() bool {
 func (this *QChildEvent) Removed() bool {
 	self := rt.Use(unsafe.Pointer(this), "QChildEvent.Removed")
 	r := C.qute_QChildEvent_removed(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }

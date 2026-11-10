@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQCommandLinkButton(parent QWidgetLike) *QCommandLinkButton {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButton")
 	}
 	p := C.qute_QCommandLinkButton_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -83,6 +85,7 @@ func NewQCommandLinkButtonWithText(text string, parent QWidgetLike) *QCommandLin
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButtonWithText")
 	}
 	p := C.qute_QCommandLinkButton_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -105,6 +108,7 @@ func NewQCommandLinkButtonWithDescription(text string, description string, paren
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButtonWithDescription")
 	}
 	p := C.qute_QCommandLinkButton_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -121,6 +125,7 @@ func NewQCommandLinkButtonWithDescription(text string, description string, paren
 func (this *QCommandLinkButton) Description() string {
 	self := rt.Use(unsafe.Pointer(this), "QCommandLinkButton.Description")
 	r := C.qute_QCommandLinkButton_description(self)
+	runtime.KeepAlive(this)
 	return quteStr(r)
 }
 
@@ -132,6 +137,7 @@ func (this *QCommandLinkButton) Description() string {
 func (this *QCommandLinkButton) SetDescription(description string) {
 	self := rt.Use(unsafe.Pointer(this), "QCommandLinkButton.SetDescription")
 	C.qute_QCommandLinkButton_setDescription(self, (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)))
+	runtime.KeepAlive(this)
 }
 
 // InitStyleOption wraps QCommandLinkButton::initStyleOption.
@@ -142,4 +148,6 @@ func (this *QCommandLinkButton) SetDescription(description string) {
 func (this *QCommandLinkButton) InitStyleOption(option *QStyleOptionButton) {
 	self := rt.Use(unsafe.Pointer(this), "QCommandLinkButton.InitStyleOption")
 	C.qute_QCommandLinkButton_initStyleOption(self, rt.UseArg(unsafe.Pointer(option), "QCommandLinkButton.InitStyleOption"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
 }

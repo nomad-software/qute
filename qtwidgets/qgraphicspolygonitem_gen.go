@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -46,6 +47,7 @@ func NewQGraphicsPolygonItem(parent QGraphicsItemLike) *QGraphicsPolygonItem {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPolygonItem")
 	}
 	p := C.qute_QGraphicsPolygonItem_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -72,6 +74,7 @@ func NewQGraphicsPolygonItemWithPointFs(polygon []qtcore.QPointF, parent QGraphi
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPolygonItemWithPointFs")
 	}
 	p := C.qute_QGraphicsPolygonItem_new_1(unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)), parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -88,6 +91,7 @@ func NewQGraphicsPolygonItemWithPointFs(polygon []qtcore.QPointF, parent QGraphi
 func (this *QGraphicsPolygonItem) Polygon() []qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPolygonItem.Polygon")
 	r := C.qute_QGraphicsPolygonItem_polygon(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
 }
 
@@ -103,6 +107,7 @@ func (this *QGraphicsPolygonItem) SetPolygon(polygon []qtcore.QPointF) {
 		polygonC[i] = cQPointF(polygon[i])
 	}
 	C.qute_QGraphicsPolygonItem_setPolygon(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
+	runtime.KeepAlive(this)
 }
 
 // FillRule wraps QGraphicsPolygonItem::fillRule.
@@ -113,6 +118,7 @@ func (this *QGraphicsPolygonItem) SetPolygon(polygon []qtcore.QPointF) {
 func (this *QGraphicsPolygonItem) FillRule() qtcore.FillRule {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPolygonItem.FillRule")
 	r := C.qute_QGraphicsPolygonItem_fillRule(self)
+	runtime.KeepAlive(this)
 	return qtcore.FillRule(r)
 }
 
@@ -124,4 +130,5 @@ func (this *QGraphicsPolygonItem) FillRule() qtcore.FillRule {
 func (this *QGraphicsPolygonItem) SetFillRule(rule qtcore.FillRule) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsPolygonItem.SetFillRule")
 	C.qute_QGraphicsPolygonItem_setFillRule(self, C.int64_t(rule))
+	runtime.KeepAlive(this)
 }

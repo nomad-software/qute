@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -60,6 +61,10 @@ func (this *QAbstractItemDelegate) Paint(painter qtgui.QPainterLike, option *QSt
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QAbstractItemDelegate.Paint")
 	}
 	C.qute_QAbstractItemDelegate_paint(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.Paint"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.Paint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(index)
 }
 
 // SizeHint wraps QAbstractItemDelegate::sizeHint.
@@ -70,6 +75,9 @@ func (this *QAbstractItemDelegate) Paint(painter qtgui.QPainterLike, option *QSt
 func (this *QAbstractItemDelegate) SizeHint(option *QStyleOptionViewItem, index *qtcore.QModelIndex) qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.SizeHint")
 	r := C.qute_QAbstractItemDelegate_sizeHint(self, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.SizeHint"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.SizeHint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(index)
 	return goQSize(r)
 }
 
@@ -89,6 +97,10 @@ func (this *QAbstractItemDelegate) CreateEditor(parent QWidgetLike, option *QSty
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QAbstractItemDelegate.CreateEditor")
 	}
 	r := C.qute_QAbstractItemDelegate_createEditor(self, parentPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.CreateEditor"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.CreateEditor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(index)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeParented), r)
 }
 
@@ -104,6 +116,9 @@ func (this *QAbstractItemDelegate) DestroyEditor(editor QWidgetLike, index *qtco
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemDelegate.DestroyEditor")
 	}
 	C.qute_QAbstractItemDelegate_destroyEditor(self, editorPtr, rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.DestroyEditor"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(editor)
+	runtime.KeepAlive(index)
 }
 
 // SetEditorData wraps QAbstractItemDelegate::setEditorData.
@@ -118,6 +133,9 @@ func (this *QAbstractItemDelegate) SetEditorData(editor QWidgetLike, index *qtco
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemDelegate.SetEditorData")
 	}
 	C.qute_QAbstractItemDelegate_setEditorData(self, editorPtr, rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.SetEditorData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(editor)
+	runtime.KeepAlive(index)
 }
 
 // SetModelData wraps QAbstractItemDelegate::setModelData.
@@ -136,6 +154,10 @@ func (this *QAbstractItemDelegate) SetModelData(editor QWidgetLike, model qtcore
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QAbstractItemDelegate.SetModelData")
 	}
 	C.qute_QAbstractItemDelegate_setModelData(self, editorPtr, modelPtr, rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.SetModelData"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(editor)
+	runtime.KeepAlive(model)
+	runtime.KeepAlive(index)
 }
 
 // UpdateEditorGeometry wraps QAbstractItemDelegate::updateEditorGeometry.
@@ -150,6 +172,10 @@ func (this *QAbstractItemDelegate) UpdateEditorGeometry(editor QWidgetLike, opti
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemDelegate.UpdateEditorGeometry")
 	}
 	C.qute_QAbstractItemDelegate_updateEditorGeometry(self, editorPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.UpdateEditorGeometry"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.UpdateEditorGeometry"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(editor)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(index)
 }
 
 // EditorEvent wraps QAbstractItemDelegate::editorEvent.
@@ -168,6 +194,11 @@ func (this *QAbstractItemDelegate) EditorEvent(event qtcore.QEventLike, model qt
 		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QAbstractItemDelegate.EditorEvent")
 	}
 	r := C.qute_QAbstractItemDelegate_editorEvent(self, eventPtr, modelPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.EditorEvent"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.EditorEvent"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(event)
+	runtime.KeepAlive(model)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -187,6 +218,9 @@ func (this *QAbstractItemDelegate) HandleEditorEvent(object qtcore.QObjectLike, 
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemDelegate.HandleEditorEvent")
 	}
 	r := C.qute_QAbstractItemDelegate_handleEditorEvent(self, objectPtr, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
 	return bool(r)
 }
 
@@ -206,6 +240,11 @@ func (this *QAbstractItemDelegate) HelpEvent(event qtgui.QHelpEventLike, view QA
 		viewPtr = rt.UseArg(unsafe.Pointer(view.AsQAbstractItemView()), "QAbstractItemDelegate.HelpEvent")
 	}
 	r := C.qute_QAbstractItemDelegate_helpEvent(self, eventPtr, viewPtr, rt.UseArg(unsafe.Pointer(option), "QAbstractItemDelegate.HelpEvent"), rt.UseArg(unsafe.Pointer(index), "QAbstractItemDelegate.HelpEvent"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(event)
+	runtime.KeepAlive(view)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(index)
 	return bool(r)
 }
 
@@ -217,6 +256,7 @@ func (this *QAbstractItemDelegate) HelpEvent(event qtgui.QHelpEventLike, view QA
 func (this *QAbstractItemDelegate) PaintingRoles() []int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.PaintingRoles")
 	r := C.qute_QAbstractItemDelegate_paintingRoles(self)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e C.int) int { return int(e) })
 }
 
@@ -232,6 +272,8 @@ func (this *QAbstractItemDelegate) EmitCommitData(editor QWidgetLike) {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemDelegate.EmitCommitData")
 	}
 	C.qute_QAbstractItemDelegate_commitData_1(self, editorPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(editor)
 }
 
 // EmitCloseEditor wraps emitting the closeEditor signal.
@@ -246,6 +288,8 @@ func (this *QAbstractItemDelegate) EmitCloseEditor(editor QWidgetLike) {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemDelegate.EmitCloseEditor")
 	}
 	C.qute_QAbstractItemDelegate_closeEditor_1(self, editorPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(editor)
 }
 
 // EmitSizeHintChanged wraps emitting the sizeHintChanged signal.
@@ -256,6 +300,8 @@ func (this *QAbstractItemDelegate) EmitCloseEditor(editor QWidgetLike) {
 func (this *QAbstractItemDelegate) EmitSizeHintChanged(modelIndex *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemDelegate.EmitSizeHintChanged")
 	C.qute_QAbstractItemDelegate_sizeHintChanged_1(self, rt.UseArg(unsafe.Pointer(modelIndex), "QAbstractItemDelegate.EmitSizeHintChanged"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(modelIndex)
 }
 
 // OnCommitData connects f to the commitData signal. The connection ends when the

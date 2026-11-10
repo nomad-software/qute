@@ -5,6 +5,7 @@ package qtwidgets
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -61,6 +62,7 @@ func NewQScrollArea(parent QWidgetLike) *QScrollArea {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollArea")
 	}
 	p := C.qute_QScrollArea_new(parentPtr)
+	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
 		mode = rt.NewParented
@@ -79,6 +81,7 @@ func NewQScrollArea(parent QWidgetLike) *QScrollArea {
 func (this *QScrollArea) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.Widget")
 	r := C.qute_QScrollArea_widget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
@@ -97,6 +100,8 @@ func (this *QScrollArea) SetWidget(widget QWidgetLike) {
 		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QScrollArea.SetWidget")
 	}
 	C.qute_QScrollArea_setWidget(self, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
 	widgetH.TransferToCpp()
 }
 
@@ -110,6 +115,7 @@ func (this *QScrollArea) SetWidget(widget QWidgetLike) {
 func (this *QScrollArea) TakeWidget() *QWidget {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.TakeWidget")
 	r := C.qute_QScrollArea_takeWidget(self)
+	runtime.KeepAlive(this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeOwned), r)
 }
 
@@ -121,6 +127,7 @@ func (this *QScrollArea) TakeWidget() *QWidget {
 func (this *QScrollArea) WidgetResizable() bool {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.WidgetResizable")
 	r := C.qute_QScrollArea_widgetResizable(self)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -132,6 +139,7 @@ func (this *QScrollArea) WidgetResizable() bool {
 func (this *QScrollArea) SetWidgetResizable(resizable bool) {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.SetWidgetResizable")
 	C.qute_QScrollArea_setWidgetResizable(self, C.bool(resizable))
+	runtime.KeepAlive(this)
 }
 
 // FocusNextPrevChild wraps QScrollArea::focusNextPrevChild.
@@ -142,6 +150,7 @@ func (this *QScrollArea) SetWidgetResizable(resizable bool) {
 func (this *QScrollArea) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.FocusNextPrevChild")
 	r := C.qute_QScrollArea_focusNextPrevChild(self, C.bool(next))
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
@@ -153,6 +162,7 @@ func (this *QScrollArea) FocusNextPrevChild(next bool) bool {
 func (this *QScrollArea) Alignment() qtcore.Alignment {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.Alignment")
 	r := C.qute_QScrollArea_alignment(self)
+	runtime.KeepAlive(this)
 	return qtcore.Alignment(r)
 }
 
@@ -164,6 +174,7 @@ func (this *QScrollArea) Alignment() qtcore.Alignment {
 func (this *QScrollArea) SetAlignment(alignment qtcore.Alignment) {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.SetAlignment")
 	C.qute_QScrollArea_setAlignment(self, C.int64_t(alignment))
+	runtime.KeepAlive(this)
 }
 
 // EnsureVisible wraps QScrollArea::ensureVisible.
@@ -174,6 +185,7 @@ func (this *QScrollArea) SetAlignment(alignment qtcore.Alignment) {
 func (this *QScrollArea) EnsureVisible(x int, y int) {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.EnsureVisible")
 	C.qute_QScrollArea_ensureVisible(self, C.int(x), C.int(y))
+	runtime.KeepAlive(this)
 }
 
 // EnsureWidgetVisible wraps QScrollArea::ensureWidgetVisible.
@@ -188,4 +200,6 @@ func (this *QScrollArea) EnsureWidgetVisible(childWidget QWidgetLike) {
 		childWidgetPtr = rt.UseArg(unsafe.Pointer(childWidget.AsQWidget()), "QScrollArea.EnsureWidgetVisible")
 	}
 	C.qute_QScrollArea_ensureWidgetVisible(self, childWidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(childWidget)
 }
