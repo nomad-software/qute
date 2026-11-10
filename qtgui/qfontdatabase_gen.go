@@ -114,6 +114,8 @@ func QFontDatabaseWritingSystemsWithFamily(family string) []QFontDatabaseWriting
 //
 //	C++: QStringList QFontDatabase::families(WritingSystem writingSystem = …)
 //
+// Arguments with C++ defaults are left at them; QFontDatabaseFamiliesFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#families
 func QFontDatabaseFamilies() []string {
 	rt.CheckThread("QFontDatabaseFamilies")
@@ -135,6 +137,8 @@ func QFontDatabaseStyles(family string) []string {
 // QFontDatabasePointSizes wraps QFontDatabase::pointSizes.
 //
 //	C++: QList<int> QFontDatabase::pointSizes(const QString & family, const QString & style = …)
+//
+// Arguments with C++ defaults are left at them; QFontDatabasePointSizesFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#pointSizes
 func QFontDatabasePointSizes(family string) []int {
@@ -195,6 +199,8 @@ func QFontDatabaseFont(family string, style string, pointSize int) *QFont {
 //
 //	C++: bool QFontDatabase::isBitmapScalable(const QString & family, const QString & style = …)
 //
+// Arguments with C++ defaults are left at them; QFontDatabaseIsBitmapScalableFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isBitmapScalable
 func QFontDatabaseIsBitmapScalable(family string) bool {
 	rt.CheckThread("QFontDatabaseIsBitmapScalable")
@@ -205,6 +211,8 @@ func QFontDatabaseIsBitmapScalable(family string) bool {
 // QFontDatabaseIsSmoothlyScalable wraps QFontDatabase::isSmoothlyScalable.
 //
 //	C++: bool QFontDatabase::isSmoothlyScalable(const QString & family, const QString & style = …)
+//
+// Arguments with C++ defaults are left at them; QFontDatabaseIsSmoothlyScalableFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isSmoothlyScalable
 func QFontDatabaseIsSmoothlyScalable(family string) bool {
@@ -217,6 +225,8 @@ func QFontDatabaseIsSmoothlyScalable(family string) bool {
 //
 //	C++: bool QFontDatabase::isScalable(const QString & family, const QString & style = …)
 //
+// Arguments with C++ defaults are left at them; QFontDatabaseIsScalableFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isScalable
 func QFontDatabaseIsScalable(family string) bool {
 	rt.CheckThread("QFontDatabaseIsScalable")
@@ -227,6 +237,8 @@ func QFontDatabaseIsScalable(family string) bool {
 // QFontDatabaseIsFixedPitch wraps QFontDatabase::isFixedPitch.
 //
 //	C++: bool QFontDatabase::isFixedPitch(const QString & family, const QString & style = …)
+//
+// Arguments with C++ defaults are left at them; QFontDatabaseIsFixedPitchFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isFixedPitch
 func QFontDatabaseIsFixedPitch(family string) bool {
@@ -393,10 +405,10 @@ func QFontDatabaseRemoveApplicationFallbackFontFamily(script qtcore.QCharScript,
 //	C++: void QFontDatabase::setApplicationFallbackFontFamilies(QChar::Script, const QStringList & familyNames)
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#setApplicationFallbackFontFamilies
-func QFontDatabaseSetApplicationFallbackFontFamilies(arg0 qtcore.QCharScript, familyNames []string) {
+func QFontDatabaseSetApplicationFallbackFontFamilies(script qtcore.QCharScript, familyNames []string) {
 	rt.CheckThread("QFontDatabaseSetApplicationFallbackFontFamilies")
 	familyNamesData, familyNamesLens := quteStrListArg(familyNames)
-	C.qute_QFontDatabase_setApplicationFallbackFontFamilies(C.int64_t(arg0), (*C.char)(unsafe.Pointer(unsafe.SliceData(familyNamesData))), (*C.ptrdiff_t)(unsafe.SliceData(familyNamesLens)), C.ptrdiff_t(len(familyNames)))
+	C.qute_QFontDatabase_setApplicationFallbackFontFamilies(C.int64_t(script), (*C.char)(unsafe.Pointer(unsafe.SliceData(familyNamesData))), (*C.ptrdiff_t)(unsafe.SliceData(familyNamesLens)), C.ptrdiff_t(len(familyNames)))
 }
 
 // QFontDatabaseApplicationFallbackFontFamilies wraps QFontDatabase::applicationFallbackFontFamilies.
@@ -464,4 +476,82 @@ func QFontDatabaseGetSystemFont(typeArg QFontDatabaseSystemFont) *QFont {
 	rt.CheckThread("QFontDatabaseGetSystemFont")
 	r := C.qute_QFontDatabase_systemFont(C.int64_t(typeArg))
 	return rt.View[QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r)
+}
+
+// QFontDatabaseFamiliesFull wraps QFontDatabase::families.
+//
+//	C++: QStringList QFontDatabase::families(WritingSystem writingSystem = …)
+//
+// QFontDatabaseFamiliesFull is QFontDatabaseFamilies with every argument, including those QFontDatabaseFamilies leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#families
+func QFontDatabaseFamiliesFull(writingSystem QFontDatabaseWritingSystem) []string {
+	rt.CheckThread("QFontDatabaseFamiliesFull")
+	r := C.qute_QFontDatabase_families_1(C.int64_t(writingSystem))
+	return quteStrList(r)
+}
+
+// QFontDatabasePointSizesFull wraps QFontDatabase::pointSizes.
+//
+//	C++: QList<int> QFontDatabase::pointSizes(const QString & family, const QString & style = …)
+//
+// QFontDatabasePointSizesFull is QFontDatabasePointSizes with every argument, including those QFontDatabasePointSizes leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#pointSizes
+func QFontDatabasePointSizesFull(family string, style string) []int {
+	rt.CheckThread("QFontDatabasePointSizesFull")
+	r := C.qute_QFontDatabase_pointSizes_1((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), (*C.char)(unsafe.Pointer(unsafe.StringData(style))), C.ptrdiff_t(len(style)))
+	return quteList(r, func(e C.int) int { return int(e) })
+}
+
+// QFontDatabaseIsBitmapScalableFull wraps QFontDatabase::isBitmapScalable.
+//
+//	C++: bool QFontDatabase::isBitmapScalable(const QString & family, const QString & style = …)
+//
+// QFontDatabaseIsBitmapScalableFull is QFontDatabaseIsBitmapScalable with every argument, including those QFontDatabaseIsBitmapScalable leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isBitmapScalable
+func QFontDatabaseIsBitmapScalableFull(family string, style string) bool {
+	rt.CheckThread("QFontDatabaseIsBitmapScalableFull")
+	r := C.qute_QFontDatabase_isBitmapScalable_1((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), (*C.char)(unsafe.Pointer(unsafe.StringData(style))), C.ptrdiff_t(len(style)))
+	return bool(r)
+}
+
+// QFontDatabaseIsSmoothlyScalableFull wraps QFontDatabase::isSmoothlyScalable.
+//
+//	C++: bool QFontDatabase::isSmoothlyScalable(const QString & family, const QString & style = …)
+//
+// QFontDatabaseIsSmoothlyScalableFull is QFontDatabaseIsSmoothlyScalable with every argument, including those QFontDatabaseIsSmoothlyScalable leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isSmoothlyScalable
+func QFontDatabaseIsSmoothlyScalableFull(family string, style string) bool {
+	rt.CheckThread("QFontDatabaseIsSmoothlyScalableFull")
+	r := C.qute_QFontDatabase_isSmoothlyScalable_1((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), (*C.char)(unsafe.Pointer(unsafe.StringData(style))), C.ptrdiff_t(len(style)))
+	return bool(r)
+}
+
+// QFontDatabaseIsScalableFull wraps QFontDatabase::isScalable.
+//
+//	C++: bool QFontDatabase::isScalable(const QString & family, const QString & style = …)
+//
+// QFontDatabaseIsScalableFull is QFontDatabaseIsScalable with every argument, including those QFontDatabaseIsScalable leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isScalable
+func QFontDatabaseIsScalableFull(family string, style string) bool {
+	rt.CheckThread("QFontDatabaseIsScalableFull")
+	r := C.qute_QFontDatabase_isScalable_1((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), (*C.char)(unsafe.Pointer(unsafe.StringData(style))), C.ptrdiff_t(len(style)))
+	return bool(r)
+}
+
+// QFontDatabaseIsFixedPitchFull wraps QFontDatabase::isFixedPitch.
+//
+//	C++: bool QFontDatabase::isFixedPitch(const QString & family, const QString & style = …)
+//
+// QFontDatabaseIsFixedPitchFull is QFontDatabaseIsFixedPitch with every argument, including those QFontDatabaseIsFixedPitch leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdatabase.html#isFixedPitch
+func QFontDatabaseIsFixedPitchFull(family string, style string) bool {
+	rt.CheckThread("QFontDatabaseIsFixedPitchFull")
+	r := C.qute_QFontDatabase_isFixedPitch_1((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), (*C.char)(unsafe.Pointer(unsafe.StringData(style))), C.ptrdiff_t(len(style)))
+	return bool(r)
 }

@@ -106,6 +106,8 @@ func NewQBrushWithStyle(bs qtcore.BrushStyle) *QBrush {
 //
 //	C++: QBrush::QBrush(const QColor & color, Qt::BrushStyle bs = …)
 //
+// Arguments with C++ defaults are left at them; NewQBrushWithColorFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbrush.html#QBrush
 func NewQBrushWithColor(color QColor) *QBrush {
 	rt.CheckThread("NewQBrushWithColor")
@@ -162,6 +164,20 @@ func NewQBrushWithGradient(gradient *QGradient) *QBrush {
 	rt.CheckThread("NewQBrushWithGradient")
 	p := C.qute_QBrush_new_6(rt.UseArg(unsafe.Pointer(gradient), "NewQBrushWithGradient"))
 	runtime.KeepAlive(gradient)
+	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	return rt.View[QBrush](h, p)
+}
+
+// NewQBrushWithColorFull wraps the QBrush constructor.
+//
+//	C++: QBrush::QBrush(const QColor & color, Qt::BrushStyle bs = …)
+//
+// NewQBrushWithColorFull is NewQBrushWithColor with every argument, including those NewQBrushWithColor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbrush.html#QBrush
+func NewQBrushWithColorFull(color QColor, bs qtcore.BrushStyle) *QBrush {
+	rt.CheckThread("NewQBrushWithColorFull")
+	p := C.qute_QBrush_new_7(cQColor(color), C.int64_t(bs))
 	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }

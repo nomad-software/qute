@@ -29,6 +29,11 @@ func init() {
 	rt.RegisterClass("QImage", rt.KindValue, func(p unsafe.Pointer) { C.qute_QImage_delete(p) })
 }
 
+// Each QImage counts the bytes it holds outside the Go heap, so GC runs as they add up.
+func init() {
+	rt.RegisterMemory("QImage", func(p unsafe.Pointer) int64 { return int64(C.qute_QImage_memory(p)) })
+}
+
 // QImageFromPtr wraps an existing C++ QImage. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QImageFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QImage {
@@ -91,10 +96,28 @@ func NewQImageWithPtrBytesPerLine(data unsafe.Pointer, width int, height int, by
 //
 //	C++: QImage::QImage(const QString & fileName, const char * format = …)
 //
+// Arguments with C++ defaults are left at them; NewQImageWithFileNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
 func NewQImageWithFileName(fileName string) *QImage {
 	rt.CheckThread("NewQImageWithFileName")
 	p := C.qute_QImage_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	return rt.View[QImage](h, p)
+}
+
+// NewQImageWithFileNameFull wraps the QImage constructor.
+//
+//	C++: QImage::QImage(const QString & fileName, const char * format = …)
+//
+// NewQImageWithFileNameFull is NewQImageWithFileName with every argument, including those NewQImageWithFileName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#QImage
+func NewQImageWithFileNameFull(fileName string, format string) *QImage {
+	rt.CheckThread("NewQImageWithFileNameFull")
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	p := C.qute_QImage_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), formatCStr)
 	h := rt.WrapClass(p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
@@ -116,6 +139,8 @@ func (this *QImage) IsNull() bool {
 //	C++: QImage QImage::copy(const QRect & rect = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; CopyFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#copy
 func (this *QImage) Copy() *QImage {
@@ -143,6 +168,8 @@ func (this *QImage) Format() QImageFormat {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ConvertToFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToFormat
 func (this *QImage) ConvertToFormat(fArg QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFormat")
@@ -156,6 +183,8 @@ func (this *QImage) ConvertToFormat(fArg QImageFormat) *QImage {
 //	C++: QImage QImage::convertToFormat(Format f, const QList<QRgb> & colorTable, Qt::ImageConversionFlags flags = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ConvertToFormatWithColorTableFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToFormat
 func (this *QImage) ConvertToFormatWithColorTable(fArg QImageFormat, colorTable []uint) *QImage {
@@ -187,6 +216,8 @@ func (this *QImage) ReinterpretAsFormat(fArg QImageFormat) bool {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ConvertedToFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertedTo
 func (this *QImage) ConvertedTo(fArg QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedTo")
@@ -199,11 +230,14 @@ func (this *QImage) ConvertedTo(fArg QImageFormat) *QImage {
 //
 //	C++: void QImage::convertTo(Format f, Qt::ImageConversionFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; ConvertToFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertTo
 func (this *QImage) ConvertTo(fArg QImageFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertTo")
 	C.qute_QImage_convertTo(self, C.int64_t(fArg))
 	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 }
 
 // Size wraps QImage::size.
@@ -544,6 +578,8 @@ func (this *QImage) SetAlphaChannel(alphaChannel *QImage) {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; CreateAlphaMaskFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#createAlphaMask
 func (this *QImage) CreateAlphaMask() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.CreateAlphaMask")
@@ -557,6 +593,8 @@ func (this *QImage) CreateAlphaMask() *QImage {
 //	C++: QImage QImage::createHeuristicMask(bool clipTight = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; CreateHeuristicMaskFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#createHeuristicMask
 func (this *QImage) CreateHeuristicMask() *QImage {
@@ -572,6 +610,8 @@ func (this *QImage) CreateHeuristicMask() *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; CreateMaskFromColorFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#createMaskFromColor
 func (this *QImage) CreateMaskFromColor(color uint) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.CreateMaskFromColor")
@@ -585,6 +625,8 @@ func (this *QImage) CreateMaskFromColor(color uint) *QImage {
 //	C++: QImage QImage::scaled(int w, int h, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ScaledFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#scaled
 func (this *QImage) Scaled(w int, hArg int) *QImage {
@@ -600,6 +642,8 @@ func (this *QImage) Scaled(w int, hArg int) *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ScaledToWidthFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#scaledToWidth
 func (this *QImage) ScaledToWidth(w int) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledToWidth")
@@ -614,6 +658,8 @@ func (this *QImage) ScaledToWidth(w int) *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ScaledToHeightFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#scaledToHeight
 func (this *QImage) ScaledToHeight(hArg int) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledToHeight")
@@ -627,6 +673,8 @@ func (this *QImage) ScaledToHeight(hArg int) *QImage {
 //	C++: QImage QImage::transformed(const QTransform & matrix, Qt::TransformationMode mode = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; TransformedFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#transformed
 func (this *QImage) Transformed(matrix *QTransform) *QImage {
@@ -657,6 +705,8 @@ func (this *QImage) RgbSwapped() *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; FlippedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#flipped
 func (this *QImage) Flipped() *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Flipped")
@@ -668,6 +718,8 @@ func (this *QImage) Flipped() *QImage {
 // Flip wraps QImage::flip.
 //
 //	C++: void QImage::flip(Qt::Orientations orient = …)
+//
+// Arguments with C++ defaults are left at them; FlipFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#flip
 func (this *QImage) Flip() {
@@ -690,6 +742,8 @@ func (this *QImage) RgbSwap() {
 // InvertPixels wraps QImage::invertPixels.
 //
 //	C++: void QImage::invertPixels(InvertMode = …)
+//
+// Arguments with C++ defaults are left at them; InvertPixelsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#invertPixels
 func (this *QImage) InvertPixels() {
@@ -733,6 +787,8 @@ func (this *QImage) ConvertedToColorSpace(colorSpace *QColorSpace) *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ConvertedToColorSpaceWithFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertedToColorSpace
 func (this *QImage) ConvertedToColorSpaceWithFormat(colorSpace *QColorSpace, format QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToColorSpaceWithFormat")
@@ -757,6 +813,8 @@ func (this *QImage) ConvertToColorSpace(colorSpace *QColorSpace) {
 // ConvertToColorSpaceWithFormat wraps QImage::convertToColorSpace.
 //
 //	C++: void QImage::convertToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …)
+//
+// Arguments with C++ defaults are left at them; ConvertToColorSpaceWithFormatFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToColorSpace
 func (this *QImage) ConvertToColorSpaceWithFormat(colorSpace *QColorSpace, format QImageFormat) {
@@ -799,6 +857,8 @@ func (this *QImage) ColorTransformed(transform *QColorTransform) *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ColorTransformedWithFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#colorTransformed
 func (this *QImage) ColorTransformedWithFormat(transform *QColorTransform, format QImageFormat) *QImage {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTransformedWithFormat")
@@ -824,6 +884,8 @@ func (this *QImage) ApplyColorTransform(transform *QColorTransform) {
 //
 //	C++: void QImage::applyColorTransform(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; ApplyColorTransformWithFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#applyColorTransform
 func (this *QImage) ApplyColorTransformWithFormat(transform *QColorTransform, format QImageFormat) {
 	self := rt.Use(unsafe.Pointer(this), "QImage.ApplyColorTransformWithFormat")
@@ -848,6 +910,7 @@ func (this *QImage) LoadFrom(device qtcore.QIODeviceLike, format string) error {
 	r := C.qute_QImage_load(self, devicePtr, formatCStr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(device)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 	if !bool(r) {
 		return fmt.Errorf("QImage.LoadFrom: failed")
 	}
@@ -858,11 +921,14 @@ func (this *QImage) LoadFrom(device qtcore.QIODeviceLike, format string) error {
 //
 //	C++: bool QImage::load(const QString & fileName, const char * format = …)
 //
+// Arguments with C++ defaults are left at them; LoadFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#load
 func (this *QImage) Load(fileName string) error {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Load")
 	r := C.qute_QImage_load_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
 	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 	if !bool(r) {
 		return fmt.Errorf("QImage.Load: failed")
 	}
@@ -873,17 +939,22 @@ func (this *QImage) Load(fileName string) error {
 //
 //	C++: bool QImage::loadFromData(QByteArrayView data, const char * format = …)
 //
+// Arguments with C++ defaults are left at them; LoadFromDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#loadFromData
 func (this *QImage) LoadFromData(data []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QImage.LoadFromData")
 	r := C.qute_QImage_loadFromData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
 	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 	return bool(r)
 }
 
 // Save wraps QImage::save.
 //
 //	C++: bool QImage::save(const QString & fileName, const char * format = …, int quality = …) const
+//
+// Arguments with C++ defaults are left at them; SaveFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#save
 func (this *QImage) Save(fileName string) error {
@@ -899,6 +970,8 @@ func (this *QImage) Save(fileName string) error {
 // SaveTo wraps QImage::save.
 //
 //	C++: bool QImage::save(QIODevice * device, const char * format = …, int quality = …) const
+//
+// Arguments with C++ defaults are left at them; SaveToFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#save
 func (this *QImage) SaveTo(device qtcore.QIODeviceLike) error {
@@ -1013,6 +1086,8 @@ func (this *QImage) TextKeys() []string {
 //
 //	C++: QString QImage::text(const QString & key = …) const
 //
+// Arguments with C++ defaults are left at them; TextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#text
 func (this *QImage) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QImage.Text")
@@ -1046,6 +1121,399 @@ func (this *QImage) PixelFormat() *QPixelFormat {
 	return rt.View[QPixelFormat](rt.WrapClass(r, "QPixelFormat", rt.TakeOwned), r)
 }
 
+// CopyFull wraps QImage::copy.
+//
+//	C++: QImage QImage::copy(const QRect & rect = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// CopyFull is Copy with every argument, including those Copy leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#copy
+func (this *QImage) CopyFull(rect qtcore.QRect) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.CopyFull")
+	r := C.qute_QImage_copy_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertToFormatFull wraps QImage::convertToFormat.
+//
+//	C++: QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ConvertToFormatFull is ConvertToFormat with every argument, including those ConvertToFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToFormat
+func (this *QImage) ConvertToFormatFull(fArg QImageFormat, flags qtcore.ImageConversionFlags) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFormatFull")
+	r := C.qute_QImage_convertToFormat_2(self, C.int64_t(fArg), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertToFormatWithColorTableFull wraps QImage::convertToFormat.
+//
+//	C++: QImage QImage::convertToFormat(Format f, const QList<QRgb> & colorTable, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ConvertToFormatWithColorTableFull is ConvertToFormatWithColorTable with every argument, including those ConvertToFormatWithColorTable leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToFormat
+func (this *QImage) ConvertToFormatWithColorTableFull(fArg QImageFormat, colorTable []uint, flags qtcore.ImageConversionFlags) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFormatWithColorTableFull")
+	colorTableC := make([]C.uint, len(colorTable))
+	for i := range colorTable {
+		colorTableC[i] = C.uint(colorTable[i])
+	}
+	r := C.qute_QImage_convertToFormat_3(self, C.int64_t(fArg), unsafe.Pointer(unsafe.SliceData(colorTableC)), C.ptrdiff_t(len(colorTable)), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertedToFull wraps QImage::convertedTo.
+//
+//	C++: QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ConvertedToFull is ConvertedTo with every argument, including those ConvertedTo leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertedTo
+func (this *QImage) ConvertedToFull(fArg QImageFormat, flags qtcore.ImageConversionFlags) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToFull")
+	r := C.qute_QImage_convertedTo_1(self, C.int64_t(fArg), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertToFull wraps QImage::convertTo.
+//
+//	C++: void QImage::convertTo(Format f, Qt::ImageConversionFlags flags = …)
+//
+// ConvertToFull is ConvertTo with every argument, including those ConvertTo leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertTo
+func (this *QImage) ConvertToFull(fArg QImageFormat, flags qtcore.ImageConversionFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToFull")
+	C.qute_QImage_convertTo_1(self, C.int64_t(fArg), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
+}
+
+// CreateAlphaMaskFull wraps QImage::createAlphaMask.
+//
+//	C++: QImage QImage::createAlphaMask(Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// CreateAlphaMaskFull is CreateAlphaMask with every argument, including those CreateAlphaMask leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#createAlphaMask
+func (this *QImage) CreateAlphaMaskFull(flags qtcore.ImageConversionFlags) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.CreateAlphaMaskFull")
+	r := C.qute_QImage_createAlphaMask_1(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// CreateHeuristicMaskFull wraps QImage::createHeuristicMask.
+//
+//	C++: QImage QImage::createHeuristicMask(bool clipTight = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// CreateHeuristicMaskFull is CreateHeuristicMask with every argument, including those CreateHeuristicMask leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#createHeuristicMask
+func (this *QImage) CreateHeuristicMaskFull(clipTight bool) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.CreateHeuristicMaskFull")
+	r := C.qute_QImage_createHeuristicMask_1(self, C.bool(clipTight))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// CreateMaskFromColorFull wraps QImage::createMaskFromColor.
+//
+//	C++: QImage QImage::createMaskFromColor(QRgb color, Qt::MaskMode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// CreateMaskFromColorFull is CreateMaskFromColor with every argument, including those CreateMaskFromColor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#createMaskFromColor
+func (this *QImage) CreateMaskFromColorFull(color uint, mode qtcore.MaskMode) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.CreateMaskFromColorFull")
+	r := C.qute_QImage_createMaskFromColor_1(self, C.uint(color), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ScaledFull wraps QImage::scaled.
+//
+//	C++: QImage QImage::scaled(int w, int h, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ScaledFull is Scaled with every argument, including those Scaled leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#scaled
+func (this *QImage) ScaledFull(w int, hArg int, aspectMode qtcore.AspectRatioMode, mode qtcore.TransformationMode) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledFull")
+	r := C.qute_QImage_scaled_1(self, C.int(w), C.int(hArg), C.int64_t(aspectMode), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ScaledToWidthFull wraps QImage::scaledToWidth.
+//
+//	C++: QImage QImage::scaledToWidth(int w, Qt::TransformationMode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ScaledToWidthFull is ScaledToWidth with every argument, including those ScaledToWidth leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#scaledToWidth
+func (this *QImage) ScaledToWidthFull(w int, mode qtcore.TransformationMode) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledToWidthFull")
+	r := C.qute_QImage_scaledToWidth_1(self, C.int(w), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ScaledToHeightFull wraps QImage::scaledToHeight.
+//
+//	C++: QImage QImage::scaledToHeight(int h, Qt::TransformationMode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ScaledToHeightFull is ScaledToHeight with every argument, including those ScaledToHeight leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#scaledToHeight
+func (this *QImage) ScaledToHeightFull(hArg int, mode qtcore.TransformationMode) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ScaledToHeightFull")
+	r := C.qute_QImage_scaledToHeight_1(self, C.int(hArg), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// TransformedFull wraps QImage::transformed.
+//
+//	C++: QImage QImage::transformed(const QTransform & matrix, Qt::TransformationMode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// TransformedFull is Transformed with every argument, including those Transformed leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#transformed
+func (this *QImage) TransformedFull(matrix *QTransform, mode qtcore.TransformationMode) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.TransformedFull")
+	r := C.qute_QImage_transformed_1(self, rt.UseArg(unsafe.Pointer(matrix), "QImage.TransformedFull"), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// FlippedFull wraps QImage::flipped.
+//
+//	C++: QImage QImage::flipped(Qt::Orientations orient = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// FlippedFull is Flipped with every argument, including those Flipped leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#flipped
+func (this *QImage) FlippedFull(orient qtcore.Orientations) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.FlippedFull")
+	r := C.qute_QImage_flipped_1(self, C.int64_t(orient))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// FlipFull wraps QImage::flip.
+//
+//	C++: void QImage::flip(Qt::Orientations orient = …)
+//
+// FlipFull is Flip with every argument, including those Flip leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#flip
+func (this *QImage) FlipFull(orient qtcore.Orientations) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.FlipFull")
+	C.qute_QImage_flip_1(self, C.int64_t(orient))
+	runtime.KeepAlive(this)
+}
+
+// InvertPixelsFull wraps QImage::invertPixels.
+//
+//	C++: void QImage::invertPixels(InvertMode = …)
+//
+// InvertPixelsFull is InvertPixels with every argument, including those InvertPixels leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#invertPixels
+func (this *QImage) InvertPixelsFull(invertMode QImageInvertMode) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.InvertPixelsFull")
+	C.qute_QImage_invertPixels_1(self, C.int64_t(invertMode))
+	runtime.KeepAlive(this)
+}
+
+// ConvertedToColorSpaceWithFormatFull wraps QImage::convertedToColorSpace.
+//
+//	C++: QImage QImage::convertedToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ConvertedToColorSpaceWithFormatFull is ConvertedToColorSpaceWithFormat with every argument, including those ConvertedToColorSpaceWithFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertedToColorSpace
+func (this *QImage) ConvertedToColorSpaceWithFormatFull(colorSpace *QColorSpace, format QImageFormat, flags qtcore.ImageConversionFlags) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertedToColorSpaceWithFormatFull")
+	r := C.qute_QImage_convertedToColorSpace_2(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertedToColorSpaceWithFormatFull"), C.int64_t(format), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ConvertToColorSpaceWithFormatFull wraps QImage::convertToColorSpace.
+//
+//	C++: void QImage::convertToColorSpace(const QColorSpace & colorSpace, QImage::Format format, Qt::ImageConversionFlags flags = …)
+//
+// ConvertToColorSpaceWithFormatFull is ConvertToColorSpaceWithFormat with every argument, including those ConvertToColorSpaceWithFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#convertToColorSpace
+func (this *QImage) ConvertToColorSpaceWithFormatFull(colorSpace *QColorSpace, format QImageFormat, flags qtcore.ImageConversionFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ConvertToColorSpaceWithFormatFull")
+	C.qute_QImage_convertToColorSpace_2(self, rt.UseArg(unsafe.Pointer(colorSpace), "QImage.ConvertToColorSpaceWithFormatFull"), C.int64_t(format), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(colorSpace)
+}
+
+// ColorTransformedWithFormatFull wraps QImage::colorTransformed.
+//
+//	C++: QImage QImage::colorTransformed(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ColorTransformedWithFormatFull is ColorTransformedWithFormat with every argument, including those ColorTransformedWithFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#colorTransformed
+func (this *QImage) ColorTransformedWithFormatFull(transform *QColorTransform, format QImageFormat, flags qtcore.ImageConversionFlags) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ColorTransformedWithFormatFull")
+	r := C.qute_QImage_colorTransformed_2(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ColorTransformedWithFormatFull"), C.int64_t(format), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// ApplyColorTransformWithFormatFull wraps QImage::applyColorTransform.
+//
+//	C++: void QImage::applyColorTransform(const QColorTransform & transform, QImage::Format format, Qt::ImageConversionFlags flags = …)
+//
+// ApplyColorTransformWithFormatFull is ApplyColorTransformWithFormat with every argument, including those ApplyColorTransformWithFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#applyColorTransform
+func (this *QImage) ApplyColorTransformWithFormatFull(transform *QColorTransform, format QImageFormat, flags qtcore.ImageConversionFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ApplyColorTransformWithFormatFull")
+	C.qute_QImage_applyColorTransform_2(self, rt.UseArg(unsafe.Pointer(transform), "QImage.ApplyColorTransformWithFormatFull"), C.int64_t(format), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
+}
+
+// LoadFull wraps QImage::load.
+//
+//	C++: bool QImage::load(const QString & fileName, const char * format = …)
+//
+// LoadFull is Load with every argument, including those Load leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#load
+func (this *QImage) LoadFull(fileName string, format string) error {
+	self := rt.Use(unsafe.Pointer(this), "QImage.LoadFull")
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	r := C.qute_QImage_load_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), formatCStr)
+	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
+	if !bool(r) {
+		return fmt.Errorf("QImage.LoadFull: failed")
+	}
+	return nil
+}
+
+// LoadFromDataFull wraps QImage::loadFromData.
+//
+//	C++: bool QImage::loadFromData(QByteArrayView data, const char * format = …)
+//
+// LoadFromDataFull is LoadFromData with every argument, including those LoadFromData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#loadFromData
+func (this *QImage) LoadFromDataFull(data []byte, format string) bool {
+	self := rt.Use(unsafe.Pointer(this), "QImage.LoadFromDataFull")
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	r := C.qute_QImage_loadFromData_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), formatCStr)
+	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
+	return bool(r)
+}
+
+// SaveFull wraps QImage::save.
+//
+//	C++: bool QImage::save(const QString & fileName, const char * format = …, int quality = …) const
+//
+// SaveFull is Save with every argument, including those Save leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#save
+func (this *QImage) SaveFull(fileName string, format string, quality int) error {
+	self := rt.Use(unsafe.Pointer(this), "QImage.SaveFull")
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	r := C.qute_QImage_save_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), formatCStr, C.int(quality))
+	runtime.KeepAlive(this)
+	if !bool(r) {
+		return fmt.Errorf("QImage.SaveFull: failed")
+	}
+	return nil
+}
+
+// SaveToFull wraps QImage::save.
+//
+//	C++: bool QImage::save(QIODevice * device, const char * format = …, int quality = …) const
+//
+// SaveToFull is SaveTo with every argument, including those SaveTo leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#save
+func (this *QImage) SaveToFull(device qtcore.QIODeviceLike, format string, quality int) error {
+	self := rt.Use(unsafe.Pointer(this), "QImage.SaveToFull")
+	var devicePtr unsafe.Pointer
+	if device != nil {
+		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQIODevice()), "QImage.SaveToFull")
+	}
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	r := C.qute_QImage_save_3(self, devicePtr, formatCStr, C.int(quality))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(device)
+	if !bool(r) {
+		return fmt.Errorf("QImage.SaveToFull: failed")
+	}
+	return nil
+}
+
+// TextFull wraps QImage::text.
+//
+//	C++: QString QImage::text(const QString & key = …) const
+//
+// TextFull is Text with every argument, including those Text leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#text
+func (this *QImage) TextFull(key string) string {
+	self := rt.Use(unsafe.Pointer(this), "QImage.TextFull")
+	r := C.qute_QImage_text_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
 // QImageTrueMatrix wraps QImage::trueMatrix.
 //
 //	C++: QTransform QImage::trueMatrix(const QTransform &, int w, int h)
@@ -1065,6 +1533,8 @@ func QImageTrueMatrix(transform *QTransform, w int, hArg int) *QTransform {
 //	C++: QImage QImage::fromData(QByteArrayView data, const char * format = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QImageFromDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qimage.html#fromData
 func QImageFromData(data []byte) *QImage {
@@ -1096,4 +1566,21 @@ func QImageToImageFormat(format *QPixelFormat) QImageFormat {
 	r := C.qute_QImage_toImageFormat(rt.UseArg(unsafe.Pointer(format), "QImageToImageFormat"))
 	runtime.KeepAlive(format)
 	return QImageFormat(r)
+}
+
+// QImageFromDataFull wraps QImage::fromData.
+//
+//	C++: QImage QImage::fromData(QByteArrayView data, const char * format = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QImageFromDataFull is QImageFromData with every argument, including those QImageFromData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#fromData
+func QImageFromDataFull(data []byte, format string) *QImage {
+	rt.CheckThread("QImageFromDataFull")
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	r := C.qute_QImage_fromData_1((*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), formatCStr)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }

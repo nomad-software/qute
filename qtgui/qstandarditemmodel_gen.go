@@ -135,7 +135,7 @@ func (this *QStandardItemModel) ItemFromIndex(index *qtcore.QModelIndex) *QStand
 	r := C.qute_QStandardItemModel_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.ItemFromIndex"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // IndexFromItem wraps QStandardItemModel::indexFromItem.
@@ -163,12 +163,14 @@ func (this *QStandardItemModel) IndexFromItem(item QStandardItemLike) *qtcore.QM
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#item
 func (this *QStandardItemModel) Item(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.Item")
 	r := C.qute_QStandardItemModel_item(self, C.int(row))
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetItem wraps QStandardItemModel::setItem.
@@ -188,7 +190,7 @@ func (this *QStandardItemModel) SetItem(row int, column int, item QStandardItemL
 	C.qute_QStandardItemModel_setItem(self, C.int(row), C.int(column), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetItemRow wraps QStandardItemModel::setItem.
@@ -208,7 +210,7 @@ func (this *QStandardItemModel) SetItemRow(row int, item QStandardItemLike) {
 	C.qute_QStandardItemModel_setItem_1(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // InvisibleRootItem wraps QStandardItemModel::invisibleRootItem.
@@ -222,7 +224,7 @@ func (this *QStandardItemModel) InvisibleRootItem() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.InvisibleRootItem")
 	r := C.qute_QStandardItemModel_invisibleRootItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // HorizontalHeaderItem wraps QStandardItemModel::horizontalHeaderItem.
@@ -236,7 +238,7 @@ func (this *QStandardItemModel) HorizontalHeaderItem(column int) *QStandardItem 
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.HorizontalHeaderItem")
 	r := C.qute_QStandardItemModel_horizontalHeaderItem(self, C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetHorizontalHeaderItem wraps QStandardItemModel::setHorizontalHeaderItem.
@@ -256,7 +258,7 @@ func (this *QStandardItemModel) SetHorizontalHeaderItem(column int, item QStanda
 	C.qute_QStandardItemModel_setHorizontalHeaderItem(self, C.int(column), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // VerticalHeaderItem wraps QStandardItemModel::verticalHeaderItem.
@@ -270,7 +272,7 @@ func (this *QStandardItemModel) VerticalHeaderItem(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.VerticalHeaderItem")
 	r := C.qute_QStandardItemModel_verticalHeaderItem(self, C.int(row))
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetVerticalHeaderItem wraps QStandardItemModel::setVerticalHeaderItem.
@@ -290,7 +292,7 @@ func (this *QStandardItemModel) SetVerticalHeaderItem(row int, item QStandardIte
 	C.qute_QStandardItemModel_setVerticalHeaderItem(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetHorizontalHeaderLabels wraps QStandardItemModel::setHorizontalHeaderLabels.
@@ -357,7 +359,7 @@ func (this *QStandardItemModel) AppendRowItems(items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -380,7 +382,7 @@ func (this *QStandardItemModel) AppendColumn(items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -402,7 +404,7 @@ func (this *QStandardItemModel) AppendRow(item QStandardItemLike) {
 	C.qute_QStandardItemModel_appendRow_1(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // InsertRowItems wraps QStandardItemModel::insertRow.
@@ -423,7 +425,7 @@ func (this *QStandardItemModel) InsertRowItems(row int, items []*QStandardItem) 
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -446,7 +448,7 @@ func (this *QStandardItemModel) InsertColumnItems(column int, items []*QStandard
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -468,7 +470,7 @@ func (this *QStandardItemModel) InsertRowItem(row int, item QStandardItemLike) {
 	C.qute_QStandardItemModel_insertRow_1(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // TakeItem wraps QStandardItemModel::takeItem.
@@ -476,6 +478,8 @@ func (this *QStandardItemModel) InsertRowItem(row int, item QStandardItemLike) {
 //	C++: QStandardItem * QStandardItemModel::takeItem(int row, int column = …)
 //
 // Ownership: the result is Owned: Go frees it.
+//
+// Arguments with C++ defaults are left at them; TakeItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#takeItem
 func (this *QStandardItemModel) TakeItem(row int) *QStandardItem {
@@ -556,7 +560,7 @@ func (this *QStandardItemModel) ItemPrototype() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.ItemPrototype")
 	r := C.qute_QStandardItemModel_itemPrototype(self)
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetItemPrototype wraps QStandardItemModel::setItemPrototype.
@@ -576,7 +580,7 @@ func (this *QStandardItemModel) SetItemPrototype(item QStandardItemLike) {
 	C.qute_QStandardItemModel_setItemPrototype(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // FindItems wraps QStandardItemModel::findItems.
@@ -585,13 +589,15 @@ func (this *QStandardItemModel) SetItemPrototype(item QStandardItemLike) {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; FindItemsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#findItems
 func (this *QStandardItemModel) FindItems(text string) []*QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.FindItems")
 	r := C.qute_QStandardItemModel_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
-		return rt.View[QStandardItem](rt.WrapClass(e, "QStandardItem", rt.KeepOrBorrow), e)
+		return rt.View[QStandardItem](rt.WrapClassFrom(e, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -632,6 +638,56 @@ func (this *QStandardItemModel) EmitItemChanged(item QStandardItemLike) {
 	C.qute_QStandardItemModel_itemChanged_1(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
+}
+
+// ItemFull wraps QStandardItemModel::item.
+//
+//	C++: QStandardItem * QStandardItemModel::item(int row, int column = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemFull is Item with every argument, including those Item leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#item
+func (this *QStandardItemModel) ItemFull(row int, column int) *QStandardItem {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.ItemFull")
+	r := C.qute_QStandardItemModel_item_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+}
+
+// TakeItemFull wraps QStandardItemModel::takeItem.
+//
+//	C++: QStandardItem * QStandardItemModel::takeItem(int row, int column = …)
+//
+// Ownership: the result is Owned: Go frees it.
+//
+// TakeItemFull is TakeItem with every argument, including those TakeItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#takeItem
+func (this *QStandardItemModel) TakeItemFull(row int, column int) *QStandardItem {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.TakeItemFull")
+	r := C.qute_QStandardItemModel_takeItem_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
+}
+
+// FindItemsFull wraps QStandardItemModel::findItems.
+//
+//	C++: QList<QStandardItem *> QStandardItemModel::findItems(const QString & text, Qt::MatchFlags flags = …, int column = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// FindItemsFull is FindItems with every argument, including those FindItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditemmodel.html#findItems
+func (this *QStandardItemModel) FindItemsFull(text string, flags qtcore.MatchFlags, column int) []*QStandardItem {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.FindItemsFull")
+	r := C.qute_QStandardItemModel_findItems_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags), C.int(column))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QStandardItem {
+		return rt.View[QStandardItem](rt.WrapClassFrom(e, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
 }
 
 // OnItemChanged connects f to the itemChanged signal. The connection ends when the

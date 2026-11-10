@@ -81,6 +81,8 @@ func (this *QKeyCombination) Unkeep() {
 //
 //	C++: QKeyCombination::QKeyCombination(Qt::Key key = …)
 //
+// Arguments with C++ defaults are left at them; NewQKeyCombinationFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qkeycombination.html#QKeyCombination
 func NewQKeyCombination() *QKeyCombination {
 	rt.CheckThread("NewQKeyCombination")
@@ -92,6 +94,8 @@ func NewQKeyCombination() *QKeyCombination {
 // NewQKeyCombinationWithModifier wraps the QKeyCombination constructor.
 //
 //	C++: QKeyCombination::QKeyCombination(Qt::Modifiers modifiers, Qt::Key key = …)
+//
+// Arguments with C++ defaults are left at them; NewQKeyCombinationWithModifierFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qkeycombination.html#QKeyCombination
 func NewQKeyCombinationWithModifier(modifiers Modifiers) *QKeyCombination {
@@ -105,10 +109,54 @@ func NewQKeyCombinationWithModifier(modifiers Modifiers) *QKeyCombination {
 //
 //	C++: QKeyCombination::QKeyCombination(Qt::KeyboardModifiers modifiers, Qt::Key key = …)
 //
+// Arguments with C++ defaults are left at them; NewQKeyCombinationWithKeyboardModifierFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qkeycombination.html#QKeyCombination
 func NewQKeyCombinationWithKeyboardModifier(modifiers KeyboardModifiers) *QKeyCombination {
 	rt.CheckThread("NewQKeyCombinationWithKeyboardModifier")
 	p := C.qute_QKeyCombination_new_2(C.int64_t(modifiers))
+	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	return rt.View[QKeyCombination](h, p)
+}
+
+// NewQKeyCombinationFull wraps the QKeyCombination constructor.
+//
+//	C++: QKeyCombination::QKeyCombination(Qt::Key key = …)
+//
+// NewQKeyCombinationFull is NewQKeyCombination with every argument, including those NewQKeyCombination leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeycombination.html#QKeyCombination
+func NewQKeyCombinationFull(key Key) *QKeyCombination {
+	rt.CheckThread("NewQKeyCombinationFull")
+	p := C.qute_QKeyCombination_new_3(C.int64_t(key))
+	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	return rt.View[QKeyCombination](h, p)
+}
+
+// NewQKeyCombinationWithModifierFull wraps the QKeyCombination constructor.
+//
+//	C++: QKeyCombination::QKeyCombination(Qt::Modifiers modifiers, Qt::Key key = …)
+//
+// NewQKeyCombinationWithModifierFull is NewQKeyCombinationWithModifier with every argument, including those NewQKeyCombinationWithModifier leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeycombination.html#QKeyCombination
+func NewQKeyCombinationWithModifierFull(modifiers Modifiers, key Key) *QKeyCombination {
+	rt.CheckThread("NewQKeyCombinationWithModifierFull")
+	p := C.qute_QKeyCombination_new_4(C.int64_t(modifiers), C.int64_t(key))
+	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	return rt.View[QKeyCombination](h, p)
+}
+
+// NewQKeyCombinationWithKeyboardModifierFull wraps the QKeyCombination constructor.
+//
+//	C++: QKeyCombination::QKeyCombination(Qt::KeyboardModifiers modifiers, Qt::Key key = …)
+//
+// NewQKeyCombinationWithKeyboardModifierFull is NewQKeyCombinationWithKeyboardModifier with every argument, including those NewQKeyCombinationWithKeyboardModifier leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeycombination.html#QKeyCombination
+func NewQKeyCombinationWithKeyboardModifierFull(modifiers KeyboardModifiers, key Key) *QKeyCombination {
+	rt.CheckThread("NewQKeyCombinationWithKeyboardModifierFull")
+	p := C.qute_QKeyCombination_new_5(C.int64_t(modifiers), C.int64_t(key))
 	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }

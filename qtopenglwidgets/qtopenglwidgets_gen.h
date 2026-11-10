@@ -12,6 +12,7 @@ const char *qute_qtopenglwidgets_check_layout(void);
 
 // QOpenGLWidget
 void * qute_QOpenGLWidget_new(void * a0);
+void * qute_QOpenGLWidget_new_1(void * a0, int64_t a1);
 void * qute_QOpenGLWidget_new_shim(void * a0);
 void qute_QOpenGLWidget_shim_init(void *self, uintptr_t id, const uint64_t *mask);
 void qute_QOpenGLWidget_super_0(void *self);

@@ -55,6 +55,8 @@ func QDockWidgetCast(o qtcore.QObjectLike) *QDockWidget {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQDockWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdockwidget.html#QDockWidget
 func NewQDockWidget(parent QWidgetLike) *QDockWidget {
 	rt.CheckThread("NewQDockWidget")
@@ -78,6 +80,8 @@ func NewQDockWidget(parent QWidgetLike) *QDockWidget {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQDockWidgetWithTitleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdockwidget.html#QDockWidget
 func NewQDockWidgetWithTitle(title string, parent QWidgetLike) *QDockWidget {
 	rt.CheckThread("NewQDockWidgetWithTitle")
@@ -86,6 +90,56 @@ func NewQDockWidgetWithTitle(title string, parent QWidgetLike) *QDockWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDockWidgetWithTitle")
 	}
 	p := C.qute_QDockWidget_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDockWidget", mode)
+	return rt.View[QDockWidget](h, p)
+}
+
+// NewQDockWidgetWithTitleFull wraps the QDockWidget constructor.
+//
+//	C++: QDockWidget::QDockWidget(const QString & title, QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQDockWidgetWithTitleFull is NewQDockWidgetWithTitle with every argument, including those NewQDockWidgetWithTitle leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdockwidget.html#QDockWidget
+func NewQDockWidgetWithTitleFull(title string, parent QWidgetLike, flags qtcore.WindowFlags) *QDockWidget {
+	rt.CheckThread("NewQDockWidgetWithTitleFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDockWidgetWithTitleFull")
+	}
+	p := C.qute_QDockWidget_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr, C.int64_t(flags))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDockWidget", mode)
+	return rt.View[QDockWidget](h, p)
+}
+
+// NewQDockWidgetFull wraps the QDockWidget constructor.
+//
+//	C++: QDockWidget::QDockWidget(QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQDockWidgetFull is NewQDockWidget with every argument, including those NewQDockWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdockwidget.html#QDockWidget
+func NewQDockWidgetFull(parent QWidgetLike, flags qtcore.WindowFlags) *QDockWidget {
+	rt.CheckThread("NewQDockWidgetFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDockWidgetFull")
+	}
+	p := C.qute_QDockWidget_new_3(parentPtr, C.int64_t(flags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -126,7 +180,7 @@ func (this *QDockWidget) SetWidget(widget QWidgetLike) {
 	C.qute_QDockWidget_setWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // SetFeatures wraps QDockWidget::setFeatures.
@@ -215,7 +269,7 @@ func (this *QDockWidget) SetTitleBarWidget(widget QWidgetLike) {
 	C.qute_QDockWidget_setTitleBarWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // TitleBarWidget wraps QDockWidget::titleBarWidget.

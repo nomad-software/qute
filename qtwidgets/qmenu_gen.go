@@ -429,6 +429,8 @@ func (this *QMenu) ActiveAction() *qtgui.QAction {
 //
 //	C++: void QMenu::popup(const QPoint & pos, QAction * at = …)
 //
+// Arguments with C++ defaults are left at them; PopupFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmenu.html#popup
 func (this *QMenu) Popup(pos qtcore.QPoint) {
 	self := rt.Use(unsafe.Pointer(this), "QMenu.Popup")
@@ -455,6 +457,8 @@ func (this *QMenu) Exec() *qtgui.QAction {
 //	C++: QAction * QMenu::exec(const QPoint & pos, QAction * at = …)
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; ExecAtFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmenu.html#exec
 func (this *QMenu) ExecAt(pos qtcore.QPoint) *qtgui.QAction {
@@ -674,11 +678,52 @@ func (this *QMenu) EmitHovered(action qtgui.QActionLike) {
 	runtime.KeepAlive(action)
 }
 
+// PopupFull wraps QMenu::popup.
+//
+//	C++: void QMenu::popup(const QPoint & pos, QAction * at = …)
+//
+// PopupFull is Popup with every argument, including those Popup leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmenu.html#popup
+func (this *QMenu) PopupFull(pos qtcore.QPoint, at qtgui.QActionLike) {
+	self := rt.Use(unsafe.Pointer(this), "QMenu.PopupFull")
+	var atPtr unsafe.Pointer
+	if at != nil {
+		atPtr = rt.UseArg(unsafe.Pointer(at.AsQAction()), "QMenu.PopupFull")
+	}
+	C.qute_QMenu_popup_1(self, cQPoint(pos), atPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(at)
+}
+
+// ExecAtFull wraps QMenu::exec.
+//
+//	C++: QAction * QMenu::exec(const QPoint & pos, QAction * at = …)
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ExecAtFull is ExecAt with every argument, including those ExecAt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmenu.html#exec
+func (this *QMenu) ExecAtFull(pos qtcore.QPoint, at qtgui.QActionLike) *qtgui.QAction {
+	self := rt.Use(unsafe.Pointer(this), "QMenu.ExecAtFull")
+	var atPtr unsafe.Pointer
+	if at != nil {
+		atPtr = rt.UseArg(unsafe.Pointer(at.AsQAction()), "QMenu.ExecAtFull")
+	}
+	r := C.qute_QMenu_exec_4(self, cQPoint(pos), atPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(at)
+	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
+}
+
 // QMenuExecActions wraps QMenu::exec.
 //
 //	C++: QAction * QMenu::exec(const QList<QAction *> & actions, const QPoint & pos, QAction * at = …, QWidget * parent = …)
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; QMenuExecActionsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmenu.html#exec
 func QMenuExecActions(actions []*qtgui.QAction, pos qtcore.QPoint) *qtgui.QAction {
@@ -708,6 +753,36 @@ func QMenuMenuInAction(action qtgui.QActionLike) *QMenu {
 	r := C.qute_QMenu_menuInAction(actionPtr)
 	runtime.KeepAlive(action)
 	return rt.View[QMenu](rt.WrapClass(r, "QMenu", rt.KeepOrBorrow), r)
+}
+
+// QMenuExecActionsFull wraps QMenu::exec.
+//
+//	C++: QAction * QMenu::exec(const QList<QAction *> & actions, const QPoint & pos, QAction * at = …, QWidget * parent = …)
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// QMenuExecActionsFull is QMenuExecActions with every argument, including those QMenuExecActions leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmenu.html#exec
+func QMenuExecActionsFull(actions []*qtgui.QAction, pos qtcore.QPoint, at qtgui.QActionLike, parent QWidgetLike) *qtgui.QAction {
+	rt.CheckThread("QMenuExecActionsFull")
+	actionsC := make([]unsafe.Pointer, len(actions))
+	for i := range actions {
+		actionsC[i] = rt.UseArg(unsafe.Pointer(actions[i]), "QMenuExecActionsFull")
+	}
+	var atPtr unsafe.Pointer
+	if at != nil {
+		atPtr = rt.UseArg(unsafe.Pointer(at.AsQAction()), "QMenuExecActionsFull")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMenuExecActionsFull")
+	}
+	r := C.qute_QMenu_exec_3(unsafe.Pointer(unsafe.SliceData(actionsC)), C.ptrdiff_t(len(actions)), cQPoint(pos), atPtr, parentPtr)
+	runtime.KeepAlive(actions)
+	runtime.KeepAlive(at)
+	runtime.KeepAlive(parent)
+	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.KeepOrBorrow), r)
 }
 
 // OnAboutToShow connects f to the aboutToShow signal. The connection ends when the

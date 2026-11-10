@@ -28,6 +28,11 @@ func init() {
 	rt.RegisterClass("QBitmap", rt.KindValue, func(p unsafe.Pointer) { C.qute_QBitmap_delete(p) })
 }
 
+// Each QBitmap counts the bytes it holds outside the Go heap, so GC runs as they add up.
+func init() {
+	rt.RegisterMemory("QBitmap", func(p unsafe.Pointer) int64 { return int64(C.qute_QBitmap_memory(p)) })
+}
+
 // QBitmapFromPtr wraps an existing C++ QBitmap. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QBitmapFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QBitmap {
@@ -62,10 +67,28 @@ func NewQBitmapWithSize(size qtcore.QSize) *QBitmap {
 //
 //	C++: QBitmap::QBitmap(const QString & fileName, const char * format = …)
 //
+// Arguments with C++ defaults are left at them; NewQBitmapWithFileNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbitmap.html#QBitmap
 func NewQBitmapWithFileName(fileName string) *QBitmap {
 	rt.CheckThread("NewQBitmapWithFileName")
 	p := C.qute_QBitmap_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	h := rt.WrapClass(p, "QBitmap", rt.NewOwned)
+	return rt.View[QBitmap](h, p)
+}
+
+// NewQBitmapWithFileNameFull wraps the QBitmap constructor.
+//
+//	C++: QBitmap::QBitmap(const QString & fileName, const char * format = …)
+//
+// NewQBitmapWithFileNameFull is NewQBitmapWithFileName with every argument, including those NewQBitmapWithFileName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitmap.html#QBitmap
+func NewQBitmapWithFileNameFull(fileName string, format string) *QBitmap {
+	rt.CheckThread("NewQBitmapWithFileNameFull")
+	formatCStr := C.CString(format)
+	defer C.free(unsafe.Pointer(formatCStr))
+	p := C.qute_QBitmap_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), formatCStr)
 	h := rt.WrapClass(p, "QBitmap", rt.NewOwned)
 	return rt.View[QBitmap](h, p)
 }
@@ -102,6 +125,8 @@ func (this *QBitmap) Transformed(matrix *QTransform) *QBitmap {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QBitmapFromImageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbitmap.html#fromImage
 func QBitmapFromImage(image *QImage) *QBitmap {
 	rt.CheckThread("QBitmapFromImage")
@@ -115,6 +140,8 @@ func QBitmapFromImage(image *QImage) *QBitmap {
 //	C++: QBitmap QBitmap::fromData(const QSize & size, const uchar * bits, QImage::Format monoFormat = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QBitmapFromDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qbitmap.html#fromData
 func QBitmapFromData(size qtcore.QSize, bits unsafe.Pointer) *QBitmap {
@@ -134,5 +161,36 @@ func QBitmapFromPixmap(pixmap *QPixmap) *QBitmap {
 	rt.CheckThread("QBitmapFromPixmap")
 	r := C.qute_QBitmap_fromPixmap(rt.UseArg(unsafe.Pointer(pixmap), "QBitmapFromPixmap"))
 	runtime.KeepAlive(pixmap)
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
+}
+
+// QBitmapFromImageFull wraps QBitmap::fromImage.
+//
+//	C++: QBitmap QBitmap::fromImage(const QImage & image, Qt::ImageConversionFlags flags = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QBitmapFromImageFull is QBitmapFromImage with every argument, including those QBitmapFromImage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitmap.html#fromImage
+func QBitmapFromImageFull(image *QImage, flags qtcore.ImageConversionFlags) *QBitmap {
+	rt.CheckThread("QBitmapFromImageFull")
+	r := C.qute_QBitmap_fromImage_1(rt.UseArg(unsafe.Pointer(image), "QBitmapFromImageFull"), C.int64_t(flags))
+	runtime.KeepAlive(image)
+	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
+}
+
+// QBitmapFromDataFull wraps QBitmap::fromData.
+//
+//	C++: QBitmap QBitmap::fromData(const QSize & size, const uchar * bits, QImage::Format monoFormat = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QBitmapFromDataFull is QBitmapFromData with every argument, including those QBitmapFromData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitmap.html#fromData
+func QBitmapFromDataFull(size qtcore.QSize, bits unsafe.Pointer, monoFormat QImageFormat) *QBitmap {
+	rt.CheckThread("QBitmapFromDataFull")
+	r := C.qute_QBitmap_fromData_1(cQSize(size), bits, C.int64_t(monoFormat))
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }

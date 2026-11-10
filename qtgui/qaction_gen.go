@@ -659,6 +659,8 @@ func (this *QAction) IsShortcutVisibleInContextMenu() bool {
 //
 //	C++: bool QAction::showStatusText(QObject * object = …)
 //
+// Arguments with C++ defaults are left at them; ShowStatusTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qaction.html#showStatusText
 func (this *QAction) ShowStatusText() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAction.ShowStatusText")
@@ -830,6 +832,25 @@ func (this *QAction) EmitToggled(arg0 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QAction.EmitToggled")
 	C.qute_QAction_toggled_1(self, C.bool(arg0))
 	runtime.KeepAlive(this)
+}
+
+// ShowStatusTextFull wraps QAction::showStatusText.
+//
+//	C++: bool QAction::showStatusText(QObject * object = …)
+//
+// ShowStatusTextFull is ShowStatusText with every argument, including those ShowStatusText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qaction.html#showStatusText
+func (this *QAction) ShowStatusTextFull(object qtcore.QObjectLike) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAction.ShowStatusTextFull")
+	var objectPtr unsafe.Pointer
+	if object != nil {
+		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QAction.ShowStatusTextFull")
+	}
+	r := C.qute_QAction_showStatusText_1(self, objectPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(object)
+	return bool(r)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

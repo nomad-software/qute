@@ -123,6 +123,8 @@ func (this *QOpenGLDebugLogger) MaximumMessageLength() int64 {
 //
 //	C++: void QOpenGLDebugLogger::pushGroup(const QString & name, GLuint id = …, QOpenGLDebugMessage::Source source = …)
 //
+// Arguments with C++ defaults are left at them; PushGroupFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#pushGroup
 func (this *QOpenGLDebugLogger) PushGroup(name string) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.PushGroup")
@@ -145,6 +147,8 @@ func (this *QOpenGLDebugLogger) PopGroup() {
 //
 //	C++: void QOpenGLDebugLogger::enableMessages(QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …, QOpenGLDebugMessage::Severities severities = …)
 //
+// Arguments with C++ defaults are left at them; EnableMessagesFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#enableMessages
 func (this *QOpenGLDebugLogger) EnableMessages() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.EnableMessages")
@@ -155,6 +159,8 @@ func (this *QOpenGLDebugLogger) EnableMessages() {
 // EnableMessagesWithIdss wraps QOpenGLDebugLogger::enableMessages.
 //
 //	C++: void QOpenGLDebugLogger::enableMessages(const QList<GLuint> & ids, QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …)
+//
+// Arguments with C++ defaults are left at them; EnableMessagesWithIdssFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#enableMessages
 func (this *QOpenGLDebugLogger) EnableMessagesWithIdss(ids []uint) {
@@ -171,6 +177,8 @@ func (this *QOpenGLDebugLogger) EnableMessagesWithIdss(ids []uint) {
 //
 //	C++: void QOpenGLDebugLogger::disableMessages(QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …, QOpenGLDebugMessage::Severities severities = …)
 //
+// Arguments with C++ defaults are left at them; DisableMessagesFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#disableMessages
 func (this *QOpenGLDebugLogger) DisableMessages() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.DisableMessages")
@@ -181,6 +189,8 @@ func (this *QOpenGLDebugLogger) DisableMessages() {
 // DisableMessagesWithIdss wraps QOpenGLDebugLogger::disableMessages.
 //
 //	C++: void QOpenGLDebugLogger::disableMessages(const QList<GLuint> & ids, QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …)
+//
+// Arguments with C++ defaults are left at them; DisableMessagesWithIdssFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#disableMessages
 func (this *QOpenGLDebugLogger) DisableMessagesWithIdss(ids []uint) {
@@ -223,6 +233,8 @@ func (this *QOpenGLDebugLogger) LogMessage(debugMessage *QOpenGLDebugMessage) {
 //
 //	C++: void QOpenGLDebugLogger::startLogging(LoggingMode loggingMode = …)
 //
+// Arguments with C++ defaults are left at them; StartLoggingFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#startLogging
 func (this *QOpenGLDebugLogger) StartLogging() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.StartLogging")
@@ -251,6 +263,92 @@ func (this *QOpenGLDebugLogger) EmitMessageLogged(debugMessage *QOpenGLDebugMess
 	C.qute_QOpenGLDebugLogger_messageLogged_1(self, rt.UseArg(unsafe.Pointer(debugMessage), "QOpenGLDebugLogger.EmitMessageLogged"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(debugMessage)
+}
+
+// PushGroupFull wraps QOpenGLDebugLogger::pushGroup.
+//
+//	C++: void QOpenGLDebugLogger::pushGroup(const QString & name, GLuint id = …, QOpenGLDebugMessage::Source source = …)
+//
+// PushGroupFull is PushGroup with every argument, including those PushGroup leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#pushGroup
+func (this *QOpenGLDebugLogger) PushGroupFull(name string, idArg uint, source QOpenGLDebugMessageSources) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.PushGroupFull")
+	C.qute_QOpenGLDebugLogger_pushGroup_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), C.uint(idArg), C.int64_t(source))
+	runtime.KeepAlive(this)
+}
+
+// EnableMessagesFull wraps QOpenGLDebugLogger::enableMessages.
+//
+//	C++: void QOpenGLDebugLogger::enableMessages(QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …, QOpenGLDebugMessage::Severities severities = …)
+//
+// EnableMessagesFull is EnableMessages with every argument, including those EnableMessages leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#enableMessages
+func (this *QOpenGLDebugLogger) EnableMessagesFull(sources QOpenGLDebugMessageSources, types QOpenGLDebugMessageTypes, severities QOpenGLDebugMessageSeverities) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.EnableMessagesFull")
+	C.qute_QOpenGLDebugLogger_enableMessages_2(self, C.int64_t(sources), C.int64_t(types), C.int64_t(severities))
+	runtime.KeepAlive(this)
+}
+
+// EnableMessagesWithIdssFull wraps QOpenGLDebugLogger::enableMessages.
+//
+//	C++: void QOpenGLDebugLogger::enableMessages(const QList<GLuint> & ids, QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …)
+//
+// EnableMessagesWithIdssFull is EnableMessagesWithIdss with every argument, including those EnableMessagesWithIdss leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#enableMessages
+func (this *QOpenGLDebugLogger) EnableMessagesWithIdssFull(ids []uint, sources QOpenGLDebugMessageSources, types QOpenGLDebugMessageTypes) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.EnableMessagesWithIdssFull")
+	idsC := make([]C.uint, len(ids))
+	for i := range ids {
+		idsC[i] = C.uint(ids[i])
+	}
+	C.qute_QOpenGLDebugLogger_enableMessages_3(self, unsafe.Pointer(unsafe.SliceData(idsC)), C.ptrdiff_t(len(ids)), C.int64_t(sources), C.int64_t(types))
+	runtime.KeepAlive(this)
+}
+
+// DisableMessagesFull wraps QOpenGLDebugLogger::disableMessages.
+//
+//	C++: void QOpenGLDebugLogger::disableMessages(QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …, QOpenGLDebugMessage::Severities severities = …)
+//
+// DisableMessagesFull is DisableMessages with every argument, including those DisableMessages leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#disableMessages
+func (this *QOpenGLDebugLogger) DisableMessagesFull(sources QOpenGLDebugMessageSources, types QOpenGLDebugMessageTypes, severities QOpenGLDebugMessageSeverities) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.DisableMessagesFull")
+	C.qute_QOpenGLDebugLogger_disableMessages_2(self, C.int64_t(sources), C.int64_t(types), C.int64_t(severities))
+	runtime.KeepAlive(this)
+}
+
+// DisableMessagesWithIdssFull wraps QOpenGLDebugLogger::disableMessages.
+//
+//	C++: void QOpenGLDebugLogger::disableMessages(const QList<GLuint> & ids, QOpenGLDebugMessage::Sources sources = …, QOpenGLDebugMessage::Types types = …)
+//
+// DisableMessagesWithIdssFull is DisableMessagesWithIdss with every argument, including those DisableMessagesWithIdss leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#disableMessages
+func (this *QOpenGLDebugLogger) DisableMessagesWithIdssFull(ids []uint, sources QOpenGLDebugMessageSources, types QOpenGLDebugMessageTypes) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.DisableMessagesWithIdssFull")
+	idsC := make([]C.uint, len(ids))
+	for i := range ids {
+		idsC[i] = C.uint(ids[i])
+	}
+	C.qute_QOpenGLDebugLogger_disableMessages_3(self, unsafe.Pointer(unsafe.SliceData(idsC)), C.ptrdiff_t(len(ids)), C.int64_t(sources), C.int64_t(types))
+	runtime.KeepAlive(this)
+}
+
+// StartLoggingFull wraps QOpenGLDebugLogger::startLogging.
+//
+//	C++: void QOpenGLDebugLogger::startLogging(LoggingMode loggingMode = …)
+//
+// StartLoggingFull is StartLogging with every argument, including those StartLogging leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebuglogger.html#startLogging
+func (this *QOpenGLDebugLogger) StartLoggingFull(loggingMode QOpenGLDebugLoggerLoggingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLDebugLogger.StartLoggingFull")
+	C.qute_QOpenGLDebugLogger_startLogging_1(self, C.int64_t(loggingMode))
+	runtime.KeepAlive(this)
 }
 
 // OnMessageLogged connects f to the messageLogged signal. The connection ends when the

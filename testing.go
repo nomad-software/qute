@@ -23,6 +23,9 @@ func TestMain(m *testing.M) {
 		os.Setenv("QT_QPA_PLATFORM", "offscreen")
 	}
 	done := make(chan int, 1)
+	// A t.Fatal inside Run ends the GUI goroutine; the runtime keeps serving
+	// Qt from a nested event loop, and once that quits the binary exits here.
+	rt.AfterRescue = func() { os.Exit(<-done) }
 	Main(func() {
 		go func() {
 			code := m.Run()
@@ -38,10 +41,15 @@ func TestMain(m *testing.M) {
 // event handler that f triggers is recovered where Qt called the handler, so
 // Qt's own frames return normally; it fails t too, and the input helpers
 // (Click, Type, Key, Wait, ProcessEvents) re-raise it as soon as they return.
+//
+// t.Fatal, t.FailNow and t.Skip work inside f: they end f and then the test,
+// as they would on the test's own goroutine. (They end the GUI goroutine
+// too, which the runtime replaces with a nested event loop, so prefer
+// t.Error and return in code that fails often.)
 func Run(t testing.TB, f func()) {
 	t.Helper()
 	var failure string
-	PostSync(func() {
+	exited := rt.PostSyncExit(func() {
 		stop := rt.CapturePanics()
 		defer func() {
 			cp := stop()
@@ -62,6 +70,17 @@ func Run(t testing.TB, f func()) {
 	})
 	if failure != "" {
 		t.Fatal(failure)
+	}
+	if exited {
+		// f called t.FailNow or t.SkipNow on the GUI goroutine; end the test
+		// on its own goroutine the same way
+		if t.Skipped() && !t.Failed() {
+			t.SkipNow()
+		}
+		if !t.Failed() {
+			t.Error("qute.Run: the function called runtime.Goexit")
+		}
+		t.FailNow()
 	}
 }
 

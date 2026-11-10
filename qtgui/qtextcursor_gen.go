@@ -159,6 +159,8 @@ func (this *QTextCursor) IsNull() bool {
 //
 //	C++: void QTextCursor::setPosition(int pos, MoveMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetPositionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#setPosition
 func (this *QTextCursor) SetPosition(pos int) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetPosition")
@@ -228,6 +230,8 @@ func (this *QTextCursor) InsertTextWithTextCharFormat(text string, format *QText
 // MovePosition wraps QTextCursor::movePosition.
 //
 //	C++: bool QTextCursor::movePosition(MoveOperation op, MoveMode = …, int n = …)
+//
+// Arguments with C++ defaults are left at them; MovePositionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#movePosition
 func (this *QTextCursor) MovePosition(op QTextCursorMoveOperation) bool {
@@ -848,6 +852,8 @@ func (this *QTextCursor) InsertHtml(html string) {
 //
 //	C++: void QTextCursor::insertMarkdown(const QString & markdown, QTextDocument::MarkdownFeatures features = …)
 //
+// Arguments with C++ defaults are left at them; InsertMarkdownFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertMarkdown
 func (this *QTextCursor) InsertMarkdown(markdown string) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertMarkdown")
@@ -893,6 +899,8 @@ func (this *QTextCursor) InsertImageName(name string) {
 // InsertImageImage wraps QTextCursor::insertImage.
 //
 //	C++: void QTextCursor::insertImage(const QImage & image, const QString & name = …)
+//
+// Arguments with C++ defaults are left at them; InsertImageImageFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertImage
 func (this *QTextCursor) InsertImageImage(image *QImage) {
@@ -984,4 +992,58 @@ func (this *QTextCursor) Document() *QTextDocument {
 	r := C.qute_QTextCursor_document(self)
 	runtime.KeepAlive(this)
 	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.KeepOrBorrow), r)
+}
+
+// SetPositionFull wraps QTextCursor::setPosition.
+//
+//	C++: void QTextCursor::setPosition(int pos, MoveMode mode = …)
+//
+// SetPositionFull is SetPosition with every argument, including those SetPosition leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#setPosition
+func (this *QTextCursor) SetPositionFull(pos int, mode QTextCursorMoveMode) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.SetPositionFull")
+	C.qute_QTextCursor_setPosition_1(self, C.int(pos), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// MovePositionFull wraps QTextCursor::movePosition.
+//
+//	C++: bool QTextCursor::movePosition(MoveOperation op, MoveMode = …, int n = …)
+//
+// MovePositionFull is MovePosition with every argument, including those MovePosition leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#movePosition
+func (this *QTextCursor) MovePositionFull(op QTextCursorMoveOperation, moveMode QTextCursorMoveMode, n int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.MovePositionFull")
+	r := C.qute_QTextCursor_movePosition_1(self, C.int64_t(op), C.int64_t(moveMode), C.int(n))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// InsertMarkdownFull wraps QTextCursor::insertMarkdown.
+//
+//	C++: void QTextCursor::insertMarkdown(const QString & markdown, QTextDocument::MarkdownFeatures features = …)
+//
+// InsertMarkdownFull is InsertMarkdown with every argument, including those InsertMarkdown leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertMarkdown
+func (this *QTextCursor) InsertMarkdownFull(markdown string, features QTextDocumentMarkdownFeatures) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertMarkdownFull")
+	C.qute_QTextCursor_insertMarkdown_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)), C.int64_t(features))
+	runtime.KeepAlive(this)
+}
+
+// InsertImageImageFull wraps QTextCursor::insertImage.
+//
+//	C++: void QTextCursor::insertImage(const QImage & image, const QString & name = …)
+//
+// InsertImageImageFull is InsertImageImage with every argument, including those InsertImageImage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcursor.html#insertImage
+func (this *QTextCursor) InsertImageImageFull(image *QImage, name string) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCursor.InsertImageImageFull")
+	C.qute_QTextCursor_insertImage_4(self, rt.UseArg(unsafe.Pointer(image), "QTextCursor.InsertImageImageFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
 }

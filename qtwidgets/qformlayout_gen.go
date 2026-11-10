@@ -232,8 +232,8 @@ func (this *QFormLayout) AddRow(label QWidgetLike, field QWidgetLike) {
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(label)
 	runtime.KeepAlive(field)
-	labelH.TransferToCpp()
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, labelH)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // AddRowLayout wraps QFormLayout::addRow.
@@ -259,8 +259,8 @@ func (this *QFormLayout) AddRowLayout(label QWidgetLike, field QLayoutLike) {
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(label)
 	runtime.KeepAlive(field)
-	labelH.TransferToCpp()
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, labelH)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // AddRowText wraps QFormLayout::addRow.
@@ -280,7 +280,7 @@ func (this *QFormLayout) AddRowText(labelText string, field QWidgetLike) {
 	C.qute_QFormLayout_addRow_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), fieldPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(field)
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // AddRowTextLayout wraps QFormLayout::addRow.
@@ -300,7 +300,7 @@ func (this *QFormLayout) AddRowTextLayout(labelText string, field QLayoutLike) {
 	C.qute_QFormLayout_addRow_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), fieldPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(field)
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // AddRowWidget wraps QFormLayout::addRow.
@@ -320,7 +320,7 @@ func (this *QFormLayout) AddRowWidget(widget QWidgetLike) {
 	C.qute_QFormLayout_addRow_4(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // AddRowSpanLayout wraps QFormLayout::addRow.
@@ -340,7 +340,7 @@ func (this *QFormLayout) AddRowSpanLayout(layout QLayoutLike) {
 	C.qute_QFormLayout_addRow_5(self, layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // InsertRow wraps QFormLayout::insertRow.
@@ -366,8 +366,8 @@ func (this *QFormLayout) InsertRow(row int, label QWidgetLike, field QWidgetLike
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(label)
 	runtime.KeepAlive(field)
-	labelH.TransferToCpp()
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, labelH)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // InsertRowLayout wraps QFormLayout::insertRow.
@@ -393,8 +393,8 @@ func (this *QFormLayout) InsertRowLayout(row int, label QWidgetLike, field QLayo
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(label)
 	runtime.KeepAlive(field)
-	labelH.TransferToCpp()
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, labelH)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // InsertRowText wraps QFormLayout::insertRow.
@@ -414,7 +414,7 @@ func (this *QFormLayout) InsertRowText(row int, labelText string, field QWidgetL
 	C.qute_QFormLayout_insertRow_2(self, C.int(row), (*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), fieldPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(field)
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // InsertRowTextLayout wraps QFormLayout::insertRow.
@@ -434,7 +434,7 @@ func (this *QFormLayout) InsertRowTextLayout(row int, labelText string, field QL
 	C.qute_QFormLayout_insertRow_3(self, C.int(row), (*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), fieldPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(field)
-	fieldH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, fieldH)
 }
 
 // InsertRowWidget wraps QFormLayout::insertRow.
@@ -454,7 +454,7 @@ func (this *QFormLayout) InsertRowWidget(row int, widget QWidgetLike) {
 	C.qute_QFormLayout_insertRow_4(self, C.int(row), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // InsertRowSpanLayout wraps QFormLayout::insertRow.
@@ -474,7 +474,7 @@ func (this *QFormLayout) InsertRowSpanLayout(row int, layout QLayoutLike) {
 	C.qute_QFormLayout_insertRow_5(self, C.int(row), layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // RemoveRow wraps QFormLayout::removeRow.
@@ -597,7 +597,7 @@ func (this *QFormLayout) SetItem(row int, role QFormLayoutItemRole, item QLayout
 	C.qute_QFormLayout_setItem(self, C.int(row), C.int64_t(role), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetWidget wraps QFormLayout::setWidget.
@@ -617,7 +617,7 @@ func (this *QFormLayout) SetWidget(row int, role QFormLayoutItemRole, widget QWi
 	C.qute_QFormLayout_setWidget(self, C.int(row), C.int64_t(role), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // SetLayout wraps QFormLayout::setLayout.
@@ -637,7 +637,7 @@ func (this *QFormLayout) SetLayout(row int, role QFormLayoutItemRole, layout QLa
 	C.qute_QFormLayout_setLayout(self, C.int(row), C.int64_t(role), layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // SetRowVisible wraps QFormLayout::setRowVisible.
@@ -740,7 +740,7 @@ func (this *QFormLayout) ItemAtRole(row int, role QFormLayoutItemRole) *QLayoutI
 	self := rt.Use(unsafe.Pointer(this), "QFormLayout.ItemAtRole")
 	r := C.qute_QFormLayout_itemAt(self, C.int(row), C.int64_t(role))
 	runtime.KeepAlive(this)
-	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QLayoutItem](rt.WrapClassFrom(r, "QLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // GetItemPosition wraps QFormLayout::getItemPosition.

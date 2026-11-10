@@ -94,10 +94,26 @@ func NewQTextOptionTab() *QTextOptionTab {
 //
 //	C++: QTextOptionTab::Tab(qreal pos, TabType tabType, QChar delim = …)
 //
+// Arguments with C++ defaults are left at them; NewQTextOptionTabWithPosFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextoptiontab.html#QTextOptionTab
 func NewQTextOptionTabWithPos(pos float64, tabType QTextOptionTabType) *QTextOptionTab {
 	rt.CheckThread("NewQTextOptionTabWithPos")
 	p := C.qute_QTextOptionTab_new_1(C.double(pos), C.int64_t(tabType))
+	h := rt.WrapClass(p, "QTextOptionTab", rt.NewOwned)
+	return rt.View[QTextOptionTab](h, p)
+}
+
+// NewQTextOptionTabWithPosFull wraps the QTextOptionTab constructor.
+//
+//	C++: QTextOptionTab::Tab(qreal pos, TabType tabType, QChar delim = …)
+//
+// NewQTextOptionTabWithPosFull is NewQTextOptionTabWithPos with every argument, including those NewQTextOptionTabWithPos leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextoptiontab.html#QTextOptionTab
+func NewQTextOptionTabWithPosFull(pos float64, tabType QTextOptionTabType, delim rune) *QTextOptionTab {
+	rt.CheckThread("NewQTextOptionTabWithPosFull")
+	p := C.qute_QTextOptionTab_new_2(C.double(pos), C.int64_t(tabType), C.uint(delim))
 	h := rt.WrapClass(p, "QTextOptionTab", rt.NewOwned)
 	return rt.View[QTextOptionTab](h, p)
 }

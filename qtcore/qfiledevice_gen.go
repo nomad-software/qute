@@ -134,6 +134,8 @@ func (this *QFileDevice) SetPermissions(permissionSpec QFileDevicePermissions) b
 //
 //	C++: uchar * QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; MapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledevice.html#map
 func (this *QFileDevice) Map(offset int64, size int64) unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Map")
@@ -179,4 +181,18 @@ func (this *QFileDevice) SetFileTime(newDate *QDateTime, fileTime QFileDeviceFil
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(newDate)
 	return bool(r)
+}
+
+// MapFull wraps QFileDevice::map.
+//
+//	C++: uchar * QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags = …)
+//
+// MapFull is Map with every argument, including those Map leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledevice.html#map
+func (this *QFileDevice) MapFull(offset int64, size int64, flags QFileDeviceMemoryMapFlags) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QFileDevice.MapFull")
+	r := C.qute_QFileDevice_map_1(self, C.longlong(offset), C.longlong(size), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return r
 }

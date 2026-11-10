@@ -51,6 +51,12 @@ void qute_QOpenGLDebugLogger_logMessage(void *self, void * a0);
 void qute_QOpenGLDebugLogger_startLogging(void *self);
 void qute_QOpenGLDebugLogger_stopLogging(void *self);
 void qute_QOpenGLDebugLogger_messageLogged_1(void *self, void * a0);
+void qute_QOpenGLDebugLogger_pushGroup_1(void *self, const char *a0, ptrdiff_t a0_len, unsigned int a1, int64_t a2);
+void qute_QOpenGLDebugLogger_enableMessages_2(void *self, int64_t a0, int64_t a1, int64_t a2);
+void qute_QOpenGLDebugLogger_enableMessages_3(void *self, const void *a0, ptrdiff_t a0_n, int64_t a1, int64_t a2);
+void qute_QOpenGLDebugLogger_disableMessages_2(void *self, int64_t a0, int64_t a1, int64_t a2);
+void qute_QOpenGLDebugLogger_disableMessages_3(void *self, const void *a0, ptrdiff_t a0_n, int64_t a1, int64_t a2);
+void qute_QOpenGLDebugLogger_startLogging_1(void *self, int64_t a0);
 void * qute_QOpenGLDebugLogger_messageLogged(void *self, uintptr_t id);
 
 // QOpenGLDebugMessage
@@ -63,11 +69,15 @@ unsigned int qute_QOpenGLDebugMessage_id(void *self);
 qute_str qute_QOpenGLDebugMessage_message(void *self);
 void * qute_QOpenGLDebugMessage_createApplicationMessage(const char *a0, ptrdiff_t a0_len);
 void * qute_QOpenGLDebugMessage_createThirdPartyMessage(const char *a0, ptrdiff_t a0_len);
+void * qute_QOpenGLDebugMessage_createApplicationMessage_1(const char *a0, ptrdiff_t a0_len, unsigned int a1, int64_t a2, int64_t a3);
+void * qute_QOpenGLDebugMessage_createThirdPartyMessage_1(const char *a0, ptrdiff_t a0_len, unsigned int a1, int64_t a2, int64_t a3);
 
 // QOpenGLFramebufferObject
 void * qute_QOpenGLFramebufferObject_new(qute_size a0);
 void * qute_QOpenGLFramebufferObject_new_1(qute_size a0, int64_t a1);
 void * qute_QOpenGLFramebufferObject_new_2(qute_size a0, void * a1);
+void * qute_QOpenGLFramebufferObject_new_3(qute_size a0, unsigned int a1);
+void * qute_QOpenGLFramebufferObject_new_4(qute_size a0, int64_t a1, unsigned int a2, unsigned int a3);
 void qute_QOpenGLFramebufferObject_delete(void *self);
 void qute_QOpenGLFramebufferObject_addColorAttachment(void *self, qute_size a0);
 void * qute_QOpenGLFramebufferObject_format(void *self);
@@ -87,6 +97,8 @@ void * qute_QOpenGLFramebufferObject_toImage(void *self);
 void * qute_QOpenGLFramebufferObject_toImage_1(void *self, bool a0, int a1);
 int64_t qute_QOpenGLFramebufferObject_attachment(void *self);
 void qute_QOpenGLFramebufferObject_setAttachment(void *self, int64_t a0);
+void qute_QOpenGLFramebufferObject_addColorAttachment_1(void *self, qute_size a0, unsigned int a1);
+void * qute_QOpenGLFramebufferObject_toImage_2(void *self, bool a0);
 bool qute_QOpenGLFramebufferObject_bindDefault(void);
 bool qute_QOpenGLFramebufferObject_hasOpenGLFramebufferObjects(void);
 bool qute_QOpenGLFramebufferObject_hasOpenGLFramebufferBlit(void);
@@ -94,6 +106,8 @@ void qute_QOpenGLFramebufferObject_blitFramebuffer(void * a0, qute_rect a1, void
 void qute_QOpenGLFramebufferObject_blitFramebuffer_1(void * a0, qute_rect a1, void * a2, qute_rect a3, unsigned int a4, unsigned int a5, int a6, int a7);
 void qute_QOpenGLFramebufferObject_blitFramebuffer_2(void * a0, qute_rect a1, void * a2, qute_rect a3);
 void qute_QOpenGLFramebufferObject_blitFramebuffer_3(void * a0, void * a1);
+void qute_QOpenGLFramebufferObject_blitFramebuffer_4(void * a0, qute_rect a1, void * a2, qute_rect a3, unsigned int a4, unsigned int a5);
+void qute_QOpenGLFramebufferObject_blitFramebuffer_5(void * a0, void * a1, unsigned int a2, unsigned int a3);
 
 // QOpenGLFramebufferObjectFormat
 void * qute_QOpenGLFramebufferObjectFormat_new(void);
@@ -157,6 +171,7 @@ bool qute_QOpenGLShader_isCompiled(void *self);
 qute_str qute_QOpenGLShader_log(void *self);
 unsigned int qute_QOpenGLShader_shaderId(void *self);
 bool qute_QOpenGLShader_hasOpenGLShaders(int64_t a0);
+bool qute_QOpenGLShader_hasOpenGLShaders_1(int64_t a0, void * a1);
 
 // QOpenGLShaderProgram
 void * qute_QOpenGLShaderProgram_new(void * a0);
@@ -228,11 +243,16 @@ void qute_QOpenGLShaderProgram_setUniformValueArray_3(void *self, int a0, const 
 void qute_QOpenGLShaderProgram_setUniformValueArray_4(void *self, int a0, const void *a1, ptrdiff_t a1_n);
 void qute_QOpenGLShaderProgram_setUniformValueArray_5(void *self, int a0, const void *a1, ptrdiff_t a1_n);
 void qute_QOpenGLShaderProgram_setUniformValueArray_6(void *self, int a0, const void *a1, ptrdiff_t a1_n);
+void qute_QOpenGLShaderProgram_setAttributeArray_2(void *self, int a0, void * a1, int a2, int a3);
+void qute_QOpenGLShaderProgram_setAttributeArray_3(void *self, int a0, unsigned int a1, void * a2, int a3, int a4);
+void qute_QOpenGLShaderProgram_setAttributeBuffer_1(void *self, int a0, unsigned int a1, int a2, int a3, int a4);
 bool qute_QOpenGLShaderProgram_hasOpenGLShaderPrograms(void);
+bool qute_QOpenGLShaderProgram_hasOpenGLShaderPrograms_1(void * a0);
 
 // QOpenGLTexture
 void * qute_QOpenGLTexture_new(int64_t a0);
 void * qute_QOpenGLTexture_new_1(void * a0);
+void * qute_QOpenGLTexture_new_2(void * a0, int64_t a1);
 void qute_QOpenGLTexture_delete(void *self);
 int64_t qute_QOpenGLTexture_target(void *self);
 bool qute_QOpenGLTexture_create(void *self);
@@ -328,6 +348,10 @@ void qute_QOpenGLTexture_setLevelOfDetailRange(void *self, float a0, float a1);
 void qute_QOpenGLTexture_levelOfDetailRange(void *self, float *r0_out, float *r1_out);
 void qute_QOpenGLTexture_setLevelofDetailBias(void *self, float a0);
 float qute_QOpenGLTexture_levelofDetailBias(void *self);
+void qute_QOpenGLTexture_bind_2(void *self, unsigned int a0, int64_t a1);
+void qute_QOpenGLTexture_release_2(void *self, unsigned int a0, int64_t a1);
+void qute_QOpenGLTexture_setData_11(void *self, void * a0, int64_t a1);
+void qute_QOpenGLTexture_generateMipMaps_2(void *self, int a0, bool a1);
 unsigned int qute_QOpenGLTexture_boundTextureId(int64_t a0);
 unsigned int qute_QOpenGLTexture_boundTextureId_1(unsigned int a0, int64_t a1);
 bool qute_QOpenGLTexture_hasFeature(int64_t a0);
@@ -345,6 +369,7 @@ void qute_QOpenGLTextureBlitter_release(void *self);
 void qute_QOpenGLTextureBlitter_setRedBlueSwizzle(void *self, bool a0);
 void qute_QOpenGLTextureBlitter_setOpacity(void *self, float a0);
 void qute_QOpenGLTextureBlitter_blit(void *self, unsigned int a0, void * a1, int64_t a2);
+void qute_QOpenGLTextureBlitter_bind_1(void *self, unsigned int a0);
 void * qute_QOpenGLTextureBlitter_targetTransform(qute_rectf a0, qute_rect a1);
 
 // QOpenGLVertexArrayObject

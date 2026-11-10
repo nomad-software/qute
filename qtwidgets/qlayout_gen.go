@@ -271,7 +271,7 @@ func (this *QLayout) SetMenuBar(w QWidgetLike) {
 	C.qute_QLayout_setMenuBar(self, wPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(w)
-	wH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
 }
 
 // MenuBar wraps QLayout::menuBar.
@@ -365,7 +365,7 @@ func (this *QLayout) AddWidget(w QWidgetLike) {
 	C.qute_QLayout_addWidget(self, wPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(w)
-	wH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
 }
 
 // AddItem wraps QLayout::addItem.
@@ -385,7 +385,7 @@ func (this *QLayout) AddItem(layoutItem QLayoutItemLike) {
 	C.qute_QLayout_addItem(self, layoutItemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layoutItem)
-	layoutItemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutItemH)
 }
 
 // RemoveWidget wraps QLayout::removeWidget.
@@ -486,7 +486,7 @@ func (this *QLayout) ItemAt(index int) *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ItemAt")
 	r := C.qute_QLayout_itemAt(self, C.int(index))
 	runtime.KeepAlive(this)
-	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QLayoutItem](rt.WrapClassFrom(r, "QLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // TakeAt wraps QLayout::takeAt.
@@ -579,6 +579,8 @@ func (this *QLayout) ControlTypes() QSizePolicyControlTypes {
 //
 // Ownership: from is borrowed for the call only; to becomes Parented: Qt frees it from now on; the result is Owned: Go frees it.
 //
+// Arguments with C++ defaults are left at them; ReplaceWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlayout.html#replaceWidget
 func (this *QLayout) ReplaceWidget(from QWidgetLike, to QWidgetLike) *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.ReplaceWidget")
@@ -595,7 +597,7 @@ func (this *QLayout) ReplaceWidget(from QWidgetLike, to QWidgetLike) *QLayoutIte
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(from)
 	runtime.KeepAlive(to)
-	toH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, toH)
 	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.TakeOwned), r)
 }
 
@@ -694,6 +696,34 @@ func (this *QLayout) IsEnabled() bool {
 	r := C.qute_QLayout_isEnabled(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// ReplaceWidgetFull wraps QLayout::replaceWidget.
+//
+//	C++: QLayoutItem * QLayout::replaceWidget(QWidget * from, QWidget * to, Qt::FindChildOptions options = …)
+//
+// Ownership: from is borrowed for the call only; to becomes Parented: Qt frees it from now on; the result is Owned: Go frees it.
+//
+// ReplaceWidgetFull is ReplaceWidget with every argument, including those ReplaceWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlayout.html#replaceWidget
+func (this *QLayout) ReplaceWidgetFull(from QWidgetLike, to QWidgetLike, options qtcore.FindChildOptions) *QLayoutItem {
+	self := rt.Use(unsafe.Pointer(this), "QLayout.ReplaceWidgetFull")
+	var fromPtr unsafe.Pointer
+	if from != nil {
+		fromPtr = rt.UseArg(unsafe.Pointer(from.AsQWidget()), "QLayout.ReplaceWidgetFull")
+	}
+	var toPtr unsafe.Pointer
+	var toH *rt.Handle
+	if to != nil {
+		toPtr, toH = rt.Arg(unsafe.Pointer(to.AsQWidget()), "QLayout.ReplaceWidgetFull")
+	}
+	r := C.qute_QLayout_replaceWidget_1(self, fromPtr, toPtr, C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, toH)
+	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.TakeOwned), r)
 }
 
 // QLayoutClosestAcceptableSize wraps QLayout::closestAcceptableSize.

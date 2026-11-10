@@ -33,15 +33,18 @@ func enqueueCleanup(arg cleanupArg) {
 	if appExited.Load() {
 		return
 	}
-	n := &qnode{arg: arg}
+	push(&qnode{arg: arg})
+	scheduleDrain()
+}
+
+func push(n *qnode) {
 	for {
 		old := queueHead.Load()
 		n.next = old
 		if queueHead.CompareAndSwap(old, n) {
-			break
+			return
 		}
 	}
-	scheduleDrain()
 }
 
 func scheduleDrain() {
@@ -62,43 +65,54 @@ func Drain() {
 		if appExited.Load() {
 			return // deleting after the app is gone crashes inside Qt destructors
 		}
-		a := n.arg
-		if a.registered {
-			regMu.Lock()
-			e := registry[a.key]
-			ok := e != nil && e.serial == a.serial
-			regMu.Unlock()
-			if !ok {
-				continue // already destroyed, or the address was reused
-			}
-			if a.kind == KindQObject && HasParent(a.key) {
-				// Safety net: an ownership rule was missed and Qt now owns the
-				// object. Never delete something with a parent.
-				continue
-			}
+		freeNode(n.arg)
+	}
+}
+
+func freeNode(a cleanupArg) {
+	if a.registered {
+		regMu.Lock()
+		e := registry[a.key]
+		ok := e != nil && e.serial == a.serial
+		regMu.Unlock()
+		if !ok {
+			return // already destroyed, or the address was reused
 		}
-		a.deleter(a.key)
-		if a.registered {
-			Destroyed(a.key, "freed by GC")
+		if a.kind == KindQObject && HasParent(a.key) {
+			// Safety net: an ownership rule was missed and Qt now owns the
+			// object. Never delete something with a parent.
+			return
 		}
-		if !a.quiet {
-			Drained.Add(1)
-		}
+	}
+	a.deleter(a.key)
+	if a.mem != 0 {
+		memLive.Add(-a.mem)
+	}
+	if a.registered {
+		Destroyed(a.key, "freed by GC")
+	}
+	if !a.quiet {
+		Drained.Add(1)
 	}
 }
 
 // AppStarted is called once the Q*Application exists and the GUI thread can
 // receive posted events.
 func AppStarted() {
+	if AppExists() {
+		installFilterC()
+	}
+	pendingMu.Lock()
 	appExited.Store(false)
 	appRunning.Store(true)
-	pendingMu.Lock()
 	p := pendingPosts
 	pendingPosts = nil
-	pendingMu.Unlock()
+	// posted under the lock, so work queued before the start runs first and
+	// none can slip in between the check in post and this hand-over
 	for _, f := range p {
-		Post(f)
+		postNow(f)
 	}
+	pendingMu.Unlock()
 	if queueHead.Load() != nil {
 		scheduleDrain()
 	}
@@ -131,14 +145,31 @@ func Post(f func()) { post(f) }
 // application starts counts as accepted; work after it exits does not.
 func post(f func()) bool {
 	if !appRunning.Load() {
-		if appExited.Load() {
-			return false
+		if testHookPost != nil {
+			testHookPost()
 		}
 		pendingMu.Lock()
-		pendingPosts = append(pendingPosts, f)
+		if !appRunning.Load() {
+			// checked again under the lock AppStarted hands the list over in,
+			// so f either joins the list before the hand-over or sees the app
+			// running
+			defer pendingMu.Unlock()
+			if appExited.Load() {
+				return false
+			}
+			pendingPosts = append(pendingPosts, f)
+			return true
+		}
 		pendingMu.Unlock()
-		return true
 	}
+	return postNow(f)
+}
+
+// testHookPost runs between post's first look at appRunning and the lock
+// (tests only), where AppStarted used to slip in and strand the work.
+var testHookPost func()
+
+func postNow(f func()) bool {
 	h := cgo.NewHandle(f)
 	if !postC(uintptr(h)) {
 		h.Delete()
@@ -151,6 +182,7 @@ type syncResult struct {
 	panicked bool
 	val      any
 	notRun   bool
+	goexit   bool
 }
 
 type syncCall struct {
@@ -168,14 +200,59 @@ var (
 // errNotRun is the panic PostSync raises when f never ran.
 const errNotRun = "qute.PostSync: the application exited before the function could run on the GUI thread"
 
+// ErrGoexit is the panic PostSync raises when f called runtime.Goexit.
+const ErrGoexit = "qute.PostSync: the function called runtime.Goexit (t.Fatal, t.FailNow or t.Skip) on the GUI thread; " +
+	"inside qute.Run that ends the test, elsewhere return from the function instead"
+
+// AfterRescue, when set, runs on the GUI thread once the event loop that
+// replaced one ended by runtime.Goexit has quit (qute.TestMain exits there).
+var AfterRescue func()
+
 // PostSync runs f on the GUI thread and waits for it. Called on the GUI
-// thread it runs f directly. A panic in f is re-raised in the caller. If the
-// application exits (or the post fails) before f runs, PostSync panics instead
-// of waiting forever.
+// thread it runs f directly. A panic in f is re-raised in the caller, and so
+// is a panic in a signal or virtual handler that f triggered: it is recovered
+// where Qt called the handler, so Qt's C++ frames return normally, and
+// re-raised with the handler's own stack. If the application exits (or the
+// post fails) before f runs, PostSync panics instead of waiting forever.
 func PostSync(f func()) {
+	switch r := postSync(f); {
+	case r.goexit:
+		panic(ErrGoexit)
+	case r.notRun:
+		panic(errNotRun)
+	case r.panicked:
+		panic(r.val)
+	}
+}
+
+// PostSyncExit is PostSync that reports a runtime.Goexit in f (a t.Fatal
+// inside qute.Run) instead of panicking, so the caller can end its own
+// goroutine the same way.
+func PostSyncExit(f func()) (goexit bool) {
+	switch r := postSync(f); {
+	case r.goexit:
+		return true
+	case r.notRun:
+		panic(errNotRun)
+	case r.panicked:
+		panic(r.val)
+	}
+	return false
+}
+
+func postSync(f func()) syncResult {
 	if IsGUIThread() {
+		stop := CapturePanics()
+		returned := false
+		defer func() {
+			// a panic of f itself keeps unwinding; a handler's is raised here
+			if cp := stop(); returned && cp != nil {
+				panic(cp)
+			}
+		}()
 		f()
-		return
+		returned = true
+		return syncResult{}
 	}
 	if !Running() {
 		panic("qute.PostSync: the application is not running; call it from inside qute.Main or a qute.TestMain test")
@@ -189,11 +266,24 @@ func PostSync(f func()) {
 		delete(syncWaiters, s)
 		syncMu.Unlock()
 		r := syncResult{panicked: true}
+		stop := CapturePanics()
 		defer func() {
+			cp := stop()
 			if r.panicked {
 				r.val = recover()
+				if r.val == nil {
+					// recover returns nil only during runtime.Goexit: f
+					// called t.Fatal, which would end the GUI goroutine and
+					// with it every later test
+					r.panicked, r.goexit = false, true
+				}
+			} else if cp != nil {
+				r.panicked, r.val = true, cp
 			}
 			s.finish(r)
+			if r.goexit {
+				rescueGUIThread()
+			}
 		}()
 		f()
 		r.panicked = false
@@ -204,12 +294,16 @@ func PostSync(f func()) {
 		syncMu.Unlock()
 		s.finish(syncResult{notRun: true})
 	}
-	r := <-s.done
-	switch {
-	case r.notRun:
-		panic(errNotRun)
-	case r.panicked:
-		panic(r.val)
+	return <-s.done
+}
+
+// rescueGUIThread runs while runtime.Goexit unwinds the GUI goroutine, which
+// it cannot stop. It keeps that goroutine serving Qt from a nested event loop
+// until the application quits, so later work (the next test) still runs.
+func rescueGUIThread() {
+	nestedLoopC()
+	if AfterRescue != nil {
+		AfterRescue()
 	}
 }
 

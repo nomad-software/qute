@@ -95,9 +95,9 @@ func NewQGradient() *QGradient {
 //	C++: QGradient::QGradient(Preset)
 //
 // Qt docs: https://doc.qt.io/qt-6/qgradient.html#QGradient
-func NewQGradientWithPreset(arg0 QGradientPreset) *QGradient {
+func NewQGradientWithPreset(preset QGradientPreset) *QGradient {
 	rt.CheckThread("NewQGradientWithPreset")
-	p := C.qute_QGradient_new_1(C.int64_t(arg0))
+	p := C.qute_QGradient_new_1(C.int64_t(preset))
 	h := rt.WrapClass(p, "QGradient", rt.NewOwned)
 	return rt.View[QGradient](h, p)
 }

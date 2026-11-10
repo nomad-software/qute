@@ -21,9 +21,12 @@ func qute_qtopengl_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallba
 func qute_qtopengl_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtopengl_virtual
-func qute_qtopengl_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) {
-	rt.Dispatch(uintptr(id), int(idx), args, ret)
+func qute_qtopengl_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
 }
+
+//export qute_qtopengl_wrong_thread
+func qute_qtopengl_wrong_thread() { rt.WrongThread() }
 
 //export qute_qtopengl_dead
 func qute_qtopengl_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }

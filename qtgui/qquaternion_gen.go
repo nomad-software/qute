@@ -95,9 +95,9 @@ func NewQQuaternion() *QQuaternion {
 //	C++: QQuaternion::QQuaternion(Qt::Initialization)
 //
 // Qt docs: https://doc.qt.io/qt-6/qquaternion.html#QQuaternion
-func NewQQuaternionWithInitialization(arg0 qtcore.Initialization) *QQuaternion {
+func NewQQuaternionWithInitialization(initialization qtcore.Initialization) *QQuaternion {
 	rt.CheckThread("NewQQuaternionWithInitialization")
-	p := C.qute_QQuaternion_new_1(C.int64_t(arg0))
+	p := C.qute_QQuaternion_new_1(C.int64_t(initialization))
 	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }

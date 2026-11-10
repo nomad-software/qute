@@ -101,13 +101,13 @@ func NewQUuidWithL(l uint, w1 uint16, w2 uint16, b1 uint8, b2 uint8, b3 uint8, b
 	return rt.View[QUuid](h, p)
 }
 
-// NewQUuidWithStringArg wraps the QUuid constructor.
+// NewQUuidWithString wraps the QUuid constructor.
 //
 //	C++: QUuid::QUuid(QAnyStringView string)
 //
 // Qt docs: https://doc.qt.io/qt-6/quuid.html#QUuid
-func NewQUuidWithStringArg(stringArg string) *QUuid {
-	rt.CheckThread("NewQUuidWithStringArg")
+func NewQUuidWithString(stringArg string) *QUuid {
+	rt.CheckThread("NewQUuidWithString")
 	p := C.qute_QUuid_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
 	h := rt.WrapClass(p, "QUuid", rt.NewOwned)
 	return rt.View[QUuid](h, p)
@@ -116,6 +116,8 @@ func NewQUuidWithStringArg(stringArg string) *QUuid {
 // ToString wraps QUuid::toString.
 //
 //	C++: QString QUuid::toString(StringFormat mode = …) const
+//
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/quuid.html#toString
 func (this *QUuid) ToString() string {
@@ -128,6 +130,8 @@ func (this *QUuid) ToString() string {
 // ToByteArray wraps QUuid::toByteArray.
 //
 //	C++: QByteArray QUuid::toByteArray(StringFormat mode = …) const
+//
+// Arguments with C++ defaults are left at them; ToByteArrayFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/quuid.html#toByteArray
 func (this *QUuid) ToByteArray() []byte {
@@ -183,6 +187,34 @@ func (this *QUuid) Version() QUuidVersion {
 	r := C.qute_QUuid_version(self)
 	runtime.KeepAlive(this)
 	return QUuidVersion(r)
+}
+
+// ToStringFull wraps QUuid::toString.
+//
+//	C++: QString QUuid::toString(StringFormat mode = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/quuid.html#toString
+func (this *QUuid) ToStringFull(mode QUuidStringFormat) string {
+	self := rt.Use(unsafe.Pointer(this), "QUuid.ToStringFull")
+	r := C.qute_QUuid_toString_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToByteArrayFull wraps QUuid::toByteArray.
+//
+//	C++: QByteArray QUuid::toByteArray(StringFormat mode = …) const
+//
+// ToByteArrayFull is ToByteArray with every argument, including those ToByteArray leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/quuid.html#toByteArray
+func (this *QUuid) ToByteArrayFull(mode QUuidStringFormat) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QUuid.ToByteArrayFull")
+	r := C.qute_QUuid_toByteArray_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteBytes(r)
 }
 
 // Data1 wraps the public field QUuid::data1.
@@ -279,6 +311,8 @@ func QUuidFromString(stringArg string) *QUuid {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QUuidFromBytesFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/quuid.html#fromBytes
 func QUuidFromBytes(bytes unsafe.Pointer) *QUuid {
 	rt.CheckThread("QUuidFromBytes")
@@ -350,5 +384,20 @@ func QUuidCreateUuidV3(ns *QUuid, baseData []byte) *QUuid {
 func QUuidCreateUuidV7() *QUuid {
 	rt.CheckThread("QUuidCreateUuidV7")
 	r := C.qute_QUuid_createUuidV7()
+	return rt.View[QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
+}
+
+// QUuidFromBytesFull wraps QUuid::fromBytes.
+//
+//	C++: QUuid QUuid::fromBytes(const void * bytes, QSysInfo::Endian order = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QUuidFromBytesFull is QUuidFromBytes with every argument, including those QUuidFromBytes leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/quuid.html#fromBytes
+func QUuidFromBytesFull(bytes unsafe.Pointer, order QSysInfoEndian) *QUuid {
+	rt.CheckThread("QUuidFromBytesFull")
+	r := C.qute_QUuid_fromBytes_1(bytes, C.int64_t(order))
 	return rt.View[QUuid](rt.WrapClass(r, "QUuid", rt.TakeOwned), r)
 }

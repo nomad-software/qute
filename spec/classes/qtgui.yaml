@@ -3,8 +3,12 @@ package: qtgui
 classes:
   QGuiApplication: { no-construct: true }
   QPaintDevice: { no-construct: true }
-  QImage: { kind: value }
-  QPixmap: { kind: value }
+  QImage:
+    kind: value
+    memory: { size: "$self->sizeInBytes()", changed-by: [load, loadFromData, convertTo] }
+  QPixmap:
+    kind: value
+    memory: { size: "qint64($self->width()) * $self->height() * (($self->depth() + 7) / 8)", changed-by: [load, loadFromData, convertFromImage] }
   QIcon: { kind: value }
   QFont: { kind: value }
   QFontMetrics: { kind: value }
@@ -59,10 +63,15 @@ classes:
   QTextObject: { no-construct: true }
   QTextFrame: {}
   QTextDocumentFragment: { kind: value }
-  QBitmap: { kind: value }
+  QBitmap:
+    kind: value
+    # QPixmap's methods measure a QBitmap again too
+    memory: { size: "qint64($self->width()) * $self->height() * (($self->depth() + 7) / 8)" }
   QColorSpace: { kind: value }
   QColorTransform: { kind: value }
-  QPicture: { kind: value }
+  QPicture:
+    kind: value
+    memory: { size: "$self->size()", changed-by: [load, setData] }
   "QFont::Tag": { kind: value }
   QSurface: { no-construct: true }
   QWindow: {}

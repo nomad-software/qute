@@ -128,6 +128,8 @@ func QCoreApplicationArguments() []string {
 //
 //	C++: void QCoreApplication::setAttribute(Qt::ApplicationAttribute attribute, bool on = …)
 //
+// Arguments with C++ defaults are left at them; QCoreApplicationSetAttributeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#setAttribute
 func QCoreApplicationSetAttribute(attribute ApplicationAttribute) {
 	rt.CheckThread("QCoreApplicationSetAttribute")
@@ -289,6 +291,8 @@ func QCoreApplicationExec() int {
 //
 //	C++: void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; QCoreApplicationProcessEventsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#processEvents
 func QCoreApplicationProcessEvents() {
 	rt.CheckThread("QCoreApplicationProcessEvents")
@@ -345,6 +349,8 @@ func QCoreApplicationSendEvent(receiver QObjectLike, event QEventLike) bool {
 //
 // The post event queue takes ownership of the event and deletes it.
 //
+// Arguments with C++ defaults are left at them; QCoreApplicationPostEventFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#postEvent
 func QCoreApplicationPostEvent(receiver QObjectLike, event QEventLike) {
 	rt.CheckThread("QCoreApplicationPostEvent")
@@ -367,6 +373,8 @@ func QCoreApplicationPostEvent(receiver QObjectLike, event QEventLike) {
 //
 //	C++: void QCoreApplication::sendPostedEvents(QObject * receiver = …, int event_type = …)
 //
+// Arguments with C++ defaults are left at them; QCoreApplicationSendPostedEventsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#sendPostedEvents
 func QCoreApplicationSendPostedEvents() {
 	rt.CheckThread("QCoreApplicationSendPostedEvents")
@@ -376,6 +384,8 @@ func QCoreApplicationSendPostedEvents() {
 // QCoreApplicationRemovePostedEvents wraps QCoreApplication::removePostedEvents.
 //
 //	C++: void QCoreApplication::removePostedEvents(QObject * receiver, int eventType = …)
+//
+// Arguments with C++ defaults are left at them; QCoreApplicationRemovePostedEventsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#removePostedEvents
 func QCoreApplicationRemovePostedEvents(receiver QObjectLike) {
@@ -523,6 +533,8 @@ func QCoreApplicationRemoveTranslator(messageFile QTranslatorLike) bool {
 //
 //	C++: QString QCoreApplication::translate(const char * context, const char * key, const char * disambiguation = …, int n = …)
 //
+// Arguments with C++ defaults are left at them; QCoreApplicationTranslateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#translate
 func QCoreApplicationTranslate(context string, key string) string {
 	rt.CheckThread("QCoreApplicationTranslate")
@@ -573,6 +585,109 @@ func QCoreApplicationQuit() {
 func QCoreApplicationExit(retcode int) {
 	rt.CheckThread("QCoreApplicationExit")
 	C.qute_QCoreApplication_exit(C.int(retcode))
+}
+
+// QCoreApplicationSetAttributeFull wraps QCoreApplication::setAttribute.
+//
+//	C++: void QCoreApplication::setAttribute(Qt::ApplicationAttribute attribute, bool on = …)
+//
+// QCoreApplicationSetAttributeFull is QCoreApplicationSetAttribute with every argument, including those QCoreApplicationSetAttribute leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#setAttribute
+func QCoreApplicationSetAttributeFull(attribute ApplicationAttribute, on bool) {
+	rt.CheckThread("QCoreApplicationSetAttributeFull")
+	C.qute_QCoreApplication_setAttribute_1(C.int64_t(attribute), C.bool(on))
+}
+
+// QCoreApplicationProcessEventsFull wraps QCoreApplication::processEvents.
+//
+//	C++: void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = …)
+//
+// QCoreApplicationProcessEventsFull is QCoreApplicationProcessEvents with every argument, including those QCoreApplicationProcessEvents leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#processEvents
+func QCoreApplicationProcessEventsFull(flags QEventLoopProcessEventsFlags) {
+	rt.CheckThread("QCoreApplicationProcessEventsFull")
+	C.qute_QCoreApplication_processEvents_3(C.int64_t(flags))
+}
+
+// QCoreApplicationPostEventFull wraps QCoreApplication::postEvent.
+//
+//	C++: void QCoreApplication::postEvent(QObject * receiver, QEvent * event, int priority = …)
+//
+// Ownership: receiver is borrowed for the call only; event becomes Parented: Qt frees it from now on.
+//
+// The post event queue takes ownership of the event and deletes it.
+//
+// QCoreApplicationPostEventFull is QCoreApplicationPostEvent with every argument, including those QCoreApplicationPostEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#postEvent
+func QCoreApplicationPostEventFull(receiver QObjectLike, event QEventLike, priority int) {
+	rt.CheckThread("QCoreApplicationPostEventFull")
+	var receiverPtr unsafe.Pointer
+	if receiver != nil {
+		receiverPtr = rt.UseArg(unsafe.Pointer(receiver.AsQObject()), "QCoreApplicationPostEventFull")
+	}
+	var eventPtr unsafe.Pointer
+	var eventH *rt.Handle
+	if event != nil {
+		eventPtr, eventH = rt.Arg(unsafe.Pointer(event.AsQEvent()), "QCoreApplicationPostEventFull")
+	}
+	C.qute_QCoreApplication_postEvent_1(receiverPtr, eventPtr, C.int(priority))
+	runtime.KeepAlive(receiver)
+	runtime.KeepAlive(event)
+	eventH.TransferToCpp()
+}
+
+// QCoreApplicationSendPostedEventsFull wraps QCoreApplication::sendPostedEvents.
+//
+//	C++: void QCoreApplication::sendPostedEvents(QObject * receiver = …, int event_type = …)
+//
+// QCoreApplicationSendPostedEventsFull is QCoreApplicationSendPostedEvents with every argument, including those QCoreApplicationSendPostedEvents leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#sendPostedEvents
+func QCoreApplicationSendPostedEventsFull(receiver QObjectLike, event_type int) {
+	rt.CheckThread("QCoreApplicationSendPostedEventsFull")
+	var receiverPtr unsafe.Pointer
+	if receiver != nil {
+		receiverPtr = rt.UseArg(unsafe.Pointer(receiver.AsQObject()), "QCoreApplicationSendPostedEventsFull")
+	}
+	C.qute_QCoreApplication_sendPostedEvents_1(receiverPtr, C.int(event_type))
+	runtime.KeepAlive(receiver)
+}
+
+// QCoreApplicationRemovePostedEventsFull wraps QCoreApplication::removePostedEvents.
+//
+//	C++: void QCoreApplication::removePostedEvents(QObject * receiver, int eventType = …)
+//
+// QCoreApplicationRemovePostedEventsFull is QCoreApplicationRemovePostedEvents with every argument, including those QCoreApplicationRemovePostedEvents leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#removePostedEvents
+func QCoreApplicationRemovePostedEventsFull(receiver QObjectLike, eventType int) {
+	rt.CheckThread("QCoreApplicationRemovePostedEventsFull")
+	var receiverPtr unsafe.Pointer
+	if receiver != nil {
+		receiverPtr = rt.UseArg(unsafe.Pointer(receiver.AsQObject()), "QCoreApplicationRemovePostedEventsFull")
+	}
+	C.qute_QCoreApplication_removePostedEvents_1(receiverPtr, C.int(eventType))
+	runtime.KeepAlive(receiver)
+}
+
+// QCoreApplicationTranslateFull wraps QCoreApplication::translate.
+//
+//	C++: QString QCoreApplication::translate(const char * context, const char * key, const char * disambiguation = …, int n = …)
+//
+// QCoreApplicationTranslateFull is QCoreApplicationTranslate with every argument, including those QCoreApplicationTranslate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcoreapplication.html#translate
+func QCoreApplicationTranslateFull(context string, key string, disambiguation []byte) string {
+	rt.CheckThread("QCoreApplicationTranslateFull")
+	contextCStr := C.CString(context)
+	defer C.free(unsafe.Pointer(contextCStr))
+	keyCStr := C.CString(key)
+	defer C.free(unsafe.Pointer(keyCStr))
+	r := C.qute_QCoreApplication_translate_1(contextCStr, keyCStr, (*C.char)(unsafe.Pointer(unsafe.SliceData(disambiguation))), C.ptrdiff_t(len(disambiguation)))
+	return quteStr(r)
 }
 
 // OnAboutToQuit connects f to the aboutToQuit signal. The connection ends when the

@@ -51,6 +51,8 @@ func QAbstractItemModelCast(o QObjectLike) *QAbstractItemModel {
 //
 //	C++: bool QAbstractItemModel::hasIndex(int row, int column, const QModelIndex & parent = …) const
 //
+// Arguments with C++ defaults are left at them; HasIndexFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#hasIndex
 func (this *QAbstractItemModel) HasIndex(row int, column int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.HasIndex")
@@ -64,6 +66,8 @@ func (this *QAbstractItemModel) HasIndex(row int, column int) bool {
 //	C++: QModelIndex QAbstractItemModel::index(int row, int column, const QModelIndex & parent = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; IndexFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#index
 func (this *QAbstractItemModel) Index(row int, column int) *QModelIndex {
@@ -107,6 +111,8 @@ func (this *QAbstractItemModel) Sibling(row int, column int, idx *QModelIndex) *
 //
 //	C++: int QAbstractItemModel::rowCount(const QModelIndex & parent = …) const
 //
+// Arguments with C++ defaults are left at them; RowCountFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#rowCount
 func (this *QAbstractItemModel) RowCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RowCount")
@@ -119,6 +125,8 @@ func (this *QAbstractItemModel) RowCount() int {
 //
 //	C++: int QAbstractItemModel::columnCount(const QModelIndex & parent = …) const
 //
+// Arguments with C++ defaults are left at them; ColumnCountFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#columnCount
 func (this *QAbstractItemModel) ColumnCount() int {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.ColumnCount")
@@ -130,6 +138,8 @@ func (this *QAbstractItemModel) ColumnCount() int {
 // HasChildren wraps QAbstractItemModel::hasChildren.
 //
 //	C++: bool QAbstractItemModel::hasChildren(const QModelIndex & parent = …) const
+//
+// Arguments with C++ defaults are left at them; HasChildrenFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#hasChildren
 func (this *QAbstractItemModel) HasChildren() bool {
@@ -145,6 +155,8 @@ func (this *QAbstractItemModel) HasChildren() bool {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; DataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#data
 func (this *QAbstractItemModel) Data(index *QModelIndex) *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.Data")
@@ -157,6 +169,8 @@ func (this *QAbstractItemModel) Data(index *QModelIndex) *QVariant {
 // SetData wraps QAbstractItemModel::setData.
 //
 //	C++: bool QAbstractItemModel::setData(const QModelIndex & index, const QVariant & value, int role = …)
+//
+// Arguments with C++ defaults are left at them; SetDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#setData
 func (this *QAbstractItemModel) SetData(index *QModelIndex, value *QVariant) bool {
@@ -174,6 +188,8 @@ func (this *QAbstractItemModel) SetData(index *QModelIndex, value *QVariant) boo
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; HeaderDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#headerData
 func (this *QAbstractItemModel) HeaderData(section int, orientation Orientations) *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.HeaderData")
@@ -185,6 +201,8 @@ func (this *QAbstractItemModel) HeaderData(section int, orientation Orientations
 // SetHeaderData wraps QAbstractItemModel::setHeaderData.
 //
 //	C++: bool QAbstractItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role = …)
+//
+// Arguments with C++ defaults are left at them; SetHeaderDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#setHeaderData
 func (this *QAbstractItemModel) SetHeaderData(section int, orientation Orientations, value *QVariant) bool {
@@ -340,6 +358,8 @@ func (this *QAbstractItemModel) SupportedDragActions() DropActions {
 //
 //	C++: bool QAbstractItemModel::insertRows(int row, int count, const QModelIndex & parent = …)
 //
+// Arguments with C++ defaults are left at them; InsertRowsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertRows
 func (this *QAbstractItemModel) InsertRows(row int, count int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.InsertRows")
@@ -351,6 +371,8 @@ func (this *QAbstractItemModel) InsertRows(row int, count int) bool {
 // InsertColumns wraps QAbstractItemModel::insertColumns.
 //
 //	C++: bool QAbstractItemModel::insertColumns(int column, int count, const QModelIndex & parent = …)
+//
+// Arguments with C++ defaults are left at them; InsertColumnsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertColumns
 func (this *QAbstractItemModel) InsertColumns(column int, count int) bool {
@@ -364,6 +386,8 @@ func (this *QAbstractItemModel) InsertColumns(column int, count int) bool {
 //
 //	C++: bool QAbstractItemModel::removeRows(int row, int count, const QModelIndex & parent = …)
 //
+// Arguments with C++ defaults are left at them; RemoveRowsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeRows
 func (this *QAbstractItemModel) RemoveRows(row int, count int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RemoveRows")
@@ -375,6 +399,8 @@ func (this *QAbstractItemModel) RemoveRows(row int, count int) bool {
 // RemoveColumns wraps QAbstractItemModel::removeColumns.
 //
 //	C++: bool QAbstractItemModel::removeColumns(int column, int count, const QModelIndex & parent = …)
+//
+// Arguments with C++ defaults are left at them; RemoveColumnsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeColumns
 func (this *QAbstractItemModel) RemoveColumns(column int, count int) bool {
@@ -416,6 +442,8 @@ func (this *QAbstractItemModel) MoveColumns(sourceParent *QModelIndex, sourceCol
 //
 //	C++: bool QAbstractItemModel::insertRow(int row, const QModelIndex & parent = …)
 //
+// Arguments with C++ defaults are left at them; InsertRowFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertRow
 func (this *QAbstractItemModel) InsertRow(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.InsertRow")
@@ -427,6 +455,8 @@ func (this *QAbstractItemModel) InsertRow(row int) bool {
 // InsertColumn wraps QAbstractItemModel::insertColumn.
 //
 //	C++: bool QAbstractItemModel::insertColumn(int column, const QModelIndex & parent = …)
+//
+// Arguments with C++ defaults are left at them; InsertColumnFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertColumn
 func (this *QAbstractItemModel) InsertColumn(column int) bool {
@@ -440,6 +470,8 @@ func (this *QAbstractItemModel) InsertColumn(column int) bool {
 //
 //	C++: bool QAbstractItemModel::removeRow(int row, const QModelIndex & parent = …)
 //
+// Arguments with C++ defaults are left at them; RemoveRowFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeRow
 func (this *QAbstractItemModel) RemoveRow(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RemoveRow")
@@ -451,6 +483,8 @@ func (this *QAbstractItemModel) RemoveRow(row int) bool {
 // RemoveColumn wraps QAbstractItemModel::removeColumn.
 //
 //	C++: bool QAbstractItemModel::removeColumn(int column, const QModelIndex & parent = …)
+//
+// Arguments with C++ defaults are left at them; RemoveColumnFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeColumn
 func (this *QAbstractItemModel) RemoveColumn(column int) bool {
@@ -530,6 +564,8 @@ func (this *QAbstractItemModel) Flags(index *QModelIndex) ItemFlags {
 //
 //	C++: void QAbstractItemModel::sort(int column, Qt::SortOrder order = …)
 //
+// Arguments with C++ defaults are left at them; SortFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#sort
 func (this *QAbstractItemModel) Sort(column int) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.Sort")
@@ -555,6 +591,8 @@ func (this *QAbstractItemModel) Buddy(index *QModelIndex) *QModelIndex {
 // Match wraps QAbstractItemModel::match.
 //
 //	C++: QModelIndexList QAbstractItemModel::match(const QModelIndex & start, int role, const QVariant & value, int hits = …, Qt::MatchFlags flags = …) const
+//
+// Arguments with C++ defaults are left at them; MatchFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#match
 func (this *QAbstractItemModel) Match(start *QModelIndex, role int, value *QVariant) []*QModelIndex {
@@ -596,6 +634,8 @@ func (this *QAbstractItemModel) RoleNames() map[int][]byte {
 // CheckIndex wraps QAbstractItemModel::checkIndex.
 //
 //	C++: bool QAbstractItemModel::checkIndex(const QModelIndex & index, CheckIndexOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; CheckIndexFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#checkIndex
 func (this *QAbstractItemModel) CheckIndex(index *QModelIndex) bool {
@@ -673,6 +713,313 @@ func (this *QAbstractItemModel) EmitLayoutAboutToBeChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.EmitLayoutAboutToBeChanged")
 	C.qute_QAbstractItemModel_layoutAboutToBeChanged_1(self)
 	runtime.KeepAlive(this)
+}
+
+// HasIndexFull wraps QAbstractItemModel::hasIndex.
+//
+//	C++: bool QAbstractItemModel::hasIndex(int row, int column, const QModelIndex & parent = …) const
+//
+// HasIndexFull is HasIndex with every argument, including those HasIndex leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#hasIndex
+func (this *QAbstractItemModel) HasIndexFull(row int, column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.HasIndexFull")
+	r := C.qute_QAbstractItemModel_hasIndex_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.HasIndexFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// IndexFull wraps QAbstractItemModel::index.
+//
+//	C++: QModelIndex QAbstractItemModel::index(int row, int column, const QModelIndex & parent = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// IndexFull is Index with every argument, including those Index leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#index
+func (this *QAbstractItemModel) IndexFull(row int, column int, parent *QModelIndex) *QModelIndex {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.IndexFull")
+	r := C.qute_QAbstractItemModel_index_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.IndexFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// RowCountFull wraps QAbstractItemModel::rowCount.
+//
+//	C++: int QAbstractItemModel::rowCount(const QModelIndex & parent = …) const
+//
+// RowCountFull is RowCount with every argument, including those RowCount leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#rowCount
+func (this *QAbstractItemModel) RowCountFull(parent *QModelIndex) int {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RowCountFull")
+	r := C.qute_QAbstractItemModel_rowCount_1(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.RowCountFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return int(r)
+}
+
+// ColumnCountFull wraps QAbstractItemModel::columnCount.
+//
+//	C++: int QAbstractItemModel::columnCount(const QModelIndex & parent = …) const
+//
+// ColumnCountFull is ColumnCount with every argument, including those ColumnCount leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#columnCount
+func (this *QAbstractItemModel) ColumnCountFull(parent *QModelIndex) int {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.ColumnCountFull")
+	r := C.qute_QAbstractItemModel_columnCount_1(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.ColumnCountFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return int(r)
+}
+
+// HasChildrenFull wraps QAbstractItemModel::hasChildren.
+//
+//	C++: bool QAbstractItemModel::hasChildren(const QModelIndex & parent = …) const
+//
+// HasChildrenFull is HasChildren with every argument, including those HasChildren leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#hasChildren
+func (this *QAbstractItemModel) HasChildrenFull(parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.HasChildrenFull")
+	r := C.qute_QAbstractItemModel_hasChildren_1(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.HasChildrenFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// DataFull wraps QAbstractItemModel::data.
+//
+//	C++: QVariant QAbstractItemModel::data(const QModelIndex & index, int role = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// DataFull is Data with every argument, including those Data leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#data
+func (this *QAbstractItemModel) DataFull(index *QModelIndex, role int) *QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.DataFull")
+	r := C.qute_QAbstractItemModel_data_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemModel.DataFull"), C.int(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetDataFull wraps QAbstractItemModel::setData.
+//
+//	C++: bool QAbstractItemModel::setData(const QModelIndex & index, const QVariant & value, int role = …)
+//
+// SetDataFull is SetData with every argument, including those SetData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#setData
+func (this *QAbstractItemModel) SetDataFull(index *QModelIndex, value *QVariant, role int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.SetDataFull")
+	r := C.qute_QAbstractItemModel_setData_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemModel.SetDataFull"), rt.UseArg(unsafe.Pointer(value), "QAbstractItemModel.SetDataFull"), C.int(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(value)
+	return bool(r)
+}
+
+// HeaderDataFull wraps QAbstractItemModel::headerData.
+//
+//	C++: QVariant QAbstractItemModel::headerData(int section, Qt::Orientation orientation, int role = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// HeaderDataFull is HeaderData with every argument, including those HeaderData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#headerData
+func (this *QAbstractItemModel) HeaderDataFull(section int, orientation Orientations, role int) *QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.HeaderDataFull")
+	r := C.qute_QAbstractItemModel_headerData_1(self, C.int(section), C.int64_t(orientation), C.int(role))
+	runtime.KeepAlive(this)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetHeaderDataFull wraps QAbstractItemModel::setHeaderData.
+//
+//	C++: bool QAbstractItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role = …)
+//
+// SetHeaderDataFull is SetHeaderData with every argument, including those SetHeaderData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#setHeaderData
+func (this *QAbstractItemModel) SetHeaderDataFull(section int, orientation Orientations, value *QVariant, role int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.SetHeaderDataFull")
+	r := C.qute_QAbstractItemModel_setHeaderData_1(self, C.int(section), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(value), "QAbstractItemModel.SetHeaderDataFull"), C.int(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
+	return bool(r)
+}
+
+// InsertRowsFull wraps QAbstractItemModel::insertRows.
+//
+//	C++: bool QAbstractItemModel::insertRows(int row, int count, const QModelIndex & parent = …)
+//
+// InsertRowsFull is InsertRows with every argument, including those InsertRows leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertRows
+func (this *QAbstractItemModel) InsertRowsFull(row int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.InsertRowsFull")
+	r := C.qute_QAbstractItemModel_insertRows_1(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.InsertRowsFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// InsertColumnsFull wraps QAbstractItemModel::insertColumns.
+//
+//	C++: bool QAbstractItemModel::insertColumns(int column, int count, const QModelIndex & parent = …)
+//
+// InsertColumnsFull is InsertColumns with every argument, including those InsertColumns leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertColumns
+func (this *QAbstractItemModel) InsertColumnsFull(column int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.InsertColumnsFull")
+	r := C.qute_QAbstractItemModel_insertColumns_1(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.InsertColumnsFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveRowsFull wraps QAbstractItemModel::removeRows.
+//
+//	C++: bool QAbstractItemModel::removeRows(int row, int count, const QModelIndex & parent = …)
+//
+// RemoveRowsFull is RemoveRows with every argument, including those RemoveRows leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeRows
+func (this *QAbstractItemModel) RemoveRowsFull(row int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RemoveRowsFull")
+	r := C.qute_QAbstractItemModel_removeRows_1(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.RemoveRowsFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveColumnsFull wraps QAbstractItemModel::removeColumns.
+//
+//	C++: bool QAbstractItemModel::removeColumns(int column, int count, const QModelIndex & parent = …)
+//
+// RemoveColumnsFull is RemoveColumns with every argument, including those RemoveColumns leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeColumns
+func (this *QAbstractItemModel) RemoveColumnsFull(column int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RemoveColumnsFull")
+	r := C.qute_QAbstractItemModel_removeColumns_1(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.RemoveColumnsFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// InsertRowFull wraps QAbstractItemModel::insertRow.
+//
+//	C++: bool QAbstractItemModel::insertRow(int row, const QModelIndex & parent = …)
+//
+// InsertRowFull is InsertRow with every argument, including those InsertRow leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertRow
+func (this *QAbstractItemModel) InsertRowFull(row int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.InsertRowFull")
+	r := C.qute_QAbstractItemModel_insertRow_1(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.InsertRowFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// InsertColumnFull wraps QAbstractItemModel::insertColumn.
+//
+//	C++: bool QAbstractItemModel::insertColumn(int column, const QModelIndex & parent = …)
+//
+// InsertColumnFull is InsertColumn with every argument, including those InsertColumn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#insertColumn
+func (this *QAbstractItemModel) InsertColumnFull(column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.InsertColumnFull")
+	r := C.qute_QAbstractItemModel_insertColumn_1(self, C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.InsertColumnFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveRowFull wraps QAbstractItemModel::removeRow.
+//
+//	C++: bool QAbstractItemModel::removeRow(int row, const QModelIndex & parent = …)
+//
+// RemoveRowFull is RemoveRow with every argument, including those RemoveRow leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeRow
+func (this *QAbstractItemModel) RemoveRowFull(row int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RemoveRowFull")
+	r := C.qute_QAbstractItemModel_removeRow_1(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.RemoveRowFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveColumnFull wraps QAbstractItemModel::removeColumn.
+//
+//	C++: bool QAbstractItemModel::removeColumn(int column, const QModelIndex & parent = …)
+//
+// RemoveColumnFull is RemoveColumn with every argument, including those RemoveColumn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#removeColumn
+func (this *QAbstractItemModel) RemoveColumnFull(column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.RemoveColumnFull")
+	r := C.qute_QAbstractItemModel_removeColumn_1(self, C.int(column), rt.UseArg(unsafe.Pointer(parent), "QAbstractItemModel.RemoveColumnFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// SortFull wraps QAbstractItemModel::sort.
+//
+//	C++: void QAbstractItemModel::sort(int column, Qt::SortOrder order = …)
+//
+// SortFull is Sort with every argument, including those Sort leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#sort
+func (this *QAbstractItemModel) SortFull(column int, order SortOrder) {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.SortFull")
+	C.qute_QAbstractItemModel_sort_1(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(this)
+}
+
+// MatchFull wraps QAbstractItemModel::match.
+//
+//	C++: QModelIndexList QAbstractItemModel::match(const QModelIndex & start, int role, const QVariant & value, int hits = …, Qt::MatchFlags flags = …) const
+//
+// MatchFull is Match with every argument, including those Match leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#match
+func (this *QAbstractItemModel) MatchFull(start *QModelIndex, role int, value *QVariant, hits int, flags MatchFlags) []*QModelIndex {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.MatchFull")
+	r := C.qute_QAbstractItemModel_match_1(self, rt.UseArg(unsafe.Pointer(start), "QAbstractItemModel.MatchFull"), C.int(role), rt.UseArg(unsafe.Pointer(value), "QAbstractItemModel.MatchFull"), C.int(hits), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(start)
+	runtime.KeepAlive(value)
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
+		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// CheckIndexFull wraps QAbstractItemModel::checkIndex.
+//
+//	C++: bool QAbstractItemModel::checkIndex(const QModelIndex & index, CheckIndexOptions options = …) const
+//
+// CheckIndexFull is CheckIndex with every argument, including those CheckIndex leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemmodel.html#checkIndex
+func (this *QAbstractItemModel) CheckIndexFull(index *QModelIndex, options QAbstractItemModelCheckIndexOptions) bool {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.CheckIndexFull")
+	r := C.qute_QAbstractItemModel_checkIndex_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemModel.CheckIndexFull"), C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+	return bool(r)
 }
 
 // OnDataChanged connects f to the dataChanged signal. The connection ends when the
@@ -1180,6 +1527,9 @@ var qAbstractItemModelVTable = []rt.Virtual{
 				MimeData([]*QModelIndex) *QMimeData
 			}).MimeData(indexes)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractItemModel.MimeData")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
 		}},
 	{Name: "CanDropMimeData", Has: func(v any) bool {
 		_, ok := v.(interface {

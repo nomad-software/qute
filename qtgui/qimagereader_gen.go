@@ -95,6 +95,8 @@ func NewQImageReader() *QImageReader {
 //
 // Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
 //
+// Arguments with C++ defaults are left at them; NewQImageReaderWithIODeviceFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimagereader.html#QImageReader
 func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 	rt.CheckThread("NewQImageReaderWithIODevice")
@@ -114,10 +116,49 @@ func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 //
 //	C++: QImageReader::QImageReader(const QString & fileName, const QByteArray & format = …)
 //
+// Arguments with C++ defaults are left at them; NewQImageReaderWithFileNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qimagereader.html#QImageReader
 func NewQImageReaderWithFileName(fileName string) *QImageReader {
 	rt.CheckThread("NewQImageReaderWithFileName")
 	p := C.qute_QImageReader_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
+	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	return rt.View[QImageReader](h, p)
+}
+
+// NewQImageReaderWithIODeviceFull wraps the QImageReader constructor.
+//
+//	C++: QImageReader::QImageReader(QIODevice * device, const QByteArray & format = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// NewQImageReaderWithIODeviceFull is NewQImageReaderWithIODevice with every argument, including those NewQImageReaderWithIODevice leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimagereader.html#QImageReader
+func NewQImageReaderWithIODeviceFull(device qtcore.QIODeviceLike, format []byte) *QImageReader {
+	rt.CheckThread("NewQImageReaderWithIODeviceFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "NewQImageReaderWithIODeviceFull")
+	}
+	p := C.qute_QImageReader_new_3(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	rt.KeepArg(h, "device", deviceH)
+	return rt.View[QImageReader](h, p)
+}
+
+// NewQImageReaderWithFileNameFull wraps the QImageReader constructor.
+//
+//	C++: QImageReader::QImageReader(const QString & fileName, const QByteArray & format = …)
+//
+// NewQImageReaderWithFileNameFull is NewQImageReaderWithFileName with every argument, including those NewQImageReaderWithFileName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimagereader.html#QImageReader
+func NewQImageReaderWithFileNameFull(fileName string, format []byte) *QImageReader {
+	rt.CheckThread("NewQImageReaderWithFileNameFull")
+	p := C.qute_QImageReader_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
 	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
 	return rt.View[QImageReader](h, p)
 }

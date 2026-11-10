@@ -95,9 +95,9 @@ func NewQMatrix4x4() *QMatrix4x4 {
 //	C++: QMatrix4x4::QMatrix4x4(Qt::Initialization)
 //
 // Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#QMatrix4x4
-func NewQMatrix4x4WithInitialization(arg0 qtcore.Initialization) *QMatrix4x4 {
+func NewQMatrix4x4WithInitialization(initialization qtcore.Initialization) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithInitialization")
-	p := C.qute_QMatrix4x4_new_1(C.int64_t(arg0))
+	p := C.qute_QMatrix4x4_new_1(C.int64_t(initialization))
 	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
@@ -383,6 +383,8 @@ func (this *QMatrix4x4) TranslateFloat32Float32(x float32, y float32, z float32)
 // RotateAngleFloat32 wraps QMatrix4x4::rotate.
 //
 //	C++: void QMatrix4x4::rotate(float angle, float x, float y, float z = …)
+//
+// Arguments with C++ defaults are left at them; RotateAngleFloat32Full takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#rotate
 func (this *QMatrix4x4) RotateAngleFloat32(angle float32, x float32, y float32) {
@@ -682,4 +684,17 @@ func (this *QMatrix4x4) Flags() QMatrix4x4Flags {
 	r := C.qute_QMatrix4x4_flags(self)
 	runtime.KeepAlive(this)
 	return QMatrix4x4Flags(r)
+}
+
+// RotateAngleFloat32Full wraps QMatrix4x4::rotate.
+//
+//	C++: void QMatrix4x4::rotate(float angle, float x, float y, float z = …)
+//
+// RotateAngleFloat32Full is RotateAngleFloat32 with every argument, including those RotateAngleFloat32 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#rotate
+func (this *QMatrix4x4) RotateAngleFloat32Full(angle float32, x float32, y float32, z float32) {
+	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.RotateAngleFloat32Full")
+	C.qute_QMatrix4x4_rotate_3(self, C.float(angle), C.float(x), C.float(y), C.float(z))
+	runtime.KeepAlive(this)
 }

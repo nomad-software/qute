@@ -251,6 +251,8 @@ func (this *QGlyphRun) IsRightToLeft() bool {
 //
 //	C++: void QGlyphRun::setFlag(GlyphRunFlag flag, bool enabled = …)
 //
+// Arguments with C++ defaults are left at them; SetFlagFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qglyphrun.html#setFlag
 func (this *QGlyphRun) SetFlag(flag QGlyphRunGlyphRunFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetFlag")
@@ -364,4 +366,17 @@ func (this *QGlyphRun) IsEmpty() bool {
 	r := C.qute_QGlyphRun_isEmpty(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// SetFlagFull wraps QGlyphRun::setFlag.
+//
+//	C++: void QGlyphRun::setFlag(GlyphRunFlag flag, bool enabled = …)
+//
+// SetFlagFull is SetFlag with every argument, including those SetFlag leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qglyphrun.html#setFlag
+func (this *QGlyphRun) SetFlagFull(flag QGlyphRunGlyphRunFlags, enabled bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGlyphRun.SetFlagFull")
+	C.qute_QGlyphRun_setFlag_1(self, C.int64_t(flag), C.bool(enabled))
+	runtime.KeepAlive(this)
 }

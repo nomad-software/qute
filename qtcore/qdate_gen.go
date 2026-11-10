@@ -387,6 +387,8 @@ func (this *QDate) EndOfDay() *QDateTime {
 //
 //	C++: QString QDate::toString(Qt::DateFormat format = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#toString
 func (this *QDate) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QDate.ToString")
@@ -557,6 +559,20 @@ func (this *QDate) ToJulianDay() int64 {
 	return int64(r)
 }
 
+// ToStringFull wraps QDate::toString.
+//
+//	C++: QString QDate::toString(Qt::DateFormat format = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#toString
+func (this *QDate) ToStringFull(format DateFormat) string {
+	self := rt.Use(unsafe.Pointer(this), "QDate.ToStringFull")
+	r := C.qute_QDate_toString_3(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
 // QDateCurrentDate wraps QDate::currentDate.
 //
 //	C++: QDate QDate::currentDate()
@@ -575,6 +591,8 @@ func QDateCurrentDate() *QDate {
 //	C++: QDate QDate::fromString(const QString & string, Qt::DateFormat format = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QDateFromStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
 func QDateFromString(stringArg string) *QDate {
@@ -617,6 +635,8 @@ func QDateFromStringFormatYearCalendar(stringArg string, format string, baseYear
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QDateFromStringFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
 func QDateFromStringFormat(stringArg string, format string) *QDate {
 	rt.CheckThread("QDateFromStringFormat")
@@ -656,5 +676,35 @@ func QDateIsLeapYear(year int) bool {
 func QDateFromJulianDay(jd_ int64) *QDate {
 	rt.CheckThread("QDateFromJulianDay")
 	r := C.qute_QDate_fromJulianDay(C.longlong(jd_))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// QDateFromStringFull wraps QDate::fromString.
+//
+//	C++: QDate QDate::fromString(const QString & string, Qt::DateFormat format = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QDateFromStringFull is QDateFromString with every argument, including those QDateFromString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
+func QDateFromStringFull(stringArg string, format DateFormat) *QDate {
+	rt.CheckThread("QDateFromStringFull")
+	r := C.qute_QDate_fromString_4((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format))
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// QDateFromStringFormatFull wraps QDate::fromString.
+//
+//	C++: QDate QDate::fromString(const QString & string, const QString & format, int baseYear = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QDateFromStringFormatFull is QDateFromStringFormat with every argument, including those QDateFromStringFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#fromString
+func QDateFromStringFormatFull(stringArg string, format string, baseYear int) *QDate {
+	rt.CheckThread("QDateFromStringFormatFull")
+	r := C.qute_QDate_fromString_5((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear))
 	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
 }

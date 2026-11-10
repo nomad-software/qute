@@ -95,9 +95,9 @@ func NewQVector3D() *QVector3D {
 //	C++: QVector3D::QVector3D(Qt::Initialization)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvector3d.html#QVector3D
-func NewQVector3DWithInitialization(arg0 qtcore.Initialization) *QVector3D {
+func NewQVector3DWithInitialization(initialization qtcore.Initialization) *QVector3D {
 	rt.CheckThread("NewQVector3DWithInitialization")
-	p := C.qute_QVector3D_new_1(C.int64_t(arg0))
+	p := C.qute_QVector3D_new_1(C.int64_t(initialization))
 	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }

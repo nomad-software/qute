@@ -89,14 +89,30 @@ func NewQCalendarYearMonthDay() *QCalendarYearMonthDay {
 	return rt.View[QCalendarYearMonthDay](h, p)
 }
 
-// NewQCalendarYearMonthDayWithY wraps the QCalendarYearMonthDay constructor.
+// NewQCalendarYearMonthDayWithYear wraps the QCalendarYearMonthDay constructor.
 //
 //	C++: QCalendarYearMonthDay::YearMonthDay(int y, int m = …, int d = …)
 //
+// Arguments with C++ defaults are left at them; NewQCalendarYearMonthDayWithYearFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcalendaryearmonthday.html#QCalendarYearMonthDay
-func NewQCalendarYearMonthDayWithY(y int) *QCalendarYearMonthDay {
-	rt.CheckThread("NewQCalendarYearMonthDayWithY")
+func NewQCalendarYearMonthDayWithYear(y int) *QCalendarYearMonthDay {
+	rt.CheckThread("NewQCalendarYearMonthDayWithYear")
 	p := C.qute_QCalendarYearMonthDay_new_1(C.int(y))
+	h := rt.WrapClass(p, "QCalendarYearMonthDay", rt.NewOwned)
+	return rt.View[QCalendarYearMonthDay](h, p)
+}
+
+// NewQCalendarYearMonthDayWithYearFull wraps the QCalendarYearMonthDay constructor.
+//
+//	C++: QCalendarYearMonthDay::YearMonthDay(int y, int m = …, int d = …)
+//
+// NewQCalendarYearMonthDayWithYearFull is NewQCalendarYearMonthDayWithYear with every argument, including those NewQCalendarYearMonthDayWithYear leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendaryearmonthday.html#QCalendarYearMonthDay
+func NewQCalendarYearMonthDayWithYearFull(y int, m int, d int) *QCalendarYearMonthDay {
+	rt.CheckThread("NewQCalendarYearMonthDayWithYearFull")
+	p := C.qute_QCalendarYearMonthDay_new_2(C.int(y), C.int(m), C.int(d))
 	h := rt.WrapClass(p, "QCalendarYearMonthDay", rt.NewOwned)
 	return rt.View[QCalendarYearMonthDay](h, p)
 }

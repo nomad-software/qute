@@ -28,6 +28,12 @@ func init() {
 	rt.RegisterClass("QGraphicsItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsItem_delete(p) })
 }
 
+// A QGraphicsItem may be a QObject (through a QObject subclass); its wrapper then
+// shares that object's handle and learns of its death.
+func init() {
+	rt.RegisterBaseOfQObject("QGraphicsItem", func(p unsafe.Pointer) unsafe.Pointer { return C.qute_QGraphicsItem_qobject(p) })
+}
+
 // QGraphicsItemFromPtr wraps an existing C++ QGraphicsItem. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QGraphicsItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QGraphicsItem {
@@ -103,7 +109,7 @@ func (this *QGraphicsItem) ParentItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.ParentItem")
 	r := C.qute_QGraphicsItem_parentItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // TopLevelItem wraps QGraphicsItem::topLevelItem.
@@ -117,7 +123,7 @@ func (this *QGraphicsItem) TopLevelItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.TopLevelItem")
 	r := C.qute_QGraphicsItem_topLevelItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // ParentObject wraps QGraphicsItem::parentObject.
@@ -187,7 +193,7 @@ func (this *QGraphicsItem) Panel() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Panel")
 	r := C.qute_QGraphicsItem_panel(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetParentItem wraps QGraphicsItem::setParentItem.
@@ -221,7 +227,7 @@ func (this *QGraphicsItem) ChildItems() []*QGraphicsItem {
 	r := C.qute_QGraphicsItem_childItems(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -286,7 +292,7 @@ func (this *QGraphicsItem) Group() *QGraphicsItemGroup {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Group")
 	r := C.qute_QGraphicsItem_group(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItemGroup](rt.WrapClass(r, "QGraphicsItemGroup", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItemGroup](rt.WrapClassFrom(r, "QGraphicsItemGroup", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetGroup wraps QGraphicsItem::setGroup.
@@ -326,6 +332,8 @@ func (this *QGraphicsItem) Flags() QGraphicsItemGraphicsItemFlags {
 //
 //	C++: void QGraphicsItem::setFlag(GraphicsItemFlag flag, bool enabled = …)
 //
+// Arguments with C++ defaults are left at them; SetFlagFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setFlag
 func (this *QGraphicsItem) SetFlag(flag QGraphicsItemGraphicsItemFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetFlag")
@@ -359,6 +367,8 @@ func (this *QGraphicsItem) CacheMode() QGraphicsItemCacheMode {
 // SetCacheMode wraps QGraphicsItem::setCacheMode.
 //
 //	C++: void QGraphicsItem::setCacheMode(CacheMode mode, const QSize & cacheSize = …)
+//
+// Arguments with C++ defaults are left at them; SetCacheModeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setCacheMode
 func (this *QGraphicsItem) SetCacheMode(mode QGraphicsItemCacheMode) {
@@ -673,7 +683,7 @@ func (this *QGraphicsItem) SetGraphicsEffect(effect QGraphicsEffectLike) {
 	C.qute_QGraphicsItem_setGraphicsEffect(self, effectPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(effect)
-	effectH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, effectH)
 }
 
 // AcceptedMouseButtons wraps QGraphicsItem::acceptedMouseButtons.
@@ -830,6 +840,8 @@ func (this *QGraphicsItem) HasFocus() bool {
 //
 //	C++: void QGraphicsItem::setFocus(Qt::FocusReason focusReason = …)
 //
+// Arguments with C++ defaults are left at them; SetFocusFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setFocus
 func (this *QGraphicsItem) SetFocus() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetFocus")
@@ -859,7 +871,7 @@ func (this *QGraphicsItem) FocusProxy() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.FocusProxy")
 	r := C.qute_QGraphicsItem_focusProxy(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetFocusProxy wraps QGraphicsItem::setFocusProxy.
@@ -889,7 +901,7 @@ func (this *QGraphicsItem) FocusItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.FocusItem")
 	r := C.qute_QGraphicsItem_focusItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // FocusScopeItem wraps QGraphicsItem::focusScopeItem.
@@ -903,7 +915,7 @@ func (this *QGraphicsItem) FocusScopeItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.FocusScopeItem")
 	r := C.qute_QGraphicsItem_focusScopeItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // GrabMouse wraps QGraphicsItem::grabMouse.
@@ -1046,6 +1058,8 @@ func (this *QGraphicsItem) MoveBy(dx float64, dy float64) {
 //
 //	C++: void QGraphicsItem::ensureVisible(const QRectF & rect = …, int xmargin = …, int ymargin = …)
 //
+// Arguments with C++ defaults are left at them; EnsureVisibleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#ensureVisible
 func (this *QGraphicsItem) EnsureVisible() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.EnsureVisible")
@@ -1118,6 +1132,8 @@ func (this *QGraphicsItem) ItemTransform(other QGraphicsItemLike) *qtgui.QTransf
 // SetTransform wraps QGraphicsItem::setTransform.
 //
 //	C++: void QGraphicsItem::setTransform(const QTransform & matrix, bool combine = …)
+//
+// Arguments with C++ defaults are left at them; SetTransformFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setTransform
 func (this *QGraphicsItem) SetTransform(matrix *qtgui.QTransform) {
@@ -1383,6 +1399,8 @@ func (this *QGraphicsItem) Contains(point qtcore.QPointF) bool {
 //
 //	C++: bool QGraphicsItem::collidesWithItem(const QGraphicsItem * other, Qt::ItemSelectionMode mode = …) const
 //
+// Arguments with C++ defaults are left at them; CollidesWithItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#collidesWithItem
 func (this *QGraphicsItem) CollidesWithItem(other QGraphicsItemLike) bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.CollidesWithItem")
@@ -1400,6 +1418,8 @@ func (this *QGraphicsItem) CollidesWithItem(other QGraphicsItemLike) bool {
 //
 //	C++: bool QGraphicsItem::collidesWithPath(const QPainterPath & path, Qt::ItemSelectionMode mode = …) const
 //
+// Arguments with C++ defaults are left at them; CollidesWithPathFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#collidesWithPath
 func (this *QGraphicsItem) CollidesWithPath(path *qtgui.QPainterPath) bool {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.CollidesWithPath")
@@ -1415,19 +1435,23 @@ func (this *QGraphicsItem) CollidesWithPath(path *qtgui.QPainterPath) bool {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; CollidingItemsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#collidingItems
 func (this *QGraphicsItem) CollidingItems() []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.CollidingItems")
 	r := C.qute_QGraphicsItem_collidingItems(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
 // IsObscured wraps QGraphicsItem::isObscured.
 //
 //	C++: bool QGraphicsItem::isObscured(const QRectF & rect = …) const
+//
+// Arguments with C++ defaults are left at them; IsObscuredFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#isObscured
 func (this *QGraphicsItem) IsObscured() bool {
@@ -1510,6 +1534,8 @@ func (this *QGraphicsItem) SetBoundingRegionGranularity(granularity float64) {
 //
 //	C++: void QGraphicsItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
 //
+// Arguments with C++ defaults are left at them; PaintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#paint
 func (this *QGraphicsItem) Paint(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.Paint")
@@ -1548,6 +1574,8 @@ func (this *QGraphicsItem) UpdateRect(rect qtcore.QRectF) {
 // Scroll wraps QGraphicsItem::scroll.
 //
 //	C++: void QGraphicsItem::scroll(qreal dx, qreal dy, const QRectF & rect = …)
+//
+// Arguments with C++ defaults are left at them; ScrollFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#scroll
 func (this *QGraphicsItem) Scroll(dx float64, dy float64) {
@@ -2041,7 +2069,7 @@ func (this *QGraphicsItem) CommonAncestorItem(other QGraphicsItemLike) *QGraphic
 	r := C.qute_QGraphicsItem_commonAncestorItem(self, otherPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(other)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // IsUnderMouse wraps QGraphicsItem::isUnderMouse.
@@ -2147,4 +2175,173 @@ func (this *QGraphicsItem) RemoveSceneEventFilter(filterItem QGraphicsItemLike) 
 	C.qute_QGraphicsItem_removeSceneEventFilter(self, filterItemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(filterItem)
+}
+
+// SetFlagFull wraps QGraphicsItem::setFlag.
+//
+//	C++: void QGraphicsItem::setFlag(GraphicsItemFlag flag, bool enabled = …)
+//
+// SetFlagFull is SetFlag with every argument, including those SetFlag leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setFlag
+func (this *QGraphicsItem) SetFlagFull(flag QGraphicsItemGraphicsItemFlags, enabled bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetFlagFull")
+	C.qute_QGraphicsItem_setFlag_1(self, C.int64_t(flag), C.bool(enabled))
+	runtime.KeepAlive(this)
+}
+
+// SetCacheModeFull wraps QGraphicsItem::setCacheMode.
+//
+//	C++: void QGraphicsItem::setCacheMode(CacheMode mode, const QSize & cacheSize = …)
+//
+// SetCacheModeFull is SetCacheMode with every argument, including those SetCacheMode leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setCacheMode
+func (this *QGraphicsItem) SetCacheModeFull(mode QGraphicsItemCacheMode, cacheSize qtcore.QSize) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetCacheModeFull")
+	C.qute_QGraphicsItem_setCacheMode_1(self, C.int64_t(mode), cQSize(cacheSize))
+	runtime.KeepAlive(this)
+}
+
+// SetFocusFull wraps QGraphicsItem::setFocus.
+//
+//	C++: void QGraphicsItem::setFocus(Qt::FocusReason focusReason = …)
+//
+// SetFocusFull is SetFocus with every argument, including those SetFocus leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setFocus
+func (this *QGraphicsItem) SetFocusFull(focusReason qtcore.FocusReason) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetFocusFull")
+	C.qute_QGraphicsItem_setFocus_1(self, C.int64_t(focusReason))
+	runtime.KeepAlive(this)
+}
+
+// EnsureVisibleFull wraps QGraphicsItem::ensureVisible.
+//
+//	C++: void QGraphicsItem::ensureVisible(const QRectF & rect = …, int xmargin = …, int ymargin = …)
+//
+// EnsureVisibleFull is EnsureVisible with every argument, including those EnsureVisible leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#ensureVisible
+func (this *QGraphicsItem) EnsureVisibleFull(rect qtcore.QRectF, xmargin int, ymargin int) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.EnsureVisibleFull")
+	C.qute_QGraphicsItem_ensureVisible_1(self, cQRectF(rect), C.int(xmargin), C.int(ymargin))
+	runtime.KeepAlive(this)
+}
+
+// SetTransformFull wraps QGraphicsItem::setTransform.
+//
+//	C++: void QGraphicsItem::setTransform(const QTransform & matrix, bool combine = …)
+//
+// SetTransformFull is SetTransform with every argument, including those SetTransform leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#setTransform
+func (this *QGraphicsItem) SetTransformFull(matrix *qtgui.QTransform, combine bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.SetTransformFull")
+	C.qute_QGraphicsItem_setTransform_1(self, rt.UseArg(unsafe.Pointer(matrix), "QGraphicsItem.SetTransformFull"), C.bool(combine))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+}
+
+// CollidesWithItemFull wraps QGraphicsItem::collidesWithItem.
+//
+//	C++: bool QGraphicsItem::collidesWithItem(const QGraphicsItem * other, Qt::ItemSelectionMode mode = …) const
+//
+// CollidesWithItemFull is CollidesWithItem with every argument, including those CollidesWithItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#collidesWithItem
+func (this *QGraphicsItem) CollidesWithItemFull(other QGraphicsItemLike, mode qtcore.ItemSelectionMode) bool {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.CollidesWithItemFull")
+	var otherPtr unsafe.Pointer
+	if other != nil {
+		otherPtr = rt.UseArg(unsafe.Pointer(other.AsQGraphicsItem()), "QGraphicsItem.CollidesWithItemFull")
+	}
+	r := C.qute_QGraphicsItem_collidesWithItem_1(self, otherPtr, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
+	return bool(r)
+}
+
+// CollidesWithPathFull wraps QGraphicsItem::collidesWithPath.
+//
+//	C++: bool QGraphicsItem::collidesWithPath(const QPainterPath & path, Qt::ItemSelectionMode mode = …) const
+//
+// CollidesWithPathFull is CollidesWithPath with every argument, including those CollidesWithPath leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#collidesWithPath
+func (this *QGraphicsItem) CollidesWithPathFull(path *qtgui.QPainterPath, mode qtcore.ItemSelectionMode) bool {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.CollidesWithPathFull")
+	r := C.qute_QGraphicsItem_collidesWithPath_1(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsItem.CollidesWithPathFull"), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	return bool(r)
+}
+
+// CollidingItemsFull wraps QGraphicsItem::collidingItems.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsItem::collidingItems(Qt::ItemSelectionMode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// CollidingItemsFull is CollidingItems with every argument, including those CollidingItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#collidingItems
+func (this *QGraphicsItem) CollidingItemsFull(mode qtcore.ItemSelectionMode) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.CollidingItemsFull")
+	r := C.qute_QGraphicsItem_collidingItems_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// IsObscuredFull wraps QGraphicsItem::isObscured.
+//
+//	C++: bool QGraphicsItem::isObscured(const QRectF & rect = …) const
+//
+// IsObscuredFull is IsObscured with every argument, including those IsObscured leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#isObscured
+func (this *QGraphicsItem) IsObscuredFull(rect qtcore.QRectF) bool {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.IsObscuredFull")
+	r := C.qute_QGraphicsItem_isObscured_1(self, cQRectF(rect))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// PaintFull wraps QGraphicsItem::paint.
+//
+//	C++: void QGraphicsItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
+//
+// PaintFull is Paint with every argument, including those Paint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#paint
+func (this *QGraphicsItem) PaintFull(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem, widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.PaintFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsItem.PaintFull")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsItem.PaintFull")
+	}
+	C.qute_QGraphicsItem_paint_1(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsItem.PaintFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+}
+
+// ScrollFull wraps QGraphicsItem::scroll.
+//
+//	C++: void QGraphicsItem::scroll(qreal dx, qreal dy, const QRectF & rect = …)
+//
+// ScrollFull is Scroll with every argument, including those Scroll leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#scroll
+func (this *QGraphicsItem) ScrollFull(dx float64, dy float64, rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.ScrollFull")
+	C.qute_QGraphicsItem_scroll_1(self, C.double(dx), C.double(dy), cQRectF(rect))
+	runtime.KeepAlive(this)
 }

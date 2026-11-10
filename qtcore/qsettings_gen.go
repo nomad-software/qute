@@ -292,6 +292,8 @@ func (this *QSettings) BeginReadArray(prefix string) int {
 //
 //	C++: void QSettings::beginWriteArray(QAnyStringView prefix, int size = …)
 //
+// Arguments with C++ defaults are left at them; BeginWriteArrayFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qsettings.html#beginWriteArray
 func (this *QSettings) BeginWriteArray(prefix string) {
 	self := rt.Use(unsafe.Pointer(this), "QSettings.BeginWriteArray")
@@ -514,6 +516,19 @@ func (this *QSettings) ApplicationName() string {
 	r := C.qute_QSettings_applicationName(self)
 	runtime.KeepAlive(this)
 	return quteStr(r)
+}
+
+// BeginWriteArrayFull wraps QSettings::beginWriteArray.
+//
+//	C++: void QSettings::beginWriteArray(QAnyStringView prefix, int size = …)
+//
+// BeginWriteArrayFull is BeginWriteArray with every argument, including those BeginWriteArray leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsettings.html#beginWriteArray
+func (this *QSettings) BeginWriteArrayFull(prefix string, size int) {
+	self := rt.Use(unsafe.Pointer(this), "QSettings.BeginWriteArrayFull")
+	C.qute_QSettings_beginWriteArray_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)), C.int(size))
+	runtime.KeepAlive(this)
 }
 
 // QSettingsSetDefaultFormat wraps QSettings::setDefaultFormat.

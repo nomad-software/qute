@@ -98,6 +98,8 @@ func NewQCheckBoxWithText(text string, parent QWidgetLike) *QCheckBox {
 //
 //	C++: void QCheckBox::setTristate(bool y = …)
 //
+// Arguments with C++ defaults are left at them; SetTristateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcheckbox.html#setTristate
 func (this *QCheckBox) SetTristate() {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.SetTristate")
@@ -145,9 +147,22 @@ func (this *QCheckBox) SetCheckState(state qtcore.CheckState) {
 //	C++: void QCheckBox::checkStateChanged(Qt::CheckState)
 //
 // Qt docs: https://doc.qt.io/qt-6/qcheckbox.html#checkStateChanged
-func (this *QCheckBox) EmitCheckStateChanged(arg0 qtcore.CheckState) {
+func (this *QCheckBox) EmitCheckStateChanged(checkState qtcore.CheckState) {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.EmitCheckStateChanged")
-	C.qute_QCheckBox_checkStateChanged_1(self, C.int64_t(arg0))
+	C.qute_QCheckBox_checkStateChanged_1(self, C.int64_t(checkState))
+	runtime.KeepAlive(this)
+}
+
+// SetTristateFull wraps QCheckBox::setTristate.
+//
+//	C++: void QCheckBox::setTristate(bool y = …)
+//
+// SetTristateFull is SetTristate with every argument, including those SetTristate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcheckbox.html#setTristate
+func (this *QCheckBox) SetTristateFull(y bool) {
+	self := rt.Use(unsafe.Pointer(this), "QCheckBox.SetTristateFull")
+	C.qute_QCheckBox_setTristate_1(self, C.bool(y))
 	runtime.KeepAlive(this)
 }
 
@@ -157,12 +172,12 @@ func (this *QCheckBox) EmitCheckStateChanged(arg0 qtcore.CheckState) {
 //	C++: void QCheckBox::checkStateChanged(Qt::CheckState) [signal]
 //
 // Qt docs: https://doc.qt.io/qt-6/qcheckbox.html#checkStateChanged
-func (this *QCheckBox) OnCheckStateChanged(f func(arg0 qtcore.CheckState)) qtcore.Connection {
+func (this *QCheckBox) OnCheckStateChanged(f func(checkState qtcore.CheckState)) qtcore.Connection {
 	self := rt.Use(unsafe.Pointer(this), "QCheckBox.OnCheckStateChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		arg0 := qtcore.CheckState(*(*C.int64_t)(a[0]))
-		f(arg0)
+		checkState := qtcore.CheckState(*(*C.int64_t)(a[0]))
+		f(checkState)
 	})
 	return rt.NewConnection(C.qute_QCheckBox_checkStateChanged(self, C.uintptr_t(id)))
 }

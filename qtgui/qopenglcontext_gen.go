@@ -266,7 +266,7 @@ func (this *QOpenGLContext) Surface() *QSurface {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Surface")
 	r := C.qute_QOpenGLContext_surface(self)
 	runtime.KeepAlive(this)
-	return rt.View[QSurface](rt.WrapClass(r, "QSurface", rt.KeepOrBorrow), r)
+	return rt.View[QSurface](rt.WrapClassFrom(r, "QSurface", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Functions wraps QOpenGLContext::functions.
@@ -282,7 +282,7 @@ func (this *QOpenGLContext) Functions() *QOpenGLFunctions {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.Functions")
 	r := C.qute_QOpenGLContext_functions(self)
 	runtime.KeepAlive(this)
-	return rt.View[QOpenGLFunctions](rt.WrapClass(r, "QOpenGLFunctions", rt.KeepOrBorrow), r)
+	return rt.View[QOpenGLFunctions](rt.WrapClassFrom(r, "QOpenGLFunctions", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // ExtraFunctions wraps QOpenGLContext::extraFunctions.
@@ -298,7 +298,7 @@ func (this *QOpenGLContext) ExtraFunctions() *QOpenGLExtraFunctions {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.ExtraFunctions")
 	r := C.qute_QOpenGLContext_extraFunctions(self)
 	runtime.KeepAlive(this)
-	return rt.View[QOpenGLExtraFunctions](rt.WrapClass(r, "QOpenGLExtraFunctions", rt.KeepOrBorrow), r)
+	return rt.View[QOpenGLExtraFunctions](rt.WrapClassFrom(r, "QOpenGLExtraFunctions", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Extensions wraps QOpenGLContext::extensions.

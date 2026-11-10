@@ -28,8 +28,9 @@ type finding struct {
 
 // vet runs the qute static checks:
 //
-//	owned-leak      an Owned object with signal connections is never deleted,
-//	                parented or shown (its connections pin it forever)
+//	owned-leak      an Owned object with signal connections, or a parentless
+//	                Go subclass, is never deleted, parented or shown (its
+//	                connections or Go value pin it forever)
 //	delete-handler  Delete() inside a signal or event handler (use DeleteLater)
 //	gui-goroutine   Qt calls inside a goroutine (use qute.Post)
 //	scoped-escape   an event or painter argument stored past its callback
@@ -135,6 +136,11 @@ func (v *vetter) file(f *ast.File) {
 	v.checkLeaks(f)
 }
 
+// rootAnyThread are the qute functions any goroutine may call; the rest of
+// the root package (Click, Type, Screenshot, DumpTree...) drives Qt.
+var rootAnyThread = map[string]bool{"Post": true, "PostSync": true, "Run": true, "Quit": true,
+	"IsGUIThread": true, "CollectGarbage": true, "Freed": true, "Main": true, "TestMain": true}
+
 // gui-goroutine: Qt calls in `go` statements, except inside qute.Post/PostSync.
 func (v *vetter) checkGoroutines(f *ast.File) {
 	ast.Inspect(f, func(n ast.Node) bool {
@@ -152,9 +158,15 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 				return true
 			}
 			if fn, _ := isQtFunc(v.pkg.TypesInfo, call); fn != nil && fn.Pkg().Path() == strings.TrimSuffix(modPath, "/") {
-				switch fn.Name() {
-				case "Post", "PostSync", "Run", "Quit":
+				if sig, ok := fn.Type().(*types.Signature); ok && sig.Recv() != nil {
+					return true
+				}
+				switch {
+				case fn.Name() == "Post" || fn.Name() == "PostSync" || fn.Name() == "Run":
 					return false // runs on the GUI thread
+				case !rootAnyThread[fn.Name()] && fn.Exported():
+					v.report(call, "gui-goroutine", "qute.%s called from a goroutine; it drives Qt on the GUI thread, wrap it in qute.Post(func() { ... })", fn.Name())
+					return false
 				}
 			}
 			if fn, ok := isQtFunc(v.pkg.TypesInfo, call); ok {
@@ -334,33 +346,42 @@ func (v *vetter) checkLeaks(f *ast.File) {
 			id       *ast.Ident
 			conns    int
 			released bool
+			subclass bool // a parentless New...With: its Go value pins it
 		}
 		cands := map[types.Object]*cand{}
+		origin := map[*ast.CallExpr]types.Object{} // the constructor call of a followed Go value
 		ast.Inspect(fd.Body, func(n ast.Node) bool {
-			as, ok := n.(*ast.AssignStmt)
-			if !ok || as.Tok != token.DEFINE {
-				return true
-			}
-			for i, r := range as.Rhs {
-				call, ok := r.(*ast.CallExpr)
-				if !ok || i >= len(as.Lhs) {
-					continue
-				}
-				fn, isQt := isQtFunc(v.pkg.TypesInfo, call)
-				if !isQt || !strings.HasPrefix(fn.Name(), "New") || strings.HasSuffix(fn.Name(), "With") {
-					continue
-				}
-				owned := true
-				for _, a := range call.Args {
-					if id, ok := a.(*ast.Ident); !ok || id.Name != "nil" {
-						if tv := v.pkg.TypesInfo.Types[a]; tv.Type != nil && types.IsInterface(tv.Type) {
-							owned = false // a parent was passed
+			switch x := n.(type) {
+			case *ast.ExprStmt:
+				// NewQWidgetWith(&Canvas{}, nil) with the result dropped
+				if call, ok := x.X.(*ast.CallExpr); ok {
+					if sub, owned := v.newOwned(call); owned && sub && len(call.Args) > 0 {
+						// the Go value stands for the object: follow it if it is
+						// a variable (row.AddWidget(swatch) gives it a parent)
+						if id, ok := call.Args[0].(*ast.Ident); ok {
+							if obj := v.pkg.TypesInfo.Uses[id]; obj != nil {
+								cands[obj] = &cand{id: id, subclass: true}
+								origin[call] = obj
+							}
+						} else {
+							v.report(call, "owned-leak", "a parentless Go subclass stays pinned while it lives (its Go value must survive), so dropping it leaks it; keep it and call Delete() when done, or give it a parent")
 						}
 					}
 				}
-				if id, ok := as.Lhs[i].(*ast.Ident); ok && owned {
-					if obj := v.pkg.TypesInfo.Defs[id]; obj != nil {
-						cands[obj] = &cand{id: id}
+			case *ast.AssignStmt:
+				if x.Tok != token.DEFINE {
+					return true
+				}
+				for i, r := range x.Rhs {
+					call, ok := r.(*ast.CallExpr)
+					if !ok || i >= len(x.Lhs) {
+						continue
+					}
+					sub, owned := v.newOwned(call)
+					if id, ok := x.Lhs[i].(*ast.Ident); ok && owned {
+						if obj := v.pkg.TypesInfo.Defs[id]; obj != nil {
+							cands[obj] = &cand{id: id, subclass: sub}
+						}
 					}
 				}
 			}
@@ -378,8 +399,11 @@ func (v *vetter) checkLeaks(f *ast.File) {
 							switch name := sel.Sel.Name; {
 							case strings.HasPrefix(name, "On"):
 								c.conns++
-							case name == "Delete" || name == "DeleteLater" || name == "SetParent" || name == "Show" ||
-								name == "Exec" || name == "Open" || name == "Keep" || strings.HasPrefix(name, "Show"):
+							case name == "Delete" || name == "DeleteLater" || name == "SetParent" || name == "Keep" ||
+								strings.HasPrefix(name, "Show"):
+								// a shown window is taken to live as long as the
+								// program; a dialog's Exec or Open returns with it
+								// hidden and still pinned by its connections
 								c.released = true
 							}
 						}
@@ -388,6 +412,9 @@ func (v *vetter) checkLeaks(f *ast.File) {
 				for _, a := range x.Args {
 					ast.Inspect(a, func(n ast.Node) bool {
 						if id, ok := n.(*ast.Ident); ok {
+							if obj := v.pkg.TypesInfo.Uses[id]; origin[x] == obj && obj != nil {
+								return true // its own constructor call
+							}
 							if c := cands[v.pkg.TypesInfo.Uses[id]]; c != nil {
 								c.released = true // handed to something that may own it
 							}
@@ -426,10 +453,43 @@ func (v *vetter) checkLeaks(f *ast.File) {
 			return true
 		})
 		for _, c := range cands {
-			if c.conns > 0 && !c.released {
+			switch {
+			case c.released:
+			case c.subclass:
+				v.report(c.id, "owned-leak", "%s is a parentless Go subclass, which stays pinned while it lives, but it is never deleted, parented or shown; call %s.Delete() when done or give it a parent", c.id.Name, c.id.Name)
+			case c.conns > 0:
 				v.report(c.id, "owned-leak", "%s is Owned and has signal connections, which pin it, but it is never deleted, parented or shown; call %s.Delete() when done or give it a parent", c.id.Name, c.id.Name)
 			}
 		}
 		return true
 	})
+}
+
+// newOwned reports whether call is a generated constructor that makes an
+// Owned object (no parent passed), and whether it is a Go subclass one
+// (NewXWith). A parent is any non-nil argument for an object parameter,
+// whatever its static type: NewQPushButtonWithText("ok", dialog).
+func (v *vetter) newOwned(call *ast.CallExpr) (subclass, owned bool) {
+	fn, isQt := isQtFunc(v.pkg.TypesInfo, call)
+	if !isQt || !strings.HasPrefix(fn.Name(), "New") {
+		return false, false
+	}
+	sig, ok := fn.Type().(*types.Signature)
+	if !ok {
+		return false, false
+	}
+	subclass = strings.HasSuffix(fn.Name(), "With")
+	for i, a := range call.Args {
+		if subclass && i == 0 || i >= sig.Params().Len() {
+			continue // the Go value, not a parent
+		}
+		if id, ok := a.(*ast.Ident); ok && id.Name == "nil" {
+			continue
+		}
+		pt := sig.Params().At(i).Type()
+		if _, ptr := pt.(*types.Pointer); ptr || types.IsInterface(pt) {
+			return subclass, false // a parent (or another object) was passed
+		}
+	}
+	return subclass, true
 }

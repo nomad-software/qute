@@ -54,6 +54,7 @@ type Class struct {
 	Protected []*Method // flattened protected non-virtuals, for the Base type
 	Shim      bool
 	Abstract  bool
+	QBase     bool // a polymorphic plain base of a QObject class (QPaintDevice, QGraphicsItem)
 	DefCtor   bool // has a public constructor callable with no arguments
 	HasDtor   bool
 	Skipped   []skipNote
@@ -118,6 +119,8 @@ type Method struct {
 	Error    bool
 	Numbered bool
 	Full     bool    // generated with all default args
+	FullOf   *Method // for an automatic Full form: the short form it extends
+	FullName string  // for a short form: the Go name of its Full form
 	Emit     bool    // emits a signal
 	Field    string  // "get" or "set": a public data member accessor
 	PairRet  []*conv // a std::pair result, returned to Go as two results
@@ -133,6 +136,8 @@ type Gen struct {
 	enums   map[string]*Enum
 	structs map[string]*structDef
 	report  *Report
+
+	retOwner string // while emitting a method: the Go expression of the receiver's handle
 }
 
 var goKeywords = map[string]bool{
@@ -180,12 +185,21 @@ func paramNames(m *irMethod) []string {
 			if len(m.Params) == 1 && len(m.Name) > 3 && strings.HasPrefix(m.Name, "set") && unicode.IsUpper(rune(m.Name[3])) {
 				n = lowerFirst(m.Name[3:])
 			} else {
-				base, _, _, _, _ := parseCpp(p.Type.Canonical)
-				if i := strings.LastIndex(base, "::"); i >= 0 {
-					base = base[i+2:]
-				}
-				if strings.HasPrefix(base, "Q") && len(base) > 1 && !strings.ContainsAny(base, "<> ") {
-					n = lowerFirst(base[1:])
+				for _, t := range []string{p.Type.Canonical, p.Type.Spelling} {
+					base, _, _, _, _ := parseCpp(t)
+					if i := strings.LastIndex(base, "::"); i >= 0 {
+						base = base[i+2:]
+					}
+					switch {
+					case strings.ContainsAny(base, "<> ") || len(base) < 2:
+					case strings.HasPrefix(base, "Q") && unicode.IsUpper(rune(base[1])):
+						n = lowerFirst(base[1:]) // QWidget -> widget
+					case unicode.IsUpper(rune(base[0])):
+						n = lowerFirst(base) // QTextCursor::MoveMode -> moveMode
+					}
+					if n != "" {
+						break
+					}
 				}
 			}
 		}
@@ -308,6 +322,9 @@ func (g *Gen) build() error {
 			if c.Kind == KindValue && c.Base != nil && c.Base.Kind == KindObject {
 				return fmt.Errorf("%s: value class with object base", c.Name)
 			}
+			if c.Kind == KindObject {
+				markQBases(c)
+			}
 		}
 	}
 	// 3. enums
@@ -328,7 +345,7 @@ func (g *Gen) build() error {
 	// 5. unused overlays
 	for _, m := range g.modules {
 		for cls, entries := range m.Overlays {
-			if g.classes[cls] == nil {
+			if g.classes[cls] == nil && !g.boundGoName(cls) {
 				g.report.warn("%s: overlay for unbound class %s", m.Name, cls)
 				continue
 			}
@@ -340,6 +357,48 @@ func (g *Gen) build() error {
 		}
 	}
 	return nil
+}
+
+// markQBases marks the plain, polymorphic classes a QObject class derives
+// from. A pointer of such a class may be a QObject (a QGraphicsItem * that is
+// a QGraphicsTextItem), so its wrapper looks for the QObject's handle first.
+func markQBases(c *Class) {
+	var walk func(x *Class)
+	walk = func(x *Class) {
+		for _, b := range append([]*Class{x.Base}, x.Secondary...) {
+			if b == nil {
+				continue
+			}
+			if b.Kind == KindPlain && polymorphic(b.IR) {
+				b.QBase = true
+			}
+			walk(b)
+		}
+	}
+	walk(c)
+}
+
+func polymorphic(c *irClass) bool {
+	if c.Dtor != nil && c.Dtor.Virtual {
+		return true
+	}
+	for _, m := range c.Methods {
+		if m.Virtual {
+			return true
+		}
+	}
+	return false
+}
+
+// boundGoName reports whether a bound class has this Go name; overlays of
+// nested classes use it (QCalendarYearMonthDay for QCalendar::YearMonthDay).
+func (g *Gen) boundGoName(name string) bool {
+	for _, c := range g.classes {
+		if c.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 func (m *Module) claim(name, what string) bool {
@@ -460,7 +519,8 @@ func (g *Gen) buildMembers(c *Class) {
 		}
 	}
 	var ctors, methods, statics, signals, emits []*Method
-	inherited := map[string]bool{} // names whose inherited binding must stay visible
+	var ctorTwins, methodTwins, staticTwins []*Method // Full forms of methods with dropped defaults
+	inherited := map[string]bool{}                    // names whose inherited binding must stay visible
 	for i := range c.IR.Methods {
 		im := &c.IR.Methods[i]
 		if im.Access != "public" {
@@ -509,6 +569,9 @@ func (g *Gen) buildMembers(c *Class) {
 			}
 			if mm := g.newMethod(c, im, ov, true, false); mm != nil {
 				ctors = append(ctors, mm)
+				if tw := g.fullTwin(c, im, ov, true, mm); tw != nil {
+					ctorTwins = append(ctorTwins, tw)
+				}
 			}
 		case "signal":
 			if mm := g.newSignal(c, im, ov); mm != nil {
@@ -533,10 +596,17 @@ func (g *Gen) buildMembers(c *Class) {
 				continue
 			}
 			if mm := g.newMethod(c, im, ov, false, false); mm != nil {
+				tw := g.fullTwin(c, im, ov, false, mm)
 				if im.Static {
 					statics = append(statics, mm)
+					if tw != nil {
+						staticTwins = append(staticTwins, tw)
+					}
 				} else {
 					methods = append(methods, mm)
+					if tw != nil {
+						methodTwins = append(methodTwins, tw)
+					}
 				}
 			}
 			if ov != nil && ov.Full != "" {
@@ -558,14 +628,17 @@ func (g *Gen) buildMembers(c *Class) {
 		ctors = append(ctors, &Method{Class: c, Owner: c, IR: im, Sig: c.Cpp + "::" + lastName(c.Cpp) + "() [implicit]"})
 	}
 	c.Ctors = g.nameCtors(c, ctors)
+	c.Ctors = append(c.Ctors, g.nameTwins(c, ctorTwins, c.Ctors, true)...)
 	var keepVisible []*Method
 	for n := range inherited {
 		keepVisible = append(keepVisible, &Method{GoName: n})
 	}
 	c.Methods = g.nameMethods(c, methods, "", keepVisible)
 	c.Statics = g.nameStatics(c, statics)
+	c.Statics = append(c.Statics, g.nameTwins(c, staticTwins, c.Statics, true)...)
 	c.Signals = g.nameMethods(c, signals, "On", c.Methods)
 	c.Methods = append(c.Methods, g.nameMethods(c, emits, "Emit", append(append([]*Method{}, c.Methods...), c.Signals...))...)
+	c.Methods = append(c.Methods, g.nameTwins(c, methodTwins, append(append([]*Method{}, c.Methods...), c.Signals...), false)...)
 	taken := map[string]bool{}
 	for _, mm := range append(append([]*Method{}, c.Methods...), c.Signals...) {
 		taken[mm.GoName] = true
@@ -591,6 +664,71 @@ func (g *Gen) buildMembers(c *Class) {
 		f.CName = c.cName(f.Field + "_" + f.IR.Name)
 		c.Methods = append(c.Methods, f)
 	}
+}
+
+// fullTwin builds the Full form of a method whose trailing default arguments
+// short leaves out: the same call taking every argument (Index(row, column)
+// and IndexFull(row, column, parent)). It returns nil when nothing was left
+// out, when an overlay already decides (keep-defaults, full), or when a
+// defaulted argument has no Go type; the short form stands either way.
+func (g *Gen) fullTwin(c *Class, im *irMethod, ov *overlay, ctor bool, short *Method) *Method {
+	if ov != nil && (ov.KeepDefs || ov.Full != "" || ov.Cpp != "") || short.PairRet != nil {
+		return nil
+	}
+	skipped, warns := len(c.Skipped), len(g.report.warnings)
+	full := g.newMethod(c, im, ov, ctor, true)
+	c.Skipped, g.report.warnings = c.Skipped[:skipped], g.report.warnings[:warns]
+	if full == nil || len(goParams(full)) == len(goParams(short)) {
+		return nil
+	}
+	full.FullOf = short
+	return full
+}
+
+// nameTwins names the Full forms whose short form survived naming: the short
+// form's name plus "Full". A twin whose Go signature another overload already
+// has, or whose name is taken, is dropped.
+func (g *Gen) nameTwins(c *Class, twins, named []*Method, pkgLevel bool) []*Method {
+	m := c.Module
+	live := map[*Method]bool{}
+	used := map[string]bool{}
+	sigs := map[string]bool{}
+	for _, mm := range named {
+		live[mm] = true
+		used[mm.GoName] = true
+		if mm.IR != nil {
+			sigs[mm.IR.Name+"|"+goSig(mm)] = true
+		}
+	}
+	for k := range reservedMethods {
+		used[k] = true
+	}
+	var out []*Method
+	for _, tw := range twins {
+		short := tw.FullOf
+		if !live[short] || short.GoName == "" || sigs[tw.IR.Name+"|"+goSig(tw)] {
+			continue
+		}
+		name := short.GoName + "Full"
+		if pkgLevel {
+			if !m.claim(name, tw.Sig+" [full]") {
+				continue
+			}
+		} else if used[name] {
+			continue
+		}
+		used[name] = true
+		sigs[tw.IR.Name+"|"+goSig(tw)] = true
+		tw.GoName = name
+		short.FullName = name
+		if tw.IR.Kind == "ctor" {
+			tw.CName = c.cName("new")
+		} else {
+			tw.CName = c.cName(tw.IR.Name)
+		}
+		out = append(out, tw)
+	}
+	return out
 }
 
 func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *Method {
@@ -1002,8 +1140,13 @@ func (g *Gen) nameCtors(c *Class, ms []*Method) []*Method {
 			base := primary
 			if len(mm.Params) > 0 {
 				base = primary + "With" + word(mm.Params[0])
-				if mm.Params[0].Name != "" && (mm.Params[0].T.k == kString || mm.Params[0].T.k == kPrim) {
-					base = primary + "With" + exportName(mm.Params[0].GoName)
+				// a number or string names the constructor by its parameter
+				// (NewQColorWithName), except a one-argument conversion
+				// (QVariant(int i)) or a name the header leaves cryptic:
+				// those are named by type (NewQVariantWithInt)
+				if p0 := mm.Params[0]; p0.Name != "" && (p0.T.k == kString || p0.T.k == kPrim) &&
+					!strings.HasSuffix(p0.GoName, "Arg") && (len(goParams(mm)) > 1 || wordName(p0.GoName)) {
+					base = primary + "With" + exportName(p0.GoName)
 				}
 			}
 			name = base
@@ -1188,6 +1331,18 @@ func (g *Gen) newVirtual(c, owner *Class, im *irMethod) *Method {
 		return nil
 	}
 	mm.Ret = t
+	// A result the caller owns (mimeData, clone, createPopupMenu): from a Go
+	// override it goes the other way, to the C++ caller, which frees it. The
+	// overlay's return rule says so for both directions.
+	// The rule may sit on the base that first declares the virtual.
+	for x := owner; t.k == kObj && x != nil && mm.RetRule == ""; x = x.Base {
+		if ov, _ := x.Module.Overlays.overlayFor(x.Name, im); ov != nil && ov.Return != "" {
+			if ov.Return == "transfer-to-go" || ov.Return == "parented" {
+				mm.RetRule, mm.RetRuled = ov.Return, true
+			}
+			break
+		}
+	}
 	return mm
 }
 
@@ -1416,6 +1571,13 @@ func goKey(c *conv) string {
 	return fmt.Sprint(c.k, c.base)
 }
 
+// wordName reports whether a parameter name reads as a word worth putting in
+// a Go name (NewQColorWithName), not a C++ abbreviation (ll, d) or a keyword
+// that had to be renamed (string, i): those name the overload by type.
+func wordName(n string) bool {
+	return len(n) >= 3 && !strings.HasSuffix(n, "Arg") && !strings.HasPrefix(n, "arg")
+}
+
 // word is the suffix an overload gets for one of its parameters:
 // QCalendar -> Calendar, int64 -> Int64, FormatType -> FormatType.
 func word(p *Param) string {
@@ -1432,6 +1594,13 @@ func word(p *Param) string {
 		return exportName(t.prim.goT)
 	case kEnum, kFlags:
 		return exportName(t.enum.ir.Name)
+	case kString:
+		if n := p.GoName; wordName(n) {
+			return exportName(n)
+		}
+		return "String"
+	case kChar:
+		return "Rune"
 	case kDur:
 		return "Duration"
 	case kTime:

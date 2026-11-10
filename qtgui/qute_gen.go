@@ -20,9 +20,12 @@ func qute_qtgui_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallback(
 func qute_qtgui_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtgui_virtual
-func qute_qtgui_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) {
-	rt.Dispatch(uintptr(id), int(idx), args, ret)
+func qute_qtgui_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
 }
+
+//export qute_qtgui_wrong_thread
+func qute_qtgui_wrong_thread() { rt.WrongThread() }
 
 //export qute_qtgui_dead
 func qute_qtgui_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }

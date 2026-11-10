@@ -10,6 +10,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QOpenGLShader wraps Qt's QOpenGLShader.
@@ -173,9 +174,29 @@ func (this *QOpenGLShader) ShaderId() uint {
 //
 //	C++: bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext * context = …)
 //
+// Arguments with C++ defaults are left at them; QOpenGLShaderHasOpenGLShadersFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglshader.html#hasOpenGLShaders
 func QOpenGLShaderHasOpenGLShaders(typeArg QOpenGLShaderShaderType) bool {
 	rt.CheckThread("QOpenGLShaderHasOpenGLShaders")
 	r := C.qute_QOpenGLShader_hasOpenGLShaders(C.int64_t(typeArg))
+	return bool(r)
+}
+
+// QOpenGLShaderHasOpenGLShadersFull wraps QOpenGLShader::hasOpenGLShaders.
+//
+//	C++: bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext * context = …)
+//
+// QOpenGLShaderHasOpenGLShadersFull is QOpenGLShaderHasOpenGLShaders with every argument, including those QOpenGLShaderHasOpenGLShaders leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglshader.html#hasOpenGLShaders
+func QOpenGLShaderHasOpenGLShadersFull(typeArg QOpenGLShaderShaderType, context qtgui.QOpenGLContextLike) bool {
+	rt.CheckThread("QOpenGLShaderHasOpenGLShadersFull")
+	var contextPtr unsafe.Pointer
+	if context != nil {
+		contextPtr = rt.UseArg(unsafe.Pointer(context.AsQOpenGLContext()), "QOpenGLShaderHasOpenGLShadersFull")
+	}
+	r := C.qute_QOpenGLShader_hasOpenGLShaders_1(C.int64_t(typeArg), contextPtr)
+	runtime.KeepAlive(context)
 	return bool(r)
 }

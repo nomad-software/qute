@@ -82,6 +82,8 @@ func (this *QTableWidgetItem) Unkeep() {
 //
 //	C++: QTableWidgetItem::QTableWidgetItem(int type = …)
 //
+// Arguments with C++ defaults are left at them; NewQTableWidgetItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#QTableWidgetItem
 func NewQTableWidgetItem() *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItem")
@@ -93,6 +95,8 @@ func NewQTableWidgetItem() *QTableWidgetItem {
 // NewQTableWidgetItemWithText wraps the QTableWidgetItem constructor.
 //
 //	C++: QTableWidgetItem::QTableWidgetItem(const QString & text, int type = …)
+//
+// Arguments with C++ defaults are left at them; NewQTableWidgetItemWithTextFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#QTableWidgetItem
 func NewQTableWidgetItemWithText(text string) *QTableWidgetItem {
@@ -106,10 +110,55 @@ func NewQTableWidgetItemWithText(text string) *QTableWidgetItem {
 //
 //	C++: QTableWidgetItem::QTableWidgetItem(const QIcon & icon, const QString & text, int type = …)
 //
+// Arguments with C++ defaults are left at them; NewQTableWidgetItemWithIconFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#QTableWidgetItem
 func NewQTableWidgetItemWithIcon(icon *qtgui.QIcon, text string) *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItemWithIcon")
 	p := C.qute_QTableWidgetItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(icon)
+	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	return rt.View[QTableWidgetItem](h, p)
+}
+
+// NewQTableWidgetItemFull wraps the QTableWidgetItem constructor.
+//
+//	C++: QTableWidgetItem::QTableWidgetItem(int type = …)
+//
+// NewQTableWidgetItemFull is NewQTableWidgetItem with every argument, including those NewQTableWidgetItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#QTableWidgetItem
+func NewQTableWidgetItemFull(typeArg int) *QTableWidgetItem {
+	rt.CheckThread("NewQTableWidgetItemFull")
+	p := C.qute_QTableWidgetItem_new_3(C.int(typeArg))
+	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	return rt.View[QTableWidgetItem](h, p)
+}
+
+// NewQTableWidgetItemWithTextFull wraps the QTableWidgetItem constructor.
+//
+//	C++: QTableWidgetItem::QTableWidgetItem(const QString & text, int type = …)
+//
+// NewQTableWidgetItemWithTextFull is NewQTableWidgetItemWithText with every argument, including those NewQTableWidgetItemWithText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#QTableWidgetItem
+func NewQTableWidgetItemWithTextFull(text string, typeArg int) *QTableWidgetItem {
+	rt.CheckThread("NewQTableWidgetItemWithTextFull")
+	p := C.qute_QTableWidgetItem_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int(typeArg))
+	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	return rt.View[QTableWidgetItem](h, p)
+}
+
+// NewQTableWidgetItemWithIconFull wraps the QTableWidgetItem constructor.
+//
+//	C++: QTableWidgetItem::QTableWidgetItem(const QIcon & icon, const QString & text, int type = …)
+//
+// NewQTableWidgetItemWithIconFull is NewQTableWidgetItemWithIcon with every argument, including those NewQTableWidgetItemWithIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidgetitem.html#QTableWidgetItem
+func NewQTableWidgetItemWithIconFull(icon *qtgui.QIcon, text string, typeArg int) *QTableWidgetItem {
+	rt.CheckThread("NewQTableWidgetItemWithIconFull")
+	p := C.qute_QTableWidgetItem_new_5(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIconFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int(typeArg))
 	runtime.KeepAlive(icon)
 	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)

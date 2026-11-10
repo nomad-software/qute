@@ -196,6 +196,8 @@ func (this *QPersistentModelIndex) Sibling(row int, column int) *QModelIndex {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; DataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpersistentmodelindex.html#data
 func (this *QPersistentModelIndex) Data() *QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Data")
@@ -240,4 +242,20 @@ func (this *QPersistentModelIndex) IsValid() bool {
 	r := C.qute_QPersistentModelIndex_isValid(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// DataFull wraps QPersistentModelIndex::data.
+//
+//	C++: QVariant QPersistentModelIndex::data(int role = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// DataFull is Data with every argument, including those Data leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpersistentmodelindex.html#data
+func (this *QPersistentModelIndex) DataFull(role int) *QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.DataFull")
+	r := C.qute_QPersistentModelIndex_data_1(self, C.int(role))
+	runtime.KeepAlive(this)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }

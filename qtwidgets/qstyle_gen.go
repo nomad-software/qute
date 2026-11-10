@@ -171,6 +171,8 @@ func (this *QStyle) ItemPixmapRect(rArg qtcore.QRect, flags int, pixmap *qtgui.Q
 //
 //	C++: void QStyle::drawItemText(QPainter * painter, const QRect & rect, int flags, const QPalette & pal, bool enabled, const QString & text, QPalette::ColorRole textRole = …) const
 //
+// Arguments with C++ defaults are left at them; DrawItemTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawItemText
 func (this *QStyle) DrawItemText(painter qtgui.QPainterLike, rect qtcore.QRect, flags int, pal *qtgui.QPalette, enabled bool, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawItemText")
@@ -219,6 +221,8 @@ func (this *QStyle) StandardPalette() *qtgui.QPalette {
 //
 //	C++: void QStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const
 //
+// Arguments with C++ defaults are left at them; DrawPrimitiveFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawPrimitive
 func (this *QStyle) DrawPrimitive(pe QStylePrimitiveElement, opt *QStyleOption, pArg qtgui.QPainterLike) {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawPrimitive")
@@ -235,6 +239,8 @@ func (this *QStyle) DrawPrimitive(pe QStylePrimitiveElement, opt *QStyleOption, 
 // DrawControl wraps QStyle::drawControl.
 //
 //	C++: void QStyle::drawControl(ControlElement element, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const
+//
+// Arguments with C++ defaults are left at them; DrawControlFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawControl
 func (this *QStyle) DrawControl(element QStyleControlElement, opt *QStyleOption, pArg qtgui.QPainterLike) {
@@ -253,6 +259,8 @@ func (this *QStyle) DrawControl(element QStyleControlElement, opt *QStyleOption,
 //
 //	C++: QRect QStyle::subElementRect(SubElement subElement, const QStyleOption * option, const QWidget * widget = …) const
 //
+// Arguments with C++ defaults are left at them; SubElementRectFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#subElementRect
 func (this *QStyle) SubElementRect(subElement QStyleSubElement, option *QStyleOption) qtcore.QRect {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.SubElementRect")
@@ -265,6 +273,8 @@ func (this *QStyle) SubElementRect(subElement QStyleSubElement, option *QStyleOp
 // DrawComplexControl wraps QStyle::drawComplexControl.
 //
 //	C++: void QStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, QPainter * p, const QWidget * widget = …) const
+//
+// Arguments with C++ defaults are left at them; DrawComplexControlFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawComplexControl
 func (this *QStyle) DrawComplexControl(cc QStyleComplexControl, opt *QStyleOptionComplex, pArg qtgui.QPainterLike) {
@@ -283,6 +293,8 @@ func (this *QStyle) DrawComplexControl(cc QStyleComplexControl, opt *QStyleOptio
 //
 //	C++: SubControl QStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, const QPoint & pt, const QWidget * widget = …) const
 //
+// Arguments with C++ defaults are left at them; HitTestComplexControlFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#hitTestComplexControl
 func (this *QStyle) HitTestComplexControl(cc QStyleComplexControl, opt *QStyleOptionComplex, pt qtcore.QPoint) QStyleSubControls {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.HitTestComplexControl")
@@ -295,6 +307,8 @@ func (this *QStyle) HitTestComplexControl(cc QStyleComplexControl, opt *QStyleOp
 // SubControlRect wraps QStyle::subControlRect.
 //
 //	C++: QRect QStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex * opt, SubControl sc, const QWidget * widget = …) const
+//
+// Arguments with C++ defaults are left at them; SubControlRectFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#subControlRect
 func (this *QStyle) SubControlRect(cc QStyleComplexControl, opt *QStyleOptionComplex, sc QStyleSubControls) qtcore.QRect {
@@ -309,6 +323,8 @@ func (this *QStyle) SubControlRect(cc QStyleComplexControl, opt *QStyleOptionCom
 //
 //	C++: int QStyle::pixelMetric(PixelMetric metric, const QStyleOption * option = …, const QWidget * widget = …) const
 //
+// Arguments with C++ defaults are left at them; PixelMetricFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#pixelMetric
 func (this *QStyle) PixelMetric(metric QStylePixelMetric) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.PixelMetric")
@@ -320,6 +336,8 @@ func (this *QStyle) PixelMetric(metric QStylePixelMetric) int {
 // SizeFromContents wraps QStyle::sizeFromContents.
 //
 //	C++: QSize QStyle::sizeFromContents(ContentsType ct, const QStyleOption * opt, const QSize & contentsSize, const QWidget * w = …) const
+//
+// Arguments with C++ defaults are left at them; SizeFromContentsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#sizeFromContents
 func (this *QStyle) SizeFromContents(ct QStyleContentsType, opt *QStyleOption, contentsSize qtcore.QSize) qtcore.QSize {
@@ -348,6 +366,8 @@ func (this *QStyle) StyleHint(stylehint QStyleStyleHint) int {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; StandardPixmapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#standardPixmap
 func (this *QStyle) StandardPixmap(standardPixmap QStyleStandardPixmap) *qtgui.QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardPixmap")
@@ -361,6 +381,8 @@ func (this *QStyle) StandardPixmap(standardPixmap QStyleStandardPixmap) *qtgui.Q
 //	C++: QIcon QStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption * option = …, const QWidget * widget = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; StandardIconFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#standardIcon
 func (this *QStyle) StandardIcon(standardIcon QStyleStandardPixmap) *qtgui.QIcon {
@@ -390,6 +412,8 @@ func (this *QStyle) GeneratedIconPixmap(iconMode qtgui.QIconMode, pixmap *qtgui.
 //
 //	C++: int QStyle::layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation, const QStyleOption * option = …, const QWidget * widget = …) const
 //
+// Arguments with C++ defaults are left at them; LayoutSpacingFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#layoutSpacing
 func (this *QStyle) LayoutSpacing(control1 QSizePolicyControlTypes, control2 QSizePolicyControlTypes, orientation qtcore.Orientations) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.LayoutSpacing")
@@ -401,6 +425,8 @@ func (this *QStyle) LayoutSpacing(control1 QSizePolicyControlTypes, control2 QSi
 // CombinedLayoutSpacing wraps QStyle::combinedLayoutSpacing.
 //
 //	C++: int QStyle::combinedLayoutSpacing(QSizePolicy::ControlTypes controls1, QSizePolicy::ControlTypes controls2, Qt::Orientation orientation, QStyleOption * option = …, QWidget * widget = …) const
+//
+// Arguments with C++ defaults are left at them; CombinedLayoutSpacingFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#combinedLayoutSpacing
 func (this *QStyle) CombinedLayoutSpacing(controls1 QSizePolicyControlTypes, controls2 QSizePolicyControlTypes, orientation qtcore.Orientations) int {
@@ -422,6 +448,281 @@ func (this *QStyle) Proxy() *QStyle {
 	r := C.qute_QStyle_proxy(self)
 	runtime.KeepAlive(this)
 	return rt.View[QStyle](rt.WrapClass(r, "QStyle", rt.KeepOrBorrow), r)
+}
+
+// DrawItemTextFull wraps QStyle::drawItemText.
+//
+//	C++: void QStyle::drawItemText(QPainter * painter, const QRect & rect, int flags, const QPalette & pal, bool enabled, const QString & text, QPalette::ColorRole textRole = …) const
+//
+// DrawItemTextFull is DrawItemText with every argument, including those DrawItemText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawItemText
+func (this *QStyle) DrawItemTextFull(painter qtgui.QPainterLike, rect qtcore.QRect, flags int, pal *qtgui.QPalette, enabled bool, text string, textRole qtgui.QPaletteColorRole) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawItemTextFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QStyle.DrawItemTextFull")
+	}
+	C.qute_QStyle_drawItemText_1(self, painterPtr, cQRect(rect), C.int(flags), rt.UseArg(unsafe.Pointer(pal), "QStyle.DrawItemTextFull"), C.bool(enabled), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(textRole))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(pal)
+}
+
+// DrawPrimitiveFull wraps QStyle::drawPrimitive.
+//
+//	C++: void QStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const
+//
+// DrawPrimitiveFull is DrawPrimitive with every argument, including those DrawPrimitive leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawPrimitive
+func (this *QStyle) DrawPrimitiveFull(pe QStylePrimitiveElement, opt *QStyleOption, pArg qtgui.QPainterLike, w QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawPrimitiveFull")
+	var pArgPtr unsafe.Pointer
+	if pArg != nil {
+		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawPrimitiveFull")
+	}
+	var wPtr unsafe.Pointer
+	if w != nil {
+		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStyle.DrawPrimitiveFull")
+	}
+	C.qute_QStyle_drawPrimitive_1(self, C.int64_t(pe), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawPrimitiveFull"), pArgPtr, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(pArg)
+	runtime.KeepAlive(w)
+}
+
+// DrawControlFull wraps QStyle::drawControl.
+//
+//	C++: void QStyle::drawControl(ControlElement element, const QStyleOption * opt, QPainter * p, const QWidget * w = …) const
+//
+// DrawControlFull is DrawControl with every argument, including those DrawControl leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawControl
+func (this *QStyle) DrawControlFull(element QStyleControlElement, opt *QStyleOption, pArg qtgui.QPainterLike, w QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawControlFull")
+	var pArgPtr unsafe.Pointer
+	if pArg != nil {
+		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawControlFull")
+	}
+	var wPtr unsafe.Pointer
+	if w != nil {
+		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStyle.DrawControlFull")
+	}
+	C.qute_QStyle_drawControl_1(self, C.int64_t(element), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawControlFull"), pArgPtr, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(pArg)
+	runtime.KeepAlive(w)
+}
+
+// SubElementRectFull wraps QStyle::subElementRect.
+//
+//	C++: QRect QStyle::subElementRect(SubElement subElement, const QStyleOption * option, const QWidget * widget = …) const
+//
+// SubElementRectFull is SubElementRect with every argument, including those SubElementRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#subElementRect
+func (this *QStyle) SubElementRectFull(subElement QStyleSubElement, option *QStyleOption, widget QWidgetLike) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.SubElementRectFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.SubElementRectFull")
+	}
+	r := C.qute_QStyle_subElementRect_1(self, C.int64_t(subElement), rt.UseArg(unsafe.Pointer(option), "QStyle.SubElementRectFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+	return goQRect(r)
+}
+
+// DrawComplexControlFull wraps QStyle::drawComplexControl.
+//
+//	C++: void QStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, QPainter * p, const QWidget * widget = …) const
+//
+// DrawComplexControlFull is DrawComplexControl with every argument, including those DrawComplexControl leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#drawComplexControl
+func (this *QStyle) DrawComplexControlFull(cc QStyleComplexControl, opt *QStyleOptionComplex, pArg qtgui.QPainterLike, widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.DrawComplexControlFull")
+	var pArgPtr unsafe.Pointer
+	if pArg != nil {
+		pArgPtr = rt.UseArg(unsafe.Pointer(pArg.AsQPainter()), "QStyle.DrawComplexControlFull")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.DrawComplexControlFull")
+	}
+	C.qute_QStyle_drawComplexControl_1(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.DrawComplexControlFull"), pArgPtr, widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(pArg)
+	runtime.KeepAlive(widget)
+}
+
+// HitTestComplexControlFull wraps QStyle::hitTestComplexControl.
+//
+//	C++: SubControl QStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex * opt, const QPoint & pt, const QWidget * widget = …) const
+//
+// HitTestComplexControlFull is HitTestComplexControl with every argument, including those HitTestComplexControl leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#hitTestComplexControl
+func (this *QStyle) HitTestComplexControlFull(cc QStyleComplexControl, opt *QStyleOptionComplex, pt qtcore.QPoint, widget QWidgetLike) QStyleSubControls {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.HitTestComplexControlFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.HitTestComplexControlFull")
+	}
+	r := C.qute_QStyle_hitTestComplexControl_1(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.HitTestComplexControlFull"), cQPoint(pt), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(widget)
+	return QStyleSubControls(r)
+}
+
+// SubControlRectFull wraps QStyle::subControlRect.
+//
+//	C++: QRect QStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex * opt, SubControl sc, const QWidget * widget = …) const
+//
+// SubControlRectFull is SubControlRect with every argument, including those SubControlRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#subControlRect
+func (this *QStyle) SubControlRectFull(cc QStyleComplexControl, opt *QStyleOptionComplex, sc QStyleSubControls, widget QWidgetLike) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.SubControlRectFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.SubControlRectFull")
+	}
+	r := C.qute_QStyle_subControlRect_1(self, C.int64_t(cc), rt.UseArg(unsafe.Pointer(opt), "QStyle.SubControlRectFull"), C.int64_t(sc), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(widget)
+	return goQRect(r)
+}
+
+// PixelMetricFull wraps QStyle::pixelMetric.
+//
+//	C++: int QStyle::pixelMetric(PixelMetric metric, const QStyleOption * option = …, const QWidget * widget = …) const
+//
+// PixelMetricFull is PixelMetric with every argument, including those PixelMetric leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#pixelMetric
+func (this *QStyle) PixelMetricFull(metric QStylePixelMetric, option *QStyleOption, widget QWidgetLike) int {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.PixelMetricFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.PixelMetricFull")
+	}
+	r := C.qute_QStyle_pixelMetric_1(self, C.int64_t(metric), rt.UseArg(unsafe.Pointer(option), "QStyle.PixelMetricFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+	return int(r)
+}
+
+// SizeFromContentsFull wraps QStyle::sizeFromContents.
+//
+//	C++: QSize QStyle::sizeFromContents(ContentsType ct, const QStyleOption * opt, const QSize & contentsSize, const QWidget * w = …) const
+//
+// SizeFromContentsFull is SizeFromContents with every argument, including those SizeFromContents leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#sizeFromContents
+func (this *QStyle) SizeFromContentsFull(ct QStyleContentsType, opt *QStyleOption, contentsSize qtcore.QSize, w QWidgetLike) qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.SizeFromContentsFull")
+	var wPtr unsafe.Pointer
+	if w != nil {
+		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QStyle.SizeFromContentsFull")
+	}
+	r := C.qute_QStyle_sizeFromContents_1(self, C.int64_t(ct), rt.UseArg(unsafe.Pointer(opt), "QStyle.SizeFromContentsFull"), cQSize(contentsSize), wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(w)
+	return goQSize(r)
+}
+
+// StandardPixmapFull wraps QStyle::standardPixmap.
+//
+//	C++: QPixmap QStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption * opt = …, const QWidget * widget = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// StandardPixmapFull is StandardPixmap with every argument, including those StandardPixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#standardPixmap
+func (this *QStyle) StandardPixmapFull(standardPixmap QStyleStandardPixmap, opt *QStyleOption, widget QWidgetLike) *qtgui.QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardPixmapFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.StandardPixmapFull")
+	}
+	r := C.qute_QStyle_standardPixmap_1(self, C.int64_t(standardPixmap), rt.UseArg(unsafe.Pointer(opt), "QStyle.StandardPixmapFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(widget)
+	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// StandardIconFull wraps QStyle::standardIcon.
+//
+//	C++: QIcon QStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption * option = …, const QWidget * widget = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// StandardIconFull is StandardIcon with every argument, including those StandardIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#standardIcon
+func (this *QStyle) StandardIconFull(standardIcon QStyleStandardPixmap, option *QStyleOption, widget QWidgetLike) *qtgui.QIcon {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.StandardIconFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.StandardIconFull")
+	}
+	r := C.qute_QStyle_standardIcon_1(self, C.int64_t(standardIcon), rt.UseArg(unsafe.Pointer(option), "QStyle.StandardIconFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+	return rt.View[qtgui.QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
+}
+
+// LayoutSpacingFull wraps QStyle::layoutSpacing.
+//
+//	C++: int QStyle::layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation, const QStyleOption * option = …, const QWidget * widget = …) const
+//
+// LayoutSpacingFull is LayoutSpacing with every argument, including those LayoutSpacing leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#layoutSpacing
+func (this *QStyle) LayoutSpacingFull(control1 QSizePolicyControlTypes, control2 QSizePolicyControlTypes, orientation qtcore.Orientations, option *QStyleOption, widget QWidgetLike) int {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.LayoutSpacingFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.LayoutSpacingFull")
+	}
+	r := C.qute_QStyle_layoutSpacing_1(self, C.int64_t(control1), C.int64_t(control2), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(option), "QStyle.LayoutSpacingFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+	return int(r)
+}
+
+// CombinedLayoutSpacingFull wraps QStyle::combinedLayoutSpacing.
+//
+//	C++: int QStyle::combinedLayoutSpacing(QSizePolicy::ControlTypes controls1, QSizePolicy::ControlTypes controls2, Qt::Orientation orientation, QStyleOption * option = …, QWidget * widget = …) const
+//
+// CombinedLayoutSpacingFull is CombinedLayoutSpacing with every argument, including those CombinedLayoutSpacing leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#combinedLayoutSpacing
+func (this *QStyle) CombinedLayoutSpacingFull(controls1 QSizePolicyControlTypes, controls2 QSizePolicyControlTypes, orientation qtcore.Orientations, option *QStyleOption, widget QWidgetLike) int {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.CombinedLayoutSpacingFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.CombinedLayoutSpacingFull")
+	}
+	r := C.qute_QStyle_combinedLayoutSpacing_1(self, C.int64_t(controls1), C.int64_t(controls2), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(option), "QStyle.CombinedLayoutSpacingFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+	return int(r)
 }
 
 // QStyleVisualRect wraps QStyle::visualRect.
@@ -450,6 +751,8 @@ func QStyleVisualPos(direction qtcore.LayoutDirection, boundingRect qtcore.QRect
 //
 //	C++: int QStyle::sliderPositionFromValue(int min, int max, int val, int space, bool upsideDown = …)
 //
+// Arguments with C++ defaults are left at them; QStyleSliderPositionFromValueFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#sliderPositionFromValue
 func QStyleSliderPositionFromValue(min int, max int, val int, space int) int {
 	rt.CheckThread("QStyleSliderPositionFromValue")
@@ -460,6 +763,8 @@ func QStyleSliderPositionFromValue(min int, max int, val int, space int) int {
 // QStyleSliderValueFromPosition wraps QStyle::sliderValueFromPosition.
 //
 //	C++: int QStyle::sliderValueFromPosition(int min, int max, int pos, int space, bool upsideDown = …)
+//
+// Arguments with C++ defaults are left at them; QStyleSliderValueFromPositionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#sliderValueFromPosition
 func QStyleSliderValueFromPosition(min int, max int, pos int, space int) int {
@@ -488,4 +793,30 @@ func QStyleAlignedRect(direction qtcore.LayoutDirection, alignment qtcore.Alignm
 	rt.CheckThread("QStyleAlignedRect")
 	r := C.qute_QStyle_alignedRect(C.int64_t(direction), C.int64_t(alignment), cQSize(size), cQRect(rectangle))
 	return goQRect(r)
+}
+
+// QStyleSliderPositionFromValueFull wraps QStyle::sliderPositionFromValue.
+//
+//	C++: int QStyle::sliderPositionFromValue(int min, int max, int val, int space, bool upsideDown = …)
+//
+// QStyleSliderPositionFromValueFull is QStyleSliderPositionFromValue with every argument, including those QStyleSliderPositionFromValue leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#sliderPositionFromValue
+func QStyleSliderPositionFromValueFull(min int, max int, val int, space int, upsideDown bool) int {
+	rt.CheckThread("QStyleSliderPositionFromValueFull")
+	r := C.qute_QStyle_sliderPositionFromValue_1(C.int(min), C.int(max), C.int(val), C.int(space), C.bool(upsideDown))
+	return int(r)
+}
+
+// QStyleSliderValueFromPositionFull wraps QStyle::sliderValueFromPosition.
+//
+//	C++: int QStyle::sliderValueFromPosition(int min, int max, int pos, int space, bool upsideDown = …)
+//
+// QStyleSliderValueFromPositionFull is QStyleSliderValueFromPosition with every argument, including those QStyleSliderValueFromPosition leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#sliderValueFromPosition
+func QStyleSliderValueFromPositionFull(min int, max int, pos int, space int, upsideDown bool) int {
+	rt.CheckThread("QStyleSliderValueFromPositionFull")
+	r := C.qute_QStyle_sliderValueFromPosition_1(C.int(min), C.int(max), C.int(pos), C.int(space), C.bool(upsideDown))
+	return int(r)
 }

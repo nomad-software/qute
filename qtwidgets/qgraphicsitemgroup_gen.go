@@ -75,7 +75,7 @@ func (this *QGraphicsItemGroup) AddToGroup(item QGraphicsItemLike) {
 	C.qute_QGraphicsItemGroup_addToGroup(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // RemoveFromGroup wraps QGraphicsItemGroup::removeFromGroup.

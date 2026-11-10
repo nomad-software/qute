@@ -389,6 +389,8 @@ func (this *QLineEdit) Alignment() qtcore.Alignment {
 //
 //	C++: void QLineEdit::cursorForward(bool mark, int steps = …)
 //
+// Arguments with C++ defaults are left at them; CursorForwardFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#cursorForward
 func (this *QLineEdit) CursorForward(mark bool) {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorForward")
@@ -399,6 +401,8 @@ func (this *QLineEdit) CursorForward(mark bool) {
 // CursorBackward wraps QLineEdit::cursorBackward.
 //
 //	C++: void QLineEdit::cursorBackward(bool mark, int steps = …)
+//
+// Arguments with C++ defaults are left at them; CursorBackwardFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlineedit.html#cursorBackward
 func (this *QLineEdit) CursorBackward(mark bool) {
@@ -944,6 +948,32 @@ func (this *QLineEdit) EmitSelectionChanged() {
 func (this *QLineEdit) EmitInputRejected() {
 	self := rt.Use(unsafe.Pointer(this), "QLineEdit.EmitInputRejected")
 	C.qute_QLineEdit_inputRejected_1(self)
+	runtime.KeepAlive(this)
+}
+
+// CursorForwardFull wraps QLineEdit::cursorForward.
+//
+//	C++: void QLineEdit::cursorForward(bool mark, int steps = …)
+//
+// CursorForwardFull is CursorForward with every argument, including those CursorForward leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlineedit.html#cursorForward
+func (this *QLineEdit) CursorForwardFull(mark bool, steps int) {
+	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorForwardFull")
+	C.qute_QLineEdit_cursorForward_1(self, C.bool(mark), C.int(steps))
+	runtime.KeepAlive(this)
+}
+
+// CursorBackwardFull wraps QLineEdit::cursorBackward.
+//
+//	C++: void QLineEdit::cursorBackward(bool mark, int steps = …)
+//
+// CursorBackwardFull is CursorBackward with every argument, including those CursorBackward leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlineedit.html#cursorBackward
+func (this *QLineEdit) CursorBackwardFull(mark bool, steps int) {
+	self := rt.Use(unsafe.Pointer(this), "QLineEdit.CursorBackwardFull")
+	C.qute_QLineEdit_cursorBackward_1(self, C.bool(mark), C.int(steps))
 	runtime.KeepAlive(this)
 }
 

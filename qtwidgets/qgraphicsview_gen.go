@@ -118,6 +118,8 @@ func (this *QGraphicsView) RenderHints() qtgui.QPainterRenderHints {
 //
 //	C++: void QGraphicsView::setRenderHint(QPainter::RenderHint hint, bool enabled = …)
 //
+// Arguments with C++ defaults are left at them; SetRenderHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setRenderHint
 func (this *QGraphicsView) SetRenderHint(hint qtgui.QPainterRenderHints) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetRenderHint")
@@ -243,6 +245,8 @@ func (this *QGraphicsView) OptimizationFlags() QGraphicsViewOptimizationFlags {
 // SetOptimizationFlag wraps QGraphicsView::setOptimizationFlag.
 //
 //	C++: void QGraphicsView::setOptimizationFlag(OptimizationFlag flag, bool enabled = …)
+//
+// Arguments with C++ defaults are left at them; SetOptimizationFlagFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setOptimizationFlag
 func (this *QGraphicsView) SetOptimizationFlag(flag QGraphicsViewOptimizationFlags) {
@@ -480,6 +484,8 @@ func (this *QGraphicsView) IsTransformed() bool {
 //
 //	C++: void QGraphicsView::setTransform(const QTransform & matrix, bool combine = …)
 //
+// Arguments with C++ defaults are left at them; SetTransformFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setTransform
 func (this *QGraphicsView) SetTransform(matrix *qtgui.QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetTransform")
@@ -574,6 +580,8 @@ func (this *QGraphicsView) CenterOnItem(item QGraphicsItemLike) {
 //
 //	C++: void QGraphicsView::ensureVisible(const QRectF & rect, int xmargin = …, int ymargin = …)
 //
+// Arguments with C++ defaults are left at them; EnsureVisibleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#ensureVisible
 func (this *QGraphicsView) EnsureVisible(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EnsureVisible")
@@ -584,6 +592,8 @@ func (this *QGraphicsView) EnsureVisible(rect qtcore.QRectF) {
 // EnsureVisibleItem wraps QGraphicsView::ensureVisible.
 //
 //	C++: void QGraphicsView::ensureVisible(const QGraphicsItem * item, int xmargin = …, int ymargin = …)
+//
+// Arguments with C++ defaults are left at them; EnsureVisibleItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#ensureVisible
 func (this *QGraphicsView) EnsureVisibleItem(item QGraphicsItemLike) {
@@ -601,6 +611,8 @@ func (this *QGraphicsView) EnsureVisibleItem(item QGraphicsItemLike) {
 //
 //	C++: void QGraphicsView::fitInView(const QRectF & rect, Qt::AspectRatioMode aspectRadioMode = …)
 //
+// Arguments with C++ defaults are left at them; FitInViewFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#fitInView
 func (this *QGraphicsView) FitInView(rect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.FitInView")
@@ -611,6 +623,8 @@ func (this *QGraphicsView) FitInView(rect qtcore.QRectF) {
 // FitInViewItem wraps QGraphicsView::fitInView.
 //
 //	C++: void QGraphicsView::fitInView(const QGraphicsItem * item, Qt::AspectRatioMode aspectRadioMode = …)
+//
+// Arguments with C++ defaults are left at them; FitInViewItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#fitInView
 func (this *QGraphicsView) FitInViewItem(item QGraphicsItemLike) {
@@ -627,6 +641,8 @@ func (this *QGraphicsView) FitInViewItem(item QGraphicsItemLike) {
 // Render wraps QGraphicsView::render.
 //
 //	C++: void QGraphicsView::render(QPainter * painter, const QRectF & target = …, const QRect & source = …, Qt::AspectRatioMode aspectRatioMode = …)
+//
+// Arguments with C++ defaults are left at them; RenderFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#render
 func (this *QGraphicsView) Render(painter qtgui.QPainterLike) {
@@ -652,7 +668,7 @@ func (this *QGraphicsView) Items() []*QGraphicsItem {
 	r := C.qute_QGraphicsView_items(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -668,7 +684,7 @@ func (this *QGraphicsView) ItemsAt(pos qtcore.QPoint) []*QGraphicsItem {
 	r := C.qute_QGraphicsView_items_1(self, cQPoint(pos))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -678,13 +694,15 @@ func (this *QGraphicsView) ItemsAt(pos qtcore.QPoint) []*QGraphicsItem {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemsInFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
 func (this *QGraphicsView) ItemsIn(rect qtcore.QRect) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsIn")
 	r := C.qute_QGraphicsView_items_2(self, cQRect(rect))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -693,6 +711,8 @@ func (this *QGraphicsView) ItemsIn(rect qtcore.QRect) []*QGraphicsItem {
 //	C++: QList<QGraphicsItem *> QGraphicsView::items(const QPolygon & polygon, Qt::ItemSelectionMode mode = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; ItemsInPolygonFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
 func (this *QGraphicsView) ItemsInPolygon(polygon []qtcore.QPoint) []*QGraphicsItem {
@@ -704,7 +724,7 @@ func (this *QGraphicsView) ItemsInPolygon(polygon []qtcore.QPoint) []*QGraphicsI
 	r := C.qute_QGraphicsView_items_3(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -714,6 +734,8 @@ func (this *QGraphicsView) ItemsInPolygon(polygon []qtcore.QPoint) []*QGraphicsI
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemsInPathFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
 func (this *QGraphicsView) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsInPath")
@@ -721,7 +743,7 @@ func (this *QGraphicsView) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsIte
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(path)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -736,7 +758,7 @@ func (this *QGraphicsView) ItemAt(pos qtcore.QPoint) *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemAt")
 	r := C.qute_QGraphicsView_itemAt(self, cQPoint(pos))
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // MapToScene wraps QGraphicsView::mapToScene.
@@ -920,6 +942,8 @@ func (this *QGraphicsView) UpdateScene(rects []qtcore.QRectF) {
 //
 //	C++: void QGraphicsView::invalidateScene(const QRectF & rect = …, QGraphicsScene::SceneLayers layers = …)
 //
+// Arguments with C++ defaults are left at them; InvalidateSceneFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#invalidateScene
 func (this *QGraphicsView) InvalidateScene() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.InvalidateScene")
@@ -946,6 +970,198 @@ func (this *QGraphicsView) UpdateSceneRect(rect qtcore.QRectF) {
 func (this *QGraphicsView) EmitRubberBandChanged(viewportRect qtcore.QRect, fromScenePoint qtcore.QPointF, toScenePoint qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EmitRubberBandChanged")
 	C.qute_QGraphicsView_rubberBandChanged_1(self, cQRect(viewportRect), cQPointF(fromScenePoint), cQPointF(toScenePoint))
+	runtime.KeepAlive(this)
+}
+
+// SetRenderHintFull wraps QGraphicsView::setRenderHint.
+//
+//	C++: void QGraphicsView::setRenderHint(QPainter::RenderHint hint, bool enabled = …)
+//
+// SetRenderHintFull is SetRenderHint with every argument, including those SetRenderHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setRenderHint
+func (this *QGraphicsView) SetRenderHintFull(hint qtgui.QPainterRenderHints, enabled bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetRenderHintFull")
+	C.qute_QGraphicsView_setRenderHint_1(self, C.int64_t(hint), C.bool(enabled))
+	runtime.KeepAlive(this)
+}
+
+// SetOptimizationFlagFull wraps QGraphicsView::setOptimizationFlag.
+//
+//	C++: void QGraphicsView::setOptimizationFlag(OptimizationFlag flag, bool enabled = …)
+//
+// SetOptimizationFlagFull is SetOptimizationFlag with every argument, including those SetOptimizationFlag leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setOptimizationFlag
+func (this *QGraphicsView) SetOptimizationFlagFull(flag QGraphicsViewOptimizationFlags, enabled bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetOptimizationFlagFull")
+	C.qute_QGraphicsView_setOptimizationFlag_1(self, C.int64_t(flag), C.bool(enabled))
+	runtime.KeepAlive(this)
+}
+
+// SetTransformFull wraps QGraphicsView::setTransform.
+//
+//	C++: void QGraphicsView::setTransform(const QTransform & matrix, bool combine = …)
+//
+// SetTransformFull is SetTransform with every argument, including those SetTransform leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#setTransform
+func (this *QGraphicsView) SetTransformFull(matrix *qtgui.QTransform, combine bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.SetTransformFull")
+	C.qute_QGraphicsView_setTransform_1(self, rt.UseArg(unsafe.Pointer(matrix), "QGraphicsView.SetTransformFull"), C.bool(combine))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+}
+
+// EnsureVisibleFull wraps QGraphicsView::ensureVisible.
+//
+//	C++: void QGraphicsView::ensureVisible(const QRectF & rect, int xmargin = …, int ymargin = …)
+//
+// EnsureVisibleFull is EnsureVisible with every argument, including those EnsureVisible leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#ensureVisible
+func (this *QGraphicsView) EnsureVisibleFull(rect qtcore.QRectF, xmargin int, ymargin int) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EnsureVisibleFull")
+	C.qute_QGraphicsView_ensureVisible_2(self, cQRectF(rect), C.int(xmargin), C.int(ymargin))
+	runtime.KeepAlive(this)
+}
+
+// EnsureVisibleItemFull wraps QGraphicsView::ensureVisible.
+//
+//	C++: void QGraphicsView::ensureVisible(const QGraphicsItem * item, int xmargin = …, int ymargin = …)
+//
+// EnsureVisibleItemFull is EnsureVisibleItem with every argument, including those EnsureVisibleItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#ensureVisible
+func (this *QGraphicsView) EnsureVisibleItemFull(item QGraphicsItemLike, xmargin int, ymargin int) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.EnsureVisibleItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.EnsureVisibleItemFull")
+	}
+	C.qute_QGraphicsView_ensureVisible_3(self, itemPtr, C.int(xmargin), C.int(ymargin))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+}
+
+// FitInViewFull wraps QGraphicsView::fitInView.
+//
+//	C++: void QGraphicsView::fitInView(const QRectF & rect, Qt::AspectRatioMode aspectRadioMode = …)
+//
+// FitInViewFull is FitInView with every argument, including those FitInView leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#fitInView
+func (this *QGraphicsView) FitInViewFull(rect qtcore.QRectF, aspectRadioMode qtcore.AspectRatioMode) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.FitInViewFull")
+	C.qute_QGraphicsView_fitInView_2(self, cQRectF(rect), C.int64_t(aspectRadioMode))
+	runtime.KeepAlive(this)
+}
+
+// FitInViewItemFull wraps QGraphicsView::fitInView.
+//
+//	C++: void QGraphicsView::fitInView(const QGraphicsItem * item, Qt::AspectRatioMode aspectRadioMode = …)
+//
+// FitInViewItemFull is FitInViewItem with every argument, including those FitInViewItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#fitInView
+func (this *QGraphicsView) FitInViewItemFull(item QGraphicsItemLike, aspectRadioMode qtcore.AspectRatioMode) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.FitInViewItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsView.FitInViewItemFull")
+	}
+	C.qute_QGraphicsView_fitInView_3(self, itemPtr, C.int64_t(aspectRadioMode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+}
+
+// RenderFull wraps QGraphicsView::render.
+//
+//	C++: void QGraphicsView::render(QPainter * painter, const QRectF & target = …, const QRect & source = …, Qt::AspectRatioMode aspectRatioMode = …)
+//
+// RenderFull is Render with every argument, including those Render leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#render
+func (this *QGraphicsView) RenderFull(painter qtgui.QPainterLike, target qtcore.QRectF, source qtcore.QRect, aspectRatioMode qtcore.AspectRatioMode) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.RenderFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsView.RenderFull")
+	}
+	C.qute_QGraphicsView_render_1(self, painterPtr, cQRectF(target), cQRect(source), C.int64_t(aspectRatioMode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// ItemsInFull wraps QGraphicsView::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsView::items(const QRect & rect, Qt::ItemSelectionMode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsInFull is ItemsIn with every argument, including those ItemsIn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
+func (this *QGraphicsView) ItemsInFull(rect qtcore.QRect, mode qtcore.ItemSelectionMode) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsInFull")
+	r := C.qute_QGraphicsView_items_5(self, cQRect(rect), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// ItemsInPolygonFull wraps QGraphicsView::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsView::items(const QPolygon & polygon, Qt::ItemSelectionMode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsInPolygonFull is ItemsInPolygon with every argument, including those ItemsInPolygon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
+func (this *QGraphicsView) ItemsInPolygonFull(polygon []qtcore.QPoint, mode qtcore.ItemSelectionMode) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsInPolygonFull")
+	polygonC := make([]C.qute_point, len(polygon))
+	for i := range polygon {
+		polygonC[i] = cQPoint(polygon[i])
+	}
+	r := C.qute_QGraphicsView_items_6(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// ItemsInPathFull wraps QGraphicsView::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsView::items(const QPainterPath & path, Qt::ItemSelectionMode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsInPathFull is ItemsInPath with every argument, including those ItemsInPath leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#items
+func (this *QGraphicsView) ItemsInPathFull(path *qtgui.QPainterPath, mode qtcore.ItemSelectionMode) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.ItemsInPathFull")
+	r := C.qute_QGraphicsView_items_7(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsView.ItemsInPathFull"), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// InvalidateSceneFull wraps QGraphicsView::invalidateScene.
+//
+//	C++: void QGraphicsView::invalidateScene(const QRectF & rect = …, QGraphicsScene::SceneLayers layers = …)
+//
+// InvalidateSceneFull is InvalidateScene with every argument, including those InvalidateScene leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsview.html#invalidateScene
+func (this *QGraphicsView) InvalidateSceneFull(rect qtcore.QRectF, layers QGraphicsSceneSceneLayers) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsView.InvalidateSceneFull")
+	C.qute_QGraphicsView_invalidateScene_1(self, cQRectF(rect), C.int64_t(layers))
 	runtime.KeepAlive(this)
 }
 

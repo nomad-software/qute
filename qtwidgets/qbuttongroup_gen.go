@@ -100,6 +100,8 @@ func (this *QButtonGroup) Exclusive() bool {
 //
 // The group does not take ownership of the button.
 //
+// Arguments with C++ defaults are left at them; AddButtonFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbuttongroup.html#addButton
 func (this *QButtonGroup) AddButton(abstractButton QAbstractButtonLike) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.AddButton")
@@ -323,6 +325,26 @@ func (this *QButtonGroup) EmitIdToggled(arg0 int, arg1 bool) {
 	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.EmitIdToggled")
 	C.qute_QButtonGroup_idToggled_1(self, C.int(arg0), C.bool(arg1))
 	runtime.KeepAlive(this)
+}
+
+// AddButtonFull wraps QButtonGroup::addButton.
+//
+//	C++: void QButtonGroup::addButton(QAbstractButton *, int id = …)
+//
+// The group does not take ownership of the button.
+//
+// AddButtonFull is AddButton with every argument, including those AddButton leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbuttongroup.html#addButton
+func (this *QButtonGroup) AddButtonFull(abstractButton QAbstractButtonLike, idArg int) {
+	self := rt.Use(unsafe.Pointer(this), "QButtonGroup.AddButtonFull")
+	var abstractButtonPtr unsafe.Pointer
+	if abstractButton != nil {
+		abstractButtonPtr = rt.UseArg(unsafe.Pointer(abstractButton.AsQAbstractButton()), "QButtonGroup.AddButtonFull")
+	}
+	C.qute_QButtonGroup_addButton_1(self, abstractButtonPtr, C.int(idArg))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(abstractButton)
 }
 
 // OnButtonClicked connects f to the buttonClicked signal. The connection ends when the

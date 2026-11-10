@@ -78,13 +78,13 @@ func NewQSplitter(parent QWidgetLike) *QSplitter {
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsplitter.html#QSplitter
-func NewQSplitterWithOrientation(arg0 qtcore.Orientations, parent QWidgetLike) *QSplitter {
+func NewQSplitterWithOrientation(orientation qtcore.Orientations, parent QWidgetLike) *QSplitter {
 	rt.CheckThread("NewQSplitterWithOrientation")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSplitterWithOrientation")
 	}
-	p := C.qute_QSplitter_new_1(C.int64_t(arg0), parentPtr)
+	p := C.qute_QSplitter_new_1(C.int64_t(orientation), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -111,7 +111,7 @@ func (this *QSplitter) AddWidget(widget QWidgetLike) {
 	C.qute_QSplitter_addWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // InsertWidget wraps QSplitter::insertWidget.
@@ -131,7 +131,7 @@ func (this *QSplitter) InsertWidget(index int, widget QWidgetLike) {
 	C.qute_QSplitter_insertWidget(self, C.int(index), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // ReplaceWidget wraps QSplitter::replaceWidget.
@@ -153,7 +153,7 @@ func (this *QSplitter) ReplaceWidget(index int, widget QWidgetLike) *QWidget {
 	r := C.qute_QSplitter_replaceWidget(self, C.int(index), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.TakeOwned), r)
 }
 
@@ -229,6 +229,8 @@ func (this *QSplitter) IsCollapsible(index int) bool {
 // SetOpaqueResize wraps QSplitter::setOpaqueResize.
 //
 //	C++: void QSplitter::setOpaqueResize(bool opaque = …)
+//
+// Arguments with C++ defaults are left at them; SetOpaqueResizeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsplitter.html#setOpaqueResize
 func (this *QSplitter) SetOpaqueResize() {
@@ -410,6 +412,19 @@ func (this *QSplitter) SetStretchFactor(index int, stretch int) {
 func (this *QSplitter) EmitSplitterMoved(pos int, index int) {
 	self := rt.Use(unsafe.Pointer(this), "QSplitter.EmitSplitterMoved")
 	C.qute_QSplitter_splitterMoved_1(self, C.int(pos), C.int(index))
+	runtime.KeepAlive(this)
+}
+
+// SetOpaqueResizeFull wraps QSplitter::setOpaqueResize.
+//
+//	C++: void QSplitter::setOpaqueResize(bool opaque = …)
+//
+// SetOpaqueResizeFull is SetOpaqueResize with every argument, including those SetOpaqueResize leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsplitter.html#setOpaqueResize
+func (this *QSplitter) SetOpaqueResizeFull(opaque bool) {
+	self := rt.Use(unsafe.Pointer(this), "QSplitter.SetOpaqueResizeFull")
+	C.qute_QSplitter_setOpaqueResize_1(self, C.bool(opaque))
 	runtime.KeepAlive(this)
 }
 

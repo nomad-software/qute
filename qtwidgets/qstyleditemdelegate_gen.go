@@ -82,7 +82,7 @@ func (this *QStyledItemDelegate) ItemEditorFactory() *QItemEditorFactory {
 	self := rt.Use(unsafe.Pointer(this), "QStyledItemDelegate.ItemEditorFactory")
 	r := C.qute_QStyledItemDelegate_itemEditorFactory(self)
 	runtime.KeepAlive(this)
-	return rt.View[QItemEditorFactory](rt.WrapClass(r, "QItemEditorFactory", rt.KeepOrBorrow), r)
+	return rt.View[QItemEditorFactory](rt.WrapClassFrom(r, "QItemEditorFactory", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetItemEditorFactory wraps QStyledItemDelegate::setItemEditorFactory.

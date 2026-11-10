@@ -81,6 +81,8 @@ func (this *QJsonValue) Unkeep() {
 //
 //	C++: QJsonValue::QJsonValue(Type = …)
 //
+// Arguments with C++ defaults are left at them; NewQJsonValueFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
 func NewQJsonValue() *QJsonValue {
 	rt.CheckThread("NewQJsonValue")
@@ -89,61 +91,61 @@ func NewQJsonValue() *QJsonValue {
 	return rt.View[QJsonValue](h, p)
 }
 
-// NewQJsonValueWithBArg wraps the QJsonValue constructor.
+// NewQJsonValueWithBool wraps the QJsonValue constructor.
 //
 //	C++: QJsonValue::QJsonValue(bool b)
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
-func NewQJsonValueWithBArg(bArg bool) *QJsonValue {
-	rt.CheckThread("NewQJsonValueWithBArg")
+func NewQJsonValueWithBool(bArg bool) *QJsonValue {
+	rt.CheckThread("NewQJsonValueWithBool")
 	p := C.qute_QJsonValue_new_1(C.bool(bArg))
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
-// NewQJsonValueWithN wraps the QJsonValue constructor.
+// NewQJsonValueWithFloat64 wraps the QJsonValue constructor.
 //
 //	C++: QJsonValue::QJsonValue(double n)
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
-func NewQJsonValueWithN(n float64) *QJsonValue {
-	rt.CheckThread("NewQJsonValueWithN")
+func NewQJsonValueWithFloat64(n float64) *QJsonValue {
+	rt.CheckThread("NewQJsonValueWithFloat64")
 	p := C.qute_QJsonValue_new_2(C.double(n))
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
-// NewQJsonValueWithNInt wraps the QJsonValue constructor.
+// NewQJsonValueWithInt wraps the QJsonValue constructor.
 //
 //	C++: QJsonValue::QJsonValue(int n)
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
-func NewQJsonValueWithNInt(n int) *QJsonValue {
-	rt.CheckThread("NewQJsonValueWithNInt")
+func NewQJsonValueWithInt(n int) *QJsonValue {
+	rt.CheckThread("NewQJsonValueWithInt")
 	p := C.qute_QJsonValue_new_3(C.int(n))
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
-// NewQJsonValueWithVArg wraps the QJsonValue constructor.
+// NewQJsonValueWithInt64 wraps the QJsonValue constructor.
 //
 //	C++: QJsonValue::QJsonValue(qint64 v)
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
-func NewQJsonValueWithVArg(vArg int64) *QJsonValue {
-	rt.CheckThread("NewQJsonValueWithVArg")
+func NewQJsonValueWithInt64(vArg int64) *QJsonValue {
+	rt.CheckThread("NewQJsonValueWithInt64")
 	p := C.qute_QJsonValue_new_4(C.longlong(vArg))
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
-// NewQJsonValueWithSArg wraps the QJsonValue constructor.
+// NewQJsonValueWithString wraps the QJsonValue constructor.
 //
 //	C++: QJsonValue::QJsonValue(const QString & s)
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
-func NewQJsonValueWithSArg(sArg string) *QJsonValue {
-	rt.CheckThread("NewQJsonValueWithSArg")
+func NewQJsonValueWithString(sArg string) *QJsonValue {
+	rt.CheckThread("NewQJsonValueWithString")
 	p := C.qute_QJsonValue_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
 	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
@@ -175,6 +177,20 @@ func NewQJsonValueWithJsonObject(o *QJsonObject) *QJsonValue {
 	return rt.View[QJsonValue](h, p)
 }
 
+// NewQJsonValueFull wraps the QJsonValue constructor.
+//
+//	C++: QJsonValue::QJsonValue(Type = …)
+//
+// NewQJsonValueFull is NewQJsonValue with every argument, including those NewQJsonValue leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#QJsonValue
+func NewQJsonValueFull(typeArg QJsonValueType) *QJsonValue {
+	rt.CheckThread("NewQJsonValueFull")
+	p := C.qute_QJsonValue_new_8(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	return rt.View[QJsonValue](h, p)
+}
+
 // ToVariant wraps QJsonValue::toVariant.
 //
 //	C++: QVariant QJsonValue::toVariant() const
@@ -192,6 +208,8 @@ func (this *QJsonValue) ToVariant() *QVariant {
 // ToJson wraps QJsonValue::toJson.
 //
 //	C++: QByteArray QJsonValue::toJson(JsonFormat format = …) const
+//
+// Arguments with C++ defaults are left at them; ToJsonFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toJson
 func (this *QJsonValue) ToJson() []byte {
@@ -301,6 +319,8 @@ func (this *QJsonValue) IsUndefined() bool {
 //
 //	C++: bool QJsonValue::toBool(bool defaultValue = …) const
 //
+// Arguments with C++ defaults are left at them; ToBoolFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toBool
 func (this *QJsonValue) ToBool() bool {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToBool")
@@ -312,6 +332,8 @@ func (this *QJsonValue) ToBool() bool {
 // ToInt wraps QJsonValue::toInt.
 //
 //	C++: int QJsonValue::toInt(int defaultValue = …) const
+//
+// Arguments with C++ defaults are left at them; ToIntFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toInt
 func (this *QJsonValue) ToInt() int {
@@ -325,6 +347,8 @@ func (this *QJsonValue) ToInt() int {
 //
 //	C++: qint64 QJsonValue::toInteger(qint64 defaultValue = …) const
 //
+// Arguments with C++ defaults are left at them; ToIntegerFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toInteger
 func (this *QJsonValue) ToInteger() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToInteger")
@@ -336,6 +360,8 @@ func (this *QJsonValue) ToInteger() int64 {
 // ToDouble wraps QJsonValue::toDouble.
 //
 //	C++: double QJsonValue::toDouble(double defaultValue = …) const
+//
+// Arguments with C++ defaults are left at them; ToDoubleFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toDouble
 func (this *QJsonValue) ToDouble() float64 {
@@ -372,6 +398,8 @@ func (this *QJsonValue) ToStringWithDefaultValue(defaultValue string) string {
 // ToStringView wraps QJsonValue::toStringView.
 //
 //	C++: QAnyStringView QJsonValue::toStringView(QAnyStringView defaultValue = …) const
+//
+// Arguments with C++ defaults are left at them; ToStringViewFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toStringView
 func (this *QJsonValue) ToStringView() string {
@@ -437,6 +465,90 @@ func (this *QJsonValue) ToObjectWithJsonObject(defaultValue *QJsonObject) *QJson
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(defaultValue)
 	return rt.View[QJsonObject](rt.WrapClass(r, "QJsonObject", rt.TakeOwned), r)
+}
+
+// ToJsonFull wraps QJsonValue::toJson.
+//
+//	C++: QByteArray QJsonValue::toJson(JsonFormat format = …) const
+//
+// ToJsonFull is ToJson with every argument, including those ToJson leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toJson
+func (this *QJsonValue) ToJsonFull(format QJsonDocumentJsonFormat) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToJsonFull")
+	r := C.qute_QJsonValue_toJson_1(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteBytes(r)
+}
+
+// ToBoolFull wraps QJsonValue::toBool.
+//
+//	C++: bool QJsonValue::toBool(bool defaultValue = …) const
+//
+// ToBoolFull is ToBool with every argument, including those ToBool leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toBool
+func (this *QJsonValue) ToBoolFull(defaultValue bool) bool {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToBoolFull")
+	r := C.qute_QJsonValue_toBool_1(self, C.bool(defaultValue))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// ToIntFull wraps QJsonValue::toInt.
+//
+//	C++: int QJsonValue::toInt(int defaultValue = …) const
+//
+// ToIntFull is ToInt with every argument, including those ToInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toInt
+func (this *QJsonValue) ToIntFull(defaultValue int) int {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToIntFull")
+	r := C.qute_QJsonValue_toInt_1(self, C.int(defaultValue))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// ToIntegerFull wraps QJsonValue::toInteger.
+//
+//	C++: qint64 QJsonValue::toInteger(qint64 defaultValue = …) const
+//
+// ToIntegerFull is ToInteger with every argument, including those ToInteger leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toInteger
+func (this *QJsonValue) ToIntegerFull(defaultValue int64) int64 {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToIntegerFull")
+	r := C.qute_QJsonValue_toInteger_1(self, C.longlong(defaultValue))
+	runtime.KeepAlive(this)
+	return int64(r)
+}
+
+// ToDoubleFull wraps QJsonValue::toDouble.
+//
+//	C++: double QJsonValue::toDouble(double defaultValue = …) const
+//
+// ToDoubleFull is ToDouble with every argument, including those ToDouble leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toDouble
+func (this *QJsonValue) ToDoubleFull(defaultValue float64) float64 {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToDoubleFull")
+	r := C.qute_QJsonValue_toDouble_1(self, C.double(defaultValue))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// ToStringViewFull wraps QJsonValue::toStringView.
+//
+//	C++: QAnyStringView QJsonValue::toStringView(QAnyStringView defaultValue = …) const
+//
+// ToStringViewFull is ToStringView with every argument, including those ToStringView leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#toStringView
+func (this *QJsonValue) ToStringViewFull(defaultValue string) string {
+	self := rt.Use(unsafe.Pointer(this), "QJsonValue.ToStringViewFull")
+	r := C.qute_QJsonValue_toStringView_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(defaultValue))), C.ptrdiff_t(len(defaultValue)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
 }
 
 // QJsonValueFromVariant wraps QJsonValue::fromVariant.

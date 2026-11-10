@@ -105,7 +105,7 @@ func (this *QTreeWidget) InvisibleRootItem() *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.InvisibleRootItem")
 	r := C.qute_QTreeWidget_invisibleRootItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // TopLevelItem wraps QTreeWidget::topLevelItem.
@@ -119,7 +119,7 @@ func (this *QTreeWidget) TopLevelItem(index int) *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.TopLevelItem")
 	r := C.qute_QTreeWidget_topLevelItem(self, C.int(index))
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // TopLevelItemCount wraps QTreeWidget::topLevelItemCount.
@@ -151,7 +151,7 @@ func (this *QTreeWidget) InsertTopLevelItem(index int, item QTreeWidgetItemLike)
 	C.qute_QTreeWidget_insertTopLevelItem(self, C.int(index), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // AddTopLevelItem wraps QTreeWidget::addTopLevelItem.
@@ -171,7 +171,7 @@ func (this *QTreeWidget) AddTopLevelItem(item QTreeWidgetItemLike) {
 	C.qute_QTreeWidget_addTopLevelItem(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // TakeTopLevelItem wraps QTreeWidget::takeTopLevelItem.
@@ -223,7 +223,7 @@ func (this *QTreeWidget) InsertTopLevelItems(index int, items []*QTreeWidgetItem
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -246,7 +246,7 @@ func (this *QTreeWidget) AddTopLevelItems(items []*QTreeWidgetItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -262,7 +262,7 @@ func (this *QTreeWidget) HeaderItem() *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.HeaderItem")
 	r := C.qute_QTreeWidget_headerItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetHeaderItem wraps QTreeWidget::setHeaderItem.
@@ -282,7 +282,7 @@ func (this *QTreeWidget) SetHeaderItem(item QTreeWidgetItemLike) {
 	C.qute_QTreeWidget_setHeaderItem(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetHeaderLabels wraps QTreeWidget::setHeaderLabels.
@@ -319,7 +319,7 @@ func (this *QTreeWidget) CurrentItem() *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.CurrentItem")
 	r := C.qute_QTreeWidget_currentItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // CurrentColumn wraps QTreeWidget::currentColumn.
@@ -393,7 +393,7 @@ func (this *QTreeWidget) ItemAt(pArg qtcore.QPoint) *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.ItemAt")
 	r := C.qute_QTreeWidget_itemAt(self, cQPoint(pArg))
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // VisualItemRect wraps QTreeWidget::visualItemRect.
@@ -440,6 +440,8 @@ func (this *QTreeWidget) SortItems(column int, order qtcore.SortOrder) {
 //
 //	C++: void QTreeWidget::editItem(QTreeWidgetItem * item, int column = …)
 //
+// Arguments with C++ defaults are left at them; EditItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#editItem
 func (this *QTreeWidget) EditItem(item QTreeWidgetItemLike) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.EditItem")
@@ -455,6 +457,8 @@ func (this *QTreeWidget) EditItem(item QTreeWidgetItemLike) {
 // OpenPersistentEditor wraps QTreeWidget::openPersistentEditor.
 //
 //	C++: void QTreeWidget::openPersistentEditor(QTreeWidgetItem * item, int column = …)
+//
+// Arguments with C++ defaults are left at them; OpenPersistentEditorFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#openPersistentEditor
 func (this *QTreeWidget) OpenPersistentEditor(item QTreeWidgetItemLike) {
@@ -472,6 +476,8 @@ func (this *QTreeWidget) OpenPersistentEditor(item QTreeWidgetItemLike) {
 //
 //	C++: void QTreeWidget::closePersistentEditor(QTreeWidgetItem * item, int column = …)
 //
+// Arguments with C++ defaults are left at them; ClosePersistentEditorFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#closePersistentEditor
 func (this *QTreeWidget) ClosePersistentEditor(item QTreeWidgetItemLike) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.ClosePersistentEditor")
@@ -487,6 +493,8 @@ func (this *QTreeWidget) ClosePersistentEditor(item QTreeWidgetItemLike) {
 // IsPersistentEditorOpen wraps QTreeWidget::isPersistentEditorOpen.
 //
 //	C++: bool QTreeWidget::isPersistentEditorOpen(QTreeWidgetItem * item, int column = …) const
+//
+// Arguments with C++ defaults are left at them; IsPersistentEditorOpenFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#isPersistentEditorOpen
 func (this *QTreeWidget) IsPersistentEditorOpen(item QTreeWidgetItemLike) bool {
@@ -542,7 +550,7 @@ func (this *QTreeWidget) SetItemWidget(item QTreeWidgetItemLike, column int, wid
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // RemoveItemWidget wraps QTreeWidget::removeItemWidget.
@@ -573,7 +581,7 @@ func (this *QTreeWidget) SelectedItems() []*QTreeWidgetItem {
 	r := C.qute_QTreeWidget_selectedItems(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTreeWidgetItem {
-		return rt.View[QTreeWidgetItem](rt.WrapClass(e, "QTreeWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QTreeWidgetItem](rt.WrapClassFrom(e, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -583,13 +591,15 @@ func (this *QTreeWidget) SelectedItems() []*QTreeWidgetItem {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; FindItemsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#findItems
 func (this *QTreeWidget) FindItems(text string, flags qtcore.MatchFlags) []*QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.FindItems")
 	r := C.qute_QTreeWidget_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTreeWidgetItem {
-		return rt.View[QTreeWidgetItem](rt.WrapClass(e, "QTreeWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QTreeWidgetItem](rt.WrapClassFrom(e, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -609,7 +619,7 @@ func (this *QTreeWidget) ItemAbove(item QTreeWidgetItemLike) *QTreeWidgetItem {
 	r := C.qute_QTreeWidget_itemAbove(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // ItemBelow wraps QTreeWidget::itemBelow.
@@ -628,7 +638,7 @@ func (this *QTreeWidget) ItemBelow(item QTreeWidgetItemLike) *QTreeWidgetItem {
 	r := C.qute_QTreeWidget_itemBelow(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // IndexFromItem wraps QTreeWidget::indexFromItem.
@@ -636,6 +646,8 @@ func (this *QTreeWidget) ItemBelow(item QTreeWidgetItemLike) *QTreeWidgetItem {
 //	C++: QModelIndex QTreeWidget::indexFromItem(const QTreeWidgetItem * item, int column = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; IndexFromItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#indexFromItem
 func (this *QTreeWidget) IndexFromItem(item QTreeWidgetItemLike) *qtcore.QModelIndex {
@@ -662,7 +674,7 @@ func (this *QTreeWidget) ItemFromIndex(index *qtcore.QModelIndex) *QTreeWidgetIt
 	r := C.qute_QTreeWidget_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QTreeWidget.ItemFromIndex"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SupportedDragActions wraps QTreeWidget::supportedDragActions.
@@ -691,6 +703,8 @@ func (this *QTreeWidget) SetSupportedDragActions(actions qtcore.DropActions) {
 // ScrollToItem wraps QTreeWidget::scrollToItem.
 //
 //	C++: void QTreeWidget::scrollToItem(const QTreeWidgetItem * item, QAbstractItemView::ScrollHint hint = …)
+//
+// Arguments with C++ defaults are left at them; ScrollToItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#scrollToItem
 func (this *QTreeWidget) ScrollToItem(item QTreeWidgetItemLike) {
@@ -905,6 +919,136 @@ func (this *QTreeWidget) EmitItemSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.EmitItemSelectionChanged")
 	C.qute_QTreeWidget_itemSelectionChanged_1(self)
 	runtime.KeepAlive(this)
+}
+
+// EditItemFull wraps QTreeWidget::editItem.
+//
+//	C++: void QTreeWidget::editItem(QTreeWidgetItem * item, int column = …)
+//
+// EditItemFull is EditItem with every argument, including those EditItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#editItem
+func (this *QTreeWidget) EditItemFull(item QTreeWidgetItemLike, column int) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.EditItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTreeWidgetItem()), "QTreeWidget.EditItemFull")
+	}
+	C.qute_QTreeWidget_editItem_1(self, itemPtr, C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+}
+
+// OpenPersistentEditorFull wraps QTreeWidget::openPersistentEditor.
+//
+//	C++: void QTreeWidget::openPersistentEditor(QTreeWidgetItem * item, int column = …)
+//
+// OpenPersistentEditorFull is OpenPersistentEditor with every argument, including those OpenPersistentEditor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#openPersistentEditor
+func (this *QTreeWidget) OpenPersistentEditorFull(item QTreeWidgetItemLike, column int) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.OpenPersistentEditorFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTreeWidgetItem()), "QTreeWidget.OpenPersistentEditorFull")
+	}
+	C.qute_QTreeWidget_openPersistentEditor_1(self, itemPtr, C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+}
+
+// ClosePersistentEditorFull wraps QTreeWidget::closePersistentEditor.
+//
+//	C++: void QTreeWidget::closePersistentEditor(QTreeWidgetItem * item, int column = …)
+//
+// ClosePersistentEditorFull is ClosePersistentEditor with every argument, including those ClosePersistentEditor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#closePersistentEditor
+func (this *QTreeWidget) ClosePersistentEditorFull(item QTreeWidgetItemLike, column int) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.ClosePersistentEditorFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTreeWidgetItem()), "QTreeWidget.ClosePersistentEditorFull")
+	}
+	C.qute_QTreeWidget_closePersistentEditor_1(self, itemPtr, C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+}
+
+// IsPersistentEditorOpenFull wraps QTreeWidget::isPersistentEditorOpen.
+//
+//	C++: bool QTreeWidget::isPersistentEditorOpen(QTreeWidgetItem * item, int column = …) const
+//
+// IsPersistentEditorOpenFull is IsPersistentEditorOpen with every argument, including those IsPersistentEditorOpen leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#isPersistentEditorOpen
+func (this *QTreeWidget) IsPersistentEditorOpenFull(item QTreeWidgetItemLike, column int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.IsPersistentEditorOpenFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTreeWidgetItem()), "QTreeWidget.IsPersistentEditorOpenFull")
+	}
+	r := C.qute_QTreeWidget_isPersistentEditorOpen_1(self, itemPtr, C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	return bool(r)
+}
+
+// FindItemsFull wraps QTreeWidget::findItems.
+//
+//	C++: QList<QTreeWidgetItem *> QTreeWidget::findItems(const QString & text, Qt::MatchFlags flags, int column = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// FindItemsFull is FindItems with every argument, including those FindItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#findItems
+func (this *QTreeWidget) FindItemsFull(text string, flags qtcore.MatchFlags, column int) []*QTreeWidgetItem {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.FindItemsFull")
+	r := C.qute_QTreeWidget_findItems_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags), C.int(column))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QTreeWidgetItem {
+		return rt.View[QTreeWidgetItem](rt.WrapClassFrom(e, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// IndexFromItemFull wraps QTreeWidget::indexFromItem.
+//
+//	C++: QModelIndex QTreeWidget::indexFromItem(const QTreeWidgetItem * item, int column = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// IndexFromItemFull is IndexFromItem with every argument, including those IndexFromItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#indexFromItem
+func (this *QTreeWidget) IndexFromItemFull(item QTreeWidgetItemLike, column int) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.IndexFromItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTreeWidgetItem()), "QTreeWidget.IndexFromItemFull")
+	}
+	r := C.qute_QTreeWidget_indexFromItem_1(self, itemPtr, C.int(column))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// ScrollToItemFull wraps QTreeWidget::scrollToItem.
+//
+//	C++: void QTreeWidget::scrollToItem(const QTreeWidgetItem * item, QAbstractItemView::ScrollHint hint = …)
+//
+// ScrollToItemFull is ScrollToItem with every argument, including those ScrollToItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidget.html#scrollToItem
+func (this *QTreeWidget) ScrollToItemFull(item QTreeWidgetItemLike, hint QAbstractItemViewScrollHint) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.ScrollToItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTreeWidgetItem()), "QTreeWidget.ScrollToItemFull")
+	}
+	C.qute_QTreeWidget_scrollToItem_1(self, itemPtr, C.int64_t(hint))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the

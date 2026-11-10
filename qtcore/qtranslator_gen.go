@@ -74,6 +74,8 @@ func NewQTranslator(parent QObjectLike) *QTranslator {
 //
 //	C++: QString QTranslator::translate(const char * context, const char * sourceText, const char * disambiguation = …, int n = …) const
 //
+// Arguments with C++ defaults are left at them; TranslateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtranslator.html#translate
 func (this *QTranslator) Translate(context string, sourceText string) string {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.Translate")
@@ -126,6 +128,8 @@ func (this *QTranslator) FilePath() string {
 //
 //	C++: bool QTranslator::load(const QString & filename, const QString & directory = …, const QString & search_delimiters = …, const QString & suffix = …)
 //
+// Arguments with C++ defaults are left at them; LoadFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
 func (this *QTranslator) Load(filename string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.Load")
@@ -137,6 +141,8 @@ func (this *QTranslator) Load(filename string) bool {
 // LoadLocale wraps QTranslator::load.
 //
 //	C++: bool QTranslator::load(const QLocale & locale, const QString & filename, const QString & prefix = …, const QString & directory = …, const QString & suffix = …)
+//
+// Arguments with C++ defaults are left at them; LoadLocaleFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
 func (this *QTranslator) LoadLocale(locale *QLocale, filename string) bool {
@@ -151,10 +157,73 @@ func (this *QTranslator) LoadLocale(locale *QLocale, filename string) bool {
 //
 //	C++: bool QTranslator::load(const uchar * data, int len, const QString & directory = …)
 //
+// Arguments with C++ defaults are left at them; LoadBytesFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
 func (this *QTranslator) LoadBytes(data []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadBytes")
 	r := C.qute_QTranslator_load_2(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// TranslateFull wraps QTranslator::translate.
+//
+//	C++: QString QTranslator::translate(const char * context, const char * sourceText, const char * disambiguation = …, int n = …) const
+//
+// TranslateFull is Translate with every argument, including those Translate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtranslator.html#translate
+func (this *QTranslator) TranslateFull(context string, sourceText string, disambiguation []byte) string {
+	self := rt.Use(unsafe.Pointer(this), "QTranslator.TranslateFull")
+	contextCStr := C.CString(context)
+	defer C.free(unsafe.Pointer(contextCStr))
+	sourceTextCStr := C.CString(sourceText)
+	defer C.free(unsafe.Pointer(sourceTextCStr))
+	r := C.qute_QTranslator_translate_1(self, contextCStr, sourceTextCStr, (*C.char)(unsafe.Pointer(unsafe.SliceData(disambiguation))), C.ptrdiff_t(len(disambiguation)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// LoadFull wraps QTranslator::load.
+//
+//	C++: bool QTranslator::load(const QString & filename, const QString & directory = …, const QString & search_delimiters = …, const QString & suffix = …)
+//
+// LoadFull is Load with every argument, including those Load leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
+func (this *QTranslator) LoadFull(filename string, directory string, search_delimiters string, suffix string) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadFull")
+	r := C.qute_QTranslator_load_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)), (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)), (*C.char)(unsafe.Pointer(unsafe.StringData(search_delimiters))), C.ptrdiff_t(len(search_delimiters)), (*C.char)(unsafe.Pointer(unsafe.StringData(suffix))), C.ptrdiff_t(len(suffix)))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// LoadLocaleFull wraps QTranslator::load.
+//
+//	C++: bool QTranslator::load(const QLocale & locale, const QString & filename, const QString & prefix = …, const QString & directory = …, const QString & suffix = …)
+//
+// LoadLocaleFull is LoadLocale with every argument, including those LoadLocale leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
+func (this *QTranslator) LoadLocaleFull(locale *QLocale, filename string, prefix string, directory string, suffix string) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadLocaleFull")
+	r := C.qute_QTranslator_load_4(self, rt.UseArg(unsafe.Pointer(locale), "QTranslator.LoadLocaleFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)), (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)), (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)), (*C.char)(unsafe.Pointer(unsafe.StringData(suffix))), C.ptrdiff_t(len(suffix)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
+	return bool(r)
+}
+
+// LoadBytesFull wraps QTranslator::load.
+//
+//	C++: bool QTranslator::load(const uchar * data, int len, const QString & directory = …)
+//
+// LoadBytesFull is LoadBytes with every argument, including those LoadBytes leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
+func (this *QTranslator) LoadBytesFull(data []byte, directory string) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadBytesFull")
+	r := C.qute_QTranslator_load_5(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)))
 	runtime.KeepAlive(this)
 	return bool(r)
 }

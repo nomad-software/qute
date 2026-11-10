@@ -202,9 +202,24 @@ func (this *QEvent) Clone() *QEvent {
 //
 //	C++: int QEvent::registerEventType(int hint = …)
 //
+// Arguments with C++ defaults are left at them; QEventRegisterEventTypeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qevent.html#registerEventType
 func QEventRegisterEventType() int {
 	rt.CheckThread("QEventRegisterEventType")
 	r := C.qute_QEvent_registerEventType()
+	return int(r)
+}
+
+// QEventRegisterEventTypeFull wraps QEvent::registerEventType.
+//
+//	C++: int QEvent::registerEventType(int hint = …)
+//
+// QEventRegisterEventTypeFull is QEventRegisterEventType with every argument, including those QEventRegisterEventType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qevent.html#registerEventType
+func QEventRegisterEventTypeFull(hint int) int {
+	rt.CheckThread("QEventRegisterEventTypeFull")
+	r := C.qute_QEvent_registerEventType_1(C.int(hint))
 	return int(r)
 }

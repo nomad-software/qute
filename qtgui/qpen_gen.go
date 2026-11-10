@@ -93,9 +93,9 @@ func NewQPen() *QPen {
 //	C++: QPen::QPen(Qt::PenStyle)
 //
 // Qt docs: https://doc.qt.io/qt-6/qpen.html#QPen
-func NewQPenWithStyle(arg0 qtcore.PenStyle) *QPen {
+func NewQPenWithStyle(penStyle qtcore.PenStyle) *QPen {
 	rt.CheckThread("NewQPenWithStyle")
-	p := C.qute_QPen_new_1(C.int64_t(arg0))
+	p := C.qute_QPen_new_1(C.int64_t(penStyle))
 	h := rt.WrapClass(p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
@@ -116,10 +116,27 @@ func NewQPenWithColor(color QColor) *QPen {
 //
 //	C++: QPen::QPen(const QBrush & brush, qreal width, Qt::PenStyle s = …, Qt::PenCapStyle c = …, Qt::PenJoinStyle j = …)
 //
+// Arguments with C++ defaults are left at them; NewQPenWithBrushFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpen.html#QPen
 func NewQPenWithBrush(brush *QBrush, width float64) *QPen {
 	rt.CheckThread("NewQPenWithBrush")
 	p := C.qute_QPen_new_3(rt.UseArg(unsafe.Pointer(brush), "NewQPenWithBrush"), C.double(width))
+	runtime.KeepAlive(brush)
+	h := rt.WrapClass(p, "QPen", rt.NewOwned)
+	return rt.View[QPen](h, p)
+}
+
+// NewQPenWithBrushFull wraps the QPen constructor.
+//
+//	C++: QPen::QPen(const QBrush & brush, qreal width, Qt::PenStyle s = …, Qt::PenCapStyle c = …, Qt::PenJoinStyle j = …)
+//
+// NewQPenWithBrushFull is NewQPenWithBrush with every argument, including those NewQPenWithBrush leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpen.html#QPen
+func NewQPenWithBrushFull(brush *QBrush, width float64, sArg qtcore.PenStyle, c qtcore.PenCapStyle, j qtcore.PenJoinStyle) *QPen {
+	rt.CheckThread("NewQPenWithBrushFull")
+	p := C.qute_QPen_new_4(rt.UseArg(unsafe.Pointer(brush), "NewQPenWithBrushFull"), C.double(width), C.int64_t(sArg), C.int64_t(c), C.int64_t(j))
 	runtime.KeepAlive(brush)
 	h := rt.WrapClass(p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)

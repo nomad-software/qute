@@ -213,6 +213,8 @@ func (this *QStaticText) Size() qtcore.QSizeF {
 //
 //	C++: void QStaticText::prepare(const QTransform & matrix = …, const QFont & font = …)
 //
+// Arguments with C++ defaults are left at them; PrepareFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstatictext.html#prepare
 func (this *QStaticText) Prepare() {
 	self := rt.Use(unsafe.Pointer(this), "QStaticText.Prepare")
@@ -241,4 +243,19 @@ func (this *QStaticText) PerformanceHint() QStaticTextPerformanceHint {
 	r := C.qute_QStaticText_performanceHint(self)
 	runtime.KeepAlive(this)
 	return QStaticTextPerformanceHint(r)
+}
+
+// PrepareFull wraps QStaticText::prepare.
+//
+//	C++: void QStaticText::prepare(const QTransform & matrix = …, const QFont & font = …)
+//
+// PrepareFull is Prepare with every argument, including those Prepare leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatictext.html#prepare
+func (this *QStaticText) PrepareFull(matrix *QTransform, font *QFont) {
+	self := rt.Use(unsafe.Pointer(this), "QStaticText.PrepareFull")
+	C.qute_QStaticText_prepare_1(self, rt.UseArg(unsafe.Pointer(matrix), "QStaticText.PrepareFull"), rt.UseArg(unsafe.Pointer(font), "QStaticText.PrepareFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+	runtime.KeepAlive(font)
 }

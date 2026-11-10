@@ -94,10 +94,27 @@ func NewQOpenGLTextureWithTarget(target QOpenGLTextureTarget) *QOpenGLTexture {
 //
 //	C++: QOpenGLTexture::QOpenGLTexture(const QImage & image, MipMapGeneration genMipMaps = …)
 //
+// Arguments with C++ defaults are left at them; NewQOpenGLTextureWithImageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#QOpenGLTexture
 func NewQOpenGLTextureWithImage(image *qtgui.QImage) *QOpenGLTexture {
 	rt.CheckThread("NewQOpenGLTextureWithImage")
 	p := C.qute_QOpenGLTexture_new_1(rt.UseArg(unsafe.Pointer(image), "NewQOpenGLTextureWithImage"))
+	runtime.KeepAlive(image)
+	h := rt.WrapClass(p, "QOpenGLTexture", rt.NewOwned)
+	return rt.View[QOpenGLTexture](h, p)
+}
+
+// NewQOpenGLTextureWithImageFull wraps the QOpenGLTexture constructor.
+//
+//	C++: QOpenGLTexture::QOpenGLTexture(const QImage & image, MipMapGeneration genMipMaps = …)
+//
+// NewQOpenGLTextureWithImageFull is NewQOpenGLTextureWithImage with every argument, including those NewQOpenGLTextureWithImage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#QOpenGLTexture
+func NewQOpenGLTextureWithImageFull(image *qtgui.QImage, genMipMaps QOpenGLTextureMipMapGeneration) *QOpenGLTexture {
+	rt.CheckThread("NewQOpenGLTextureWithImageFull")
+	p := C.qute_QOpenGLTexture_new_2(rt.UseArg(unsafe.Pointer(image), "NewQOpenGLTextureWithImageFull"), C.int64_t(genMipMaps))
 	runtime.KeepAlive(image)
 	h := rt.WrapClass(p, "QOpenGLTexture", rt.NewOwned)
 	return rt.View[QOpenGLTexture](h, p)
@@ -177,6 +194,8 @@ func (this *QOpenGLTexture) Bind() {
 //
 //	C++: void QOpenGLTexture::bind(uint unit, TextureUnitReset reset = …)
 //
+// Arguments with C++ defaults are left at them; BindWithUnitFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#bind
 func (this *QOpenGLTexture) BindWithUnit(unit uint) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BindWithUnit")
@@ -198,6 +217,8 @@ func (this *QOpenGLTexture) Release() {
 // ReleaseWithUnit wraps QOpenGLTexture::release.
 //
 //	C++: void QOpenGLTexture::release(uint unit, TextureUnitReset reset = …)
+//
+// Arguments with C++ defaults are left at them; ReleaseWithUnitFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#release
 func (this *QOpenGLTexture) ReleaseWithUnit(unit uint) {
@@ -649,6 +670,8 @@ func (this *QOpenGLTexture) SetCompressedData(dataSize int, data unsafe.Pointer)
 //
 //	C++: void QOpenGLTexture::setData(const QImage & image, MipMapGeneration genMipMaps = …)
 //
+// Arguments with C++ defaults are left at them; SetDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#setData
 func (this *QOpenGLTexture) SetData(image *qtgui.QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetData")
@@ -765,6 +788,8 @@ func (this *QOpenGLTexture) GenerateMipMaps() {
 // GenerateMipMapsWithBaseLevel wraps QOpenGLTexture::generateMipMaps.
 //
 //	C++: void QOpenGLTexture::generateMipMaps(int baseLevel, bool resetBaseLevel = …)
+//
+// Arguments with C++ defaults are left at them; GenerateMipMapsWithBaseLevelFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#generateMipMaps
 func (this *QOpenGLTexture) GenerateMipMapsWithBaseLevel(baseLevel int) {
@@ -1185,6 +1210,59 @@ func (this *QOpenGLTexture) LevelofDetailBias() float32 {
 	r := C.qute_QOpenGLTexture_levelofDetailBias(self)
 	runtime.KeepAlive(this)
 	return float32(r)
+}
+
+// BindWithUnitFull wraps QOpenGLTexture::bind.
+//
+//	C++: void QOpenGLTexture::bind(uint unit, TextureUnitReset reset = …)
+//
+// BindWithUnitFull is BindWithUnit with every argument, including those BindWithUnit leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#bind
+func (this *QOpenGLTexture) BindWithUnitFull(unit uint, reset QOpenGLTextureTextureUnitReset) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.BindWithUnitFull")
+	C.qute_QOpenGLTexture_bind_2(self, C.uint(unit), C.int64_t(reset))
+	runtime.KeepAlive(this)
+}
+
+// ReleaseWithUnitFull wraps QOpenGLTexture::release.
+//
+//	C++: void QOpenGLTexture::release(uint unit, TextureUnitReset reset = …)
+//
+// ReleaseWithUnitFull is ReleaseWithUnit with every argument, including those ReleaseWithUnit leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#release
+func (this *QOpenGLTexture) ReleaseWithUnitFull(unit uint, reset QOpenGLTextureTextureUnitReset) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.ReleaseWithUnitFull")
+	C.qute_QOpenGLTexture_release_2(self, C.uint(unit), C.int64_t(reset))
+	runtime.KeepAlive(this)
+}
+
+// SetDataFull wraps QOpenGLTexture::setData.
+//
+//	C++: void QOpenGLTexture::setData(const QImage & image, MipMapGeneration genMipMaps = …)
+//
+// SetDataFull is SetData with every argument, including those SetData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#setData
+func (this *QOpenGLTexture) SetDataFull(image *qtgui.QImage, genMipMaps QOpenGLTextureMipMapGeneration) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetDataFull")
+	C.qute_QOpenGLTexture_setData_11(self, rt.UseArg(unsafe.Pointer(image), "QOpenGLTexture.SetDataFull"), C.int64_t(genMipMaps))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
+}
+
+// GenerateMipMapsWithBaseLevelFull wraps QOpenGLTexture::generateMipMaps.
+//
+//	C++: void QOpenGLTexture::generateMipMaps(int baseLevel, bool resetBaseLevel = …)
+//
+// GenerateMipMapsWithBaseLevelFull is GenerateMipMapsWithBaseLevel with every argument, including those GenerateMipMapsWithBaseLevel leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#generateMipMaps
+func (this *QOpenGLTexture) GenerateMipMapsWithBaseLevelFull(baseLevel int, resetBaseLevel bool) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.GenerateMipMapsWithBaseLevelFull")
+	C.qute_QOpenGLTexture_generateMipMaps_2(self, C.int(baseLevel), C.bool(resetBaseLevel))
+	runtime.KeepAlive(this)
 }
 
 // QOpenGLTextureBoundTextureId wraps QOpenGLTexture::boundTextureId.

@@ -95,9 +95,9 @@ func NewQVector2D() *QVector2D {
 //	C++: QVector2D::QVector2D(Qt::Initialization)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvector2d.html#QVector2D
-func NewQVector2DWithInitialization(arg0 qtcore.Initialization) *QVector2D {
+func NewQVector2DWithInitialization(initialization qtcore.Initialization) *QVector2D {
 	rt.CheckThread("NewQVector2DWithInitialization")
-	p := C.qute_QVector2D_new_1(C.int64_t(arg0))
+	p := C.qute_QVector2D_new_1(C.int64_t(initialization))
 	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }

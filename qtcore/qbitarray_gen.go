@@ -93,10 +93,26 @@ func NewQBitArray() *QBitArray {
 //
 //	C++: QBitArray::QBitArray(qsizetype size, bool val = …)
 //
+// Arguments with C++ defaults are left at them; NewQBitArrayWithSizeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbitarray.html#QBitArray
 func NewQBitArrayWithSize(size int) *QBitArray {
 	rt.CheckThread("NewQBitArrayWithSize")
 	p := C.qute_QBitArray_new_1(C.longlong(size))
+	h := rt.WrapClass(p, "QBitArray", rt.NewOwned)
+	return rt.View[QBitArray](h, p)
+}
+
+// NewQBitArrayWithSizeFull wraps the QBitArray constructor.
+//
+//	C++: QBitArray::QBitArray(qsizetype size, bool val = …)
+//
+// NewQBitArrayWithSizeFull is NewQBitArrayWithSize with every argument, including those NewQBitArrayWithSize leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitarray.html#QBitArray
+func NewQBitArrayWithSizeFull(size int, val bool) *QBitArray {
+	rt.CheckThread("NewQBitArrayWithSizeFull")
+	p := C.qute_QBitArray_new_2(C.longlong(size), C.bool(val))
 	h := rt.WrapClass(p, "QBitArray", rt.NewOwned)
 	return rt.View[QBitArray](h, p)
 }
@@ -256,6 +272,8 @@ func (this *QBitArray) At(iArg int) bool {
 //
 //	C++: bool QBitArray::fill(bool aval, qsizetype asize = …)
 //
+// Arguments with C++ defaults are left at them; FillFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbitarray.html#fill
 func (this *QBitArray) Fill(aval bool) bool {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.Fill")
@@ -308,6 +326,20 @@ func (this *QBitArray) ToUInt32(endianness QSysInfoEndian) uint {
 	r := C.qute_QBitArray_toUInt32(self, C.int64_t(endianness))
 	runtime.KeepAlive(this)
 	return uint(r)
+}
+
+// FillFull wraps QBitArray::fill.
+//
+//	C++: bool QBitArray::fill(bool aval, qsizetype asize = …)
+//
+// FillFull is Fill with every argument, including those Fill leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitarray.html#fill
+func (this *QBitArray) FillFull(aval bool, asize int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QBitArray.FillFull")
+	r := C.qute_QBitArray_fill_2(self, C.bool(aval), C.longlong(asize))
+	runtime.KeepAlive(this)
+	return bool(r)
 }
 
 // QBitArrayFromBits wraps QBitArray::fromBits.

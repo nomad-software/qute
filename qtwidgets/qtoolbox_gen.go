@@ -55,6 +55,8 @@ func QToolBoxCast(o qtcore.QObjectLike) *QToolBox {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQToolBoxFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtoolbox.html#QToolBox
 func NewQToolBox(parent QWidgetLike) *QToolBox {
 	rt.CheckThread("NewQToolBox")
@@ -63,6 +65,31 @@ func NewQToolBox(parent QWidgetLike) *QToolBox {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolBox")
 	}
 	p := C.qute_QToolBox_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QToolBox", mode)
+	return rt.View[QToolBox](h, p)
+}
+
+// NewQToolBoxFull wraps the QToolBox constructor.
+//
+//	C++: QToolBox::QToolBox(QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQToolBoxFull is NewQToolBox with every argument, including those NewQToolBox leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtoolbox.html#QToolBox
+func NewQToolBoxFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QToolBox {
+	rt.CheckThread("NewQToolBoxFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolBoxFull")
+	}
+	p := C.qute_QToolBox_new_1(parentPtr, C.int64_t(fArg))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -89,7 +116,7 @@ func (this *QToolBox) AddItem(widget QWidgetLike, text string) int {
 	r := C.qute_QToolBox_addItem(self, widgetPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -111,7 +138,7 @@ func (this *QToolBox) AddItemIcon(widget QWidgetLike, icon *qtgui.QIcon, text st
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
 	runtime.KeepAlive(icon)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -132,7 +159,7 @@ func (this *QToolBox) InsertItem(index int, widget QWidgetLike, text string) int
 	r := C.qute_QToolBox_insertItem(self, C.int(index), widgetPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -154,7 +181,7 @@ func (this *QToolBox) InsertItemIcon(index int, widget QWidgetLike, icon *qtgui.
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
 	runtime.KeepAlive(icon)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 

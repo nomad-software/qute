@@ -105,7 +105,7 @@ func (this *QFormLayoutTakeRowResult) LabelItem() *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QFormLayoutTakeRowResult.LabelItem")
 	r := C.qute_QFormLayoutTakeRowResult_get_labelItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QLayoutItem](rt.WrapClassFrom(r, "QLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetLabelItem wraps the public field QFormLayout::TakeRowResult::labelItem.
@@ -137,7 +137,7 @@ func (this *QFormLayoutTakeRowResult) FieldItem() *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QFormLayoutTakeRowResult.FieldItem")
 	r := C.qute_QFormLayoutTakeRowResult_get_fieldItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QLayoutItem](rt.WrapClassFrom(r, "QLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetFieldItem wraps the public field QFormLayout::TakeRowResult::fieldItem.

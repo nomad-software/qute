@@ -253,6 +253,8 @@ func (this *QObject) BlockSignals(bArg bool) bool {
 //
 //	C++: int QObject::startTimer(int interval, Qt::TimerType timerType = …)
 //
+// Arguments with C++ defaults are left at them; StartTimerFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qobject.html#startTimer
 func (this *QObject) StartTimer(interval int) int {
 	self := rt.Use(unsafe.Pointer(this), "QObject.StartTimer")
@@ -264,6 +266,8 @@ func (this *QObject) StartTimer(interval int) int {
 // StartTimerDuration wraps QObject::startTimer.
 //
 //	C++: int QObject::startTimer(std::chrono::nanoseconds time, Qt::TimerType timerType = …)
+//
+// Arguments with C++ defaults are left at them; StartTimerDurationFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qobject.html#startTimer
 func (this *QObject) StartTimerDuration(time time.Duration) int {
@@ -465,6 +469,34 @@ func (this *QObject) EmitDestroyed() {
 	self := rt.Use(unsafe.Pointer(this), "QObject.EmitDestroyed")
 	C.qute_QObject_destroyed_1(self)
 	runtime.KeepAlive(this)
+}
+
+// StartTimerFull wraps QObject::startTimer.
+//
+//	C++: int QObject::startTimer(int interval, Qt::TimerType timerType = …)
+//
+// StartTimerFull is StartTimer with every argument, including those StartTimer leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qobject.html#startTimer
+func (this *QObject) StartTimerFull(interval int, timerType TimerType) int {
+	self := rt.Use(unsafe.Pointer(this), "QObject.StartTimerFull")
+	r := C.qute_QObject_startTimer_2(self, C.int(interval), C.int64_t(timerType))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// StartTimerDurationFull wraps QObject::startTimer.
+//
+//	C++: int QObject::startTimer(std::chrono::nanoseconds time, Qt::TimerType timerType = …)
+//
+// StartTimerDurationFull is StartTimerDuration with every argument, including those StartTimerDuration leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qobject.html#startTimer
+func (this *QObject) StartTimerDurationFull(time time.Duration, timerType TimerType) int {
+	self := rt.Use(unsafe.Pointer(this), "QObject.StartTimerDurationFull")
+	r := C.qute_QObject_startTimer_3(self, C.int64_t(time), C.int64_t(timerType))
+	runtime.KeepAlive(this)
+	return int(r)
 }
 
 // OnDestroyed connects f to the destroyed signal. The connection ends when the

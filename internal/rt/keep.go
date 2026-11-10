@@ -13,48 +13,42 @@ import (
 // instead (PySide's reference-keeping). A kept reference lasts until the
 // receiver dies, the slot is replaced, or a release rule drops it.
 //
-// Registered objects (QObjects and notify-dtor classes) can lose their Go
-// handle while the C++ object lives on (a Parented widget nobody references),
-// so their references are stored by object address and dropped by Destroyed.
-// Other objects keep them on the handle, which lives as long as the object
-// does for Owned values.
+// The references live on the owner's handle. A registered owner (a QObject
+// or notify-dtor object) can outlive every Go variable that refers to it, so
+// while it keeps anything its handle is anchored (see anchor.go): held by the
+// root of its object tree, or globally. The references then last exactly as
+// long as the object, and a window whose view keeps a model that refers back
+// to the window can still be collected as a whole.
 
-type keepSet struct {
-	serial uint64
-	slots  map[string]any
-}
-
-var (
-	keepMu sync.Mutex
-	kept   = map[unsafe.Pointer]*keepSet{}
-)
+var keepMu sync.Mutex
 
 func (h *Handle) registeredKind() bool { return h.kind == KindQObject || h.kind == KindNotify }
 
 // slotsFor returns the keep slots of owner, creating them if create is set.
 // The caller holds keepMu.
 func slotsFor(owner *Handle, create bool) map[string]any {
-	if owner.registeredKind() {
-		ks := kept[owner.ptr]
-		if ks != nil && ks.serial != owner.serial {
-			// a stale set from an object that died at this address without a
-			// notice reaching us; never let it leak into the new object
-			ks = nil
-			delete(kept, owner.ptr)
-		}
-		if ks == nil && create {
-			ks = &keepSet{serial: owner.serial, slots: map[string]any{}}
-			kept[owner.ptr] = ks
-		}
-		if ks == nil {
-			return nil
-		}
-		return ks.slots
-	}
 	if owner.keeps == nil && create {
 		owner.keeps = map[string]any{}
+		if owner.registeredKind() {
+			owner.anchorPin()
+		}
 	}
 	return owner.keeps
+}
+
+// unslotLocked drops one slot and the owner's anchor once nothing is kept.
+// The caller holds keepMu.
+func unslotLocked(owner *Handle, slot string) {
+	if owner.keeps == nil {
+		return
+	}
+	delete(owner.keeps, slot)
+	if len(owner.keeps) == 0 {
+		owner.keeps = nil
+		if owner.registeredKind() {
+			owner.anchorUnpin()
+		}
+	}
 }
 
 // KeepArg makes owner hold arg (a handle, or nil to clear) under slot,
@@ -66,9 +60,7 @@ func KeepArg(owner *Handle, slot string, arg *Handle) {
 	keepMu.Lock()
 	defer keepMu.Unlock()
 	if arg == nil {
-		if s := slotsFor(owner, false); s != nil {
-			delete(s, slot)
-		}
+		unslotLocked(owner, slot)
 		return
 	}
 	slotsFor(owner, true)[slot] = arg
@@ -90,9 +82,7 @@ func Release(owner *Handle, arg *Handle) {
 	}
 	keepMu.Lock()
 	defer keepMu.Unlock()
-	if s := slotsFor(owner, false); s != nil {
-		delete(s, eachSlot(arg))
-	}
+	unslotLocked(owner, eachSlot(arg))
 }
 
 func eachSlot(arg *Handle) string { return fmt.Sprintf("each:%p", arg) }
@@ -104,7 +94,7 @@ func Keeps(owner, arg *Handle) bool {
 	}
 	keepMu.Lock()
 	defer keepMu.Unlock()
-	for _, v := range slotsFor(owner, false) {
+	for _, v := range owner.keeps {
 		if v == arg {
 			return true
 		}
@@ -127,23 +117,15 @@ func KeepEachArg(owner, arg unsafe.Pointer) {
 	}
 }
 
-// dropKeeps forgets the references held by the object at key.
-func dropKeeps(key unsafe.Pointer) {
-	keepMu.Lock()
-	delete(kept, key)
-	keepMu.Unlock()
-}
-
-// dropHandleKeeps forgets the references a handle held itself.
+// dropHandleKeeps forgets the references a dead handle held.
 func (h *Handle) dropHandleKeeps() {
 	keepMu.Lock()
+	had := h.keeps != nil
 	h.keeps = nil
-	if h.registeredKind() {
-		if ks := kept[h.ptr]; ks != nil && ks.serial == h.serial {
-			delete(kept, h.ptr)
-		}
-	}
 	keepMu.Unlock()
+	if had && h.registeredKind() {
+		h.anchorUnpin()
+	}
 }
 
 // A value that only means something while another object lives (a

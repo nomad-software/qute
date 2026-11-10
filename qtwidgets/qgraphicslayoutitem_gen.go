@@ -27,6 +27,12 @@ func init() {
 	rt.RegisterClass("QGraphicsLayoutItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsLayoutItem_delete(p) })
 }
 
+// A QGraphicsLayoutItem may be a QObject (through a QObject subclass); its wrapper then
+// shares that object's handle and learns of its death.
+func init() {
+	rt.RegisterBaseOfQObject("QGraphicsLayoutItem", func(p unsafe.Pointer) unsafe.Pointer { return C.qute_QGraphicsLayoutItem_qobject(p) })
+}
+
 // QGraphicsLayoutItemFromPtr wraps an existing C++ QGraphicsLayoutItem. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QGraphicsLayoutItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QGraphicsLayoutItem {
@@ -92,6 +98,8 @@ func (this *QGraphicsLayoutItem) SetSizePolicy(policy *QSizePolicy) {
 // SetSizePolicyPolicy wraps QGraphicsLayoutItem::setSizePolicy.
 //
 //	C++: void QGraphicsLayoutItem::setSizePolicy(QSizePolicy::Policy hPolicy, QSizePolicy::Policy vPolicy, QSizePolicy::ControlType controlType = …)
+//
+// Arguments with C++ defaults are left at them; SetSizePolicyPolicyFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicslayoutitem.html#setSizePolicy
 func (this *QGraphicsLayoutItem) SetSizePolicyPolicy(hPolicy QSizePolicyPolicy, vPolicy QSizePolicyPolicy) {
@@ -376,6 +384,8 @@ func (this *QGraphicsLayoutItem) ContentsRect() qtcore.QRectF {
 //
 //	C++: QSizeF QGraphicsLayoutItem::effectiveSizeHint(Qt::SizeHint which, const QSizeF & constraint = …) const
 //
+// Arguments with C++ defaults are left at them; EffectiveSizeHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicslayoutitem.html#effectiveSizeHint
 func (this *QGraphicsLayoutItem) EffectiveSizeHint(which qtcore.SizeHint) qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.EffectiveSizeHint")
@@ -418,7 +428,7 @@ func (this *QGraphicsLayoutItem) ParentLayoutItem() *QGraphicsLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.ParentLayoutItem")
 	r := C.qute_QGraphicsLayoutItem_parentLayoutItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsLayoutItem](rt.WrapClass(r, "QGraphicsLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsLayoutItem](rt.WrapClassFrom(r, "QGraphicsLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetParentLayoutItem wraps QGraphicsLayoutItem::setParentLayoutItem.
@@ -460,7 +470,7 @@ func (this *QGraphicsLayoutItem) GraphicsItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.GraphicsItem")
 	r := C.qute_QGraphicsLayoutItem_graphicsItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // OwnedByLayout wraps QGraphicsLayoutItem::ownedByLayout.
@@ -473,4 +483,31 @@ func (this *QGraphicsLayoutItem) OwnedByLayout() bool {
 	r := C.qute_QGraphicsLayoutItem_ownedByLayout(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// SetSizePolicyPolicyFull wraps QGraphicsLayoutItem::setSizePolicy.
+//
+//	C++: void QGraphicsLayoutItem::setSizePolicy(QSizePolicy::Policy hPolicy, QSizePolicy::Policy vPolicy, QSizePolicy::ControlType controlType = …)
+//
+// SetSizePolicyPolicyFull is SetSizePolicyPolicy with every argument, including those SetSizePolicyPolicy leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicslayoutitem.html#setSizePolicy
+func (this *QGraphicsLayoutItem) SetSizePolicyPolicyFull(hPolicy QSizePolicyPolicy, vPolicy QSizePolicyPolicy, controlType QSizePolicyControlTypes) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetSizePolicyPolicyFull")
+	C.qute_QGraphicsLayoutItem_setSizePolicy_2(self, C.int64_t(hPolicy), C.int64_t(vPolicy), C.int64_t(controlType))
+	runtime.KeepAlive(this)
+}
+
+// EffectiveSizeHintFull wraps QGraphicsLayoutItem::effectiveSizeHint.
+//
+//	C++: QSizeF QGraphicsLayoutItem::effectiveSizeHint(Qt::SizeHint which, const QSizeF & constraint = …) const
+//
+// EffectiveSizeHintFull is EffectiveSizeHint with every argument, including those EffectiveSizeHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicslayoutitem.html#effectiveSizeHint
+func (this *QGraphicsLayoutItem) EffectiveSizeHintFull(which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.EffectiveSizeHintFull")
+	r := C.qute_QGraphicsLayoutItem_effectiveSizeHint_1(self, C.int64_t(which), cQSizeF(constraint))
+	runtime.KeepAlive(this)
+	return goQSizeF(r)
 }

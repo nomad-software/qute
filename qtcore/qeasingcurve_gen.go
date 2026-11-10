@@ -81,10 +81,26 @@ func (this *QEasingCurve) Unkeep() {
 //
 //	C++: QEasingCurve::QEasingCurve(Type type = …)
 //
+// Arguments with C++ defaults are left at them; NewQEasingCurveFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qeasingcurve.html#QEasingCurve
 func NewQEasingCurve() *QEasingCurve {
 	rt.CheckThread("NewQEasingCurve")
 	p := C.qute_QEasingCurve_new()
+	h := rt.WrapClass(p, "QEasingCurve", rt.NewOwned)
+	return rt.View[QEasingCurve](h, p)
+}
+
+// NewQEasingCurveFull wraps the QEasingCurve constructor.
+//
+//	C++: QEasingCurve::QEasingCurve(Type type = …)
+//
+// NewQEasingCurveFull is NewQEasingCurve with every argument, including those NewQEasingCurve leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeasingcurve.html#QEasingCurve
+func NewQEasingCurveFull(typeArg QEasingCurveType) *QEasingCurve {
+	rt.CheckThread("NewQEasingCurveFull")
+	p := C.qute_QEasingCurve_new_1(C.int64_t(typeArg))
 	h := rt.WrapClass(p, "QEasingCurve", rt.NewOwned)
 	return rt.View[QEasingCurve](h, p)
 }

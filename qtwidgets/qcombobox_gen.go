@@ -180,6 +180,8 @@ func (this *QComboBox) HasFrame() bool {
 //
 //	C++: int QComboBox::findText(const QString & text, Qt::MatchFlags flags = …) const
 //
+// Arguments with C++ defaults are left at them; FindTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#findText
 func (this *QComboBox) FindText(text string) int {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.FindText")
@@ -191,6 +193,8 @@ func (this *QComboBox) FindText(text string) int {
 // FindData wraps QComboBox::findData.
 //
 //	C++: int QComboBox::findData(const QVariant & data, int role = …, Qt::MatchFlags flags = …) const
+//
+// Arguments with C++ defaults are left at them; FindDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#findData
 func (this *QComboBox) FindData(data *qtcore.QVariant) int {
@@ -356,7 +360,7 @@ func (this *QComboBox) SetLineEdit(edit QLineEditLike) {
 	C.qute_QComboBox_setLineEdit(self, editPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(edit)
-	editH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, editH)
 }
 
 // LineEdit wraps QComboBox::lineEdit.
@@ -613,6 +617,8 @@ func (this *QComboBox) CurrentText() string {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; CurrentDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#currentData
 func (this *QComboBox) CurrentData() *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.CurrentData")
@@ -653,6 +659,8 @@ func (this *QComboBox) ItemIcon(index int) *qtgui.QIcon {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ItemDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#itemData
 func (this *QComboBox) ItemData(index int) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.ItemData")
@@ -665,6 +673,8 @@ func (this *QComboBox) ItemData(index int) *qtcore.QVariant {
 //
 //	C++: void QComboBox::addItem(const QString & text, const QVariant & userData = …)
 //
+// Arguments with C++ defaults are left at them; AddItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#addItem
 func (this *QComboBox) AddItem(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.AddItem")
@@ -675,6 +685,8 @@ func (this *QComboBox) AddItem(text string) {
 // AddItemIcon wraps QComboBox::addItem.
 //
 //	C++: void QComboBox::addItem(const QIcon & icon, const QString & text, const QVariant & userData = …)
+//
+// Arguments with C++ defaults are left at them; AddItemIconFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#addItem
 func (this *QComboBox) AddItemIcon(icon *qtgui.QIcon, text string) {
@@ -700,6 +712,8 @@ func (this *QComboBox) AddItems(texts []string) {
 //
 //	C++: void QComboBox::insertItem(int index, const QString & text, const QVariant & userData = …)
 //
+// Arguments with C++ defaults are left at them; InsertItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#insertItem
 func (this *QComboBox) InsertItem(index int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertItem")
@@ -710,6 +724,8 @@ func (this *QComboBox) InsertItem(index int, text string) {
 // InsertItemIcon wraps QComboBox::insertItem.
 //
 //	C++: void QComboBox::insertItem(int index, const QIcon & icon, const QString & text, const QVariant & userData = …)
+//
+// Arguments with C++ defaults are left at them; InsertItemIconFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#insertItem
 func (this *QComboBox) InsertItemIcon(index int, icon *qtgui.QIcon, text string) {
@@ -780,6 +796,8 @@ func (this *QComboBox) SetItemIcon(index int, icon *qtgui.QIcon) {
 //
 //	C++: void QComboBox::setItemData(int index, const QVariant & value, int role = …)
 //
+// Arguments with C++ defaults are left at them; SetItemDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcombobox.html#setItemData
 func (this *QComboBox) SetItemData(index int, value *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetItemData")
@@ -819,7 +837,7 @@ func (this *QComboBox) SetView(itemView QAbstractItemViewLike) {
 	C.qute_QComboBox_setView(self, itemViewPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(itemView)
-	itemViewH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemViewH)
 }
 
 // ShowPopup wraps QComboBox::showPopup.
@@ -974,6 +992,139 @@ func (this *QComboBox) EmitCurrentTextChanged(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.EmitCurrentTextChanged")
 	C.qute_QComboBox_currentTextChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
 	runtime.KeepAlive(this)
+}
+
+// FindTextFull wraps QComboBox::findText.
+//
+//	C++: int QComboBox::findText(const QString & text, Qt::MatchFlags flags = …) const
+//
+// FindTextFull is FindText with every argument, including those FindText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#findText
+func (this *QComboBox) FindTextFull(text string, flags qtcore.MatchFlags) int {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.FindTextFull")
+	r := C.qute_QComboBox_findText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// FindDataFull wraps QComboBox::findData.
+//
+//	C++: int QComboBox::findData(const QVariant & data, int role = …, Qt::MatchFlags flags = …) const
+//
+// FindDataFull is FindData with every argument, including those FindData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#findData
+func (this *QComboBox) FindDataFull(data *qtcore.QVariant, role int, flags qtcore.MatchFlags) int {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.FindDataFull")
+	r := C.qute_QComboBox_findData_1(self, rt.UseArg(unsafe.Pointer(data), "QComboBox.FindDataFull"), C.int(role), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
+	return int(r)
+}
+
+// CurrentDataFull wraps QComboBox::currentData.
+//
+//	C++: QVariant QComboBox::currentData(int role = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// CurrentDataFull is CurrentData with every argument, including those CurrentData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#currentData
+func (this *QComboBox) CurrentDataFull(role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.CurrentDataFull")
+	r := C.qute_QComboBox_currentData_1(self, C.int(role))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// ItemDataFull wraps QComboBox::itemData.
+//
+//	C++: QVariant QComboBox::itemData(int index, int role = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ItemDataFull is ItemData with every argument, including those ItemData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#itemData
+func (this *QComboBox) ItemDataFull(index int, role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.ItemDataFull")
+	r := C.qute_QComboBox_itemData_1(self, C.int(index), C.int(role))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// AddItemFull wraps QComboBox::addItem.
+//
+//	C++: void QComboBox::addItem(const QString & text, const QVariant & userData = …)
+//
+// AddItemFull is AddItem with every argument, including those AddItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#addItem
+func (this *QComboBox) AddItemFull(text string, userData *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.AddItemFull")
+	C.qute_QComboBox_addItem_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(userData), "QComboBox.AddItemFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(userData)
+}
+
+// AddItemIconFull wraps QComboBox::addItem.
+//
+//	C++: void QComboBox::addItem(const QIcon & icon, const QString & text, const QVariant & userData = …)
+//
+// AddItemIconFull is AddItemIcon with every argument, including those AddItemIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#addItem
+func (this *QComboBox) AddItemIconFull(icon *qtgui.QIcon, text string, userData *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.AddItemIconFull")
+	C.qute_QComboBox_addItem_3(self, rt.UseArg(unsafe.Pointer(icon), "QComboBox.AddItemIconFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(userData), "QComboBox.AddItemIconFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(userData)
+}
+
+// InsertItemFull wraps QComboBox::insertItem.
+//
+//	C++: void QComboBox::insertItem(int index, const QString & text, const QVariant & userData = …)
+//
+// InsertItemFull is InsertItem with every argument, including those InsertItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#insertItem
+func (this *QComboBox) InsertItemFull(index int, text string, userData *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertItemFull")
+	C.qute_QComboBox_insertItem_2(self, C.int(index), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(userData), "QComboBox.InsertItemFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(userData)
+}
+
+// InsertItemIconFull wraps QComboBox::insertItem.
+//
+//	C++: void QComboBox::insertItem(int index, const QIcon & icon, const QString & text, const QVariant & userData = …)
+//
+// InsertItemIconFull is InsertItemIcon with every argument, including those InsertItemIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#insertItem
+func (this *QComboBox) InsertItemIconFull(index int, icon *qtgui.QIcon, text string, userData *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.InsertItemIconFull")
+	C.qute_QComboBox_insertItem_3(self, C.int(index), rt.UseArg(unsafe.Pointer(icon), "QComboBox.InsertItemIconFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(userData), "QComboBox.InsertItemIconFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(userData)
+}
+
+// SetItemDataFull wraps QComboBox::setItemData.
+//
+//	C++: void QComboBox::setItemData(int index, const QVariant & value, int role = …)
+//
+// SetItemDataFull is SetItemData with every argument, including those SetItemData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcombobox.html#setItemData
+func (this *QComboBox) SetItemDataFull(index int, value *qtcore.QVariant, role int) {
+	self := rt.Use(unsafe.Pointer(this), "QComboBox.SetItemDataFull")
+	C.qute_QComboBox_setItemData_1(self, C.int(index), rt.UseArg(unsafe.Pointer(value), "QComboBox.SetItemDataFull"), C.int(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
 }
 
 // OnEditTextChanged connects f to the editTextChanged signal. The connection ends when the

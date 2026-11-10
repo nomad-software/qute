@@ -90,13 +90,13 @@ func NewQTextFormat() *QTextFormat {
 	return rt.View[QTextFormat](h, p)
 }
 
-// NewQTextFormatWithTypeArg wraps the QTextFormat constructor.
+// NewQTextFormatWithType wraps the QTextFormat constructor.
 //
 //	C++: QTextFormat::QTextFormat(int type)
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextformat.html#QTextFormat
-func NewQTextFormatWithTypeArg(typeArg int) *QTextFormat {
-	rt.CheckThread("NewQTextFormatWithTypeArg")
+func NewQTextFormatWithType(typeArg int) *QTextFormat {
+	rt.CheckThread("NewQTextFormatWithType")
 	p := C.qute_QTextFormat_new_1(C.int(typeArg))
 	h := rt.WrapClass(p, "QTextFormat", rt.NewOwned)
 	return rt.View[QTextFormat](h, p)

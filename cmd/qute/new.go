@@ -128,6 +128,9 @@ func NewWindow() *Window {
 	lay.AddWidget(w.Label)
 	lay.AddWidget(w.Button)
 
+	// The handler refers to the window; that is fine: the window's own Go
+	// handle holds it, so a closed (hidden) window nobody refers to is still
+	// freed by GC, handler and all.
 	w.Button.OnClicked(func(bool) {
 		w.clicks++
 		w.Label.SetText(fmt.Sprintf("Clicked %d times", w.clicks))
@@ -176,11 +179,13 @@ func TestScreenshot(t *testing.T) {
 		defer w.Delete()
 		img := qute.Screenshot(w)
 		if b := img.Bounds(); b.Dx() < 100 || b.Dy() < 50 {
-			t.Fatalf("window too small: %v", b)
+			t.Errorf("window too small: %v", b)
+			return
 		}
 		path := filepath.Join(t.TempDir(), "window.png")
 		if err := qute.SaveScreenshot(w, path); err != nil {
-			t.Fatal(err)
+			t.Error(err)
+			return
 		}
 		t.Log("screenshot:", path)
 		t.Log(qute.DumpTree(w))

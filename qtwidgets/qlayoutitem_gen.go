@@ -27,6 +27,19 @@ func init() {
 	rt.RegisterClass("QLayoutItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QLayoutItem_delete(p) })
 }
 
+// A QLayoutItem may be a QObject (through a QObject subclass); its wrapper then
+// shares that object's handle and learns of its death.
+func init() {
+	rt.RegisterBaseOfQObject("QLayoutItem", func(p unsafe.Pointer) unsafe.Pointer { return C.qute_QLayoutItem_qobject(p) })
+}
+
+// Every QLayoutItem holds the QWidget it belongs to (depends-on: widget).
+func init() {
+	rt.RegisterDependency("QLayoutItem", func(p unsafe.Pointer) *rt.Handle {
+		return rt.WrapClass(C.qute_QLayoutItem_widget(p), "QWidget", rt.KeepOrBorrow)
+	})
+}
+
 // QLayoutItemFromPtr wraps an existing C++ QLayoutItem. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QLayoutItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QLayoutItem {
@@ -246,7 +259,7 @@ func (this *QLayoutItem) SpacerItem() *QSpacerItem {
 	self := rt.Use(unsafe.Pointer(this), "QLayoutItem.SpacerItem")
 	r := C.qute_QLayoutItem_spacerItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QSpacerItem](rt.WrapClass(r, "QSpacerItem", rt.KeepOrBorrow), r)
+	return rt.View[QSpacerItem](rt.WrapClassFrom(r, "QSpacerItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Alignment wraps QLayoutItem::alignment.

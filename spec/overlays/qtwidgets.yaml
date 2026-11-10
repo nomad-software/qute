@@ -1371,7 +1371,10 @@ QItemEditorFactory:
       }
       f.Delete()
   setDefaultFactory: { args: { factory: transfer-to-cpp }, doc: "Qt keeps and later deletes the default factory." }
-  defaultFactory: { return: borrowed }
+  defaultFactory:
+    return: borrowed
+    reviewed: true
+    doc: "Qt's global factory: it lives until SetDefaultFactory replaces (and deletes) it, so do not keep it past that."
 
 QStyledItemDelegate:
   setItemEditorFactory: { args: { factory: keep }, reviewed: true, doc: "The delegate does not take ownership of the factory." }

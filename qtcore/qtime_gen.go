@@ -89,14 +89,30 @@ func NewQTime() *QTime {
 	return rt.View[QTime](h, p)
 }
 
-// NewQTimeWithHArg wraps the QTime constructor.
+// NewQTimeWithHourMinute wraps the QTime constructor.
 //
 //	C++: QTime::QTime(int h, int m, int s = …, int ms = …)
 //
+// Arguments with C++ defaults are left at them; NewQTimeWithHourMinuteFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#QTime
-func NewQTimeWithHArg(hArg int, m int) *QTime {
-	rt.CheckThread("NewQTimeWithHArg")
+func NewQTimeWithHourMinute(hArg int, m int) *QTime {
+	rt.CheckThread("NewQTimeWithHourMinute")
 	p := C.qute_QTime_new_1(C.int(hArg), C.int(m))
+	h := rt.WrapClass(p, "QTime", rt.NewOwned)
+	return rt.View[QTime](h, p)
+}
+
+// NewQTimeWithHourMinuteFull wraps the QTime constructor.
+//
+//	C++: QTime::QTime(int h, int m, int s = …, int ms = …)
+//
+// NewQTimeWithHourMinuteFull is NewQTimeWithHourMinute with every argument, including those NewQTimeWithHourMinute leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtime.html#QTime
+func NewQTimeWithHourMinuteFull(hArg int, m int, sArg int, ms int) *QTime {
+	rt.CheckThread("NewQTimeWithHourMinuteFull")
+	p := C.qute_QTime_new_2(C.int(hArg), C.int(m), C.int(sArg), C.int(ms))
 	h := rt.WrapClass(p, "QTime", rt.NewOwned)
 	return rt.View[QTime](h, p)
 }
@@ -177,6 +193,8 @@ func (this *QTime) Msec() int {
 //
 //	C++: QString QTime::toString(Qt::DateFormat f = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#toString
 func (this *QTime) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QTime.ToString")
@@ -200,6 +218,8 @@ func (this *QTime) ToStringFormat(format string) string {
 // SetHMS wraps QTime::setHMS.
 //
 //	C++: bool QTime::setHMS(int h, int m, int s, int ms = …)
+//
+// Arguments with C++ defaults are left at them; SetHMSFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#setHMS
 func (this *QTime) SetHMS(hArg int, m int, sArg int) bool {
@@ -275,6 +295,34 @@ func (this *QTime) MsecsSinceStartOfDay() int {
 	return int(r)
 }
 
+// ToStringFull wraps QTime::toString.
+//
+//	C++: QString QTime::toString(Qt::DateFormat f = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtime.html#toString
+func (this *QTime) ToStringFull(fArg DateFormat) string {
+	self := rt.Use(unsafe.Pointer(this), "QTime.ToStringFull")
+	r := C.qute_QTime_toString_2(self, C.int64_t(fArg))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetHMSFull wraps QTime::setHMS.
+//
+//	C++: bool QTime::setHMS(int h, int m, int s, int ms = …)
+//
+// SetHMSFull is SetHMS with every argument, including those SetHMS leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtime.html#setHMS
+func (this *QTime) SetHMSFull(hArg int, m int, sArg int, ms int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTime.SetHMSFull")
+	r := C.qute_QTime_setHMS_1(self, C.int(hArg), C.int(m), C.int(sArg), C.int(ms))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
 // QTimeFromMSecsSinceStartOfDay wraps QTime::fromMSecsSinceStartOfDay.
 //
 //	C++: QTime QTime::fromMSecsSinceStartOfDay(int msecs)
@@ -307,6 +355,8 @@ func QTimeCurrentTime() *QTime {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QTimeFromStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#fromString
 func QTimeFromString(stringArg string) *QTime {
 	rt.CheckThread("QTimeFromString")
@@ -331,9 +381,39 @@ func QTimeFromStringFormat(stringArg string, format string) *QTime {
 //
 //	C++: bool QTime::isValid(int h, int m, int s, int ms = …)
 //
+// Arguments with C++ defaults are left at them; QTimeIsValidFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtime.html#isValid
 func QTimeIsValid(hArg int, m int, sArg int) bool {
 	rt.CheckThread("QTimeIsValid")
 	r := C.qute_QTime_isValid_1(C.int(hArg), C.int(m), C.int(sArg))
+	return bool(r)
+}
+
+// QTimeFromStringFull wraps QTime::fromString.
+//
+//	C++: QTime QTime::fromString(const QString & string, Qt::DateFormat format = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QTimeFromStringFull is QTimeFromString with every argument, including those QTimeFromString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtime.html#fromString
+func QTimeFromStringFull(stringArg string, format DateFormat) *QTime {
+	rt.CheckThread("QTimeFromStringFull")
+	r := C.qute_QTime_fromString_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format))
+	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
+}
+
+// QTimeIsValidFull wraps QTime::isValid.
+//
+//	C++: bool QTime::isValid(int h, int m, int s, int ms = …)
+//
+// QTimeIsValidFull is QTimeIsValid with every argument, including those QTimeIsValid leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtime.html#isValid
+func QTimeIsValidFull(hArg int, m int, sArg int, ms int) bool {
+	rt.CheckThread("QTimeIsValidFull")
+	r := C.qute_QTime_isValid_2(C.int(hArg), C.int(m), C.int(sArg), C.int(ms))
 	return bool(r)
 }

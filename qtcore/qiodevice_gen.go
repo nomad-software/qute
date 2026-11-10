@@ -368,6 +368,8 @@ func (this *QIODevice) ReadLineWithBytes(data []byte) int64 {
 //
 //	C++: QByteArray QIODevice::readLine(qint64 maxlen = …)
 //
+// Arguments with C++ defaults are left at them; ReadLineFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLine
 func (this *QIODevice) ReadLine() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLine")
@@ -379,6 +381,8 @@ func (this *QIODevice) ReadLine() []byte {
 // ReadLineInto wraps QIODevice::readLineInto.
 //
 //	C++: bool QIODevice::readLineInto(QByteArray * result, qint64 maxlen = …)
+//
+// Arguments with C++ defaults are left at them; ReadLineIntoFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLineInto
 func (this *QIODevice) ReadLineInto() (bool, []byte) {
@@ -656,6 +660,35 @@ func (this *QIODevice) EmitReadChannelFinished() {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.EmitReadChannelFinished")
 	C.qute_QIODevice_readChannelFinished_1(self)
 	runtime.KeepAlive(this)
+}
+
+// ReadLineFull wraps QIODevice::readLine.
+//
+//	C++: QByteArray QIODevice::readLine(qint64 maxlen = …)
+//
+// ReadLineFull is ReadLine with every argument, including those ReadLine leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLine
+func (this *QIODevice) ReadLineFull(maxlen int64) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineFull")
+	r := C.qute_QIODevice_readLine_2(self, C.longlong(maxlen))
+	runtime.KeepAlive(this)
+	return quteBytes(r)
+}
+
+// ReadLineIntoFull wraps QIODevice::readLineInto.
+//
+//	C++: bool QIODevice::readLineInto(QByteArray * result, qint64 maxlen = …)
+//
+// ReadLineIntoFull is ReadLineInto with every argument, including those ReadLineInto leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qiodevice.html#readLineInto
+func (this *QIODevice) ReadLineIntoFull(maxlen int64) (bool, []byte) {
+	self := rt.Use(unsafe.Pointer(this), "QIODevice.ReadLineIntoFull")
+	var resultOut C.qute_str
+	r := C.qute_QIODevice_readLineInto_2(self, &resultOut, C.longlong(maxlen))
+	runtime.KeepAlive(this)
+	return bool(r), quteBytes(resultOut)
 }
 
 // OnReadyRead connects f to the readyRead signal. The connection ends when the

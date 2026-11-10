@@ -308,6 +308,9 @@ func TestOwnership_QBoxLayout_AddSpacerItem(t *testing.T) {
 			t.Errorf("spacerItem: %v, want Parented", got)
 		}
 		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -365,6 +368,9 @@ func TestOwnership_QBoxLayout_InsertSpacerItem(t *testing.T) {
 			t.Errorf("spacerItem: %v, want Parented", got)
 		}
 		root.Delete()
+		if a1.Alive() {
+			t.Errorf("a1 alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -422,6 +428,9 @@ func TestOwnership_QBoxLayout_InsertItem(t *testing.T) {
 			t.Errorf("layoutItem: %v, want Parented", got)
 		}
 		root.Delete()
+		if a1.Alive() {
+			t.Errorf("a1 alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -1780,6 +1789,9 @@ func TestOwnership_QFormLayout_SetItem(t *testing.T) {
 			t.Errorf("item: %v, want Parented", got)
 		}
 		root.Delete()
+		if a2.Alive() {
+			t.Errorf("a2 alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -3255,6 +3267,9 @@ func TestOwnership_QGridLayout_AddItemAt(t *testing.T) {
 			t.Errorf("item: %v, want Parented", got)
 		}
 		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}
@@ -3598,6 +3613,9 @@ func TestOwnership_QLayout_AddItem(t *testing.T) {
 			t.Errorf("layoutItem: %v, want Parented", got)
 		}
 		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
 		if recv.Alive() {
 			recv.Delete()
 		}

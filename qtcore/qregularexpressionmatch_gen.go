@@ -207,6 +207,8 @@ func (this *QRegularExpressionMatch) HasCapturedNth(nth int) bool {
 //
 //	C++: QString QRegularExpressionMatch::captured(int nth = …) const
 //
+// Arguments with C++ defaults are left at them; CapturedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#captured
 func (this *QRegularExpressionMatch) Captured() string {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.Captured")
@@ -218,6 +220,8 @@ func (this *QRegularExpressionMatch) Captured() string {
 // CapturedView wraps QRegularExpressionMatch::capturedView.
 //
 //	C++: QStringView QRegularExpressionMatch::capturedView(int nth = …) const
+//
+// Arguments with C++ defaults are left at them; CapturedViewFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedView
 func (this *QRegularExpressionMatch) CapturedView() string {
@@ -267,6 +271,8 @@ func (this *QRegularExpressionMatch) CapturedTexts() []string {
 //
 //	C++: qsizetype QRegularExpressionMatch::capturedStart(int nth = …) const
 //
+// Arguments with C++ defaults are left at them; CapturedStartFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedStart
 func (this *QRegularExpressionMatch) CapturedStart() int {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedStart")
@@ -279,6 +285,8 @@ func (this *QRegularExpressionMatch) CapturedStart() int {
 //
 //	C++: qsizetype QRegularExpressionMatch::capturedLength(int nth = …) const
 //
+// Arguments with C++ defaults are left at them; CapturedLengthFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedLength
 func (this *QRegularExpressionMatch) CapturedLength() int {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedLength")
@@ -290,6 +298,8 @@ func (this *QRegularExpressionMatch) CapturedLength() int {
 // CapturedEnd wraps QRegularExpressionMatch::capturedEnd.
 //
 //	C++: qsizetype QRegularExpressionMatch::capturedEnd(int nth = …) const
+//
+// Arguments with C++ defaults are left at them; CapturedEndFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedEnd
 func (this *QRegularExpressionMatch) CapturedEnd() int {
@@ -331,6 +341,76 @@ func (this *QRegularExpressionMatch) CapturedLengthWithName(name string) int {
 func (this *QRegularExpressionMatch) CapturedEndWithName(name string) int {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedEndWithName")
 	r := C.qute_QRegularExpressionMatch_capturedEnd_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// CapturedFull wraps QRegularExpressionMatch::captured.
+//
+//	C++: QString QRegularExpressionMatch::captured(int nth = …) const
+//
+// CapturedFull is Captured with every argument, including those Captured leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#captured
+func (this *QRegularExpressionMatch) CapturedFull(nth int) string {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedFull")
+	r := C.qute_QRegularExpressionMatch_captured_2(self, C.int(nth))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// CapturedViewFull wraps QRegularExpressionMatch::capturedView.
+//
+//	C++: QStringView QRegularExpressionMatch::capturedView(int nth = …) const
+//
+// CapturedViewFull is CapturedView with every argument, including those CapturedView leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedView
+func (this *QRegularExpressionMatch) CapturedViewFull(nth int) string {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedViewFull")
+	r := C.qute_QRegularExpressionMatch_capturedView_2(self, C.int(nth))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// CapturedStartFull wraps QRegularExpressionMatch::capturedStart.
+//
+//	C++: qsizetype QRegularExpressionMatch::capturedStart(int nth = …) const
+//
+// CapturedStartFull is CapturedStart with every argument, including those CapturedStart leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedStart
+func (this *QRegularExpressionMatch) CapturedStartFull(nth int) int {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedStartFull")
+	r := C.qute_QRegularExpressionMatch_capturedStart_2(self, C.int(nth))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// CapturedLengthFull wraps QRegularExpressionMatch::capturedLength.
+//
+//	C++: qsizetype QRegularExpressionMatch::capturedLength(int nth = …) const
+//
+// CapturedLengthFull is CapturedLength with every argument, including those CapturedLength leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedLength
+func (this *QRegularExpressionMatch) CapturedLengthFull(nth int) int {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedLengthFull")
+	r := C.qute_QRegularExpressionMatch_capturedLength_2(self, C.int(nth))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// CapturedEndFull wraps QRegularExpressionMatch::capturedEnd.
+//
+//	C++: qsizetype QRegularExpressionMatch::capturedEnd(int nth = …) const
+//
+// CapturedEndFull is CapturedEnd with every argument, including those CapturedEnd leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatch.html#capturedEnd
+func (this *QRegularExpressionMatch) CapturedEndFull(nth int) int {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatch.CapturedEndFull")
+	r := C.qute_QRegularExpressionMatch_capturedEnd_2(self, C.int(nth))
 	runtime.KeepAlive(this)
 	return int(r)
 }

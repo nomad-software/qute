@@ -600,6 +600,8 @@ func (this *QAbstractItemView) VisualRect(index *qtcore.QModelIndex) qtcore.QRec
 //
 //	C++: void QAbstractItemView::scrollTo(const QModelIndex & index, ScrollHint hint = …)
 //
+// Arguments with C++ defaults are left at them; ScrollToFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#scrollTo
 func (this *QAbstractItemView) ScrollTo(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ScrollTo")
@@ -760,7 +762,7 @@ func (this *QAbstractItemView) SetIndexWidget(index *qtcore.QModelIndex, widget 
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // IndexWidget wraps QAbstractItemView::indexWidget.
@@ -1055,6 +1057,20 @@ func (this *QAbstractItemView) EmitIconSizeChanged(size qtcore.QSize) {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.EmitIconSizeChanged")
 	C.qute_QAbstractItemView_iconSizeChanged_1(self, cQSize(size))
 	runtime.KeepAlive(this)
+}
+
+// ScrollToFull wraps QAbstractItemView::scrollTo.
+//
+//	C++: void QAbstractItemView::scrollTo(const QModelIndex & index, ScrollHint hint = …)
+//
+// ScrollToFull is ScrollTo with every argument, including those ScrollTo leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qabstractitemview.html#scrollTo
+func (this *QAbstractItemView) ScrollToFull(index *qtcore.QModelIndex, hint QAbstractItemViewScrollHint) {
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.ScrollToFull")
+	C.qute_QAbstractItemView_scrollTo_1(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.ScrollToFull"), C.int64_t(hint))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
 }
 
 // OnPressed connects f to the pressed signal. The connection ends when the

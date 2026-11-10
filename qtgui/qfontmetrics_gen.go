@@ -293,6 +293,8 @@ func (this *QFontMetrics) RightBearing(char rune) int {
 //
 //	C++: int QFontMetrics::horizontalAdvance(const QString &, int len = …) const
 //
+// Arguments with C++ defaults are left at them; HorizontalAdvanceFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#horizontalAdvance
 func (this *QFontMetrics) HorizontalAdvance(stringArg string) int {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvance")
@@ -416,6 +418,8 @@ func (this *QFontMetrics) TightBoundingRectWithTextOption(text string, textOptio
 //
 //	C++: QString QFontMetrics::elidedText(const QString & text, Qt::TextElideMode mode, int width, int flags = …) const
 //
+// Arguments with C++ defaults are left at them; ElidedTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#elidedText
 func (this *QFontMetrics) ElidedText(text string, mode qtcore.TextElideMode, width int) string {
 	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.ElidedText")
@@ -482,4 +486,32 @@ func (this *QFontMetrics) FontDpi() float64 {
 	r := C.qute_QFontMetrics_fontDpi(self)
 	runtime.KeepAlive(this)
 	return float64(r)
+}
+
+// HorizontalAdvanceFull wraps QFontMetrics::horizontalAdvance.
+//
+//	C++: int QFontMetrics::horizontalAdvance(const QString &, int len = …) const
+//
+// HorizontalAdvanceFull is HorizontalAdvance with every argument, including those HorizontalAdvance leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#horizontalAdvance
+func (this *QFontMetrics) HorizontalAdvanceFull(stringArg string, lenArg int) int {
+	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.HorizontalAdvanceFull")
+	r := C.qute_QFontMetrics_horizontalAdvance_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int(lenArg))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// ElidedTextFull wraps QFontMetrics::elidedText.
+//
+//	C++: QString QFontMetrics::elidedText(const QString & text, Qt::TextElideMode mode, int width, int flags = …) const
+//
+// ElidedTextFull is ElidedText with every argument, including those ElidedText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontmetrics.html#elidedText
+func (this *QFontMetrics) ElidedTextFull(text string, mode qtcore.TextElideMode, width int, flags int) string {
+	self := rt.Use(unsafe.Pointer(this), "QFontMetrics.ElidedTextFull")
+	r := C.qute_QFontMetrics_elidedText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(mode), C.int(width), C.int(flags))
+	runtime.KeepAlive(this)
+	return quteStr(r)
 }

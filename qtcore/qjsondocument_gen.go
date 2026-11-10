@@ -133,6 +133,8 @@ func (this *QJsonDocument) ToVariant() *QVariant {
 //
 //	C++: QByteArray QJsonDocument::toJson(JsonFormat format = …) const
 //
+// Arguments with C++ defaults are left at them; ToJsonFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qjsondocument.html#toJson
 func (this *QJsonDocument) ToJson() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.ToJson")
@@ -239,6 +241,20 @@ func (this *QJsonDocument) IsNull() bool {
 	r := C.qute_QJsonDocument_isNull(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// ToJsonFull wraps QJsonDocument::toJson.
+//
+//	C++: QByteArray QJsonDocument::toJson(JsonFormat format = …) const
+//
+// ToJsonFull is ToJson with every argument, including those ToJson leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsondocument.html#toJson
+func (this *QJsonDocument) ToJsonFull(format QJsonDocumentJsonFormat) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QJsonDocument.ToJsonFull")
+	r := C.qute_QJsonDocument_toJson_1(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteBytes(r)
 }
 
 // QJsonDocumentFromVariant wraps QJsonDocument::fromVariant.

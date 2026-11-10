@@ -242,6 +242,8 @@ func (this *QSystemTrayIcon) Hide() {
 //
 //	C++: void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, const QIcon & icon, int msecs = …)
 //
+// Arguments with C++ defaults are left at them; ShowMessageIconFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#showMessage
 func (this *QSystemTrayIcon) ShowMessageIcon(title string, msg string, icon *qtgui.QIcon) {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessageIcon")
@@ -253,6 +255,8 @@ func (this *QSystemTrayIcon) ShowMessageIcon(title string, msg string, icon *qtg
 // ShowMessage wraps QSystemTrayIcon::showMessage.
 //
 //	C++: void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, QSystemTrayIcon::MessageIcon icon = …, int msecs = …)
+//
+// Arguments with C++ defaults are left at them; ShowMessageFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#showMessage
 func (this *QSystemTrayIcon) ShowMessage(title string, msg string) {
@@ -280,6 +284,33 @@ func (this *QSystemTrayIcon) EmitActivated(reason QSystemTrayIconActivationReaso
 func (this *QSystemTrayIcon) EmitMessageClicked() {
 	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.EmitMessageClicked")
 	C.qute_QSystemTrayIcon_messageClicked_1(self)
+	runtime.KeepAlive(this)
+}
+
+// ShowMessageIconFull wraps QSystemTrayIcon::showMessage.
+//
+//	C++: void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, const QIcon & icon, int msecs = …)
+//
+// ShowMessageIconFull is ShowMessageIcon with every argument, including those ShowMessageIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#showMessage
+func (this *QSystemTrayIcon) ShowMessageIconFull(title string, msg string, icon *qtgui.QIcon, msecs int) {
+	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessageIconFull")
+	C.qute_QSystemTrayIcon_showMessage_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)), rt.UseArg(unsafe.Pointer(icon), "QSystemTrayIcon.ShowMessageIconFull"), C.int(msecs))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(icon)
+}
+
+// ShowMessageFull wraps QSystemTrayIcon::showMessage.
+//
+//	C++: void QSystemTrayIcon::showMessage(const QString & title, const QString & msg, QSystemTrayIcon::MessageIcon icon = …, int msecs = …)
+//
+// ShowMessageFull is ShowMessage with every argument, including those ShowMessage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsystemtrayicon.html#showMessage
+func (this *QSystemTrayIcon) ShowMessageFull(title string, msg string, icon QSystemTrayIconMessageIcon, msecs int) {
+	self := rt.Use(unsafe.Pointer(this), "QSystemTrayIcon.ShowMessageFull")
+	C.qute_QSystemTrayIcon_showMessage_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)), C.int64_t(icon), C.int(msecs))
 	runtime.KeepAlive(this)
 }
 

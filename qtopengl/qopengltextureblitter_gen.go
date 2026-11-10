@@ -153,6 +153,8 @@ func (this *QOpenGLTextureBlitter) SupportsRectangleTarget() bool {
 //
 //	C++: void QOpenGLTextureBlitter::bind(GLenum target = …)
 //
+// Arguments with C++ defaults are left at them; BindFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengltextureblitter.html#bind
 func (this *QOpenGLTextureBlitter) Bind() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.Bind")
@@ -203,6 +205,19 @@ func (this *QOpenGLTextureBlitter) Blit(texture uint, targetTransform *qtgui.QMa
 	C.qute_QOpenGLTextureBlitter_blit(self, C.uint(texture), rt.UseArg(unsafe.Pointer(targetTransform), "QOpenGLTextureBlitter.Blit"), C.int64_t(sourceOrigin))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(targetTransform)
+}
+
+// BindFull wraps QOpenGLTextureBlitter::bind.
+//
+//	C++: void QOpenGLTextureBlitter::bind(GLenum target = …)
+//
+// BindFull is Bind with every argument, including those Bind leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengltextureblitter.html#bind
+func (this *QOpenGLTextureBlitter) BindFull(target uint) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLTextureBlitter.BindFull")
+	C.qute_QOpenGLTextureBlitter_bind_1(self, C.uint(target))
+	runtime.KeepAlive(this)
 }
 
 // QOpenGLTextureBlitterTargetTransform wraps QOpenGLTextureBlitter::targetTransform.

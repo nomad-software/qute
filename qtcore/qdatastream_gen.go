@@ -249,7 +249,7 @@ func (this *QDataStream) WriteBytes(arg0 []byte) *QDataStream {
 	self := rt.Use(unsafe.Pointer(this), "QDataStream.WriteBytes")
 	r := C.qute_QDataStream_writeBytes(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(arg0))), C.ptrdiff_t(len(arg0)))
 	runtime.KeepAlive(this)
-	return rt.View[QDataStream](rt.WrapClass(r, "QDataStream", rt.KeepOrBorrow), r)
+	return rt.View[QDataStream](rt.WrapClassFrom(r, "QDataStream", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // WriteRawData wraps QDataStream::writeRawData.

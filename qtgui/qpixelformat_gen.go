@@ -94,10 +94,26 @@ func NewQPixelFormat() *QPixelFormat {
 //
 //	C++: QPixelFormat::QPixelFormat(ColorModel colorModel, uchar firstSize, uchar secondSize, uchar thirdSize, uchar fourthSize, uchar fifthSize, uchar alphaSize, AlphaUsage alphaUsage, AlphaPosition alphaPosition, AlphaPremultiplied premultiplied, TypeInterpretation typeInterpretation, ByteOrder byteOrder = …, uchar subEnum = …)
 //
+// Arguments with C++ defaults are left at them; NewQPixelFormatWithColorModelFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpixelformat.html#QPixelFormat
 func NewQPixelFormatWithColorModel(colorModel QPixelFormatColorModel, firstSize uint8, secondSize uint8, thirdSize uint8, fourthSize uint8, fifthSize uint8, alphaSize uint8, alphaUsage QPixelFormatAlphaUsage, alphaPosition QPixelFormatAlphaPosition, premultiplied QPixelFormatAlphaPremultiplied, typeInterpretation QPixelFormatTypeInterpretation) *QPixelFormat {
 	rt.CheckThread("NewQPixelFormatWithColorModel")
 	p := C.qute_QPixelFormat_new_1(C.int64_t(colorModel), C.uchar(firstSize), C.uchar(secondSize), C.uchar(thirdSize), C.uchar(fourthSize), C.uchar(fifthSize), C.uchar(alphaSize), C.int64_t(alphaUsage), C.int64_t(alphaPosition), C.int64_t(premultiplied), C.int64_t(typeInterpretation))
+	h := rt.WrapClass(p, "QPixelFormat", rt.NewOwned)
+	return rt.View[QPixelFormat](h, p)
+}
+
+// NewQPixelFormatWithColorModelFull wraps the QPixelFormat constructor.
+//
+//	C++: QPixelFormat::QPixelFormat(ColorModel colorModel, uchar firstSize, uchar secondSize, uchar thirdSize, uchar fourthSize, uchar fifthSize, uchar alphaSize, AlphaUsage alphaUsage, AlphaPosition alphaPosition, AlphaPremultiplied premultiplied, TypeInterpretation typeInterpretation, ByteOrder byteOrder = …, uchar subEnum = …)
+//
+// NewQPixelFormatWithColorModelFull is NewQPixelFormatWithColorModel with every argument, including those NewQPixelFormatWithColorModel leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixelformat.html#QPixelFormat
+func NewQPixelFormatWithColorModelFull(colorModel QPixelFormatColorModel, firstSize uint8, secondSize uint8, thirdSize uint8, fourthSize uint8, fifthSize uint8, alphaSize uint8, alphaUsage QPixelFormatAlphaUsage, alphaPosition QPixelFormatAlphaPosition, premultiplied QPixelFormatAlphaPremultiplied, typeInterpretation QPixelFormatTypeInterpretation, byteOrder QPixelFormatByteOrder, subEnum uint8) *QPixelFormat {
+	rt.CheckThread("NewQPixelFormatWithColorModelFull")
+	p := C.qute_QPixelFormat_new_2(C.int64_t(colorModel), C.uchar(firstSize), C.uchar(secondSize), C.uchar(thirdSize), C.uchar(fourthSize), C.uchar(fifthSize), C.uchar(alphaSize), C.int64_t(alphaUsage), C.int64_t(alphaPosition), C.int64_t(premultiplied), C.int64_t(typeInterpretation), C.int64_t(byteOrder), C.uchar(subEnum))
 	h := rt.WrapClass(p, "QPixelFormat", rt.NewOwned)
 	return rt.View[QPixelFormat](h, p)
 }

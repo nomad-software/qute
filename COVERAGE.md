@@ -16,7 +16,9 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 8204 |
+| Bound constructors, methods and functions | 8806 |
+| of which Full forms (every argument, defaults included) | 602 |
+| Plain-object results that depend on their receiver | 83 |
 | Skipped on purpose (with reasons below) | 607 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |

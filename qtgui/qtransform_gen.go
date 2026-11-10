@@ -447,6 +447,8 @@ func (this *QTransform) RotateWithAxis(aArg float64, axis qtcore.Axis, distanceT
 //
 //	C++: QTransform & QTransform::rotate(qreal a, Qt::Axis axis = …)
 //
+// Arguments with C++ defaults are left at them; RotateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotate
 func (this *QTransform) Rotate(aArg float64) *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Rotate")
@@ -470,6 +472,8 @@ func (this *QTransform) RotateRadiansWithAxis(aArg float64, axis qtcore.Axis, di
 // RotateRadians wraps QTransform::rotateRadians.
 //
 //	C++: QTransform & QTransform::rotateRadians(qreal a, Qt::Axis axis = …)
+//
+// Arguments with C++ defaults are left at them; RotateRadiansFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotateRadians
 func (this *QTransform) RotateRadians(aArg float64) *QTransform {
@@ -640,6 +644,34 @@ func (this *QTransform) MapRectF(rectF qtcore.QRectF) qtcore.QRectF {
 	r := C.qute_QTransform_mapRect_1(self, cQRectF(rectF))
 	runtime.KeepAlive(this)
 	return goQRectF(r)
+}
+
+// RotateFull wraps QTransform::rotate.
+//
+//	C++: QTransform & QTransform::rotate(qreal a, Qt::Axis axis = …)
+//
+// RotateFull is Rotate with every argument, including those Rotate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotate
+func (this *QTransform) RotateFull(aArg float64, axis qtcore.Axis) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateFull")
+	C.qute_QTransform_rotate_2(self, C.double(aArg), C.int64_t(axis))
+	runtime.KeepAlive(this)
+	return this
+}
+
+// RotateRadiansFull wraps QTransform::rotateRadians.
+//
+//	C++: QTransform & QTransform::rotateRadians(qreal a, Qt::Axis axis = …)
+//
+// RotateRadiansFull is RotateRadians with every argument, including those RotateRadians leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#rotateRadians
+func (this *QTransform) RotateRadiansFull(aArg float64, axis qtcore.Axis) *QTransform {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.RotateRadiansFull")
+	C.qute_QTransform_rotateRadians_2(self, C.double(aArg), C.int64_t(axis))
+	runtime.KeepAlive(this)
+	return this
 }
 
 // QTransformSquareToQuad wraps QTransform::squareToQuad.

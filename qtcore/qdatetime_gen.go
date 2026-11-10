@@ -94,6 +94,8 @@ func NewQDateTime() *QDateTime {
 //
 //	C++: QDateTime::QDateTime(QDate date, QTime time, const QTimeZone & timeZone, TransitionResolution resolve = …)
 //
+// Arguments with C++ defaults are left at them; NewQDateTimeInFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#QDateTime
 func NewQDateTimeIn(date *QDate, time *QTime, timeZone *QTimeZone) *QDateTime {
 	rt.CheckThread("NewQDateTimeIn")
@@ -111,10 +113,47 @@ func NewQDateTimeIn(date *QDate, time *QTime, timeZone *QTimeZone) *QDateTime {
 //
 // Local time.
 //
+// Arguments with C++ defaults are left at them; NewQDateTimeLocalFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#QDateTime
 func NewQDateTimeLocal(date *QDate, time *QTime) *QDateTime {
 	rt.CheckThread("NewQDateTimeLocal")
 	p := C.qute_QDateTime_new_2(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeLocal"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeLocal"))
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(time)
+	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	return rt.View[QDateTime](h, p)
+}
+
+// NewQDateTimeInFull wraps the QDateTime constructor.
+//
+//	C++: QDateTime::QDateTime(QDate date, QTime time, const QTimeZone & timeZone, TransitionResolution resolve = …)
+//
+// NewQDateTimeInFull is NewQDateTimeIn with every argument, including those NewQDateTimeIn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#QDateTime
+func NewQDateTimeInFull(date *QDate, time *QTime, timeZone *QTimeZone, resolve QDateTimeTransitionResolution) *QDateTime {
+	rt.CheckThread("NewQDateTimeInFull")
+	p := C.qute_QDateTime_new_3(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeInFull"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeInFull"), rt.UseArg(unsafe.Pointer(timeZone), "NewQDateTimeInFull"), C.int64_t(resolve))
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(time)
+	runtime.KeepAlive(timeZone)
+	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	return rt.View[QDateTime](h, p)
+}
+
+// NewQDateTimeLocalFull wraps the QDateTime constructor.
+//
+//	C++: QDateTime::QDateTime(QDate date, QTime time, TransitionResolution resolve = …)
+//
+// Local time.
+//
+// NewQDateTimeLocalFull is NewQDateTimeLocal with every argument, including those NewQDateTimeLocal leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#QDateTime
+func NewQDateTimeLocalFull(date *QDate, time *QTime, resolve QDateTimeTransitionResolution) *QDateTime {
+	rt.CheckThread("NewQDateTimeLocalFull")
+	p := C.qute_QDateTime_new_4(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeLocalFull"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeLocalFull"), C.int64_t(resolve))
 	runtime.KeepAlive(date)
 	runtime.KeepAlive(time)
 	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
@@ -277,6 +316,8 @@ func (this *QDateTime) ToSecsSinceEpoch() int64 {
 //
 //	C++: void QDateTime::setDate(QDate date, TransitionResolution resolve = …)
 //
+// Arguments with C++ defaults are left at them; SetDateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setDate
 func (this *QDateTime) SetDate(date *QDate) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetDate")
@@ -289,6 +330,8 @@ func (this *QDateTime) SetDate(date *QDate) {
 //
 //	C++: void QDateTime::setTime(QTime time, TransitionResolution resolve = …)
 //
+// Arguments with C++ defaults are left at them; SetTimeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setTime
 func (this *QDateTime) SetTime(time *QTime) {
 	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetTime")
@@ -300,6 +343,8 @@ func (this *QDateTime) SetTime(time *QTime) {
 // SetTimeZone wraps QDateTime::setTimeZone.
 //
 //	C++: void QDateTime::setTimeZone(const QTimeZone & toZone, TransitionResolution resolve = …)
+//
+// Arguments with C++ defaults are left at them; SetTimeZoneFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setTimeZone
 func (this *QDateTime) SetTimeZone(toZone *QTimeZone) {
@@ -334,6 +379,8 @@ func (this *QDateTime) SetSecsSinceEpoch(secs int64) {
 // ToString wraps QDateTime::toString.
 //
 //	C++: QString QDateTime::toString(Qt::DateFormat format = …) const
+//
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#toString
 func (this *QDateTime) ToString() string {
@@ -548,6 +595,62 @@ func (this *QDateTime) MsecsTo(dateTime *QDateTime) int64 {
 	return int64(r)
 }
 
+// SetDateFull wraps QDateTime::setDate.
+//
+//	C++: void QDateTime::setDate(QDate date, TransitionResolution resolve = …)
+//
+// SetDateFull is SetDate with every argument, including those SetDate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setDate
+func (this *QDateTime) SetDateFull(date *QDate, resolve QDateTimeTransitionResolution) {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetDateFull")
+	C.qute_QDateTime_setDate_1(self, rt.UseArg(unsafe.Pointer(date), "QDateTime.SetDateFull"), C.int64_t(resolve))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
+}
+
+// SetTimeFull wraps QDateTime::setTime.
+//
+//	C++: void QDateTime::setTime(QTime time, TransitionResolution resolve = …)
+//
+// SetTimeFull is SetTime with every argument, including those SetTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setTime
+func (this *QDateTime) SetTimeFull(time *QTime, resolve QDateTimeTransitionResolution) {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetTimeFull")
+	C.qute_QDateTime_setTime_1(self, rt.UseArg(unsafe.Pointer(time), "QDateTime.SetTimeFull"), C.int64_t(resolve))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
+}
+
+// SetTimeZoneFull wraps QDateTime::setTimeZone.
+//
+//	C++: void QDateTime::setTimeZone(const QTimeZone & toZone, TransitionResolution resolve = …)
+//
+// SetTimeZoneFull is SetTimeZone with every argument, including those SetTimeZone leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#setTimeZone
+func (this *QDateTime) SetTimeZoneFull(toZone *QTimeZone, resolve QDateTimeTransitionResolution) {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.SetTimeZoneFull")
+	C.qute_QDateTime_setTimeZone_1(self, rt.UseArg(unsafe.Pointer(toZone), "QDateTime.SetTimeZoneFull"), C.int64_t(resolve))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(toZone)
+}
+
+// ToStringFull wraps QDateTime::toString.
+//
+//	C++: QString QDateTime::toString(Qt::DateFormat format = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#toString
+func (this *QDateTime) ToStringFull(format DateFormat) string {
+	self := rt.Use(unsafe.Pointer(this), "QDateTime.ToStringFull")
+	r := C.qute_QDateTime_toString_3(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
 // QDateTimeCurrentDateTimeWithTimeZone wraps QDateTime::currentDateTime.
 //
 //	C++: QDateTime QDateTime::currentDateTime(const QTimeZone & zone)
@@ -594,6 +697,8 @@ func QDateTimeCurrentDateTimeUtc() *QDateTime {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QDateTimeFromStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
 func QDateTimeFromString(stringArg string) *QDateTime {
 	rt.CheckThread("QDateTimeFromString")
@@ -634,6 +739,8 @@ func QDateTimeFromStringFormatYearCalendar(stringArg string, format string, base
 //	C++: QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QDateTimeFromStringFormatFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
 func QDateTimeFromStringFormat(stringArg string, format string) *QDateTime {
@@ -728,5 +835,35 @@ func QDateTimeCurrentSecsSinceEpoch() int64 {
 func QDateTimeFromStdTimePoint(time time.Time) *QDateTime {
 	rt.CheckThread("QDateTimeFromStdTimePoint")
 	r := C.qute_QDateTime_fromStdTimePoint(C.int64_t(time.UnixMilli()))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// QDateTimeFromStringFull wraps QDateTime::fromString.
+//
+//	C++: QDateTime QDateTime::fromString(const QString & string, Qt::DateFormat format = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QDateTimeFromStringFull is QDateTimeFromString with every argument, including those QDateTimeFromString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
+func QDateTimeFromStringFull(stringArg string, format DateFormat) *QDateTime {
+	rt.CheckThread("QDateTimeFromStringFull")
+	r := C.qute_QDateTime_fromString_4((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format))
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// QDateTimeFromStringFormatFull wraps QDateTime::fromString.
+//
+//	C++: QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QDateTimeFromStringFormatFull is QDateTimeFromStringFormat with every argument, including those QDateTimeFromStringFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdatetime.html#fromString
+func QDateTimeFromStringFormatFull(stringArg string, format string, baseYear int) *QDateTime {
+	rt.CheckThread("QDateTimeFromStringFormatFull")
+	r := C.qute_QDateTime_fromString_5((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear))
 	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
 }

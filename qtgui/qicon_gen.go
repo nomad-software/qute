@@ -121,6 +121,8 @@ func NewQIconWithFileName(fileName string) *QIcon {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; PixmapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#pixmap
 func (this *QIcon) Pixmap(size qtcore.QSize) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.Pixmap")
@@ -134,6 +136,8 @@ func (this *QIcon) Pixmap(size qtcore.QSize) *QPixmap {
 //	C++: QPixmap QIcon::pixmap(int extent, Mode mode = …, State state = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; PixmapExtentFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#pixmap
 func (this *QIcon) PixmapExtent(extent int) *QPixmap {
@@ -149,6 +153,8 @@ func (this *QIcon) PixmapExtent(extent int) *QPixmap {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; PixmapScaledFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#pixmap
 func (this *QIcon) PixmapScaled(size qtcore.QSize, devicePixelRatio float64) *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.PixmapScaled")
@@ -160,6 +166,8 @@ func (this *QIcon) PixmapScaled(size qtcore.QSize, devicePixelRatio float64) *QP
 // ActualSize wraps QIcon::actualSize.
 //
 //	C++: QSize QIcon::actualSize(const QSize & size, Mode mode = …, State state = …) const
+//
+// Arguments with C++ defaults are left at them; ActualSizeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#actualSize
 func (this *QIcon) ActualSize(size qtcore.QSize) qtcore.QSize {
@@ -184,6 +192,8 @@ func (this *QIcon) Name() string {
 // Paint wraps QIcon::paint.
 //
 //	C++: void QIcon::paint(QPainter * painter, const QRect & rect, Qt::Alignment alignment = …, Mode mode = …, State state = …) const
+//
+// Arguments with C++ defaults are left at them; PaintFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#paint
 func (this *QIcon) Paint(painter QPainterLike, rect qtcore.QRect) {
@@ -225,6 +235,8 @@ func (this *QIcon) CacheKey() int64 {
 //
 //	C++: void QIcon::addPixmap(const QPixmap & pixmap, Mode mode = …, State state = …)
 //
+// Arguments with C++ defaults are left at them; AddPixmapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#addPixmap
 func (this *QIcon) AddPixmap(pixmap *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.AddPixmap")
@@ -237,6 +249,8 @@ func (this *QIcon) AddPixmap(pixmap *QPixmap) {
 //
 //	C++: void QIcon::addFile(const QString & fileName, const QSize & size = …, Mode mode = …, State state = …)
 //
+// Arguments with C++ defaults are left at them; AddFileFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#addFile
 func (this *QIcon) AddFile(fileName string) {
 	self := rt.Use(unsafe.Pointer(this), "QIcon.AddFile")
@@ -247,6 +261,8 @@ func (this *QIcon) AddFile(fileName string) {
 // AvailableSizes wraps QIcon::availableSizes.
 //
 //	C++: QList<QSize> QIcon::availableSizes(Mode mode = …, State state = …) const
+//
+// Arguments with C++ defaults are left at them; AvailableSizesFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qicon.html#availableSizes
 func (this *QIcon) AvailableSizes() []qtcore.QSize {
@@ -277,6 +293,127 @@ func (this *QIcon) IsMask() bool {
 	r := C.qute_QIcon_isMask(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// PixmapFull wraps QIcon::pixmap.
+//
+//	C++: QPixmap QIcon::pixmap(const QSize & size, Mode mode = …, State state = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// PixmapFull is Pixmap with every argument, including those Pixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#pixmap
+func (this *QIcon) PixmapFull(size qtcore.QSize, mode QIconMode, state QIconState) *QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.PixmapFull")
+	r := C.qute_QIcon_pixmap_3(self, cQSize(size), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// PixmapExtentFull wraps QIcon::pixmap.
+//
+//	C++: QPixmap QIcon::pixmap(int extent, Mode mode = …, State state = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// PixmapExtentFull is PixmapExtent with every argument, including those PixmapExtent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#pixmap
+func (this *QIcon) PixmapExtentFull(extent int, mode QIconMode, state QIconState) *QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.PixmapExtentFull")
+	r := C.qute_QIcon_pixmap_4(self, C.int(extent), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// PixmapScaledFull wraps QIcon::pixmap.
+//
+//	C++: QPixmap QIcon::pixmap(const QSize & size, qreal devicePixelRatio, Mode mode = …, State state = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// PixmapScaledFull is PixmapScaled with every argument, including those PixmapScaled leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#pixmap
+func (this *QIcon) PixmapScaledFull(size qtcore.QSize, devicePixelRatio float64, mode QIconMode, state QIconState) *QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.PixmapScaledFull")
+	r := C.qute_QIcon_pixmap_5(self, cQSize(size), C.double(devicePixelRatio), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// ActualSizeFull wraps QIcon::actualSize.
+//
+//	C++: QSize QIcon::actualSize(const QSize & size, Mode mode = …, State state = …) const
+//
+// ActualSizeFull is ActualSize with every argument, including those ActualSize leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#actualSize
+func (this *QIcon) ActualSizeFull(size qtcore.QSize, mode QIconMode, state QIconState) qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.ActualSizeFull")
+	r := C.qute_QIcon_actualSize_1(self, cQSize(size), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	return goQSize(r)
+}
+
+// PaintFull wraps QIcon::paint.
+//
+//	C++: void QIcon::paint(QPainter * painter, const QRect & rect, Qt::Alignment alignment = …, Mode mode = …, State state = …) const
+//
+// PaintFull is Paint with every argument, including those Paint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#paint
+func (this *QIcon) PaintFull(painter QPainterLike, rect qtcore.QRect, alignment qtcore.Alignment, mode QIconMode, state QIconState) {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.PaintFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QIcon.PaintFull")
+	}
+	C.qute_QIcon_paint_1(self, painterPtr, cQRect(rect), C.int64_t(alignment), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// AddPixmapFull wraps QIcon::addPixmap.
+//
+//	C++: void QIcon::addPixmap(const QPixmap & pixmap, Mode mode = …, State state = …)
+//
+// AddPixmapFull is AddPixmap with every argument, including those AddPixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#addPixmap
+func (this *QIcon) AddPixmapFull(pixmap *QPixmap, mode QIconMode, state QIconState) {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.AddPixmapFull")
+	C.qute_QIcon_addPixmap_1(self, rt.UseArg(unsafe.Pointer(pixmap), "QIcon.AddPixmapFull"), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
+}
+
+// AddFileFull wraps QIcon::addFile.
+//
+//	C++: void QIcon::addFile(const QString & fileName, const QSize & size = …, Mode mode = …, State state = …)
+//
+// AddFileFull is AddFile with every argument, including those AddFile leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#addFile
+func (this *QIcon) AddFileFull(fileName string, size qtcore.QSize, mode QIconMode, state QIconState) {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.AddFileFull")
+	C.qute_QIcon_addFile_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), cQSize(size), C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+}
+
+// AvailableSizesFull wraps QIcon::availableSizes.
+//
+//	C++: QList<QSize> QIcon::availableSizes(Mode mode = …, State state = …) const
+//
+// AvailableSizesFull is AvailableSizes with every argument, including those AvailableSizes leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#availableSizes
+func (this *QIcon) AvailableSizesFull(mode QIconMode, state QIconState) []qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.AvailableSizesFull")
+	r := C.qute_QIcon_availableSizes_1(self, C.int64_t(mode), C.int64_t(state))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e C.qute_size) qtcore.QSize { return goQSize(e) })
 }
 
 // QIconFromTheme wraps QIcon::fromTheme.

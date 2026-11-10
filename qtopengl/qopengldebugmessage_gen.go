@@ -156,6 +156,8 @@ func (this *QOpenGLDebugMessage) Message() string {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QOpenGLDebugMessageCreateApplicationMessageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengldebugmessage.html#createApplicationMessage
 func QOpenGLDebugMessageCreateApplicationMessage(text string) *QOpenGLDebugMessage {
 	rt.CheckThread("QOpenGLDebugMessageCreateApplicationMessage")
@@ -169,9 +171,41 @@ func QOpenGLDebugMessageCreateApplicationMessage(text string) *QOpenGLDebugMessa
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QOpenGLDebugMessageCreateThirdPartyMessageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopengldebugmessage.html#createThirdPartyMessage
 func QOpenGLDebugMessageCreateThirdPartyMessage(text string) *QOpenGLDebugMessage {
 	rt.CheckThread("QOpenGLDebugMessageCreateThirdPartyMessage")
 	r := C.qute_QOpenGLDebugMessage_createThirdPartyMessage((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	return rt.View[QOpenGLDebugMessage](rt.WrapClass(r, "QOpenGLDebugMessage", rt.TakeOwned), r)
+}
+
+// QOpenGLDebugMessageCreateApplicationMessageFull wraps QOpenGLDebugMessage::createApplicationMessage.
+//
+//	C++: QOpenGLDebugMessage QOpenGLDebugMessage::createApplicationMessage(const QString & text, GLuint id = …, Severity severity = …, Type type = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QOpenGLDebugMessageCreateApplicationMessageFull is QOpenGLDebugMessageCreateApplicationMessage with every argument, including those QOpenGLDebugMessageCreateApplicationMessage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebugmessage.html#createApplicationMessage
+func QOpenGLDebugMessageCreateApplicationMessageFull(text string, idArg uint, severity QOpenGLDebugMessageSeverities, typeArg QOpenGLDebugMessageTypes) *QOpenGLDebugMessage {
+	rt.CheckThread("QOpenGLDebugMessageCreateApplicationMessageFull")
+	r := C.qute_QOpenGLDebugMessage_createApplicationMessage_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.uint(idArg), C.int64_t(severity), C.int64_t(typeArg))
+	return rt.View[QOpenGLDebugMessage](rt.WrapClass(r, "QOpenGLDebugMessage", rt.TakeOwned), r)
+}
+
+// QOpenGLDebugMessageCreateThirdPartyMessageFull wraps QOpenGLDebugMessage::createThirdPartyMessage.
+//
+//	C++: QOpenGLDebugMessage QOpenGLDebugMessage::createThirdPartyMessage(const QString & text, GLuint id = …, Severity severity = …, Type type = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QOpenGLDebugMessageCreateThirdPartyMessageFull is QOpenGLDebugMessageCreateThirdPartyMessage with every argument, including those QOpenGLDebugMessageCreateThirdPartyMessage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopengldebugmessage.html#createThirdPartyMessage
+func QOpenGLDebugMessageCreateThirdPartyMessageFull(text string, idArg uint, severity QOpenGLDebugMessageSeverities, typeArg QOpenGLDebugMessageTypes) *QOpenGLDebugMessage {
+	rt.CheckThread("QOpenGLDebugMessageCreateThirdPartyMessageFull")
+	r := C.qute_QOpenGLDebugMessage_createThirdPartyMessage_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.uint(idArg), C.int64_t(severity), C.int64_t(typeArg))
 	return rt.View[QOpenGLDebugMessage](rt.WrapClass(r, "QOpenGLDebugMessage", rt.TakeOwned), r)
 }

@@ -86,6 +86,8 @@ func (this *QOpenGLFramebufferObject) Unkeep() {
 //
 //	C++: QOpenGLFramebufferObject::QOpenGLFramebufferObject(const QSize & size, GLenum target = …)
 //
+// Arguments with C++ defaults are left at them; NewQOpenGLFramebufferObjectWithSizeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#QOpenGLFramebufferObject
 func NewQOpenGLFramebufferObjectWithSize(size qtcore.QSize) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSize")
@@ -97,6 +99,8 @@ func NewQOpenGLFramebufferObjectWithSize(size qtcore.QSize) *QOpenGLFramebufferO
 // NewQOpenGLFramebufferObjectWithSizeAttachment wraps the QOpenGLFramebufferObject constructor.
 //
 //	C++: QOpenGLFramebufferObject::QOpenGLFramebufferObject(const QSize & size, Attachment attachment, GLenum target = …, GLenum internalFormat = …)
+//
+// Arguments with C++ defaults are left at them; NewQOpenGLFramebufferObjectWithSizeAttachmentFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#QOpenGLFramebufferObject
 func NewQOpenGLFramebufferObjectWithSizeAttachment(size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment) *QOpenGLFramebufferObject {
@@ -119,9 +123,39 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcor
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
+// NewQOpenGLFramebufferObjectWithSizeFull wraps the QOpenGLFramebufferObject constructor.
+//
+//	C++: QOpenGLFramebufferObject::QOpenGLFramebufferObject(const QSize & size, GLenum target = …)
+//
+// NewQOpenGLFramebufferObjectWithSizeFull is NewQOpenGLFramebufferObjectWithSize with every argument, including those NewQOpenGLFramebufferObjectWithSize leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#QOpenGLFramebufferObject
+func NewQOpenGLFramebufferObjectWithSizeFull(size qtcore.QSize, target uint) *QOpenGLFramebufferObject {
+	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeFull")
+	p := C.qute_QOpenGLFramebufferObject_new_3(cQSize(size), C.uint(target))
+	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	return rt.View[QOpenGLFramebufferObject](h, p)
+}
+
+// NewQOpenGLFramebufferObjectWithSizeAttachmentFull wraps the QOpenGLFramebufferObject constructor.
+//
+//	C++: QOpenGLFramebufferObject::QOpenGLFramebufferObject(const QSize & size, Attachment attachment, GLenum target = …, GLenum internalFormat = …)
+//
+// NewQOpenGLFramebufferObjectWithSizeAttachmentFull is NewQOpenGLFramebufferObjectWithSizeAttachment with every argument, including those NewQOpenGLFramebufferObjectWithSizeAttachment leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#QOpenGLFramebufferObject
+func NewQOpenGLFramebufferObjectWithSizeAttachmentFull(size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment, target uint, internalFormat uint) *QOpenGLFramebufferObject {
+	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeAttachmentFull")
+	p := C.qute_QOpenGLFramebufferObject_new_4(cQSize(size), C.int64_t(attachment), C.uint(target), C.uint(internalFormat))
+	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	return rt.View[QOpenGLFramebufferObject](h, p)
+}
+
 // AddColorAttachment wraps QOpenGLFramebufferObject::addColorAttachment.
 //
 //	C++: void QOpenGLFramebufferObject::addColorAttachment(const QSize & size, GLenum internalFormat = …)
+//
+// Arguments with C++ defaults are left at them; AddColorAttachmentFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#addColorAttachment
 func (this *QOpenGLFramebufferObject) AddColorAttachment(size qtcore.QSize) {
@@ -294,6 +328,8 @@ func (this *QOpenGLFramebufferObject) Sizes() []qtcore.QSize {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ToImageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#toImage
 func (this *QOpenGLFramebufferObject) ToImage() *qtgui.QImage {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.ToImage")
@@ -337,6 +373,35 @@ func (this *QOpenGLFramebufferObject) SetAttachment(attachment QOpenGLFramebuffe
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.SetAttachment")
 	C.qute_QOpenGLFramebufferObject_setAttachment(self, C.int64_t(attachment))
 	runtime.KeepAlive(this)
+}
+
+// AddColorAttachmentFull wraps QOpenGLFramebufferObject::addColorAttachment.
+//
+//	C++: void QOpenGLFramebufferObject::addColorAttachment(const QSize & size, GLenum internalFormat = …)
+//
+// AddColorAttachmentFull is AddColorAttachment with every argument, including those AddColorAttachment leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#addColorAttachment
+func (this *QOpenGLFramebufferObject) AddColorAttachmentFull(size qtcore.QSize, internalFormat uint) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.AddColorAttachmentFull")
+	C.qute_QOpenGLFramebufferObject_addColorAttachment_1(self, cQSize(size), C.uint(internalFormat))
+	runtime.KeepAlive(this)
+}
+
+// ToImageFull wraps QOpenGLFramebufferObject::toImage.
+//
+//	C++: QImage QOpenGLFramebufferObject::toImage(bool flipped = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToImageFull is ToImage with every argument, including those ToImage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#toImage
+func (this *QOpenGLFramebufferObject) ToImageFull(flipped bool) *qtgui.QImage {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.ToImageFull")
+	r := C.qute_QOpenGLFramebufferObject_toImage_2(self, C.bool(flipped))
+	runtime.KeepAlive(this)
+	return rt.View[qtgui.QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
 }
 
 // QOpenGLFramebufferObjectBindDefault wraps QOpenGLFramebufferObject::bindDefault.
@@ -416,6 +481,8 @@ func QOpenGLFramebufferObjectBlitFramebufferRectOpenGLFramebufferObject(target Q
 //
 //	C++: void QOpenGLFramebufferObject::blitFramebuffer(QOpenGLFramebufferObject * target, const QRect & targetRect, QOpenGLFramebufferObject * source, const QRect & sourceRect, GLbitfield buffers = …, GLenum filter = …)
 //
+// Arguments with C++ defaults are left at them; QOpenGLFramebufferObjectBlitFramebufferRectFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#blitFramebuffer
 func QOpenGLFramebufferObjectBlitFramebufferRect(target QOpenGLFramebufferObjectLike, targetRect qtcore.QRect, source QOpenGLFramebufferObjectLike, sourceRect qtcore.QRect) {
 	rt.CheckThread("QOpenGLFramebufferObjectBlitFramebufferRect")
@@ -436,6 +503,8 @@ func QOpenGLFramebufferObjectBlitFramebufferRect(target QOpenGLFramebufferObject
 //
 //	C++: void QOpenGLFramebufferObject::blitFramebuffer(QOpenGLFramebufferObject * target, QOpenGLFramebufferObject * source, GLbitfield buffers = …, GLenum filter = …)
 //
+// Arguments with C++ defaults are left at them; QOpenGLFramebufferObjectBlitFramebufferFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#blitFramebuffer
 func QOpenGLFramebufferObjectBlitFramebuffer(target QOpenGLFramebufferObjectLike, source QOpenGLFramebufferObjectLike) {
 	rt.CheckThread("QOpenGLFramebufferObjectBlitFramebuffer")
@@ -448,6 +517,50 @@ func QOpenGLFramebufferObjectBlitFramebuffer(target QOpenGLFramebufferObjectLike
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebuffer")
 	}
 	C.qute_QOpenGLFramebufferObject_blitFramebuffer_3(targetPtr, sourcePtr)
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(source)
+}
+
+// QOpenGLFramebufferObjectBlitFramebufferRectFull wraps QOpenGLFramebufferObject::blitFramebuffer.
+//
+//	C++: void QOpenGLFramebufferObject::blitFramebuffer(QOpenGLFramebufferObject * target, const QRect & targetRect, QOpenGLFramebufferObject * source, const QRect & sourceRect, GLbitfield buffers = …, GLenum filter = …)
+//
+// QOpenGLFramebufferObjectBlitFramebufferRectFull is QOpenGLFramebufferObjectBlitFramebufferRect with every argument, including those QOpenGLFramebufferObjectBlitFramebufferRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#blitFramebuffer
+func QOpenGLFramebufferObjectBlitFramebufferRectFull(target QOpenGLFramebufferObjectLike, targetRect qtcore.QRect, source QOpenGLFramebufferObjectLike, sourceRect qtcore.QRect, buffers uint, filter uint) {
+	rt.CheckThread("QOpenGLFramebufferObjectBlitFramebufferRectFull")
+	var targetPtr unsafe.Pointer
+	if target != nil {
+		targetPtr = rt.UseArg(unsafe.Pointer(target.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferRectFull")
+	}
+	var sourcePtr unsafe.Pointer
+	if source != nil {
+		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferRectFull")
+	}
+	C.qute_QOpenGLFramebufferObject_blitFramebuffer_4(targetPtr, cQRect(targetRect), sourcePtr, cQRect(sourceRect), C.uint(buffers), C.uint(filter))
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(source)
+}
+
+// QOpenGLFramebufferObjectBlitFramebufferFull wraps QOpenGLFramebufferObject::blitFramebuffer.
+//
+//	C++: void QOpenGLFramebufferObject::blitFramebuffer(QOpenGLFramebufferObject * target, QOpenGLFramebufferObject * source, GLbitfield buffers = …, GLenum filter = …)
+//
+// QOpenGLFramebufferObjectBlitFramebufferFull is QOpenGLFramebufferObjectBlitFramebuffer with every argument, including those QOpenGLFramebufferObjectBlitFramebuffer leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#blitFramebuffer
+func QOpenGLFramebufferObjectBlitFramebufferFull(target QOpenGLFramebufferObjectLike, source QOpenGLFramebufferObjectLike, buffers uint, filter uint) {
+	rt.CheckThread("QOpenGLFramebufferObjectBlitFramebufferFull")
+	var targetPtr unsafe.Pointer
+	if target != nil {
+		targetPtr = rt.UseArg(unsafe.Pointer(target.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferFull")
+	}
+	var sourcePtr unsafe.Pointer
+	if source != nil {
+		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQOpenGLFramebufferObject()), "QOpenGLFramebufferObjectBlitFramebufferFull")
+	}
+	C.qute_QOpenGLFramebufferObject_blitFramebuffer_5(targetPtr, sourcePtr, C.uint(buffers), C.uint(filter))
 	runtime.KeepAlive(target)
 	runtime.KeepAlive(source)
 }

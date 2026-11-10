@@ -116,7 +116,7 @@ func (this *QTableView) SetHorizontalHeader(header QHeaderViewLike) {
 	C.qute_QTableView_setHorizontalHeader(self, headerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(header)
-	headerH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, headerH)
 }
 
 // SetVerticalHeader wraps QTableView::setVerticalHeader.
@@ -136,7 +136,7 @@ func (this *QTableView) SetVerticalHeader(header QHeaderViewLike) {
 	C.qute_QTableView_setVerticalHeader(self, headerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(header)
-	headerH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, headerH)
 }
 
 // RowViewportPosition wraps QTableView::rowViewportPosition.

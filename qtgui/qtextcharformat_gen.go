@@ -50,6 +50,8 @@ func NewQTextCharFormat() *QTextCharFormat {
 //
 //	C++: void QTextCharFormat::setFont(const QFont & font, FontPropertiesInheritanceBehavior behavior = …)
 //
+// Arguments with C++ defaults are left at them; SetFontFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextcharformat.html#setFont
 func (this *QTextCharFormat) SetFont(font *QFont) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFont")
@@ -426,6 +428,8 @@ func (this *QTextCharFormat) FontStretch() int {
 //
 //	C++: void QTextCharFormat::setFontStyleHint(QFont::StyleHint hint, QFont::StyleStrategy strategy = …)
 //
+// Arguments with C++ defaults are left at them; SetFontStyleHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextcharformat.html#setFontStyleHint
 func (this *QTextCharFormat) SetFontStyleHint(hint QFontStyleHint) {
 	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStyleHint")
@@ -792,4 +796,31 @@ func (this *QTextCharFormat) TableCellColumnSpan() int {
 	r := C.qute_QTextCharFormat_tableCellColumnSpan(self)
 	runtime.KeepAlive(this)
 	return int(r)
+}
+
+// SetFontFull wraps QTextCharFormat::setFont.
+//
+//	C++: void QTextCharFormat::setFont(const QFont & font, FontPropertiesInheritanceBehavior behavior = …)
+//
+// SetFontFull is SetFont with every argument, including those SetFont leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcharformat.html#setFont
+func (this *QTextCharFormat) SetFontFull(font *QFont, behavior QTextCharFormatFontPropertiesInheritanceBehavior) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontFull")
+	C.qute_QTextCharFormat_setFont_1(self, rt.UseArg(unsafe.Pointer(font), "QTextCharFormat.SetFontFull"), C.int64_t(behavior))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
+}
+
+// SetFontStyleHintFull wraps QTextCharFormat::setFontStyleHint.
+//
+//	C++: void QTextCharFormat::setFontStyleHint(QFont::StyleHint hint, QFont::StyleStrategy strategy = …)
+//
+// SetFontStyleHintFull is SetFontStyleHint with every argument, including those SetFontStyleHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextcharformat.html#setFontStyleHint
+func (this *QTextCharFormat) SetFontStyleHintFull(hint QFontStyleHint, strategy QFontStyleStrategy) {
+	self := rt.Use(unsafe.Pointer(this), "QTextCharFormat.SetFontStyleHintFull")
+	C.qute_QTextCharFormat_setFontStyleHint_1(self, C.int64_t(hint), C.int64_t(strategy))
+	runtime.KeepAlive(this)
 }

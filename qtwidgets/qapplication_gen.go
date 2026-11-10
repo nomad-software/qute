@@ -198,6 +198,8 @@ func QApplicationPalette(className string) *qtgui.QPalette {
 //
 //	C++: void QApplication::setPalette(const QPalette &, const char * className = …)
 //
+// Arguments with C++ defaults are left at them; QApplicationSetPaletteFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qapplication.html#setPalette
 func QApplicationSetPalette(palette *qtgui.QPalette) {
 	rt.CheckThread("QApplicationSetPalette")
@@ -254,6 +256,8 @@ func QApplicationFontForClass(className string) *qtgui.QFont {
 // QApplicationSetFont wraps QApplication::setFont.
 //
 //	C++: void QApplication::setFont(const QFont &, const char * className = …)
+//
+// Arguments with C++ defaults are left at them; QApplicationSetFontFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qapplication.html#setFont
 func QApplicationSetFont(font *qtgui.QFont) {
@@ -383,6 +387,8 @@ func QApplicationBeep() {
 // QApplicationAlert wraps QApplication::alert.
 //
 //	C++: void QApplication::alert(QWidget * widget, int duration = …)
+//
+// Arguments with C++ defaults are left at them; QApplicationAlertFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qapplication.html#alert
 func QApplicationAlert(widget QWidgetLike) {
@@ -526,9 +532,9 @@ func QApplicationStartDragDistance() int {
 //	C++: bool QApplication::isEffectEnabled(Qt::UIEffect)
 //
 // Qt docs: https://doc.qt.io/qt-6/qapplication.html#isEffectEnabled
-func QApplicationIsEffectEnabled(arg0 qtcore.UIEffect) bool {
+func QApplicationIsEffectEnabled(uIEffect qtcore.UIEffect) bool {
 	rt.CheckThread("QApplicationIsEffectEnabled")
-	r := C.qute_QApplication_isEffectEnabled(C.int64_t(arg0))
+	r := C.qute_QApplication_isEffectEnabled(C.int64_t(uIEffect))
 	return bool(r)
 }
 
@@ -536,10 +542,12 @@ func QApplicationIsEffectEnabled(arg0 qtcore.UIEffect) bool {
 //
 //	C++: void QApplication::setEffectEnabled(Qt::UIEffect, bool enable = …)
 //
+// Arguments with C++ defaults are left at them; QApplicationSetEffectEnabledFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qapplication.html#setEffectEnabled
-func QApplicationSetEffectEnabled(arg0 qtcore.UIEffect) {
+func QApplicationSetEffectEnabled(uIEffect qtcore.UIEffect) {
 	rt.CheckThread("QApplicationSetEffectEnabled")
-	C.qute_QApplication_setEffectEnabled(C.int64_t(arg0))
+	C.qute_QApplication_setEffectEnabled(C.int64_t(uIEffect))
 }
 
 // QApplicationExec wraps QApplication::exec.
@@ -571,6 +579,65 @@ func QApplicationCloseAllWindows() {
 func QApplicationAboutQt() {
 	rt.CheckThread("QApplicationAboutQt")
 	C.qute_QApplication_aboutQt()
+}
+
+// QApplicationSetPaletteFull wraps QApplication::setPalette.
+//
+//	C++: void QApplication::setPalette(const QPalette &, const char * className = …)
+//
+// QApplicationSetPaletteFull is QApplicationSetPalette with every argument, including those QApplicationSetPalette leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qapplication.html#setPalette
+func QApplicationSetPaletteFull(palette *qtgui.QPalette, className string) {
+	rt.CheckThread("QApplicationSetPaletteFull")
+	classNameCStr := C.CString(className)
+	defer C.free(unsafe.Pointer(classNameCStr))
+	C.qute_QApplication_setPalette_1(rt.UseArg(unsafe.Pointer(palette), "QApplicationSetPaletteFull"), classNameCStr)
+	runtime.KeepAlive(palette)
+}
+
+// QApplicationSetFontFull wraps QApplication::setFont.
+//
+//	C++: void QApplication::setFont(const QFont &, const char * className = …)
+//
+// QApplicationSetFontFull is QApplicationSetFont with every argument, including those QApplicationSetFont leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qapplication.html#setFont
+func QApplicationSetFontFull(font *qtgui.QFont, className string) {
+	rt.CheckThread("QApplicationSetFontFull")
+	classNameCStr := C.CString(className)
+	defer C.free(unsafe.Pointer(classNameCStr))
+	C.qute_QApplication_setFont_1(rt.UseArg(unsafe.Pointer(font), "QApplicationSetFontFull"), classNameCStr)
+	runtime.KeepAlive(font)
+}
+
+// QApplicationAlertFull wraps QApplication::alert.
+//
+//	C++: void QApplication::alert(QWidget * widget, int duration = …)
+//
+// QApplicationAlertFull is QApplicationAlert with every argument, including those QApplicationAlert leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qapplication.html#alert
+func QApplicationAlertFull(widget QWidgetLike, duration int) {
+	rt.CheckThread("QApplicationAlertFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QApplicationAlertFull")
+	}
+	C.qute_QApplication_alert_1(widgetPtr, C.int(duration))
+	runtime.KeepAlive(widget)
+}
+
+// QApplicationSetEffectEnabledFull wraps QApplication::setEffectEnabled.
+//
+//	C++: void QApplication::setEffectEnabled(Qt::UIEffect, bool enable = …)
+//
+// QApplicationSetEffectEnabledFull is QApplicationSetEffectEnabled with every argument, including those QApplicationSetEffectEnabled leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qapplication.html#setEffectEnabled
+func QApplicationSetEffectEnabledFull(uIEffect qtcore.UIEffect, enable bool) {
+	rt.CheckThread("QApplicationSetEffectEnabledFull")
+	C.qute_QApplication_setEffectEnabled_1(C.int64_t(uIEffect), C.bool(enable))
 }
 
 // OnFocusChanged connects f to the focusChanged signal. The connection ends when the

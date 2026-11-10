@@ -113,7 +113,7 @@ func (this *QStackedLayout) InsertWidget(index int, w QWidgetLike) int {
 	r := C.qute_QStackedLayout_insertWidget(self, C.int(index), wPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(w)
-	wH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
 	return int(r)
 }
 

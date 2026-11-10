@@ -52,10 +52,31 @@ func QRubberBandCast(o qtcore.QObjectLike) *QRubberBand {
 //
 //	C++: QRubberBand::QRubberBand(Shape, QWidget * = …)
 //
+// Arguments with C++ defaults are left at them; NewQRubberBandWithShapeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qrubberband.html#QRubberBand
-func NewQRubberBandWithShape(arg0 QRubberBandShape) *QRubberBand {
+func NewQRubberBandWithShape(shape QRubberBandShape) *QRubberBand {
 	rt.CheckThread("NewQRubberBandWithShape")
-	p := C.qute_QRubberBand_new(C.int64_t(arg0))
+	p := C.qute_QRubberBand_new(C.int64_t(shape))
+	h := rt.WrapClass(p, "QRubberBand", rt.NewOwned)
+	return rt.View[QRubberBand](h, p)
+}
+
+// NewQRubberBandWithShapeFull wraps the QRubberBand constructor.
+//
+//	C++: QRubberBand::QRubberBand(Shape, QWidget * = …)
+//
+// NewQRubberBandWithShapeFull is NewQRubberBandWithShape with every argument, including those NewQRubberBandWithShape leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qrubberband.html#QRubberBand
+func NewQRubberBandWithShapeFull(shape QRubberBandShape, widget QWidgetLike) *QRubberBand {
+	rt.CheckThread("NewQRubberBandWithShapeFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "NewQRubberBandWithShapeFull")
+	}
+	p := C.qute_QRubberBand_new_1(C.int64_t(shape), widgetPtr)
+	runtime.KeepAlive(widget)
 	h := rt.WrapClass(p, "QRubberBand", rt.NewOwned)
 	return rt.View[QRubberBand](h, p)
 }

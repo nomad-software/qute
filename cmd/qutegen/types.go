@@ -831,6 +831,9 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 }
 
 func (g *Gen) wrapExpr(cls *Class, p, mode string, ctx *Module) string {
+	if g.retOwner != "" && cls.Kind == KindPlain && mode != "rt.TakeOwned" && mode != "rt.NewOwned" && mode != "rt.NewParented" {
+		return fmt.Sprintf("rt.View[%s](rt.WrapClassFrom(%s, %q, %s, %s), %s)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name, mode, g.retOwner, p)
+	}
 	return fmt.Sprintf("rt.View[%s](rt.WrapClass(%s, %q, %s), %s)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name, mode, p)
 }
 

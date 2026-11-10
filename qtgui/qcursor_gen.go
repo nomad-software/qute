@@ -106,6 +106,8 @@ func NewQCursorWithCursorShape(shape qtcore.CursorShape) *QCursor {
 //
 //	C++: QCursor::QCursor(const QBitmap & bitmap, const QBitmap & mask, int hotX = …, int hotY = …)
 //
+// Arguments with C++ defaults are left at them; NewQCursorWithBitmapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
 func NewQCursorWithBitmap(bitmap *QBitmap, maskArg *QBitmap) *QCursor {
 	rt.CheckThread("NewQCursorWithBitmap")
@@ -120,10 +122,43 @@ func NewQCursorWithBitmap(bitmap *QBitmap, maskArg *QBitmap) *QCursor {
 //
 //	C++: QCursor::QCursor(const QPixmap & pixmap, int hotX = …, int hotY = …)
 //
+// Arguments with C++ defaults are left at them; NewQCursorWithPixmapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
 func NewQCursorWithPixmap(pixmap *QPixmap) *QCursor {
 	rt.CheckThread("NewQCursorWithPixmap")
 	p := C.qute_QCursor_new_3(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmap"))
+	runtime.KeepAlive(pixmap)
+	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	return rt.View[QCursor](h, p)
+}
+
+// NewQCursorWithBitmapFull wraps the QCursor constructor.
+//
+//	C++: QCursor::QCursor(const QBitmap & bitmap, const QBitmap & mask, int hotX = …, int hotY = …)
+//
+// NewQCursorWithBitmapFull is NewQCursorWithBitmap with every argument, including those NewQCursorWithBitmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
+func NewQCursorWithBitmapFull(bitmap *QBitmap, maskArg *QBitmap, hotX int, hotY int) *QCursor {
+	rt.CheckThread("NewQCursorWithBitmapFull")
+	p := C.qute_QCursor_new_4(rt.UseArg(unsafe.Pointer(bitmap), "NewQCursorWithBitmapFull"), rt.UseArg(unsafe.Pointer(maskArg), "NewQCursorWithBitmapFull"), C.int(hotX), C.int(hotY))
+	runtime.KeepAlive(bitmap)
+	runtime.KeepAlive(maskArg)
+	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	return rt.View[QCursor](h, p)
+}
+
+// NewQCursorWithPixmapFull wraps the QCursor constructor.
+//
+//	C++: QCursor::QCursor(const QPixmap & pixmap, int hotX = …, int hotY = …)
+//
+// NewQCursorWithPixmapFull is NewQCursorWithPixmap with every argument, including those NewQCursorWithPixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcursor.html#QCursor
+func NewQCursorWithPixmapFull(pixmap *QPixmap, hotX int, hotY int) *QCursor {
+	rt.CheckThread("NewQCursorWithPixmapFull")
+	p := C.qute_QCursor_new_5(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmapFull"), C.int(hotX), C.int(hotY))
 	runtime.KeepAlive(pixmap)
 	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)

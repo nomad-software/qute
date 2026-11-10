@@ -62,6 +62,8 @@ func (this *QGraphicsWidget) AsQGraphicsLayoutItem() *QGraphicsLayoutItem {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQGraphicsWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#QGraphicsWidget
 func NewQGraphicsWidget(parent QGraphicsItemLike) *QGraphicsWidget {
 	rt.CheckThread("NewQGraphicsWidget")
@@ -70,6 +72,31 @@ func NewQGraphicsWidget(parent QGraphicsItemLike) *QGraphicsWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsWidget")
 	}
 	p := C.qute_QGraphicsWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsWidget", mode)
+	return rt.View[QGraphicsWidget](h, p)
+}
+
+// NewQGraphicsWidgetFull wraps the QGraphicsWidget constructor.
+//
+//	C++: QGraphicsWidget::QGraphicsWidget(QGraphicsItem * parent = …, Qt::WindowFlags wFlags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQGraphicsWidgetFull is NewQGraphicsWidget with every argument, including those NewQGraphicsWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#QGraphicsWidget
+func NewQGraphicsWidgetFull(parent QGraphicsItemLike, wFlags qtcore.WindowFlags) *QGraphicsWidget {
+	rt.CheckThread("NewQGraphicsWidgetFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsWidgetFull")
+	}
+	p := C.qute_QGraphicsWidget_new_1(parentPtr, C.int64_t(wFlags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -90,7 +117,7 @@ func (this *QGraphicsWidget) Layout() *QGraphicsLayout {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Layout")
 	r := C.qute_QGraphicsWidget_layout(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsLayout](rt.WrapClass(r, "QGraphicsLayout", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsLayout](rt.WrapClassFrom(r, "QGraphicsLayout", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetLayout wraps QGraphicsWidget::setLayout.
@@ -112,7 +139,7 @@ func (this *QGraphicsWidget) SetLayout(layout QGraphicsLayoutLike) {
 	C.qute_QGraphicsWidget_setLayout(self, layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // AdjustSize wraps QGraphicsWidget::adjustSize.
@@ -539,6 +566,8 @@ func (this *QGraphicsWidget) FocusWidget() *QGraphicsWidget {
 //
 //	C++: int QGraphicsWidget::grabShortcut(const QKeySequence & sequence, Qt::ShortcutContext context = …)
 //
+// Arguments with C++ defaults are left at them; GrabShortcutFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#grabShortcut
 func (this *QGraphicsWidget) GrabShortcut(sequence *qtgui.QKeySequence) int {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.GrabShortcut")
@@ -563,6 +592,8 @@ func (this *QGraphicsWidget) ReleaseShortcut(idArg int) {
 //
 //	C++: void QGraphicsWidget::setShortcutEnabled(int id, bool enabled = …)
 //
+// Arguments with C++ defaults are left at them; SetShortcutEnabledFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setShortcutEnabled
 func (this *QGraphicsWidget) SetShortcutEnabled(idArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetShortcutEnabled")
@@ -573,6 +604,8 @@ func (this *QGraphicsWidget) SetShortcutEnabled(idArg int) {
 // SetShortcutAutoRepeat wraps QGraphicsWidget::setShortcutAutoRepeat.
 //
 //	C++: void QGraphicsWidget::setShortcutAutoRepeat(int id, bool enabled = …)
+//
+// Arguments with C++ defaults are left at them; SetShortcutAutoRepeatFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setShortcutAutoRepeat
 func (this *QGraphicsWidget) SetShortcutAutoRepeat(idArg int) {
@@ -703,6 +736,8 @@ func (this *QGraphicsWidget) Actions() []*qtgui.QAction {
 //
 //	C++: void QGraphicsWidget::setAttribute(Qt::WidgetAttribute attribute, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetAttributeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setAttribute
 func (this *QGraphicsWidget) SetAttribute(attribute qtcore.WidgetAttribute) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetAttribute")
@@ -738,6 +773,8 @@ func (this *QGraphicsWidget) Type() int {
 //
 //	C++: void QGraphicsWidget::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
 //
+// Arguments with C++ defaults are left at them; PaintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#paint
 func (this *QGraphicsWidget) Paint(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.Paint")
@@ -754,6 +791,8 @@ func (this *QGraphicsWidget) Paint(painter qtgui.QPainterLike, option *QStyleOpt
 // PaintWindowFrame wraps QGraphicsWidget::paintWindowFrame.
 //
 //	C++: void QGraphicsWidget::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
+//
+// Arguments with C++ defaults are left at them; PaintWindowFrameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#paintWindowFrame
 func (this *QGraphicsWidget) PaintWindowFrame(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem) {
@@ -826,6 +865,108 @@ func (this *QGraphicsWidget) EmitLayoutChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.EmitLayoutChanged")
 	C.qute_QGraphicsWidget_layoutChanged_1(self)
 	runtime.KeepAlive(this)
+}
+
+// GrabShortcutFull wraps QGraphicsWidget::grabShortcut.
+//
+//	C++: int QGraphicsWidget::grabShortcut(const QKeySequence & sequence, Qt::ShortcutContext context = …)
+//
+// GrabShortcutFull is GrabShortcut with every argument, including those GrabShortcut leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#grabShortcut
+func (this *QGraphicsWidget) GrabShortcutFull(sequence *qtgui.QKeySequence, context qtcore.ShortcutContext) int {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.GrabShortcutFull")
+	r := C.qute_QGraphicsWidget_grabShortcut_1(self, rt.UseArg(unsafe.Pointer(sequence), "QGraphicsWidget.GrabShortcutFull"), C.int64_t(context))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sequence)
+	return int(r)
+}
+
+// SetShortcutEnabledFull wraps QGraphicsWidget::setShortcutEnabled.
+//
+//	C++: void QGraphicsWidget::setShortcutEnabled(int id, bool enabled = …)
+//
+// SetShortcutEnabledFull is SetShortcutEnabled with every argument, including those SetShortcutEnabled leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setShortcutEnabled
+func (this *QGraphicsWidget) SetShortcutEnabledFull(idArg int, enabled bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetShortcutEnabledFull")
+	C.qute_QGraphicsWidget_setShortcutEnabled_1(self, C.int(idArg), C.bool(enabled))
+	runtime.KeepAlive(this)
+}
+
+// SetShortcutAutoRepeatFull wraps QGraphicsWidget::setShortcutAutoRepeat.
+//
+//	C++: void QGraphicsWidget::setShortcutAutoRepeat(int id, bool enabled = …)
+//
+// SetShortcutAutoRepeatFull is SetShortcutAutoRepeat with every argument, including those SetShortcutAutoRepeat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setShortcutAutoRepeat
+func (this *QGraphicsWidget) SetShortcutAutoRepeatFull(idArg int, enabled bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetShortcutAutoRepeatFull")
+	C.qute_QGraphicsWidget_setShortcutAutoRepeat_1(self, C.int(idArg), C.bool(enabled))
+	runtime.KeepAlive(this)
+}
+
+// SetAttributeFull wraps QGraphicsWidget::setAttribute.
+//
+//	C++: void QGraphicsWidget::setAttribute(Qt::WidgetAttribute attribute, bool on = …)
+//
+// SetAttributeFull is SetAttribute with every argument, including those SetAttribute leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#setAttribute
+func (this *QGraphicsWidget) SetAttributeFull(attribute qtcore.WidgetAttribute, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetAttributeFull")
+	C.qute_QGraphicsWidget_setAttribute_1(self, C.int64_t(attribute), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
+// PaintFull wraps QGraphicsWidget::paint.
+//
+//	C++: void QGraphicsWidget::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
+//
+// PaintFull is Paint with every argument, including those Paint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#paint
+func (this *QGraphicsWidget) PaintFull(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem, widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.PaintFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsWidget.PaintFull")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsWidget.PaintFull")
+	}
+	C.qute_QGraphicsWidget_paint_1(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.PaintFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+}
+
+// PaintWindowFrameFull wraps QGraphicsWidget::paintWindowFrame.
+//
+//	C++: void QGraphicsWidget::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = …)
+//
+// PaintWindowFrameFull is PaintWindowFrame with every argument, including those PaintWindowFrame leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicswidget.html#paintWindowFrame
+func (this *QGraphicsWidget) PaintWindowFrameFull(painter qtgui.QPainterLike, option *QStyleOptionGraphicsItem, widget QWidgetLike) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.PaintWindowFrameFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsWidget.PaintWindowFrameFull")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsWidget.PaintWindowFrameFull")
+	}
+	C.qute_QGraphicsWidget_paintWindowFrame_1(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.PaintWindowFrameFull"), widgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
 }
 
 // QGraphicsWidgetSetTabOrder wraps QGraphicsWidget::setTabOrder.

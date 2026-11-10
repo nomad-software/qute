@@ -181,7 +181,7 @@ func (this *QDialogButtonBox) AddButton(button QAbstractButtonLike, role QDialog
 	C.qute_QDialogButtonBox_addButton(self, buttonPtr, C.int64_t(role))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(button)
-	buttonH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, buttonH)
 }
 
 // AddButtonText wraps QDialogButtonBox::addButton.

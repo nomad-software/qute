@@ -106,6 +106,8 @@ func (this *QMdiArea) ActiveSubWindow() *QMdiSubWindow {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; SubWindowListFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmdiarea.html#subWindowList
 func (this *QMdiArea) SubWindowList() []*QMdiSubWindow {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SubWindowList")
@@ -122,6 +124,8 @@ func (this *QMdiArea) SubWindowList() []*QMdiSubWindow {
 //
 // Ownership: widget becomes Parented: Qt frees it from now on; the result is Parented: its Qt parent frees it.
 //
+// Arguments with C++ defaults are left at them; AddSubWindowFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmdiarea.html#addSubWindow
 func (this *QMdiArea) AddSubWindow(widget QWidgetLike) *QMdiSubWindow {
 	self := rt.Use(unsafe.Pointer(this), "QMdiArea.AddSubWindow")
@@ -133,7 +137,7 @@ func (this *QMdiArea) AddSubWindow(widget QWidgetLike) *QMdiSubWindow {
 	r := C.qute_QMdiArea_addSubWindow(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return rt.View[QMdiSubWindow](rt.WrapClass(r, "QMdiSubWindow", rt.TakeParented), r)
 }
 
@@ -209,6 +213,8 @@ func (this *QMdiArea) SetActivationOrder(order QMdiAreaWindowOrder) {
 // SetOption wraps QMdiArea::setOption.
 //
 //	C++: void QMdiArea::setOption(AreaOption option, bool on = …)
+//
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmdiarea.html#setOption
 func (this *QMdiArea) SetOption(option QMdiAreaAreaOptions) {
@@ -463,6 +469,60 @@ func (this *QMdiArea) EmitSubWindowActivated(mdiSubWindow QMdiSubWindowLike) {
 	C.qute_QMdiArea_subWindowActivated_1(self, mdiSubWindowPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(mdiSubWindow)
+}
+
+// SubWindowListFull wraps QMdiArea::subWindowList.
+//
+//	C++: QList<QMdiSubWindow *> QMdiArea::subWindowList(WindowOrder order = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// SubWindowListFull is SubWindowList with every argument, including those SubWindowList leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmdiarea.html#subWindowList
+func (this *QMdiArea) SubWindowListFull(order QMdiAreaWindowOrder) []*QMdiSubWindow {
+	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SubWindowListFull")
+	r := C.qute_QMdiArea_subWindowList_1(self, C.int64_t(order))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QMdiSubWindow {
+		return rt.View[QMdiSubWindow](rt.WrapClass(e, "QMdiSubWindow", rt.KeepOrBorrow), e)
+	})
+}
+
+// AddSubWindowFull wraps QMdiArea::addSubWindow.
+//
+//	C++: QMdiSubWindow * QMdiArea::addSubWindow(QWidget * widget, Qt::WindowFlags flags = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on; the result is Parented: its Qt parent frees it.
+//
+// AddSubWindowFull is AddSubWindow with every argument, including those AddSubWindow leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmdiarea.html#addSubWindow
+func (this *QMdiArea) AddSubWindowFull(widget QWidgetLike, flags qtcore.WindowFlags) *QMdiSubWindow {
+	self := rt.Use(unsafe.Pointer(this), "QMdiArea.AddSubWindowFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QMdiArea.AddSubWindowFull")
+	}
+	r := C.qute_QMdiArea_addSubWindow_1(self, widgetPtr, C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+	return rt.View[QMdiSubWindow](rt.WrapClass(r, "QMdiSubWindow", rt.TakeParented), r)
+}
+
+// SetOptionFull wraps QMdiArea::setOption.
+//
+//	C++: void QMdiArea::setOption(AreaOption option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmdiarea.html#setOption
+func (this *QMdiArea) SetOptionFull(option QMdiAreaAreaOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QMdiArea.SetOptionFull")
+	C.qute_QMdiArea_setOption_1(self, C.int64_t(option), C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // OnSubWindowActivated connects f to the subWindowActivated signal. The connection ends when the

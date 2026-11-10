@@ -299,6 +299,8 @@ func (this *QGridLayout) MinimumHeightForWidth(arg0 int) int {
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
 //
+// Arguments with C++ defaults are left at them; AddWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addWidget
 func (this *QGridLayout) AddWidget(widget QWidgetLike, row int, column int) {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.AddWidget")
@@ -310,7 +312,7 @@ func (this *QGridLayout) AddWidget(widget QWidgetLike, row int, column int) {
 	C.qute_QGridLayout_addWidget(self, widgetPtr, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // AddWidgetSpan wraps QGridLayout::addWidget.
@@ -318,6 +320,8 @@ func (this *QGridLayout) AddWidget(widget QWidgetLike, row int, column int) {
 //	C++: void QGridLayout::addWidget(QWidget *, int row, int column, int rowSpan, int columnSpan, Qt::Alignment = …)
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddWidgetSpanFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addWidget
 func (this *QGridLayout) AddWidgetSpan(widget QWidgetLike, row int, column int, rowSpan int, columnSpan int) {
@@ -330,7 +334,7 @@ func (this *QGridLayout) AddWidgetSpan(widget QWidgetLike, row int, column int, 
 	C.qute_QGridLayout_addWidget_1(self, widgetPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // AddLayout wraps QGridLayout::addLayout.
@@ -338,6 +342,8 @@ func (this *QGridLayout) AddWidgetSpan(widget QWidgetLike, row int, column int, 
 //	C++: void QGridLayout::addLayout(QLayout *, int row, int column, Qt::Alignment = …)
 //
 // Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddLayoutFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addLayout
 func (this *QGridLayout) AddLayout(layout QLayoutLike, row int, column int) {
@@ -350,7 +356,7 @@ func (this *QGridLayout) AddLayout(layout QLayoutLike, row int, column int) {
 	C.qute_QGridLayout_addLayout(self, layoutPtr, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // AddLayoutSpan wraps QGridLayout::addLayout.
@@ -358,6 +364,8 @@ func (this *QGridLayout) AddLayout(layout QLayoutLike, row int, column int) {
 //	C++: void QGridLayout::addLayout(QLayout *, int row, int column, int rowSpan, int columnSpan, Qt::Alignment = …)
 //
 // Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddLayoutSpanFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addLayout
 func (this *QGridLayout) AddLayoutSpan(layout QLayoutLike, row int, column int, rowSpan int, columnSpan int) {
@@ -370,7 +378,7 @@ func (this *QGridLayout) AddLayoutSpan(layout QLayoutLike, row int, column int, 
 	C.qute_QGridLayout_addLayout_1(self, layoutPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // SetOriginCorner wraps QGridLayout::setOriginCorner.
@@ -407,7 +415,7 @@ func (this *QGridLayout) ItemAtPosition(row int, column int) *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGridLayout.ItemAtPosition")
 	r := C.qute_QGridLayout_itemAtPosition(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QLayoutItem](rt.WrapClassFrom(r, "QLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // AddItemAt wraps QGridLayout::addItem.
@@ -415,6 +423,8 @@ func (this *QGridLayout) ItemAtPosition(row int, column int) *QLayoutItem {
 //	C++: void QGridLayout::addItem(QLayoutItem * item, int row, int column, int rowSpan = …, int columnSpan = …, Qt::Alignment = …)
 //
 // Ownership: item becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddItemAtFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addItem
 func (this *QGridLayout) AddItemAt(item QLayoutItemLike, row int, column int) {
@@ -427,7 +437,7 @@ func (this *QGridLayout) AddItemAt(item QLayoutItemLike, row int, column int) {
 	C.qute_QGridLayout_addItem(self, itemPtr, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetDefaultPositioning wraps QGridLayout::setDefaultPositioning.
@@ -455,4 +465,114 @@ func (this *QGridLayout) GetItemPosition(idx int) (int, int, int, int) {
 	C.qute_QGridLayout_getItemPosition(self, C.int(idx), &rowOut, &columnOut, &rowSpanOut, &columnSpanOut)
 	runtime.KeepAlive(this)
 	return int(rowOut), int(columnOut), int(rowSpanOut), int(columnSpanOut)
+}
+
+// AddWidgetFull wraps QGridLayout::addWidget.
+//
+//	C++: void QGridLayout::addWidget(QWidget *, int row, int column, Qt::Alignment = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// AddWidgetFull is AddWidget with every argument, including those AddWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addWidget
+func (this *QGridLayout) AddWidgetFull(widget QWidgetLike, row int, column int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGridLayout.AddWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGridLayout.AddWidgetFull")
+	}
+	C.qute_QGridLayout_addWidget_2(self, widgetPtr, C.int(row), C.int(column), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+}
+
+// AddWidgetSpanFull wraps QGridLayout::addWidget.
+//
+//	C++: void QGridLayout::addWidget(QWidget *, int row, int column, int rowSpan, int columnSpan, Qt::Alignment = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// AddWidgetSpanFull is AddWidgetSpan with every argument, including those AddWidgetSpan leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addWidget
+func (this *QGridLayout) AddWidgetSpanFull(widget QWidgetLike, row int, column int, rowSpan int, columnSpan int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGridLayout.AddWidgetSpanFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGridLayout.AddWidgetSpanFull")
+	}
+	C.qute_QGridLayout_addWidget_3(self, widgetPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+}
+
+// AddLayoutFull wraps QGridLayout::addLayout.
+//
+//	C++: void QGridLayout::addLayout(QLayout *, int row, int column, Qt::Alignment = …)
+//
+// Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// AddLayoutFull is AddLayout with every argument, including those AddLayout leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addLayout
+func (this *QGridLayout) AddLayoutFull(layout QLayoutLike, row int, column int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGridLayout.AddLayoutFull")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QGridLayout.AddLayoutFull")
+	}
+	C.qute_QGridLayout_addLayout_2(self, layoutPtr, C.int(row), C.int(column), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
+}
+
+// AddLayoutSpanFull wraps QGridLayout::addLayout.
+//
+//	C++: void QGridLayout::addLayout(QLayout *, int row, int column, int rowSpan, int columnSpan, Qt::Alignment = …)
+//
+// Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// AddLayoutSpanFull is AddLayoutSpan with every argument, including those AddLayoutSpan leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addLayout
+func (this *QGridLayout) AddLayoutSpanFull(layout QLayoutLike, row int, column int, rowSpan int, columnSpan int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGridLayout.AddLayoutSpanFull")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QGridLayout.AddLayoutSpanFull")
+	}
+	C.qute_QGridLayout_addLayout_3(self, layoutPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
+}
+
+// AddItemAtFull wraps QGridLayout::addItem.
+//
+//	C++: void QGridLayout::addItem(QLayoutItem * item, int row, int column, int rowSpan = …, int columnSpan = …, Qt::Alignment = …)
+//
+// Ownership: item becomes Parented: Qt frees it from now on.
+//
+// AddItemAtFull is AddItemAt with every argument, including those AddItemAt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgridlayout.html#addItem
+func (this *QGridLayout) AddItemAtFull(item QLayoutItemLike, row int, column int, rowSpan int, columnSpan int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGridLayout.AddItemAtFull")
+	var itemPtr unsafe.Pointer
+	var itemH *rt.Handle
+	if item != nil {
+		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQLayoutItem()), "QGridLayout.AddItemAtFull")
+	}
+	C.qute_QGridLayout_addItem_1(self, itemPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }

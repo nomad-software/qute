@@ -27,6 +27,12 @@ func init() {
 	rt.RegisterClass("QSurface", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QSurface_delete(p) })
 }
 
+// A QSurface may be a QObject (through a QObject subclass); its wrapper then
+// shares that object's handle and learns of its death.
+func init() {
+	rt.RegisterBaseOfQObject("QSurface", func(p unsafe.Pointer) unsafe.Pointer { return C.qute_QSurface_qobject(p) })
+}
+
 // QSurfaceFromPtr wraps an existing C++ QSurface. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QSurfaceFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSurface {

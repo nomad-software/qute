@@ -251,6 +251,14 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	if c.Kind != KindObject && c.HasDtor && (c.IR.Dtor == nil || c.IR.Dtor.Access == "public") {
 		add(cDecl("void", "qute_"+cls+"_delete", []string{"void *self"}), fmt.Sprintf("delete %s;", self))
 	}
+	if c.QBase {
+		add(cDecl("void *", "qute_"+cls+"_qobject", []string{"void *self"}),
+			fmt.Sprintf("return static_cast<void *>(dynamic_cast<QObject *>(%s));", self))
+	}
+	if c.Opts.Memory != nil {
+		add(cDecl("int64_t", "qute_"+cls+"_memory", []string{"void *self"}),
+			fmt.Sprintf("return static_cast<int64_t>(%s);", expandCpp(c.Opts.Memory.Size, fmt.Sprintf("static_cast<const %s *>(self)", cpp), nil)))
+	}
 	if c.QObject {
 		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(qobject_cast<%s *>(static_cast<QObject *>(obj)));", cpp))
@@ -397,15 +405,22 @@ func (g *Gen) emitCpp(m *Module, b *buf) {
 	for _, inc := range g.includes(m) {
 		b.p("#include <%s>", inc)
 	}
-	b.p("\n#include <cstring>\n#include <memory>\n")
+	b.p("\n#include <QtCore/QCoreApplication>\n#include <QtCore/QThread>\n#include <cstring>\n#include <memory>\n")
 	b.p("extern \"C\" {")
 	b.p("void qute_%s_signal(uintptr_t id, void *args);", m.Pkg)
 	b.p("void qute_%s_release(uintptr_t id);", m.Pkg)
-	b.p("void qute_%s_virtual(uintptr_t id, int idx, void *args, void *ret);", m.Pkg)
+	b.p("bool qute_%s_virtual(uintptr_t id, int idx, void *args, void *ret);", m.Pkg)
+	b.p("void qute_%s_wrong_thread(void);", m.Pkg)
 	b.p("void qute_%s_dead(void *key);", m.Pkg)
 	b.p("void qute_%s_call(uintptr_t id, void *args, void *ret);", m.Pkg)
 	b.p("}\n")
 	b.p("static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_%s_call(id, args, ret); }\n", m.Pkg)
+	b.p("// Every Qt call must come from the GUI thread; the Go side panics otherwise.")
+	b.p("// It is checked here, where it costs a thread-local read, so release builds")
+	b.p("// catch it too (qute_debug builds also name the method).")
+	b.p("static inline void qute_gui_only() {")
+	b.p("\tQCoreApplication *app = QCoreApplication::instance();")
+	b.p("\tif (app && QThread::currentThread() != app->thread()) {\n\t\tqute_%s_wrong_thread();\n\t}\n}\n", m.Pkg)
 	b.p("namespace {")
 	b.p("// GoSlot owns a Go closure id; Qt destroys the slot object on disconnect")
 	b.p("// or when the sender dies, which releases the closure.")
@@ -429,7 +444,7 @@ func (g *Gen) emitCpp(m *Module, b *buf) {
 	for _, c := range m.Classes {
 		b.p("// ---- %s", c.Name)
 		for _, f := range g.classCFuncs(c) {
-			b.p("%s {\n\t%s\n}", f.decl, f.body)
+			b.p("%s {\n\tqute_gui_only();\n\t%s\n}", f.decl, f.body)
 		}
 		b.p("")
 	}
@@ -486,16 +501,17 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 			b.p("\t\t\tvoid *args[] = {%s};", strings.Join(refs, ", "))
 			args = "args"
 		}
+		// false: the Go value is gone (its tree was collected and is about to
+		// be deleted), so the C++ implementation runs instead
 		if v.Ret.k == kVoid {
-			b.p("\t\t\tqute_%s_virtual(qute_id, %d, %s, nullptr);\n\t\t\treturn;", c.Module.Pkg, v.VIndex, args)
+			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, nullptr)) {\n\t\t\t\treturn;\n\t\t\t}", c.Module.Pkg, v.VIndex, args)
 		} else {
 			if v.Ret.k == kValue || v.Ret.k == kObj {
 				b.p("\t\t\t%s r = nullptr;", cType(v.Ret))
 			} else {
 				b.p("\t\t\t%s r{};", cType(v.Ret))
 			}
-			b.p("\t\t\tqute_%s_virtual(qute_id, %d, %s, &r);", c.Module.Pkg, v.VIndex, args)
-			b.p("\t\t\treturn %s;", g.cppVirtRet(v.Ret, "r"))
+			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {\n\t\t\t\treturn %s;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, g.cppVirtRet(v.Ret, "r"))
 		}
 		b.p("\t\t}")
 		if v.IR.Pure {
@@ -578,7 +594,8 @@ func (g *Gen) emitHelpers(m *Module) []byte {
 	pkg := m.Pkg
 	b.p("//export qute_%s_signal\nfunc qute_%s_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallback(uintptr(id), args) }\n", pkg, pkg)
 	b.p("//export qute_%s_release\nfunc qute_%s_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }\n", pkg, pkg)
-	b.p("//export qute_%s_virtual\nfunc qute_%s_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) {\n\trt.Dispatch(uintptr(id), int(idx), args, ret)\n}\n", pkg, pkg)
+	b.p("//export qute_%s_virtual\nfunc qute_%s_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {\n\treturn C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))\n}\n", pkg, pkg)
+	b.p("//export qute_%s_wrong_thread\nfunc qute_%s_wrong_thread() { rt.WrongThread() }\n", pkg, pkg)
 	b.p("//export qute_%s_dead\nfunc qute_%s_dead(key unsafe.Pointer) { rt.Destroyed(key, \"destroyed by Qt\") }\n", pkg, pkg)
 	b.p("//export qute_%s_call\nfunc qute_%s_call(id C.uintptr_t, args, ret unsafe.Pointer) { rt.InvokeFunc(uintptr(id), args, ret) }\n", pkg, pkg)
 	b.p("func checkLayout() string {\n\tif p := C.qute_%s_check_layout(); p != nil {\n\t\treturn C.GoString(p)\n\t}\n\treturn \"\"\n}\n", pkg)
@@ -835,6 +852,30 @@ func (g *Gen) emitClass(c *Class) []byte {
 	b.p("// As%s returns the receiver; it lets derived types be passed as %sLike.", cls, cls)
 	b.p("func (this *%s) As%s() *%s { return this }\n", cls, cls, cls)
 	b.p("func init() { rt.RegisterClass(%q, %s, %s) }\n", cls, kindConst(c), g.deleterExpr(c))
+	if c.QBase {
+		b.p("// A %s may be a QObject (through a QObject subclass); its wrapper then", cls)
+		b.p("// shares that object's handle and learns of its death.")
+		b.p("func init() {\n\trt.RegisterBaseOfQObject(%q, func(p unsafe.Pointer) unsafe.Pointer { return C.qute_%s_qobject(p) })\n}\n", cls, cls)
+	}
+	if mem := c.Opts.Memory; mem != nil {
+		if c.Kind != KindValue {
+			g.report.warn("%s: memory option on a class that is not a value class", cls)
+		}
+		b.p("// Each %s counts the bytes it holds outside the Go heap, so GC runs as they add up.", cls)
+		b.p("func init() {\n\trt.RegisterMemory(%q, func(p unsafe.Pointer) int64 { return int64(C.qute_%s_memory(p)) })\n}\n", cls, cls)
+		for _, n := range mem.ChangedBy {
+			found := false
+			for _, mm := range c.Methods {
+				found = found || mm.IR.Name == n
+			}
+			if !found {
+				g.report.warn("%s: memory changed-by %q is not a bound method", cls, n)
+			}
+		}
+	}
+	if len(c.Opts.DependsOn) > 0 && c.QObject {
+		g.report.warn("%s: depends-on on a QObject class does nothing; its death is watched directly", cls)
+	}
 	for i, dep := range c.Opts.DependsOn {
 		if dep.Cpp != "" {
 			if dc := g.classes[dep.Class]; dc == nil || dc.Opts.EnumsOnly {
@@ -989,6 +1030,11 @@ func (g *Gen) docLines(c *Class, mm *Method, b *buf, what string) {
 	if mm.Overlay != nil && mm.Overlay.Doc != "" {
 		b.p("//\n// %s", mm.Overlay.Doc)
 	}
+	if mm.FullOf != nil {
+		b.p("//\n// %s is %s with every argument, including those %s leaves at their C++ defaults.", mm.GoName, mm.FullOf.GoName, mm.FullOf.GoName)
+	} else if mm.FullName != "" {
+		b.p("//\n// Arguments with C++ defaults are left at them; %s takes every argument.", mm.FullName)
+	}
 	anchor := mm.IR.Name
 	if mm.IR.Kind == "ctor" {
 		anchor = mm.Class.Name
@@ -1082,7 +1128,14 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 			gc.args = append(gc.args, pp)
 			switch p.Rule {
 			case "transfer-to-cpp":
-				gc.post = append(gc.post, fmt.Sprintf("%s.TransferToCpp()", hh))
+				switch {
+				case mm.IR.Kind == "ctor":
+					gc.post = append(gc.post, fmt.Sprintf("rt.TransferTo(h, %s)", hh))
+				case mm.IR.Static || virtualParams:
+					gc.post = append(gc.post, fmt.Sprintf("%s.TransferToCpp()", hh))
+				default:
+					gc.post = append(gc.post, fmt.Sprintf("rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, %s)", hh))
+				}
 			case "transfer-to-go":
 				gc.post = append(gc.post, fmt.Sprintf("%s.TransferToGo()", hh))
 			case "transfer-this":
@@ -1110,7 +1163,13 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 		gc.pre = append(gc.pre, pre...)
 		gc.args = append(gc.args, args...)
 		if p.T.k == kList && p.T.elem.k == kObj && p.Rule == "transfer-to-cpp" {
-			gc.post = append(gc.post, fmt.Sprintf("for _, x := range %s {\n\t\tif x != nil {\n\t\t\trt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()\n\t\t}\n\t}", p.GoName))
+			owner := "nil"
+			if mm.IR.Kind == "ctor" {
+				owner = "h"
+			} else if !mm.IR.Static && !virtualParams {
+				owner = "rt.RefOf(unsafe.Pointer(this)).H"
+			}
+			gc.post = append(gc.post, fmt.Sprintf("for _, x := range %s {\n\t\tif x != nil {\n\t\t\trt.TransferTo(%s, rt.RefOf(unsafe.Pointer(x)).H)\n\t\t}\n\t}", p.GoName, owner))
 		}
 	}
 	return gc
@@ -1242,6 +1301,9 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 		for _, s := range gc.post {
 			b.p("\t%s", s)
 		}
+		if remeasures(c, mm) {
+			b.p("\trt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)")
+		}
 		switch {
 		case mm.Ret.k == kSelf:
 			b.p("\treturn this%s", outs)
@@ -1258,6 +1320,9 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 	for _, s := range gc.post {
 		b.p("\t%s", s)
 	}
+	if remeasures(c, mm) {
+		b.p("\trt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)")
+	}
 	if mm.Error {
 		msg := fmt.Sprintf("fmt.Errorf(\"%s: failed\")", method)
 		if mm.Overlay.ErrorMsg != "" {
@@ -1266,7 +1331,26 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 		b.p("\tif !bool(r) {\n\t\treturn %s%s\n\t}\n\treturn nil%s\n}\n", msg, outs, outs)
 		return
 	}
+	if !static {
+		// a plain object the receiver hands out lives no longer than it
+		g.retOwner = "rt.RefOf(unsafe.Pointer(this)).H"
+		defer func() { g.retOwner = "" }()
+	}
 	b.p("\treturn %s%s\n}\n", g.goRet(mm.Ret, "r", retMode(mm), m), outs)
+}
+
+// remeasures reports whether mm may change how much memory its receiver
+// holds (the class's memory changed-by list).
+func remeasures(c *Class, mm *Method) bool {
+	if c.Opts.Memory == nil || mm.IR.Static {
+		return false
+	}
+	for _, n := range c.Opts.Memory.ChangedBy {
+		if n == mm.IR.Name {
+			return true
+		}
+	}
+	return false
 }
 
 // unpackArgs converts a shim argument array into Go values. Scoped object
@@ -1363,6 +1447,10 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 			b.p("\t\t\tr := %s", call)
 			ex, _ := g.goVirtRet(v.Ret, "r", cls+"."+v.GoName, m)
 			b.p("\t\t\t*(*%s)(ret) = %s", g.cgoType(v.Ret), ex)
+			if v.RetRule != "" {
+				// the C++ caller owns what the override returns (rule 2)
+				b.p("\t\t\tif r != nil {\n\t\t\t\trt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()\n\t\t\t}")
+			}
 		}
 		b.p("\t\t}},")
 	}

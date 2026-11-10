@@ -172,10 +172,26 @@ func (this *QTextDocumentFragment) ToHtml() string {
 //
 //	C++: QString QTextDocumentFragment::toMarkdown(QTextDocument::MarkdownFeatures features = …) const
 //
+// Arguments with C++ defaults are left at them; ToMarkdownFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocumentfragment.html#toMarkdown
 func (this *QTextDocumentFragment) ToMarkdown() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.ToMarkdown")
 	r := C.qute_QTextDocumentFragment_toMarkdown(self)
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToMarkdownFull wraps QTextDocumentFragment::toMarkdown.
+//
+//	C++: QString QTextDocumentFragment::toMarkdown(QTextDocument::MarkdownFeatures features = …) const
+//
+// ToMarkdownFull is ToMarkdown with every argument, including those ToMarkdown leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocumentfragment.html#toMarkdown
+func (this *QTextDocumentFragment) ToMarkdownFull(features QTextDocumentMarkdownFeatures) string {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocumentFragment.ToMarkdownFull")
+	r := C.qute_QTextDocumentFragment_toMarkdown_1(self, C.int64_t(features))
 	runtime.KeepAlive(this)
 	return quteStr(r)
 }
@@ -199,6 +215,8 @@ func QTextDocumentFragmentFromPlainText(plainText string) *QTextDocumentFragment
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QTextDocumentFragmentFromHtmlFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocumentfragment.html#fromHtml
 func QTextDocumentFragmentFromHtml(html string) *QTextDocumentFragment {
 	rt.CheckThread("QTextDocumentFragmentFromHtml")
@@ -212,9 +230,46 @@ func QTextDocumentFragmentFromHtml(html string) *QTextDocumentFragment {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QTextDocumentFragmentFromMarkdownFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocumentfragment.html#fromMarkdown
 func QTextDocumentFragmentFromMarkdown(markdown string) *QTextDocumentFragment {
 	rt.CheckThread("QTextDocumentFragmentFromMarkdown")
 	r := C.qute_QTextDocumentFragment_fromMarkdown((*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)))
+	return rt.View[QTextDocumentFragment](rt.WrapClass(r, "QTextDocumentFragment", rt.TakeOwned), r)
+}
+
+// QTextDocumentFragmentFromHtmlFull wraps QTextDocumentFragment::fromHtml.
+//
+//	C++: QTextDocumentFragment QTextDocumentFragment::fromHtml(const QString & html, const QTextDocument * resourceProvider = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QTextDocumentFragmentFromHtmlFull is QTextDocumentFragmentFromHtml with every argument, including those QTextDocumentFragmentFromHtml leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocumentfragment.html#fromHtml
+func QTextDocumentFragmentFromHtmlFull(html string, resourceProvider QTextDocumentLike) *QTextDocumentFragment {
+	rt.CheckThread("QTextDocumentFragmentFromHtmlFull")
+	var resourceProviderPtr unsafe.Pointer
+	if resourceProvider != nil {
+		resourceProviderPtr = rt.UseArg(unsafe.Pointer(resourceProvider.AsQTextDocument()), "QTextDocumentFragmentFromHtmlFull")
+	}
+	r := C.qute_QTextDocumentFragment_fromHtml_1((*C.char)(unsafe.Pointer(unsafe.StringData(html))), C.ptrdiff_t(len(html)), resourceProviderPtr)
+	runtime.KeepAlive(resourceProvider)
+	return rt.View[QTextDocumentFragment](rt.WrapClass(r, "QTextDocumentFragment", rt.TakeOwned), r)
+}
+
+// QTextDocumentFragmentFromMarkdownFull wraps QTextDocumentFragment::fromMarkdown.
+//
+//	C++: QTextDocumentFragment QTextDocumentFragment::fromMarkdown(const QString & markdown, QTextDocument::MarkdownFeatures features = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QTextDocumentFragmentFromMarkdownFull is QTextDocumentFragmentFromMarkdown with every argument, including those QTextDocumentFragmentFromMarkdown leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocumentfragment.html#fromMarkdown
+func QTextDocumentFragmentFromMarkdownFull(markdown string, features QTextDocumentMarkdownFeatures) *QTextDocumentFragment {
+	rt.CheckThread("QTextDocumentFragmentFromMarkdownFull")
+	r := C.qute_QTextDocumentFragment_fromMarkdown_1((*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)), C.int64_t(features))
 	return rt.View[QTextDocumentFragment](rt.WrapClass(r, "QTextDocumentFragment", rt.TakeOwned), r)
 }

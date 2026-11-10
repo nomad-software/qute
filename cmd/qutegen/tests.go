@@ -116,7 +116,12 @@ func (t *testCtx) construct(cls *Class, parent string) (string, *Class, bool) {
 // gives receivers such as QTableWidget(rows, columns) a usable size.
 func (t *testCtx) constructPref(cls *Class, parent string, longest bool) (string, *Class, bool) {
 	for _, cc := range t.g.concreteFor(cls) {
-		ctors := append([]*Method{}, cc.Ctors...)
+		var ctors []*Method
+		for _, c := range cc.Ctors {
+			if c.FullOf == nil { // a Full form only adds defaults zeroArg would guess
+				ctors = append(ctors, c)
+			}
+		}
 		if longest {
 			sort.SliceStable(ctors, func(i, j int) bool { return len(ctors[i].Params) > len(ctors[j].Params) })
 		}
@@ -194,6 +199,9 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 		}
 		// constructors with a transfer-this parent
 		for _, ctor := range c.Ctors {
+			if ctor.FullOf != nil {
+				continue // the same rules and code path as its short form, tested there
+			}
 			if ctor.Overlay != nil && ctor.Overlay.Test != "" {
 				g.emitSnippet(t, c, ctor, b)
 				continue
@@ -276,6 +284,9 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 }
 
 func (g *Gen) emitMethodTest(t *testCtx, c *Class, mm *Method, b *buf) {
+	if mm.FullOf != nil {
+		return // the same rules and code path as its short form, tested there
+	}
 	if mm.Overlay != nil && mm.Overlay.Test != "" {
 		g.emitSnippet(t, c, mm, b)
 		return
@@ -560,8 +571,6 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 			b.p("\t\t%s.Delete()\n\t\tif %s.Alive() {\n\t\t\tt.Error(\"result alive after Delete\")\n\t\t}", res, res)
 		} else if mm.Ret.cls.QObject || mm.Overlay != nil && mm.Overlay.Created {
 			checks = append(checks, "DEAD:"+res)
-		} else {
-			g.report.unobservable(mm)
 		}
 	}
 	var dead []string

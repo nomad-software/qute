@@ -51,6 +51,8 @@ func QItemSelectionModelCast(o QObjectLike) *QItemSelectionModel {
 //
 //	C++: QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model = …)
 //
+// Arguments with C++ defaults are left at them; NewQItemSelectionModelFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#QItemSelectionModel
 func NewQItemSelectionModel() *QItemSelectionModel {
 	rt.CheckThread("NewQItemSelectionModel")
@@ -89,6 +91,25 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 	return rt.View[QItemSelectionModel](h, p)
 }
 
+// NewQItemSelectionModelFull wraps the QItemSelectionModel constructor.
+//
+//	C++: QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model = …)
+//
+// NewQItemSelectionModelFull is NewQItemSelectionModel with every argument, including those NewQItemSelectionModel leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#QItemSelectionModel
+func NewQItemSelectionModelFull(model QAbstractItemModelLike) *QItemSelectionModel {
+	rt.CheckThread("NewQItemSelectionModelFull")
+	var modelPtr unsafe.Pointer
+	if model != nil {
+		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelFull")
+	}
+	p := C.qute_QItemSelectionModel_new_2(modelPtr)
+	runtime.KeepAlive(model)
+	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	return rt.View[QItemSelectionModel](h, p)
+}
+
 // CurrentIndex wraps QItemSelectionModel::currentIndex.
 //
 //	C++: QModelIndex QItemSelectionModel::currentIndex() const
@@ -120,6 +141,8 @@ func (this *QItemSelectionModel) IsSelected(index *QModelIndex) bool {
 //
 //	C++: bool QItemSelectionModel::isRowSelected(int row, const QModelIndex & parent = …) const
 //
+// Arguments with C++ defaults are left at them; IsRowSelectedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#isRowSelected
 func (this *QItemSelectionModel) IsRowSelected(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsRowSelected")
@@ -131,6 +154,8 @@ func (this *QItemSelectionModel) IsRowSelected(row int) bool {
 // IsColumnSelected wraps QItemSelectionModel::isColumnSelected.
 //
 //	C++: bool QItemSelectionModel::isColumnSelected(int column, const QModelIndex & parent = …) const
+//
+// Arguments with C++ defaults are left at them; IsColumnSelectedFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#isColumnSelected
 func (this *QItemSelectionModel) IsColumnSelected(column int) bool {
@@ -144,6 +169,8 @@ func (this *QItemSelectionModel) IsColumnSelected(column int) bool {
 //
 //	C++: bool QItemSelectionModel::rowIntersectsSelection(int row, const QModelIndex & parent = …) const
 //
+// Arguments with C++ defaults are left at them; RowIntersectsSelectionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#rowIntersectsSelection
 func (this *QItemSelectionModel) RowIntersectsSelection(row int) bool {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.RowIntersectsSelection")
@@ -155,6 +182,8 @@ func (this *QItemSelectionModel) RowIntersectsSelection(row int) bool {
 // ColumnIntersectsSelection wraps QItemSelectionModel::columnIntersectsSelection.
 //
 //	C++: bool QItemSelectionModel::columnIntersectsSelection(int column, const QModelIndex & parent = …) const
+//
+// Arguments with C++ defaults are left at them; ColumnIntersectsSelectionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#columnIntersectsSelection
 func (this *QItemSelectionModel) ColumnIntersectsSelection(column int) bool {
@@ -194,6 +223,8 @@ func (this *QItemSelectionModel) SelectedIndexes() []*QModelIndex {
 //
 //	C++: QModelIndexList QItemSelectionModel::selectedRows(int column = …) const
 //
+// Arguments with C++ defaults are left at them; SelectedRowsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selectedRows
 func (this *QItemSelectionModel) SelectedRows() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedRows")
@@ -207,6 +238,8 @@ func (this *QItemSelectionModel) SelectedRows() []*QModelIndex {
 // SelectedColumns wraps QItemSelectionModel::selectedColumns.
 //
 //	C++: QModelIndexList QItemSelectionModel::selectedColumns(int row = …) const
+//
+// Arguments with C++ defaults are left at them; SelectedColumnsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selectedColumns
 func (this *QItemSelectionModel) SelectedColumns() []*QModelIndex {
@@ -412,6 +445,98 @@ func (this *QItemSelectionModel) EmitModelChanged(model QAbstractItemModelLike) 
 	C.qute_QItemSelectionModel_modelChanged_1(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
+}
+
+// IsRowSelectedFull wraps QItemSelectionModel::isRowSelected.
+//
+//	C++: bool QItemSelectionModel::isRowSelected(int row, const QModelIndex & parent = …) const
+//
+// IsRowSelectedFull is IsRowSelected with every argument, including those IsRowSelected leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#isRowSelected
+func (this *QItemSelectionModel) IsRowSelectedFull(row int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsRowSelectedFull")
+	r := C.qute_QItemSelectionModel_isRowSelected_1(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QItemSelectionModel.IsRowSelectedFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// IsColumnSelectedFull wraps QItemSelectionModel::isColumnSelected.
+//
+//	C++: bool QItemSelectionModel::isColumnSelected(int column, const QModelIndex & parent = …) const
+//
+// IsColumnSelectedFull is IsColumnSelected with every argument, including those IsColumnSelected leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#isColumnSelected
+func (this *QItemSelectionModel) IsColumnSelectedFull(column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsColumnSelectedFull")
+	r := C.qute_QItemSelectionModel_isColumnSelected_1(self, C.int(column), rt.UseArg(unsafe.Pointer(parent), "QItemSelectionModel.IsColumnSelectedFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RowIntersectsSelectionFull wraps QItemSelectionModel::rowIntersectsSelection.
+//
+//	C++: bool QItemSelectionModel::rowIntersectsSelection(int row, const QModelIndex & parent = …) const
+//
+// RowIntersectsSelectionFull is RowIntersectsSelection with every argument, including those RowIntersectsSelection leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#rowIntersectsSelection
+func (this *QItemSelectionModel) RowIntersectsSelectionFull(row int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.RowIntersectsSelectionFull")
+	r := C.qute_QItemSelectionModel_rowIntersectsSelection_1(self, C.int(row), rt.UseArg(unsafe.Pointer(parent), "QItemSelectionModel.RowIntersectsSelectionFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// ColumnIntersectsSelectionFull wraps QItemSelectionModel::columnIntersectsSelection.
+//
+//	C++: bool QItemSelectionModel::columnIntersectsSelection(int column, const QModelIndex & parent = …) const
+//
+// ColumnIntersectsSelectionFull is ColumnIntersectsSelection with every argument, including those ColumnIntersectsSelection leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#columnIntersectsSelection
+func (this *QItemSelectionModel) ColumnIntersectsSelectionFull(column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.ColumnIntersectsSelectionFull")
+	r := C.qute_QItemSelectionModel_columnIntersectsSelection_1(self, C.int(column), rt.UseArg(unsafe.Pointer(parent), "QItemSelectionModel.ColumnIntersectsSelectionFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// SelectedRowsFull wraps QItemSelectionModel::selectedRows.
+//
+//	C++: QModelIndexList QItemSelectionModel::selectedRows(int column = …) const
+//
+// SelectedRowsFull is SelectedRows with every argument, including those SelectedRows leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selectedRows
+func (this *QItemSelectionModel) SelectedRowsFull(column int) []*QModelIndex {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedRowsFull")
+	r := C.qute_QItemSelectionModel_selectedRows_1(self, C.int(column))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
+		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// SelectedColumnsFull wraps QItemSelectionModel::selectedColumns.
+//
+//	C++: QModelIndexList QItemSelectionModel::selectedColumns(int row = …) const
+//
+// SelectedColumnsFull is SelectedColumns with every argument, including those SelectedColumns leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#selectedColumns
+func (this *QItemSelectionModel) SelectedColumnsFull(row int) []*QModelIndex {
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedColumnsFull")
+	r := C.qute_QItemSelectionModel_selectedColumns_1(self, C.int(row))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
+		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the

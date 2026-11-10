@@ -12,12 +12,6 @@ type Report struct {
 	blind    []string
 }
 
-// unobservable records a Parented result that Qt itself created from a
-// non-QObject class: nothing tells Go when its owner frees it.
-func (r *Report) unobservable(m *Method) {
-	r.blind = append(r.blind, fmt.Sprintf("- `%s`", m.Sig))
-}
-
 func (r *Report) untested(m *Method, why string) {
 	r.noTest = append(r.noTest, fmt.Sprintf("- `%s`: %s", m.Sig, why))
 }
@@ -48,12 +42,22 @@ func (g *Gen) writeReport(path string) error {
 
 	type row struct{ cls, text string }
 	var rules, numbered, skipped []row
-	total := 0
+	total, fulls, tied := 0, 0, 0
 	for _, m := range g.modules {
 		for _, c := range m.Classes {
 			all := append(append(append([]*Method{}, c.Ctors...), c.Methods...), c.Statics...)
 			for _, mm := range all {
 				total++
+				if mm.FullOf != nil {
+					fulls++ // same rules as its short form, reported there
+					continue
+				}
+				switch plainResult(mm) {
+				case "tied":
+					tied++
+				case "blind":
+					g.report.blind = append(g.report.blind, fmt.Sprintf("- `%s`", mm.Sig))
+				}
 				var defaults []string
 				for _, prm := range mm.Params {
 					if mm.IR.Kind == "ctor" && prm.Rule == "transfer-this" && prm.Name == "parent" {
@@ -168,9 +172,9 @@ func (g *Gen) writeReport(path string) error {
 	}
 	if len(g.report.blind) > 0 {
 		p("## Results whose death qute cannot see (%d)\n", len(g.report.blind))
-		p("Qt creates these items itself, and they are not QObjects, so no death notice")
-		p("reaches Go. The handle is Parented and correct while the owner lives; after")
-		p("the owner is deleted, do not use it.\n")
+		p("These functions return an object Qt made that is neither a QObject nor a")
+		p("notifying subclass, and they have no receiver the result could depend on,")
+		p("so nothing tells Go when it is freed. Do not keep the result.\n")
 		for _, w := range g.report.blind {
 			p("%s", w)
 		}
@@ -186,6 +190,8 @@ func (g *Gen) writeReport(path string) error {
 	var sum strings.Builder
 	fmt.Fprintf(&sum, "## Summary\n\n| | Count |\n| --- | --- |\n")
 	fmt.Fprintf(&sum, "| Bound constructors, methods and functions | %d |\n", total)
+	fmt.Fprintf(&sum, "| of which Full forms (every argument, defaults included) | %d |\n", fulls)
+	fmt.Fprintf(&sum, "| Plain-object results that depend on their receiver | %d |\n", tied)
 	fmt.Fprintf(&sum, "| Skipped on purpose (with reasons below) | %d |\n", len(onPurpose))
 	fmt.Fprintf(&sum, "| Default ownership rules to review | %d |\n", len(rules))
 	fmt.Fprintf(&sum, "| Numbered overload names | %d |\n", len(numbered))
@@ -198,4 +204,30 @@ func (g *Gen) writeReport(path string) error {
 		fmt.Fprintf(&sum, "%d item(s) open; see their sections below.\n\n", open)
 	}
 	return writeFile(path, []byte(strings.Replace(b.String(), "{{SUMMARY}}\n", sum.String(), 1)))
+}
+
+// plainResult classifies a method whose result is a plain object Qt made
+// (not a QObject, value copy or object built by the binding), which qute
+// cannot watch: "tied" when it depends on the receiver (WrapClassFrom: Use
+// panics once the receiver is gone), "blind" for a function with no
+// receiver (unless an overlay marks it reviewed), "" otherwise. A plain base of QObject classes (QPaintDevice)
+// still counts: the pointer may be a plain object too.
+func plainResult(mm *Method) string {
+	if mm.Ret == nil || mm.IR == nil || mm.IR.Kind == "ctor" || mm.Overlay != nil && mm.Overlay.Created {
+		return ""
+	}
+	t := mm.Ret
+	if t.k == kList {
+		t = t.elem
+	}
+	if t == nil || t.k != kObj || t.cls.Kind != KindPlain || mm.RetRule == "transfer-to-go" {
+		return ""
+	}
+	if mm.IR.Static {
+		if mm.Overlay != nil && mm.Overlay.Reviewed {
+			return "" // a person checked how long it lives (doc says)
+		}
+		return "blind"
+	}
+	return "tied"
 }

@@ -52,6 +52,8 @@ func QClipboardCast(o qtcore.QObjectLike) *QClipboard {
 //
 //	C++: void QClipboard::clear(Mode mode = …)
 //
+// Arguments with C++ defaults are left at them; ClearFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#clear
 func (this *QClipboard) Clear() {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Clear")
@@ -123,6 +125,8 @@ func (this *QClipboard) OwnsFindBuffer() bool {
 //
 //	C++: QString QClipboard::text(Mode mode = …) const
 //
+// Arguments with C++ defaults are left at them; TextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#text
 func (this *QClipboard) Text() string {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Text")
@@ -137,6 +141,8 @@ func (this *QClipboard) Text() string {
 //
 // subtype is read (the MIME subtype wanted, or empty for any) and set to the subtype found.
 //
+// Arguments with C++ defaults are left at them; TextWithSubtypeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#text
 func (this *QClipboard) TextWithSubtype(subtype string) (string, string) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.TextWithSubtype")
@@ -150,6 +156,8 @@ func (this *QClipboard) TextWithSubtype(subtype string) (string, string) {
 //
 //	C++: void QClipboard::setText(const QString &, Mode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setText
 func (this *QClipboard) SetText(stringArg string) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetText")
@@ -162,6 +170,8 @@ func (this *QClipboard) SetText(stringArg string) {
 //	C++: const QMimeData * QClipboard::mimeData(Mode mode = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; MimeDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#mimeData
 func (this *QClipboard) MimeData() *qtcore.QMimeData {
@@ -179,6 +189,8 @@ func (this *QClipboard) MimeData() *qtcore.QMimeData {
 //
 // The clipboard takes ownership of data.
 //
+// Arguments with C++ defaults are left at them; SetMimeDataFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setMimeData
 func (this *QClipboard) SetMimeData(data qtcore.QMimeDataLike) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetMimeData")
@@ -190,7 +202,7 @@ func (this *QClipboard) SetMimeData(data qtcore.QMimeDataLike) {
 	C.qute_QClipboard_setMimeData(self, dataPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(data)
-	dataH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, dataH)
 }
 
 // Image wraps QClipboard::image.
@@ -198,6 +210,8 @@ func (this *QClipboard) SetMimeData(data qtcore.QMimeDataLike) {
 //	C++: QImage QClipboard::image(Mode mode = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ImageFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#image
 func (this *QClipboard) Image() *QImage {
@@ -213,6 +227,8 @@ func (this *QClipboard) Image() *QImage {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; PixmapFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#pixmap
 func (this *QClipboard) Pixmap() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.Pixmap")
@@ -225,6 +241,8 @@ func (this *QClipboard) Pixmap() *QPixmap {
 //
 //	C++: void QClipboard::setImage(const QImage &, Mode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetImageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setImage
 func (this *QClipboard) SetImage(image *QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetImage")
@@ -236,6 +254,8 @@ func (this *QClipboard) SetImage(image *QImage) {
 // SetPixmap wraps QClipboard::setPixmap.
 //
 //	C++: void QClipboard::setPixmap(const QPixmap &, Mode mode = …)
+//
+// Arguments with C++ defaults are left at them; SetPixmapFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setPixmap
 func (this *QClipboard) SetPixmap(pixmap *QPixmap) {
@@ -287,6 +307,163 @@ func (this *QClipboard) EmitDataChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QClipboard.EmitDataChanged")
 	C.qute_QClipboard_dataChanged_1(self)
 	runtime.KeepAlive(this)
+}
+
+// ClearFull wraps QClipboard::clear.
+//
+//	C++: void QClipboard::clear(Mode mode = …)
+//
+// ClearFull is Clear with every argument, including those Clear leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#clear
+func (this *QClipboard) ClearFull(mode QClipboardMode) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.ClearFull")
+	C.qute_QClipboard_clear_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// TextFull wraps QClipboard::text.
+//
+//	C++: QString QClipboard::text(Mode mode = …) const
+//
+// TextFull is Text with every argument, including those Text leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#text
+func (this *QClipboard) TextFull(mode QClipboardMode) string {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.TextFull")
+	r := C.qute_QClipboard_text_2(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// TextWithSubtypeFull wraps QClipboard::text.
+//
+//	C++: QString QClipboard::text(QString & subtype, Mode mode = …) const
+//
+// subtype is read (the MIME subtype wanted, or empty for any) and set to the subtype found.
+//
+// TextWithSubtypeFull is TextWithSubtype with every argument, including those TextWithSubtype leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#text
+func (this *QClipboard) TextWithSubtypeFull(subtype string, mode QClipboardMode) (string, string) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.TextWithSubtypeFull")
+	var subtypeOut C.qute_str
+	r := C.qute_QClipboard_text_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subtype))), C.ptrdiff_t(len(subtype)), &subtypeOut, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return quteStr(r), quteStr(subtypeOut)
+}
+
+// SetTextFull wraps QClipboard::setText.
+//
+//	C++: void QClipboard::setText(const QString &, Mode mode = …)
+//
+// SetTextFull is SetText with every argument, including those SetText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setText
+func (this *QClipboard) SetTextFull(stringArg string, mode QClipboardMode) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetTextFull")
+	C.qute_QClipboard_setText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// MimeDataFull wraps QClipboard::mimeData.
+//
+//	C++: const QMimeData * QClipboard::mimeData(Mode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// MimeDataFull is MimeData with every argument, including those MimeData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#mimeData
+func (this *QClipboard) MimeDataFull(mode QClipboardMode) *qtcore.QMimeData {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.MimeDataFull")
+	r := C.qute_QClipboard_mimeData_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
+}
+
+// SetMimeDataFull wraps QClipboard::setMimeData.
+//
+//	C++: void QClipboard::setMimeData(QMimeData * data, Mode mode = …)
+//
+// Ownership: data becomes Parented: Qt frees it from now on.
+//
+// The clipboard takes ownership of data.
+//
+// SetMimeDataFull is SetMimeData with every argument, including those SetMimeData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setMimeData
+func (this *QClipboard) SetMimeDataFull(data qtcore.QMimeDataLike, mode QClipboardMode) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetMimeDataFull")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "QClipboard.SetMimeDataFull")
+	}
+	C.qute_QClipboard_setMimeData_1(self, dataPtr, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, dataH)
+}
+
+// ImageFull wraps QClipboard::image.
+//
+//	C++: QImage QClipboard::image(Mode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ImageFull is Image with every argument, including those Image leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#image
+func (this *QClipboard) ImageFull(mode QClipboardMode) *QImage {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.ImageFull")
+	r := C.qute_QClipboard_image_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QImage](rt.WrapClass(r, "QImage", rt.TakeOwned), r)
+}
+
+// PixmapFull wraps QClipboard::pixmap.
+//
+//	C++: QPixmap QClipboard::pixmap(Mode mode = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// PixmapFull is Pixmap with every argument, including those Pixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#pixmap
+func (this *QClipboard) PixmapFull(mode QClipboardMode) *QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.PixmapFull")
+	r := C.qute_QClipboard_pixmap_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// SetImageFull wraps QClipboard::setImage.
+//
+//	C++: void QClipboard::setImage(const QImage &, Mode mode = …)
+//
+// SetImageFull is SetImage with every argument, including those SetImage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setImage
+func (this *QClipboard) SetImageFull(image *QImage, mode QClipboardMode) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetImageFull")
+	C.qute_QClipboard_setImage_1(self, rt.UseArg(unsafe.Pointer(image), "QClipboard.SetImageFull"), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
+}
+
+// SetPixmapFull wraps QClipboard::setPixmap.
+//
+//	C++: void QClipboard::setPixmap(const QPixmap &, Mode mode = …)
+//
+// SetPixmapFull is SetPixmap with every argument, including those SetPixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qclipboard.html#setPixmap
+func (this *QClipboard) SetPixmapFull(pixmap *QPixmap, mode QClipboardMode) {
+	self := rt.Use(unsafe.Pointer(this), "QClipboard.SetPixmapFull")
+	C.qute_QClipboard_setPixmap_1(self, rt.UseArg(unsafe.Pointer(pixmap), "QClipboard.SetPixmapFull"), C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

@@ -100,6 +100,8 @@ func NewQTextDocumentWithText(text string, parent qtcore.QObjectLike) *QTextDocu
 //
 // Ownership: the result is Owned: Go frees it.
 //
+// Arguments with C++ defaults are left at them; CloneFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#clone
 func (this *QTextDocument) Clone() *QTextDocument {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Clone")
@@ -264,6 +266,8 @@ func (this *QTextDocument) SetHtml(html string) {
 //
 //	C++: QString QTextDocument::toMarkdown(MarkdownFeatures features = …) const
 //
+// Arguments with C++ defaults are left at them; ToMarkdownFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#toMarkdown
 func (this *QTextDocument) ToMarkdown() string {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ToMarkdown")
@@ -275,6 +279,8 @@ func (this *QTextDocument) ToMarkdown() string {
 // SetMarkdown wraps QTextDocument::setMarkdown.
 //
 //	C++: void QTextDocument::setMarkdown(const QString & markdown, MarkdownFeatures features = …)
+//
+// Arguments with C++ defaults are left at them; SetMarkdownFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setMarkdown
 func (this *QTextDocument) SetMarkdown(markdown string) {
@@ -336,6 +342,8 @@ func (this *QTextDocument) CharacterAt(pos int) rune {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; FindFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
 func (this *QTextDocument) Find(subString string) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.Find")
@@ -349,6 +357,8 @@ func (this *QTextDocument) Find(subString string) *QTextCursor {
 //	C++: QTextCursor QTextDocument::find(const QString & subString, const QTextCursor & cursor, FindFlags options = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; FindWithTextCursorFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
 func (this *QTextDocument) FindWithTextCursor(subString string, cursor *QTextCursor) *QTextCursor {
@@ -365,6 +375,8 @@ func (this *QTextDocument) FindWithTextCursor(subString string, cursor *QTextCur
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; FindRegularExpressionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
 func (this *QTextDocument) FindRegularExpression(expr *qtcore.QRegularExpression) *QTextCursor {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpression")
@@ -379,6 +391,8 @@ func (this *QTextDocument) FindRegularExpression(expr *qtcore.QRegularExpression
 //	C++: QTextCursor QTextDocument::find(const QRegularExpression & expr, const QTextCursor & cursor, FindFlags options = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; FindRegularExpressionTextCursorFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
 func (this *QTextDocument) FindRegularExpressionTextCursor(expr *qtcore.QRegularExpression, cursor *QTextCursor) *QTextCursor {
@@ -823,6 +837,8 @@ func (this *QTextDocument) IsLayoutEnabled() bool {
 //
 //	C++: void QTextDocument::drawContents(QPainter * painter, const QRectF & rect = …)
 //
+// Arguments with C++ defaults are left at them; DrawContentsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#drawContents
 func (this *QTextDocument) DrawContents(painter QPainterLike) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DrawContents")
@@ -1026,6 +1042,8 @@ func (this *QTextDocument) RedoWithTextCursor(cursor *QTextCursor) {
 //
 //	C++: void QTextDocument::clearUndoRedoStacks(Stacks historyToClear = …)
 //
+// Arguments with C++ defaults are left at them; ClearUndoRedoStacksFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#clearUndoRedoStacks
 func (this *QTextDocument) ClearUndoRedoStacks() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ClearUndoRedoStacks")
@@ -1157,6 +1175,8 @@ func (this *QTextDocument) Redo() {
 //
 //	C++: void QTextDocument::setModified(bool m = …)
 //
+// Arguments with C++ defaults are left at them; SetModifiedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setModified
 func (this *QTextDocument) SetModified() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetModified")
@@ -1273,6 +1293,166 @@ func (this *QTextDocument) EmitBaseUrlChanged(url *qtcore.QUrl) {
 func (this *QTextDocument) EmitDocumentLayoutChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.EmitDocumentLayoutChanged")
 	C.qute_QTextDocument_documentLayoutChanged_1(self)
+	runtime.KeepAlive(this)
+}
+
+// CloneFull wraps QTextDocument::clone.
+//
+//	C++: QTextDocument * QTextDocument::clone(QObject * parent = …) const
+//
+// Ownership: the result is Owned: Go frees it.
+//
+// CloneFull is Clone with every argument, including those Clone leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#clone
+func (this *QTextDocument) CloneFull(parent qtcore.QObjectLike) *QTextDocument {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.CloneFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "QTextDocument.CloneFull")
+	}
+	r := C.qute_QTextDocument_clone_1(self, parentPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	return rt.View[QTextDocument](rt.WrapClass(r, "QTextDocument", rt.TakeOwned), r)
+}
+
+// ToMarkdownFull wraps QTextDocument::toMarkdown.
+//
+//	C++: QString QTextDocument::toMarkdown(MarkdownFeatures features = …) const
+//
+// ToMarkdownFull is ToMarkdown with every argument, including those ToMarkdown leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#toMarkdown
+func (this *QTextDocument) ToMarkdownFull(features QTextDocumentMarkdownFeatures) string {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ToMarkdownFull")
+	r := C.qute_QTextDocument_toMarkdown_1(self, C.int64_t(features))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetMarkdownFull wraps QTextDocument::setMarkdown.
+//
+//	C++: void QTextDocument::setMarkdown(const QString & markdown, MarkdownFeatures features = …)
+//
+// SetMarkdownFull is SetMarkdown with every argument, including those SetMarkdown leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setMarkdown
+func (this *QTextDocument) SetMarkdownFull(markdown string, features QTextDocumentMarkdownFeatures) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetMarkdownFull")
+	C.qute_QTextDocument_setMarkdown_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(markdown))), C.ptrdiff_t(len(markdown)), C.int64_t(features))
+	runtime.KeepAlive(this)
+}
+
+// FindFull wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QString & subString, int from = …, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// FindFull is Find with every argument, including those Find leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindFull(subString string, from int, options QTextDocumentFindFlags) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindFull")
+	r := C.qute_QTextDocument_find_4(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)), C.int(from), C.int64_t(options))
+	runtime.KeepAlive(this)
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FindWithTextCursorFull wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QString & subString, const QTextCursor & cursor, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// FindWithTextCursorFull is FindWithTextCursor with every argument, including those FindWithTextCursor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindWithTextCursorFull(subString string, cursor *QTextCursor, options QTextDocumentFindFlags) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindWithTextCursorFull")
+	r := C.qute_QTextDocument_find_5(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)), rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.FindWithTextCursorFull"), C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cursor)
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FindRegularExpressionFull wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QRegularExpression & expr, int from = …, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// FindRegularExpressionFull is FindRegularExpression with every argument, including those FindRegularExpression leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindRegularExpressionFull(expr *qtcore.QRegularExpression, from int, options QTextDocumentFindFlags) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpressionFull")
+	r := C.qute_QTextDocument_find_6(self, rt.UseArg(unsafe.Pointer(expr), "QTextDocument.FindRegularExpressionFull"), C.int(from), C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(expr)
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// FindRegularExpressionTextCursorFull wraps QTextDocument::find.
+//
+//	C++: QTextCursor QTextDocument::find(const QRegularExpression & expr, const QTextCursor & cursor, FindFlags options = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// FindRegularExpressionTextCursorFull is FindRegularExpressionTextCursor with every argument, including those FindRegularExpressionTextCursor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#find
+func (this *QTextDocument) FindRegularExpressionTextCursorFull(expr *qtcore.QRegularExpression, cursor *QTextCursor, options QTextDocumentFindFlags) *QTextCursor {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.FindRegularExpressionTextCursorFull")
+	r := C.qute_QTextDocument_find_7(self, rt.UseArg(unsafe.Pointer(expr), "QTextDocument.FindRegularExpressionTextCursorFull"), rt.UseArg(unsafe.Pointer(cursor), "QTextDocument.FindRegularExpressionTextCursorFull"), C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(expr)
+	runtime.KeepAlive(cursor)
+	return rt.View[QTextCursor](rt.WrapClass(r, "QTextCursor", rt.TakeOwned), r)
+}
+
+// DrawContentsFull wraps QTextDocument::drawContents.
+//
+//	C++: void QTextDocument::drawContents(QPainter * painter, const QRectF & rect = …)
+//
+// DrawContentsFull is DrawContents with every argument, including those DrawContents leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#drawContents
+func (this *QTextDocument) DrawContentsFull(painter QPainterLike, rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DrawContentsFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTextDocument.DrawContentsFull")
+	}
+	C.qute_QTextDocument_drawContents_1(self, painterPtr, cQRectF(rect))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// ClearUndoRedoStacksFull wraps QTextDocument::clearUndoRedoStacks.
+//
+//	C++: void QTextDocument::clearUndoRedoStacks(Stacks historyToClear = …)
+//
+// ClearUndoRedoStacksFull is ClearUndoRedoStacks with every argument, including those ClearUndoRedoStacks leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#clearUndoRedoStacks
+func (this *QTextDocument) ClearUndoRedoStacksFull(historyToClear QTextDocumentStacks) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.ClearUndoRedoStacksFull")
+	C.qute_QTextDocument_clearUndoRedoStacks_1(self, C.int64_t(historyToClear))
+	runtime.KeepAlive(this)
+}
+
+// SetModifiedFull wraps QTextDocument::setModified.
+//
+//	C++: void QTextDocument::setModified(bool m = …)
+//
+// SetModifiedFull is SetModified with every argument, including those SetModified leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setModified
+func (this *QTextDocument) SetModifiedFull(m bool) {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetModifiedFull")
+	C.qute_QTextDocument_setModified_1(self, C.bool(m))
 	runtime.KeepAlive(this)
 }
 

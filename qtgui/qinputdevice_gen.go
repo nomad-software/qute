@@ -232,10 +232,27 @@ func QInputDeviceDevices() []*QInputDevice {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; QInputDevicePrimaryKeyboardFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qinputdevice.html#primaryKeyboard
 func QInputDevicePrimaryKeyboard() *QInputDevice {
 	rt.CheckThread("QInputDevicePrimaryKeyboard")
 	r := C.qute_QInputDevice_primaryKeyboard()
+	return rt.View[QInputDevice](rt.WrapClass(r, "QInputDevice", rt.KeepOrBorrow), r)
+}
+
+// QInputDevicePrimaryKeyboardFull wraps QInputDevice::primaryKeyboard.
+//
+//	C++: const QInputDevice * QInputDevice::primaryKeyboard(const QString & seatName = …)
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// QInputDevicePrimaryKeyboardFull is QInputDevicePrimaryKeyboard with every argument, including those QInputDevicePrimaryKeyboard leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdevice.html#primaryKeyboard
+func QInputDevicePrimaryKeyboardFull(seatName string) *QInputDevice {
+	rt.CheckThread("QInputDevicePrimaryKeyboardFull")
+	r := C.qute_QInputDevice_primaryKeyboard_1((*C.char)(unsafe.Pointer(unsafe.StringData(seatName))), C.ptrdiff_t(len(seatName)))
 	return rt.View[QInputDevice](rt.WrapClass(r, "QInputDevice", rt.KeepOrBorrow), r)
 }
 

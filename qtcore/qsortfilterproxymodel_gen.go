@@ -827,6 +827,9 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 				MimeData([]*QModelIndex) *QMimeData
 			}).MimeData(indexes)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QSortFilterProxyModel.MimeData")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
 		}},
 	{Name: "DropMimeData", Has: func(v any) bool {
 		_, ok := v.(interface {

@@ -126,7 +126,7 @@ func (this *QAbstractScrollArea) SetVerticalScrollBar(scrollbar QScrollBarLike) 
 	C.qute_QAbstractScrollArea_setVerticalScrollBar(self, scrollbarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(scrollbar)
-	scrollbarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, scrollbarH)
 }
 
 // HorizontalScrollBarPolicy wraps QAbstractScrollArea::horizontalScrollBarPolicy.
@@ -183,7 +183,7 @@ func (this *QAbstractScrollArea) SetHorizontalScrollBar(scrollbar QScrollBarLike
 	C.qute_QAbstractScrollArea_setHorizontalScrollBar(self, scrollbarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(scrollbar)
-	scrollbarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, scrollbarH)
 }
 
 // CornerWidget wraps QAbstractScrollArea::cornerWidget.
@@ -217,7 +217,7 @@ func (this *QAbstractScrollArea) SetCornerWidget(widget QWidgetLike) {
 	C.qute_QAbstractScrollArea_setCornerWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // AddScrollBarWidget wraps QAbstractScrollArea::addScrollBarWidget.
@@ -237,7 +237,7 @@ func (this *QAbstractScrollArea) AddScrollBarWidget(widget QWidgetLike, alignmen
 	C.qute_QAbstractScrollArea_addScrollBarWidget(self, widgetPtr, C.int64_t(alignment))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // ScrollBarWidgets wraps QAbstractScrollArea::scrollBarWidgets.
@@ -287,7 +287,7 @@ func (this *QAbstractScrollArea) SetViewport(widget QWidgetLike) {
 	C.qute_QAbstractScrollArea_setViewport(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // MaximumViewportSize wraps QAbstractScrollArea::maximumViewportSize.

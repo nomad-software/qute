@@ -102,7 +102,7 @@ func (this *QTreeView) SetHeader(header QHeaderViewLike) {
 	C.qute_QTreeView_setHeader(self, headerPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(header)
-	headerH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, headerH)
 }
 
 // AutoExpandDelay wraps QTreeView::autoExpandDelay.
@@ -584,6 +584,8 @@ func (this *QTreeView) IndexBelow(index *qtcore.QModelIndex) *qtcore.QModelIndex
 //
 //	C++: void QTreeView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QList<int> & roles = …)
 //
+// Arguments with C++ defaults are left at them; DataChangedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreeview.html#dataChanged
 func (this *QTreeView) DataChanged(topLeft *qtcore.QModelIndex, bottomRight *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.DataChanged")
@@ -676,6 +678,8 @@ func (this *QTreeView) ExpandAll() {
 //
 //	C++: void QTreeView::expandRecursively(const QModelIndex & index, int depth = …)
 //
+// Arguments with C++ defaults are left at them; ExpandRecursivelyFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreeview.html#expandRecursively
 func (this *QTreeView) ExpandRecursively(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExpandRecursively")
@@ -726,6 +730,39 @@ func (this *QTreeView) EmitExpanded(index *qtcore.QModelIndex) {
 func (this *QTreeView) EmitCollapsed(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeView.EmitCollapsed")
 	C.qute_QTreeView_collapsed_1(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.EmitCollapsed"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+}
+
+// DataChangedFull wraps QTreeView::dataChanged.
+//
+//	C++: void QTreeView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QList<int> & roles = …)
+//
+// DataChangedFull is DataChanged with every argument, including those DataChanged leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreeview.html#dataChanged
+func (this *QTreeView) DataChangedFull(topLeft *qtcore.QModelIndex, bottomRight *qtcore.QModelIndex, roles []int) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.DataChangedFull")
+	rolesC := make([]C.int, len(roles))
+	for i := range roles {
+		rolesC[i] = C.int(roles[i])
+	}
+	C.qute_QTreeView_dataChanged_1(self, rt.UseArg(unsafe.Pointer(topLeft), "QTreeView.DataChangedFull"), rt.UseArg(unsafe.Pointer(bottomRight), "QTreeView.DataChangedFull"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(topLeft)
+	runtime.KeepAlive(bottomRight)
+}
+
+// ExpandRecursivelyFull wraps QTreeView::expandRecursively.
+//
+//	C++: void QTreeView::expandRecursively(const QModelIndex & index, int depth = …)
+//
+// ExpandRecursivelyFull is ExpandRecursively with every argument, including those ExpandRecursively leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreeview.html#expandRecursively
+func (this *QTreeView) ExpandRecursivelyFull(index *qtcore.QModelIndex, depth int) {
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExpandRecursivelyFull")
+	C.qute_QTreeView_expandRecursively_1(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.ExpandRecursivelyFull"), C.int(depth))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
 }

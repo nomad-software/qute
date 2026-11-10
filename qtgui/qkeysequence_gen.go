@@ -94,6 +94,8 @@ func NewQKeySequence() *QKeySequence {
 //
 //	C++: QKeySequence::QKeySequence(const QString & key, SequenceFormat format = …)
 //
+// Arguments with C++ defaults are left at them; NewQKeySequenceWithKeyFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
 func NewQKeySequenceWithKey(key string) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceWithKey")
@@ -102,13 +104,15 @@ func NewQKeySequenceWithKey(key string) *QKeySequence {
 	return rt.View[QKeySequence](h, p)
 }
 
-// NewQKeySequenceWithK1 wraps the QKeySequence constructor.
+// NewQKeySequenceWithKeyCode wraps the QKeySequence constructor.
 //
 //	C++: QKeySequence::QKeySequence(int k1, int k2 = …, int k3 = …, int k4 = …)
 //
+// Arguments with C++ defaults are left at them; NewQKeySequenceWithKeyCodeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
-func NewQKeySequenceWithK1(k1 int) *QKeySequence {
-	rt.CheckThread("NewQKeySequenceWithK1")
+func NewQKeySequenceWithKeyCode(k1 int) *QKeySequence {
+	rt.CheckThread("NewQKeySequenceWithKeyCode")
 	p := C.qute_QKeySequence_new_2(C.int(k1))
 	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
@@ -117,6 +121,8 @@ func NewQKeySequenceWithK1(k1 int) *QKeySequence {
 // NewQKeySequenceWithKeyCombination wraps the QKeySequence constructor.
 //
 //	C++: QKeySequence::QKeySequence(QKeyCombination k1, QKeyCombination k2 = …, QKeyCombination k3 = …, QKeyCombination k4 = …)
+//
+// Arguments with C++ defaults are left at them; NewQKeySequenceWithKeyCombinationFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
 func NewQKeySequenceWithKeyCombination(k1 *qtcore.QKeyCombination) *QKeySequence {
@@ -135,6 +141,52 @@ func NewQKeySequenceWithKeyCombination(k1 *qtcore.QKeyCombination) *QKeySequence
 func NewQKeySequenceStandard(key QKeySequenceStandardKey) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceStandard")
 	p := C.qute_QKeySequence_new_4(C.int64_t(key))
+	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	return rt.View[QKeySequence](h, p)
+}
+
+// NewQKeySequenceWithKeyFull wraps the QKeySequence constructor.
+//
+//	C++: QKeySequence::QKeySequence(const QString & key, SequenceFormat format = …)
+//
+// NewQKeySequenceWithKeyFull is NewQKeySequenceWithKey with every argument, including those NewQKeySequenceWithKey leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
+func NewQKeySequenceWithKeyFull(key string, format QKeySequenceSequenceFormat) *QKeySequence {
+	rt.CheckThread("NewQKeySequenceWithKeyFull")
+	p := C.qute_QKeySequence_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), C.int64_t(format))
+	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	return rt.View[QKeySequence](h, p)
+}
+
+// NewQKeySequenceWithKeyCodeFull wraps the QKeySequence constructor.
+//
+//	C++: QKeySequence::QKeySequence(int k1, int k2 = …, int k3 = …, int k4 = …)
+//
+// NewQKeySequenceWithKeyCodeFull is NewQKeySequenceWithKeyCode with every argument, including those NewQKeySequenceWithKeyCode leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
+func NewQKeySequenceWithKeyCodeFull(k1 int, k2 int, k3 int, k4 int) *QKeySequence {
+	rt.CheckThread("NewQKeySequenceWithKeyCodeFull")
+	p := C.qute_QKeySequence_new_6(C.int(k1), C.int(k2), C.int(k3), C.int(k4))
+	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	return rt.View[QKeySequence](h, p)
+}
+
+// NewQKeySequenceWithKeyCombinationFull wraps the QKeySequence constructor.
+//
+//	C++: QKeySequence::QKeySequence(QKeyCombination k1, QKeyCombination k2 = …, QKeyCombination k3 = …, QKeyCombination k4 = …)
+//
+// NewQKeySequenceWithKeyCombinationFull is NewQKeySequenceWithKeyCombination with every argument, including those NewQKeySequenceWithKeyCombination leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#QKeySequence
+func NewQKeySequenceWithKeyCombinationFull(k1 *qtcore.QKeyCombination, k2 *qtcore.QKeyCombination, k3 *qtcore.QKeyCombination, k4 *qtcore.QKeyCombination) *QKeySequence {
+	rt.CheckThread("NewQKeySequenceWithKeyCombinationFull")
+	p := C.qute_QKeySequence_new_7(rt.UseArg(unsafe.Pointer(k1), "NewQKeySequenceWithKeyCombinationFull"), rt.UseArg(unsafe.Pointer(k2), "NewQKeySequenceWithKeyCombinationFull"), rt.UseArg(unsafe.Pointer(k3), "NewQKeySequenceWithKeyCombinationFull"), rt.UseArg(unsafe.Pointer(k4), "NewQKeySequenceWithKeyCombinationFull"))
+	runtime.KeepAlive(k1)
+	runtime.KeepAlive(k2)
+	runtime.KeepAlive(k3)
+	runtime.KeepAlive(k4)
 	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
@@ -167,6 +219,8 @@ func (this *QKeySequence) IsEmpty() bool {
 //
 //	C++: QString QKeySequence::toString(SequenceFormat format = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#toString
 func (this *QKeySequence) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QKeySequence.ToString")
@@ -188,11 +242,27 @@ func (this *QKeySequence) Matches(seq *QKeySequence) QKeySequenceSequenceMatch {
 	return QKeySequenceSequenceMatch(r)
 }
 
+// ToStringFull wraps QKeySequence::toString.
+//
+//	C++: QString QKeySequence::toString(SequenceFormat format = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#toString
+func (this *QKeySequence) ToStringFull(format QKeySequenceSequenceFormat) string {
+	self := rt.Use(unsafe.Pointer(this), "QKeySequence.ToStringFull")
+	r := C.qute_QKeySequence_toString_1(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
 // QKeySequenceFromString wraps QKeySequence::fromString.
 //
 //	C++: QKeySequence QKeySequence::fromString(const QString & str, SequenceFormat format = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QKeySequenceFromStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#fromString
 func QKeySequenceFromString(str string) *QKeySequence {
@@ -204,6 +274,8 @@ func QKeySequenceFromString(str string) *QKeySequence {
 // QKeySequenceListFromString wraps QKeySequence::listFromString.
 //
 //	C++: QList<QKeySequence> QKeySequence::listFromString(const QString & str, SequenceFormat format = …)
+//
+// Arguments with C++ defaults are left at them; QKeySequenceListFromStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#listFromString
 func QKeySequenceListFromString(str string) []*QKeySequence {
@@ -217,6 +289,8 @@ func QKeySequenceListFromString(str string) []*QKeySequence {
 // QKeySequenceListToString wraps QKeySequence::listToString.
 //
 //	C++: QString QKeySequence::listToString(const QList<QKeySequence> & list, SequenceFormat format = …)
+//
+// Arguments with C++ defaults are left at them; QKeySequenceListToStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#listToString
 func QKeySequenceListToString(list []*QKeySequence) string {
@@ -254,4 +328,52 @@ func QKeySequenceKeyBindings(key QKeySequenceStandardKey) []*QKeySequence {
 	return quteList(r, func(e unsafe.Pointer) *QKeySequence {
 		return rt.View[QKeySequence](rt.WrapClass(e, "QKeySequence", rt.TakeOwned), e)
 	})
+}
+
+// QKeySequenceFromStringFull wraps QKeySequence::fromString.
+//
+//	C++: QKeySequence QKeySequence::fromString(const QString & str, SequenceFormat format = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QKeySequenceFromStringFull is QKeySequenceFromString with every argument, including those QKeySequenceFromString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#fromString
+func QKeySequenceFromStringFull(str string, format QKeySequenceSequenceFormat) *QKeySequence {
+	rt.CheckThread("QKeySequenceFromStringFull")
+	r := C.qute_QKeySequence_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)), C.int64_t(format))
+	return rt.View[QKeySequence](rt.WrapClass(r, "QKeySequence", rt.TakeOwned), r)
+}
+
+// QKeySequenceListFromStringFull wraps QKeySequence::listFromString.
+//
+//	C++: QList<QKeySequence> QKeySequence::listFromString(const QString & str, SequenceFormat format = …)
+//
+// QKeySequenceListFromStringFull is QKeySequenceListFromString with every argument, including those QKeySequenceListFromString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#listFromString
+func QKeySequenceListFromStringFull(str string, format QKeySequenceSequenceFormat) []*QKeySequence {
+	rt.CheckThread("QKeySequenceListFromStringFull")
+	r := C.qute_QKeySequence_listFromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)), C.int64_t(format))
+	return quteList(r, func(e unsafe.Pointer) *QKeySequence {
+		return rt.View[QKeySequence](rt.WrapClass(e, "QKeySequence", rt.TakeOwned), e)
+	})
+}
+
+// QKeySequenceListToStringFull wraps QKeySequence::listToString.
+//
+//	C++: QString QKeySequence::listToString(const QList<QKeySequence> & list, SequenceFormat format = …)
+//
+// QKeySequenceListToStringFull is QKeySequenceListToString with every argument, including those QKeySequenceListToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#listToString
+func QKeySequenceListToStringFull(list []*QKeySequence, format QKeySequenceSequenceFormat) string {
+	rt.CheckThread("QKeySequenceListToStringFull")
+	listC := make([]unsafe.Pointer, len(list))
+	for i := range list {
+		listC[i] = rt.UseArg(unsafe.Pointer(list[i]), "QKeySequenceListToStringFull")
+	}
+	r := C.qute_QKeySequence_listToString_1(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)), C.int64_t(format))
+	runtime.KeepAlive(list)
+	return quteStr(r)
 }

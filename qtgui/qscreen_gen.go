@@ -434,6 +434,8 @@ func (this *QScreen) IsLandscape(orientation qtcore.ScreenOrientations) bool {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; GrabWindowFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qscreen.html#grabWindow
 func (this *QScreen) GrabWindow() *QPixmap {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.GrabWindow")
@@ -551,6 +553,22 @@ func (this *QScreen) EmitRefreshRateChanged(refreshRate float64) {
 	self := rt.Use(unsafe.Pointer(this), "QScreen.EmitRefreshRateChanged")
 	C.qute_QScreen_refreshRateChanged_1(self, C.double(refreshRate))
 	runtime.KeepAlive(this)
+}
+
+// GrabWindowFull wraps QScreen::grabWindow.
+//
+//	C++: QPixmap QScreen::grabWindow(WId window = …, int x = …, int y = …, int w = …, int h = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// GrabWindowFull is GrabWindow with every argument, including those GrabWindow leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qscreen.html#grabWindow
+func (this *QScreen) GrabWindowFull(window uint64, x int, y int, w int, hArg int) *QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QScreen.GrabWindowFull")
+	r := C.qute_QScreen_grabWindow_1(self, C.ulonglong(window), C.int(x), C.int(y), C.int(w), C.int(hArg))
+	runtime.KeepAlive(this)
+	return rt.View[QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
 }
 
 // OnGeometryChanged connects f to the geometryChanged signal. The connection ends when the

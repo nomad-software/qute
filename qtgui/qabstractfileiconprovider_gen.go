@@ -100,9 +100,9 @@ func NewQAbstractFileIconProvider() *QAbstractFileIconProvider {
 // Ownership: the result is an Owned copy.
 //
 // Qt docs: https://doc.qt.io/qt-6/qabstractfileiconprovider.html#icon
-func (this *QAbstractFileIconProvider) Icon(arg0 QAbstractFileIconProviderIconType) *QIcon {
+func (this *QAbstractFileIconProvider) Icon(iconType QAbstractFileIconProviderIconType) *QIcon {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractFileIconProvider.Icon")
-	r := C.qute_QAbstractFileIconProvider_icon(self, C.int64_t(arg0))
+	r := C.qute_QAbstractFileIconProvider_icon(self, C.int64_t(iconType))
 	runtime.KeepAlive(this)
 	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
 }

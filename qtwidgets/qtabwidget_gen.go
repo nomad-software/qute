@@ -89,7 +89,7 @@ func (this *QTabWidget) AddTab(widget QWidgetLike, stringArg string) int {
 	r := C.qute_QTabWidget_addTab(self, widgetPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -111,7 +111,7 @@ func (this *QTabWidget) AddTabIcon(widget QWidgetLike, icon *qtgui.QIcon, label 
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
 	runtime.KeepAlive(icon)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -132,7 +132,7 @@ func (this *QTabWidget) InsertTab(index int, widget QWidgetLike, stringArg strin
 	r := C.qute_QTabWidget_insertTab(self, C.int(index), widgetPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -154,7 +154,7 @@ func (this *QTabWidget) InsertTabIcon(index int, widget QWidgetLike, icon *qtgui
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
 	runtime.KeepAlive(icon)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -479,6 +479,8 @@ func (this *QTabWidget) SetTabShape(sArg QTabWidgetTabShape) {
 //
 // Ownership: w becomes Parented: Qt frees it from now on.
 //
+// Arguments with C++ defaults are left at them; SetCornerWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtabwidget.html#setCornerWidget
 func (this *QTabWidget) SetCornerWidget(w QWidgetLike) {
 	self := rt.Use(unsafe.Pointer(this), "QTabWidget.SetCornerWidget")
@@ -490,7 +492,7 @@ func (this *QTabWidget) SetCornerWidget(w QWidgetLike) {
 	C.qute_QTabWidget_setCornerWidget(self, wPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(w)
-	wH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
 }
 
 // CornerWidget wraps QTabWidget::cornerWidget.
@@ -498,6 +500,8 @@ func (this *QTabWidget) SetCornerWidget(w QWidgetLike) {
 //	C++: QWidget * QTabWidget::cornerWidget(Qt::Corner corner = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; CornerWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtabwidget.html#cornerWidget
 func (this *QTabWidget) CornerWidget() *QWidget {
@@ -716,6 +720,44 @@ func (this *QTabWidget) EmitTabBarDoubleClicked(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QTabWidget.EmitTabBarDoubleClicked")
 	C.qute_QTabWidget_tabBarDoubleClicked_1(self, C.int(index))
 	runtime.KeepAlive(this)
+}
+
+// SetCornerWidgetFull wraps QTabWidget::setCornerWidget.
+//
+//	C++: void QTabWidget::setCornerWidget(QWidget * w, Qt::Corner corner = …)
+//
+// Ownership: w becomes Parented: Qt frees it from now on.
+//
+// SetCornerWidgetFull is SetCornerWidget with every argument, including those SetCornerWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtabwidget.html#setCornerWidget
+func (this *QTabWidget) SetCornerWidgetFull(w QWidgetLike, corner qtcore.Corner) {
+	self := rt.Use(unsafe.Pointer(this), "QTabWidget.SetCornerWidgetFull")
+	var wPtr unsafe.Pointer
+	var wH *rt.Handle
+	if w != nil {
+		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QTabWidget.SetCornerWidgetFull")
+	}
+	C.qute_QTabWidget_setCornerWidget_1(self, wPtr, C.int64_t(corner))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
+}
+
+// CornerWidgetFull wraps QTabWidget::cornerWidget.
+//
+//	C++: QWidget * QTabWidget::cornerWidget(Qt::Corner corner = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// CornerWidgetFull is CornerWidget with every argument, including those CornerWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtabwidget.html#cornerWidget
+func (this *QTabWidget) CornerWidgetFull(corner qtcore.Corner) *QWidget {
+	self := rt.Use(unsafe.Pointer(this), "QTabWidget.CornerWidgetFull")
+	r := C.qute_QTabWidget_cornerWidget_1(self, C.int64_t(corner))
+	runtime.KeepAlive(this)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the

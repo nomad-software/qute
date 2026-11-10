@@ -140,6 +140,8 @@ func (this *QFontDialog) SelectedFont() *qtgui.QFont {
 //
 //	C++: void QFontDialog::setOption(FontDialogOption option, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#setOption
 func (this *QFontDialog) SetOption(option QFontDialogFontDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QFontDialog.SetOption")
@@ -206,11 +208,26 @@ func (this *QFontDialog) EmitFontSelected(font *qtgui.QFont) {
 	runtime.KeepAlive(font)
 }
 
+// SetOptionFull wraps QFontDialog::setOption.
+//
+//	C++: void QFontDialog::setOption(FontDialogOption option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#setOption
+func (this *QFontDialog) SetOptionFull(option QFontDialogFontDialogOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QFontDialog.SetOptionFull")
+	C.qute_QFontDialog_setOption_1(self, C.int64_t(option), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
 // QFontDialogGetFont wraps QFontDialog::getFont.
 //
 //	C++: QFont QFontDialog::getFont(bool * ok, QWidget * parent = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QFontDialogGetFontFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#getFont
 func QFontDialogGetFont() (*qtgui.QFont, bool) {
@@ -226,12 +243,57 @@ func QFontDialogGetFont() (*qtgui.QFont, bool) {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QFontDialogGetFontWithFontFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#getFont
 func QFontDialogGetFontWithFont(initial *qtgui.QFont) (*qtgui.QFont, bool) {
 	rt.CheckThread("QFontDialogGetFontWithFont")
 	var okOut C.bool
 	r := C.qute_QFontDialog_getFont_1(&okOut, rt.UseArg(unsafe.Pointer(initial), "QFontDialogGetFontWithFont"))
 	runtime.KeepAlive(initial)
+	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r), bool(okOut)
+}
+
+// QFontDialogGetFontFull wraps QFontDialog::getFont.
+//
+//	C++: QFont QFontDialog::getFont(bool * ok, QWidget * parent = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QFontDialogGetFontFull is QFontDialogGetFont with every argument, including those QFontDialogGetFont leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#getFont
+func QFontDialogGetFontFull(parent QWidgetLike) (*qtgui.QFont, bool) {
+	rt.CheckThread("QFontDialogGetFontFull")
+	var okOut C.bool
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QFontDialogGetFontFull")
+	}
+	r := C.qute_QFontDialog_getFont_2(&okOut, parentPtr)
+	runtime.KeepAlive(parent)
+	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r), bool(okOut)
+}
+
+// QFontDialogGetFontWithFontFull wraps QFontDialog::getFont.
+//
+//	C++: QFont QFontDialog::getFont(bool * ok, const QFont & initial, QWidget * parent = …, const QString & title = …, FontDialogOptions options = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QFontDialogGetFontWithFontFull is QFontDialogGetFontWithFont with every argument, including those QFontDialogGetFontWithFont leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfontdialog.html#getFont
+func QFontDialogGetFontWithFontFull(initial *qtgui.QFont, parent QWidgetLike, title string, options QFontDialogFontDialogOptions) (*qtgui.QFont, bool) {
+	rt.CheckThread("QFontDialogGetFontWithFontFull")
+	var okOut C.bool
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QFontDialogGetFontWithFontFull")
+	}
+	r := C.qute_QFontDialog_getFont_3(&okOut, rt.UseArg(unsafe.Pointer(initial), "QFontDialogGetFontWithFontFull"), parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), C.int64_t(options))
+	runtime.KeepAlive(initial)
+	runtime.KeepAlive(parent)
 	return rt.View[qtgui.QFont](rt.WrapClass(r, "QFont", rt.TakeOwned), r), bool(okOut)
 }
 

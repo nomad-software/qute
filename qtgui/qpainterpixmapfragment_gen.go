@@ -348,9 +348,26 @@ func (this *QPainterPixmapFragment) SetOpacity(opacity float64) {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QPainterPixmapFragmentCreateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainterpixmapfragment.html#create
 func QPainterPixmapFragmentCreate(pos qtcore.QPointF, sourceRect qtcore.QRectF) *QPainterPixmapFragment {
 	rt.CheckThread("QPainterPixmapFragmentCreate")
 	r := C.qute_QPainterPixmapFragment_create(cQPointF(pos), cQRectF(sourceRect))
+	return rt.View[QPainterPixmapFragment](rt.WrapClass(r, "QPainterPixmapFragment", rt.TakeOwned), r)
+}
+
+// QPainterPixmapFragmentCreateFull wraps QPainterPixmapFragment::create.
+//
+//	C++: PixmapFragment QPainterPixmapFragment::create(const QPointF & pos, const QRectF & sourceRect, qreal scaleX = …, qreal scaleY = …, qreal rotation = …, qreal opacity = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QPainterPixmapFragmentCreateFull is QPainterPixmapFragmentCreate with every argument, including those QPainterPixmapFragmentCreate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpixmapfragment.html#create
+func QPainterPixmapFragmentCreateFull(pos qtcore.QPointF, sourceRect qtcore.QRectF, scaleX float64, scaleY float64, rotation float64, opacity float64) *QPainterPixmapFragment {
+	rt.CheckThread("QPainterPixmapFragmentCreateFull")
+	r := C.qute_QPainterPixmapFragment_create_1(cQPointF(pos), cQRectF(sourceRect), C.double(scaleX), C.double(scaleY), C.double(rotation), C.double(opacity))
 	return rt.View[QPainterPixmapFragment](rt.WrapClass(r, "QPainterPixmapFragment", rt.TakeOwned), r)
 }

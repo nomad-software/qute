@@ -134,6 +134,8 @@ func (this *QColorDialog) SelectedColor() qtgui.QColor {
 //
 //	C++: void QColorDialog::setOption(ColorDialogOption option, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcolordialog.html#setOption
 func (this *QColorDialog) SetOption(option QColorDialogColorDialogOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QColorDialog.SetOption")
@@ -198,9 +200,24 @@ func (this *QColorDialog) EmitColorSelected(color qtgui.QColor) {
 	runtime.KeepAlive(this)
 }
 
+// SetOptionFull wraps QColorDialog::setOption.
+//
+//	C++: void QColorDialog::setOption(ColorDialogOption option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolordialog.html#setOption
+func (this *QColorDialog) SetOptionFull(option QColorDialogColorDialogOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QColorDialog.SetOptionFull")
+	C.qute_QColorDialog_setOption_1(self, C.int64_t(option), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
 // QColorDialogGetColor wraps QColorDialog::getColor.
 //
 //	C++: QColor QColorDialog::getColor(const QColor & initial = …, QWidget * parent = …, const QString & title = …, ColorDialogOptions options = …)
+//
+// Arguments with C++ defaults are left at them; QColorDialogGetColorFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcolordialog.html#getColor
 func QColorDialogGetColor() qtgui.QColor {
@@ -260,6 +277,24 @@ func QColorDialogStandardColor(index int) qtgui.QColor {
 func QColorDialogSetStandardColor(index int, color qtgui.QColor) {
 	rt.CheckThread("QColorDialogSetStandardColor")
 	C.qute_QColorDialog_setStandardColor(C.int(index), cQColor(color))
+}
+
+// QColorDialogGetColorFull wraps QColorDialog::getColor.
+//
+//	C++: QColor QColorDialog::getColor(const QColor & initial = …, QWidget * parent = …, const QString & title = …, ColorDialogOptions options = …)
+//
+// QColorDialogGetColorFull is QColorDialogGetColor with every argument, including those QColorDialogGetColor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolordialog.html#getColor
+func QColorDialogGetColorFull(initial qtgui.QColor, parent QWidgetLike, title string, options QColorDialogColorDialogOptions) qtgui.QColor {
+	rt.CheckThread("QColorDialogGetColorFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QColorDialogGetColorFull")
+	}
+	r := C.qute_QColorDialog_getColor_1(cQColor(initial), parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), C.int64_t(options))
+	runtime.KeepAlive(parent)
+	return goQColor(r)
 }
 
 // OnCurrentColorChanged connects f to the currentColorChanged signal. The connection ends when the

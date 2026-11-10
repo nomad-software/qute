@@ -55,6 +55,8 @@ func QDialogCast(o qtcore.QObjectLike) *QDialog {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQDialogFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdialog.html#QDialog
 func NewQDialog(parent QWidgetLike) *QDialog {
 	rt.CheckThread("NewQDialog")
@@ -63,6 +65,31 @@ func NewQDialog(parent QWidgetLike) *QDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialog")
 	}
 	p := C.qute_QDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDialog", mode)
+	return rt.View[QDialog](h, p)
+}
+
+// NewQDialogFull wraps the QDialog constructor.
+//
+//	C++: QDialog::QDialog(QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQDialogFull is NewQDialog with every argument, including those NewQDialog leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdialog.html#QDialog
+func NewQDialogFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QDialog {
+	rt.CheckThread("NewQDialogFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogFull")
+	}
+	p := C.qute_QDialog_new_1(parentPtr, C.int64_t(fArg))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

@@ -59,6 +59,8 @@ func (this *QGraphicsObject) AsQGraphicsItem() *QGraphicsItem {
 //
 //	C++: void QGraphicsObject::grabGesture(Qt::GestureType type, Qt::GestureFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; GrabGestureFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsobject.html#grabGesture
 func (this *QGraphicsObject) GrabGesture(typeArg qtcore.GestureType) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.GrabGesture")
@@ -206,6 +208,19 @@ func (this *QGraphicsObject) EmitWidthChanged() {
 func (this *QGraphicsObject) EmitHeightChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.EmitHeightChanged")
 	C.qute_QGraphicsObject_heightChanged_1(self)
+	runtime.KeepAlive(this)
+}
+
+// GrabGestureFull wraps QGraphicsObject::grabGesture.
+//
+//	C++: void QGraphicsObject::grabGesture(Qt::GestureType type, Qt::GestureFlags flags = …)
+//
+// GrabGestureFull is GrabGesture with every argument, including those GrabGesture leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsobject.html#grabGesture
+func (this *QGraphicsObject) GrabGestureFull(typeArg qtcore.GestureType, flags qtcore.GestureFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.GrabGestureFull")
+	C.qute_QGraphicsObject_grabGesture_1(self, C.int64_t(typeArg), C.int64_t(flags))
 	runtime.KeepAlive(this)
 }
 

@@ -74,6 +74,8 @@ func NewQEventLoop(parent QObjectLike) *QEventLoop {
 //
 //	C++: bool QEventLoop::processEvents(ProcessEventsFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; ProcessEventsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qeventloop.html#processEvents
 func (this *QEventLoop) ProcessEvents() bool {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ProcessEvents")
@@ -108,6 +110,8 @@ func (this *QEventLoop) ProcessEventsWithProcessEventsFlagDeadlineTimer(flags QE
 // Exec wraps QEventLoop::exec.
 //
 //	C++: int QEventLoop::exec(ProcessEventsFlags flags = …)
+//
+// Arguments with C++ defaults are left at them; ExecFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qeventloop.html#exec
 func (this *QEventLoop) Exec() int {
@@ -144,6 +148,8 @@ func (this *QEventLoop) WakeUp() {
 //
 //	C++: void QEventLoop::exit(int returnCode = …)
 //
+// Arguments with C++ defaults are left at them; ExitFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qeventloop.html#exit
 func (this *QEventLoop) Exit() {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.Exit")
@@ -159,5 +165,46 @@ func (this *QEventLoop) Exit() {
 func (this *QEventLoop) Quit() {
 	self := rt.Use(unsafe.Pointer(this), "QEventLoop.Quit")
 	C.qute_QEventLoop_quit(self)
+	runtime.KeepAlive(this)
+}
+
+// ProcessEventsFull wraps QEventLoop::processEvents.
+//
+//	C++: bool QEventLoop::processEvents(ProcessEventsFlags flags = …)
+//
+// ProcessEventsFull is ProcessEvents with every argument, including those ProcessEvents leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventloop.html#processEvents
+func (this *QEventLoop) ProcessEventsFull(flags QEventLoopProcessEventsFlags) bool {
+	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ProcessEventsFull")
+	r := C.qute_QEventLoop_processEvents_3(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// ExecFull wraps QEventLoop::exec.
+//
+//	C++: int QEventLoop::exec(ProcessEventsFlags flags = …)
+//
+// ExecFull is Exec with every argument, including those Exec leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventloop.html#exec
+func (this *QEventLoop) ExecFull(flags QEventLoopProcessEventsFlags) int {
+	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ExecFull")
+	r := C.qute_QEventLoop_exec_1(self, C.int64_t(flags))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// ExitFull wraps QEventLoop::exit.
+//
+//	C++: void QEventLoop::exit(int returnCode = …)
+//
+// ExitFull is Exit with every argument, including those Exit leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventloop.html#exit
+func (this *QEventLoop) ExitFull(returnCode int) {
+	self := rt.Use(unsafe.Pointer(this), "QEventLoop.ExitFull")
+	C.qute_QEventLoop_exit_1(self, C.int(returnCode))
 	runtime.KeepAlive(this)
 }

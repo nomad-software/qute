@@ -94,6 +94,8 @@ func NewQFont() *QFont {
 //
 //	C++: QFont::QFont(const QString & family, int pointSize = …, int weight = …, bool italic = …)
 //
+// Arguments with C++ defaults are left at them; NewQFontWithFamilyFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfont.html#QFont
 func NewQFontWithFamily(family string) *QFont {
 	rt.CheckThread("NewQFontWithFamily")
@@ -105,6 +107,8 @@ func NewQFontWithFamily(family string) *QFont {
 // NewQFontWithFamilies wraps the QFont constructor.
 //
 //	C++: QFont::QFont(const QStringList & families, int pointSize = …, int weight = …, bool italic = …)
+//
+// Arguments with C++ defaults are left at them; NewQFontWithFamiliesFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfont.html#QFont
 func NewQFontWithFamilies(families []string) *QFont {
@@ -129,6 +133,35 @@ func NewQFontFor(font *QFont, pd QPaintDeviceLike) *QFont {
 	p := C.qute_QFont_new_3(rt.UseArg(unsafe.Pointer(font), "NewQFontFor"), pdPtr)
 	runtime.KeepAlive(font)
 	runtime.KeepAlive(pd)
+	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	return rt.View[QFont](h, p)
+}
+
+// NewQFontWithFamilyFull wraps the QFont constructor.
+//
+//	C++: QFont::QFont(const QString & family, int pointSize = …, int weight = …, bool italic = …)
+//
+// NewQFontWithFamilyFull is NewQFontWithFamily with every argument, including those NewQFontWithFamily leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#QFont
+func NewQFontWithFamilyFull(family string, pointSize int, weight int, italic bool) *QFont {
+	rt.CheckThread("NewQFontWithFamilyFull")
+	p := C.qute_QFont_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), C.int(pointSize), C.int(weight), C.bool(italic))
+	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	return rt.View[QFont](h, p)
+}
+
+// NewQFontWithFamiliesFull wraps the QFont constructor.
+//
+//	C++: QFont::QFont(const QStringList & families, int pointSize = …, int weight = …, bool italic = …)
+//
+// NewQFontWithFamiliesFull is NewQFontWithFamilies with every argument, including those NewQFontWithFamilies leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#QFont
+func NewQFontWithFamiliesFull(families []string, pointSize int, weight int, italic bool) *QFont {
+	rt.CheckThread("NewQFontWithFamiliesFull")
+	familiesData, familiesLens := quteStrListArg(families)
+	p := C.qute_QFont_new_5((*C.char)(unsafe.Pointer(unsafe.SliceData(familiesData))), (*C.ptrdiff_t)(unsafe.SliceData(familiesLens)), C.ptrdiff_t(len(families)), C.int(pointSize), C.int(weight), C.bool(italic))
 	h := rt.WrapClass(p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
@@ -507,10 +540,12 @@ func (this *QFont) StyleStrategy() QFontStyleStrategy {
 //
 //	C++: void QFont::setStyleHint(StyleHint, StyleStrategy = …)
 //
+// Arguments with C++ defaults are left at them; SetStyleHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfont.html#setStyleHint
-func (this *QFont) SetStyleHint(arg0 QFontStyleHint) {
+func (this *QFont) SetStyleHint(styleHint QFontStyleHint) {
 	self := rt.Use(unsafe.Pointer(this), "QFont.SetStyleHint")
-	C.qute_QFont_setStyleHint(self, C.int64_t(arg0))
+	C.qute_QFont_setStyleHint(self, C.int64_t(styleHint))
 	runtime.KeepAlive(this)
 }
 
@@ -913,6 +948,19 @@ func (this *QFont) SetResolveMask(maskArg uint) {
 	runtime.KeepAlive(this)
 }
 
+// SetStyleHintFull wraps QFont::setStyleHint.
+//
+//	C++: void QFont::setStyleHint(StyleHint, StyleStrategy = …)
+//
+// SetStyleHintFull is SetStyleHint with every argument, including those SetStyleHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#setStyleHint
+func (this *QFont) SetStyleHintFull(styleHint QFontStyleHint, styleStrategy QFontStyleStrategy) {
+	self := rt.Use(unsafe.Pointer(this), "QFont.SetStyleHintFull")
+	C.qute_QFont_setStyleHint_1(self, C.int64_t(styleHint), C.int64_t(styleStrategy))
+	runtime.KeepAlive(this)
+}
+
 // QFontSubstitute wraps QFont::substitute.
 //
 //	C++: QString QFont::substitute(const QString &)
@@ -961,10 +1009,10 @@ func QFontInsertSubstitution(stringArg string, arg1 string) {
 //	C++: void QFont::insertSubstitutions(const QString &, const QStringList &)
 //
 // Qt docs: https://doc.qt.io/qt-6/qfont.html#insertSubstitutions
-func QFontInsertSubstitutions(stringArg string, arg1 []string) {
+func QFontInsertSubstitutions(stringArg string, stringList []string) {
 	rt.CheckThread("QFontInsertSubstitutions")
-	arg1Data, arg1Lens := quteStrListArg(arg1)
-	C.qute_QFont_insertSubstitutions((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.SliceData(arg1Data))), (*C.ptrdiff_t)(unsafe.SliceData(arg1Lens)), C.ptrdiff_t(len(arg1)))
+	stringListData, stringListLens := quteStrListArg(stringList)
+	C.qute_QFont_insertSubstitutions((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.SliceData(stringListData))), (*C.ptrdiff_t)(unsafe.SliceData(stringListLens)), C.ptrdiff_t(len(stringList)))
 }
 
 // QFontRemoveSubstitutions wraps QFont::removeSubstitutions.

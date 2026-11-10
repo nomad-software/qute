@@ -130,10 +130,26 @@ func NewQTimeZoneWithBytes(ianaId []byte) *QTimeZone {
 //
 //	C++: QTimeZone::QTimeZone(const QByteArray & zoneId, int offsetSeconds, const QString & name, const QString & abbreviation, QLocale::Territory territory = …, const QString & comment = …)
 //
+// Arguments with C++ defaults are left at them; NewQTimeZoneWithBytesOffsetSecondsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtimezone.html#QTimeZone
 func NewQTimeZoneWithBytesOffsetSeconds(zoneId []byte, offsetSeconds int, name string, abbreviation string) *QTimeZone {
 	rt.CheckThread("NewQTimeZoneWithBytesOffsetSeconds")
 	p := C.qute_QTimeZone_new_4((*C.char)(unsafe.Pointer(unsafe.SliceData(zoneId))), C.ptrdiff_t(len(zoneId)), C.int(offsetSeconds), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(abbreviation))), C.ptrdiff_t(len(abbreviation)))
+	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	return rt.View[QTimeZone](h, p)
+}
+
+// NewQTimeZoneWithBytesOffsetSecondsFull wraps the QTimeZone constructor.
+//
+//	C++: QTimeZone::QTimeZone(const QByteArray & zoneId, int offsetSeconds, const QString & name, const QString & abbreviation, QLocale::Territory territory = …, const QString & comment = …)
+//
+// NewQTimeZoneWithBytesOffsetSecondsFull is NewQTimeZoneWithBytesOffsetSeconds with every argument, including those NewQTimeZoneWithBytesOffsetSeconds leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#QTimeZone
+func NewQTimeZoneWithBytesOffsetSecondsFull(zoneId []byte, offsetSeconds int, name string, abbreviation string, territory QLocaleCountry, comment string) *QTimeZone {
+	rt.CheckThread("NewQTimeZoneWithBytesOffsetSecondsFull")
+	p := C.qute_QTimeZone_new_5((*C.char)(unsafe.Pointer(unsafe.SliceData(zoneId))), C.ptrdiff_t(len(zoneId)), C.int(offsetSeconds), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(abbreviation))), C.ptrdiff_t(len(abbreviation)), C.int64_t(territory), (*C.char)(unsafe.Pointer(unsafe.StringData(comment))), C.ptrdiff_t(len(comment)))
 	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
@@ -252,6 +268,8 @@ func (this *QTimeZone) Comment() string {
 //
 //	C++: QString QTimeZone::displayName(const QDateTime & atDateTime, NameType nameType = …, const QLocale & locale = …) const
 //
+// Arguments with C++ defaults are left at them; DisplayNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtimezone.html#displayName
 func (this *QTimeZone) DisplayName(atDateTime *QDateTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QTimeZone.DisplayName")
@@ -264,6 +282,8 @@ func (this *QTimeZone) DisplayName(atDateTime *QDateTime) string {
 // DisplayNameTimeType wraps QTimeZone::displayName.
 //
 //	C++: QString QTimeZone::displayName(TimeType timeType, NameType nameType = …, const QLocale & locale = …) const
+//
+// Arguments with C++ defaults are left at them; DisplayNameTimeTypeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtimezone.html#displayName
 func (this *QTimeZone) DisplayNameTimeType(timeType QTimeZoneTimeType) string {
@@ -421,6 +441,37 @@ func (this *QTimeZone) Transitions(fromDateTime *QDateTime, toDateTime *QDateTim
 	return quteList(r, func(e unsafe.Pointer) *QTimeZoneOffsetData {
 		return rt.View[QTimeZoneOffsetData](rt.WrapClass(e, "QTimeZoneOffsetData", rt.TakeOwned), e)
 	})
+}
+
+// DisplayNameFull wraps QTimeZone::displayName.
+//
+//	C++: QString QTimeZone::displayName(const QDateTime & atDateTime, NameType nameType = …, const QLocale & locale = …) const
+//
+// DisplayNameFull is DisplayName with every argument, including those DisplayName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#displayName
+func (this *QTimeZone) DisplayNameFull(atDateTime *QDateTime, nameType QTimeZoneNameType, locale *QLocale) string {
+	self := rt.Use(unsafe.Pointer(this), "QTimeZone.DisplayNameFull")
+	r := C.qute_QTimeZone_displayName_2(self, rt.UseArg(unsafe.Pointer(atDateTime), "QTimeZone.DisplayNameFull"), C.int64_t(nameType), rt.UseArg(unsafe.Pointer(locale), "QTimeZone.DisplayNameFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(atDateTime)
+	runtime.KeepAlive(locale)
+	return quteStr(r)
+}
+
+// DisplayNameTimeTypeFull wraps QTimeZone::displayName.
+//
+//	C++: QString QTimeZone::displayName(TimeType timeType, NameType nameType = …, const QLocale & locale = …) const
+//
+// DisplayNameTimeTypeFull is DisplayNameTimeType with every argument, including those DisplayNameTimeType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtimezone.html#displayName
+func (this *QTimeZone) DisplayNameTimeTypeFull(timeType QTimeZoneTimeType, nameType QTimeZoneNameType, locale *QLocale) string {
+	self := rt.Use(unsafe.Pointer(this), "QTimeZone.DisplayNameTimeTypeFull")
+	r := C.qute_QTimeZone_displayName_3(self, C.int64_t(timeType), C.int64_t(nameType), rt.UseArg(unsafe.Pointer(locale), "QTimeZone.DisplayNameTimeTypeFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
+	return quteStr(r)
 }
 
 // QTimeZoneFromDurationAheadOfUtc wraps QTimeZone::fromDurationAheadOfUtc.

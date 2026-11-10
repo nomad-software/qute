@@ -123,7 +123,7 @@ func (this *QPainter) Device() *QPaintDevice {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.Device")
 	r := C.qute_QPainter_device(self)
 	runtime.KeepAlive(this)
-	return rt.View[QPaintDevice](rt.WrapClass(r, "QPaintDevice", rt.KeepOrBorrow), r)
+	return rt.View[QPaintDevice](rt.WrapClassFrom(r, "QPaintDevice", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Begin wraps QPainter::begin.
@@ -494,6 +494,8 @@ func (this *QPainter) ClipPath() *QPainterPath {
 //
 //	C++: void QPainter::setClipRect(const QRectF &, Qt::ClipOperation op = …)
 //
+// Arguments with C++ defaults are left at them; SetClipRectFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipRect
 func (this *QPainter) SetClipRectF(rectF qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRectF")
@@ -504,6 +506,8 @@ func (this *QPainter) SetClipRectF(rectF qtcore.QRectF) {
 // SetClipRect wraps QPainter::setClipRect.
 //
 //	C++: void QPainter::setClipRect(const QRect &, Qt::ClipOperation op = …)
+//
+// Arguments with C++ defaults are left at them; SetClipRectFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipRect
 func (this *QPainter) SetClipRect(rect qtcore.QRect) {
@@ -516,6 +520,8 @@ func (this *QPainter) SetClipRect(rect qtcore.QRect) {
 //
 //	C++: void QPainter::setClipRegion(const QRegion &, Qt::ClipOperation op = …)
 //
+// Arguments with C++ defaults are left at them; SetClipRegionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipRegion
 func (this *QPainter) SetClipRegion(region *QRegion) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRegion")
@@ -527,6 +533,8 @@ func (this *QPainter) SetClipRegion(region *QRegion) {
 // SetClipPath wraps QPainter::setClipPath.
 //
 //	C++: void QPainter::setClipPath(const QPainterPath & path, Qt::ClipOperation op = …)
+//
+// Arguments with C++ defaults are left at them; SetClipPathFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipPath
 func (this *QPainter) SetClipPath(path *QPainterPath) {
@@ -597,6 +605,8 @@ func (this *QPainter) Restore() {
 //
 //	C++: void QPainter::setTransform(const QTransform & transform, bool combine = …)
 //
+// Arguments with C++ defaults are left at them; SetTransformFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setTransform
 func (this *QPainter) SetTransform(transform *QTransform) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetTransform")
@@ -647,6 +657,8 @@ func (this *QPainter) ResetTransform() {
 // SetWorldTransform wraps QPainter::setWorldTransform.
 //
 //	C++: void QPainter::setWorldTransform(const QTransform & matrix, bool combine = …)
+//
+// Arguments with C++ defaults are left at them; SetWorldTransformFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setWorldTransform
 func (this *QPainter) SetWorldTransform(matrix *QTransform) {
@@ -1157,6 +1169,8 @@ func (this *QPainter) DrawPolyline(polygon []qtcore.QPoint) {
 //
 //	C++: void QPainter::drawPolygon(const QPolygonF & polygon, Qt::FillRule fillRule = …)
 //
+// Arguments with C++ defaults are left at them; DrawPolygonFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPolygon
 func (this *QPainter) DrawPolygonF(polygon []qtcore.QPointF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPolygonF")
@@ -1171,6 +1185,8 @@ func (this *QPainter) DrawPolygonF(polygon []qtcore.QPointF) {
 // DrawPolygon wraps QPainter::drawPolygon.
 //
 //	C++: void QPainter::drawPolygon(const QPolygon & polygon, Qt::FillRule fillRule = …)
+//
+// Arguments with C++ defaults are left at them; DrawPolygonFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPolygon
 func (this *QPainter) DrawPolygon(polygon []qtcore.QPoint) {
@@ -1283,6 +1299,8 @@ func (this *QPainter) DrawChord(rect qtcore.QRect, aArg int, alen int) {
 //
 //	C++: void QPainter::drawRoundedRect(const QRectF & rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
 //
+// Arguments with C++ defaults are left at them; DrawRoundedRectFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawRoundedRect
 func (this *QPainter) DrawRoundedRectF(rect qtcore.QRectF, xRadius float64, yRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRoundedRectF")
@@ -1293,6 +1311,8 @@ func (this *QPainter) DrawRoundedRectF(rect qtcore.QRectF, xRadius float64, yRad
 // DrawRoundedRect wraps QPainter::drawRoundedRect.
 //
 //	C++: void QPainter::drawRoundedRect(const QRect & rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
+//
+// Arguments with C++ defaults are left at them; DrawRoundedRectFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawRoundedRect
 func (this *QPainter) DrawRoundedRect(rect qtcore.QRect, xRadius float64, yRadius float64) {
@@ -1305,6 +1325,8 @@ func (this *QPainter) DrawRoundedRect(rect qtcore.QRect, xRadius float64, yRadiu
 //
 //	C++: void QPainter::drawTiledPixmap(const QRectF & rect, const QPixmap & pm, const QPointF & offset = …)
 //
+// Arguments with C++ defaults are left at them; DrawTiledPixmapFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawTiledPixmap
 func (this *QPainter) DrawTiledPixmapF(rect qtcore.QRectF, pm *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTiledPixmapF")
@@ -1316,6 +1338,8 @@ func (this *QPainter) DrawTiledPixmapF(rect qtcore.QRectF, pm *QPixmap) {
 // DrawTiledPixmap wraps QPainter::drawTiledPixmap.
 //
 //	C++: void QPainter::drawTiledPixmap(const QRect &, const QPixmap &, const QPoint & = …)
+//
+// Arguments with C++ defaults are left at them; DrawTiledPixmapFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawTiledPixmap
 func (this *QPainter) DrawTiledPixmap(rect qtcore.QRect, pixmap *QPixmap) {
@@ -1413,6 +1437,8 @@ func (this *QPainter) DrawPixmapIn(rArg qtcore.QRect, pm *QPixmap) {
 //
 //	C++: void QPainter::drawPixmapFragments(const PixmapFragment * fragments, int fragmentCount, const QPixmap & pixmap, PixmapFragmentHints hints = …)
 //
+// Arguments with C++ defaults are left at them; DrawPixmapFragmentsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPixmapFragments
 func (this *QPainter) DrawPixmapFragments(fragments []*QPainterPixmapFragment, pixmap *QPixmap) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapFragments")
@@ -1430,6 +1456,8 @@ func (this *QPainter) DrawPixmapFragments(fragments []*QPainterPixmapFragment, p
 //
 //	C++: void QPainter::drawImage(const QRectF & targetRect, const QImage & image, const QRectF & sourceRect, Qt::ImageConversionFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; DrawImagePartFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawImage
 func (this *QPainter) DrawImagePartF(targetRect qtcore.QRectF, image *QImage, sourceRect qtcore.QRectF) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImagePartF")
@@ -1441,6 +1469,8 @@ func (this *QPainter) DrawImagePartF(targetRect qtcore.QRectF, image *QImage, so
 // DrawImagePart wraps QPainter::drawImage.
 //
 //	C++: void QPainter::drawImage(const QRect & targetRect, const QImage & image, const QRect & sourceRect, Qt::ImageConversionFlags flags = …)
+//
+// Arguments with C++ defaults are left at them; DrawImagePartFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawImage
 func (this *QPainter) DrawImagePart(targetRect qtcore.QRect, image *QImage, sourceRect qtcore.QRect) {
@@ -1629,6 +1659,8 @@ func (this *QPainter) BoundingRect(rect qtcore.QRect, flags int, text string) qt
 //
 //	C++: QRectF QPainter::boundingRect(const QRectF & rect, const QString & text, const QTextOption & o = …)
 //
+// Arguments with C++ defaults are left at them; BoundingRectTextFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#boundingRect
 func (this *QPainter) BoundingRectTextF(rect qtcore.QRectF, text string) qtcore.QRectF {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRectTextF")
@@ -1763,6 +1795,8 @@ func (this *QPainter) EraseRect(rect qtcore.QRect) {
 //
 //	C++: void QPainter::setRenderHint(RenderHint hint, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetRenderHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setRenderHint
 func (this *QPainter) SetRenderHint(hint QPainterRenderHints) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.SetRenderHint")
@@ -1773,6 +1807,8 @@ func (this *QPainter) SetRenderHint(hint QPainterRenderHints) {
 // SetRenderHints wraps QPainter::setRenderHints.
 //
 //	C++: void QPainter::setRenderHints(RenderHints hints, bool on = …)
+//
+// Arguments with C++ defaults are left at them; SetRenderHintsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#setRenderHints
 func (this *QPainter) SetRenderHints(hints QPainterRenderHints) {
@@ -1824,5 +1860,263 @@ func (this *QPainter) BeginNativePainting() {
 func (this *QPainter) EndNativePainting() {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.EndNativePainting")
 	C.qute_QPainter_endNativePainting(self)
+	runtime.KeepAlive(this)
+}
+
+// SetClipRectFFull wraps QPainter::setClipRect.
+//
+//	C++: void QPainter::setClipRect(const QRectF &, Qt::ClipOperation op = …)
+//
+// SetClipRectFFull is SetClipRectF with every argument, including those SetClipRectF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipRect
+func (this *QPainter) SetClipRectFFull(rectF qtcore.QRectF, op qtcore.ClipOperation) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRectFFull")
+	C.qute_QPainter_setClipRect_2(self, cQRectF(rectF), C.int64_t(op))
+	runtime.KeepAlive(this)
+}
+
+// SetClipRectFull wraps QPainter::setClipRect.
+//
+//	C++: void QPainter::setClipRect(const QRect &, Qt::ClipOperation op = …)
+//
+// SetClipRectFull is SetClipRect with every argument, including those SetClipRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipRect
+func (this *QPainter) SetClipRectFull(rect qtcore.QRect, op qtcore.ClipOperation) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRectFull")
+	C.qute_QPainter_setClipRect_3(self, cQRect(rect), C.int64_t(op))
+	runtime.KeepAlive(this)
+}
+
+// SetClipRegionFull wraps QPainter::setClipRegion.
+//
+//	C++: void QPainter::setClipRegion(const QRegion &, Qt::ClipOperation op = …)
+//
+// SetClipRegionFull is SetClipRegion with every argument, including those SetClipRegion leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipRegion
+func (this *QPainter) SetClipRegionFull(region *QRegion, op qtcore.ClipOperation) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipRegionFull")
+	C.qute_QPainter_setClipRegion_1(self, rt.UseArg(unsafe.Pointer(region), "QPainter.SetClipRegionFull"), C.int64_t(op))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(region)
+}
+
+// SetClipPathFull wraps QPainter::setClipPath.
+//
+//	C++: void QPainter::setClipPath(const QPainterPath & path, Qt::ClipOperation op = …)
+//
+// SetClipPathFull is SetClipPath with every argument, including those SetClipPath leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setClipPath
+func (this *QPainter) SetClipPathFull(path *QPainterPath, op qtcore.ClipOperation) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetClipPathFull")
+	C.qute_QPainter_setClipPath_1(self, rt.UseArg(unsafe.Pointer(path), "QPainter.SetClipPathFull"), C.int64_t(op))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+}
+
+// SetTransformFull wraps QPainter::setTransform.
+//
+//	C++: void QPainter::setTransform(const QTransform & transform, bool combine = …)
+//
+// SetTransformFull is SetTransform with every argument, including those SetTransform leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setTransform
+func (this *QPainter) SetTransformFull(transform *QTransform, combine bool) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetTransformFull")
+	C.qute_QPainter_setTransform_1(self, rt.UseArg(unsafe.Pointer(transform), "QPainter.SetTransformFull"), C.bool(combine))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(transform)
+}
+
+// SetWorldTransformFull wraps QPainter::setWorldTransform.
+//
+//	C++: void QPainter::setWorldTransform(const QTransform & matrix, bool combine = …)
+//
+// SetWorldTransformFull is SetWorldTransform with every argument, including those SetWorldTransform leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setWorldTransform
+func (this *QPainter) SetWorldTransformFull(matrix *QTransform, combine bool) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetWorldTransformFull")
+	C.qute_QPainter_setWorldTransform_1(self, rt.UseArg(unsafe.Pointer(matrix), "QPainter.SetWorldTransformFull"), C.bool(combine))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+}
+
+// DrawPolygonFFull wraps QPainter::drawPolygon.
+//
+//	C++: void QPainter::drawPolygon(const QPolygonF & polygon, Qt::FillRule fillRule = …)
+//
+// DrawPolygonFFull is DrawPolygonF with every argument, including those DrawPolygonF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPolygon
+func (this *QPainter) DrawPolygonFFull(polygon []qtcore.QPointF, fillRule qtcore.FillRule) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPolygonFFull")
+	polygonC := make([]C.qute_pointf, len(polygon))
+	for i := range polygon {
+		polygonC[i] = cQPointF(polygon[i])
+	}
+	C.qute_QPainter_drawPolygon_2(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)), C.int64_t(fillRule))
+	runtime.KeepAlive(this)
+}
+
+// DrawPolygonFull wraps QPainter::drawPolygon.
+//
+//	C++: void QPainter::drawPolygon(const QPolygon & polygon, Qt::FillRule fillRule = …)
+//
+// DrawPolygonFull is DrawPolygon with every argument, including those DrawPolygon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPolygon
+func (this *QPainter) DrawPolygonFull(polygon []qtcore.QPoint, fillRule qtcore.FillRule) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPolygonFull")
+	polygonC := make([]C.qute_point, len(polygon))
+	for i := range polygon {
+		polygonC[i] = cQPoint(polygon[i])
+	}
+	C.qute_QPainter_drawPolygon_3(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)), C.int64_t(fillRule))
+	runtime.KeepAlive(this)
+}
+
+// DrawRoundedRectFFull wraps QPainter::drawRoundedRect.
+//
+//	C++: void QPainter::drawRoundedRect(const QRectF & rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
+//
+// DrawRoundedRectFFull is DrawRoundedRectF with every argument, including those DrawRoundedRectF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawRoundedRect
+func (this *QPainter) DrawRoundedRectFFull(rect qtcore.QRectF, xRadius float64, yRadius float64, mode qtcore.SizeMode) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRoundedRectFFull")
+	C.qute_QPainter_drawRoundedRect_2(self, cQRectF(rect), C.double(xRadius), C.double(yRadius), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// DrawRoundedRectFull wraps QPainter::drawRoundedRect.
+//
+//	C++: void QPainter::drawRoundedRect(const QRect & rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
+//
+// DrawRoundedRectFull is DrawRoundedRect with every argument, including those DrawRoundedRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawRoundedRect
+func (this *QPainter) DrawRoundedRectFull(rect qtcore.QRect, xRadius float64, yRadius float64, mode qtcore.SizeMode) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawRoundedRectFull")
+	C.qute_QPainter_drawRoundedRect_3(self, cQRect(rect), C.double(xRadius), C.double(yRadius), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// DrawTiledPixmapFFull wraps QPainter::drawTiledPixmap.
+//
+//	C++: void QPainter::drawTiledPixmap(const QRectF & rect, const QPixmap & pm, const QPointF & offset = …)
+//
+// DrawTiledPixmapFFull is DrawTiledPixmapF with every argument, including those DrawTiledPixmapF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawTiledPixmap
+func (this *QPainter) DrawTiledPixmapFFull(rect qtcore.QRectF, pm *QPixmap, offset qtcore.QPointF) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTiledPixmapFFull")
+	C.qute_QPainter_drawTiledPixmap_2(self, cQRectF(rect), rt.UseArg(unsafe.Pointer(pm), "QPainter.DrawTiledPixmapFFull"), cQPointF(offset))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pm)
+}
+
+// DrawTiledPixmapFull wraps QPainter::drawTiledPixmap.
+//
+//	C++: void QPainter::drawTiledPixmap(const QRect &, const QPixmap &, const QPoint & = …)
+//
+// DrawTiledPixmapFull is DrawTiledPixmap with every argument, including those DrawTiledPixmap leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawTiledPixmap
+func (this *QPainter) DrawTiledPixmapFull(rect qtcore.QRect, pixmap *QPixmap, point qtcore.QPoint) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTiledPixmapFull")
+	C.qute_QPainter_drawTiledPixmap_3(self, cQRect(rect), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawTiledPixmapFull"), cQPoint(point))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(pixmap)
+}
+
+// DrawPixmapFragmentsFull wraps QPainter::drawPixmapFragments.
+//
+//	C++: void QPainter::drawPixmapFragments(const PixmapFragment * fragments, int fragmentCount, const QPixmap & pixmap, PixmapFragmentHints hints = …)
+//
+// DrawPixmapFragmentsFull is DrawPixmapFragments with every argument, including those DrawPixmapFragments leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawPixmapFragments
+func (this *QPainter) DrawPixmapFragmentsFull(fragments []*QPainterPixmapFragment, pixmap *QPixmap, hints QPainterPixmapFragmentHints) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawPixmapFragmentsFull")
+	fragmentsC := make([]unsafe.Pointer, len(fragments))
+	for i := range fragments {
+		fragmentsC[i] = rt.UseArg(unsafe.Pointer(fragments[i]), "QPainter.DrawPixmapFragmentsFull")
+	}
+	C.qute_QPainter_drawPixmapFragments_1(self, unsafe.Pointer(unsafe.SliceData(fragmentsC)), C.ptrdiff_t(len(fragments)), rt.UseArg(unsafe.Pointer(pixmap), "QPainter.DrawPixmapFragmentsFull"), C.int64_t(hints))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(fragments)
+	runtime.KeepAlive(pixmap)
+}
+
+// DrawImagePartFFull wraps QPainter::drawImage.
+//
+//	C++: void QPainter::drawImage(const QRectF & targetRect, const QImage & image, const QRectF & sourceRect, Qt::ImageConversionFlags flags = …)
+//
+// DrawImagePartFFull is DrawImagePartF with every argument, including those DrawImagePartF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawImage
+func (this *QPainter) DrawImagePartFFull(targetRect qtcore.QRectF, image *QImage, sourceRect qtcore.QRectF, flags qtcore.ImageConversionFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImagePartFFull")
+	C.qute_QPainter_drawImage_6(self, cQRectF(targetRect), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImagePartFFull"), cQRectF(sourceRect), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
+}
+
+// DrawImagePartFull wraps QPainter::drawImage.
+//
+//	C++: void QPainter::drawImage(const QRect & targetRect, const QImage & image, const QRect & sourceRect, Qt::ImageConversionFlags flags = …)
+//
+// DrawImagePartFull is DrawImagePart with every argument, including those DrawImagePart leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawImage
+func (this *QPainter) DrawImagePartFull(targetRect qtcore.QRect, image *QImage, sourceRect qtcore.QRect, flags qtcore.ImageConversionFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawImagePartFull")
+	C.qute_QPainter_drawImage_7(self, cQRect(targetRect), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImagePartFull"), cQRect(sourceRect), C.int64_t(flags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(image)
+}
+
+// BoundingRectTextFFull wraps QPainter::boundingRect.
+//
+//	C++: QRectF QPainter::boundingRect(const QRectF & rect, const QString & text, const QTextOption & o = …)
+//
+// BoundingRectTextFFull is BoundingRectTextF with every argument, including those BoundingRectTextF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#boundingRect
+func (this *QPainter) BoundingRectTextFFull(rect qtcore.QRectF, text string, o *QTextOption) qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.BoundingRectTextFFull")
+	r := C.qute_QPainter_boundingRect_3(self, cQRectF(rect), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(o), "QPainter.BoundingRectTextFFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(o)
+	return goQRectF(r)
+}
+
+// SetRenderHintFull wraps QPainter::setRenderHint.
+//
+//	C++: void QPainter::setRenderHint(RenderHint hint, bool on = …)
+//
+// SetRenderHintFull is SetRenderHint with every argument, including those SetRenderHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setRenderHint
+func (this *QPainter) SetRenderHintFull(hint QPainterRenderHints, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetRenderHintFull")
+	C.qute_QPainter_setRenderHint_1(self, C.int64_t(hint), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
+// SetRenderHintsFull wraps QPainter::setRenderHints.
+//
+//	C++: void QPainter::setRenderHints(RenderHints hints, bool on = …)
+//
+// SetRenderHintsFull is SetRenderHints with every argument, including those SetRenderHints leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#setRenderHints
+func (this *QPainter) SetRenderHintsFull(hints QPainterRenderHints, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.SetRenderHintsFull")
+	C.qute_QPainter_setRenderHints_1(self, C.int64_t(hints), C.bool(on))
 	runtime.KeepAlive(this)
 }

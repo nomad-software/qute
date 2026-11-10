@@ -78,13 +78,13 @@ func NewQScrollBar(parent QWidgetLike) *QScrollBar {
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qscrollbar.html#QScrollBar
-func NewQScrollBarWithOrientation(arg0 qtcore.Orientations, parent QWidgetLike) *QScrollBar {
+func NewQScrollBarWithOrientation(orientation qtcore.Orientations, parent QWidgetLike) *QScrollBar {
 	rt.CheckThread("NewQScrollBarWithOrientation")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollBarWithOrientation")
 	}
-	p := C.qute_QScrollBar_new_1(C.int64_t(arg0), parentPtr)
+	p := C.qute_QScrollBar_new_1(C.int64_t(orientation), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

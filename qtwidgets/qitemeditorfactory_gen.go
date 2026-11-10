@@ -128,6 +128,8 @@ func (this *QItemEditorFactory) ValuePropertyName(userType int) []byte {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Qt's global factory: it lives until SetDefaultFactory replaces (and deletes) it, so do not keep it past that.
+//
 // Qt docs: https://doc.qt.io/qt-6/qitemeditorfactory.html#defaultFactory
 func QItemEditorFactoryDefaultFactory() *QItemEditorFactory {
 	rt.CheckThread("QItemEditorFactoryDefaultFactory")

@@ -66,6 +66,8 @@ func NewQGraphicsGridLayout(parent QGraphicsLayoutItemLike) *QGraphicsGridLayout
 //
 // The layout takes ownership of the item.
 //
+// Arguments with C++ defaults are left at them; AddItemWithRowSpanFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsgridlayout.html#addItem
 func (this *QGraphicsGridLayout) AddItemWithRowSpan(item QGraphicsLayoutItemLike, row int, column int, rowSpan int, columnSpan int) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsGridLayout.AddItemWithRowSpan")
@@ -77,7 +79,7 @@ func (this *QGraphicsGridLayout) AddItemWithRowSpan(item QGraphicsLayoutItemLike
 	C.qute_QGraphicsGridLayout_addItem(self, itemPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // AddItem wraps QGraphicsGridLayout::addItem.
@@ -87,6 +89,8 @@ func (this *QGraphicsGridLayout) AddItemWithRowSpan(item QGraphicsLayoutItemLike
 // Ownership: item becomes Parented: Qt frees it from now on.
 //
 // The layout takes ownership of the item.
+//
+// Arguments with C++ defaults are left at them; AddItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsgridlayout.html#addItem
 func (this *QGraphicsGridLayout) AddItem(item QGraphicsLayoutItemLike, row int, column int) {
@@ -99,7 +103,7 @@ func (this *QGraphicsGridLayout) AddItem(item QGraphicsLayoutItemLike, row int, 
 	C.qute_QGraphicsGridLayout_addItem_1(self, itemPtr, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetHorizontalSpacing wraps QGraphicsGridLayout::setHorizontalSpacing.
@@ -525,7 +529,7 @@ func (this *QGraphicsGridLayout) ItemAtCell(row int, column int) *QGraphicsLayou
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsGridLayout.ItemAtCell")
 	r := C.qute_QGraphicsGridLayout_itemAt(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsLayoutItem](rt.WrapClass(r, "QGraphicsLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsLayoutItem](rt.WrapClassFrom(r, "QGraphicsLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // RemoveItem wraps QGraphicsGridLayout::removeItem.
@@ -554,10 +558,74 @@ func (this *QGraphicsGridLayout) RemoveItem(item QGraphicsLayoutItemLike) {
 //
 //	C++: QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF & constraint = …) const
 //
+// Arguments with C++ defaults are left at them; SizeHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsgridlayout.html#sizeHint
 func (this *QGraphicsGridLayout) SizeHint(which qtcore.SizeHint) qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsGridLayout.SizeHint")
 	r := C.qute_QGraphicsGridLayout_sizeHint(self, C.int64_t(which))
+	runtime.KeepAlive(this)
+	return goQSizeF(r)
+}
+
+// AddItemWithRowSpanFull wraps QGraphicsGridLayout::addItem.
+//
+//	C++: void QGraphicsGridLayout::addItem(QGraphicsLayoutItem * item, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = …)
+//
+// Ownership: item becomes Parented: Qt frees it from now on.
+//
+// The layout takes ownership of the item.
+//
+// AddItemWithRowSpanFull is AddItemWithRowSpan with every argument, including those AddItemWithRowSpan leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsgridlayout.html#addItem
+func (this *QGraphicsGridLayout) AddItemWithRowSpanFull(item QGraphicsLayoutItemLike, row int, column int, rowSpan int, columnSpan int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsGridLayout.AddItemWithRowSpanFull")
+	var itemPtr unsafe.Pointer
+	var itemH *rt.Handle
+	if item != nil {
+		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsGridLayout.AddItemWithRowSpanFull")
+	}
+	C.qute_QGraphicsGridLayout_addItem_2(self, itemPtr, C.int(row), C.int(column), C.int(rowSpan), C.int(columnSpan), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
+}
+
+// AddItemFull wraps QGraphicsGridLayout::addItem.
+//
+//	C++: void QGraphicsGridLayout::addItem(QGraphicsLayoutItem * item, int row, int column, Qt::Alignment alignment = …)
+//
+// Ownership: item becomes Parented: Qt frees it from now on.
+//
+// The layout takes ownership of the item.
+//
+// AddItemFull is AddItem with every argument, including those AddItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsgridlayout.html#addItem
+func (this *QGraphicsGridLayout) AddItemFull(item QGraphicsLayoutItemLike, row int, column int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsGridLayout.AddItemFull")
+	var itemPtr unsafe.Pointer
+	var itemH *rt.Handle
+	if item != nil {
+		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsLayoutItem()), "QGraphicsGridLayout.AddItemFull")
+	}
+	C.qute_QGraphicsGridLayout_addItem_3(self, itemPtr, C.int(row), C.int(column), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
+}
+
+// SizeHintFull wraps QGraphicsGridLayout::sizeHint.
+//
+//	C++: QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF & constraint = …) const
+//
+// SizeHintFull is SizeHint with every argument, including those SizeHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsgridlayout.html#sizeHint
+func (this *QGraphicsGridLayout) SizeHintFull(which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsGridLayout.SizeHintFull")
+	r := C.qute_QGraphicsGridLayout_sizeHint_1(self, C.int64_t(which), cQSizeF(constraint))
 	runtime.KeepAlive(this)
 	return goQSizeF(r)
 }

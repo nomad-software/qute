@@ -106,10 +106,12 @@ func NewQDeadlineTimerWithTimerType(type_ TimerType) *QDeadlineTimer {
 //
 //	C++: QDeadlineTimer::QDeadlineTimer(ForeverConstant, Qt::TimerType type_ = …)
 //
+// Arguments with C++ defaults are left at them; NewQDeadlineTimerWithForeverConstantFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#QDeadlineTimer
-func NewQDeadlineTimerWithForeverConstant(arg0 QDeadlineTimerForeverConstant) *QDeadlineTimer {
+func NewQDeadlineTimerWithForeverConstant(foreverConstant QDeadlineTimerForeverConstant) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithForeverConstant")
-	p := C.qute_QDeadlineTimer_new_2(C.int64_t(arg0))
+	p := C.qute_QDeadlineTimer_new_2(C.int64_t(foreverConstant))
 	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
@@ -118,10 +120,40 @@ func NewQDeadlineTimerWithForeverConstant(arg0 QDeadlineTimerForeverConstant) *Q
 //
 //	C++: QDeadlineTimer::QDeadlineTimer(qint64 msecs, Qt::TimerType type = …)
 //
+// Arguments with C++ defaults are left at them; NewQDeadlineTimerWithMsecsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#QDeadlineTimer
 func NewQDeadlineTimerWithMsecs(msecs int64) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithMsecs")
 	p := C.qute_QDeadlineTimer_new_3(C.longlong(msecs))
+	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	return rt.View[QDeadlineTimer](h, p)
+}
+
+// NewQDeadlineTimerWithForeverConstantFull wraps the QDeadlineTimer constructor.
+//
+//	C++: QDeadlineTimer::QDeadlineTimer(ForeverConstant, Qt::TimerType type_ = …)
+//
+// NewQDeadlineTimerWithForeverConstantFull is NewQDeadlineTimerWithForeverConstant with every argument, including those NewQDeadlineTimerWithForeverConstant leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#QDeadlineTimer
+func NewQDeadlineTimerWithForeverConstantFull(foreverConstant QDeadlineTimerForeverConstant, type_ TimerType) *QDeadlineTimer {
+	rt.CheckThread("NewQDeadlineTimerWithForeverConstantFull")
+	p := C.qute_QDeadlineTimer_new_4(C.int64_t(foreverConstant), C.int64_t(type_))
+	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	return rt.View[QDeadlineTimer](h, p)
+}
+
+// NewQDeadlineTimerWithMsecsFull wraps the QDeadlineTimer constructor.
+//
+//	C++: QDeadlineTimer::QDeadlineTimer(qint64 msecs, Qt::TimerType type = …)
+//
+// NewQDeadlineTimerWithMsecsFull is NewQDeadlineTimerWithMsecs with every argument, including those NewQDeadlineTimerWithMsecs leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#QDeadlineTimer
+func NewQDeadlineTimerWithMsecsFull(msecs int64, typeArg TimerType) *QDeadlineTimer {
+	rt.CheckThread("NewQDeadlineTimerWithMsecsFull")
+	p := C.qute_QDeadlineTimer_new_5(C.longlong(msecs), C.int64_t(typeArg))
 	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
@@ -201,6 +233,8 @@ func (this *QDeadlineTimer) RemainingTimeNSecs() int64 {
 //
 //	C++: void QDeadlineTimer::setRemainingTime(qint64 msecs, Qt::TimerType type = …)
 //
+// Arguments with C++ defaults are left at them; SetRemainingTimeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setRemainingTime
 func (this *QDeadlineTimer) SetRemainingTime(msecs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetRemainingTime")
@@ -211,6 +245,8 @@ func (this *QDeadlineTimer) SetRemainingTime(msecs int64) {
 // SetPreciseRemainingTime wraps QDeadlineTimer::setPreciseRemainingTime.
 //
 //	C++: void QDeadlineTimer::setPreciseRemainingTime(qint64 secs, qint64 nsecs = …, Qt::TimerType type = …)
+//
+// Arguments with C++ defaults are left at them; SetPreciseRemainingTimeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setPreciseRemainingTime
 func (this *QDeadlineTimer) SetPreciseRemainingTime(secs int64) {
@@ -247,6 +283,8 @@ func (this *QDeadlineTimer) DeadlineNSecs() int64 {
 //
 //	C++: void QDeadlineTimer::setDeadline(qint64 msecs, Qt::TimerType timerType = …)
 //
+// Arguments with C++ defaults are left at them; SetDeadlineFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setDeadline
 func (this *QDeadlineTimer) SetDeadline(msecs int64) {
 	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetDeadline")
@@ -257,6 +295,8 @@ func (this *QDeadlineTimer) SetDeadline(msecs int64) {
 // SetPreciseDeadline wraps QDeadlineTimer::setPreciseDeadline.
 //
 //	C++: void QDeadlineTimer::setPreciseDeadline(qint64 secs, qint64 nsecs = …, Qt::TimerType type = …)
+//
+// Arguments with C++ defaults are left at them; SetPreciseDeadlineFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setPreciseDeadline
 func (this *QDeadlineTimer) SetPreciseDeadline(secs int64) {
@@ -275,6 +315,58 @@ func (this *QDeadlineTimer) RemainingTimeAsDuration() time.Duration {
 	r := C.qute_QDeadlineTimer_remainingTimeAsDuration(self)
 	runtime.KeepAlive(this)
 	return time.Duration(r)
+}
+
+// SetRemainingTimeFull wraps QDeadlineTimer::setRemainingTime.
+//
+//	C++: void QDeadlineTimer::setRemainingTime(qint64 msecs, Qt::TimerType type = …)
+//
+// SetRemainingTimeFull is SetRemainingTime with every argument, including those SetRemainingTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setRemainingTime
+func (this *QDeadlineTimer) SetRemainingTimeFull(msecs int64, typeArg TimerType) {
+	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetRemainingTimeFull")
+	C.qute_QDeadlineTimer_setRemainingTime_1(self, C.longlong(msecs), C.int64_t(typeArg))
+	runtime.KeepAlive(this)
+}
+
+// SetPreciseRemainingTimeFull wraps QDeadlineTimer::setPreciseRemainingTime.
+//
+//	C++: void QDeadlineTimer::setPreciseRemainingTime(qint64 secs, qint64 nsecs = …, Qt::TimerType type = …)
+//
+// SetPreciseRemainingTimeFull is SetPreciseRemainingTime with every argument, including those SetPreciseRemainingTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setPreciseRemainingTime
+func (this *QDeadlineTimer) SetPreciseRemainingTimeFull(secs int64, nsecs int64, typeArg TimerType) {
+	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetPreciseRemainingTimeFull")
+	C.qute_QDeadlineTimer_setPreciseRemainingTime_1(self, C.longlong(secs), C.longlong(nsecs), C.int64_t(typeArg))
+	runtime.KeepAlive(this)
+}
+
+// SetDeadlineFull wraps QDeadlineTimer::setDeadline.
+//
+//	C++: void QDeadlineTimer::setDeadline(qint64 msecs, Qt::TimerType timerType = …)
+//
+// SetDeadlineFull is SetDeadline with every argument, including those SetDeadline leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setDeadline
+func (this *QDeadlineTimer) SetDeadlineFull(msecs int64, timerType TimerType) {
+	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetDeadlineFull")
+	C.qute_QDeadlineTimer_setDeadline_1(self, C.longlong(msecs), C.int64_t(timerType))
+	runtime.KeepAlive(this)
+}
+
+// SetPreciseDeadlineFull wraps QDeadlineTimer::setPreciseDeadline.
+//
+//	C++: void QDeadlineTimer::setPreciseDeadline(qint64 secs, qint64 nsecs = …, Qt::TimerType type = …)
+//
+// SetPreciseDeadlineFull is SetPreciseDeadline with every argument, including those SetPreciseDeadline leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#setPreciseDeadline
+func (this *QDeadlineTimer) SetPreciseDeadlineFull(secs int64, nsecs int64, typeArg TimerType) {
+	self := rt.Use(unsafe.Pointer(this), "QDeadlineTimer.SetPreciseDeadlineFull")
+	C.qute_QDeadlineTimer_setPreciseDeadline_1(self, C.longlong(secs), C.longlong(nsecs), C.int64_t(typeArg))
+	runtime.KeepAlive(this)
 }
 
 // QDeadlineTimerAddNSecs wraps QDeadlineTimer::addNSecs.
@@ -297,9 +389,26 @@ func QDeadlineTimerAddNSecs(dt *QDeadlineTimer, nsecs int64) *QDeadlineTimer {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QDeadlineTimerCurrentFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#current
 func QDeadlineTimerCurrent() *QDeadlineTimer {
 	rt.CheckThread("QDeadlineTimerCurrent")
 	r := C.qute_QDeadlineTimer_current()
+	return rt.View[QDeadlineTimer](rt.WrapClass(r, "QDeadlineTimer", rt.TakeOwned), r)
+}
+
+// QDeadlineTimerCurrentFull wraps QDeadlineTimer::current.
+//
+//	C++: QDeadlineTimer QDeadlineTimer::current(Qt::TimerType timerType = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QDeadlineTimerCurrentFull is QDeadlineTimerCurrent with every argument, including those QDeadlineTimerCurrent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdeadlinetimer.html#current
+func QDeadlineTimerCurrentFull(timerType TimerType) *QDeadlineTimer {
+	rt.CheckThread("QDeadlineTimerCurrentFull")
+	r := C.qute_QDeadlineTimer_current_1(C.int64_t(timerType))
 	return rt.View[QDeadlineTimer](rt.WrapClass(r, "QDeadlineTimer", rt.TakeOwned), r)
 }

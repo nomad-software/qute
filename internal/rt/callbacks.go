@@ -7,6 +7,7 @@ import (
 	"runtime/debug"
 	"sync/atomic"
 	"unsafe"
+	"weak"
 )
 
 var callbackDepth atomic.Int32
@@ -70,20 +71,19 @@ func catchPanic() {
 }
 
 type callback struct {
-	fn     func(args unsafe.Pointer)
-	fnr    func(args, ret unsafe.Pointer)
-	sender *Handle
+	fn  func(args unsafe.Pointer)
+	fnr func(args, ret unsafe.Pointer)
 }
 
 // NewFunc stores a Go func passed to Qt as a std::function. Qt releases it
 // (through the same release path as signals) when it drops the function.
 func NewFunc(fn func(args, ret unsafe.Pointer)) uintptr {
-	return uintptr(cgo.NewHandle(&callback{fnr: fn}))
+	return uintptr(cgo.NewHandle(&callback{fnr: fn})) | funcBit
 }
 
 // InvokeFunc runs a std::function callback and lets it write its result.
 func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
-	cb := cgo.Handle(id).Value().(*callback)
+	cb := cgo.Handle(id &^ funcBit).Value().(*callback)
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
@@ -91,18 +91,44 @@ func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
 }
 
 // NewCallback stores fn for a C++ lambda that captures only the returned id.
-// The sender stays pinned while the connection is live.
+// The closure lives on the sender's handle, which is anchored (see anchor.go)
+// while the connection is live: by the root of its object tree, or globally
+// when the sender is itself a root.
 func NewCallback(sender *Handle, fn func(args unsafe.Pointer)) uintptr {
-	if sender != nil {
-		sender.Pin()
+	if sender == nil {
+		return uintptr(cgo.NewHandle(&callback{fn: fn})) | funcBit
 	}
-	return uintptr(cgo.NewHandle(&callback{fn: fn, sender: sender}))
+	id := newSlot(sender)
+	sender.mu.Lock()
+	if sender.callbacks == nil {
+		sender.callbacks = map[uintptr]*callback{}
+	}
+	sender.callbacks[id] = &callback{fn: fn}
+	sender.mu.Unlock()
+	sender.anchorPin()
+	return id
 }
 
+// funcBit marks a callback id that is a cgo.Handle rather than a slot id (a
+// std::function, or a connection without a sender handle). cgo handles start
+// at 1 and grow by one, so the top bit is free.
+const funcBit = uintptr(1) << (unsafe.Sizeof(uintptr(0))*8 - 1)
+
 // InvokeCallback runs the closure stored under id with the shim's argument
-// array.
+// array. A closure whose object tree GC already collected (its deletion is
+// still queued) is skipped.
 func InvokeCallback(id uintptr, args unsafe.Pointer) {
-	cb := cgo.Handle(id).Value().(*callback)
+	var cb *callback
+	if id&funcBit != 0 {
+		cb = cgo.Handle(id &^ funcBit).Value().(*callback)
+	} else if h := slotHandle(id); h != nil {
+		h.mu.Lock()
+		cb = h.callbacks[id]
+		h.mu.Unlock()
+	}
+	if cb == nil {
+		return
+	}
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
@@ -110,13 +136,22 @@ func InvokeCallback(id uintptr, args unsafe.Pointer) {
 }
 
 // ReleaseCallback is called when Qt destroys the slot object, on Disconnect or
-// when the sender dies. It frees the closure and drops the sender's pin.
+// when the sender dies. It frees the closure and drops the sender's anchor.
+// std::function callbacks (NewFunc) come here too.
 func ReleaseCallback(id uintptr) {
-	h := cgo.Handle(id)
-	cb := h.Value().(*callback)
-	h.Delete()
-	if cb.sender != nil {
-		cb.sender.Unpin()
+	if id&funcBit != 0 {
+		cgo.Handle(id &^ funcBit).Delete()
+		return
+	}
+	v, ok := slots.LoadAndDelete(id)
+	if !ok {
+		return
+	}
+	if h := v.(weak.Pointer[Handle]).Value(); h != nil {
+		h.mu.Lock()
+		delete(h.callbacks, id)
+		h.mu.Unlock()
+		h.anchorUnpin()
 	}
 }
 
@@ -163,9 +198,14 @@ type Virtual struct {
 	Call func(self any, args, ret unsafe.Pointer)
 }
 
-// Dispatch is called by a shim for an overridden virtual.
-func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) {
-	h := cgo.Handle(id).Value().(*Handle)
+// Dispatch is called by a shim for an overridden virtual. It reports false
+// when the Go value is gone (its object tree was collected and is about to be
+// deleted); the shim then runs the C++ implementation instead.
+func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) bool {
+	h := slotHandle(id)
+	if h == nil || h.Self == nil {
+		return false
+	}
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
@@ -173,6 +213,7 @@ func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) {
 		panic(fmt.Sprintf("qute: virtual index %d out of range for %s", idx, h.class))
 	}
 	h.VTable[idx].Call(h.Self, args, ret)
+	return true
 }
 
 // Mask computes the override bitmask for self against vt.

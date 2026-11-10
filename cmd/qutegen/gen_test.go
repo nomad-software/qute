@@ -276,3 +276,174 @@ func TestReportListsInferredOutParameters(t *testing.T) {
 		t.Error("the report does not list an unconfirmed out-parameter")
 	}
 }
+
+// A method whose trailing defaults are dropped gets a Full form taking every
+// argument; the generated tests skip it (same rules as the short form).
+func TestFullForms(t *testing.T) {
+	for _, tc := range []struct{ cls, short, full string }{
+		{"QAbstractItemModel", "Index", "IndexFull"},
+		{"QAbstractItemModel", "Data", "DataFull"},
+		{"QTextCursor", "MovePosition", "MovePositionFull"},
+		{"QBoxLayout", "AddWidget", "AddWidgetFull"},
+		{"QWidget", "SetWindowFlag", "SetWindowFlagFull"},
+		{"QFont", "NewQFontWithFamily", "NewQFontWithFamilyFull"},
+		{"QMessageBox", "QMessageBoxInformation", "QMessageBoxInformationFull"},
+	} {
+		c := class(t, tc.cls)
+		var short, full *Method
+		for _, mm := range append(append(append([]*Method{}, c.Ctors...), c.Methods...), c.Statics...) {
+			switch mm.GoName {
+			case tc.short:
+				short = mm
+			case tc.full:
+				full = mm
+			}
+		}
+		if short == nil || full == nil {
+			t.Errorf("%s: short %s or full %s missing", tc.cls, tc.short, tc.full)
+			continue
+		}
+		if full.FullOf != short || short.FullName != tc.full || len(goParams(full)) <= len(goParams(short)) {
+			t.Errorf("%s.%s: not the Full form of %s (%d vs %d params)", tc.cls, tc.full, tc.short, len(goParams(full)), len(goParams(short)))
+		}
+	}
+	// keep-defaults already passes everything: no Full form
+	for _, mm := range class(t, "QCoreApplication").Statics {
+		if mm.GoName == "QCoreApplicationExitFull" {
+			t.Error("keep-defaults method got a Full form")
+		}
+	}
+}
+
+// Plain polymorphic bases of QObject classes look for the QObject's handle.
+func TestQObjectBases(t *testing.T) {
+	for _, n := range []string{"QPaintDevice", "QGraphicsItem", "QLayoutItem", "QSurface"} {
+		if !class(t, n).QBase {
+			t.Errorf("%s is not marked as a base of QObject classes", n)
+		}
+	}
+	for _, n := range []string{"QStandardItem", "QSpacerItem", "QImage"} {
+		if class(t, n).QBase {
+			t.Errorf("%s is marked as a base of QObject classes", n)
+		}
+	}
+	src := string(gen(t).emitClass(class(t, "QPaintDevice")))
+	if !strings.Contains(src, `rt.RegisterBaseOfQObject("QPaintDevice"`) {
+		t.Error("QPaintDevice does not register its QObject cast")
+	}
+}
+
+// A plain object handed out by a receiver depends on it; one Go owns does not.
+func TestPlainResultsDependOnReceiver(t *testing.T) {
+	src := string(gen(t).emitClass(class(t, "QLayout")))
+	if !strings.Contains(src, `rt.WrapClassFrom(r, "QLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H)`) {
+		t.Error("QLayout.ItemAt does not tie its item to the layout")
+	}
+	if !strings.Contains(src, `rt.WrapClass(r, "QLayoutItem", rt.TakeOwned)`) {
+		t.Error("QLayout.TakeAt (Owned) should not depend on the layout")
+	}
+}
+
+// A transfer-to-cpp argument records the container that took it.
+func TestTransferRecordsContainer(t *testing.T) {
+	src := string(gen(t).emitClass(class(t, "QBoxLayout")))
+	if !strings.Contains(src, "rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)") {
+		t.Error("QBoxLayout.AddWidget does not pass its layout to TransferTo")
+	}
+}
+
+// The return rule of a virtual also governs what a Go override returns: the
+// caller owns it, found on the base that declares it.
+func TestVirtualReturnRule(t *testing.T) {
+	c := class(t, "QSortFilterProxyModel")
+	var v *Method
+	for _, x := range c.Virtuals {
+		if x.IR.Name == "mimeData" {
+			v = x
+		}
+	}
+	if v == nil || v.RetRule != "transfer-to-go" {
+		t.Fatalf("QSortFilterProxyModel mimeData virtual: %+v, want the base's transfer-to-go rule", v)
+	}
+	src := string(gen(t).emitClass(c))
+	if !strings.Contains(src, "rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()") {
+		t.Error("the override's result is not transferred to C++")
+	}
+}
+
+// A shim runs the C++ implementation when the Go value is gone, and every
+// generated C function checks the thread.
+func TestShimFallbackAndThreadCheck(t *testing.T) {
+	g := gen(t)
+	var b buf
+	g.emitShimClass(class(t, "QWidget"), &b)
+	shim := b.String()
+	i := strings.Index(shim, "QSize sizeHint() const override {")
+	if i < 0 {
+		t.Fatal("no sizeHint override in the QWidget shim")
+	}
+	body := shim[i : i+strings.Index(shim[i:], "\n\t}")]
+	if !strings.Contains(body, "if (qute_qtwidgets_virtual(") || !strings.Contains(body, "return QWidget::sizeHint()") {
+		t.Errorf("sizeHint does not fall back to the C++ implementation:\n%s", body)
+	}
+	var cpp buf
+	g.emitCpp(g.byName["QtCore"], &cpp)
+	src := cpp.String()
+	funcs := strings.Count(src, ") {\n\tqute_gui_only();")
+	if funcs < 1000 || !strings.Contains(src, "qute_qtcore_wrong_thread();") {
+		t.Errorf("only %d C functions check the thread", funcs)
+	}
+}
+
+// Value classes with a memory option report their size and are measured
+// again after the methods that change it.
+func TestMemoryOption(t *testing.T) {
+	src := string(gen(t).emitClass(class(t, "QImage")))
+	if !strings.Contains(src, `rt.RegisterMemory("QImage"`) {
+		t.Error("QImage does not register its memory size")
+	}
+	i := strings.Index(src, "func (this *QImage) Load(")
+	if i < 0 || !strings.Contains(src[i:i+strings.Index(src[i:], "\n}\n")], "rt.Remeasure(") {
+		t.Error("QImage.Load does not measure the image again")
+	}
+}
+
+// A conversion constructor is named by its type, not by a cryptic C++
+// parameter name; constructors with several named numbers keep the names.
+func TestConstructorNames(t *testing.T) {
+	c := class(t, "QVariant")
+	names := map[string]bool{}
+	for _, mm := range c.Ctors {
+		names[mm.GoName] = true
+	}
+	for _, n := range []string{"NewQVariantWithInt", "NewQVariantWithInt64", "NewQVariantWithBool", "NewQVariantWithFloat64", "NewQVariantWithString", "NewQVariantWithRune"} {
+		if !names[n] {
+			t.Errorf("no %s", n)
+		}
+	}
+	for n := range names {
+		for _, bad := range []string{"IArg", "Ll", "WithD", "Qchar", "StringArg", "BArg"} {
+			if strings.HasSuffix(n, bad) {
+				t.Errorf("cryptic constructor name %s", n)
+			}
+		}
+	}
+	method(t, "QDate", "QDate::QDate(int y, int m, int d)") // still NewQDateWithY
+}
+
+// depends-on on a QObject class would do nothing: the generator says so.
+func TestDependsOnQObjectWarns(t *testing.T) {
+	g := gen(t)
+	c := class(t, "QTimer")
+	saved, warns := c.Opts.DependsOn, len(g.report.warnings)
+	c.Opts.DependsOn = depList{{Getter: "parent"}}
+	defer func() { c.Opts.DependsOn, g.report.warnings = saved, g.report.warnings[:warns] }()
+	g.emitClass(c)
+	found := false
+	for _, w := range g.report.warnings[warns:] {
+		found = found || strings.Contains(w, "depends-on on a QObject class")
+	}
+	if !found {
+		t.Error("no warning for depends-on on a QObject class")
+	}
+}

@@ -266,7 +266,7 @@ func (this *QCompleter) SetPopup(popup QAbstractItemViewLike) {
 	C.qute_QCompleter_setPopup(self, popupPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(popup)
-	popupH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, popupH)
 }
 
 // SetCaseSensitivity wraps QCompleter::setCaseSensitivity.
@@ -499,6 +499,8 @@ func (this *QCompleter) SetCompletionPrefix(prefix string) {
 //
 //	C++: void QCompleter::complete(const QRect & rect = …)
 //
+// Arguments with C++ defaults are left at them; CompleteFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcompleter.html#complete
 func (this *QCompleter) Complete() {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.Complete")
@@ -586,6 +588,19 @@ func (this *QCompleter) EmitHighlightedIndex(index *qtcore.QModelIndex) {
 	C.qute_QCompleter_highlighted_3(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.EmitHighlightedIndex"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
+}
+
+// CompleteFull wraps QCompleter::complete.
+//
+//	C++: void QCompleter::complete(const QRect & rect = …)
+//
+// CompleteFull is Complete with every argument, including those Complete leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcompleter.html#complete
+func (this *QCompleter) CompleteFull(rect qtcore.QRect) {
+	self := rt.Use(unsafe.Pointer(this), "QCompleter.CompleteFull")
+	C.qute_QCompleter_complete_1(self, cQRect(rect))
+	runtime.KeepAlive(this)
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the

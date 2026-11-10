@@ -54,6 +54,8 @@ func QInputDialogCast(o qtcore.QObjectLike) *QInputDialog {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQInputDialogFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#QInputDialog
 func NewQInputDialog(parent QWidgetLike) *QInputDialog {
 	rt.CheckThread("NewQInputDialog")
@@ -62,6 +64,31 @@ func NewQInputDialog(parent QWidgetLike) *QInputDialog {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQInputDialog")
 	}
 	p := C.qute_QInputDialog_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QInputDialog", mode)
+	return rt.View[QInputDialog](h, p)
+}
+
+// NewQInputDialogFull wraps the QInputDialog constructor.
+//
+//	C++: QInputDialog::QInputDialog(QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQInputDialogFull is NewQInputDialog with every argument, including those NewQInputDialog leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#QInputDialog
+func NewQInputDialogFull(parent QWidgetLike, flags qtcore.WindowFlags) *QInputDialog {
+	rt.CheckThread("NewQInputDialogFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQInputDialogFull")
+	}
+	p := C.qute_QInputDialog_new_1(parentPtr, C.int64_t(flags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -120,6 +147,8 @@ func (this *QInputDialog) LabelText() string {
 // SetOption wraps QInputDialog::setOption.
 //
 //	C++: void QInputDialog::setOption(InputDialogOption option, bool on = …)
+//
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#setOption
 func (this *QInputDialog) SetOption(option QInputDialogInputDialogOptions) {
@@ -594,6 +623,19 @@ func (this *QInputDialog) EmitDoubleValueChanged(value float64) {
 func (this *QInputDialog) EmitDoubleValueSelected(value float64) {
 	self := rt.Use(unsafe.Pointer(this), "QInputDialog.EmitDoubleValueSelected")
 	C.qute_QInputDialog_doubleValueSelected_1(self, C.double(value))
+	runtime.KeepAlive(this)
+}
+
+// SetOptionFull wraps QInputDialog::setOption.
+//
+//	C++: void QInputDialog::setOption(InputDialogOption option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#setOption
+func (this *QInputDialog) SetOptionFull(option QInputDialogInputDialogOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QInputDialog.SetOptionFull")
+	C.qute_QInputDialog_setOption_1(self, C.int64_t(option), C.bool(on))
 	runtime.KeepAlive(this)
 }
 

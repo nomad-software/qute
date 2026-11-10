@@ -54,6 +54,8 @@ func QGraphicsProxyWidgetCast(o qtcore.QObjectLike) *QGraphicsProxyWidget {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQGraphicsProxyWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsproxywidget.html#QGraphicsProxyWidget
 func NewQGraphicsProxyWidget(parent QGraphicsItemLike) *QGraphicsProxyWidget {
 	rt.CheckThread("NewQGraphicsProxyWidget")
@@ -62,6 +64,31 @@ func NewQGraphicsProxyWidget(parent QGraphicsItemLike) *QGraphicsProxyWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsProxyWidget")
 	}
 	p := C.qute_QGraphicsProxyWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsProxyWidget", mode)
+	return rt.View[QGraphicsProxyWidget](h, p)
+}
+
+// NewQGraphicsProxyWidgetFull wraps the QGraphicsProxyWidget constructor.
+//
+//	C++: QGraphicsProxyWidget::QGraphicsProxyWidget(QGraphicsItem * parent = …, Qt::WindowFlags wFlags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQGraphicsProxyWidgetFull is NewQGraphicsProxyWidget with every argument, including those NewQGraphicsProxyWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsproxywidget.html#QGraphicsProxyWidget
+func NewQGraphicsProxyWidgetFull(parent QGraphicsItemLike, wFlags qtcore.WindowFlags) *QGraphicsProxyWidget {
+	rt.CheckThread("NewQGraphicsProxyWidgetFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsProxyWidgetFull")
+	}
+	p := C.qute_QGraphicsProxyWidget_new_1(parentPtr, C.int64_t(wFlags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -90,7 +117,7 @@ func (this *QGraphicsProxyWidget) SetWidget(widget QWidgetLike) {
 	C.qute_QGraphicsProxyWidget_setWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // Widget wraps QGraphicsProxyWidget::widget.

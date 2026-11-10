@@ -23,9 +23,12 @@ func qute_qtopenglwidgets_signal(id C.uintptr_t, args unsafe.Pointer) {
 func qute_qtopenglwidgets_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtopenglwidgets_virtual
-func qute_qtopenglwidgets_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) {
-	rt.Dispatch(uintptr(id), int(idx), args, ret)
+func qute_qtopenglwidgets_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
 }
+
+//export qute_qtopenglwidgets_wrong_thread
+func qute_qtopenglwidgets_wrong_thread() { rt.WrongThread() }
 
 //export qute_qtopenglwidgets_dead
 func qute_qtopenglwidgets_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }

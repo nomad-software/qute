@@ -237,7 +237,7 @@ func (this *QToolBar) AddWidget(widget QWidgetLike) *qtgui.QAction {
 	r := C.qute_QToolBar_addWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 
@@ -263,7 +263,7 @@ func (this *QToolBar) InsertWidget(before qtgui.QActionLike, widget QWidgetLike)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return rt.View[qtgui.QAction](rt.WrapClass(r, "QAction", rt.TakeParented), r)
 }
 

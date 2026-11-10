@@ -540,6 +540,8 @@ func (this *QOpenGLShaderProgram) SetAttributeValues(location int, values unsafe
 //
 // Qt reads the array at draw time: keep the memory alive and pinned until then, or use SetAttributeBuffer.
 //
+// Arguments with C++ defaults are left at them; SetAttributeArrayFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#setAttributeArray
 func (this *QOpenGLShaderProgram) SetAttributeArray(location int, values unsafe.Pointer, tupleSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeArray")
@@ -553,6 +555,8 @@ func (this *QOpenGLShaderProgram) SetAttributeArray(location int, values unsafe.
 //
 // Qt reads the array at draw time: keep the memory alive and pinned until then, or use SetAttributeBuffer.
 //
+// Arguments with C++ defaults are left at them; SetAttributeArrayTypeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#setAttributeArray
 func (this *QOpenGLShaderProgram) SetAttributeArrayType(location int, typeArg uint, values unsafe.Pointer, tupleSize int) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeArrayType")
@@ -563,6 +567,8 @@ func (this *QOpenGLShaderProgram) SetAttributeArrayType(location int, typeArg ui
 // SetAttributeBuffer wraps QOpenGLShaderProgram::setAttributeBuffer.
 //
 //	C++: void QOpenGLShaderProgram::setAttributeBuffer(int location, GLenum type, int offset, int tupleSize, int stride = …)
+//
+// Arguments with C++ defaults are left at them; SetAttributeBufferFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#setAttributeBuffer
 func (this *QOpenGLShaderProgram) SetAttributeBuffer(location int, typeArg uint, offset int, tupleSize int) {
@@ -897,13 +903,76 @@ func (this *QOpenGLShaderProgram) SetUniformMatrix4x4Array(location int, values 
 	runtime.KeepAlive(values)
 }
 
+// SetAttributeArrayFull wraps QOpenGLShaderProgram::setAttributeArray.
+//
+//	C++: void QOpenGLShaderProgram::setAttributeArray(int location, const GLfloat * values, int tupleSize, int stride = …)
+//
+// Qt reads the array at draw time: keep the memory alive and pinned until then, or use SetAttributeBuffer.
+//
+// SetAttributeArrayFull is SetAttributeArray with every argument, including those SetAttributeArray leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#setAttributeArray
+func (this *QOpenGLShaderProgram) SetAttributeArrayFull(location int, values unsafe.Pointer, tupleSize int, stride int) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeArrayFull")
+	C.qute_QOpenGLShaderProgram_setAttributeArray_2(self, C.int(location), values, C.int(tupleSize), C.int(stride))
+	runtime.KeepAlive(this)
+}
+
+// SetAttributeArrayTypeFull wraps QOpenGLShaderProgram::setAttributeArray.
+//
+//	C++: void QOpenGLShaderProgram::setAttributeArray(int location, GLenum type, const void * values, int tupleSize, int stride = …)
+//
+// Qt reads the array at draw time: keep the memory alive and pinned until then, or use SetAttributeBuffer.
+//
+// SetAttributeArrayTypeFull is SetAttributeArrayType with every argument, including those SetAttributeArrayType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#setAttributeArray
+func (this *QOpenGLShaderProgram) SetAttributeArrayTypeFull(location int, typeArg uint, values unsafe.Pointer, tupleSize int, stride int) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeArrayTypeFull")
+	C.qute_QOpenGLShaderProgram_setAttributeArray_3(self, C.int(location), C.uint(typeArg), values, C.int(tupleSize), C.int(stride))
+	runtime.KeepAlive(this)
+}
+
+// SetAttributeBufferFull wraps QOpenGLShaderProgram::setAttributeBuffer.
+//
+//	C++: void QOpenGLShaderProgram::setAttributeBuffer(int location, GLenum type, int offset, int tupleSize, int stride = …)
+//
+// SetAttributeBufferFull is SetAttributeBuffer with every argument, including those SetAttributeBuffer leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#setAttributeBuffer
+func (this *QOpenGLShaderProgram) SetAttributeBufferFull(location int, typeArg uint, offset int, tupleSize int, stride int) {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLShaderProgram.SetAttributeBufferFull")
+	C.qute_QOpenGLShaderProgram_setAttributeBuffer_1(self, C.int(location), C.uint(typeArg), C.int(offset), C.int(tupleSize), C.int(stride))
+	runtime.KeepAlive(this)
+}
+
 // QOpenGLShaderProgramHasOpenGLShaderPrograms wraps QOpenGLShaderProgram::hasOpenGLShaderPrograms.
 //
 //	C++: bool QOpenGLShaderProgram::hasOpenGLShaderPrograms(QOpenGLContext * context = …)
+//
+// Arguments with C++ defaults are left at them; QOpenGLShaderProgramHasOpenGLShaderProgramsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#hasOpenGLShaderPrograms
 func QOpenGLShaderProgramHasOpenGLShaderPrograms() bool {
 	rt.CheckThread("QOpenGLShaderProgramHasOpenGLShaderPrograms")
 	r := C.qute_QOpenGLShaderProgram_hasOpenGLShaderPrograms()
+	return bool(r)
+}
+
+// QOpenGLShaderProgramHasOpenGLShaderProgramsFull wraps QOpenGLShaderProgram::hasOpenGLShaderPrograms.
+//
+//	C++: bool QOpenGLShaderProgram::hasOpenGLShaderPrograms(QOpenGLContext * context = …)
+//
+// QOpenGLShaderProgramHasOpenGLShaderProgramsFull is QOpenGLShaderProgramHasOpenGLShaderPrograms with every argument, including those QOpenGLShaderProgramHasOpenGLShaderPrograms leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglshaderprogram.html#hasOpenGLShaderPrograms
+func QOpenGLShaderProgramHasOpenGLShaderProgramsFull(context qtgui.QOpenGLContextLike) bool {
+	rt.CheckThread("QOpenGLShaderProgramHasOpenGLShaderProgramsFull")
+	var contextPtr unsafe.Pointer
+	if context != nil {
+		contextPtr = rt.UseArg(unsafe.Pointer(context.AsQOpenGLContext()), "QOpenGLShaderProgramHasOpenGLShaderProgramsFull")
+	}
+	r := C.qute_QOpenGLShaderProgram_hasOpenGLShaderPrograms_1(contextPtr)
+	runtime.KeepAlive(context)
 	return bool(r)
 }

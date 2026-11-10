@@ -24,7 +24,7 @@ type QSpacerItemLike interface{ AsQSpacerItem() *QSpacerItem }
 func (this *QSpacerItem) AsQSpacerItem() *QSpacerItem { return this }
 
 func init() {
-	rt.RegisterClass("QSpacerItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QSpacerItem_delete(p) })
+	rt.RegisterClass("QSpacerItem", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QSpacerItem_delete(p) })
 }
 
 // QSpacerItemFromPtr wraps an existing C++ QSpacerItem. This is an unsafe escape hatch: own says
@@ -37,6 +37,8 @@ func QSpacerItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSpacerItem {
 //
 //	C++: QSpacerItem::QSpacerItem(int w, int h, QSizePolicy::Policy hData = …, QSizePolicy::Policy vData = …)
 //
+// Arguments with C++ defaults are left at them; NewQSpacerItemWithWFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qspaceritem.html#QSpacerItem
 func NewQSpacerItemWithW(w int, hArg int) *QSpacerItem {
 	rt.CheckThread("NewQSpacerItemWithW")
@@ -45,9 +47,25 @@ func NewQSpacerItemWithW(w int, hArg int) *QSpacerItem {
 	return rt.View[QSpacerItem](h, p)
 }
 
+// NewQSpacerItemWithWFull wraps the QSpacerItem constructor.
+//
+//	C++: QSpacerItem::QSpacerItem(int w, int h, QSizePolicy::Policy hData = …, QSizePolicy::Policy vData = …)
+//
+// NewQSpacerItemWithWFull is NewQSpacerItemWithW with every argument, including those NewQSpacerItemWithW leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qspaceritem.html#QSpacerItem
+func NewQSpacerItemWithWFull(w int, hArg int, hData QSizePolicyPolicy, vData QSizePolicyPolicy) *QSpacerItem {
+	rt.CheckThread("NewQSpacerItemWithWFull")
+	p := C.qute_QSpacerItem_new_1(C.int(w), C.int(hArg), C.int64_t(hData), C.int64_t(vData))
+	h := rt.WrapClass(p, "QSpacerItem", rt.NewOwned)
+	return rt.View[QSpacerItem](h, p)
+}
+
 // ChangeSize wraps QSpacerItem::changeSize.
 //
 //	C++: void QSpacerItem::changeSize(int w, int h, QSizePolicy::Policy hData = …, QSizePolicy::Policy vData = …)
+//
+// Arguments with C++ defaults are left at them; ChangeSizeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qspaceritem.html#changeSize
 func (this *QSpacerItem) ChangeSize(w int, hArg int) {
@@ -68,4 +86,17 @@ func (this *QSpacerItem) SizePolicy() *QSizePolicy {
 	r := C.qute_QSpacerItem_sizePolicy(self)
 	runtime.KeepAlive(this)
 	return rt.View[QSizePolicy](rt.WrapClass(r, "QSizePolicy", rt.TakeOwned), r)
+}
+
+// ChangeSizeFull wraps QSpacerItem::changeSize.
+//
+//	C++: void QSpacerItem::changeSize(int w, int h, QSizePolicy::Policy hData = …, QSizePolicy::Policy vData = …)
+//
+// ChangeSizeFull is ChangeSize with every argument, including those ChangeSize leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qspaceritem.html#changeSize
+func (this *QSpacerItem) ChangeSizeFull(w int, hArg int, hData QSizePolicyPolicy, vData QSizePolicyPolicy) {
+	self := rt.Use(unsafe.Pointer(this), "QSpacerItem.ChangeSizeFull")
+	C.qute_QSpacerItem_changeSize_1(self, C.int(w), C.int(hArg), C.int64_t(hData), C.int64_t(vData))
+	runtime.KeepAlive(this)
 }

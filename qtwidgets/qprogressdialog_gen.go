@@ -54,6 +54,8 @@ func QProgressDialogCast(o qtcore.QObjectLike) *QProgressDialog {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQProgressDialogFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qprogressdialog.html#QProgressDialog
 func NewQProgressDialog(parent QWidgetLike) *QProgressDialog {
 	rt.CheckThread("NewQProgressDialog")
@@ -77,6 +79,8 @@ func NewQProgressDialog(parent QWidgetLike) *QProgressDialog {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQProgressDialogWithLabelTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qprogressdialog.html#QProgressDialog
 func NewQProgressDialogWithLabelText(labelText string, cancelButtonText string, minimum int, maximum int, parent QWidgetLike) *QProgressDialog {
 	rt.CheckThread("NewQProgressDialogWithLabelText")
@@ -85,6 +89,56 @@ func NewQProgressDialogWithLabelText(labelText string, cancelButtonText string, 
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressDialogWithLabelText")
 	}
 	p := C.qute_QProgressDialog_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), (*C.char)(unsafe.Pointer(unsafe.StringData(cancelButtonText))), C.ptrdiff_t(len(cancelButtonText)), C.int(minimum), C.int(maximum), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QProgressDialog", mode)
+	return rt.View[QProgressDialog](h, p)
+}
+
+// NewQProgressDialogFull wraps the QProgressDialog constructor.
+//
+//	C++: QProgressDialog::QProgressDialog(QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQProgressDialogFull is NewQProgressDialog with every argument, including those NewQProgressDialog leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qprogressdialog.html#QProgressDialog
+func NewQProgressDialogFull(parent QWidgetLike, flags qtcore.WindowFlags) *QProgressDialog {
+	rt.CheckThread("NewQProgressDialogFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressDialogFull")
+	}
+	p := C.qute_QProgressDialog_new_2(parentPtr, C.int64_t(flags))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QProgressDialog", mode)
+	return rt.View[QProgressDialog](h, p)
+}
+
+// NewQProgressDialogWithLabelTextFull wraps the QProgressDialog constructor.
+//
+//	C++: QProgressDialog::QProgressDialog(const QString & labelText, const QString & cancelButtonText, int minimum, int maximum, QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQProgressDialogWithLabelTextFull is NewQProgressDialogWithLabelText with every argument, including those NewQProgressDialogWithLabelText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qprogressdialog.html#QProgressDialog
+func NewQProgressDialogWithLabelTextFull(labelText string, cancelButtonText string, minimum int, maximum int, parent QWidgetLike, flags qtcore.WindowFlags) *QProgressDialog {
+	rt.CheckThread("NewQProgressDialogWithLabelTextFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressDialogWithLabelTextFull")
+	}
+	p := C.qute_QProgressDialog_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), (*C.char)(unsafe.Pointer(unsafe.StringData(cancelButtonText))), C.ptrdiff_t(len(cancelButtonText)), C.int(minimum), C.int(maximum), parentPtr, C.int64_t(flags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -111,7 +165,7 @@ func (this *QProgressDialog) SetLabel(label QLabelLike) {
 	C.qute_QProgressDialog_setLabel(self, labelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(label)
-	labelH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, labelH)
 }
 
 // SetCancelButton wraps QProgressDialog::setCancelButton.
@@ -131,7 +185,7 @@ func (this *QProgressDialog) SetCancelButton(button QPushButtonLike) {
 	C.qute_QProgressDialog_setCancelButton(self, buttonPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(button)
-	buttonH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, buttonH)
 }
 
 // SetBar wraps QProgressDialog::setBar.
@@ -151,7 +205,7 @@ func (this *QProgressDialog) SetBar(bar QProgressBarLike) {
 	C.qute_QProgressDialog_setBar(self, barPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(bar)
-	barH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, barH)
 }
 
 // WasCanceled wraps QProgressDialog::wasCanceled.

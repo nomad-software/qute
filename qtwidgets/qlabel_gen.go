@@ -55,6 +55,8 @@ func QLabelCast(o qtcore.QObjectLike) *QLabel {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQLabelFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlabel.html#QLabel
 func NewQLabel(parent QWidgetLike) *QLabel {
 	rt.CheckThread("NewQLabel")
@@ -78,6 +80,8 @@ func NewQLabel(parent QWidgetLike) *QLabel {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQLabelWithTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlabel.html#QLabel
 func NewQLabelWithText(text string, parent QWidgetLike) *QLabel {
 	rt.CheckThread("NewQLabelWithText")
@@ -86,6 +90,56 @@ func NewQLabelWithText(text string, parent QWidgetLike) *QLabel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelWithText")
 	}
 	p := C.qute_QLabel_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QLabel", mode)
+	return rt.View[QLabel](h, p)
+}
+
+// NewQLabelFull wraps the QLabel constructor.
+//
+//	C++: QLabel::QLabel(QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQLabelFull is NewQLabel with every argument, including those NewQLabel leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#QLabel
+func NewQLabelFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QLabel {
+	rt.CheckThread("NewQLabelFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelFull")
+	}
+	p := C.qute_QLabel_new_2(parentPtr, C.int64_t(fArg))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QLabel", mode)
+	return rt.View[QLabel](h, p)
+}
+
+// NewQLabelWithTextFull wraps the QLabel constructor.
+//
+//	C++: QLabel::QLabel(const QString & text, QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQLabelWithTextFull is NewQLabelWithText with every argument, including those NewQLabelWithText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlabel.html#QLabel
+func NewQLabelWithTextFull(text string, parent QWidgetLike, fArg qtcore.WindowFlags) *QLabel {
+	rt.CheckThread("NewQLabelWithTextFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelWithTextFull")
+	}
+	p := C.qute_QLabel_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr, C.int64_t(fArg))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

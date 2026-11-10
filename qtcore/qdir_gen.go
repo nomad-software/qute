@@ -79,6 +79,8 @@ func (this *QDir) Unkeep() {
 //
 //	C++: QDir::QDir(const QString & path = …)
 //
+// Arguments with C++ defaults are left at them; NewQDirFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#QDir
 func NewQDir() *QDir {
 	rt.CheckThread("NewQDir")
@@ -91,10 +93,40 @@ func NewQDir() *QDir {
 //
 //	C++: QDir::QDir(const QString & path, const QString & nameFilter, SortFlags sort = …, Filters filter = …)
 //
+// Arguments with C++ defaults are left at them; NewQDirWithPathFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#QDir
 func NewQDirWithPath(path string, nameFilter string) *QDir {
 	rt.CheckThread("NewQDirWithPath")
 	p := C.qute_QDir_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), (*C.char)(unsafe.Pointer(unsafe.StringData(nameFilter))), C.ptrdiff_t(len(nameFilter)))
+	h := rt.WrapClass(p, "QDir", rt.NewOwned)
+	return rt.View[QDir](h, p)
+}
+
+// NewQDirFull wraps the QDir constructor.
+//
+//	C++: QDir::QDir(const QString & path = …)
+//
+// NewQDirFull is NewQDir with every argument, including those NewQDir leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#QDir
+func NewQDirFull(path string) *QDir {
+	rt.CheckThread("NewQDirFull")
+	p := C.qute_QDir_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	h := rt.WrapClass(p, "QDir", rt.NewOwned)
+	return rt.View[QDir](h, p)
+}
+
+// NewQDirWithPathFull wraps the QDir constructor.
+//
+//	C++: QDir::QDir(const QString & path, const QString & nameFilter, SortFlags sort = …, Filters filter = …)
+//
+// NewQDirWithPathFull is NewQDirWithPath with every argument, including those NewQDirWithPath leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#QDir
+func NewQDirWithPathFull(path string, nameFilter string, sort QDirSortFlags, filter QDirFilters) *QDir {
+	rt.CheckThread("NewQDirWithPathFull")
+	p := C.qute_QDir_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), (*C.char)(unsafe.Pointer(unsafe.StringData(nameFilter))), C.ptrdiff_t(len(nameFilter)), C.int64_t(sort), C.int64_t(filter))
 	h := rt.WrapClass(p, "QDir", rt.NewOwned)
 	return rt.View[QDir](h, p)
 }
@@ -340,6 +372,8 @@ func (this *QDir) Count() int {
 //
 //	C++: bool QDir::isEmpty(Filters filters = …) const
 //
+// Arguments with C++ defaults are left at them; IsEmptyFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#isEmpty
 func (this *QDir) IsEmpty() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDir.IsEmpty")
@@ -352,6 +386,8 @@ func (this *QDir) IsEmpty() bool {
 //
 //	C++: QStringList QDir::entryList(Filters filters = …, SortFlags sort = …) const
 //
+// Arguments with C++ defaults are left at them; EntryListFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#entryList
 func (this *QDir) EntryList() []string {
 	self := rt.Use(unsafe.Pointer(this), "QDir.EntryList")
@@ -363,6 +399,8 @@ func (this *QDir) EntryList() []string {
 // EntryListWithNameFilters wraps QDir::entryList.
 //
 //	C++: QStringList QDir::entryList(const QStringList & nameFilters, Filters filters = …, SortFlags sort = …) const
+//
+// Arguments with C++ defaults are left at them; EntryListWithNameFiltersFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#entryList
 func (this *QDir) EntryListWithNameFilters(nameFilters []string) []string {
@@ -377,6 +415,8 @@ func (this *QDir) EntryListWithNameFilters(nameFilters []string) []string {
 //
 //	C++: QFileInfoList QDir::entryInfoList(Filters filters = …, SortFlags sort = …) const
 //
+// Arguments with C++ defaults are left at them; EntryInfoListFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#entryInfoList
 func (this *QDir) EntryInfoList() []*QFileInfo {
 	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoList")
@@ -390,6 +430,8 @@ func (this *QDir) EntryInfoList() []*QFileInfo {
 // EntryInfoListWithNameFilters wraps QDir::entryInfoList.
 //
 //	C++: QFileInfoList QDir::entryInfoList(const QStringList & nameFilters, Filters filters = …, SortFlags sort = …) const
+//
+// Arguments with C++ defaults are left at them; EntryInfoListWithNameFiltersFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qdir.html#entryInfoList
 func (this *QDir) EntryInfoListWithNameFilters(nameFilters []string) []*QFileInfo {
@@ -579,6 +621,82 @@ func (this *QDir) Refresh() {
 	self := rt.Use(unsafe.Pointer(this), "QDir.Refresh")
 	C.qute_QDir_refresh(self)
 	runtime.KeepAlive(this)
+}
+
+// IsEmptyFull wraps QDir::isEmpty.
+//
+//	C++: bool QDir::isEmpty(Filters filters = …) const
+//
+// IsEmptyFull is IsEmpty with every argument, including those IsEmpty leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#isEmpty
+func (this *QDir) IsEmptyFull(filters QDirFilters) bool {
+	self := rt.Use(unsafe.Pointer(this), "QDir.IsEmptyFull")
+	r := C.qute_QDir_isEmpty_1(self, C.int64_t(filters))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// EntryListFull wraps QDir::entryList.
+//
+//	C++: QStringList QDir::entryList(Filters filters = …, SortFlags sort = …) const
+//
+// EntryListFull is EntryList with every argument, including those EntryList leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#entryList
+func (this *QDir) EntryListFull(filters QDirFilters, sort QDirSortFlags) []string {
+	self := rt.Use(unsafe.Pointer(this), "QDir.EntryListFull")
+	r := C.qute_QDir_entryList_2(self, C.int64_t(filters), C.int64_t(sort))
+	runtime.KeepAlive(this)
+	return quteStrList(r)
+}
+
+// EntryListWithNameFiltersFull wraps QDir::entryList.
+//
+//	C++: QStringList QDir::entryList(const QStringList & nameFilters, Filters filters = …, SortFlags sort = …) const
+//
+// EntryListWithNameFiltersFull is EntryListWithNameFilters with every argument, including those EntryListWithNameFilters leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#entryList
+func (this *QDir) EntryListWithNameFiltersFull(nameFilters []string, filters QDirFilters, sort QDirSortFlags) []string {
+	self := rt.Use(unsafe.Pointer(this), "QDir.EntryListWithNameFiltersFull")
+	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
+	r := C.qute_QDir_entryList_3(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)), C.int64_t(filters), C.int64_t(sort))
+	runtime.KeepAlive(this)
+	return quteStrList(r)
+}
+
+// EntryInfoListFull wraps QDir::entryInfoList.
+//
+//	C++: QFileInfoList QDir::entryInfoList(Filters filters = …, SortFlags sort = …) const
+//
+// EntryInfoListFull is EntryInfoList with every argument, including those EntryInfoList leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#entryInfoList
+func (this *QDir) EntryInfoListFull(filters QDirFilters, sort QDirSortFlags) []*QFileInfo {
+	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoListFull")
+	r := C.qute_QDir_entryInfoList_2(self, C.int64_t(filters), C.int64_t(sort))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
+		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
+	})
+}
+
+// EntryInfoListWithNameFiltersFull wraps QDir::entryInfoList.
+//
+//	C++: QFileInfoList QDir::entryInfoList(const QStringList & nameFilters, Filters filters = …, SortFlags sort = …) const
+//
+// EntryInfoListWithNameFiltersFull is EntryInfoListWithNameFilters with every argument, including those EntryInfoListWithNameFilters leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdir.html#entryInfoList
+func (this *QDir) EntryInfoListWithNameFiltersFull(nameFilters []string, filters QDirFilters, sort QDirSortFlags) []*QFileInfo {
+	self := rt.Use(unsafe.Pointer(this), "QDir.EntryInfoListWithNameFiltersFull")
+	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
+	r := C.qute_QDir_entryInfoList_3(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)), C.int64_t(filters), C.int64_t(sort))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QFileInfo {
+		return rt.View[QFileInfo](rt.WrapClass(e, "QFileInfo", rt.TakeOwned), e)
+	})
 }
 
 // QDirSetSearchPaths wraps QDir::setSearchPaths.

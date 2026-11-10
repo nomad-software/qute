@@ -1,9 +1,11 @@
 package rt
 
 import (
+	"runtime"
 	"strings"
 	"testing"
 	"unsafe"
+	"weak"
 )
 
 // These tests cover the runtime logic that needs no QApplication: handle
@@ -98,45 +100,41 @@ func TestKeepsDropWhenPlainOwnerDies(t *testing.T) {
 	}
 }
 
-// Registered owners store references by address, so they survive the loss of
-// the Go handle and go away with the object's death notice.
+// A registered owner can outlive its Go variables, so while it keeps
+// references its handle is anchored; its death notice drops both.
 func TestKeepsOfRegisteredOwnerDropOnDestroyed(t *testing.T) {
 	key := fakePtr(1)
 	owner := Wrap(key, "Owner", KindNotify, KeepOrBorrow, nil)
 	a := newPlain("A")
 	KeepArg(owner, "s", a)
-	// a new handle for the same live object sees the same references
-	keepMu.Lock()
-	_, ok := kept[key]
-	keepMu.Unlock()
-	if !ok {
-		t.Fatal("registered owner's references are not stored by address")
+	if owner.Anchored() != "global" {
+		t.Fatalf("owner with kept references anchored %q, want global", owner.Anchored())
 	}
 	Destroyed(key, "test")
-	keepMu.Lock()
-	_, ok = kept[key]
-	keepMu.Unlock()
-	if ok {
+	if Keeps(owner, a) {
 		t.Fatal("references survived the owner's death notice")
+	}
+	if owner.Anchored() != "" || owner.Pins() != 0 {
+		t.Fatalf("dead owner still anchored (%q, %d pins)", owner.Anchored(), owner.Pins())
 	}
 	if owner.State() != Dead {
 		t.Fatalf("owner = %v, want Dead", owner.State())
 	}
 }
 
-// A stale reference set at a reused address must not leak into a new object.
-func TestKeepsIgnoreStaleSerial(t *testing.T) {
+// Clearing the last kept reference drops the anchor it took.
+func TestKeepsAnchorReleased(t *testing.T) {
 	key := fakePtr(2)
-	keepMu.Lock()
-	kept[key] = &keepSet{serial: 0, slots: map[string]any{"s": newPlain("Old")}}
-	keepMu.Unlock()
 	owner := Wrap(key, "Owner", KindNotify, KeepOrBorrow, nil)
 	defer Destroyed(key, "test")
-	keepMu.Lock()
-	s := slotsFor(owner, false)
-	keepMu.Unlock()
-	if len(s) != 0 {
-		t.Fatalf("new object at a reused address sees %d stale references", len(s))
+	a := newPlain("A")
+	KeepEach(owner, a)
+	if owner.Pins() != 1 {
+		t.Fatalf("pins = %d, want 1 while keeping", owner.Pins())
+	}
+	Release(owner, a)
+	if owner.Pins() != 0 || owner.Anchored() != "" {
+		t.Fatalf("after Release: pins %d, anchored %q, want 0 and none", owner.Pins(), owner.Anchored())
 	}
 }
 
@@ -312,4 +310,182 @@ func TestRethrowCallbackPanic(t *testing.T) {
 		}
 	}()
 	RethrowCallbackPanic()
+}
+
+// A post that saw the app not yet running, while AppStarted handed the
+// pending list over, used to append to the list after the hand-over and
+// never run. Now it sees the app running and posts directly.
+func TestPostRacingAppStarted(t *testing.T) {
+	defer func() {
+		testHookPost = nil
+		appRunning.Store(false)
+		appExited.Store(false)
+		pendingPosts = nil
+	}()
+	testHookPost = func() {
+		testHookPost = nil
+		AppStarted() // runs between post's check and its lock
+	}
+	post(func() {})
+	pendingMu.Lock()
+	n := len(pendingPosts)
+	pendingMu.Unlock()
+	if n != 0 {
+		t.Fatalf("%d posts stranded in the pending list after the app started", n)
+	}
+}
+
+// A plain object handed out by a method depends on the receiver and on what
+// the receiver depends on; Alive and Use see that.
+func TestWrapClassFromDependsOnReceiver(t *testing.T) {
+	RegisterClass("PlainItem", KindPlain, nil)
+	doc := newPlain("Doc")
+	owner := newPlain("Layout")
+	owner.deps = []*Handle{doc}
+	it := WrapClassFrom(fakePtr(3), "PlainItem", KeepOrBorrow, owner)
+	if len(it.deps) != 2 || it.deps[0] != owner || it.deps[1] != doc {
+		t.Fatalf("deps = %v, want the receiver and its document", it.deps)
+	}
+	if !it.Alive() {
+		t.Fatal("item not alive while its receiver lives")
+	}
+	doc.markDead("test")
+	if it.Alive() {
+		t.Fatal("item alive after what its receiver depends on died")
+	}
+	defer func() {
+		if p, _ := recover().(string); !strings.Contains(p, "the Doc this PlainItem belongs to was destroyed") {
+			t.Errorf("Use: panic %q, want the dependency message", p)
+		}
+	}()
+	r := &fakeWrapper{Ref{H: it, P: fakePtr(3)}}
+	Use(unsafe.Pointer(r), "PlainItem.Geometry")
+}
+
+// An owned plain result needs no dependency: Go frees it.
+func TestWrapClassFromOwnedHasNoDependency(t *testing.T) {
+	RegisterClass("OwnedItem", KindPlain, func(unsafe.Pointer) {})
+	owner := newPlain("Layout")
+	it := WrapClassFrom(fakePtr(4), "OwnedItem", TakeOwned, owner)
+	if len(it.deps) != 0 {
+		t.Fatalf("owned result depends on %v", it.deps)
+	}
+}
+
+// fakeQObjects registers QObject handles without Qt: a fake tree for the
+// anchoring logic.
+func fakeQObject(t *testing.T, st State) *Handle {
+	t.Helper()
+	b := make([]byte, 8)
+	h := newHandle(unsafe.Pointer(&b[0]), "QObject", KindQObject, st, nil)
+	regMu.Lock()
+	registry[h.ptr] = &regEntry{w: weak.Make(h), serial: h.serial}
+	regMu.Unlock()
+	t.Cleanup(func() {
+		regMu.Lock()
+		delete(registry, h.ptr)
+		regMu.Unlock()
+		runtime.KeepAlive(b)
+	})
+	return h
+}
+
+func withFakeTree(t *testing.T, parent map[*Handle]*Handle) {
+	t.Helper()
+	oldRoot, oldSub := rootOfC, subtreeC
+	t.Cleanup(func() { rootOfC, subtreeC = oldRoot, oldSub })
+	byPtr := map[unsafe.Pointer]*Handle{}
+	for c, p := range parent {
+		byPtr[c.ptr] = c
+		if p != nil {
+			byPtr[p.ptr] = p
+		}
+	}
+	rootOfC = func(p unsafe.Pointer) unsafe.Pointer {
+		h := byPtr[p]
+		for parent[h] != nil {
+			h = parent[h]
+		}
+		return h.ptr
+	}
+	subtreeC = func(p unsafe.Pointer) []unsafe.Pointer {
+		out := []unsafe.Pointer{p}
+		for c, par := range parent {
+			if par != nil && par.ptr == p {
+				out = append(out, subtreeC(c.ptr)...)
+			}
+		}
+		return out
+	}
+}
+
+// Go state of an object in a tree is held by the tree's Owned root, so the
+// whole tree can be collected; a root that stops being Owned hands it to the
+// global set, and so does a move between parents.
+func TestAnchoring(t *testing.T) {
+	root := fakeQObject(t, Owned)
+	child := fakeQObject(t, Parented)
+	withFakeTree(t, map[*Handle]*Handle{root: nil, child: root})
+
+	child.anchorPin()
+	if got := child.Anchored(); got != "root" {
+		t.Fatalf("child anchored %q, want root", got)
+	}
+	if child.Pins() != 0 {
+		t.Fatalf("child anchored by its root is also pinned globally (%d)", child.Pins())
+	}
+	if _, ok := root.anchored[child]; !ok {
+		t.Fatal("root does not hold the child")
+	}
+
+	root.anchorPin() // a root's own state is global: rule "pinned while connected"
+	if got := root.Anchored(); got != "global" || root.Pins() != 1 {
+		t.Fatalf("root anchored %q with %d pins, want global and 1", got, root.Pins())
+	}
+	root.anchorUnpin()
+
+	reanchorSubtree(child.ptr, true) // between parents
+	if got := child.Anchored(); got != "global" || child.Pins() != 1 {
+		t.Fatalf("moving child anchored %q with %d pins, want global and 1", got, child.Pins())
+	}
+	reanchorSubtree(child.ptr, false) // arrived (back) under root
+	if got := child.Anchored(); got != "root" || child.Pins() != 0 {
+		t.Fatalf("re-added child anchored %q with %d pins, want root and 0", got, child.Pins())
+	}
+
+	root.TransferToCpp() // a Parented root may be collected: it holds nothing
+	if got := child.Anchored(); got != "global" || child.Pins() != 1 {
+		t.Fatalf("after root became Parented: child anchored %q with %d pins, want global", got, child.Pins())
+	}
+	child.anchorUnpin()
+	if child.Anchored() != "" || child.Pins() != 0 {
+		t.Fatalf("released child anchored %q with %d pins", child.Anchored(), child.Pins())
+	}
+}
+
+// A connection's closure lives on its sender's handle; the id table holds the
+// handle weakly, and releasing the connection drops the closure and anchor.
+func TestCallbackSlots(t *testing.T) {
+	sender := Wrap(fakePtr(5), "Sender", KindNotify, KeepOrBorrow, nil)
+	defer Destroyed(sender.ptr, "test")
+	ran := 0
+	id := NewCallback(sender, func(unsafe.Pointer) { ran++ })
+	if sender.Pins() != 1 {
+		t.Fatalf("connected sender pins = %d, want 1", sender.Pins())
+	}
+	InvokeCallback(id, nil)
+	if ran != 1 {
+		t.Fatalf("callback ran %d times, want 1", ran)
+	}
+	ReleaseCallback(id)
+	InvokeCallback(id, nil) // released: nothing runs
+	if ran != 1 || sender.Pins() != 0 || len(sender.callbacks) != 0 {
+		t.Fatalf("after release: ran %d, pins %d, %d closures", ran, sender.Pins(), len(sender.callbacks))
+	}
+	// std::function ids never collide with slot ids
+	fid := NewFunc(func(_, _ unsafe.Pointer) {})
+	if fid&funcBit == 0 {
+		t.Fatal("NewFunc id lacks the func bit")
+	}
+	ReleaseCallback(fid)
 }

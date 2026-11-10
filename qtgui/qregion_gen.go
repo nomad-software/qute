@@ -94,6 +94,8 @@ func NewQRegion() *QRegion {
 //
 //	C++: QRegion::QRegion(const QRect & r, RegionType t = …)
 //
+// Arguments with C++ defaults are left at them; NewQRegionWithRectFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
 func NewQRegionWithRect(rArg qtcore.QRect) *QRegion {
 	rt.CheckThread("NewQRegionWithRect")
@@ -105,6 +107,8 @@ func NewQRegionWithRect(rArg qtcore.QRect) *QRegion {
 // NewQRegionWithPoints wraps the QRegion constructor.
 //
 //	C++: QRegion::QRegion(const QPolygon & pa, Qt::FillRule fillRule = …)
+//
+// Arguments with C++ defaults are left at them; NewQRegionWithPointsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
 func NewQRegionWithPoints(pa []qtcore.QPoint) *QRegion {
@@ -127,6 +131,38 @@ func NewQRegionWithBitmap(bitmap *QBitmap) *QRegion {
 	rt.CheckThread("NewQRegionWithBitmap")
 	p := C.qute_QRegion_new_3(rt.UseArg(unsafe.Pointer(bitmap), "NewQRegionWithBitmap"))
 	runtime.KeepAlive(bitmap)
+	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	return rt.View[QRegion](h, p)
+}
+
+// NewQRegionWithRectFull wraps the QRegion constructor.
+//
+//	C++: QRegion::QRegion(const QRect & r, RegionType t = …)
+//
+// NewQRegionWithRectFull is NewQRegionWithRect with every argument, including those NewQRegionWithRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
+func NewQRegionWithRectFull(rArg qtcore.QRect, t QRegionRegionType) *QRegion {
+	rt.CheckThread("NewQRegionWithRectFull")
+	p := C.qute_QRegion_new_4(cQRect(rArg), C.int64_t(t))
+	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	return rt.View[QRegion](h, p)
+}
+
+// NewQRegionWithPointsFull wraps the QRegion constructor.
+//
+//	C++: QRegion::QRegion(const QPolygon & pa, Qt::FillRule fillRule = …)
+//
+// NewQRegionWithPointsFull is NewQRegionWithPoints with every argument, including those NewQRegionWithPoints leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregion.html#QRegion
+func NewQRegionWithPointsFull(pa []qtcore.QPoint, fillRule qtcore.FillRule) *QRegion {
+	rt.CheckThread("NewQRegionWithPointsFull")
+	paC := make([]C.qute_point, len(pa))
+	for i := range pa {
+		paC[i] = cQPoint(pa[i])
+	}
+	p := C.qute_QRegion_new_5(unsafe.Pointer(unsafe.SliceData(paC)), C.ptrdiff_t(len(pa)), C.int64_t(fillRule))
 	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }

@@ -55,6 +55,8 @@ func QFileDialogCast(o qtcore.QObjectLike) *QFileDialog {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQFileDialogFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#QFileDialog
 func NewQFileDialog(parent QWidgetLike) *QFileDialog {
 	rt.CheckThread("NewQFileDialog")
@@ -86,6 +88,31 @@ func NewQFileDialogWithWidget(parent QWidgetLike, fArg qtcore.WindowFlags) *QFil
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFileDialogWithWidget")
 	}
 	p := C.qute_QFileDialog_new_1(parentPtr, C.int64_t(fArg))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QFileDialog", mode)
+	return rt.View[QFileDialog](h, p)
+}
+
+// NewQFileDialogFull wraps the QFileDialog constructor.
+//
+//	C++: QFileDialog::QFileDialog(QWidget * parent = …, const QString & caption = …, const QString & directory = …, const QString & filter = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQFileDialogFull is NewQFileDialog with every argument, including those NewQFileDialog leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#QFileDialog
+func NewQFileDialogFull(parent QWidgetLike, caption string, directory string, filter string) *QFileDialog {
+	rt.CheckThread("NewQFileDialogFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFileDialogFull")
+	}
+	p := C.qute_QFileDialog_new_2(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(caption))), C.ptrdiff_t(len(caption)), (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)), (*C.char)(unsafe.Pointer(unsafe.StringData(filter))), C.ptrdiff_t(len(filter)))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -574,7 +601,7 @@ func (this *QFileDialog) IconProvider() *qtgui.QAbstractFileIconProvider {
 	self := rt.Use(unsafe.Pointer(this), "QFileDialog.IconProvider")
 	r := C.qute_QFileDialog_iconProvider(self)
 	runtime.KeepAlive(this)
-	return rt.View[qtgui.QAbstractFileIconProvider](rt.WrapClass(r, "QAbstractFileIconProvider", rt.KeepOrBorrow), r)
+	return rt.View[qtgui.QAbstractFileIconProvider](rt.WrapClassFrom(r, "QAbstractFileIconProvider", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetLabelText wraps QFileDialog::setLabelText.
@@ -643,7 +670,7 @@ func (this *QFileDialog) SetProxyModel(model qtcore.QAbstractProxyModelLike) {
 	C.qute_QFileDialog_setProxyModel(self, modelPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(model)
-	modelH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, modelH)
 }
 
 // ProxyModel wraps QFileDialog::proxyModel.
@@ -663,6 +690,8 @@ func (this *QFileDialog) ProxyModel() *qtcore.QAbstractProxyModel {
 // SetOption wraps QFileDialog::setOption.
 //
 //	C++: void QFileDialog::setOption(Option option, bool on = …)
+//
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setOption
 func (this *QFileDialog) SetOption(option QFileDialogOptions) {
@@ -814,6 +843,19 @@ func (this *QFileDialog) EmitFilterSelected(filter string) {
 	runtime.KeepAlive(this)
 }
 
+// SetOptionFull wraps QFileDialog::setOption.
+//
+//	C++: void QFileDialog::setOption(Option option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#setOption
+func (this *QFileDialog) SetOptionFull(option QFileDialogOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QFileDialog.SetOptionFull")
+	C.qute_QFileDialog_setOption_1(self, C.int64_t(option), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
 // QFileDialogGetOpenFileName wraps QFileDialog::getOpenFileName.
 //
 //	C++: QString QFileDialog::getOpenFileName(QWidget * parent = …, const QString & caption = …, const QString & dir = …, const QString & filter = …, QString * selectedFilter = …, Options options = …)
@@ -866,6 +908,8 @@ func QFileDialogGetSaveFileUrl() *qtcore.QUrl {
 //
 //	C++: QString QFileDialog::getExistingDirectory(QWidget * parent = …, const QString & caption = …, const QString & dir = …, Options options = …)
 //
+// Arguments with C++ defaults are left at them; QFileDialogGetExistingDirectoryFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getExistingDirectory
 func QFileDialogGetExistingDirectory() string {
 	rt.CheckThread("QFileDialogGetExistingDirectory")
@@ -878,6 +922,8 @@ func QFileDialogGetExistingDirectory() string {
 //	C++: QUrl QFileDialog::getExistingDirectoryUrl(QWidget * parent = …, const QString & caption = …, const QUrl & dir = …, Options options = …, const QStringList & supportedSchemes = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QFileDialogGetExistingDirectoryUrlFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getExistingDirectoryUrl
 func QFileDialogGetExistingDirectoryUrl() *qtcore.QUrl {
@@ -914,6 +960,8 @@ func QFileDialogGetOpenFileUrls() []*qtcore.QUrl {
 //
 //	C++: void QFileDialog::getOpenFileContent(const QString & nameFilter, const std::function<void (const QString &, const QByteArray &)> & fileContentsReady, QWidget * parent = …)
 //
+// Arguments with C++ defaults are left at them; QFileDialogGetOpenFileContentFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getOpenFileContent
 func QFileDialogGetOpenFileContent(nameFilter string, fileContentsReady func(string, []byte)) {
 	rt.CheckThread("QFileDialogGetOpenFileContent")
@@ -931,10 +979,93 @@ func QFileDialogGetOpenFileContent(nameFilter string, fileContentsReady func(str
 //
 //	C++: void QFileDialog::saveFileContent(const QByteArray & fileContent, const QString & fileNameHint, QWidget * parent = …)
 //
+// Arguments with C++ defaults are left at them; QFileDialogSaveFileContentFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#saveFileContent
 func QFileDialogSaveFileContent(fileContent []byte, fileNameHint string) {
 	rt.CheckThread("QFileDialogSaveFileContent")
 	C.qute_QFileDialog_saveFileContent((*C.char)(unsafe.Pointer(unsafe.SliceData(fileContent))), C.ptrdiff_t(len(fileContent)), (*C.char)(unsafe.Pointer(unsafe.StringData(fileNameHint))), C.ptrdiff_t(len(fileNameHint)))
+}
+
+// QFileDialogGetExistingDirectoryFull wraps QFileDialog::getExistingDirectory.
+//
+//	C++: QString QFileDialog::getExistingDirectory(QWidget * parent = …, const QString & caption = …, const QString & dir = …, Options options = …)
+//
+// QFileDialogGetExistingDirectoryFull is QFileDialogGetExistingDirectory with every argument, including those QFileDialogGetExistingDirectory leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getExistingDirectory
+func QFileDialogGetExistingDirectoryFull(parent QWidgetLike, caption string, dir string, options QFileDialogOptions) string {
+	rt.CheckThread("QFileDialogGetExistingDirectoryFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QFileDialogGetExistingDirectoryFull")
+	}
+	r := C.qute_QFileDialog_getExistingDirectory_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(caption))), C.ptrdiff_t(len(caption)), (*C.char)(unsafe.Pointer(unsafe.StringData(dir))), C.ptrdiff_t(len(dir)), C.int64_t(options))
+	runtime.KeepAlive(parent)
+	return quteStr(r)
+}
+
+// QFileDialogGetExistingDirectoryUrlFull wraps QFileDialog::getExistingDirectoryUrl.
+//
+//	C++: QUrl QFileDialog::getExistingDirectoryUrl(QWidget * parent = …, const QString & caption = …, const QUrl & dir = …, Options options = …, const QStringList & supportedSchemes = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QFileDialogGetExistingDirectoryUrlFull is QFileDialogGetExistingDirectoryUrl with every argument, including those QFileDialogGetExistingDirectoryUrl leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getExistingDirectoryUrl
+func QFileDialogGetExistingDirectoryUrlFull(parent QWidgetLike, caption string, dir *qtcore.QUrl, options QFileDialogOptions, supportedSchemes []string) *qtcore.QUrl {
+	rt.CheckThread("QFileDialogGetExistingDirectoryUrlFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QFileDialogGetExistingDirectoryUrlFull")
+	}
+	supportedSchemesData, supportedSchemesLens := quteStrListArg(supportedSchemes)
+	r := C.qute_QFileDialog_getExistingDirectoryUrl_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(caption))), C.ptrdiff_t(len(caption)), rt.UseArg(unsafe.Pointer(dir), "QFileDialogGetExistingDirectoryUrlFull"), C.int64_t(options), (*C.char)(unsafe.Pointer(unsafe.SliceData(supportedSchemesData))), (*C.ptrdiff_t)(unsafe.SliceData(supportedSchemesLens)), C.ptrdiff_t(len(supportedSchemes)))
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(dir)
+	return rt.View[qtcore.QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
+}
+
+// QFileDialogGetOpenFileContentFull wraps QFileDialog::getOpenFileContent.
+//
+//	C++: void QFileDialog::getOpenFileContent(const QString & nameFilter, const std::function<void (const QString &, const QByteArray &)> & fileContentsReady, QWidget * parent = …)
+//
+// QFileDialogGetOpenFileContentFull is QFileDialogGetOpenFileContent with every argument, including those QFileDialogGetOpenFileContent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#getOpenFileContent
+func QFileDialogGetOpenFileContentFull(nameFilter string, fileContentsReady func(string, []byte), parent QWidgetLike) {
+	rt.CheckThread("QFileDialogGetOpenFileContentFull")
+	fileContentsReadyID := rt.NewFunc(func(args, ret unsafe.Pointer) {
+		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+		p0 := quteStr(*(*C.qute_str)(a[0]))
+		p1 := quteBytes(*(*C.qute_str)(a[1]))
+		_ = ret
+		fileContentsReady(p0, p1)
+	})
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QFileDialogGetOpenFileContentFull")
+	}
+	C.qute_QFileDialog_getOpenFileContent_1((*C.char)(unsafe.Pointer(unsafe.StringData(nameFilter))), C.ptrdiff_t(len(nameFilter)), C.uintptr_t(fileContentsReadyID), parentPtr)
+	runtime.KeepAlive(parent)
+}
+
+// QFileDialogSaveFileContentFull wraps QFileDialog::saveFileContent.
+//
+//	C++: void QFileDialog::saveFileContent(const QByteArray & fileContent, const QString & fileNameHint, QWidget * parent = …)
+//
+// QFileDialogSaveFileContentFull is QFileDialogSaveFileContent with every argument, including those QFileDialogSaveFileContent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledialog.html#saveFileContent
+func QFileDialogSaveFileContentFull(fileContent []byte, fileNameHint string, parent QWidgetLike) {
+	rt.CheckThread("QFileDialogSaveFileContentFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QFileDialogSaveFileContentFull")
+	}
+	C.qute_QFileDialog_saveFileContent_1((*C.char)(unsafe.Pointer(unsafe.SliceData(fileContent))), C.ptrdiff_t(len(fileContent)), (*C.char)(unsafe.Pointer(unsafe.StringData(fileNameHint))), C.ptrdiff_t(len(fileNameHint)), parentPtr)
+	runtime.KeepAlive(parent)
 }
 
 // OnFileSelected connects f to the fileSelected signal. The connection ends when the

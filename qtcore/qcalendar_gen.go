@@ -142,6 +142,8 @@ func (this *QCalendar) IsValid() bool {
 //
 //	C++: int QCalendar::daysInMonth(int month, int year = …) const
 //
+// Arguments with C++ defaults are left at them; DaysInMonthFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcalendar.html#daysInMonth
 func (this *QCalendar) DaysInMonth(month int) int {
 	self := rt.Use(unsafe.Pointer(this), "QCalendar.DaysInMonth")
@@ -394,6 +396,8 @@ func (this *QCalendar) DayOfWeek(date *QDate) int {
 //
 //	C++: QString QCalendar::monthName(const QLocale & locale, int month, int year = …, QLocale::FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; MonthNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcalendar.html#monthName
 func (this *QCalendar) MonthName(locale *QLocale, month int) string {
 	self := rt.Use(unsafe.Pointer(this), "QCalendar.MonthName")
@@ -406,6 +410,8 @@ func (this *QCalendar) MonthName(locale *QLocale, month int) string {
 // StandaloneMonthName wraps QCalendar::standaloneMonthName.
 //
 //	C++: QString QCalendar::standaloneMonthName(const QLocale & locale, int month, int year = …, QLocale::FormatType format = …) const
+//
+// Arguments with C++ defaults are left at them; StandaloneMonthNameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcalendar.html#standaloneMonthName
 func (this *QCalendar) StandaloneMonthName(locale *QLocale, month int) string {
@@ -420,6 +426,8 @@ func (this *QCalendar) StandaloneMonthName(locale *QLocale, month int) string {
 //
 //	C++: QString QCalendar::weekDayName(const QLocale & locale, int day, QLocale::FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; WeekDayNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcalendar.html#weekDayName
 func (this *QCalendar) WeekDayName(locale *QLocale, day int) string {
 	self := rt.Use(unsafe.Pointer(this), "QCalendar.WeekDayName")
@@ -432,6 +440,8 @@ func (this *QCalendar) WeekDayName(locale *QLocale, day int) string {
 // StandaloneWeekDayName wraps QCalendar::standaloneWeekDayName.
 //
 //	C++: QString QCalendar::standaloneWeekDayName(const QLocale & locale, int day, QLocale::FormatType format = …) const
+//
+// Arguments with C++ defaults are left at them; StandaloneWeekDayNameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcalendar.html#standaloneWeekDayName
 func (this *QCalendar) StandaloneWeekDayName(locale *QLocale, day int) string {
@@ -454,6 +464,80 @@ func (this *QCalendar) DateTimeToString(format string, datetime *QDateTime, date
 	runtime.KeepAlive(datetime)
 	runtime.KeepAlive(dateOnly)
 	runtime.KeepAlive(timeOnly)
+	runtime.KeepAlive(locale)
+	return quteStr(r)
+}
+
+// DaysInMonthFull wraps QCalendar::daysInMonth.
+//
+//	C++: int QCalendar::daysInMonth(int month, int year = …) const
+//
+// DaysInMonthFull is DaysInMonth with every argument, including those DaysInMonth leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#daysInMonth
+func (this *QCalendar) DaysInMonthFull(month int, year int) int {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.DaysInMonthFull")
+	r := C.qute_QCalendar_daysInMonth_1(self, C.int(month), C.int(year))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// MonthNameFull wraps QCalendar::monthName.
+//
+//	C++: QString QCalendar::monthName(const QLocale & locale, int month, int year = …, QLocale::FormatType format = …) const
+//
+// MonthNameFull is MonthName with every argument, including those MonthName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#monthName
+func (this *QCalendar) MonthNameFull(locale *QLocale, month int, year int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.MonthNameFull")
+	r := C.qute_QCalendar_monthName_1(self, rt.UseArg(unsafe.Pointer(locale), "QCalendar.MonthNameFull"), C.int(month), C.int(year), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
+	return quteStr(r)
+}
+
+// StandaloneMonthNameFull wraps QCalendar::standaloneMonthName.
+//
+//	C++: QString QCalendar::standaloneMonthName(const QLocale & locale, int month, int year = …, QLocale::FormatType format = …) const
+//
+// StandaloneMonthNameFull is StandaloneMonthName with every argument, including those StandaloneMonthName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#standaloneMonthName
+func (this *QCalendar) StandaloneMonthNameFull(locale *QLocale, month int, year int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.StandaloneMonthNameFull")
+	r := C.qute_QCalendar_standaloneMonthName_1(self, rt.UseArg(unsafe.Pointer(locale), "QCalendar.StandaloneMonthNameFull"), C.int(month), C.int(year), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
+	return quteStr(r)
+}
+
+// WeekDayNameFull wraps QCalendar::weekDayName.
+//
+//	C++: QString QCalendar::weekDayName(const QLocale & locale, int day, QLocale::FormatType format = …) const
+//
+// WeekDayNameFull is WeekDayName with every argument, including those WeekDayName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#weekDayName
+func (this *QCalendar) WeekDayNameFull(locale *QLocale, day int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.WeekDayNameFull")
+	r := C.qute_QCalendar_weekDayName_1(self, rt.UseArg(unsafe.Pointer(locale), "QCalendar.WeekDayNameFull"), C.int(day), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(locale)
+	return quteStr(r)
+}
+
+// StandaloneWeekDayNameFull wraps QCalendar::standaloneWeekDayName.
+//
+//	C++: QString QCalendar::standaloneWeekDayName(const QLocale & locale, int day, QLocale::FormatType format = …) const
+//
+// StandaloneWeekDayNameFull is StandaloneWeekDayName with every argument, including those StandaloneWeekDayName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcalendar.html#standaloneWeekDayName
+func (this *QCalendar) StandaloneWeekDayNameFull(locale *QLocale, day int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QCalendar.StandaloneWeekDayNameFull")
+	r := C.qute_QCalendar_standaloneWeekDayName_1(self, rt.UseArg(unsafe.Pointer(locale), "QCalendar.StandaloneWeekDayNameFull"), C.int(day), C.int64_t(format))
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(locale)
 	return quteStr(r)
 }

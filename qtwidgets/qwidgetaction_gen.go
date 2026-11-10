@@ -89,7 +89,7 @@ func (this *QWidgetAction) SetDefaultWidget(w QWidgetLike) {
 	C.qute_QWidgetAction_setDefaultWidget(self, wPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(w)
-	wH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
 }
 
 // DefaultWidget wraps QWidgetAction::defaultWidget.

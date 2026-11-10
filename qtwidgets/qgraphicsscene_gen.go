@@ -146,6 +146,8 @@ func (this *QGraphicsScene) SetSceneRect(rect qtcore.QRectF) {
 //
 //	C++: void QGraphicsScene::render(QPainter * painter, const QRectF & target = …, const QRectF & source = …, Qt::AspectRatioMode aspectRatioMode = …)
 //
+// Arguments with C++ defaults are left at them; RenderFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#render
 func (this *QGraphicsScene) Render(painter qtgui.QPainterLike) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Render")
@@ -222,13 +224,15 @@ func (this *QGraphicsScene) ItemsBoundingRect() qtcore.QRectF {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
 func (this *QGraphicsScene) Items() []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.Items")
 	r := C.qute_QGraphicsScene_items(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -238,13 +242,15 @@ func (this *QGraphicsScene) Items() []*QGraphicsItem {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemsAtFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
 func (this *QGraphicsScene) ItemsAt(pos qtcore.QPointF) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsAt")
 	r := C.qute_QGraphicsScene_items_1(self, cQPointF(pos))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -254,13 +260,15 @@ func (this *QGraphicsScene) ItemsAt(pos qtcore.QPointF) []*QGraphicsItem {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemsInFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
 func (this *QGraphicsScene) ItemsIn(rect qtcore.QRectF) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsIn")
 	r := C.qute_QGraphicsScene_items_2(self, cQRectF(rect))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -269,6 +277,8 @@ func (this *QGraphicsScene) ItemsIn(rect qtcore.QRectF) []*QGraphicsItem {
 //	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPolygonF & polygon, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; ItemsInPolygonFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
 func (this *QGraphicsScene) ItemsInPolygon(polygon []qtcore.QPointF) []*QGraphicsItem {
@@ -280,7 +290,7 @@ func (this *QGraphicsScene) ItemsInPolygon(polygon []qtcore.QPointF) []*QGraphic
 	r := C.qute_QGraphicsScene_items_3(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -290,6 +300,8 @@ func (this *QGraphicsScene) ItemsInPolygon(polygon []qtcore.QPointF) []*QGraphic
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ItemsInPathFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
 func (this *QGraphicsScene) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInPath")
@@ -297,7 +309,7 @@ func (this *QGraphicsScene) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsIt
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(path)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -306,6 +318,8 @@ func (this *QGraphicsScene) ItemsInPath(path *qtgui.QPainterPath) []*QGraphicsIt
 //	C++: QList<QGraphicsItem *> QGraphicsScene::collidingItems(const QGraphicsItem * item, Qt::ItemSelectionMode mode = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; CollidingItemsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#collidingItems
 func (this *QGraphicsScene) CollidingItems(item QGraphicsItemLike) []*QGraphicsItem {
@@ -318,7 +332,7 @@ func (this *QGraphicsScene) CollidingItems(item QGraphicsItemLike) []*QGraphicsI
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -334,7 +348,7 @@ func (this *QGraphicsScene) ItemAt(pos qtcore.QPointF, deviceTransform *qtgui.QT
 	r := C.qute_QGraphicsScene_itemAt(self, cQPointF(pos), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemAt"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(deviceTransform)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SelectedItems wraps QGraphicsScene::selectedItems.
@@ -349,7 +363,7 @@ func (this *QGraphicsScene) SelectedItems() []*QGraphicsItem {
 	r := C.qute_QGraphicsScene_selectedItems(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
-		return rt.View[QGraphicsItem](rt.WrapClass(e, "QGraphicsItem", rt.KeepOrBorrow), e)
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -384,6 +398,8 @@ func (this *QGraphicsScene) SetSelectionArea(path *qtgui.QPainterPath, deviceTra
 //
 //	C++: void QGraphicsScene::setSelectionArea(const QPainterPath & path, Qt::ItemSelectionOperation selectionOperation = …, Qt::ItemSelectionMode mode = …, const QTransform & deviceTransform = …)
 //
+// Arguments with C++ defaults are left at them; SetSelectionAreaWithFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setSelectionArea
 func (this *QGraphicsScene) SetSelectionAreaWith(path *qtgui.QPainterPath) {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSelectionAreaWith")
@@ -409,7 +425,7 @@ func (this *QGraphicsScene) AddItem(item QGraphicsItemLike) {
 	C.qute_QGraphicsScene_addItem(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // AddEllipse wraps QGraphicsScene::addEllipse.
@@ -509,6 +525,8 @@ func (this *QGraphicsScene) AddRect(rect qtcore.QRectF) *QGraphicsRectItem {
 //
 // Ownership: the result is Parented: its Qt parent frees it.
 //
+// Arguments with C++ defaults are left at them; AddTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addText
 func (this *QGraphicsScene) AddText(text string) *QGraphicsTextItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddText")
@@ -539,6 +557,8 @@ func (this *QGraphicsScene) AddSimpleText(text string) *QGraphicsSimpleTextItem 
 //
 // The scene owns the proxy, and the proxy owns the widget.
 //
+// Arguments with C++ defaults are left at them; AddWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addWidget
 func (this *QGraphicsScene) AddWidget(widget QWidgetLike) *QGraphicsProxyWidget {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddWidget")
@@ -550,7 +570,7 @@ func (this *QGraphicsScene) AddWidget(widget QWidgetLike) *QGraphicsProxyWidget 
 	r := C.qute_QGraphicsScene_addWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return rt.View[QGraphicsProxyWidget](rt.WrapClass(r, "QGraphicsProxyWidget", rt.TakeParented), r)
 }
 
@@ -587,12 +607,14 @@ func (this *QGraphicsScene) FocusItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.FocusItem")
 	r := C.qute_QGraphicsScene_focusItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetFocusItem wraps QGraphicsScene::setFocusItem.
 //
 //	C++: void QGraphicsScene::setFocusItem(QGraphicsItem * item, Qt::FocusReason focusReason = …)
+//
+// Arguments with C++ defaults are left at them; SetFocusItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setFocusItem
 func (this *QGraphicsScene) SetFocusItem(item QGraphicsItemLike) {
@@ -621,6 +643,8 @@ func (this *QGraphicsScene) HasFocus() bool {
 // SetFocus wraps QGraphicsScene::setFocus.
 //
 //	C++: void QGraphicsScene::setFocus(Qt::FocusReason focusReason = …)
+//
+// Arguments with C++ defaults are left at them; SetFocusFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setFocus
 func (this *QGraphicsScene) SetFocus() {
@@ -674,7 +698,7 @@ func (this *QGraphicsScene) MouseGrabberItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.MouseGrabberItem")
 	r := C.qute_QGraphicsScene_mouseGrabberItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // BackgroundBrush wraps QGraphicsScene::backgroundBrush.
@@ -778,7 +802,7 @@ func (this *QGraphicsScene) SetStyle(style QStyleLike) {
 	C.qute_QGraphicsScene_setStyle(self, stylePtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(style)
-	styleH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, styleH)
 }
 
 // Font wraps QGraphicsScene::font.
@@ -856,7 +880,7 @@ func (this *QGraphicsScene) ActivePanel() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ActivePanel")
 	r := C.qute_QGraphicsScene_activePanel(self)
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsItem](rt.WrapClass(r, "QGraphicsItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsItem](rt.WrapClassFrom(r, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetActivePanel wraps QGraphicsScene::setActivePanel.
@@ -1106,6 +1130,234 @@ func (this *QGraphicsScene) EmitFocusItemChanged(newFocus QGraphicsItemLike, old
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(newFocus)
 	runtime.KeepAlive(oldFocus)
+}
+
+// RenderFull wraps QGraphicsScene::render.
+//
+//	C++: void QGraphicsScene::render(QPainter * painter, const QRectF & target = …, const QRectF & source = …, Qt::AspectRatioMode aspectRatioMode = …)
+//
+// RenderFull is Render with every argument, including those Render leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#render
+func (this *QGraphicsScene) RenderFull(painter qtgui.QPainterLike, target qtcore.QRectF, source qtcore.QRectF, aspectRatioMode qtcore.AspectRatioMode) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.RenderFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsScene.RenderFull")
+	}
+	C.qute_QGraphicsScene_render_1(self, painterPtr, cQRectF(target), cQRectF(source), C.int64_t(aspectRatioMode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// ItemsFull wraps QGraphicsScene::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsScene::items(Qt::SortOrder order = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsFull is Items with every argument, including those Items leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
+func (this *QGraphicsScene) ItemsFull(order qtcore.SortOrder) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsFull")
+	r := C.qute_QGraphicsScene_items_5(self, C.int64_t(order))
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// ItemsAtFull wraps QGraphicsScene::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPointF & pos, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsAtFull is ItemsAt with every argument, including those ItemsAt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
+func (this *QGraphicsScene) ItemsAtFull(pos qtcore.QPointF, mode qtcore.ItemSelectionMode, order qtcore.SortOrder, deviceTransform *qtgui.QTransform) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsAtFull")
+	r := C.qute_QGraphicsScene_items_6(self, cQPointF(pos), C.int64_t(mode), C.int64_t(order), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemsAtFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(deviceTransform)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// ItemsInFull wraps QGraphicsScene::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QRectF & rect, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsInFull is ItemsIn with every argument, including those ItemsIn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
+func (this *QGraphicsScene) ItemsInFull(rect qtcore.QRectF, mode qtcore.ItemSelectionMode, order qtcore.SortOrder, deviceTransform *qtgui.QTransform) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInFull")
+	r := C.qute_QGraphicsScene_items_7(self, cQRectF(rect), C.int64_t(mode), C.int64_t(order), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemsInFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(deviceTransform)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// ItemsInPolygonFull wraps QGraphicsScene::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPolygonF & polygon, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsInPolygonFull is ItemsInPolygon with every argument, including those ItemsInPolygon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
+func (this *QGraphicsScene) ItemsInPolygonFull(polygon []qtcore.QPointF, mode qtcore.ItemSelectionMode, order qtcore.SortOrder, deviceTransform *qtgui.QTransform) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInPolygonFull")
+	polygonC := make([]C.qute_pointf, len(polygon))
+	for i := range polygon {
+		polygonC[i] = cQPointF(polygon[i])
+	}
+	r := C.qute_QGraphicsScene_items_8(self, unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)), C.int64_t(mode), C.int64_t(order), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemsInPolygonFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(deviceTransform)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// ItemsInPathFull wraps QGraphicsScene::items.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsScene::items(const QPainterPath & path, Qt::ItemSelectionMode mode = …, Qt::SortOrder order = …, const QTransform & deviceTransform = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ItemsInPathFull is ItemsInPath with every argument, including those ItemsInPath leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#items
+func (this *QGraphicsScene) ItemsInPathFull(path *qtgui.QPainterPath, mode qtcore.ItemSelectionMode, order qtcore.SortOrder, deviceTransform *qtgui.QTransform) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.ItemsInPathFull")
+	r := C.qute_QGraphicsScene_items_9(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.ItemsInPathFull"), C.int64_t(mode), C.int64_t(order), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.ItemsInPathFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	runtime.KeepAlive(deviceTransform)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// CollidingItemsFull wraps QGraphicsScene::collidingItems.
+//
+//	C++: QList<QGraphicsItem *> QGraphicsScene::collidingItems(const QGraphicsItem * item, Qt::ItemSelectionMode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// CollidingItemsFull is CollidingItems with every argument, including those CollidingItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#collidingItems
+func (this *QGraphicsScene) CollidingItemsFull(item QGraphicsItemLike, mode qtcore.ItemSelectionMode) []*QGraphicsItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.CollidingItemsFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.CollidingItemsFull")
+	}
+	r := C.qute_QGraphicsScene_collidingItems_1(self, itemPtr, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	return quteList(r, func(e unsafe.Pointer) *QGraphicsItem {
+		return rt.View[QGraphicsItem](rt.WrapClassFrom(e, "QGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
+	})
+}
+
+// SetSelectionAreaWithFull wraps QGraphicsScene::setSelectionArea.
+//
+//	C++: void QGraphicsScene::setSelectionArea(const QPainterPath & path, Qt::ItemSelectionOperation selectionOperation = …, Qt::ItemSelectionMode mode = …, const QTransform & deviceTransform = …)
+//
+// SetSelectionAreaWithFull is SetSelectionAreaWith with every argument, including those SetSelectionAreaWith leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setSelectionArea
+func (this *QGraphicsScene) SetSelectionAreaWithFull(path *qtgui.QPainterPath, selectionOperation qtcore.ItemSelectionOperation, mode qtcore.ItemSelectionMode, deviceTransform *qtgui.QTransform) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetSelectionAreaWithFull")
+	C.qute_QGraphicsScene_setSelectionArea_2(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsScene.SetSelectionAreaWithFull"), C.int64_t(selectionOperation), C.int64_t(mode), rt.UseArg(unsafe.Pointer(deviceTransform), "QGraphicsScene.SetSelectionAreaWithFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(path)
+	runtime.KeepAlive(deviceTransform)
+}
+
+// AddTextFull wraps QGraphicsScene::addText.
+//
+//	C++: QGraphicsTextItem * QGraphicsScene::addText(const QString & text, const QFont & font = …)
+//
+// Ownership: the result is Parented: its Qt parent frees it.
+//
+// AddTextFull is AddText with every argument, including those AddText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addText
+func (this *QGraphicsScene) AddTextFull(text string, font *qtgui.QFont) *QGraphicsTextItem {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddTextFull")
+	r := C.qute_QGraphicsScene_addText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), rt.UseArg(unsafe.Pointer(font), "QGraphicsScene.AddTextFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(font)
+	return rt.View[QGraphicsTextItem](rt.WrapClass(r, "QGraphicsTextItem", rt.TakeParented), r)
+}
+
+// AddWidgetFull wraps QGraphicsScene::addWidget.
+//
+//	C++: QGraphicsProxyWidget * QGraphicsScene::addWidget(QWidget * widget, Qt::WindowFlags wFlags = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on; the result is Parented: its Qt parent frees it.
+//
+// The scene owns the proxy, and the proxy owns the widget.
+//
+// AddWidgetFull is AddWidget with every argument, including those AddWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#addWidget
+func (this *QGraphicsScene) AddWidgetFull(widget QWidgetLike, wFlags qtcore.WindowFlags) *QGraphicsProxyWidget {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.AddWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsScene.AddWidgetFull")
+	}
+	r := C.qute_QGraphicsScene_addWidget_1(self, widgetPtr, C.int64_t(wFlags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+	return rt.View[QGraphicsProxyWidget](rt.WrapClass(r, "QGraphicsProxyWidget", rt.TakeParented), r)
+}
+
+// SetFocusItemFull wraps QGraphicsScene::setFocusItem.
+//
+//	C++: void QGraphicsScene::setFocusItem(QGraphicsItem * item, Qt::FocusReason focusReason = …)
+//
+// SetFocusItemFull is SetFocusItem with every argument, including those SetFocusItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setFocusItem
+func (this *QGraphicsScene) SetFocusItemFull(item QGraphicsItemLike, focusReason qtcore.FocusReason) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetFocusItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsScene.SetFocusItemFull")
+	}
+	C.qute_QGraphicsScene_setFocusItem_1(self, itemPtr, C.int64_t(focusReason))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+}
+
+// SetFocusFull wraps QGraphicsScene::setFocus.
+//
+//	C++: void QGraphicsScene::setFocus(Qt::FocusReason focusReason = …)
+//
+// SetFocusFull is SetFocus with every argument, including those SetFocus leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#setFocus
+func (this *QGraphicsScene) SetFocusFull(focusReason qtcore.FocusReason) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.SetFocusFull")
+	C.qute_QGraphicsScene_setFocus_1(self, C.int64_t(focusReason))
+	runtime.KeepAlive(this)
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the

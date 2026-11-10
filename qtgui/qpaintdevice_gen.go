@@ -27,6 +27,12 @@ func init() {
 	rt.RegisterClass("QPaintDevice", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QPaintDevice_delete(p) })
 }
 
+// A QPaintDevice may be a QObject (through a QObject subclass); its wrapper then
+// shares that object's handle and learns of its death.
+func init() {
+	rt.RegisterBaseOfQObject("QPaintDevice", func(p unsafe.Pointer) unsafe.Pointer { return C.qute_QPaintDevice_qobject(p) })
+}
+
 // QPaintDeviceFromPtr wraps an existing C++ QPaintDevice. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QPaintDeviceFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPaintDevice {

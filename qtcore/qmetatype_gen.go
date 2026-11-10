@@ -77,13 +77,13 @@ func (this *QMetaType) Unkeep() {
 	}
 }
 
-// NewQMetaTypeWithTypeArg wraps the QMetaType constructor.
+// NewQMetaTypeWithType wraps the QMetaType constructor.
 //
 //	C++: QMetaType::QMetaType(int type)
 //
 // Qt docs: https://doc.qt.io/qt-6/qmetatype.html#QMetaType
-func NewQMetaTypeWithTypeArg(typeArg int) *QMetaType {
-	rt.CheckThread("NewQMetaTypeWithTypeArg")
+func NewQMetaTypeWithType(typeArg int) *QMetaType {
+	rt.CheckThread("NewQMetaTypeWithType")
 	p := C.qute_QMetaType_new(C.int(typeArg))
 	h := rt.WrapClass(p, "QMetaType", rt.NewOwned)
 	return rt.View[QMetaType](h, p)
@@ -139,6 +139,8 @@ func (this *QMetaType) RegisterType() {
 // Id wraps QMetaType::id.
 //
 //	C++: int QMetaType::id(int = …) const
+//
+// Arguments with C++ defaults are left at them; IdFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmetatype.html#id
 func (this *QMetaType) Id() int {
@@ -212,6 +214,8 @@ func (this *QMetaType) Name() string {
 //
 //	C++: void * QMetaType::create(const void * copy = …) const
 //
+// Arguments with C++ defaults are left at them; CreateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmetatype.html#create
 func (this *QMetaType) Create() unsafe.Pointer {
 	self := rt.Use(unsafe.Pointer(this), "QMetaType.Create")
@@ -234,6 +238,8 @@ func (this *QMetaType) Destroy(data unsafe.Pointer) {
 // Construct wraps QMetaType::construct.
 //
 //	C++: void * QMetaType::construct(void * where, const void * copy = …) const
+//
+// Arguments with C++ defaults are left at them; ConstructFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmetatype.html#construct
 func (this *QMetaType) Construct(where unsafe.Pointer) unsafe.Pointer {
@@ -422,6 +428,48 @@ func (this *QMetaType) HasRegisteredDebugStreamOperator() bool {
 	r := C.qute_QMetaType_hasRegisteredDebugStreamOperator(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// IdFull wraps QMetaType::id.
+//
+//	C++: int QMetaType::id(int = …) const
+//
+// IdFull is Id with every argument, including those Id leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmetatype.html#id
+func (this *QMetaType) IdFull(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(this), "QMetaType.IdFull")
+	r := C.qute_QMetaType_id_1(self, C.int(arg0))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// CreateFull wraps QMetaType::create.
+//
+//	C++: void * QMetaType::create(const void * copy = …) const
+//
+// CreateFull is Create with every argument, including those Create leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmetatype.html#create
+func (this *QMetaType) CreateFull(copy unsafe.Pointer) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QMetaType.CreateFull")
+	r := C.qute_QMetaType_create_1(self, copy)
+	runtime.KeepAlive(this)
+	return r
+}
+
+// ConstructFull wraps QMetaType::construct.
+//
+//	C++: void * QMetaType::construct(void * where, const void * copy = …) const
+//
+// ConstructFull is Construct with every argument, including those Construct leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmetatype.html#construct
+func (this *QMetaType) ConstructFull(where unsafe.Pointer, copy unsafe.Pointer) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QMetaType.ConstructFull")
+	r := C.qute_QMetaType_construct_1(self, where, copy)
+	runtime.KeepAlive(this)
+	return r
 }
 
 // QMetaTypeRegisterNormalizedTypedef wraps QMetaType::registerNormalizedTypedef.

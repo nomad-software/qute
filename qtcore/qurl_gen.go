@@ -91,6 +91,8 @@ func NewQUrl() *QUrl {
 //
 //	C++: QUrl::QUrl(const QString & url, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; NewQUrlWithUrlFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#QUrl
 func NewQUrlWithUrl(url string) *QUrl {
 	rt.CheckThread("NewQUrlWithUrl")
@@ -99,9 +101,25 @@ func NewQUrlWithUrl(url string) *QUrl {
 	return rt.View[QUrl](h, p)
 }
 
+// NewQUrlWithUrlFull wraps the QUrl constructor.
+//
+//	C++: QUrl::QUrl(const QString & url, ParsingMode mode = …)
+//
+// NewQUrlWithUrlFull is NewQUrlWithUrl with every argument, including those NewQUrlWithUrl leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#QUrl
+func NewQUrlWithUrlFull(url string, mode QUrlParsingMode) *QUrl {
+	rt.CheckThread("NewQUrlWithUrlFull")
+	p := C.qute_QUrl_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(url))), C.ptrdiff_t(len(url)), C.int64_t(mode))
+	h := rt.WrapClass(p, "QUrl", rt.NewOwned)
+	return rt.View[QUrl](h, p)
+}
+
 // SetUrl wraps QUrl::setUrl.
 //
 //	C++: void QUrl::setUrl(const QString & url, ParsingMode mode = …)
+//
+// Arguments with C++ defaults are left at them; SetUrlFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setUrl
 func (this *QUrl) SetUrl(url string) {
@@ -113,6 +131,8 @@ func (this *QUrl) SetUrl(url string) {
 // Url wraps QUrl::url.
 //
 //	C++: QString QUrl::url(FormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; UrlFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#url
 func (this *QUrl) Url() string {
@@ -126,6 +146,8 @@ func (this *QUrl) Url() string {
 //
 //	C++: QString QUrl::toString(FormattingOptions options = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#toString
 func (this *QUrl) ToString() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.ToString")
@@ -137,6 +159,8 @@ func (this *QUrl) ToString() string {
 // ToDisplayString wraps QUrl::toDisplayString.
 //
 //	C++: QString QUrl::toDisplayString(FormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; ToDisplayStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#toDisplayString
 func (this *QUrl) ToDisplayString() string {
@@ -163,6 +187,8 @@ func (this *QUrl) Adjusted(options QUrlUrlFormattingOption) *QUrl {
 // ToEncoded wraps QUrl::toEncoded.
 //
 //	C++: QByteArray QUrl::toEncoded(FormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; ToEncodedFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#toEncoded
 func (this *QUrl) ToEncoded() []byte {
@@ -246,6 +272,8 @@ func (this *QUrl) Scheme() string {
 //
 //	C++: void QUrl::setAuthority(const QString & authority, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetAuthorityFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setAuthority
 func (this *QUrl) SetAuthority(authority string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetAuthority")
@@ -256,6 +284,8 @@ func (this *QUrl) SetAuthority(authority string) {
 // Authority wraps QUrl::authority.
 //
 //	C++: QString QUrl::authority(ComponentFormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; AuthorityFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#authority
 func (this *QUrl) Authority() string {
@@ -269,6 +299,8 @@ func (this *QUrl) Authority() string {
 //
 //	C++: void QUrl::setUserInfo(const QString & userInfo, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetUserInfoFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setUserInfo
 func (this *QUrl) SetUserInfo(userInfo string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUserInfo")
@@ -279,6 +311,8 @@ func (this *QUrl) SetUserInfo(userInfo string) {
 // UserInfo wraps QUrl::userInfo.
 //
 //	C++: QString QUrl::userInfo(ComponentFormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; UserInfoFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#userInfo
 func (this *QUrl) UserInfo() string {
@@ -292,6 +326,8 @@ func (this *QUrl) UserInfo() string {
 //
 //	C++: void QUrl::setUserName(const QString & userName, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetUserNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setUserName
 func (this *QUrl) SetUserName(userName string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUserName")
@@ -302,6 +338,8 @@ func (this *QUrl) SetUserName(userName string) {
 // UserName wraps QUrl::userName.
 //
 //	C++: QString QUrl::userName(ComponentFormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; UserNameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#userName
 func (this *QUrl) UserName() string {
@@ -315,6 +353,8 @@ func (this *QUrl) UserName() string {
 //
 //	C++: void QUrl::setPassword(const QString & password, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetPasswordFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setPassword
 func (this *QUrl) SetPassword(password string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPassword")
@@ -325,6 +365,8 @@ func (this *QUrl) SetPassword(password string) {
 // Password wraps QUrl::password.
 //
 //	C++: QString QUrl::password(ComponentFormattingOptions = …) const
+//
+// Arguments with C++ defaults are left at them; PasswordFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#password
 func (this *QUrl) Password() string {
@@ -338,6 +380,8 @@ func (this *QUrl) Password() string {
 //
 //	C++: void QUrl::setHost(const QString & host, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetHostFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setHost
 func (this *QUrl) SetHost(host string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetHost")
@@ -348,6 +392,8 @@ func (this *QUrl) SetHost(host string) {
 // Host wraps QUrl::host.
 //
 //	C++: QString QUrl::host(ComponentFormattingOptions = …) const
+//
+// Arguments with C++ defaults are left at them; HostFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#host
 func (this *QUrl) Host() string {
@@ -372,6 +418,8 @@ func (this *QUrl) SetPort(port int) {
 //
 //	C++: int QUrl::port(int defaultPort = …) const
 //
+// Arguments with C++ defaults are left at them; PortFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#port
 func (this *QUrl) Port() int {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Port")
@@ -384,6 +432,8 @@ func (this *QUrl) Port() int {
 //
 //	C++: void QUrl::setPath(const QString & path, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetPathFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setPath
 func (this *QUrl) SetPath(path string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPath")
@@ -394,6 +444,8 @@ func (this *QUrl) SetPath(path string) {
 // Path wraps QUrl::path.
 //
 //	C++: QString QUrl::path(ComponentFormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; PathFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#path
 func (this *QUrl) Path() string {
@@ -406,6 +458,8 @@ func (this *QUrl) Path() string {
 // FileName wraps QUrl::fileName.
 //
 //	C++: QString QUrl::fileName(ComponentFormattingOptions options = …) const
+//
+// Arguments with C++ defaults are left at them; FileNameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#fileName
 func (this *QUrl) FileName() string {
@@ -431,6 +485,8 @@ func (this *QUrl) HasQuery() bool {
 //
 //	C++: void QUrl::setQuery(const QString & query, ParsingMode mode = …)
 //
+// Arguments with C++ defaults are left at them; SetQueryFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setQuery
 func (this *QUrl) SetQuery(query string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.SetQuery")
@@ -453,6 +509,8 @@ func (this *QUrl) SetQueryUrlQuery(query *QUrlQuery) {
 // Query wraps QUrl::query.
 //
 //	C++: QString QUrl::query(ComponentFormattingOptions = …) const
+//
+// Arguments with C++ defaults are left at them; QueryFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#query
 func (this *QUrl) Query() string {
@@ -478,6 +536,8 @@ func (this *QUrl) HasFragment() bool {
 //
 //	C++: QString QUrl::fragment(ComponentFormattingOptions options = …) const
 //
+// Arguments with C++ defaults are left at them; FragmentFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#fragment
 func (this *QUrl) Fragment() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrl.Fragment")
@@ -489,6 +549,8 @@ func (this *QUrl) Fragment() string {
 // SetFragment wraps QUrl::setFragment.
 //
 //	C++: void QUrl::setFragment(const QString & fragment, ParsingMode mode = …)
+//
+// Arguments with C++ defaults are left at them; SetFragmentFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#setFragment
 func (this *QUrl) SetFragment(fragment string) {
@@ -574,11 +636,326 @@ func (this *QUrl) Matches(url *QUrl, options QUrlUrlFormattingOption) bool {
 	return bool(r)
 }
 
+// SetUrlFull wraps QUrl::setUrl.
+//
+//	C++: void QUrl::setUrl(const QString & url, ParsingMode mode = …)
+//
+// SetUrlFull is SetUrl with every argument, including those SetUrl leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setUrl
+func (this *QUrl) SetUrlFull(url string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUrlFull")
+	C.qute_QUrl_setUrl_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(url))), C.ptrdiff_t(len(url)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// UrlFull wraps QUrl::url.
+//
+//	C++: QString QUrl::url(FormattingOptions options = …) const
+//
+// UrlFull is Url with every argument, including those Url leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#url
+func (this *QUrl) UrlFull(options QUrlUrlFormattingOption) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.UrlFull")
+	r := C.qute_QUrl_url_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToStringFull wraps QUrl::toString.
+//
+//	C++: QString QUrl::toString(FormattingOptions options = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#toString
+func (this *QUrl) ToStringFull(options QUrlUrlFormattingOption) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.ToStringFull")
+	r := C.qute_QUrl_toString_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToDisplayStringFull wraps QUrl::toDisplayString.
+//
+//	C++: QString QUrl::toDisplayString(FormattingOptions options = …) const
+//
+// ToDisplayStringFull is ToDisplayString with every argument, including those ToDisplayString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#toDisplayString
+func (this *QUrl) ToDisplayStringFull(options QUrlUrlFormattingOption) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.ToDisplayStringFull")
+	r := C.qute_QUrl_toDisplayString_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToEncodedFull wraps QUrl::toEncoded.
+//
+//	C++: QByteArray QUrl::toEncoded(FormattingOptions options = …) const
+//
+// ToEncodedFull is ToEncoded with every argument, including those ToEncoded leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#toEncoded
+func (this *QUrl) ToEncodedFull(options QUrlUrlFormattingOption) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.ToEncodedFull")
+	r := C.qute_QUrl_toEncoded_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteBytes(r)
+}
+
+// SetAuthorityFull wraps QUrl::setAuthority.
+//
+//	C++: void QUrl::setAuthority(const QString & authority, ParsingMode mode = …)
+//
+// SetAuthorityFull is SetAuthority with every argument, including those SetAuthority leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setAuthority
+func (this *QUrl) SetAuthorityFull(authority string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetAuthorityFull")
+	C.qute_QUrl_setAuthority_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(authority))), C.ptrdiff_t(len(authority)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// AuthorityFull wraps QUrl::authority.
+//
+//	C++: QString QUrl::authority(ComponentFormattingOptions options = …) const
+//
+// AuthorityFull is Authority with every argument, including those Authority leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#authority
+func (this *QUrl) AuthorityFull(options QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.AuthorityFull")
+	r := C.qute_QUrl_authority_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetUserInfoFull wraps QUrl::setUserInfo.
+//
+//	C++: void QUrl::setUserInfo(const QString & userInfo, ParsingMode mode = …)
+//
+// SetUserInfoFull is SetUserInfo with every argument, including those SetUserInfo leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setUserInfo
+func (this *QUrl) SetUserInfoFull(userInfo string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUserInfoFull")
+	C.qute_QUrl_setUserInfo_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(userInfo))), C.ptrdiff_t(len(userInfo)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// UserInfoFull wraps QUrl::userInfo.
+//
+//	C++: QString QUrl::userInfo(ComponentFormattingOptions options = …) const
+//
+// UserInfoFull is UserInfo with every argument, including those UserInfo leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#userInfo
+func (this *QUrl) UserInfoFull(options QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.UserInfoFull")
+	r := C.qute_QUrl_userInfo_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetUserNameFull wraps QUrl::setUserName.
+//
+//	C++: void QUrl::setUserName(const QString & userName, ParsingMode mode = …)
+//
+// SetUserNameFull is SetUserName with every argument, including those SetUserName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setUserName
+func (this *QUrl) SetUserNameFull(userName string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetUserNameFull")
+	C.qute_QUrl_setUserName_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(userName))), C.ptrdiff_t(len(userName)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// UserNameFull wraps QUrl::userName.
+//
+//	C++: QString QUrl::userName(ComponentFormattingOptions options = …) const
+//
+// UserNameFull is UserName with every argument, including those UserName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#userName
+func (this *QUrl) UserNameFull(options QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.UserNameFull")
+	r := C.qute_QUrl_userName_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetPasswordFull wraps QUrl::setPassword.
+//
+//	C++: void QUrl::setPassword(const QString & password, ParsingMode mode = …)
+//
+// SetPasswordFull is SetPassword with every argument, including those SetPassword leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setPassword
+func (this *QUrl) SetPasswordFull(password string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPasswordFull")
+	C.qute_QUrl_setPassword_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(password))), C.ptrdiff_t(len(password)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// PasswordFull wraps QUrl::password.
+//
+//	C++: QString QUrl::password(ComponentFormattingOptions = …) const
+//
+// PasswordFull is Password with every argument, including those Password leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#password
+func (this *QUrl) PasswordFull(componentFormattingOptions QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.PasswordFull")
+	r := C.qute_QUrl_password_1(self, C.int64_t(componentFormattingOptions))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetHostFull wraps QUrl::setHost.
+//
+//	C++: void QUrl::setHost(const QString & host, ParsingMode mode = …)
+//
+// SetHostFull is SetHost with every argument, including those SetHost leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setHost
+func (this *QUrl) SetHostFull(host string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetHostFull")
+	C.qute_QUrl_setHost_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(host))), C.ptrdiff_t(len(host)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// HostFull wraps QUrl::host.
+//
+//	C++: QString QUrl::host(ComponentFormattingOptions = …) const
+//
+// HostFull is Host with every argument, including those Host leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#host
+func (this *QUrl) HostFull(componentFormattingOptions QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.HostFull")
+	r := C.qute_QUrl_host_1(self, C.int64_t(componentFormattingOptions))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// PortFull wraps QUrl::port.
+//
+//	C++: int QUrl::port(int defaultPort = …) const
+//
+// PortFull is Port with every argument, including those Port leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#port
+func (this *QUrl) PortFull(defaultPort int) int {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.PortFull")
+	r := C.qute_QUrl_port_1(self, C.int(defaultPort))
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
+// SetPathFull wraps QUrl::setPath.
+//
+//	C++: void QUrl::setPath(const QString & path, ParsingMode mode = …)
+//
+// SetPathFull is SetPath with every argument, including those SetPath leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setPath
+func (this *QUrl) SetPathFull(path string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetPathFull")
+	C.qute_QUrl_setPath_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// PathFull wraps QUrl::path.
+//
+//	C++: QString QUrl::path(ComponentFormattingOptions options = …) const
+//
+// PathFull is Path with every argument, including those Path leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#path
+func (this *QUrl) PathFull(options QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.PathFull")
+	r := C.qute_QUrl_path_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// FileNameFull wraps QUrl::fileName.
+//
+//	C++: QString QUrl::fileName(ComponentFormattingOptions options = …) const
+//
+// FileNameFull is FileName with every argument, including those FileName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fileName
+func (this *QUrl) FileNameFull(options QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.FileNameFull")
+	r := C.qute_QUrl_fileName_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetQueryFull wraps QUrl::setQuery.
+//
+//	C++: void QUrl::setQuery(const QString & query, ParsingMode mode = …)
+//
+// SetQueryFull is SetQuery with every argument, including those SetQuery leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setQuery
+func (this *QUrl) SetQueryFull(query string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetQueryFull")
+	C.qute_QUrl_setQuery_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(query))), C.ptrdiff_t(len(query)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// QueryFull wraps QUrl::query.
+//
+//	C++: QString QUrl::query(ComponentFormattingOptions = …) const
+//
+// QueryFull is Query with every argument, including those Query leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#query
+func (this *QUrl) QueryFull(componentFormattingOptions QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.QueryFull")
+	r := C.qute_QUrl_query_1(self, C.int64_t(componentFormattingOptions))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// FragmentFull wraps QUrl::fragment.
+//
+//	C++: QString QUrl::fragment(ComponentFormattingOptions options = …) const
+//
+// FragmentFull is Fragment with every argument, including those Fragment leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fragment
+func (this *QUrl) FragmentFull(options QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.FragmentFull")
+	r := C.qute_QUrl_fragment_1(self, C.int64_t(options))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// SetFragmentFull wraps QUrl::setFragment.
+//
+//	C++: void QUrl::setFragment(const QString & fragment, ParsingMode mode = …)
+//
+// SetFragmentFull is SetFragment with every argument, including those SetFragment leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#setFragment
+func (this *QUrl) SetFragmentFull(fragment string, mode QUrlParsingMode) {
+	self := rt.Use(unsafe.Pointer(this), "QUrl.SetFragmentFull")
+	C.qute_QUrl_setFragment_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fragment))), C.ptrdiff_t(len(fragment)), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
 // QUrlFromEncoded wraps QUrl::fromEncoded.
 //
 //	C++: QUrl QUrl::fromEncoded(QByteArrayView input, ParsingMode mode = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QUrlFromEncodedFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#fromEncoded
 func QUrlFromEncoded(input []byte) *QUrl {
@@ -592,6 +969,8 @@ func QUrlFromEncoded(input []byte) *QUrl {
 //	C++: QUrl QUrl::fromUserInput(const QString & userInput, const QString & workingDirectory = …, UserInputResolutionOptions options = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; QUrlFromUserInputFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#fromUserInput
 func QUrlFromUserInput(userInput string) *QUrl {
@@ -628,6 +1007,8 @@ func QUrlFromPercentEncoding(byteArray []byte) string {
 //
 //	C++: QByteArray QUrl::toPercentEncoding(const QString &, const QByteArray & exclude = …, const QByteArray & include = …)
 //
+// Arguments with C++ defaults are left at them; QUrlToPercentEncodingFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#toPercentEncoding
 func QUrlToPercentEncoding(stringArg string) []byte {
 	rt.CheckThread("QUrlToPercentEncoding")
@@ -639,6 +1020,8 @@ func QUrlToPercentEncoding(stringArg string) []byte {
 //
 //	C++: QString QUrl::fromAce(const QByteArray & domain, AceProcessingOptions options = …)
 //
+// Arguments with C++ defaults are left at them; QUrlFromAceFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#fromAce
 func QUrlFromAce(domain []byte) string {
 	rt.CheckThread("QUrlFromAce")
@@ -649,6 +1032,8 @@ func QUrlFromAce(domain []byte) string {
 // QUrlToAce wraps QUrl::toAce.
 //
 //	C++: QByteArray QUrl::toAce(const QString & domain, AceProcessingOptions options = …)
+//
+// Arguments with C++ defaults are left at them; QUrlToAceFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#toAce
 func QUrlToAce(domain string) []byte {
@@ -672,6 +1057,8 @@ func QUrlIdnWhitelist() []string {
 //
 //	C++: QStringList QUrl::toStringList(const QList<QUrl> & uris, FormattingOptions options = …)
 //
+// Arguments with C++ defaults are left at them; QUrlToStringListFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#toStringList
 func QUrlToStringList(uris []*QUrl) []string {
 	rt.CheckThread("QUrlToStringList")
@@ -687,6 +1074,8 @@ func QUrlToStringList(uris []*QUrl) []string {
 // QUrlFromStringList wraps QUrl::fromStringList.
 //
 //	C++: QList<QUrl> QUrl::fromStringList(const QStringList & uris, ParsingMode mode = …)
+//
+// Arguments with C++ defaults are left at them; QUrlFromStringListFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurl.html#fromStringList
 func QUrlFromStringList(uris []string) []*QUrl {
@@ -705,4 +1094,105 @@ func QUrlSetIdnWhitelist(idnWhitelist []string) {
 	rt.CheckThread("QUrlSetIdnWhitelist")
 	idnWhitelistData, idnWhitelistLens := quteStrListArg(idnWhitelist)
 	C.qute_QUrl_setIdnWhitelist((*C.char)(unsafe.Pointer(unsafe.SliceData(idnWhitelistData))), (*C.ptrdiff_t)(unsafe.SliceData(idnWhitelistLens)), C.ptrdiff_t(len(idnWhitelist)))
+}
+
+// QUrlFromEncodedFull wraps QUrl::fromEncoded.
+//
+//	C++: QUrl QUrl::fromEncoded(QByteArrayView input, ParsingMode mode = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QUrlFromEncodedFull is QUrlFromEncoded with every argument, including those QUrlFromEncoded leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fromEncoded
+func QUrlFromEncodedFull(input []byte, mode QUrlParsingMode) *QUrl {
+	rt.CheckThread("QUrlFromEncodedFull")
+	r := C.qute_QUrl_fromEncoded_1((*C.char)(unsafe.Pointer(unsafe.SliceData(input))), C.ptrdiff_t(len(input)), C.int64_t(mode))
+	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
+}
+
+// QUrlFromUserInputFull wraps QUrl::fromUserInput.
+//
+//	C++: QUrl QUrl::fromUserInput(const QString & userInput, const QString & workingDirectory = …, UserInputResolutionOptions options = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QUrlFromUserInputFull is QUrlFromUserInput with every argument, including those QUrlFromUserInput leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fromUserInput
+func QUrlFromUserInputFull(userInput string, workingDirectory string, options QUrlUserInputResolutionOptions) *QUrl {
+	rt.CheckThread("QUrlFromUserInputFull")
+	r := C.qute_QUrl_fromUserInput_1((*C.char)(unsafe.Pointer(unsafe.StringData(userInput))), C.ptrdiff_t(len(userInput)), (*C.char)(unsafe.Pointer(unsafe.StringData(workingDirectory))), C.ptrdiff_t(len(workingDirectory)), C.int64_t(options))
+	return rt.View[QUrl](rt.WrapClass(r, "QUrl", rt.TakeOwned), r)
+}
+
+// QUrlToPercentEncodingFull wraps QUrl::toPercentEncoding.
+//
+//	C++: QByteArray QUrl::toPercentEncoding(const QString &, const QByteArray & exclude = …, const QByteArray & include = …)
+//
+// QUrlToPercentEncodingFull is QUrlToPercentEncoding with every argument, including those QUrlToPercentEncoding leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#toPercentEncoding
+func QUrlToPercentEncodingFull(stringArg string, exclude []byte, include []byte) []byte {
+	rt.CheckThread("QUrlToPercentEncodingFull")
+	r := C.qute_QUrl_toPercentEncoding_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.SliceData(exclude))), C.ptrdiff_t(len(exclude)), (*C.char)(unsafe.Pointer(unsafe.SliceData(include))), C.ptrdiff_t(len(include)))
+	return quteBytes(r)
+}
+
+// QUrlFromAceFull wraps QUrl::fromAce.
+//
+//	C++: QString QUrl::fromAce(const QByteArray & domain, AceProcessingOptions options = …)
+//
+// QUrlFromAceFull is QUrlFromAce with every argument, including those QUrlFromAce leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fromAce
+func QUrlFromAceFull(domain []byte, options QUrlAceProcessingOptions) string {
+	rt.CheckThread("QUrlFromAceFull")
+	r := C.qute_QUrl_fromAce_1((*C.char)(unsafe.Pointer(unsafe.SliceData(domain))), C.ptrdiff_t(len(domain)), C.int64_t(options))
+	return quteStr(r)
+}
+
+// QUrlToAceFull wraps QUrl::toAce.
+//
+//	C++: QByteArray QUrl::toAce(const QString & domain, AceProcessingOptions options = …)
+//
+// QUrlToAceFull is QUrlToAce with every argument, including those QUrlToAce leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#toAce
+func QUrlToAceFull(domain string, options QUrlAceProcessingOptions) []byte {
+	rt.CheckThread("QUrlToAceFull")
+	r := C.qute_QUrl_toAce_1((*C.char)(unsafe.Pointer(unsafe.StringData(domain))), C.ptrdiff_t(len(domain)), C.int64_t(options))
+	return quteBytes(r)
+}
+
+// QUrlToStringListFull wraps QUrl::toStringList.
+//
+//	C++: QStringList QUrl::toStringList(const QList<QUrl> & uris, FormattingOptions options = …)
+//
+// QUrlToStringListFull is QUrlToStringList with every argument, including those QUrlToStringList leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#toStringList
+func QUrlToStringListFull(uris []*QUrl, options QUrlUrlFormattingOption) []string {
+	rt.CheckThread("QUrlToStringListFull")
+	urisC := make([]unsafe.Pointer, len(uris))
+	for i := range uris {
+		urisC[i] = rt.UseArg(unsafe.Pointer(uris[i]), "QUrlToStringListFull")
+	}
+	r := C.qute_QUrl_toStringList_1(unsafe.Pointer(unsafe.SliceData(urisC)), C.ptrdiff_t(len(uris)), C.int64_t(options))
+	runtime.KeepAlive(uris)
+	return quteStrList(r)
+}
+
+// QUrlFromStringListFull wraps QUrl::fromStringList.
+//
+//	C++: QList<QUrl> QUrl::fromStringList(const QStringList & uris, ParsingMode mode = …)
+//
+// QUrlFromStringListFull is QUrlFromStringList with every argument, including those QUrlFromStringList leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurl.html#fromStringList
+func QUrlFromStringListFull(uris []string, mode QUrlParsingMode) []*QUrl {
+	rt.CheckThread("QUrlFromStringListFull")
+	urisData, urisLens := quteStrListArg(uris)
+	r := C.qute_QUrl_fromStringList_1((*C.char)(unsafe.Pointer(unsafe.SliceData(urisData))), (*C.ptrdiff_t)(unsafe.SliceData(urisLens)), C.ptrdiff_t(len(uris)), C.int64_t(mode))
+	return quteList(r, func(e unsafe.Pointer) *QUrl { return rt.View[QUrl](rt.WrapClass(e, "QUrl", rt.TakeOwned), e) })
 }

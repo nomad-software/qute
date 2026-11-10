@@ -82,7 +82,7 @@ func (this *QListWidget) Item(row int) *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.Item")
 	r := C.qute_QListWidget_item(self, C.int(row))
 	runtime.KeepAlive(this)
-	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QListWidgetItem](rt.WrapClassFrom(r, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Row wraps QListWidget::row.
@@ -119,7 +119,7 @@ func (this *QListWidget) InsertItem(row int, item QListWidgetItemLike) {
 	C.qute_QListWidget_insertItem(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // InsertItemText wraps QListWidget::insertItem.
@@ -173,7 +173,7 @@ func (this *QListWidget) AddItem(item QListWidgetItemLike) {
 	C.qute_QListWidget_addItem_1(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // AddItems wraps QListWidget::addItems.
@@ -225,7 +225,7 @@ func (this *QListWidget) CurrentItem() *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.CurrentItem")
 	r := C.qute_QListWidget_currentItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QListWidgetItem](rt.WrapClassFrom(r, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetCurrentItem wraps QListWidget::setCurrentItem.
@@ -305,7 +305,7 @@ func (this *QListWidget) ItemAt(pArg qtcore.QPoint) *QListWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.ItemAt")
 	r := C.qute_QListWidget_itemAt(self, cQPoint(pArg))
 	runtime.KeepAlive(this)
-	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QListWidgetItem](rt.WrapClassFrom(r, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // VisualItemRect wraps QListWidget::visualItemRect.
@@ -328,6 +328,8 @@ func (this *QListWidget) VisualItemRect(item QListWidgetItemLike) qtcore.QRect {
 // SortItems wraps QListWidget::sortItems.
 //
 //	C++: void QListWidget::sortItems(Qt::SortOrder order = …)
+//
+// Arguments with C++ defaults are left at them; SortItemsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlistwidget.html#sortItems
 func (this *QListWidget) SortItems() {
@@ -465,7 +467,7 @@ func (this *QListWidget) SetItemWidget(item QListWidgetItemLike, widget QWidgetL
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // RemoveItemWidget wraps QListWidget::removeItemWidget.
@@ -498,7 +500,7 @@ func (this *QListWidget) SelectedItems() []*QListWidgetItem {
 	r := C.qute_QListWidget_selectedItems(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QListWidgetItem {
-		return rt.View[QListWidgetItem](rt.WrapClass(e, "QListWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QListWidgetItem](rt.WrapClassFrom(e, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -514,7 +516,7 @@ func (this *QListWidget) FindItems(text string, flags qtcore.MatchFlags) []*QLis
 	r := C.qute_QListWidget_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QListWidgetItem {
-		return rt.View[QListWidgetItem](rt.WrapClass(e, "QListWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QListWidgetItem](rt.WrapClassFrom(e, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -535,7 +537,7 @@ func (this *QListWidget) Items(data qtcore.QMimeDataLike) []*QListWidgetItem {
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(data)
 	return quteList(r, func(e unsafe.Pointer) *QListWidgetItem {
-		return rt.View[QListWidgetItem](rt.WrapClass(e, "QListWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QListWidgetItem](rt.WrapClassFrom(e, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -570,7 +572,7 @@ func (this *QListWidget) ItemFromIndex(index *qtcore.QModelIndex) *QListWidgetIt
 	r := C.qute_QListWidget_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QListWidget.ItemFromIndex"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
-	return rt.View[QListWidgetItem](rt.WrapClass(r, "QListWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QListWidgetItem](rt.WrapClassFrom(r, "QListWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetSupportedDragActions wraps QListWidget::setSupportedDragActions.
@@ -599,6 +601,8 @@ func (this *QListWidget) SupportedDragActions() qtcore.DropActions {
 // ScrollToItem wraps QListWidget::scrollToItem.
 //
 //	C++: void QListWidget::scrollToItem(const QListWidgetItem * item, QAbstractItemView::ScrollHint hint = …)
+//
+// Arguments with C++ defaults are left at them; ScrollToItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlistwidget.html#scrollToItem
 func (this *QListWidget) ScrollToItem(item QListWidgetItemLike) {
@@ -771,6 +775,37 @@ func (this *QListWidget) EmitItemSelectionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.EmitItemSelectionChanged")
 	C.qute_QListWidget_itemSelectionChanged_1(self)
 	runtime.KeepAlive(this)
+}
+
+// SortItemsFull wraps QListWidget::sortItems.
+//
+//	C++: void QListWidget::sortItems(Qt::SortOrder order = …)
+//
+// SortItemsFull is SortItems with every argument, including those SortItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidget.html#sortItems
+func (this *QListWidget) SortItemsFull(order qtcore.SortOrder) {
+	self := rt.Use(unsafe.Pointer(this), "QListWidget.SortItemsFull")
+	C.qute_QListWidget_sortItems_1(self, C.int64_t(order))
+	runtime.KeepAlive(this)
+}
+
+// ScrollToItemFull wraps QListWidget::scrollToItem.
+//
+//	C++: void QListWidget::scrollToItem(const QListWidgetItem * item, QAbstractItemView::ScrollHint hint = …)
+//
+// ScrollToItemFull is ScrollToItem with every argument, including those ScrollToItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidget.html#scrollToItem
+func (this *QListWidget) ScrollToItemFull(item QListWidgetItemLike, hint QAbstractItemViewScrollHint) {
+	self := rt.Use(unsafe.Pointer(this), "QListWidget.ScrollToItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQListWidgetItem()), "QListWidget.ScrollToItemFull")
+	}
+	C.qute_QListWidget_scrollToItem_1(self, itemPtr, C.int64_t(hint))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the

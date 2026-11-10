@@ -55,6 +55,8 @@ func QFrameCast(o qtcore.QObjectLike) *QFrame {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQFrameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qframe.html#QFrame
 func NewQFrame(parent QWidgetLike) *QFrame {
 	rt.CheckThread("NewQFrame")
@@ -63,6 +65,31 @@ func NewQFrame(parent QWidgetLike) *QFrame {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFrame")
 	}
 	p := C.qute_QFrame_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QFrame", mode)
+	return rt.View[QFrame](h, p)
+}
+
+// NewQFrameFull wraps the QFrame constructor.
+//
+//	C++: QFrame::QFrame(QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQFrameFull is NewQFrame with every argument, including those NewQFrame leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qframe.html#QFrame
+func NewQFrameFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QFrame {
+	rt.CheckThread("NewQFrameFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFrameFull")
+	}
+	p := C.qute_QFrame_new_1(parentPtr, C.int64_t(fArg))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

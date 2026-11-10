@@ -28,6 +28,11 @@ func init() {
 	rt.RegisterClass("QPicture", rt.KindValue, func(p unsafe.Pointer) { C.qute_QPicture_delete(p) })
 }
 
+// Each QPicture counts the bytes it holds outside the Go heap, so GC runs as they add up.
+func init() {
+	rt.RegisterMemory("QPicture", func(p unsafe.Pointer) int64 { return int64(C.qute_QPicture_memory(p)) })
+}
+
 // QPictureFromPtr wraps an existing C++ QPicture. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QPictureFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPicture {
@@ -38,10 +43,26 @@ func QPictureFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPicture {
 //
 //	C++: QPicture::QPicture(int formatVersion = …)
 //
+// Arguments with C++ defaults are left at them; NewQPictureFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpicture.html#QPicture
 func NewQPicture() *QPicture {
 	rt.CheckThread("NewQPicture")
 	p := C.qute_QPicture_new()
+	h := rt.WrapClass(p, "QPicture", rt.NewOwned)
+	return rt.View[QPicture](h, p)
+}
+
+// NewQPictureFull wraps the QPicture constructor.
+//
+//	C++: QPicture::QPicture(int formatVersion = …)
+//
+// NewQPictureFull is NewQPicture with every argument, including those NewQPicture leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpicture.html#QPicture
+func NewQPictureFull(formatVersion int) *QPicture {
+	rt.CheckThread("NewQPictureFull")
+	p := C.qute_QPicture_new_1(C.int(formatVersion))
 	h := rt.WrapClass(p, "QPicture", rt.NewOwned)
 	return rt.View[QPicture](h, p)
 }
@@ -91,6 +112,7 @@ func (this *QPicture) SetData(data []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.SetData")
 	C.qute_QPicture_setData(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
 	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 }
 
 // Play wraps QPicture::play.
@@ -124,6 +146,7 @@ func (this *QPicture) Load(dev qtcore.QIODeviceLike) bool {
 	r := C.qute_QPicture_load(self, devPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(dev)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 	return bool(r)
 }
 
@@ -136,6 +159,7 @@ func (this *QPicture) LoadFileName(fileName string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QPicture.LoadFileName")
 	r := C.qute_QPicture_load_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
 	runtime.KeepAlive(this)
+	rt.Remeasure(rt.RefOf(unsafe.Pointer(this)).H)
 	return bool(r)
 }
 

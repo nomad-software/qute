@@ -13,7 +13,9 @@ import (
 
 // NewQApplication creates the application object. Most programs call
 // qute.Main instead, which creates it, runs the event loop and handles
-// shutdown. The application object is never freed by GC.
+// shutdown; code that calls NewQApplication itself must still run its event
+// loop through qute.Main, which starts the runtime (cleanup queue, window
+// pins). The application object is never freed by GC.
 func NewQApplication(args []string) *QApplication {
 	rt.CheckThread("NewQApplication")
 	if rt.AppExists() {
@@ -24,11 +26,4 @@ func NewQApplication(args []string) *QApplication {
 	app := rt.View[QApplication](rt.WrapClass(p, "QApplication", rt.KeepOrBorrow), p)
 	app.Keep()
 	return app
-}
-
-//export qute_qtwidgets_visibility
-func qute_qtwidgets_visibility(obj unsafe.Pointer, visible C.bool) {
-	if h := rt.Lookup(obj); h != nil {
-		h.SetVisiblePin(bool(visible))
-	}
 }

@@ -268,6 +268,8 @@ func (this *QPdfWriter) DocumentXmpMetadata() []byte {
 //
 //	C++: void QPdfWriter::addFileAttachment(const QString & fileName, const QByteArray & data, const QString & mimeType = …)
 //
+// Arguments with C++ defaults are left at them; AddFileAttachmentFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpdfwriter.html#addFileAttachment
 func (this *QPdfWriter) AddFileAttachment(fileName string, data []byte) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.AddFileAttachment")
@@ -295,5 +297,18 @@ func (this *QPdfWriter) ColorModel() QPdfWriterColorModel {
 func (this *QPdfWriter) SetColorModel(model QPdfWriterColorModel) {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.SetColorModel")
 	C.qute_QPdfWriter_setColorModel(self, C.int64_t(model))
+	runtime.KeepAlive(this)
+}
+
+// AddFileAttachmentFull wraps QPdfWriter::addFileAttachment.
+//
+//	C++: void QPdfWriter::addFileAttachment(const QString & fileName, const QByteArray & data, const QString & mimeType = …)
+//
+// AddFileAttachmentFull is AddFileAttachment with every argument, including those AddFileAttachment leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpdfwriter.html#addFileAttachment
+func (this *QPdfWriter) AddFileAttachmentFull(fileName string, data []byte, mimeType string) {
+	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.AddFileAttachmentFull")
+	C.qute_QPdfWriter_addFileAttachment_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), (*C.char)(unsafe.Pointer(unsafe.StringData(mimeType))), C.ptrdiff_t(len(mimeType)))
 	runtime.KeepAlive(this)
 }

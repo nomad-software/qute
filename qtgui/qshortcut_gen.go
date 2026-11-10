@@ -77,6 +77,8 @@ func NewQShortcut(parent qtcore.QObjectLike) *QShortcut {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQShortcutWithKeySequenceFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qshortcut.html#QShortcut
 func NewQShortcutWithKeySequence(key *QKeySequence, parent qtcore.QObjectLike) *QShortcut {
 	rt.CheckThread("NewQShortcutWithKeySequence")
@@ -101,6 +103,8 @@ func NewQShortcutWithKeySequence(key *QKeySequence, parent qtcore.QObjectLike) *
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQShortcutStandardFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qshortcut.html#QShortcut
 func NewQShortcutStandard(key QKeySequenceStandardKey, parent qtcore.QObjectLike) *QShortcut {
 	rt.CheckThread("NewQShortcutStandard")
@@ -109,6 +113,65 @@ func NewQShortcutStandard(key QKeySequenceStandardKey, parent qtcore.QObjectLike
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutStandard")
 	}
 	p := C.qute_QShortcut_new_2(C.int64_t(key), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QShortcut", mode)
+	return rt.View[QShortcut](h, p)
+}
+
+// NewQShortcutWithKeySequenceFull wraps the QShortcut constructor.
+//
+//	C++: QShortcut::QShortcut(const QKeySequence & key, QObject * parent, const char * member = …, const char * ambiguousMember = …, Qt::ShortcutContext context = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQShortcutWithKeySequenceFull is NewQShortcutWithKeySequence with every argument, including those NewQShortcutWithKeySequence leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qshortcut.html#QShortcut
+func NewQShortcutWithKeySequenceFull(key *QKeySequence, parent qtcore.QObjectLike, member string, ambiguousMember string, context qtcore.ShortcutContext) *QShortcut {
+	rt.CheckThread("NewQShortcutWithKeySequenceFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutWithKeySequenceFull")
+	}
+	memberCStr := C.CString(member)
+	defer C.free(unsafe.Pointer(memberCStr))
+	ambiguousMemberCStr := C.CString(ambiguousMember)
+	defer C.free(unsafe.Pointer(ambiguousMemberCStr))
+	p := C.qute_QShortcut_new_3(rt.UseArg(unsafe.Pointer(key), "NewQShortcutWithKeySequenceFull"), parentPtr, memberCStr, ambiguousMemberCStr, C.int64_t(context))
+	runtime.KeepAlive(key)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QShortcut", mode)
+	return rt.View[QShortcut](h, p)
+}
+
+// NewQShortcutStandardFull wraps the QShortcut constructor.
+//
+//	C++: QShortcut::QShortcut(QKeySequence::StandardKey key, QObject * parent, const char * member = …, const char * ambiguousMember = …, Qt::ShortcutContext context = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQShortcutStandardFull is NewQShortcutStandard with every argument, including those NewQShortcutStandard leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qshortcut.html#QShortcut
+func NewQShortcutStandardFull(key QKeySequenceStandardKey, parent qtcore.QObjectLike, member string, ambiguousMember string, context qtcore.ShortcutContext) *QShortcut {
+	rt.CheckThread("NewQShortcutStandardFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutStandardFull")
+	}
+	memberCStr := C.CString(member)
+	defer C.free(unsafe.Pointer(memberCStr))
+	ambiguousMemberCStr := C.CString(ambiguousMember)
+	defer C.free(unsafe.Pointer(ambiguousMemberCStr))
+	p := C.qute_QShortcut_new_4(C.int64_t(key), parentPtr, memberCStr, ambiguousMemberCStr, C.int64_t(context))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

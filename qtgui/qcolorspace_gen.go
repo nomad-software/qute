@@ -106,6 +106,8 @@ func NewQColorSpaceWithNamedColorSpace(namedColorSpace QColorSpaceNamedColorSpac
 //
 //	C++: QColorSpace::QColorSpace(QPointF whitePoint, TransferFunction transferFunction, float gamma = …)
 //
+// Arguments with C++ defaults are left at them; NewQColorSpaceWithPointFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
 func NewQColorSpaceWithPointF(whitePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPointF")
@@ -133,6 +135,8 @@ func NewQColorSpaceWithPointFTransferFunctionTables(whitePoint qtcore.QPointF, t
 // NewQColorSpaceWithPrimaries wraps the QColorSpace constructor.
 //
 //	C++: QColorSpace::QColorSpace(Primaries primaries, TransferFunction transferFunction, float gamma = …)
+//
+// Arguments with C++ defaults are left at them; NewQColorSpaceWithPrimariesFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
 func NewQColorSpaceWithPrimaries(primaries QColorSpacePrimaries, transferFunction QColorSpaceTransferFunction) *QColorSpace {
@@ -174,6 +178,8 @@ func NewQColorSpaceWithPrimariesTransferFunctionTables(primaries QColorSpacePrim
 //
 //	C++: QColorSpace::QColorSpace(const QPointF & whitePoint, const QPointF & redPoint, const QPointF & greenPoint, const QPointF & bluePoint, TransferFunction transferFunction, float gamma = …)
 //
+// Arguments with C++ defaults are left at them; NewQColorSpaceWithPointFPointFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
 func NewQColorSpaceWithPointFPointF(whitePoint qtcore.QPointF, redPoint qtcore.QPointF, greenPoint qtcore.QPointF, bluePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPointFPointF")
@@ -185,6 +191,8 @@ func NewQColorSpaceWithPointFPointF(whitePoint qtcore.QPointF, redPoint qtcore.Q
 // NewQColorSpaceWithColorSpacePrimaryPoints wraps the QColorSpace constructor.
 //
 //	C++: QColorSpace::QColorSpace(const PrimaryPoints & primaryPoints, TransferFunction transferFunction, float gamma = …)
+//
+// Arguments with C++ defaults are left at them; NewQColorSpaceWithColorSpacePrimaryPointsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
 func NewQColorSpaceWithColorSpacePrimaryPoints(primaryPoints *QColorSpacePrimaryPoints, transferFunction QColorSpaceTransferFunction) *QColorSpace {
@@ -231,6 +239,63 @@ func NewQColorSpaceWithPointFPointFPointFPointF(whitePoint qtcore.QPointF, redPo
 		blueTransferFunctionTableC[i] = C.ushort(blueTransferFunctionTable[i])
 	}
 	p := C.qute_QColorSpace_new_10(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(redTransferFunctionTableC)), C.ptrdiff_t(len(redTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(greenTransferFunctionTableC)), C.ptrdiff_t(len(greenTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(blueTransferFunctionTableC)), C.ptrdiff_t(len(blueTransferFunctionTable)))
+	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	return rt.View[QColorSpace](h, p)
+}
+
+// NewQColorSpaceWithPointFFull wraps the QColorSpace constructor.
+//
+//	C++: QColorSpace::QColorSpace(QPointF whitePoint, TransferFunction transferFunction, float gamma = …)
+//
+// NewQColorSpaceWithPointFFull is NewQColorSpaceWithPointF with every argument, including those NewQColorSpaceWithPointF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
+func NewQColorSpaceWithPointFFull(whitePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
+	rt.CheckThread("NewQColorSpaceWithPointFFull")
+	p := C.qute_QColorSpace_new_11(cQPointF(whitePoint), C.int64_t(transferFunction), C.float(gamma))
+	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	return rt.View[QColorSpace](h, p)
+}
+
+// NewQColorSpaceWithPrimariesFull wraps the QColorSpace constructor.
+//
+//	C++: QColorSpace::QColorSpace(Primaries primaries, TransferFunction transferFunction, float gamma = …)
+//
+// NewQColorSpaceWithPrimariesFull is NewQColorSpaceWithPrimaries with every argument, including those NewQColorSpaceWithPrimaries leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
+func NewQColorSpaceWithPrimariesFull(primaries QColorSpacePrimaries, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
+	rt.CheckThread("NewQColorSpaceWithPrimariesFull")
+	p := C.qute_QColorSpace_new_12(C.int64_t(primaries), C.int64_t(transferFunction), C.float(gamma))
+	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	return rt.View[QColorSpace](h, p)
+}
+
+// NewQColorSpaceWithPointFPointFFull wraps the QColorSpace constructor.
+//
+//	C++: QColorSpace::QColorSpace(const QPointF & whitePoint, const QPointF & redPoint, const QPointF & greenPoint, const QPointF & bluePoint, TransferFunction transferFunction, float gamma = …)
+//
+// NewQColorSpaceWithPointFPointFFull is NewQColorSpaceWithPointFPointF with every argument, including those NewQColorSpaceWithPointFPointF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
+func NewQColorSpaceWithPointFPointFFull(whitePoint qtcore.QPointF, redPoint qtcore.QPointF, greenPoint qtcore.QPointF, bluePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
+	rt.CheckThread("NewQColorSpaceWithPointFPointFFull")
+	p := C.qute_QColorSpace_new_13(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), C.int64_t(transferFunction), C.float(gamma))
+	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	return rt.View[QColorSpace](h, p)
+}
+
+// NewQColorSpaceWithColorSpacePrimaryPointsFull wraps the QColorSpace constructor.
+//
+//	C++: QColorSpace::QColorSpace(const PrimaryPoints & primaryPoints, TransferFunction transferFunction, float gamma = …)
+//
+// NewQColorSpaceWithColorSpacePrimaryPointsFull is NewQColorSpaceWithColorSpacePrimaryPoints with every argument, including those NewQColorSpaceWithColorSpacePrimaryPoints leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#QColorSpace
+func NewQColorSpaceWithColorSpacePrimaryPointsFull(primaryPoints *QColorSpacePrimaryPoints, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
+	rt.CheckThread("NewQColorSpaceWithColorSpacePrimaryPointsFull")
+	p := C.qute_QColorSpace_new_14(rt.UseArg(unsafe.Pointer(primaryPoints), "NewQColorSpaceWithColorSpacePrimaryPointsFull"), C.int64_t(transferFunction), C.float(gamma))
+	runtime.KeepAlive(primaryPoints)
 	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
@@ -298,6 +363,8 @@ func (this *QColorSpace) SetDescription(description string) {
 //
 //	C++: void QColorSpace::setTransferFunction(TransferFunction transferFunction, float gamma = …)
 //
+// Arguments with C++ defaults are left at them; SetTransferFunctionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#setTransferFunction
 func (this *QColorSpace) SetTransferFunction(transferFunction QColorSpaceTransferFunction) {
 	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetTransferFunction")
@@ -348,6 +415,8 @@ func (this *QColorSpace) SetTransferFunctions(redTransferFunctionTable []uint16,
 //	C++: QColorSpace QColorSpace::withTransferFunction(TransferFunction transferFunction, float gamma = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; WithTransferFunctionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#withTransferFunction
 func (this *QColorSpace) WithTransferFunction(transferFunction QColorSpaceTransferFunction) *QColorSpace {
@@ -545,6 +614,35 @@ func (this *QColorSpace) TransformationToColorSpace(colorspace *QColorSpace) *QC
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(colorspace)
 	return rt.View[QColorTransform](rt.WrapClass(r, "QColorTransform", rt.TakeOwned), r)
+}
+
+// SetTransferFunctionFull wraps QColorSpace::setTransferFunction.
+//
+//	C++: void QColorSpace::setTransferFunction(TransferFunction transferFunction, float gamma = …)
+//
+// SetTransferFunctionFull is SetTransferFunction with every argument, including those SetTransferFunction leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#setTransferFunction
+func (this *QColorSpace) SetTransferFunctionFull(transferFunction QColorSpaceTransferFunction, gamma float32) {
+	self := rt.Use(unsafe.Pointer(this), "QColorSpace.SetTransferFunctionFull")
+	C.qute_QColorSpace_setTransferFunction_2(self, C.int64_t(transferFunction), C.float(gamma))
+	runtime.KeepAlive(this)
+}
+
+// WithTransferFunctionFull wraps QColorSpace::withTransferFunction.
+//
+//	C++: QColorSpace QColorSpace::withTransferFunction(TransferFunction transferFunction, float gamma = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// WithTransferFunctionFull is WithTransferFunction with every argument, including those WithTransferFunction leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#withTransferFunction
+func (this *QColorSpace) WithTransferFunctionFull(transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
+	self := rt.Use(unsafe.Pointer(this), "QColorSpace.WithTransferFunctionFull")
+	r := C.qute_QColorSpace_withTransferFunction_2(self, C.int64_t(transferFunction), C.float(gamma))
+	runtime.KeepAlive(this)
+	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
 // QColorSpaceFromIccProfile wraps QColorSpace::fromIccProfile.

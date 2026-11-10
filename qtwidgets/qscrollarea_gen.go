@@ -102,7 +102,7 @@ func (this *QScrollArea) SetWidget(widget QWidgetLike) {
 	C.qute_QScrollArea_setWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // TakeWidget wraps QScrollArea::takeWidget.
@@ -181,6 +181,8 @@ func (this *QScrollArea) SetAlignment(alignment qtcore.Alignment) {
 //
 //	C++: void QScrollArea::ensureVisible(int x, int y, int xmargin = …, int ymargin = …)
 //
+// Arguments with C++ defaults are left at them; EnsureVisibleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qscrollarea.html#ensureVisible
 func (this *QScrollArea) EnsureVisible(x int, y int) {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.EnsureVisible")
@@ -192,6 +194,8 @@ func (this *QScrollArea) EnsureVisible(x int, y int) {
 //
 //	C++: void QScrollArea::ensureWidgetVisible(QWidget * childWidget, int xmargin = …, int ymargin = …)
 //
+// Arguments with C++ defaults are left at them; EnsureWidgetVisibleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qscrollarea.html#ensureWidgetVisible
 func (this *QScrollArea) EnsureWidgetVisible(childWidget QWidgetLike) {
 	self := rt.Use(unsafe.Pointer(this), "QScrollArea.EnsureWidgetVisible")
@@ -200,6 +204,37 @@ func (this *QScrollArea) EnsureWidgetVisible(childWidget QWidgetLike) {
 		childWidgetPtr = rt.UseArg(unsafe.Pointer(childWidget.AsQWidget()), "QScrollArea.EnsureWidgetVisible")
 	}
 	C.qute_QScrollArea_ensureWidgetVisible(self, childWidgetPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(childWidget)
+}
+
+// EnsureVisibleFull wraps QScrollArea::ensureVisible.
+//
+//	C++: void QScrollArea::ensureVisible(int x, int y, int xmargin = …, int ymargin = …)
+//
+// EnsureVisibleFull is EnsureVisible with every argument, including those EnsureVisible leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qscrollarea.html#ensureVisible
+func (this *QScrollArea) EnsureVisibleFull(x int, y int, xmargin int, ymargin int) {
+	self := rt.Use(unsafe.Pointer(this), "QScrollArea.EnsureVisibleFull")
+	C.qute_QScrollArea_ensureVisible_1(self, C.int(x), C.int(y), C.int(xmargin), C.int(ymargin))
+	runtime.KeepAlive(this)
+}
+
+// EnsureWidgetVisibleFull wraps QScrollArea::ensureWidgetVisible.
+//
+//	C++: void QScrollArea::ensureWidgetVisible(QWidget * childWidget, int xmargin = …, int ymargin = …)
+//
+// EnsureWidgetVisibleFull is EnsureWidgetVisible with every argument, including those EnsureWidgetVisible leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qscrollarea.html#ensureWidgetVisible
+func (this *QScrollArea) EnsureWidgetVisibleFull(childWidget QWidgetLike, xmargin int, ymargin int) {
+	self := rt.Use(unsafe.Pointer(this), "QScrollArea.EnsureWidgetVisibleFull")
+	var childWidgetPtr unsafe.Pointer
+	if childWidget != nil {
+		childWidgetPtr = rt.UseArg(unsafe.Pointer(childWidget.AsQWidget()), "QScrollArea.EnsureWidgetVisibleFull")
+	}
+	C.qute_QScrollArea_ensureWidgetVisible_1(self, childWidgetPtr, C.int(xmargin), C.int(ymargin))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(childWidget)
 }

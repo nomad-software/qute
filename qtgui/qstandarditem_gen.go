@@ -118,10 +118,26 @@ func NewQStandardItemWithIcon(icon *QIcon, text string) *QStandardItem {
 //
 //	C++: QStandardItem::QStandardItem(int rows, int columns = …)
 //
+// Arguments with C++ defaults are left at them; NewQStandardItemWithRowsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#QStandardItem
 func NewQStandardItemWithRows(rows int) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithRows")
 	p := C.qute_QStandardItem_new_3(C.int(rows))
+	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	return rt.View[QStandardItem](h, p)
+}
+
+// NewQStandardItemWithRowsFull wraps the QStandardItem constructor.
+//
+//	C++: QStandardItem::QStandardItem(int rows, int columns = …)
+//
+// NewQStandardItemWithRowsFull is NewQStandardItemWithRows with every argument, including those NewQStandardItemWithRows leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#QStandardItem
+func NewQStandardItemWithRowsFull(rows int, columns int) *QStandardItem {
+	rt.CheckThread("NewQStandardItemWithRowsFull")
+	p := C.qute_QStandardItem_new_4(C.int(rows), C.int(columns))
 	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
@@ -131,6 +147,8 @@ func NewQStandardItemWithRows(rows int) *QStandardItem {
 //	C++: QVariant QStandardItem::data(int role = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; DataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#data
 func (this *QStandardItem) Data() *qtcore.QVariant {
@@ -143,6 +161,8 @@ func (this *QStandardItem) Data() *qtcore.QVariant {
 // SetData wraps QStandardItem::setData.
 //
 //	C++: void QStandardItem::setData(const QVariant & value, int role = …)
+//
+// Arguments with C++ defaults are left at them; SetDataFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#setData
 func (this *QStandardItem) SetData(value *qtcore.QVariant) {
@@ -692,7 +712,7 @@ func (this *QStandardItem) Parent() *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Parent")
 	r := C.qute_QStandardItem_parent(self)
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Row wraps QStandardItem::row.
@@ -811,12 +831,14 @@ func (this *QStandardItem) HasChildren() bool {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ChildFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#child
 func (this *QStandardItem) Child(row int) *QStandardItem {
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.Child")
 	r := C.qute_QStandardItem_child(self, C.int(row))
 	runtime.KeepAlive(this)
-	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetChild wraps QStandardItem::setChild.
@@ -836,7 +858,7 @@ func (this *QStandardItem) SetChild(row int, column int, item QStandardItemLike)
 	C.qute_QStandardItem_setChild(self, C.int(row), C.int(column), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SetChildRow wraps QStandardItem::setChild.
@@ -856,7 +878,7 @@ func (this *QStandardItem) SetChildRow(row int, item QStandardItemLike) {
 	C.qute_QStandardItem_setChild_1(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // InsertRowItems wraps QStandardItem::insertRow.
@@ -877,7 +899,7 @@ func (this *QStandardItem) InsertRowItems(row int, items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -900,7 +922,7 @@ func (this *QStandardItem) InsertColumn(column int, items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -923,7 +945,7 @@ func (this *QStandardItem) InsertRowsItems(row int, items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -1012,7 +1034,7 @@ func (this *QStandardItem) AppendRowItems(items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -1035,7 +1057,7 @@ func (this *QStandardItem) AppendRows(items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -1058,7 +1080,7 @@ func (this *QStandardItem) AppendColumn(items []*QStandardItem) {
 	runtime.KeepAlive(items)
 	for _, x := range items {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -1080,7 +1102,7 @@ func (this *QStandardItem) InsertRowItem(row int, item QStandardItemLike) {
 	C.qute_QStandardItem_insertRow_1(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // AppendRow wraps QStandardItem::appendRow.
@@ -1100,7 +1122,7 @@ func (this *QStandardItem) AppendRow(item QStandardItemLike) {
 	C.qute_QStandardItem_appendRow_1(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // TakeChild wraps QStandardItem::takeChild.
@@ -1108,6 +1130,8 @@ func (this *QStandardItem) AppendRow(item QStandardItemLike) {
 //	C++: QStandardItem * QStandardItem::takeChild(int row, int column = …)
 //
 // Ownership: the result is Owned: Go frees it.
+//
+// Arguments with C++ defaults are left at them; TakeChildFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#takeChild
 func (this *QStandardItem) TakeChild(row int) *QStandardItem {
@@ -1152,6 +1176,8 @@ func (this *QStandardItem) TakeColumn(column int) []*QStandardItem {
 // SortChildren wraps QStandardItem::sortChildren.
 //
 //	C++: void QStandardItem::sortChildren(int column, Qt::SortOrder order = …)
+//
+// Arguments with C++ defaults are left at them; SortChildrenFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#sortChildren
 func (this *QStandardItem) SortChildren(column int) {
@@ -1216,4 +1242,79 @@ func (this *QStandardItem) Write(out qtcore.QDataStreamLike) {
 	C.qute_QStandardItem_write(self, outPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(out)
+}
+
+// DataFull wraps QStandardItem::data.
+//
+//	C++: QVariant QStandardItem::data(int role = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// DataFull is Data with every argument, including those Data leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#data
+func (this *QStandardItem) DataFull(role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.DataFull")
+	r := C.qute_QStandardItem_data_1(self, C.int(role))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetDataFull wraps QStandardItem::setData.
+//
+//	C++: void QStandardItem::setData(const QVariant & value, int role = …)
+//
+// SetDataFull is SetData with every argument, including those SetData leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#setData
+func (this *QStandardItem) SetDataFull(value *qtcore.QVariant, role int) {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SetDataFull")
+	C.qute_QStandardItem_setData_1(self, rt.UseArg(unsafe.Pointer(value), "QStandardItem.SetDataFull"), C.int(role))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(value)
+}
+
+// ChildFull wraps QStandardItem::child.
+//
+//	C++: QStandardItem * QStandardItem::child(int row, int column = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ChildFull is Child with every argument, including those Child leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#child
+func (this *QStandardItem) ChildFull(row int, column int) *QStandardItem {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.ChildFull")
+	r := C.qute_QStandardItem_child_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	return rt.View[QStandardItem](rt.WrapClassFrom(r, "QStandardItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+}
+
+// TakeChildFull wraps QStandardItem::takeChild.
+//
+//	C++: QStandardItem * QStandardItem::takeChild(int row, int column = …)
+//
+// Ownership: the result is Owned: Go frees it.
+//
+// TakeChildFull is TakeChild with every argument, including those TakeChild leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#takeChild
+func (this *QStandardItem) TakeChildFull(row int, column int) *QStandardItem {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.TakeChildFull")
+	r := C.qute_QStandardItem_takeChild_1(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.TakeOwned), r)
+}
+
+// SortChildrenFull wraps QStandardItem::sortChildren.
+//
+//	C++: void QStandardItem::sortChildren(int column, Qt::SortOrder order = …)
+//
+// SortChildrenFull is SortChildren with every argument, including those SortChildren leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstandarditem.html#sortChildren
+func (this *QStandardItem) SortChildrenFull(column int, order qtcore.SortOrder) {
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SortChildrenFull")
+	C.qute_QStandardItem_sortChildren_1(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(this)
 }

@@ -24,7 +24,7 @@ type QWidgetItemLike interface{ AsQWidgetItem() *QWidgetItem }
 func (this *QWidgetItem) AsQWidgetItem() *QWidgetItem { return this }
 
 func init() {
-	rt.RegisterClass("QWidgetItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QWidgetItem_delete(p) })
+	rt.RegisterClass("QWidgetItem", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QWidgetItem_delete(p) })
 }
 
 // Every QWidgetItem holds the QWidget it belongs to (depends-on: widget).

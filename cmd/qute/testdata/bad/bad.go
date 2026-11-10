@@ -23,6 +23,35 @@ func Leak() {
 	btn.OnClicked(func(bool) {})
 }
 
+// A parent passed as a concrete wrapper is still a parent.
+func ParentedByDialog() {
+	d := qtwidgets.NewQDialog(nil)
+	b := qtwidgets.NewQPushButtonWithText("ok", d)
+	b.OnClicked(func(bool) { d.Accept() })
+	d.Show()
+}
+
+// Exec returns with the dialog hidden, still pinned by its own connection.
+func DialogLeak() {
+	d := qtwidgets.NewQDialog(nil) // want owned-leak
+	d.OnFinished(func(int) {})
+	d.Exec()
+}
+
+// A parentless Go subclass is pinned for its Go value.
+func SubclassLeak() {
+	qtwidgets.NewQWidgetWith(&Canvas{}, nil)      // want owned-leak
+	c := qtwidgets.NewQWidgetWith(&Canvas{}, nil) // want owned-leak
+	c.Resize(10, 10)
+	ok := qtwidgets.NewQWidgetWith(&Canvas{}, nil)
+	defer ok.Delete()
+	v := &Canvas{}
+	qtwidgets.NewQWidgetWith(v, nil) // want owned-leak
+	given := &Canvas{}
+	qtwidgets.NewQWidgetWith(given, nil)
+	qtwidgets.NewQVBoxLayout(ok).AddWidget(given) // the value stands for the widget
+}
+
 func NoLeak() *qtwidgets.QPushButton {
 	btn := qtwidgets.NewQPushButtonWithText("x", nil)
 	btn.OnClicked(func(bool) {})
@@ -40,6 +69,8 @@ func Goroutine(lbl *qtwidgets.QLabel) {
 	go func() {
 		lbl.SetText("x") // want gui-goroutine
 		qute.Post(func() { lbl.SetText("fine") })
+		qute.Click(lbl) // want gui-goroutine
+		qute.PostSync(func() { qute.Click(lbl) })
 	}()
 }
 

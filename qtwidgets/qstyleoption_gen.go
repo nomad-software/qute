@@ -83,10 +83,26 @@ func (this *QStyleOption) Unkeep() {
 //
 //	C++: QStyleOption::QStyleOption(int version = …, int type = …)
 //
+// Arguments with C++ defaults are left at them; NewQStyleOptionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyleoption.html#QStyleOption
 func NewQStyleOption() *QStyleOption {
 	rt.CheckThread("NewQStyleOption")
 	p := C.qute_QStyleOption_new()
+	h := rt.WrapClass(p, "QStyleOption", rt.NewOwned)
+	return rt.View[QStyleOption](h, p)
+}
+
+// NewQStyleOptionFull wraps the QStyleOption constructor.
+//
+//	C++: QStyleOption::QStyleOption(int version = …, int type = …)
+//
+// NewQStyleOptionFull is NewQStyleOption with every argument, including those NewQStyleOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyleoption.html#QStyleOption
+func NewQStyleOptionFull(version int, typeArg int) *QStyleOption {
+	rt.CheckThread("NewQStyleOptionFull")
+	p := C.qute_QStyleOption_new_1(C.int(version), C.int(typeArg))
 	h := rt.WrapClass(p, "QStyleOption", rt.NewOwned)
 	return rt.View[QStyleOption](h, p)
 }

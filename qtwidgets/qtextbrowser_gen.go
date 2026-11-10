@@ -257,6 +257,8 @@ func (this *QTextBrowser) SetOpenLinks(open bool) {
 //
 //	C++: void QTextBrowser::setSource(const QUrl & name, QTextDocument::ResourceType type = …)
 //
+// Arguments with C++ defaults are left at them; SetSourceFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextbrowser.html#setSource
 func (this *QTextBrowser) SetSource(name *qtcore.QUrl) {
 	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetSource")
@@ -376,6 +378,20 @@ func (this *QTextBrowser) EmitAnchorClicked(url *qtcore.QUrl) {
 	C.qute_QTextBrowser_anchorClicked_1(self, rt.UseArg(unsafe.Pointer(url), "QTextBrowser.EmitAnchorClicked"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(url)
+}
+
+// SetSourceFull wraps QTextBrowser::setSource.
+//
+//	C++: void QTextBrowser::setSource(const QUrl & name, QTextDocument::ResourceType type = …)
+//
+// SetSourceFull is SetSource with every argument, including those SetSource leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextbrowser.html#setSource
+func (this *QTextBrowser) SetSourceFull(name *qtcore.QUrl, typeArg qtgui.QTextDocumentResourceType) {
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetSourceFull")
+	C.qute_QTextBrowser_setSource_1(self, rt.UseArg(unsafe.Pointer(name), "QTextBrowser.SetSourceFull"), C.int64_t(typeArg))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(name)
 }
 
 // OnBackwardAvailable connects f to the backwardAvailable signal. The connection ends when the

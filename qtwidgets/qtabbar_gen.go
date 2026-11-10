@@ -539,7 +539,7 @@ func (this *QTabBar) SetTabButton(index int, position QTabBarButtonPosition, wid
 	C.qute_QTabBar_setTabButton(self, C.int(index), C.int64_t(position), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // TabButton wraps QTabBar::tabButton.

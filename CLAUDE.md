@@ -10,7 +10,8 @@ true when the code changes.
 ## Goals
 
 - No double free or dangling pointer reachable from ordinary Go code. Misuse
-  is a clear panic, never a segfault.
+  (a dead handle, the wrong thread, `Delete()` on Borrowed) is a clear panic,
+  never a segfault.
 - Automatic cleanup by default (GC), deterministic `Delete()` when needed.
 - Ownership rules live in small YAML spec files, not in generator code. A
   binding bug is usually a one-line spec fix plus its generated test.
@@ -85,7 +86,11 @@ Rules (panic messages cite these numbers; keep them stable):
 6. Scoped arguments (events, `QPainter*` and style options in callbacks) are
    marked Dead when the callback returns. Long-lived arguments stay Borrowed.
 7. Safety net: GC never deletes a QObject that has a parent, even if a rule
-   was missed.
+   was missed, and an Owned QObject that Qt gives a parent becomes Parented
+   (the event filter sees the reparenting). In reverse, a `transfer-to-cpp`
+   argument that Qt did not parent (a widget in a layout with no widget yet)
+   is recorded as adopted by the receiver; if the receiver dies and it is
+   still parentless, it goes back to Owned (`rt.TransferTo`, `adopt.go`).
 
 `SetParent(p)` / `SetParent(nil)` move between Parented and Owned
 (`transfer-this`).
@@ -99,13 +104,28 @@ w.Show()                                      // w pinned while visible
 // hidden + unreachable -> GC frees w, which frees lay and lbl
 ```
 
-**Pinning.** GC must never delete something the user is looking at. An object
-is pinned (held strongly in `rt`'s strong set) while it is a visible top-level
-window (an event filter on QApplication watches Show/Hide), while it has Go
-virtual overrides (for its whole life, so its Go state survives), while it has
-live signal connections, or after `Keep()` (until `Unkeep()`). GC frees an
-Owned object only when it is unpinned and unreachable. So a parentless object
-with connections must be `Delete()`d; `qute vet` flags ones that never are.
+**Pinning and anchoring.** GC must never delete something the user is
+looking at: a parentless widget or `QWindow` is pinned (held strongly in
+`rt`'s strong set) while it is shown, seen by `rt`'s event filter on
+QApplication (non-spontaneous Show/Hide; minimising does not unpin), and
+anything is pinned after `Keep()` until `Unkeep()`.
+
+Go state of an object, meaning the closures of the connections it sends, its
+Go subclass value and the references it keeps, must live as long as the
+object even when no Go variable refers to it. A global root would also keep
+alive whatever that state refers to (a button handler that mentions its
+dialog would pin the dialog forever: Go cannot see a cycle through C++). So
+such a handle is *anchored* (`anchor.go`): held by the handle of its tree's
+root when that root is an Owned QObject (GC frees the root and with it the
+whole tree), otherwise globally. A root's own state is global, so a
+parentless object with connections, or a parentless Go subclass, must be
+`Delete()`d; `qute vet` flags ones that never are. The event filter reports
+reparenting (ChildAdded/ChildRemoved, ParentChange), and the anchored state
+of the moved subtree moves with it; a root that stops being Owned hands what
+it holds to the global set. Qt calls back with ids that refer to handles
+weakly; a callback or virtual whose tree was collected but not yet deleted
+finds nothing and is skipped (a virtual then runs the C++ implementation).
+GC frees an Owned object only when it is unpinned and unreachable.
 
 **Kept references.** Qt often stores a pointer it does not own: a view's
 model, a stream's device, a button's menu, actions added to a widget. The arg
@@ -114,10 +134,10 @@ constructor, the new object) hold a Go reference to the argument, so GC can't
 free it underneath Qt (PySide's reference-keeping). `keep` fills one slot per
 method (`keep:<slot>` shares one, e.g. `QDataStream` constructor and
 `setDevice`); passing another argument or nil replaces it. `keep-each` holds
-every distinct argument until a `release` method drops it. References of
-QObjects and notify-dtor objects are stored by object address in `rt` and
-dropped by the death notice, because a Parented receiver's Go handle may be
-collected while the object lives; other receivers hold them on the handle.
+every distinct argument until a `release` method drops it. References live
+on the receiver's handle; a QObject or notify-dtor receiver is anchored while
+it keeps anything, because its Parented handle could otherwise be collected
+while the object lives. The death notice drops them.
 A value only valid with another object (`QModelIndex` and its model,
 `QTextBlock` and its document, `QWidgetItem` and its widget) uses the class
 option `depends-on`: each wrapper holds that object, and `rt.Use` panics once
@@ -150,10 +170,20 @@ class: <bound class>}` when Qt has no getter; a class may list several
 - **Non-QObject classes.** With `notify-dtor` the shim subclass reports death
   from its destructor; only objects built by our constructors are registered.
   Other non-QObjects (`KindPlain`) are never registered and get a fresh handle
-  per wrap.
+  per wrap. Such a handle handed out by a method (a layout's `itemAt`, a
+  painter's `device`) depends on the receiver and on what it depends on
+  (`rt.WrapClassFrom`): `Use` panics once the receiver is gone, and `Alive()`
+  is false. A plain polymorphic base of a QObject class (`QGraphicsItem`,
+  `QPaintDevice`, `QLayoutItem`, `QSurface`) dynamic_casts to QObject when
+  wrapped (`rt.RegisterBaseOfQObject`), so a QObject reached through it
+  shares the QObject's handle instead of getting a second one that never
+  learns of its death.
 - **Value classes** (`QImage`, `QFont`, `QIcon`, `QVariant`, ...) are heap
   copies in Owned handles, freed by GC; Qt's implicit sharing keeps copies
-  cheap.
+  cheap. A class with a `memory` option (images, pixmaps, pictures) counts
+  its bytes outside the Go heap (`memory.go`): enough of them run the GC
+  (like GOGC=100), and on the GUI thread the value objects already queued
+  are freed at once, so a loop inside one handler stays bounded.
 
 ## Marshalling
 
@@ -225,22 +255,36 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
 - `qute.Post(f)` / `qute.PostSync(f)` queue work via
   `QMetaObject::invokeMethod(qApp, ..., Qt::QueuedConnection)`. `PostSync` on
   the GUI thread runs `f` inline (no deadlock) and re-raises panics in the
-  caller.
+  caller. While `f` runs, handler panics are recovered at the cgo boundary
+  (so Qt's frames return normally) and re-raised as a `*rt.CallbackPanic`
+  with the handler's stack. A `Post` before `Main` is held in a list that
+  `AppStarted` hands over under the same lock, so none is lost.
+- If `f` calls `runtime.Goexit` (`t.Fatal` inside `qute.Run`), the GUI
+  goroutine is ending and nothing can stop it; its deferred code keeps
+  serving Qt from a nested event loop until the app quits
+  (`rescueGUIThread`), and `qute.TestMain` exits from there. `Run` then ends
+  the test on its own goroutine, so later tests run.
+- Every generated C function first checks it is on the GUI thread (a
+  thread-local read) and panics through `qute_<pkg>_wrong_thread` otherwise,
+  in release builds too.
 - GC cleanups never call `delete`: they push onto a lock-free queue that the
   GUI thread drains from a posted event. After the event loop exits, queued
   cleanups are dropped, since deleting after the app is gone crashes Qt.
   Unreachable `qtcore.Connection`s are freed through the same queue.
 - `PostSync` panics instead of waiting forever when its function can never
   run (the post fails, or the event loop exits first).
-- Build tag `qute_debug` adds a GUI-thread check to every call, records
-  creation and death call sites, and enforces rule 5.
+- Build tag `qute_debug` adds a Go-side GUI-thread check that names the
+  method, records creation and death call sites, and enforces rule 5.
 
 ## Signals and subclassing
 
 - `btn.OnClicked(func(checked bool) {...})` returns a `qtcore.Connection`.
-  The closure is stored as a `cgo.Handle`; the C++ lambda captures only its
-  id, and a `GoSlot` destructor releases it when Qt drops the connection
-  (`Disconnect()` or sender destroyed). The sender is the context object.
+  The closure is stored on the sender's handle, which is anchored while the
+  connection lives (see Pinning and anchoring); the C++ lambda captures only
+  an id that refers to the handle weakly, and a `GoSlot` destructor releases
+  it when Qt drops the connection (`Disconnect()` or sender destroyed). The
+  sender is the context object. `std::function` callbacks are `cgo.Handle`s
+  (marked by the top bit of the id).
 - `model.EmitDataChanged(...)` emits a signal.
 - Subclassing: embed `qtwidgets.QWidgetBase` (etc.), define virtual methods
   by name, construct with `NewQWidgetWith(v, parent)`. The shim subclass
@@ -250,7 +294,11 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   public virtual like `SizeHint` can't dispatch to itself. `b.Super().X()`
   calls the C++ base; protected methods are on the Base type. Pure virtuals
   not overridden return a default value. Classes whose pure virtuals can't be
-  bound aren't subclassable.
+  bound aren't subclassable. The Go value is anchored like a connection.
+  An override's object result follows the method's return rule in the other
+  direction: `transfer-to-go` or `parented` (the C++ caller owns it, e.g.
+  `mimeData`, `createPopupMenu`) makes it Parented; the rule may sit on the
+  base that declares the virtual.
 
 ```go
 type Canvas struct{ qtwidgets.QWidgetBase }
@@ -274,8 +322,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 - **Classes** (`spec/classes/<module>.yaml`): which classes are bound, with
   options `kind: value|event`, `subclass`, `notify-dtor`, `no-construct`,
   `skip-virtuals`, `raw-pointers`, `enums-only` (enums but no wrapper, e.g.
-  `QChar`, which is a `rune` in Go), `depends-on` (see Kept references),
-  `reviewed`. A class's primary base must
+  `QChar`, which is a `rune` in Go), `depends-on` (see Kept references; on a
+  QObject class it does nothing and the generator warns), `memory` (`size:`
+  a C++ expression over `$self`, `changed-by:` the methods after which it is
+  measured again; see Value classes), `reviewed`. A class's primary base must
   be bound too. Don't use class-level `reviewed`: it hides methods nobody
   looked at (it hid `QTextCursor::insertList` and `QGraphicsWidget::setLayout`).
 - **Overlays** (`spec/overlays/<module>.yaml`), keyed by method name (all
@@ -302,9 +352,16 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 - **Defaults** (Shiboken-style): a constructor argument named `parent` is
   `transfer-this`; other object pointers and returned objects are
   `borrowed`; value results are Owned copies; trailing default arguments are
-  dropped (a constructor's `parent` is kept).
+  dropped (a constructor's `parent` is kept), and the method also gets a
+  `Full` form, `<Name>Full`, that takes every argument (`IndexFull`,
+  `NewQFontWithFamilyFull`). There is none when an overlay has
+  `keep-defaults`, `full` or `cpp`, when a defaulted argument has no Go type
+  (an unconfirmed `bool *ok`), or when another overload already has its Go
+  signature. Full forms share the short form's rules and tests.
 - **Naming**: methods mirror Qt (`setText` → `SetText`); constructors are
-  `NewX` (parent-only form) and `NewXWith<FirstParam>`; statics are package
+  `NewX` (parent-only form) and `NewXWith<FirstParam>` (a number or string
+  first parameter by its name, except a one-argument conversion or a
+  cryptic name, which are named by type: `NewQVariantWithInt`); statics are package
   functions `<Class><Method>`; signals `On<Signal>` / `Emit<Signal>`; enums
   `<Class><Value>` (Qt namespace: bare, e.g. `AlignLeft`); unnamed C++
   parameters get names from setters or their type.
@@ -321,8 +378,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   and out-parameters not yet confirmed by an `out`/`in-out` rule,
   numbered names, skipped methods (split into missing type support, counted
   by type, and skipped on purpose), rules without a test, and results whose
-  death qute can't observe. Signal emitters count as reviewed, since emitting
-  never changes ownership.
+  death qute can't observe (a plain object from a function with no receiver
+  to depend on, unless an overlay marks it `reviewed`). The summary also
+  counts Full forms and plain results tied to their receiver. Signal
+  emitters count as reviewed, since emitting never changes ownership.
 - **Escape hatches**: `.Ptr()`, `XFromPtr(p, qtcore.Borrowed)`, `XCast(obj)`
   (`qobject_cast`), and hand-written `*_manual.{go,cpp,h}` files the
   generator never touches.
@@ -351,8 +410,13 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   Inside `Run`, a panic in a signal, virtual or callback handler is recovered
   at the cgo boundary (so Qt's C++ frames return normally), re-raised by the
   input helpers and `ProcessEvents`/`Wait`, and fails the test. Under
-  `qute.Main` a handler panic still crashes the program.
-- `qute vet`: owned-leak, delete-handler, gui-goroutine, scoped-escape.
+  `qute.Main` a handler panic still crashes the program, unless it ran inside
+  `PostSync`, which re-raises it in its caller. `t.Fatal`, `t.FailNow` and
+  `t.Skip` inside `Run` end the test (see Threading).
+- `qute vet`: owned-leak (also a parentless Go subclass never deleted; a
+  parent is any non-nil object argument; `Show` counts as keeping a window
+  for the program's life, `Exec` does not), delete-handler, gui-goroutine
+  (also the root package's input and inspection helpers), scoped-escape.
 - `qute new app <dir> [module]`: main.go, a window, a behaviour test and a
   screenshot test.
 
@@ -372,7 +436,14 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 - `opengl_test.go` draws a triangle (shader program, buffer, VAO) and checks
   the pixels; `scene_test.go` checks scene items die with the scene, with
   `Clear()` and with their parent item.
-- `.github/workflows/ci.yml`: Linux runs test, `qute_debug`, `-asan`,
+- `lifetime_test.go` covers object lifetimes that went wrong once: layout
+  items and paint devices after their owner died, a QObject through its
+  second base, visible `QWindow`s, windows kept alive by their handlers,
+  subclass children or kept models, orphaned layout widgets, image memory,
+  override results. `run_test.go` covers `t.Fatal` inside `Run` (in a child
+  process), `PostSync` handler panics, the off-thread check and Full forms.
+- `.github/workflows/ci.yml`: Linux runs test (with `gofmt -l` and
+  `qute vet ./examples/...`), `qute_debug`, `-asan`,
   `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check. The macOS and
   Windows jobs are kept for later but are not yet verified; they are
   non-blocking (`continue-on-error`) until that work starts.
@@ -388,10 +459,22 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
    more modules, Qt's summary text in doc comments, then macOS and Windows.
 
-Known limitation: a non-QObject that Qt itself creates and frees (with no
-notifying subclass qute could substitute) can't report its death. None are
-bound today; `COVERAGE.md` lists any under "Results whose death qute cannot
-see".
+Known limitations:
+
+- A non-QObject that Qt itself creates and frees (with no notifying
+  subclass qute could substitute) can't report its death. Handed out by a
+  method, it depends on the receiver (and a `QLayoutItem` on its widget), so
+  the usual ways it dies are caught; one Qt frees while both still live
+  (`QLayout::removeWidget` deleting the item) is not. Functions with no
+  receiver are listed in `COVERAGE.md` under "Results whose death qute cannot
+  see" (none today).
+- When GC frees a window, Go handlers of its children no longer run, even
+  ones Qt would call while the tree is being destroyed (`OnDestroyed`): their
+  closures were collected with the window. `Delete()` the window to have them
+  run.
+- A virtual or signal that Qt calls between GC collecting a tree and the
+  GUI thread deleting it is skipped (the virtual runs its C++
+  implementation); arguments the shim converted for it are not freed.
 
 Open questions: is one eager `destroyed` connection per wrapped QObject cheap
 enough, or should it be lazy? The first build takes about a minute; would
@@ -429,7 +512,12 @@ Layout:
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and
   the generator directly (no QApplication; the generator test loads the real
   spec).
-- `internal/rt`: runtime (hand-written).
+- `internal/rt`: runtime (hand-written): `handle.go` (states, registry,
+  wrapping), `anchor.go` (Go state held by tree roots), `keep.go` (kept
+  references, depends-on), `adopt.go` (parentless transfers), `memory.go`
+  (value-object bytes), `queue.go` (cleanup queue, Post/PostSync),
+  `callbacks.go`, and `rt.cpp` (the application event filter for window
+  pins and reparenting).
 - `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`: **generated**. Never edit `*_gen.*`,
   `qute_common.h`, `ownership_gen_test.go` or `export_gen_test.go`; change
   the generator or spec and regenerate. Hand-written code is in `*_manual.*`.
@@ -440,8 +528,9 @@ Layout:
   chaining, buffers, maps, durations, fields, callbacks).
 - `keepalive_test.go` runs the GC inside a call (nested event loop, a
   synchronous event) and checks the receiver and arguments survive it.
-- Inside `qute.Run`, use `t.Error` and `return`, not `t.Fatal`: `FailNow`
-  ends the GUI goroutine and the test binary hangs.
+- Inside `qute.Run`, prefer `t.Error` and `return`. `t.Fatal` works (it ends
+  the test), but each one ends the GUI goroutine, which the runtime replaces
+  with a nested event loop.
 - `cmd/qute`: `vet` and `new`. `testdata/bad/bad.go` holds `// want <rule>`
   comments that `vet_test.go` checks.
 

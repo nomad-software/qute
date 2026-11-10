@@ -99,6 +99,7 @@ QDateTime:
   fromString(const QString&, const QString&, int): { name: QDateTimeFromStringFormat }
 
 QTime:
+  QTime(int, int, int, int): { name: NewQTimeWithHourMinute }
   toString(const QString&): { name: ToStringFormat }
   toString(QStringView): { skip: "use the QString overload" }
   fromString(QStringView, Qt::DateFormat): { skip: "use the QString overload" }
@@ -125,6 +126,7 @@ QSettings:
   value(QAnyStringView): { name: Value }
 
 QVariant:
+  QVariant(const QStringList&): { name: NewQVariantWithStrings }
   load: { reviewed: true }
   save: { reviewed: true }
   QVariant(QSizeF): { name: NewQVariantWithSizeF }
@@ -172,3 +174,6 @@ QMetaType:
 
 QTimerEvent:
   matches: { reviewed: true }
+
+QCalendarYearMonthDay:
+  YearMonthDay(int, int, int): { name: NewQCalendarYearMonthDayWithYear }

@@ -77,6 +77,8 @@ func NewQStatusBar(parent QWidgetLike) *QStatusBar {
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
 //
+// Arguments with C++ defaults are left at them; AddWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#addWidget
 func (this *QStatusBar) AddWidget(widget QWidgetLike) {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.AddWidget")
@@ -88,7 +90,7 @@ func (this *QStatusBar) AddWidget(widget QWidgetLike) {
 	C.qute_QStatusBar_addWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // InsertWidget wraps QStatusBar::insertWidget.
@@ -96,6 +98,8 @@ func (this *QStatusBar) AddWidget(widget QWidgetLike) {
 //	C++: int QStatusBar::insertWidget(int index, QWidget * widget, int stretch = …)
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; InsertWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#insertWidget
 func (this *QStatusBar) InsertWidget(index int, widget QWidgetLike) int {
@@ -108,7 +112,7 @@ func (this *QStatusBar) InsertWidget(index int, widget QWidgetLike) int {
 	r := C.qute_QStatusBar_insertWidget(self, C.int(index), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -117,6 +121,8 @@ func (this *QStatusBar) InsertWidget(index int, widget QWidgetLike) int {
 //	C++: void QStatusBar::addPermanentWidget(QWidget * widget, int stretch = …)
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddPermanentWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#addPermanentWidget
 func (this *QStatusBar) AddPermanentWidget(widget QWidgetLike) {
@@ -129,7 +135,7 @@ func (this *QStatusBar) AddPermanentWidget(widget QWidgetLike) {
 	C.qute_QStatusBar_addPermanentWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // InsertPermanentWidget wraps QStatusBar::insertPermanentWidget.
@@ -137,6 +143,8 @@ func (this *QStatusBar) AddPermanentWidget(widget QWidgetLike) {
 //	C++: int QStatusBar::insertPermanentWidget(int index, QWidget * widget, int stretch = …)
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; InsertPermanentWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#insertPermanentWidget
 func (this *QStatusBar) InsertPermanentWidget(index int, widget QWidgetLike) int {
@@ -149,7 +157,7 @@ func (this *QStatusBar) InsertPermanentWidget(index int, widget QWidgetLike) int
 	r := C.qute_QStatusBar_insertPermanentWidget(self, C.int(index), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 	return int(r)
 }
 
@@ -210,6 +218,8 @@ func (this *QStatusBar) CurrentMessage() string {
 //
 //	C++: void QStatusBar::showMessage(const QString & text, int timeout = …)
 //
+// Arguments with C++ defaults are left at them; ShowMessageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#showMessage
 func (this *QStatusBar) ShowMessage(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.ShowMessage")
@@ -236,6 +246,109 @@ func (this *QStatusBar) ClearMessage() {
 func (this *QStatusBar) EmitMessageChanged(text string) {
 	self := rt.Use(unsafe.Pointer(this), "QStatusBar.EmitMessageChanged")
 	C.qute_QStatusBar_messageChanged_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(this)
+}
+
+// AddWidgetFull wraps QStatusBar::addWidget.
+//
+//	C++: void QStatusBar::addWidget(QWidget * widget, int stretch = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// AddWidgetFull is AddWidget with every argument, including those AddWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#addWidget
+func (this *QStatusBar) AddWidgetFull(widget QWidgetLike, stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QStatusBar.AddWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.AddWidgetFull")
+	}
+	C.qute_QStatusBar_addWidget_1(self, widgetPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+}
+
+// InsertWidgetFull wraps QStatusBar::insertWidget.
+//
+//	C++: int QStatusBar::insertWidget(int index, QWidget * widget, int stretch = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// InsertWidgetFull is InsertWidget with every argument, including those InsertWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#insertWidget
+func (this *QStatusBar) InsertWidgetFull(index int, widget QWidgetLike, stretch int) int {
+	self := rt.Use(unsafe.Pointer(this), "QStatusBar.InsertWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.InsertWidgetFull")
+	}
+	r := C.qute_QStatusBar_insertWidget_1(self, C.int(index), widgetPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+	return int(r)
+}
+
+// AddPermanentWidgetFull wraps QStatusBar::addPermanentWidget.
+//
+//	C++: void QStatusBar::addPermanentWidget(QWidget * widget, int stretch = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// AddPermanentWidgetFull is AddPermanentWidget with every argument, including those AddPermanentWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#addPermanentWidget
+func (this *QStatusBar) AddPermanentWidgetFull(widget QWidgetLike, stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QStatusBar.AddPermanentWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.AddPermanentWidgetFull")
+	}
+	C.qute_QStatusBar_addPermanentWidget_1(self, widgetPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+}
+
+// InsertPermanentWidgetFull wraps QStatusBar::insertPermanentWidget.
+//
+//	C++: int QStatusBar::insertPermanentWidget(int index, QWidget * widget, int stretch = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// InsertPermanentWidgetFull is InsertPermanentWidget with every argument, including those InsertPermanentWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#insertPermanentWidget
+func (this *QStatusBar) InsertPermanentWidgetFull(index int, widget QWidgetLike, stretch int) int {
+	self := rt.Use(unsafe.Pointer(this), "QStatusBar.InsertPermanentWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QStatusBar.InsertPermanentWidgetFull")
+	}
+	r := C.qute_QStatusBar_insertPermanentWidget_1(self, C.int(index), widgetPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+	return int(r)
+}
+
+// ShowMessageFull wraps QStatusBar::showMessage.
+//
+//	C++: void QStatusBar::showMessage(const QString & text, int timeout = …)
+//
+// ShowMessageFull is ShowMessage with every argument, including those ShowMessage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatusbar.html#showMessage
+func (this *QStatusBar) ShowMessageFull(text string, timeout int) {
+	self := rt.Use(unsafe.Pointer(this), "QStatusBar.ShowMessageFull")
+	C.qute_QStatusBar_showMessage_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int(timeout))
 	runtime.KeepAlive(this)
 }
 

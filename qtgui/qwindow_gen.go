@@ -165,6 +165,8 @@ func (this *QWindow) WinId() uint64 {
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; ParentFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwindow.html#parent
 func (this *QWindow) Parent() *QWindow {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.Parent")
@@ -306,10 +308,12 @@ func (this *QWindow) Flags() qtcore.WindowFlags {
 //
 //	C++: void QWindow::setFlag(Qt::WindowType, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetFlagFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwindow.html#setFlag
-func (this *QWindow) SetFlag(arg0 qtcore.WindowFlags) {
+func (this *QWindow) SetFlag(windowType qtcore.WindowFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFlag")
-	C.qute_QWindow_setFlag(self, C.int64_t(arg0))
+	C.qute_QWindow_setFlag(self, C.int64_t(windowType))
 	runtime.KeepAlive(this)
 }
 
@@ -512,6 +516,8 @@ func (this *QWindow) TransientParent() *QWindow {
 // IsAncestorOf wraps QWindow::isAncestorOf.
 //
 //	C++: bool QWindow::isAncestorOf(const QWindow * child, AncestorMode mode = …) const
+//
+// Arguments with C++ defaults are left at them; IsAncestorOfFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwindow.html#isAncestorOf
 func (this *QWindow) IsAncestorOf(child QWindowLike) bool {
@@ -1578,6 +1584,54 @@ func (this *QWindow) EmitTransientParentChanged(transientParent QWindowLike) {
 	C.qute_QWindow_transientParentChanged_1(self, transientParentPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(transientParent)
+}
+
+// ParentFull wraps QWindow::parent.
+//
+//	C++: QWindow * QWindow::parent(AncestorMode mode = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// ParentFull is Parent with every argument, including those Parent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwindow.html#parent
+func (this *QWindow) ParentFull(mode QWindowAncestorMode) *QWindow {
+	self := rt.Use(unsafe.Pointer(this), "QWindow.ParentFull")
+	r := C.qute_QWindow_parent_1(self, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	return rt.View[QWindow](rt.WrapClass(r, "QWindow", rt.KeepOrBorrow), r)
+}
+
+// SetFlagFull wraps QWindow::setFlag.
+//
+//	C++: void QWindow::setFlag(Qt::WindowType, bool on = …)
+//
+// SetFlagFull is SetFlag with every argument, including those SetFlag leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwindow.html#setFlag
+func (this *QWindow) SetFlagFull(windowType qtcore.WindowFlags, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QWindow.SetFlagFull")
+	C.qute_QWindow_setFlag_1(self, C.int64_t(windowType), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
+// IsAncestorOfFull wraps QWindow::isAncestorOf.
+//
+//	C++: bool QWindow::isAncestorOf(const QWindow * child, AncestorMode mode = …) const
+//
+// IsAncestorOfFull is IsAncestorOf with every argument, including those IsAncestorOf leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwindow.html#isAncestorOf
+func (this *QWindow) IsAncestorOfFull(child QWindowLike, mode QWindowAncestorMode) bool {
+	self := rt.Use(unsafe.Pointer(this), "QWindow.IsAncestorOfFull")
+	var childPtr unsafe.Pointer
+	if child != nil {
+		childPtr = rt.UseArg(unsafe.Pointer(child.AsQWindow()), "QWindow.IsAncestorOfFull")
+	}
+	r := C.qute_QWindow_isAncestorOf_1(self, childPtr, C.int64_t(mode))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(child)
+	return bool(r)
 }
 
 // QWindowFromWinId wraps QWindow::fromWinId.

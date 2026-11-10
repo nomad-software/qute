@@ -173,10 +173,27 @@ func (this *QPointingDevice) EmitGrabChanged(grabber qtcore.QObjectLike, transit
 //
 // Ownership: the result is Borrowed: Go never frees it.
 //
+// Arguments with C++ defaults are left at them; QPointingDevicePrimaryPointingDeviceFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpointingdevice.html#primaryPointingDevice
 func QPointingDevicePrimaryPointingDevice() *QPointingDevice {
 	rt.CheckThread("QPointingDevicePrimaryPointingDevice")
 	r := C.qute_QPointingDevice_primaryPointingDevice()
+	return rt.View[QPointingDevice](rt.WrapClass(r, "QPointingDevice", rt.KeepOrBorrow), r)
+}
+
+// QPointingDevicePrimaryPointingDeviceFull wraps QPointingDevice::primaryPointingDevice.
+//
+//	C++: const QPointingDevice * QPointingDevice::primaryPointingDevice(const QString & seatName = …)
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// QPointingDevicePrimaryPointingDeviceFull is QPointingDevicePrimaryPointingDevice with every argument, including those QPointingDevicePrimaryPointingDevice leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointingdevice.html#primaryPointingDevice
+func QPointingDevicePrimaryPointingDeviceFull(seatName string) *QPointingDevice {
+	rt.CheckThread("QPointingDevicePrimaryPointingDeviceFull")
+	r := C.qute_QPointingDevice_primaryPointingDevice_1((*C.char)(unsafe.Pointer(unsafe.StringData(seatName))), C.ptrdiff_t(len(seatName)))
 	return rt.View[QPointingDevice](rt.WrapClass(r, "QPointingDevice", rt.KeepOrBorrow), r)
 }
 

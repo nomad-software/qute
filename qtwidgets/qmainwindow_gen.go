@@ -55,6 +55,8 @@ func QMainWindowCast(o qtcore.QObjectLike) *QMainWindow {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQMainWindowFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#QMainWindow
 func NewQMainWindow(parent QWidgetLike) *QMainWindow {
 	rt.CheckThread("NewQMainWindow")
@@ -63,6 +65,31 @@ func NewQMainWindow(parent QWidgetLike) *QMainWindow {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMainWindow")
 	}
 	p := C.qute_QMainWindow_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMainWindow", mode)
+	return rt.View[QMainWindow](h, p)
+}
+
+// NewQMainWindowFull wraps the QMainWindow constructor.
+//
+//	C++: QMainWindow::QMainWindow(QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQMainWindowFull is NewQMainWindow with every argument, including those NewQMainWindow leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#QMainWindow
+func NewQMainWindowFull(parent QWidgetLike, flags qtcore.WindowFlags) *QMainWindow {
+	rt.CheckThread("NewQMainWindowFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMainWindowFull")
+	}
+	p := C.qute_QMainWindow_new_1(parentPtr, C.int64_t(flags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -277,7 +304,7 @@ func (this *QMainWindow) SetMenuBar(menubar QMenuBarLike) {
 	C.qute_QMainWindow_setMenuBar(self, menubarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menubar)
-	menubarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, menubarH)
 }
 
 // MenuWidget wraps QMainWindow::menuWidget.
@@ -311,7 +338,7 @@ func (this *QMainWindow) SetMenuWidget(menubar QWidgetLike) {
 	C.qute_QMainWindow_setMenuWidget(self, menubarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(menubar)
-	menubarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, menubarH)
 }
 
 // StatusBar wraps QMainWindow::statusBar.
@@ -345,7 +372,7 @@ func (this *QMainWindow) SetStatusBar(statusbar QStatusBarLike) {
 	C.qute_QMainWindow_setStatusBar(self, statusbarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(statusbar)
-	statusbarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, statusbarH)
 }
 
 // CentralWidget wraps QMainWindow::centralWidget.
@@ -379,7 +406,7 @@ func (this *QMainWindow) SetCentralWidget(widget QWidgetLike) {
 	C.qute_QMainWindow_setCentralWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // TakeCentralWidget wraps QMainWindow::takeCentralWidget.
@@ -423,6 +450,8 @@ func (this *QMainWindow) Corner(corner qtcore.Corner) qtcore.DockWidgetAreas {
 //
 //	C++: void QMainWindow::addToolBarBreak(Qt::ToolBarArea area = …)
 //
+// Arguments with C++ defaults are left at them; AddToolBarBreakFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#addToolBarBreak
 func (this *QMainWindow) AddToolBarBreak() {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.AddToolBarBreak")
@@ -463,7 +492,7 @@ func (this *QMainWindow) AddToolBarArea(area qtcore.ToolBarAreas, toolbar QToolB
 	C.qute_QMainWindow_addToolBar(self, C.int64_t(area), toolbarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(toolbar)
-	toolbarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, toolbarH)
 }
 
 // AddToolBar wraps QMainWindow::addToolBar.
@@ -483,7 +512,7 @@ func (this *QMainWindow) AddToolBar(toolbar QToolBarLike) {
 	C.qute_QMainWindow_addToolBar_1(self, toolbarPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(toolbar)
-	toolbarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, toolbarH)
 }
 
 // AddToolBarTitle wraps QMainWindow::addToolBar.
@@ -522,7 +551,7 @@ func (this *QMainWindow) InsertToolBar(before QToolBarLike, toolbar QToolBarLike
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(before)
 	runtime.KeepAlive(toolbar)
-	toolbarH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, toolbarH)
 }
 
 // RemoveToolBar wraps QMainWindow::removeToolBar.
@@ -622,7 +651,7 @@ func (this *QMainWindow) AddDockWidget(area qtcore.DockWidgetAreas, dockwidget Q
 	C.qute_QMainWindow_addDockWidget(self, C.int64_t(area), dockwidgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(dockwidget)
-	dockwidgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, dockwidgetH)
 }
 
 // AddDockWidgetOriented wraps QMainWindow::addDockWidget.
@@ -642,7 +671,7 @@ func (this *QMainWindow) AddDockWidgetOriented(area qtcore.DockWidgetAreas, dock
 	C.qute_QMainWindow_addDockWidget_1(self, C.int64_t(area), dockwidgetPtr, C.int64_t(orientation))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(dockwidget)
-	dockwidgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, dockwidgetH)
 }
 
 // SplitDockWidget wraps QMainWindow::splitDockWidget.
@@ -782,6 +811,8 @@ func (this *QMainWindow) ResizeDocks(docks []*QDockWidget, sizes []int, orientat
 //
 //	C++: QByteArray QMainWindow::saveState(int version = …) const
 //
+// Arguments with C++ defaults are left at them; SaveStateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#saveState
 func (this *QMainWindow) SaveState() []byte {
 	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SaveState")
@@ -793,6 +824,8 @@ func (this *QMainWindow) SaveState() []byte {
 // RestoreState wraps QMainWindow::restoreState.
 //
 //	C++: bool QMainWindow::restoreState(const QByteArray & state, int version = …)
+//
+// Arguments with C++ defaults are left at them; RestoreStateFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#restoreState
 func (this *QMainWindow) RestoreState(state []byte) bool {
@@ -887,6 +920,47 @@ func (this *QMainWindow) EmitTabifiedDockWidgetActivated(dockWidget QDockWidgetL
 	runtime.KeepAlive(dockWidget)
 }
 
+// AddToolBarBreakFull wraps QMainWindow::addToolBarBreak.
+//
+//	C++: void QMainWindow::addToolBarBreak(Qt::ToolBarArea area = …)
+//
+// AddToolBarBreakFull is AddToolBarBreak with every argument, including those AddToolBarBreak leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#addToolBarBreak
+func (this *QMainWindow) AddToolBarBreakFull(area qtcore.ToolBarAreas) {
+	self := rt.Use(unsafe.Pointer(this), "QMainWindow.AddToolBarBreakFull")
+	C.qute_QMainWindow_addToolBarBreak_1(self, C.int64_t(area))
+	runtime.KeepAlive(this)
+}
+
+// SaveStateFull wraps QMainWindow::saveState.
+//
+//	C++: QByteArray QMainWindow::saveState(int version = …) const
+//
+// SaveStateFull is SaveState with every argument, including those SaveState leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#saveState
+func (this *QMainWindow) SaveStateFull(version int) []byte {
+	self := rt.Use(unsafe.Pointer(this), "QMainWindow.SaveStateFull")
+	r := C.qute_QMainWindow_saveState_1(self, C.int(version))
+	runtime.KeepAlive(this)
+	return quteBytes(r)
+}
+
+// RestoreStateFull wraps QMainWindow::restoreState.
+//
+//	C++: bool QMainWindow::restoreState(const QByteArray & state, int version = …)
+//
+// RestoreStateFull is RestoreState with every argument, including those RestoreState leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmainwindow.html#restoreState
+func (this *QMainWindow) RestoreStateFull(state []byte, version int) bool {
+	self := rt.Use(unsafe.Pointer(this), "QMainWindow.RestoreStateFull")
+	r := C.qute_QMainWindow_restoreState_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(state))), C.ptrdiff_t(len(state)), C.int(version))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
 // OnIconSizeChanged connects f to the iconSizeChanged signal. The connection ends when the
 // sender is destroyed or Disconnect is called; until then the sender is pinned.
 //
@@ -941,6 +1015,9 @@ var qMainWindowVTable = []rt.Virtual{
 			_ = args
 			r := v.(interface{ CreatePopupMenu() *QMenu }).CreatePopupMenu()
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QMainWindow.CreatePopupMenu")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
 		_, ok := v.(interface {

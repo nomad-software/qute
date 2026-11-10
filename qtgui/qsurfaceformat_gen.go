@@ -453,6 +453,8 @@ func (this *QSurfaceFormat) SetOptions(options QSurfaceFormatFormatOptions) {
 //
 //	C++: void QSurfaceFormat::setOption(FormatOption option, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qsurfaceformat.html#setOption
 func (this *QSurfaceFormat) SetOption(option QSurfaceFormatFormatOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetOption")
@@ -531,6 +533,19 @@ func (this *QSurfaceFormat) SetColorSpace(colorSpace *QColorSpace) {
 	C.qute_QSurfaceFormat_setColorSpace(self, rt.UseArg(unsafe.Pointer(colorSpace), "QSurfaceFormat.SetColorSpace"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(colorSpace)
+}
+
+// SetOptionFull wraps QSurfaceFormat::setOption.
+//
+//	C++: void QSurfaceFormat::setOption(FormatOption option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsurfaceformat.html#setOption
+func (this *QSurfaceFormat) SetOptionFull(option QSurfaceFormatFormatOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QSurfaceFormat.SetOptionFull")
+	C.qute_QSurfaceFormat_setOption_1(self, C.int64_t(option), C.bool(on))
+	runtime.KeepAlive(this)
 }
 
 // QSurfaceFormatSetDefaultFormat wraps QSurfaceFormat::setDefaultFormat.

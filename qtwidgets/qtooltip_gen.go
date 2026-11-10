@@ -82,6 +82,8 @@ func (this *QToolTip) Unkeep() {
 //
 //	C++: void QToolTip::showText(const QPoint & pos, const QString & text, QWidget * w = …, const QRect & rect = …, int msecShowTime = …)
 //
+// Arguments with C++ defaults are left at them; QToolTipShowTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtooltip.html#showText
 func QToolTipShowText(pos qtcore.QPoint, text string) {
 	rt.CheckThread("QToolTipShowText")
@@ -166,4 +168,21 @@ func QToolTipSetFont(font *qtgui.QFont) {
 	rt.CheckThread("QToolTipSetFont")
 	C.qute_QToolTip_setFont(rt.UseArg(unsafe.Pointer(font), "QToolTipSetFont"))
 	runtime.KeepAlive(font)
+}
+
+// QToolTipShowTextFull wraps QToolTip::showText.
+//
+//	C++: void QToolTip::showText(const QPoint & pos, const QString & text, QWidget * w = …, const QRect & rect = …, int msecShowTime = …)
+//
+// QToolTipShowTextFull is QToolTipShowText with every argument, including those QToolTipShowText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtooltip.html#showText
+func QToolTipShowTextFull(pos qtcore.QPoint, text string, w QWidgetLike, rect qtcore.QRect, msecShowTime int) {
+	rt.CheckThread("QToolTipShowTextFull")
+	var wPtr unsafe.Pointer
+	if w != nil {
+		wPtr = rt.UseArg(unsafe.Pointer(w.AsQWidget()), "QToolTipShowTextFull")
+	}
+	C.qute_QToolTip_showText_1(cQPoint(pos), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), wPtr, cQRect(rect), C.int(msecShowTime))
+	runtime.KeepAlive(w)
 }

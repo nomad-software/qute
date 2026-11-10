@@ -54,6 +54,8 @@ func QMdiSubWindowCast(o qtcore.QObjectLike) *QMdiSubWindow {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQMdiSubWindowFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmdisubwindow.html#QMdiSubWindow
 func NewQMdiSubWindow(parent QWidgetLike) *QMdiSubWindow {
 	rt.CheckThread("NewQMdiSubWindow")
@@ -62,6 +64,31 @@ func NewQMdiSubWindow(parent QWidgetLike) *QMdiSubWindow {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMdiSubWindow")
 	}
 	p := C.qute_QMdiSubWindow_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMdiSubWindow", mode)
+	return rt.View[QMdiSubWindow](h, p)
+}
+
+// NewQMdiSubWindowFull wraps the QMdiSubWindow constructor.
+//
+//	C++: QMdiSubWindow::QMdiSubWindow(QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQMdiSubWindowFull is NewQMdiSubWindow with every argument, including those NewQMdiSubWindow leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmdisubwindow.html#QMdiSubWindow
+func NewQMdiSubWindowFull(parent QWidgetLike, flags qtcore.WindowFlags) *QMdiSubWindow {
+	rt.CheckThread("NewQMdiSubWindowFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMdiSubWindowFull")
+	}
+	p := C.qute_QMdiSubWindow_new_1(parentPtr, C.int64_t(flags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -88,7 +115,7 @@ func (this *QMdiSubWindow) SetWidget(widget QWidgetLike) {
 	C.qute_QMdiSubWindow_setWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // Widget wraps QMdiSubWindow::widget.
@@ -149,6 +176,8 @@ func (this *QMdiSubWindow) IsShaded() bool {
 //
 //	C++: void QMdiSubWindow::setOption(SubWindowOption option, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmdisubwindow.html#setOption
 func (this *QMdiSubWindow) SetOption(option QMdiSubWindowSubWindowOptions) {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.SetOption")
@@ -161,9 +190,9 @@ func (this *QMdiSubWindow) SetOption(option QMdiSubWindowSubWindowOptions) {
 //	C++: bool QMdiSubWindow::testOption(SubWindowOption) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qmdisubwindow.html#testOption
-func (this *QMdiSubWindow) TestOption(arg0 QMdiSubWindowSubWindowOptions) bool {
+func (this *QMdiSubWindow) TestOption(subWindowOption QMdiSubWindowSubWindowOptions) bool {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.TestOption")
-	r := C.qute_QMdiSubWindow_testOption(self, C.int64_t(arg0))
+	r := C.qute_QMdiSubWindow_testOption(self, C.int64_t(subWindowOption))
 	runtime.KeepAlive(this)
 	return bool(r)
 }
@@ -231,7 +260,7 @@ func (this *QMdiSubWindow) SetSystemMenu(systemMenu QMenuLike) {
 	C.qute_QMdiSubWindow_setSystemMenu(self, systemMenuPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(systemMenu)
-	systemMenuH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, systemMenuH)
 }
 
 // SystemMenu wraps QMdiSubWindow::systemMenu.
@@ -303,6 +332,19 @@ func (this *QMdiSubWindow) EmitWindowStateChanged(oldState qtcore.WindowStates, 
 func (this *QMdiSubWindow) EmitAboutToActivate() {
 	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.EmitAboutToActivate")
 	C.qute_QMdiSubWindow_aboutToActivate_1(self)
+	runtime.KeepAlive(this)
+}
+
+// SetOptionFull wraps QMdiSubWindow::setOption.
+//
+//	C++: void QMdiSubWindow::setOption(SubWindowOption option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmdisubwindow.html#setOption
+func (this *QMdiSubWindow) SetOptionFull(option QMdiSubWindowSubWindowOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QMdiSubWindow.SetOptionFull")
+	C.qute_QMdiSubWindow_setOption_1(self, C.int64_t(option), C.bool(on))
 	runtime.KeepAlive(this)
 }
 

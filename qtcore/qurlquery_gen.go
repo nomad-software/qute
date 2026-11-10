@@ -141,6 +141,8 @@ func (this *QUrlQuery) Clear() {
 //
 //	C++: QString QUrlQuery::query(QUrl::ComponentFormattingOptions encoding = …) const
 //
+// Arguments with C++ defaults are left at them; QueryFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurlquery.html#query
 func (this *QUrlQuery) Query() string {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.Query")
@@ -163,6 +165,8 @@ func (this *QUrlQuery) SetQuery(queryString string) {
 // ToString wraps QUrlQuery::toString.
 //
 //	C++: QString QUrlQuery::toString(QUrl::ComponentFormattingOptions encoding = …) const
+//
+// Arguments with C++ defaults are left at them; ToStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurlquery.html#toString
 func (this *QUrlQuery) ToString() string {
@@ -231,6 +235,8 @@ func (this *QUrlQuery) SetQueryItems(query []Pair[string, string]) {
 //
 //	C++: QList<std::pair<QString, QString>> QUrlQuery::queryItems(QUrl::ComponentFormattingOptions encoding = …) const
 //
+// Arguments with C++ defaults are left at them; QueryItemsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurlquery.html#queryItems
 func (this *QUrlQuery) QueryItems() []Pair[string, string] {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItems")
@@ -277,6 +283,8 @@ func (this *QUrlQuery) RemoveQueryItem(key string) {
 //
 //	C++: QString QUrlQuery::queryItemValue(const QString & key, QUrl::ComponentFormattingOptions encoding = …) const
 //
+// Arguments with C++ defaults are left at them; QueryItemValueFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qurlquery.html#queryItemValue
 func (this *QUrlQuery) QueryItemValue(key string) string {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItemValue")
@@ -288,6 +296,8 @@ func (this *QUrlQuery) QueryItemValue(key string) string {
 // AllQueryItemValues wraps QUrlQuery::allQueryItemValues.
 //
 //	C++: QStringList QUrlQuery::allQueryItemValues(const QString & key, QUrl::ComponentFormattingOptions encoding = …) const
+//
+// Arguments with C++ defaults are left at them; AllQueryItemValuesFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qurlquery.html#allQueryItemValues
 func (this *QUrlQuery) AllQueryItemValues(key string) []string {
@@ -306,6 +316,76 @@ func (this *QUrlQuery) RemoveAllQueryItems(key string) {
 	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.RemoveAllQueryItems")
 	C.qute_QUrlQuery_removeAllQueryItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
 	runtime.KeepAlive(this)
+}
+
+// QueryFull wraps QUrlQuery::query.
+//
+//	C++: QString QUrlQuery::query(QUrl::ComponentFormattingOptions encoding = …) const
+//
+// QueryFull is Query with every argument, including those Query leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#query
+func (this *QUrlQuery) QueryFull(encoding QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryFull")
+	r := C.qute_QUrlQuery_query_1(self, C.int64_t(encoding))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToStringFull wraps QUrlQuery::toString.
+//
+//	C++: QString QUrlQuery::toString(QUrl::ComponentFormattingOptions encoding = …) const
+//
+// ToStringFull is ToString with every argument, including those ToString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#toString
+func (this *QUrlQuery) ToStringFull(encoding QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.ToStringFull")
+	r := C.qute_QUrlQuery_toString_1(self, C.int64_t(encoding))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// QueryItemsFull wraps QUrlQuery::queryItems.
+//
+//	C++: QList<std::pair<QString, QString>> QUrlQuery::queryItems(QUrl::ComponentFormattingOptions encoding = …) const
+//
+// QueryItemsFull is QueryItems with every argument, including those QueryItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#queryItems
+func (this *QUrlQuery) QueryItemsFull(encoding QUrlComponentFormattingOptions) []Pair[string, string] {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItemsFull")
+	r := C.qute_QUrlQuery_queryItems_1(self, C.int64_t(encoding))
+	runtime.KeepAlive(this)
+	return qutePairs(r, func(k C.qute_str) string { return quteStr(k) }, func(v C.qute_str) string { return quteStr(v) }, func(a string, b string) Pair[string, string] { return Pair[string, string]{First: a, Second: b} })
+}
+
+// QueryItemValueFull wraps QUrlQuery::queryItemValue.
+//
+//	C++: QString QUrlQuery::queryItemValue(const QString & key, QUrl::ComponentFormattingOptions encoding = …) const
+//
+// QueryItemValueFull is QueryItemValue with every argument, including those QueryItemValue leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#queryItemValue
+func (this *QUrlQuery) QueryItemValueFull(key string, encoding QUrlComponentFormattingOptions) string {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.QueryItemValueFull")
+	r := C.qute_QUrlQuery_queryItemValue_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), C.int64_t(encoding))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// AllQueryItemValuesFull wraps QUrlQuery::allQueryItemValues.
+//
+//	C++: QStringList QUrlQuery::allQueryItemValues(const QString & key, QUrl::ComponentFormattingOptions encoding = …) const
+//
+// AllQueryItemValuesFull is AllQueryItemValues with every argument, including those AllQueryItemValues leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qurlquery.html#allQueryItemValues
+func (this *QUrlQuery) AllQueryItemValuesFull(key string, encoding QUrlComponentFormattingOptions) []string {
+	self := rt.Use(unsafe.Pointer(this), "QUrlQuery.AllQueryItemValuesFull")
+	r := C.qute_QUrlQuery_allQueryItemValues_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), C.int64_t(encoding))
+	runtime.KeepAlive(this)
+	return quteStrList(r)
 }
 
 // QUrlQueryDefaultQueryValueDelimiter wraps QUrlQuery::defaultQueryValueDelimiter.

@@ -56,6 +56,8 @@ func QOpenGLWidgetCast(o qtcore.QObjectLike) *QOpenGLWidget {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQOpenGLWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qopenglwidget.html#QOpenGLWidget
 func NewQOpenGLWidget(parent qtwidgets.QWidgetLike) *QOpenGLWidget {
 	rt.CheckThread("NewQOpenGLWidget")
@@ -64,6 +66,31 @@ func NewQOpenGLWidget(parent qtwidgets.QWidgetLike) *QOpenGLWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQOpenGLWidget")
 	}
 	p := C.qute_QOpenGLWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QOpenGLWidget", mode)
+	return rt.View[QOpenGLWidget](h, p)
+}
+
+// NewQOpenGLWidgetFull wraps the QOpenGLWidget constructor.
+//
+//	C++: QOpenGLWidget::QOpenGLWidget(QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQOpenGLWidgetFull is NewQOpenGLWidget with every argument, including those NewQOpenGLWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglwidget.html#QOpenGLWidget
+func NewQOpenGLWidgetFull(parent qtwidgets.QWidgetLike, fArg qtcore.WindowFlags) *QOpenGLWidget {
+	rt.CheckThread("NewQOpenGLWidgetFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQOpenGLWidgetFull")
+	}
+	p := C.qute_QOpenGLWidget_new_1(parentPtr, C.int64_t(fArg))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

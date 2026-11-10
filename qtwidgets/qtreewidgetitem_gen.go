@@ -82,6 +82,8 @@ func (this *QTreeWidgetItem) Unkeep() {
 //
 //	C++: QTreeWidgetItem::QTreeWidgetItem(int type = …)
 //
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItem() *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItem")
@@ -93,6 +95,8 @@ func NewQTreeWidgetItem() *QTreeWidgetItem {
 // NewQTreeWidgetItemWithStrings wraps the QTreeWidgetItem constructor.
 //
 //	C++: QTreeWidgetItem::QTreeWidgetItem(const QStringList & strings, int type = …)
+//
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemWithStringsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemWithStrings(strings []string) *QTreeWidgetItem {
@@ -108,6 +112,8 @@ func NewQTreeWidgetItemWithStrings(strings []string) *QTreeWidgetItem {
 //	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidget * treeview, int type = …)
 //
 // Ownership: treeview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemInFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemIn(treeview QTreeWidgetLike) *QTreeWidgetItem {
@@ -132,6 +138,8 @@ func NewQTreeWidgetItemIn(treeview QTreeWidgetLike) *QTreeWidgetItem {
 //
 // Ownership: treeview the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemInWithStringsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemInWithStrings(treeview QTreeWidgetLike, strings []string) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemInWithStrings")
@@ -155,6 +163,8 @@ func NewQTreeWidgetItemInWithStrings(treeview QTreeWidgetLike, strings []string)
 //	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidget * treeview, QTreeWidgetItem * after, int type = …)
 //
 // Ownership: treeview the receiver becomes Parented when it is non-nil, Owned when nil; after is borrowed for the call only.
+//
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemInAfterFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemInAfter(treeview QTreeWidgetLike, after QTreeWidgetItemLike) *QTreeWidgetItem {
@@ -184,6 +194,8 @@ func NewQTreeWidgetItemInAfter(treeview QTreeWidgetLike, after QTreeWidgetItemLi
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemUnderFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemUnder(parent QTreeWidgetItemLike) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemUnder")
@@ -206,6 +218,8 @@ func NewQTreeWidgetItemUnder(parent QTreeWidgetItemLike) *QTreeWidgetItem {
 //	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem * parent, const QStringList & strings, int type = …)
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemUnderWithStringsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemUnderWithStrings(parent QTreeWidgetItemLike, strings []string) *QTreeWidgetItem {
@@ -231,6 +245,8 @@ func NewQTreeWidgetItemUnderWithStrings(parent QTreeWidgetItemLike, strings []st
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil; after is borrowed for the call only.
 //
+// Arguments with C++ defaults are left at them; NewQTreeWidgetItemUnderAfterFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
 func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetItemLike) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemUnderAfter")
@@ -243,6 +259,197 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderAfter")
 	}
 	p := C.qute_QTreeWidgetItem_new_7(parentPtr, afterPtr)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(after)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(int type = …)
+//
+// NewQTreeWidgetItemFull is NewQTreeWidgetItem with every argument, including those NewQTreeWidgetItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemFull(typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemFull")
+	p := C.qute_QTreeWidgetItem_new_8(C.int(typeArg))
+	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemWithStringsFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(const QStringList & strings, int type = …)
+//
+// NewQTreeWidgetItemWithStringsFull is NewQTreeWidgetItemWithStrings with every argument, including those NewQTreeWidgetItemWithStrings leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemWithStringsFull(strings []string, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemWithStringsFull")
+	stringsData, stringsLens := quteStrListArg(strings)
+	p := C.qute_QTreeWidgetItem_new_9((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)), C.int(typeArg))
+	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemInFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidget * treeview, int type = …)
+//
+// Ownership: treeview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQTreeWidgetItemInFull is NewQTreeWidgetItemIn with every argument, including those NewQTreeWidgetItemIn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemInFull(treeview QTreeWidgetLike, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemInFull")
+	var treeviewPtr unsafe.Pointer
+	if treeview != nil {
+		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemInFull")
+	}
+	p := C.qute_QTreeWidgetItem_new_10(treeviewPtr, C.int(typeArg))
+	runtime.KeepAlive(treeview)
+	mode := rt.NewOwned
+	if treeviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemInWithStringsFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidget * treeview, const QStringList & strings, int type = …)
+//
+// Ownership: treeview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQTreeWidgetItemInWithStringsFull is NewQTreeWidgetItemInWithStrings with every argument, including those NewQTreeWidgetItemInWithStrings leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemInWithStringsFull(treeview QTreeWidgetLike, strings []string, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemInWithStringsFull")
+	var treeviewPtr unsafe.Pointer
+	if treeview != nil {
+		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemInWithStringsFull")
+	}
+	stringsData, stringsLens := quteStrListArg(strings)
+	p := C.qute_QTreeWidgetItem_new_11(treeviewPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)), C.int(typeArg))
+	runtime.KeepAlive(treeview)
+	mode := rt.NewOwned
+	if treeviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemInAfterFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidget * treeview, QTreeWidgetItem * after, int type = …)
+//
+// Ownership: treeview the receiver becomes Parented when it is non-nil, Owned when nil; after is borrowed for the call only.
+//
+// NewQTreeWidgetItemInAfterFull is NewQTreeWidgetItemInAfter with every argument, including those NewQTreeWidgetItemInAfter leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemInAfterFull(treeview QTreeWidgetLike, after QTreeWidgetItemLike, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemInAfterFull")
+	var treeviewPtr unsafe.Pointer
+	if treeview != nil {
+		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemInAfterFull")
+	}
+	var afterPtr unsafe.Pointer
+	if after != nil {
+		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemInAfterFull")
+	}
+	p := C.qute_QTreeWidgetItem_new_12(treeviewPtr, afterPtr, C.int(typeArg))
+	runtime.KeepAlive(treeview)
+	runtime.KeepAlive(after)
+	mode := rt.NewOwned
+	if treeviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemUnderFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem * parent, int type = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQTreeWidgetItemUnderFull is NewQTreeWidgetItemUnder with every argument, including those NewQTreeWidgetItemUnder leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemUnderFull(parent QTreeWidgetItemLike, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemUnderFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderFull")
+	}
+	p := C.qute_QTreeWidgetItem_new_13(parentPtr, C.int(typeArg))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemUnderWithStringsFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem * parent, const QStringList & strings, int type = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQTreeWidgetItemUnderWithStringsFull is NewQTreeWidgetItemUnderWithStrings with every argument, including those NewQTreeWidgetItemUnderWithStrings leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemUnderWithStringsFull(parent QTreeWidgetItemLike, strings []string, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemUnderWithStringsFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderWithStringsFull")
+	}
+	stringsData, stringsLens := quteStrListArg(strings)
+	p := C.qute_QTreeWidgetItem_new_14(parentPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)), C.int(typeArg))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	return rt.View[QTreeWidgetItem](h, p)
+}
+
+// NewQTreeWidgetItemUnderAfterFull wraps the QTreeWidgetItem constructor.
+//
+//	C++: QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem * parent, QTreeWidgetItem * after, int type = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil; after is borrowed for the call only.
+//
+// NewQTreeWidgetItemUnderAfterFull is NewQTreeWidgetItemUnderAfter with every argument, including those NewQTreeWidgetItemUnderAfter leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtreewidgetitem.html#QTreeWidgetItem
+func NewQTreeWidgetItemUnderAfterFull(parent QTreeWidgetItemLike, after QTreeWidgetItemLike, typeArg int) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemUnderAfterFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderAfterFull")
+	}
+	var afterPtr unsafe.Pointer
+	if after != nil {
+		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderAfterFull")
+	}
+	p := C.qute_QTreeWidgetItem_new_15(parentPtr, afterPtr, C.int(typeArg))
 	runtime.KeepAlive(parent)
 	runtime.KeepAlive(after)
 	mode := rt.NewOwned
@@ -776,7 +983,7 @@ func (this *QTreeWidgetItem) Parent() *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Parent")
 	r := C.qute_QTreeWidgetItem_parent(self)
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // Child wraps QTreeWidgetItem::child.
@@ -790,7 +997,7 @@ func (this *QTreeWidgetItem) Child(index int) *QTreeWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.Child")
 	r := C.qute_QTreeWidgetItem_child(self, C.int(index))
 	runtime.KeepAlive(this)
-	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTreeWidgetItem](rt.WrapClassFrom(r, "QTreeWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // ChildCount wraps QTreeWidgetItem::childCount.
@@ -851,7 +1058,7 @@ func (this *QTreeWidgetItem) AddChild(child QTreeWidgetItemLike) {
 	C.qute_QTreeWidgetItem_addChild(self, childPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(child)
-	childH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, childH)
 }
 
 // InsertChild wraps QTreeWidgetItem::insertChild.
@@ -871,7 +1078,7 @@ func (this *QTreeWidgetItem) InsertChild(index int, child QTreeWidgetItemLike) {
 	C.qute_QTreeWidgetItem_insertChild(self, C.int(index), childPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(child)
-	childH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, childH)
 }
 
 // RemoveChild wraps QTreeWidgetItem::removeChild.
@@ -928,7 +1135,7 @@ func (this *QTreeWidgetItem) AddChildren(children []*QTreeWidgetItem) {
 	runtime.KeepAlive(children)
 	for _, x := range children {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }
@@ -951,7 +1158,7 @@ func (this *QTreeWidgetItem) InsertChildren(index int, children []*QTreeWidgetIt
 	runtime.KeepAlive(children)
 	for _, x := range children {
 		if x != nil {
-			rt.RefOf(unsafe.Pointer(x)).H.TransferToCpp()
+			rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, rt.RefOf(unsafe.Pointer(x)).H)
 		}
 	}
 }

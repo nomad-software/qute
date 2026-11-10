@@ -185,7 +185,7 @@ func (this *QTableWidget) Item(row int, column int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.Item")
 	r := C.qute_QTableWidget_item(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetItem wraps QTableWidget::setItem.
@@ -205,7 +205,7 @@ func (this *QTableWidget) SetItem(row int, column int, item QTableWidgetItemLike
 	C.qute_QTableWidget_setItem(self, C.int(row), C.int(column), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // TakeItem wraps QTableWidget::takeItem.
@@ -239,7 +239,7 @@ func (this *QTableWidget) Items(data qtcore.QMimeDataLike) []*QTableWidgetItem {
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(data)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetItem {
-		return rt.View[QTableWidgetItem](rt.WrapClass(e, "QTableWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QTableWidgetItem](rt.WrapClassFrom(e, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -274,7 +274,7 @@ func (this *QTableWidget) ItemFromIndex(index *qtcore.QModelIndex) *QTableWidget
 	r := C.qute_QTableWidget_itemFromIndex(self, rt.UseArg(unsafe.Pointer(index), "QTableWidget.ItemFromIndex"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(index)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // VerticalHeaderItem wraps QTableWidget::verticalHeaderItem.
@@ -288,7 +288,7 @@ func (this *QTableWidget) VerticalHeaderItem(row int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.VerticalHeaderItem")
 	r := C.qute_QTableWidget_verticalHeaderItem(self, C.int(row))
 	runtime.KeepAlive(this)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetVerticalHeaderItem wraps QTableWidget::setVerticalHeaderItem.
@@ -308,7 +308,7 @@ func (this *QTableWidget) SetVerticalHeaderItem(row int, item QTableWidgetItemLi
 	C.qute_QTableWidget_setVerticalHeaderItem(self, C.int(row), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // TakeVerticalHeaderItem wraps QTableWidget::takeVerticalHeaderItem.
@@ -336,7 +336,7 @@ func (this *QTableWidget) HorizontalHeaderItem(column int) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.HorizontalHeaderItem")
 	r := C.qute_QTableWidget_horizontalHeaderItem(self, C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetHorizontalHeaderItem wraps QTableWidget::setHorizontalHeaderItem.
@@ -356,7 +356,7 @@ func (this *QTableWidget) SetHorizontalHeaderItem(column int, item QTableWidgetI
 	C.qute_QTableWidget_setHorizontalHeaderItem(self, C.int(column), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // TakeHorizontalHeaderItem wraps QTableWidget::takeHorizontalHeaderItem.
@@ -432,7 +432,7 @@ func (this *QTableWidget) CurrentItem() *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.CurrentItem")
 	r := C.qute_QTableWidget_currentItem(self)
 	runtime.KeepAlive(this)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetCurrentItem wraps QTableWidget::setCurrentItem.
@@ -492,6 +492,8 @@ func (this *QTableWidget) SetCurrentCellWith(row int, column int, command qtcore
 // SortItems wraps QTableWidget::sortItems.
 //
 //	C++: void QTableWidget::sortItems(int column, Qt::SortOrder order = …)
+//
+// Arguments with C++ defaults are left at them; SortItemsFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtablewidget.html#sortItems
 func (this *QTableWidget) SortItems(column int) {
@@ -596,7 +598,7 @@ func (this *QTableWidget) SetCellWidget(row int, column int, widget QWidgetLike)
 	C.qute_QTableWidget_setCellWidget(self, C.int(row), C.int(column), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // RemoveCellWidget wraps QTableWidget::removeCellWidget.
@@ -650,7 +652,7 @@ func (this *QTableWidget) SelectedItems() []*QTableWidgetItem {
 	r := C.qute_QTableWidget_selectedItems(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetItem {
-		return rt.View[QTableWidgetItem](rt.WrapClass(e, "QTableWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QTableWidgetItem](rt.WrapClassFrom(e, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -666,7 +668,7 @@ func (this *QTableWidget) FindItems(text string, flags qtcore.MatchFlags) []*QTa
 	r := C.qute_QTableWidget_findItems(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(flags))
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QTableWidgetItem {
-		return rt.View[QTableWidgetItem](rt.WrapClass(e, "QTableWidgetItem", rt.KeepOrBorrow), e)
+		return rt.View[QTableWidgetItem](rt.WrapClassFrom(e, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), e)
 	})
 }
 
@@ -705,7 +707,7 @@ func (this *QTableWidget) ItemAt(pArg qtcore.QPoint) *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ItemAt")
 	r := C.qute_QTableWidget_itemAt(self, cQPoint(pArg))
 	runtime.KeepAlive(this)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // VisualItemRect wraps QTableWidget::visualItemRect.
@@ -736,7 +738,7 @@ func (this *QTableWidget) ItemPrototype() *QTableWidgetItem {
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ItemPrototype")
 	r := C.qute_QTableWidget_itemPrototype(self)
 	runtime.KeepAlive(this)
-	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+	return rt.View[QTableWidgetItem](rt.WrapClassFrom(r, "QTableWidgetItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // SetItemPrototype wraps QTableWidget::setItemPrototype.
@@ -756,7 +758,7 @@ func (this *QTableWidget) SetItemPrototype(item QTableWidgetItemLike) {
 	C.qute_QTableWidget_setItemPrototype(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // SupportedDragActions wraps QTableWidget::supportedDragActions.
@@ -785,6 +787,8 @@ func (this *QTableWidget) SetSupportedDragActions(actions qtcore.DropActions) {
 // ScrollToItem wraps QTableWidget::scrollToItem.
 //
 //	C++: void QTableWidget::scrollToItem(const QTableWidgetItem * item, QAbstractItemView::ScrollHint hint = …)
+//
+// Arguments with C++ defaults are left at them; ScrollToItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtablewidget.html#scrollToItem
 func (this *QTableWidget) ScrollToItem(item QTableWidgetItemLike) {
@@ -1067,6 +1071,37 @@ func (this *QTableWidget) EmitCurrentCellChanged(currentRow int, currentColumn i
 	self := rt.Use(unsafe.Pointer(this), "QTableWidget.EmitCurrentCellChanged")
 	C.qute_QTableWidget_currentCellChanged_1(self, C.int(currentRow), C.int(currentColumn), C.int(previousRow), C.int(previousColumn))
 	runtime.KeepAlive(this)
+}
+
+// SortItemsFull wraps QTableWidget::sortItems.
+//
+//	C++: void QTableWidget::sortItems(int column, Qt::SortOrder order = …)
+//
+// SortItemsFull is SortItems with every argument, including those SortItems leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidget.html#sortItems
+func (this *QTableWidget) SortItemsFull(column int, order qtcore.SortOrder) {
+	self := rt.Use(unsafe.Pointer(this), "QTableWidget.SortItemsFull")
+	C.qute_QTableWidget_sortItems_1(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(this)
+}
+
+// ScrollToItemFull wraps QTableWidget::scrollToItem.
+//
+//	C++: void QTableWidget::scrollToItem(const QTableWidgetItem * item, QAbstractItemView::ScrollHint hint = …)
+//
+// ScrollToItemFull is ScrollToItem with every argument, including those ScrollToItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtablewidget.html#scrollToItem
+func (this *QTableWidget) ScrollToItemFull(item QTableWidgetItemLike, hint QAbstractItemViewScrollHint) {
+	self := rt.Use(unsafe.Pointer(this), "QTableWidget.ScrollToItemFull")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQTableWidgetItem()), "QTableWidget.ScrollToItemFull")
+	}
+	C.qute_QTableWidget_scrollToItem_1(self, itemPtr, C.int64_t(hint))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the

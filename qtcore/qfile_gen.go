@@ -228,10 +228,26 @@ func (this *QFile) OpenWithPermissions(flags QIODeviceBaseOpenMode, permissions 
 //
 //	C++: bool QFile::open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags = …)
 //
+// Arguments with C++ defaults are left at them; OpenFdFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfile.html#open
 func (this *QFile) OpenFd(fd int, ioFlags QIODeviceBaseOpenMode) bool {
 	self := rt.Use(unsafe.Pointer(this), "QFile.OpenFd")
 	r := C.qute_QFile_open_1(self, C.int(fd), C.int64_t(ioFlags))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// OpenFdFull wraps QFile::open.
+//
+//	C++: bool QFile::open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags = …)
+//
+// OpenFdFull is OpenFd with every argument, including those OpenFd leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfile.html#open
+func (this *QFile) OpenFdFull(fd int, ioFlags QIODeviceBaseOpenMode, handleFlags QFileDeviceFileHandleFlags) bool {
+	self := rt.Use(unsafe.Pointer(this), "QFile.OpenFdFull")
+	r := C.qute_QFile_open_2(self, C.int(fd), C.int64_t(ioFlags), C.int64_t(handleFlags))
 	runtime.KeepAlive(this)
 	return bool(r)
 }

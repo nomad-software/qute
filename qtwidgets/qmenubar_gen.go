@@ -284,6 +284,8 @@ func (this *QMenuBar) ActionAt(point qtcore.QPoint) *qtgui.QAction {
 //
 // Ownership: w becomes Parented: Qt frees it from now on.
 //
+// Arguments with C++ defaults are left at them; SetCornerWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmenubar.html#setCornerWidget
 func (this *QMenuBar) SetCornerWidget(w QWidgetLike) {
 	self := rt.Use(unsafe.Pointer(this), "QMenuBar.SetCornerWidget")
@@ -295,7 +297,7 @@ func (this *QMenuBar) SetCornerWidget(w QWidgetLike) {
 	C.qute_QMenuBar_setCornerWidget(self, wPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(w)
-	wH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
 }
 
 // CornerWidget wraps QMenuBar::cornerWidget.
@@ -303,6 +305,8 @@ func (this *QMenuBar) SetCornerWidget(w QWidgetLike) {
 //	C++: QWidget * QMenuBar::cornerWidget(Qt::Corner corner = …) const
 //
 // Ownership: the result is Borrowed: Go never frees it.
+//
+// Arguments with C++ defaults are left at them; CornerWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmenubar.html#cornerWidget
 func (this *QMenuBar) CornerWidget() *QWidget {
@@ -365,6 +369,44 @@ func (this *QMenuBar) EmitHovered(action qtgui.QActionLike) {
 	C.qute_QMenuBar_hovered_1(self, actionPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(action)
+}
+
+// SetCornerWidgetFull wraps QMenuBar::setCornerWidget.
+//
+//	C++: void QMenuBar::setCornerWidget(QWidget * w, Qt::Corner corner = …)
+//
+// Ownership: w becomes Parented: Qt frees it from now on.
+//
+// SetCornerWidgetFull is SetCornerWidget with every argument, including those SetCornerWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmenubar.html#setCornerWidget
+func (this *QMenuBar) SetCornerWidgetFull(w QWidgetLike, corner qtcore.Corner) {
+	self := rt.Use(unsafe.Pointer(this), "QMenuBar.SetCornerWidgetFull")
+	var wPtr unsafe.Pointer
+	var wH *rt.Handle
+	if w != nil {
+		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QMenuBar.SetCornerWidgetFull")
+	}
+	C.qute_QMenuBar_setCornerWidget_1(self, wPtr, C.int64_t(corner))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
+}
+
+// CornerWidgetFull wraps QMenuBar::cornerWidget.
+//
+//	C++: QWidget * QMenuBar::cornerWidget(Qt::Corner corner = …) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// CornerWidgetFull is CornerWidget with every argument, including those CornerWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmenubar.html#cornerWidget
+func (this *QMenuBar) CornerWidgetFull(corner qtcore.Corner) *QWidget {
+	self := rt.Use(unsafe.Pointer(this), "QMenuBar.CornerWidgetFull")
+	r := C.qute_QMenuBar_cornerWidget_1(self, C.int64_t(corner))
+	runtime.KeepAlive(this)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the

@@ -51,9 +51,13 @@ classes:
   QFontDialog: {}
   QProgressDialog: {}
   QDialogButtonBox: {}
-  QLayoutItem: { no-construct: true }
-  QSpacerItem: {}
-  QWidgetItem: { depends-on: widget }
+  # Qt makes most layout items itself and frees them with their layout, which
+  # qute cannot watch: an item handed out by a layout depends on it (see
+  # WrapClassFrom), and on its widget, whose deletion also frees the item.
+  # Items built in Go report their death themselves (notify-dtor).
+  QLayoutItem: { no-construct: true, depends-on: widget }
+  QSpacerItem: { notify-dtor: true }
+  QWidgetItem: { notify-dtor: true, depends-on: widget }
   QLayout: {}
   QBoxLayout: {}
   QHBoxLayout: {}

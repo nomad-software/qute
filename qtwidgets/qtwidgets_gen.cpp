@@ -291,18 +291,31 @@
 #include <QWidgetItem>
 #include <QWindow>
 
+#include <QtCore/QCoreApplication>
+#include <QtCore/QThread>
 #include <cstring>
 #include <memory>
 
 extern "C" {
 void qute_qtwidgets_signal(uintptr_t id, void *args);
 void qute_qtwidgets_release(uintptr_t id);
-void qute_qtwidgets_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtwidgets_virtual(uintptr_t id, int idx, void *args, void *ret);
+void qute_qtwidgets_wrong_thread(void);
 void qute_qtwidgets_dead(void *key);
 void qute_qtwidgets_call(uintptr_t id, void *args, void *ret);
 }
 
 static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtwidgets_call(id, args, ret); }
+
+// Every Qt call must come from the GUI thread; the Go side panics otherwise.
+// It is checked here, where it costs a thread-local read, so release builds
+// catch it too (qute_debug builds also name the method).
+static inline void qute_gui_only() {
+	QCoreApplication *app = QCoreApplication::instance();
+	if (app && QThread::currentThread() != app->thread()) {
+		qute_qtwidgets_wrong_thread();
+	}
+}
 
 namespace {
 // GoSlot owns a Go closure id; Qt destroys the slot object on disconnect
@@ -332,8 +345,9 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(0)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 0, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 0, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QAbstractScrollArea::minimumSizeHint();
 	}
@@ -341,8 +355,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(1)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 1, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 1, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QAbstractScrollArea::sizeHint();
 	}
@@ -351,8 +366,9 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 2, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::setupViewport(a0);
 	}
@@ -363,8 +379,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 3, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 3, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QAbstractScrollArea::eventFilter(a0, a1);
 	}
@@ -374,8 +391,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 4, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 4, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QAbstractScrollArea::event(a0);
 	}
@@ -385,8 +403,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 5, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 5, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QAbstractScrollArea::viewportEvent(a0);
 	}
@@ -395,8 +414,9 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 6, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::resizeEvent(a0);
 	}
@@ -405,8 +425,9 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 7, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::paintEvent(a0);
 	}
@@ -415,8 +436,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::mousePressEvent(a0);
 	}
@@ -425,8 +447,9 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 9, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::mouseReleaseEvent(a0);
 	}
@@ -435,8 +458,9 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 10, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::mouseDoubleClickEvent(a0);
 	}
@@ -445,8 +469,9 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 11, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::mouseMoveEvent(a0);
 	}
@@ -455,8 +480,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::wheelEvent(a0);
 	}
@@ -465,8 +491,9 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 13, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 13, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::contextMenuEvent(a0);
 	}
@@ -475,8 +502,9 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 14, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::dragEnterEvent(a0);
 	}
@@ -485,8 +513,9 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 15, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 15, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::dragMoveEvent(a0);
 	}
@@ -495,8 +524,9 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 16, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 16, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::dragLeaveEvent(a0);
 	}
@@ -505,8 +535,9 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::dropEvent(a0);
 	}
@@ -515,8 +546,9 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 18, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 18, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::keyPressEvent(a0);
 	}
@@ -526,8 +558,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
-			qute_qtwidgets_virtual(qute_id, 19, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 19, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractScrollArea::scrollContentsBy(a0, a1);
 	}
@@ -535,8 +568,9 @@ public:
 	QSize viewportSizeHint() const override {
 		if (qute_has(20)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 20, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 20, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QAbstractScrollArea::viewportSizeHint();
 	}
@@ -545,8 +579,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QFrame::changeEvent(a0);
 	}
@@ -555,8 +590,9 @@ public:
 		if (qute_has(22)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::setVisible(a0);
 	}
@@ -566,8 +602,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 23, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 23, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
@@ -575,8 +612,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(24)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 24, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 24, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -585,8 +623,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyReleaseEvent(a0);
 	}
@@ -595,8 +634,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusInEvent(a0);
 	}
@@ -605,8 +645,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusOutEvent(a0);
 	}
@@ -615,8 +656,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -625,8 +667,9 @@ public:
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 29, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -635,8 +678,9 @@ public:
 		if (qute_has(30)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 30, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 30, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -645,8 +689,9 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 31, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 31, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::closeEvent(a0);
 	}
@@ -655,8 +700,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::showEvent(a0);
 	}
@@ -665,8 +711,9 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -676,8 +723,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 34, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 34, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
@@ -686,8 +734,9 @@ public:
 		if (qute_has(35)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 35, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 35, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::timerEvent(a0);
 	}
@@ -696,8 +745,9 @@ public:
 		if (qute_has(36)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 36, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 36, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -706,8 +756,9 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 37, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 37, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
@@ -731,8 +782,9 @@ public:
 		if (qute_has(0)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 0, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 0, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::setVisible(a0);
 	}
@@ -740,8 +792,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(1)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 1, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 1, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QDialog::sizeHint();
 	}
@@ -749,16 +802,18 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(2)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 2, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 2, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QDialog::minimumSizeHint();
 	}
 	QSize qute_super_2() const { return QDialog::minimumSizeHint(); }
 	void open() override {
 		if (qute_has(3)) {
-			qute_qtwidgets_virtual(qute_id, 3, nullptr, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 3, nullptr, nullptr)) {
+				return;
+			}
 		}
 		QDialog::open();
 	}
@@ -766,8 +821,9 @@ public:
 	int exec() override {
 		if (qute_has(4)) {
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 4, nullptr, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 4, nullptr, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QDialog::exec();
 	}
@@ -776,24 +832,27 @@ public:
 		if (qute_has(5)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 5, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::done(a0);
 	}
 	void qute_super_5(int a0) { return QDialog::done(a0); }
 	void accept() override {
 		if (qute_has(6)) {
-			qute_qtwidgets_virtual(qute_id, 6, nullptr, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 6, nullptr, nullptr)) {
+				return;
+			}
 		}
 		QDialog::accept();
 	}
 	void qute_super_6() { return QDialog::accept(); }
 	void reject() override {
 		if (qute_has(7)) {
-			qute_qtwidgets_virtual(qute_id, 7, nullptr, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 7, nullptr, nullptr)) {
+				return;
+			}
 		}
 		QDialog::reject();
 	}
@@ -802,8 +861,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::keyPressEvent(a0);
 	}
@@ -812,8 +872,9 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 9, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::closeEvent(a0);
 	}
@@ -822,8 +883,9 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 10, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::showEvent(a0);
 	}
@@ -832,8 +894,9 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 11, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::resizeEvent(a0);
 	}
@@ -842,8 +905,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QDialog::contextMenuEvent(a0);
 	}
@@ -854,8 +918,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 13, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 13, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QDialog::eventFilter(a0, a1);
 	}
@@ -865,8 +930,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 14, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 14, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
@@ -874,8 +940,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(15)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 15, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 15, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -885,8 +952,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 16, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 16, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::event(a0);
 	}
@@ -895,8 +963,9 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mousePressEvent(a0);
 	}
@@ -905,8 +974,9 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 18, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 18, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseReleaseEvent(a0);
 	}
@@ -915,8 +985,9 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 19, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 19, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseDoubleClickEvent(a0);
 	}
@@ -925,8 +996,9 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 20, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 20, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseMoveEvent(a0);
 	}
@@ -935,8 +1007,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::wheelEvent(a0);
 	}
@@ -945,8 +1018,9 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyReleaseEvent(a0);
 	}
@@ -955,8 +1029,9 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 23, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusInEvent(a0);
 	}
@@ -965,8 +1040,9 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 24, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 24, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusOutEvent(a0);
 	}
@@ -975,8 +1051,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -985,8 +1062,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -995,8 +1073,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::paintEvent(a0);
 	}
@@ -1005,8 +1084,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -1015,8 +1095,9 @@ public:
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 29, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragEnterEvent(a0);
 	}
@@ -1025,8 +1106,9 @@ public:
 		if (qute_has(30)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 30, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 30, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragMoveEvent(a0);
 	}
@@ -1035,8 +1117,9 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 31, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 31, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragLeaveEvent(a0);
 	}
@@ -1045,8 +1128,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dropEvent(a0);
 	}
@@ -1055,8 +1139,9 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -1065,8 +1150,9 @@ public:
 		if (qute_has(34)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 34, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 34, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::changeEvent(a0);
 	}
@@ -1076,8 +1162,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 35, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 35, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
@@ -1086,8 +1173,9 @@ public:
 		if (qute_has(36)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 36, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 36, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::timerEvent(a0);
 	}
@@ -1096,8 +1184,9 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 37, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 37, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -1106,8 +1195,9 @@ public:
 		if (qute_has(38)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 38, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 38, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
@@ -1130,8 +1220,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(0)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 0, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 0, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QFrame::sizeHint();
 	}
@@ -1141,8 +1232,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 1, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QFrame::event(a0);
 	}
@@ -1151,8 +1243,9 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 2, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
 		}
 		QFrame::paintEvent(a0);
 	}
@@ -1161,8 +1254,9 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 3, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
 		}
 		QFrame::changeEvent(a0);
 	}
@@ -1171,8 +1265,9 @@ public:
 		if (qute_has(4)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 4, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::setVisible(a0);
 	}
@@ -1180,8 +1275,9 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(5)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 5, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 5, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QWidget::minimumSizeHint();
 	}
@@ -1191,8 +1287,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 6, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 6, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
@@ -1200,8 +1297,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(7)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 7, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 7, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -1210,8 +1308,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mousePressEvent(a0);
 	}
@@ -1220,8 +1319,9 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 9, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseReleaseEvent(a0);
 	}
@@ -1230,8 +1330,9 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 10, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseDoubleClickEvent(a0);
 	}
@@ -1240,8 +1341,9 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 11, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseMoveEvent(a0);
 	}
@@ -1250,8 +1352,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::wheelEvent(a0);
 	}
@@ -1260,8 +1363,9 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 13, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 13, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyPressEvent(a0);
 	}
@@ -1270,8 +1374,9 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 14, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyReleaseEvent(a0);
 	}
@@ -1280,8 +1385,9 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 15, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 15, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusInEvent(a0);
 	}
@@ -1290,8 +1396,9 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 16, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 16, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusOutEvent(a0);
 	}
@@ -1300,8 +1407,9 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -1310,8 +1418,9 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 18, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 18, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -1320,8 +1429,9 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 19, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 19, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -1330,8 +1440,9 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 20, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 20, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::resizeEvent(a0);
 	}
@@ -1340,8 +1451,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::closeEvent(a0);
 	}
@@ -1350,8 +1462,9 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::contextMenuEvent(a0);
 	}
@@ -1360,8 +1473,9 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 23, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragEnterEvent(a0);
 	}
@@ -1370,8 +1484,9 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 24, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 24, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragMoveEvent(a0);
 	}
@@ -1380,8 +1495,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragLeaveEvent(a0);
 	}
@@ -1390,8 +1506,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dropEvent(a0);
 	}
@@ -1400,8 +1517,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::showEvent(a0);
 	}
@@ -1410,8 +1528,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -1421,8 +1540,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 29, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 29, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
@@ -1433,8 +1553,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 30, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 30, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
@@ -1443,8 +1564,9 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 31, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 31, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::timerEvent(a0);
 	}
@@ -1453,8 +1575,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -1463,8 +1586,9 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
@@ -1577,8 +1701,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(0)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 0, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 0, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QLabel::sizeHint();
 	}
@@ -1586,8 +1711,9 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(1)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 1, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 1, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QLabel::minimumSizeHint();
 	}
@@ -1597,8 +1723,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 2, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 2, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QLabel::heightForWidth(a0);
 	}
@@ -1608,8 +1735,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 3, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 3, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QLabel::event(a0);
 	}
@@ -1618,8 +1746,9 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 4, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::keyPressEvent(a0);
 	}
@@ -1628,8 +1757,9 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 5, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::paintEvent(a0);
 	}
@@ -1638,8 +1768,9 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 6, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::changeEvent(a0);
 	}
@@ -1648,8 +1779,9 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 7, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::mousePressEvent(a0);
 	}
@@ -1658,8 +1790,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::mouseMoveEvent(a0);
 	}
@@ -1668,8 +1801,9 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 9, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::mouseReleaseEvent(a0);
 	}
@@ -1678,8 +1812,9 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 10, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::contextMenuEvent(a0);
 	}
@@ -1688,8 +1823,9 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 11, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::focusInEvent(a0);
 	}
@@ -1698,8 +1834,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QLabel::focusOutEvent(a0);
 	}
@@ -1709,8 +1846,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 13, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 13, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QLabel::focusNextPrevChild(a0);
 	}
@@ -1719,8 +1857,9 @@ public:
 		if (qute_has(14)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 14, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::setVisible(a0);
 	}
@@ -1728,8 +1867,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(15)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 15, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 15, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -1738,8 +1878,9 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 16, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 16, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseDoubleClickEvent(a0);
 	}
@@ -1748,8 +1889,9 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::wheelEvent(a0);
 	}
@@ -1758,8 +1900,9 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 18, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 18, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyReleaseEvent(a0);
 	}
@@ -1768,8 +1911,9 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 19, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 19, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -1778,8 +1922,9 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 20, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 20, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -1788,8 +1933,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -1798,8 +1944,9 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::resizeEvent(a0);
 	}
@@ -1808,8 +1955,9 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 23, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::closeEvent(a0);
 	}
@@ -1818,8 +1966,9 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 24, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 24, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragEnterEvent(a0);
 	}
@@ -1828,8 +1977,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragMoveEvent(a0);
 	}
@@ -1838,8 +1988,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragLeaveEvent(a0);
 	}
@@ -1848,8 +1999,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dropEvent(a0);
 	}
@@ -1858,8 +2010,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::showEvent(a0);
 	}
@@ -1868,8 +2021,9 @@ public:
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 29, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -1880,8 +2034,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 30, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 30, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
@@ -1890,8 +2045,9 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 31, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 31, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::timerEvent(a0);
 	}
@@ -1900,8 +2056,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -1910,8 +2067,9 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
@@ -1942,8 +2100,9 @@ public:
 	QMenu * createPopupMenu() override {
 		if (qute_has(0)) {
 			void * r = nullptr;
-			qute_qtwidgets_virtual(qute_id, 0, nullptr, &r);
-			return static_cast<QMenu *>(r);
+			if (qute_qtwidgets_virtual(qute_id, 0, nullptr, &r)) {
+				return static_cast<QMenu *>(r);
+			}
 		}
 		return QMainWindow::createPopupMenu();
 	}
@@ -1952,8 +2111,9 @@ public:
 		if (qute_has(1)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 1, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 1, args, nullptr)) {
+				return;
+			}
 		}
 		QMainWindow::contextMenuEvent(a0);
 	}
@@ -1963,8 +2123,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 2, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 2, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QMainWindow::event(a0);
 	}
@@ -1973,8 +2134,9 @@ public:
 		if (qute_has(3)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 3, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::setVisible(a0);
 	}
@@ -1982,8 +2144,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(4)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 4, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 4, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QWidget::sizeHint();
 	}
@@ -1991,8 +2154,9 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(5)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 5, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 5, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QWidget::minimumSizeHint();
 	}
@@ -2002,8 +2166,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 6, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 6, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
@@ -2011,8 +2176,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(7)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 7, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 7, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -2021,8 +2187,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mousePressEvent(a0);
 	}
@@ -2031,8 +2198,9 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 9, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseReleaseEvent(a0);
 	}
@@ -2041,8 +2209,9 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 10, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseDoubleClickEvent(a0);
 	}
@@ -2051,8 +2220,9 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 11, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseMoveEvent(a0);
 	}
@@ -2061,8 +2231,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::wheelEvent(a0);
 	}
@@ -2071,8 +2242,9 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 13, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 13, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyPressEvent(a0);
 	}
@@ -2081,8 +2253,9 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 14, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyReleaseEvent(a0);
 	}
@@ -2091,8 +2264,9 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 15, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 15, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusInEvent(a0);
 	}
@@ -2101,8 +2275,9 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 16, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 16, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusOutEvent(a0);
 	}
@@ -2111,8 +2286,9 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -2121,8 +2297,9 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 18, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 18, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -2131,8 +2308,9 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 19, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 19, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::paintEvent(a0);
 	}
@@ -2141,8 +2319,9 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 20, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 20, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -2151,8 +2330,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::resizeEvent(a0);
 	}
@@ -2161,8 +2341,9 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::closeEvent(a0);
 	}
@@ -2171,8 +2352,9 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 23, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragEnterEvent(a0);
 	}
@@ -2181,8 +2363,9 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 24, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 24, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragMoveEvent(a0);
 	}
@@ -2191,8 +2374,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragLeaveEvent(a0);
 	}
@@ -2201,8 +2385,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dropEvent(a0);
 	}
@@ -2211,8 +2396,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::showEvent(a0);
 	}
@@ -2221,8 +2407,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -2231,8 +2418,9 @@ public:
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 29, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::changeEvent(a0);
 	}
@@ -2242,8 +2430,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 30, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 30, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
@@ -2254,8 +2443,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 31, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 31, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
@@ -2264,8 +2454,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::timerEvent(a0);
 	}
@@ -2274,8 +2465,9 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -2284,8 +2476,9 @@ public:
 		if (qute_has(34)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 34, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 34, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
@@ -2307,8 +2500,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(0)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 0, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 0, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QPushButton::sizeHint();
 	}
@@ -2316,8 +2510,9 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(1)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 1, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 1, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QPushButton::minimumSizeHint();
 	}
@@ -2327,8 +2522,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 2, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 2, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QPushButton::event(a0);
 	}
@@ -2337,8 +2533,9 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 3, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
 		}
 		QPushButton::paintEvent(a0);
 	}
@@ -2347,8 +2544,9 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 4, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
 		}
 		QPushButton::keyPressEvent(a0);
 	}
@@ -2357,8 +2555,9 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 5, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
 		}
 		QPushButton::focusInEvent(a0);
 	}
@@ -2367,8 +2566,9 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 6, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
 		}
 		QPushButton::focusOutEvent(a0);
 	}
@@ -2377,8 +2577,9 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 7, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
 		}
 		QPushButton::mouseMoveEvent(a0);
 	}
@@ -2387,8 +2588,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = static_cast<void *>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QPushButton::initStyleOption(a0);
 	}
@@ -2398,24 +2600,27 @@ public:
 			qute_point c0 = qute_from_QPoint(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 9, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 9, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QPushButton::hitButton(a0);
 	}
 	bool qute_super_9(const QPoint & a0) const { return QPushButton::hitButton(a0); }
 	void checkStateSet() override {
 		if (qute_has(10)) {
-			qute_qtwidgets_virtual(qute_id, 10, nullptr, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, nullptr, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::checkStateSet();
 	}
 	void qute_super_10() { return QAbstractButton::checkStateSet(); }
 	void nextCheckState() override {
 		if (qute_has(11)) {
-			qute_qtwidgets_virtual(qute_id, 11, nullptr, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, nullptr, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::nextCheckState();
 	}
@@ -2424,8 +2629,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::keyReleaseEvent(a0);
 	}
@@ -2434,8 +2640,9 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 13, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 13, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::mousePressEvent(a0);
 	}
@@ -2444,8 +2651,9 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 14, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::mouseReleaseEvent(a0);
 	}
@@ -2454,8 +2662,9 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 15, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 15, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::changeEvent(a0);
 	}
@@ -2464,8 +2673,9 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 16, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 16, args, nullptr)) {
+				return;
+			}
 		}
 		QAbstractButton::timerEvent(a0);
 	}
@@ -2474,8 +2684,9 @@ public:
 		if (qute_has(17)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::setVisible(a0);
 	}
@@ -2485,8 +2696,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 18, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 18, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
@@ -2494,8 +2706,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(19)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 19, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 19, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -2504,8 +2717,9 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 20, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 20, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseDoubleClickEvent(a0);
 	}
@@ -2514,8 +2728,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::wheelEvent(a0);
 	}
@@ -2524,8 +2739,9 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -2534,8 +2750,9 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 23, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -2544,8 +2761,9 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 24, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 24, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -2554,8 +2772,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::resizeEvent(a0);
 	}
@@ -2564,8 +2783,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::closeEvent(a0);
 	}
@@ -2574,8 +2794,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::contextMenuEvent(a0);
 	}
@@ -2584,8 +2805,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragEnterEvent(a0);
 	}
@@ -2594,8 +2816,9 @@ public:
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 29, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragMoveEvent(a0);
 	}
@@ -2604,8 +2827,9 @@ public:
 		if (qute_has(30)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 30, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 30, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragLeaveEvent(a0);
 	}
@@ -2614,8 +2838,9 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 31, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 31, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dropEvent(a0);
 	}
@@ -2624,8 +2849,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::showEvent(a0);
 	}
@@ -2634,8 +2860,9 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -2645,8 +2872,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 34, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 34, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
@@ -2657,8 +2885,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 35, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 35, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
@@ -2667,8 +2896,9 @@ public:
 		if (qute_has(36)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 36, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 36, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -2677,12 +2907,22 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 37, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 37, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
 	void qute_super_37(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QSpacerItem : public QSpacerItem {
+public:
+	using QSpacerItem::QSpacerItem;
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QSpacerItem() override { qute_qtwidgets_dead(static_cast<void *>(static_cast<QSpacerItem *>(this))); }
 };
 
 class qute_QTableWidgetItem : public QTableWidgetItem {
@@ -2719,8 +2959,9 @@ public:
 		if (qute_has(0)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 0, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 0, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::setVisible(a0);
 	}
@@ -2728,8 +2969,9 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(1)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 1, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 1, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QWidget::sizeHint();
 	}
@@ -2737,8 +2979,9 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(2)) {
 			qute_size r{};
-			qute_qtwidgets_virtual(qute_id, 2, nullptr, &r);
-			return qute_to_QSize(r);
+			if (qute_qtwidgets_virtual(qute_id, 2, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
 		}
 		return QWidget::minimumSizeHint();
 	}
@@ -2748,8 +2991,9 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			qute_qtwidgets_virtual(qute_id, 3, args, &r);
-			return static_cast<int>(r);
+			if (qute_qtwidgets_virtual(qute_id, 3, args, &r)) {
+				return static_cast<int>(r);
+			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
@@ -2757,8 +3001,9 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(4)) {
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 4, nullptr, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 4, nullptr, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
@@ -2768,8 +3013,9 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 5, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 5, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::event(a0);
 	}
@@ -2778,8 +3024,9 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 6, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mousePressEvent(a0);
 	}
@@ -2788,8 +3035,9 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 7, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseReleaseEvent(a0);
 	}
@@ -2798,8 +3046,9 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 8, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseDoubleClickEvent(a0);
 	}
@@ -2808,8 +3057,9 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 9, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::mouseMoveEvent(a0);
 	}
@@ -2818,8 +3068,9 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 10, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 10, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::wheelEvent(a0);
 	}
@@ -2828,8 +3079,9 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 11, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 11, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyPressEvent(a0);
 	}
@@ -2838,8 +3090,9 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 12, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::keyReleaseEvent(a0);
 	}
@@ -2848,8 +3101,9 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 13, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 13, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusInEvent(a0);
 	}
@@ -2858,8 +3112,9 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 14, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::focusOutEvent(a0);
 	}
@@ -2868,8 +3123,9 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 15, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 15, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::enterEvent(a0);
 	}
@@ -2878,8 +3134,9 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 16, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 16, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::leaveEvent(a0);
 	}
@@ -2888,8 +3145,9 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 17, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 17, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::paintEvent(a0);
 	}
@@ -2898,8 +3156,9 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 18, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 18, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::moveEvent(a0);
 	}
@@ -2908,8 +3167,9 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 19, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 19, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::resizeEvent(a0);
 	}
@@ -2918,8 +3178,9 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 20, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 20, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::closeEvent(a0);
 	}
@@ -2928,8 +3189,9 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 21, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 21, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::contextMenuEvent(a0);
 	}
@@ -2938,8 +3200,9 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 22, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 22, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragEnterEvent(a0);
 	}
@@ -2948,8 +3211,9 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 23, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragMoveEvent(a0);
 	}
@@ -2958,8 +3222,9 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 24, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 24, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dragLeaveEvent(a0);
 	}
@@ -2968,8 +3233,9 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 25, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 25, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::dropEvent(a0);
 	}
@@ -2978,8 +3244,9 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 26, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 26, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::showEvent(a0);
 	}
@@ -2988,8 +3255,9 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 27, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::hideEvent(a0);
 	}
@@ -2998,8 +3266,9 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 28, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
 		}
 		QWidget::changeEvent(a0);
 	}
@@ -3009,8 +3278,9 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 29, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 29, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
@@ -3021,8 +3291,9 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			qute_qtwidgets_virtual(qute_id, 30, args, &r);
-			return static_cast<bool>(r);
+			if (qute_qtwidgets_virtual(qute_id, 30, args, &r)) {
+				return static_cast<bool>(r);
+			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
@@ -3031,8 +3302,9 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 31, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 31, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::timerEvent(a0);
 	}
@@ -3041,8 +3313,9 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 32, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 32, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::childEvent(a0);
 	}
@@ -3051,12 +3324,22 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			qute_qtwidgets_virtual(qute_id, 33, args, nullptr);
-			return;
+			if (qute_qtwidgets_virtual(qute_id, 33, args, nullptr)) {
+				return;
+			}
 		}
 		QObject::customEvent(a0);
 	}
 	void qute_super_33(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QWidgetItem : public QWidgetItem {
+public:
+	using QWidgetItem::QWidgetItem;
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QWidgetItem() override { qute_qtwidgets_dead(static_cast<void *>(static_cast<QWidgetItem *>(this))); }
 };
 
 extern "C" {
@@ -3178,114 +3461,149 @@ const char *qute_qtwidgets_check_layout(void) {
 
 // ---- QAbstractButton
 void * qute_QAbstractButton_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAbstractButton *>(static_cast<QObject *>(obj)));
 }
 void qute_QAbstractButton_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QAbstractButton_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QAbstractButton *>(self)->text());
 }
 void qute_QAbstractButton_setIcon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 void * qute_QAbstractButton_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QAbstractButton *>(self)->icon()));
 }
 qute_size qute_QAbstractButton_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QAbstractButton *>(self)->iconSize());
 }
 void qute_QAbstractButton_setShortcut(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setShortcut((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()));
 }
 void * qute_QAbstractButton_shortcut(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QKeySequence(static_cast<QAbstractButton *>(self)->shortcut()));
 }
 void qute_QAbstractButton_setCheckable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setCheckable(static_cast<bool>(a0));
 }
 bool qute_QAbstractButton_isCheckable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractButton *>(self)->isCheckable());
 }
 bool qute_QAbstractButton_isChecked(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractButton *>(self)->isChecked());
 }
 void qute_QAbstractButton_setDown(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setDown(static_cast<bool>(a0));
 }
 bool qute_QAbstractButton_isDown(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractButton *>(self)->isDown());
 }
 void qute_QAbstractButton_setAutoRepeat(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setAutoRepeat(static_cast<bool>(a0));
 }
 bool qute_QAbstractButton_autoRepeat(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractButton *>(self)->autoRepeat());
 }
 void qute_QAbstractButton_setAutoRepeatDelay(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setAutoRepeatDelay(static_cast<int>(a0));
 }
 int qute_QAbstractButton_autoRepeatDelay(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractButton *>(self)->autoRepeatDelay());
 }
 void qute_QAbstractButton_setAutoRepeatInterval(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setAutoRepeatInterval(static_cast<int>(a0));
 }
 int qute_QAbstractButton_autoRepeatInterval(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractButton *>(self)->autoRepeatInterval());
 }
 void qute_QAbstractButton_setAutoExclusive(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setAutoExclusive(static_cast<bool>(a0));
 }
 bool qute_QAbstractButton_autoExclusive(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractButton *>(self)->autoExclusive());
 }
 void * qute_QAbstractButton_group(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractButton *>(self)->group());
 }
 void qute_QAbstractButton_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setIconSize(qute_to_QSize(a0));
 }
 void qute_QAbstractButton_animateClick(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->animateClick();
 }
 void qute_QAbstractButton_click(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->click();
 }
 void qute_QAbstractButton_toggle(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->toggle();
 }
 void qute_QAbstractButton_setChecked(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->setChecked(static_cast<bool>(a0));
 }
 void qute_QAbstractButton_pressed_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->pressed();
 }
 void qute_QAbstractButton_released_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->released();
 }
 void qute_QAbstractButton_clicked_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->clicked();
 }
 void qute_QAbstractButton_toggled_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractButton *>(self)->toggled(static_cast<bool>(a0));
 }
 void * qute_QAbstractButton_pressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractButton *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractButton::pressed, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractButton_released(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractButton *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractButton::released, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractButton_clicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractButton *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractButton::clicked, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractButton_toggled(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractButton *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractButton::toggled, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -3293,78 +3611,101 @@ void * qute_QAbstractButton_toggled(void *self, uintptr_t id) {
 
 // ---- QAbstractGraphicsShapeItem
 void qute_QAbstractGraphicsShapeItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QAbstractGraphicsShapeItem *>(self);
 }
 void * qute_QAbstractGraphicsShapeItem_pen(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPen(static_cast<QAbstractGraphicsShapeItem *>(self)->pen()));
 }
 void qute_QAbstractGraphicsShapeItem_setPen(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractGraphicsShapeItem *>(self)->setPen((a0 ? *static_cast<QPen *>(a0) : QPen()));
 }
 void * qute_QAbstractGraphicsShapeItem_brush(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QAbstractGraphicsShapeItem *>(self)->brush()));
 }
 void qute_QAbstractGraphicsShapeItem_setBrush(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractGraphicsShapeItem *>(self)->setBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 
 // ---- QAbstractItemDelegate
 void * qute_QAbstractItemDelegate_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAbstractItemDelegate *>(static_cast<QObject *>(obj)));
 }
 void qute_QAbstractItemDelegate_paint(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->paint(static_cast<QPainter *>(a0), (a1 ? *static_cast<QStyleOptionViewItem *>(a1) : QStyleOptionViewItem()), (a2 ? *static_cast<QModelIndex *>(a2) : QModelIndex()));
 }
 qute_size qute_QAbstractItemDelegate_sizeHint(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QAbstractItemDelegate *>(self)->sizeHint((a0 ? *static_cast<QStyleOptionViewItem *>(a0) : QStyleOptionViewItem()), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex())));
 }
 void * qute_QAbstractItemDelegate_createEditor(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemDelegate *>(self)->createEditor(static_cast<QWidget *>(a0), (a1 ? *static_cast<QStyleOptionViewItem *>(a1) : QStyleOptionViewItem()), (a2 ? *static_cast<QModelIndex *>(a2) : QModelIndex())));
 }
 void qute_QAbstractItemDelegate_destroyEditor(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->destroyEditor(static_cast<QWidget *>(a0), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex()));
 }
 void qute_QAbstractItemDelegate_setEditorData(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->setEditorData(static_cast<QWidget *>(a0), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex()));
 }
 void qute_QAbstractItemDelegate_setModelData(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->setModelData(static_cast<QWidget *>(a0), static_cast<QAbstractItemModel *>(a1), (a2 ? *static_cast<QModelIndex *>(a2) : QModelIndex()));
 }
 void qute_QAbstractItemDelegate_updateEditorGeometry(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->updateEditorGeometry(static_cast<QWidget *>(a0), (a1 ? *static_cast<QStyleOptionViewItem *>(a1) : QStyleOptionViewItem()), (a2 ? *static_cast<QModelIndex *>(a2) : QModelIndex()));
 }
 bool qute_QAbstractItemDelegate_editorEvent(void *self, void * a0, void * a1, void * a2, void * a3) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemDelegate *>(self)->editorEvent(static_cast<QEvent *>(a0), static_cast<QAbstractItemModel *>(a1), (a2 ? *static_cast<QStyleOptionViewItem *>(a2) : QStyleOptionViewItem()), (a3 ? *static_cast<QModelIndex *>(a3) : QModelIndex())));
 }
 bool qute_QAbstractItemDelegate_handleEditorEvent(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemDelegate *>(self)->handleEditorEvent(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 bool qute_QAbstractItemDelegate_helpEvent(void *self, void * a0, void * a1, void * a2, void * a3) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemDelegate *>(self)->helpEvent(static_cast<QHelpEvent *>(a0), static_cast<QAbstractItemView *>(a1), (a2 ? *static_cast<QStyleOptionViewItem *>(a2) : QStyleOptionViewItem()), (a3 ? *static_cast<QModelIndex *>(a3) : QModelIndex())));
 }
 qute_list qute_QAbstractItemDelegate_paintingRoles(void *self) {
+	qute_gui_only();
 	return qute_ret_list<int>(static_cast<QAbstractItemDelegate *>(self)->paintingRoles(), [](const auto &v) { return static_cast<int>(v); });
 }
 void qute_QAbstractItemDelegate_commitData_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->commitData(static_cast<QWidget *>(a0));
 }
 void qute_QAbstractItemDelegate_closeEditor_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->closeEditor(static_cast<QWidget *>(a0));
 }
 void qute_QAbstractItemDelegate_sizeHintChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemDelegate *>(self)->sizeHintChanged((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void * qute_QAbstractItemDelegate_commitData(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemDelegate *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemDelegate::commitData, obj, [s](QWidget * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemDelegate_closeEditor(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemDelegate *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemDelegate::closeEditor, obj, [s](QWidget * a0, QAbstractItemDelegate::EndEditHint a1) { void * c0 = (void *)(a0); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemDelegate_sizeHintChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemDelegate *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemDelegate::sizeHintChanged, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -3372,279 +3713,371 @@ void * qute_QAbstractItemDelegate_sizeHintChanged(void *self, uintptr_t id) {
 
 // ---- QAbstractItemView
 void * qute_QAbstractItemView_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAbstractItemView *>(static_cast<QObject *>(obj)));
 }
 void qute_QAbstractItemView_setModel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setModel(static_cast<QAbstractItemModel *>(a0));
 }
 void * qute_QAbstractItemView_model(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->model());
 }
 void qute_QAbstractItemView_setSelectionModel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setSelectionModel(static_cast<QItemSelectionModel *>(a0));
 }
 void * qute_QAbstractItemView_selectionModel(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->selectionModel());
 }
 void qute_QAbstractItemView_setItemDelegate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setItemDelegate(static_cast<QAbstractItemDelegate *>(a0));
 }
 void * qute_QAbstractItemView_itemDelegate(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->itemDelegate());
 }
 void qute_QAbstractItemView_setSelectionMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setSelectionMode(static_cast<QAbstractItemView::SelectionMode>(a0));
 }
 int64_t qute_QAbstractItemView_selectionMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->selectionMode());
 }
 void qute_QAbstractItemView_setSelectionBehavior(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setSelectionBehavior(static_cast<QAbstractItemView::SelectionBehavior>(a0));
 }
 int64_t qute_QAbstractItemView_selectionBehavior(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->selectionBehavior());
 }
 void * qute_QAbstractItemView_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QAbstractItemView *>(self)->currentIndex()));
 }
 void * qute_QAbstractItemView_rootIndex(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QAbstractItemView *>(self)->rootIndex()));
 }
 void qute_QAbstractItemView_setEditTriggers(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setEditTriggers(QFlags<QAbstractItemView::EditTrigger>::fromInt(static_cast<QFlags<QAbstractItemView::EditTrigger>::Int>(a0)));
 }
 int64_t qute_QAbstractItemView_editTriggers(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QAbstractItemView *>(self)->editTriggers()).toInt());
 }
 void qute_QAbstractItemView_setVerticalScrollMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setVerticalScrollMode(static_cast<QAbstractItemView::ScrollMode>(a0));
 }
 int64_t qute_QAbstractItemView_verticalScrollMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->verticalScrollMode());
 }
 void qute_QAbstractItemView_resetVerticalScrollMode(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->resetVerticalScrollMode();
 }
 void qute_QAbstractItemView_setHorizontalScrollMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setHorizontalScrollMode(static_cast<QAbstractItemView::ScrollMode>(a0));
 }
 int64_t qute_QAbstractItemView_horizontalScrollMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->horizontalScrollMode());
 }
 void qute_QAbstractItemView_resetHorizontalScrollMode(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->resetHorizontalScrollMode();
 }
 void qute_QAbstractItemView_setAutoScroll(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setAutoScroll(static_cast<bool>(a0));
 }
 bool qute_QAbstractItemView_hasAutoScroll(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->hasAutoScroll());
 }
 void qute_QAbstractItemView_setAutoScrollMargin(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setAutoScrollMargin(static_cast<int>(a0));
 }
 int qute_QAbstractItemView_autoScrollMargin(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractItemView *>(self)->autoScrollMargin());
 }
 void qute_QAbstractItemView_setTabKeyNavigation(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setTabKeyNavigation(static_cast<bool>(a0));
 }
 bool qute_QAbstractItemView_tabKeyNavigation(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->tabKeyNavigation());
 }
 void qute_QAbstractItemView_setDropIndicatorShown(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setDropIndicatorShown(static_cast<bool>(a0));
 }
 bool qute_QAbstractItemView_showDropIndicator(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->showDropIndicator());
 }
 void qute_QAbstractItemView_setDragEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setDragEnabled(static_cast<bool>(a0));
 }
 bool qute_QAbstractItemView_dragEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->dragEnabled());
 }
 void qute_QAbstractItemView_setDragDropOverwriteMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setDragDropOverwriteMode(static_cast<bool>(a0));
 }
 bool qute_QAbstractItemView_dragDropOverwriteMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->dragDropOverwriteMode());
 }
 void qute_QAbstractItemView_setDragDropMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setDragDropMode(static_cast<QAbstractItemView::DragDropMode>(a0));
 }
 int64_t qute_QAbstractItemView_dragDropMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->dragDropMode());
 }
 void qute_QAbstractItemView_setDefaultDropAction(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setDefaultDropAction(static_cast<Qt::DropAction>(a0));
 }
 int64_t qute_QAbstractItemView_defaultDropAction(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->defaultDropAction());
 }
 void qute_QAbstractItemView_setAlternatingRowColors(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setAlternatingRowColors(static_cast<bool>(a0));
 }
 bool qute_QAbstractItemView_alternatingRowColors(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->alternatingRowColors());
 }
 void qute_QAbstractItemView_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setIconSize(qute_to_QSize(a0));
 }
 qute_size qute_QAbstractItemView_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QAbstractItemView *>(self)->iconSize());
 }
 void qute_QAbstractItemView_setTextElideMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setTextElideMode(static_cast<Qt::TextElideMode>(a0));
 }
 int64_t qute_QAbstractItemView_textElideMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractItemView *>(self)->textElideMode());
 }
 void qute_QAbstractItemView_keyboardSearch(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->keyboardSearch(QString::fromUtf8(a0, a0_len));
 }
 qute_rect qute_QAbstractItemView_visualRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QAbstractItemView *>(self)->visualRect((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void qute_QAbstractItemView_scrollTo(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->scrollTo((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void * qute_QAbstractItemView_indexAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QAbstractItemView *>(self)->indexAt(qute_to_QPoint(a0))));
 }
 qute_size qute_QAbstractItemView_sizeHintForIndex(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QAbstractItemView *>(self)->sizeHintForIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 int qute_QAbstractItemView_sizeHintForRow(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractItemView *>(self)->sizeHintForRow(static_cast<int>(a0)));
 }
 int qute_QAbstractItemView_sizeHintForColumn(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractItemView *>(self)->sizeHintForColumn(static_cast<int>(a0)));
 }
 int qute_QAbstractItemView_updateThreshold(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractItemView *>(self)->updateThreshold());
 }
 void qute_QAbstractItemView_setUpdateThreshold(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setUpdateThreshold(static_cast<int>(a0));
 }
 int64_t qute_QAbstractItemView_keyboardSearchFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QAbstractItemView *>(self)->keyboardSearchFlags()).toInt());
 }
 void qute_QAbstractItemView_setKeyboardSearchFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setKeyboardSearchFlags(QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a0)));
 }
 void qute_QAbstractItemView_openPersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->openPersistentEditor((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_closePersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->closePersistentEditor((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 bool qute_QAbstractItemView_isPersistentEditorOpen(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractItemView *>(self)->isPersistentEditorOpen((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void qute_QAbstractItemView_setIndexWidget(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setIndexWidget((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()), static_cast<QWidget *>(a1));
 }
 void * qute_QAbstractItemView_indexWidget(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->indexWidget((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void qute_QAbstractItemView_setItemDelegateForRow(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setItemDelegateForRow(static_cast<int>(a0), static_cast<QAbstractItemDelegate *>(a1));
 }
 void * qute_QAbstractItemView_itemDelegateForRow(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->itemDelegateForRow(static_cast<int>(a0)));
 }
 void qute_QAbstractItemView_setItemDelegateForColumn(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setItemDelegateForColumn(static_cast<int>(a0), static_cast<QAbstractItemDelegate *>(a1));
 }
 void * qute_QAbstractItemView_itemDelegateForColumn(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->itemDelegateForColumn(static_cast<int>(a0)));
 }
 void * qute_QAbstractItemView_itemDelegateForIndex(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractItemView *>(self)->itemDelegateForIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void qute_QAbstractItemView_reset(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->reset();
 }
 void qute_QAbstractItemView_setRootIndex(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setRootIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_doItemsLayout(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->doItemsLayout();
 }
 void qute_QAbstractItemView_selectAll(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->selectAll();
 }
 void qute_QAbstractItemView_edit(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->edit((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_clearSelection(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->clearSelection();
 }
 void qute_QAbstractItemView_setCurrentIndex(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->setCurrentIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_scrollToTop(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->scrollToTop();
 }
 void qute_QAbstractItemView_scrollToBottom(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->scrollToBottom();
 }
 void qute_QAbstractItemView_update(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->update((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_pressed_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->pressed((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_clicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->clicked((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_doubleClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->doubleClicked((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_activated_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->activated((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_entered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->entered((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QAbstractItemView_viewportEntered_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->viewportEntered();
 }
 void qute_QAbstractItemView_iconSizeChanged_1(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QAbstractItemView *>(self)->iconSizeChanged(qute_to_QSize(a0));
 }
+void qute_QAbstractItemView_scrollTo_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QAbstractItemView *>(self)->scrollTo((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()), static_cast<QAbstractItemView::ScrollHint>(a1));
+}
 void * qute_QAbstractItemView_pressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::pressed, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemView_clicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::clicked, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemView_doubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::doubleClicked, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemView_activated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::activated, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemView_entered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::entered, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractItemView_viewportEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::viewportEntered, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractItemView_iconSizeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemView::iconSizeChanged, obj, [s](const QSize & a0) { qute_size c0 = qute_from_QSize(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -3652,339 +4085,447 @@ void * qute_QAbstractItemView_iconSizeChanged(void *self, uintptr_t id) {
 
 // ---- QAbstractScrollArea
 void * qute_QAbstractScrollArea_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QAbstractScrollArea *>(new QAbstractScrollArea(static_cast<QWidget *>(a0)));
 }
 void * qute_QAbstractScrollArea_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QAbstractScrollArea *>(new qute_QAbstractScrollArea(static_cast<QWidget *>(a0)));
 }
 void qute_QAbstractScrollArea_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 qute_size qute_QAbstractScrollArea_super_0(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_0());
 }
 qute_size qute_QAbstractScrollArea_super_1(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_1());
 }
 void qute_QAbstractScrollArea_super_2(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_2(static_cast<QWidget *>(a0));
 }
 bool qute_QAbstractScrollArea_super_3(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_3(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 bool qute_QAbstractScrollArea_super_4(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_4(static_cast<QEvent *>(a0)));
 }
 bool qute_QAbstractScrollArea_super_5(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_5(static_cast<QEvent *>(a0)));
 }
 void qute_QAbstractScrollArea_super_6(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_6(static_cast<QResizeEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_7(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_7(static_cast<QPaintEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_8(static_cast<QMouseEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_9(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_9(static_cast<QMouseEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_10(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_10(static_cast<QMouseEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_11(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_11(static_cast<QMouseEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_12(static_cast<QWheelEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_13(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_13(static_cast<QContextMenuEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_14(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_14(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_15(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_15(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_16(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_16(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_17(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_17(static_cast<QDropEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_18(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_18(static_cast<QKeyEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_19(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_19(static_cast<int>(a0), static_cast<int>(a1));
 }
 qute_size qute_QAbstractScrollArea_super_20(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_20());
 }
 void qute_QAbstractScrollArea_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_21(static_cast<QEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_22(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_22(static_cast<bool>(a0));
 }
 int qute_QAbstractScrollArea_super_23(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_23(static_cast<int>(a0)));
 }
 bool qute_QAbstractScrollArea_super_24(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_24());
 }
 void qute_QAbstractScrollArea_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_25(static_cast<QKeyEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_26(static_cast<QFocusEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_27(static_cast<QFocusEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_28(static_cast<QEnterEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_29(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_29(static_cast<QEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_30(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_30(static_cast<QMoveEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_31(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_31(static_cast<QCloseEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_32(static_cast<QShowEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_33(static_cast<QHideEvent *>(a0));
 }
 bool qute_QAbstractScrollArea_super_34(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_34(static_cast<bool>(a0)));
 }
 void qute_QAbstractScrollArea_super_35(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_35(static_cast<QTimerEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_36(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_36(static_cast<QChildEvent *>(a0));
 }
 void qute_QAbstractScrollArea_super_37(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->qute_super_37(static_cast<QEvent *>(a0));
 }
 void qute_QAbstractScrollArea_prot_setViewportMargins(void *self, int a0, int a1, int a2, int a3) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->setViewportMargins(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
 }
 void qute_QAbstractScrollArea_prot_setViewportMargins_1(void *self, qute_margins a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->setViewportMargins(qute_to_QMargins(a0));
 }
 qute_margins qute_QAbstractScrollArea_prot_viewportMargins(void *self) {
+	qute_gui_only();
 	return qute_from_QMargins(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->viewportMargins());
 }
 void qute_QAbstractScrollArea_prot_drawFrame(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->drawFrame(static_cast<QPainter *>(a0));
 }
 void qute_QAbstractScrollArea_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->updateMicroFocus();
 }
 void qute_QAbstractScrollArea_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->create();
 }
 void qute_QAbstractScrollArea_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->destroy();
 }
 bool qute_QAbstractScrollArea_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->focusNextChild());
 }
 bool qute_QAbstractScrollArea_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->focusPreviousChild());
 }
 double qute_QAbstractScrollArea_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QAbstractScrollArea *>(static_cast<QAbstractScrollArea *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QAbstractScrollArea_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAbstractScrollArea *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QAbstractScrollArea_verticalScrollBarPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractScrollArea *>(self)->verticalScrollBarPolicy());
 }
 void qute_QAbstractScrollArea_setVerticalScrollBarPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setVerticalScrollBarPolicy(static_cast<Qt::ScrollBarPolicy>(a0));
 }
 void * qute_QAbstractScrollArea_verticalScrollBar(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractScrollArea *>(self)->verticalScrollBar());
 }
 void qute_QAbstractScrollArea_setVerticalScrollBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setVerticalScrollBar(static_cast<QScrollBar *>(a0));
 }
 int64_t qute_QAbstractScrollArea_horizontalScrollBarPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractScrollArea *>(self)->horizontalScrollBarPolicy());
 }
 void qute_QAbstractScrollArea_setHorizontalScrollBarPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setHorizontalScrollBarPolicy(static_cast<Qt::ScrollBarPolicy>(a0));
 }
 void * qute_QAbstractScrollArea_horizontalScrollBar(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractScrollArea *>(self)->horizontalScrollBar());
 }
 void qute_QAbstractScrollArea_setHorizontalScrollBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setHorizontalScrollBar(static_cast<QScrollBar *>(a0));
 }
 void * qute_QAbstractScrollArea_cornerWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractScrollArea *>(self)->cornerWidget());
 }
 void qute_QAbstractScrollArea_setCornerWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setCornerWidget(static_cast<QWidget *>(a0));
 }
 void qute_QAbstractScrollArea_addScrollBarWidget(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->addScrollBarWidget(static_cast<QWidget *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
 }
 qute_list qute_QAbstractScrollArea_scrollBarWidgets(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QAbstractScrollArea *>(self)->scrollBarWidgets(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0))), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QAbstractScrollArea_viewport(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QAbstractScrollArea *>(self)->viewport());
 }
 void qute_QAbstractScrollArea_setViewport(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setViewport(static_cast<QWidget *>(a0));
 }
 qute_size qute_QAbstractScrollArea_maximumViewportSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QAbstractScrollArea *>(self)->maximumViewportSize());
 }
 void qute_QAbstractScrollArea_setupViewport(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setupViewport(static_cast<QWidget *>(a0));
 }
 int64_t qute_QAbstractScrollArea_sizeAdjustPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractScrollArea *>(self)->sizeAdjustPolicy());
 }
 void qute_QAbstractScrollArea_setSizeAdjustPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractScrollArea *>(self)->setSizeAdjustPolicy(static_cast<QAbstractScrollArea::SizeAdjustPolicy>(a0));
 }
 
 // ---- QAbstractSlider
 void * qute_QAbstractSlider_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QAbstractSlider *>(new QAbstractSlider(static_cast<QWidget *>(a0)));
 }
 void * qute_QAbstractSlider_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAbstractSlider *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QAbstractSlider_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractSlider *>(self)->orientation());
 }
 void qute_QAbstractSlider_setMinimum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setMinimum(static_cast<int>(a0));
 }
 int qute_QAbstractSlider_minimum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractSlider *>(self)->minimum());
 }
 void qute_QAbstractSlider_setMaximum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setMaximum(static_cast<int>(a0));
 }
 int qute_QAbstractSlider_maximum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractSlider *>(self)->maximum());
 }
 void qute_QAbstractSlider_setSingleStep(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setSingleStep(static_cast<int>(a0));
 }
 int qute_QAbstractSlider_singleStep(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractSlider *>(self)->singleStep());
 }
 void qute_QAbstractSlider_setPageStep(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setPageStep(static_cast<int>(a0));
 }
 int qute_QAbstractSlider_pageStep(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractSlider *>(self)->pageStep());
 }
 void qute_QAbstractSlider_setTracking(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setTracking(static_cast<bool>(a0));
 }
 bool qute_QAbstractSlider_hasTracking(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSlider *>(self)->hasTracking());
 }
 void qute_QAbstractSlider_setSliderDown(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setSliderDown(static_cast<bool>(a0));
 }
 bool qute_QAbstractSlider_isSliderDown(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSlider *>(self)->isSliderDown());
 }
 void qute_QAbstractSlider_setSliderPosition(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setSliderPosition(static_cast<int>(a0));
 }
 int qute_QAbstractSlider_sliderPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractSlider *>(self)->sliderPosition());
 }
 void qute_QAbstractSlider_setInvertedAppearance(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setInvertedAppearance(static_cast<bool>(a0));
 }
 bool qute_QAbstractSlider_invertedAppearance(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSlider *>(self)->invertedAppearance());
 }
 void qute_QAbstractSlider_setInvertedControls(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setInvertedControls(static_cast<bool>(a0));
 }
 bool qute_QAbstractSlider_invertedControls(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSlider *>(self)->invertedControls());
 }
 int qute_QAbstractSlider_value(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QAbstractSlider *>(self)->value());
 }
 void qute_QAbstractSlider_triggerAction(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->triggerAction(static_cast<QAbstractSlider::SliderAction>(a0));
 }
 void qute_QAbstractSlider_setValue(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setValue(static_cast<int>(a0));
 }
 void qute_QAbstractSlider_setOrientation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
 }
 void qute_QAbstractSlider_setRange(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->setRange(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QAbstractSlider_valueChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->valueChanged(static_cast<int>(a0));
 }
 void qute_QAbstractSlider_sliderPressed_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->sliderPressed();
 }
 void qute_QAbstractSlider_sliderMoved_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->sliderMoved(static_cast<int>(a0));
 }
 void qute_QAbstractSlider_sliderReleased_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->sliderReleased();
 }
 void qute_QAbstractSlider_rangeChanged_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->rangeChanged(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QAbstractSlider_actionTriggered_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSlider *>(self)->actionTriggered(static_cast<int>(a0));
 }
 void * qute_QAbstractSlider_valueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSlider *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSlider::valueChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractSlider_sliderPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSlider *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSlider::sliderPressed, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractSlider_sliderMoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSlider *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSlider::sliderMoved, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractSlider_sliderReleased(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSlider *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSlider::sliderReleased, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractSlider_rangeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSlider *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSlider::rangeChanged, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QAbstractSlider_actionTriggered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSlider *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSlider::actionTriggered, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -3992,81 +4533,107 @@ void * qute_QAbstractSlider_actionTriggered(void *self, uintptr_t id) {
 
 // ---- QAbstractSpinBox
 void * qute_QAbstractSpinBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QAbstractSpinBox *>(new QAbstractSpinBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QAbstractSpinBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAbstractSpinBox *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QAbstractSpinBox_buttonSymbols(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractSpinBox *>(self)->buttonSymbols());
 }
 void qute_QAbstractSpinBox_setButtonSymbols(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setButtonSymbols(static_cast<QAbstractSpinBox::ButtonSymbols>(a0));
 }
 void qute_QAbstractSpinBox_setCorrectionMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setCorrectionMode(static_cast<QAbstractSpinBox::CorrectionMode>(a0));
 }
 int64_t qute_QAbstractSpinBox_correctionMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QAbstractSpinBox *>(self)->correctionMode());
 }
 bool qute_QAbstractSpinBox_hasAcceptableInput(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->hasAcceptableInput());
 }
 qute_str qute_QAbstractSpinBox_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QAbstractSpinBox *>(self)->text());
 }
 qute_str qute_QAbstractSpinBox_specialValueText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QAbstractSpinBox *>(self)->specialValueText());
 }
 void qute_QAbstractSpinBox_setSpecialValueText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setSpecialValueText(QString::fromUtf8(a0, a0_len));
 }
 bool qute_QAbstractSpinBox_wrapping(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->wrapping());
 }
 void qute_QAbstractSpinBox_setWrapping(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setWrapping(static_cast<bool>(a0));
 }
 void qute_QAbstractSpinBox_setReadOnly(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setReadOnly(static_cast<bool>(a0));
 }
 bool qute_QAbstractSpinBox_isReadOnly(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->isReadOnly());
 }
 void qute_QAbstractSpinBox_setKeyboardTracking(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setKeyboardTracking(static_cast<bool>(a0));
 }
 bool qute_QAbstractSpinBox_keyboardTracking(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->keyboardTracking());
 }
 void qute_QAbstractSpinBox_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QAbstractSpinBox_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QAbstractSpinBox *>(self)->alignment()).toInt());
 }
 void qute_QAbstractSpinBox_setFrame(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setFrame(static_cast<bool>(a0));
 }
 bool qute_QAbstractSpinBox_hasFrame(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->hasFrame());
 }
 void qute_QAbstractSpinBox_setAccelerated(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setAccelerated(static_cast<bool>(a0));
 }
 bool qute_QAbstractSpinBox_isAccelerated(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->isAccelerated());
 }
 void qute_QAbstractSpinBox_setGroupSeparatorShown(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->setGroupSeparatorShown(static_cast<bool>(a0));
 }
 bool qute_QAbstractSpinBox_isGroupSeparatorShown(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QAbstractSpinBox *>(self)->isGroupSeparatorShown());
 }
 void qute_QAbstractSpinBox_interpretText(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->interpretText();
 }
 int64_t qute_QAbstractSpinBox_validate(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out, int a1, int *a1_out) {
+	qute_gui_only();
 	QString t0 = QString::fromUtf8(a0, a0_len);
 	int t1 = static_cast<int>(a1);
 	auto &&r = static_cast<QAbstractSpinBox *>(self)->validate(t0, t1);
@@ -4075,37 +4642,47 @@ int64_t qute_QAbstractSpinBox_validate(void *self, const char *a0, ptrdiff_t a0_
 	return static_cast<int64_t>(r);
 }
 void qute_QAbstractSpinBox_fixup(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out) {
+	qute_gui_only();
 	QString t0 = QString::fromUtf8(a0, a0_len);
 	static_cast<QAbstractSpinBox *>(self)->fixup(t0);
 	*a0_out = qute_ret_str(t0);
 }
 void qute_QAbstractSpinBox_stepBy(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->stepBy(static_cast<int>(a0));
 }
 void qute_QAbstractSpinBox_stepUp(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->stepUp();
 }
 void qute_QAbstractSpinBox_stepDown(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->stepDown();
 }
 void qute_QAbstractSpinBox_selectAll(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->selectAll();
 }
 void qute_QAbstractSpinBox_clear(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->clear();
 }
 void qute_QAbstractSpinBox_editingFinished_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->editingFinished();
 }
 void qute_QAbstractSpinBox_returnPressed_1(void *self) {
+	qute_gui_only();
 	static_cast<QAbstractSpinBox *>(self)->returnPressed();
 }
 void * qute_QAbstractSpinBox_editingFinished(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSpinBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSpinBox::editingFinished, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractSpinBox_returnPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractSpinBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractSpinBox::returnPressed, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -4113,135 +4690,195 @@ void * qute_QAbstractSpinBox_returnPressed(void *self, uintptr_t id) {
 
 // ---- QApplication
 void * qute_QApplication_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QApplication *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QApplication_styleSheet(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QApplication *>(self)->styleSheet());
 }
 bool qute_QApplication_autoSipEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QApplication *>(self)->autoSipEnabled());
 }
 void qute_QApplication_setStyleSheet(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QApplication *>(self)->setStyleSheet(QString::fromUtf8(a0, a0_len));
 }
 void qute_QApplication_setAutoSipEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QApplication *>(self)->setAutoSipEnabled(static_cast<bool>(a0));
 }
 void qute_QApplication_focusChanged_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QApplication *>(self)->focusChanged(static_cast<QWidget *>(a0), static_cast<QWidget *>(a1));
 }
 void * qute_QApplication_style(void) {
+	qute_gui_only();
 	return (void *)(QApplication::style());
 }
 void qute_QApplication_setStyle(void * a0) {
+	qute_gui_only();
 	QApplication::setStyle(static_cast<QStyle *>(a0));
 }
 void * qute_QApplication_setStyle_1(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(QApplication::setStyle(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QApplication_palette(void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(QApplication::palette(static_cast<QWidget *>(a0))));
 }
 void * qute_QApplication_palette_1(const char * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(QApplication::palette(a0)));
 }
 void qute_QApplication_setPalette(void * a0) {
+	qute_gui_only();
 	QApplication::setPalette((a0 ? *static_cast<QPalette *>(a0) : QPalette()));
 }
 void * qute_QApplication_font(void) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(QApplication::font()));
 }
 void * qute_QApplication_font_1(void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(QApplication::font(static_cast<QWidget *>(a0))));
 }
 void * qute_QApplication_font_2(const char * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(QApplication::font(a0)));
 }
 void qute_QApplication_setFont(void * a0) {
+	qute_gui_only();
 	QApplication::setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 qute_list qute_QApplication_allWidgets(void) {
+	qute_gui_only();
 	return qute_ret_list<void *>(QApplication::allWidgets(), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QApplication_topLevelWidgets(void) {
+	qute_gui_only();
 	return qute_ret_list<void *>(QApplication::topLevelWidgets(), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QApplication_activePopupWidget(void) {
+	qute_gui_only();
 	return (void *)(QApplication::activePopupWidget());
 }
 void * qute_QApplication_activeModalWidget(void) {
+	qute_gui_only();
 	return (void *)(QApplication::activeModalWidget());
 }
 void * qute_QApplication_focusWidget(void) {
+	qute_gui_only();
 	return (void *)(QApplication::focusWidget());
 }
 void * qute_QApplication_activeWindow(void) {
+	qute_gui_only();
 	return (void *)(QApplication::activeWindow());
 }
 void * qute_QApplication_widgetAt(qute_point a0) {
+	qute_gui_only();
 	return (void *)(QApplication::widgetAt(qute_to_QPoint(a0)));
 }
 void * qute_QApplication_topLevelAt(qute_point a0) {
+	qute_gui_only();
 	return (void *)(QApplication::topLevelAt(qute_to_QPoint(a0)));
 }
 void qute_QApplication_beep(void) {
+	qute_gui_only();
 	QApplication::beep();
 }
 void qute_QApplication_alert(void * a0) {
+	qute_gui_only();
 	QApplication::alert(static_cast<QWidget *>(a0));
 }
 void qute_QApplication_setCursorFlashTime(int a0) {
+	qute_gui_only();
 	QApplication::setCursorFlashTime(static_cast<int>(a0));
 }
 int qute_QApplication_cursorFlashTime(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::cursorFlashTime());
 }
 void qute_QApplication_setDoubleClickInterval(int a0) {
+	qute_gui_only();
 	QApplication::setDoubleClickInterval(static_cast<int>(a0));
 }
 int qute_QApplication_doubleClickInterval(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::doubleClickInterval());
 }
 void qute_QApplication_setKeyboardInputInterval(int a0) {
+	qute_gui_only();
 	QApplication::setKeyboardInputInterval(static_cast<int>(a0));
 }
 int qute_QApplication_keyboardInputInterval(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::keyboardInputInterval());
 }
 void qute_QApplication_setWheelScrollLines(int a0) {
+	qute_gui_only();
 	QApplication::setWheelScrollLines(static_cast<int>(a0));
 }
 int qute_QApplication_wheelScrollLines(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::wheelScrollLines());
 }
 void qute_QApplication_setStartDragTime(int a0) {
+	qute_gui_only();
 	QApplication::setStartDragTime(static_cast<int>(a0));
 }
 int qute_QApplication_startDragTime(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::startDragTime());
 }
 void qute_QApplication_setStartDragDistance(int a0) {
+	qute_gui_only();
 	QApplication::setStartDragDistance(static_cast<int>(a0));
 }
 int qute_QApplication_startDragDistance(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::startDragDistance());
 }
 bool qute_QApplication_isEffectEnabled(int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(QApplication::isEffectEnabled(static_cast<Qt::UIEffect>(a0)));
 }
 void qute_QApplication_setEffectEnabled(int64_t a0) {
+	qute_gui_only();
 	QApplication::setEffectEnabled(static_cast<Qt::UIEffect>(a0));
 }
 int qute_QApplication_exec(void) {
+	qute_gui_only();
 	return static_cast<int>(QApplication::exec());
 }
 void qute_QApplication_closeAllWindows(void) {
+	qute_gui_only();
 	QApplication::closeAllWindows();
 }
 void qute_QApplication_aboutQt(void) {
+	qute_gui_only();
 	QApplication::aboutQt();
 }
+void qute_QApplication_setPalette_1(void * a0, const char * a1) {
+	qute_gui_only();
+	QApplication::setPalette((a0 ? *static_cast<QPalette *>(a0) : QPalette()), a1);
+}
+void qute_QApplication_setFont_1(void * a0, const char * a1) {
+	qute_gui_only();
+	QApplication::setFont((a0 ? *static_cast<QFont *>(a0) : QFont()), a1);
+}
+void qute_QApplication_alert_1(void * a0, int a1) {
+	qute_gui_only();
+	QApplication::alert(static_cast<QWidget *>(a0), static_cast<int>(a1));
+}
+void qute_QApplication_setEffectEnabled_1(int64_t a0, bool a1) {
+	qute_gui_only();
+	QApplication::setEffectEnabled(static_cast<Qt::UIEffect>(a0), static_cast<bool>(a1));
+}
 void * qute_QApplication_focusChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QApplication *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QApplication::focusChanged, obj, [s](QWidget * a0, QWidget * a1) { void * c0 = (void *)(a0); void * c1 = (void *)(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
@@ -4249,175 +4886,255 @@ void * qute_QApplication_focusChanged(void *self, uintptr_t id) {
 
 // ---- QBoxLayout
 void * qute_QBoxLayout_new(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QBoxLayout *>(new QBoxLayout(static_cast<QBoxLayout::Direction>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QBoxLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QBoxLayout *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QBoxLayout_direction(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QBoxLayout *>(self)->direction());
 }
 void qute_QBoxLayout_setDirection(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->setDirection(static_cast<QBoxLayout::Direction>(a0));
 }
 void qute_QBoxLayout_addSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->addSpacing(static_cast<int>(a0));
 }
 void qute_QBoxLayout_addStretch(void *self) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->addStretch();
 }
 void qute_QBoxLayout_addSpacerItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->addSpacerItem(static_cast<QSpacerItem *>(a0));
 }
 void qute_QBoxLayout_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->addWidget(static_cast<QWidget *>(a0));
 }
 void qute_QBoxLayout_addLayout(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->addLayout(static_cast<QLayout *>(a0));
 }
 void qute_QBoxLayout_addStrut(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->addStrut(static_cast<int>(a0));
 }
 void qute_QBoxLayout_insertSpacing(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->insertSpacing(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QBoxLayout_insertStretch(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->insertStretch(static_cast<int>(a0));
 }
 void qute_QBoxLayout_insertSpacerItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->insertSpacerItem(static_cast<int>(a0), static_cast<QSpacerItem *>(a1));
 }
 void qute_QBoxLayout_insertWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1));
 }
 void qute_QBoxLayout_insertLayout(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->insertLayout(static_cast<int>(a0), static_cast<QLayout *>(a1));
 }
 void qute_QBoxLayout_insertItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->insertItem(static_cast<int>(a0), static_cast<QLayoutItem *>(a1));
 }
 bool qute_QBoxLayout_setStretchFactor(void *self, void * a0, int a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QBoxLayout *>(self)->setStretchFactor(static_cast<QWidget *>(a0), static_cast<int>(a1)));
 }
 bool qute_QBoxLayout_setStretchFactor_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QBoxLayout *>(self)->setStretchFactor(static_cast<QLayout *>(a0), static_cast<int>(a1)));
 }
 void qute_QBoxLayout_setStretch(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QBoxLayout *>(self)->setStretch(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QBoxLayout_stretch(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QBoxLayout *>(self)->stretch(static_cast<int>(a0)));
 }
 qute_size qute_QBoxLayout_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QBoxLayout *>(self)->sizeHint());
 }
 bool qute_QBoxLayout_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QBoxLayout *>(self)->hasHeightForWidth());
 }
 int qute_QBoxLayout_heightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QBoxLayout *>(self)->heightForWidth(static_cast<int>(a0)));
 }
 int qute_QBoxLayout_minimumHeightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QBoxLayout *>(self)->minimumHeightForWidth(static_cast<int>(a0)));
+}
+void qute_QBoxLayout_addStretch_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QBoxLayout *>(self)->addStretch(static_cast<int>(a0));
+}
+void qute_QBoxLayout_addWidget_1(void *self, void * a0, int a1, int64_t a2) {
+	qute_gui_only();
+	static_cast<QBoxLayout *>(self)->addWidget(static_cast<QWidget *>(a0), static_cast<int>(a1), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a2)));
+}
+void qute_QBoxLayout_addLayout_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QBoxLayout *>(self)->addLayout(static_cast<QLayout *>(a0), static_cast<int>(a1));
+}
+void qute_QBoxLayout_insertStretch_1(void *self, int a0, int a1) {
+	qute_gui_only();
+	static_cast<QBoxLayout *>(self)->insertStretch(static_cast<int>(a0), static_cast<int>(a1));
+}
+void qute_QBoxLayout_insertWidget_1(void *self, int a0, void * a1, int a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QBoxLayout *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1), static_cast<int>(a2), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a3)));
+}
+void qute_QBoxLayout_insertLayout_1(void *self, int a0, void * a1, int a2) {
+	qute_gui_only();
+	static_cast<QBoxLayout *>(self)->insertLayout(static_cast<int>(a0), static_cast<QLayout *>(a1), static_cast<int>(a2));
 }
 
 // ---- QButtonGroup
 void * qute_QButtonGroup_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QButtonGroup *>(new QButtonGroup(static_cast<QObject *>(a0)));
 }
 void * qute_QButtonGroup_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QButtonGroup *>(static_cast<QObject *>(obj)));
 }
 void qute_QButtonGroup_setExclusive(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->setExclusive(static_cast<bool>(a0));
 }
 bool qute_QButtonGroup_exclusive(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QButtonGroup *>(self)->exclusive());
 }
 void qute_QButtonGroup_addButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->addButton(static_cast<QAbstractButton *>(a0));
 }
 void qute_QButtonGroup_removeButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->removeButton(static_cast<QAbstractButton *>(a0));
 }
 qute_list qute_QButtonGroup_buttons(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QButtonGroup *>(self)->buttons(), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QButtonGroup_checkedButton(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QButtonGroup *>(self)->checkedButton());
 }
 void * qute_QButtonGroup_button(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QButtonGroup *>(self)->button(static_cast<int>(a0)));
 }
 void qute_QButtonGroup_setId(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->setId(static_cast<QAbstractButton *>(a0), static_cast<int>(a1));
 }
 int qute_QButtonGroup_id(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QButtonGroup *>(self)->id(static_cast<QAbstractButton *>(a0)));
 }
 int qute_QButtonGroup_checkedId(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QButtonGroup *>(self)->checkedId());
 }
 void qute_QButtonGroup_buttonClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->buttonClicked(static_cast<QAbstractButton *>(a0));
 }
 void qute_QButtonGroup_buttonPressed_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->buttonPressed(static_cast<QAbstractButton *>(a0));
 }
 void qute_QButtonGroup_buttonReleased_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->buttonReleased(static_cast<QAbstractButton *>(a0));
 }
 void qute_QButtonGroup_buttonToggled_1(void *self, void * a0, bool a1) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->buttonToggled(static_cast<QAbstractButton *>(a0), static_cast<bool>(a1));
 }
 void qute_QButtonGroup_idClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->idClicked(static_cast<int>(a0));
 }
 void qute_QButtonGroup_idPressed_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->idPressed(static_cast<int>(a0));
 }
 void qute_QButtonGroup_idReleased_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->idReleased(static_cast<int>(a0));
 }
 void qute_QButtonGroup_idToggled_1(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QButtonGroup *>(self)->idToggled(static_cast<int>(a0), static_cast<bool>(a1));
 }
+void qute_QButtonGroup_addButton_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QButtonGroup *>(self)->addButton(static_cast<QAbstractButton *>(a0), static_cast<int>(a1));
+}
 void * qute_QButtonGroup_buttonClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::buttonClicked, obj, [s](QAbstractButton * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_buttonPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::buttonPressed, obj, [s](QAbstractButton * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_buttonReleased(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::buttonReleased, obj, [s](QAbstractButton * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_buttonToggled(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::buttonToggled, obj, [s](QAbstractButton * a0, bool a1) { void * c0 = (void *)(a0); bool c1 = static_cast<bool>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_idClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::idClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_idPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::idPressed, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_idReleased(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::idReleased, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QButtonGroup_idToggled(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QButtonGroup *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QButtonGroup::idToggled, obj, [s](int a0, bool a1) { int c0 = static_cast<int>(a0); bool c1 = static_cast<bool>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
@@ -4425,165 +5142,217 @@ void * qute_QButtonGroup_idToggled(void *self, uintptr_t id) {
 
 // ---- QCalendarWidget
 void * qute_QCalendarWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QCalendarWidget *>(new QCalendarWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QCalendarWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QCalendarWidget *>(static_cast<QObject *>(obj)));
 }
 void * qute_QCalendarWidget_selectedDate(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDate(static_cast<QCalendarWidget *>(self)->selectedDate()));
 }
 int qute_QCalendarWidget_yearShown(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCalendarWidget *>(self)->yearShown());
 }
 int qute_QCalendarWidget_monthShown(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCalendarWidget *>(self)->monthShown());
 }
 void * qute_QCalendarWidget_minimumDate(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDate(static_cast<QCalendarWidget *>(self)->minimumDate()));
 }
 void qute_QCalendarWidget_setMinimumDate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setMinimumDate((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QCalendarWidget_clearMinimumDate(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->clearMinimumDate();
 }
 void * qute_QCalendarWidget_maximumDate(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDate(static_cast<QCalendarWidget *>(self)->maximumDate()));
 }
 void qute_QCalendarWidget_setMaximumDate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setMaximumDate((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QCalendarWidget_clearMaximumDate(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->clearMaximumDate();
 }
 int64_t qute_QCalendarWidget_firstDayOfWeek(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCalendarWidget *>(self)->firstDayOfWeek());
 }
 void qute_QCalendarWidget_setFirstDayOfWeek(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setFirstDayOfWeek(static_cast<Qt::DayOfWeek>(a0));
 }
 bool qute_QCalendarWidget_isNavigationBarVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QCalendarWidget *>(self)->isNavigationBarVisible());
 }
 bool qute_QCalendarWidget_isGridVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QCalendarWidget *>(self)->isGridVisible());
 }
 void * qute_QCalendarWidget_calendar(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QCalendar(static_cast<QCalendarWidget *>(self)->calendar()));
 }
 void qute_QCalendarWidget_setCalendar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setCalendar((a0 ? *static_cast<QCalendar *>(a0) : QCalendar()));
 }
 int64_t qute_QCalendarWidget_selectionMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCalendarWidget *>(self)->selectionMode());
 }
 void qute_QCalendarWidget_setSelectionMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setSelectionMode(static_cast<QCalendarWidget::SelectionMode>(a0));
 }
 int64_t qute_QCalendarWidget_horizontalHeaderFormat(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCalendarWidget *>(self)->horizontalHeaderFormat());
 }
 void qute_QCalendarWidget_setHorizontalHeaderFormat(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setHorizontalHeaderFormat(static_cast<QCalendarWidget::HorizontalHeaderFormat>(a0));
 }
 int64_t qute_QCalendarWidget_verticalHeaderFormat(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCalendarWidget *>(self)->verticalHeaderFormat());
 }
 void qute_QCalendarWidget_setVerticalHeaderFormat(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setVerticalHeaderFormat(static_cast<QCalendarWidget::VerticalHeaderFormat>(a0));
 }
 void * qute_QCalendarWidget_headerTextFormat(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCharFormat(static_cast<QCalendarWidget *>(self)->headerTextFormat()));
 }
 void qute_QCalendarWidget_setHeaderTextFormat(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setHeaderTextFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
 }
 void * qute_QCalendarWidget_weekdayTextFormat(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCharFormat(static_cast<QCalendarWidget *>(self)->weekdayTextFormat(static_cast<Qt::DayOfWeek>(a0))));
 }
 void qute_QCalendarWidget_setWeekdayTextFormat(void *self, int64_t a0, void * a1) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setWeekdayTextFormat(static_cast<Qt::DayOfWeek>(a0), (a1 ? *static_cast<QTextCharFormat *>(a1) : QTextCharFormat()));
 }
 void * qute_QCalendarWidget_dateTextFormat(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCharFormat(static_cast<QCalendarWidget *>(self)->dateTextFormat((a0 ? *static_cast<QDate *>(a0) : QDate()))));
 }
 void qute_QCalendarWidget_setDateTextFormat(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setDateTextFormat((a0 ? *static_cast<QDate *>(a0) : QDate()), (a1 ? *static_cast<QTextCharFormat *>(a1) : QTextCharFormat()));
 }
 bool qute_QCalendarWidget_isDateEditEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QCalendarWidget *>(self)->isDateEditEnabled());
 }
 void qute_QCalendarWidget_setDateEditEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setDateEditEnabled(static_cast<bool>(a0));
 }
 int qute_QCalendarWidget_dateEditAcceptDelay(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCalendarWidget *>(self)->dateEditAcceptDelay());
 }
 void qute_QCalendarWidget_setDateEditAcceptDelay(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setDateEditAcceptDelay(static_cast<int>(a0));
 }
 void qute_QCalendarWidget_setSelectedDate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setSelectedDate((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QCalendarWidget_setDateRange(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setDateRange((a0 ? *static_cast<QDate *>(a0) : QDate()), (a1 ? *static_cast<QDate *>(a1) : QDate()));
 }
 void qute_QCalendarWidget_setCurrentPage(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setCurrentPage(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QCalendarWidget_setGridVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setGridVisible(static_cast<bool>(a0));
 }
 void qute_QCalendarWidget_setNavigationBarVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->setNavigationBarVisible(static_cast<bool>(a0));
 }
 void qute_QCalendarWidget_showNextMonth(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->showNextMonth();
 }
 void qute_QCalendarWidget_showPreviousMonth(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->showPreviousMonth();
 }
 void qute_QCalendarWidget_showNextYear(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->showNextYear();
 }
 void qute_QCalendarWidget_showPreviousYear(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->showPreviousYear();
 }
 void qute_QCalendarWidget_showSelectedDate(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->showSelectedDate();
 }
 void qute_QCalendarWidget_showToday(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->showToday();
 }
 void qute_QCalendarWidget_selectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->selectionChanged();
 }
 void qute_QCalendarWidget_clicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->clicked((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QCalendarWidget_activated_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->activated((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QCalendarWidget_currentPageChanged_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QCalendarWidget *>(self)->currentPageChanged(static_cast<int>(a0), static_cast<int>(a1));
 }
 void * qute_QCalendarWidget_selectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCalendarWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QCalendarWidget::selectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QCalendarWidget_clicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCalendarWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QCalendarWidget::clicked, obj, [s](QDate a0) { void * c0 = static_cast<void *>(new QDate(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QCalendarWidget_activated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCalendarWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QCalendarWidget::activated, obj, [s](QDate a0) { void * c0 = static_cast<void *>(new QDate(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QCalendarWidget_currentPageChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCalendarWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QCalendarWidget::currentPageChanged, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
@@ -4591,30 +5360,43 @@ void * qute_QCalendarWidget_currentPageChanged(void *self, uintptr_t id) {
 
 // ---- QCheckBox
 void * qute_QCheckBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QCheckBox *>(new QCheckBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QCheckBox_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QCheckBox *>(new QCheckBox(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QCheckBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QCheckBox *>(static_cast<QObject *>(obj)));
 }
 void qute_QCheckBox_setTristate(void *self) {
+	qute_gui_only();
 	static_cast<QCheckBox *>(self)->setTristate();
 }
 bool qute_QCheckBox_isTristate(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QCheckBox *>(self)->isTristate());
 }
 int64_t qute_QCheckBox_checkState(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCheckBox *>(self)->checkState());
 }
 void qute_QCheckBox_setCheckState(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCheckBox *>(self)->setCheckState(static_cast<Qt::CheckState>(a0));
 }
 void qute_QCheckBox_checkStateChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCheckBox *>(self)->checkStateChanged(static_cast<Qt::CheckState>(a0));
 }
+void qute_QCheckBox_setTristate_1(void *self, bool a0) {
+	qute_gui_only();
+	static_cast<QCheckBox *>(self)->setTristate(static_cast<bool>(a0));
+}
 void * qute_QCheckBox_checkStateChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCheckBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QCheckBox::checkStateChanged, obj, [s](Qt::CheckState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -4622,65 +5404,93 @@ void * qute_QCheckBox_checkStateChanged(void *self, uintptr_t id) {
 
 // ---- QColorDialog
 void * qute_QColorDialog_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QColorDialog *>(new QColorDialog(static_cast<QWidget *>(a0)));
 }
 void * qute_QColorDialog_new_1(qute_color a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QColorDialog *>(new QColorDialog(qute_to_QColor(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QColorDialog_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QColorDialog *>(static_cast<QObject *>(obj)));
 }
 void qute_QColorDialog_setCurrentColor(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QColorDialog *>(self)->setCurrentColor(qute_to_QColor(a0));
 }
 qute_color qute_QColorDialog_currentColor(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QColorDialog *>(self)->currentColor());
 }
 qute_color qute_QColorDialog_selectedColor(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QColorDialog *>(self)->selectedColor());
 }
 void qute_QColorDialog_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QColorDialog *>(self)->setOption(static_cast<QColorDialog::ColorDialogOption>(a0));
 }
 bool qute_QColorDialog_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QColorDialog *>(self)->testOption(static_cast<QColorDialog::ColorDialogOption>(a0)));
 }
 void qute_QColorDialog_setOptions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QColorDialog *>(self)->setOptions(QFlags<QColorDialog::ColorDialogOption>::fromInt(static_cast<QFlags<QColorDialog::ColorDialogOption>::Int>(a0)));
 }
 int64_t qute_QColorDialog_options(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QColorDialog *>(self)->options()).toInt());
 }
 void qute_QColorDialog_currentColorChanged_1(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QColorDialog *>(self)->currentColorChanged(qute_to_QColor(a0));
 }
 void qute_QColorDialog_colorSelected_1(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QColorDialog *>(self)->colorSelected(qute_to_QColor(a0));
 }
+void qute_QColorDialog_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QColorDialog *>(self)->setOption(static_cast<QColorDialog::ColorDialogOption>(a0), static_cast<bool>(a1));
+}
 qute_color qute_QColorDialog_getColor(void) {
+	qute_gui_only();
 	return qute_from_QColor(QColorDialog::getColor());
 }
 int qute_QColorDialog_customCount(void) {
+	qute_gui_only();
 	return static_cast<int>(QColorDialog::customCount());
 }
 qute_color qute_QColorDialog_customColor(int a0) {
+	qute_gui_only();
 	return qute_from_QColor(QColorDialog::customColor(static_cast<int>(a0)));
 }
 void qute_QColorDialog_setCustomColor(int a0, qute_color a1) {
+	qute_gui_only();
 	QColorDialog::setCustomColor(static_cast<int>(a0), qute_to_QColor(a1));
 }
 qute_color qute_QColorDialog_standardColor(int a0) {
+	qute_gui_only();
 	return qute_from_QColor(QColorDialog::standardColor(static_cast<int>(a0)));
 }
 void qute_QColorDialog_setStandardColor(int a0, qute_color a1) {
+	qute_gui_only();
 	QColorDialog::setStandardColor(static_cast<int>(a0), qute_to_QColor(a1));
 }
+qute_color qute_QColorDialog_getColor_1(qute_color a0, void * a1, const char *a2, ptrdiff_t a2_len, int64_t a3) {
+	qute_gui_only();
+	return qute_from_QColor(QColorDialog::getColor(qute_to_QColor(a0), static_cast<QWidget *>(a1), QString::fromUtf8(a2, a2_len), QFlags<QColorDialog::ColorDialogOption>::fromInt(static_cast<QFlags<QColorDialog::ColorDialogOption>::Int>(a3))));
+}
 void * qute_QColorDialog_currentColorChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QColorDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QColorDialog::currentColorChanged, obj, [s](const QColor & a0) { qute_color c0 = qute_from_QColor(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QColorDialog_colorSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QColorDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QColorDialog::colorSelected, obj, [s](const QColor & a0) { qute_color c0 = qute_from_QColor(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -4688,258 +5498,375 @@ void * qute_QColorDialog_colorSelected(void *self, uintptr_t id) {
 
 // ---- QComboBox
 void * qute_QComboBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QComboBox *>(new QComboBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QComboBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QComboBox *>(static_cast<QObject *>(obj)));
 }
 int qute_QComboBox_maxVisibleItems(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->maxVisibleItems());
 }
 void qute_QComboBox_setMaxVisibleItems(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setMaxVisibleItems(static_cast<int>(a0));
 }
 int qute_QComboBox_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->count());
 }
 void qute_QComboBox_setMaxCount(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setMaxCount(static_cast<int>(a0));
 }
 int qute_QComboBox_maxCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->maxCount());
 }
 bool qute_QComboBox_duplicatesEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QComboBox *>(self)->duplicatesEnabled());
 }
 void qute_QComboBox_setDuplicatesEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setDuplicatesEnabled(static_cast<bool>(a0));
 }
 void qute_QComboBox_setFrame(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setFrame(static_cast<bool>(a0));
 }
 bool qute_QComboBox_hasFrame(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QComboBox *>(self)->hasFrame());
 }
 int qute_QComboBox_findText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->findText(QString::fromUtf8(a0, a0_len)));
 }
 int qute_QComboBox_findData(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->findData((a0 ? *static_cast<QVariant *>(a0) : QVariant())));
 }
 int64_t qute_QComboBox_insertPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QComboBox *>(self)->insertPolicy());
 }
 void qute_QComboBox_setInsertPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setInsertPolicy(static_cast<QComboBox::InsertPolicy>(a0));
 }
 int64_t qute_QComboBox_sizeAdjustPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QComboBox *>(self)->sizeAdjustPolicy());
 }
 void qute_QComboBox_setSizeAdjustPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setSizeAdjustPolicy(static_cast<QComboBox::SizeAdjustPolicy>(a0));
 }
 int qute_QComboBox_minimumContentsLength(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->minimumContentsLength());
 }
 void qute_QComboBox_setMinimumContentsLength(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setMinimumContentsLength(static_cast<int>(a0));
 }
 qute_size qute_QComboBox_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QComboBox *>(self)->iconSize());
 }
 void qute_QComboBox_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setIconSize(qute_to_QSize(a0));
 }
 void qute_QComboBox_setPlaceholderText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setPlaceholderText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QComboBox_placeholderText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QComboBox *>(self)->placeholderText());
 }
 bool qute_QComboBox_isEditable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QComboBox *>(self)->isEditable());
 }
 void qute_QComboBox_setEditable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setEditable(static_cast<bool>(a0));
 }
 void qute_QComboBox_setLineEdit(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setLineEdit(static_cast<QLineEdit *>(a0));
 }
 void * qute_QComboBox_lineEdit(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QComboBox *>(self)->lineEdit());
 }
 void qute_QComboBox_setValidator(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setValidator(static_cast<QValidator *>(a0));
 }
 void * qute_QComboBox_validator(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QComboBox *>(self)->validator());
 }
 void qute_QComboBox_setCompleter(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setCompleter(static_cast<QCompleter *>(a0));
 }
 void * qute_QComboBox_completer(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QComboBox *>(self)->completer());
 }
 void * qute_QComboBox_itemDelegate(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QComboBox *>(self)->itemDelegate());
 }
 void qute_QComboBox_setItemDelegate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setItemDelegate(static_cast<QAbstractItemDelegate *>(a0));
 }
 void * qute_QComboBox_model(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QComboBox *>(self)->model());
 }
 void qute_QComboBox_setModel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setModel(static_cast<QAbstractItemModel *>(a0));
 }
 void * qute_QComboBox_rootModelIndex(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QComboBox *>(self)->rootModelIndex()));
 }
 void qute_QComboBox_setRootModelIndex(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setRootModelIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 int qute_QComboBox_modelColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->modelColumn());
 }
 void qute_QComboBox_setModelColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setModelColumn(static_cast<int>(a0));
 }
 int64_t qute_QComboBox_labelDrawingMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QComboBox *>(self)->labelDrawingMode());
 }
 void qute_QComboBox_setLabelDrawingMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setLabelDrawingMode(static_cast<QComboBox::LabelDrawingMode>(a0));
 }
 int qute_QComboBox_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QComboBox *>(self)->currentIndex());
 }
 qute_str qute_QComboBox_currentText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QComboBox *>(self)->currentText());
 }
 void * qute_QComboBox_currentData(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QComboBox *>(self)->currentData()));
 }
 qute_str qute_QComboBox_itemText(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QComboBox *>(self)->itemText(static_cast<int>(a0)));
 }
 void * qute_QComboBox_itemIcon(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QComboBox *>(self)->itemIcon(static_cast<int>(a0))));
 }
 void * qute_QComboBox_itemData(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QComboBox *>(self)->itemData(static_cast<int>(a0))));
 }
 void qute_QComboBox_addItem(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->addItem(QString::fromUtf8(a0, a0_len));
 }
 void qute_QComboBox_addItem_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->addItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len));
 }
 void qute_QComboBox_addItems(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->addItems(qute_qstrlist(a0, a0_lens, a0_n));
 }
 void qute_QComboBox_insertItem(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->insertItem(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void qute_QComboBox_insertItem_1(void *self, int a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->insertItem(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()), QString::fromUtf8(a2, a2_len));
 }
 void qute_QComboBox_insertItems(void *self, int a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->insertItems(static_cast<int>(a0), qute_qstrlist(a1, a1_lens, a1_n));
 }
 void qute_QComboBox_insertSeparator(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->insertSeparator(static_cast<int>(a0));
 }
 void qute_QComboBox_removeItem(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->removeItem(static_cast<int>(a0));
 }
 void qute_QComboBox_setItemText(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setItemText(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void qute_QComboBox_setItemIcon(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setItemIcon(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()));
 }
 void qute_QComboBox_setItemData(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setItemData(static_cast<int>(a0), (a1 ? *static_cast<QVariant *>(a1) : QVariant()));
 }
 void * qute_QComboBox_view(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QComboBox *>(self)->view());
 }
 void qute_QComboBox_setView(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setView(static_cast<QAbstractItemView *>(a0));
 }
 void qute_QComboBox_showPopup(void *self) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->showPopup();
 }
 void qute_QComboBox_hidePopup(void *self) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->hidePopup();
 }
 void qute_QComboBox_clear(void *self) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->clear();
 }
 void qute_QComboBox_clearEditText(void *self) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->clearEditText();
 }
 void qute_QComboBox_setEditText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setEditText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QComboBox_setCurrentIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setCurrentIndex(static_cast<int>(a0));
 }
 void qute_QComboBox_setCurrentText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->setCurrentText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QComboBox_editTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->editTextChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QComboBox_activated_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->activated(static_cast<int>(a0));
 }
 void qute_QComboBox_textActivated_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->textActivated(QString::fromUtf8(a0, a0_len));
 }
 void qute_QComboBox_highlighted_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->highlighted(static_cast<int>(a0));
 }
 void qute_QComboBox_textHighlighted_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->textHighlighted(QString::fromUtf8(a0, a0_len));
 }
 void qute_QComboBox_currentIndexChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->currentIndexChanged(static_cast<int>(a0));
 }
 void qute_QComboBox_currentTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QComboBox *>(self)->currentTextChanged(QString::fromUtf8(a0, a0_len));
 }
+int qute_QComboBox_findText_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QComboBox *>(self)->findText(QString::fromUtf8(a0, a0_len), QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a1))));
+}
+int qute_QComboBox_findData_1(void *self, void * a0, int a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QComboBox *>(self)->findData((a0 ? *static_cast<QVariant *>(a0) : QVariant()), static_cast<int>(a1), QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a2))));
+}
+void * qute_QComboBox_currentData_1(void *self, int a0) {
+	qute_gui_only();
+	return static_cast<void *>(new QVariant(static_cast<QComboBox *>(self)->currentData(static_cast<int>(a0))));
+}
+void * qute_QComboBox_itemData_1(void *self, int a0, int a1) {
+	qute_gui_only();
+	return static_cast<void *>(new QVariant(static_cast<QComboBox *>(self)->itemData(static_cast<int>(a0), static_cast<int>(a1))));
+}
+void qute_QComboBox_addItem_2(void *self, const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	static_cast<QComboBox *>(self)->addItem(QString::fromUtf8(a0, a0_len), (a1 ? *static_cast<QVariant *>(a1) : QVariant()));
+}
+void qute_QComboBox_addItem_3(void *self, void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
+	static_cast<QComboBox *>(self)->addItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QVariant *>(a2) : QVariant()));
+}
+void qute_QComboBox_insertItem_2(void *self, int a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
+	static_cast<QComboBox *>(self)->insertItem(static_cast<int>(a0), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QVariant *>(a2) : QVariant()));
+}
+void qute_QComboBox_insertItem_3(void *self, int a0, void * a1, const char *a2, ptrdiff_t a2_len, void * a3) {
+	qute_gui_only();
+	static_cast<QComboBox *>(self)->insertItem(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()), QString::fromUtf8(a2, a2_len), (a3 ? *static_cast<QVariant *>(a3) : QVariant()));
+}
+void qute_QComboBox_setItemData_1(void *self, int a0, void * a1, int a2) {
+	qute_gui_only();
+	static_cast<QComboBox *>(self)->setItemData(static_cast<int>(a0), (a1 ? *static_cast<QVariant *>(a1) : QVariant()), static_cast<int>(a2));
+}
 void * qute_QComboBox_editTextChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::editTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QComboBox_activated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::activated, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QComboBox_textActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::textActivated, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QComboBox_highlighted(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::highlighted, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QComboBox_textHighlighted(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::textHighlighted, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QComboBox_currentIndexChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::currentIndexChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QComboBox_currentTextChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QComboBox::currentTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -4947,167 +5874,223 @@ void * qute_QComboBox_currentTextChanged(void *self, uintptr_t id) {
 
 // ---- QCommandLinkButton
 void * qute_QCommandLinkButton_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QCommandLinkButton *>(new QCommandLinkButton(static_cast<QWidget *>(a0)));
 }
 void * qute_QCommandLinkButton_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QCommandLinkButton *>(new QCommandLinkButton(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QCommandLinkButton_new_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	return static_cast<QCommandLinkButton *>(new QCommandLinkButton(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<QWidget *>(a2)));
 }
 void * qute_QCommandLinkButton_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QCommandLinkButton *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QCommandLinkButton_description(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QCommandLinkButton *>(self)->description());
 }
 void qute_QCommandLinkButton_setDescription(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QCommandLinkButton *>(self)->setDescription(QString::fromUtf8(a0, a0_len));
 }
 void qute_QCommandLinkButton_initStyleOption(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCommandLinkButton *>(self)->initStyleOption(static_cast<QStyleOptionButton *>(a0));
 }
 
 // ---- QCompleter
 void * qute_QCompleter_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QCompleter *>(new QCompleter(static_cast<QObject *>(a0)));
 }
 void * qute_QCompleter_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QCompleter *>(new QCompleter(static_cast<QAbstractItemModel *>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QCompleter_new_2(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, void * a1) {
+	qute_gui_only();
 	return static_cast<QCompleter *>(new QCompleter(qute_qstrlist(a0, a0_lens, a0_n), static_cast<QObject *>(a1)));
 }
 void * qute_QCompleter_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QCompleter *>(static_cast<QObject *>(obj)));
 }
 void qute_QCompleter_setWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QCompleter_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QCompleter *>(self)->widget());
 }
 void qute_QCompleter_setModel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setModel(static_cast<QAbstractItemModel *>(a0));
 }
 void * qute_QCompleter_model(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QCompleter *>(self)->model());
 }
 void qute_QCompleter_setCompletionMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setCompletionMode(static_cast<QCompleter::CompletionMode>(a0));
 }
 int64_t qute_QCompleter_completionMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCompleter *>(self)->completionMode());
 }
 void qute_QCompleter_setFilterMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setFilterMode(QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a0)));
 }
 int64_t qute_QCompleter_filterMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QCompleter *>(self)->filterMode()).toInt());
 }
 void * qute_QCompleter_popup(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QCompleter *>(self)->popup());
 }
 void qute_QCompleter_setPopup(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setPopup(static_cast<QAbstractItemView *>(a0));
 }
 void qute_QCompleter_setCaseSensitivity(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setCaseSensitivity(static_cast<Qt::CaseSensitivity>(a0));
 }
 int64_t qute_QCompleter_caseSensitivity(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCompleter *>(self)->caseSensitivity());
 }
 void qute_QCompleter_setModelSorting(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setModelSorting(static_cast<QCompleter::ModelSorting>(a0));
 }
 int64_t qute_QCompleter_modelSorting(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QCompleter *>(self)->modelSorting());
 }
 void qute_QCompleter_setCompletionColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setCompletionColumn(static_cast<int>(a0));
 }
 int qute_QCompleter_completionColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCompleter *>(self)->completionColumn());
 }
 void qute_QCompleter_setCompletionRole(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setCompletionRole(static_cast<int>(a0));
 }
 int qute_QCompleter_completionRole(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCompleter *>(self)->completionRole());
 }
 bool qute_QCompleter_wrapAround(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QCompleter *>(self)->wrapAround());
 }
 int qute_QCompleter_maxVisibleItems(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCompleter *>(self)->maxVisibleItems());
 }
 void qute_QCompleter_setMaxVisibleItems(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setMaxVisibleItems(static_cast<int>(a0));
 }
 int qute_QCompleter_completionCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCompleter *>(self)->completionCount());
 }
 bool qute_QCompleter_setCurrentRow(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QCompleter *>(self)->setCurrentRow(static_cast<int>(a0)));
 }
 int qute_QCompleter_currentRow(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QCompleter *>(self)->currentRow());
 }
 void * qute_QCompleter_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QCompleter *>(self)->currentIndex()));
 }
 qute_str qute_QCompleter_currentCompletion(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QCompleter *>(self)->currentCompletion());
 }
 void * qute_QCompleter_completionModel(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QCompleter *>(self)->completionModel());
 }
 qute_str qute_QCompleter_completionPrefix(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QCompleter *>(self)->completionPrefix());
 }
 void qute_QCompleter_setCompletionPrefix(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setCompletionPrefix(QString::fromUtf8(a0, a0_len));
 }
 void qute_QCompleter_complete(void *self) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->complete();
 }
 void qute_QCompleter_setWrapAround(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->setWrapAround(static_cast<bool>(a0));
 }
 qute_str qute_QCompleter_pathFromIndex(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QCompleter *>(self)->pathFromIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 qute_list qute_QCompleter_splitPath(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QCompleter *>(self)->splitPath(QString::fromUtf8(a0, a0_len)));
 }
 void qute_QCompleter_activated_2(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->activated(QString::fromUtf8(a0, a0_len));
 }
 void qute_QCompleter_activated_3(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->activated((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QCompleter_highlighted_2(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->highlighted(QString::fromUtf8(a0, a0_len));
 }
 void qute_QCompleter_highlighted_3(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QCompleter *>(self)->highlighted((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
+void qute_QCompleter_complete_1(void *self, qute_rect a0) {
+	qute_gui_only();
+	static_cast<QCompleter *>(self)->complete(qute_to_QRect(a0));
+}
 void * qute_QCompleter_activated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCompleter *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::activated), obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QCompleter_activated_1(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCompleter *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated), obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QCompleter_highlighted(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCompleter *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::highlighted), obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QCompleter_highlighted_1(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCompleter *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::highlighted), obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -5115,18 +6098,23 @@ void * qute_QCompleter_highlighted_1(void *self, uintptr_t id) {
 
 // ---- QDateEdit
 void * qute_QDateEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDateEdit *>(new QDateEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QDateEdit_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QDateEdit *>(new QDateEdit((a0 ? *static_cast<QDate *>(a0) : QDate()), static_cast<QWidget *>(a1)));
 }
 void * qute_QDateEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDateEdit *>(static_cast<QObject *>(obj)));
 }
 void qute_QDateEdit_userDateChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateEdit *>(self)->userDateChanged((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void * qute_QDateEdit_userDateChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDateEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDateEdit::userDateChanged, obj, [s](QDate a0) { void * c0 = static_cast<void *>(new QDate(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -5134,178 +6122,235 @@ void * qute_QDateEdit_userDateChanged(void *self, uintptr_t id) {
 
 // ---- QDateTimeEdit
 void * qute_QDateTimeEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new QDateTimeEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QDateTimeEdit_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new QDateTimeEdit((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), static_cast<QWidget *>(a1)));
 }
 void * qute_QDateTimeEdit_new_2(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new QDateTimeEdit((a0 ? *static_cast<QDate *>(a0) : QDate()), static_cast<QWidget *>(a1)));
 }
 void * qute_QDateTimeEdit_new_3(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new QDateTimeEdit((a0 ? *static_cast<QTime *>(a0) : QTime()), static_cast<QWidget *>(a1)));
 }
 void * qute_QDateTimeEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDateTimeEdit *>(static_cast<QObject *>(obj)));
 }
 void * qute_QDateTimeEdit_dateTime(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDateTime(static_cast<QDateTimeEdit *>(self)->dateTime()));
 }
 void * qute_QDateTimeEdit_date(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDate(static_cast<QDateTimeEdit *>(self)->date()));
 }
 void * qute_QDateTimeEdit_time(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTime(static_cast<QDateTimeEdit *>(self)->time()));
 }
 void * qute_QDateTimeEdit_calendar(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QCalendar(static_cast<QDateTimeEdit *>(self)->calendar()));
 }
 void qute_QDateTimeEdit_setCalendar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setCalendar((a0 ? *static_cast<QCalendar *>(a0) : QCalendar()));
 }
 void * qute_QDateTimeEdit_minimumDateTime(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDateTime(static_cast<QDateTimeEdit *>(self)->minimumDateTime()));
 }
 void qute_QDateTimeEdit_clearMinimumDateTime(void *self) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->clearMinimumDateTime();
 }
 void qute_QDateTimeEdit_setMinimumDateTime(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setMinimumDateTime((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()));
 }
 void * qute_QDateTimeEdit_maximumDateTime(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDateTime(static_cast<QDateTimeEdit *>(self)->maximumDateTime()));
 }
 void qute_QDateTimeEdit_clearMaximumDateTime(void *self) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->clearMaximumDateTime();
 }
 void qute_QDateTimeEdit_setMaximumDateTime(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setMaximumDateTime((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()));
 }
 void qute_QDateTimeEdit_setDateTimeRange(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setDateTimeRange((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), (a1 ? *static_cast<QDateTime *>(a1) : QDateTime()));
 }
 void * qute_QDateTimeEdit_minimumDate(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDate(static_cast<QDateTimeEdit *>(self)->minimumDate()));
 }
 void qute_QDateTimeEdit_setMinimumDate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setMinimumDate((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QDateTimeEdit_clearMinimumDate(void *self) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->clearMinimumDate();
 }
 void * qute_QDateTimeEdit_maximumDate(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDate(static_cast<QDateTimeEdit *>(self)->maximumDate()));
 }
 void qute_QDateTimeEdit_setMaximumDate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setMaximumDate((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QDateTimeEdit_clearMaximumDate(void *self) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->clearMaximumDate();
 }
 void qute_QDateTimeEdit_setDateRange(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setDateRange((a0 ? *static_cast<QDate *>(a0) : QDate()), (a1 ? *static_cast<QDate *>(a1) : QDate()));
 }
 void * qute_QDateTimeEdit_minimumTime(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTime(static_cast<QDateTimeEdit *>(self)->minimumTime()));
 }
 void qute_QDateTimeEdit_setMinimumTime(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setMinimumTime((a0 ? *static_cast<QTime *>(a0) : QTime()));
 }
 void qute_QDateTimeEdit_clearMinimumTime(void *self) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->clearMinimumTime();
 }
 void * qute_QDateTimeEdit_maximumTime(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTime(static_cast<QDateTimeEdit *>(self)->maximumTime()));
 }
 void qute_QDateTimeEdit_setMaximumTime(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setMaximumTime((a0 ? *static_cast<QTime *>(a0) : QTime()));
 }
 void qute_QDateTimeEdit_clearMaximumTime(void *self) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->clearMaximumTime();
 }
 void qute_QDateTimeEdit_setTimeRange(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setTimeRange((a0 ? *static_cast<QTime *>(a0) : QTime()), (a1 ? *static_cast<QTime *>(a1) : QTime()));
 }
 int64_t qute_QDateTimeEdit_displayedSections(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QDateTimeEdit *>(self)->displayedSections()).toInt());
 }
 int64_t qute_QDateTimeEdit_currentSection(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDateTimeEdit *>(self)->currentSection());
 }
 int64_t qute_QDateTimeEdit_sectionAt(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDateTimeEdit *>(self)->sectionAt(static_cast<int>(a0)));
 }
 void qute_QDateTimeEdit_setCurrentSection(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setCurrentSection(static_cast<QDateTimeEdit::Section>(a0));
 }
 int qute_QDateTimeEdit_currentSectionIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QDateTimeEdit *>(self)->currentSectionIndex());
 }
 void qute_QDateTimeEdit_setCurrentSectionIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setCurrentSectionIndex(static_cast<int>(a0));
 }
 void * qute_QDateTimeEdit_calendarWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QDateTimeEdit *>(self)->calendarWidget());
 }
 void qute_QDateTimeEdit_setCalendarWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setCalendarWidget(static_cast<QCalendarWidget *>(a0));
 }
 int qute_QDateTimeEdit_sectionCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QDateTimeEdit *>(self)->sectionCount());
 }
 void qute_QDateTimeEdit_setSelectedSection(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setSelectedSection(static_cast<QDateTimeEdit::Section>(a0));
 }
 qute_str qute_QDateTimeEdit_sectionText(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QDateTimeEdit *>(self)->sectionText(static_cast<QDateTimeEdit::Section>(a0)));
 }
 qute_str qute_QDateTimeEdit_displayFormat(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QDateTimeEdit *>(self)->displayFormat());
 }
 void qute_QDateTimeEdit_setDisplayFormat(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setDisplayFormat(QString::fromUtf8(a0, a0_len));
 }
 bool qute_QDateTimeEdit_calendarPopup(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDateTimeEdit *>(self)->calendarPopup());
 }
 void qute_QDateTimeEdit_setCalendarPopup(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setCalendarPopup(static_cast<bool>(a0));
 }
 void * qute_QDateTimeEdit_timeZone(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTimeZone(static_cast<QDateTimeEdit *>(self)->timeZone()));
 }
 void qute_QDateTimeEdit_setTimeZone(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setTimeZone((a0 ? *static_cast<QTimeZone *>(a0) : QTimeZone()));
 }
 void qute_QDateTimeEdit_setDateTime(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setDateTime((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()));
 }
 void qute_QDateTimeEdit_setDate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setDate((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void qute_QDateTimeEdit_setTime(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->setTime((a0 ? *static_cast<QTime *>(a0) : QTime()));
 }
 void qute_QDateTimeEdit_dateTimeChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->dateTimeChanged((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()));
 }
 void qute_QDateTimeEdit_timeChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->timeChanged((a0 ? *static_cast<QTime *>(a0) : QTime()));
 }
 void qute_QDateTimeEdit_dateChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDateTimeEdit *>(self)->dateChanged((a0 ? *static_cast<QDate *>(a0) : QDate()));
 }
 void * qute_QDateTimeEdit_dateTimeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDateTimeEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDateTimeEdit::dateTimeChanged, obj, [s](const QDateTime & a0) { void * c0 = static_cast<void *>(new QDateTime(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDateTimeEdit_timeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDateTimeEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDateTimeEdit::timeChanged, obj, [s](QTime a0) { void * c0 = static_cast<void *>(new QTime(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDateTimeEdit_dateChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDateTimeEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDateTimeEdit::dateChanged, obj, [s](QDate a0) { void * c0 = static_cast<void *>(new QDate(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -5313,234 +6358,313 @@ void * qute_QDateTimeEdit_dateChanged(void *self, uintptr_t id) {
 
 // ---- QDial
 void * qute_QDial_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDial *>(new QDial(static_cast<QWidget *>(a0)));
 }
 void * qute_QDial_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDial *>(static_cast<QObject *>(obj)));
 }
 bool qute_QDial_wrapping(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDial *>(self)->wrapping());
 }
 int qute_QDial_notchSize(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QDial *>(self)->notchSize());
 }
 void qute_QDial_setNotchTarget(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QDial *>(self)->setNotchTarget(static_cast<double>(a0));
 }
 double qute_QDial_notchTarget(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QDial *>(self)->notchTarget());
 }
 bool qute_QDial_notchesVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDial *>(self)->notchesVisible());
 }
 void qute_QDial_setNotchesVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDial *>(self)->setNotchesVisible(static_cast<bool>(a0));
 }
 void qute_QDial_setWrapping(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDial *>(self)->setWrapping(static_cast<bool>(a0));
 }
 
 // ---- QDialog
 void * qute_QDialog_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDialog *>(new QDialog(static_cast<QWidget *>(a0)));
 }
+void * qute_QDialog_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QDialog *>(new QDialog(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QDialog_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QDialog *>(new qute_QDialog(static_cast<QWidget *>(a0)));
 }
 void qute_QDialog_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QDialog *>(static_cast<QDialog *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 void qute_QDialog_super_0(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_0(static_cast<bool>(a0));
 }
 qute_size qute_QDialog_super_1(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_1());
 }
 qute_size qute_QDialog_super_2(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_2());
 }
 void qute_QDialog_super_3(void *self) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_3();
 }
 int qute_QDialog_super_4(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_4());
 }
 void qute_QDialog_super_5(void *self, int a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_5(static_cast<int>(a0));
 }
 void qute_QDialog_super_6(void *self) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_6();
 }
 void qute_QDialog_super_7(void *self) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_7();
 }
 void qute_QDialog_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_8(static_cast<QKeyEvent *>(a0));
 }
 void qute_QDialog_super_9(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_9(static_cast<QCloseEvent *>(a0));
 }
 void qute_QDialog_super_10(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_10(static_cast<QShowEvent *>(a0));
 }
 void qute_QDialog_super_11(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_11(static_cast<QResizeEvent *>(a0));
 }
 void qute_QDialog_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_12(static_cast<QContextMenuEvent *>(a0));
 }
 bool qute_QDialog_super_13(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_13(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 int qute_QDialog_super_14(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_14(static_cast<int>(a0)));
 }
 bool qute_QDialog_super_15(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_15());
 }
 bool qute_QDialog_super_16(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_16(static_cast<QEvent *>(a0)));
 }
 void qute_QDialog_super_17(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_17(static_cast<QMouseEvent *>(a0));
 }
 void qute_QDialog_super_18(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_18(static_cast<QMouseEvent *>(a0));
 }
 void qute_QDialog_super_19(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_19(static_cast<QMouseEvent *>(a0));
 }
 void qute_QDialog_super_20(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_20(static_cast<QMouseEvent *>(a0));
 }
 void qute_QDialog_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_21(static_cast<QWheelEvent *>(a0));
 }
 void qute_QDialog_super_22(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_22(static_cast<QKeyEvent *>(a0));
 }
 void qute_QDialog_super_23(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_23(static_cast<QFocusEvent *>(a0));
 }
 void qute_QDialog_super_24(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_24(static_cast<QFocusEvent *>(a0));
 }
 void qute_QDialog_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_25(static_cast<QEnterEvent *>(a0));
 }
 void qute_QDialog_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_26(static_cast<QEvent *>(a0));
 }
 void qute_QDialog_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_27(static_cast<QPaintEvent *>(a0));
 }
 void qute_QDialog_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_28(static_cast<QMoveEvent *>(a0));
 }
 void qute_QDialog_super_29(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_29(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QDialog_super_30(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_30(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QDialog_super_31(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_31(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QDialog_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_32(static_cast<QDropEvent *>(a0));
 }
 void qute_QDialog_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_33(static_cast<QHideEvent *>(a0));
 }
 void qute_QDialog_super_34(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_34(static_cast<QEvent *>(a0));
 }
 bool qute_QDialog_super_35(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_35(static_cast<bool>(a0)));
 }
 void qute_QDialog_super_36(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_36(static_cast<QTimerEvent *>(a0));
 }
 void qute_QDialog_super_37(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_37(static_cast<QChildEvent *>(a0));
 }
 void qute_QDialog_super_38(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->qute_super_38(static_cast<QEvent *>(a0));
 }
 void qute_QDialog_prot_adjustPosition(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->adjustPosition(static_cast<QWidget *>(a0));
 }
 void qute_QDialog_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->updateMicroFocus();
 }
 void qute_QDialog_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->create();
 }
 void qute_QDialog_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->destroy();
 }
 bool qute_QDialog_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->focusNextChild());
 }
 bool qute_QDialog_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->focusPreviousChild());
 }
 double qute_QDialog_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QDialog *>(static_cast<QDialog *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QDialog_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDialog *>(static_cast<QObject *>(obj)));
 }
 int qute_QDialog_result(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QDialog *>(self)->result());
 }
 void qute_QDialog_setSizeGripEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->setSizeGripEnabled(static_cast<bool>(a0));
 }
 bool qute_QDialog_isSizeGripEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDialog *>(self)->isSizeGripEnabled());
 }
 void qute_QDialog_setModal(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->setModal(static_cast<bool>(a0));
 }
 void qute_QDialog_setResult(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->setResult(static_cast<int>(a0));
 }
 void qute_QDialog_open(void *self) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->open();
 }
 int qute_QDialog_exec(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QDialog *>(self)->exec());
 }
 void qute_QDialog_done(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->done(static_cast<int>(a0));
 }
 void qute_QDialog_accept(void *self) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->accept();
 }
 void qute_QDialog_reject(void *self) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->reject();
 }
 void qute_QDialog_finished_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->finished(static_cast<int>(a0));
 }
 void qute_QDialog_accepted_1(void *self) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->accepted();
 }
 void qute_QDialog_rejected_1(void *self) {
+	qute_gui_only();
 	static_cast<QDialog *>(self)->rejected();
 }
 void * qute_QDialog_finished(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialog::finished, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDialog_accepted(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialog::accepted, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QDialog_rejected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialog::rejected, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -5548,99 +6672,129 @@ void * qute_QDialog_rejected(void *self, uintptr_t id) {
 
 // ---- QDialogButtonBox
 void * qute_QDialogButtonBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDialogButtonBox *>(new QDialogButtonBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QDialogButtonBox_new_1(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QDialogButtonBox *>(new QDialogButtonBox(static_cast<Qt::Orientation>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QDialogButtonBox_new_2(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QDialogButtonBox *>(new QDialogButtonBox(QFlags<QDialogButtonBox::StandardButton>::fromInt(static_cast<QFlags<QDialogButtonBox::StandardButton>::Int>(a0)), static_cast<QWidget *>(a1)));
 }
 void * qute_QDialogButtonBox_new_3(int64_t a0, int64_t a1, void * a2) {
+	qute_gui_only();
 	return static_cast<QDialogButtonBox *>(new QDialogButtonBox(QFlags<QDialogButtonBox::StandardButton>::fromInt(static_cast<QFlags<QDialogButtonBox::StandardButton>::Int>(a0)), static_cast<Qt::Orientation>(a1), static_cast<QWidget *>(a2)));
 }
 void * qute_QDialogButtonBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDialogButtonBox *>(static_cast<QObject *>(obj)));
 }
 void qute_QDialogButtonBox_setOrientation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
 }
 int64_t qute_QDialogButtonBox_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDialogButtonBox *>(self)->orientation());
 }
 void qute_QDialogButtonBox_addButton(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->addButton(static_cast<QAbstractButton *>(a0), static_cast<QDialogButtonBox::ButtonRole>(a1));
 }
 void * qute_QDialogButtonBox_addButton_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QDialogButtonBox *>(self)->addButton(QString::fromUtf8(a0, a0_len), static_cast<QDialogButtonBox::ButtonRole>(a1)));
 }
 void * qute_QDialogButtonBox_addButton_2(void *self, int64_t a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QDialogButtonBox *>(self)->addButton(static_cast<QDialogButtonBox::StandardButton>(a0)));
 }
 void qute_QDialogButtonBox_removeButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->removeButton(static_cast<QAbstractButton *>(a0));
 }
 void qute_QDialogButtonBox_clear(void *self) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->clear();
 }
 qute_list qute_QDialogButtonBox_buttons(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QDialogButtonBox *>(self)->buttons(), [](const auto &v) { return (void *)(v); });
 }
 int64_t qute_QDialogButtonBox_buttonRole(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDialogButtonBox *>(self)->buttonRole(static_cast<QAbstractButton *>(a0)));
 }
 void qute_QDialogButtonBox_setStandardButtons(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->setStandardButtons(QFlags<QDialogButtonBox::StandardButton>::fromInt(static_cast<QFlags<QDialogButtonBox::StandardButton>::Int>(a0)));
 }
 int64_t qute_QDialogButtonBox_standardButtons(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QDialogButtonBox *>(self)->standardButtons()).toInt());
 }
 int64_t qute_QDialogButtonBox_standardButton(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDialogButtonBox *>(self)->standardButton(static_cast<QAbstractButton *>(a0)));
 }
 void * qute_QDialogButtonBox_button(void *self, int64_t a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QDialogButtonBox *>(self)->button(static_cast<QDialogButtonBox::StandardButton>(a0)));
 }
 void qute_QDialogButtonBox_setCenterButtons(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->setCenterButtons(static_cast<bool>(a0));
 }
 bool qute_QDialogButtonBox_centerButtons(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDialogButtonBox *>(self)->centerButtons());
 }
 void qute_QDialogButtonBox_clicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->clicked(static_cast<QAbstractButton *>(a0));
 }
 void qute_QDialogButtonBox_accepted_1(void *self) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->accepted();
 }
 void qute_QDialogButtonBox_helpRequested_1(void *self) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->helpRequested();
 }
 void qute_QDialogButtonBox_rejected_1(void *self) {
+	qute_gui_only();
 	static_cast<QDialogButtonBox *>(self)->rejected();
 }
 qute_str qute_QDialogButtonBox_standardButtonText(int64_t a0) {
+	qute_gui_only();
 	return qute_ret_str(QDialogButtonBox::standardButtonText(static_cast<QDialogButtonBox::StandardButton>(a0)));
 }
 void * qute_QDialogButtonBox_standardButtonShortcut(int64_t a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QKeySequence(QDialogButtonBox::standardButtonShortcut(static_cast<QDialogButtonBox::StandardButton>(a0))));
 }
 void * qute_QDialogButtonBox_clicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialogButtonBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialogButtonBox::clicked, obj, [s](QAbstractButton * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDialogButtonBox_accepted(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialogButtonBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialogButtonBox::accepted, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QDialogButtonBox_helpRequested(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialogButtonBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialogButtonBox::helpRequested, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QDialogButtonBox_rejected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDialogButtonBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDialogButtonBox::rejected, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -5648,92 +6802,127 @@ void * qute_QDialogButtonBox_rejected(void *self, uintptr_t id) {
 
 // ---- QDockWidget
 void * qute_QDockWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDockWidget *>(new QDockWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QDockWidget_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QDockWidget *>(new QDockWidget(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
+void * qute_QDockWidget_new_2(const char *a0, ptrdiff_t a0_len, void * a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<QDockWidget *>(new QDockWidget(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a2))));
+}
+void * qute_QDockWidget_new_3(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QDockWidget *>(new QDockWidget(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QDockWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDockWidget *>(static_cast<QObject *>(obj)));
 }
 void * qute_QDockWidget_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QDockWidget *>(self)->widget());
 }
 void qute_QDockWidget_setWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->setWidget(static_cast<QWidget *>(a0));
 }
 void qute_QDockWidget_setFeatures(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->setFeatures(QFlags<QDockWidget::DockWidgetFeature>::fromInt(static_cast<QFlags<QDockWidget::DockWidgetFeature>::Int>(a0)));
 }
 int64_t qute_QDockWidget_features(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QDockWidget *>(self)->features()).toInt());
 }
 void qute_QDockWidget_setFloating(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->setFloating(static_cast<bool>(a0));
 }
 bool qute_QDockWidget_isFloating(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDockWidget *>(self)->isFloating());
 }
 void qute_QDockWidget_setAllowedAreas(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->setAllowedAreas(QFlags<Qt::DockWidgetArea>::fromInt(static_cast<QFlags<Qt::DockWidgetArea>::Int>(a0)));
 }
 int64_t qute_QDockWidget_allowedAreas(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QDockWidget *>(self)->allowedAreas()).toInt());
 }
 void qute_QDockWidget_setTitleBarWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->setTitleBarWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QDockWidget_titleBarWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QDockWidget *>(self)->titleBarWidget());
 }
 void qute_QDockWidget_setDockLocation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->setDockLocation(static_cast<Qt::DockWidgetArea>(a0));
 }
 int64_t qute_QDockWidget_dockLocation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDockWidget *>(self)->dockLocation());
 }
 bool qute_QDockWidget_isAreaAllowed(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QDockWidget *>(self)->isAreaAllowed(static_cast<Qt::DockWidgetArea>(a0)));
 }
 void * qute_QDockWidget_toggleViewAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QDockWidget *>(self)->toggleViewAction());
 }
 void qute_QDockWidget_featuresChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->featuresChanged(QFlags<QDockWidget::DockWidgetFeature>::fromInt(static_cast<QFlags<QDockWidget::DockWidgetFeature>::Int>(a0)));
 }
 void qute_QDockWidget_topLevelChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->topLevelChanged(static_cast<bool>(a0));
 }
 void qute_QDockWidget_allowedAreasChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->allowedAreasChanged(QFlags<Qt::DockWidgetArea>::fromInt(static_cast<QFlags<Qt::DockWidgetArea>::Int>(a0)));
 }
 void qute_QDockWidget_visibilityChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->visibilityChanged(static_cast<bool>(a0));
 }
 void qute_QDockWidget_dockLocationChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDockWidget *>(self)->dockLocationChanged(static_cast<Qt::DockWidgetArea>(a0));
 }
 void * qute_QDockWidget_featuresChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDockWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDockWidget::featuresChanged, obj, [s](QFlags<QDockWidget::DockWidgetFeature> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDockWidget_topLevelChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDockWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDockWidget::topLevelChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDockWidget_allowedAreasChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDockWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDockWidget::allowedAreasChanged, obj, [s](QFlags<Qt::DockWidgetArea> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDockWidget_visibilityChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDockWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDockWidget::visibilityChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDockWidget_dockLocationChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDockWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDockWidget::dockLocationChanged, obj, [s](Qt::DockWidgetArea a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -5741,83 +6930,109 @@ void * qute_QDockWidget_dockLocationChanged(void *self, uintptr_t id) {
 
 // ---- QDoubleSpinBox
 void * qute_QDoubleSpinBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QDoubleSpinBox *>(new QDoubleSpinBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QDoubleSpinBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDoubleSpinBox *>(static_cast<QObject *>(obj)));
 }
 double qute_QDoubleSpinBox_value(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QDoubleSpinBox *>(self)->value());
 }
 qute_str qute_QDoubleSpinBox_prefix(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QDoubleSpinBox *>(self)->prefix());
 }
 void qute_QDoubleSpinBox_setPrefix(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setPrefix(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QDoubleSpinBox_suffix(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QDoubleSpinBox *>(self)->suffix());
 }
 void qute_QDoubleSpinBox_setSuffix(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setSuffix(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QDoubleSpinBox_cleanText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QDoubleSpinBox *>(self)->cleanText());
 }
 double qute_QDoubleSpinBox_singleStep(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QDoubleSpinBox *>(self)->singleStep());
 }
 void qute_QDoubleSpinBox_setSingleStep(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setSingleStep(static_cast<double>(a0));
 }
 double qute_QDoubleSpinBox_minimum(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QDoubleSpinBox *>(self)->minimum());
 }
 void qute_QDoubleSpinBox_setMinimum(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setMinimum(static_cast<double>(a0));
 }
 double qute_QDoubleSpinBox_maximum(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QDoubleSpinBox *>(self)->maximum());
 }
 void qute_QDoubleSpinBox_setMaximum(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setMaximum(static_cast<double>(a0));
 }
 void qute_QDoubleSpinBox_setRange(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setRange(static_cast<double>(a0), static_cast<double>(a1));
 }
 int64_t qute_QDoubleSpinBox_stepType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QDoubleSpinBox *>(self)->stepType());
 }
 void qute_QDoubleSpinBox_setStepType(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setStepType(static_cast<QAbstractSpinBox::StepType>(a0));
 }
 int qute_QDoubleSpinBox_decimals(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QDoubleSpinBox *>(self)->decimals());
 }
 void qute_QDoubleSpinBox_setDecimals(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setDecimals(static_cast<int>(a0));
 }
 double qute_QDoubleSpinBox_valueFromText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QDoubleSpinBox *>(self)->valueFromText(QString::fromUtf8(a0, a0_len)));
 }
 qute_str qute_QDoubleSpinBox_textFromValue(void *self, double a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QDoubleSpinBox *>(self)->textFromValue(static_cast<double>(a0)));
 }
 void qute_QDoubleSpinBox_setValue(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->setValue(static_cast<double>(a0));
 }
 void qute_QDoubleSpinBox_valueChanged_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->valueChanged(static_cast<double>(a0));
 }
 void qute_QDoubleSpinBox_textChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QDoubleSpinBox *>(self)->textChanged(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QDoubleSpinBox_valueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDoubleSpinBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleSpinBox::valueChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QDoubleSpinBox_textChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDoubleSpinBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleSpinBox::textChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -5825,256 +7040,359 @@ void * qute_QDoubleSpinBox_textChanged(void *self, uintptr_t id) {
 
 // ---- QFileDialog
 void * qute_QFileDialog_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QFileDialog *>(new QFileDialog(static_cast<QWidget *>(a0)));
 }
 void * qute_QFileDialog_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<QFileDialog *>(new QFileDialog(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
 }
+void * qute_QFileDialog_new_2(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len) {
+	qute_gui_only();
+	return static_cast<QFileDialog *>(new QFileDialog(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QString::fromUtf8(a3, a3_len)));
+}
 void * qute_QFileDialog_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QFileDialog *>(static_cast<QObject *>(obj)));
 }
 void qute_QFileDialog_setDirectory(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setDirectory(QString::fromUtf8(a0, a0_len));
 }
 void qute_QFileDialog_setDirectory_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setDirectory((a0 ? *static_cast<QDir *>(a0) : QDir()));
 }
 void * qute_QFileDialog_directory(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QDir(static_cast<QFileDialog *>(self)->directory()));
 }
 void qute_QFileDialog_setDirectoryUrl(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setDirectoryUrl((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void * qute_QFileDialog_directoryUrl(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QUrl(static_cast<QFileDialog *>(self)->directoryUrl()));
 }
 void qute_QFileDialog_selectFile(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->selectFile(QString::fromUtf8(a0, a0_len));
 }
 qute_list qute_QFileDialog_selectedFiles(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QFileDialog *>(self)->selectedFiles());
 }
 void qute_QFileDialog_selectUrl(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->selectUrl((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 qute_list qute_QFileDialog_selectedUrls(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QFileDialog *>(self)->selectedUrls(), [](const auto &v) { return static_cast<void *>(new QUrl(v)); });
 }
 void qute_QFileDialog_setNameFilter(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setNameFilter(QString::fromUtf8(a0, a0_len));
 }
 void qute_QFileDialog_setNameFilters(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setNameFilters(qute_qstrlist(a0, a0_lens, a0_n));
 }
 qute_list qute_QFileDialog_nameFilters(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QFileDialog *>(self)->nameFilters());
 }
 void qute_QFileDialog_selectNameFilter(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->selectNameFilter(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QFileDialog_selectedMimeTypeFilter(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QFileDialog *>(self)->selectedMimeTypeFilter());
 }
 qute_str qute_QFileDialog_selectedNameFilter(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QFileDialog *>(self)->selectedNameFilter());
 }
 void qute_QFileDialog_setMimeTypeFilters(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setMimeTypeFilters(qute_qstrlist(a0, a0_lens, a0_n));
 }
 qute_list qute_QFileDialog_mimeTypeFilters(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QFileDialog *>(self)->mimeTypeFilters());
 }
 void qute_QFileDialog_selectMimeTypeFilter(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->selectMimeTypeFilter(QString::fromUtf8(a0, a0_len));
 }
 int64_t qute_QFileDialog_filter(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QFileDialog *>(self)->filter()).toInt());
 }
 void qute_QFileDialog_setFilter(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setFilter(QFlags<QDir::Filter>::fromInt(static_cast<QFlags<QDir::Filter>::Int>(a0)));
 }
 void qute_QFileDialog_setViewMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setViewMode(static_cast<QFileDialog::ViewMode>(a0));
 }
 int64_t qute_QFileDialog_viewMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFileDialog *>(self)->viewMode());
 }
 void qute_QFileDialog_setFileMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setFileMode(static_cast<QFileDialog::FileMode>(a0));
 }
 int64_t qute_QFileDialog_fileMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFileDialog *>(self)->fileMode());
 }
 void qute_QFileDialog_setAcceptMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setAcceptMode(static_cast<QFileDialog::AcceptMode>(a0));
 }
 int64_t qute_QFileDialog_acceptMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFileDialog *>(self)->acceptMode());
 }
 void qute_QFileDialog_setSidebarUrls(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setSidebarUrls([&] { QList<QUrl> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QUrl *>(d[i]) : QUrl())); return l; }());
 }
 qute_list qute_QFileDialog_sidebarUrls(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QFileDialog *>(self)->sidebarUrls(), [](const auto &v) { return static_cast<void *>(new QUrl(v)); });
 }
 qute_str qute_QFileDialog_saveState(void *self) {
+	qute_gui_only();
 	return qute_ret_bytes(static_cast<QFileDialog *>(self)->saveState());
 }
 bool qute_QFileDialog_restoreState(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFileDialog *>(self)->restoreState(QByteArray(a0, a0_len)));
 }
 void qute_QFileDialog_setDefaultSuffix(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setDefaultSuffix(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QFileDialog_defaultSuffix(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QFileDialog *>(self)->defaultSuffix());
 }
 void qute_QFileDialog_setHistory(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setHistory(qute_qstrlist(a0, a0_lens, a0_n));
 }
 qute_list qute_QFileDialog_history(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QFileDialog *>(self)->history());
 }
 void qute_QFileDialog_setItemDelegate(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setItemDelegate(static_cast<QAbstractItemDelegate *>(a0));
 }
 void * qute_QFileDialog_itemDelegate(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QFileDialog *>(self)->itemDelegate());
 }
 void qute_QFileDialog_setIconProvider(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setIconProvider(static_cast<QAbstractFileIconProvider *>(a0));
 }
 void * qute_QFileDialog_iconProvider(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QFileDialog *>(self)->iconProvider());
 }
 void qute_QFileDialog_setLabelText(void *self, int64_t a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setLabelText(static_cast<QFileDialog::DialogLabel>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QFileDialog_labelText(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QFileDialog *>(self)->labelText(static_cast<QFileDialog::DialogLabel>(a0)));
 }
 void qute_QFileDialog_setSupportedSchemes(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setSupportedSchemes(qute_qstrlist(a0, a0_lens, a0_n));
 }
 qute_list qute_QFileDialog_supportedSchemes(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QFileDialog *>(self)->supportedSchemes());
 }
 void qute_QFileDialog_setProxyModel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setProxyModel(static_cast<QAbstractProxyModel *>(a0));
 }
 void * qute_QFileDialog_proxyModel(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QFileDialog *>(self)->proxyModel());
 }
 void qute_QFileDialog_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setOption(static_cast<QFileDialog::Option>(a0));
 }
 bool qute_QFileDialog_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFileDialog *>(self)->testOption(static_cast<QFileDialog::Option>(a0)));
 }
 void qute_QFileDialog_setOptions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->setOptions(QFlags<QFileDialog::Option>::fromInt(static_cast<QFlags<QFileDialog::Option>::Int>(a0)));
 }
 int64_t qute_QFileDialog_options(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QFileDialog *>(self)->options()).toInt());
 }
 void qute_QFileDialog_fileSelected_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->fileSelected(QString::fromUtf8(a0, a0_len));
 }
 void qute_QFileDialog_filesSelected_1(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->filesSelected(qute_qstrlist(a0, a0_lens, a0_n));
 }
 void qute_QFileDialog_currentChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->currentChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QFileDialog_directoryEntered_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->directoryEntered(QString::fromUtf8(a0, a0_len));
 }
 void qute_QFileDialog_urlSelected_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->urlSelected((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void qute_QFileDialog_urlsSelected_1(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->urlsSelected([&] { QList<QUrl> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QUrl *>(d[i]) : QUrl())); return l; }());
 }
 void qute_QFileDialog_currentUrlChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->currentUrlChanged((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void qute_QFileDialog_directoryUrlEntered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->directoryUrlEntered((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void qute_QFileDialog_filterSelected_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QFileDialog *>(self)->filterSelected(QString::fromUtf8(a0, a0_len));
 }
+void qute_QFileDialog_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QFileDialog *>(self)->setOption(static_cast<QFileDialog::Option>(a0), static_cast<bool>(a1));
+}
 qute_str qute_QFileDialog_getOpenFileName(void) {
+	qute_gui_only();
 	return qute_ret_str(QFileDialog::getOpenFileName());
 }
 void * qute_QFileDialog_getOpenFileUrl(void) {
+	qute_gui_only();
 	return static_cast<void *>(new QUrl(QFileDialog::getOpenFileUrl()));
 }
 qute_str qute_QFileDialog_getSaveFileName(void) {
+	qute_gui_only();
 	return qute_ret_str(QFileDialog::getSaveFileName());
 }
 void * qute_QFileDialog_getSaveFileUrl(void) {
+	qute_gui_only();
 	return static_cast<void *>(new QUrl(QFileDialog::getSaveFileUrl()));
 }
 qute_str qute_QFileDialog_getExistingDirectory(void) {
+	qute_gui_only();
 	return qute_ret_str(QFileDialog::getExistingDirectory());
 }
 void * qute_QFileDialog_getExistingDirectoryUrl(void) {
+	qute_gui_only();
 	return static_cast<void *>(new QUrl(QFileDialog::getExistingDirectoryUrl()));
 }
 qute_list qute_QFileDialog_getOpenFileNames(void) {
+	qute_gui_only();
 	return qute_ret_strlist(QFileDialog::getOpenFileNames());
 }
 qute_list qute_QFileDialog_getOpenFileUrls(void) {
+	qute_gui_only();
 	return qute_ret_list<void *>(QFileDialog::getOpenFileUrls(), [](const auto &v) { return static_cast<void *>(new QUrl(v)); });
 }
 void qute_QFileDialog_getOpenFileContent(const char *a0, ptrdiff_t a0_len, uintptr_t a1) {
+	qute_gui_only();
 	QFileDialog::getOpenFileContent(QString::fromUtf8(a0, a0_len), std::function<void (const QString &, const QByteArray &)>([s = std::make_shared<GoSlot>(a1)](const QString & p0, const QByteArray & p1) -> void { qute_str c0 = qute_ret_str(p0); qute_str c1 = qute_ret_bytes(p1); void *args[] = {&c0, &c1}; qute_call(s->id, args, nullptr); }));
 }
 void qute_QFileDialog_saveFileContent(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	QFileDialog::saveFileContent(QByteArray(a0, a0_len), QString::fromUtf8(a1, a1_len));
 }
+qute_str qute_QFileDialog_getExistingDirectory_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3) {
+	qute_gui_only();
+	return qute_ret_str(QFileDialog::getExistingDirectory(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QFileDialog::Option>::fromInt(static_cast<QFlags<QFileDialog::Option>::Int>(a3))));
+}
+void * qute_QFileDialog_getExistingDirectoryUrl_1(void * a0, const char *a1, ptrdiff_t a1_len, void * a2, int64_t a3, const char *a4, const ptrdiff_t *a4_lens, ptrdiff_t a4_n) {
+	qute_gui_only();
+	return static_cast<void *>(new QUrl(QFileDialog::getExistingDirectoryUrl(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QUrl *>(a2) : QUrl()), QFlags<QFileDialog::Option>::fromInt(static_cast<QFlags<QFileDialog::Option>::Int>(a3)), qute_qstrlist(a4, a4_lens, a4_n))));
+}
+void qute_QFileDialog_getOpenFileContent_1(const char *a0, ptrdiff_t a0_len, uintptr_t a1, void * a2) {
+	qute_gui_only();
+	QFileDialog::getOpenFileContent(QString::fromUtf8(a0, a0_len), std::function<void (const QString &, const QByteArray &)>([s = std::make_shared<GoSlot>(a1)](const QString & p0, const QByteArray & p1) -> void { qute_str c0 = qute_ret_str(p0); qute_str c1 = qute_ret_bytes(p1); void *args[] = {&c0, &c1}; qute_call(s->id, args, nullptr); }), static_cast<QWidget *>(a2));
+}
+void qute_QFileDialog_saveFileContent_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
+	QFileDialog::saveFileContent(QByteArray(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<QWidget *>(a2));
+}
 void * qute_QFileDialog_fileSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::fileSelected, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_filesSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::filesSelected, obj, [s](const QList<QString> & a0) { qute_list c0 = qute_ret_strlist(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_currentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::currentChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_directoryEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::directoryEntered, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_urlSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::urlSelected, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_urlsSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::urlsSelected, obj, [s](const QList<QUrl> & a0) { qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QUrl(v)); }); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_currentUrlChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::currentUrlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_directoryUrlEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::directoryUrlEntered, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFileDialog_filterSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFileDialog::filterSelected, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6082,59 +7400,77 @@ void * qute_QFileDialog_filterSelected(void *self, uintptr_t id) {
 
 // ---- QFileIconProvider
 void * qute_QFileIconProvider_new(void) {
+	qute_gui_only();
 	return static_cast<QFileIconProvider *>(new QFileIconProvider());
 }
 void qute_QFileIconProvider_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QFileIconProvider *>(self);
 }
 
 // ---- QFontComboBox
 void * qute_QFontComboBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QFontComboBox *>(new QFontComboBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QFontComboBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QFontComboBox *>(static_cast<QObject *>(obj)));
 }
 void qute_QFontComboBox_setWritingSystem(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->setWritingSystem(static_cast<QFontDatabase::WritingSystem>(a0));
 }
 int64_t qute_QFontComboBox_writingSystem(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFontComboBox *>(self)->writingSystem());
 }
 void qute_QFontComboBox_setFontFilters(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->setFontFilters(QFlags<QFontComboBox::FontFilter>::fromInt(static_cast<QFlags<QFontComboBox::FontFilter>::Int>(a0)));
 }
 int64_t qute_QFontComboBox_fontFilters(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QFontComboBox *>(self)->fontFilters()).toInt());
 }
 void * qute_QFontComboBox_currentFont(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QFontComboBox *>(self)->currentFont()));
 }
 void qute_QFontComboBox_setSampleTextForSystem(void *self, int64_t a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->setSampleTextForSystem(static_cast<QFontDatabase::WritingSystem>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QFontComboBox_sampleTextForSystem(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QFontComboBox *>(self)->sampleTextForSystem(static_cast<QFontDatabase::WritingSystem>(a0)));
 }
 void qute_QFontComboBox_setSampleTextForFont(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->setSampleTextForFont(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QFontComboBox_sampleTextForFont(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QFontComboBox *>(self)->sampleTextForFont(QString::fromUtf8(a0, a0_len)));
 }
 void qute_QFontComboBox_setDisplayFont(void *self, const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->setDisplayFont(QString::fromUtf8(a0, a0_len), (a1 ? *static_cast<QFont *>(a1) : QFont()));
 }
 void * qute_QFontComboBox_displayFont(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return [&]() -> void * { auto o = static_cast<QFontComboBox *>(self)->displayFont(QString::fromUtf8(a0, a0_len)); return o ? static_cast<void *>(new QFont(*o)) : nullptr; }();
 }
 void qute_QFontComboBox_setCurrentFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->setCurrentFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void qute_QFontComboBox_currentFontChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFontComboBox *>(self)->currentFontChanged((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void * qute_QFontComboBox_currentFontChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFontComboBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFontComboBox::currentFontChanged, obj, [s](const QFont & a0) { void * c0 = static_cast<void *>(new QFont(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6142,59 +7478,93 @@ void * qute_QFontComboBox_currentFontChanged(void *self, uintptr_t id) {
 
 // ---- QFontDialog
 void * qute_QFontDialog_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QFontDialog *>(new QFontDialog(static_cast<QWidget *>(a0)));
 }
 void * qute_QFontDialog_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QFontDialog *>(new QFontDialog((a0 ? *static_cast<QFont *>(a0) : QFont()), static_cast<QWidget *>(a1)));
 }
 void * qute_QFontDialog_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QFontDialog *>(static_cast<QObject *>(obj)));
 }
 void qute_QFontDialog_setCurrentFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFontDialog *>(self)->setCurrentFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void * qute_QFontDialog_currentFont(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QFontDialog *>(self)->currentFont()));
 }
 void * qute_QFontDialog_selectedFont(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QFontDialog *>(self)->selectedFont()));
 }
 void qute_QFontDialog_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFontDialog *>(self)->setOption(static_cast<QFontDialog::FontDialogOption>(a0));
 }
 bool qute_QFontDialog_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFontDialog *>(self)->testOption(static_cast<QFontDialog::FontDialogOption>(a0)));
 }
 void qute_QFontDialog_setOptions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFontDialog *>(self)->setOptions(QFlags<QFontDialog::FontDialogOption>::fromInt(static_cast<QFlags<QFontDialog::FontDialogOption>::Int>(a0)));
 }
 int64_t qute_QFontDialog_options(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QFontDialog *>(self)->options()).toInt());
 }
 void qute_QFontDialog_currentFontChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFontDialog *>(self)->currentFontChanged((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void qute_QFontDialog_fontSelected_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFontDialog *>(self)->fontSelected((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
+void qute_QFontDialog_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QFontDialog *>(self)->setOption(static_cast<QFontDialog::FontDialogOption>(a0), static_cast<bool>(a1));
+}
 void * qute_QFontDialog_getFont(bool *a0_out) {
+	qute_gui_only();
 	bool t0{};
 	auto &&r = QFontDialog::getFont(&t0);
 	*a0_out = static_cast<bool>(t0);
 	return static_cast<void *>(new QFont(r));
 }
 void * qute_QFontDialog_getFont_1(bool *a0_out, void * a1) {
+	qute_gui_only();
 	bool t0{};
 	auto &&r = QFontDialog::getFont(&t0, (a1 ? *static_cast<QFont *>(a1) : QFont()));
 	*a0_out = static_cast<bool>(t0);
 	return static_cast<void *>(new QFont(r));
 }
+void * qute_QFontDialog_getFont_2(bool *a0_out, void * a1) {
+	qute_gui_only();
+	bool t0{};
+	auto &&r = QFontDialog::getFont(&t0, static_cast<QWidget *>(a1));
+	*a0_out = static_cast<bool>(t0);
+	return static_cast<void *>(new QFont(r));
+}
+void * qute_QFontDialog_getFont_3(bool *a0_out, void * a1, void * a2, const char *a3, ptrdiff_t a3_len, int64_t a4) {
+	qute_gui_only();
+	bool t0{};
+	auto &&r = QFontDialog::getFont(&t0, (a1 ? *static_cast<QFont *>(a1) : QFont()), static_cast<QWidget *>(a2), QString::fromUtf8(a3, a3_len), QFlags<QFontDialog::FontDialogOption>::fromInt(static_cast<QFlags<QFontDialog::FontDialogOption>::Int>(a4)));
+	*a0_out = static_cast<bool>(t0);
+	return static_cast<void *>(new QFont(r));
+}
 void * qute_QFontDialog_currentFontChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFontDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFontDialog::currentFontChanged, obj, [s](const QFont & a0) { void * c0 = static_cast<void *>(new QFont(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QFontDialog_fontSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFontDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QFontDialog::fontSelected, obj, [s](const QFont & a0) { void * c0 = static_cast<void *>(new QFont(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6202,132 +7572,175 @@ void * qute_QFontDialog_fontSelected(void *self, uintptr_t id) {
 
 // ---- QFormLayout
 void * qute_QFormLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QFormLayout *>(new QFormLayout(static_cast<QWidget *>(a0)));
 }
 void * qute_QFormLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QFormLayout *>(static_cast<QObject *>(obj)));
 }
 void qute_QFormLayout_setFieldGrowthPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setFieldGrowthPolicy(static_cast<QFormLayout::FieldGrowthPolicy>(a0));
 }
 int64_t qute_QFormLayout_fieldGrowthPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFormLayout *>(self)->fieldGrowthPolicy());
 }
 void qute_QFormLayout_setRowWrapPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setRowWrapPolicy(static_cast<QFormLayout::RowWrapPolicy>(a0));
 }
 int64_t qute_QFormLayout_rowWrapPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFormLayout *>(self)->rowWrapPolicy());
 }
 void qute_QFormLayout_setLabelAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setLabelAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QFormLayout_labelAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QFormLayout *>(self)->labelAlignment()).toInt());
 }
 void qute_QFormLayout_setFormAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setFormAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QFormLayout_formAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QFormLayout *>(self)->formAlignment()).toInt());
 }
 void qute_QFormLayout_setHorizontalSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setHorizontalSpacing(static_cast<int>(a0));
 }
 int qute_QFormLayout_horizontalSpacing(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFormLayout *>(self)->horizontalSpacing());
 }
 void qute_QFormLayout_setVerticalSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setVerticalSpacing(static_cast<int>(a0));
 }
 int qute_QFormLayout_verticalSpacing(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFormLayout *>(self)->verticalSpacing());
 }
 void qute_QFormLayout_addRow(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->addRow(static_cast<QWidget *>(a0), static_cast<QWidget *>(a1));
 }
 void qute_QFormLayout_addRow_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->addRow(static_cast<QWidget *>(a0), static_cast<QLayout *>(a1));
 }
 void qute_QFormLayout_addRow_2(void *self, const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->addRow(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1));
 }
 void qute_QFormLayout_addRow_3(void *self, const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->addRow(QString::fromUtf8(a0, a0_len), static_cast<QLayout *>(a1));
 }
 void qute_QFormLayout_addRow_4(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->addRow(static_cast<QWidget *>(a0));
 }
 void qute_QFormLayout_addRow_5(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->addRow(static_cast<QLayout *>(a0));
 }
 void qute_QFormLayout_insertRow(void *self, int a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->insertRow(static_cast<int>(a0), static_cast<QWidget *>(a1), static_cast<QWidget *>(a2));
 }
 void qute_QFormLayout_insertRow_1(void *self, int a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->insertRow(static_cast<int>(a0), static_cast<QWidget *>(a1), static_cast<QLayout *>(a2));
 }
 void qute_QFormLayout_insertRow_2(void *self, int a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->insertRow(static_cast<int>(a0), QString::fromUtf8(a1, a1_len), static_cast<QWidget *>(a2));
 }
 void qute_QFormLayout_insertRow_3(void *self, int a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->insertRow(static_cast<int>(a0), QString::fromUtf8(a1, a1_len), static_cast<QLayout *>(a2));
 }
 void qute_QFormLayout_insertRow_4(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->insertRow(static_cast<int>(a0), static_cast<QWidget *>(a1));
 }
 void qute_QFormLayout_insertRow_5(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->insertRow(static_cast<int>(a0), static_cast<QLayout *>(a1));
 }
 void qute_QFormLayout_removeRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->removeRow(static_cast<int>(a0));
 }
 void qute_QFormLayout_removeRow_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->removeRow(static_cast<QWidget *>(a0));
 }
 void qute_QFormLayout_removeRow_2(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->removeRow(static_cast<QLayout *>(a0));
 }
 void * qute_QFormLayout_takeRow(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QFormLayout::TakeRowResult(static_cast<QFormLayout *>(self)->takeRow(static_cast<int>(a0))));
 }
 void * qute_QFormLayout_takeRow_1(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QFormLayout::TakeRowResult(static_cast<QFormLayout *>(self)->takeRow(static_cast<QWidget *>(a0))));
 }
 void * qute_QFormLayout_takeRow_2(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QFormLayout::TakeRowResult(static_cast<QFormLayout *>(self)->takeRow(static_cast<QLayout *>(a0))));
 }
 void qute_QFormLayout_setItem(void *self, int a0, int64_t a1, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setItem(static_cast<int>(a0), static_cast<QFormLayout::ItemRole>(a1), static_cast<QLayoutItem *>(a2));
 }
 void qute_QFormLayout_setWidget(void *self, int a0, int64_t a1, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setWidget(static_cast<int>(a0), static_cast<QFormLayout::ItemRole>(a1), static_cast<QWidget *>(a2));
 }
 void qute_QFormLayout_setLayout(void *self, int a0, int64_t a1, void * a2) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setLayout(static_cast<int>(a0), static_cast<QFormLayout::ItemRole>(a1), static_cast<QLayout *>(a2));
 }
 void qute_QFormLayout_setRowVisible(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setRowVisible(static_cast<int>(a0), static_cast<bool>(a1));
 }
 void qute_QFormLayout_setRowVisible_1(void *self, void * a0, bool a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setRowVisible(static_cast<QWidget *>(a0), static_cast<bool>(a1));
 }
 void qute_QFormLayout_setRowVisible_2(void *self, void * a0, bool a1) {
+	qute_gui_only();
 	static_cast<QFormLayout *>(self)->setRowVisible(static_cast<QLayout *>(a0), static_cast<bool>(a1));
 }
 bool qute_QFormLayout_isRowVisible(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFormLayout *>(self)->isRowVisible(static_cast<int>(a0)));
 }
 bool qute_QFormLayout_isRowVisible_1(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFormLayout *>(self)->isRowVisible(static_cast<QWidget *>(a0)));
 }
 bool qute_QFormLayout_isRowVisible_2(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFormLayout *>(self)->isRowVisible(static_cast<QLayout *>(a0)));
 }
 void * qute_QFormLayout_itemAt(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QFormLayout *>(self)->itemAt(static_cast<int>(a0), static_cast<QFormLayout::ItemRole>(a1)));
 }
 void qute_QFormLayout_getItemPosition(void *self, int a0, int *a1_out, int64_t *a2_out) {
+	qute_gui_only();
 	int t1{};
 	QFormLayout::ItemRole t2{};
 	static_cast<QFormLayout *>(self)->getItemPosition(static_cast<int>(a0), &t1, &t2);
@@ -6335,6 +7748,7 @@ void qute_QFormLayout_getItemPosition(void *self, int a0, int *a1_out, int64_t *
 	*a2_out = static_cast<int64_t>(t2);
 }
 void qute_QFormLayout_getWidgetPosition(void *self, void * a0, int *a1_out, int64_t *a2_out) {
+	qute_gui_only();
 	int t1{};
 	QFormLayout::ItemRole t2{};
 	static_cast<QFormLayout *>(self)->getWidgetPosition(static_cast<QWidget *>(a0), &t1, &t2);
@@ -6342,6 +7756,7 @@ void qute_QFormLayout_getWidgetPosition(void *self, void * a0, int *a1_out, int6
 	*a2_out = static_cast<int64_t>(t2);
 }
 void qute_QFormLayout_getLayoutPosition(void *self, void * a0, int *a1_out, int64_t *a2_out) {
+	qute_gui_only();
 	int t1{};
 	QFormLayout::ItemRole t2{};
 	static_cast<QFormLayout *>(self)->getLayoutPosition(static_cast<QLayout *>(a0), &t1, &t2);
@@ -6349,251 +7764,335 @@ void qute_QFormLayout_getLayoutPosition(void *self, void * a0, int *a1_out, int6
 	*a2_out = static_cast<int64_t>(t2);
 }
 void * qute_QFormLayout_labelForField(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QFormLayout *>(self)->labelForField(static_cast<QWidget *>(a0)));
 }
 void * qute_QFormLayout_labelForField_1(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QFormLayout *>(self)->labelForField(static_cast<QLayout *>(a0)));
 }
 qute_size qute_QFormLayout_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QFormLayout *>(self)->sizeHint());
 }
 bool qute_QFormLayout_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QFormLayout *>(self)->hasHeightForWidth());
 }
 int qute_QFormLayout_heightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFormLayout *>(self)->heightForWidth(static_cast<int>(a0)));
 }
 int qute_QFormLayout_rowCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFormLayout *>(self)->rowCount());
 }
 
 // ---- QFormLayoutTakeRowResult
 void * qute_QFormLayoutTakeRowResult_new(void) {
+	qute_gui_only();
 	return static_cast<QFormLayout::TakeRowResult *>(new QFormLayout::TakeRowResult());
 }
 void qute_QFormLayoutTakeRowResult_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QFormLayout::TakeRowResult *>(self);
 }
 void * qute_QFormLayoutTakeRowResult_get_labelItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QFormLayout::TakeRowResult *>(self)->labelItem);
 }
 void qute_QFormLayoutTakeRowResult_set_labelItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFormLayout::TakeRowResult *>(self)->labelItem = static_cast<QLayoutItem *>(a0);
 }
 void * qute_QFormLayoutTakeRowResult_get_fieldItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QFormLayout::TakeRowResult *>(self)->fieldItem);
 }
 void qute_QFormLayoutTakeRowResult_set_fieldItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QFormLayout::TakeRowResult *>(self)->fieldItem = static_cast<QLayoutItem *>(a0);
 }
 
 // ---- QFrame
 void * qute_QFrame_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QFrame *>(new QFrame(static_cast<QWidget *>(a0)));
 }
+void * qute_QFrame_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QFrame *>(new QFrame(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QFrame_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QFrame *>(new qute_QFrame(static_cast<QWidget *>(a0)));
 }
 void qute_QFrame_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QFrame *>(static_cast<QFrame *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 qute_size qute_QFrame_super_0(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_0());
 }
 bool qute_QFrame_super_1(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_1(static_cast<QEvent *>(a0)));
 }
 void qute_QFrame_super_2(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_2(static_cast<QPaintEvent *>(a0));
 }
 void qute_QFrame_super_3(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_3(static_cast<QEvent *>(a0));
 }
 void qute_QFrame_super_4(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_4(static_cast<bool>(a0));
 }
 qute_size qute_QFrame_super_5(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_5());
 }
 int qute_QFrame_super_6(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_6(static_cast<int>(a0)));
 }
 bool qute_QFrame_super_7(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_7());
 }
 void qute_QFrame_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_8(static_cast<QMouseEvent *>(a0));
 }
 void qute_QFrame_super_9(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_9(static_cast<QMouseEvent *>(a0));
 }
 void qute_QFrame_super_10(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_10(static_cast<QMouseEvent *>(a0));
 }
 void qute_QFrame_super_11(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_11(static_cast<QMouseEvent *>(a0));
 }
 void qute_QFrame_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_12(static_cast<QWheelEvent *>(a0));
 }
 void qute_QFrame_super_13(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_13(static_cast<QKeyEvent *>(a0));
 }
 void qute_QFrame_super_14(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_14(static_cast<QKeyEvent *>(a0));
 }
 void qute_QFrame_super_15(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_15(static_cast<QFocusEvent *>(a0));
 }
 void qute_QFrame_super_16(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_16(static_cast<QFocusEvent *>(a0));
 }
 void qute_QFrame_super_17(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_17(static_cast<QEnterEvent *>(a0));
 }
 void qute_QFrame_super_18(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_18(static_cast<QEvent *>(a0));
 }
 void qute_QFrame_super_19(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_19(static_cast<QMoveEvent *>(a0));
 }
 void qute_QFrame_super_20(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_20(static_cast<QResizeEvent *>(a0));
 }
 void qute_QFrame_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_21(static_cast<QCloseEvent *>(a0));
 }
 void qute_QFrame_super_22(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_22(static_cast<QContextMenuEvent *>(a0));
 }
 void qute_QFrame_super_23(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_23(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QFrame_super_24(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_24(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QFrame_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_25(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QFrame_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_26(static_cast<QDropEvent *>(a0));
 }
 void qute_QFrame_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_27(static_cast<QShowEvent *>(a0));
 }
 void qute_QFrame_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_28(static_cast<QHideEvent *>(a0));
 }
 bool qute_QFrame_super_29(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_29(static_cast<bool>(a0)));
 }
 bool qute_QFrame_super_30(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_30(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QFrame_super_31(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_31(static_cast<QTimerEvent *>(a0));
 }
 void qute_QFrame_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_32(static_cast<QChildEvent *>(a0));
 }
 void qute_QFrame_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->qute_super_33(static_cast<QEvent *>(a0));
 }
 void qute_QFrame_prot_drawFrame(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->drawFrame(static_cast<QPainter *>(a0));
 }
 void qute_QFrame_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->updateMicroFocus();
 }
 void qute_QFrame_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->create();
 }
 void qute_QFrame_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->destroy();
 }
 bool qute_QFrame_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->focusNextChild());
 }
 bool qute_QFrame_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->focusPreviousChild());
 }
 double qute_QFrame_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QFrame *>(static_cast<QFrame *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QFrame_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QFrame *>(static_cast<QObject *>(obj)));
 }
 int qute_QFrame_frameStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFrame *>(self)->frameStyle());
 }
 void qute_QFrame_setFrameStyle(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QFrame *>(self)->setFrameStyle(static_cast<int>(a0));
 }
 int qute_QFrame_frameWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFrame *>(self)->frameWidth());
 }
 int64_t qute_QFrame_frameShape(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFrame *>(self)->frameShape());
 }
 void qute_QFrame_setFrameShape(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFrame *>(self)->setFrameShape(static_cast<QFrame::Shape>(a0));
 }
 int64_t qute_QFrame_frameShadow(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QFrame *>(self)->frameShadow());
 }
 void qute_QFrame_setFrameShadow(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QFrame *>(self)->setFrameShadow(static_cast<QFrame::Shadow>(a0));
 }
 int qute_QFrame_lineWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFrame *>(self)->lineWidth());
 }
 void qute_QFrame_setLineWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QFrame *>(self)->setLineWidth(static_cast<int>(a0));
 }
 int qute_QFrame_midLineWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QFrame *>(self)->midLineWidth());
 }
 void qute_QFrame_setMidLineWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QFrame *>(self)->setMidLineWidth(static_cast<int>(a0));
 }
 qute_rect qute_QFrame_frameRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QFrame *>(self)->frameRect());
 }
 void qute_QFrame_setFrameRect(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QFrame *>(self)->setFrameRect(qute_to_QRect(a0));
 }
 
 // ---- QGraphicsBlurEffect
 void * qute_QGraphicsBlurEffect_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsBlurEffect *>(new QGraphicsBlurEffect(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsBlurEffect_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsBlurEffect *>(static_cast<QObject *>(obj)));
 }
 double qute_QGraphicsBlurEffect_blurRadius(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsBlurEffect *>(self)->blurRadius());
 }
 int64_t qute_QGraphicsBlurEffect_blurHints(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsBlurEffect *>(self)->blurHints()).toInt());
 }
 void qute_QGraphicsBlurEffect_setBlurRadius(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsBlurEffect *>(self)->setBlurRadius(static_cast<double>(a0));
 }
 void qute_QGraphicsBlurEffect_setBlurHints(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsBlurEffect *>(self)->setBlurHints(QFlags<QGraphicsBlurEffect::BlurHint>::fromInt(static_cast<QFlags<QGraphicsBlurEffect::BlurHint>::Int>(a0)));
 }
 void qute_QGraphicsBlurEffect_blurRadiusChanged_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsBlurEffect *>(self)->blurRadiusChanged(static_cast<double>(a0));
 }
 void qute_QGraphicsBlurEffect_blurHintsChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsBlurEffect *>(self)->blurHintsChanged(QFlags<QGraphicsBlurEffect::BlurHint>::fromInt(static_cast<QFlags<QGraphicsBlurEffect::BlurHint>::Int>(a0)));
 }
 void * qute_QGraphicsBlurEffect_blurRadiusChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsBlurEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsBlurEffect::blurRadiusChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsBlurEffect_blurHintsChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsBlurEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsBlurEffect::blurHintsChanged, obj, [s](QFlags<QGraphicsBlurEffect::BlurHint> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6601,35 +8100,45 @@ void * qute_QGraphicsBlurEffect_blurHintsChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsColorizeEffect
 void * qute_QGraphicsColorizeEffect_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsColorizeEffect *>(new QGraphicsColorizeEffect(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsColorizeEffect_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsColorizeEffect *>(static_cast<QObject *>(obj)));
 }
 qute_color qute_QGraphicsColorizeEffect_color(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QGraphicsColorizeEffect *>(self)->color());
 }
 double qute_QGraphicsColorizeEffect_strength(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsColorizeEffect *>(self)->strength());
 }
 void qute_QGraphicsColorizeEffect_setColor(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QGraphicsColorizeEffect *>(self)->setColor(qute_to_QColor(a0));
 }
 void qute_QGraphicsColorizeEffect_setStrength(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsColorizeEffect *>(self)->setStrength(static_cast<double>(a0));
 }
 void qute_QGraphicsColorizeEffect_colorChanged_1(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QGraphicsColorizeEffect *>(self)->colorChanged(qute_to_QColor(a0));
 }
 void qute_QGraphicsColorizeEffect_strengthChanged_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsColorizeEffect *>(self)->strengthChanged(static_cast<double>(a0));
 }
 void * qute_QGraphicsColorizeEffect_colorChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsColorizeEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsColorizeEffect::colorChanged, obj, [s](const QColor & a0) { qute_color c0 = qute_from_QColor(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsColorizeEffect_strengthChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsColorizeEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsColorizeEffect::strengthChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6637,64 +8146,83 @@ void * qute_QGraphicsColorizeEffect_strengthChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsDropShadowEffect
 void * qute_QGraphicsDropShadowEffect_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsDropShadowEffect *>(new QGraphicsDropShadowEffect(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsDropShadowEffect_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsDropShadowEffect *>(static_cast<QObject *>(obj)));
 }
 qute_pointf qute_QGraphicsDropShadowEffect_offset(void *self) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsDropShadowEffect *>(self)->offset());
 }
 double qute_QGraphicsDropShadowEffect_xOffset(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsDropShadowEffect *>(self)->xOffset());
 }
 double qute_QGraphicsDropShadowEffect_yOffset(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsDropShadowEffect *>(self)->yOffset());
 }
 double qute_QGraphicsDropShadowEffect_blurRadius(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsDropShadowEffect *>(self)->blurRadius());
 }
 qute_color qute_QGraphicsDropShadowEffect_color(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QGraphicsDropShadowEffect *>(self)->color());
 }
 void qute_QGraphicsDropShadowEffect_setOffset(void *self, qute_pointf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->setOffset(qute_to_QPointF(a0));
 }
 void qute_QGraphicsDropShadowEffect_setOffset_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->setOffset(static_cast<double>(a0));
 }
 void qute_QGraphicsDropShadowEffect_setXOffset(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->setXOffset(static_cast<double>(a0));
 }
 void qute_QGraphicsDropShadowEffect_setYOffset(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->setYOffset(static_cast<double>(a0));
 }
 void qute_QGraphicsDropShadowEffect_setBlurRadius(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->setBlurRadius(static_cast<double>(a0));
 }
 void qute_QGraphicsDropShadowEffect_setColor(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->setColor(qute_to_QColor(a0));
 }
 void qute_QGraphicsDropShadowEffect_offsetChanged_1(void *self, qute_pointf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->offsetChanged(qute_to_QPointF(a0));
 }
 void qute_QGraphicsDropShadowEffect_blurRadiusChanged_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->blurRadiusChanged(static_cast<double>(a0));
 }
 void qute_QGraphicsDropShadowEffect_colorChanged_1(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QGraphicsDropShadowEffect *>(self)->colorChanged(qute_to_QColor(a0));
 }
 void * qute_QGraphicsDropShadowEffect_offsetChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsDropShadowEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsDropShadowEffect::offsetChanged, obj, [s](const QPointF & a0) { qute_pointf c0 = qute_from_QPointF(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsDropShadowEffect_blurRadiusChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsDropShadowEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsDropShadowEffect::blurRadiusChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsDropShadowEffect_colorChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsDropShadowEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsDropShadowEffect::colorChanged, obj, [s](const QColor & a0) { qute_color c0 = qute_from_QColor(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6702,27 +8230,35 @@ void * qute_QGraphicsDropShadowEffect_colorChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsEffect
 void * qute_QGraphicsEffect_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsEffect *>(static_cast<QObject *>(obj)));
 }
 qute_rectf qute_QGraphicsEffect_boundingRectFor(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsEffect *>(self)->boundingRectFor(qute_to_QRectF(a0)));
 }
 qute_rectf qute_QGraphicsEffect_boundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsEffect *>(self)->boundingRect());
 }
 bool qute_QGraphicsEffect_isEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsEffect *>(self)->isEnabled());
 }
 void qute_QGraphicsEffect_setEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsEffect *>(self)->setEnabled(static_cast<bool>(a0));
 }
 void qute_QGraphicsEffect_update(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsEffect *>(self)->update();
 }
 void qute_QGraphicsEffect_enabledChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsEffect *>(self)->enabledChanged(static_cast<bool>(a0));
 }
 void * qute_QGraphicsEffect_enabledChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsEffect::enabledChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -6730,757 +8266,1069 @@ void * qute_QGraphicsEffect_enabledChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsEllipseItem
 void * qute_QGraphicsEllipseItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsEllipseItem *>(new qute_QGraphicsEllipseItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsEllipseItem_new_1(qute_rectf a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsEllipseItem *>(new qute_QGraphicsEllipseItem(qute_to_QRectF(a0), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsEllipseItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsEllipseItem *>(self);
 }
 qute_rectf qute_QGraphicsEllipseItem_rect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsEllipseItem *>(self)->rect());
 }
 void qute_QGraphicsEllipseItem_setRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsEllipseItem *>(self)->setRect(qute_to_QRectF(a0));
 }
 int qute_QGraphicsEllipseItem_startAngle(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsEllipseItem *>(self)->startAngle());
 }
 void qute_QGraphicsEllipseItem_setStartAngle(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsEllipseItem *>(self)->setStartAngle(static_cast<int>(a0));
 }
 int qute_QGraphicsEllipseItem_spanAngle(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsEllipseItem *>(self)->spanAngle());
 }
 void qute_QGraphicsEllipseItem_setSpanAngle(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsEllipseItem *>(self)->setSpanAngle(static_cast<int>(a0));
 }
 
 // ---- QGraphicsGridLayout
 void * qute_QGraphicsGridLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsGridLayout *>(new qute_QGraphicsGridLayout(static_cast<QGraphicsLayoutItem *>(a0)));
 }
 void qute_QGraphicsGridLayout_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsGridLayout *>(self);
 }
 void qute_QGraphicsGridLayout_addItem(void *self, void * a0, int a1, int a2, int a3, int a4) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
 }
 void qute_QGraphicsGridLayout_addItem_1(void *self, void * a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QGraphicsGridLayout_setHorizontalSpacing(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setHorizontalSpacing(static_cast<double>(a0));
 }
 double qute_QGraphicsGridLayout_horizontalSpacing(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->horizontalSpacing());
 }
 void qute_QGraphicsGridLayout_setVerticalSpacing(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setVerticalSpacing(static_cast<double>(a0));
 }
 double qute_QGraphicsGridLayout_verticalSpacing(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->verticalSpacing());
 }
 void qute_QGraphicsGridLayout_setSpacing(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setSpacing(static_cast<double>(a0));
 }
 void qute_QGraphicsGridLayout_setRowSpacing(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowSpacing(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_rowSpacing(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowSpacing(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setColumnSpacing(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnSpacing(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_columnSpacing(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnSpacing(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setRowStretchFactor(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowStretchFactor(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QGraphicsGridLayout_rowStretchFactor(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->rowStretchFactor(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setColumnStretchFactor(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnStretchFactor(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QGraphicsGridLayout_columnStretchFactor(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->columnStretchFactor(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setRowMinimumHeight(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowMinimumHeight(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_rowMinimumHeight(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowMinimumHeight(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setRowPreferredHeight(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowPreferredHeight(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_rowPreferredHeight(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowPreferredHeight(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setRowMaximumHeight(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowMaximumHeight(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_rowMaximumHeight(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->rowMaximumHeight(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setRowFixedHeight(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowFixedHeight(static_cast<int>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsGridLayout_setColumnMinimumWidth(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnMinimumWidth(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_columnMinimumWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnMinimumWidth(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setColumnPreferredWidth(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnPreferredWidth(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_columnPreferredWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnPreferredWidth(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setColumnMaximumWidth(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnMaximumWidth(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsGridLayout_columnMaximumWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsGridLayout *>(self)->columnMaximumWidth(static_cast<int>(a0)));
 }
 void qute_QGraphicsGridLayout_setColumnFixedWidth(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnFixedWidth(static_cast<int>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsGridLayout_setRowAlignment(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setRowAlignment(static_cast<int>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
 }
 int64_t qute_QGraphicsGridLayout_rowAlignment(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsGridLayout *>(self)->rowAlignment(static_cast<int>(a0))).toInt());
 }
 void qute_QGraphicsGridLayout_setColumnAlignment(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setColumnAlignment(static_cast<int>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
 }
 int64_t qute_QGraphicsGridLayout_columnAlignment(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsGridLayout *>(self)->columnAlignment(static_cast<int>(a0))).toInt());
 }
 void qute_QGraphicsGridLayout_setAlignment(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->setAlignment(static_cast<QGraphicsLayoutItem *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
 }
 int64_t qute_QGraphicsGridLayout_alignment(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsGridLayout *>(self)->alignment(static_cast<QGraphicsLayoutItem *>(a0))).toInt());
 }
 int qute_QGraphicsGridLayout_rowCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->rowCount());
 }
 int qute_QGraphicsGridLayout_columnCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsGridLayout *>(self)->columnCount());
 }
 void * qute_QGraphicsGridLayout_itemAt(void *self, int a0, int a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsGridLayout *>(self)->itemAt(static_cast<int>(a0), static_cast<int>(a1)));
 }
 void qute_QGraphicsGridLayout_removeItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsGridLayout *>(self)->removeItem(static_cast<QGraphicsLayoutItem *>(a0));
 }
 qute_sizef qute_QGraphicsGridLayout_sizeHint(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsGridLayout *>(self)->sizeHint(static_cast<Qt::SizeHint>(a0)));
+}
+void qute_QGraphicsGridLayout_addItem_2(void *self, void * a0, int a1, int a2, int a3, int a4, int64_t a5) {
+	qute_gui_only();
+	static_cast<QGraphicsGridLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a5)));
+}
+void qute_QGraphicsGridLayout_addItem_3(void *self, void * a0, int a1, int a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QGraphicsGridLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a3)));
+}
+qute_sizef qute_QGraphicsGridLayout_sizeHint_1(void *self, int64_t a0, qute_sizef a1) {
+	qute_gui_only();
+	return qute_from_QSizeF(static_cast<QGraphicsGridLayout *>(self)->sizeHint(static_cast<Qt::SizeHint>(a0), qute_to_QSizeF(a1)));
 }
 
 // ---- QGraphicsItem
 void qute_QGraphicsItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsItem *>(self);
 }
+void * qute_QGraphicsItem_qobject(void *self) {
+	qute_gui_only();
+	return static_cast<void *>(dynamic_cast<QObject *>(static_cast<QGraphicsItem *>(self)));
+}
 void * qute_QGraphicsItem_scene(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->scene());
 }
 void * qute_QGraphicsItem_parentItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->parentItem());
 }
 void * qute_QGraphicsItem_topLevelItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->topLevelItem());
 }
 void * qute_QGraphicsItem_parentObject(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->parentObject());
 }
 void * qute_QGraphicsItem_parentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->parentWidget());
 }
 void * qute_QGraphicsItem_topLevelWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->topLevelWidget());
 }
 void * qute_QGraphicsItem_window(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->window());
 }
 void * qute_QGraphicsItem_panel(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->panel());
 }
 void qute_QGraphicsItem_setParentItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setParentItem(static_cast<QGraphicsItem *>(a0));
 }
 qute_list qute_QGraphicsItem_childItems(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsItem *>(self)->childItems(), [](const auto &v) { return (void *)(v); });
 }
 bool qute_QGraphicsItem_isWidget(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isWidget());
 }
 bool qute_QGraphicsItem_isWindow(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isWindow());
 }
 bool qute_QGraphicsItem_isPanel(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isPanel());
 }
 void * qute_QGraphicsItem_toGraphicsObject(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->toGraphicsObject());
 }
 void * qute_QGraphicsItem_group(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->group());
 }
 void qute_QGraphicsItem_setGroup(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setGroup(static_cast<QGraphicsItemGroup *>(a0));
 }
 int64_t qute_QGraphicsItem_flags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsItem *>(self)->flags()).toInt());
 }
 void qute_QGraphicsItem_setFlag(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setFlag(static_cast<QGraphicsItem::GraphicsItemFlag>(a0));
 }
 void qute_QGraphicsItem_setFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setFlags(QFlags<QGraphicsItem::GraphicsItemFlag>::fromInt(static_cast<QFlags<QGraphicsItem::GraphicsItemFlag>::Int>(a0)));
 }
 int64_t qute_QGraphicsItem_cacheMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsItem *>(self)->cacheMode());
 }
 void qute_QGraphicsItem_setCacheMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setCacheMode(static_cast<QGraphicsItem::CacheMode>(a0));
 }
 int64_t qute_QGraphicsItem_panelModality(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsItem *>(self)->panelModality());
 }
 void qute_QGraphicsItem_setPanelModality(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setPanelModality(static_cast<QGraphicsItem::PanelModality>(a0));
 }
 bool qute_QGraphicsItem_isBlockedByModalPanel(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isBlockedByModalPanel());
 }
 qute_str qute_QGraphicsItem_toolTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QGraphicsItem *>(self)->toolTip());
 }
 void qute_QGraphicsItem_setToolTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setToolTip(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QGraphicsItem_cursor(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QCursor(static_cast<QGraphicsItem *>(self)->cursor()));
 }
 void qute_QGraphicsItem_setCursor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setCursor((a0 ? *static_cast<QCursor *>(a0) : QCursor()));
 }
 bool qute_QGraphicsItem_hasCursor(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->hasCursor());
 }
 void qute_QGraphicsItem_unsetCursor(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->unsetCursor();
 }
 bool qute_QGraphicsItem_isVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isVisible());
 }
 bool qute_QGraphicsItem_isVisibleTo(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isVisibleTo(static_cast<QGraphicsItem *>(a0)));
 }
 void qute_QGraphicsItem_setVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setVisible(static_cast<bool>(a0));
 }
 void qute_QGraphicsItem_hide(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->hide();
 }
 void qute_QGraphicsItem_show(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->show();
 }
 bool qute_QGraphicsItem_isEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isEnabled());
 }
 void qute_QGraphicsItem_setEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setEnabled(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_isSelected(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isSelected());
 }
 void qute_QGraphicsItem_setSelected(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setSelected(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_acceptDrops(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->acceptDrops());
 }
 void qute_QGraphicsItem_setAcceptDrops(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setAcceptDrops(static_cast<bool>(a0));
 }
 double qute_QGraphicsItem_opacity(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->opacity());
 }
 double qute_QGraphicsItem_effectiveOpacity(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->effectiveOpacity());
 }
 void qute_QGraphicsItem_setOpacity(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setOpacity(static_cast<double>(a0));
 }
 void * qute_QGraphicsItem_graphicsEffect(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->graphicsEffect());
 }
 void qute_QGraphicsItem_setGraphicsEffect(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setGraphicsEffect(static_cast<QGraphicsEffect *>(a0));
 }
 int64_t qute_QGraphicsItem_acceptedMouseButtons(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsItem *>(self)->acceptedMouseButtons()).toInt());
 }
 void qute_QGraphicsItem_setAcceptedMouseButtons(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setAcceptedMouseButtons(QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a0)));
 }
 bool qute_QGraphicsItem_acceptHoverEvents(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->acceptHoverEvents());
 }
 void qute_QGraphicsItem_setAcceptHoverEvents(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setAcceptHoverEvents(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_acceptTouchEvents(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->acceptTouchEvents());
 }
 void qute_QGraphicsItem_setAcceptTouchEvents(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setAcceptTouchEvents(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_filtersChildEvents(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->filtersChildEvents());
 }
 void qute_QGraphicsItem_setFiltersChildEvents(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setFiltersChildEvents(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_handlesChildEvents(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->handlesChildEvents());
 }
 void qute_QGraphicsItem_setHandlesChildEvents(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setHandlesChildEvents(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_isActive(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isActive());
 }
 void qute_QGraphicsItem_setActive(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setActive(static_cast<bool>(a0));
 }
 bool qute_QGraphicsItem_hasFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->hasFocus());
 }
 void qute_QGraphicsItem_setFocus(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setFocus();
 }
 void qute_QGraphicsItem_clearFocus(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->clearFocus();
 }
 void * qute_QGraphicsItem_focusProxy(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->focusProxy());
 }
 void qute_QGraphicsItem_setFocusProxy(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setFocusProxy(static_cast<QGraphicsItem *>(a0));
 }
 void * qute_QGraphicsItem_focusItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->focusItem());
 }
 void * qute_QGraphicsItem_focusScopeItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->focusScopeItem());
 }
 void qute_QGraphicsItem_grabMouse(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->grabMouse();
 }
 void qute_QGraphicsItem_ungrabMouse(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->ungrabMouse();
 }
 void qute_QGraphicsItem_grabKeyboard(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->grabKeyboard();
 }
 void qute_QGraphicsItem_ungrabKeyboard(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->ungrabKeyboard();
 }
 qute_pointf qute_QGraphicsItem_pos(void *self) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->pos());
 }
 double qute_QGraphicsItem_x(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->x());
 }
 void qute_QGraphicsItem_setX(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setX(static_cast<double>(a0));
 }
 double qute_QGraphicsItem_y(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->y());
 }
 void qute_QGraphicsItem_setY(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setY(static_cast<double>(a0));
 }
 qute_pointf qute_QGraphicsItem_scenePos(void *self) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->scenePos());
 }
 void qute_QGraphicsItem_setPos(void *self, qute_pointf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setPos(qute_to_QPointF(a0));
 }
 void qute_QGraphicsItem_moveBy(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->moveBy(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsItem_ensureVisible(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->ensureVisible();
 }
 void * qute_QGraphicsItem_transform(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsItem *>(self)->transform()));
 }
 void * qute_QGraphicsItem_sceneTransform(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsItem *>(self)->sceneTransform()));
 }
 void * qute_QGraphicsItem_deviceTransform(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsItem *>(self)->deviceTransform((a0 ? *static_cast<QTransform *>(a0) : QTransform()))));
 }
 void * qute_QGraphicsItem_itemTransform(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsItem *>(self)->itemTransform(static_cast<QGraphicsItem *>(a0))));
 }
 void qute_QGraphicsItem_setTransform(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setTransform((a0 ? *static_cast<QTransform *>(a0) : QTransform()));
 }
 void qute_QGraphicsItem_resetTransform(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->resetTransform();
 }
 void qute_QGraphicsItem_setRotation(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setRotation(static_cast<double>(a0));
 }
 double qute_QGraphicsItem_rotation(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->rotation());
 }
 void qute_QGraphicsItem_setScale(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setScale(static_cast<double>(a0));
 }
 double qute_QGraphicsItem_scale(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->scale());
 }
 qute_list qute_QGraphicsItem_transformations(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsItem *>(self)->transformations(), [](const auto &v) { return (void *)(v); });
 }
 void qute_QGraphicsItem_setTransformations(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setTransformations([&] { QList<QGraphicsTransform *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QGraphicsTransform *>(d[i])); return l; }());
 }
 qute_pointf qute_QGraphicsItem_transformOriginPoint(void *self) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->transformOriginPoint());
 }
 void qute_QGraphicsItem_setTransformOriginPoint(void *self, qute_pointf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setTransformOriginPoint(qute_to_QPointF(a0));
 }
 void qute_QGraphicsItem_advance(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->advance(static_cast<int>(a0));
 }
 double qute_QGraphicsItem_zValue(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->zValue());
 }
 void qute_QGraphicsItem_setZValue(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setZValue(static_cast<double>(a0));
 }
 void qute_QGraphicsItem_stackBefore(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->stackBefore(static_cast<QGraphicsItem *>(a0));
 }
 qute_rectf qute_QGraphicsItem_boundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->boundingRect());
 }
 qute_rectf qute_QGraphicsItem_childrenBoundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->childrenBoundingRect());
 }
 qute_rectf qute_QGraphicsItem_sceneBoundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->sceneBoundingRect());
 }
 void * qute_QGraphicsItem_shape(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->shape()));
 }
 bool qute_QGraphicsItem_isClipped(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isClipped());
 }
 void * qute_QGraphicsItem_clipPath(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->clipPath()));
 }
 bool qute_QGraphicsItem_contains(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->contains(qute_to_QPointF(a0)));
 }
 bool qute_QGraphicsItem_collidesWithItem(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->collidesWithItem(static_cast<QGraphicsItem *>(a0)));
 }
 bool qute_QGraphicsItem_collidesWithPath(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->collidesWithPath((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())));
 }
 qute_list qute_QGraphicsItem_collidingItems(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsItem *>(self)->collidingItems(), [](const auto &v) { return (void *)(v); });
 }
 bool qute_QGraphicsItem_isObscured(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isObscured());
 }
 bool qute_QGraphicsItem_isObscuredBy(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isObscuredBy(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsItem_opaqueArea(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->opaqueArea()));
 }
 void * qute_QGraphicsItem_boundingRegion(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QRegion(static_cast<QGraphicsItem *>(self)->boundingRegion((a0 ? *static_cast<QTransform *>(a0) : QTransform()))));
 }
 double qute_QGraphicsItem_boundingRegionGranularity(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsItem *>(self)->boundingRegionGranularity());
 }
 void qute_QGraphicsItem_setBoundingRegionGranularity(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setBoundingRegionGranularity(static_cast<double>(a0));
 }
 void qute_QGraphicsItem_paint(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->paint(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1));
 }
 void qute_QGraphicsItem_update(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->update();
 }
 void qute_QGraphicsItem_update_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->update(qute_to_QRectF(a0));
 }
 void qute_QGraphicsItem_scroll(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->scroll(static_cast<double>(a0), static_cast<double>(a1));
 }
 qute_pointf qute_QGraphicsItem_mapToItem(void *self, void * a0, qute_pointf a1) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapToItem(static_cast<QGraphicsItem *>(a0), qute_to_QPointF(a1)));
 }
 qute_pointf qute_QGraphicsItem_mapToParent(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapToParent(qute_to_QPointF(a0)));
 }
 qute_pointf qute_QGraphicsItem_mapToScene(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapToScene(qute_to_QPointF(a0)));
 }
 qute_list qute_QGraphicsItem_mapToItem_1(void *self, void * a0, qute_rectf a1) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToItem(static_cast<QGraphicsItem *>(a0), qute_to_QRectF(a1)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapToParent_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToParent(qute_to_QRectF(a0)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapToScene_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToScene(qute_to_QRectF(a0)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_rectf qute_QGraphicsItem_mapRectToItem(void *self, void * a0, qute_rectf a1) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectToItem(static_cast<QGraphicsItem *>(a0), qute_to_QRectF(a1)));
 }
 qute_rectf qute_QGraphicsItem_mapRectToParent(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectToParent(qute_to_QRectF(a0)));
 }
 qute_rectf qute_QGraphicsItem_mapRectToScene(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectToScene(qute_to_QRectF(a0)));
 }
 qute_list qute_QGraphicsItem_mapToItem_2(void *self, void * a0, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToItem(static_cast<QGraphicsItem *>(a0), QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapToParent_2(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToParent(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapToScene_2(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapToScene(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 void * qute_QGraphicsItem_mapToItem_3(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapToItem(static_cast<QGraphicsItem *>(a0), (a1 ? *static_cast<QPainterPath *>(a1) : QPainterPath()))));
 }
 void * qute_QGraphicsItem_mapToParent_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapToParent((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
 }
 void * qute_QGraphicsItem_mapToScene_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapToScene((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
 }
 qute_pointf qute_QGraphicsItem_mapFromItem(void *self, void * a0, qute_pointf a1) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapFromItem(static_cast<QGraphicsItem *>(a0), qute_to_QPointF(a1)));
 }
 qute_pointf qute_QGraphicsItem_mapFromParent(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapFromParent(qute_to_QPointF(a0)));
 }
 qute_pointf qute_QGraphicsItem_mapFromScene(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsItem *>(self)->mapFromScene(qute_to_QPointF(a0)));
 }
 qute_list qute_QGraphicsItem_mapFromItem_1(void *self, void * a0, qute_rectf a1) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromItem(static_cast<QGraphicsItem *>(a0), qute_to_QRectF(a1)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapFromParent_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromParent(qute_to_QRectF(a0)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapFromScene_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromScene(qute_to_QRectF(a0)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_rectf qute_QGraphicsItem_mapRectFromItem(void *self, void * a0, qute_rectf a1) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectFromItem(static_cast<QGraphicsItem *>(a0), qute_to_QRectF(a1)));
 }
 qute_rectf qute_QGraphicsItem_mapRectFromParent(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectFromParent(qute_to_QRectF(a0)));
 }
 qute_rectf qute_QGraphicsItem_mapRectFromScene(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsItem *>(self)->mapRectFromScene(qute_to_QRectF(a0)));
 }
 qute_list qute_QGraphicsItem_mapFromItem_2(void *self, void * a0, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromItem(static_cast<QGraphicsItem *>(a0), QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapFromParent_2(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromParent(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsItem_mapFromScene_2(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsItem *>(self)->mapFromScene(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 void * qute_QGraphicsItem_mapFromItem_3(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapFromItem(static_cast<QGraphicsItem *>(a0), (a1 ? *static_cast<QPainterPath *>(a1) : QPainterPath()))));
 }
 void * qute_QGraphicsItem_mapFromParent_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapFromParent((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
 }
 void * qute_QGraphicsItem_mapFromScene_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsItem *>(self)->mapFromScene((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
 }
 bool qute_QGraphicsItem_isAncestorOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isAncestorOf(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsItem_commonAncestorItem(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsItem *>(self)->commonAncestorItem(static_cast<QGraphicsItem *>(a0)));
 }
 bool qute_QGraphicsItem_isUnderMouse(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isUnderMouse());
 }
 void * qute_QGraphicsItem_data(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QGraphicsItem *>(self)->data(static_cast<int>(a0))));
 }
 void qute_QGraphicsItem_setData(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setData(static_cast<int>(a0), (a1 ? *static_cast<QVariant *>(a1) : QVariant()));
 }
 int64_t qute_QGraphicsItem_inputMethodHints(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsItem *>(self)->inputMethodHints()).toInt());
 }
 void qute_QGraphicsItem_setInputMethodHints(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->setInputMethodHints(QFlags<Qt::InputMethodHint>::fromInt(static_cast<QFlags<Qt::InputMethodHint>::Int>(a0)));
 }
 int qute_QGraphicsItem_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsItem *>(self)->type());
 }
 void qute_QGraphicsItem_installSceneEventFilter(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->installSceneEventFilter(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsItem_removeSceneEventFilter(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItem *>(self)->removeSceneEventFilter(static_cast<QGraphicsItem *>(a0));
+}
+void qute_QGraphicsItem_setFlag_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->setFlag(static_cast<QGraphicsItem::GraphicsItemFlag>(a0), static_cast<bool>(a1));
+}
+void qute_QGraphicsItem_setCacheMode_1(void *self, int64_t a0, qute_size a1) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->setCacheMode(static_cast<QGraphicsItem::CacheMode>(a0), qute_to_QSize(a1));
+}
+void qute_QGraphicsItem_setFocus_1(void *self, int64_t a0) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->setFocus(static_cast<Qt::FocusReason>(a0));
+}
+void qute_QGraphicsItem_ensureVisible_1(void *self, qute_rectf a0, int a1, int a2) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->ensureVisible(qute_to_QRectF(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QGraphicsItem_setTransform_1(void *self, void * a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->setTransform((a0 ? *static_cast<QTransform *>(a0) : QTransform()), static_cast<bool>(a1));
+}
+bool qute_QGraphicsItem_collidesWithItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->collidesWithItem(static_cast<QGraphicsItem *>(a0), static_cast<Qt::ItemSelectionMode>(a1)));
+}
+bool qute_QGraphicsItem_collidesWithPath_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->collidesWithPath((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()), static_cast<Qt::ItemSelectionMode>(a1)));
+}
+qute_list qute_QGraphicsItem_collidingItems_1(void *self, int64_t a0) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsItem *>(self)->collidingItems(static_cast<Qt::ItemSelectionMode>(a0)), [](const auto &v) { return (void *)(v); });
+}
+bool qute_QGraphicsItem_isObscured_1(void *self, qute_rectf a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QGraphicsItem *>(self)->isObscured(qute_to_QRectF(a0)));
+}
+void qute_QGraphicsItem_paint_1(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->paint(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1), static_cast<QWidget *>(a2));
+}
+void qute_QGraphicsItem_scroll_1(void *self, double a0, double a1, qute_rectf a2) {
+	qute_gui_only();
+	static_cast<QGraphicsItem *>(self)->scroll(static_cast<double>(a0), static_cast<double>(a1), qute_to_QRectF(a2));
 }
 
 // ---- QGraphicsItemGroup
 void * qute_QGraphicsItemGroup_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsItemGroup *>(new qute_QGraphicsItemGroup(static_cast<QGraphicsItem *>(a0)));
 }
 void qute_QGraphicsItemGroup_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsItemGroup *>(self);
 }
 void qute_QGraphicsItemGroup_addToGroup(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItemGroup *>(self)->addToGroup(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsItemGroup_removeFromGroup(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsItemGroup *>(self)->removeFromGroup(static_cast<QGraphicsItem *>(a0));
 }
 
 // ---- QGraphicsLayout
 void qute_QGraphicsLayout_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsLayout *>(self);
 }
 void qute_QGraphicsLayout_setContentsMargins(void *self, double a0, double a1, double a2, double a3) {
+	qute_gui_only();
 	static_cast<QGraphicsLayout *>(self)->setContentsMargins(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
 void qute_QGraphicsLayout_activate(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsLayout *>(self)->activate();
 }
 bool qute_QGraphicsLayout_isActivated(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsLayout *>(self)->isActivated());
 }
 void qute_QGraphicsLayout_invalidate(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsLayout *>(self)->invalidate();
 }
 void qute_QGraphicsLayout_widgetEvent(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayout *>(self)->widgetEvent(static_cast<QEvent *>(a0));
 }
 int qute_QGraphicsLayout_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsLayout *>(self)->count());
 }
 void * qute_QGraphicsLayout_itemAt(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsLayout *>(self)->itemAt(static_cast<int>(a0)));
 }
 void qute_QGraphicsLayout_removeAt(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayout *>(self)->removeAt(static_cast<int>(a0));
 }
 void qute_QGraphicsLayout_setInstantInvalidatePropagation(bool a0) {
+	qute_gui_only();
 	QGraphicsLayout::setInstantInvalidatePropagation(static_cast<bool>(a0));
 }
 bool qute_QGraphicsLayout_instantInvalidatePropagation(void) {
+	qute_gui_only();
 	return static_cast<bool>(QGraphicsLayout::instantInvalidatePropagation());
 }
 
 // ---- QGraphicsLayoutItem
 void qute_QGraphicsLayoutItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsLayoutItem *>(self);
 }
+void * qute_QGraphicsLayoutItem_qobject(void *self) {
+	qute_gui_only();
+	return static_cast<void *>(dynamic_cast<QObject *>(static_cast<QGraphicsLayoutItem *>(self)));
+}
 void qute_QGraphicsLayoutItem_setSizePolicy(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setSizePolicy((a0 ? *static_cast<QSizePolicy *>(a0) : QSizePolicy()));
 }
 void qute_QGraphicsLayoutItem_setSizePolicy_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setSizePolicy(static_cast<QSizePolicy::Policy>(a0), static_cast<QSizePolicy::Policy>(a1));
 }
 void * qute_QGraphicsLayoutItem_sizePolicy(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QSizePolicy(static_cast<QGraphicsLayoutItem *>(self)->sizePolicy()));
 }
 void qute_QGraphicsLayoutItem_setMinimumSize(void *self, qute_sizef a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setMinimumSize(qute_to_QSizeF(a0));
 }
 qute_sizef qute_QGraphicsLayoutItem_minimumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsLayoutItem *>(self)->minimumSize());
 }
 void qute_QGraphicsLayoutItem_setMinimumWidth(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setMinimumWidth(static_cast<double>(a0));
 }
 double qute_QGraphicsLayoutItem_minimumWidth(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLayoutItem *>(self)->minimumWidth());
 }
 void qute_QGraphicsLayoutItem_setMinimumHeight(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setMinimumHeight(static_cast<double>(a0));
 }
 double qute_QGraphicsLayoutItem_minimumHeight(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLayoutItem *>(self)->minimumHeight());
 }
 void qute_QGraphicsLayoutItem_setPreferredSize(void *self, qute_sizef a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setPreferredSize(qute_to_QSizeF(a0));
 }
 qute_sizef qute_QGraphicsLayoutItem_preferredSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsLayoutItem *>(self)->preferredSize());
 }
 void qute_QGraphicsLayoutItem_setPreferredWidth(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setPreferredWidth(static_cast<double>(a0));
 }
 double qute_QGraphicsLayoutItem_preferredWidth(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLayoutItem *>(self)->preferredWidth());
 }
 void qute_QGraphicsLayoutItem_setPreferredHeight(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setPreferredHeight(static_cast<double>(a0));
 }
 double qute_QGraphicsLayoutItem_preferredHeight(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLayoutItem *>(self)->preferredHeight());
 }
 void qute_QGraphicsLayoutItem_setMaximumSize(void *self, qute_sizef a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setMaximumSize(qute_to_QSizeF(a0));
 }
 qute_sizef qute_QGraphicsLayoutItem_maximumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsLayoutItem *>(self)->maximumSize());
 }
 void qute_QGraphicsLayoutItem_setMaximumWidth(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setMaximumWidth(static_cast<double>(a0));
 }
 double qute_QGraphicsLayoutItem_maximumWidth(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLayoutItem *>(self)->maximumWidth());
 }
 void qute_QGraphicsLayoutItem_setMaximumHeight(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setMaximumHeight(static_cast<double>(a0));
 }
 double qute_QGraphicsLayoutItem_maximumHeight(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLayoutItem *>(self)->maximumHeight());
 }
 void qute_QGraphicsLayoutItem_setGeometry(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setGeometry(qute_to_QRectF(a0));
 }
 qute_rectf qute_QGraphicsLayoutItem_geometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsLayoutItem *>(self)->geometry());
 }
 void qute_QGraphicsLayoutItem_getContentsMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out) {
+	qute_gui_only();
 	double t0{};
 	double t1{};
 	double t2{};
@@ -7492,223 +9340,315 @@ void qute_QGraphicsLayoutItem_getContentsMargins(void *self, double *a0_out, dou
 	*a3_out = static_cast<double>(t3);
 }
 qute_rectf qute_QGraphicsLayoutItem_contentsRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsLayoutItem *>(self)->contentsRect());
 }
 qute_sizef qute_QGraphicsLayoutItem_effectiveSizeHint(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsLayoutItem *>(self)->effectiveSizeHint(static_cast<Qt::SizeHint>(a0)));
 }
 void qute_QGraphicsLayoutItem_updateGeometry(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->updateGeometry();
 }
 bool qute_QGraphicsLayoutItem_isEmpty(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsLayoutItem *>(self)->isEmpty());
 }
 void * qute_QGraphicsLayoutItem_parentLayoutItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsLayoutItem *>(self)->parentLayoutItem());
 }
 void qute_QGraphicsLayoutItem_setParentLayoutItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLayoutItem *>(self)->setParentLayoutItem(static_cast<QGraphicsLayoutItem *>(a0));
 }
 bool qute_QGraphicsLayoutItem_isLayout(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsLayoutItem *>(self)->isLayout());
 }
 void * qute_QGraphicsLayoutItem_graphicsItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsLayoutItem *>(self)->graphicsItem());
 }
 bool qute_QGraphicsLayoutItem_ownedByLayout(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsLayoutItem *>(self)->ownedByLayout());
+}
+void qute_QGraphicsLayoutItem_setSizePolicy_2(void *self, int64_t a0, int64_t a1, int64_t a2) {
+	qute_gui_only();
+	static_cast<QGraphicsLayoutItem *>(self)->setSizePolicy(static_cast<QSizePolicy::Policy>(a0), static_cast<QSizePolicy::Policy>(a1), static_cast<QSizePolicy::ControlType>(a2));
+}
+qute_sizef qute_QGraphicsLayoutItem_effectiveSizeHint_1(void *self, int64_t a0, qute_sizef a1) {
+	qute_gui_only();
+	return qute_from_QSizeF(static_cast<QGraphicsLayoutItem *>(self)->effectiveSizeHint(static_cast<Qt::SizeHint>(a0), qute_to_QSizeF(a1)));
 }
 
 // ---- QGraphicsLineItem
 void * qute_QGraphicsLineItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsLineItem *>(new qute_QGraphicsLineItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsLineItem_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsLineItem *>(new qute_QGraphicsLineItem((a0 ? *static_cast<QLineF *>(a0) : QLineF()), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsLineItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsLineItem *>(self);
 }
 void * qute_QGraphicsLineItem_pen(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPen(static_cast<QGraphicsLineItem *>(self)->pen()));
 }
 void qute_QGraphicsLineItem_setPen(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLineItem *>(self)->setPen((a0 ? *static_cast<QPen *>(a0) : QPen()));
 }
 void * qute_QGraphicsLineItem_line(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QLineF(static_cast<QGraphicsLineItem *>(self)->line()));
 }
 void qute_QGraphicsLineItem_setLine(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLineItem *>(self)->setLine((a0 ? *static_cast<QLineF *>(a0) : QLineF()));
 }
 
 // ---- QGraphicsLinearLayout
 void * qute_QGraphicsLinearLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsLinearLayout *>(new qute_QGraphicsLinearLayout(static_cast<QGraphicsLayoutItem *>(a0)));
 }
 void * qute_QGraphicsLinearLayout_new_1(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsLinearLayout *>(new qute_QGraphicsLinearLayout(static_cast<Qt::Orientation>(a0), static_cast<QGraphicsLayoutItem *>(a1)));
 }
 void qute_QGraphicsLinearLayout_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsLinearLayout *>(self);
 }
 void qute_QGraphicsLinearLayout_setOrientation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
 }
 int64_t qute_QGraphicsLinearLayout_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsLinearLayout *>(self)->orientation());
 }
 void qute_QGraphicsLinearLayout_addItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->addItem(static_cast<QGraphicsLayoutItem *>(a0));
 }
 void qute_QGraphicsLinearLayout_addStretch(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->addStretch();
 }
 void qute_QGraphicsLinearLayout_insertItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->insertItem(static_cast<int>(a0), static_cast<QGraphicsLayoutItem *>(a1));
 }
 void qute_QGraphicsLinearLayout_insertStretch(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->insertStretch(static_cast<int>(a0));
 }
 void qute_QGraphicsLinearLayout_removeItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->removeItem(static_cast<QGraphicsLayoutItem *>(a0));
 }
 void qute_QGraphicsLinearLayout_setSpacing(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->setSpacing(static_cast<double>(a0));
 }
 double qute_QGraphicsLinearLayout_spacing(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLinearLayout *>(self)->spacing());
 }
 void qute_QGraphicsLinearLayout_setItemSpacing(void *self, int a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->setItemSpacing(static_cast<int>(a0), static_cast<double>(a1));
 }
 double qute_QGraphicsLinearLayout_itemSpacing(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsLinearLayout *>(self)->itemSpacing(static_cast<int>(a0)));
 }
 void qute_QGraphicsLinearLayout_setStretchFactor(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->setStretchFactor(static_cast<QGraphicsLayoutItem *>(a0), static_cast<int>(a1));
 }
 int qute_QGraphicsLinearLayout_stretchFactor(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsLinearLayout *>(self)->stretchFactor(static_cast<QGraphicsLayoutItem *>(a0)));
 }
 void qute_QGraphicsLinearLayout_setAlignment(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->setAlignment(static_cast<QGraphicsLayoutItem *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
 }
 int64_t qute_QGraphicsLinearLayout_alignment(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsLinearLayout *>(self)->alignment(static_cast<QGraphicsLayoutItem *>(a0))).toInt());
 }
 qute_sizef qute_QGraphicsLinearLayout_sizeHint(void *self, int64_t a0) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsLinearLayout *>(self)->sizeHint(static_cast<Qt::SizeHint>(a0)));
 }
 void qute_QGraphicsLinearLayout_dump(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsLinearLayout *>(self)->dump();
+}
+void qute_QGraphicsLinearLayout_addStretch_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QGraphicsLinearLayout *>(self)->addStretch(static_cast<int>(a0));
+}
+void qute_QGraphicsLinearLayout_insertStretch_1(void *self, int a0, int a1) {
+	qute_gui_only();
+	static_cast<QGraphicsLinearLayout *>(self)->insertStretch(static_cast<int>(a0), static_cast<int>(a1));
+}
+qute_sizef qute_QGraphicsLinearLayout_sizeHint_1(void *self, int64_t a0, qute_sizef a1) {
+	qute_gui_only();
+	return qute_from_QSizeF(static_cast<QGraphicsLinearLayout *>(self)->sizeHint(static_cast<Qt::SizeHint>(a0), qute_to_QSizeF(a1)));
+}
+void qute_QGraphicsLinearLayout_dump_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QGraphicsLinearLayout *>(self)->dump(static_cast<int>(a0));
 }
 
 // ---- QGraphicsObject
 void * qute_QGraphicsObject_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsObject *>(static_cast<QObject *>(obj)));
 }
 void * qute_QGraphicsObject_as_QGraphicsItem(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(static_cast<QGraphicsItem *>(static_cast<QGraphicsObject *>(self)));
 }
 void qute_QGraphicsObject_grabGesture(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->grabGesture(static_cast<Qt::GestureType>(a0));
 }
 void qute_QGraphicsObject_ungrabGesture(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->ungrabGesture(static_cast<Qt::GestureType>(a0));
 }
 void qute_QGraphicsObject_parentChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->parentChanged();
 }
 void qute_QGraphicsObject_opacityChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->opacityChanged();
 }
 void qute_QGraphicsObject_visibleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->visibleChanged();
 }
 void qute_QGraphicsObject_enabledChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->enabledChanged();
 }
 void qute_QGraphicsObject_xChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->xChanged();
 }
 void qute_QGraphicsObject_yChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->yChanged();
 }
 void qute_QGraphicsObject_zChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->zChanged();
 }
 void qute_QGraphicsObject_rotationChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->rotationChanged();
 }
 void qute_QGraphicsObject_scaleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->scaleChanged();
 }
 void qute_QGraphicsObject_childrenChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->childrenChanged();
 }
 void qute_QGraphicsObject_widthChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->widthChanged();
 }
 void qute_QGraphicsObject_heightChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->heightChanged();
 }
+void qute_QGraphicsObject_grabGesture_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QGraphicsObject *>(self)->grabGesture(static_cast<Qt::GestureType>(a0), QFlags<Qt::GestureFlag>::fromInt(static_cast<QFlags<Qt::GestureFlag>::Int>(a1)));
+}
 void * qute_QGraphicsObject_parentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::parentChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_opacityChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::opacityChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_visibleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::visibleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_enabledChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::enabledChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_xChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::xChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_yChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::yChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_zChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::zChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_rotationChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::rotationChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_scaleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::scaleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_childrenChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::childrenChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_widthChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::widthChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsObject_heightChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsObject *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsObject::heightChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -7716,35 +9656,45 @@ void * qute_QGraphicsObject_heightChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsOpacityEffect
 void * qute_QGraphicsOpacityEffect_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsOpacityEffect *>(new QGraphicsOpacityEffect(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsOpacityEffect_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsOpacityEffect *>(static_cast<QObject *>(obj)));
 }
 double qute_QGraphicsOpacityEffect_opacity(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsOpacityEffect *>(self)->opacity());
 }
 void * qute_QGraphicsOpacityEffect_opacityMask(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QGraphicsOpacityEffect *>(self)->opacityMask()));
 }
 void qute_QGraphicsOpacityEffect_setOpacity(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsOpacityEffect *>(self)->setOpacity(static_cast<double>(a0));
 }
 void qute_QGraphicsOpacityEffect_setOpacityMask(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsOpacityEffect *>(self)->setOpacityMask((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void qute_QGraphicsOpacityEffect_opacityChanged_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsOpacityEffect *>(self)->opacityChanged(static_cast<double>(a0));
 }
 void qute_QGraphicsOpacityEffect_opacityMaskChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsOpacityEffect *>(self)->opacityMaskChanged((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void * qute_QGraphicsOpacityEffect_opacityChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsOpacityEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsOpacityEffect::opacityChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsOpacityEffect_opacityMaskChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsOpacityEffect *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsOpacityEffect::opacityMaskChanged, obj, [s](const QBrush & a0) { void * c0 = static_cast<void *>(new QBrush(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -7752,164 +9702,217 @@ void * qute_QGraphicsOpacityEffect_opacityMaskChanged(void *self, uintptr_t id) 
 
 // ---- QGraphicsPathItem
 void * qute_QGraphicsPathItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsPathItem *>(new qute_QGraphicsPathItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsPathItem_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsPathItem *>(new qute_QGraphicsPathItem((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsPathItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsPathItem *>(self);
 }
 void * qute_QGraphicsPathItem_path(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsPathItem *>(self)->path()));
 }
 void qute_QGraphicsPathItem_setPath(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsPathItem *>(self)->setPath((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()));
 }
 
 // ---- QGraphicsPixmapItem
 void * qute_QGraphicsPixmapItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsPixmapItem *>(new qute_QGraphicsPixmapItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsPixmapItem_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsPixmapItem *>(new qute_QGraphicsPixmapItem((a0 ? *static_cast<QPixmap *>(a0) : QPixmap()), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsPixmapItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsPixmapItem *>(self);
 }
 void * qute_QGraphicsPixmapItem_pixmap(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPixmap(static_cast<QGraphicsPixmapItem *>(self)->pixmap()));
 }
 void qute_QGraphicsPixmapItem_setPixmap(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsPixmapItem *>(self)->setPixmap((a0 ? *static_cast<QPixmap *>(a0) : QPixmap()));
 }
 int64_t qute_QGraphicsPixmapItem_transformationMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsPixmapItem *>(self)->transformationMode());
 }
 void qute_QGraphicsPixmapItem_setTransformationMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsPixmapItem *>(self)->setTransformationMode(static_cast<Qt::TransformationMode>(a0));
 }
 qute_pointf qute_QGraphicsPixmapItem_offset(void *self) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsPixmapItem *>(self)->offset());
 }
 void qute_QGraphicsPixmapItem_setOffset(void *self, qute_pointf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsPixmapItem *>(self)->setOffset(qute_to_QPointF(a0));
 }
 int64_t qute_QGraphicsPixmapItem_shapeMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsPixmapItem *>(self)->shapeMode());
 }
 void qute_QGraphicsPixmapItem_setShapeMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsPixmapItem *>(self)->setShapeMode(static_cast<QGraphicsPixmapItem::ShapeMode>(a0));
 }
 
 // ---- QGraphicsPolygonItem
 void * qute_QGraphicsPolygonItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsPolygonItem *>(new qute_QGraphicsPolygonItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsPolygonItem_new_1(const void *a0, ptrdiff_t a0_n, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsPolygonItem *>(new qute_QGraphicsPolygonItem(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }()), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsPolygonItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsPolygonItem *>(self);
 }
 qute_list qute_QGraphicsPolygonItem_polygon(void *self) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsPolygonItem *>(self)->polygon(), [](const auto &v) { return qute_from_QPointF(v); });
 }
 void qute_QGraphicsPolygonItem_setPolygon(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QGraphicsPolygonItem *>(self)->setPolygon(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }()));
 }
 int64_t qute_QGraphicsPolygonItem_fillRule(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsPolygonItem *>(self)->fillRule());
 }
 void qute_QGraphicsPolygonItem_setFillRule(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsPolygonItem *>(self)->setFillRule(static_cast<Qt::FillRule>(a0));
 }
 
 // ---- QGraphicsProxyWidget
 void * qute_QGraphicsProxyWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsProxyWidget *>(new QGraphicsProxyWidget(static_cast<QGraphicsItem *>(a0)));
 }
+void * qute_QGraphicsProxyWidget_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QGraphicsProxyWidget *>(new QGraphicsProxyWidget(static_cast<QGraphicsItem *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QGraphicsProxyWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsProxyWidget *>(static_cast<QObject *>(obj)));
 }
 void qute_QGraphicsProxyWidget_setWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsProxyWidget *>(self)->setWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QGraphicsProxyWidget_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsProxyWidget *>(self)->widget());
 }
 qute_rectf qute_QGraphicsProxyWidget_subWidgetRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsProxyWidget *>(self)->subWidgetRect(static_cast<QWidget *>(a0)));
 }
 void * qute_QGraphicsProxyWidget_createProxyForChildWidget(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsProxyWidget *>(self)->createProxyForChildWidget(static_cast<QWidget *>(a0)));
 }
 
 // ---- QGraphicsRectItem
 void * qute_QGraphicsRectItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsRectItem *>(new qute_QGraphicsRectItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsRectItem_new_1(qute_rectf a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsRectItem *>(new qute_QGraphicsRectItem(qute_to_QRectF(a0), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsRectItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsRectItem *>(self);
 }
 qute_rectf qute_QGraphicsRectItem_rect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsRectItem *>(self)->rect());
 }
 void qute_QGraphicsRectItem_setRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsRectItem *>(self)->setRect(qute_to_QRectF(a0));
 }
 
 // ---- QGraphicsRotation
 void * qute_QGraphicsRotation_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsRotation *>(new QGraphicsRotation(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsRotation_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsRotation *>(static_cast<QObject *>(obj)));
 }
 void * qute_QGraphicsRotation_origin(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QVector3D(static_cast<QGraphicsRotation *>(self)->origin()));
 }
 void qute_QGraphicsRotation_setOrigin(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->setOrigin((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
 }
 double qute_QGraphicsRotation_angle(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsRotation *>(self)->angle());
 }
 void qute_QGraphicsRotation_setAngle(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->setAngle(static_cast<double>(a0));
 }
 void * qute_QGraphicsRotation_axis(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QVector3D(static_cast<QGraphicsRotation *>(self)->axis()));
 }
 void qute_QGraphicsRotation_setAxis(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->setAxis((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
 }
 void qute_QGraphicsRotation_setAxis_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->setAxis(static_cast<Qt::Axis>(a0));
 }
 void qute_QGraphicsRotation_originChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->originChanged();
 }
 void qute_QGraphicsRotation_angleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->angleChanged();
 }
 void qute_QGraphicsRotation_axisChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsRotation *>(self)->axisChanged();
 }
 void * qute_QGraphicsRotation_originChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsRotation *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsRotation::originChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsRotation_angleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsRotation *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsRotation::angleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsRotation_axisChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsRotation *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsRotation::axisChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -7917,71 +9920,91 @@ void * qute_QGraphicsRotation_axisChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsScale
 void * qute_QGraphicsScale_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsScale *>(new QGraphicsScale(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsScale_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsScale *>(static_cast<QObject *>(obj)));
 }
 void * qute_QGraphicsScale_origin(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QVector3D(static_cast<QGraphicsScale *>(self)->origin()));
 }
 void qute_QGraphicsScale_setOrigin(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->setOrigin((a0 ? *static_cast<QVector3D *>(a0) : QVector3D()));
 }
 double qute_QGraphicsScale_xScale(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsScale *>(self)->xScale());
 }
 void qute_QGraphicsScale_setXScale(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->setXScale(static_cast<double>(a0));
 }
 double qute_QGraphicsScale_yScale(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsScale *>(self)->yScale());
 }
 void qute_QGraphicsScale_setYScale(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->setYScale(static_cast<double>(a0));
 }
 double qute_QGraphicsScale_zScale(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsScale *>(self)->zScale());
 }
 void qute_QGraphicsScale_setZScale(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->setZScale(static_cast<double>(a0));
 }
 void qute_QGraphicsScale_originChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->originChanged();
 }
 void qute_QGraphicsScale_xScaleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->xScaleChanged();
 }
 void qute_QGraphicsScale_yScaleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->yScaleChanged();
 }
 void qute_QGraphicsScale_zScaleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->zScaleChanged();
 }
 void qute_QGraphicsScale_scaleChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScale *>(self)->scaleChanged();
 }
 void * qute_QGraphicsScale_originChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScale *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScale::originChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsScale_xScaleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScale *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScale::xScaleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsScale_yScaleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScale *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScale::yScaleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsScale_zScaleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScale *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScale::zScaleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsScale_scaleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScale *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScale::scaleChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -7989,246 +10012,373 @@ void * qute_QGraphicsScale_scaleChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsScene
 void * qute_QGraphicsScene_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsScene *>(new QGraphicsScene(static_cast<QObject *>(a0)));
 }
 void * qute_QGraphicsScene_new_1(qute_rectf a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsScene *>(new QGraphicsScene(qute_to_QRectF(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QGraphicsScene_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsScene *>(static_cast<QObject *>(obj)));
 }
 qute_rectf qute_QGraphicsScene_sceneRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsScene *>(self)->sceneRect());
 }
 double qute_QGraphicsScene_width(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsScene *>(self)->width());
 }
 double qute_QGraphicsScene_height(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsScene *>(self)->height());
 }
 void qute_QGraphicsScene_setSceneRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setSceneRect(qute_to_QRectF(a0));
 }
 void qute_QGraphicsScene_render(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->render(static_cast<QPainter *>(a0));
 }
 int64_t qute_QGraphicsScene_itemIndexMethod(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsScene *>(self)->itemIndexMethod());
 }
 void qute_QGraphicsScene_setItemIndexMethod(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setItemIndexMethod(static_cast<QGraphicsScene::ItemIndexMethod>(a0));
 }
 int qute_QGraphicsScene_bspTreeDepth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsScene *>(self)->bspTreeDepth());
 }
 void qute_QGraphicsScene_setBspTreeDepth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setBspTreeDepth(static_cast<int>(a0));
 }
 qute_rectf qute_QGraphicsScene_itemsBoundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsScene *>(self)->itemsBoundingRect());
 }
 qute_list qute_QGraphicsScene_items(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsScene_items_1(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(qute_to_QPointF(a0)), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsScene_items_2(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(qute_to_QRectF(a0)), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsScene_items_3(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsScene_items_4(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsScene_collidingItems(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->collidingItems(static_cast<QGraphicsItem *>(a0)), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QGraphicsScene_itemAt(void *self, qute_pointf a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->itemAt(qute_to_QPointF(a0), (a1 ? *static_cast<QTransform *>(a1) : QTransform())));
 }
 qute_list qute_QGraphicsScene_selectedItems(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->selectedItems(), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QGraphicsScene_selectionArea(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsScene *>(self)->selectionArea()));
 }
 void qute_QGraphicsScene_setSelectionArea(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setSelectionArea((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()), (a1 ? *static_cast<QTransform *>(a1) : QTransform()));
 }
 void qute_QGraphicsScene_setSelectionArea_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setSelectionArea((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()));
 }
 void qute_QGraphicsScene_addItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->addItem(static_cast<QGraphicsItem *>(a0));
 }
 void * qute_QGraphicsScene_addEllipse(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsEllipseItem(qute_to_QRectF(a0)); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addLine(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsLineItem((a0 ? *static_cast<QLineF *>(a0) : QLineF())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addPath(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsPathItem((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addPixmap(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsPixmapItem((a0 ? *static_cast<QPixmap *>(a0) : QPixmap())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addPolygon(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsPolygonItem(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsRectItem(qute_to_QRectF(a0)); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->addText(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QGraphicsScene_addSimpleText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)([&] { auto i = new qute_QGraphicsSimpleTextItem(QString::fromUtf8(a0, a0_len)); static_cast<QGraphicsScene *>(self)->addItem(i); return i; }());
 }
 void * qute_QGraphicsScene_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->addWidget(static_cast<QWidget *>(a0)));
 }
 void qute_QGraphicsScene_removeItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->removeItem(static_cast<QGraphicsItem *>(a0));
 }
 void * qute_QGraphicsScene_focusItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->focusItem());
 }
 void qute_QGraphicsScene_setFocusItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setFocusItem(static_cast<QGraphicsItem *>(a0));
 }
 bool qute_QGraphicsScene_hasFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsScene *>(self)->hasFocus());
 }
 void qute_QGraphicsScene_setFocus(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setFocus();
 }
 void qute_QGraphicsScene_clearFocus(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->clearFocus();
 }
 void qute_QGraphicsScene_setStickyFocus(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setStickyFocus(static_cast<bool>(a0));
 }
 bool qute_QGraphicsScene_stickyFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsScene *>(self)->stickyFocus());
 }
 void * qute_QGraphicsScene_mouseGrabberItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->mouseGrabberItem());
 }
 void * qute_QGraphicsScene_backgroundBrush(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QGraphicsScene *>(self)->backgroundBrush()));
 }
 void qute_QGraphicsScene_setBackgroundBrush(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setBackgroundBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void * qute_QGraphicsScene_foregroundBrush(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QGraphicsScene *>(self)->foregroundBrush()));
 }
 void qute_QGraphicsScene_setForegroundBrush(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setForegroundBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 qute_list qute_QGraphicsScene_views(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->views(), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QGraphicsScene_style(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->style());
 }
 void qute_QGraphicsScene_setStyle(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setStyle(static_cast<QStyle *>(a0));
 }
 void * qute_QGraphicsScene_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QGraphicsScene *>(self)->font()));
 }
 void qute_QGraphicsScene_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void * qute_QGraphicsScene_palette(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(static_cast<QGraphicsScene *>(self)->palette()));
 }
 void qute_QGraphicsScene_setPalette(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setPalette((a0 ? *static_cast<QPalette *>(a0) : QPalette()));
 }
 bool qute_QGraphicsScene_isActive(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsScene *>(self)->isActive());
 }
 void * qute_QGraphicsScene_activePanel(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->activePanel());
 }
 void qute_QGraphicsScene_setActivePanel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setActivePanel(static_cast<QGraphicsItem *>(a0));
 }
 void * qute_QGraphicsScene_activeWindow(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsScene *>(self)->activeWindow());
 }
 void qute_QGraphicsScene_setActiveWindow(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setActiveWindow(static_cast<QGraphicsWidget *>(a0));
 }
 bool qute_QGraphicsScene_sendEvent(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsScene *>(self)->sendEvent(static_cast<QGraphicsItem *>(a0), static_cast<QEvent *>(a1)));
 }
 double qute_QGraphicsScene_minimumRenderSize(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsScene *>(self)->minimumRenderSize());
 }
 void qute_QGraphicsScene_setMinimumRenderSize(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setMinimumRenderSize(static_cast<double>(a0));
 }
 bool qute_QGraphicsScene_focusOnTouch(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsScene *>(self)->focusOnTouch());
 }
 void qute_QGraphicsScene_setFocusOnTouch(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->setFocusOnTouch(static_cast<bool>(a0));
 }
 void qute_QGraphicsScene_update(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->update();
 }
 void qute_QGraphicsScene_update_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->update(qute_to_QRectF(a0));
 }
 void qute_QGraphicsScene_invalidate(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->invalidate();
 }
 void qute_QGraphicsScene_invalidate_1(void *self, qute_rectf a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->invalidate(qute_to_QRectF(a0), QFlags<QGraphicsScene::SceneLayer>::fromInt(static_cast<QFlags<QGraphicsScene::SceneLayer>::Int>(a1)));
 }
 void qute_QGraphicsScene_advance(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->advance();
 }
 void qute_QGraphicsScene_clearSelection(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->clearSelection();
 }
 void qute_QGraphicsScene_clear(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->clear();
 }
 void qute_QGraphicsScene_changed_1(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->changed([&] { QList<QRectF> l; auto d = static_cast<qute_rectf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QRectF(d[i])); return l; }());
 }
 void qute_QGraphicsScene_sceneRectChanged_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->sceneRectChanged(qute_to_QRectF(a0));
 }
 void qute_QGraphicsScene_selectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->selectionChanged();
 }
 void qute_QGraphicsScene_focusItemChanged_1(void *self, void * a0, void * a1, int64_t a2) {
+	qute_gui_only();
 	static_cast<QGraphicsScene *>(self)->focusItemChanged(static_cast<QGraphicsItem *>(a0), static_cast<QGraphicsItem *>(a1), static_cast<Qt::FocusReason>(a2));
 }
+void qute_QGraphicsScene_render_1(void *self, void * a0, qute_rectf a1, qute_rectf a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QGraphicsScene *>(self)->render(static_cast<QPainter *>(a0), qute_to_QRectF(a1), qute_to_QRectF(a2), static_cast<Qt::AspectRatioMode>(a3));
+}
+qute_list qute_QGraphicsScene_items_5(void *self, int64_t a0) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(static_cast<Qt::SortOrder>(a0)), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsScene_items_6(void *self, qute_pointf a0, int64_t a1, int64_t a2, void * a3) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(qute_to_QPointF(a0), static_cast<Qt::ItemSelectionMode>(a1), static_cast<Qt::SortOrder>(a2), (a3 ? *static_cast<QTransform *>(a3) : QTransform())), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsScene_items_7(void *self, qute_rectf a0, int64_t a1, int64_t a2, void * a3) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(qute_to_QRectF(a0), static_cast<Qt::ItemSelectionMode>(a1), static_cast<Qt::SortOrder>(a2), (a3 ? *static_cast<QTransform *>(a3) : QTransform())), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsScene_items_8(void *self, const void *a0, ptrdiff_t a0_n, int64_t a1, int64_t a2, void * a3) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }()), static_cast<Qt::ItemSelectionMode>(a1), static_cast<Qt::SortOrder>(a2), (a3 ? *static_cast<QTransform *>(a3) : QTransform())), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsScene_items_9(void *self, void * a0, int64_t a1, int64_t a2, void * a3) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->items((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()), static_cast<Qt::ItemSelectionMode>(a1), static_cast<Qt::SortOrder>(a2), (a3 ? *static_cast<QTransform *>(a3) : QTransform())), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsScene_collidingItems_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsScene *>(self)->collidingItems(static_cast<QGraphicsItem *>(a0), static_cast<Qt::ItemSelectionMode>(a1)), [](const auto &v) { return (void *)(v); });
+}
+void qute_QGraphicsScene_setSelectionArea_2(void *self, void * a0, int64_t a1, int64_t a2, void * a3) {
+	qute_gui_only();
+	static_cast<QGraphicsScene *>(self)->setSelectionArea((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()), static_cast<Qt::ItemSelectionOperation>(a1), static_cast<Qt::ItemSelectionMode>(a2), (a3 ? *static_cast<QTransform *>(a3) : QTransform()));
+}
+void * qute_QGraphicsScene_addText_1(void *self, const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return (void *)(static_cast<QGraphicsScene *>(self)->addText(QString::fromUtf8(a0, a0_len), (a1 ? *static_cast<QFont *>(a1) : QFont())));
+}
+void * qute_QGraphicsScene_addWidget_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return (void *)(static_cast<QGraphicsScene *>(self)->addWidget(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
+void qute_QGraphicsScene_setFocusItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QGraphicsScene *>(self)->setFocusItem(static_cast<QGraphicsItem *>(a0), static_cast<Qt::FocusReason>(a1));
+}
+void qute_QGraphicsScene_setFocus_1(void *self, int64_t a0) {
+	qute_gui_only();
+	static_cast<QGraphicsScene *>(self)->setFocus(static_cast<Qt::FocusReason>(a0));
+}
 void * qute_QGraphicsScene_changed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScene *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScene::changed, obj, [s](const QList<QRectF> & a0) { qute_list c0 = qute_ret_list<qute_rectf>(a0, [](const auto &v) { return qute_from_QRectF(v); }); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsScene_sceneRectChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScene *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScene::sceneRectChanged, obj, [s](const QRectF & a0) { qute_rectf c0 = qute_from_QRectF(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsScene_selectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScene *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScene::selectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsScene_focusItemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsScene *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsScene::focusItemChanged, obj, [s](QGraphicsItem * a0, QGraphicsItem * a1, Qt::FocusReason a2) { void * c0 = (void *)(a0); void * c1 = (void *)(a1); int64_t c2 = static_cast<int64_t>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtwidgets_signal(s->id, args); }));
@@ -8236,133 +10386,175 @@ void * qute_QGraphicsScene_focusItemChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsSimpleTextItem
 void * qute_QGraphicsSimpleTextItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsSimpleTextItem *>(new qute_QGraphicsSimpleTextItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsSimpleTextItem_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsSimpleTextItem *>(new qute_QGraphicsSimpleTextItem(QString::fromUtf8(a0, a0_len), static_cast<QGraphicsItem *>(a1)));
 }
 void qute_QGraphicsSimpleTextItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QGraphicsSimpleTextItem *>(self);
 }
 void qute_QGraphicsSimpleTextItem_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsSimpleTextItem *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QGraphicsSimpleTextItem_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QGraphicsSimpleTextItem *>(self)->text());
 }
 void qute_QGraphicsSimpleTextItem_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsSimpleTextItem *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void * qute_QGraphicsSimpleTextItem_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QGraphicsSimpleTextItem *>(self)->font()));
 }
 
 // ---- QGraphicsTextItem
 void * qute_QGraphicsTextItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsTextItem *>(new QGraphicsTextItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsTextItem_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsTextItem *>(new QGraphicsTextItem(QString::fromUtf8(a0, a0_len), static_cast<QGraphicsItem *>(a1)));
 }
 void * qute_QGraphicsTextItem_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsTextItem *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QGraphicsTextItem_toHtml(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QGraphicsTextItem *>(self)->toHtml());
 }
 void qute_QGraphicsTextItem_setHtml(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setHtml(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QGraphicsTextItem_toPlainText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QGraphicsTextItem *>(self)->toPlainText());
 }
 void qute_QGraphicsTextItem_setPlainText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setPlainText(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QGraphicsTextItem_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QGraphicsTextItem *>(self)->font()));
 }
 void qute_QGraphicsTextItem_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void qute_QGraphicsTextItem_setDefaultTextColor(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setDefaultTextColor(qute_to_QColor(a0));
 }
 qute_color qute_QGraphicsTextItem_defaultTextColor(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QGraphicsTextItem *>(self)->defaultTextColor());
 }
 qute_rectf qute_QGraphicsTextItem_boundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsTextItem *>(self)->boundingRect());
 }
 void * qute_QGraphicsTextItem_shape(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsTextItem *>(self)->shape()));
 }
 bool qute_QGraphicsTextItem_contains(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsTextItem *>(self)->contains(qute_to_QPointF(a0)));
 }
 void qute_QGraphicsTextItem_paint(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->paint(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1), static_cast<QWidget *>(a2));
 }
 bool qute_QGraphicsTextItem_isObscuredBy(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsTextItem *>(self)->isObscuredBy(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsTextItem_opaqueArea(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsTextItem *>(self)->opaqueArea()));
 }
 int qute_QGraphicsTextItem_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsTextItem *>(self)->type());
 }
 void qute_QGraphicsTextItem_setTextWidth(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setTextWidth(static_cast<double>(a0));
 }
 double qute_QGraphicsTextItem_textWidth(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QGraphicsTextItem *>(self)->textWidth());
 }
 void qute_QGraphicsTextItem_adjustSize(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->adjustSize();
 }
 void qute_QGraphicsTextItem_setDocument(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setDocument(static_cast<QTextDocument *>(a0));
 }
 void * qute_QGraphicsTextItem_document(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsTextItem *>(self)->document());
 }
 void qute_QGraphicsTextItem_setTextInteractionFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setTextInteractionFlags(QFlags<Qt::TextInteractionFlag>::fromInt(static_cast<QFlags<Qt::TextInteractionFlag>::Int>(a0)));
 }
 int64_t qute_QGraphicsTextItem_textInteractionFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsTextItem *>(self)->textInteractionFlags()).toInt());
 }
 void qute_QGraphicsTextItem_setTabChangesFocus(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setTabChangesFocus(static_cast<bool>(a0));
 }
 bool qute_QGraphicsTextItem_tabChangesFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsTextItem *>(self)->tabChangesFocus());
 }
 void qute_QGraphicsTextItem_setOpenExternalLinks(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setOpenExternalLinks(static_cast<bool>(a0));
 }
 bool qute_QGraphicsTextItem_openExternalLinks(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsTextItem *>(self)->openExternalLinks());
 }
 void qute_QGraphicsTextItem_setTextCursor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->setTextCursor((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()));
 }
 void * qute_QGraphicsTextItem_textCursor(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCursor(static_cast<QGraphicsTextItem *>(self)->textCursor()));
 }
 void qute_QGraphicsTextItem_linkActivated_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->linkActivated(QString::fromUtf8(a0, a0_len));
 }
 void qute_QGraphicsTextItem_linkHovered_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsTextItem *>(self)->linkHovered(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QGraphicsTextItem_linkActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsTextItem *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsTextItem::linkActivated, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGraphicsTextItem_linkHovered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsTextItem *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsTextItem::linkHovered, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -8370,221 +10562,341 @@ void * qute_QGraphicsTextItem_linkHovered(void *self, uintptr_t id) {
 
 // ---- QGraphicsTransform
 void * qute_QGraphicsTransform_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsTransform *>(static_cast<QObject *>(obj)));
 }
 void qute_QGraphicsTransform_applyTo(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsTransform *>(self)->applyTo(static_cast<QMatrix4x4 *>(a0));
 }
 
 // ---- QGraphicsView
 void * qute_QGraphicsView_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsView *>(new QGraphicsView(static_cast<QWidget *>(a0)));
 }
 void * qute_QGraphicsView_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QGraphicsView *>(new QGraphicsView(static_cast<QGraphicsScene *>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QGraphicsView_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsView *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QGraphicsView_renderHints(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsView *>(self)->renderHints()).toInt());
 }
 void qute_QGraphicsView_setRenderHint(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setRenderHint(static_cast<QPainter::RenderHint>(a0));
 }
 void qute_QGraphicsView_setRenderHints(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setRenderHints(QFlags<QPainter::RenderHint>::fromInt(static_cast<QFlags<QPainter::RenderHint>::Int>(a0)));
 }
 int64_t qute_QGraphicsView_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsView *>(self)->alignment()).toInt());
 }
 void qute_QGraphicsView_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QGraphicsView_transformationAnchor(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsView *>(self)->transformationAnchor());
 }
 void qute_QGraphicsView_setTransformationAnchor(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setTransformationAnchor(static_cast<QGraphicsView::ViewportAnchor>(a0));
 }
 int64_t qute_QGraphicsView_resizeAnchor(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsView *>(self)->resizeAnchor());
 }
 void qute_QGraphicsView_setResizeAnchor(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setResizeAnchor(static_cast<QGraphicsView::ViewportAnchor>(a0));
 }
 int64_t qute_QGraphicsView_viewportUpdateMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsView *>(self)->viewportUpdateMode());
 }
 void qute_QGraphicsView_setViewportUpdateMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setViewportUpdateMode(static_cast<QGraphicsView::ViewportUpdateMode>(a0));
 }
 int64_t qute_QGraphicsView_optimizationFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsView *>(self)->optimizationFlags()).toInt());
 }
 void qute_QGraphicsView_setOptimizationFlag(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setOptimizationFlag(static_cast<QGraphicsView::OptimizationFlag>(a0));
 }
 void qute_QGraphicsView_setOptimizationFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setOptimizationFlags(QFlags<QGraphicsView::OptimizationFlag>::fromInt(static_cast<QFlags<QGraphicsView::OptimizationFlag>::Int>(a0)));
 }
 int64_t qute_QGraphicsView_dragMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsView *>(self)->dragMode());
 }
 void qute_QGraphicsView_setDragMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setDragMode(static_cast<QGraphicsView::DragMode>(a0));
 }
 int64_t qute_QGraphicsView_rubberBandSelectionMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsView *>(self)->rubberBandSelectionMode());
 }
 void qute_QGraphicsView_setRubberBandSelectionMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setRubberBandSelectionMode(static_cast<Qt::ItemSelectionMode>(a0));
 }
 qute_rect qute_QGraphicsView_rubberBandRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QGraphicsView *>(self)->rubberBandRect());
 }
 int64_t qute_QGraphicsView_cacheMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsView *>(self)->cacheMode()).toInt());
 }
 void qute_QGraphicsView_setCacheMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setCacheMode(QFlags<QGraphicsView::CacheModeFlag>::fromInt(static_cast<QFlags<QGraphicsView::CacheModeFlag>::Int>(a0)));
 }
 void qute_QGraphicsView_resetCachedContent(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->resetCachedContent();
 }
 bool qute_QGraphicsView_isInteractive(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsView *>(self)->isInteractive());
 }
 void qute_QGraphicsView_setInteractive(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setInteractive(static_cast<bool>(a0));
 }
 void * qute_QGraphicsView_scene(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsView *>(self)->scene());
 }
 void qute_QGraphicsView_setScene(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setScene(static_cast<QGraphicsScene *>(a0));
 }
 qute_rectf qute_QGraphicsView_sceneRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsView *>(self)->sceneRect());
 }
 void qute_QGraphicsView_setSceneRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setSceneRect(qute_to_QRectF(a0));
 }
 void * qute_QGraphicsView_transform(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsView *>(self)->transform()));
 }
 void * qute_QGraphicsView_viewportTransform(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTransform(static_cast<QGraphicsView *>(self)->viewportTransform()));
 }
 bool qute_QGraphicsView_isTransformed(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsView *>(self)->isTransformed());
 }
 void qute_QGraphicsView_setTransform(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setTransform((a0 ? *static_cast<QTransform *>(a0) : QTransform()));
 }
 void qute_QGraphicsView_resetTransform(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->resetTransform();
 }
 void qute_QGraphicsView_rotate(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->rotate(static_cast<double>(a0));
 }
 void qute_QGraphicsView_scale(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->scale(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsView_shear(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->shear(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsView_translate(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->translate(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QGraphicsView_centerOn(void *self, qute_pointf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->centerOn(qute_to_QPointF(a0));
 }
 void qute_QGraphicsView_centerOn_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->centerOn(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsView_ensureVisible(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->ensureVisible(qute_to_QRectF(a0));
 }
 void qute_QGraphicsView_ensureVisible_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->ensureVisible(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsView_fitInView(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->fitInView(qute_to_QRectF(a0));
 }
 void qute_QGraphicsView_fitInView_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->fitInView(static_cast<QGraphicsItem *>(a0));
 }
 void qute_QGraphicsView_render(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->render(static_cast<QPainter *>(a0));
 }
 qute_list qute_QGraphicsView_items(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsView_items_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(qute_to_QPoint(a0)), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsView_items_2(void *self, qute_rect a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(qute_to_QRect(a0)), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsView_items_3(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(QPolygon([&] { QList<QPoint> l; auto d = static_cast<qute_point const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPoint(d[i])); return l; }())), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QGraphicsView_items_4(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath())), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QGraphicsView_itemAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsView *>(self)->itemAt(qute_to_QPoint(a0)));
 }
 qute_pointf qute_QGraphicsView_mapToScene(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QGraphicsView *>(self)->mapToScene(qute_to_QPoint(a0)));
 }
 qute_list qute_QGraphicsView_mapToScene_1(void *self, qute_rect a0) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsView *>(self)->mapToScene(qute_to_QRect(a0)), [](const auto &v) { return qute_from_QPointF(v); });
 }
 qute_list qute_QGraphicsView_mapToScene_2(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_pointf>(static_cast<QGraphicsView *>(self)->mapToScene(QPolygon([&] { QList<QPoint> l; auto d = static_cast<qute_point const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPoint(d[i])); return l; }())), [](const auto &v) { return qute_from_QPointF(v); });
 }
 void * qute_QGraphicsView_mapToScene_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsView *>(self)->mapToScene((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
 }
 qute_point qute_QGraphicsView_mapFromScene(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QGraphicsView *>(self)->mapFromScene(qute_to_QPointF(a0)));
 }
 qute_list qute_QGraphicsView_mapFromScene_1(void *self, qute_rectf a0) {
+	qute_gui_only();
 	return qute_ret_list<qute_point>(static_cast<QGraphicsView *>(self)->mapFromScene(qute_to_QRectF(a0)), [](const auto &v) { return qute_from_QPoint(v); });
 }
 qute_list qute_QGraphicsView_mapFromScene_2(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return qute_ret_list<qute_point>(static_cast<QGraphicsView *>(self)->mapFromScene(QPolygonF([&] { QList<QPointF> l; auto d = static_cast<qute_pointf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPointF(d[i])); return l; }())), [](const auto &v) { return qute_from_QPoint(v); });
 }
 void * qute_QGraphicsView_mapFromScene_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsView *>(self)->mapFromScene((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()))));
 }
 void * qute_QGraphicsView_backgroundBrush(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QGraphicsView *>(self)->backgroundBrush()));
 }
 void qute_QGraphicsView_setBackgroundBrush(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setBackgroundBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void * qute_QGraphicsView_foregroundBrush(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QGraphicsView *>(self)->foregroundBrush()));
 }
 void qute_QGraphicsView_setForegroundBrush(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->setForegroundBrush((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void qute_QGraphicsView_updateScene(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->updateScene([&] { QList<QRectF> l; auto d = static_cast<qute_rectf const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QRectF(d[i])); return l; }());
 }
 void qute_QGraphicsView_invalidateScene(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->invalidateScene();
 }
 void qute_QGraphicsView_updateSceneRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->updateSceneRect(qute_to_QRectF(a0));
 }
 void qute_QGraphicsView_rubberBandChanged_1(void *self, qute_rect a0, qute_pointf a1, qute_pointf a2) {
+	qute_gui_only();
 	static_cast<QGraphicsView *>(self)->rubberBandChanged(qute_to_QRect(a0), qute_to_QPointF(a1), qute_to_QPointF(a2));
 }
+void qute_QGraphicsView_setRenderHint_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->setRenderHint(static_cast<QPainter::RenderHint>(a0), static_cast<bool>(a1));
+}
+void qute_QGraphicsView_setOptimizationFlag_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->setOptimizationFlag(static_cast<QGraphicsView::OptimizationFlag>(a0), static_cast<bool>(a1));
+}
+void qute_QGraphicsView_setTransform_1(void *self, void * a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->setTransform((a0 ? *static_cast<QTransform *>(a0) : QTransform()), static_cast<bool>(a1));
+}
+void qute_QGraphicsView_ensureVisible_2(void *self, qute_rectf a0, int a1, int a2) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->ensureVisible(qute_to_QRectF(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QGraphicsView_ensureVisible_3(void *self, void * a0, int a1, int a2) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->ensureVisible(static_cast<QGraphicsItem *>(a0), static_cast<int>(a1), static_cast<int>(a2));
+}
+void qute_QGraphicsView_fitInView_2(void *self, qute_rectf a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->fitInView(qute_to_QRectF(a0), static_cast<Qt::AspectRatioMode>(a1));
+}
+void qute_QGraphicsView_fitInView_3(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->fitInView(static_cast<QGraphicsItem *>(a0), static_cast<Qt::AspectRatioMode>(a1));
+}
+void qute_QGraphicsView_render_1(void *self, void * a0, qute_rectf a1, qute_rect a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->render(static_cast<QPainter *>(a0), qute_to_QRectF(a1), qute_to_QRect(a2), static_cast<Qt::AspectRatioMode>(a3));
+}
+qute_list qute_QGraphicsView_items_5(void *self, qute_rect a0, int64_t a1) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(qute_to_QRect(a0), static_cast<Qt::ItemSelectionMode>(a1)), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsView_items_6(void *self, const void *a0, ptrdiff_t a0_n, int64_t a1) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items(QPolygon([&] { QList<QPoint> l; auto d = static_cast<qute_point const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(qute_to_QPoint(d[i])); return l; }()), static_cast<Qt::ItemSelectionMode>(a1)), [](const auto &v) { return (void *)(v); });
+}
+qute_list qute_QGraphicsView_items_7(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QGraphicsView *>(self)->items((a0 ? *static_cast<QPainterPath *>(a0) : QPainterPath()), static_cast<Qt::ItemSelectionMode>(a1)), [](const auto &v) { return (void *)(v); });
+}
+void qute_QGraphicsView_invalidateScene_1(void *self, qute_rectf a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QGraphicsView *>(self)->invalidateScene(qute_to_QRectF(a0), QFlags<QGraphicsScene::SceneLayer>::fromInt(static_cast<QFlags<QGraphicsScene::SceneLayer>::Int>(a1)));
+}
 void * qute_QGraphicsView_rubberBandChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsView::rubberBandChanged, obj, [s](QRect a0, QPointF a1, QPointF a2) { qute_rect c0 = qute_from_QRect(a0); qute_pointf c1 = qute_from_QPointF(a1); qute_pointf c2 = qute_from_QPointF(a2); void *args[] = {&c0, &c1, &c2}; qute_qtwidgets_signal(s->id, args); }));
@@ -8592,75 +10904,103 @@ void * qute_QGraphicsView_rubberBandChanged(void *self, uintptr_t id) {
 
 // ---- QGraphicsWidget
 void * qute_QGraphicsWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGraphicsWidget *>(new QGraphicsWidget(static_cast<QGraphicsItem *>(a0)));
 }
+void * qute_QGraphicsWidget_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QGraphicsWidget *>(new QGraphicsWidget(static_cast<QGraphicsItem *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QGraphicsWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsWidget *>(static_cast<QObject *>(obj)));
 }
 void * qute_QGraphicsWidget_as_QGraphicsLayoutItem(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(static_cast<QGraphicsLayoutItem *>(static_cast<QGraphicsWidget *>(self)));
 }
 void * qute_QGraphicsWidget_layout(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsWidget *>(self)->layout());
 }
 void qute_QGraphicsWidget_setLayout(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setLayout(static_cast<QGraphicsLayout *>(a0));
 }
 void qute_QGraphicsWidget_adjustSize(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->adjustSize();
 }
 int64_t qute_QGraphicsWidget_layoutDirection(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsWidget *>(self)->layoutDirection());
 }
 void qute_QGraphicsWidget_setLayoutDirection(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setLayoutDirection(static_cast<Qt::LayoutDirection>(a0));
 }
 void qute_QGraphicsWidget_unsetLayoutDirection(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->unsetLayoutDirection();
 }
 void * qute_QGraphicsWidget_style(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsWidget *>(self)->style());
 }
 void qute_QGraphicsWidget_setStyle(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setStyle(static_cast<QStyle *>(a0));
 }
 void * qute_QGraphicsWidget_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QGraphicsWidget *>(self)->font()));
 }
 void qute_QGraphicsWidget_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void * qute_QGraphicsWidget_palette(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(static_cast<QGraphicsWidget *>(self)->palette()));
 }
 void qute_QGraphicsWidget_setPalette(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setPalette((a0 ? *static_cast<QPalette *>(a0) : QPalette()));
 }
 bool qute_QGraphicsWidget_autoFillBackground(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsWidget *>(self)->autoFillBackground());
 }
 void qute_QGraphicsWidget_setAutoFillBackground(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setAutoFillBackground(static_cast<bool>(a0));
 }
 void qute_QGraphicsWidget_resize(void *self, qute_sizef a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->resize(qute_to_QSizeF(a0));
 }
 qute_sizef qute_QGraphicsWidget_size(void *self) {
+	qute_gui_only();
 	return qute_from_QSizeF(static_cast<QGraphicsWidget *>(self)->size());
 }
 void qute_QGraphicsWidget_setGeometry(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setGeometry(qute_to_QRectF(a0));
 }
 qute_rectf qute_QGraphicsWidget_rect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsWidget *>(self)->rect());
 }
 void qute_QGraphicsWidget_setContentsMargins(void *self, double a0, double a1, double a2, double a3) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setContentsMargins(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
 void qute_QGraphicsWidget_setContentsMargins_1(void *self, qute_marginsf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setContentsMargins(qute_to_QMarginsF(a0));
 }
 void qute_QGraphicsWidget_getContentsMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out) {
+	qute_gui_only();
 	double t0{};
 	double t1{};
 	double t2{};
@@ -8672,12 +11012,15 @@ void qute_QGraphicsWidget_getContentsMargins(void *self, double *a0_out, double 
 	*a3_out = static_cast<double>(t3);
 }
 void qute_QGraphicsWidget_setWindowFrameMargins(void *self, double a0, double a1, double a2, double a3) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setWindowFrameMargins(static_cast<double>(a0), static_cast<double>(a1), static_cast<double>(a2), static_cast<double>(a3));
 }
 void qute_QGraphicsWidget_setWindowFrameMargins_1(void *self, qute_marginsf a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setWindowFrameMargins(qute_to_QMarginsF(a0));
 }
 void qute_QGraphicsWidget_getWindowFrameMargins(void *self, double *a0_out, double *a1_out, double *a2_out, double *a3_out) {
+	qute_gui_only();
 	double t0{};
 	double t1{};
 	double t2{};
@@ -8689,110 +11032,169 @@ void qute_QGraphicsWidget_getWindowFrameMargins(void *self, double *a0_out, doub
 	*a3_out = static_cast<double>(t3);
 }
 void qute_QGraphicsWidget_unsetWindowFrameMargins(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->unsetWindowFrameMargins();
 }
 qute_rectf qute_QGraphicsWidget_windowFrameGeometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsWidget *>(self)->windowFrameGeometry());
 }
 qute_rectf qute_QGraphicsWidget_windowFrameRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsWidget *>(self)->windowFrameRect());
 }
 int64_t qute_QGraphicsWidget_windowFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGraphicsWidget *>(self)->windowFlags()).toInt());
 }
 int64_t qute_QGraphicsWidget_windowType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsWidget *>(self)->windowType());
 }
 void qute_QGraphicsWidget_setWindowFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setWindowFlags(QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a0)));
 }
 bool qute_QGraphicsWidget_isActiveWindow(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsWidget *>(self)->isActiveWindow());
 }
 void qute_QGraphicsWidget_setWindowTitle(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setWindowTitle(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QGraphicsWidget_windowTitle(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QGraphicsWidget *>(self)->windowTitle());
 }
 int64_t qute_QGraphicsWidget_focusPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGraphicsWidget *>(self)->focusPolicy());
 }
 void qute_QGraphicsWidget_setFocusPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setFocusPolicy(static_cast<Qt::FocusPolicy>(a0));
 }
 void * qute_QGraphicsWidget_focusWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QGraphicsWidget *>(self)->focusWidget());
 }
 int qute_QGraphicsWidget_grabShortcut(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsWidget *>(self)->grabShortcut((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence())));
 }
 void qute_QGraphicsWidget_releaseShortcut(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->releaseShortcut(static_cast<int>(a0));
 }
 void qute_QGraphicsWidget_setShortcutEnabled(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setShortcutEnabled(static_cast<int>(a0));
 }
 void qute_QGraphicsWidget_setShortcutAutoRepeat(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setShortcutAutoRepeat(static_cast<int>(a0));
 }
 void qute_QGraphicsWidget_addAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->addAction(static_cast<QAction *>(a0));
 }
 void qute_QGraphicsWidget_addActions(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->addActions([&] { QList<QAction *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QAction *>(d[i])); return l; }());
 }
 void qute_QGraphicsWidget_insertActions(void *self, void * a0, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->insertActions(static_cast<QAction *>(a0), [&] { QList<QAction *> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(static_cast<QAction *>(d[i])); return l; }());
 }
 void qute_QGraphicsWidget_insertAction(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->insertAction(static_cast<QAction *>(a0), static_cast<QAction *>(a1));
 }
 void qute_QGraphicsWidget_removeAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->removeAction(static_cast<QAction *>(a0));
 }
 qute_list qute_QGraphicsWidget_actions(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QGraphicsWidget *>(self)->actions(), [](const auto &v) { return (void *)(v); });
 }
 void qute_QGraphicsWidget_setAttribute(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->setAttribute(static_cast<Qt::WidgetAttribute>(a0));
 }
 bool qute_QGraphicsWidget_testAttribute(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsWidget *>(self)->testAttribute(static_cast<Qt::WidgetAttribute>(a0)));
 }
 int qute_QGraphicsWidget_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGraphicsWidget *>(self)->type());
 }
 void qute_QGraphicsWidget_paint(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->paint(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1));
 }
 void qute_QGraphicsWidget_paintWindowFrame(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->paintWindowFrame(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1));
 }
 qute_rectf qute_QGraphicsWidget_boundingRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QGraphicsWidget *>(self)->boundingRect());
 }
 void * qute_QGraphicsWidget_shape(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPainterPath(static_cast<QGraphicsWidget *>(self)->shape()));
 }
 bool qute_QGraphicsWidget_close(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGraphicsWidget *>(self)->close());
 }
 void qute_QGraphicsWidget_geometryChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->geometryChanged();
 }
 void qute_QGraphicsWidget_layoutChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QGraphicsWidget *>(self)->layoutChanged();
 }
+int qute_QGraphicsWidget_grabShortcut_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QGraphicsWidget *>(self)->grabShortcut((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<Qt::ShortcutContext>(a1)));
+}
+void qute_QGraphicsWidget_setShortcutEnabled_1(void *self, int a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsWidget *>(self)->setShortcutEnabled(static_cast<int>(a0), static_cast<bool>(a1));
+}
+void qute_QGraphicsWidget_setShortcutAutoRepeat_1(void *self, int a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsWidget *>(self)->setShortcutAutoRepeat(static_cast<int>(a0), static_cast<bool>(a1));
+}
+void qute_QGraphicsWidget_setAttribute_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QGraphicsWidget *>(self)->setAttribute(static_cast<Qt::WidgetAttribute>(a0), static_cast<bool>(a1));
+}
+void qute_QGraphicsWidget_paint_1(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
+	static_cast<QGraphicsWidget *>(self)->paint(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1), static_cast<QWidget *>(a2));
+}
+void qute_QGraphicsWidget_paintWindowFrame_1(void *self, void * a0, void * a1, void * a2) {
+	qute_gui_only();
+	static_cast<QGraphicsWidget *>(self)->paintWindowFrame(static_cast<QPainter *>(a0), static_cast<const QStyleOptionGraphicsItem *>(a1), static_cast<QWidget *>(a2));
+}
 void qute_QGraphicsWidget_setTabOrder(void * a0, void * a1) {
+	qute_gui_only();
 	QGraphicsWidget::setTabOrder(static_cast<QGraphicsWidget *>(a0), static_cast<QGraphicsWidget *>(a1));
 }
 void * qute_QGraphicsWidget_geometryChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsWidget::geometryChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QGraphicsWidget_layoutChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGraphicsWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGraphicsWidget::layoutChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -8800,96 +11202,127 @@ void * qute_QGraphicsWidget_layoutChanged(void *self, uintptr_t id) {
 
 // ---- QGridLayout
 void * qute_QGridLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGridLayout *>(new QGridLayout(static_cast<QWidget *>(a0)));
 }
 void * qute_QGridLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGridLayout *>(static_cast<QObject *>(obj)));
 }
 qute_size qute_QGridLayout_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QGridLayout *>(self)->sizeHint());
 }
 void qute_QGridLayout_setHorizontalSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setHorizontalSpacing(static_cast<int>(a0));
 }
 int qute_QGridLayout_horizontalSpacing(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->horizontalSpacing());
 }
 void qute_QGridLayout_setVerticalSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setVerticalSpacing(static_cast<int>(a0));
 }
 int qute_QGridLayout_verticalSpacing(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->verticalSpacing());
 }
 void qute_QGridLayout_setRowStretch(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setRowStretch(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QGridLayout_setColumnStretch(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setColumnStretch(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QGridLayout_rowStretch(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->rowStretch(static_cast<int>(a0)));
 }
 int qute_QGridLayout_columnStretch(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->columnStretch(static_cast<int>(a0)));
 }
 void qute_QGridLayout_setRowMinimumHeight(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setRowMinimumHeight(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QGridLayout_setColumnMinimumWidth(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setColumnMinimumWidth(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QGridLayout_rowMinimumHeight(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->rowMinimumHeight(static_cast<int>(a0)));
 }
 int qute_QGridLayout_columnMinimumWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->columnMinimumWidth(static_cast<int>(a0)));
 }
 int qute_QGridLayout_columnCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->columnCount());
 }
 int qute_QGridLayout_rowCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->rowCount());
 }
 qute_rect qute_QGridLayout_cellRect(void *self, int a0, int a1) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QGridLayout *>(self)->cellRect(static_cast<int>(a0), static_cast<int>(a1)));
 }
 bool qute_QGridLayout_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGridLayout *>(self)->hasHeightForWidth());
 }
 int qute_QGridLayout_heightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->heightForWidth(static_cast<int>(a0)));
 }
 int qute_QGridLayout_minimumHeightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QGridLayout *>(self)->minimumHeightForWidth(static_cast<int>(a0)));
 }
 void qute_QGridLayout_addWidget(void *self, void * a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->addWidget(static_cast<QWidget *>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QGridLayout_addWidget_1(void *self, void * a0, int a1, int a2, int a3, int a4) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->addWidget(static_cast<QWidget *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
 }
 void qute_QGridLayout_addLayout(void *self, void * a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->addLayout(static_cast<QLayout *>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QGridLayout_addLayout_1(void *self, void * a0, int a1, int a2, int a3, int a4) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->addLayout(static_cast<QLayout *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4));
 }
 void qute_QGridLayout_setOriginCorner(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setOriginCorner(static_cast<Qt::Corner>(a0));
 }
 int64_t qute_QGridLayout_originCorner(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QGridLayout *>(self)->originCorner());
 }
 void * qute_QGridLayout_itemAtPosition(void *self, int a0, int a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QGridLayout *>(self)->itemAtPosition(static_cast<int>(a0), static_cast<int>(a1)));
 }
 void qute_QGridLayout_addItem(void *self, void * a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->addItem(static_cast<QLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QGridLayout_setDefaultPositioning(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QGridLayout *>(self)->setDefaultPositioning(static_cast<int>(a0), static_cast<Qt::Orientation>(a1));
 }
 void qute_QGridLayout_getItemPosition(void *self, int a0, int *a1_out, int *a2_out, int *a3_out, int *a4_out) {
+	qute_gui_only();
 	int t1{};
 	int t2{};
 	int t3{};
@@ -8900,59 +11333,96 @@ void qute_QGridLayout_getItemPosition(void *self, int a0, int *a1_out, int *a2_o
 	*a3_out = static_cast<int>(t3);
 	*a4_out = static_cast<int>(t4);
 }
+void qute_QGridLayout_addWidget_2(void *self, void * a0, int a1, int a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QGridLayout *>(self)->addWidget(static_cast<QWidget *>(a0), static_cast<int>(a1), static_cast<int>(a2), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a3)));
+}
+void qute_QGridLayout_addWidget_3(void *self, void * a0, int a1, int a2, int a3, int a4, int64_t a5) {
+	qute_gui_only();
+	static_cast<QGridLayout *>(self)->addWidget(static_cast<QWidget *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a5)));
+}
+void qute_QGridLayout_addLayout_2(void *self, void * a0, int a1, int a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QGridLayout *>(self)->addLayout(static_cast<QLayout *>(a0), static_cast<int>(a1), static_cast<int>(a2), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a3)));
+}
+void qute_QGridLayout_addLayout_3(void *self, void * a0, int a1, int a2, int a3, int a4, int64_t a5) {
+	qute_gui_only();
+	static_cast<QGridLayout *>(self)->addLayout(static_cast<QLayout *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a5)));
+}
+void qute_QGridLayout_addItem_1(void *self, void * a0, int a1, int a2, int a3, int a4, int64_t a5) {
+	qute_gui_only();
+	static_cast<QGridLayout *>(self)->addItem(static_cast<QLayoutItem *>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<int>(a4), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a5)));
+}
 
 // ---- QGroupBox
 void * qute_QGroupBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QGroupBox *>(new QGroupBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QGroupBox_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QGroupBox *>(new QGroupBox(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QGroupBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGroupBox *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QGroupBox_title(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QGroupBox *>(self)->title());
 }
 void qute_QGroupBox_setTitle(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->setTitle(QString::fromUtf8(a0, a0_len));
 }
 int64_t qute_QGroupBox_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QGroupBox *>(self)->alignment()).toInt());
 }
 void qute_QGroupBox_setAlignment(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->setAlignment(static_cast<int>(a0));
 }
 bool qute_QGroupBox_isFlat(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGroupBox *>(self)->isFlat());
 }
 void qute_QGroupBox_setFlat(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->setFlat(static_cast<bool>(a0));
 }
 bool qute_QGroupBox_isCheckable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGroupBox *>(self)->isCheckable());
 }
 void qute_QGroupBox_setCheckable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->setCheckable(static_cast<bool>(a0));
 }
 bool qute_QGroupBox_isChecked(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QGroupBox *>(self)->isChecked());
 }
 void qute_QGroupBox_setChecked(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->setChecked(static_cast<bool>(a0));
 }
 void qute_QGroupBox_clicked_1(void *self) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->clicked();
 }
 void qute_QGroupBox_toggled_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QGroupBox *>(self)->toggled(static_cast<bool>(a0));
 }
 void * qute_QGroupBox_clicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGroupBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGroupBox::clicked, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QGroupBox_toggled(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGroupBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QGroupBox::toggled, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -8960,295 +11430,385 @@ void * qute_QGroupBox_toggled(void *self, uintptr_t id) {
 
 // ---- QHBoxLayout
 void * qute_QHBoxLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QHBoxLayout *>(new QHBoxLayout(static_cast<QWidget *>(a0)));
 }
 void * qute_QHBoxLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QHBoxLayout *>(static_cast<QObject *>(obj)));
 }
 
 // ---- QHeaderView
 void * qute_QHeaderView_new(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QHeaderView *>(new QHeaderView(static_cast<Qt::Orientation>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QHeaderView_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QHeaderView *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QHeaderView_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QHeaderView *>(self)->orientation());
 }
 int qute_QHeaderView_offset(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->offset());
 }
 int qute_QHeaderView_length(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->length());
 }
 int qute_QHeaderView_sectionSizeHint(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->sectionSizeHint(static_cast<int>(a0)));
 }
 int qute_QHeaderView_visualIndexAt(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->visualIndexAt(static_cast<int>(a0)));
 }
 int qute_QHeaderView_logicalIndexAt(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->logicalIndexAt(static_cast<int>(a0)));
 }
 int qute_QHeaderView_logicalIndexAt_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->logicalIndexAt(qute_to_QPoint(a0)));
 }
 int qute_QHeaderView_sectionSize(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->sectionSize(static_cast<int>(a0)));
 }
 int qute_QHeaderView_sectionPosition(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->sectionPosition(static_cast<int>(a0)));
 }
 int qute_QHeaderView_sectionViewportPosition(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->sectionViewportPosition(static_cast<int>(a0)));
 }
 void qute_QHeaderView_moveSection(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->moveSection(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QHeaderView_swapSections(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->swapSections(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QHeaderView_resizeSection(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->resizeSection(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QHeaderView_resizeSections(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->resizeSections(static_cast<QHeaderView::ResizeMode>(a0));
 }
 bool qute_QHeaderView_isSectionHidden(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->isSectionHidden(static_cast<int>(a0)));
 }
 void qute_QHeaderView_setSectionHidden(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSectionHidden(static_cast<int>(a0), static_cast<bool>(a1));
 }
 int qute_QHeaderView_hiddenSectionCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->hiddenSectionCount());
 }
 void qute_QHeaderView_hideSection(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->hideSection(static_cast<int>(a0));
 }
 void qute_QHeaderView_showSection(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->showSection(static_cast<int>(a0));
 }
 int qute_QHeaderView_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->count());
 }
 int qute_QHeaderView_visualIndex(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->visualIndex(static_cast<int>(a0)));
 }
 int qute_QHeaderView_logicalIndex(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->logicalIndex(static_cast<int>(a0)));
 }
 void qute_QHeaderView_setSectionsMovable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSectionsMovable(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_sectionsMovable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->sectionsMovable());
 }
 void qute_QHeaderView_setFirstSectionMovable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setFirstSectionMovable(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_isFirstSectionMovable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->isFirstSectionMovable());
 }
 void qute_QHeaderView_setSectionsClickable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSectionsClickable(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_sectionsClickable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->sectionsClickable());
 }
 void qute_QHeaderView_setHighlightSections(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setHighlightSections(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_highlightSections(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->highlightSections());
 }
 int64_t qute_QHeaderView_sectionResizeMode(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QHeaderView *>(self)->sectionResizeMode(static_cast<int>(a0)));
 }
 void qute_QHeaderView_setSectionResizeMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSectionResizeMode(static_cast<QHeaderView::ResizeMode>(a0));
 }
 void qute_QHeaderView_setSectionResizeMode_1(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSectionResizeMode(static_cast<int>(a0), static_cast<QHeaderView::ResizeMode>(a1));
 }
 void qute_QHeaderView_setResizeContentsPrecision(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setResizeContentsPrecision(static_cast<int>(a0));
 }
 int qute_QHeaderView_resizeContentsPrecision(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->resizeContentsPrecision());
 }
 int qute_QHeaderView_stretchSectionCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->stretchSectionCount());
 }
 void qute_QHeaderView_setSortIndicatorShown(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSortIndicatorShown(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_isSortIndicatorShown(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->isSortIndicatorShown());
 }
 void qute_QHeaderView_setSortIndicator(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSortIndicator(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
 }
 int qute_QHeaderView_sortIndicatorSection(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->sortIndicatorSection());
 }
 int64_t qute_QHeaderView_sortIndicatorOrder(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QHeaderView *>(self)->sortIndicatorOrder());
 }
 void qute_QHeaderView_setSortIndicatorClearable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setSortIndicatorClearable(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_isSortIndicatorClearable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->isSortIndicatorClearable());
 }
 bool qute_QHeaderView_stretchLastSection(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->stretchLastSection());
 }
 void qute_QHeaderView_setStretchLastSection(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setStretchLastSection(static_cast<bool>(a0));
 }
 bool qute_QHeaderView_cascadingSectionResizes(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->cascadingSectionResizes());
 }
 void qute_QHeaderView_setCascadingSectionResizes(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setCascadingSectionResizes(static_cast<bool>(a0));
 }
 int qute_QHeaderView_defaultSectionSize(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->defaultSectionSize());
 }
 void qute_QHeaderView_setDefaultSectionSize(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setDefaultSectionSize(static_cast<int>(a0));
 }
 void qute_QHeaderView_resetDefaultSectionSize(void *self) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->resetDefaultSectionSize();
 }
 int qute_QHeaderView_minimumSectionSize(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->minimumSectionSize());
 }
 void qute_QHeaderView_setMinimumSectionSize(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setMinimumSectionSize(static_cast<int>(a0));
 }
 int qute_QHeaderView_maximumSectionSize(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QHeaderView *>(self)->maximumSectionSize());
 }
 void qute_QHeaderView_setMaximumSectionSize(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setMaximumSectionSize(static_cast<int>(a0));
 }
 int64_t qute_QHeaderView_defaultAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QHeaderView *>(self)->defaultAlignment()).toInt());
 }
 void qute_QHeaderView_setDefaultAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setDefaultAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 bool qute_QHeaderView_sectionsMoved(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->sectionsMoved());
 }
 bool qute_QHeaderView_sectionsHidden(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->sectionsHidden());
 }
 qute_str qute_QHeaderView_saveState(void *self) {
+	qute_gui_only();
 	return qute_ret_bytes(static_cast<QHeaderView *>(self)->saveState());
 }
 bool qute_QHeaderView_restoreState(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QHeaderView *>(self)->restoreState(QByteArray(a0, a0_len)));
 }
 void qute_QHeaderView_setOffset(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setOffset(static_cast<int>(a0));
 }
 void qute_QHeaderView_setOffsetToSectionPosition(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setOffsetToSectionPosition(static_cast<int>(a0));
 }
 void qute_QHeaderView_setOffsetToLastSection(void *self) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->setOffsetToLastSection();
 }
 void qute_QHeaderView_headerDataChanged(void *self, int64_t a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->headerDataChanged(static_cast<Qt::Orientation>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QHeaderView_sectionMoved_1(void *self, int a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionMoved(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QHeaderView_sectionResized_1(void *self, int a0, int a1, int a2) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionResized(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 void qute_QHeaderView_sectionPressed_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionPressed(static_cast<int>(a0));
 }
 void qute_QHeaderView_sectionClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionClicked(static_cast<int>(a0));
 }
 void qute_QHeaderView_sectionEntered_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionEntered(static_cast<int>(a0));
 }
 void qute_QHeaderView_sectionDoubleClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionDoubleClicked(static_cast<int>(a0));
 }
 void qute_QHeaderView_sectionCountChanged_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionCountChanged(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QHeaderView_sectionHandleDoubleClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sectionHandleDoubleClicked(static_cast<int>(a0));
 }
 void qute_QHeaderView_geometriesChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->geometriesChanged();
 }
 void qute_QHeaderView_sortIndicatorChanged_1(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sortIndicatorChanged(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
 }
 void qute_QHeaderView_sortIndicatorClearableChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QHeaderView *>(self)->sortIndicatorClearableChanged(static_cast<bool>(a0));
 }
 void * qute_QHeaderView_sectionMoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionMoved, obj, [s](int a0, int a1, int a2) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionResized(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionResized, obj, [s](int a0, int a1, int a2) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionPressed, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionEntered, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionDoubleClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionCountChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionCountChanged, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sectionHandleDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sectionHandleDoubleClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_geometriesChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::geometriesChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QHeaderView_sortIndicatorChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sortIndicatorChanged, obj, [s](int a0, Qt::SortOrder a1) { int c0 = static_cast<int>(a0); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QHeaderView_sortIndicatorClearableChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QHeaderView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QHeaderView::sortIndicatorClearableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -9256,190 +11816,257 @@ void * qute_QHeaderView_sortIndicatorClearableChanged(void *self, uintptr_t id) 
 
 // ---- QInputDialog
 void * qute_QInputDialog_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QInputDialog *>(new QInputDialog(static_cast<QWidget *>(a0)));
 }
+void * qute_QInputDialog_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QInputDialog *>(new QInputDialog(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QInputDialog_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QInputDialog *>(static_cast<QObject *>(obj)));
 }
 void qute_QInputDialog_setInputMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setInputMode(static_cast<QInputDialog::InputMode>(a0));
 }
 int64_t qute_QInputDialog_inputMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QInputDialog *>(self)->inputMode());
 }
 void qute_QInputDialog_setLabelText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setLabelText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QInputDialog_labelText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QInputDialog *>(self)->labelText());
 }
 void qute_QInputDialog_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setOption(static_cast<QInputDialog::InputDialogOption>(a0));
 }
 bool qute_QInputDialog_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QInputDialog *>(self)->testOption(static_cast<QInputDialog::InputDialogOption>(a0)));
 }
 void qute_QInputDialog_setOptions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setOptions(QFlags<QInputDialog::InputDialogOption>::fromInt(static_cast<QFlags<QInputDialog::InputDialogOption>::Int>(a0)));
 }
 int64_t qute_QInputDialog_options(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QInputDialog *>(self)->options()).toInt());
 }
 void qute_QInputDialog_setTextValue(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setTextValue(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QInputDialog_textValue(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QInputDialog *>(self)->textValue());
 }
 void qute_QInputDialog_setTextEchoMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setTextEchoMode(static_cast<QLineEdit::EchoMode>(a0));
 }
 int64_t qute_QInputDialog_textEchoMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QInputDialog *>(self)->textEchoMode());
 }
 void qute_QInputDialog_setComboBoxEditable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setComboBoxEditable(static_cast<bool>(a0));
 }
 bool qute_QInputDialog_isComboBoxEditable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QInputDialog *>(self)->isComboBoxEditable());
 }
 void qute_QInputDialog_setComboBoxItems(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setComboBoxItems(qute_qstrlist(a0, a0_lens, a0_n));
 }
 qute_list qute_QInputDialog_comboBoxItems(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QInputDialog *>(self)->comboBoxItems());
 }
 void qute_QInputDialog_setIntValue(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setIntValue(static_cast<int>(a0));
 }
 int qute_QInputDialog_intValue(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QInputDialog *>(self)->intValue());
 }
 void qute_QInputDialog_setIntMinimum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setIntMinimum(static_cast<int>(a0));
 }
 int qute_QInputDialog_intMinimum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QInputDialog *>(self)->intMinimum());
 }
 void qute_QInputDialog_setIntMaximum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setIntMaximum(static_cast<int>(a0));
 }
 int qute_QInputDialog_intMaximum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QInputDialog *>(self)->intMaximum());
 }
 void qute_QInputDialog_setIntRange(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setIntRange(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QInputDialog_setIntStep(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setIntStep(static_cast<int>(a0));
 }
 int qute_QInputDialog_intStep(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QInputDialog *>(self)->intStep());
 }
 void qute_QInputDialog_setDoubleValue(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setDoubleValue(static_cast<double>(a0));
 }
 double qute_QInputDialog_doubleValue(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QInputDialog *>(self)->doubleValue());
 }
 void qute_QInputDialog_setDoubleMinimum(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setDoubleMinimum(static_cast<double>(a0));
 }
 double qute_QInputDialog_doubleMinimum(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QInputDialog *>(self)->doubleMinimum());
 }
 void qute_QInputDialog_setDoubleMaximum(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setDoubleMaximum(static_cast<double>(a0));
 }
 double qute_QInputDialog_doubleMaximum(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QInputDialog *>(self)->doubleMaximum());
 }
 void qute_QInputDialog_setDoubleRange(void *self, double a0, double a1) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setDoubleRange(static_cast<double>(a0), static_cast<double>(a1));
 }
 void qute_QInputDialog_setDoubleDecimals(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setDoubleDecimals(static_cast<int>(a0));
 }
 int qute_QInputDialog_doubleDecimals(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QInputDialog *>(self)->doubleDecimals());
 }
 void qute_QInputDialog_setOkButtonText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setOkButtonText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QInputDialog_okButtonText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QInputDialog *>(self)->okButtonText());
 }
 void qute_QInputDialog_setCancelButtonText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setCancelButtonText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QInputDialog_cancelButtonText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QInputDialog *>(self)->cancelButtonText());
 }
 void qute_QInputDialog_setDoubleStep(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->setDoubleStep(static_cast<double>(a0));
 }
 double qute_QInputDialog_doubleStep(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QInputDialog *>(self)->doubleStep());
 }
 void qute_QInputDialog_textValueChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->textValueChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QInputDialog_textValueSelected_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->textValueSelected(QString::fromUtf8(a0, a0_len));
 }
 void qute_QInputDialog_intValueChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->intValueChanged(static_cast<int>(a0));
 }
 void qute_QInputDialog_intValueSelected_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->intValueSelected(static_cast<int>(a0));
 }
 void qute_QInputDialog_doubleValueChanged_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->doubleValueChanged(static_cast<double>(a0));
 }
 void qute_QInputDialog_doubleValueSelected_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QInputDialog *>(self)->doubleValueSelected(static_cast<double>(a0));
 }
+void qute_QInputDialog_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QInputDialog *>(self)->setOption(static_cast<QInputDialog::InputDialogOption>(a0), static_cast<bool>(a1));
+}
 qute_str qute_QInputDialog_getText(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return qute_ret_str(QInputDialog::getText(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 qute_str qute_QInputDialog_getMultiLineText(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return qute_ret_str(QInputDialog::getMultiLineText(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 qute_str qute_QInputDialog_getItem(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, const ptrdiff_t *a3_lens, ptrdiff_t a3_n) {
+	qute_gui_only();
 	return qute_ret_str(QInputDialog::getItem(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), qute_qstrlist(a3, a3_lens, a3_n)));
 }
 int qute_QInputDialog_getInt(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int>(QInputDialog::getInt(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 double qute_QInputDialog_getDouble(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<double>(QInputDialog::getDouble(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 void * qute_QInputDialog_textValueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QInputDialog::textValueChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QInputDialog_textValueSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QInputDialog::textValueSelected, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QInputDialog_intValueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QInputDialog::intValueChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QInputDialog_intValueSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QInputDialog::intValueSelected, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QInputDialog_doubleValueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QInputDialog::doubleValueChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QInputDialog_doubleValueSelected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QInputDialog::doubleValueSelected, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -9447,73 +12074,95 @@ void * qute_QInputDialog_doubleValueSelected(void *self, uintptr_t id) {
 
 // ---- QItemEditorFactory
 void * qute_QItemEditorFactory_new(void) {
+	qute_gui_only();
 	return static_cast<QItemEditorFactory *>(new QItemEditorFactory());
 }
 void qute_QItemEditorFactory_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QItemEditorFactory *>(self);
 }
 void * qute_QItemEditorFactory_createEditor(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QItemEditorFactory *>(self)->createEditor(static_cast<int>(a0), static_cast<QWidget *>(a1)));
 }
 qute_str qute_QItemEditorFactory_valuePropertyName(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_bytes(static_cast<QItemEditorFactory *>(self)->valuePropertyName(static_cast<int>(a0)));
 }
 void * qute_QItemEditorFactory_defaultFactory(void) {
+	qute_gui_only();
 	return (void *)(QItemEditorFactory::defaultFactory());
 }
 void qute_QItemEditorFactory_setDefaultFactory(void * a0) {
+	qute_gui_only();
 	QItemEditorFactory::setDefaultFactory(static_cast<QItemEditorFactory *>(a0));
 }
 
 // ---- QKeySequenceEdit
 void * qute_QKeySequenceEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QKeySequenceEdit *>(new QKeySequenceEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QKeySequenceEdit_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QKeySequenceEdit *>(new QKeySequenceEdit((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<QWidget *>(a1)));
 }
 void * qute_QKeySequenceEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QKeySequenceEdit *>(static_cast<QObject *>(obj)));
 }
 void * qute_QKeySequenceEdit_keySequence(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QKeySequence(static_cast<QKeySequenceEdit *>(self)->keySequence()));
 }
 long long qute_QKeySequenceEdit_maximumSequenceLength(void *self) {
+	qute_gui_only();
 	return static_cast<long long>(static_cast<QKeySequenceEdit *>(self)->maximumSequenceLength());
 }
 void qute_QKeySequenceEdit_setClearButtonEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->setClearButtonEnabled(static_cast<bool>(a0));
 }
 bool qute_QKeySequenceEdit_isClearButtonEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QKeySequenceEdit *>(self)->isClearButtonEnabled());
 }
 void qute_QKeySequenceEdit_setFinishingKeyCombinations(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->setFinishingKeyCombinations([&] { QList<QKeyCombination> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QKeyCombination *>(d[i]) : QKeyCombination())); return l; }());
 }
 qute_list qute_QKeySequenceEdit_finishingKeyCombinations(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QKeySequenceEdit *>(self)->finishingKeyCombinations(), [](const auto &v) { return static_cast<void *>(new QKeyCombination(v)); });
 }
 void qute_QKeySequenceEdit_setKeySequence(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->setKeySequence((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()));
 }
 void qute_QKeySequenceEdit_clear(void *self) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->clear();
 }
 void qute_QKeySequenceEdit_setMaximumSequenceLength(void *self, long long a0) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->setMaximumSequenceLength(static_cast<long long>(a0));
 }
 void qute_QKeySequenceEdit_editingFinished_1(void *self) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->editingFinished();
 }
 void qute_QKeySequenceEdit_keySequenceChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QKeySequenceEdit *>(self)->keySequenceChanged((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()));
 }
 void * qute_QKeySequenceEdit_editingFinished(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QKeySequenceEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QKeySequenceEdit::editingFinished, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QKeySequenceEdit_keySequenceChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QKeySequenceEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QKeySequenceEdit::keySequenceChanged, obj, [s](const QKeySequence & a0) { void * c0 = static_cast<void *>(new QKeySequence(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -9521,75 +12170,99 @@ void * qute_QKeySequenceEdit_keySequenceChanged(void *self, uintptr_t id) {
 
 // ---- QLCDNumber
 void * qute_QLCDNumber_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QLCDNumber *>(new QLCDNumber(static_cast<QWidget *>(a0)));
 }
 void * qute_QLCDNumber_new_1(unsigned int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QLCDNumber *>(new QLCDNumber(static_cast<unsigned int>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QLCDNumber_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QLCDNumber *>(static_cast<QObject *>(obj)));
 }
 bool qute_QLCDNumber_smallDecimalPoint(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLCDNumber *>(self)->smallDecimalPoint());
 }
 int qute_QLCDNumber_digitCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLCDNumber *>(self)->digitCount());
 }
 void qute_QLCDNumber_setDigitCount(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setDigitCount(static_cast<int>(a0));
 }
 bool qute_QLCDNumber_checkOverflow(void *self, double a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLCDNumber *>(self)->checkOverflow(static_cast<double>(a0)));
 }
 bool qute_QLCDNumber_checkOverflow_1(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLCDNumber *>(self)->checkOverflow(static_cast<int>(a0)));
 }
 int64_t qute_QLCDNumber_mode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLCDNumber *>(self)->mode());
 }
 void qute_QLCDNumber_setMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setMode(static_cast<QLCDNumber::Mode>(a0));
 }
 int64_t qute_QLCDNumber_segmentStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLCDNumber *>(self)->segmentStyle());
 }
 void qute_QLCDNumber_setSegmentStyle(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setSegmentStyle(static_cast<QLCDNumber::SegmentStyle>(a0));
 }
 double qute_QLCDNumber_value(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QLCDNumber *>(self)->value());
 }
 int qute_QLCDNumber_intValue(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLCDNumber *>(self)->intValue());
 }
 void qute_QLCDNumber_display(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->display(QString::fromUtf8(a0, a0_len));
 }
 void qute_QLCDNumber_display_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->display(static_cast<int>(a0));
 }
 void qute_QLCDNumber_display_2(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->display(static_cast<double>(a0));
 }
 void qute_QLCDNumber_setHexMode(void *self) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setHexMode();
 }
 void qute_QLCDNumber_setDecMode(void *self) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setDecMode();
 }
 void qute_QLCDNumber_setOctMode(void *self) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setOctMode();
 }
 void qute_QLCDNumber_setBinMode(void *self) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setBinMode();
 }
 void qute_QLCDNumber_setSmallDecimalPoint(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->setSmallDecimalPoint(static_cast<bool>(a0));
 }
 void qute_QLCDNumber_overflow_1(void *self) {
+	qute_gui_only();
 	static_cast<QLCDNumber *>(self)->overflow();
 }
 void * qute_QLCDNumber_overflow(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLCDNumber *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLCDNumber::overflow, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -9597,257 +12270,349 @@ void * qute_QLCDNumber_overflow(void *self, uintptr_t id) {
 
 // ---- QLabel
 void * qute_QLabel_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QLabel *>(new QLabel(static_cast<QWidget *>(a0)));
 }
 void * qute_QLabel_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QLabel *>(new QLabel(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
+void * qute_QLabel_new_2(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QLabel *>(new QLabel(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
+void * qute_QLabel_new_3(const char *a0, ptrdiff_t a0_len, void * a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<QLabel *>(new QLabel(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a2))));
+}
 void * qute_QLabel_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QLabel *>(new qute_QLabel(static_cast<QWidget *>(a0)));
 }
 void qute_QLabel_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QLabel *>(static_cast<QLabel *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 qute_size qute_QLabel_super_0(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_0());
 }
 qute_size qute_QLabel_super_1(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_1());
 }
 int qute_QLabel_super_2(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_2(static_cast<int>(a0)));
 }
 bool qute_QLabel_super_3(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_3(static_cast<QEvent *>(a0)));
 }
 void qute_QLabel_super_4(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_4(static_cast<QKeyEvent *>(a0));
 }
 void qute_QLabel_super_5(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_5(static_cast<QPaintEvent *>(a0));
 }
 void qute_QLabel_super_6(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_6(static_cast<QEvent *>(a0));
 }
 void qute_QLabel_super_7(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_7(static_cast<QMouseEvent *>(a0));
 }
 void qute_QLabel_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_8(static_cast<QMouseEvent *>(a0));
 }
 void qute_QLabel_super_9(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_9(static_cast<QMouseEvent *>(a0));
 }
 void qute_QLabel_super_10(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_10(static_cast<QContextMenuEvent *>(a0));
 }
 void qute_QLabel_super_11(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_11(static_cast<QFocusEvent *>(a0));
 }
 void qute_QLabel_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_12(static_cast<QFocusEvent *>(a0));
 }
 bool qute_QLabel_super_13(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_13(static_cast<bool>(a0)));
 }
 void qute_QLabel_super_14(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_14(static_cast<bool>(a0));
 }
 bool qute_QLabel_super_15(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_15());
 }
 void qute_QLabel_super_16(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_16(static_cast<QMouseEvent *>(a0));
 }
 void qute_QLabel_super_17(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_17(static_cast<QWheelEvent *>(a0));
 }
 void qute_QLabel_super_18(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_18(static_cast<QKeyEvent *>(a0));
 }
 void qute_QLabel_super_19(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_19(static_cast<QEnterEvent *>(a0));
 }
 void qute_QLabel_super_20(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_20(static_cast<QEvent *>(a0));
 }
 void qute_QLabel_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_21(static_cast<QMoveEvent *>(a0));
 }
 void qute_QLabel_super_22(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_22(static_cast<QResizeEvent *>(a0));
 }
 void qute_QLabel_super_23(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_23(static_cast<QCloseEvent *>(a0));
 }
 void qute_QLabel_super_24(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_24(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QLabel_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_25(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QLabel_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_26(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QLabel_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_27(static_cast<QDropEvent *>(a0));
 }
 void qute_QLabel_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_28(static_cast<QShowEvent *>(a0));
 }
 void qute_QLabel_super_29(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_29(static_cast<QHideEvent *>(a0));
 }
 bool qute_QLabel_super_30(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_30(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QLabel_super_31(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_31(static_cast<QTimerEvent *>(a0));
 }
 void qute_QLabel_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_32(static_cast<QChildEvent *>(a0));
 }
 void qute_QLabel_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->qute_super_33(static_cast<QEvent *>(a0));
 }
 void qute_QLabel_prot_drawFrame(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->drawFrame(static_cast<QPainter *>(a0));
 }
 void qute_QLabel_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->updateMicroFocus();
 }
 void qute_QLabel_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->create();
 }
 void qute_QLabel_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->destroy();
 }
 bool qute_QLabel_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->focusNextChild());
 }
 bool qute_QLabel_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->focusPreviousChild());
 }
 double qute_QLabel_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QLabel *>(static_cast<QLabel *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QLabel_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QLabel *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QLabel_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLabel *>(self)->text());
 }
 void * qute_QLabel_pixmap(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPixmap(static_cast<QLabel *>(self)->pixmap()));
 }
 void * qute_QLabel_picture(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPicture(static_cast<QLabel *>(self)->picture()));
 }
 void * qute_QLabel_movie(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLabel *>(self)->movie());
 }
 int64_t qute_QLabel_textFormat(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLabel *>(self)->textFormat());
 }
 void qute_QLabel_setTextFormat(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setTextFormat(static_cast<Qt::TextFormat>(a0));
 }
 void qute_QLabel_setResourceProvider(void *self, uintptr_t a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setResourceProvider(std::function<QVariant (const QUrl &)>([s = std::make_shared<GoSlot>(a0)](const QUrl & p0) -> QVariant { void * c0 = static_cast<void *>(new QUrl(p0)); void *args[] = {&c0}; void * r = nullptr; qute_call(s->id, args, &r); return (r ? *static_cast<QVariant *>(r) : QVariant()); }));
 }
 int64_t qute_QLabel_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLabel *>(self)->alignment()).toInt());
 }
 void qute_QLabel_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 void qute_QLabel_setWordWrap(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setWordWrap(static_cast<bool>(a0));
 }
 bool qute_QLabel_wordWrap(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLabel *>(self)->wordWrap());
 }
 int qute_QLabel_indent(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLabel *>(self)->indent());
 }
 void qute_QLabel_setIndent(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setIndent(static_cast<int>(a0));
 }
 int qute_QLabel_margin(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLabel *>(self)->margin());
 }
 void qute_QLabel_setMargin(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setMargin(static_cast<int>(a0));
 }
 bool qute_QLabel_hasScaledContents(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLabel *>(self)->hasScaledContents());
 }
 void qute_QLabel_setScaledContents(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setScaledContents(static_cast<bool>(a0));
 }
 void qute_QLabel_setBuddy(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setBuddy(static_cast<QWidget *>(a0));
 }
 void * qute_QLabel_buddy(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLabel *>(self)->buddy());
 }
 bool qute_QLabel_openExternalLinks(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLabel *>(self)->openExternalLinks());
 }
 void qute_QLabel_setOpenExternalLinks(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setOpenExternalLinks(static_cast<bool>(a0));
 }
 void qute_QLabel_setTextInteractionFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setTextInteractionFlags(QFlags<Qt::TextInteractionFlag>::fromInt(static_cast<QFlags<Qt::TextInteractionFlag>::Int>(a0)));
 }
 int64_t qute_QLabel_textInteractionFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLabel *>(self)->textInteractionFlags()).toInt());
 }
 void qute_QLabel_setSelection(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setSelection(static_cast<int>(a0), static_cast<int>(a1));
 }
 bool qute_QLabel_hasSelectedText(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLabel *>(self)->hasSelectedText());
 }
 qute_str qute_QLabel_selectedText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLabel *>(self)->selectedText());
 }
 int qute_QLabel_selectionStart(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLabel *>(self)->selectionStart());
 }
 void qute_QLabel_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QLabel_setPixmap(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setPixmap((a0 ? *static_cast<QPixmap *>(a0) : QPixmap()));
 }
 void qute_QLabel_setPicture(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setPicture((a0 ? *static_cast<QPicture *>(a0) : QPicture()));
 }
 void qute_QLabel_setMovie(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setMovie(static_cast<QMovie *>(a0));
 }
 void qute_QLabel_setNum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setNum(static_cast<int>(a0));
 }
 void qute_QLabel_setNum_1(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->setNum(static_cast<double>(a0));
 }
 void qute_QLabel_clear(void *self) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->clear();
 }
 void qute_QLabel_linkActivated_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->linkActivated(QString::fromUtf8(a0, a0_len));
 }
 void qute_QLabel_linkHovered_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLabel *>(self)->linkHovered(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QLabel_linkActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLabel *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLabel::linkActivated, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QLabel_linkHovered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLabel *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLabel::linkHovered, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -9855,24 +12620,31 @@ void * qute_QLabel_linkHovered(void *self, uintptr_t id) {
 
 // ---- QLayout
 void * qute_QLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QLayout *>(static_cast<QObject *>(obj)));
 }
 void * qute_QLayout_as_QLayoutItem(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(static_cast<QLayoutItem *>(static_cast<QLayout *>(self)));
 }
 int qute_QLayout_spacing(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayout *>(self)->spacing());
 }
 void qute_QLayout_setSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setSpacing(static_cast<int>(a0));
 }
 void qute_QLayout_setContentsMargins(void *self, qute_margins a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setContentsMargins(qute_to_QMargins(a0));
 }
 void qute_QLayout_unsetContentsMargins(void *self) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->unsetContentsMargins();
 }
 void qute_QLayout_getContentsMargins(void *self, int *a0_out, int *a1_out, int *a2_out, int *a3_out) {
+	qute_gui_only();
 	int t0{};
 	int t1{};
 	int t2{};
@@ -9884,445 +12656,603 @@ void qute_QLayout_getContentsMargins(void *self, int *a0_out, int *a1_out, int *
 	*a3_out = static_cast<int>(t3);
 }
 qute_margins qute_QLayout_contentsMargins(void *self) {
+	qute_gui_only();
 	return qute_from_QMargins(static_cast<QLayout *>(self)->contentsMargins());
 }
 qute_rect qute_QLayout_contentsRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QLayout *>(self)->contentsRect());
 }
 bool qute_QLayout_setAlignment(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayout *>(self)->setAlignment(static_cast<QWidget *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1))));
 }
 bool qute_QLayout_setAlignment_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayout *>(self)->setAlignment(static_cast<QLayout *>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1))));
 }
 void qute_QLayout_setSizeConstraint(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setSizeConstraint(static_cast<QLayout::SizeConstraint>(a0));
 }
 int64_t qute_QLayout_sizeConstraint(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLayout *>(self)->sizeConstraint());
 }
 void qute_QLayout_setSizeConstraints(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setSizeConstraints(static_cast<QLayout::SizeConstraint>(a0), static_cast<QLayout::SizeConstraint>(a1));
 }
 void qute_QLayout_setHorizontalSizeConstraint(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setHorizontalSizeConstraint(static_cast<QLayout::SizeConstraint>(a0));
 }
 int64_t qute_QLayout_horizontalSizeConstraint(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLayout *>(self)->horizontalSizeConstraint());
 }
 void qute_QLayout_setVerticalSizeConstraint(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setVerticalSizeConstraint(static_cast<QLayout::SizeConstraint>(a0));
 }
 int64_t qute_QLayout_verticalSizeConstraint(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLayout *>(self)->verticalSizeConstraint());
 }
 void qute_QLayout_setMenuBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setMenuBar(static_cast<QWidget *>(a0));
 }
 void * qute_QLayout_menuBar(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayout *>(self)->menuBar());
 }
 void * qute_QLayout_parentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayout *>(self)->parentWidget());
 }
 void qute_QLayout_invalidate(void *self) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->invalidate();
 }
 qute_rect qute_QLayout_geometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QLayout *>(self)->geometry());
 }
 bool qute_QLayout_activate(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayout *>(self)->activate());
 }
 void qute_QLayout_update(void *self) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->update();
 }
 void qute_QLayout_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->addWidget(static_cast<QWidget *>(a0));
 }
 void qute_QLayout_addItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->addItem(static_cast<QLayoutItem *>(a0));
 }
 void qute_QLayout_removeWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->removeWidget(static_cast<QWidget *>(a0));
 }
 void qute_QLayout_removeItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->removeItem(static_cast<QLayoutItem *>(a0));
 }
 int64_t qute_QLayout_expandingDirections(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLayout *>(self)->expandingDirections()).toInt());
 }
 qute_size qute_QLayout_minimumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayout *>(self)->minimumSize());
 }
 qute_size qute_QLayout_maximumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayout *>(self)->maximumSize());
 }
 void qute_QLayout_setGeometry(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setGeometry(qute_to_QRect(a0));
 }
 void * qute_QLayout_itemAt(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayout *>(self)->itemAt(static_cast<int>(a0)));
 }
 void * qute_QLayout_takeAt(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayout *>(self)->takeAt(static_cast<int>(a0)));
 }
 int qute_QLayout_indexOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayout *>(self)->indexOf(static_cast<QWidget *>(a0)));
 }
 int qute_QLayout_indexOf_1(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayout *>(self)->indexOf(static_cast<QLayoutItem *>(a0)));
 }
 int qute_QLayout_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayout *>(self)->count());
 }
 bool qute_QLayout_isEmpty(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayout *>(self)->isEmpty());
 }
 int64_t qute_QLayout_controlTypes(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLayout *>(self)->controlTypes()).toInt());
 }
 void * qute_QLayout_replaceWidget(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayout *>(self)->replaceWidget(static_cast<QWidget *>(a0), static_cast<QWidget *>(a1)));
 }
 int qute_QLayout_totalMinimumHeightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayout *>(self)->totalMinimumHeightForWidth(static_cast<int>(a0)));
 }
 int qute_QLayout_totalHeightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayout *>(self)->totalHeightForWidth(static_cast<int>(a0)));
 }
 qute_size qute_QLayout_totalMinimumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayout *>(self)->totalMinimumSize());
 }
 qute_size qute_QLayout_totalMaximumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayout *>(self)->totalMaximumSize());
 }
 qute_size qute_QLayout_totalSizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayout *>(self)->totalSizeHint());
 }
 void * qute_QLayout_layout(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayout *>(self)->layout());
 }
 void qute_QLayout_setEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLayout *>(self)->setEnabled(static_cast<bool>(a0));
 }
 bool qute_QLayout_isEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayout *>(self)->isEnabled());
 }
+void * qute_QLayout_replaceWidget_1(void *self, void * a0, void * a1, int64_t a2) {
+	qute_gui_only();
+	return (void *)(static_cast<QLayout *>(self)->replaceWidget(static_cast<QWidget *>(a0), static_cast<QWidget *>(a1), QFlags<Qt::FindChildOption>::fromInt(static_cast<QFlags<Qt::FindChildOption>::Int>(a2))));
+}
 qute_size qute_QLayout_closestAcceptableSize(void * a0, qute_size a1) {
+	qute_gui_only();
 	return qute_from_QSize(QLayout::closestAcceptableSize(static_cast<QWidget *>(a0), qute_to_QSize(a1)));
 }
 
 // ---- QLayoutItem
 void qute_QLayoutItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QLayoutItem *>(self);
 }
+void * qute_QLayoutItem_qobject(void *self) {
+	qute_gui_only();
+	return static_cast<void *>(dynamic_cast<QObject *>(static_cast<QLayoutItem *>(self)));
+}
 qute_size qute_QLayoutItem_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayoutItem *>(self)->sizeHint());
 }
 qute_size qute_QLayoutItem_minimumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayoutItem *>(self)->minimumSize());
 }
 qute_size qute_QLayoutItem_maximumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QLayoutItem *>(self)->maximumSize());
 }
 int64_t qute_QLayoutItem_expandingDirections(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLayoutItem *>(self)->expandingDirections()).toInt());
 }
 void qute_QLayoutItem_setGeometry(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QLayoutItem *>(self)->setGeometry(qute_to_QRect(a0));
 }
 qute_rect qute_QLayoutItem_geometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QLayoutItem *>(self)->geometry());
 }
 bool qute_QLayoutItem_isEmpty(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayoutItem *>(self)->isEmpty());
 }
 bool qute_QLayoutItem_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLayoutItem *>(self)->hasHeightForWidth());
 }
 int qute_QLayoutItem_heightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayoutItem *>(self)->heightForWidth(static_cast<int>(a0)));
 }
 int qute_QLayoutItem_minimumHeightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLayoutItem *>(self)->minimumHeightForWidth(static_cast<int>(a0)));
 }
 void qute_QLayoutItem_invalidate(void *self) {
+	qute_gui_only();
 	static_cast<QLayoutItem *>(self)->invalidate();
 }
 void * qute_QLayoutItem_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayoutItem *>(self)->widget());
 }
 void * qute_QLayoutItem_layout(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayoutItem *>(self)->layout());
 }
 void * qute_QLayoutItem_spacerItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLayoutItem *>(self)->spacerItem());
 }
 int64_t qute_QLayoutItem_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLayoutItem *>(self)->alignment()).toInt());
 }
 void qute_QLayoutItem_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLayoutItem *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QLayoutItem_controlTypes(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLayoutItem *>(self)->controlTypes()).toInt());
 }
 
 // ---- QLineEdit
 void * qute_QLineEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QLineEdit *>(new QLineEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QLineEdit_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QLineEdit *>(new QLineEdit(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QLineEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QLineEdit *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QLineEdit_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLineEdit *>(self)->text());
 }
 qute_str qute_QLineEdit_displayText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLineEdit *>(self)->displayText());
 }
 qute_str qute_QLineEdit_placeholderText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLineEdit *>(self)->placeholderText());
 }
 void qute_QLineEdit_setPlaceholderText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setPlaceholderText(QString::fromUtf8(a0, a0_len));
 }
 int qute_QLineEdit_maxLength(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLineEdit *>(self)->maxLength());
 }
 void qute_QLineEdit_setMaxLength(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setMaxLength(static_cast<int>(a0));
 }
 void qute_QLineEdit_setFrame(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setFrame(static_cast<bool>(a0));
 }
 bool qute_QLineEdit_hasFrame(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->hasFrame());
 }
 void qute_QLineEdit_setClearButtonEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setClearButtonEnabled(static_cast<bool>(a0));
 }
 bool qute_QLineEdit_isClearButtonEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->isClearButtonEnabled());
 }
 int64_t qute_QLineEdit_echoMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLineEdit *>(self)->echoMode());
 }
 void qute_QLineEdit_setEchoMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setEchoMode(static_cast<QLineEdit::EchoMode>(a0));
 }
 bool qute_QLineEdit_isReadOnly(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->isReadOnly());
 }
 void qute_QLineEdit_setReadOnly(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setReadOnly(static_cast<bool>(a0));
 }
 void qute_QLineEdit_setValidator(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setValidator(static_cast<QValidator *>(a0));
 }
 void * qute_QLineEdit_validator(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLineEdit *>(self)->validator());
 }
 void qute_QLineEdit_setCompleter(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setCompleter(static_cast<QCompleter *>(a0));
 }
 void * qute_QLineEdit_completer(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLineEdit *>(self)->completer());
 }
 int qute_QLineEdit_cursorPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLineEdit *>(self)->cursorPosition());
 }
 void qute_QLineEdit_setCursorPosition(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setCursorPosition(static_cast<int>(a0));
 }
 int qute_QLineEdit_cursorPositionAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLineEdit *>(self)->cursorPositionAt(qute_to_QPoint(a0)));
 }
 void qute_QLineEdit_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QLineEdit_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QLineEdit *>(self)->alignment()).toInt());
 }
 void qute_QLineEdit_cursorForward(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->cursorForward(static_cast<bool>(a0));
 }
 void qute_QLineEdit_cursorBackward(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->cursorBackward(static_cast<bool>(a0));
 }
 void qute_QLineEdit_cursorWordForward(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->cursorWordForward(static_cast<bool>(a0));
 }
 void qute_QLineEdit_cursorWordBackward(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->cursorWordBackward(static_cast<bool>(a0));
 }
 void qute_QLineEdit_backspace(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->backspace();
 }
 void qute_QLineEdit_del(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->del();
 }
 void qute_QLineEdit_home(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->home(static_cast<bool>(a0));
 }
 void qute_QLineEdit_end(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->end(static_cast<bool>(a0));
 }
 bool qute_QLineEdit_isModified(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->isModified());
 }
 void qute_QLineEdit_setModified(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setModified(static_cast<bool>(a0));
 }
 void qute_QLineEdit_setSelection(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setSelection(static_cast<int>(a0), static_cast<int>(a1));
 }
 bool qute_QLineEdit_hasSelectedText(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->hasSelectedText());
 }
 qute_str qute_QLineEdit_selectedText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLineEdit *>(self)->selectedText());
 }
 int qute_QLineEdit_selectionStart(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLineEdit *>(self)->selectionStart());
 }
 int qute_QLineEdit_selectionEnd(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLineEdit *>(self)->selectionEnd());
 }
 int qute_QLineEdit_selectionLength(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QLineEdit *>(self)->selectionLength());
 }
 bool qute_QLineEdit_isUndoAvailable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->isUndoAvailable());
 }
 bool qute_QLineEdit_isRedoAvailable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->isRedoAvailable());
 }
 void qute_QLineEdit_setDragEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setDragEnabled(static_cast<bool>(a0));
 }
 bool qute_QLineEdit_dragEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->dragEnabled());
 }
 void qute_QLineEdit_setCursorMoveStyle(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setCursorMoveStyle(static_cast<Qt::CursorMoveStyle>(a0));
 }
 int64_t qute_QLineEdit_cursorMoveStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QLineEdit *>(self)->cursorMoveStyle());
 }
 qute_str qute_QLineEdit_inputMask(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QLineEdit *>(self)->inputMask());
 }
 void qute_QLineEdit_setInputMask(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setInputMask(QString::fromUtf8(a0, a0_len));
 }
 bool qute_QLineEdit_hasAcceptableInput(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QLineEdit *>(self)->hasAcceptableInput());
 }
 void qute_QLineEdit_setTextMargins(void *self, qute_margins a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setTextMargins(qute_to_QMargins(a0));
 }
 qute_margins qute_QLineEdit_textMargins(void *self) {
+	qute_gui_only();
 	return qute_from_QMargins(static_cast<QLineEdit *>(self)->textMargins());
 }
 void qute_QLineEdit_addAction(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->addAction(static_cast<QAction *>(a0), static_cast<QLineEdit::ActionPosition>(a1));
 }
 void * qute_QLineEdit_addAction_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QLineEdit *>(self)->addAction((a0 ? *static_cast<QIcon *>(a0) : QIcon()), static_cast<QLineEdit::ActionPosition>(a1)));
 }
 void qute_QLineEdit_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QLineEdit_clear(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->clear();
 }
 void qute_QLineEdit_selectAll(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->selectAll();
 }
 void qute_QLineEdit_undo(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->undo();
 }
 void qute_QLineEdit_redo(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->redo();
 }
 void qute_QLineEdit_cut(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->cut();
 }
 void qute_QLineEdit_copy(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->copy();
 }
 void qute_QLineEdit_paste(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->paste();
 }
 void qute_QLineEdit_deselect(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->deselect();
 }
 void qute_QLineEdit_insert(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->insert(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QLineEdit_createStandardContextMenu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QLineEdit *>(self)->createStandardContextMenu());
 }
 void qute_QLineEdit_timerEvent(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->timerEvent(static_cast<QTimerEvent *>(a0));
 }
 void qute_QLineEdit_textChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->textChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QLineEdit_textEdited_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->textEdited(QString::fromUtf8(a0, a0_len));
 }
 void qute_QLineEdit_cursorPositionChanged_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->cursorPositionChanged(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QLineEdit_returnPressed_1(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->returnPressed();
 }
 void qute_QLineEdit_editingFinished_1(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->editingFinished();
 }
 void qute_QLineEdit_selectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->selectionChanged();
 }
 void qute_QLineEdit_inputRejected_1(void *self) {
+	qute_gui_only();
 	static_cast<QLineEdit *>(self)->inputRejected();
 }
+void qute_QLineEdit_cursorForward_1(void *self, bool a0, int a1) {
+	qute_gui_only();
+	static_cast<QLineEdit *>(self)->cursorForward(static_cast<bool>(a0), static_cast<int>(a1));
+}
+void qute_QLineEdit_cursorBackward_1(void *self, bool a0, int a1) {
+	qute_gui_only();
+	static_cast<QLineEdit *>(self)->cursorBackward(static_cast<bool>(a0), static_cast<int>(a1));
+}
 void * qute_QLineEdit_textChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::textChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QLineEdit_textEdited(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::textEdited, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QLineEdit_cursorPositionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::cursorPositionChanged, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QLineEdit_returnPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::returnPressed, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QLineEdit_editingFinished(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::editingFinished, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QLineEdit_selectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::selectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QLineEdit_inputRejected(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QLineEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QLineEdit::inputRejected, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -10330,108 +13260,143 @@ void * qute_QLineEdit_inputRejected(void *self, uintptr_t id) {
 
 // ---- QListView
 void * qute_QListView_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QListView *>(new QListView(static_cast<QWidget *>(a0)));
 }
 void * qute_QListView_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QListView *>(static_cast<QObject *>(obj)));
 }
 void qute_QListView_setMovement(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setMovement(static_cast<QListView::Movement>(a0));
 }
 int64_t qute_QListView_movement(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QListView *>(self)->movement());
 }
 void qute_QListView_setFlow(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setFlow(static_cast<QListView::Flow>(a0));
 }
 int64_t qute_QListView_flow(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QListView *>(self)->flow());
 }
 void qute_QListView_setWrapping(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setWrapping(static_cast<bool>(a0));
 }
 bool qute_QListView_isWrapping(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListView *>(self)->isWrapping());
 }
 void qute_QListView_setResizeMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setResizeMode(static_cast<QListView::ResizeMode>(a0));
 }
 int64_t qute_QListView_resizeMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QListView *>(self)->resizeMode());
 }
 void qute_QListView_setLayoutMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setLayoutMode(static_cast<QListView::LayoutMode>(a0));
 }
 int64_t qute_QListView_layoutMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QListView *>(self)->layoutMode());
 }
 void qute_QListView_setSpacing(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setSpacing(static_cast<int>(a0));
 }
 int qute_QListView_spacing(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListView *>(self)->spacing());
 }
 void qute_QListView_setBatchSize(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setBatchSize(static_cast<int>(a0));
 }
 int qute_QListView_batchSize(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListView *>(self)->batchSize());
 }
 void qute_QListView_setGridSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setGridSize(qute_to_QSize(a0));
 }
 qute_size qute_QListView_gridSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QListView *>(self)->gridSize());
 }
 void qute_QListView_setViewMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setViewMode(static_cast<QListView::ViewMode>(a0));
 }
 int64_t qute_QListView_viewMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QListView *>(self)->viewMode());
 }
 void qute_QListView_clearPropertyFlags(void *self) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->clearPropertyFlags();
 }
 bool qute_QListView_isRowHidden(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListView *>(self)->isRowHidden(static_cast<int>(a0)));
 }
 void qute_QListView_setRowHidden(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setRowHidden(static_cast<int>(a0), static_cast<bool>(a1));
 }
 void qute_QListView_setModelColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setModelColumn(static_cast<int>(a0));
 }
 int qute_QListView_modelColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListView *>(self)->modelColumn());
 }
 void qute_QListView_setUniformItemSizes(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setUniformItemSizes(static_cast<bool>(a0));
 }
 bool qute_QListView_uniformItemSizes(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListView *>(self)->uniformItemSizes());
 }
 void qute_QListView_setWordWrap(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setWordWrap(static_cast<bool>(a0));
 }
 bool qute_QListView_wordWrap(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListView *>(self)->wordWrap());
 }
 void qute_QListView_setSelectionRectVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setSelectionRectVisible(static_cast<bool>(a0));
 }
 bool qute_QListView_isSelectionRectVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListView *>(self)->isSelectionRectVisible());
 }
 void qute_QListView_setItemAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->setItemAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QListView_itemAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QListView *>(self)->itemAlignment()).toInt());
 }
 void qute_QListView_indexesMoved_1(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QListView *>(self)->indexesMoved([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }());
 }
 void * qute_QListView_indexesMoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListView::indexesMoved, obj, [s](const QList<QModelIndex> & a0) { qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); }); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -10439,198 +13404,265 @@ void * qute_QListView_indexesMoved(void *self, uintptr_t id) {
 
 // ---- QListWidget
 void * qute_QListWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QListWidget *>(new QListWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QListWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QListWidget *>(static_cast<QObject *>(obj)));
 }
 void * qute_QListWidget_item(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidget *>(self)->item(static_cast<int>(a0)));
 }
 int qute_QListWidget_row(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListWidget *>(self)->row(static_cast<QListWidgetItem *>(a0)));
 }
 void qute_QListWidget_insertItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->insertItem(static_cast<int>(a0), static_cast<QListWidgetItem *>(a1));
 }
 void qute_QListWidget_insertItem_1(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->insertItem(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void qute_QListWidget_insertItems(void *self, int a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->insertItems(static_cast<int>(a0), qute_qstrlist(a1, a1_lens, a1_n));
 }
 void qute_QListWidget_addItem(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->addItem(QString::fromUtf8(a0, a0_len));
 }
 void qute_QListWidget_addItem_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->addItem(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_addItems(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->addItems(qute_qstrlist(a0, a0_lens, a0_n));
 }
 void * qute_QListWidget_takeItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidget *>(self)->takeItem(static_cast<int>(a0)));
 }
 int qute_QListWidget_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListWidget *>(self)->count());
 }
 void * qute_QListWidget_currentItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidget *>(self)->currentItem());
 }
 void qute_QListWidget_setCurrentItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setCurrentItem(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_setCurrentItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setCurrentItem(static_cast<QListWidgetItem *>(a0), QFlags<QItemSelectionModel::SelectionFlag>::fromInt(static_cast<QFlags<QItemSelectionModel::SelectionFlag>::Int>(a1)));
 }
 int qute_QListWidget_currentRow(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListWidget *>(self)->currentRow());
 }
 void qute_QListWidget_setCurrentRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setCurrentRow(static_cast<int>(a0));
 }
 void qute_QListWidget_setCurrentRow_1(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setCurrentRow(static_cast<int>(a0), QFlags<QItemSelectionModel::SelectionFlag>::fromInt(static_cast<QFlags<QItemSelectionModel::SelectionFlag>::Int>(a1)));
 }
 void * qute_QListWidget_itemAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidget *>(self)->itemAt(qute_to_QPoint(a0)));
 }
 qute_rect qute_QListWidget_visualItemRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QListWidget *>(self)->visualItemRect(static_cast<QListWidgetItem *>(a0)));
 }
 void qute_QListWidget_sortItems(void *self) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->sortItems();
 }
 void qute_QListWidget_setSortingEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setSortingEnabled(static_cast<bool>(a0));
 }
 bool qute_QListWidget_isSortingEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListWidget *>(self)->isSortingEnabled());
 }
 void qute_QListWidget_editItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->editItem(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_openPersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->openPersistentEditor(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_closePersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->closePersistentEditor(static_cast<QListWidgetItem *>(a0));
 }
 bool qute_QListWidget_isPersistentEditorOpen(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListWidget *>(self)->isPersistentEditorOpen(static_cast<QListWidgetItem *>(a0)));
 }
 void * qute_QListWidget_itemWidget(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidget *>(self)->itemWidget(static_cast<QListWidgetItem *>(a0)));
 }
 void qute_QListWidget_setItemWidget(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setItemWidget(static_cast<QListWidgetItem *>(a0), static_cast<QWidget *>(a1));
 }
 void qute_QListWidget_removeItemWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->removeItemWidget(static_cast<QListWidgetItem *>(a0));
 }
 qute_list qute_QListWidget_selectedItems(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QListWidget *>(self)->selectedItems(), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QListWidget_findItems(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QListWidget *>(self)->findItems(QString::fromUtf8(a0, a0_len), QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a1))), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QListWidget_items(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QListWidget *>(self)->items(static_cast<QMimeData *>(a0)), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QListWidget_indexFromItem(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QListWidget *>(self)->indexFromItem(static_cast<QListWidgetItem *>(a0))));
 }
 void * qute_QListWidget_itemFromIndex(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidget *>(self)->itemFromIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void qute_QListWidget_setSupportedDragActions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->setSupportedDragActions(QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a0)));
 }
 int64_t qute_QListWidget_supportedDragActions(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QListWidget *>(self)->supportedDragActions()).toInt());
 }
 void qute_QListWidget_scrollToItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->scrollToItem(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_clear(void *self) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->clear();
 }
 void qute_QListWidget_itemPressed_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemPressed(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_itemClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemClicked(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_itemDoubleClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemDoubleClicked(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_itemActivated_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemActivated(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_itemEntered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemEntered(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_itemChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemChanged(static_cast<QListWidgetItem *>(a0));
 }
 void qute_QListWidget_currentItemChanged_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->currentItemChanged(static_cast<QListWidgetItem *>(a0), static_cast<QListWidgetItem *>(a1));
 }
 void qute_QListWidget_currentTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->currentTextChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QListWidget_currentRowChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->currentRowChanged(static_cast<int>(a0));
 }
 void qute_QListWidget_itemSelectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QListWidget *>(self)->itemSelectionChanged();
 }
+void qute_QListWidget_sortItems_1(void *self, int64_t a0) {
+	qute_gui_only();
+	static_cast<QListWidget *>(self)->sortItems(static_cast<Qt::SortOrder>(a0));
+}
+void qute_QListWidget_scrollToItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QListWidget *>(self)->scrollToItem(static_cast<QListWidgetItem *>(a0), static_cast<QAbstractItemView::ScrollHint>(a1));
+}
 void * qute_QListWidget_itemPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemPressed, obj, [s](QListWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_itemClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemClicked, obj, [s](QListWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_itemDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemDoubleClicked, obj, [s](QListWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_itemActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemActivated, obj, [s](QListWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_itemEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemEntered, obj, [s](QListWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_itemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemChanged, obj, [s](QListWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_currentItemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::currentItemChanged, obj, [s](QListWidgetItem * a0, QListWidgetItem * a1) { void * c0 = (void *)(a0); void * c1 = (void *)(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_currentTextChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::currentTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_currentRowChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::currentRowChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QListWidget_itemSelectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QListWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QListWidget::itemSelectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -10638,435 +13670,605 @@ void * qute_QListWidget_itemSelectionChanged(void *self, uintptr_t id) {
 
 // ---- QListWidgetItem
 void * qute_QListWidgetItem_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QListWidgetItem *>(new qute_QListWidgetItem(static_cast<QListWidget *>(a0)));
 }
 void * qute_QListWidgetItem_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QListWidgetItem *>(new qute_QListWidgetItem(QString::fromUtf8(a0, a0_len), static_cast<QListWidget *>(a1)));
 }
 void * qute_QListWidgetItem_new_2(void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	return static_cast<QListWidgetItem *>(new qute_QListWidgetItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), static_cast<QListWidget *>(a2)));
 }
+void * qute_QListWidgetItem_new_3(void * a0, int a1) {
+	qute_gui_only();
+	return static_cast<QListWidgetItem *>(new qute_QListWidgetItem(static_cast<QListWidget *>(a0), static_cast<int>(a1)));
+}
+void * qute_QListWidgetItem_new_4(const char *a0, ptrdiff_t a0_len, void * a1, int a2) {
+	qute_gui_only();
+	return static_cast<QListWidgetItem *>(new qute_QListWidgetItem(QString::fromUtf8(a0, a0_len), static_cast<QListWidget *>(a1), static_cast<int>(a2)));
+}
+void * qute_QListWidgetItem_new_5(void * a0, const char *a1, ptrdiff_t a1_len, void * a2, int a3) {
+	qute_gui_only();
+	return static_cast<QListWidgetItem *>(new qute_QListWidgetItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), static_cast<QListWidget *>(a2), static_cast<int>(a3)));
+}
 void qute_QListWidgetItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QListWidgetItem *>(self);
 }
 void * qute_QListWidgetItem_clone(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidgetItem *>(self)->clone());
 }
 void * qute_QListWidgetItem_listWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QListWidgetItem *>(self)->listWidget());
 }
 void qute_QListWidgetItem_setSelected(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setSelected(static_cast<bool>(a0));
 }
 bool qute_QListWidgetItem_isSelected(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListWidgetItem *>(self)->isSelected());
 }
 void qute_QListWidgetItem_setHidden(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setHidden(static_cast<bool>(a0));
 }
 bool qute_QListWidgetItem_isHidden(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QListWidgetItem *>(self)->isHidden());
 }
 int64_t qute_QListWidgetItem_flags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QListWidgetItem *>(self)->flags()).toInt());
 }
 void qute_QListWidgetItem_setFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setFlags(QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(a0)));
 }
 qute_str qute_QListWidgetItem_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QListWidgetItem *>(self)->text());
 }
 void qute_QListWidgetItem_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QListWidgetItem_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QListWidgetItem *>(self)->icon()));
 }
 void qute_QListWidgetItem_setIcon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 qute_str qute_QListWidgetItem_statusTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QListWidgetItem *>(self)->statusTip());
 }
 void qute_QListWidgetItem_setStatusTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setStatusTip(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QListWidgetItem_toolTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QListWidgetItem *>(self)->toolTip());
 }
 void qute_QListWidgetItem_setToolTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setToolTip(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QListWidgetItem_whatsThis(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QListWidgetItem *>(self)->whatsThis());
 }
 void qute_QListWidgetItem_setWhatsThis(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setWhatsThis(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QListWidgetItem_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QListWidgetItem *>(self)->font()));
 }
 void qute_QListWidgetItem_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 int qute_QListWidgetItem_textAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListWidgetItem *>(self)->textAlignment());
 }
 void qute_QListWidgetItem_setTextAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setTextAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 void * qute_QListWidgetItem_background(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QListWidgetItem *>(self)->background()));
 }
 void qute_QListWidgetItem_setBackground(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setBackground((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void * qute_QListWidgetItem_foreground(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QListWidgetItem *>(self)->foreground()));
 }
 void qute_QListWidgetItem_setForeground(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setForeground((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 int64_t qute_QListWidgetItem_checkState(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QListWidgetItem *>(self)->checkState());
 }
 void qute_QListWidgetItem_setCheckState(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setCheckState(static_cast<Qt::CheckState>(a0));
 }
 qute_size qute_QListWidgetItem_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QListWidgetItem *>(self)->sizeHint());
 }
 void qute_QListWidgetItem_setSizeHint(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setSizeHint(qute_to_QSize(a0));
 }
 void * qute_QListWidgetItem_data(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QListWidgetItem *>(self)->data(static_cast<int>(a0))));
 }
 void qute_QListWidgetItem_setData(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->setData(static_cast<int>(a0), (a1 ? *static_cast<QVariant *>(a1) : QVariant()));
 }
 void qute_QListWidgetItem_read(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->read(*static_cast<QDataStream *>(a0));
 }
 void qute_QListWidgetItem_write(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QListWidgetItem *>(self)->write(*static_cast<QDataStream *>(a0));
 }
 int qute_QListWidgetItem_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QListWidgetItem *>(self)->type());
 }
 
 // ---- QMainWindow
 void * qute_QMainWindow_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QMainWindow *>(new QMainWindow(static_cast<QWidget *>(a0)));
 }
+void * qute_QMainWindow_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QMainWindow *>(new QMainWindow(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QMainWindow_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QMainWindow *>(new qute_QMainWindow(static_cast<QWidget *>(a0)));
 }
 void qute_QMainWindow_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 void * qute_QMainWindow_super_0(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_0());
 }
 void qute_QMainWindow_super_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_1(static_cast<QContextMenuEvent *>(a0));
 }
 bool qute_QMainWindow_super_2(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_2(static_cast<QEvent *>(a0)));
 }
 void qute_QMainWindow_super_3(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_3(static_cast<bool>(a0));
 }
 qute_size qute_QMainWindow_super_4(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_4());
 }
 qute_size qute_QMainWindow_super_5(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_5());
 }
 int qute_QMainWindow_super_6(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_6(static_cast<int>(a0)));
 }
 bool qute_QMainWindow_super_7(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_7());
 }
 void qute_QMainWindow_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_8(static_cast<QMouseEvent *>(a0));
 }
 void qute_QMainWindow_super_9(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_9(static_cast<QMouseEvent *>(a0));
 }
 void qute_QMainWindow_super_10(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_10(static_cast<QMouseEvent *>(a0));
 }
 void qute_QMainWindow_super_11(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_11(static_cast<QMouseEvent *>(a0));
 }
 void qute_QMainWindow_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_12(static_cast<QWheelEvent *>(a0));
 }
 void qute_QMainWindow_super_13(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_13(static_cast<QKeyEvent *>(a0));
 }
 void qute_QMainWindow_super_14(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_14(static_cast<QKeyEvent *>(a0));
 }
 void qute_QMainWindow_super_15(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_15(static_cast<QFocusEvent *>(a0));
 }
 void qute_QMainWindow_super_16(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_16(static_cast<QFocusEvent *>(a0));
 }
 void qute_QMainWindow_super_17(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_17(static_cast<QEnterEvent *>(a0));
 }
 void qute_QMainWindow_super_18(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_18(static_cast<QEvent *>(a0));
 }
 void qute_QMainWindow_super_19(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_19(static_cast<QPaintEvent *>(a0));
 }
 void qute_QMainWindow_super_20(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_20(static_cast<QMoveEvent *>(a0));
 }
 void qute_QMainWindow_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_21(static_cast<QResizeEvent *>(a0));
 }
 void qute_QMainWindow_super_22(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_22(static_cast<QCloseEvent *>(a0));
 }
 void qute_QMainWindow_super_23(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_23(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QMainWindow_super_24(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_24(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QMainWindow_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_25(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QMainWindow_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_26(static_cast<QDropEvent *>(a0));
 }
 void qute_QMainWindow_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_27(static_cast<QShowEvent *>(a0));
 }
 void qute_QMainWindow_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_28(static_cast<QHideEvent *>(a0));
 }
 void qute_QMainWindow_super_29(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_29(static_cast<QEvent *>(a0));
 }
 bool qute_QMainWindow_super_30(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_30(static_cast<bool>(a0)));
 }
 bool qute_QMainWindow_super_31(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_31(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QMainWindow_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_32(static_cast<QTimerEvent *>(a0));
 }
 void qute_QMainWindow_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_33(static_cast<QChildEvent *>(a0));
 }
 void qute_QMainWindow_super_34(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->qute_super_34(static_cast<QEvent *>(a0));
 }
 void qute_QMainWindow_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->updateMicroFocus();
 }
 void qute_QMainWindow_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->create();
 }
 void qute_QMainWindow_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->destroy();
 }
 bool qute_QMainWindow_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->focusNextChild());
 }
 bool qute_QMainWindow_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->focusPreviousChild());
 }
 double qute_QMainWindow_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QMainWindow *>(static_cast<QMainWindow *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QMainWindow_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMainWindow *>(static_cast<QObject *>(obj)));
 }
 qute_size qute_QMainWindow_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QMainWindow *>(self)->iconSize());
 }
 void qute_QMainWindow_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setIconSize(qute_to_QSize(a0));
 }
 int64_t qute_QMainWindow_toolButtonStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMainWindow *>(self)->toolButtonStyle());
 }
 void qute_QMainWindow_setToolButtonStyle(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setToolButtonStyle(static_cast<Qt::ToolButtonStyle>(a0));
 }
 bool qute_QMainWindow_isAnimated(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->isAnimated());
 }
 bool qute_QMainWindow_isDockNestingEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->isDockNestingEnabled());
 }
 bool qute_QMainWindow_documentMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->documentMode());
 }
 void qute_QMainWindow_setDocumentMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setDocumentMode(static_cast<bool>(a0));
 }
 int64_t qute_QMainWindow_tabShape(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMainWindow *>(self)->tabShape());
 }
 void qute_QMainWindow_setTabShape(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setTabShape(static_cast<QTabWidget::TabShape>(a0));
 }
 int64_t qute_QMainWindow_tabPosition(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMainWindow *>(self)->tabPosition(static_cast<Qt::DockWidgetArea>(a0)));
 }
 void qute_QMainWindow_setTabPosition(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setTabPosition(QFlags<Qt::DockWidgetArea>::fromInt(static_cast<QFlags<Qt::DockWidgetArea>::Int>(a0)), static_cast<QTabWidget::TabPosition>(a1));
 }
 void qute_QMainWindow_setDockOptions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setDockOptions(QFlags<QMainWindow::DockOption>::fromInt(static_cast<QFlags<QMainWindow::DockOption>::Int>(a0)));
 }
 int64_t qute_QMainWindow_dockOptions(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QMainWindow *>(self)->dockOptions()).toInt());
 }
 bool qute_QMainWindow_isSeparator(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->isSeparator(qute_to_QPoint(a0)));
 }
 void * qute_QMainWindow_menuBar(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->menuBar());
 }
 void qute_QMainWindow_setMenuBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setMenuBar(static_cast<QMenuBar *>(a0));
 }
 void * qute_QMainWindow_menuWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->menuWidget());
 }
 void qute_QMainWindow_setMenuWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setMenuWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QMainWindow_statusBar(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->statusBar());
 }
 void qute_QMainWindow_setStatusBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setStatusBar(static_cast<QStatusBar *>(a0));
 }
 void * qute_QMainWindow_centralWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->centralWidget());
 }
 void qute_QMainWindow_setCentralWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setCentralWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QMainWindow_takeCentralWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->takeCentralWidget());
 }
 void qute_QMainWindow_setCorner(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setCorner(static_cast<Qt::Corner>(a0), static_cast<Qt::DockWidgetArea>(a1));
 }
 int64_t qute_QMainWindow_corner(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMainWindow *>(self)->corner(static_cast<Qt::Corner>(a0)));
 }
 void qute_QMainWindow_addToolBarBreak(void *self) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->addToolBarBreak();
 }
 void qute_QMainWindow_insertToolBarBreak(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->insertToolBarBreak(static_cast<QToolBar *>(a0));
 }
 void qute_QMainWindow_addToolBar(void *self, int64_t a0, void * a1) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->addToolBar(static_cast<Qt::ToolBarArea>(a0), static_cast<QToolBar *>(a1));
 }
 void qute_QMainWindow_addToolBar_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->addToolBar(static_cast<QToolBar *>(a0));
 }
 void * qute_QMainWindow_addToolBar_2(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->addToolBar(QString::fromUtf8(a0, a0_len)));
 }
 void qute_QMainWindow_insertToolBar(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->insertToolBar(static_cast<QToolBar *>(a0), static_cast<QToolBar *>(a1));
 }
 void qute_QMainWindow_removeToolBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->removeToolBar(static_cast<QToolBar *>(a0));
 }
 void qute_QMainWindow_removeToolBarBreak(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->removeToolBarBreak(static_cast<QToolBar *>(a0));
 }
 bool qute_QMainWindow_unifiedTitleAndToolBarOnMac(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->unifiedTitleAndToolBarOnMac());
 }
 int64_t qute_QMainWindow_toolBarArea(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMainWindow *>(self)->toolBarArea(static_cast<QToolBar *>(a0)));
 }
 bool qute_QMainWindow_toolBarBreak(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->toolBarBreak(static_cast<QToolBar *>(a0)));
 }
 void qute_QMainWindow_addDockWidget(void *self, int64_t a0, void * a1) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->addDockWidget(static_cast<Qt::DockWidgetArea>(a0), static_cast<QDockWidget *>(a1));
 }
 void qute_QMainWindow_addDockWidget_1(void *self, int64_t a0, void * a1, int64_t a2) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->addDockWidget(static_cast<Qt::DockWidgetArea>(a0), static_cast<QDockWidget *>(a1), static_cast<Qt::Orientation>(a2));
 }
 void qute_QMainWindow_splitDockWidget(void *self, void * a0, void * a1, int64_t a2) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->splitDockWidget(static_cast<QDockWidget *>(a0), static_cast<QDockWidget *>(a1), static_cast<Qt::Orientation>(a2));
 }
 void qute_QMainWindow_tabifyDockWidget(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->tabifyDockWidget(static_cast<QDockWidget *>(a0), static_cast<QDockWidget *>(a1));
 }
 qute_list qute_QMainWindow_tabifiedDockWidgets(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QMainWindow *>(self)->tabifiedDockWidgets(static_cast<QDockWidget *>(a0)), [](const auto &v) { return (void *)(v); });
 }
 void qute_QMainWindow_removeDockWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->removeDockWidget(static_cast<QDockWidget *>(a0));
 }
 bool qute_QMainWindow_restoreDockWidget(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->restoreDockWidget(static_cast<QDockWidget *>(a0)));
 }
 int64_t qute_QMainWindow_dockWidgetArea(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMainWindow *>(self)->dockWidgetArea(static_cast<QDockWidget *>(a0)));
 }
 void qute_QMainWindow_resizeDocks(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n, int64_t a2) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->resizeDocks([&] { QList<QDockWidget *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QDockWidget *>(d[i])); return l; }(), [&] { QList<int> l; auto d = static_cast<int const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(static_cast<int>(d[i])); return l; }(), static_cast<Qt::Orientation>(a2));
 }
 qute_str qute_QMainWindow_saveState(void *self) {
+	qute_gui_only();
 	return qute_ret_bytes(static_cast<QMainWindow *>(self)->saveState());
 }
 bool qute_QMainWindow_restoreState(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMainWindow *>(self)->restoreState(QByteArray(a0, a0_len)));
 }
 void * qute_QMainWindow_createPopupMenu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMainWindow *>(self)->createPopupMenu());
 }
 void qute_QMainWindow_setAnimated(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setAnimated(static_cast<bool>(a0));
 }
 void qute_QMainWindow_setDockNestingEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setDockNestingEnabled(static_cast<bool>(a0));
 }
 void qute_QMainWindow_setUnifiedTitleAndToolBarOnMac(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->setUnifiedTitleAndToolBarOnMac(static_cast<bool>(a0));
 }
 void qute_QMainWindow_iconSizeChanged_1(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->iconSizeChanged(qute_to_QSize(a0));
 }
 void qute_QMainWindow_toolButtonStyleChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->toolButtonStyleChanged(static_cast<Qt::ToolButtonStyle>(a0));
 }
 void qute_QMainWindow_tabifiedDockWidgetActivated_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMainWindow *>(self)->tabifiedDockWidgetActivated(static_cast<QDockWidget *>(a0));
 }
+void qute_QMainWindow_addToolBarBreak_1(void *self, int64_t a0) {
+	qute_gui_only();
+	static_cast<QMainWindow *>(self)->addToolBarBreak(static_cast<Qt::ToolBarArea>(a0));
+}
+qute_str qute_QMainWindow_saveState_1(void *self, int a0) {
+	qute_gui_only();
+	return qute_ret_bytes(static_cast<QMainWindow *>(self)->saveState(static_cast<int>(a0)));
+}
+bool qute_QMainWindow_restoreState_1(void *self, const char *a0, ptrdiff_t a0_len, int a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QMainWindow *>(self)->restoreState(QByteArray(a0, a0_len), static_cast<int>(a1)));
+}
 void * qute_QMainWindow_iconSizeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMainWindow *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMainWindow::iconSizeChanged, obj, [s](const QSize & a0) { qute_size c0 = qute_from_QSize(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QMainWindow_toolButtonStyleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMainWindow *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMainWindow::toolButtonStyleChanged, obj, [s](Qt::ToolButtonStyle a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QMainWindow_tabifiedDockWidgetActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMainWindow *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMainWindow::tabifiedDockWidgetActivated, obj, [s](QDockWidget * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11074,105 +14276,151 @@ void * qute_QMainWindow_tabifiedDockWidgetActivated(void *self, uintptr_t id) {
 
 // ---- QMdiArea
 void * qute_QMdiArea_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QMdiArea *>(new QMdiArea(static_cast<QWidget *>(a0)));
 }
 void * qute_QMdiArea_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMdiArea *>(static_cast<QObject *>(obj)));
 }
 void * qute_QMdiArea_currentSubWindow(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiArea *>(self)->currentSubWindow());
 }
 void * qute_QMdiArea_activeSubWindow(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiArea *>(self)->activeSubWindow());
 }
 qute_list qute_QMdiArea_subWindowList(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QMdiArea *>(self)->subWindowList(), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QMdiArea_addSubWindow(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiArea *>(self)->addSubWindow(static_cast<QWidget *>(a0)));
 }
 void qute_QMdiArea_removeSubWindow(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->removeSubWindow(static_cast<QWidget *>(a0));
 }
 void * qute_QMdiArea_background(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QMdiArea *>(self)->background()));
 }
 void qute_QMdiArea_setBackground(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setBackground((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 int64_t qute_QMdiArea_activationOrder(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMdiArea *>(self)->activationOrder());
 }
 void qute_QMdiArea_setActivationOrder(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setActivationOrder(static_cast<QMdiArea::WindowOrder>(a0));
 }
 void qute_QMdiArea_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setOption(static_cast<QMdiArea::AreaOption>(a0));
 }
 bool qute_QMdiArea_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMdiArea *>(self)->testOption(static_cast<QMdiArea::AreaOption>(a0)));
 }
 void qute_QMdiArea_setViewMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setViewMode(static_cast<QMdiArea::ViewMode>(a0));
 }
 int64_t qute_QMdiArea_viewMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMdiArea *>(self)->viewMode());
 }
 bool qute_QMdiArea_documentMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMdiArea *>(self)->documentMode());
 }
 void qute_QMdiArea_setDocumentMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setDocumentMode(static_cast<bool>(a0));
 }
 void qute_QMdiArea_setTabsClosable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setTabsClosable(static_cast<bool>(a0));
 }
 bool qute_QMdiArea_tabsClosable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMdiArea *>(self)->tabsClosable());
 }
 void qute_QMdiArea_setTabsMovable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setTabsMovable(static_cast<bool>(a0));
 }
 bool qute_QMdiArea_tabsMovable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMdiArea *>(self)->tabsMovable());
 }
 void qute_QMdiArea_setTabShape(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setTabShape(static_cast<QTabWidget::TabShape>(a0));
 }
 int64_t qute_QMdiArea_tabShape(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMdiArea *>(self)->tabShape());
 }
 void qute_QMdiArea_setTabPosition(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setTabPosition(static_cast<QTabWidget::TabPosition>(a0));
 }
 int64_t qute_QMdiArea_tabPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMdiArea *>(self)->tabPosition());
 }
 void qute_QMdiArea_setActiveSubWindow(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->setActiveSubWindow(static_cast<QMdiSubWindow *>(a0));
 }
 void qute_QMdiArea_tileSubWindows(void *self) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->tileSubWindows();
 }
 void qute_QMdiArea_cascadeSubWindows(void *self) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->cascadeSubWindows();
 }
 void qute_QMdiArea_closeActiveSubWindow(void *self) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->closeActiveSubWindow();
 }
 void qute_QMdiArea_closeAllSubWindows(void *self) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->closeAllSubWindows();
 }
 void qute_QMdiArea_activateNextSubWindow(void *self) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->activateNextSubWindow();
 }
 void qute_QMdiArea_activatePreviousSubWindow(void *self) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->activatePreviousSubWindow();
 }
 void qute_QMdiArea_subWindowActivated_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMdiArea *>(self)->subWindowActivated(static_cast<QMdiSubWindow *>(a0));
 }
+qute_list qute_QMdiArea_subWindowList_1(void *self, int64_t a0) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QMdiArea *>(self)->subWindowList(static_cast<QMdiArea::WindowOrder>(a0)), [](const auto &v) { return (void *)(v); });
+}
+void * qute_QMdiArea_addSubWindow_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return (void *)(static_cast<QMdiArea *>(self)->addSubWindow(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
+void qute_QMdiArea_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QMdiArea *>(self)->setOption(static_cast<QMdiArea::AreaOption>(a0), static_cast<bool>(a1));
+}
 void * qute_QMdiArea_subWindowActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMdiArea *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMdiArea::subWindowActivated, obj, [s](QMdiSubWindow * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11180,71 +14428,101 @@ void * qute_QMdiArea_subWindowActivated(void *self, uintptr_t id) {
 
 // ---- QMdiSubWindow
 void * qute_QMdiSubWindow_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QMdiSubWindow *>(new QMdiSubWindow(static_cast<QWidget *>(a0)));
 }
+void * qute_QMdiSubWindow_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QMdiSubWindow *>(new QMdiSubWindow(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QMdiSubWindow_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMdiSubWindow *>(static_cast<QObject *>(obj)));
 }
 void qute_QMdiSubWindow_setWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->setWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QMdiSubWindow_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiSubWindow *>(self)->widget());
 }
 void * qute_QMdiSubWindow_maximizedButtonsWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiSubWindow *>(self)->maximizedButtonsWidget());
 }
 void * qute_QMdiSubWindow_maximizedSystemMenuIconWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiSubWindow *>(self)->maximizedSystemMenuIconWidget());
 }
 bool qute_QMdiSubWindow_isShaded(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMdiSubWindow *>(self)->isShaded());
 }
 void qute_QMdiSubWindow_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->setOption(static_cast<QMdiSubWindow::SubWindowOption>(a0));
 }
 bool qute_QMdiSubWindow_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMdiSubWindow *>(self)->testOption(static_cast<QMdiSubWindow::SubWindowOption>(a0)));
 }
 void qute_QMdiSubWindow_setKeyboardSingleStep(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->setKeyboardSingleStep(static_cast<int>(a0));
 }
 int qute_QMdiSubWindow_keyboardSingleStep(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QMdiSubWindow *>(self)->keyboardSingleStep());
 }
 void qute_QMdiSubWindow_setKeyboardPageStep(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->setKeyboardPageStep(static_cast<int>(a0));
 }
 int qute_QMdiSubWindow_keyboardPageStep(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QMdiSubWindow *>(self)->keyboardPageStep());
 }
 void qute_QMdiSubWindow_setSystemMenu(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->setSystemMenu(static_cast<QMenu *>(a0));
 }
 void * qute_QMdiSubWindow_systemMenu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiSubWindow *>(self)->systemMenu());
 }
 void * qute_QMdiSubWindow_mdiArea(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMdiSubWindow *>(self)->mdiArea());
 }
 void qute_QMdiSubWindow_showSystemMenu(void *self) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->showSystemMenu();
 }
 void qute_QMdiSubWindow_showShaded(void *self) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->showShaded();
 }
 void qute_QMdiSubWindow_windowStateChanged_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->windowStateChanged(QFlags<Qt::WindowState>::fromInt(static_cast<QFlags<Qt::WindowState>::Int>(a0)), QFlags<Qt::WindowState>::fromInt(static_cast<QFlags<Qt::WindowState>::Int>(a1)));
 }
 void qute_QMdiSubWindow_aboutToActivate_1(void *self) {
+	qute_gui_only();
 	static_cast<QMdiSubWindow *>(self)->aboutToActivate();
 }
+void qute_QMdiSubWindow_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QMdiSubWindow *>(self)->setOption(static_cast<QMdiSubWindow::SubWindowOption>(a0), static_cast<bool>(a1));
+}
 void * qute_QMdiSubWindow_windowStateChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMdiSubWindow *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMdiSubWindow::windowStateChanged, obj, [s](QFlags<Qt::WindowState> a0, QFlags<Qt::WindowState> a1) { int64_t c0 = static_cast<int64_t>((a0).toInt()); int64_t c1 = static_cast<int64_t>((a1).toInt()); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QMdiSubWindow_aboutToActivate(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMdiSubWindow *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMdiSubWindow::aboutToActivate, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -11252,159 +14530,221 @@ void * qute_QMdiSubWindow_aboutToActivate(void *self, uintptr_t id) {
 
 // ---- QMenu
 void * qute_QMenu_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QMenu *>(new QMenu(static_cast<QWidget *>(a0)));
 }
 void * qute_QMenu_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QMenu *>(new QMenu(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QMenu_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMenu *>(static_cast<QObject *>(obj)));
 }
 void * qute_QMenu_addMenu(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->addMenu(static_cast<QMenu *>(a0)));
 }
 void * qute_QMenu_addMenu_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->addMenu(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QMenu_addMenu_2(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->addMenu((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
 }
 void * qute_QMenu_addSeparator(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->addSeparator());
 }
 void * qute_QMenu_addSection(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->addSection(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QMenu_addSection_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->addSection((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
 }
 void * qute_QMenu_insertMenu(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->insertMenu(static_cast<QAction *>(a0), static_cast<QMenu *>(a1)));
 }
 void * qute_QMenu_insertSeparator(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->insertSeparator(static_cast<QAction *>(a0)));
 }
 void * qute_QMenu_insertSection(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->insertSection(static_cast<QAction *>(a0), QString::fromUtf8(a1, a1_len)));
 }
 void * qute_QMenu_insertSection_1(void *self, void * a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->insertSection(static_cast<QAction *>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()), QString::fromUtf8(a2, a2_len)));
 }
 bool qute_QMenu_isEmpty(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenu *>(self)->isEmpty());
 }
 void qute_QMenu_clear(void *self) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->clear();
 }
 void qute_QMenu_setTearOffEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setTearOffEnabled(static_cast<bool>(a0));
 }
 bool qute_QMenu_isTearOffEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenu *>(self)->isTearOffEnabled());
 }
 bool qute_QMenu_isTearOffMenuVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenu *>(self)->isTearOffMenuVisible());
 }
 void qute_QMenu_showTearOffMenu(void *self) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->showTearOffMenu();
 }
 void qute_QMenu_showTearOffMenu_1(void *self, qute_point a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->showTearOffMenu(qute_to_QPoint(a0));
 }
 void qute_QMenu_hideTearOffMenu(void *self) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->hideTearOffMenu();
 }
 void qute_QMenu_setDefaultAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setDefaultAction(static_cast<QAction *>(a0));
 }
 void * qute_QMenu_defaultAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->defaultAction());
 }
 void qute_QMenu_setActiveAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setActiveAction(static_cast<QAction *>(a0));
 }
 void * qute_QMenu_activeAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->activeAction());
 }
 void qute_QMenu_popup(void *self, qute_point a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->popup(qute_to_QPoint(a0));
 }
 void * qute_QMenu_exec(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->exec());
 }
 void * qute_QMenu_exec_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->exec(qute_to_QPoint(a0)));
 }
 qute_rect qute_QMenu_actionGeometry(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QMenu *>(self)->actionGeometry(static_cast<QAction *>(a0)));
 }
 void * qute_QMenu_actionAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->actionAt(qute_to_QPoint(a0)));
 }
 void * qute_QMenu_menuAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenu *>(self)->menuAction());
 }
 qute_str qute_QMenu_title(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QMenu *>(self)->title());
 }
 void qute_QMenu_setTitle(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setTitle(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QMenu_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QMenu *>(self)->icon()));
 }
 void qute_QMenu_setIcon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 void qute_QMenu_setNoReplayFor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setNoReplayFor(static_cast<QWidget *>(a0));
 }
 bool qute_QMenu_separatorsCollapsible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenu *>(self)->separatorsCollapsible());
 }
 void qute_QMenu_setSeparatorsCollapsible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setSeparatorsCollapsible(static_cast<bool>(a0));
 }
 bool qute_QMenu_toolTipsVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenu *>(self)->toolTipsVisible());
 }
 void qute_QMenu_setToolTipsVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->setToolTipsVisible(static_cast<bool>(a0));
 }
 void qute_QMenu_aboutToShow_1(void *self) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->aboutToShow();
 }
 void qute_QMenu_aboutToHide_1(void *self) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->aboutToHide();
 }
 void qute_QMenu_triggered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->triggered(static_cast<QAction *>(a0));
 }
 void qute_QMenu_hovered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenu *>(self)->hovered(static_cast<QAction *>(a0));
 }
+void qute_QMenu_popup_1(void *self, qute_point a0, void * a1) {
+	qute_gui_only();
+	static_cast<QMenu *>(self)->popup(qute_to_QPoint(a0), static_cast<QAction *>(a1));
+}
+void * qute_QMenu_exec_4(void *self, qute_point a0, void * a1) {
+	qute_gui_only();
+	return (void *)(static_cast<QMenu *>(self)->exec(qute_to_QPoint(a0), static_cast<QAction *>(a1)));
+}
 void * qute_QMenu_exec_2(const void *a0, ptrdiff_t a0_n, qute_point a1) {
+	qute_gui_only();
 	return (void *)(QMenu::exec([&] { QList<QAction *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QAction *>(d[i])); return l; }(), qute_to_QPoint(a1)));
 }
 void * qute_QMenu_menuInAction(void * a0) {
+	qute_gui_only();
 	return (void *)(QMenu::menuInAction(static_cast<QAction *>(a0)));
 }
+void * qute_QMenu_exec_3(const void *a0, ptrdiff_t a0_n, qute_point a1, void * a2, void * a3) {
+	qute_gui_only();
+	return (void *)(QMenu::exec([&] { QList<QAction *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QAction *>(d[i])); return l; }(), qute_to_QPoint(a1), static_cast<QAction *>(a2), static_cast<QWidget *>(a3)));
+}
 void * qute_QMenu_aboutToShow(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMenu *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMenu::aboutToShow, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QMenu_aboutToHide(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMenu *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMenu::aboutToHide, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QMenu_triggered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMenu *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMenu::triggered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QMenu_hovered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMenu *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMenu::hovered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11412,74 +14752,105 @@ void * qute_QMenu_hovered(void *self, uintptr_t id) {
 
 // ---- QMenuBar
 void * qute_QMenuBar_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QMenuBar *>(new QMenuBar(static_cast<QWidget *>(a0)));
 }
 void * qute_QMenuBar_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMenuBar *>(static_cast<QObject *>(obj)));
 }
 void * qute_QMenuBar_addMenu(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->addMenu(static_cast<QMenu *>(a0)));
 }
 void * qute_QMenuBar_addMenu_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->addMenu(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QMenuBar_addMenu_2(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->addMenu((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
 }
 void * qute_QMenuBar_addSeparator(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->addSeparator());
 }
 void * qute_QMenuBar_insertSeparator(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->insertSeparator(static_cast<QAction *>(a0)));
 }
 void * qute_QMenuBar_insertMenu(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->insertMenu(static_cast<QAction *>(a0), static_cast<QMenu *>(a1)));
 }
 void qute_QMenuBar_clear(void *self) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->clear();
 }
 void * qute_QMenuBar_activeAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->activeAction());
 }
 void qute_QMenuBar_setActiveAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->setActiveAction(static_cast<QAction *>(a0));
 }
 void qute_QMenuBar_setDefaultUp(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->setDefaultUp(static_cast<bool>(a0));
 }
 bool qute_QMenuBar_isDefaultUp(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenuBar *>(self)->isDefaultUp());
 }
 qute_rect qute_QMenuBar_actionGeometry(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QMenuBar *>(self)->actionGeometry(static_cast<QAction *>(a0)));
 }
 void * qute_QMenuBar_actionAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->actionAt(qute_to_QPoint(a0)));
 }
 void qute_QMenuBar_setCornerWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->setCornerWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QMenuBar_cornerWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMenuBar *>(self)->cornerWidget());
 }
 bool qute_QMenuBar_isNativeMenuBar(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMenuBar *>(self)->isNativeMenuBar());
 }
 void qute_QMenuBar_setNativeMenuBar(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->setNativeMenuBar(static_cast<bool>(a0));
 }
 void qute_QMenuBar_triggered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->triggered(static_cast<QAction *>(a0));
 }
 void qute_QMenuBar_hovered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMenuBar *>(self)->hovered(static_cast<QAction *>(a0));
 }
+void qute_QMenuBar_setCornerWidget_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QMenuBar *>(self)->setCornerWidget(static_cast<QWidget *>(a0), static_cast<Qt::Corner>(a1));
+}
+void * qute_QMenuBar_cornerWidget_1(void *self, int64_t a0) {
+	qute_gui_only();
+	return (void *)(static_cast<QMenuBar *>(self)->cornerWidget(static_cast<Qt::Corner>(a0)));
+}
 void * qute_QMenuBar_triggered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMenuBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMenuBar::triggered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QMenuBar_hovered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMenuBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMenuBar::hovered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11487,147 +14858,223 @@ void * qute_QMenuBar_hovered(void *self, uintptr_t id) {
 
 // ---- QMessageBox
 void * qute_QMessageBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QMessageBox *>(new QMessageBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QMessageBox_new_1(int64_t a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, void * a4) {
+	qute_gui_only();
 	return static_cast<QMessageBox *>(new QMessageBox(static_cast<QMessageBox::Icon>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QWidget *>(a4)));
 }
+void * qute_QMessageBox_new_2(int64_t a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, void * a4, int64_t a5) {
+	qute_gui_only();
+	return static_cast<QMessageBox *>(new QMessageBox(static_cast<QMessageBox::Icon>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QWidget *>(a4), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a5))));
+}
 void * qute_QMessageBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMessageBox *>(static_cast<QObject *>(obj)));
 }
 void qute_QMessageBox_addButton(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->addButton(static_cast<QAbstractButton *>(a0), static_cast<QMessageBox::ButtonRole>(a1));
 }
 void * qute_QMessageBox_addButton_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->addButton(QString::fromUtf8(a0, a0_len), static_cast<QMessageBox::ButtonRole>(a1)));
 }
 void * qute_QMessageBox_addButton_2(void *self, int64_t a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->addButton(static_cast<QMessageBox::StandardButton>(a0)));
 }
 void qute_QMessageBox_removeButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->removeButton(static_cast<QAbstractButton *>(a0));
 }
 qute_list qute_QMessageBox_buttons(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QMessageBox *>(self)->buttons(), [](const auto &v) { return (void *)(v); });
 }
 int64_t qute_QMessageBox_buttonRole(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMessageBox *>(self)->buttonRole(static_cast<QAbstractButton *>(a0)));
 }
 void qute_QMessageBox_setStandardButtons(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setStandardButtons(QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a0)));
 }
 int64_t qute_QMessageBox_standardButtons(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QMessageBox *>(self)->standardButtons()).toInt());
 }
 int64_t qute_QMessageBox_standardButton(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMessageBox *>(self)->standardButton(static_cast<QAbstractButton *>(a0)));
 }
 void * qute_QMessageBox_button(void *self, int64_t a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->button(static_cast<QMessageBox::StandardButton>(a0)));
 }
 void * qute_QMessageBox_defaultButton(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->defaultButton());
 }
 void qute_QMessageBox_setDefaultButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setDefaultButton(static_cast<QPushButton *>(a0));
 }
 void qute_QMessageBox_setDefaultButton_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setDefaultButton(static_cast<QMessageBox::StandardButton>(a0));
 }
 void * qute_QMessageBox_escapeButton(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->escapeButton());
 }
 void qute_QMessageBox_setEscapeButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setEscapeButton(static_cast<QAbstractButton *>(a0));
 }
 void qute_QMessageBox_setEscapeButton_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setEscapeButton(static_cast<QMessageBox::StandardButton>(a0));
 }
 void * qute_QMessageBox_clickedButton(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->clickedButton());
 }
 qute_str qute_QMessageBox_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QMessageBox *>(self)->text());
 }
 void qute_QMessageBox_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 int64_t qute_QMessageBox_icon(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMessageBox *>(self)->icon());
 }
 void qute_QMessageBox_setIcon(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setIcon(static_cast<QMessageBox::Icon>(a0));
 }
 void * qute_QMessageBox_iconPixmap(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPixmap(static_cast<QMessageBox *>(self)->iconPixmap()));
 }
 void qute_QMessageBox_setIconPixmap(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setIconPixmap((a0 ? *static_cast<QPixmap *>(a0) : QPixmap()));
 }
 int64_t qute_QMessageBox_textFormat(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QMessageBox *>(self)->textFormat());
 }
 void qute_QMessageBox_setTextFormat(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setTextFormat(static_cast<Qt::TextFormat>(a0));
 }
 void qute_QMessageBox_setTextInteractionFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setTextInteractionFlags(QFlags<Qt::TextInteractionFlag>::fromInt(static_cast<QFlags<Qt::TextInteractionFlag>::Int>(a0)));
 }
 int64_t qute_QMessageBox_textInteractionFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QMessageBox *>(self)->textInteractionFlags()).toInt());
 }
 void qute_QMessageBox_setCheckBox(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setCheckBox(static_cast<QCheckBox *>(a0));
 }
 void * qute_QMessageBox_checkBox(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QMessageBox *>(self)->checkBox());
 }
 void qute_QMessageBox_setOption(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setOption(static_cast<QMessageBox::Option>(a0));
 }
 bool qute_QMessageBox_testOption(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QMessageBox *>(self)->testOption(static_cast<QMessageBox::Option>(a0)));
 }
 void qute_QMessageBox_setOptions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setOptions(QFlags<QMessageBox::Option>::fromInt(static_cast<QFlags<QMessageBox::Option>::Int>(a0)));
 }
 int64_t qute_QMessageBox_options(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QMessageBox *>(self)->options()).toInt());
 }
 qute_str qute_QMessageBox_informativeText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QMessageBox *>(self)->informativeText());
 }
 void qute_QMessageBox_setInformativeText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setInformativeText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QMessageBox_detailedText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QMessageBox *>(self)->detailedText());
 }
 void qute_QMessageBox_setDetailedText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->setDetailedText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QMessageBox_buttonClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QMessageBox *>(self)->buttonClicked(static_cast<QAbstractButton *>(a0));
 }
+void qute_QMessageBox_setOption_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QMessageBox *>(self)->setOption(static_cast<QMessageBox::Option>(a0), static_cast<bool>(a1));
+}
 int64_t qute_QMessageBox_information(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int64_t>(QMessageBox::information(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 int64_t qute_QMessageBox_question(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int64_t>(QMessageBox::question(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 int64_t qute_QMessageBox_warning(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int64_t>(QMessageBox::warning(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 int64_t qute_QMessageBox_critical(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int64_t>(QMessageBox::critical(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 void qute_QMessageBox_about(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	QMessageBox::about(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len));
 }
 void qute_QMessageBox_aboutQt(void * a0) {
+	qute_gui_only();
 	QMessageBox::aboutQt(static_cast<QWidget *>(a0));
 }
+int64_t qute_QMessageBox_information_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<int64_t>(QMessageBox::information(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+}
+int64_t qute_QMessageBox_question_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<int64_t>(QMessageBox::question(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+}
+int64_t qute_QMessageBox_warning_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<int64_t>(QMessageBox::warning(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+}
+int64_t qute_QMessageBox_critical_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<int64_t>(QMessageBox::critical(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+}
+void qute_QMessageBox_aboutQt_1(void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
+	QMessageBox::aboutQt(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len));
+}
 void * qute_QMessageBox_buttonClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMessageBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QMessageBox::buttonClicked, obj, [s](QAbstractButton * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11635,280 +15082,387 @@ void * qute_QMessageBox_buttonClicked(void *self, uintptr_t id) {
 
 // ---- QPlainTextEdit
 void * qute_QPlainTextEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QPlainTextEdit *>(new QPlainTextEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QPlainTextEdit_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QPlainTextEdit *>(new QPlainTextEdit(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QPlainTextEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QPlainTextEdit *>(static_cast<QObject *>(obj)));
 }
 void qute_QPlainTextEdit_setDocument(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setDocument(static_cast<QTextDocument *>(a0));
 }
 void * qute_QPlainTextEdit_document(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QPlainTextEdit *>(self)->document());
 }
 void qute_QPlainTextEdit_setPlaceholderText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setPlaceholderText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QPlainTextEdit_placeholderText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QPlainTextEdit *>(self)->placeholderText());
 }
 void qute_QPlainTextEdit_setTextCursor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setTextCursor((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()));
 }
 void * qute_QPlainTextEdit_textCursor(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCursor(static_cast<QPlainTextEdit *>(self)->textCursor()));
 }
 bool qute_QPlainTextEdit_isReadOnly(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->isReadOnly());
 }
 void qute_QPlainTextEdit_setReadOnly(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setReadOnly(static_cast<bool>(a0));
 }
 void qute_QPlainTextEdit_setTextInteractionFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setTextInteractionFlags(QFlags<Qt::TextInteractionFlag>::fromInt(static_cast<QFlags<Qt::TextInteractionFlag>::Int>(a0)));
 }
 int64_t qute_QPlainTextEdit_textInteractionFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QPlainTextEdit *>(self)->textInteractionFlags()).toInt());
 }
 void qute_QPlainTextEdit_mergeCurrentCharFormat(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->mergeCurrentCharFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
 }
 void qute_QPlainTextEdit_setCurrentCharFormat(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setCurrentCharFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
 }
 void * qute_QPlainTextEdit_currentCharFormat(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCharFormat(static_cast<QPlainTextEdit *>(self)->currentCharFormat()));
 }
 bool qute_QPlainTextEdit_tabChangesFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->tabChangesFocus());
 }
 void qute_QPlainTextEdit_setTabChangesFocus(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setTabChangesFocus(static_cast<bool>(a0));
 }
 void qute_QPlainTextEdit_setDocumentTitle(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setDocumentTitle(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QPlainTextEdit_documentTitle(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QPlainTextEdit *>(self)->documentTitle());
 }
 bool qute_QPlainTextEdit_isUndoRedoEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->isUndoRedoEnabled());
 }
 void qute_QPlainTextEdit_setUndoRedoEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setUndoRedoEnabled(static_cast<bool>(a0));
 }
 void qute_QPlainTextEdit_setMaximumBlockCount(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setMaximumBlockCount(static_cast<int>(a0));
 }
 int qute_QPlainTextEdit_maximumBlockCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QPlainTextEdit *>(self)->maximumBlockCount());
 }
 int64_t qute_QPlainTextEdit_lineWrapMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QPlainTextEdit *>(self)->lineWrapMode());
 }
 void qute_QPlainTextEdit_setLineWrapMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setLineWrapMode(static_cast<QPlainTextEdit::LineWrapMode>(a0));
 }
 int64_t qute_QPlainTextEdit_wordWrapMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QPlainTextEdit *>(self)->wordWrapMode());
 }
 void qute_QPlainTextEdit_setWordWrapMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setWordWrapMode(static_cast<QTextOption::WrapMode>(a0));
 }
 void qute_QPlainTextEdit_setBackgroundVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setBackgroundVisible(static_cast<bool>(a0));
 }
 bool qute_QPlainTextEdit_backgroundVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->backgroundVisible());
 }
 void qute_QPlainTextEdit_setCenterOnScroll(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setCenterOnScroll(static_cast<bool>(a0));
 }
 bool qute_QPlainTextEdit_centerOnScroll(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->centerOnScroll());
 }
 bool qute_QPlainTextEdit_find(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->find(QString::fromUtf8(a0, a0_len)));
 }
 bool qute_QPlainTextEdit_find_1(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->find((a0 ? *static_cast<QRegularExpression *>(a0) : QRegularExpression())));
 }
 qute_str qute_QPlainTextEdit_toPlainText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QPlainTextEdit *>(self)->toPlainText());
 }
 void qute_QPlainTextEdit_ensureCursorVisible(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->ensureCursorVisible();
 }
 void * qute_QPlainTextEdit_loadResource(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QPlainTextEdit *>(self)->loadResource(static_cast<int>(a0), (a1 ? *static_cast<QUrl *>(a1) : QUrl()))));
 }
 void * qute_QPlainTextEdit_createStandardContextMenu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QPlainTextEdit *>(self)->createStandardContextMenu());
 }
 void * qute_QPlainTextEdit_createStandardContextMenu_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QPlainTextEdit *>(self)->createStandardContextMenu(qute_to_QPoint(a0)));
 }
 void * qute_QPlainTextEdit_cursorForPosition(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCursor(static_cast<QPlainTextEdit *>(self)->cursorForPosition(qute_to_QPoint(a0))));
 }
 qute_rect qute_QPlainTextEdit_cursorRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QPlainTextEdit *>(self)->cursorRect((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor())));
 }
 qute_rect qute_QPlainTextEdit_cursorRect_1(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QPlainTextEdit *>(self)->cursorRect());
 }
 qute_str qute_QPlainTextEdit_anchorAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QPlainTextEdit *>(self)->anchorAt(qute_to_QPoint(a0)));
 }
 bool qute_QPlainTextEdit_overwriteMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->overwriteMode());
 }
 void qute_QPlainTextEdit_setOverwriteMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setOverwriteMode(static_cast<bool>(a0));
 }
 double qute_QPlainTextEdit_tabStopDistance(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QPlainTextEdit *>(self)->tabStopDistance());
 }
 void qute_QPlainTextEdit_setTabStopDistance(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setTabStopDistance(static_cast<double>(a0));
 }
 int qute_QPlainTextEdit_cursorWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QPlainTextEdit *>(self)->cursorWidth());
 }
 void qute_QPlainTextEdit_setCursorWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setCursorWidth(static_cast<int>(a0));
 }
 void qute_QPlainTextEdit_setExtraSelections(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setExtraSelections([&] { QList<QTextEdit::ExtraSelection> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QTextEdit::ExtraSelection *>(d[i]) : QTextEdit::ExtraSelection())); return l; }());
 }
 qute_list qute_QPlainTextEdit_extraSelections(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QPlainTextEdit *>(self)->extraSelections(), [](const auto &v) { return static_cast<void *>(new QTextEdit::ExtraSelection(v)); });
 }
 void qute_QPlainTextEdit_moveCursor(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->moveCursor(static_cast<QTextCursor::MoveOperation>(a0));
 }
 bool qute_QPlainTextEdit_canPaste(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->canPaste());
 }
 void qute_QPlainTextEdit_print(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->print(static_cast<QPagedPaintDevice *>(a0));
 }
 int qute_QPlainTextEdit_blockCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QPlainTextEdit *>(self)->blockCount());
 }
 void qute_QPlainTextEdit_setPlainText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->setPlainText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QPlainTextEdit_cut(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->cut();
 }
 void qute_QPlainTextEdit_copy(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->copy();
 }
 void qute_QPlainTextEdit_paste(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->paste();
 }
 void qute_QPlainTextEdit_undo(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->undo();
 }
 void qute_QPlainTextEdit_redo(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->redo();
 }
 void qute_QPlainTextEdit_clear(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->clear();
 }
 void qute_QPlainTextEdit_selectAll(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->selectAll();
 }
 void qute_QPlainTextEdit_insertPlainText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->insertPlainText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QPlainTextEdit_appendPlainText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->appendPlainText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QPlainTextEdit_appendHtml(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->appendHtml(QString::fromUtf8(a0, a0_len));
 }
 void qute_QPlainTextEdit_centerCursor(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->centerCursor();
 }
 void qute_QPlainTextEdit_zoomIn(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->zoomIn();
 }
 void qute_QPlainTextEdit_zoomOut(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->zoomOut();
 }
 void qute_QPlainTextEdit_textChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->textChanged();
 }
 void qute_QPlainTextEdit_undoAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->undoAvailable(static_cast<bool>(a0));
 }
 void qute_QPlainTextEdit_redoAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->redoAvailable(static_cast<bool>(a0));
 }
 void qute_QPlainTextEdit_copyAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->copyAvailable(static_cast<bool>(a0));
 }
 void qute_QPlainTextEdit_selectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->selectionChanged();
 }
 void qute_QPlainTextEdit_cursorPositionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->cursorPositionChanged();
 }
 void qute_QPlainTextEdit_updateRequest_1(void *self, qute_rect a0, int a1) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->updateRequest(qute_to_QRect(a0), static_cast<int>(a1));
 }
 void qute_QPlainTextEdit_blockCountChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->blockCountChanged(static_cast<int>(a0));
 }
 void qute_QPlainTextEdit_modificationChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPlainTextEdit *>(self)->modificationChanged(static_cast<bool>(a0));
 }
+bool qute_QPlainTextEdit_find_2(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->find(QString::fromUtf8(a0, a0_len), QFlags<QTextDocument::FindFlag>::fromInt(static_cast<QFlags<QTextDocument::FindFlag>::Int>(a1))));
+}
+bool qute_QPlainTextEdit_find_3(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QPlainTextEdit *>(self)->find((a0 ? *static_cast<QRegularExpression *>(a0) : QRegularExpression()), QFlags<QTextDocument::FindFlag>::fromInt(static_cast<QFlags<QTextDocument::FindFlag>::Int>(a1))));
+}
+void qute_QPlainTextEdit_moveCursor_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QPlainTextEdit *>(self)->moveCursor(static_cast<QTextCursor::MoveOperation>(a0), static_cast<QTextCursor::MoveMode>(a1));
+}
+void qute_QPlainTextEdit_zoomIn_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QPlainTextEdit *>(self)->zoomIn(static_cast<int>(a0));
+}
+void qute_QPlainTextEdit_zoomOut_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QPlainTextEdit *>(self)->zoomOut(static_cast<int>(a0));
+}
 void * qute_QPlainTextEdit_textChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::textChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QPlainTextEdit_undoAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::undoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QPlainTextEdit_redoAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::redoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QPlainTextEdit_copyAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::copyAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QPlainTextEdit_selectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::selectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QPlainTextEdit_cursorPositionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::cursorPositionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QPlainTextEdit_updateRequest(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::updateRequest, obj, [s](const QRect & a0, int a1) { qute_rect c0 = qute_from_QRect(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QPlainTextEdit_blockCountChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::blockCountChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QPlainTextEdit_modificationChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPlainTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QPlainTextEdit::modificationChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11916,81 +15470,107 @@ void * qute_QPlainTextEdit_modificationChanged(void *self, uintptr_t id) {
 
 // ---- QProgressBar
 void * qute_QProgressBar_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QProgressBar *>(new QProgressBar(static_cast<QWidget *>(a0)));
 }
 void * qute_QProgressBar_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QProgressBar *>(static_cast<QObject *>(obj)));
 }
 int qute_QProgressBar_minimum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressBar *>(self)->minimum());
 }
 int qute_QProgressBar_maximum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressBar *>(self)->maximum());
 }
 int qute_QProgressBar_value(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressBar *>(self)->value());
 }
 qute_str qute_QProgressBar_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QProgressBar *>(self)->text());
 }
 void qute_QProgressBar_setTextVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setTextVisible(static_cast<bool>(a0));
 }
 bool qute_QProgressBar_isTextVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QProgressBar *>(self)->isTextVisible());
 }
 int64_t qute_QProgressBar_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QProgressBar *>(self)->alignment()).toInt());
 }
 void qute_QProgressBar_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 int64_t qute_QProgressBar_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QProgressBar *>(self)->orientation());
 }
 void qute_QProgressBar_setInvertedAppearance(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setInvertedAppearance(static_cast<bool>(a0));
 }
 bool qute_QProgressBar_invertedAppearance(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QProgressBar *>(self)->invertedAppearance());
 }
 void qute_QProgressBar_setTextDirection(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setTextDirection(static_cast<QProgressBar::Direction>(a0));
 }
 int64_t qute_QProgressBar_textDirection(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QProgressBar *>(self)->textDirection());
 }
 void qute_QProgressBar_setFormat(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setFormat(QString::fromUtf8(a0, a0_len));
 }
 void qute_QProgressBar_resetFormat(void *self) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->resetFormat();
 }
 qute_str qute_QProgressBar_format(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QProgressBar *>(self)->format());
 }
 void qute_QProgressBar_reset(void *self) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->reset();
 }
 void qute_QProgressBar_setRange(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setRange(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QProgressBar_setMinimum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setMinimum(static_cast<int>(a0));
 }
 void qute_QProgressBar_setMaximum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setMaximum(static_cast<int>(a0));
 }
 void qute_QProgressBar_setValue(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setValue(static_cast<int>(a0));
 }
 void qute_QProgressBar_setOrientation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
 }
 void qute_QProgressBar_valueChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressBar *>(self)->valueChanged(static_cast<int>(a0));
 }
 void * qute_QProgressBar_valueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProgressBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QProgressBar::valueChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -11998,84 +15578,119 @@ void * qute_QProgressBar_valueChanged(void *self, uintptr_t id) {
 
 // ---- QProgressDialog
 void * qute_QProgressDialog_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QProgressDialog *>(new QProgressDialog(static_cast<QWidget *>(a0)));
 }
 void * qute_QProgressDialog_new_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, int a2, int a3, void * a4) {
+	qute_gui_only();
 	return static_cast<QProgressDialog *>(new QProgressDialog(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<int>(a2), static_cast<int>(a3), static_cast<QWidget *>(a4)));
 }
+void * qute_QProgressDialog_new_2(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QProgressDialog *>(new QProgressDialog(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
+void * qute_QProgressDialog_new_3(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, int a2, int a3, void * a4, int64_t a5) {
+	qute_gui_only();
+	return static_cast<QProgressDialog *>(new QProgressDialog(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<int>(a2), static_cast<int>(a3), static_cast<QWidget *>(a4), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a5))));
+}
 void * qute_QProgressDialog_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QProgressDialog *>(static_cast<QObject *>(obj)));
 }
 void qute_QProgressDialog_setLabel(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setLabel(static_cast<QLabel *>(a0));
 }
 void qute_QProgressDialog_setCancelButton(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setCancelButton(static_cast<QPushButton *>(a0));
 }
 void qute_QProgressDialog_setBar(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setBar(static_cast<QProgressBar *>(a0));
 }
 bool qute_QProgressDialog_wasCanceled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QProgressDialog *>(self)->wasCanceled());
 }
 int qute_QProgressDialog_minimum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressDialog *>(self)->minimum());
 }
 int qute_QProgressDialog_maximum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressDialog *>(self)->maximum());
 }
 int qute_QProgressDialog_value(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressDialog *>(self)->value());
 }
 qute_str qute_QProgressDialog_labelText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QProgressDialog *>(self)->labelText());
 }
 int qute_QProgressDialog_minimumDuration(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QProgressDialog *>(self)->minimumDuration());
 }
 void qute_QProgressDialog_setAutoReset(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setAutoReset(static_cast<bool>(a0));
 }
 bool qute_QProgressDialog_autoReset(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QProgressDialog *>(self)->autoReset());
 }
 void qute_QProgressDialog_setAutoClose(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setAutoClose(static_cast<bool>(a0));
 }
 bool qute_QProgressDialog_autoClose(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QProgressDialog *>(self)->autoClose());
 }
 void qute_QProgressDialog_cancel(void *self) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->cancel();
 }
 void qute_QProgressDialog_reset(void *self) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->reset();
 }
 void qute_QProgressDialog_setMaximum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setMaximum(static_cast<int>(a0));
 }
 void qute_QProgressDialog_setMinimum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setMinimum(static_cast<int>(a0));
 }
 void qute_QProgressDialog_setRange(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setRange(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QProgressDialog_setValue(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setValue(static_cast<int>(a0));
 }
 void qute_QProgressDialog_setLabelText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setLabelText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QProgressDialog_setCancelButtonText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setCancelButtonText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QProgressDialog_setMinimumDuration(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->setMinimumDuration(static_cast<int>(a0));
 }
 void qute_QProgressDialog_canceled_1(void *self) {
+	qute_gui_only();
 	static_cast<QProgressDialog *>(self)->canceled();
 }
 void * qute_QProgressDialog_canceled(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProgressDialog *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QProgressDialog::canceled, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -12083,443 +15698,607 @@ void * qute_QProgressDialog_canceled(void *self, uintptr_t id) {
 
 // ---- QPushButton
 void * qute_QPushButton_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QPushButton *>(new QPushButton(static_cast<QWidget *>(a0)));
 }
 void * qute_QPushButton_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QPushButton *>(new QPushButton(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QPushButton_new_2(void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	return static_cast<QPushButton *>(new QPushButton((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), static_cast<QWidget *>(a2)));
 }
 void * qute_QPushButton_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QPushButton *>(new qute_QPushButton(static_cast<QWidget *>(a0)));
 }
 void qute_QPushButton_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 qute_size qute_QPushButton_super_0(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_0());
 }
 qute_size qute_QPushButton_super_1(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_1());
 }
 bool qute_QPushButton_super_2(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_2(static_cast<QEvent *>(a0)));
 }
 void qute_QPushButton_super_3(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_3(static_cast<QPaintEvent *>(a0));
 }
 void qute_QPushButton_super_4(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_4(static_cast<QKeyEvent *>(a0));
 }
 void qute_QPushButton_super_5(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_5(static_cast<QFocusEvent *>(a0));
 }
 void qute_QPushButton_super_6(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_6(static_cast<QFocusEvent *>(a0));
 }
 void qute_QPushButton_super_7(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_7(static_cast<QMouseEvent *>(a0));
 }
 void qute_QPushButton_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_8(static_cast<QStyleOptionButton *>(a0));
 }
 bool qute_QPushButton_super_9(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_9(qute_to_QPoint(a0)));
 }
 void qute_QPushButton_super_10(void *self) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_10();
 }
 void qute_QPushButton_super_11(void *self) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_11();
 }
 void qute_QPushButton_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_12(static_cast<QKeyEvent *>(a0));
 }
 void qute_QPushButton_super_13(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_13(static_cast<QMouseEvent *>(a0));
 }
 void qute_QPushButton_super_14(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_14(static_cast<QMouseEvent *>(a0));
 }
 void qute_QPushButton_super_15(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_15(static_cast<QEvent *>(a0));
 }
 void qute_QPushButton_super_16(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_16(static_cast<QTimerEvent *>(a0));
 }
 void qute_QPushButton_super_17(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_17(static_cast<bool>(a0));
 }
 int qute_QPushButton_super_18(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_18(static_cast<int>(a0)));
 }
 bool qute_QPushButton_super_19(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_19());
 }
 void qute_QPushButton_super_20(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_20(static_cast<QMouseEvent *>(a0));
 }
 void qute_QPushButton_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_21(static_cast<QWheelEvent *>(a0));
 }
 void qute_QPushButton_super_22(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_22(static_cast<QEnterEvent *>(a0));
 }
 void qute_QPushButton_super_23(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_23(static_cast<QEvent *>(a0));
 }
 void qute_QPushButton_super_24(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_24(static_cast<QMoveEvent *>(a0));
 }
 void qute_QPushButton_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_25(static_cast<QResizeEvent *>(a0));
 }
 void qute_QPushButton_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_26(static_cast<QCloseEvent *>(a0));
 }
 void qute_QPushButton_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_27(static_cast<QContextMenuEvent *>(a0));
 }
 void qute_QPushButton_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_28(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QPushButton_super_29(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_29(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QPushButton_super_30(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_30(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QPushButton_super_31(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_31(static_cast<QDropEvent *>(a0));
 }
 void qute_QPushButton_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_32(static_cast<QShowEvent *>(a0));
 }
 void qute_QPushButton_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_33(static_cast<QHideEvent *>(a0));
 }
 bool qute_QPushButton_super_34(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_34(static_cast<bool>(a0)));
 }
 bool qute_QPushButton_super_35(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_35(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QPushButton_super_36(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_36(static_cast<QChildEvent *>(a0));
 }
 void qute_QPushButton_super_37(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->qute_super_37(static_cast<QEvent *>(a0));
 }
 void qute_QPushButton_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->updateMicroFocus();
 }
 void qute_QPushButton_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->create();
 }
 void qute_QPushButton_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->destroy();
 }
 bool qute_QPushButton_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->focusNextChild());
 }
 bool qute_QPushButton_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->focusPreviousChild());
 }
 double qute_QPushButton_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QPushButton *>(static_cast<QPushButton *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QPushButton_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QPushButton *>(static_cast<QObject *>(obj)));
 }
 bool qute_QPushButton_autoDefault(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPushButton *>(self)->autoDefault());
 }
 void qute_QPushButton_setAutoDefault(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPushButton *>(self)->setAutoDefault(static_cast<bool>(a0));
 }
 bool qute_QPushButton_isDefault(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPushButton *>(self)->isDefault());
 }
 void qute_QPushButton_setDefault(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPushButton *>(self)->setDefault(static_cast<bool>(a0));
 }
 void qute_QPushButton_setMenu(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QPushButton *>(self)->setMenu(static_cast<QMenu *>(a0));
 }
 void * qute_QPushButton_menu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QPushButton *>(self)->menu());
 }
 void qute_QPushButton_setFlat(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QPushButton *>(self)->setFlat(static_cast<bool>(a0));
 }
 bool qute_QPushButton_isFlat(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QPushButton *>(self)->isFlat());
 }
 void qute_QPushButton_showMenu(void *self) {
+	qute_gui_only();
 	static_cast<QPushButton *>(self)->showMenu();
 }
 
 // ---- QRadioButton
 void * qute_QRadioButton_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QRadioButton *>(new QRadioButton(static_cast<QWidget *>(a0)));
 }
 void * qute_QRadioButton_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QRadioButton *>(new QRadioButton(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QRadioButton_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QRadioButton *>(static_cast<QObject *>(obj)));
 }
 
 // ---- QRubberBand
 void * qute_QRubberBand_new(int64_t a0) {
+	qute_gui_only();
 	return static_cast<QRubberBand *>(new QRubberBand(static_cast<QRubberBand::Shape>(a0)));
 }
+void * qute_QRubberBand_new_1(int64_t a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QRubberBand *>(new QRubberBand(static_cast<QRubberBand::Shape>(a0), static_cast<QWidget *>(a1)));
+}
 void * qute_QRubberBand_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QRubberBand *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QRubberBand_shape(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QRubberBand *>(self)->shape());
 }
 
 // ---- QScrollArea
 void * qute_QScrollArea_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QScrollArea *>(new QScrollArea(static_cast<QWidget *>(a0)));
 }
 void * qute_QScrollArea_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QScrollArea *>(static_cast<QObject *>(obj)));
 }
 void * qute_QScrollArea_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QScrollArea *>(self)->widget());
 }
 void qute_QScrollArea_setWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QScrollArea *>(self)->setWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QScrollArea_takeWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QScrollArea *>(self)->takeWidget());
 }
 bool qute_QScrollArea_widgetResizable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QScrollArea *>(self)->widgetResizable());
 }
 void qute_QScrollArea_setWidgetResizable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QScrollArea *>(self)->setWidgetResizable(static_cast<bool>(a0));
 }
 bool qute_QScrollArea_focusNextPrevChild(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QScrollArea *>(self)->focusNextPrevChild(static_cast<bool>(a0)));
 }
 int64_t qute_QScrollArea_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QScrollArea *>(self)->alignment()).toInt());
 }
 void qute_QScrollArea_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QScrollArea *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 void qute_QScrollArea_ensureVisible(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QScrollArea *>(self)->ensureVisible(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QScrollArea_ensureWidgetVisible(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QScrollArea *>(self)->ensureWidgetVisible(static_cast<QWidget *>(a0));
+}
+void qute_QScrollArea_ensureVisible_1(void *self, int a0, int a1, int a2, int a3) {
+	qute_gui_only();
+	static_cast<QScrollArea *>(self)->ensureVisible(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
+}
+void qute_QScrollArea_ensureWidgetVisible_1(void *self, void * a0, int a1, int a2) {
+	qute_gui_only();
+	static_cast<QScrollArea *>(self)->ensureWidgetVisible(static_cast<QWidget *>(a0), static_cast<int>(a1), static_cast<int>(a2));
 }
 
 // ---- QScrollBar
 void * qute_QScrollBar_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QScrollBar *>(new QScrollBar(static_cast<QWidget *>(a0)));
 }
 void * qute_QScrollBar_new_1(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QScrollBar *>(new QScrollBar(static_cast<Qt::Orientation>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QScrollBar_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QScrollBar *>(static_cast<QObject *>(obj)));
 }
 void * qute_QScrollBar_createStandardContextMenu(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QScrollBar *>(self)->createStandardContextMenu(qute_to_QPoint(a0)));
 }
 
 // ---- QSizeGrip
 void * qute_QSizeGrip_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QSizeGrip *>(new QSizeGrip(static_cast<QWidget *>(a0)));
 }
 void * qute_QSizeGrip_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QSizeGrip *>(static_cast<QObject *>(obj)));
 }
 
 // ---- QSizePolicy
 void * qute_QSizePolicy_new(void) {
+	qute_gui_only();
 	return static_cast<QSizePolicy *>(new QSizePolicy());
 }
 void * qute_QSizePolicy_new_1(int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<QSizePolicy *>(new QSizePolicy(static_cast<QSizePolicy::Policy>(a0), static_cast<QSizePolicy::Policy>(a1)));
 }
+void * qute_QSizePolicy_new_2(int64_t a0, int64_t a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<QSizePolicy *>(new QSizePolicy(static_cast<QSizePolicy::Policy>(a0), static_cast<QSizePolicy::Policy>(a1), static_cast<QSizePolicy::ControlType>(a2)));
+}
 void qute_QSizePolicy_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QSizePolicy *>(self);
 }
 int64_t qute_QSizePolicy_horizontalPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QSizePolicy *>(self)->horizontalPolicy());
 }
 int64_t qute_QSizePolicy_verticalPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QSizePolicy *>(self)->verticalPolicy());
 }
 int64_t qute_QSizePolicy_controlType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QSizePolicy *>(self)->controlType());
 }
 void qute_QSizePolicy_setHorizontalPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setHorizontalPolicy(static_cast<QSizePolicy::Policy>(a0));
 }
 void qute_QSizePolicy_setVerticalPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setVerticalPolicy(static_cast<QSizePolicy::Policy>(a0));
 }
 void qute_QSizePolicy_setControlType(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setControlType(static_cast<QSizePolicy::ControlType>(a0));
 }
 int64_t qute_QSizePolicy_expandingDirections(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QSizePolicy *>(self)->expandingDirections()).toInt());
 }
 void qute_QSizePolicy_setHeightForWidth(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setHeightForWidth(static_cast<bool>(a0));
 }
 bool qute_QSizePolicy_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSizePolicy *>(self)->hasHeightForWidth());
 }
 void qute_QSizePolicy_setWidthForHeight(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setWidthForHeight(static_cast<bool>(a0));
 }
 bool qute_QSizePolicy_hasWidthForHeight(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSizePolicy *>(self)->hasWidthForHeight());
 }
 int qute_QSizePolicy_horizontalStretch(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSizePolicy *>(self)->horizontalStretch());
 }
 int qute_QSizePolicy_verticalStretch(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSizePolicy *>(self)->verticalStretch());
 }
 void qute_QSizePolicy_setHorizontalStretch(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setHorizontalStretch(static_cast<int>(a0));
 }
 void qute_QSizePolicy_setVerticalStretch(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setVerticalStretch(static_cast<int>(a0));
 }
 bool qute_QSizePolicy_retainSizeWhenHidden(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSizePolicy *>(self)->retainSizeWhenHidden());
 }
 void qute_QSizePolicy_setRetainSizeWhenHidden(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->setRetainSizeWhenHidden(static_cast<bool>(a0));
 }
 void qute_QSizePolicy_transpose(void *self) {
+	qute_gui_only();
 	static_cast<QSizePolicy *>(self)->transpose();
 }
 void * qute_QSizePolicy_transposed(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QSizePolicy(static_cast<QSizePolicy *>(self)->transposed()));
 }
 
 // ---- QSlider
 void * qute_QSlider_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QSlider *>(new QSlider(static_cast<QWidget *>(a0)));
 }
 void * qute_QSlider_new_1(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QSlider *>(new QSlider(static_cast<Qt::Orientation>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QSlider_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QSlider *>(static_cast<QObject *>(obj)));
 }
 void qute_QSlider_setTickPosition(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSlider *>(self)->setTickPosition(static_cast<QSlider::TickPosition>(a0));
 }
 int64_t qute_QSlider_tickPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QSlider *>(self)->tickPosition());
 }
 void qute_QSlider_setTickInterval(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSlider *>(self)->setTickInterval(static_cast<int>(a0));
 }
 int qute_QSlider_tickInterval(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSlider *>(self)->tickInterval());
 }
 
 // ---- QSpacerItem
 void * qute_QSpacerItem_new(int a0, int a1) {
-	return static_cast<QSpacerItem *>(new QSpacerItem(static_cast<int>(a0), static_cast<int>(a1)));
+	qute_gui_only();
+	return static_cast<QSpacerItem *>(new qute_QSpacerItem(static_cast<int>(a0), static_cast<int>(a1)));
+}
+void * qute_QSpacerItem_new_1(int a0, int a1, int64_t a2, int64_t a3) {
+	qute_gui_only();
+	return static_cast<QSpacerItem *>(new qute_QSpacerItem(static_cast<int>(a0), static_cast<int>(a1), static_cast<QSizePolicy::Policy>(a2), static_cast<QSizePolicy::Policy>(a3)));
 }
 void qute_QSpacerItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QSpacerItem *>(self);
 }
 void qute_QSpacerItem_changeSize(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QSpacerItem *>(self)->changeSize(static_cast<int>(a0), static_cast<int>(a1));
 }
 void * qute_QSpacerItem_sizePolicy(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QSizePolicy(static_cast<QSpacerItem *>(self)->sizePolicy()));
+}
+void qute_QSpacerItem_changeSize_1(void *self, int a0, int a1, int64_t a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QSpacerItem *>(self)->changeSize(static_cast<int>(a0), static_cast<int>(a1), static_cast<QSizePolicy::Policy>(a2), static_cast<QSizePolicy::Policy>(a3));
 }
 
 // ---- QSpinBox
 void * qute_QSpinBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QSpinBox *>(new QSpinBox(static_cast<QWidget *>(a0)));
 }
 void * qute_QSpinBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QSpinBox *>(static_cast<QObject *>(obj)));
 }
 int qute_QSpinBox_value(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSpinBox *>(self)->value());
 }
 qute_str qute_QSpinBox_prefix(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QSpinBox *>(self)->prefix());
 }
 void qute_QSpinBox_setPrefix(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setPrefix(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QSpinBox_suffix(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QSpinBox *>(self)->suffix());
 }
 void qute_QSpinBox_setSuffix(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setSuffix(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QSpinBox_cleanText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QSpinBox *>(self)->cleanText());
 }
 int qute_QSpinBox_singleStep(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSpinBox *>(self)->singleStep());
 }
 void qute_QSpinBox_setSingleStep(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setSingleStep(static_cast<int>(a0));
 }
 int qute_QSpinBox_minimum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSpinBox *>(self)->minimum());
 }
 void qute_QSpinBox_setMinimum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setMinimum(static_cast<int>(a0));
 }
 int qute_QSpinBox_maximum(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSpinBox *>(self)->maximum());
 }
 void qute_QSpinBox_setMaximum(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setMaximum(static_cast<int>(a0));
 }
 void qute_QSpinBox_setRange(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setRange(static_cast<int>(a0), static_cast<int>(a1));
 }
 int64_t qute_QSpinBox_stepType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QSpinBox *>(self)->stepType());
 }
 void qute_QSpinBox_setStepType(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setStepType(static_cast<QAbstractSpinBox::StepType>(a0));
 }
 int qute_QSpinBox_displayIntegerBase(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSpinBox *>(self)->displayIntegerBase());
 }
 void qute_QSpinBox_setDisplayIntegerBase(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setDisplayIntegerBase(static_cast<int>(a0));
 }
 void qute_QSpinBox_setValue(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->setValue(static_cast<int>(a0));
 }
 void qute_QSpinBox_valueChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->valueChanged(static_cast<int>(a0));
 }
 void qute_QSpinBox_textChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QSpinBox *>(self)->textChanged(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QSpinBox_valueChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSpinBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QSpinBox::valueChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QSpinBox_textChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSpinBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QSpinBox::textChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -12527,78 +16306,103 @@ void * qute_QSpinBox_textChanged(void *self, uintptr_t id) {
 
 // ---- QSplitter
 void * qute_QSplitter_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QSplitter *>(new QSplitter(static_cast<QWidget *>(a0)));
 }
 void * qute_QSplitter_new_1(int64_t a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QSplitter *>(new QSplitter(static_cast<Qt::Orientation>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QSplitter_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QSplitter *>(static_cast<QObject *>(obj)));
 }
 void qute_QSplitter_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->addWidget(static_cast<QWidget *>(a0));
 }
 void qute_QSplitter_insertWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1));
 }
 void * qute_QSplitter_replaceWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QSplitter *>(self)->replaceWidget(static_cast<int>(a0), static_cast<QWidget *>(a1)));
 }
 void qute_QSplitter_setOrientation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
 }
 int64_t qute_QSplitter_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QSplitter *>(self)->orientation());
 }
 void qute_QSplitter_setChildrenCollapsible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setChildrenCollapsible(static_cast<bool>(a0));
 }
 bool qute_QSplitter_childrenCollapsible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSplitter *>(self)->childrenCollapsible());
 }
 void qute_QSplitter_setCollapsible(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setCollapsible(static_cast<int>(a0), static_cast<bool>(a1));
 }
 bool qute_QSplitter_isCollapsible(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSplitter *>(self)->isCollapsible(static_cast<int>(a0)));
 }
 void qute_QSplitter_setOpaqueResize(void *self) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setOpaqueResize();
 }
 bool qute_QSplitter_opaqueResize(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSplitter *>(self)->opaqueResize());
 }
 void qute_QSplitter_refresh(void *self) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->refresh();
 }
 qute_list qute_QSplitter_sizes(void *self) {
+	qute_gui_only();
 	return qute_ret_list<int>(static_cast<QSplitter *>(self)->sizes(), [](const auto &v) { return static_cast<int>(v); });
 }
 void qute_QSplitter_setSizes(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setSizes([&] { QList<int> l; auto d = static_cast<int const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<int>(d[i])); return l; }());
 }
 qute_str qute_QSplitter_saveState(void *self) {
+	qute_gui_only();
 	return qute_ret_bytes(static_cast<QSplitter *>(self)->saveState());
 }
 bool qute_QSplitter_restoreState(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSplitter *>(self)->restoreState(QByteArray(a0, a0_len)));
 }
 int qute_QSplitter_handleWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSplitter *>(self)->handleWidth());
 }
 void qute_QSplitter_setHandleWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setHandleWidth(static_cast<int>(a0));
 }
 int qute_QSplitter_indexOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSplitter *>(self)->indexOf(static_cast<QWidget *>(a0)));
 }
 void * qute_QSplitter_widget(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QSplitter *>(self)->widget(static_cast<int>(a0)));
 }
 int qute_QSplitter_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QSplitter *>(self)->count());
 }
 void qute_QSplitter_getRange(void *self, int a0, int *a1_out, int *a2_out) {
+	qute_gui_only();
 	int t1{};
 	int t2{};
 	static_cast<QSplitter *>(self)->getRange(static_cast<int>(a0), &t1, &t2);
@@ -12606,12 +16410,19 @@ void qute_QSplitter_getRange(void *self, int a0, int *a1_out, int *a2_out) {
 	*a2_out = static_cast<int>(t2);
 }
 void qute_QSplitter_setStretchFactor(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->setStretchFactor(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QSplitter_splitterMoved_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QSplitter *>(self)->splitterMoved(static_cast<int>(a0), static_cast<int>(a1));
 }
+void qute_QSplitter_setOpaqueResize_1(void *self, bool a0) {
+	qute_gui_only();
+	static_cast<QSplitter *>(self)->setOpaqueResize(static_cast<bool>(a0));
+}
 void * qute_QSplitter_splitterMoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSplitter *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QSplitter::splitterMoved, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
@@ -12619,67 +16430,87 @@ void * qute_QSplitter_splitterMoved(void *self, uintptr_t id) {
 
 // ---- QStackedLayout
 void * qute_QStackedLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QStackedLayout *>(new QStackedLayout(static_cast<QWidget *>(a0)));
 }
 void * qute_QStackedLayout_new_1(void * a0) {
+	qute_gui_only();
 	return static_cast<QStackedLayout *>(new QStackedLayout(static_cast<QLayout *>(a0)));
 }
 void * qute_QStackedLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QStackedLayout *>(static_cast<QObject *>(obj)));
 }
 int qute_QStackedLayout_insertWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedLayout *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QStackedLayout_currentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QStackedLayout *>(self)->currentWidget());
 }
 int qute_QStackedLayout_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedLayout *>(self)->currentIndex());
 }
 void * qute_QStackedLayout_widget(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QStackedLayout *>(self)->widget(static_cast<int>(a0)));
 }
 int64_t qute_QStackedLayout_stackingMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStackedLayout *>(self)->stackingMode());
 }
 void qute_QStackedLayout_setStackingMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStackedLayout *>(self)->setStackingMode(static_cast<QStackedLayout::StackingMode>(a0));
 }
 qute_size qute_QStackedLayout_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QStackedLayout *>(self)->sizeHint());
 }
 bool qute_QStackedLayout_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QStackedLayout *>(self)->hasHeightForWidth());
 }
 int qute_QStackedLayout_heightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedLayout *>(self)->heightForWidth(static_cast<int>(a0)));
 }
 void qute_QStackedLayout_setCurrentIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedLayout *>(self)->setCurrentIndex(static_cast<int>(a0));
 }
 void qute_QStackedLayout_setCurrentWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStackedLayout *>(self)->setCurrentWidget(static_cast<QWidget *>(a0));
 }
 void qute_QStackedLayout_widgetRemoved_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedLayout *>(self)->widgetRemoved(static_cast<int>(a0));
 }
 void qute_QStackedLayout_currentChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedLayout *>(self)->currentChanged(static_cast<int>(a0));
 }
 void qute_QStackedLayout_widgetAdded_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedLayout *>(self)->widgetAdded(static_cast<int>(a0));
 }
 void * qute_QStackedLayout_widgetRemoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStackedLayout *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStackedLayout::widgetRemoved, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QStackedLayout_currentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStackedLayout *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStackedLayout::currentChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QStackedLayout_widgetAdded(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStackedLayout *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStackedLayout::widgetAdded, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -12687,61 +16518,79 @@ void * qute_QStackedLayout_widgetAdded(void *self, uintptr_t id) {
 
 // ---- QStackedWidget
 void * qute_QStackedWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QStackedWidget *>(new QStackedWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QStackedWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QStackedWidget *>(static_cast<QObject *>(obj)));
 }
 int qute_QStackedWidget_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedWidget *>(self)->addWidget(static_cast<QWidget *>(a0)));
 }
 int qute_QStackedWidget_insertWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedWidget *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1)));
 }
 void qute_QStackedWidget_removeWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStackedWidget *>(self)->removeWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QStackedWidget_currentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QStackedWidget *>(self)->currentWidget());
 }
 int qute_QStackedWidget_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedWidget *>(self)->currentIndex());
 }
 int qute_QStackedWidget_indexOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedWidget *>(self)->indexOf(static_cast<QWidget *>(a0)));
 }
 void * qute_QStackedWidget_widget(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QStackedWidget *>(self)->widget(static_cast<int>(a0)));
 }
 int qute_QStackedWidget_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStackedWidget *>(self)->count());
 }
 void qute_QStackedWidget_setCurrentIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedWidget *>(self)->setCurrentIndex(static_cast<int>(a0));
 }
 void qute_QStackedWidget_setCurrentWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStackedWidget *>(self)->setCurrentWidget(static_cast<QWidget *>(a0));
 }
 void qute_QStackedWidget_currentChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedWidget *>(self)->currentChanged(static_cast<int>(a0));
 }
 void qute_QStackedWidget_widgetRemoved_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedWidget *>(self)->widgetRemoved(static_cast<int>(a0));
 }
 void qute_QStackedWidget_widgetAdded_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStackedWidget *>(self)->widgetAdded(static_cast<int>(a0));
 }
 void * qute_QStackedWidget_currentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStackedWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStackedWidget::currentChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QStackedWidget_widgetRemoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStackedWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStackedWidget::widgetRemoved, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QStackedWidget_widgetAdded(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStackedWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStackedWidget::widgetAdded, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -12749,45 +16598,79 @@ void * qute_QStackedWidget_widgetAdded(void *self, uintptr_t id) {
 
 // ---- QStatusBar
 void * qute_QStatusBar_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QStatusBar *>(new QStatusBar(static_cast<QWidget *>(a0)));
 }
 void * qute_QStatusBar_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QStatusBar *>(static_cast<QObject *>(obj)));
 }
 void qute_QStatusBar_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->addWidget(static_cast<QWidget *>(a0));
 }
 int qute_QStatusBar_insertWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStatusBar *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1)));
 }
 void qute_QStatusBar_addPermanentWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->addPermanentWidget(static_cast<QWidget *>(a0));
 }
 int qute_QStatusBar_insertPermanentWidget(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStatusBar *>(self)->insertPermanentWidget(static_cast<int>(a0), static_cast<QWidget *>(a1)));
 }
 void qute_QStatusBar_removeWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->removeWidget(static_cast<QWidget *>(a0));
 }
 void qute_QStatusBar_setSizeGripEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->setSizeGripEnabled(static_cast<bool>(a0));
 }
 bool qute_QStatusBar_isSizeGripEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QStatusBar *>(self)->isSizeGripEnabled());
 }
 qute_str qute_QStatusBar_currentMessage(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QStatusBar *>(self)->currentMessage());
 }
 void qute_QStatusBar_showMessage(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->showMessage(QString::fromUtf8(a0, a0_len));
 }
 void qute_QStatusBar_clearMessage(void *self) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->clearMessage();
 }
 void qute_QStatusBar_messageChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QStatusBar *>(self)->messageChanged(QString::fromUtf8(a0, a0_len));
 }
+void qute_QStatusBar_addWidget_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QStatusBar *>(self)->addWidget(static_cast<QWidget *>(a0), static_cast<int>(a1));
+}
+int qute_QStatusBar_insertWidget_1(void *self, int a0, void * a1, int a2) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QStatusBar *>(self)->insertWidget(static_cast<int>(a0), static_cast<QWidget *>(a1), static_cast<int>(a2)));
+}
+void qute_QStatusBar_addPermanentWidget_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QStatusBar *>(self)->addPermanentWidget(static_cast<QWidget *>(a0), static_cast<int>(a1));
+}
+int qute_QStatusBar_insertPermanentWidget_1(void *self, int a0, void * a1, int a2) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QStatusBar *>(self)->insertPermanentWidget(static_cast<int>(a0), static_cast<QWidget *>(a1), static_cast<int>(a2)));
+}
+void qute_QStatusBar_showMessage_1(void *self, const char *a0, ptrdiff_t a0_len, int a1) {
+	qute_gui_only();
+	static_cast<QStatusBar *>(self)->showMessage(QString::fromUtf8(a0, a0_len), static_cast<int>(a1));
+}
 void * qute_QStatusBar_messageChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStatusBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QStatusBar::messageChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -12795,434 +16678,647 @@ void * qute_QStatusBar_messageChanged(void *self, uintptr_t id) {
 
 // ---- QStyle
 void * qute_QStyle_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QStyle *>(static_cast<QObject *>(obj)));
 }
 qute_str qute_QStyle_name(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QStyle *>(self)->name());
 }
 void qute_QStyle_polish(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->polish(static_cast<QWidget *>(a0));
 }
 void qute_QStyle_unpolish(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->unpolish(static_cast<QWidget *>(a0));
 }
 void qute_QStyle_polish_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->polish(static_cast<QApplication *>(a0));
 }
 void qute_QStyle_unpolish_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->unpolish(static_cast<QApplication *>(a0));
 }
 void qute_QStyle_polish_2(void *self, void * a0, void * *a0_out) {
+	qute_gui_only();
 	QPalette t0 = (a0 ? *static_cast<QPalette *>(a0) : QPalette());
 	static_cast<QStyle *>(self)->polish(t0);
 	*a0_out = static_cast<void *>(new QPalette(t0));
 }
 qute_rect qute_QStyle_itemTextRect(void *self, void * a0, qute_rect a1, int a2, bool a3, const char *a4, ptrdiff_t a4_len) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QStyle *>(self)->itemTextRect(*static_cast<QFontMetrics *>(a0), qute_to_QRect(a1), static_cast<int>(a2), static_cast<bool>(a3), QString::fromUtf8(a4, a4_len)));
 }
 qute_rect qute_QStyle_itemPixmapRect(void *self, qute_rect a0, int a1, void * a2) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QStyle *>(self)->itemPixmapRect(qute_to_QRect(a0), static_cast<int>(a1), (a2 ? *static_cast<QPixmap *>(a2) : QPixmap())));
 }
 void qute_QStyle_drawItemText(void *self, void * a0, qute_rect a1, int a2, void * a3, bool a4, const char *a5, ptrdiff_t a5_len) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->drawItemText(static_cast<QPainter *>(a0), qute_to_QRect(a1), static_cast<int>(a2), (a3 ? *static_cast<QPalette *>(a3) : QPalette()), static_cast<bool>(a4), QString::fromUtf8(a5, a5_len));
 }
 void qute_QStyle_drawItemPixmap(void *self, void * a0, qute_rect a1, int a2, void * a3) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->drawItemPixmap(static_cast<QPainter *>(a0), qute_to_QRect(a1), static_cast<int>(a2), (a3 ? *static_cast<QPixmap *>(a3) : QPixmap()));
 }
 void * qute_QStyle_standardPalette(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(static_cast<QStyle *>(self)->standardPalette()));
 }
 void qute_QStyle_drawPrimitive(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->drawPrimitive(static_cast<QStyle::PrimitiveElement>(a0), static_cast<const QStyleOption *>(a1), static_cast<QPainter *>(a2));
 }
 void qute_QStyle_drawControl(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->drawControl(static_cast<QStyle::ControlElement>(a0), static_cast<const QStyleOption *>(a1), static_cast<QPainter *>(a2));
 }
 qute_rect qute_QStyle_subElementRect(void *self, int64_t a0, void * a1) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QStyle *>(self)->subElementRect(static_cast<QStyle::SubElement>(a0), static_cast<const QStyleOption *>(a1)));
 }
 void qute_QStyle_drawComplexControl(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
 	static_cast<QStyle *>(self)->drawComplexControl(static_cast<QStyle::ComplexControl>(a0), static_cast<const QStyleOptionComplex *>(a1), static_cast<QPainter *>(a2));
 }
 int64_t qute_QStyle_hitTestComplexControl(void *self, int64_t a0, void * a1, qute_point a2) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyle *>(self)->hitTestComplexControl(static_cast<QStyle::ComplexControl>(a0), static_cast<const QStyleOptionComplex *>(a1), qute_to_QPoint(a2)));
 }
 qute_rect qute_QStyle_subControlRect(void *self, int64_t a0, void * a1, int64_t a2) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QStyle *>(self)->subControlRect(static_cast<QStyle::ComplexControl>(a0), static_cast<const QStyleOptionComplex *>(a1), static_cast<QStyle::SubControl>(a2)));
 }
 int qute_QStyle_pixelMetric(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStyle *>(self)->pixelMetric(static_cast<QStyle::PixelMetric>(a0)));
 }
 qute_size qute_QStyle_sizeFromContents(void *self, int64_t a0, void * a1, qute_size a2) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QStyle *>(self)->sizeFromContents(static_cast<QStyle::ContentsType>(a0), static_cast<const QStyleOption *>(a1), qute_to_QSize(a2)));
 }
 int qute_QStyle_styleHint(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStyle *>(self)->styleHint(static_cast<QStyle::StyleHint>(a0)));
 }
 void * qute_QStyle_standardPixmap(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QPixmap(static_cast<QStyle *>(self)->standardPixmap(static_cast<QStyle::StandardPixmap>(a0))));
 }
 void * qute_QStyle_standardIcon(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QStyle *>(self)->standardIcon(static_cast<QStyle::StandardPixmap>(a0))));
 }
 void * qute_QStyle_generatedIconPixmap(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
 	return static_cast<void *>(new QPixmap(static_cast<QStyle *>(self)->generatedIconPixmap(static_cast<QIcon::Mode>(a0), (a1 ? *static_cast<QPixmap *>(a1) : QPixmap()), static_cast<const QStyleOption *>(a2))));
 }
 int qute_QStyle_layoutSpacing(void *self, int64_t a0, int64_t a1, int64_t a2) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStyle *>(self)->layoutSpacing(static_cast<QSizePolicy::ControlType>(a0), static_cast<QSizePolicy::ControlType>(a1), static_cast<Qt::Orientation>(a2)));
 }
 int qute_QStyle_combinedLayoutSpacing(void *self, int64_t a0, int64_t a1, int64_t a2) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStyle *>(self)->combinedLayoutSpacing(QFlags<QSizePolicy::ControlType>::fromInt(static_cast<QFlags<QSizePolicy::ControlType>::Int>(a0)), QFlags<QSizePolicy::ControlType>::fromInt(static_cast<QFlags<QSizePolicy::ControlType>::Int>(a1)), static_cast<Qt::Orientation>(a2)));
 }
 void * qute_QStyle_proxy(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QStyle *>(self)->proxy());
 }
+void qute_QStyle_drawItemText_1(void *self, void * a0, qute_rect a1, int a2, void * a3, bool a4, const char *a5, ptrdiff_t a5_len, int64_t a6) {
+	qute_gui_only();
+	static_cast<QStyle *>(self)->drawItemText(static_cast<QPainter *>(a0), qute_to_QRect(a1), static_cast<int>(a2), (a3 ? *static_cast<QPalette *>(a3) : QPalette()), static_cast<bool>(a4), QString::fromUtf8(a5, a5_len), static_cast<QPalette::ColorRole>(a6));
+}
+void qute_QStyle_drawPrimitive_1(void *self, int64_t a0, void * a1, void * a2, void * a3) {
+	qute_gui_only();
+	static_cast<QStyle *>(self)->drawPrimitive(static_cast<QStyle::PrimitiveElement>(a0), static_cast<const QStyleOption *>(a1), static_cast<QPainter *>(a2), static_cast<QWidget *>(a3));
+}
+void qute_QStyle_drawControl_1(void *self, int64_t a0, void * a1, void * a2, void * a3) {
+	qute_gui_only();
+	static_cast<QStyle *>(self)->drawControl(static_cast<QStyle::ControlElement>(a0), static_cast<const QStyleOption *>(a1), static_cast<QPainter *>(a2), static_cast<QWidget *>(a3));
+}
+qute_rect qute_QStyle_subElementRect_1(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
+	return qute_from_QRect(static_cast<QStyle *>(self)->subElementRect(static_cast<QStyle::SubElement>(a0), static_cast<const QStyleOption *>(a1), static_cast<QWidget *>(a2)));
+}
+void qute_QStyle_drawComplexControl_1(void *self, int64_t a0, void * a1, void * a2, void * a3) {
+	qute_gui_only();
+	static_cast<QStyle *>(self)->drawComplexControl(static_cast<QStyle::ComplexControl>(a0), static_cast<const QStyleOptionComplex *>(a1), static_cast<QPainter *>(a2), static_cast<QWidget *>(a3));
+}
+int64_t qute_QStyle_hitTestComplexControl_1(void *self, int64_t a0, void * a1, qute_point a2, void * a3) {
+	qute_gui_only();
+	return static_cast<int64_t>(static_cast<QStyle *>(self)->hitTestComplexControl(static_cast<QStyle::ComplexControl>(a0), static_cast<const QStyleOptionComplex *>(a1), qute_to_QPoint(a2), static_cast<QWidget *>(a3)));
+}
+qute_rect qute_QStyle_subControlRect_1(void *self, int64_t a0, void * a1, int64_t a2, void * a3) {
+	qute_gui_only();
+	return qute_from_QRect(static_cast<QStyle *>(self)->subControlRect(static_cast<QStyle::ComplexControl>(a0), static_cast<const QStyleOptionComplex *>(a1), static_cast<QStyle::SubControl>(a2), static_cast<QWidget *>(a3)));
+}
+int qute_QStyle_pixelMetric_1(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QStyle *>(self)->pixelMetric(static_cast<QStyle::PixelMetric>(a0), static_cast<const QStyleOption *>(a1), static_cast<QWidget *>(a2)));
+}
+qute_size qute_QStyle_sizeFromContents_1(void *self, int64_t a0, void * a1, qute_size a2, void * a3) {
+	qute_gui_only();
+	return qute_from_QSize(static_cast<QStyle *>(self)->sizeFromContents(static_cast<QStyle::ContentsType>(a0), static_cast<const QStyleOption *>(a1), qute_to_QSize(a2), static_cast<QWidget *>(a3)));
+}
+void * qute_QStyle_standardPixmap_1(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
+	return static_cast<void *>(new QPixmap(static_cast<QStyle *>(self)->standardPixmap(static_cast<QStyle::StandardPixmap>(a0), static_cast<const QStyleOption *>(a1), static_cast<QWidget *>(a2))));
+}
+void * qute_QStyle_standardIcon_1(void *self, int64_t a0, void * a1, void * a2) {
+	qute_gui_only();
+	return static_cast<void *>(new QIcon(static_cast<QStyle *>(self)->standardIcon(static_cast<QStyle::StandardPixmap>(a0), static_cast<const QStyleOption *>(a1), static_cast<QWidget *>(a2))));
+}
+int qute_QStyle_layoutSpacing_1(void *self, int64_t a0, int64_t a1, int64_t a2, void * a3, void * a4) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QStyle *>(self)->layoutSpacing(static_cast<QSizePolicy::ControlType>(a0), static_cast<QSizePolicy::ControlType>(a1), static_cast<Qt::Orientation>(a2), static_cast<const QStyleOption *>(a3), static_cast<QWidget *>(a4)));
+}
+int qute_QStyle_combinedLayoutSpacing_1(void *self, int64_t a0, int64_t a1, int64_t a2, void * a3, void * a4) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QStyle *>(self)->combinedLayoutSpacing(QFlags<QSizePolicy::ControlType>::fromInt(static_cast<QFlags<QSizePolicy::ControlType>::Int>(a0)), QFlags<QSizePolicy::ControlType>::fromInt(static_cast<QFlags<QSizePolicy::ControlType>::Int>(a1)), static_cast<Qt::Orientation>(a2), static_cast<QStyleOption *>(a3), static_cast<QWidget *>(a4)));
+}
 qute_rect qute_QStyle_visualRect(int64_t a0, qute_rect a1, qute_rect a2) {
+	qute_gui_only();
 	return qute_from_QRect(QStyle::visualRect(static_cast<Qt::LayoutDirection>(a0), qute_to_QRect(a1), qute_to_QRect(a2)));
 }
 qute_point qute_QStyle_visualPos(int64_t a0, qute_rect a1, qute_point a2) {
+	qute_gui_only();
 	return qute_from_QPoint(QStyle::visualPos(static_cast<Qt::LayoutDirection>(a0), qute_to_QRect(a1), qute_to_QPoint(a2)));
 }
 int qute_QStyle_sliderPositionFromValue(int a0, int a1, int a2, int a3) {
+	qute_gui_only();
 	return static_cast<int>(QStyle::sliderPositionFromValue(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3)));
 }
 int qute_QStyle_sliderValueFromPosition(int a0, int a1, int a2, int a3) {
+	qute_gui_only();
 	return static_cast<int>(QStyle::sliderValueFromPosition(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3)));
 }
 int64_t qute_QStyle_visualAlignment(int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<int64_t>((QStyle::visualAlignment(static_cast<Qt::LayoutDirection>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)))).toInt());
 }
 qute_rect qute_QStyle_alignedRect(int64_t a0, int64_t a1, qute_size a2, qute_rect a3) {
+	qute_gui_only();
 	return qute_from_QRect(QStyle::alignedRect(static_cast<Qt::LayoutDirection>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)), qute_to_QSize(a2), qute_to_QRect(a3)));
+}
+int qute_QStyle_sliderPositionFromValue_1(int a0, int a1, int a2, int a3, bool a4) {
+	qute_gui_only();
+	return static_cast<int>(QStyle::sliderPositionFromValue(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<bool>(a4)));
+}
+int qute_QStyle_sliderValueFromPosition_1(int a0, int a1, int a2, int a3, bool a4) {
+	qute_gui_only();
+	return static_cast<int>(QStyle::sliderValueFromPosition(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3), static_cast<bool>(a4)));
 }
 
 // ---- QStyleFactory
 void qute_QStyleFactory_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QStyleFactory *>(self);
 }
 qute_list qute_QStyleFactory_keys(void) {
+	qute_gui_only();
 	return qute_ret_strlist(QStyleFactory::keys());
 }
 void * qute_QStyleFactory_create(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(QStyleFactory::create(QString::fromUtf8(a0, a0_len)));
 }
 
 // ---- QStyleOption
 void * qute_QStyleOption_new(void) {
+	qute_gui_only();
 	return static_cast<QStyleOption *>(new QStyleOption());
 }
+void * qute_QStyleOption_new_1(int a0, int a1) {
+	qute_gui_only();
+	return static_cast<QStyleOption *>(new QStyleOption(static_cast<int>(a0), static_cast<int>(a1)));
+}
 void qute_QStyleOption_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QStyleOption *>(self);
 }
 void qute_QStyleOption_initFrom(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->initFrom(static_cast<QWidget *>(a0));
 }
 int qute_QStyleOption_get_version(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStyleOption *>(self)->version);
 }
 void qute_QStyleOption_set_version(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->version = static_cast<int>(a0);
 }
 int qute_QStyleOption_get_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QStyleOption *>(self)->type);
 }
 void qute_QStyleOption_set_type(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->type = static_cast<int>(a0);
 }
 int64_t qute_QStyleOption_get_state(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOption *>(self)->state).toInt());
 }
 void qute_QStyleOption_set_state(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->state = QFlags<QStyle::StateFlag>::fromInt(static_cast<QFlags<QStyle::StateFlag>::Int>(a0));
 }
 int64_t qute_QStyleOption_get_direction(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOption *>(self)->direction);
 }
 void qute_QStyleOption_set_direction(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->direction = static_cast<Qt::LayoutDirection>(a0);
 }
 qute_rect qute_QStyleOption_get_rect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QStyleOption *>(self)->rect);
 }
 void qute_QStyleOption_set_rect(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->rect = qute_to_QRect(a0);
 }
 void * qute_QStyleOption_get_fontMetrics(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFontMetrics(static_cast<QStyleOption *>(self)->fontMetrics));
 }
 void qute_QStyleOption_set_fontMetrics(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->fontMetrics = *static_cast<QFontMetrics *>(a0);
 }
 void * qute_QStyleOption_get_palette(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(static_cast<QStyleOption *>(self)->palette));
 }
 void qute_QStyleOption_set_palette(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->palette = (a0 ? *static_cast<QPalette *>(a0) : QPalette());
 }
 void * qute_QStyleOption_get_styleObject(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QStyleOption *>(self)->styleObject);
 }
 void qute_QStyleOption_set_styleObject(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOption *>(self)->styleObject = static_cast<QObject *>(a0);
 }
 
 // ---- QStyleOptionButton
 void * qute_QStyleOptionButton_new(void) {
+	qute_gui_only();
 	return static_cast<QStyleOptionButton *>(new QStyleOptionButton());
 }
 void qute_QStyleOptionButton_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QStyleOptionButton *>(self);
 }
 int64_t qute_QStyleOptionButton_get_features(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionButton *>(self)->features).toInt());
 }
 void qute_QStyleOptionButton_set_features(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionButton *>(self)->features = QFlags<QStyleOptionButton::ButtonFeature>::fromInt(static_cast<QFlags<QStyleOptionButton::ButtonFeature>::Int>(a0));
 }
 qute_str qute_QStyleOptionButton_get_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QStyleOptionButton *>(self)->text);
 }
 void qute_QStyleOptionButton_set_text(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QStyleOptionButton *>(self)->text = QString::fromUtf8(a0, a0_len);
 }
 void * qute_QStyleOptionButton_get_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QStyleOptionButton *>(self)->icon));
 }
 void qute_QStyleOptionButton_set_icon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionButton *>(self)->icon = (a0 ? *static_cast<QIcon *>(a0) : QIcon());
 }
 qute_size qute_QStyleOptionButton_get_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QStyleOptionButton *>(self)->iconSize);
 }
 void qute_QStyleOptionButton_set_iconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionButton *>(self)->iconSize = qute_to_QSize(a0);
 }
 
 // ---- QStyleOptionComplex
 void * qute_QStyleOptionComplex_new(void) {
+	qute_gui_only();
 	return static_cast<QStyleOptionComplex *>(new QStyleOptionComplex());
 }
+void * qute_QStyleOptionComplex_new_1(int a0, int a1) {
+	qute_gui_only();
+	return static_cast<QStyleOptionComplex *>(new QStyleOptionComplex(static_cast<int>(a0), static_cast<int>(a1)));
+}
 void qute_QStyleOptionComplex_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QStyleOptionComplex *>(self);
 }
 int64_t qute_QStyleOptionComplex_get_subControls(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionComplex *>(self)->subControls).toInt());
 }
 void qute_QStyleOptionComplex_set_subControls(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionComplex *>(self)->subControls = QFlags<QStyle::SubControl>::fromInt(static_cast<QFlags<QStyle::SubControl>::Int>(a0));
 }
 int64_t qute_QStyleOptionComplex_get_activeSubControls(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionComplex *>(self)->activeSubControls).toInt());
 }
 void qute_QStyleOptionComplex_set_activeSubControls(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionComplex *>(self)->activeSubControls = QFlags<QStyle::SubControl>::fromInt(static_cast<QFlags<QStyle::SubControl>::Int>(a0));
 }
 
 // ---- QStyleOptionGraphicsItem
 void * qute_QStyleOptionGraphicsItem_new(void) {
+	qute_gui_only();
 	return static_cast<QStyleOptionGraphicsItem *>(new QStyleOptionGraphicsItem());
 }
 void qute_QStyleOptionGraphicsItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QStyleOptionGraphicsItem *>(self);
 }
 qute_rectf qute_QStyleOptionGraphicsItem_get_exposedRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRectF(static_cast<QStyleOptionGraphicsItem *>(self)->exposedRect);
 }
 void qute_QStyleOptionGraphicsItem_set_exposedRect(void *self, qute_rectf a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionGraphicsItem *>(self)->exposedRect = qute_to_QRectF(a0);
 }
 double qute_QStyleOptionGraphicsItem_levelOfDetailFromTransform(void * a0) {
+	qute_gui_only();
 	return static_cast<double>(QStyleOptionGraphicsItem::levelOfDetailFromTransform((a0 ? *static_cast<QTransform *>(a0) : QTransform())));
 }
 
 // ---- QStyleOptionViewItem
 void * qute_QStyleOptionViewItem_new(void) {
+	qute_gui_only();
 	return static_cast<QStyleOptionViewItem *>(new QStyleOptionViewItem());
 }
 void qute_QStyleOptionViewItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QStyleOptionViewItem *>(self);
 }
 int64_t qute_QStyleOptionViewItem_get_displayAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionViewItem *>(self)->displayAlignment).toInt());
 }
 void qute_QStyleOptionViewItem_set_displayAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->displayAlignment = QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0));
 }
 int64_t qute_QStyleOptionViewItem_get_decorationAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionViewItem *>(self)->decorationAlignment).toInt());
 }
 void qute_QStyleOptionViewItem_set_decorationAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->decorationAlignment = QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0));
 }
 int64_t qute_QStyleOptionViewItem_get_textElideMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionViewItem *>(self)->textElideMode);
 }
 void qute_QStyleOptionViewItem_set_textElideMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->textElideMode = static_cast<Qt::TextElideMode>(a0);
 }
 int64_t qute_QStyleOptionViewItem_get_decorationPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionViewItem *>(self)->decorationPosition);
 }
 void qute_QStyleOptionViewItem_set_decorationPosition(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->decorationPosition = static_cast<QStyleOptionViewItem::Position>(a0);
 }
 qute_size qute_QStyleOptionViewItem_get_decorationSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QStyleOptionViewItem *>(self)->decorationSize);
 }
 void qute_QStyleOptionViewItem_set_decorationSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->decorationSize = qute_to_QSize(a0);
 }
 void * qute_QStyleOptionViewItem_get_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QStyleOptionViewItem *>(self)->font));
 }
 void qute_QStyleOptionViewItem_set_font(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->font = (a0 ? *static_cast<QFont *>(a0) : QFont());
 }
 bool qute_QStyleOptionViewItem_get_showDecorationSelected(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QStyleOptionViewItem *>(self)->showDecorationSelected);
 }
 void qute_QStyleOptionViewItem_set_showDecorationSelected(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->showDecorationSelected = static_cast<bool>(a0);
 }
 int64_t qute_QStyleOptionViewItem_get_features(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionViewItem *>(self)->features).toInt());
 }
 void qute_QStyleOptionViewItem_set_features(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->features = QFlags<QStyleOptionViewItem::ViewItemFeature>::fromInt(static_cast<QFlags<QStyleOptionViewItem::ViewItemFeature>::Int>(a0));
 }
 void * qute_QStyleOptionViewItem_get_locale(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QLocale(static_cast<QStyleOptionViewItem *>(self)->locale));
 }
 void qute_QStyleOptionViewItem_set_locale(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->locale = (a0 ? *static_cast<QLocale *>(a0) : QLocale());
 }
 void * qute_QStyleOptionViewItem_get_widget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QStyleOptionViewItem *>(self)->widget);
 }
 void qute_QStyleOptionViewItem_set_widget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->widget = static_cast<QWidget *>(a0);
 }
 void * qute_QStyleOptionViewItem_get_index(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QStyleOptionViewItem *>(self)->index));
 }
 void qute_QStyleOptionViewItem_set_index(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->index = (a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex());
 }
 int64_t qute_QStyleOptionViewItem_get_checkState(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionViewItem *>(self)->checkState);
 }
 void qute_QStyleOptionViewItem_set_checkState(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->checkState = static_cast<Qt::CheckState>(a0);
 }
 void * qute_QStyleOptionViewItem_get_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QStyleOptionViewItem *>(self)->icon));
 }
 void qute_QStyleOptionViewItem_set_icon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->icon = (a0 ? *static_cast<QIcon *>(a0) : QIcon());
 }
 qute_str qute_QStyleOptionViewItem_get_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QStyleOptionViewItem *>(self)->text);
 }
 void qute_QStyleOptionViewItem_set_text(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->text = QString::fromUtf8(a0, a0_len);
 }
 int64_t qute_QStyleOptionViewItem_get_viewItemPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionViewItem *>(self)->viewItemPosition);
 }
 void qute_QStyleOptionViewItem_set_viewItemPosition(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->viewItemPosition = static_cast<QStyleOptionViewItem::ViewItemPosition>(a0);
 }
 void * qute_QStyleOptionViewItem_get_backgroundBrush(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QStyleOptionViewItem *>(self)->backgroundBrush));
 }
 void qute_QStyleOptionViewItem_set_backgroundBrush(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyleOptionViewItem *>(self)->backgroundBrush = (a0 ? *static_cast<QBrush *>(a0) : QBrush());
 }
 
 // ---- QStyledItemDelegate
 void * qute_QStyledItemDelegate_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QStyledItemDelegate *>(new QStyledItemDelegate(static_cast<QObject *>(a0)));
 }
 void * qute_QStyledItemDelegate_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QStyledItemDelegate *>(static_cast<QObject *>(obj)));
 }
 void * qute_QStyledItemDelegate_itemEditorFactory(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QStyledItemDelegate *>(self)->itemEditorFactory());
 }
 void qute_QStyledItemDelegate_setItemEditorFactory(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QStyledItemDelegate *>(self)->setItemEditorFactory(static_cast<QItemEditorFactory *>(a0));
 }
 qute_str qute_QStyledItemDelegate_displayText(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QStyledItemDelegate *>(self)->displayText((a0 ? *static_cast<QVariant *>(a0) : QVariant()), (a1 ? *static_cast<QLocale *>(a1) : QLocale())));
 }
 
 // ---- QSystemTrayIcon
 void * qute_QSystemTrayIcon_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QSystemTrayIcon *>(new QSystemTrayIcon(static_cast<QObject *>(a0)));
 }
 void * qute_QSystemTrayIcon_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QSystemTrayIcon *>(new QSystemTrayIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()), static_cast<QObject *>(a1)));
 }
 void * qute_QSystemTrayIcon_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QSystemTrayIcon *>(static_cast<QObject *>(obj)));
 }
 void qute_QSystemTrayIcon_setContextMenu(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->setContextMenu(static_cast<QMenu *>(a0));
 }
 void * qute_QSystemTrayIcon_contextMenu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QSystemTrayIcon *>(self)->contextMenu());
 }
 void * qute_QSystemTrayIcon_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QSystemTrayIcon *>(self)->icon()));
 }
 void qute_QSystemTrayIcon_setIcon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->setIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 qute_str qute_QSystemTrayIcon_toolTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QSystemTrayIcon *>(self)->toolTip());
 }
 void qute_QSystemTrayIcon_setToolTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->setToolTip(QString::fromUtf8(a0, a0_len));
 }
 qute_rect qute_QSystemTrayIcon_geometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QSystemTrayIcon *>(self)->geometry());
 }
 bool qute_QSystemTrayIcon_isVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QSystemTrayIcon *>(self)->isVisible());
 }
 void qute_QSystemTrayIcon_setVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->setVisible(static_cast<bool>(a0));
 }
 void qute_QSystemTrayIcon_show(void *self) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->show();
 }
 void qute_QSystemTrayIcon_hide(void *self) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->hide();
 }
 void qute_QSystemTrayIcon_showMessage(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->showMessage(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QIcon *>(a2) : QIcon()));
 }
 void qute_QSystemTrayIcon_showMessage_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->showMessage(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len));
 }
 void qute_QSystemTrayIcon_activated_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->activated(static_cast<QSystemTrayIcon::ActivationReason>(a0));
 }
 void qute_QSystemTrayIcon_messageClicked_1(void *self) {
+	qute_gui_only();
 	static_cast<QSystemTrayIcon *>(self)->messageClicked();
 }
+void qute_QSystemTrayIcon_showMessage_2(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2, int a3) {
+	qute_gui_only();
+	static_cast<QSystemTrayIcon *>(self)->showMessage(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QIcon *>(a2) : QIcon()), static_cast<int>(a3));
+}
+void qute_QSystemTrayIcon_showMessage_3(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, int64_t a2, int a3) {
+	qute_gui_only();
+	static_cast<QSystemTrayIcon *>(self)->showMessage(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<QSystemTrayIcon::MessageIcon>(a2), static_cast<int>(a3));
+}
 bool qute_QSystemTrayIcon_isSystemTrayAvailable(void) {
+	qute_gui_only();
 	return static_cast<bool>(QSystemTrayIcon::isSystemTrayAvailable());
 }
 bool qute_QSystemTrayIcon_supportsMessages(void) {
+	qute_gui_only();
 	return static_cast<bool>(QSystemTrayIcon::supportsMessages());
 }
 void * qute_QSystemTrayIcon_activated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSystemTrayIcon *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QSystemTrayIcon::activated, obj, [s](QSystemTrayIcon::ActivationReason a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QSystemTrayIcon_messageClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSystemTrayIcon *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QSystemTrayIcon::messageClicked, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -13230,212 +17326,279 @@ void * qute_QSystemTrayIcon_messageClicked(void *self, uintptr_t id) {
 
 // ---- QTabBar
 void * qute_QTabBar_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTabBar *>(new QTabBar(static_cast<QWidget *>(a0)));
 }
 void * qute_QTabBar_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTabBar *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QTabBar_shape(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTabBar *>(self)->shape());
 }
 void qute_QTabBar_setShape(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setShape(static_cast<QTabBar::Shape>(a0));
 }
 int qute_QTabBar_addTab(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->addTab(QString::fromUtf8(a0, a0_len)));
 }
 int qute_QTabBar_addTab_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->addTab((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
 }
 int qute_QTabBar_insertTab(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->insertTab(static_cast<int>(a0), QString::fromUtf8(a1, a1_len)));
 }
 int qute_QTabBar_insertTab_1(void *self, int a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->insertTab(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()), QString::fromUtf8(a2, a2_len)));
 }
 void qute_QTabBar_removeTab(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->removeTab(static_cast<int>(a0));
 }
 void qute_QTabBar_moveTab(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->moveTab(static_cast<int>(a0), static_cast<int>(a1));
 }
 bool qute_QTabBar_isTabEnabled(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->isTabEnabled(static_cast<int>(a0)));
 }
 void qute_QTabBar_setTabEnabled(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabEnabled(static_cast<int>(a0), static_cast<bool>(a1));
 }
 bool qute_QTabBar_isTabVisible(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->isTabVisible(static_cast<int>(a0)));
 }
 void qute_QTabBar_setTabVisible(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabVisible(static_cast<int>(a0), static_cast<bool>(a1));
 }
 qute_str qute_QTabBar_tabText(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabBar *>(self)->tabText(static_cast<int>(a0)));
 }
 void qute_QTabBar_setTabText(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabText(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_color qute_QTabBar_tabTextColor(void *self, int a0) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QTabBar *>(self)->tabTextColor(static_cast<int>(a0)));
 }
 void qute_QTabBar_setTabTextColor(void *self, int a0, qute_color a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabTextColor(static_cast<int>(a0), qute_to_QColor(a1));
 }
 void * qute_QTabBar_tabIcon(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QTabBar *>(self)->tabIcon(static_cast<int>(a0))));
 }
 void qute_QTabBar_setTabIcon(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabIcon(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()));
 }
 int64_t qute_QTabBar_elideMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTabBar *>(self)->elideMode());
 }
 void qute_QTabBar_setElideMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setElideMode(static_cast<Qt::TextElideMode>(a0));
 }
 void qute_QTabBar_setTabToolTip(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabToolTip(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QTabBar_tabToolTip(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabBar *>(self)->tabToolTip(static_cast<int>(a0)));
 }
 void qute_QTabBar_setTabWhatsThis(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabWhatsThis(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QTabBar_tabWhatsThis(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabBar *>(self)->tabWhatsThis(static_cast<int>(a0)));
 }
 void qute_QTabBar_setTabData(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabData(static_cast<int>(a0), (a1 ? *static_cast<QVariant *>(a1) : QVariant()));
 }
 void * qute_QTabBar_tabData(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QTabBar *>(self)->tabData(static_cast<int>(a0))));
 }
 qute_rect qute_QTabBar_tabRect(void *self, int a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QTabBar *>(self)->tabRect(static_cast<int>(a0)));
 }
 int qute_QTabBar_tabAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->tabAt(qute_to_QPoint(a0)));
 }
 int qute_QTabBar_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->currentIndex());
 }
 int qute_QTabBar_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabBar *>(self)->count());
 }
 void qute_QTabBar_setDrawBase(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setDrawBase(static_cast<bool>(a0));
 }
 bool qute_QTabBar_drawBase(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->drawBase());
 }
 qute_size qute_QTabBar_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QTabBar *>(self)->iconSize());
 }
 void qute_QTabBar_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setIconSize(qute_to_QSize(a0));
 }
 bool qute_QTabBar_usesScrollButtons(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->usesScrollButtons());
 }
 void qute_QTabBar_setUsesScrollButtons(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setUsesScrollButtons(static_cast<bool>(a0));
 }
 bool qute_QTabBar_tabsClosable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->tabsClosable());
 }
 void qute_QTabBar_setTabsClosable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabsClosable(static_cast<bool>(a0));
 }
 void qute_QTabBar_setTabButton(void *self, int a0, int64_t a1, void * a2) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setTabButton(static_cast<int>(a0), static_cast<QTabBar::ButtonPosition>(a1), static_cast<QWidget *>(a2));
 }
 void * qute_QTabBar_tabButton(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QTabBar *>(self)->tabButton(static_cast<int>(a0), static_cast<QTabBar::ButtonPosition>(a1)));
 }
 int64_t qute_QTabBar_selectionBehaviorOnRemove(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTabBar *>(self)->selectionBehaviorOnRemove());
 }
 void qute_QTabBar_setSelectionBehaviorOnRemove(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setSelectionBehaviorOnRemove(static_cast<QTabBar::SelectionBehavior>(a0));
 }
 bool qute_QTabBar_expanding(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->expanding());
 }
 void qute_QTabBar_setExpanding(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setExpanding(static_cast<bool>(a0));
 }
 bool qute_QTabBar_isMovable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->isMovable());
 }
 void qute_QTabBar_setMovable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setMovable(static_cast<bool>(a0));
 }
 bool qute_QTabBar_documentMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->documentMode());
 }
 void qute_QTabBar_setDocumentMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setDocumentMode(static_cast<bool>(a0));
 }
 bool qute_QTabBar_autoHide(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->autoHide());
 }
 void qute_QTabBar_setAutoHide(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setAutoHide(static_cast<bool>(a0));
 }
 bool qute_QTabBar_changeCurrentOnDrag(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabBar *>(self)->changeCurrentOnDrag());
 }
 void qute_QTabBar_setChangeCurrentOnDrag(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setChangeCurrentOnDrag(static_cast<bool>(a0));
 }
 qute_str qute_QTabBar_accessibleTabName(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabBar *>(self)->accessibleTabName(static_cast<int>(a0)));
 }
 void qute_QTabBar_setAccessibleTabName(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setAccessibleTabName(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void qute_QTabBar_setCurrentIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->setCurrentIndex(static_cast<int>(a0));
 }
 void qute_QTabBar_currentChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->currentChanged(static_cast<int>(a0));
 }
 void qute_QTabBar_tabCloseRequested_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->tabCloseRequested(static_cast<int>(a0));
 }
 void qute_QTabBar_tabMoved_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->tabMoved(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTabBar_tabBarClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->tabBarClicked(static_cast<int>(a0));
 }
 void qute_QTabBar_tabBarDoubleClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabBar *>(self)->tabBarDoubleClicked(static_cast<int>(a0));
 }
 void * qute_QTabBar_currentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabBar::currentChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabBar_tabCloseRequested(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabBar::tabCloseRequested, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabBar_tabMoved(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabBar::tabMoved, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabBar_tabBarClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabBar::tabBarClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabBar_tabBarDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabBar::tabBarDoubleClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -13443,177 +17606,241 @@ void * qute_QTabBar_tabBarDoubleClicked(void *self, uintptr_t id) {
 
 // ---- QTabWidget
 void * qute_QTabWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTabWidget *>(new QTabWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QTabWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTabWidget *>(static_cast<QObject *>(obj)));
 }
 int qute_QTabWidget_addTab(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->addTab(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len)));
 }
 int qute_QTabWidget_addTab_1(void *self, void * a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->addTab(static_cast<QWidget *>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()), QString::fromUtf8(a2, a2_len)));
 }
 int qute_QTabWidget_insertTab(void *self, int a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->insertTab(static_cast<int>(a0), static_cast<QWidget *>(a1), QString::fromUtf8(a2, a2_len)));
 }
 int qute_QTabWidget_insertTab_1(void *self, int a0, void * a1, void * a2, const char *a3, ptrdiff_t a3_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->insertTab(static_cast<int>(a0), static_cast<QWidget *>(a1), (a2 ? *static_cast<QIcon *>(a2) : QIcon()), QString::fromUtf8(a3, a3_len)));
 }
 void qute_QTabWidget_removeTab(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->removeTab(static_cast<int>(a0));
 }
 bool qute_QTabWidget_isTabEnabled(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->isTabEnabled(static_cast<int>(a0)));
 }
 void qute_QTabWidget_setTabEnabled(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabEnabled(static_cast<int>(a0), static_cast<bool>(a1));
 }
 bool qute_QTabWidget_isTabVisible(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->isTabVisible(static_cast<int>(a0)));
 }
 void qute_QTabWidget_setTabVisible(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabVisible(static_cast<int>(a0), static_cast<bool>(a1));
 }
 qute_str qute_QTabWidget_tabText(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabWidget *>(self)->tabText(static_cast<int>(a0)));
 }
 void qute_QTabWidget_setTabText(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabText(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void * qute_QTabWidget_tabIcon(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QTabWidget *>(self)->tabIcon(static_cast<int>(a0))));
 }
 void qute_QTabWidget_setTabIcon(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabIcon(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()));
 }
 void qute_QTabWidget_setTabToolTip(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabToolTip(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QTabWidget_tabToolTip(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabWidget *>(self)->tabToolTip(static_cast<int>(a0)));
 }
 void qute_QTabWidget_setTabWhatsThis(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabWhatsThis(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QTabWidget_tabWhatsThis(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTabWidget *>(self)->tabWhatsThis(static_cast<int>(a0)));
 }
 int qute_QTabWidget_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->currentIndex());
 }
 void * qute_QTabWidget_currentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTabWidget *>(self)->currentWidget());
 }
 void * qute_QTabWidget_widget(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTabWidget *>(self)->widget(static_cast<int>(a0)));
 }
 int qute_QTabWidget_indexOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->indexOf(static_cast<QWidget *>(a0)));
 }
 int qute_QTabWidget_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTabWidget *>(self)->count());
 }
 int64_t qute_QTabWidget_tabPosition(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTabWidget *>(self)->tabPosition());
 }
 void qute_QTabWidget_setTabPosition(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabPosition(static_cast<QTabWidget::TabPosition>(a0));
 }
 bool qute_QTabWidget_tabsClosable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->tabsClosable());
 }
 void qute_QTabWidget_setTabsClosable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabsClosable(static_cast<bool>(a0));
 }
 bool qute_QTabWidget_isMovable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->isMovable());
 }
 void qute_QTabWidget_setMovable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setMovable(static_cast<bool>(a0));
 }
 int64_t qute_QTabWidget_tabShape(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTabWidget *>(self)->tabShape());
 }
 void qute_QTabWidget_setTabShape(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabShape(static_cast<QTabWidget::TabShape>(a0));
 }
 void qute_QTabWidget_setCornerWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setCornerWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QTabWidget_cornerWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTabWidget *>(self)->cornerWidget());
 }
 int64_t qute_QTabWidget_elideMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTabWidget *>(self)->elideMode());
 }
 void qute_QTabWidget_setElideMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setElideMode(static_cast<Qt::TextElideMode>(a0));
 }
 qute_size qute_QTabWidget_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QTabWidget *>(self)->iconSize());
 }
 void qute_QTabWidget_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setIconSize(qute_to_QSize(a0));
 }
 bool qute_QTabWidget_usesScrollButtons(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->usesScrollButtons());
 }
 void qute_QTabWidget_setUsesScrollButtons(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setUsesScrollButtons(static_cast<bool>(a0));
 }
 bool qute_QTabWidget_documentMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->documentMode());
 }
 void qute_QTabWidget_setDocumentMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setDocumentMode(static_cast<bool>(a0));
 }
 bool qute_QTabWidget_tabBarAutoHide(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTabWidget *>(self)->tabBarAutoHide());
 }
 void qute_QTabWidget_setTabBarAutoHide(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setTabBarAutoHide(static_cast<bool>(a0));
 }
 void qute_QTabWidget_clear(void *self) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->clear();
 }
 void * qute_QTabWidget_tabBar(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTabWidget *>(self)->tabBar());
 }
 void qute_QTabWidget_setCurrentIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setCurrentIndex(static_cast<int>(a0));
 }
 void qute_QTabWidget_setCurrentWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->setCurrentWidget(static_cast<QWidget *>(a0));
 }
 void qute_QTabWidget_currentChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->currentChanged(static_cast<int>(a0));
 }
 void qute_QTabWidget_tabCloseRequested_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->tabCloseRequested(static_cast<int>(a0));
 }
 void qute_QTabWidget_tabBarClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->tabBarClicked(static_cast<int>(a0));
 }
 void qute_QTabWidget_tabBarDoubleClicked_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTabWidget *>(self)->tabBarDoubleClicked(static_cast<int>(a0));
 }
+void qute_QTabWidget_setCornerWidget_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QTabWidget *>(self)->setCornerWidget(static_cast<QWidget *>(a0), static_cast<Qt::Corner>(a1));
+}
+void * qute_QTabWidget_cornerWidget_1(void *self, int64_t a0) {
+	qute_gui_only();
+	return (void *)(static_cast<QTabWidget *>(self)->cornerWidget(static_cast<Qt::Corner>(a0)));
+}
 void * qute_QTabWidget_currentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabWidget::currentChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabWidget_tabCloseRequested(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabWidget::tabCloseRequested, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabWidget_tabBarClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabWidget::tabBarClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTabWidget_tabBarDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTabWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTabWidget::tabBarDoubleClicked, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -13621,423 +17848,561 @@ void * qute_QTabWidget_tabBarDoubleClicked(void *self, uintptr_t id) {
 
 // ---- QTableView
 void * qute_QTableView_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTableView *>(new QTableView(static_cast<QWidget *>(a0)));
 }
 void * qute_QTableView_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTableView *>(static_cast<QObject *>(obj)));
 }
 void * qute_QTableView_horizontalHeader(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableView *>(self)->horizontalHeader());
 }
 void * qute_QTableView_verticalHeader(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableView *>(self)->verticalHeader());
 }
 void qute_QTableView_setHorizontalHeader(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setHorizontalHeader(static_cast<QHeaderView *>(a0));
 }
 void qute_QTableView_setVerticalHeader(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setVerticalHeader(static_cast<QHeaderView *>(a0));
 }
 int qute_QTableView_rowViewportPosition(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->rowViewportPosition(static_cast<int>(a0)));
 }
 int qute_QTableView_rowAt(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->rowAt(static_cast<int>(a0)));
 }
 void qute_QTableView_setRowHeight(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setRowHeight(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QTableView_rowHeight(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->rowHeight(static_cast<int>(a0)));
 }
 int qute_QTableView_columnViewportPosition(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->columnViewportPosition(static_cast<int>(a0)));
 }
 int qute_QTableView_columnAt(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->columnAt(static_cast<int>(a0)));
 }
 void qute_QTableView_setColumnWidth(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setColumnWidth(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QTableView_columnWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->columnWidth(static_cast<int>(a0)));
 }
 bool qute_QTableView_isRowHidden(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableView *>(self)->isRowHidden(static_cast<int>(a0)));
 }
 void qute_QTableView_setRowHidden(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setRowHidden(static_cast<int>(a0), static_cast<bool>(a1));
 }
 bool qute_QTableView_isColumnHidden(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableView *>(self)->isColumnHidden(static_cast<int>(a0)));
 }
 void qute_QTableView_setColumnHidden(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setColumnHidden(static_cast<int>(a0), static_cast<bool>(a1));
 }
 void qute_QTableView_setSortingEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setSortingEnabled(static_cast<bool>(a0));
 }
 bool qute_QTableView_isSortingEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableView *>(self)->isSortingEnabled());
 }
 bool qute_QTableView_showGrid(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableView *>(self)->showGrid());
 }
 int64_t qute_QTableView_gridStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTableView *>(self)->gridStyle());
 }
 void qute_QTableView_setGridStyle(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setGridStyle(static_cast<Qt::PenStyle>(a0));
 }
 void qute_QTableView_setWordWrap(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setWordWrap(static_cast<bool>(a0));
 }
 bool qute_QTableView_wordWrap(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableView *>(self)->wordWrap());
 }
 void qute_QTableView_setCornerButtonEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setCornerButtonEnabled(static_cast<bool>(a0));
 }
 bool qute_QTableView_isCornerButtonEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableView *>(self)->isCornerButtonEnabled());
 }
 void qute_QTableView_setSpan(void *self, int a0, int a1, int a2, int a3) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setSpan(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
 }
 int qute_QTableView_rowSpan(void *self, int a0, int a1) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->rowSpan(static_cast<int>(a0), static_cast<int>(a1)));
 }
 int qute_QTableView_columnSpan(void *self, int a0, int a1) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableView *>(self)->columnSpan(static_cast<int>(a0), static_cast<int>(a1)));
 }
 void qute_QTableView_clearSpans(void *self) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->clearSpans();
 }
 void qute_QTableView_selectRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->selectRow(static_cast<int>(a0));
 }
 void qute_QTableView_selectColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->selectColumn(static_cast<int>(a0));
 }
 void qute_QTableView_hideRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->hideRow(static_cast<int>(a0));
 }
 void qute_QTableView_hideColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->hideColumn(static_cast<int>(a0));
 }
 void qute_QTableView_showRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->showRow(static_cast<int>(a0));
 }
 void qute_QTableView_showColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->showColumn(static_cast<int>(a0));
 }
 void qute_QTableView_resizeRowToContents(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->resizeRowToContents(static_cast<int>(a0));
 }
 void qute_QTableView_resizeRowsToContents(void *self) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->resizeRowsToContents();
 }
 void qute_QTableView_resizeColumnToContents(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->resizeColumnToContents(static_cast<int>(a0));
 }
 void qute_QTableView_resizeColumnsToContents(void *self) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->resizeColumnsToContents();
 }
 void qute_QTableView_sortByColumn(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->sortByColumn(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
 }
 void qute_QTableView_setShowGrid(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTableView *>(self)->setShowGrid(static_cast<bool>(a0));
 }
 
 // ---- QTableWidget
 void * qute_QTableWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTableWidget *>(new QTableWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QTableWidget_new_1(int a0, int a1, void * a2) {
+	qute_gui_only();
 	return static_cast<QTableWidget *>(new QTableWidget(static_cast<int>(a0), static_cast<int>(a1), static_cast<QWidget *>(a2)));
 }
 void * qute_QTableWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTableWidget *>(static_cast<QObject *>(obj)));
 }
 void qute_QTableWidget_setRowCount(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setRowCount(static_cast<int>(a0));
 }
 int qute_QTableWidget_rowCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->rowCount());
 }
 void qute_QTableWidget_setColumnCount(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setColumnCount(static_cast<int>(a0));
 }
 int qute_QTableWidget_columnCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->columnCount());
 }
 int qute_QTableWidget_row(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->row(static_cast<QTableWidgetItem *>(a0)));
 }
 int qute_QTableWidget_column(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->column(static_cast<QTableWidgetItem *>(a0)));
 }
 void * qute_QTableWidget_item(void *self, int a0, int a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->item(static_cast<int>(a0), static_cast<int>(a1)));
 }
 void qute_QTableWidget_setItem(void *self, int a0, int a1, void * a2) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setItem(static_cast<int>(a0), static_cast<int>(a1), static_cast<QTableWidgetItem *>(a2));
 }
 void * qute_QTableWidget_takeItem(void *self, int a0, int a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->takeItem(static_cast<int>(a0), static_cast<int>(a1)));
 }
 qute_list qute_QTableWidget_items(void *self, void * a0) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTableWidget *>(self)->items(static_cast<QMimeData *>(a0)), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QTableWidget_indexFromItem(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QTableWidget *>(self)->indexFromItem(static_cast<QTableWidgetItem *>(a0))));
 }
 void * qute_QTableWidget_itemFromIndex(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->itemFromIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void * qute_QTableWidget_verticalHeaderItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->verticalHeaderItem(static_cast<int>(a0)));
 }
 void qute_QTableWidget_setVerticalHeaderItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setVerticalHeaderItem(static_cast<int>(a0), static_cast<QTableWidgetItem *>(a1));
 }
 void * qute_QTableWidget_takeVerticalHeaderItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->takeVerticalHeaderItem(static_cast<int>(a0)));
 }
 void * qute_QTableWidget_horizontalHeaderItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->horizontalHeaderItem(static_cast<int>(a0)));
 }
 void qute_QTableWidget_setHorizontalHeaderItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setHorizontalHeaderItem(static_cast<int>(a0), static_cast<QTableWidgetItem *>(a1));
 }
 void * qute_QTableWidget_takeHorizontalHeaderItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->takeHorizontalHeaderItem(static_cast<int>(a0)));
 }
 void qute_QTableWidget_setVerticalHeaderLabels(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setVerticalHeaderLabels(qute_qstrlist(a0, a0_lens, a0_n));
 }
 void qute_QTableWidget_setHorizontalHeaderLabels(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setHorizontalHeaderLabels(qute_qstrlist(a0, a0_lens, a0_n));
 }
 int qute_QTableWidget_currentRow(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->currentRow());
 }
 int qute_QTableWidget_currentColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->currentColumn());
 }
 void * qute_QTableWidget_currentItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->currentItem());
 }
 void qute_QTableWidget_setCurrentItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setCurrentItem(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_setCurrentItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setCurrentItem(static_cast<QTableWidgetItem *>(a0), QFlags<QItemSelectionModel::SelectionFlag>::fromInt(static_cast<QFlags<QItemSelectionModel::SelectionFlag>::Int>(a1)));
 }
 void qute_QTableWidget_setCurrentCell(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setCurrentCell(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_setCurrentCell_1(void *self, int a0, int a1, int64_t a2) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setCurrentCell(static_cast<int>(a0), static_cast<int>(a1), QFlags<QItemSelectionModel::SelectionFlag>::fromInt(static_cast<QFlags<QItemSelectionModel::SelectionFlag>::Int>(a2)));
 }
 void qute_QTableWidget_sortItems(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->sortItems(static_cast<int>(a0));
 }
 void qute_QTableWidget_editItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->editItem(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_openPersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->openPersistentEditor(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_closePersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->closePersistentEditor(static_cast<QTableWidgetItem *>(a0));
 }
 bool qute_QTableWidget_isPersistentEditorOpen(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableWidget *>(self)->isPersistentEditorOpen(static_cast<QTableWidgetItem *>(a0)));
 }
 void * qute_QTableWidget_cellWidget(void *self, int a0, int a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->cellWidget(static_cast<int>(a0), static_cast<int>(a1)));
 }
 void qute_QTableWidget_setCellWidget(void *self, int a0, int a1, void * a2) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setCellWidget(static_cast<int>(a0), static_cast<int>(a1), static_cast<QWidget *>(a2));
 }
 void qute_QTableWidget_removeCellWidget(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->removeCellWidget(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_setRangeSelected(void *self, void * a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setRangeSelected((a0 ? *static_cast<QTableWidgetSelectionRange *>(a0) : QTableWidgetSelectionRange()), static_cast<bool>(a1));
 }
 qute_list qute_QTableWidget_selectedRanges(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTableWidget *>(self)->selectedRanges(), [](const auto &v) { return static_cast<void *>(new QTableWidgetSelectionRange(v)); });
 }
 qute_list qute_QTableWidget_selectedItems(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTableWidget *>(self)->selectedItems(), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QTableWidget_findItems(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTableWidget *>(self)->findItems(QString::fromUtf8(a0, a0_len), QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a1))), [](const auto &v) { return (void *)(v); });
 }
 int qute_QTableWidget_visualRow(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->visualRow(static_cast<int>(a0)));
 }
 int qute_QTableWidget_visualColumn(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidget *>(self)->visualColumn(static_cast<int>(a0)));
 }
 void * qute_QTableWidget_itemAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->itemAt(qute_to_QPoint(a0)));
 }
 qute_rect qute_QTableWidget_visualItemRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QTableWidget *>(self)->visualItemRect(static_cast<QTableWidgetItem *>(a0)));
 }
 void * qute_QTableWidget_itemPrototype(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidget *>(self)->itemPrototype());
 }
 void qute_QTableWidget_setItemPrototype(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setItemPrototype(static_cast<QTableWidgetItem *>(a0));
 }
 int64_t qute_QTableWidget_supportedDragActions(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTableWidget *>(self)->supportedDragActions()).toInt());
 }
 void qute_QTableWidget_setSupportedDragActions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->setSupportedDragActions(QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a0)));
 }
 void qute_QTableWidget_scrollToItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->scrollToItem(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_insertRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->insertRow(static_cast<int>(a0));
 }
 void qute_QTableWidget_insertColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->insertColumn(static_cast<int>(a0));
 }
 void qute_QTableWidget_removeRow(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->removeRow(static_cast<int>(a0));
 }
 void qute_QTableWidget_removeColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->removeColumn(static_cast<int>(a0));
 }
 void qute_QTableWidget_clear(void *self) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->clear();
 }
 void qute_QTableWidget_clearContents(void *self) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->clearContents();
 }
 void qute_QTableWidget_itemPressed_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemPressed(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_itemClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemClicked(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_itemDoubleClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemDoubleClicked(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_itemActivated_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemActivated(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_itemEntered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemEntered(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_itemChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemChanged(static_cast<QTableWidgetItem *>(a0));
 }
 void qute_QTableWidget_currentItemChanged_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->currentItemChanged(static_cast<QTableWidgetItem *>(a0), static_cast<QTableWidgetItem *>(a1));
 }
 void qute_QTableWidget_itemSelectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->itemSelectionChanged();
 }
 void qute_QTableWidget_cellPressed_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->cellPressed(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_cellClicked_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->cellClicked(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_cellDoubleClicked_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->cellDoubleClicked(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_cellActivated_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->cellActivated(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_cellEntered_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->cellEntered(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_cellChanged_1(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->cellChanged(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QTableWidget_currentCellChanged_1(void *self, int a0, int a1, int a2, int a3) {
+	qute_gui_only();
 	static_cast<QTableWidget *>(self)->currentCellChanged(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3));
 }
+void qute_QTableWidget_sortItems_1(void *self, int a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QTableWidget *>(self)->sortItems(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
+}
+void qute_QTableWidget_scrollToItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QTableWidget *>(self)->scrollToItem(static_cast<QTableWidgetItem *>(a0), static_cast<QAbstractItemView::ScrollHint>(a1));
+}
 void * qute_QTableWidget_itemPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemPressed, obj, [s](QTableWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_itemClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemClicked, obj, [s](QTableWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_itemDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemDoubleClicked, obj, [s](QTableWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_itemActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemActivated, obj, [s](QTableWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_itemEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemEntered, obj, [s](QTableWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_itemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemChanged, obj, [s](QTableWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_currentItemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::currentItemChanged, obj, [s](QTableWidgetItem * a0, QTableWidgetItem * a1) { void * c0 = (void *)(a0); void * c1 = (void *)(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_itemSelectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::itemSelectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QTableWidget_cellPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::cellPressed, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_cellClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::cellClicked, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_cellDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::cellDoubleClicked, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_cellActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::cellActivated, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_cellEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::cellEntered, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_cellChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::cellChanged, obj, [s](int a0, int a1) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTableWidget_currentCellChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTableWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTableWidget::currentCellChanged, obj, [s](int a0, int a1, int a2, int a3) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); int c3 = static_cast<int>(a3); void *args[] = {&c0, &c1, &c2, &c3}; qute_qtwidgets_signal(s->id, args); }));
@@ -14045,263 +18410,361 @@ void * qute_QTableWidget_currentCellChanged(void *self, uintptr_t id) {
 
 // ---- QTableWidgetItem
 void * qute_QTableWidgetItem_new(void) {
+	qute_gui_only();
 	return static_cast<QTableWidgetItem *>(new qute_QTableWidgetItem());
 }
 void * qute_QTableWidgetItem_new_1(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<QTableWidgetItem *>(new qute_QTableWidgetItem(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QTableWidgetItem_new_2(void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return static_cast<QTableWidgetItem *>(new qute_QTableWidgetItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
 }
+void * qute_QTableWidgetItem_new_3(int a0) {
+	qute_gui_only();
+	return static_cast<QTableWidgetItem *>(new qute_QTableWidgetItem(static_cast<int>(a0)));
+}
+void * qute_QTableWidgetItem_new_4(const char *a0, ptrdiff_t a0_len, int a1) {
+	qute_gui_only();
+	return static_cast<QTableWidgetItem *>(new qute_QTableWidgetItem(QString::fromUtf8(a0, a0_len), static_cast<int>(a1)));
+}
+void * qute_QTableWidgetItem_new_5(void * a0, const char *a1, ptrdiff_t a1_len, int a2) {
+	qute_gui_only();
+	return static_cast<QTableWidgetItem *>(new qute_QTableWidgetItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), static_cast<int>(a2)));
+}
 void qute_QTableWidgetItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QTableWidgetItem *>(self);
 }
 void * qute_QTableWidgetItem_clone(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidgetItem *>(self)->clone());
 }
 void * qute_QTableWidgetItem_tableWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTableWidgetItem *>(self)->tableWidget());
 }
 int qute_QTableWidgetItem_row(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetItem *>(self)->row());
 }
 int qute_QTableWidgetItem_column(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetItem *>(self)->column());
 }
 void qute_QTableWidgetItem_setSelected(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setSelected(static_cast<bool>(a0));
 }
 bool qute_QTableWidgetItem_isSelected(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTableWidgetItem *>(self)->isSelected());
 }
 int64_t qute_QTableWidgetItem_flags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTableWidgetItem *>(self)->flags()).toInt());
 }
 void qute_QTableWidgetItem_setFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setFlags(QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(a0)));
 }
 qute_str qute_QTableWidgetItem_text(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTableWidgetItem *>(self)->text());
 }
 void qute_QTableWidgetItem_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QTableWidgetItem_icon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QTableWidgetItem *>(self)->icon()));
 }
 void qute_QTableWidgetItem_setIcon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 qute_str qute_QTableWidgetItem_statusTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTableWidgetItem *>(self)->statusTip());
 }
 void qute_QTableWidgetItem_setStatusTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setStatusTip(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QTableWidgetItem_toolTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTableWidgetItem *>(self)->toolTip());
 }
 void qute_QTableWidgetItem_setToolTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setToolTip(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QTableWidgetItem_whatsThis(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTableWidgetItem *>(self)->whatsThis());
 }
 void qute_QTableWidgetItem_setWhatsThis(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setWhatsThis(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QTableWidgetItem_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QTableWidgetItem *>(self)->font()));
 }
 void qute_QTableWidgetItem_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 int qute_QTableWidgetItem_textAlignment(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetItem *>(self)->textAlignment());
 }
 void qute_QTableWidgetItem_setTextAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setTextAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 void * qute_QTableWidgetItem_background(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QTableWidgetItem *>(self)->background()));
 }
 void qute_QTableWidgetItem_setBackground(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setBackground((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 void * qute_QTableWidgetItem_foreground(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QTableWidgetItem *>(self)->foreground()));
 }
 void qute_QTableWidgetItem_setForeground(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setForeground((a0 ? *static_cast<QBrush *>(a0) : QBrush()));
 }
 int64_t qute_QTableWidgetItem_checkState(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTableWidgetItem *>(self)->checkState());
 }
 void qute_QTableWidgetItem_setCheckState(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setCheckState(static_cast<Qt::CheckState>(a0));
 }
 qute_size qute_QTableWidgetItem_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QTableWidgetItem *>(self)->sizeHint());
 }
 void qute_QTableWidgetItem_setSizeHint(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setSizeHint(qute_to_QSize(a0));
 }
 void * qute_QTableWidgetItem_data(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QTableWidgetItem *>(self)->data(static_cast<int>(a0))));
 }
 void qute_QTableWidgetItem_setData(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->setData(static_cast<int>(a0), (a1 ? *static_cast<QVariant *>(a1) : QVariant()));
 }
 void qute_QTableWidgetItem_read(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->read(*static_cast<QDataStream *>(a0));
 }
 void qute_QTableWidgetItem_write(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTableWidgetItem *>(self)->write(*static_cast<QDataStream *>(a0));
 }
 int qute_QTableWidgetItem_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetItem *>(self)->type());
 }
 
 // ---- QTableWidgetSelectionRange
 void * qute_QTableWidgetSelectionRange_new(void) {
+	qute_gui_only();
 	return static_cast<QTableWidgetSelectionRange *>(new QTableWidgetSelectionRange());
 }
 void * qute_QTableWidgetSelectionRange_new_1(int a0, int a1, int a2, int a3) {
+	qute_gui_only();
 	return static_cast<QTableWidgetSelectionRange *>(new QTableWidgetSelectionRange(static_cast<int>(a0), static_cast<int>(a1), static_cast<int>(a2), static_cast<int>(a3)));
 }
 void qute_QTableWidgetSelectionRange_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QTableWidgetSelectionRange *>(self);
 }
 int qute_QTableWidgetSelectionRange_topRow(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetSelectionRange *>(self)->topRow());
 }
 int qute_QTableWidgetSelectionRange_bottomRow(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetSelectionRange *>(self)->bottomRow());
 }
 int qute_QTableWidgetSelectionRange_leftColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetSelectionRange *>(self)->leftColumn());
 }
 int qute_QTableWidgetSelectionRange_rightColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetSelectionRange *>(self)->rightColumn());
 }
 int qute_QTableWidgetSelectionRange_rowCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetSelectionRange *>(self)->rowCount());
 }
 int qute_QTableWidgetSelectionRange_columnCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTableWidgetSelectionRange *>(self)->columnCount());
 }
 
 // ---- QTextBrowser
 void * qute_QTextBrowser_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTextBrowser *>(new QTextBrowser(static_cast<QWidget *>(a0)));
 }
 void * qute_QTextBrowser_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTextBrowser *>(static_cast<QObject *>(obj)));
 }
 void * qute_QTextBrowser_source(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QUrl(static_cast<QTextBrowser *>(self)->source()));
 }
 int64_t qute_QTextBrowser_sourceType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTextBrowser *>(self)->sourceType());
 }
 qute_list qute_QTextBrowser_searchPaths(void *self) {
+	qute_gui_only();
 	return qute_ret_strlist(static_cast<QTextBrowser *>(self)->searchPaths());
 }
 void qute_QTextBrowser_setSearchPaths(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->setSearchPaths(qute_qstrlist(a0, a0_lens, a0_n));
 }
 bool qute_QTextBrowser_isBackwardAvailable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextBrowser *>(self)->isBackwardAvailable());
 }
 bool qute_QTextBrowser_isForwardAvailable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextBrowser *>(self)->isForwardAvailable());
 }
 void qute_QTextBrowser_clearHistory(void *self) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->clearHistory();
 }
 qute_str qute_QTextBrowser_historyTitle(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextBrowser *>(self)->historyTitle(static_cast<int>(a0)));
 }
 void * qute_QTextBrowser_historyUrl(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QUrl(static_cast<QTextBrowser *>(self)->historyUrl(static_cast<int>(a0))));
 }
 int qute_QTextBrowser_backwardHistoryCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTextBrowser *>(self)->backwardHistoryCount());
 }
 int qute_QTextBrowser_forwardHistoryCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTextBrowser *>(self)->forwardHistoryCount());
 }
 bool qute_QTextBrowser_openExternalLinks(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextBrowser *>(self)->openExternalLinks());
 }
 void qute_QTextBrowser_setOpenExternalLinks(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->setOpenExternalLinks(static_cast<bool>(a0));
 }
 bool qute_QTextBrowser_openLinks(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextBrowser *>(self)->openLinks());
 }
 void qute_QTextBrowser_setOpenLinks(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->setOpenLinks(static_cast<bool>(a0));
 }
 void qute_QTextBrowser_setSource(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->setSource((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void qute_QTextBrowser_backward(void *self) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->backward();
 }
 void qute_QTextBrowser_forward(void *self) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->forward();
 }
 void qute_QTextBrowser_home(void *self) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->home();
 }
 void qute_QTextBrowser_reload(void *self) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->reload();
 }
 void qute_QTextBrowser_backwardAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->backwardAvailable(static_cast<bool>(a0));
 }
 void qute_QTextBrowser_forwardAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->forwardAvailable(static_cast<bool>(a0));
 }
 void qute_QTextBrowser_historyChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->historyChanged();
 }
 void qute_QTextBrowser_sourceChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->sourceChanged((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void qute_QTextBrowser_highlighted_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->highlighted((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
 void qute_QTextBrowser_anchorClicked_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextBrowser *>(self)->anchorClicked((a0 ? *static_cast<QUrl *>(a0) : QUrl()));
 }
+void qute_QTextBrowser_setSource_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QTextBrowser *>(self)->setSource((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<QTextDocument::ResourceType>(a1));
+}
 void * qute_QTextBrowser_backwardAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextBrowser *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextBrowser::backwardAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextBrowser_forwardAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextBrowser *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextBrowser::forwardAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextBrowser_historyChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextBrowser *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextBrowser::historyChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QTextBrowser_sourceChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextBrowser *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextBrowser::sourceChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextBrowser_highlighted(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextBrowser *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextBrowser::highlighted, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextBrowser_anchorClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextBrowser *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextBrowser::anchorClicked, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -14309,330 +18772,459 @@ void * qute_QTextBrowser_anchorClicked(void *self, uintptr_t id) {
 
 // ---- QTextEdit
 void * qute_QTextEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTextEdit *>(new QTextEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QTextEdit_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QTextEdit *>(new QTextEdit(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QTextEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTextEdit *>(static_cast<QObject *>(obj)));
 }
 void qute_QTextEdit_setDocument(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setDocument(static_cast<QTextDocument *>(a0));
 }
 void * qute_QTextEdit_document(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTextEdit *>(self)->document());
 }
 void qute_QTextEdit_setPlaceholderText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setPlaceholderText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QTextEdit_placeholderText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->placeholderText());
 }
 void qute_QTextEdit_setTextCursor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setTextCursor((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor()));
 }
 void * qute_QTextEdit_textCursor(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCursor(static_cast<QTextEdit *>(self)->textCursor()));
 }
 bool qute_QTextEdit_isReadOnly(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->isReadOnly());
 }
 void qute_QTextEdit_setReadOnly(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setReadOnly(static_cast<bool>(a0));
 }
 void qute_QTextEdit_setTextInteractionFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setTextInteractionFlags(QFlags<Qt::TextInteractionFlag>::fromInt(static_cast<QFlags<Qt::TextInteractionFlag>::Int>(a0)));
 }
 int64_t qute_QTextEdit_textInteractionFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTextEdit *>(self)->textInteractionFlags()).toInt());
 }
 double qute_QTextEdit_fontPointSize(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QTextEdit *>(self)->fontPointSize());
 }
 qute_str qute_QTextEdit_fontFamily(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->fontFamily());
 }
 int qute_QTextEdit_fontWeight(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTextEdit *>(self)->fontWeight());
 }
 bool qute_QTextEdit_fontUnderline(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->fontUnderline());
 }
 bool qute_QTextEdit_fontItalic(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->fontItalic());
 }
 qute_color qute_QTextEdit_textColor(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QTextEdit *>(self)->textColor());
 }
 qute_color qute_QTextEdit_textBackgroundColor(void *self) {
+	qute_gui_only();
 	return qute_from_QColor(static_cast<QTextEdit *>(self)->textBackgroundColor());
 }
 void * qute_QTextEdit_currentFont(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QTextEdit *>(self)->currentFont()));
 }
 int64_t qute_QTextEdit_alignment(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTextEdit *>(self)->alignment()).toInt());
 }
 void qute_QTextEdit_mergeCurrentCharFormat(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->mergeCurrentCharFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
 }
 void qute_QTextEdit_setCurrentCharFormat(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setCurrentCharFormat((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
 }
 void * qute_QTextEdit_currentCharFormat(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCharFormat(static_cast<QTextEdit *>(self)->currentCharFormat()));
 }
 int64_t qute_QTextEdit_autoFormatting(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTextEdit *>(self)->autoFormatting()).toInt());
 }
 void qute_QTextEdit_setAutoFormatting(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setAutoFormatting(QFlags<QTextEdit::AutoFormattingFlag>::fromInt(static_cast<QFlags<QTextEdit::AutoFormattingFlag>::Int>(a0)));
 }
 bool qute_QTextEdit_tabChangesFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->tabChangesFocus());
 }
 void qute_QTextEdit_setTabChangesFocus(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setTabChangesFocus(static_cast<bool>(a0));
 }
 void qute_QTextEdit_setDocumentTitle(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setDocumentTitle(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QTextEdit_documentTitle(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->documentTitle());
 }
 bool qute_QTextEdit_isUndoRedoEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->isUndoRedoEnabled());
 }
 void qute_QTextEdit_setUndoRedoEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setUndoRedoEnabled(static_cast<bool>(a0));
 }
 int64_t qute_QTextEdit_lineWrapMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTextEdit *>(self)->lineWrapMode());
 }
 void qute_QTextEdit_setLineWrapMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setLineWrapMode(static_cast<QTextEdit::LineWrapMode>(a0));
 }
 int qute_QTextEdit_lineWrapColumnOrWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTextEdit *>(self)->lineWrapColumnOrWidth());
 }
 void qute_QTextEdit_setLineWrapColumnOrWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setLineWrapColumnOrWidth(static_cast<int>(a0));
 }
 int64_t qute_QTextEdit_wordWrapMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTextEdit *>(self)->wordWrapMode());
 }
 void qute_QTextEdit_setWordWrapMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setWordWrapMode(static_cast<QTextOption::WrapMode>(a0));
 }
 bool qute_QTextEdit_find(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->find(QString::fromUtf8(a0, a0_len)));
 }
 bool qute_QTextEdit_find_1(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->find((a0 ? *static_cast<QRegularExpression *>(a0) : QRegularExpression())));
 }
 qute_str qute_QTextEdit_toPlainText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->toPlainText());
 }
 qute_str qute_QTextEdit_toHtml(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->toHtml());
 }
 qute_str qute_QTextEdit_toMarkdown(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->toMarkdown());
 }
 void qute_QTextEdit_ensureCursorVisible(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->ensureCursorVisible();
 }
 void * qute_QTextEdit_loadResource(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QTextEdit *>(self)->loadResource(static_cast<int>(a0), (a1 ? *static_cast<QUrl *>(a1) : QUrl()))));
 }
 void * qute_QTextEdit_createStandardContextMenu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTextEdit *>(self)->createStandardContextMenu());
 }
 void * qute_QTextEdit_createStandardContextMenu_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTextEdit *>(self)->createStandardContextMenu(qute_to_QPoint(a0)));
 }
 void * qute_QTextEdit_cursorForPosition(void *self, qute_point a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCursor(static_cast<QTextEdit *>(self)->cursorForPosition(qute_to_QPoint(a0))));
 }
 qute_rect qute_QTextEdit_cursorRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QTextEdit *>(self)->cursorRect((a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor())));
 }
 qute_rect qute_QTextEdit_cursorRect_1(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QTextEdit *>(self)->cursorRect());
 }
 qute_str qute_QTextEdit_anchorAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTextEdit *>(self)->anchorAt(qute_to_QPoint(a0)));
 }
 bool qute_QTextEdit_overwriteMode(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->overwriteMode());
 }
 void qute_QTextEdit_setOverwriteMode(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setOverwriteMode(static_cast<bool>(a0));
 }
 double qute_QTextEdit_tabStopDistance(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QTextEdit *>(self)->tabStopDistance());
 }
 void qute_QTextEdit_setTabStopDistance(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setTabStopDistance(static_cast<double>(a0));
 }
 int qute_QTextEdit_cursorWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTextEdit *>(self)->cursorWidth());
 }
 void qute_QTextEdit_setCursorWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setCursorWidth(static_cast<int>(a0));
 }
 bool qute_QTextEdit_acceptRichText(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->acceptRichText());
 }
 void qute_QTextEdit_setAcceptRichText(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setAcceptRichText(static_cast<bool>(a0));
 }
 void qute_QTextEdit_setExtraSelections(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setExtraSelections([&] { QList<QTextEdit::ExtraSelection> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QTextEdit::ExtraSelection *>(d[i]) : QTextEdit::ExtraSelection())); return l; }());
 }
 qute_list qute_QTextEdit_extraSelections(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTextEdit *>(self)->extraSelections(), [](const auto &v) { return static_cast<void *>(new QTextEdit::ExtraSelection(v)); });
 }
 void qute_QTextEdit_moveCursor(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->moveCursor(static_cast<QTextCursor::MoveOperation>(a0));
 }
 bool qute_QTextEdit_canPaste(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTextEdit *>(self)->canPaste());
 }
 void qute_QTextEdit_print(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->print(static_cast<QPagedPaintDevice *>(a0));
 }
 void qute_QTextEdit_setFontPointSize(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setFontPointSize(static_cast<double>(a0));
 }
 void qute_QTextEdit_setFontFamily(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setFontFamily(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_setFontWeight(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setFontWeight(static_cast<int>(a0));
 }
 void qute_QTextEdit_setFontUnderline(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setFontUnderline(static_cast<bool>(a0));
 }
 void qute_QTextEdit_setFontItalic(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setFontItalic(static_cast<bool>(a0));
 }
 void qute_QTextEdit_setTextColor(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setTextColor(qute_to_QColor(a0));
 }
 void qute_QTextEdit_setTextBackgroundColor(void *self, qute_color a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setTextBackgroundColor(qute_to_QColor(a0));
 }
 void qute_QTextEdit_setCurrentFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setCurrentFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void qute_QTextEdit_setAlignment(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setAlignment(QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a0)));
 }
 void qute_QTextEdit_setPlainText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setPlainText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_setHtml(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setHtml(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_setMarkdown(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setMarkdown(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_setText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->setText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_cut(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->cut();
 }
 void qute_QTextEdit_copy(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->copy();
 }
 void qute_QTextEdit_paste(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->paste();
 }
 void qute_QTextEdit_undo(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->undo();
 }
 void qute_QTextEdit_redo(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->redo();
 }
 void qute_QTextEdit_clear(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->clear();
 }
 void qute_QTextEdit_selectAll(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->selectAll();
 }
 void qute_QTextEdit_insertPlainText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->insertPlainText(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_insertHtml(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->insertHtml(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_append(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->append(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_scrollToAnchor(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->scrollToAnchor(QString::fromUtf8(a0, a0_len));
 }
 void qute_QTextEdit_zoomIn(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->zoomIn();
 }
 void qute_QTextEdit_zoomOut(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->zoomOut();
 }
 void qute_QTextEdit_textChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->textChanged();
 }
 void qute_QTextEdit_undoAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->undoAvailable(static_cast<bool>(a0));
 }
 void qute_QTextEdit_redoAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->redoAvailable(static_cast<bool>(a0));
 }
 void qute_QTextEdit_currentCharFormatChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->currentCharFormatChanged((a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat()));
 }
 void qute_QTextEdit_copyAvailable_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->copyAvailable(static_cast<bool>(a0));
 }
 void qute_QTextEdit_selectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->selectionChanged();
 }
 void qute_QTextEdit_cursorPositionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QTextEdit *>(self)->cursorPositionChanged();
 }
+bool qute_QTextEdit_find_2(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QTextEdit *>(self)->find(QString::fromUtf8(a0, a0_len), QFlags<QTextDocument::FindFlag>::fromInt(static_cast<QFlags<QTextDocument::FindFlag>::Int>(a1))));
+}
+bool qute_QTextEdit_find_3(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QTextEdit *>(self)->find((a0 ? *static_cast<QRegularExpression *>(a0) : QRegularExpression()), QFlags<QTextDocument::FindFlag>::fromInt(static_cast<QFlags<QTextDocument::FindFlag>::Int>(a1))));
+}
+qute_str qute_QTextEdit_toMarkdown_1(void *self, int64_t a0) {
+	qute_gui_only();
+	return qute_ret_str(static_cast<QTextEdit *>(self)->toMarkdown(QFlags<QTextDocument::MarkdownFeature>::fromInt(static_cast<QFlags<QTextDocument::MarkdownFeature>::Int>(a0))));
+}
+void qute_QTextEdit_moveCursor_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QTextEdit *>(self)->moveCursor(static_cast<QTextCursor::MoveOperation>(a0), static_cast<QTextCursor::MoveMode>(a1));
+}
+void qute_QTextEdit_zoomIn_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QTextEdit *>(self)->zoomIn(static_cast<int>(a0));
+}
+void qute_QTextEdit_zoomOut_1(void *self, int a0) {
+	qute_gui_only();
+	static_cast<QTextEdit *>(self)->zoomOut(static_cast<int>(a0));
+}
 void * qute_QTextEdit_textChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::textChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QTextEdit_undoAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::undoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextEdit_redoAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::redoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextEdit_currentCharFormatChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::currentCharFormatChanged, obj, [s](const QTextCharFormat & a0) { void * c0 = static_cast<void *>(new QTextCharFormat(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextEdit_copyAvailable(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::copyAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTextEdit_selectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::selectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
 }
 void * qute_QTextEdit_cursorPositionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTextEdit::cursorPositionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -14640,38 +19232,49 @@ void * qute_QTextEdit_cursorPositionChanged(void *self, uintptr_t id) {
 
 // ---- QTextEditExtraSelection
 void * qute_QTextEditExtraSelection_new(void) {
+	qute_gui_only();
 	return static_cast<QTextEdit::ExtraSelection *>(new QTextEdit::ExtraSelection());
 }
 void qute_QTextEditExtraSelection_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QTextEdit::ExtraSelection *>(self);
 }
 void * qute_QTextEditExtraSelection_get_cursor(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCursor(static_cast<QTextEdit::ExtraSelection *>(self)->cursor));
 }
 void qute_QTextEditExtraSelection_set_cursor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit::ExtraSelection *>(self)->cursor = (a0 ? *static_cast<QTextCursor *>(a0) : QTextCursor());
 }
 void * qute_QTextEditExtraSelection_get_format(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QTextCharFormat(static_cast<QTextEdit::ExtraSelection *>(self)->format));
 }
 void qute_QTextEditExtraSelection_set_format(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTextEdit::ExtraSelection *>(self)->format = (a0 ? *static_cast<QTextCharFormat *>(a0) : QTextCharFormat());
 }
 
 // ---- QTimeEdit
 void * qute_QTimeEdit_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTimeEdit *>(new QTimeEdit(static_cast<QWidget *>(a0)));
 }
 void * qute_QTimeEdit_new_1(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QTimeEdit *>(new QTimeEdit((a0 ? *static_cast<QTime *>(a0) : QTime()), static_cast<QWidget *>(a1)));
 }
 void * qute_QTimeEdit_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTimeEdit *>(static_cast<QObject *>(obj)));
 }
 void qute_QTimeEdit_userTimeChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTimeEdit *>(self)->userTimeChanged((a0 ? *static_cast<QTime *>(a0) : QTime()));
 }
 void * qute_QTimeEdit_userTimeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTimeEdit *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTimeEdit::userTimeChanged, obj, [s](QTime a0) { void * c0 = static_cast<void *>(new QTime(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -14679,143 +19282,185 @@ void * qute_QTimeEdit_userTimeChanged(void *self, uintptr_t id) {
 
 // ---- QToolBar
 void * qute_QToolBar_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QToolBar *>(new QToolBar(static_cast<QWidget *>(a0)));
 }
 void * qute_QToolBar_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return static_cast<QToolBar *>(new QToolBar(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QToolBar_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QToolBar *>(static_cast<QObject *>(obj)));
 }
 void qute_QToolBar_setMovable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->setMovable(static_cast<bool>(a0));
 }
 bool qute_QToolBar_isMovable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QToolBar *>(self)->isMovable());
 }
 void qute_QToolBar_setAllowedAreas(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->setAllowedAreas(QFlags<Qt::ToolBarArea>::fromInt(static_cast<QFlags<Qt::ToolBarArea>::Int>(a0)));
 }
 int64_t qute_QToolBar_allowedAreas(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QToolBar *>(self)->allowedAreas()).toInt());
 }
 bool qute_QToolBar_isAreaAllowed(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QToolBar *>(self)->isAreaAllowed(static_cast<Qt::ToolBarArea>(a0)));
 }
 void qute_QToolBar_setOrientation(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->setOrientation(static_cast<Qt::Orientation>(a0));
 }
 int64_t qute_QToolBar_orientation(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QToolBar *>(self)->orientation());
 }
 void qute_QToolBar_clear(void *self) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->clear();
 }
 void * qute_QToolBar_addSeparator(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->addSeparator());
 }
 void * qute_QToolBar_insertSeparator(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->insertSeparator(static_cast<QAction *>(a0)));
 }
 void * qute_QToolBar_addWidget(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->addWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QToolBar_insertWidget(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->insertWidget(static_cast<QAction *>(a0), static_cast<QWidget *>(a1)));
 }
 qute_rect qute_QToolBar_actionGeometry(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QToolBar *>(self)->actionGeometry(static_cast<QAction *>(a0)));
 }
 void * qute_QToolBar_actionAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->actionAt(qute_to_QPoint(a0)));
 }
 void * qute_QToolBar_toggleViewAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->toggleViewAction());
 }
 qute_size qute_QToolBar_iconSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QToolBar *>(self)->iconSize());
 }
 int64_t qute_QToolBar_toolButtonStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QToolBar *>(self)->toolButtonStyle());
 }
 void * qute_QToolBar_widgetForAction(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBar *>(self)->widgetForAction(static_cast<QAction *>(a0)));
 }
 bool qute_QToolBar_isFloatable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QToolBar *>(self)->isFloatable());
 }
 void qute_QToolBar_setFloatable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->setFloatable(static_cast<bool>(a0));
 }
 bool qute_QToolBar_isFloating(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QToolBar *>(self)->isFloating());
 }
 void qute_QToolBar_setIconSize(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->setIconSize(qute_to_QSize(a0));
 }
 void qute_QToolBar_setToolButtonStyle(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->setToolButtonStyle(static_cast<Qt::ToolButtonStyle>(a0));
 }
 void qute_QToolBar_actionTriggered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->actionTriggered(static_cast<QAction *>(a0));
 }
 void qute_QToolBar_movableChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->movableChanged(static_cast<bool>(a0));
 }
 void qute_QToolBar_allowedAreasChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->allowedAreasChanged(QFlags<Qt::ToolBarArea>::fromInt(static_cast<QFlags<Qt::ToolBarArea>::Int>(a0)));
 }
 void qute_QToolBar_orientationChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->orientationChanged(static_cast<Qt::Orientation>(a0));
 }
 void qute_QToolBar_iconSizeChanged_1(void *self, qute_size a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->iconSizeChanged(qute_to_QSize(a0));
 }
 void qute_QToolBar_toolButtonStyleChanged_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->toolButtonStyleChanged(static_cast<Qt::ToolButtonStyle>(a0));
 }
 void qute_QToolBar_topLevelChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->topLevelChanged(static_cast<bool>(a0));
 }
 void qute_QToolBar_visibilityChanged_1(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QToolBar *>(self)->visibilityChanged(static_cast<bool>(a0));
 }
 void * qute_QToolBar_actionTriggered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::actionTriggered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_movableChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::movableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_allowedAreasChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::allowedAreasChanged, obj, [s](QFlags<Qt::ToolBarArea> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_orientationChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::orientationChanged, obj, [s](Qt::Orientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_iconSizeChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::iconSizeChanged, obj, [s](const QSize & a0) { qute_size c0 = qute_from_QSize(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_toolButtonStyleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::toolButtonStyleChanged, obj, [s](Qt::ToolButtonStyle a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_topLevelChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::topLevelChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QToolBar_visibilityChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBar *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBar::visibilityChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -14823,75 +19468,103 @@ void * qute_QToolBar_visibilityChanged(void *self, uintptr_t id) {
 
 // ---- QToolBox
 void * qute_QToolBox_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QToolBox *>(new QToolBox(static_cast<QWidget *>(a0)));
 }
+void * qute_QToolBox_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QToolBox *>(new QToolBox(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QToolBox_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QToolBox *>(static_cast<QObject *>(obj)));
 }
 int qute_QToolBox_addItem(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->addItem(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len)));
 }
 int qute_QToolBox_addItem_1(void *self, void * a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->addItem(static_cast<QWidget *>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()), QString::fromUtf8(a2, a2_len)));
 }
 int qute_QToolBox_insertItem(void *self, int a0, void * a1, const char *a2, ptrdiff_t a2_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->insertItem(static_cast<int>(a0), static_cast<QWidget *>(a1), QString::fromUtf8(a2, a2_len)));
 }
 int qute_QToolBox_insertItem_1(void *self, int a0, void * a1, void * a2, const char *a3, ptrdiff_t a3_len) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->insertItem(static_cast<int>(a0), static_cast<QWidget *>(a1), (a2 ? *static_cast<QIcon *>(a2) : QIcon()), QString::fromUtf8(a3, a3_len)));
 }
 void qute_QToolBox_removeItem(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->removeItem(static_cast<int>(a0));
 }
 void qute_QToolBox_setItemEnabled(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->setItemEnabled(static_cast<int>(a0), static_cast<bool>(a1));
 }
 bool qute_QToolBox_isItemEnabled(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QToolBox *>(self)->isItemEnabled(static_cast<int>(a0)));
 }
 void qute_QToolBox_setItemText(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->setItemText(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QToolBox_itemText(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QToolBox *>(self)->itemText(static_cast<int>(a0)));
 }
 void qute_QToolBox_setItemIcon(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->setItemIcon(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()));
 }
 void * qute_QToolBox_itemIcon(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QToolBox *>(self)->itemIcon(static_cast<int>(a0))));
 }
 void qute_QToolBox_setItemToolTip(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->setItemToolTip(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QToolBox_itemToolTip(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QToolBox *>(self)->itemToolTip(static_cast<int>(a0)));
 }
 int qute_QToolBox_currentIndex(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->currentIndex());
 }
 void * qute_QToolBox_currentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBox *>(self)->currentWidget());
 }
 void * qute_QToolBox_widget(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolBox *>(self)->widget(static_cast<int>(a0)));
 }
 int qute_QToolBox_indexOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->indexOf(static_cast<QWidget *>(a0)));
 }
 int qute_QToolBox_count(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QToolBox *>(self)->count());
 }
 void qute_QToolBox_setCurrentIndex(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->setCurrentIndex(static_cast<int>(a0));
 }
 void qute_QToolBox_setCurrentWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->setCurrentWidget(static_cast<QWidget *>(a0));
 }
 void qute_QToolBox_currentChanged_1(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QToolBox *>(self)->currentChanged(static_cast<int>(a0));
 }
 void * qute_QToolBox_currentChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolBox *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolBox::currentChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -14899,54 +19572,71 @@ void * qute_QToolBox_currentChanged(void *self, uintptr_t id) {
 
 // ---- QToolButton
 void * qute_QToolButton_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QToolButton *>(new QToolButton(static_cast<QWidget *>(a0)));
 }
 void * qute_QToolButton_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QToolButton *>(static_cast<QObject *>(obj)));
 }
 int64_t qute_QToolButton_toolButtonStyle(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QToolButton *>(self)->toolButtonStyle());
 }
 int64_t qute_QToolButton_arrowType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QToolButton *>(self)->arrowType());
 }
 void qute_QToolButton_setArrowType(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->setArrowType(static_cast<Qt::ArrowType>(a0));
 }
 void qute_QToolButton_setMenu(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->setMenu(static_cast<QMenu *>(a0));
 }
 void * qute_QToolButton_menu(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolButton *>(self)->menu());
 }
 void qute_QToolButton_setPopupMode(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->setPopupMode(static_cast<QToolButton::ToolButtonPopupMode>(a0));
 }
 int64_t qute_QToolButton_popupMode(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QToolButton *>(self)->popupMode());
 }
 void * qute_QToolButton_defaultAction(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QToolButton *>(self)->defaultAction());
 }
 void qute_QToolButton_setAutoRaise(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->setAutoRaise(static_cast<bool>(a0));
 }
 bool qute_QToolButton_autoRaise(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QToolButton *>(self)->autoRaise());
 }
 void qute_QToolButton_showMenu(void *self) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->showMenu();
 }
 void qute_QToolButton_setToolButtonStyle(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->setToolButtonStyle(static_cast<Qt::ToolButtonStyle>(a0));
 }
 void qute_QToolButton_setDefaultAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->setDefaultAction(static_cast<QAction *>(a0));
 }
 void qute_QToolButton_triggered_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QToolButton *>(self)->triggered(static_cast<QAction *>(a0));
 }
 void * qute_QToolButton_triggered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QToolButton *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QToolButton::triggered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -14954,211 +19644,291 @@ void * qute_QToolButton_triggered(void *self, uintptr_t id) {
 
 // ---- QToolTip
 void qute_QToolTip_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QToolTip *>(self);
 }
 void qute_QToolTip_showText(qute_point a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	QToolTip::showText(qute_to_QPoint(a0), QString::fromUtf8(a1, a1_len));
 }
 void qute_QToolTip_hideText(void) {
+	qute_gui_only();
 	QToolTip::hideText();
 }
 bool qute_QToolTip_isVisible(void) {
+	qute_gui_only();
 	return static_cast<bool>(QToolTip::isVisible());
 }
 qute_str qute_QToolTip_text(void) {
+	qute_gui_only();
 	return qute_ret_str(QToolTip::text());
 }
 void * qute_QToolTip_palette(void) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(QToolTip::palette()));
 }
 void qute_QToolTip_setPalette(void * a0) {
+	qute_gui_only();
 	QToolTip::setPalette((a0 ? *static_cast<QPalette *>(a0) : QPalette()));
 }
 void * qute_QToolTip_font(void) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(QToolTip::font()));
 }
 void qute_QToolTip_setFont(void * a0) {
+	qute_gui_only();
 	QToolTip::setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
+}
+void qute_QToolTip_showText_1(qute_point a0, const char *a1, ptrdiff_t a1_len, void * a2, qute_rect a3, int a4) {
+	qute_gui_only();
+	QToolTip::showText(qute_to_QPoint(a0), QString::fromUtf8(a1, a1_len), static_cast<QWidget *>(a2), qute_to_QRect(a3), static_cast<int>(a4));
 }
 
 // ---- QTreeView
 void * qute_QTreeView_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTreeView *>(new QTreeView(static_cast<QWidget *>(a0)));
 }
 void * qute_QTreeView_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTreeView *>(static_cast<QObject *>(obj)));
 }
 void * qute_QTreeView_header(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeView *>(self)->header());
 }
 void qute_QTreeView_setHeader(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setHeader(static_cast<QHeaderView *>(a0));
 }
 int qute_QTreeView_autoExpandDelay(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeView *>(self)->autoExpandDelay());
 }
 void qute_QTreeView_setAutoExpandDelay(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setAutoExpandDelay(static_cast<int>(a0));
 }
 int qute_QTreeView_indentation(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeView *>(self)->indentation());
 }
 void qute_QTreeView_setIndentation(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setIndentation(static_cast<int>(a0));
 }
 void qute_QTreeView_resetIndentation(void *self) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->resetIndentation();
 }
 bool qute_QTreeView_rootIsDecorated(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->rootIsDecorated());
 }
 void qute_QTreeView_setRootIsDecorated(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setRootIsDecorated(static_cast<bool>(a0));
 }
 bool qute_QTreeView_uniformRowHeights(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->uniformRowHeights());
 }
 void qute_QTreeView_setUniformRowHeights(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setUniformRowHeights(static_cast<bool>(a0));
 }
 bool qute_QTreeView_itemsExpandable(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->itemsExpandable());
 }
 void qute_QTreeView_setItemsExpandable(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setItemsExpandable(static_cast<bool>(a0));
 }
 bool qute_QTreeView_expandsOnDoubleClick(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->expandsOnDoubleClick());
 }
 void qute_QTreeView_setExpandsOnDoubleClick(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setExpandsOnDoubleClick(static_cast<bool>(a0));
 }
 int qute_QTreeView_columnViewportPosition(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeView *>(self)->columnViewportPosition(static_cast<int>(a0)));
 }
 int qute_QTreeView_columnWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeView *>(self)->columnWidth(static_cast<int>(a0)));
 }
 void qute_QTreeView_setColumnWidth(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setColumnWidth(static_cast<int>(a0), static_cast<int>(a1));
 }
 int qute_QTreeView_columnAt(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeView *>(self)->columnAt(static_cast<int>(a0)));
 }
 bool qute_QTreeView_isColumnHidden(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isColumnHidden(static_cast<int>(a0)));
 }
 void qute_QTreeView_setColumnHidden(void *self, int a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setColumnHidden(static_cast<int>(a0), static_cast<bool>(a1));
 }
 bool qute_QTreeView_isHeaderHidden(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isHeaderHidden());
 }
 void qute_QTreeView_setHeaderHidden(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setHeaderHidden(static_cast<bool>(a0));
 }
 bool qute_QTreeView_isRowHidden(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isRowHidden(static_cast<int>(a0), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex())));
 }
 void qute_QTreeView_setRowHidden(void *self, int a0, void * a1, bool a2) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setRowHidden(static_cast<int>(a0), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex()), static_cast<bool>(a2));
 }
 bool qute_QTreeView_isFirstColumnSpanned(void *self, int a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isFirstColumnSpanned(static_cast<int>(a0), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex())));
 }
 void qute_QTreeView_setFirstColumnSpanned(void *self, int a0, void * a1, bool a2) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setFirstColumnSpanned(static_cast<int>(a0), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex()), static_cast<bool>(a2));
 }
 bool qute_QTreeView_isExpanded(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isExpanded((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void qute_QTreeView_setExpanded(void *self, void * a0, bool a1) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setExpanded((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()), static_cast<bool>(a1));
 }
 void qute_QTreeView_setSortingEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setSortingEnabled(static_cast<bool>(a0));
 }
 bool qute_QTreeView_isSortingEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isSortingEnabled());
 }
 void qute_QTreeView_setAnimated(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setAnimated(static_cast<bool>(a0));
 }
 bool qute_QTreeView_isAnimated(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->isAnimated());
 }
 void qute_QTreeView_setAllColumnsShowFocus(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setAllColumnsShowFocus(static_cast<bool>(a0));
 }
 bool qute_QTreeView_allColumnsShowFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->allColumnsShowFocus());
 }
 void qute_QTreeView_setWordWrap(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setWordWrap(static_cast<bool>(a0));
 }
 bool qute_QTreeView_wordWrap(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeView *>(self)->wordWrap());
 }
 void qute_QTreeView_setTreePosition(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->setTreePosition(static_cast<int>(a0));
 }
 int qute_QTreeView_treePosition(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeView *>(self)->treePosition());
 }
 qute_rect qute_QTreeView_itemDecorationRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QTreeView *>(self)->itemDecorationRect((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 void * qute_QTreeView_indexAbove(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QTreeView *>(self)->indexAbove((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()))));
 }
 void * qute_QTreeView_indexBelow(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QTreeView *>(self)->indexBelow((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()))));
 }
 void qute_QTreeView_dataChanged(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->dataChanged((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex()));
 }
 void qute_QTreeView_hideColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->hideColumn(static_cast<int>(a0));
 }
 void qute_QTreeView_showColumn(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->showColumn(static_cast<int>(a0));
 }
 void qute_QTreeView_expand(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->expand((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QTreeView_collapse(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->collapse((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QTreeView_resizeColumnToContents(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->resizeColumnToContents(static_cast<int>(a0));
 }
 void qute_QTreeView_sortByColumn(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->sortByColumn(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
 }
 void qute_QTreeView_expandAll(void *self) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->expandAll();
 }
 void qute_QTreeView_expandRecursively(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->expandRecursively((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QTreeView_collapseAll(void *self) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->collapseAll();
 }
 void qute_QTreeView_expandToDepth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->expandToDepth(static_cast<int>(a0));
 }
 void qute_QTreeView_expanded_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->expanded((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
 void qute_QTreeView_collapsed_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeView *>(self)->collapsed((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()));
 }
+void qute_QTreeView_dataChanged_1(void *self, void * a0, void * a1, const void *a2, ptrdiff_t a2_n) {
+	qute_gui_only();
+	static_cast<QTreeView *>(self)->dataChanged((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()), (a1 ? *static_cast<QModelIndex *>(a1) : QModelIndex()), [&] { QList<int> l; auto d = static_cast<int const *>(a2); l.reserve(a2_n); for (ptrdiff_t i = 0; i < a2_n; i++) l.append(static_cast<int>(d[i])); return l; }());
+}
+void qute_QTreeView_expandRecursively_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QTreeView *>(self)->expandRecursively((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex()), static_cast<int>(a1));
+}
 void * qute_QTreeView_expanded(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeView::expanded, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeView_collapsed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeView *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeView::collapsed, obj, [s](const QModelIndex & a0) { void * c0 = static_cast<void *>(new QModelIndex(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -15166,216 +19936,309 @@ void * qute_QTreeView_collapsed(void *self, uintptr_t id) {
 
 // ---- QTreeWidget
 void * qute_QTreeWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QTreeWidget *>(new QTreeWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QTreeWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTreeWidget *>(static_cast<QObject *>(obj)));
 }
 int qute_QTreeWidget_columnCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidget *>(self)->columnCount());
 }
 void qute_QTreeWidget_setColumnCount(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setColumnCount(static_cast<int>(a0));
 }
 void * qute_QTreeWidget_invisibleRootItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->invisibleRootItem());
 }
 void * qute_QTreeWidget_topLevelItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->topLevelItem(static_cast<int>(a0)));
 }
 int qute_QTreeWidget_topLevelItemCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidget *>(self)->topLevelItemCount());
 }
 void qute_QTreeWidget_insertTopLevelItem(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->insertTopLevelItem(static_cast<int>(a0), static_cast<QTreeWidgetItem *>(a1));
 }
 void qute_QTreeWidget_addTopLevelItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->addTopLevelItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void * qute_QTreeWidget_takeTopLevelItem(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->takeTopLevelItem(static_cast<int>(a0)));
 }
 int qute_QTreeWidget_indexOfTopLevelItem(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidget *>(self)->indexOfTopLevelItem(static_cast<QTreeWidgetItem *>(a0)));
 }
 void qute_QTreeWidget_insertTopLevelItems(void *self, int a0, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->insertTopLevelItems(static_cast<int>(a0), [&] { QList<QTreeWidgetItem *> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(static_cast<QTreeWidgetItem *>(d[i])); return l; }());
 }
 void qute_QTreeWidget_addTopLevelItems(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->addTopLevelItems([&] { QList<QTreeWidgetItem *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QTreeWidgetItem *>(d[i])); return l; }());
 }
 void * qute_QTreeWidget_headerItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->headerItem());
 }
 void qute_QTreeWidget_setHeaderItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setHeaderItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_setHeaderLabels(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setHeaderLabels(qute_qstrlist(a0, a0_lens, a0_n));
 }
 void qute_QTreeWidget_setHeaderLabel(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setHeaderLabel(QString::fromUtf8(a0, a0_len));
 }
 void * qute_QTreeWidget_currentItem(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->currentItem());
 }
 int qute_QTreeWidget_currentColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidget *>(self)->currentColumn());
 }
 void qute_QTreeWidget_setCurrentItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setCurrentItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_setCurrentItem_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setCurrentItem(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_setCurrentItem_2(void *self, void * a0, int a1, int64_t a2) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setCurrentItem(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1), QFlags<QItemSelectionModel::SelectionFlag>::fromInt(static_cast<QFlags<QItemSelectionModel::SelectionFlag>::Int>(a2)));
 }
 void * qute_QTreeWidget_itemAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->itemAt(qute_to_QPoint(a0)));
 }
 qute_rect qute_QTreeWidget_visualItemRect(void *self, void * a0) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QTreeWidget *>(self)->visualItemRect(static_cast<QTreeWidgetItem *>(a0)));
 }
 int qute_QTreeWidget_sortColumn(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidget *>(self)->sortColumn());
 }
 void qute_QTreeWidget_sortItems(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->sortItems(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
 }
 void qute_QTreeWidget_editItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->editItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_openPersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->openPersistentEditor(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_closePersistentEditor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->closePersistentEditor(static_cast<QTreeWidgetItem *>(a0));
 }
 bool qute_QTreeWidget_isPersistentEditorOpen(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeWidget *>(self)->isPersistentEditorOpen(static_cast<QTreeWidgetItem *>(a0)));
 }
 void * qute_QTreeWidget_itemWidget(void *self, void * a0, int a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->itemWidget(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1)));
 }
 void qute_QTreeWidget_setItemWidget(void *self, void * a0, int a1, void * a2) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setItemWidget(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1), static_cast<QWidget *>(a2));
 }
 void qute_QTreeWidget_removeItemWidget(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->removeItemWidget(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 qute_list qute_QTreeWidget_selectedItems(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTreeWidget *>(self)->selectedItems(), [](const auto &v) { return (void *)(v); });
 }
 qute_list qute_QTreeWidget_findItems(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTreeWidget *>(self)->findItems(QString::fromUtf8(a0, a0_len), QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a1))), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QTreeWidget_itemAbove(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->itemAbove(static_cast<QTreeWidgetItem *>(a0)));
 }
 void * qute_QTreeWidget_itemBelow(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->itemBelow(static_cast<QTreeWidgetItem *>(a0)));
 }
 void * qute_QTreeWidget_indexFromItem(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<QTreeWidget *>(self)->indexFromItem(static_cast<QTreeWidgetItem *>(a0))));
 }
 void * qute_QTreeWidget_itemFromIndex(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidget *>(self)->itemFromIndex((a0 ? *static_cast<QModelIndex *>(a0) : QModelIndex())));
 }
 int64_t qute_QTreeWidget_supportedDragActions(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTreeWidget *>(self)->supportedDragActions()).toInt());
 }
 void qute_QTreeWidget_setSupportedDragActions(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->setSupportedDragActions(QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a0)));
 }
 void qute_QTreeWidget_scrollToItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->scrollToItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_expandItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->expandItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_collapseItem(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->collapseItem(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_clear(void *self) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->clear();
 }
 void qute_QTreeWidget_itemPressed_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemPressed(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_itemClicked_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemClicked(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_itemDoubleClicked_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemDoubleClicked(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_itemActivated_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemActivated(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_itemEntered_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemEntered(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_itemChanged_1(void *self, void * a0, int a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemChanged(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
 }
 void qute_QTreeWidget_itemExpanded_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemExpanded(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_itemCollapsed_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemCollapsed(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidget_currentItemChanged_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->currentItemChanged(static_cast<QTreeWidgetItem *>(a0), static_cast<QTreeWidgetItem *>(a1));
 }
 void qute_QTreeWidget_itemSelectionChanged_1(void *self) {
+	qute_gui_only();
 	static_cast<QTreeWidget *>(self)->itemSelectionChanged();
 }
+void qute_QTreeWidget_editItem_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QTreeWidget *>(self)->editItem(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
+}
+void qute_QTreeWidget_openPersistentEditor_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QTreeWidget *>(self)->openPersistentEditor(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
+}
+void qute_QTreeWidget_closePersistentEditor_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	static_cast<QTreeWidget *>(self)->closePersistentEditor(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1));
+}
+bool qute_QTreeWidget_isPersistentEditorOpen_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QTreeWidget *>(self)->isPersistentEditorOpen(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1)));
+}
+qute_list qute_QTreeWidget_findItems_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1, int a2) {
+	qute_gui_only();
+	return qute_ret_list<void *>(static_cast<QTreeWidget *>(self)->findItems(QString::fromUtf8(a0, a0_len), QFlags<Qt::MatchFlag>::fromInt(static_cast<QFlags<Qt::MatchFlag>::Int>(a1)), static_cast<int>(a2)), [](const auto &v) { return (void *)(v); });
+}
+void * qute_QTreeWidget_indexFromItem_1(void *self, void * a0, int a1) {
+	qute_gui_only();
+	return static_cast<void *>(new QModelIndex(static_cast<QTreeWidget *>(self)->indexFromItem(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1))));
+}
+void qute_QTreeWidget_scrollToItem_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QTreeWidget *>(self)->scrollToItem(static_cast<QTreeWidgetItem *>(a0), static_cast<QAbstractItemView::ScrollHint>(a1));
+}
 void * qute_QTreeWidget_itemPressed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemPressed, obj, [s](QTreeWidgetItem * a0, int a1) { void * c0 = (void *)(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemClicked, obj, [s](QTreeWidgetItem * a0, int a1) { void * c0 = (void *)(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemDoubleClicked(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemDoubleClicked, obj, [s](QTreeWidgetItem * a0, int a1) { void * c0 = (void *)(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemActivated(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemActivated, obj, [s](QTreeWidgetItem * a0, int a1) { void * c0 = (void *)(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemEntered(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemEntered, obj, [s](QTreeWidgetItem * a0, int a1) { void * c0 = (void *)(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemChanged, obj, [s](QTreeWidgetItem * a0, int a1) { void * c0 = (void *)(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemExpanded(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemExpanded, obj, [s](QTreeWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemCollapsed(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemCollapsed, obj, [s](QTreeWidgetItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_currentItemChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::currentItemChanged, obj, [s](QTreeWidgetItem * a0, QTreeWidgetItem * a1) { void * c0 = (void *)(a0); void * c1 = (void *)(a1); void *args[] = {&c0, &c1}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QTreeWidget_itemSelectionChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTreeWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QTreeWidget::itemSelectionChanged, obj, [s]() {  qute_qtwidgets_signal(s->id, nullptr); }));
@@ -15383,1096 +20246,1529 @@ void * qute_QTreeWidget_itemSelectionChanged(void *self, uintptr_t id) {
 
 // ---- QTreeWidgetItem
 void * qute_QTreeWidgetItem_new(void) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem());
 }
 void * qute_QTreeWidgetItem_new_1(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(qute_qstrlist(a0, a0_lens, a0_n)));
 }
 void * qute_QTreeWidgetItem_new_2(void * a0) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidget *>(a0)));
 }
 void * qute_QTreeWidgetItem_new_3(void * a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidget *>(a0), qute_qstrlist(a1, a1_lens, a1_n)));
 }
 void * qute_QTreeWidgetItem_new_4(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidget *>(a0), static_cast<QTreeWidgetItem *>(a1)));
 }
 void * qute_QTreeWidgetItem_new_5(void * a0) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidgetItem *>(a0)));
 }
 void * qute_QTreeWidgetItem_new_6(void * a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidgetItem *>(a0), qute_qstrlist(a1, a1_lens, a1_n)));
 }
 void * qute_QTreeWidgetItem_new_7(void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidgetItem *>(a0), static_cast<QTreeWidgetItem *>(a1)));
 }
+void * qute_QTreeWidgetItem_new_8(int a0) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<int>(a0)));
+}
+void * qute_QTreeWidgetItem_new_9(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, int a1) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(qute_qstrlist(a0, a0_lens, a0_n), static_cast<int>(a1)));
+}
+void * qute_QTreeWidgetItem_new_10(void * a0, int a1) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidget *>(a0), static_cast<int>(a1)));
+}
+void * qute_QTreeWidgetItem_new_11(void * a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n, int a2) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidget *>(a0), qute_qstrlist(a1, a1_lens, a1_n), static_cast<int>(a2)));
+}
+void * qute_QTreeWidgetItem_new_12(void * a0, void * a1, int a2) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidget *>(a0), static_cast<QTreeWidgetItem *>(a1), static_cast<int>(a2)));
+}
+void * qute_QTreeWidgetItem_new_13(void * a0, int a1) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidgetItem *>(a0), static_cast<int>(a1)));
+}
+void * qute_QTreeWidgetItem_new_14(void * a0, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n, int a2) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidgetItem *>(a0), qute_qstrlist(a1, a1_lens, a1_n), static_cast<int>(a2)));
+}
+void * qute_QTreeWidgetItem_new_15(void * a0, void * a1, int a2) {
+	qute_gui_only();
+	return static_cast<QTreeWidgetItem *>(new qute_QTreeWidgetItem(static_cast<QTreeWidgetItem *>(a0), static_cast<QTreeWidgetItem *>(a1), static_cast<int>(a2)));
+}
 void qute_QTreeWidgetItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QTreeWidgetItem *>(self);
 }
 void * qute_QTreeWidgetItem_clone(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidgetItem *>(self)->clone());
 }
 void * qute_QTreeWidgetItem_treeWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidgetItem *>(self)->treeWidget());
 }
 void qute_QTreeWidgetItem_setSelected(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setSelected(static_cast<bool>(a0));
 }
 bool qute_QTreeWidgetItem_isSelected(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeWidgetItem *>(self)->isSelected());
 }
 void qute_QTreeWidgetItem_setHidden(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setHidden(static_cast<bool>(a0));
 }
 bool qute_QTreeWidgetItem_isHidden(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeWidgetItem *>(self)->isHidden());
 }
 void qute_QTreeWidgetItem_setExpanded(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setExpanded(static_cast<bool>(a0));
 }
 bool qute_QTreeWidgetItem_isExpanded(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeWidgetItem *>(self)->isExpanded());
 }
 void qute_QTreeWidgetItem_setFirstColumnSpanned(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setFirstColumnSpanned(static_cast<bool>(a0));
 }
 bool qute_QTreeWidgetItem_isFirstColumnSpanned(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeWidgetItem *>(self)->isFirstColumnSpanned());
 }
 void qute_QTreeWidgetItem_setDisabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setDisabled(static_cast<bool>(a0));
 }
 bool qute_QTreeWidgetItem_isDisabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QTreeWidgetItem *>(self)->isDisabled());
 }
 void qute_QTreeWidgetItem_setChildIndicatorPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setChildIndicatorPolicy(static_cast<QTreeWidgetItem::ChildIndicatorPolicy>(a0));
 }
 int64_t qute_QTreeWidgetItem_childIndicatorPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTreeWidgetItem *>(self)->childIndicatorPolicy());
 }
 int64_t qute_QTreeWidgetItem_flags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QTreeWidgetItem *>(self)->flags()).toInt());
 }
 void qute_QTreeWidgetItem_setFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setFlags(QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(a0)));
 }
 qute_str qute_QTreeWidgetItem_text(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTreeWidgetItem *>(self)->text(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setText(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setText(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void * qute_QTreeWidgetItem_icon(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QTreeWidgetItem *>(self)->icon(static_cast<int>(a0))));
 }
 void qute_QTreeWidgetItem_setIcon(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setIcon(static_cast<int>(a0), (a1 ? *static_cast<QIcon *>(a1) : QIcon()));
 }
 qute_str qute_QTreeWidgetItem_statusTip(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTreeWidgetItem *>(self)->statusTip(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setStatusTip(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setStatusTip(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QTreeWidgetItem_toolTip(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTreeWidgetItem *>(self)->toolTip(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setToolTip(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setToolTip(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 qute_str qute_QTreeWidgetItem_whatsThis(void *self, int a0) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QTreeWidgetItem *>(self)->whatsThis(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setWhatsThis(void *self, int a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setWhatsThis(static_cast<int>(a0), QString::fromUtf8(a1, a1_len));
 }
 void * qute_QTreeWidgetItem_font(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QTreeWidgetItem *>(self)->font(static_cast<int>(a0))));
 }
 void qute_QTreeWidgetItem_setFont(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setFont(static_cast<int>(a0), (a1 ? *static_cast<QFont *>(a1) : QFont()));
 }
 int qute_QTreeWidgetItem_textAlignment(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidgetItem *>(self)->textAlignment(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setTextAlignment(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setTextAlignment(static_cast<int>(a0), QFlags<Qt::AlignmentFlag>::fromInt(static_cast<QFlags<Qt::AlignmentFlag>::Int>(a1)));
 }
 void * qute_QTreeWidgetItem_background(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QTreeWidgetItem *>(self)->background(static_cast<int>(a0))));
 }
 void qute_QTreeWidgetItem_setBackground(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setBackground(static_cast<int>(a0), (a1 ? *static_cast<QBrush *>(a1) : QBrush()));
 }
 void * qute_QTreeWidgetItem_foreground(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<void *>(new QBrush(static_cast<QTreeWidgetItem *>(self)->foreground(static_cast<int>(a0))));
 }
 void qute_QTreeWidgetItem_setForeground(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setForeground(static_cast<int>(a0), (a1 ? *static_cast<QBrush *>(a1) : QBrush()));
 }
 int64_t qute_QTreeWidgetItem_checkState(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QTreeWidgetItem *>(self)->checkState(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setCheckState(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setCheckState(static_cast<int>(a0), static_cast<Qt::CheckState>(a1));
 }
 qute_size qute_QTreeWidgetItem_sizeHint(void *self, int a0) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QTreeWidgetItem *>(self)->sizeHint(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_setSizeHint(void *self, int a0, qute_size a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setSizeHint(static_cast<int>(a0), qute_to_QSize(a1));
 }
 void * qute_QTreeWidgetItem_data(void *self, int a0, int a1) {
+	qute_gui_only();
 	return static_cast<void *>(new QVariant(static_cast<QTreeWidgetItem *>(self)->data(static_cast<int>(a0), static_cast<int>(a1))));
 }
 void qute_QTreeWidgetItem_setData(void *self, int a0, int a1, void * a2) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->setData(static_cast<int>(a0), static_cast<int>(a1), (a2 ? *static_cast<QVariant *>(a2) : QVariant()));
 }
 void qute_QTreeWidgetItem_read(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->read(*static_cast<QDataStream *>(a0));
 }
 void qute_QTreeWidgetItem_write(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->write(*static_cast<QDataStream *>(a0));
 }
 void * qute_QTreeWidgetItem_parent(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidgetItem *>(self)->parent());
 }
 void * qute_QTreeWidgetItem_child(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidgetItem *>(self)->child(static_cast<int>(a0)));
 }
 int qute_QTreeWidgetItem_childCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidgetItem *>(self)->childCount());
 }
 int qute_QTreeWidgetItem_columnCount(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidgetItem *>(self)->columnCount());
 }
 int qute_QTreeWidgetItem_indexOfChild(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidgetItem *>(self)->indexOfChild(static_cast<QTreeWidgetItem *>(a0)));
 }
 void qute_QTreeWidgetItem_addChild(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->addChild(static_cast<QTreeWidgetItem *>(a0));
 }
 void qute_QTreeWidgetItem_insertChild(void *self, int a0, void * a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->insertChild(static_cast<int>(a0), static_cast<QTreeWidgetItem *>(a1));
 }
 void qute_QTreeWidgetItem_removeChild(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->removeChild(static_cast<QTreeWidgetItem *>(a0));
 }
 void * qute_QTreeWidgetItem_takeChild(void *self, int a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QTreeWidgetItem *>(self)->takeChild(static_cast<int>(a0)));
 }
 void qute_QTreeWidgetItem_addChildren(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->addChildren([&] { QList<QTreeWidgetItem *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QTreeWidgetItem *>(d[i])); return l; }());
 }
 void qute_QTreeWidgetItem_insertChildren(void *self, int a0, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->insertChildren(static_cast<int>(a0), [&] { QList<QTreeWidgetItem *> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(static_cast<QTreeWidgetItem *>(d[i])); return l; }());
 }
 qute_list qute_QTreeWidgetItem_takeChildren(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QTreeWidgetItem *>(self)->takeChildren(), [](const auto &v) { return (void *)(v); });
 }
 int qute_QTreeWidgetItem_type(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QTreeWidgetItem *>(self)->type());
 }
 void qute_QTreeWidgetItem_sortChildren(void *self, int a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QTreeWidgetItem *>(self)->sortChildren(static_cast<int>(a0), static_cast<Qt::SortOrder>(a1));
 }
 
 // ---- QVBoxLayout
 void * qute_QVBoxLayout_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QVBoxLayout *>(new QVBoxLayout(static_cast<QWidget *>(a0)));
 }
 void * qute_QVBoxLayout_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QVBoxLayout *>(static_cast<QObject *>(obj)));
 }
 
 // ---- QWidget
 void * qute_QWidget_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QWidget *>(new QWidget(static_cast<QWidget *>(a0)));
 }
+void * qute_QWidget_new_1(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QWidget *>(new QWidget(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+}
 void * qute_QWidget_new_shim(void * a0) {
+	qute_gui_only();
 	return static_cast<QWidget *>(new qute_QWidget(static_cast<QWidget *>(a0)));
 }
 void qute_QWidget_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
 	auto s = static_cast<qute_QWidget *>(static_cast<QWidget *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
 void qute_QWidget_super_0(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_0(static_cast<bool>(a0));
 }
 qute_size qute_QWidget_super_1(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_1());
 }
 qute_size qute_QWidget_super_2(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_2());
 }
 int qute_QWidget_super_3(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_3(static_cast<int>(a0)));
 }
 bool qute_QWidget_super_4(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_4());
 }
 bool qute_QWidget_super_5(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_5(static_cast<QEvent *>(a0)));
 }
 void qute_QWidget_super_6(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_6(static_cast<QMouseEvent *>(a0));
 }
 void qute_QWidget_super_7(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_7(static_cast<QMouseEvent *>(a0));
 }
 void qute_QWidget_super_8(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_8(static_cast<QMouseEvent *>(a0));
 }
 void qute_QWidget_super_9(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_9(static_cast<QMouseEvent *>(a0));
 }
 void qute_QWidget_super_10(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_10(static_cast<QWheelEvent *>(a0));
 }
 void qute_QWidget_super_11(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_11(static_cast<QKeyEvent *>(a0));
 }
 void qute_QWidget_super_12(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_12(static_cast<QKeyEvent *>(a0));
 }
 void qute_QWidget_super_13(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_13(static_cast<QFocusEvent *>(a0));
 }
 void qute_QWidget_super_14(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_14(static_cast<QFocusEvent *>(a0));
 }
 void qute_QWidget_super_15(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_15(static_cast<QEnterEvent *>(a0));
 }
 void qute_QWidget_super_16(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_16(static_cast<QEvent *>(a0));
 }
 void qute_QWidget_super_17(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_17(static_cast<QPaintEvent *>(a0));
 }
 void qute_QWidget_super_18(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_18(static_cast<QMoveEvent *>(a0));
 }
 void qute_QWidget_super_19(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_19(static_cast<QResizeEvent *>(a0));
 }
 void qute_QWidget_super_20(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_20(static_cast<QCloseEvent *>(a0));
 }
 void qute_QWidget_super_21(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_21(static_cast<QContextMenuEvent *>(a0));
 }
 void qute_QWidget_super_22(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_22(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QWidget_super_23(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_23(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QWidget_super_24(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_24(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QWidget_super_25(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_25(static_cast<QDropEvent *>(a0));
 }
 void qute_QWidget_super_26(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_26(static_cast<QShowEvent *>(a0));
 }
 void qute_QWidget_super_27(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_27(static_cast<QHideEvent *>(a0));
 }
 void qute_QWidget_super_28(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_28(static_cast<QEvent *>(a0));
 }
 bool qute_QWidget_super_29(void *self, bool a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_29(static_cast<bool>(a0)));
 }
 bool qute_QWidget_super_30(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_30(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QWidget_super_31(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_31(static_cast<QTimerEvent *>(a0));
 }
 void qute_QWidget_super_32(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_32(static_cast<QChildEvent *>(a0));
 }
 void qute_QWidget_super_33(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->qute_super_33(static_cast<QEvent *>(a0));
 }
 void qute_QWidget_prot_updateMicroFocus(void *self) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->updateMicroFocus();
 }
 void qute_QWidget_prot_create(void *self) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->create();
 }
 void qute_QWidget_prot_destroy(void *self) {
+	qute_gui_only();
 	static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->destroy();
 }
 bool qute_QWidget_prot_focusNextChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->focusNextChild());
 }
 bool qute_QWidget_prot_focusPreviousChild(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->focusPreviousChild());
 }
 double qute_QWidget_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<qute_QWidget *>(static_cast<QWidget *>(self))->getDecodedMetricF(static_cast<QPaintDevice::PaintDeviceMetric>(a0), static_cast<QPaintDevice::PaintDeviceMetric>(a1)));
 }
 void * qute_QWidget_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWidget *>(static_cast<QObject *>(obj)));
 }
 void * qute_QWidget_as_QPaintDevice(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(static_cast<QPaintDevice *>(static_cast<QWidget *>(self)));
 }
 unsigned long long qute_QWidget_winId(void *self) {
+	qute_gui_only();
 	return static_cast<unsigned long long>(static_cast<QWidget *>(self)->winId());
 }
 void qute_QWidget_createWinId(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->createWinId();
 }
 unsigned long long qute_QWidget_internalWinId(void *self) {
+	qute_gui_only();
 	return static_cast<unsigned long long>(static_cast<QWidget *>(self)->internalWinId());
 }
 unsigned long long qute_QWidget_effectiveWinId(void *self) {
+	qute_gui_only();
 	return static_cast<unsigned long long>(static_cast<QWidget *>(self)->effectiveWinId());
 }
 void * qute_QWidget_style(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->style());
 }
 void qute_QWidget_setStyle(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setStyle(static_cast<QStyle *>(a0));
 }
 bool qute_QWidget_isWindow(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isWindow());
 }
 bool qute_QWidget_isModal(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isModal());
 }
 int64_t qute_QWidget_windowModality(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->windowModality());
 }
 void qute_QWidget_setWindowModality(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowModality(static_cast<Qt::WindowModality>(a0));
 }
 bool qute_QWidget_isEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isEnabled());
 }
 bool qute_QWidget_isEnabledTo(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isEnabledTo(static_cast<QWidget *>(a0)));
 }
 void qute_QWidget_setEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setEnabled(static_cast<bool>(a0));
 }
 void qute_QWidget_setDisabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setDisabled(static_cast<bool>(a0));
 }
 void qute_QWidget_setWindowModified(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowModified(static_cast<bool>(a0));
 }
 qute_rect qute_QWidget_frameGeometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QWidget *>(self)->frameGeometry());
 }
 qute_rect qute_QWidget_geometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QWidget *>(self)->geometry());
 }
 qute_rect qute_QWidget_normalGeometry(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QWidget *>(self)->normalGeometry());
 }
 int qute_QWidget_x(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->x());
 }
 int qute_QWidget_y(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->y());
 }
 qute_point qute_QWidget_pos(void *self) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->pos());
 }
 qute_size qute_QWidget_frameSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->frameSize());
 }
 qute_size qute_QWidget_size(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->size());
 }
 int qute_QWidget_width(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->width());
 }
 int qute_QWidget_height(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->height());
 }
 qute_rect qute_QWidget_rect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QWidget *>(self)->rect());
 }
 qute_rect qute_QWidget_childrenRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QWidget *>(self)->childrenRect());
 }
 void * qute_QWidget_childrenRegion(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QRegion(static_cast<QWidget *>(self)->childrenRegion()));
 }
 qute_size qute_QWidget_minimumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->minimumSize());
 }
 qute_size qute_QWidget_maximumSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->maximumSize());
 }
 int qute_QWidget_minimumWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->minimumWidth());
 }
 int qute_QWidget_minimumHeight(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->minimumHeight());
 }
 int qute_QWidget_maximumWidth(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->maximumWidth());
 }
 int qute_QWidget_maximumHeight(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->maximumHeight());
 }
 void qute_QWidget_setMinimumSize(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMinimumSize(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_setMaximumSize(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMaximumSize(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_setMinimumWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMinimumWidth(static_cast<int>(a0));
 }
 void qute_QWidget_setMinimumHeight(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMinimumHeight(static_cast<int>(a0));
 }
 void qute_QWidget_setMaximumWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMaximumWidth(static_cast<int>(a0));
 }
 void qute_QWidget_setMaximumHeight(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMaximumHeight(static_cast<int>(a0));
 }
 qute_size qute_QWidget_sizeIncrement(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->sizeIncrement());
 }
 void qute_QWidget_setSizeIncrement(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setSizeIncrement(static_cast<int>(a0), static_cast<int>(a1));
 }
 qute_size qute_QWidget_baseSize(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->baseSize());
 }
 void qute_QWidget_setBaseSize(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setBaseSize(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_setFixedSize(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFixedSize(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_setFixedWidth(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFixedWidth(static_cast<int>(a0));
 }
 void qute_QWidget_setFixedHeight(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFixedHeight(static_cast<int>(a0));
 }
 qute_pointf qute_QWidget_mapToGlobal(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QWidget *>(self)->mapToGlobal(qute_to_QPointF(a0)));
 }
 qute_point qute_QWidget_mapToGlobal_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->mapToGlobal(qute_to_QPoint(a0)));
 }
 qute_pointf qute_QWidget_mapFromGlobal(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QWidget *>(self)->mapFromGlobal(qute_to_QPointF(a0)));
 }
 qute_point qute_QWidget_mapFromGlobal_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->mapFromGlobal(qute_to_QPoint(a0)));
 }
 qute_pointf qute_QWidget_mapToParent(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QWidget *>(self)->mapToParent(qute_to_QPointF(a0)));
 }
 qute_point qute_QWidget_mapToParent_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->mapToParent(qute_to_QPoint(a0)));
 }
 qute_pointf qute_QWidget_mapFromParent(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QWidget *>(self)->mapFromParent(qute_to_QPointF(a0)));
 }
 qute_point qute_QWidget_mapFromParent_1(void *self, qute_point a0) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->mapFromParent(qute_to_QPoint(a0)));
 }
 qute_pointf qute_QWidget_mapTo(void *self, void * a0, qute_pointf a1) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QWidget *>(self)->mapTo(static_cast<QWidget *>(a0), qute_to_QPointF(a1)));
 }
 qute_point qute_QWidget_mapTo_1(void *self, void * a0, qute_point a1) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->mapTo(static_cast<QWidget *>(a0), qute_to_QPoint(a1)));
 }
 qute_pointf qute_QWidget_mapFrom(void *self, void * a0, qute_pointf a1) {
+	qute_gui_only();
 	return qute_from_QPointF(static_cast<QWidget *>(self)->mapFrom(static_cast<QWidget *>(a0), qute_to_QPointF(a1)));
 }
 qute_point qute_QWidget_mapFrom_1(void *self, void * a0, qute_point a1) {
+	qute_gui_only();
 	return qute_from_QPoint(static_cast<QWidget *>(self)->mapFrom(static_cast<QWidget *>(a0), qute_to_QPoint(a1)));
 }
 void * qute_QWidget_window(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->window());
 }
 void * qute_QWidget_nativeParentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->nativeParentWidget());
 }
 void * qute_QWidget_topLevelWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->topLevelWidget());
 }
 void * qute_QWidget_palette(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPalette(static_cast<QWidget *>(self)->palette()));
 }
 void qute_QWidget_setPalette(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setPalette((a0 ? *static_cast<QPalette *>(a0) : QPalette()));
 }
 void qute_QWidget_setBackgroundRole(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setBackgroundRole(static_cast<QPalette::ColorRole>(a0));
 }
 int64_t qute_QWidget_backgroundRole(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->backgroundRole());
 }
 void qute_QWidget_setForegroundRole(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setForegroundRole(static_cast<QPalette::ColorRole>(a0));
 }
 int64_t qute_QWidget_foregroundRole(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->foregroundRole());
 }
 void * qute_QWidget_font(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFont(static_cast<QWidget *>(self)->font()));
 }
 void qute_QWidget_setFont(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFont((a0 ? *static_cast<QFont *>(a0) : QFont()));
 }
 void * qute_QWidget_fontMetrics(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFontMetrics(static_cast<QWidget *>(self)->fontMetrics()));
 }
 void * qute_QWidget_fontInfo(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QFontInfo(static_cast<QWidget *>(self)->fontInfo()));
 }
 void * qute_QWidget_cursor(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QCursor(static_cast<QWidget *>(self)->cursor()));
 }
 void qute_QWidget_setCursor(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setCursor((a0 ? *static_cast<QCursor *>(a0) : QCursor()));
 }
 void qute_QWidget_unsetCursor(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->unsetCursor();
 }
 void qute_QWidget_setMouseTracking(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMouseTracking(static_cast<bool>(a0));
 }
 bool qute_QWidget_hasMouseTracking(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->hasMouseTracking());
 }
 bool qute_QWidget_underMouse(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->underMouse());
 }
 void qute_QWidget_setTabletTracking(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setTabletTracking(static_cast<bool>(a0));
 }
 bool qute_QWidget_hasTabletTracking(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->hasTabletTracking());
 }
 void qute_QWidget_setMask(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMask((a0 ? *static_cast<QBitmap *>(a0) : QBitmap()));
 }
 void qute_QWidget_setMask_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setMask((a0 ? *static_cast<QRegion *>(a0) : QRegion()));
 }
 void * qute_QWidget_mask(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QRegion(static_cast<QWidget *>(self)->mask()));
 }
 void qute_QWidget_clearMask(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->clearMask();
 }
 void qute_QWidget_render(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->render(static_cast<QPaintDevice *>(a0));
 }
 void qute_QWidget_render_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->render(static_cast<QPainter *>(a0));
 }
 void * qute_QWidget_grab(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QPixmap(static_cast<QWidget *>(self)->grab()));
 }
 void * qute_QWidget_graphicsEffect(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->graphicsEffect());
 }
 void qute_QWidget_setGraphicsEffect(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setGraphicsEffect(static_cast<QGraphicsEffect *>(a0));
 }
 void qute_QWidget_grabGesture(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->grabGesture(static_cast<Qt::GestureType>(a0));
 }
 void qute_QWidget_ungrabGesture(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->ungrabGesture(static_cast<Qt::GestureType>(a0));
 }
 void qute_QWidget_setWindowTitle(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowTitle(QString::fromUtf8(a0, a0_len));
 }
 void qute_QWidget_setStyleSheet(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setStyleSheet(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_styleSheet(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->styleSheet());
 }
 qute_str qute_QWidget_windowTitle(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->windowTitle());
 }
 void qute_QWidget_setWindowIcon(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowIcon((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 void * qute_QWidget_windowIcon(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QIcon(static_cast<QWidget *>(self)->windowIcon()));
 }
 void qute_QWidget_setWindowIconText(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowIconText(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_windowIconText(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->windowIconText());
 }
 void qute_QWidget_setWindowRole(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowRole(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_windowRole(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->windowRole());
 }
 void qute_QWidget_setWindowFilePath(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowFilePath(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_windowFilePath(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->windowFilePath());
 }
 void qute_QWidget_setWindowOpacity(void *self, double a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowOpacity(static_cast<double>(a0));
 }
 double qute_QWidget_windowOpacity(void *self) {
+	qute_gui_only();
 	return static_cast<double>(static_cast<QWidget *>(self)->windowOpacity());
 }
 bool qute_QWidget_isWindowModified(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isWindowModified());
 }
 void qute_QWidget_setToolTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setToolTip(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_toolTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->toolTip());
 }
 void qute_QWidget_setToolTipDuration(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setToolTipDuration(static_cast<int>(a0));
 }
 int qute_QWidget_toolTipDuration(void *self) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->toolTipDuration());
 }
 void qute_QWidget_setStatusTip(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setStatusTip(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_statusTip(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->statusTip());
 }
 void qute_QWidget_setWhatsThis(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWhatsThis(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_whatsThis(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->whatsThis());
 }
 qute_str qute_QWidget_accessibleName(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->accessibleName());
 }
 void qute_QWidget_setAccessibleName(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setAccessibleName(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_accessibleDescription(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->accessibleDescription());
 }
 void qute_QWidget_setAccessibleDescription(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setAccessibleDescription(QString::fromUtf8(a0, a0_len));
 }
 qute_str qute_QWidget_accessibleIdentifier(void *self) {
+	qute_gui_only();
 	return qute_ret_str(static_cast<QWidget *>(self)->accessibleIdentifier());
 }
 void qute_QWidget_setAccessibleIdentifier(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setAccessibleIdentifier(QString::fromUtf8(a0, a0_len));
 }
 void qute_QWidget_setLayoutDirection(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setLayoutDirection(static_cast<Qt::LayoutDirection>(a0));
 }
 int64_t qute_QWidget_layoutDirection(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->layoutDirection());
 }
 void qute_QWidget_unsetLayoutDirection(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->unsetLayoutDirection();
 }
 void qute_QWidget_setLocale(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setLocale((a0 ? *static_cast<QLocale *>(a0) : QLocale()));
 }
 void * qute_QWidget_locale(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QLocale(static_cast<QWidget *>(self)->locale()));
 }
 void qute_QWidget_unsetLocale(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->unsetLocale();
 }
 bool qute_QWidget_isRightToLeft(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isRightToLeft());
 }
 bool qute_QWidget_isLeftToRight(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isLeftToRight());
 }
 void qute_QWidget_setFocus(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFocus();
 }
 bool qute_QWidget_isActiveWindow(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isActiveWindow());
 }
 void qute_QWidget_activateWindow(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->activateWindow();
 }
 void qute_QWidget_clearFocus(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->clearFocus();
 }
 void qute_QWidget_setFocus_1(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFocus(static_cast<Qt::FocusReason>(a0));
 }
 int64_t qute_QWidget_focusPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->focusPolicy());
 }
 void qute_QWidget_setFocusPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFocusPolicy(static_cast<Qt::FocusPolicy>(a0));
 }
 bool qute_QWidget_hasFocus(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->hasFocus());
 }
 void qute_QWidget_setFocusProxy(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setFocusProxy(static_cast<QWidget *>(a0));
 }
 void * qute_QWidget_focusProxy(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->focusProxy());
 }
 int64_t qute_QWidget_contextMenuPolicy(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->contextMenuPolicy());
 }
 void qute_QWidget_setContextMenuPolicy(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setContextMenuPolicy(static_cast<Qt::ContextMenuPolicy>(a0));
 }
 void qute_QWidget_grabMouse(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->grabMouse();
 }
 void qute_QWidget_grabMouse_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->grabMouse((a0 ? *static_cast<QCursor *>(a0) : QCursor()));
 }
 void qute_QWidget_releaseMouse(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->releaseMouse();
 }
 void qute_QWidget_grabKeyboard(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->grabKeyboard();
 }
 void qute_QWidget_releaseKeyboard(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->releaseKeyboard();
 }
 int qute_QWidget_grabShortcut(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->grabShortcut((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence())));
 }
 void qute_QWidget_releaseShortcut(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->releaseShortcut(static_cast<int>(a0));
 }
 void qute_QWidget_setShortcutEnabled(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setShortcutEnabled(static_cast<int>(a0));
 }
 void qute_QWidget_setShortcutAutoRepeat(void *self, int a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setShortcutAutoRepeat(static_cast<int>(a0));
 }
 bool qute_QWidget_updatesEnabled(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->updatesEnabled());
 }
 void qute_QWidget_setUpdatesEnabled(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setUpdatesEnabled(static_cast<bool>(a0));
 }
 void * qute_QWidget_graphicsProxyWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->graphicsProxyWidget());
 }
 void qute_QWidget_update(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->update();
 }
 void qute_QWidget_repaint(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->repaint();
 }
 void qute_QWidget_update_1(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->update(qute_to_QRect(a0));
 }
 void qute_QWidget_update_2(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->update((a0 ? *static_cast<QRegion *>(a0) : QRegion()));
 }
 void qute_QWidget_repaint_1(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->repaint(qute_to_QRect(a0));
 }
 void qute_QWidget_repaint_2(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->repaint((a0 ? *static_cast<QRegion *>(a0) : QRegion()));
 }
 void qute_QWidget_setVisible(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setVisible(static_cast<bool>(a0));
 }
 void qute_QWidget_setHidden(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setHidden(static_cast<bool>(a0));
 }
 void qute_QWidget_show(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->show();
 }
 void qute_QWidget_hide(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->hide();
 }
 void qute_QWidget_showMinimized(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->showMinimized();
 }
 void qute_QWidget_showMaximized(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->showMaximized();
 }
 void qute_QWidget_showFullScreen(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->showFullScreen();
 }
 void qute_QWidget_showNormal(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->showNormal();
 }
 bool qute_QWidget_close(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->close());
 }
 void qute_QWidget_raise(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->raise();
 }
 void qute_QWidget_lower(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->lower();
 }
 void qute_QWidget_stackUnder(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->stackUnder(static_cast<QWidget *>(a0));
 }
 void qute_QWidget_move(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->move(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_resize(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->resize(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_setGeometry(void *self, qute_rect a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setGeometry(qute_to_QRect(a0));
 }
 qute_str qute_QWidget_saveGeometry(void *self) {
+	qute_gui_only();
 	return qute_ret_bytes(static_cast<QWidget *>(self)->saveGeometry());
 }
 bool qute_QWidget_restoreGeometry(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->restoreGeometry(QByteArray(a0, a0_len)));
 }
 void qute_QWidget_adjustSize(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->adjustSize();
 }
 bool qute_QWidget_isVisible(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isVisible());
 }
 bool qute_QWidget_isVisibleTo(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isVisibleTo(static_cast<QWidget *>(a0)));
 }
 bool qute_QWidget_isHidden(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isHidden());
 }
 bool qute_QWidget_isMinimized(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isMinimized());
 }
 bool qute_QWidget_isMaximized(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isMaximized());
 }
 bool qute_QWidget_isFullScreen(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isFullScreen());
 }
 int64_t qute_QWidget_windowState(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QWidget *>(self)->windowState()).toInt());
 }
 void qute_QWidget_setWindowState(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowState(QFlags<Qt::WindowState>::fromInt(static_cast<QFlags<Qt::WindowState>::Int>(a0)));
 }
 void qute_QWidget_overrideWindowState(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->overrideWindowState(QFlags<Qt::WindowState>::fromInt(static_cast<QFlags<Qt::WindowState>::Int>(a0)));
 }
 qute_size qute_QWidget_sizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->sizeHint());
 }
 qute_size qute_QWidget_minimumSizeHint(void *self) {
+	qute_gui_only();
 	return qute_from_QSize(static_cast<QWidget *>(self)->minimumSizeHint());
 }
 void * qute_QWidget_sizePolicy(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QSizePolicy(static_cast<QWidget *>(self)->sizePolicy()));
 }
 void qute_QWidget_setSizePolicy(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setSizePolicy((a0 ? *static_cast<QSizePolicy *>(a0) : QSizePolicy()));
 }
 void qute_QWidget_setSizePolicy_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setSizePolicy(static_cast<QSizePolicy::Policy>(a0), static_cast<QSizePolicy::Policy>(a1));
 }
 int qute_QWidget_heightForWidth(void *self, int a0) {
+	qute_gui_only();
 	return static_cast<int>(static_cast<QWidget *>(self)->heightForWidth(static_cast<int>(a0)));
 }
 bool qute_QWidget_hasHeightForWidth(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->hasHeightForWidth());
 }
 void * qute_QWidget_visibleRegion(void *self) {
+	qute_gui_only();
 	return static_cast<void *>(new QRegion(static_cast<QWidget *>(self)->visibleRegion()));
 }
 void qute_QWidget_setContentsMargins(void *self, qute_margins a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setContentsMargins(qute_to_QMargins(a0));
 }
 qute_margins qute_QWidget_contentsMargins(void *self) {
+	qute_gui_only();
 	return qute_from_QMargins(static_cast<QWidget *>(self)->contentsMargins());
 }
 qute_rect qute_QWidget_contentsRect(void *self) {
+	qute_gui_only();
 	return qute_from_QRect(static_cast<QWidget *>(self)->contentsRect());
 }
 void * qute_QWidget_layout(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->layout());
 }
 void qute_QWidget_setLayout(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setLayout(static_cast<QLayout *>(a0));
 }
 void qute_QWidget_updateGeometry(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->updateGeometry();
 }
 void qute_QWidget_setParent(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setParent(static_cast<QWidget *>(a0));
 }
 void qute_QWidget_setParent_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setParent(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1)));
 }
 void qute_QWidget_scroll(void *self, int a0, int a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->scroll(static_cast<int>(a0), static_cast<int>(a1));
 }
 void qute_QWidget_scroll_1(void *self, int a0, int a1, qute_rect a2) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->scroll(static_cast<int>(a0), static_cast<int>(a1), qute_to_QRect(a2));
 }
 void * qute_QWidget_focusWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->focusWidget());
 }
 void * qute_QWidget_nextInFocusChain(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->nextInFocusChain());
 }
 void * qute_QWidget_previousInFocusChain(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->previousInFocusChain());
 }
 bool qute_QWidget_acceptDrops(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->acceptDrops());
 }
 void qute_QWidget_setAcceptDrops(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setAcceptDrops(static_cast<bool>(a0));
 }
 void qute_QWidget_addAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->addAction(static_cast<QAction *>(a0));
 }
 void qute_QWidget_addActions(void *self, const void *a0, ptrdiff_t a0_n) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->addActions([&] { QList<QAction *> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(static_cast<QAction *>(d[i])); return l; }());
 }
 void qute_QWidget_insertActions(void *self, void * a0, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->insertActions(static_cast<QAction *>(a0), [&] { QList<QAction *> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(static_cast<QAction *>(d[i])); return l; }());
 }
 void qute_QWidget_insertAction(void *self, void * a0, void * a1) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->insertAction(static_cast<QAction *>(a0), static_cast<QAction *>(a1));
 }
 void qute_QWidget_removeAction(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->removeAction(static_cast<QAction *>(a0));
 }
 qute_list qute_QWidget_actions(void *self) {
+	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<QWidget *>(self)->actions(), [](const auto &v) { return (void *)(v); });
 }
 void * qute_QWidget_addAction_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->addAction(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QWidget_addAction_2(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->addAction((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
 }
 void * qute_QWidget_addAction_3(void *self, const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->addAction(QString::fromUtf8(a0, a0_len), (a1 ? *static_cast<QKeySequence *>(a1) : QKeySequence())));
 }
 void * qute_QWidget_addAction_4(void *self, void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->addAction((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), (a2 ? *static_cast<QKeySequence *>(a2) : QKeySequence())));
 }
 void * qute_QWidget_parentWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->parentWidget());
 }
 void qute_QWidget_setWindowFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowFlags(QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a0)));
 }
 int64_t qute_QWidget_windowFlags(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QWidget *>(self)->windowFlags()).toInt());
 }
 void qute_QWidget_setWindowFlag(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setWindowFlag(static_cast<Qt::WindowType>(a0));
 }
 void qute_QWidget_overrideWindowFlags(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->overrideWindowFlags(QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a0)));
 }
 int64_t qute_QWidget_windowType(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QWidget *>(self)->windowType());
 }
 void * qute_QWidget_childAt(void *self, qute_point a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->childAt(qute_to_QPoint(a0)));
 }
 void * qute_QWidget_childAt_1(void *self, qute_pointf a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->childAt(qute_to_QPointF(a0)));
 }
 void qute_QWidget_setAttribute(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setAttribute(static_cast<Qt::WidgetAttribute>(a0));
 }
 bool qute_QWidget_testAttribute(void *self, int64_t a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->testAttribute(static_cast<Qt::WidgetAttribute>(a0)));
 }
 void qute_QWidget_ensurePolished(void *self) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->ensurePolished();
 }
 bool qute_QWidget_isAncestorOf(void *self, void * a0) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->isAncestorOf(static_cast<QWidget *>(a0)));
 }
 bool qute_QWidget_autoFillBackground(void *self) {
+	qute_gui_only();
 	return static_cast<bool>(static_cast<QWidget *>(self)->autoFillBackground());
 }
 void qute_QWidget_setAutoFillBackground(void *self, bool a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setAutoFillBackground(static_cast<bool>(a0));
 }
 void * qute_QWidget_windowHandle(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->windowHandle());
 }
 void * qute_QWidget_screen(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidget *>(self)->screen());
 }
 void qute_QWidget_setScreen(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setScreen(static_cast<QScreen *>(a0));
 }
 int64_t qute_QWidget_inputMethodHints(void *self) {
+	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QWidget *>(self)->inputMethodHints()).toInt());
 }
 void qute_QWidget_setInputMethodHints(void *self, int64_t a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->setInputMethodHints(QFlags<Qt::InputMethodHint>::fromInt(static_cast<QFlags<Qt::InputMethodHint>::Int>(a0)));
 }
 void qute_QWidget_windowTitleChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->windowTitleChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QWidget_windowIconChanged_1(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->windowIconChanged((a0 ? *static_cast<QIcon *>(a0) : QIcon()));
 }
 void qute_QWidget_windowIconTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->windowIconTextChanged(QString::fromUtf8(a0, a0_len));
 }
 void qute_QWidget_customContextMenuRequested_1(void *self, qute_point a0) {
+	qute_gui_only();
 	static_cast<QWidget *>(self)->customContextMenuRequested(qute_to_QPoint(a0));
 }
+void qute_QWidget_render_2(void *self, void * a0, qute_point a1, void * a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->render(static_cast<QPaintDevice *>(a0), qute_to_QPoint(a1), (a2 ? *static_cast<QRegion *>(a2) : QRegion()), QFlags<QWidget::RenderFlag>::fromInt(static_cast<QFlags<QWidget::RenderFlag>::Int>(a3)));
+}
+void qute_QWidget_render_3(void *self, void * a0, qute_point a1, void * a2, int64_t a3) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->render(static_cast<QPainter *>(a0), qute_to_QPoint(a1), (a2 ? *static_cast<QRegion *>(a2) : QRegion()), QFlags<QWidget::RenderFlag>::fromInt(static_cast<QFlags<QWidget::RenderFlag>::Int>(a3)));
+}
+void * qute_QWidget_grab_1(void *self, qute_rect a0) {
+	qute_gui_only();
+	return static_cast<void *>(new QPixmap(static_cast<QWidget *>(self)->grab(qute_to_QRect(a0))));
+}
+void qute_QWidget_grabGesture_1(void *self, int64_t a0, int64_t a1) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->grabGesture(static_cast<Qt::GestureType>(a0), QFlags<Qt::GestureFlag>::fromInt(static_cast<QFlags<Qt::GestureFlag>::Int>(a1)));
+}
+int qute_QWidget_grabShortcut_1(void *self, void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QWidget *>(self)->grabShortcut((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<Qt::ShortcutContext>(a1)));
+}
+void qute_QWidget_setShortcutEnabled_1(void *self, int a0, bool a1) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->setShortcutEnabled(static_cast<int>(a0), static_cast<bool>(a1));
+}
+void qute_QWidget_setShortcutAutoRepeat_1(void *self, int a0, bool a1) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->setShortcutAutoRepeat(static_cast<int>(a0), static_cast<bool>(a1));
+}
+void qute_QWidget_setWindowFlag_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->setWindowFlag(static_cast<Qt::WindowType>(a0), static_cast<bool>(a1));
+}
+void qute_QWidget_setAttribute_1(void *self, int64_t a0, bool a1) {
+	qute_gui_only();
+	static_cast<QWidget *>(self)->setAttribute(static_cast<Qt::WidgetAttribute>(a0), static_cast<bool>(a1));
+}
 void qute_QWidget_setTabOrder(void * a0, void * a1) {
+	qute_gui_only();
 	QWidget::setTabOrder(static_cast<QWidget *>(a0), static_cast<QWidget *>(a1));
 }
 void * qute_QWidget_mouseGrabber(void) {
+	qute_gui_only();
 	return (void *)(QWidget::mouseGrabber());
 }
 void * qute_QWidget_keyboardGrabber(void) {
+	qute_gui_only();
 	return (void *)(QWidget::keyboardGrabber());
 }
 void * qute_QWidget_find(unsigned long long a0) {
+	qute_gui_only();
 	return (void *)(QWidget::find(static_cast<unsigned long long>(a0)));
 }
 void * qute_QWidget_windowTitleChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QWidget::windowTitleChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QWidget_windowIconChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QWidget::windowIconChanged, obj, [s](const QIcon & a0) { void * c0 = static_cast<void *>(new QIcon(a0)); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QWidget_windowIconTextChanged(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QWidget::windowIconTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
 }
 void * qute_QWidget_customContextMenuRequested(void *self, uintptr_t id) {
+	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWidget *>(self);
 	return new QMetaObject::Connection(QObject::connect(obj, &QWidget::customContextMenuRequested, obj, [s](const QPoint & a0) { qute_point c0 = qute_from_QPoint(a0); void *args[] = {&c0}; qute_qtwidgets_signal(s->id, args); }));
@@ -16480,29 +21776,37 @@ void * qute_QWidget_customContextMenuRequested(void *self, uintptr_t id) {
 
 // ---- QWidgetAction
 void * qute_QWidgetAction_new(void * a0) {
+	qute_gui_only();
 	return static_cast<QWidgetAction *>(new QWidgetAction(static_cast<QObject *>(a0)));
 }
 void * qute_QWidgetAction_cast(void *obj) {
+	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWidgetAction *>(static_cast<QObject *>(obj)));
 }
 void qute_QWidgetAction_setDefaultWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidgetAction *>(self)->setDefaultWidget(static_cast<QWidget *>(a0));
 }
 void * qute_QWidgetAction_defaultWidget(void *self) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidgetAction *>(self)->defaultWidget());
 }
 void * qute_QWidgetAction_requestWidget(void *self, void * a0) {
+	qute_gui_only();
 	return (void *)(static_cast<QWidgetAction *>(self)->requestWidget(static_cast<QWidget *>(a0)));
 }
 void qute_QWidgetAction_releaseWidget(void *self, void * a0) {
+	qute_gui_only();
 	static_cast<QWidgetAction *>(self)->releaseWidget(static_cast<QWidget *>(a0));
 }
 
 // ---- QWidgetItem
 void * qute_QWidgetItem_new(void * a0) {
-	return static_cast<QWidgetItem *>(new QWidgetItem(static_cast<QWidget *>(a0)));
+	qute_gui_only();
+	return static_cast<QWidgetItem *>(new qute_QWidgetItem(static_cast<QWidget *>(a0)));
 }
 void qute_QWidgetItem_delete(void *self) {
+	qute_gui_only();
 	delete static_cast<QWidgetItem *>(self);
 }
 

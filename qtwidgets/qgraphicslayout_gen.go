@@ -117,7 +117,7 @@ func (this *QGraphicsLayout) ItemAt(iArg int) *QGraphicsLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayout.ItemAt")
 	r := C.qute_QGraphicsLayout_itemAt(self, C.int(iArg))
 	runtime.KeepAlive(this)
-	return rt.View[QGraphicsLayoutItem](rt.WrapClass(r, "QGraphicsLayoutItem", rt.KeepOrBorrow), r)
+	return rt.View[QGraphicsLayoutItem](rt.WrapClassFrom(r, "QGraphicsLayoutItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
 }
 
 // RemoveAt wraps QGraphicsLayout::removeAt.

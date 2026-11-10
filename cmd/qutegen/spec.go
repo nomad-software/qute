@@ -46,6 +46,15 @@ type classOpts struct {
 	// those objects, so GC cannot free them first, and panics once one of them
 	// is destroyed. A single getter may be written as a plain string.
 	DependsOn depList `yaml:"depends-on"`
+	// Memory says how many bytes one object holds outside the Go heap (a
+	// QImage's pixels), so GC runs as those add up: size is a C++ expression
+	// over $self, changed-by lists the methods after which it is measured again.
+	Memory *memSpec `yaml:"memory"`
+}
+
+type memSpec struct {
+	Size      string   `yaml:"size"`
+	ChangedBy []string `yaml:"changed-by"`
 }
 
 // depSpec is one depends-on entry: Getter, or Cpp with the Class it returns.

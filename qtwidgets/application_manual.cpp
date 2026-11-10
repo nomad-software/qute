@@ -1,31 +1,11 @@
 // Hand-written; qutegen never overwrites *_manual files.
 #include "application_manual.h"
 
-#include <QtCore/QEvent>
-#include <QtCore/QObject>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QWidget>
 
 #include <cstring>
 
-extern "C" void qute_qtwidgets_visibility(void *obj, bool visible);
-
 namespace {
-// Pins Owned top-level windows while they are visible, so GC never deletes a
-// window the user is looking at.
-class VisibilityFilter : public QObject {
-public:
-    using QObject::QObject;
-    bool eventFilter(QObject *o, QEvent *e) override {
-        const auto t = e->type();
-        if ((t == QEvent::Show || t == QEvent::Hide) && o->isWidgetType() &&
-            static_cast<QWidget *>(o)->isWindow()) {
-            qute_qtwidgets_visibility(static_cast<void *>(o), t == QEvent::Show);
-        }
-        return false;
-    }
-};
-
 int qute_argc = 0;
 char **qute_argv = nullptr;
 } // namespace
@@ -41,7 +21,7 @@ extern "C" void *qute_application_new(const char *args, const ptrdiff_t *lens, p
         args += lens[i];
     }
     qute_argv[n] = nullptr;
-    auto app = new QApplication(qute_argc, qute_argv);
-    app->installEventFilter(new VisibilityFilter(app));
-    return static_cast<QApplication *>(app);
+    // The runtime's event filter (visibility pins, reparenting) is installed
+    // by rt.AppStarted, which qute.Main calls next.
+    return static_cast<QApplication *>(new QApplication(qute_argc, qute_argv));
 }

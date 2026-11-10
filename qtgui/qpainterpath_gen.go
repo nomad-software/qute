@@ -313,6 +313,8 @@ func (this *QPainterPath) AddRegion(region *QRegion) {
 //
 //	C++: void QPainterPath::addRoundedRect(const QRectF & rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
 //
+// Arguments with C++ defaults are left at them; AddRoundedRectFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addRoundedRect
 func (this *QPainterPath) AddRoundedRect(rect qtcore.QRectF, xRadius float64, yRadius float64) {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRoundedRect")
@@ -470,6 +472,8 @@ func (this *QPainterPath) ToReversed() *QPainterPath {
 //
 //	C++: QList<QPolygonF> QPainterPath::toSubpathPolygons(const QTransform & matrix = …) const
 //
+// Arguments with C++ defaults are left at them; ToSubpathPolygonsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toSubpathPolygons
 func (this *QPainterPath) ToSubpathPolygons() [][]qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToSubpathPolygons")
@@ -484,6 +488,8 @@ func (this *QPainterPath) ToSubpathPolygons() [][]qtcore.QPointF {
 //
 //	C++: QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform & matrix = …) const
 //
+// Arguments with C++ defaults are left at them; ToFillPolygonsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toFillPolygons
 func (this *QPainterPath) ToFillPolygons() [][]qtcore.QPointF {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToFillPolygons")
@@ -497,6 +503,8 @@ func (this *QPainterPath) ToFillPolygons() [][]qtcore.QPointF {
 // ToFillPolygon wraps QPainterPath::toFillPolygon.
 //
 //	C++: QPolygonF QPainterPath::toFillPolygon(const QTransform & matrix = …) const
+//
+// Arguments with C++ defaults are left at them; ToFillPolygonFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toFillPolygon
 func (this *QPainterPath) ToFillPolygon() []qtcore.QPointF {
@@ -632,6 +640,8 @@ func (this *QPainterPath) SlopeAtPercent(t float64) float64 {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; TrimmedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#trimmed
 func (this *QPainterPath) Trimmed(fromFraction float64, toFraction float64) *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Trimmed")
@@ -721,6 +731,84 @@ func (this *QPainterPath) Subtracted(rArg *QPainterPath) *QPainterPath {
 func (this *QPainterPath) Simplified() *QPainterPath {
 	self := rt.Use(unsafe.Pointer(this), "QPainterPath.Simplified")
 	r := C.qute_QPainterPath_simplified(self)
+	runtime.KeepAlive(this)
+	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
+}
+
+// AddRoundedRectFull wraps QPainterPath::addRoundedRect.
+//
+//	C++: void QPainterPath::addRoundedRect(const QRectF & rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = …)
+//
+// AddRoundedRectFull is AddRoundedRect with every argument, including those AddRoundedRect leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#addRoundedRect
+func (this *QPainterPath) AddRoundedRectFull(rect qtcore.QRectF, xRadius float64, yRadius float64, mode qtcore.SizeMode) {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.AddRoundedRectFull")
+	C.qute_QPainterPath_addRoundedRect_1(self, cQRectF(rect), C.double(xRadius), C.double(yRadius), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// ToSubpathPolygonsFull wraps QPainterPath::toSubpathPolygons.
+//
+//	C++: QList<QPolygonF> QPainterPath::toSubpathPolygons(const QTransform & matrix = …) const
+//
+// ToSubpathPolygonsFull is ToSubpathPolygons with every argument, including those ToSubpathPolygons leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toSubpathPolygons
+func (this *QPainterPath) ToSubpathPolygonsFull(matrix *QTransform) [][]qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToSubpathPolygonsFull")
+	r := C.qute_QPainterPath_toSubpathPolygons_1(self, rt.UseArg(unsafe.Pointer(matrix), "QPainterPath.ToSubpathPolygonsFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+	return quteList(r, func(e C.qute_list) []qtcore.QPointF {
+		return quteList(e, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
+	})
+}
+
+// ToFillPolygonsFull wraps QPainterPath::toFillPolygons.
+//
+//	C++: QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform & matrix = …) const
+//
+// ToFillPolygonsFull is ToFillPolygons with every argument, including those ToFillPolygons leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toFillPolygons
+func (this *QPainterPath) ToFillPolygonsFull(matrix *QTransform) [][]qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToFillPolygonsFull")
+	r := C.qute_QPainterPath_toFillPolygons_1(self, rt.UseArg(unsafe.Pointer(matrix), "QPainterPath.ToFillPolygonsFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+	return quteList(r, func(e C.qute_list) []qtcore.QPointF {
+		return quteList(e, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
+	})
+}
+
+// ToFillPolygonFull wraps QPainterPath::toFillPolygon.
+//
+//	C++: QPolygonF QPainterPath::toFillPolygon(const QTransform & matrix = …) const
+//
+// ToFillPolygonFull is ToFillPolygon with every argument, including those ToFillPolygon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#toFillPolygon
+func (this *QPainterPath) ToFillPolygonFull(matrix *QTransform) []qtcore.QPointF {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.ToFillPolygonFull")
+	r := C.qute_QPainterPath_toFillPolygon_1(self, rt.UseArg(unsafe.Pointer(matrix), "QPainterPath.ToFillPolygonFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(matrix)
+	return quteList(r, func(e C.qute_pointf) qtcore.QPointF { return goQPointF(e) })
+}
+
+// TrimmedFull wraps QPainterPath::trimmed.
+//
+//	C++: QPainterPath QPainterPath::trimmed(qreal fromFraction, qreal toFraction, qreal offset = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// TrimmedFull is Trimmed with every argument, including those Trimmed leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainterpath.html#trimmed
+func (this *QPainterPath) TrimmedFull(fromFraction float64, toFraction float64, offset float64) *QPainterPath {
+	self := rt.Use(unsafe.Pointer(this), "QPainterPath.TrimmedFull")
+	r := C.qute_QPainterPath_trimmed_1(self, C.double(fromFraction), C.double(toFraction), C.double(offset))
 	runtime.KeepAlive(this)
 	return rt.View[QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }

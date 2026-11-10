@@ -38,10 +38,26 @@ func QStyleOptionComplexFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyleO
 //
 //	C++: QStyleOptionComplex::QStyleOptionComplex(int version = …, int type = …)
 //
+// Arguments with C++ defaults are left at them; NewQStyleOptionComplexFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyleoptioncomplex.html#QStyleOptionComplex
 func NewQStyleOptionComplex() *QStyleOptionComplex {
 	rt.CheckThread("NewQStyleOptionComplex")
 	p := C.qute_QStyleOptionComplex_new()
+	h := rt.WrapClass(p, "QStyleOptionComplex", rt.NewOwned)
+	return rt.View[QStyleOptionComplex](h, p)
+}
+
+// NewQStyleOptionComplexFull wraps the QStyleOptionComplex constructor.
+//
+//	C++: QStyleOptionComplex::QStyleOptionComplex(int version = …, int type = …)
+//
+// NewQStyleOptionComplexFull is NewQStyleOptionComplex with every argument, including those NewQStyleOptionComplex leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyleoptioncomplex.html#QStyleOptionComplex
+func NewQStyleOptionComplexFull(version int, typeArg int) *QStyleOptionComplex {
+	rt.CheckThread("NewQStyleOptionComplexFull")
+	p := C.qute_QStyleOptionComplex_new_1(C.int(version), C.int(typeArg))
 	h := rt.WrapClass(p, "QStyleOptionComplex", rt.NewOwned)
 	return rt.View[QStyleOptionComplex](h, p)
 }

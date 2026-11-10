@@ -82,6 +82,8 @@ func (this *QEventPoint) Unkeep() {
 //
 //	C++: QEventPoint::QEventPoint(int id = …, const QPointingDevice * device = …)
 //
+// Arguments with C++ defaults are left at them; NewQEventPointFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#QEventPoint
 func NewQEventPoint() *QEventPoint {
 	rt.CheckThread("NewQEventPoint")
@@ -98,6 +100,25 @@ func NewQEventPoint() *QEventPoint {
 func NewQEventPointWithPointId(pointId int, state QEventPointStates, scenePosition qtcore.QPointF, globalPosition qtcore.QPointF) *QEventPoint {
 	rt.CheckThread("NewQEventPointWithPointId")
 	p := C.qute_QEventPoint_new_1(C.int(pointId), C.int64_t(state), cQPointF(scenePosition), cQPointF(globalPosition))
+	h := rt.WrapClass(p, "QEventPoint", rt.NewOwned)
+	return rt.View[QEventPoint](h, p)
+}
+
+// NewQEventPointFull wraps the QEventPoint constructor.
+//
+//	C++: QEventPoint::QEventPoint(int id = …, const QPointingDevice * device = …)
+//
+// NewQEventPointFull is NewQEventPoint with every argument, including those NewQEventPoint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#QEventPoint
+func NewQEventPointFull(idArg int, device QPointingDeviceLike) *QEventPoint {
+	rt.CheckThread("NewQEventPointFull")
+	var devicePtr unsafe.Pointer
+	if device != nil {
+		devicePtr = rt.UseArg(unsafe.Pointer(device.AsQPointingDevice()), "NewQEventPointFull")
+	}
+	p := C.qute_QEventPoint_new_2(C.int(idArg), devicePtr)
+	runtime.KeepAlive(device)
 	h := rt.WrapClass(p, "QEventPoint", rt.NewOwned)
 	return rt.View[QEventPoint](h, p)
 }
@@ -424,9 +445,24 @@ func (this *QEventPoint) IsAccepted() bool {
 //
 //	C++: void QEventPoint::setAccepted(bool accepted = …)
 //
+// Arguments with C++ defaults are left at them; SetAcceptedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#setAccepted
 func (this *QEventPoint) SetAccepted() {
 	self := rt.Use(unsafe.Pointer(this), "QEventPoint.SetAccepted")
 	C.qute_QEventPoint_setAccepted(self)
+	runtime.KeepAlive(this)
+}
+
+// SetAcceptedFull wraps QEventPoint::setAccepted.
+//
+//	C++: void QEventPoint::setAccepted(bool accepted = …)
+//
+// SetAcceptedFull is SetAccepted with every argument, including those SetAccepted leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qeventpoint.html#setAccepted
+func (this *QEventPoint) SetAcceptedFull(accepted bool) {
+	self := rt.Use(unsafe.Pointer(this), "QEventPoint.SetAcceptedFull")
+	C.qute_QEventPoint_setAccepted_1(self, C.bool(accepted))
 	runtime.KeepAlive(this)
 }

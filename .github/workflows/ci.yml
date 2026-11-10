@@ -19,7 +19,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y qt6-base-dev libqt6opengl6-dev libgl1-mesa-dri pkg-config
       - name: test
         if: matrix.mode == 'test'
-        run: go vet ./... && go test ./...
+        run: |
+          go vet ./...
+          test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+          go run ./cmd/qute vet ./examples/...
+          go test ./...
       - name: debug build (thread checks, call sites)
         if: matrix.mode == 'debug'
         run: go test -tags qute_debug ./...
@@ -31,7 +35,11 @@ jobs:
         run: GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets
       - name: generated code is up to date
         if: matrix.mode == 'generate'
-        run: go generate ./qtcore && git diff --exit-code
+        # git status also catches new untracked files the generator wrote
+        run: |
+          go generate ./qtcore
+          git diff --exit-code
+          test -z "$(git status --porcelain)" || { git status --porcelain; exit 1; }
 
   # macOS and Windows support comes later: these jobs are kept but do not
   # fail the build until that work starts.

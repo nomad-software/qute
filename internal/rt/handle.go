@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"reflect"
 	"runtime"
-	"runtime/cgo"
 	"sync"
 	"sync/atomic"
 	"unsafe"
@@ -74,9 +73,18 @@ type Handle struct {
 	visiblePin bool
 	keepPins   int32
 	cache      []any
-	selfID     cgo.Handle
+	selfSlot   uintptr // the id the shim dispatches virtuals with
 	deathNote  string
-	keeps      map[string]any // kept references of an unregistered owner (guarded by keepMu)
+	callbacks  map[uintptr]*callback // closures of live connections this object sends
+	memBytes   int64                 // external memory counted for this value (memory.go)
+
+	keeps map[string]any // kept references (guarded by keepMu)
+
+	// anchoring (anchor.go), guarded by anchorMu
+	anchorN  int32                // reasons to hold the Go state: connections, Self, keeps
+	placed   bool                 // held by holder, or globally when holder is nil
+	holder   *Handle              // the root handle holding this one
+	anchored map[*Handle]struct{} // handles this root holds
 
 	// deps are the objects this one only makes sense with (a QModelIndex's
 	// model); set once at creation, so Use reads them without a lock.
@@ -128,8 +136,19 @@ func (h *Handle) State() State {
 // Class is the C++ class name the handle was created with.
 func (h *Handle) Class() string { return h.class }
 
-// Alive reports whether the C++ object still exists.
-func (h *Handle) Alive() bool { return h != nil && h.State() != Dead }
+// Alive reports whether the C++ object still exists: it is not Dead, and no
+// object it depends on (the model of an index, the layout of an item) is.
+func (h *Handle) Alive() bool {
+	if h == nil || h.State() == Dead {
+		return false
+	}
+	for _, d := range h.deps {
+		if d.State() == Dead {
+			return false
+		}
+	}
+	return true
+}
 
 // Lookup returns the live handle registered for key, or nil.
 func Lookup(key unsafe.Pointer) *Handle {
@@ -201,6 +220,9 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 	regMu.Unlock()
 	if needWatch {
 		watch(key)
+	}
+	if kind == KindNotify {
+		h.attachDependency()
 	}
 	if st == Owned {
 		h.attachCleanup()
@@ -284,6 +306,9 @@ func (h *Handle) TransferToCpp() {
 		}
 		if h.state.CompareAndSwap(uint32(s), uint32(Parented)) {
 			h.stopCleanup()
+			if s == Owned {
+				h.releaseAnchored() // a Parented handle may be collected: it holds nothing
+			}
 			return
 		}
 	}
@@ -304,6 +329,9 @@ func (h *Handle) TransferToGo() {
 		}
 		if h.state.CompareAndSwap(uint32(s), uint32(Owned)) {
 			h.attachCleanup()
+			if h.kind == KindQObject && subtreeC != nil && !HasParent(h.ptr) {
+				reanchorSubtree(h.ptr, false) // a new root: it holds its tree's Go state
+			}
 			return
 		}
 	}
@@ -325,7 +353,8 @@ type cleanupArg struct {
 	kind       Kind
 	deleter    func(unsafe.Pointer)
 	registered bool
-	quiet      bool // not an object handle: not counted in Drained
+	quiet      bool  // not an object handle: not counted in Drained
+	mem        int64 // external memory freed with it (memory.go)
 }
 
 func (h *Handle) attachCleanup() {
@@ -335,7 +364,7 @@ func (h *Handle) attachCleanup() {
 		return
 	}
 	arg := cleanupArg{key: h.ptr, serial: h.serial, kind: h.kind, deleter: h.deleter,
-		registered: h.kind == KindQObject || h.kind == KindNotify}
+		registered: h.kind == KindQObject || h.kind == KindNotify, mem: h.memBytes}
 	h.cleanup = runtime.AddCleanup(h, enqueueCleanup, arg)
 	h.hasCleanup = true
 }
@@ -411,14 +440,19 @@ func (h *Handle) SetVisiblePin(visible bool) {
 	}
 }
 
-// SetSelf attaches a Go subclass value and its dispatch table, pins the handle
-// for as long as the object lives, and returns the id the shim dispatches with.
+// SetSelf attaches a Go subclass value and its dispatch table, anchors the
+// handle for as long as the object lives (globally for a parentless object,
+// else by the root of its tree, see anchor.go), and returns the id the shim
+// dispatches with.
 func (h *Handle) SetSelf(self any, vt []Virtual) uintptr {
 	h.Self = self
 	h.VTable = vt
-	h.selfID = cgo.NewHandle(h)
-	h.Pin()
-	return uintptr(h.selfID)
+	h.mu.Lock()
+	h.selfSlot = newSlot(h)
+	id := h.selfSlot
+	h.mu.Unlock()
+	h.anchorPin()
+	return id
 }
 
 // Destroyed is called when Qt (or a shim destructor) reports that the object
@@ -429,13 +463,12 @@ func Destroyed(key unsafe.Pointer, why string) {
 	e := registry[key]
 	delete(registry, key)
 	regMu.Unlock()
-	dropKeeps(key)
-	if e == nil {
-		return
+	if e != nil {
+		if h := e.w.Value(); h != nil {
+			h.markDead(why)
+		}
 	}
-	if h := e.w.Value(); h != nil {
-		h.markDead(why)
-	}
+	orphaned(key)
 }
 
 func (h *Handle) markDead(why string) {
@@ -451,8 +484,8 @@ func (h *Handle) markDead(why string) {
 	if debugEnabled {
 		h.died = callSite()
 	}
-	visible, keeps, id := h.visiblePin, h.keepPins, h.selfID
-	h.visiblePin, h.keepPins, h.selfID = false, 0, 0
+	visible, keeps, id := h.visiblePin, h.keepPins, h.selfSlot
+	h.visiblePin, h.keepPins, h.selfSlot = false, 0, 0
 	h.mu.Unlock()
 	if visible {
 		h.Unpin()
@@ -461,10 +494,15 @@ func (h *Handle) markDead(why string) {
 		h.Unpin()
 	}
 	if id != 0 {
-		id.Delete()
-		h.Unpin()
+		slots.Delete(id)
+		h.anchorUnpin()
 	}
 	h.dropHandleKeeps()
+	// What this root held moves to the global set: its children are deleted
+	// right after it, and their handlers may still run while they die. Their
+	// release callbacks then drop it.
+	h.releaseAnchored()
+	untrackMemory(h)
 }
 
 // Delete frees the object now. It is idempotent and works on Owned and
@@ -578,8 +616,10 @@ const (
 )
 
 type classInfo struct {
-	kind    Kind
-	deleter func(unsafe.Pointer)
+	kind     Kind
+	deleter  func(unsafe.Pointer)
+	toObject func(unsafe.Pointer) unsafe.Pointer
+	memory   func(unsafe.Pointer) int64
 }
 
 var classes sync.Map // name -> classInfo
@@ -587,6 +627,22 @@ var classes sync.Map // name -> classInfo
 // RegisterClass records how a generated class is tracked and freed.
 func RegisterClass(name string, kind Kind, deleter func(unsafe.Pointer)) {
 	classes.Store(name, classInfo{kind: kind, deleter: deleter})
+}
+
+// RegisterBaseOfQObject records that the plain class name is a base of some
+// QObject class (QGraphicsItem of QGraphicsObject, QPaintDevice of QWidget,
+// QLayoutItem of QLayout). toObject is a dynamic_cast to QObject: when a
+// pointer of the base class is in fact a QObject, it is wrapped with that
+// QObject's handle, so it shares the object's state and death notice instead
+// of getting a second handle that never learns the object died.
+func RegisterBaseOfQObject(name string, toObject func(unsafe.Pointer) unsafe.Pointer) {
+	v, ok := classes.Load(name)
+	if !ok {
+		panic("qute: RegisterBaseOfQObject before RegisterClass for " + name)
+	}
+	ci := v.(classInfo)
+	ci.toObject = toObject
+	classes.Store(name, ci)
 }
 
 // WrapClass is Wrap for a registered class.
@@ -602,9 +658,26 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 	kind := ci.kind
 	switch mode {
 	case NewOwned:
-		return Wrap(p, class, kind, TakeOwned, ci.deleter)
+		h := Wrap(p, class, kind, TakeOwned, ci.deleter)
+		trackNew(h, ci)
+		return h
 	case NewParented:
 		return Wrap(p, class, kind, TakeParented, ci.deleter)
+	}
+	if kind == KindValue {
+		h := Wrap(p, class, kind, mode, ci.deleter)
+		trackNew(h, ci)
+		return h
+	}
+	if ci.toObject != nil && mode != NewScoped {
+		if q := ci.toObject(p); q != nil {
+			// the QObject's own handle; a fresh one carries its real class
+			if h := Lookup(q); h != nil {
+				h.retake(mode)
+				return h
+			}
+			return Wrap(q, classNameC(q), KindQObject, mode, DeleteQObject)
+		}
 	}
 	if kind == KindNotify {
 		// Only objects built by our shim constructors report their death, so
@@ -616,6 +689,26 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 		kind = KindPlain
 	}
 	return Wrap(p, class, kind, mode, ci.deleter)
+}
+
+// WrapClassFrom is WrapClass for an object pointer returned by a method of
+// owner. When the result is a plain object qute cannot watch (a QLayoutItem
+// Qt made, the QPaintDevice a QPainter draws on) and Go does not own it, it
+// depends on owner and on whatever owner depends on: Use panics once owner is
+// destroyed, instead of following a pointer Qt may have freed with it.
+func WrapClassFrom(p unsafe.Pointer, class string, mode WrapMode, owner *Handle) *Handle {
+	h := WrapClass(p, class, mode)
+	if h == nil || owner == nil || h == owner || h.kind != KindPlain || h.State() == Owned {
+		return h
+	}
+	// a fresh plain handle, not yet shared: its deps may still be set
+	h.deps = append(h.deps, owner)
+	for _, d := range owner.deps {
+		if d != h {
+			h.deps = append(h.deps, d)
+		}
+	}
+	return h
 }
 
 // ModeFor maps a public ownership request to a wrap mode.
@@ -636,4 +729,10 @@ func Arg(wrapper unsafe.Pointer, method string) (unsafe.Pointer, *Handle) {
 	}
 	p := Use(wrapper, method)
 	return p, (*Ref)(wrapper).H
+}
+
+// WrongThread is called by a generated shim that runs off the GUI thread.
+func WrongThread() {
+	panic("qute: a Qt method was called off the GUI thread; Qt objects may only be used on the GUI thread, " +
+		"wrap the call in qute.Post(func() { ... }) (build with -tags qute_debug to have the method named)")
 }

@@ -62,6 +62,8 @@ func (this *QWidget) AsQPaintDevice() *qtgui.QPaintDevice {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQWidgetFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#QWidget
 func NewQWidget(parent QWidgetLike) *QWidget {
 	rt.CheckThread("NewQWidget")
@@ -70,6 +72,31 @@ func NewQWidget(parent QWidgetLike) *QWidget {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQWidget")
 	}
 	p := C.qute_QWidget_new(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QWidget", mode)
+	return rt.View[QWidget](h, p)
+}
+
+// NewQWidgetFull wraps the QWidget constructor.
+//
+//	C++: QWidget::QWidget(QWidget * parent = …, Qt::WindowFlags f = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQWidgetFull is NewQWidget with every argument, including those NewQWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#QWidget
+func NewQWidgetFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QWidget {
+	rt.CheckThread("NewQWidgetFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQWidgetFull")
+	}
+	p := C.qute_QWidget_new_1(parentPtr, C.int64_t(fArg))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -1126,6 +1153,8 @@ func (this *QWidget) ClearMask() {
 //
 //	C++: void QWidget::render(QPaintDevice * target, const QPoint & targetOffset = …, const QRegion & sourceRegion = …, RenderFlags renderFlags = …)
 //
+// Arguments with C++ defaults are left at them; RenderFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#render
 func (this *QWidget) Render(target qtgui.QPaintDeviceLike) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.Render")
@@ -1141,6 +1170,8 @@ func (this *QWidget) Render(target qtgui.QPaintDeviceLike) {
 // RenderWithPainter wraps QWidget::render.
 //
 //	C++: void QWidget::render(QPainter * painter, const QPoint & targetOffset = …, const QRegion & sourceRegion = …, RenderFlags renderFlags = …)
+//
+// Arguments with C++ defaults are left at them; RenderWithPainterFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#render
 func (this *QWidget) RenderWithPainter(painter qtgui.QPainterLike) {
@@ -1159,6 +1190,8 @@ func (this *QWidget) RenderWithPainter(painter qtgui.QPainterLike) {
 //	C++: QPixmap QWidget::grab(const QRect & rectangle = …)
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; GrabFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#grab
 func (this *QWidget) Grab() *qtgui.QPixmap {
@@ -1201,12 +1234,14 @@ func (this *QWidget) SetGraphicsEffect(effect QGraphicsEffectLike) {
 	C.qute_QWidget_setGraphicsEffect(self, effectPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(effect)
-	effectH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, effectH)
 }
 
 // GrabGesture wraps QWidget::grabGesture.
 //
 //	C++: void QWidget::grabGesture(Qt::GestureType type, Qt::GestureFlags flags = …)
+//
+// Arguments with C++ defaults are left at them; GrabGestureFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#grabGesture
 func (this *QWidget) GrabGesture(typeArg qtcore.GestureType) {
@@ -1862,6 +1897,8 @@ func (this *QWidget) ReleaseKeyboard() {
 //
 //	C++: int QWidget::grabShortcut(const QKeySequence & key, Qt::ShortcutContext context = …)
 //
+// Arguments with C++ defaults are left at them; GrabShortcutFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#grabShortcut
 func (this *QWidget) GrabShortcut(key *qtgui.QKeySequence) int {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.GrabShortcut")
@@ -1886,6 +1923,8 @@ func (this *QWidget) ReleaseShortcut(idArg int) {
 //
 //	C++: void QWidget::setShortcutEnabled(int id, bool enable = …)
 //
+// Arguments with C++ defaults are left at them; SetShortcutEnabledFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setShortcutEnabled
 func (this *QWidget) SetShortcutEnabled(idArg int) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetShortcutEnabled")
@@ -1896,6 +1935,8 @@ func (this *QWidget) SetShortcutEnabled(idArg int) {
 // SetShortcutAutoRepeat wraps QWidget::setShortcutAutoRepeat.
 //
 //	C++: void QWidget::setShortcutAutoRepeat(int id, bool enable = …)
+//
+// Arguments with C++ defaults are left at them; SetShortcutAutoRepeatFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setShortcutAutoRepeat
 func (this *QWidget) SetShortcutAutoRepeat(idArg int) {
@@ -2491,7 +2532,7 @@ func (this *QWidget) SetLayout(layout QLayoutLike) {
 	C.qute_QWidget_setLayout(self, layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // UpdateGeometry wraps QWidget::updateGeometry.
@@ -2849,10 +2890,12 @@ func (this *QWidget) WindowFlags() qtcore.WindowFlags {
 //
 //	C++: void QWidget::setWindowFlag(Qt::WindowType, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetWindowFlagFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setWindowFlag
-func (this *QWidget) SetWindowFlag(arg0 qtcore.WindowFlags) {
+func (this *QWidget) SetWindowFlag(windowType qtcore.WindowFlags) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetWindowFlag")
-	C.qute_QWidget_setWindowFlag(self, C.int64_t(arg0))
+	C.qute_QWidget_setWindowFlag(self, C.int64_t(windowType))
 	runtime.KeepAlive(this)
 }
 
@@ -2911,10 +2954,12 @@ func (this *QWidget) ChildAtF(pArg qtcore.QPointF) *QWidget {
 //
 //	C++: void QWidget::setAttribute(Qt::WidgetAttribute, bool on = …)
 //
+// Arguments with C++ defaults are left at them; SetAttributeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#setAttribute
-func (this *QWidget) SetAttribute(arg0 qtcore.WidgetAttribute) {
+func (this *QWidget) SetAttribute(widgetAttribute qtcore.WidgetAttribute) {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.SetAttribute")
-	C.qute_QWidget_setAttribute(self, C.int64_t(arg0))
+	C.qute_QWidget_setAttribute(self, C.int64_t(widgetAttribute))
 	runtime.KeepAlive(this)
 }
 
@@ -2923,9 +2968,9 @@ func (this *QWidget) SetAttribute(arg0 qtcore.WidgetAttribute) {
 //	C++: bool QWidget::testAttribute(Qt::WidgetAttribute) const
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#testAttribute
-func (this *QWidget) TestAttribute(arg0 qtcore.WidgetAttribute) bool {
+func (this *QWidget) TestAttribute(widgetAttribute qtcore.WidgetAttribute) bool {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.TestAttribute")
-	r := C.qute_QWidget_testAttribute(self, C.int64_t(arg0))
+	r := C.qute_QWidget_testAttribute(self, C.int64_t(widgetAttribute))
 	runtime.KeepAlive(this)
 	return bool(r)
 }
@@ -3093,6 +3138,140 @@ func (this *QWidget) EmitCustomContextMenuRequested(pos qtcore.QPoint) {
 	runtime.KeepAlive(this)
 }
 
+// RenderFull wraps QWidget::render.
+//
+//	C++: void QWidget::render(QPaintDevice * target, const QPoint & targetOffset = …, const QRegion & sourceRegion = …, RenderFlags renderFlags = …)
+//
+// RenderFull is Render with every argument, including those Render leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#render
+func (this *QWidget) RenderFull(target qtgui.QPaintDeviceLike, targetOffset qtcore.QPoint, sourceRegion *qtgui.QRegion, renderFlags QWidgetRenderFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.RenderFull")
+	var targetPtr unsafe.Pointer
+	if target != nil {
+		targetPtr = rt.UseArg(unsafe.Pointer(target.AsQPaintDevice()), "QWidget.RenderFull")
+	}
+	C.qute_QWidget_render_2(self, targetPtr, cQPoint(targetOffset), rt.UseArg(unsafe.Pointer(sourceRegion), "QWidget.RenderFull"), C.int64_t(renderFlags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(sourceRegion)
+}
+
+// RenderWithPainterFull wraps QWidget::render.
+//
+//	C++: void QWidget::render(QPainter * painter, const QPoint & targetOffset = …, const QRegion & sourceRegion = …, RenderFlags renderFlags = …)
+//
+// RenderWithPainterFull is RenderWithPainter with every argument, including those RenderWithPainter leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#render
+func (this *QWidget) RenderWithPainterFull(painter qtgui.QPainterLike, targetOffset qtcore.QPoint, sourceRegion *qtgui.QRegion, renderFlags QWidgetRenderFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.RenderWithPainterFull")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QWidget.RenderWithPainterFull")
+	}
+	C.qute_QWidget_render_3(self, painterPtr, cQPoint(targetOffset), rt.UseArg(unsafe.Pointer(sourceRegion), "QWidget.RenderWithPainterFull"), C.int64_t(renderFlags))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(sourceRegion)
+}
+
+// GrabFull wraps QWidget::grab.
+//
+//	C++: QPixmap QWidget::grab(const QRect & rectangle = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// GrabFull is Grab with every argument, including those Grab leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#grab
+func (this *QWidget) GrabFull(rectangle qtcore.QRect) *qtgui.QPixmap {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.GrabFull")
+	r := C.qute_QWidget_grab_1(self, cQRect(rectangle))
+	runtime.KeepAlive(this)
+	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// GrabGestureFull wraps QWidget::grabGesture.
+//
+//	C++: void QWidget::grabGesture(Qt::GestureType type, Qt::GestureFlags flags = …)
+//
+// GrabGestureFull is GrabGesture with every argument, including those GrabGesture leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#grabGesture
+func (this *QWidget) GrabGestureFull(typeArg qtcore.GestureType, flags qtcore.GestureFlags) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.GrabGestureFull")
+	C.qute_QWidget_grabGesture_1(self, C.int64_t(typeArg), C.int64_t(flags))
+	runtime.KeepAlive(this)
+}
+
+// GrabShortcutFull wraps QWidget::grabShortcut.
+//
+//	C++: int QWidget::grabShortcut(const QKeySequence & key, Qt::ShortcutContext context = …)
+//
+// GrabShortcutFull is GrabShortcut with every argument, including those GrabShortcut leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#grabShortcut
+func (this *QWidget) GrabShortcutFull(key *qtgui.QKeySequence, context qtcore.ShortcutContext) int {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.GrabShortcutFull")
+	r := C.qute_QWidget_grabShortcut_1(self, rt.UseArg(unsafe.Pointer(key), "QWidget.GrabShortcutFull"), C.int64_t(context))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(key)
+	return int(r)
+}
+
+// SetShortcutEnabledFull wraps QWidget::setShortcutEnabled.
+//
+//	C++: void QWidget::setShortcutEnabled(int id, bool enable = …)
+//
+// SetShortcutEnabledFull is SetShortcutEnabled with every argument, including those SetShortcutEnabled leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setShortcutEnabled
+func (this *QWidget) SetShortcutEnabledFull(idArg int, enable bool) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetShortcutEnabledFull")
+	C.qute_QWidget_setShortcutEnabled_1(self, C.int(idArg), C.bool(enable))
+	runtime.KeepAlive(this)
+}
+
+// SetShortcutAutoRepeatFull wraps QWidget::setShortcutAutoRepeat.
+//
+//	C++: void QWidget::setShortcutAutoRepeat(int id, bool enable = …)
+//
+// SetShortcutAutoRepeatFull is SetShortcutAutoRepeat with every argument, including those SetShortcutAutoRepeat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setShortcutAutoRepeat
+func (this *QWidget) SetShortcutAutoRepeatFull(idArg int, enable bool) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetShortcutAutoRepeatFull")
+	C.qute_QWidget_setShortcutAutoRepeat_1(self, C.int(idArg), C.bool(enable))
+	runtime.KeepAlive(this)
+}
+
+// SetWindowFlagFull wraps QWidget::setWindowFlag.
+//
+//	C++: void QWidget::setWindowFlag(Qt::WindowType, bool on = …)
+//
+// SetWindowFlagFull is SetWindowFlag with every argument, including those SetWindowFlag leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setWindowFlag
+func (this *QWidget) SetWindowFlagFull(windowType qtcore.WindowFlags, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetWindowFlagFull")
+	C.qute_QWidget_setWindowFlag_1(self, C.int64_t(windowType), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
+// SetAttributeFull wraps QWidget::setAttribute.
+//
+//	C++: void QWidget::setAttribute(Qt::WidgetAttribute, bool on = …)
+//
+// SetAttributeFull is SetAttribute with every argument, including those SetAttribute leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwidget.html#setAttribute
+func (this *QWidget) SetAttributeFull(widgetAttribute qtcore.WidgetAttribute, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QWidget.SetAttributeFull")
+	C.qute_QWidget_setAttribute_1(self, C.int64_t(widgetAttribute), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
 // QWidgetSetTabOrder wraps QWidget::setTabOrder.
 //
 //	C++: void QWidget::setTabOrder(QWidget *, QWidget *)
@@ -3146,9 +3325,9 @@ func QWidgetKeyboardGrabber() *QWidget {
 // Ownership: the result is Borrowed: Go never frees it.
 //
 // Qt docs: https://doc.qt.io/qt-6/qwidget.html#find
-func QWidgetFind(arg0 uint64) *QWidget {
+func QWidgetFind(wId uint64) *QWidget {
 	rt.CheckThread("QWidgetFind")
-	r := C.qute_QWidget_find(C.ulonglong(arg0))
+	r := C.qute_QWidget_find(C.ulonglong(wId))
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
 

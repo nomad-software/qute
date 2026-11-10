@@ -93,10 +93,26 @@ func NewQRegularExpression() *QRegularExpression {
 //
 //	C++: QRegularExpression::QRegularExpression(const QString & pattern, PatternOptions options = …)
 //
+// Arguments with C++ defaults are left at them; NewQRegularExpressionWithPatternFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#QRegularExpression
 func NewQRegularExpressionWithPattern(pattern string) *QRegularExpression {
 	rt.CheckThread("NewQRegularExpressionWithPattern")
 	p := C.qute_QRegularExpression_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)))
+	h := rt.WrapClass(p, "QRegularExpression", rt.NewOwned)
+	return rt.View[QRegularExpression](h, p)
+}
+
+// NewQRegularExpressionWithPatternFull wraps the QRegularExpression constructor.
+//
+//	C++: QRegularExpression::QRegularExpression(const QString & pattern, PatternOptions options = …)
+//
+// NewQRegularExpressionWithPatternFull is NewQRegularExpressionWithPattern with every argument, including those NewQRegularExpressionWithPattern leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#QRegularExpression
+func NewQRegularExpressionWithPatternFull(pattern string, options QRegularExpressionPatternOptions) *QRegularExpression {
+	rt.CheckThread("NewQRegularExpressionWithPatternFull")
+	p := C.qute_QRegularExpression_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)), C.int64_t(options))
 	h := rt.WrapClass(p, "QRegularExpression", rt.NewOwned)
 	return rt.View[QRegularExpression](h, p)
 }
@@ -213,6 +229,8 @@ func (this *QRegularExpression) NamedCaptureGroups() []string {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; MatchFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#match
 func (this *QRegularExpression) Match(subject string) *QRegularExpressionMatch {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.Match")
@@ -226,6 +244,8 @@ func (this *QRegularExpression) Match(subject string) *QRegularExpressionMatch {
 //	C++: QRegularExpressionMatch QRegularExpression::matchView(QStringView subjectView, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; MatchViewFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#matchView
 func (this *QRegularExpression) MatchView(subjectView string) *QRegularExpressionMatch {
@@ -241,6 +261,8 @@ func (this *QRegularExpression) MatchView(subjectView string) *QRegularExpressio
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; GlobalMatchFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#globalMatch
 func (this *QRegularExpression) GlobalMatch(subject string) *QRegularExpressionMatchIterator {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatch")
@@ -254,6 +276,8 @@ func (this *QRegularExpression) GlobalMatch(subject string) *QRegularExpressionM
 //	C++: QRegularExpressionMatchIterator QRegularExpression::globalMatchView(QStringView subjectView, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; GlobalMatchViewFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#globalMatchView
 func (this *QRegularExpression) GlobalMatchView(subjectView string) *QRegularExpressionMatchIterator {
@@ -274,6 +298,70 @@ func (this *QRegularExpression) Optimize() {
 	runtime.KeepAlive(this)
 }
 
+// MatchFull wraps QRegularExpression::match.
+//
+//	C++: QRegularExpressionMatch QRegularExpression::match(const QString & subject, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// MatchFull is Match with every argument, including those Match leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#match
+func (this *QRegularExpression) MatchFull(subject string, offset int, matchType QRegularExpressionMatchType, matchOptions QRegularExpressionMatchOptions) *QRegularExpressionMatch {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.MatchFull")
+	r := C.qute_QRegularExpression_match_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subject))), C.ptrdiff_t(len(subject)), C.longlong(offset), C.int64_t(matchType), C.int64_t(matchOptions))
+	runtime.KeepAlive(this)
+	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
+}
+
+// MatchViewFull wraps QRegularExpression::matchView.
+//
+//	C++: QRegularExpressionMatch QRegularExpression::matchView(QStringView subjectView, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// MatchViewFull is MatchView with every argument, including those MatchView leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#matchView
+func (this *QRegularExpression) MatchViewFull(subjectView string, offset int, matchType QRegularExpressionMatchType, matchOptions QRegularExpressionMatchOptions) *QRegularExpressionMatch {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.MatchViewFull")
+	r := C.qute_QRegularExpression_matchView_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subjectView))), C.ptrdiff_t(len(subjectView)), C.longlong(offset), C.int64_t(matchType), C.int64_t(matchOptions))
+	runtime.KeepAlive(this)
+	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
+}
+
+// GlobalMatchFull wraps QRegularExpression::globalMatch.
+//
+//	C++: QRegularExpressionMatchIterator QRegularExpression::globalMatch(const QString & subject, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// GlobalMatchFull is GlobalMatch with every argument, including those GlobalMatch leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#globalMatch
+func (this *QRegularExpression) GlobalMatchFull(subject string, offset int, matchType QRegularExpressionMatchType, matchOptions QRegularExpressionMatchOptions) *QRegularExpressionMatchIterator {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatchFull")
+	r := C.qute_QRegularExpression_globalMatch_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subject))), C.ptrdiff_t(len(subject)), C.longlong(offset), C.int64_t(matchType), C.int64_t(matchOptions))
+	runtime.KeepAlive(this)
+	return rt.View[QRegularExpressionMatchIterator](rt.WrapClass(r, "QRegularExpressionMatchIterator", rt.TakeOwned), r)
+}
+
+// GlobalMatchViewFull wraps QRegularExpression::globalMatchView.
+//
+//	C++: QRegularExpressionMatchIterator QRegularExpression::globalMatchView(QStringView subjectView, qsizetype offset = …, MatchType matchType = …, MatchOptions matchOptions = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// GlobalMatchViewFull is GlobalMatchView with every argument, including those GlobalMatchView leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#globalMatchView
+func (this *QRegularExpression) GlobalMatchViewFull(subjectView string, offset int, matchType QRegularExpressionMatchType, matchOptions QRegularExpressionMatchOptions) *QRegularExpressionMatchIterator {
+	self := rt.Use(unsafe.Pointer(this), "QRegularExpression.GlobalMatchViewFull")
+	r := C.qute_QRegularExpression_globalMatchView_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subjectView))), C.ptrdiff_t(len(subjectView)), C.longlong(offset), C.int64_t(matchType), C.int64_t(matchOptions))
+	runtime.KeepAlive(this)
+	return rt.View[QRegularExpressionMatchIterator](rt.WrapClass(r, "QRegularExpressionMatchIterator", rt.TakeOwned), r)
+}
+
 // QRegularExpressionEscape wraps QRegularExpression::escape.
 //
 //	C++: QString QRegularExpression::escape(const QString & str)
@@ -288,6 +376,8 @@ func QRegularExpressionEscape(str string) string {
 // QRegularExpressionWildcardToRegularExpression wraps QRegularExpression::wildcardToRegularExpression.
 //
 //	C++: QString QRegularExpression::wildcardToRegularExpression(const QString & str, WildcardConversionOptions options = …)
+//
+// Arguments with C++ defaults are left at them; QRegularExpressionWildcardToRegularExpressionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#wildcardToRegularExpression
 func QRegularExpressionWildcardToRegularExpression(str string) string {
@@ -313,9 +403,39 @@ func QRegularExpressionAnchoredPattern(expression string) string {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QRegularExpressionFromWildcardFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#fromWildcard
 func QRegularExpressionFromWildcard(pattern string) *QRegularExpression {
 	rt.CheckThread("QRegularExpressionFromWildcard")
 	r := C.qute_QRegularExpression_fromWildcard((*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)))
+	return rt.View[QRegularExpression](rt.WrapClass(r, "QRegularExpression", rt.TakeOwned), r)
+}
+
+// QRegularExpressionWildcardToRegularExpressionFull wraps QRegularExpression::wildcardToRegularExpression.
+//
+//	C++: QString QRegularExpression::wildcardToRegularExpression(const QString & str, WildcardConversionOptions options = …)
+//
+// QRegularExpressionWildcardToRegularExpressionFull is QRegularExpressionWildcardToRegularExpression with every argument, including those QRegularExpressionWildcardToRegularExpression leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#wildcardToRegularExpression
+func QRegularExpressionWildcardToRegularExpressionFull(str string, options QRegularExpressionWildcardConversionOptions) string {
+	rt.CheckThread("QRegularExpressionWildcardToRegularExpressionFull")
+	r := C.qute_QRegularExpression_wildcardToRegularExpression_1((*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)), C.int64_t(options))
+	return quteStr(r)
+}
+
+// QRegularExpressionFromWildcardFull wraps QRegularExpression::fromWildcard.
+//
+//	C++: QRegularExpression QRegularExpression::fromWildcard(QStringView pattern, Qt::CaseSensitivity cs = …, WildcardConversionOptions options = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QRegularExpressionFromWildcardFull is QRegularExpressionFromWildcard with every argument, including those QRegularExpressionFromWildcard leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregularexpression.html#fromWildcard
+func QRegularExpressionFromWildcardFull(pattern string, cs CaseSensitivity, options QRegularExpressionWildcardConversionOptions) *QRegularExpression {
+	rt.CheckThread("QRegularExpressionFromWildcardFull")
+	r := C.qute_QRegularExpression_fromWildcard_1((*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)), C.int64_t(cs), C.int64_t(options))
 	return rt.View[QRegularExpression](rt.WrapClass(r, "QRegularExpression", rt.TakeOwned), r)
 }

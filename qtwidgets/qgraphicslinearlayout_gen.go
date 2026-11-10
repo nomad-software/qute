@@ -125,12 +125,14 @@ func (this *QGraphicsLinearLayout) AddItem(item QGraphicsLayoutItemLike) {
 	C.qute_QGraphicsLinearLayout_addItem(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // AddStretch wraps QGraphicsLinearLayout::addStretch.
 //
 //	C++: void QGraphicsLinearLayout::addStretch(int stretch = …)
+//
+// Arguments with C++ defaults are left at them; AddStretchFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#addStretch
 func (this *QGraphicsLinearLayout) AddStretch() {
@@ -156,12 +158,14 @@ func (this *QGraphicsLinearLayout) InsertItem(index int, item QGraphicsLayoutIte
 	C.qute_QGraphicsLinearLayout_insertItem(self, C.int(index), itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	itemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, itemH)
 }
 
 // InsertStretch wraps QGraphicsLinearLayout::insertStretch.
 //
 //	C++: void QGraphicsLinearLayout::insertStretch(int index, int stretch = …)
+//
+// Arguments with C++ defaults are left at them; InsertStretchFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#insertStretch
 func (this *QGraphicsLinearLayout) InsertStretch(index int) {
@@ -308,6 +312,8 @@ func (this *QGraphicsLinearLayout) Alignment(item QGraphicsLayoutItemLike) qtcor
 //
 //	C++: QSizeF QGraphicsLinearLayout::sizeHint(Qt::SizeHint which, const QSizeF & constraint = …) const
 //
+// Arguments with C++ defaults are left at them; SizeHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#sizeHint
 func (this *QGraphicsLinearLayout) SizeHint(which qtcore.SizeHint) qtcore.QSizeF {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SizeHint")
@@ -320,9 +326,64 @@ func (this *QGraphicsLinearLayout) SizeHint(which qtcore.SizeHint) qtcore.QSizeF
 //
 //	C++: void QGraphicsLinearLayout::dump(int indent = …) const
 //
+// Arguments with C++ defaults are left at them; DumpFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#dump
 func (this *QGraphicsLinearLayout) Dump() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.Dump")
 	C.qute_QGraphicsLinearLayout_dump(self)
+	runtime.KeepAlive(this)
+}
+
+// AddStretchFull wraps QGraphicsLinearLayout::addStretch.
+//
+//	C++: void QGraphicsLinearLayout::addStretch(int stretch = …)
+//
+// AddStretchFull is AddStretch with every argument, including those AddStretch leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#addStretch
+func (this *QGraphicsLinearLayout) AddStretchFull(stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.AddStretchFull")
+	C.qute_QGraphicsLinearLayout_addStretch_1(self, C.int(stretch))
+	runtime.KeepAlive(this)
+}
+
+// InsertStretchFull wraps QGraphicsLinearLayout::insertStretch.
+//
+//	C++: void QGraphicsLinearLayout::insertStretch(int index, int stretch = …)
+//
+// InsertStretchFull is InsertStretch with every argument, including those InsertStretch leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#insertStretch
+func (this *QGraphicsLinearLayout) InsertStretchFull(index int, stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.InsertStretchFull")
+	C.qute_QGraphicsLinearLayout_insertStretch_1(self, C.int(index), C.int(stretch))
+	runtime.KeepAlive(this)
+}
+
+// SizeHintFull wraps QGraphicsLinearLayout::sizeHint.
+//
+//	C++: QSizeF QGraphicsLinearLayout::sizeHint(Qt::SizeHint which, const QSizeF & constraint = …) const
+//
+// SizeHintFull is SizeHint with every argument, including those SizeHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#sizeHint
+func (this *QGraphicsLinearLayout) SizeHintFull(which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SizeHintFull")
+	r := C.qute_QGraphicsLinearLayout_sizeHint_1(self, C.int64_t(which), cQSizeF(constraint))
+	runtime.KeepAlive(this)
+	return goQSizeF(r)
+}
+
+// DumpFull wraps QGraphicsLinearLayout::dump.
+//
+//	C++: void QGraphicsLinearLayout::dump(int indent = …) const
+//
+// DumpFull is Dump with every argument, including those Dump leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicslinearlayout.html#dump
+func (this *QGraphicsLinearLayout) DumpFull(indent int) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.DumpFull")
+	C.qute_QGraphicsLinearLayout_dump_1(self, C.int(indent))
 	runtime.KeepAlive(this)
 }

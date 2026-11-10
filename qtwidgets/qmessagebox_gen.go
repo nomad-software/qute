@@ -78,6 +78,8 @@ func NewQMessageBox(parent QWidgetLike) *QMessageBox {
 //
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQMessageBoxWithIconFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#QMessageBox
 func NewQMessageBoxWithIcon(icon QMessageBoxIcon, title string, text string, buttons QMessageBoxStandardButtons, parent QWidgetLike) *QMessageBox {
 	rt.CheckThread("NewQMessageBoxWithIcon")
@@ -86,6 +88,31 @@ func NewQMessageBoxWithIcon(icon QMessageBoxIcon, title string, text string, but
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMessageBoxWithIcon")
 	}
 	p := C.qute_QMessageBox_new_1(C.int64_t(icon), (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMessageBox", mode)
+	return rt.View[QMessageBox](h, p)
+}
+
+// NewQMessageBoxWithIconFull wraps the QMessageBox constructor.
+//
+//	C++: QMessageBox::QMessageBox(Icon icon, const QString & title, const QString & text, StandardButtons buttons = …, QWidget * parent = …, Qt::WindowFlags flags = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQMessageBoxWithIconFull is NewQMessageBoxWithIcon with every argument, including those NewQMessageBoxWithIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#QMessageBox
+func NewQMessageBoxWithIconFull(icon QMessageBoxIcon, title string, text string, buttons QMessageBoxStandardButtons, parent QWidgetLike, flags qtcore.WindowFlags) *QMessageBox {
+	rt.CheckThread("NewQMessageBoxWithIconFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMessageBoxWithIconFull")
+	}
+	p := C.qute_QMessageBox_new_2(C.int64_t(icon), (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), parentPtr, C.int64_t(flags))
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -112,7 +139,7 @@ func (this *QMessageBox) AddButton(button QAbstractButtonLike, role QMessageBoxB
 	C.qute_QMessageBox_addButton(self, buttonPtr, C.int64_t(role))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(button)
-	buttonH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, buttonH)
 }
 
 // AddButtonText wraps QMessageBox::addButton.
@@ -483,7 +510,7 @@ func (this *QMessageBox) SetCheckBox(cb QCheckBoxLike) {
 	C.qute_QMessageBox_setCheckBox(self, cbPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(cb)
-	cbH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, cbH)
 }
 
 // CheckBox wraps QMessageBox::checkBox.
@@ -503,6 +530,8 @@ func (this *QMessageBox) CheckBox() *QCheckBox {
 // SetOption wraps QMessageBox::setOption.
 //
 //	C++: void QMessageBox::setOption(Option option, bool on = …)
+//
+// Arguments with C++ defaults are left at them; SetOptionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#setOption
 func (this *QMessageBox) SetOption(option QMessageBoxOptions) {
@@ -608,9 +637,24 @@ func (this *QMessageBox) EmitButtonClicked(button QAbstractButtonLike) {
 	runtime.KeepAlive(button)
 }
 
+// SetOptionFull wraps QMessageBox::setOption.
+//
+//	C++: void QMessageBox::setOption(Option option, bool on = …)
+//
+// SetOptionFull is SetOption with every argument, including those SetOption leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#setOption
+func (this *QMessageBox) SetOptionFull(option QMessageBoxOptions, on bool) {
+	self := rt.Use(unsafe.Pointer(this), "QMessageBox.SetOptionFull")
+	C.qute_QMessageBox_setOption_1(self, C.int64_t(option), C.bool(on))
+	runtime.KeepAlive(this)
+}
+
 // QMessageBoxInformation wraps QMessageBox::information.
 //
 //	C++: StandardButton QMessageBox::information(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// Arguments with C++ defaults are left at them; QMessageBoxInformationFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#information
 func QMessageBoxInformation(parent QWidgetLike, title string, text string) QMessageBoxStandardButtons {
@@ -628,6 +672,8 @@ func QMessageBoxInformation(parent QWidgetLike, title string, text string) QMess
 //
 //	C++: StandardButton QMessageBox::question(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
 //
+// Arguments with C++ defaults are left at them; QMessageBoxQuestionFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#question
 func QMessageBoxQuestion(parent QWidgetLike, title string, text string) QMessageBoxStandardButtons {
 	rt.CheckThread("QMessageBoxQuestion")
@@ -644,6 +690,8 @@ func QMessageBoxQuestion(parent QWidgetLike, title string, text string) QMessage
 //
 //	C++: StandardButton QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
 //
+// Arguments with C++ defaults are left at them; QMessageBoxWarningFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#warning
 func QMessageBoxWarning(parent QWidgetLike, title string, text string) QMessageBoxStandardButtons {
 	rt.CheckThread("QMessageBoxWarning")
@@ -659,6 +707,8 @@ func QMessageBoxWarning(parent QWidgetLike, title string, text string) QMessageB
 // QMessageBoxCritical wraps QMessageBox::critical.
 //
 //	C++: StandardButton QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// Arguments with C++ defaults are left at them; QMessageBoxCriticalFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#critical
 func QMessageBoxCritical(parent QWidgetLike, title string, text string) QMessageBoxStandardButtons {
@@ -691,6 +741,8 @@ func QMessageBoxAbout(parent QWidgetLike, title string, text string) {
 //
 //	C++: void QMessageBox::aboutQt(QWidget * parent, const QString & title = …)
 //
+// Arguments with C++ defaults are left at them; QMessageBoxAboutQtFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#aboutQt
 func QMessageBoxAboutQt(parent QWidgetLike) {
 	rt.CheckThread("QMessageBoxAboutQt")
@@ -699,6 +751,95 @@ func QMessageBoxAboutQt(parent QWidgetLike) {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxAboutQt")
 	}
 	C.qute_QMessageBox_aboutQt(parentPtr)
+	runtime.KeepAlive(parent)
+}
+
+// QMessageBoxInformationFull wraps QMessageBox::information.
+//
+//	C++: StandardButton QMessageBox::information(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// QMessageBoxInformationFull is QMessageBoxInformation with every argument, including those QMessageBoxInformation leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#information
+func QMessageBoxInformationFull(parent QWidgetLike, title string, text string, buttons QMessageBoxStandardButtons, defaultButton QMessageBoxStandardButtons) QMessageBoxStandardButtons {
+	rt.CheckThread("QMessageBoxInformationFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxInformationFull")
+	}
+	r := C.qute_QMessageBox_information_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), C.int64_t(defaultButton))
+	runtime.KeepAlive(parent)
+	return QMessageBoxStandardButtons(r)
+}
+
+// QMessageBoxQuestionFull wraps QMessageBox::question.
+//
+//	C++: StandardButton QMessageBox::question(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// QMessageBoxQuestionFull is QMessageBoxQuestion with every argument, including those QMessageBoxQuestion leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#question
+func QMessageBoxQuestionFull(parent QWidgetLike, title string, text string, buttons QMessageBoxStandardButtons, defaultButton QMessageBoxStandardButtons) QMessageBoxStandardButtons {
+	rt.CheckThread("QMessageBoxQuestionFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxQuestionFull")
+	}
+	r := C.qute_QMessageBox_question_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), C.int64_t(defaultButton))
+	runtime.KeepAlive(parent)
+	return QMessageBoxStandardButtons(r)
+}
+
+// QMessageBoxWarningFull wraps QMessageBox::warning.
+//
+//	C++: StandardButton QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// QMessageBoxWarningFull is QMessageBoxWarning with every argument, including those QMessageBoxWarning leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#warning
+func QMessageBoxWarningFull(parent QWidgetLike, title string, text string, buttons QMessageBoxStandardButtons, defaultButton QMessageBoxStandardButtons) QMessageBoxStandardButtons {
+	rt.CheckThread("QMessageBoxWarningFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxWarningFull")
+	}
+	r := C.qute_QMessageBox_warning_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), C.int64_t(defaultButton))
+	runtime.KeepAlive(parent)
+	return QMessageBoxStandardButtons(r)
+}
+
+// QMessageBoxCriticalFull wraps QMessageBox::critical.
+//
+//	C++: StandardButton QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// QMessageBoxCriticalFull is QMessageBoxCritical with every argument, including those QMessageBoxCritical leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#critical
+func QMessageBoxCriticalFull(parent QWidgetLike, title string, text string, buttons QMessageBoxStandardButtons, defaultButton QMessageBoxStandardButtons) QMessageBoxStandardButtons {
+	rt.CheckThread("QMessageBoxCriticalFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxCriticalFull")
+	}
+	r := C.qute_QMessageBox_critical_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(buttons), C.int64_t(defaultButton))
+	runtime.KeepAlive(parent)
+	return QMessageBoxStandardButtons(r)
+}
+
+// QMessageBoxAboutQtFull wraps QMessageBox::aboutQt.
+//
+//	C++: void QMessageBox::aboutQt(QWidget * parent, const QString & title = …)
+//
+// QMessageBoxAboutQtFull is QMessageBoxAboutQt with every argument, including those QMessageBoxAboutQt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#aboutQt
+func QMessageBoxAboutQtFull(parent QWidgetLike, title string) {
+	rt.CheckThread("QMessageBoxAboutQtFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QMessageBoxAboutQtFull")
+	}
+	C.qute_QMessageBox_aboutQt_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)))
 	runtime.KeepAlive(parent)
 }
 

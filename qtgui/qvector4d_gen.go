@@ -95,9 +95,9 @@ func NewQVector4D() *QVector4D {
 //	C++: QVector4D::QVector4D(Qt::Initialization)
 //
 // Qt docs: https://doc.qt.io/qt-6/qvector4d.html#QVector4D
-func NewQVector4DWithInitialization(arg0 qtcore.Initialization) *QVector4D {
+func NewQVector4DWithInitialization(initialization qtcore.Initialization) *QVector4D {
 	rt.CheckThread("NewQVector4DWithInitialization")
-	p := C.qute_QVector4D_new_1(C.int64_t(arg0))
+	p := C.qute_QVector4D_new_1(C.int64_t(initialization))
 	h := rt.WrapClass(p, "QVector4D", rt.NewOwned)
 	return rt.View[QVector4D](h, p)
 }

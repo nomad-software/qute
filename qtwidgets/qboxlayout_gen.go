@@ -55,13 +55,13 @@ func QBoxLayoutCast(o qtcore.QObjectLike) *QBoxLayout {
 // Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
 //
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#QBoxLayout
-func NewQBoxLayoutWithDirection(arg0 QBoxLayoutDirection, parent QWidgetLike) *QBoxLayout {
+func NewQBoxLayoutWithDirection(direction QBoxLayoutDirection, parent QWidgetLike) *QBoxLayout {
 	rt.CheckThread("NewQBoxLayoutWithDirection")
 	var parentPtr unsafe.Pointer
 	if parent != nil {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQBoxLayoutWithDirection")
 	}
-	p := C.qute_QBoxLayout_new(C.int64_t(arg0), parentPtr)
+	p := C.qute_QBoxLayout_new(C.int64_t(direction), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {
@@ -109,6 +109,8 @@ func (this *QBoxLayout) AddSpacing(size int) {
 //
 //	C++: void QBoxLayout::addStretch(int stretch = …)
 //
+// Arguments with C++ defaults are left at them; AddStretchFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#addStretch
 func (this *QBoxLayout) AddStretch() {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddStretch")
@@ -133,7 +135,7 @@ func (this *QBoxLayout) AddSpacerItem(spacerItem QSpacerItemLike) {
 	C.qute_QBoxLayout_addSpacerItem(self, spacerItemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(spacerItem)
-	spacerItemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, spacerItemH)
 }
 
 // AddWidget wraps QBoxLayout::addWidget.
@@ -141,6 +143,8 @@ func (this *QBoxLayout) AddSpacerItem(spacerItem QSpacerItemLike) {
 //	C++: void QBoxLayout::addWidget(QWidget *, int stretch = …, Qt::Alignment alignment = …)
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#addWidget
 func (this *QBoxLayout) AddWidget(widget QWidgetLike) {
@@ -153,7 +157,7 @@ func (this *QBoxLayout) AddWidget(widget QWidgetLike) {
 	C.qute_QBoxLayout_addWidget(self, widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // AddLayout wraps QBoxLayout::addLayout.
@@ -161,6 +165,8 @@ func (this *QBoxLayout) AddWidget(widget QWidgetLike) {
 //	C++: void QBoxLayout::addLayout(QLayout * layout, int stretch = …)
 //
 // Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; AddLayoutFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#addLayout
 func (this *QBoxLayout) AddLayout(layout QLayoutLike) {
@@ -173,7 +179,7 @@ func (this *QBoxLayout) AddLayout(layout QLayoutLike) {
 	C.qute_QBoxLayout_addLayout(self, layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // AddStrut wraps QBoxLayout::addStrut.
@@ -202,6 +208,8 @@ func (this *QBoxLayout) InsertSpacing(index int, size int) {
 //
 //	C++: void QBoxLayout::insertStretch(int index, int stretch = …)
 //
+// Arguments with C++ defaults are left at them; InsertStretchFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#insertStretch
 func (this *QBoxLayout) InsertStretch(index int) {
 	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.InsertStretch")
@@ -226,7 +234,7 @@ func (this *QBoxLayout) InsertSpacerItem(index int, spacerItem QSpacerItemLike) 
 	C.qute_QBoxLayout_insertSpacerItem(self, C.int(index), spacerItemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(spacerItem)
-	spacerItemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, spacerItemH)
 }
 
 // InsertWidget wraps QBoxLayout::insertWidget.
@@ -234,6 +242,8 @@ func (this *QBoxLayout) InsertSpacerItem(index int, spacerItem QSpacerItemLike) 
 //	C++: void QBoxLayout::insertWidget(int index, QWidget * widget, int stretch = …, Qt::Alignment alignment = …)
 //
 // Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; InsertWidgetFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#insertWidget
 func (this *QBoxLayout) InsertWidget(index int, widget QWidgetLike) {
@@ -246,7 +256,7 @@ func (this *QBoxLayout) InsertWidget(index int, widget QWidgetLike) {
 	C.qute_QBoxLayout_insertWidget(self, C.int(index), widgetPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
-	widgetH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
 }
 
 // InsertLayout wraps QBoxLayout::insertLayout.
@@ -254,6 +264,8 @@ func (this *QBoxLayout) InsertWidget(index int, widget QWidgetLike) {
 //	C++: void QBoxLayout::insertLayout(int index, QLayout * layout, int stretch = …)
 //
 // Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// Arguments with C++ defaults are left at them; InsertLayoutFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#insertLayout
 func (this *QBoxLayout) InsertLayout(index int, layout QLayoutLike) {
@@ -266,7 +278,7 @@ func (this *QBoxLayout) InsertLayout(index int, layout QLayoutLike) {
 	C.qute_QBoxLayout_insertLayout(self, C.int(index), layoutPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layout)
-	layoutH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }
 
 // InsertItem wraps QBoxLayout::insertItem.
@@ -286,7 +298,7 @@ func (this *QBoxLayout) InsertItem(index int, layoutItem QLayoutItemLike) {
 	C.qute_QBoxLayout_insertItem(self, C.int(index), layoutItemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(layoutItem)
-	layoutItemH.TransferToCpp()
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutItemH)
 }
 
 // SetStretchFactor wraps QBoxLayout::setStretchFactor.
@@ -392,4 +404,118 @@ func (this *QBoxLayout) MinimumHeightForWidth(arg0 int) int {
 	r := C.qute_QBoxLayout_minimumHeightForWidth(self, C.int(arg0))
 	runtime.KeepAlive(this)
 	return int(r)
+}
+
+// AddStretchFull wraps QBoxLayout::addStretch.
+//
+//	C++: void QBoxLayout::addStretch(int stretch = …)
+//
+// AddStretchFull is AddStretch with every argument, including those AddStretch leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#addStretch
+func (this *QBoxLayout) AddStretchFull(stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddStretchFull")
+	C.qute_QBoxLayout_addStretch_1(self, C.int(stretch))
+	runtime.KeepAlive(this)
+}
+
+// AddWidgetFull wraps QBoxLayout::addWidget.
+//
+//	C++: void QBoxLayout::addWidget(QWidget *, int stretch = …, Qt::Alignment alignment = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// AddWidgetFull is AddWidget with every argument, including those AddWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#addWidget
+func (this *QBoxLayout) AddWidgetFull(widget QWidgetLike, stretch int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QBoxLayout.AddWidgetFull")
+	}
+	C.qute_QBoxLayout_addWidget_1(self, widgetPtr, C.int(stretch), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+}
+
+// AddLayoutFull wraps QBoxLayout::addLayout.
+//
+//	C++: void QBoxLayout::addLayout(QLayout * layout, int stretch = …)
+//
+// Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// AddLayoutFull is AddLayout with every argument, including those AddLayout leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#addLayout
+func (this *QBoxLayout) AddLayoutFull(layout QLayoutLike, stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.AddLayoutFull")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QBoxLayout.AddLayoutFull")
+	}
+	C.qute_QBoxLayout_addLayout_1(self, layoutPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
+}
+
+// InsertStretchFull wraps QBoxLayout::insertStretch.
+//
+//	C++: void QBoxLayout::insertStretch(int index, int stretch = …)
+//
+// InsertStretchFull is InsertStretch with every argument, including those InsertStretch leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#insertStretch
+func (this *QBoxLayout) InsertStretchFull(index int, stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.InsertStretchFull")
+	C.qute_QBoxLayout_insertStretch_1(self, C.int(index), C.int(stretch))
+	runtime.KeepAlive(this)
+}
+
+// InsertWidgetFull wraps QBoxLayout::insertWidget.
+//
+//	C++: void QBoxLayout::insertWidget(int index, QWidget * widget, int stretch = …, Qt::Alignment alignment = …)
+//
+// Ownership: widget becomes Parented: Qt frees it from now on.
+//
+// InsertWidgetFull is InsertWidget with every argument, including those InsertWidget leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#insertWidget
+func (this *QBoxLayout) InsertWidgetFull(index int, widget QWidgetLike, stretch int, alignment qtcore.Alignment) {
+	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.InsertWidgetFull")
+	var widgetPtr unsafe.Pointer
+	var widgetH *rt.Handle
+	if widget != nil {
+		widgetPtr, widgetH = rt.Arg(unsafe.Pointer(widget.AsQWidget()), "QBoxLayout.InsertWidgetFull")
+	}
+	C.qute_QBoxLayout_insertWidget_1(self, C.int(index), widgetPtr, C.int(stretch), C.int64_t(alignment))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(widget)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, widgetH)
+}
+
+// InsertLayoutFull wraps QBoxLayout::insertLayout.
+//
+//	C++: void QBoxLayout::insertLayout(int index, QLayout * layout, int stretch = …)
+//
+// Ownership: layout becomes Parented: Qt frees it from now on.
+//
+// InsertLayoutFull is InsertLayout with every argument, including those InsertLayout leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qboxlayout.html#insertLayout
+func (this *QBoxLayout) InsertLayoutFull(index int, layout QLayoutLike, stretch int) {
+	self := rt.Use(unsafe.Pointer(this), "QBoxLayout.InsertLayoutFull")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QBoxLayout.InsertLayoutFull")
+	}
+	C.qute_QBoxLayout_insertLayout_1(self, C.int(index), layoutPtr, C.int(stretch))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
 }

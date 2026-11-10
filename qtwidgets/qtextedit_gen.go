@@ -539,6 +539,8 @@ func (this *QTextEdit) SetWordWrapMode(policy qtgui.QTextOptionWrapMode) {
 //
 //	C++: bool QTextEdit::find(const QString & exp, QTextDocument::FindFlags options = …)
 //
+// Arguments with C++ defaults are left at them; FindFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#find
 func (this *QTextEdit) Find(exp string) bool {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Find")
@@ -550,6 +552,8 @@ func (this *QTextEdit) Find(exp string) bool {
 // FindRegularExpression wraps QTextEdit::find.
 //
 //	C++: bool QTextEdit::find(const QRegularExpression & exp, QTextDocument::FindFlags options = …)
+//
+// Arguments with C++ defaults are left at them; FindRegularExpressionFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#find
 func (this *QTextEdit) FindRegularExpression(exp *qtcore.QRegularExpression) bool {
@@ -587,6 +591,8 @@ func (this *QTextEdit) ToHtml() string {
 // ToMarkdown wraps QTextEdit::toMarkdown.
 //
 //	C++: QString QTextEdit::toMarkdown(QTextDocument::MarkdownFeatures features = …) const
+//
+// Arguments with C++ defaults are left at them; ToMarkdownFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#toMarkdown
 func (this *QTextEdit) ToMarkdown() string {
@@ -826,6 +832,8 @@ func (this *QTextEdit) ExtraSelections() []*QTextEditExtraSelection {
 // MoveCursor wraps QTextEdit::moveCursor.
 //
 //	C++: void QTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = …)
+//
+// Arguments with C++ defaults are left at them; MoveCursorFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#moveCursor
 func (this *QTextEdit) MoveCursor(operation qtgui.QTextCursorMoveOperation) {
@@ -1131,6 +1139,8 @@ func (this *QTextEdit) ScrollToAnchor(name string) {
 //
 //	C++: void QTextEdit::zoomIn(int range = …)
 //
+// Arguments with C++ defaults are left at them; ZoomInFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#zoomIn
 func (this *QTextEdit) ZoomIn() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ZoomIn")
@@ -1141,6 +1151,8 @@ func (this *QTextEdit) ZoomIn() {
 // ZoomOut wraps QTextEdit::zoomOut.
 //
 //	C++: void QTextEdit::zoomOut(int range = …)
+//
+// Arguments with C++ defaults are left at them; ZoomOutFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtextedit.html#zoomOut
 func (this *QTextEdit) ZoomOut() {
@@ -1224,6 +1236,88 @@ func (this *QTextEdit) EmitSelectionChanged() {
 func (this *QTextEdit) EmitCursorPositionChanged() {
 	self := rt.Use(unsafe.Pointer(this), "QTextEdit.EmitCursorPositionChanged")
 	C.qute_QTextEdit_cursorPositionChanged_1(self)
+	runtime.KeepAlive(this)
+}
+
+// FindFull wraps QTextEdit::find.
+//
+//	C++: bool QTextEdit::find(const QString & exp, QTextDocument::FindFlags options = …)
+//
+// FindFull is Find with every argument, including those Find leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#find
+func (this *QTextEdit) FindFull(exp string, options qtgui.QTextDocumentFindFlags) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FindFull")
+	r := C.qute_QTextEdit_find_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(exp))), C.ptrdiff_t(len(exp)), C.int64_t(options))
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// FindRegularExpressionFull wraps QTextEdit::find.
+//
+//	C++: bool QTextEdit::find(const QRegularExpression & exp, QTextDocument::FindFlags options = …)
+//
+// FindRegularExpressionFull is FindRegularExpression with every argument, including those FindRegularExpression leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#find
+func (this *QTextEdit) FindRegularExpressionFull(exp *qtcore.QRegularExpression, options qtgui.QTextDocumentFindFlags) bool {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FindRegularExpressionFull")
+	r := C.qute_QTextEdit_find_3(self, rt.UseArg(unsafe.Pointer(exp), "QTextEdit.FindRegularExpressionFull"), C.int64_t(options))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(exp)
+	return bool(r)
+}
+
+// ToMarkdownFull wraps QTextEdit::toMarkdown.
+//
+//	C++: QString QTextEdit::toMarkdown(QTextDocument::MarkdownFeatures features = …) const
+//
+// ToMarkdownFull is ToMarkdown with every argument, including those ToMarkdown leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#toMarkdown
+func (this *QTextEdit) ToMarkdownFull(features qtgui.QTextDocumentMarkdownFeatures) string {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ToMarkdownFull")
+	r := C.qute_QTextEdit_toMarkdown_1(self, C.int64_t(features))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// MoveCursorFull wraps QTextEdit::moveCursor.
+//
+//	C++: void QTextEdit::moveCursor(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = …)
+//
+// MoveCursorFull is MoveCursor with every argument, including those MoveCursor leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#moveCursor
+func (this *QTextEdit) MoveCursorFull(operation qtgui.QTextCursorMoveOperation, mode qtgui.QTextCursorMoveMode) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.MoveCursorFull")
+	C.qute_QTextEdit_moveCursor_1(self, C.int64_t(operation), C.int64_t(mode))
+	runtime.KeepAlive(this)
+}
+
+// ZoomInFull wraps QTextEdit::zoomIn.
+//
+//	C++: void QTextEdit::zoomIn(int range = …)
+//
+// ZoomInFull is ZoomIn with every argument, including those ZoomIn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#zoomIn
+func (this *QTextEdit) ZoomInFull(rangeArg int) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ZoomInFull")
+	C.qute_QTextEdit_zoomIn_1(self, C.int(rangeArg))
+	runtime.KeepAlive(this)
+}
+
+// ZoomOutFull wraps QTextEdit::zoomOut.
+//
+//	C++: void QTextEdit::zoomOut(int range = …)
+//
+// ZoomOutFull is ZoomOut with every argument, including those ZoomOut leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextedit.html#zoomOut
+func (this *QTextEdit) ZoomOutFull(rangeArg int) {
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ZoomOutFull")
+	C.qute_QTextEdit_zoomOut_1(self, C.int(rangeArg))
 	runtime.KeepAlive(this)
 }
 

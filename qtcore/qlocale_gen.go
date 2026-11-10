@@ -117,10 +117,26 @@ func NewQLocaleWithLanguageTerritory(language QLocaleLanguage, territory QLocale
 //
 //	C++: QLocale::QLocale(Language language, Script script = …, Territory territory = …)
 //
+// Arguments with C++ defaults are left at them; NewQLocaleWithLanguageFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#QLocale
 func NewQLocaleWithLanguage(language QLocaleLanguage) *QLocale {
 	rt.CheckThread("NewQLocaleWithLanguage")
 	p := C.qute_QLocale_new_3(C.int64_t(language))
+	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
+	return rt.View[QLocale](h, p)
+}
+
+// NewQLocaleWithLanguageFull wraps the QLocale constructor.
+//
+//	C++: QLocale::QLocale(Language language, Script script = …, Territory territory = …)
+//
+// NewQLocaleWithLanguageFull is NewQLocaleWithLanguage with every argument, including those NewQLocaleWithLanguage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#QLocale
+func NewQLocaleWithLanguageFull(language QLocaleLanguage, script QLocaleScript, territory QLocaleCountry) *QLocale {
+	rt.CheckThread("NewQLocaleWithLanguageFull")
+	p := C.qute_QLocale_new_4(C.int64_t(language), C.int64_t(script), C.int64_t(territory))
 	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
 	return rt.View[QLocale](h, p)
 }
@@ -165,6 +181,8 @@ func (this *QLocale) Territory() QLocaleCountry {
 //
 //	C++: QString QLocale::name(TagSeparator separator = …) const
 //
+// Arguments with C++ defaults are left at them; NameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#name
 func (this *QLocale) Name() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.Name")
@@ -176,6 +194,8 @@ func (this *QLocale) Name() string {
 // Bcp47Name wraps QLocale::bcp47Name.
 //
 //	C++: QString QLocale::bcp47Name(TagSeparator separator = …) const
+//
+// Arguments with C++ defaults are left at them; Bcp47NameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#bcp47Name
 func (this *QLocale) Bcp47Name() string {
@@ -501,6 +521,8 @@ func (this *QLocale) ToStringUint16Padded(number uint16, fieldWidth int, fillCha
 //
 //	C++: QString QLocale::toString(double f, char format = …, int precision = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringFloat64Full takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringFloat64(fArg float64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat64")
@@ -512,6 +534,8 @@ func (this *QLocale) ToStringFloat64(fArg float64) string {
 // ToStringFloat32 wraps QLocale::toString.
 //
 //	C++: QString QLocale::toString(float f, char format = …, int precision = …) const
+//
+// Arguments with C++ defaults are left at them; ToStringFloat32Full takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringFloat32(fArg float32) string {
@@ -564,6 +588,8 @@ func (this *QLocale) ToStringDateTimeFormat(dateTime *QDateTime, format string) 
 //
 //	C++: QString QLocale::toString(QDate date, FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringDateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDate(date *QDate) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDate")
@@ -577,6 +603,8 @@ func (this *QLocale) ToStringDate(date *QDate) string {
 //
 //	C++: QString QLocale::toString(QTime time, FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; ToStringTimeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringTime(time *QTime) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringTime")
@@ -589,6 +617,8 @@ func (this *QLocale) ToStringTime(time *QTime) string {
 // ToStringDateTime wraps QLocale::toString.
 //
 //	C++: QString QLocale::toString(const QDateTime & dateTime, FormatType format = …) const
+//
+// Arguments with C++ defaults are left at them; ToStringDateTimeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
 func (this *QLocale) ToStringDateTime(dateTime *QDateTime) string {
@@ -659,6 +689,8 @@ func (this *QLocale) ToStringDateTimeFormatCalendar(dateTime *QDateTime, format 
 //
 //	C++: QString QLocale::dateFormat(FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; DateFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#dateFormat
 func (this *QLocale) DateFormat() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.DateFormat")
@@ -671,6 +703,8 @@ func (this *QLocale) DateFormat() string {
 //
 //	C++: QString QLocale::timeFormat(FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; TimeFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#timeFormat
 func (this *QLocale) TimeFormat() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.TimeFormat")
@@ -682,6 +716,8 @@ func (this *QLocale) TimeFormat() string {
 // DateTimeFormat wraps QLocale::dateTimeFormat.
 //
 //	C++: QString QLocale::dateTimeFormat(FormatType format = …) const
+//
+// Arguments with C++ defaults are left at them; DateTimeFormatFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#dateTimeFormat
 func (this *QLocale) DateTimeFormat() string {
@@ -696,6 +732,8 @@ func (this *QLocale) DateTimeFormat() string {
 //	C++: QTime QLocale::toTime(const QString & string, FormatType = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ToTimeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toTime
 func (this *QLocale) ToTime(stringArg string) *QTime {
@@ -725,6 +763,8 @@ func (this *QLocale) ToTimeWithFormat(stringArg string, format string) *QTime {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ToDateFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
 func (this *QLocale) ToDate(stringArg string) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDate")
@@ -738,6 +778,8 @@ func (this *QLocale) ToDate(stringArg string) *QDate {
 //	C++: QDate QLocale::toDate(const QString & string, const QString & format, int baseYear = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ToDateWithFormatFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
 func (this *QLocale) ToDateWithFormat(stringArg string, format string) *QDate {
@@ -753,6 +795,8 @@ func (this *QLocale) ToDateWithFormat(stringArg string, format string) *QDate {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ToDateTimeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
 func (this *QLocale) ToDateTime(stringArg string) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTime")
@@ -767,6 +811,8 @@ func (this *QLocale) ToDateTime(stringArg string) *QDateTime {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ToDateTimeWithFormatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
 func (this *QLocale) ToDateTimeWithFormat(stringArg string, format string) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormat")
@@ -780,6 +826,8 @@ func (this *QLocale) ToDateTimeWithFormat(stringArg string, format string) *QDat
 //	C++: QDate QLocale::toDate(const QString & string, FormatType format, QCalendar cal, int baseYear = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ToDateWithFormatTypeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
 func (this *QLocale) ToDateWithFormatType(stringArg string, format QLocaleFormatType, cal *QCalendar) *QDate {
@@ -796,6 +844,8 @@ func (this *QLocale) ToDateWithFormatType(stringArg string, format QLocaleFormat
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ToDateWithFormatCalendarFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
 func (this *QLocale) ToDateWithFormatCalendar(stringArg string, format string, cal *QCalendar) *QDate {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormatCalendar")
@@ -811,6 +861,8 @@ func (this *QLocale) ToDateWithFormatCalendar(stringArg string, format string, c
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ToDateTimeWithFormatTypeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
 func (this *QLocale) ToDateTimeWithFormatType(stringArg string, format QLocaleFormatType, cal *QCalendar) *QDateTime {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormatType")
@@ -825,6 +877,8 @@ func (this *QLocale) ToDateTimeWithFormatType(stringArg string, format QLocaleFo
 //	C++: QDateTime QLocale::toDateTime(const QString & string, const QString & format, QCalendar cal, int baseYear = …) const
 //
 // Ownership: the result is an Owned copy.
+//
+// Arguments with C++ defaults are left at them; ToDateTimeWithFormatCalendarFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
 func (this *QLocale) ToDateTimeWithFormatCalendar(stringArg string, format string, cal *QCalendar) *QDateTime {
@@ -923,6 +977,8 @@ func (this *QLocale) Exponential() string {
 //
 //	C++: QString QLocale::monthName(int, FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; MonthNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#monthName
 func (this *QLocale) MonthName(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.MonthName")
@@ -934,6 +990,8 @@ func (this *QLocale) MonthName(arg0 int) string {
 // StandaloneMonthName wraps QLocale::standaloneMonthName.
 //
 //	C++: QString QLocale::standaloneMonthName(int, FormatType format = …) const
+//
+// Arguments with C++ defaults are left at them; StandaloneMonthNameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#standaloneMonthName
 func (this *QLocale) StandaloneMonthName(arg0 int) string {
@@ -947,6 +1005,8 @@ func (this *QLocale) StandaloneMonthName(arg0 int) string {
 //
 //	C++: QString QLocale::dayName(int, FormatType format = …) const
 //
+// Arguments with C++ defaults are left at them; DayNameFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#dayName
 func (this *QLocale) DayName(arg0 int) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.DayName")
@@ -958,6 +1018,8 @@ func (this *QLocale) DayName(arg0 int) string {
 // StandaloneDayName wraps QLocale::standaloneDayName.
 //
 //	C++: QString QLocale::standaloneDayName(int, FormatType format = …) const
+//
+// Arguments with C++ defaults are left at them; StandaloneDayNameFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#standaloneDayName
 func (this *QLocale) StandaloneDayName(arg0 int) string {
@@ -1081,6 +1143,8 @@ func (this *QLocale) ToLower(str string) string {
 //
 //	C++: QString QLocale::currencySymbol(CurrencySymbolFormat = …) const
 //
+// Arguments with C++ defaults are left at them; CurrencySymbolFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#currencySymbol
 func (this *QLocale) CurrencySymbol() string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.CurrencySymbol")
@@ -1092,6 +1156,8 @@ func (this *QLocale) CurrencySymbol() string {
 // ToCurrencyString wraps QLocale::toCurrencyString.
 //
 //	C++: QString QLocale::toCurrencyString(qlonglong, const QString & symbol = …) const
+//
+// Arguments with C++ defaults are left at them; ToCurrencyStringFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyString(arg0 int64) string {
@@ -1105,6 +1171,8 @@ func (this *QLocale) ToCurrencyString(arg0 int64) string {
 //
 //	C++: QString QLocale::toCurrencyString(qulonglong, const QString & symbol = …) const
 //
+// Arguments with C++ defaults are left at them; ToCurrencyStringUint64Full takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringUint64(arg0 uint64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint64")
@@ -1116,6 +1184,8 @@ func (this *QLocale) ToCurrencyStringUint64(arg0 uint64) string {
 // ToCurrencyStringInt16 wraps QLocale::toCurrencyString.
 //
 //	C++: QString QLocale::toCurrencyString(short i, const QString & symbol = …) const
+//
+// Arguments with C++ defaults are left at them; ToCurrencyStringInt16Full takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringInt16(iArg int16) string {
@@ -1129,6 +1199,8 @@ func (this *QLocale) ToCurrencyStringInt16(iArg int16) string {
 //
 //	C++: QString QLocale::toCurrencyString(ushort i, const QString & symbol = …) const
 //
+// Arguments with C++ defaults are left at them; ToCurrencyStringUint16Full takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringUint16(iArg uint16) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint16")
@@ -1140,6 +1212,8 @@ func (this *QLocale) ToCurrencyStringUint16(iArg uint16) string {
 // ToCurrencyStringInt wraps QLocale::toCurrencyString.
 //
 //	C++: QString QLocale::toCurrencyString(int i, const QString & symbol = …) const
+//
+// Arguments with C++ defaults are left at them; ToCurrencyStringIntFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringInt(iArg int) string {
@@ -1153,6 +1227,8 @@ func (this *QLocale) ToCurrencyStringInt(iArg int) string {
 //
 //	C++: QString QLocale::toCurrencyString(uint i, const QString & symbol = …) const
 //
+// Arguments with C++ defaults are left at them; ToCurrencyStringUintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringUint(iArg uint) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint")
@@ -1164,6 +1240,8 @@ func (this *QLocale) ToCurrencyStringUint(iArg uint) string {
 // ToCurrencyStringFloat64 wraps QLocale::toCurrencyString.
 //
 //	C++: QString QLocale::toCurrencyString(double, const QString & symbol = …, int precision = …) const
+//
+// Arguments with C++ defaults are left at them; ToCurrencyStringFloat64Full takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringFloat64(arg0 float64) string {
@@ -1177,6 +1255,8 @@ func (this *QLocale) ToCurrencyStringFloat64(arg0 float64) string {
 //
 //	C++: QString QLocale::toCurrencyString(float i, const QString & symbol = …, int precision = …) const
 //
+// Arguments with C++ defaults are left at them; ToCurrencyStringFloat32Full takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
 func (this *QLocale) ToCurrencyStringFloat32(iArg float32) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringFloat32")
@@ -1189,6 +1269,8 @@ func (this *QLocale) ToCurrencyStringFloat32(iArg float32) string {
 //
 //	C++: QString QLocale::formattedDataSize(qint64 bytes, int precision = …, DataSizeFormats format = …) const
 //
+// Arguments with C++ defaults are left at them; FormattedDataSizeFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#formattedDataSize
 func (this *QLocale) FormattedDataSize(bytes int64) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.FormattedDataSize")
@@ -1200,6 +1282,8 @@ func (this *QLocale) FormattedDataSize(bytes int64) string {
 // UiLanguages wraps QLocale::uiLanguages.
 //
 //	C++: QStringList QLocale::uiLanguages(TagSeparator separator = …) const
+//
+// Arguments with C++ defaults are left at them; UiLanguagesFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#uiLanguages
 func (this *QLocale) UiLanguages() []string {
@@ -1236,6 +1320,8 @@ func (this *QLocale) NumberOptions() QLocaleNumberOptions {
 //
 //	C++: QString QLocale::quoteString(const QString & str, QuotationStyle style = …) const
 //
+// Arguments with C++ defaults are left at them; QuoteStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#quoteString
 func (this *QLocale) QuoteString(str string) string {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.QuoteString")
@@ -1257,9 +1343,526 @@ func (this *QLocale) CreateSeparatedList(strl []string) string {
 	return quteStr(r)
 }
 
+// NameFull wraps QLocale::name.
+//
+//	C++: QString QLocale::name(TagSeparator separator = …) const
+//
+// NameFull is Name with every argument, including those Name leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#name
+func (this *QLocale) NameFull(separator QLocaleTagSeparator) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.NameFull")
+	r := C.qute_QLocale_name_1(self, C.int64_t(separator))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// Bcp47NameFull wraps QLocale::bcp47Name.
+//
+//	C++: QString QLocale::bcp47Name(TagSeparator separator = …) const
+//
+// Bcp47NameFull is Bcp47Name with every argument, including those Bcp47Name leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#bcp47Name
+func (this *QLocale) Bcp47NameFull(separator QLocaleTagSeparator) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.Bcp47NameFull")
+	r := C.qute_QLocale_bcp47Name_1(self, C.int64_t(separator))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToStringFloat64Full wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(double f, char format = …, int precision = …) const
+//
+// ToStringFloat64Full is ToStringFloat64 with every argument, including those ToStringFloat64 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringFloat64Full(fArg float64, format byte, precision int) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat64Full")
+	r := C.qute_QLocale_toString_26(self, C.double(fArg), C.char(format), C.int(precision))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToStringFloat32Full wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(float f, char format = …, int precision = …) const
+//
+// ToStringFloat32Full is ToStringFloat32 with every argument, including those ToStringFloat32 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringFloat32Full(fArg float32, format byte, precision int) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringFloat32Full")
+	r := C.qute_QLocale_toString_27(self, C.float(fArg), C.char(format), C.int(precision))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToStringDateFull wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(QDate date, FormatType format = …) const
+//
+// ToStringDateFull is ToStringDate with every argument, including those ToStringDate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringDateFull(date *QDate, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateFull")
+	r := C.qute_QLocale_toString_28(self, rt.UseArg(unsafe.Pointer(date), "QLocale.ToStringDateFull"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
+	return quteStr(r)
+}
+
+// ToStringTimeFull wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(QTime time, FormatType format = …) const
+//
+// ToStringTimeFull is ToStringTime with every argument, including those ToStringTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringTimeFull(time *QTime, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringTimeFull")
+	r := C.qute_QLocale_toString_29(self, rt.UseArg(unsafe.Pointer(time), "QLocale.ToStringTimeFull"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(time)
+	return quteStr(r)
+}
+
+// ToStringDateTimeFull wraps QLocale::toString.
+//
+//	C++: QString QLocale::toString(const QDateTime & dateTime, FormatType format = …) const
+//
+// ToStringDateTimeFull is ToStringDateTime with every argument, including those ToStringDateTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toString
+func (this *QLocale) ToStringDateTimeFull(dateTime *QDateTime, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToStringDateTimeFull")
+	r := C.qute_QLocale_toString_30(self, rt.UseArg(unsafe.Pointer(dateTime), "QLocale.ToStringDateTimeFull"), C.int64_t(format))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(dateTime)
+	return quteStr(r)
+}
+
+// DateFormatFull wraps QLocale::dateFormat.
+//
+//	C++: QString QLocale::dateFormat(FormatType format = …) const
+//
+// DateFormatFull is DateFormat with every argument, including those DateFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#dateFormat
+func (this *QLocale) DateFormatFull(format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.DateFormatFull")
+	r := C.qute_QLocale_dateFormat_1(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// TimeFormatFull wraps QLocale::timeFormat.
+//
+//	C++: QString QLocale::timeFormat(FormatType format = …) const
+//
+// TimeFormatFull is TimeFormat with every argument, including those TimeFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#timeFormat
+func (this *QLocale) TimeFormatFull(format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.TimeFormatFull")
+	r := C.qute_QLocale_timeFormat_1(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// DateTimeFormatFull wraps QLocale::dateTimeFormat.
+//
+//	C++: QString QLocale::dateTimeFormat(FormatType format = …) const
+//
+// DateTimeFormatFull is DateTimeFormat with every argument, including those DateTimeFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#dateTimeFormat
+func (this *QLocale) DateTimeFormatFull(format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.DateTimeFormatFull")
+	r := C.qute_QLocale_dateTimeFormat_1(self, C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToTimeFull wraps QLocale::toTime.
+//
+//	C++: QTime QLocale::toTime(const QString & string, FormatType = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToTimeFull is ToTime with every argument, including those ToTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toTime
+func (this *QLocale) ToTimeFull(stringArg string, formatType QLocaleFormatType) *QTime {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToTimeFull")
+	r := C.qute_QLocale_toTime_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(formatType))
+	runtime.KeepAlive(this)
+	return rt.View[QTime](rt.WrapClass(r, "QTime", rt.TakeOwned), r)
+}
+
+// ToDateFull wraps QLocale::toDate.
+//
+//	C++: QDate QLocale::toDate(const QString & string, FormatType = …, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateFull is ToDate with every argument, including those ToDate leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
+func (this *QLocale) ToDateFull(stringArg string, formatType QLocaleFormatType, baseYear int) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateFull")
+	r := C.qute_QLocale_toDate_4(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(formatType), C.int(baseYear))
+	runtime.KeepAlive(this)
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// ToDateWithFormatFull wraps QLocale::toDate.
+//
+//	C++: QDate QLocale::toDate(const QString & string, const QString & format, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateWithFormatFull is ToDateWithFormat with every argument, including those ToDateWithFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
+func (this *QLocale) ToDateWithFormatFull(stringArg string, format string, baseYear int) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormatFull")
+	r := C.qute_QLocale_toDate_5(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear))
+	runtime.KeepAlive(this)
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// ToDateTimeFull wraps QLocale::toDateTime.
+//
+//	C++: QDateTime QLocale::toDateTime(const QString & string, FormatType format = …, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateTimeFull is ToDateTime with every argument, including those ToDateTime leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
+func (this *QLocale) ToDateTimeFull(stringArg string, format QLocaleFormatType, baseYear int) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeFull")
+	r := C.qute_QLocale_toDateTime_4(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format), C.int(baseYear))
+	runtime.KeepAlive(this)
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// ToDateTimeWithFormatFull wraps QLocale::toDateTime.
+//
+//	C++: QDateTime QLocale::toDateTime(const QString & string, const QString & format, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateTimeWithFormatFull is ToDateTimeWithFormat with every argument, including those ToDateTimeWithFormat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
+func (this *QLocale) ToDateTimeWithFormatFull(stringArg string, format string, baseYear int) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormatFull")
+	r := C.qute_QLocale_toDateTime_5(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), C.int(baseYear))
+	runtime.KeepAlive(this)
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// ToDateWithFormatTypeFull wraps QLocale::toDate.
+//
+//	C++: QDate QLocale::toDate(const QString & string, FormatType format, QCalendar cal, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateWithFormatTypeFull is ToDateWithFormatType with every argument, including those ToDateWithFormatType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
+func (this *QLocale) ToDateWithFormatTypeFull(stringArg string, format QLocaleFormatType, cal *QCalendar, baseYear int) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormatTypeFull")
+	r := C.qute_QLocale_toDate_6(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateWithFormatTypeFull"), C.int(baseYear))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// ToDateWithFormatCalendarFull wraps QLocale::toDate.
+//
+//	C++: QDate QLocale::toDate(const QString & string, const QString & format, QCalendar cal, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateWithFormatCalendarFull is ToDateWithFormatCalendar with every argument, including those ToDateWithFormatCalendar leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDate
+func (this *QLocale) ToDateWithFormatCalendarFull(stringArg string, format string, cal *QCalendar, baseYear int) *QDate {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateWithFormatCalendarFull")
+	r := C.qute_QLocale_toDate_7(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateWithFormatCalendarFull"), C.int(baseYear))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
+	return rt.View[QDate](rt.WrapClass(r, "QDate", rt.TakeOwned), r)
+}
+
+// ToDateTimeWithFormatTypeFull wraps QLocale::toDateTime.
+//
+//	C++: QDateTime QLocale::toDateTime(const QString & string, FormatType format, QCalendar cal, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateTimeWithFormatTypeFull is ToDateTimeWithFormatType with every argument, including those ToDateTimeWithFormatType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
+func (this *QLocale) ToDateTimeWithFormatTypeFull(stringArg string, format QLocaleFormatType, cal *QCalendar, baseYear int) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormatTypeFull")
+	r := C.qute_QLocale_toDateTime_6(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), C.int64_t(format), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateTimeWithFormatTypeFull"), C.int(baseYear))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// ToDateTimeWithFormatCalendarFull wraps QLocale::toDateTime.
+//
+//	C++: QDateTime QLocale::toDateTime(const QString & string, const QString & format, QCalendar cal, int baseYear = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ToDateTimeWithFormatCalendarFull is ToDateTimeWithFormatCalendar with every argument, including those ToDateTimeWithFormatCalendar leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDateTime
+func (this *QLocale) ToDateTimeWithFormatCalendarFull(stringArg string, format string, cal *QCalendar, baseYear int) *QDateTime {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDateTimeWithFormatCalendarFull")
+	r := C.qute_QLocale_toDateTime_7(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), (*C.char)(unsafe.Pointer(unsafe.StringData(format))), C.ptrdiff_t(len(format)), rt.UseArg(unsafe.Pointer(cal), "QLocale.ToDateTimeWithFormatCalendarFull"), C.int(baseYear))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(cal)
+	return rt.View[QDateTime](rt.WrapClass(r, "QDateTime", rt.TakeOwned), r)
+}
+
+// MonthNameFull wraps QLocale::monthName.
+//
+//	C++: QString QLocale::monthName(int, FormatType format = …) const
+//
+// MonthNameFull is MonthName with every argument, including those MonthName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#monthName
+func (this *QLocale) MonthNameFull(arg0 int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.MonthNameFull")
+	r := C.qute_QLocale_monthName_1(self, C.int(arg0), C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// StandaloneMonthNameFull wraps QLocale::standaloneMonthName.
+//
+//	C++: QString QLocale::standaloneMonthName(int, FormatType format = …) const
+//
+// StandaloneMonthNameFull is StandaloneMonthName with every argument, including those StandaloneMonthName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#standaloneMonthName
+func (this *QLocale) StandaloneMonthNameFull(arg0 int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.StandaloneMonthNameFull")
+	r := C.qute_QLocale_standaloneMonthName_1(self, C.int(arg0), C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// DayNameFull wraps QLocale::dayName.
+//
+//	C++: QString QLocale::dayName(int, FormatType format = …) const
+//
+// DayNameFull is DayName with every argument, including those DayName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#dayName
+func (this *QLocale) DayNameFull(arg0 int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.DayNameFull")
+	r := C.qute_QLocale_dayName_1(self, C.int(arg0), C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// StandaloneDayNameFull wraps QLocale::standaloneDayName.
+//
+//	C++: QString QLocale::standaloneDayName(int, FormatType format = …) const
+//
+// StandaloneDayNameFull is StandaloneDayName with every argument, including those StandaloneDayName leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#standaloneDayName
+func (this *QLocale) StandaloneDayNameFull(arg0 int, format QLocaleFormatType) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.StandaloneDayNameFull")
+	r := C.qute_QLocale_standaloneDayName_1(self, C.int(arg0), C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// CurrencySymbolFull wraps QLocale::currencySymbol.
+//
+//	C++: QString QLocale::currencySymbol(CurrencySymbolFormat = …) const
+//
+// CurrencySymbolFull is CurrencySymbol with every argument, including those CurrencySymbol leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#currencySymbol
+func (this *QLocale) CurrencySymbolFull(currencySymbolFormat QLocaleCurrencySymbolFormat) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.CurrencySymbolFull")
+	r := C.qute_QLocale_currencySymbol_1(self, C.int64_t(currencySymbolFormat))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringFull wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(qlonglong, const QString & symbol = …) const
+//
+// ToCurrencyStringFull is ToCurrencyString with every argument, including those ToCurrencyString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringFull(arg0 int64, symbol string) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringFull")
+	r := C.qute_QLocale_toCurrencyString_8(self, C.longlong(arg0), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringUint64Full wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(qulonglong, const QString & symbol = …) const
+//
+// ToCurrencyStringUint64Full is ToCurrencyStringUint64 with every argument, including those ToCurrencyStringUint64 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringUint64Full(arg0 uint64, symbol string) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint64Full")
+	r := C.qute_QLocale_toCurrencyString_9(self, C.ulonglong(arg0), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringInt16Full wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(short i, const QString & symbol = …) const
+//
+// ToCurrencyStringInt16Full is ToCurrencyStringInt16 with every argument, including those ToCurrencyStringInt16 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringInt16Full(iArg int16, symbol string) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringInt16Full")
+	r := C.qute_QLocale_toCurrencyString_10(self, C.short(iArg), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringUint16Full wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(ushort i, const QString & symbol = …) const
+//
+// ToCurrencyStringUint16Full is ToCurrencyStringUint16 with every argument, including those ToCurrencyStringUint16 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringUint16Full(iArg uint16, symbol string) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUint16Full")
+	r := C.qute_QLocale_toCurrencyString_11(self, C.ushort(iArg), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringIntFull wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(int i, const QString & symbol = …) const
+//
+// ToCurrencyStringIntFull is ToCurrencyStringInt with every argument, including those ToCurrencyStringInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringIntFull(iArg int, symbol string) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringIntFull")
+	r := C.qute_QLocale_toCurrencyString_12(self, C.int(iArg), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringUintFull wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(uint i, const QString & symbol = …) const
+//
+// ToCurrencyStringUintFull is ToCurrencyStringUint with every argument, including those ToCurrencyStringUint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringUintFull(iArg uint, symbol string) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringUintFull")
+	r := C.qute_QLocale_toCurrencyString_13(self, C.uint(iArg), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringFloat64Full wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(double, const QString & symbol = …, int precision = …) const
+//
+// ToCurrencyStringFloat64Full is ToCurrencyStringFloat64 with every argument, including those ToCurrencyStringFloat64 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringFloat64Full(arg0 float64, symbol string, precision int) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringFloat64Full")
+	r := C.qute_QLocale_toCurrencyString_14(self, C.double(arg0), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)), C.int(precision))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// ToCurrencyStringFloat32Full wraps QLocale::toCurrencyString.
+//
+//	C++: QString QLocale::toCurrencyString(float i, const QString & symbol = …, int precision = …) const
+//
+// ToCurrencyStringFloat32Full is ToCurrencyStringFloat32 with every argument, including those ToCurrencyStringFloat32 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toCurrencyString
+func (this *QLocale) ToCurrencyStringFloat32Full(iArg float32, symbol string, precision int) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToCurrencyStringFloat32Full")
+	r := C.qute_QLocale_toCurrencyString_15(self, C.float(iArg), (*C.char)(unsafe.Pointer(unsafe.StringData(symbol))), C.ptrdiff_t(len(symbol)), C.int(precision))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// FormattedDataSizeFull wraps QLocale::formattedDataSize.
+//
+//	C++: QString QLocale::formattedDataSize(qint64 bytes, int precision = …, DataSizeFormats format = …) const
+//
+// FormattedDataSizeFull is FormattedDataSize with every argument, including those FormattedDataSize leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#formattedDataSize
+func (this *QLocale) FormattedDataSizeFull(bytes int64, precision int, format QLocaleDataSizeFormats) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.FormattedDataSizeFull")
+	r := C.qute_QLocale_formattedDataSize_1(self, C.longlong(bytes), C.int(precision), C.int64_t(format))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
+// UiLanguagesFull wraps QLocale::uiLanguages.
+//
+//	C++: QStringList QLocale::uiLanguages(TagSeparator separator = …) const
+//
+// UiLanguagesFull is UiLanguages with every argument, including those UiLanguages leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#uiLanguages
+func (this *QLocale) UiLanguagesFull(separator QLocaleTagSeparator) []string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.UiLanguagesFull")
+	r := C.qute_QLocale_uiLanguages_1(self, C.int64_t(separator))
+	runtime.KeepAlive(this)
+	return quteStrList(r)
+}
+
+// QuoteStringFull wraps QLocale::quoteString.
+//
+//	C++: QString QLocale::quoteString(const QString & str, QuotationStyle style = …) const
+//
+// QuoteStringFull is QuoteString with every argument, including those QuoteString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#quoteString
+func (this *QLocale) QuoteStringFull(str string, style QLocaleQuotationStyle) string {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.QuoteStringFull")
+	r := C.qute_QLocale_quoteString_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)), C.int64_t(style))
+	runtime.KeepAlive(this)
+	return quteStr(r)
+}
+
 // QLocaleLanguageToCode wraps QLocale::languageToCode.
 //
 //	C++: QString QLocale::languageToCode(Language language, LanguageCodeTypes codeTypes = …)
+//
+// Arguments with C++ defaults are left at them; QLocaleLanguageToCodeFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#languageToCode
 func QLocaleLanguageToCode(language QLocaleLanguage) string {
@@ -1271,6 +1874,8 @@ func QLocaleLanguageToCode(language QLocaleLanguage) string {
 // QLocaleCodeToLanguage wraps QLocale::codeToLanguage.
 //
 //	C++: Language QLocale::codeToLanguage(QStringView languageCode, LanguageCodeTypes codeTypes = …)
+//
+// Arguments with C++ defaults are left at them; QLocaleCodeToLanguageFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#codeToLanguage
 func QLocaleCodeToLanguage(languageCode string) QLocaleLanguage {
@@ -1402,4 +2007,30 @@ func QLocaleMatchingLocales(language QLocaleLanguage, script QLocaleScript, terr
 	rt.CheckThread("QLocaleMatchingLocales")
 	r := C.qute_QLocale_matchingLocales(C.int64_t(language), C.int64_t(script), C.int64_t(territory))
 	return quteList(r, func(e unsafe.Pointer) *QLocale { return rt.View[QLocale](rt.WrapClass(e, "QLocale", rt.TakeOwned), e) })
+}
+
+// QLocaleLanguageToCodeFull wraps QLocale::languageToCode.
+//
+//	C++: QString QLocale::languageToCode(Language language, LanguageCodeTypes codeTypes = …)
+//
+// QLocaleLanguageToCodeFull is QLocaleLanguageToCode with every argument, including those QLocaleLanguageToCode leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#languageToCode
+func QLocaleLanguageToCodeFull(language QLocaleLanguage, codeTypes QLocaleLanguageCodeTypes) string {
+	rt.CheckThread("QLocaleLanguageToCodeFull")
+	r := C.qute_QLocale_languageToCode_1(C.int64_t(language), C.int64_t(codeTypes))
+	return quteStr(r)
+}
+
+// QLocaleCodeToLanguageFull wraps QLocale::codeToLanguage.
+//
+//	C++: Language QLocale::codeToLanguage(QStringView languageCode, LanguageCodeTypes codeTypes = …)
+//
+// QLocaleCodeToLanguageFull is QLocaleCodeToLanguage with every argument, including those QLocaleCodeToLanguage leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#codeToLanguage
+func QLocaleCodeToLanguageFull(languageCode string, codeTypes QLocaleLanguageCodeTypes) QLocaleLanguage {
+	rt.CheckThread("QLocaleCodeToLanguageFull")
+	r := C.qute_QLocale_codeToLanguage_1((*C.char)(unsafe.Pointer(unsafe.StringData(languageCode))), C.ptrdiff_t(len(languageCode)), C.int64_t(codeTypes))
+	return QLocaleLanguage(r)
 }

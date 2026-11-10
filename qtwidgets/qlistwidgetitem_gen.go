@@ -84,6 +84,8 @@ func (this *QListWidgetItem) Unkeep() {
 //
 // Ownership: listview the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQListWidgetItemFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#QListWidgetItem
 func NewQListWidgetItem(listview QListWidgetLike) *QListWidgetItem {
 	rt.CheckThread("NewQListWidgetItem")
@@ -106,6 +108,8 @@ func NewQListWidgetItem(listview QListWidgetLike) *QListWidgetItem {
 //	C++: QListWidgetItem::QListWidgetItem(const QString & text, QListWidget * listview = …, int type = …)
 //
 // Ownership: listview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// Arguments with C++ defaults are left at them; NewQListWidgetItemWithTextFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#QListWidgetItem
 func NewQListWidgetItemWithText(text string, listview QListWidgetLike) *QListWidgetItem {
@@ -130,6 +134,8 @@ func NewQListWidgetItemWithText(text string, listview QListWidgetLike) *QListWid
 //
 // Ownership: listview the receiver becomes Parented when it is non-nil, Owned when nil.
 //
+// Arguments with C++ defaults are left at them; NewQListWidgetItemWithIconFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#QListWidgetItem
 func NewQListWidgetItemWithIcon(icon *qtgui.QIcon, text string, listview QListWidgetLike) *QListWidgetItem {
 	rt.CheckThread("NewQListWidgetItemWithIcon")
@@ -138,6 +144,82 @@ func NewQListWidgetItemWithIcon(icon *qtgui.QIcon, text string, listview QListWi
 		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithIcon")
 	}
 	p := C.qute_QListWidgetItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQListWidgetItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(listview)
+	mode := rt.NewOwned
+	if listviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	return rt.View[QListWidgetItem](h, p)
+}
+
+// NewQListWidgetItemFull wraps the QListWidgetItem constructor.
+//
+//	C++: QListWidgetItem::QListWidgetItem(QListWidget * listview = …, int type = …)
+//
+// Ownership: listview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQListWidgetItemFull is NewQListWidgetItem with every argument, including those NewQListWidgetItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#QListWidgetItem
+func NewQListWidgetItemFull(listview QListWidgetLike, typeArg int) *QListWidgetItem {
+	rt.CheckThread("NewQListWidgetItemFull")
+	var listviewPtr unsafe.Pointer
+	if listview != nil {
+		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemFull")
+	}
+	p := C.qute_QListWidgetItem_new_3(listviewPtr, C.int(typeArg))
+	runtime.KeepAlive(listview)
+	mode := rt.NewOwned
+	if listviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	return rt.View[QListWidgetItem](h, p)
+}
+
+// NewQListWidgetItemWithTextFull wraps the QListWidgetItem constructor.
+//
+//	C++: QListWidgetItem::QListWidgetItem(const QString & text, QListWidget * listview = …, int type = …)
+//
+// Ownership: listview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQListWidgetItemWithTextFull is NewQListWidgetItemWithText with every argument, including those NewQListWidgetItemWithText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#QListWidgetItem
+func NewQListWidgetItemWithTextFull(text string, listview QListWidgetLike, typeArg int) *QListWidgetItem {
+	rt.CheckThread("NewQListWidgetItemWithTextFull")
+	var listviewPtr unsafe.Pointer
+	if listview != nil {
+		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithTextFull")
+	}
+	p := C.qute_QListWidgetItem_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr, C.int(typeArg))
+	runtime.KeepAlive(listview)
+	mode := rt.NewOwned
+	if listviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	return rt.View[QListWidgetItem](h, p)
+}
+
+// NewQListWidgetItemWithIconFull wraps the QListWidgetItem constructor.
+//
+//	C++: QListWidgetItem::QListWidgetItem(const QIcon & icon, const QString & text, QListWidget * listview = …, int type = …)
+//
+// Ownership: listview the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// NewQListWidgetItemWithIconFull is NewQListWidgetItemWithIcon with every argument, including those NewQListWidgetItemWithIcon leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlistwidgetitem.html#QListWidgetItem
+func NewQListWidgetItemWithIconFull(icon *qtgui.QIcon, text string, listview QListWidgetLike, typeArg int) *QListWidgetItem {
+	rt.CheckThread("NewQListWidgetItemWithIconFull")
+	var listviewPtr unsafe.Pointer
+	if listview != nil {
+		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithIconFull")
+	}
+	p := C.qute_QListWidgetItem_new_5(rt.UseArg(unsafe.Pointer(icon), "NewQListWidgetItemWithIconFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr, C.int(typeArg))
 	runtime.KeepAlive(icon)
 	runtime.KeepAlive(listview)
 	mode := rt.NewOwned
