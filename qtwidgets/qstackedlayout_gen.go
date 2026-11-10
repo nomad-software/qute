@@ -277,7 +277,8 @@ func (this *QStackedLayout) EmitWidgetAdded(index int) {
 }
 
 // OnWidgetRemoved connects f to the widgetRemoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStackedLayout::widgetRemoved(int index) [signal]
 //
@@ -293,7 +294,8 @@ func (this *QStackedLayout) OnWidgetRemoved(f func(index int)) qtcore.Connection
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStackedLayout::currentChanged(int index) [signal]
 //
@@ -309,7 +311,8 @@ func (this *QStackedLayout) OnCurrentChanged(f func(index int)) qtcore.Connectio
 }
 
 // OnWidgetAdded connects f to the widgetAdded signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStackedLayout::widgetAdded(int index) [signal]
 //

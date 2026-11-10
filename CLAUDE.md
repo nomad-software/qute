@@ -148,7 +148,7 @@ class: <bound class>}` when Qt has no getter; a class may list several
 
 ## Object lifetime and handle safety
 
-- **Registry.** `map[unsafe.Pointer]weak.Pointer[Handle]` (Go `weak`).
+- **Registry.** Object address to a `weak.Pointer[Handle]` plus a serial.
   Wrapping a pointer twice returns the same handle, and the same Go wrapper
   per type; an upcast of a derived wrapper returns its embedded base, so
   comparing wrappers of the same object with `==` works.
@@ -157,8 +157,9 @@ class: <bound class>}` when Qt has no getter; a class may list several
   and releases its Go callbacks. The entry goes before the memory is freed, so
   a new object at a reused address gets a fresh handle. Queued cleanups carry
   a serial number for the same reason.
-- **Checked calls.** Every generated method does one atomic load; a Dead
-  handle panics with class and method name and the fix.
+- **Checked calls.** Every generated method does one atomic load (and one per
+  dependency); a Dead handle, or one whose dependency died, panics with class
+  and method name and the fix. Its C shim checks the thread.
 - **Kept alive for the call.** After the C call, generated methods call
   `runtime.KeepAlive` on the receiver and on every argument that holds
   wrappers. Once `rt.Use` has returned the raw pointer nothing else refers to
@@ -257,8 +258,10 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   the GUI thread runs `f` inline (no deadlock) and re-raises panics in the
   caller. While `f` runs, handler panics are recovered at the cgo boundary
   (so Qt's frames return normally) and re-raised as a `*rt.CallbackPanic`
-  with the handler's stack. A `Post` before `Main` is held in a list that
-  `AppStarted` hands over under the same lock, so none is lost.
+  with the handler's stack. It panics instead of waiting forever when its
+  function can never run (the post fails, or the event loop exits first). A
+  `Post` before `Main` is held in a list that `AppStarted` hands over under
+  the same lock, so none is lost.
 - If `f` calls `runtime.Goexit` (`t.Fatal` inside `qute.Run`), the GUI
   goroutine is ending and nothing can stop it; its deferred code keeps
   serving Qt from a nested event loop until the app quits
@@ -266,13 +269,12 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   the test on its own goroutine, so later tests run.
 - Every generated C function first checks it is on the GUI thread (a
   thread-local read) and panics through `qute_<pkg>_wrong_thread` otherwise,
-  in release builds too.
+  in release builds too; the hand-written root helpers (`Click`, `Tree`,
+  `Screenshot`, `Wait`...) call `rt.GUIOnly`.
 - GC cleanups never call `delete`: they push onto a lock-free queue that the
   GUI thread drains from a posted event. After the event loop exits, queued
   cleanups are dropped, since deleting after the app is gone crashes Qt.
   Unreachable `qtcore.Connection`s are freed through the same queue.
-- `PostSync` panics instead of waiting forever when its function can never
-  run (the post fails, or the event loop exits first).
 - Build tag `qute_debug` adds a Go-side GUI-thread check that names the
   method, records creation and death call sites, and enforces rule 5.
 
@@ -328,7 +330,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   measured again; see Value classes), `reviewed`. A class's primary base must
   be bound too. Don't use class-level `reviewed`: it hides methods nobody
   looked at (it hid `QTextCursor::insertList` and `QGraphicsWidget::setLayout`).
-- **Overlays** (`spec/overlays/<module>.yaml`), keyed by method name (all
+- **Overlays** (`spec/overlays/<module>.yaml`), keyed by class (a nested
+  class by its Go name, `QCalendarYearMonthDay`) and then by method name (all
   overloads) or signature (`addWidget(QWidget*, int, int, Qt::Alignment)`):
 
   ```yaml
@@ -341,8 +344,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `borrowed`, `scoped`, `keep`, `keep:<slot>`, `keep-each`, `release`, and
   for non-object parameters `out` and `in-out` (keyed by name or index).
   Return rules:
-  `transfer-to-go`, `parented`, `borrowed`. An unknown rule, or a return
-  rule on a result that is not an object pointer, is a generator warning.
+  `transfer-to-go`, `parented`, `borrowed`; on a virtual they also govern
+  what a Go override returns (see Signals and subclassing). An unknown rule,
+  or a return rule on a result that is not an object pointer, is a generator
+  warning.
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `error`,
   `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…) and `created: true` (the
   result is built by the binding, so it is registered and its death seen).
@@ -364,7 +369,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   cryptic name, which are named by type: `NewQVariantWithInt`); statics are package
   functions `<Class><Method>`; signals `On<Signal>` / `Emit<Signal>`; enums
   `<Class><Value>` (Qt namespace: bare, e.g. `AlignLeft`); unnamed C++
-  parameters get names from setters or their type.
+  parameters get names from setters or their type (`QTextCursor::MoveMode`
+  gives `moveMode`).
 - **Overloads** are named automatically, in this order: overloads identical
   in Go (a `QStringView` twin of a `QString` one) are dropped; plain-number
   twins of a struct overload (`setStart(x, y)` next to `setStart(QPointF)`)
@@ -402,7 +408,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 
 - `qute.Screenshot(w)` returns an image under the offscreen platform;
   `qute.SaveScreenshot`; `go run ./examples/hello -screenshot out.png`.
-- `qute.DumpTree(w)`: class, objectName, ownership, pins, geometry as JSON.
+- `qute.DumpTree(w)`: class, objectName, ownership, pins, anchoring
+  (`root` or `global`, see Pinning and anchoring), geometry as JSON.
 - `qute.Click`, `ClickAt`, `DoubleClick`, `Type` (handles non-ASCII), `Key`,
   `Wait`, `ProcessEvents`, over QTest.
 - `qute.TestMain(m)` and `qute.Run(t, f)` run tests on the GUI thread,
@@ -477,7 +484,7 @@ Known limitations:
   implementation); arguments the shim converted for it are not freed.
 
 Open questions: is one eager `destroyed` connection per wrapped QObject cheap
-enough, or should it be lazy? The first build takes about a minute; would
+enough, or should it be lazy? The first build takes about two minutes; would
 prebuilt shim archives help? Static linking and Qt's LGPL terms for
 distributed binaries. Could miqt's IR or overlays save review time?
 
@@ -497,8 +504,9 @@ python3 tools/irgen/irgen.py                    # only for a new Qt version (nee
 - Go 1.26 is the minimum: `golang.org/x/tools` (used by `qute vet`) needs it,
   and `go mod tidy` raises the `go` line back if it is lowered. Keep CI's
   `go-version` and the `go.mod` that `qute new` writes in step.
-- A cold build of qtwidgets compiles ~14k lines of C++; `go test ./qtwidgets`
-  takes 1–2 minutes cold. Use long timeouts.
+- A cold build compiles ~22k lines of C++ for qtwidgets alone, about two
+  minutes for everything on 8 cores; `go test ./qtwidgets` takes about a
+  minute more. Use long timeouts.
 - To debug a C++ crash: `go test -c -o x.test ./pkg`, then
   `QT_QPA_PLATFORM=offscreen gdb -batch -ex run -ex bt --args ./x.test -test.run Name`.
   `qute.Run` failures caused by runtime errors include the Go stack.

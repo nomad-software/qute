@@ -400,7 +400,8 @@ func (this *QAbstractButton) EmitToggled(checked bool) {
 }
 
 // OnPressed connects f to the pressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractButton::pressed() [signal]
 //
@@ -415,7 +416,8 @@ func (this *QAbstractButton) OnPressed(f func()) qtcore.Connection {
 }
 
 // OnReleased connects f to the released signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractButton::released() [signal]
 //
@@ -430,7 +432,8 @@ func (this *QAbstractButton) OnReleased(f func()) qtcore.Connection {
 }
 
 // OnClicked connects f to the clicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractButton::clicked(bool checked = …) [signal]
 //
@@ -446,7 +449,8 @@ func (this *QAbstractButton) OnClicked(f func(checked bool)) qtcore.Connection {
 }
 
 // OnToggled connects f to the toggled signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractButton::toggled(bool checked) [signal]
 //

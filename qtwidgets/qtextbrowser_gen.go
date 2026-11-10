@@ -395,7 +395,8 @@ func (this *QTextBrowser) SetSourceFull(name *qtcore.QUrl, typeArg qtgui.QTextDo
 }
 
 // OnBackwardAvailable connects f to the backwardAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextBrowser::backwardAvailable(bool) [signal]
 //
@@ -411,7 +412,8 @@ func (this *QTextBrowser) OnBackwardAvailable(f func(arg0 bool)) qtcore.Connecti
 }
 
 // OnForwardAvailable connects f to the forwardAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextBrowser::forwardAvailable(bool) [signal]
 //
@@ -427,7 +429,8 @@ func (this *QTextBrowser) OnForwardAvailable(f func(arg0 bool)) qtcore.Connectio
 }
 
 // OnHistoryChanged connects f to the historyChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextBrowser::historyChanged() [signal]
 //
@@ -442,7 +445,8 @@ func (this *QTextBrowser) OnHistoryChanged(f func()) qtcore.Connection {
 }
 
 // OnSourceChanged connects f to the sourceChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextBrowser::sourceChanged(const QUrl &) [signal]
 //
@@ -458,7 +462,8 @@ func (this *QTextBrowser) OnSourceChanged(f func(url *qtcore.QUrl)) qtcore.Conne
 }
 
 // OnHighlighted connects f to the highlighted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextBrowser::highlighted(const QUrl &) [signal]
 //
@@ -474,7 +479,8 @@ func (this *QTextBrowser) OnHighlighted(f func(url *qtcore.QUrl)) qtcore.Connect
 }
 
 // OnAnchorClicked connects f to the anchorClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextBrowser::anchorClicked(const QUrl &) [signal]
 //

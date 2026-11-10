@@ -388,15 +388,6 @@ func (g *Gen) emitKeepTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	b.p("\t})\n}\n")
 }
 
-func hasOut(mm *Method) bool {
-	for _, p := range mm.Params {
-		if p.Out || p.InOut {
-			return true
-		}
-	}
-	return false
-}
-
 // results counts the Go results of a generated method.
 func results(mm *Method) int {
 	n := len(mm.PairRet)

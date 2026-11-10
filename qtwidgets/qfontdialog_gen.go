@@ -298,7 +298,8 @@ func QFontDialogGetFontWithFontFull(initial *qtgui.QFont, parent QWidgetLike, ti
 }
 
 // OnCurrentFontChanged connects f to the currentFontChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFontDialog::currentFontChanged(const QFont & font) [signal]
 //
@@ -314,7 +315,8 @@ func (this *QFontDialog) OnCurrentFontChanged(f func(font *qtgui.QFont)) qtcore.
 }
 
 // OnFontSelected connects f to the fontSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFontDialog::fontSelected(const QFont & font) [signal]
 //

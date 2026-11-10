@@ -1052,7 +1052,8 @@ func (this *QTreeWidget) ScrollToItemFull(item QTreeWidgetItemLike, hint QAbstra
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemPressed(QTreeWidgetItem * item, int column) [signal]
 //
@@ -1069,7 +1070,8 @@ func (this *QTreeWidget) OnItemPressed(f func(item *QTreeWidgetItem, column int)
 }
 
 // OnItemClicked connects f to the itemClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemClicked(QTreeWidgetItem * item, int column) [signal]
 //
@@ -1086,7 +1088,8 @@ func (this *QTreeWidget) OnItemClicked(f func(item *QTreeWidgetItem, column int)
 }
 
 // OnItemDoubleClicked connects f to the itemDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemDoubleClicked(QTreeWidgetItem * item, int column) [signal]
 //
@@ -1103,7 +1106,8 @@ func (this *QTreeWidget) OnItemDoubleClicked(f func(item *QTreeWidgetItem, colum
 }
 
 // OnItemActivated connects f to the itemActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemActivated(QTreeWidgetItem * item, int column) [signal]
 //
@@ -1120,7 +1124,8 @@ func (this *QTreeWidget) OnItemActivated(f func(item *QTreeWidgetItem, column in
 }
 
 // OnItemEntered connects f to the itemEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemEntered(QTreeWidgetItem * item, int column) [signal]
 //
@@ -1137,7 +1142,8 @@ func (this *QTreeWidget) OnItemEntered(f func(item *QTreeWidgetItem, column int)
 }
 
 // OnItemChanged connects f to the itemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemChanged(QTreeWidgetItem * item, int column) [signal]
 //
@@ -1154,7 +1160,8 @@ func (this *QTreeWidget) OnItemChanged(f func(item *QTreeWidgetItem, column int)
 }
 
 // OnItemExpanded connects f to the itemExpanded signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemExpanded(QTreeWidgetItem * item) [signal]
 //
@@ -1170,7 +1177,8 @@ func (this *QTreeWidget) OnItemExpanded(f func(item *QTreeWidgetItem)) qtcore.Co
 }
 
 // OnItemCollapsed connects f to the itemCollapsed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemCollapsed(QTreeWidgetItem * item) [signal]
 //
@@ -1186,7 +1194,8 @@ func (this *QTreeWidget) OnItemCollapsed(f func(item *QTreeWidgetItem)) qtcore.C
 }
 
 // OnCurrentItemChanged connects f to the currentItemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous) [signal]
 //
@@ -1203,7 +1212,8 @@ func (this *QTreeWidget) OnCurrentItemChanged(f func(current *QTreeWidgetItem, p
 }
 
 // OnItemSelectionChanged connects f to the itemSelectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeWidget::itemSelectionChanged() [signal]
 //

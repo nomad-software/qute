@@ -768,7 +768,8 @@ func (this *QTreeView) ExpandRecursivelyFull(index *qtcore.QModelIndex, depth in
 }
 
 // OnExpanded connects f to the expanded signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeView::expanded(const QModelIndex & index) [signal]
 //
@@ -784,7 +785,8 @@ func (this *QTreeView) OnExpanded(f func(index *qtcore.QModelIndex)) qtcore.Conn
 }
 
 // OnCollapsed connects f to the collapsed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTreeView::collapsed(const QModelIndex & index) [signal]
 //

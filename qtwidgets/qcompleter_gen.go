@@ -604,7 +604,8 @@ func (this *QCompleter) CompleteFull(rect qtcore.QRect) {
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCompleter::activated(const QString & text) [signal]
 //
@@ -620,7 +621,8 @@ func (this *QCompleter) OnActivated(f func(text string)) qtcore.Connection {
 }
 
 // OnActivatedIndex connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCompleter::activated(const QModelIndex & index) [signal]
 //
@@ -636,7 +638,8 @@ func (this *QCompleter) OnActivatedIndex(f func(index *qtcore.QModelIndex)) qtco
 }
 
 // OnHighlighted connects f to the highlighted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCompleter::highlighted(const QString & text) [signal]
 //
@@ -652,7 +655,8 @@ func (this *QCompleter) OnHighlighted(f func(text string)) qtcore.Connection {
 }
 
 // OnHighlightedIndex connects f to the highlighted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCompleter::highlighted(const QModelIndex & index) [signal]
 //

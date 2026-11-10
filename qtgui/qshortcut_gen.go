@@ -363,7 +363,8 @@ func (this *QShortcut) EmitActivatedAmbiguously() {
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QShortcut::activated() [signal]
 //
@@ -378,7 +379,8 @@ func (this *QShortcut) OnActivated(f func()) qtcore.Connection {
 }
 
 // OnActivatedAmbiguously connects f to the activatedAmbiguously signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QShortcut::activatedAmbiguously() [signal]
 //

@@ -692,7 +692,8 @@ func (this *QIODevice) ReadLineIntoFull(maxlen int64) (bool, []byte) {
 }
 
 // OnReadyRead connects f to the readyRead signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QIODevice::readyRead() [signal]
 //
@@ -707,7 +708,8 @@ func (this *QIODevice) OnReadyRead(f func()) Connection {
 }
 
 // OnChannelReadyRead connects f to the channelReadyRead signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QIODevice::channelReadyRead(int channel) [signal]
 //
@@ -723,7 +725,8 @@ func (this *QIODevice) OnChannelReadyRead(f func(channel int)) Connection {
 }
 
 // OnBytesWritten connects f to the bytesWritten signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QIODevice::bytesWritten(qint64 bytes) [signal]
 //
@@ -739,7 +742,8 @@ func (this *QIODevice) OnBytesWritten(f func(bytes int64)) Connection {
 }
 
 // OnChannelBytesWritten connects f to the channelBytesWritten signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QIODevice::channelBytesWritten(int channel, qint64 bytes) [signal]
 //
@@ -756,7 +760,8 @@ func (this *QIODevice) OnChannelBytesWritten(f func(channel int, bytes int64)) C
 }
 
 // OnAboutToClose connects f to the aboutToClose signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QIODevice::aboutToClose() [signal]
 //
@@ -771,7 +776,8 @@ func (this *QIODevice) OnAboutToClose(f func()) Connection {
 }
 
 // OnReadChannelFinished connects f to the readChannelFinished signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QIODevice::readChannelFinished() [signal]
 //

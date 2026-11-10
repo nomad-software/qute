@@ -214,7 +214,8 @@ func (this *QOpenGLWindow) EmitFrameSwapped() {
 }
 
 // OnFrameSwapped connects f to the frameSwapped signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QOpenGLWindow::frameSwapped() [signal]
 //
@@ -834,8 +835,9 @@ func (b *QOpenGLWindowBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDev
 }
 
 // NewQOpenGLWindowWith constructs a QOpenGLWindow whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQOpenGLWindowWith(v QOpenGLWindowSubclass, updateBehavior QOpenGLWindowUpdateBehavior, parent qtgui.QWindowLike) *QOpenGLWindow {
 	rt.CheckThread("NewQOpenGLWindowWith")
 	base := v.quteQOpenGLWindowBase()

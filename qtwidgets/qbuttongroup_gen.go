@@ -348,7 +348,8 @@ func (this *QButtonGroup) AddButtonFull(abstractButton QAbstractButtonLike, idAr
 }
 
 // OnButtonClicked connects f to the buttonClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::buttonClicked(QAbstractButton *) [signal]
 //
@@ -364,7 +365,8 @@ func (this *QButtonGroup) OnButtonClicked(f func(abstractButton *QAbstractButton
 }
 
 // OnButtonPressed connects f to the buttonPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::buttonPressed(QAbstractButton *) [signal]
 //
@@ -380,7 +382,8 @@ func (this *QButtonGroup) OnButtonPressed(f func(abstractButton *QAbstractButton
 }
 
 // OnButtonReleased connects f to the buttonReleased signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::buttonReleased(QAbstractButton *) [signal]
 //
@@ -396,7 +399,8 @@ func (this *QButtonGroup) OnButtonReleased(f func(abstractButton *QAbstractButto
 }
 
 // OnButtonToggled connects f to the buttonToggled signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::buttonToggled(QAbstractButton *, bool) [signal]
 //
@@ -413,7 +417,8 @@ func (this *QButtonGroup) OnButtonToggled(f func(abstractButton *QAbstractButton
 }
 
 // OnIdClicked connects f to the idClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::idClicked(int) [signal]
 //
@@ -429,7 +434,8 @@ func (this *QButtonGroup) OnIdClicked(f func(arg0 int)) qtcore.Connection {
 }
 
 // OnIdPressed connects f to the idPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::idPressed(int) [signal]
 //
@@ -445,7 +451,8 @@ func (this *QButtonGroup) OnIdPressed(f func(arg0 int)) qtcore.Connection {
 }
 
 // OnIdReleased connects f to the idReleased signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::idReleased(int) [signal]
 //
@@ -461,7 +468,8 @@ func (this *QButtonGroup) OnIdReleased(f func(arg0 int)) qtcore.Connection {
 }
 
 // OnIdToggled connects f to the idToggled signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QButtonGroup::idToggled(int, bool) [signal]
 //

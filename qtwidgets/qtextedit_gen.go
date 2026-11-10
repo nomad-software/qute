@@ -1322,7 +1322,8 @@ func (this *QTextEdit) ZoomOutFull(rangeArg int) {
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::textChanged() [signal]
 //
@@ -1337,7 +1338,8 @@ func (this *QTextEdit) OnTextChanged(f func()) qtcore.Connection {
 }
 
 // OnUndoAvailable connects f to the undoAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::undoAvailable(bool b) [signal]
 //
@@ -1353,7 +1355,8 @@ func (this *QTextEdit) OnUndoAvailable(f func(bArg bool)) qtcore.Connection {
 }
 
 // OnRedoAvailable connects f to the redoAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::redoAvailable(bool b) [signal]
 //
@@ -1369,7 +1372,8 @@ func (this *QTextEdit) OnRedoAvailable(f func(bArg bool)) qtcore.Connection {
 }
 
 // OnCurrentCharFormatChanged connects f to the currentCharFormatChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::currentCharFormatChanged(const QTextCharFormat & format) [signal]
 //
@@ -1385,7 +1389,8 @@ func (this *QTextEdit) OnCurrentCharFormatChanged(f func(format *qtgui.QTextChar
 }
 
 // OnCopyAvailable connects f to the copyAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::copyAvailable(bool b) [signal]
 //
@@ -1401,7 +1406,8 @@ func (this *QTextEdit) OnCopyAvailable(f func(bArg bool)) qtcore.Connection {
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::selectionChanged() [signal]
 //
@@ -1416,7 +1422,8 @@ func (this *QTextEdit) OnSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnCursorPositionChanged connects f to the cursorPositionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextEdit::cursorPositionChanged() [signal]
 //

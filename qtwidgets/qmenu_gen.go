@@ -786,7 +786,8 @@ func QMenuExecActionsFull(actions []*qtgui.QAction, pos qtcore.QPoint, at qtgui.
 }
 
 // OnAboutToShow connects f to the aboutToShow signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMenu::aboutToShow() [signal]
 //
@@ -801,7 +802,8 @@ func (this *QMenu) OnAboutToShow(f func()) qtcore.Connection {
 }
 
 // OnAboutToHide connects f to the aboutToHide signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMenu::aboutToHide() [signal]
 //
@@ -816,7 +818,8 @@ func (this *QMenu) OnAboutToHide(f func()) qtcore.Connection {
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMenu::triggered(QAction * action) [signal]
 //
@@ -832,7 +835,8 @@ func (this *QMenu) OnTriggered(f func(action *qtgui.QAction)) qtcore.Connection 
 }
 
 // OnHovered connects f to the hovered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMenu::hovered(QAction * action) [signal]
 //

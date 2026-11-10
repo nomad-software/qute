@@ -349,7 +349,8 @@ func (this *QMdiSubWindow) SetOptionFull(option QMdiSubWindowSubWindowOptions, o
 }
 
 // OnWindowStateChanged connects f to the windowStateChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMdiSubWindow::windowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) [signal]
 //
@@ -366,7 +367,8 @@ func (this *QMdiSubWindow) OnWindowStateChanged(f func(oldState qtcore.WindowSta
 }
 
 // OnAboutToActivate connects f to the aboutToActivate signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMdiSubWindow::aboutToActivate() [signal]
 //

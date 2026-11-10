@@ -1331,12 +1331,11 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 		b.p("\tif !bool(r) {\n\t\treturn %s%s\n\t}\n\treturn nil%s\n}\n", msg, outs, outs)
 		return
 	}
+	owner := "" // a plain object the receiver hands out lives no longer than it
 	if !static {
-		// a plain object the receiver hands out lives no longer than it
-		g.retOwner = "rt.RefOf(unsafe.Pointer(this)).H"
-		defer func() { g.retOwner = "" }()
+		owner = "rt.RefOf(unsafe.Pointer(this)).H"
 	}
-	b.p("\treturn %s%s\n}\n", g.goRet(mm.Ret, "r", retMode(mm), m), outs)
+	b.p("\treturn %s%s\n}\n", g.goRetFrom(mm.Ret, "r", retMode(mm), m, owner), outs)
 }
 
 // remeasures reports whether mm may change how much memory its receiver
@@ -1388,7 +1387,8 @@ func (g *Gen) emitSignal(c *Class, sg *Method, b *buf) {
 	}
 	conn := g.qual(g.byName["QtCore"], m, "Connection")
 	b.p("// %s connects f to the %s signal. The connection ends when the", sg.GoName, sg.IR.Name)
-	b.p("// sender is destroyed or Disconnect is called; until then the sender is pinned.")
+	b.p("// sender is destroyed or Disconnect is called; until then f is held for as")
+	b.p("// long as the sender lives (by its window's handle, or pinned if it has no parent).")
 	b.p("//\n//\tC++: %s [signal]", sg.Sig)
 	for _, p := range sg.Params {
 		if p.Rule == "scoped" {
@@ -1531,8 +1531,9 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 	// constructor
 	gc := g.prepCall(c, pc, "New"+cls+"With", false)
 	b.p("// New%sWith constructs a %s whose virtual methods dispatch to v. The", cls, cls)
-	b.p("// object stays pinned while it lives, so v's Go state survives even when only")
-	b.p("// Qt references it.")
+	b.p("// object holds v for as long as it lives, so v's Go state survives even when")
+	b.p("// only Qt refers to it: through its window's handle, or pinned (Delete it when")
+	b.p("// done) if it has no parent.")
 	b.p("func New%sWith(%s) *%s {", cls, strings.Join(append([]string{"v " + cls + "Subclass"}, gc.params...), ", "), cls)
 	b.p("\trt.CheckThread(%q)", "New"+cls+"With")
 	b.p("\tbase := v.%sBase()", lower)

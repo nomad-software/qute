@@ -1473,7 +1473,8 @@ func QTextDocumentSetDefaultResourceProvider(provider func(*qtcore.QUrl) *qtcore
 }
 
 // OnContentsChange connects f to the contentsChange signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::contentsChange(int from, int charsRemoved, int charsAdded) [signal]
 //
@@ -1491,7 +1492,8 @@ func (this *QTextDocument) OnContentsChange(f func(from int, charsRemoved int, c
 }
 
 // OnContentsChanged connects f to the contentsChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::contentsChanged() [signal]
 //
@@ -1506,7 +1508,8 @@ func (this *QTextDocument) OnContentsChanged(f func()) qtcore.Connection {
 }
 
 // OnUndoAvailable connects f to the undoAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::undoAvailable(bool) [signal]
 //
@@ -1522,7 +1525,8 @@ func (this *QTextDocument) OnUndoAvailable(f func(arg0 bool)) qtcore.Connection 
 }
 
 // OnRedoAvailable connects f to the redoAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::redoAvailable(bool) [signal]
 //
@@ -1538,7 +1542,8 @@ func (this *QTextDocument) OnRedoAvailable(f func(arg0 bool)) qtcore.Connection 
 }
 
 // OnUndoCommandAdded connects f to the undoCommandAdded signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::undoCommandAdded() [signal]
 //
@@ -1553,7 +1558,8 @@ func (this *QTextDocument) OnUndoCommandAdded(f func()) qtcore.Connection {
 }
 
 // OnModificationChanged connects f to the modificationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::modificationChanged(bool m) [signal]
 //
@@ -1569,7 +1575,8 @@ func (this *QTextDocument) OnModificationChanged(f func(m bool)) qtcore.Connecti
 }
 
 // OnCursorPositionChanged connects f to the cursorPositionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::cursorPositionChanged(const QTextCursor & cursor) [signal]
 //
@@ -1585,7 +1592,8 @@ func (this *QTextDocument) OnCursorPositionChanged(f func(cursor *QTextCursor)) 
 }
 
 // OnBlockCountChanged connects f to the blockCountChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::blockCountChanged(int newBlockCount) [signal]
 //
@@ -1601,7 +1609,8 @@ func (this *QTextDocument) OnBlockCountChanged(f func(newBlockCount int)) qtcore
 }
 
 // OnBaseUrlChanged connects f to the baseUrlChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::baseUrlChanged(const QUrl & url) [signal]
 //
@@ -1617,7 +1626,8 @@ func (this *QTextDocument) OnBaseUrlChanged(f func(url *qtcore.QUrl)) qtcore.Con
 }
 
 // OnDocumentLayoutChanged connects f to the documentLayoutChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTextDocument::documentLayoutChanged() [signal]
 //

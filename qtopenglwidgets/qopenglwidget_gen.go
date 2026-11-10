@@ -340,7 +340,8 @@ func (this *QOpenGLWidget) EmitResized() {
 }
 
 // OnAboutToCompose connects f to the aboutToCompose signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QOpenGLWidget::aboutToCompose() [signal]
 //
@@ -355,7 +356,8 @@ func (this *QOpenGLWidget) OnAboutToCompose(f func()) qtcore.Connection {
 }
 
 // OnFrameSwapped connects f to the frameSwapped signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QOpenGLWidget::frameSwapped() [signal]
 //
@@ -370,7 +372,8 @@ func (this *QOpenGLWidget) OnFrameSwapped(f func()) qtcore.Connection {
 }
 
 // OnAboutToResize connects f to the aboutToResize signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QOpenGLWidget::aboutToResize() [signal]
 //
@@ -385,7 +388,8 @@ func (this *QOpenGLWidget) OnAboutToResize(f func()) qtcore.Connection {
 }
 
 // OnResized connects f to the resized signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QOpenGLWidget::resized() [signal]
 //
@@ -1205,8 +1209,9 @@ func (b *QOpenGLWidgetBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDev
 }
 
 // NewQOpenGLWidgetWith constructs a QOpenGLWidget whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQOpenGLWidgetWith(v QOpenGLWidgetSubclass, parent qtwidgets.QWidgetLike) *QOpenGLWidget {
 	rt.CheckThread("NewQOpenGLWidgetWith")
 	base := v.quteQOpenGLWidgetBase()

@@ -136,8 +136,6 @@ type Gen struct {
 	enums   map[string]*Enum
 	structs map[string]*structDef
 	report  *Report
-
-	retOwner string // while emitting a method: the Go expression of the receiver's handle
 }
 
 var goKeywords = map[string]bool{

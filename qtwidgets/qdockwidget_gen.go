@@ -391,7 +391,8 @@ func (this *QDockWidget) EmitDockLocationChanged(area qtcore.DockWidgetAreas) {
 }
 
 // OnFeaturesChanged connects f to the featuresChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDockWidget::featuresChanged(QDockWidget::DockWidgetFeatures features) [signal]
 //
@@ -407,7 +408,8 @@ func (this *QDockWidget) OnFeaturesChanged(f func(features QDockWidgetDockWidget
 }
 
 // OnTopLevelChanged connects f to the topLevelChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDockWidget::topLevelChanged(bool topLevel) [signal]
 //
@@ -423,7 +425,8 @@ func (this *QDockWidget) OnTopLevelChanged(f func(topLevel bool)) qtcore.Connect
 }
 
 // OnAllowedAreasChanged connects f to the allowedAreasChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDockWidget::allowedAreasChanged(Qt::DockWidgetAreas allowedAreas) [signal]
 //
@@ -439,7 +442,8 @@ func (this *QDockWidget) OnAllowedAreasChanged(f func(allowedAreas qtcore.DockWi
 }
 
 // OnVisibilityChanged connects f to the visibilityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDockWidget::visibilityChanged(bool visible) [signal]
 //
@@ -455,7 +459,8 @@ func (this *QDockWidget) OnVisibilityChanged(f func(visible bool)) qtcore.Connec
 }
 
 // OnDockLocationChanged connects f to the dockLocationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDockWidget::dockLocationChanged(Qt::DockWidgetArea area) [signal]
 //

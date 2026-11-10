@@ -145,7 +145,8 @@ func (this *QGraphicsColorizeEffect) EmitStrengthChanged(strength float64) {
 }
 
 // OnColorChanged connects f to the colorChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsColorizeEffect::colorChanged(const QColor & color) [signal]
 //
@@ -161,7 +162,8 @@ func (this *QGraphicsColorizeEffect) OnColorChanged(f func(color qtgui.QColor)) 
 }
 
 // OnStrengthChanged connects f to the strengthChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsColorizeEffect::strengthChanged(qreal strength) [signal]
 //

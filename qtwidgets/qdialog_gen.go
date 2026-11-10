@@ -246,7 +246,8 @@ func (this *QDialog) EmitRejected() {
 }
 
 // OnFinished connects f to the finished signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialog::finished(int result) [signal]
 //
@@ -262,7 +263,8 @@ func (this *QDialog) OnFinished(f func(result int)) qtcore.Connection {
 }
 
 // OnAccepted connects f to the accepted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialog::accepted() [signal]
 //
@@ -277,7 +279,8 @@ func (this *QDialog) OnAccepted(f func()) qtcore.Connection {
 }
 
 // OnRejected connects f to the rejected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialog::rejected() [signal]
 //
@@ -1132,8 +1135,9 @@ func (b *QDialogBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMet
 }
 
 // NewQDialogWith constructs a QDialog whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQDialogWith(v QDialogSubclass, parent QWidgetLike) *QDialog {
 	rt.CheckThread("NewQDialogWith")
 	base := v.quteQDialogBase()

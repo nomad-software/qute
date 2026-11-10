@@ -413,7 +413,8 @@ func (this *QAbstractSlider) EmitActionTriggered(action int) {
 }
 
 // OnValueChanged connects f to the valueChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSlider::valueChanged(int value) [signal]
 //
@@ -429,7 +430,8 @@ func (this *QAbstractSlider) OnValueChanged(f func(value int)) qtcore.Connection
 }
 
 // OnSliderPressed connects f to the sliderPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSlider::sliderPressed() [signal]
 //
@@ -444,7 +446,8 @@ func (this *QAbstractSlider) OnSliderPressed(f func()) qtcore.Connection {
 }
 
 // OnSliderMoved connects f to the sliderMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSlider::sliderMoved(int position) [signal]
 //
@@ -460,7 +463,8 @@ func (this *QAbstractSlider) OnSliderMoved(f func(position int)) qtcore.Connecti
 }
 
 // OnSliderReleased connects f to the sliderReleased signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSlider::sliderReleased() [signal]
 //
@@ -475,7 +479,8 @@ func (this *QAbstractSlider) OnSliderReleased(f func()) qtcore.Connection {
 }
 
 // OnRangeChanged connects f to the rangeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSlider::rangeChanged(int min, int max) [signal]
 //
@@ -492,7 +497,8 @@ func (this *QAbstractSlider) OnRangeChanged(f func(min int, max int)) qtcore.Con
 }
 
 // OnActionTriggered connects f to the actionTriggered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSlider::actionTriggered(int action) [signal]
 //

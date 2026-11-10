@@ -1074,7 +1074,8 @@ func (this *QAbstractItemView) ScrollToFull(index *qtcore.QModelIndex, hint QAbs
 }
 
 // OnPressed connects f to the pressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::pressed(const QModelIndex & index) [signal]
 //
@@ -1090,7 +1091,8 @@ func (this *QAbstractItemView) OnPressed(f func(index *qtcore.QModelIndex)) qtco
 }
 
 // OnClicked connects f to the clicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::clicked(const QModelIndex & index) [signal]
 //
@@ -1106,7 +1108,8 @@ func (this *QAbstractItemView) OnClicked(f func(index *qtcore.QModelIndex)) qtco
 }
 
 // OnDoubleClicked connects f to the doubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::doubleClicked(const QModelIndex & index) [signal]
 //
@@ -1122,7 +1125,8 @@ func (this *QAbstractItemView) OnDoubleClicked(f func(index *qtcore.QModelIndex)
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::activated(const QModelIndex & index) [signal]
 //
@@ -1138,7 +1142,8 @@ func (this *QAbstractItemView) OnActivated(f func(index *qtcore.QModelIndex)) qt
 }
 
 // OnEntered connects f to the entered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::entered(const QModelIndex & index) [signal]
 //
@@ -1154,7 +1159,8 @@ func (this *QAbstractItemView) OnEntered(f func(index *qtcore.QModelIndex)) qtco
 }
 
 // OnViewportEntered connects f to the viewportEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::viewportEntered() [signal]
 //
@@ -1169,7 +1175,8 @@ func (this *QAbstractItemView) OnViewportEntered(f func()) qtcore.Connection {
 }
 
 // OnIconSizeChanged connects f to the iconSizeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemView::iconSizeChanged(const QSize & size) [signal]
 //

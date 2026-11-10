@@ -809,7 +809,8 @@ func (this *QListWidget) ScrollToItemFull(item QListWidgetItemLike, hint QAbstra
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemPressed(QListWidgetItem * item) [signal]
 //
@@ -825,7 +826,8 @@ func (this *QListWidget) OnItemPressed(f func(item *QListWidgetItem)) qtcore.Con
 }
 
 // OnItemClicked connects f to the itemClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemClicked(QListWidgetItem * item) [signal]
 //
@@ -841,7 +843,8 @@ func (this *QListWidget) OnItemClicked(f func(item *QListWidgetItem)) qtcore.Con
 }
 
 // OnItemDoubleClicked connects f to the itemDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemDoubleClicked(QListWidgetItem * item) [signal]
 //
@@ -857,7 +860,8 @@ func (this *QListWidget) OnItemDoubleClicked(f func(item *QListWidgetItem)) qtco
 }
 
 // OnItemActivated connects f to the itemActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemActivated(QListWidgetItem * item) [signal]
 //
@@ -873,7 +877,8 @@ func (this *QListWidget) OnItemActivated(f func(item *QListWidgetItem)) qtcore.C
 }
 
 // OnItemEntered connects f to the itemEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemEntered(QListWidgetItem * item) [signal]
 //
@@ -889,7 +894,8 @@ func (this *QListWidget) OnItemEntered(f func(item *QListWidgetItem)) qtcore.Con
 }
 
 // OnItemChanged connects f to the itemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemChanged(QListWidgetItem * item) [signal]
 //
@@ -905,7 +911,8 @@ func (this *QListWidget) OnItemChanged(f func(item *QListWidgetItem)) qtcore.Con
 }
 
 // OnCurrentItemChanged connects f to the currentItemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::currentItemChanged(QListWidgetItem * current, QListWidgetItem * previous) [signal]
 //
@@ -922,7 +929,8 @@ func (this *QListWidget) OnCurrentItemChanged(f func(current *QListWidgetItem, p
 }
 
 // OnCurrentTextChanged connects f to the currentTextChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::currentTextChanged(const QString & currentText) [signal]
 //
@@ -938,7 +946,8 @@ func (this *QListWidget) OnCurrentTextChanged(f func(currentText string)) qtcore
 }
 
 // OnCurrentRowChanged connects f to the currentRowChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::currentRowChanged(int currentRow) [signal]
 //
@@ -954,7 +963,8 @@ func (this *QListWidget) OnCurrentRowChanged(f func(currentRow int)) qtcore.Conn
 }
 
 // OnItemSelectionChanged connects f to the itemSelectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QListWidget::itemSelectionChanged() [signal]
 //

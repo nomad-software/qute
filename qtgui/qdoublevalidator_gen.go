@@ -253,7 +253,8 @@ func (this *QDoubleValidator) EmitNotationChanged(notation QDoubleValidatorNotat
 }
 
 // OnBottomChanged connects f to the bottomChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDoubleValidator::bottomChanged(double bottom) [signal]
 //
@@ -269,7 +270,8 @@ func (this *QDoubleValidator) OnBottomChanged(f func(bottom float64)) qtcore.Con
 }
 
 // OnTopChanged connects f to the topChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDoubleValidator::topChanged(double top) [signal]
 //
@@ -285,7 +287,8 @@ func (this *QDoubleValidator) OnTopChanged(f func(top float64)) qtcore.Connectio
 }
 
 // OnDecimalsChanged connects f to the decimalsChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDoubleValidator::decimalsChanged(int decimals) [signal]
 //
@@ -301,7 +304,8 @@ func (this *QDoubleValidator) OnDecimalsChanged(f func(decimals int)) qtcore.Con
 }
 
 // OnNotationChanged connects f to the notationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDoubleValidator::notationChanged(QDoubleValidator::Notation notation) [signal]
 //

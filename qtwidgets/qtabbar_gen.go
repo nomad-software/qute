@@ -784,7 +784,8 @@ func (this *QTabBar) EmitTabBarDoubleClicked(index int) {
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTabBar::currentChanged(int index) [signal]
 //
@@ -800,7 +801,8 @@ func (this *QTabBar) OnCurrentChanged(f func(index int)) qtcore.Connection {
 }
 
 // OnTabCloseRequested connects f to the tabCloseRequested signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTabBar::tabCloseRequested(int index) [signal]
 //
@@ -816,7 +818,8 @@ func (this *QTabBar) OnTabCloseRequested(f func(index int)) qtcore.Connection {
 }
 
 // OnTabMoved connects f to the tabMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTabBar::tabMoved(int from, int to) [signal]
 //
@@ -833,7 +836,8 @@ func (this *QTabBar) OnTabMoved(f func(from int, to int)) qtcore.Connection {
 }
 
 // OnTabBarClicked connects f to the tabBarClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTabBar::tabBarClicked(int index) [signal]
 //
@@ -849,7 +853,8 @@ func (this *QTabBar) OnTabBarClicked(f func(index int)) qtcore.Connection {
 }
 
 // OnTabBarDoubleClicked connects f to the tabBarDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTabBar::tabBarDoubleClicked(int index) [signal]
 //

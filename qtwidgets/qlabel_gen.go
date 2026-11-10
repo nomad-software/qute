@@ -594,7 +594,8 @@ func (this *QLabel) EmitLinkHovered(link string) {
 }
 
 // OnLinkActivated connects f to the linkActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLabel::linkActivated(const QString & link) [signal]
 //
@@ -610,7 +611,8 @@ func (this *QLabel) OnLinkActivated(f func(link string)) qtcore.Connection {
 }
 
 // OnLinkHovered connects f to the linkHovered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLabel::linkHovered(const QString & link) [signal]
 //
@@ -1403,8 +1405,9 @@ func (b *QLabelBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetr
 }
 
 // NewQLabelWith constructs a QLabel whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQLabelWith(v QLabelSubclass, parent QWidgetLike) *QLabel {
 	rt.CheckThread("NewQLabelWith")
 	base := v.quteQLabelBase()

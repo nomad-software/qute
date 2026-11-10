@@ -1057,8 +1057,9 @@ func (b *QPushButtonBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDevic
 }
 
 // NewQPushButtonWith constructs a QPushButton whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQPushButtonWith(v QPushButtonSubclass, parent QWidgetLike) *QPushButton {
 	rt.CheckThread("NewQPushButtonWith")
 	base := v.quteQPushButtonBase()

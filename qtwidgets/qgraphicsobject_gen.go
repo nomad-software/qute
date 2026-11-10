@@ -225,7 +225,8 @@ func (this *QGraphicsObject) GrabGestureFull(typeArg qtcore.GestureType, flags q
 }
 
 // OnParentChanged connects f to the parentChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::parentChanged() [signal]
 //
@@ -240,7 +241,8 @@ func (this *QGraphicsObject) OnParentChanged(f func()) qtcore.Connection {
 }
 
 // OnOpacityChanged connects f to the opacityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::opacityChanged() [signal]
 //
@@ -255,7 +257,8 @@ func (this *QGraphicsObject) OnOpacityChanged(f func()) qtcore.Connection {
 }
 
 // OnVisibleChanged connects f to the visibleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::visibleChanged() [signal]
 //
@@ -270,7 +273,8 @@ func (this *QGraphicsObject) OnVisibleChanged(f func()) qtcore.Connection {
 }
 
 // OnEnabledChanged connects f to the enabledChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::enabledChanged() [signal]
 //
@@ -285,7 +289,8 @@ func (this *QGraphicsObject) OnEnabledChanged(f func()) qtcore.Connection {
 }
 
 // OnXChanged connects f to the xChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::xChanged() [signal]
 //
@@ -300,7 +305,8 @@ func (this *QGraphicsObject) OnXChanged(f func()) qtcore.Connection {
 }
 
 // OnYChanged connects f to the yChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::yChanged() [signal]
 //
@@ -315,7 +321,8 @@ func (this *QGraphicsObject) OnYChanged(f func()) qtcore.Connection {
 }
 
 // OnZChanged connects f to the zChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::zChanged() [signal]
 //
@@ -330,7 +337,8 @@ func (this *QGraphicsObject) OnZChanged(f func()) qtcore.Connection {
 }
 
 // OnRotationChanged connects f to the rotationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::rotationChanged() [signal]
 //
@@ -345,7 +353,8 @@ func (this *QGraphicsObject) OnRotationChanged(f func()) qtcore.Connection {
 }
 
 // OnScaleChanged connects f to the scaleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::scaleChanged() [signal]
 //
@@ -360,7 +369,8 @@ func (this *QGraphicsObject) OnScaleChanged(f func()) qtcore.Connection {
 }
 
 // OnChildrenChanged connects f to the childrenChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::childrenChanged() [signal]
 //
@@ -375,7 +385,8 @@ func (this *QGraphicsObject) OnChildrenChanged(f func()) qtcore.Connection {
 }
 
 // OnWidthChanged connects f to the widthChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::widthChanged() [signal]
 //
@@ -390,7 +401,8 @@ func (this *QGraphicsObject) OnWidthChanged(f func()) qtcore.Connection {
 }
 
 // OnHeightChanged connects f to the heightChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsObject::heightChanged() [signal]
 //

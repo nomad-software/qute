@@ -721,7 +721,8 @@ func QInputDialogGetDouble(parent QWidgetLike, title string, label string) float
 }
 
 // OnTextValueChanged connects f to the textValueChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputDialog::textValueChanged(const QString & text) [signal]
 //
@@ -737,7 +738,8 @@ func (this *QInputDialog) OnTextValueChanged(f func(text string)) qtcore.Connect
 }
 
 // OnTextValueSelected connects f to the textValueSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputDialog::textValueSelected(const QString & text) [signal]
 //
@@ -753,7 +755,8 @@ func (this *QInputDialog) OnTextValueSelected(f func(text string)) qtcore.Connec
 }
 
 // OnIntValueChanged connects f to the intValueChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputDialog::intValueChanged(int value) [signal]
 //
@@ -769,7 +772,8 @@ func (this *QInputDialog) OnIntValueChanged(f func(value int)) qtcore.Connection
 }
 
 // OnIntValueSelected connects f to the intValueSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputDialog::intValueSelected(int value) [signal]
 //
@@ -785,7 +789,8 @@ func (this *QInputDialog) OnIntValueSelected(f func(value int)) qtcore.Connectio
 }
 
 // OnDoubleValueChanged connects f to the doubleValueChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputDialog::doubleValueChanged(double value) [signal]
 //
@@ -801,7 +806,8 @@ func (this *QInputDialog) OnDoubleValueChanged(f func(value float64)) qtcore.Con
 }
 
 // OnDoubleValueSelected connects f to the doubleValueSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputDialog::doubleValueSelected(double value) [signal]
 //

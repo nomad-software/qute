@@ -540,7 +540,8 @@ func (this *QItemSelectionModel) SelectedColumnsFull(row int) []*QModelIndex {
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected) [signal]
 //
@@ -557,7 +558,8 @@ func (this *QItemSelectionModel) OnSelectionChanged(f func(selected *QItemSelect
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QItemSelectionModel::currentChanged(const QModelIndex & current, const QModelIndex & previous) [signal]
 //
@@ -574,7 +576,8 @@ func (this *QItemSelectionModel) OnCurrentChanged(f func(current *QModelIndex, p
 }
 
 // OnCurrentRowChanged connects f to the currentRowChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QItemSelectionModel::currentRowChanged(const QModelIndex & current, const QModelIndex & previous) [signal]
 //
@@ -591,7 +594,8 @@ func (this *QItemSelectionModel) OnCurrentRowChanged(f func(current *QModelIndex
 }
 
 // OnCurrentColumnChanged connects f to the currentColumnChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QItemSelectionModel::currentColumnChanged(const QModelIndex & current, const QModelIndex & previous) [signal]
 //
@@ -608,7 +612,8 @@ func (this *QItemSelectionModel) OnCurrentColumnChanged(f func(current *QModelIn
 }
 
 // OnModelChanged connects f to the modelChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QItemSelectionModel::modelChanged(QAbstractItemModel * model) [signal]
 //

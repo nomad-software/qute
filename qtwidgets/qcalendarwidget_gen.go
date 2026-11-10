@@ -623,7 +623,8 @@ func (this *QCalendarWidget) EmitCurrentPageChanged(year int, month int) {
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCalendarWidget::selectionChanged() [signal]
 //
@@ -638,7 +639,8 @@ func (this *QCalendarWidget) OnSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnClicked connects f to the clicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCalendarWidget::clicked(QDate date) [signal]
 //
@@ -654,7 +656,8 @@ func (this *QCalendarWidget) OnClicked(f func(date *qtcore.QDate)) qtcore.Connec
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCalendarWidget::activated(QDate date) [signal]
 //
@@ -670,7 +673,8 @@ func (this *QCalendarWidget) OnActivated(f func(date *qtcore.QDate)) qtcore.Conn
 }
 
 // OnCurrentPageChanged connects f to the currentPageChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QCalendarWidget::currentPageChanged(int year, int month) [signal]
 //

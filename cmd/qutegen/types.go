@@ -777,6 +777,13 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 // goRet converts a C result expression r to Go. mode is the rt wrap mode for
 // object pointers.
 func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
+	return g.goRetFrom(c, r, mode, ctx, "")
+}
+
+// goRetFrom is goRet for a result of a method: owner is the Go expression of
+// the receiver's handle, which a plain object result depends on
+// (rt.WrapClassFrom), or "" for none.
+func (g *Gen) goRetFrom(c *conv, r string, mode string, ctx *Module, owner string) string {
 	switch c.k {
 	case kPrim:
 		return fmt.Sprintf("%s(%s)", c.prim.goT, r)
@@ -795,15 +802,15 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 	case kStruct:
 		return fmt.Sprintf("go%s(%s)", c.st.name, r)
 	case kValue:
-		return g.wrapExpr(c.cls, r, "rt.TakeOwned", ctx)
+		return g.wrapExpr(c.cls, r, "rt.TakeOwned", ctx, "")
 	case kObj:
-		return g.wrapExpr(c.cls, r, mode, ctx)
+		return g.wrapExpr(c.cls, r, mode, ctx, owner)
 	case kList:
 		et := g.cgoType(c.elem)
 		gt := g.goType(c.elem, ctx, false)
-		inner := g.goRet(c.elem, "e", mode, ctx)
+		inner := g.goRetFrom(c.elem, "e", mode, ctx, owner)
 		if c.elem.k == kValue {
-			inner = g.wrapExpr(c.elem.cls, "e", "rt.TakeOwned", ctx)
+			inner = g.wrapExpr(c.elem.cls, "e", "rt.TakeOwned", ctx, "")
 		}
 		return fmt.Sprintf("quteList(%s, func(e %s) %s { return %s })", r, et, gt, inner)
 	case kRaw:
@@ -815,7 +822,7 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 	case kPath:
 		return fmt.Sprintf("quteStr(%s)", r)
 	case kOpt:
-		return g.wrapExpr(c.elem.cls, r, "rt.TakeOwned", ctx)
+		return g.wrapExpr(c.elem.cls, r, "rt.TakeOwned", ctx, "")
 	case kMap:
 		kt, vt := g.goType(c.key, ctx, false), g.goType(c.elem, ctx, false)
 		kin, vin := g.goRet(c.key, "k", mode, ctx), g.goRet(c.elem, "v", "rt.TakeOwned", ctx)
@@ -830,9 +837,9 @@ func (g *Gen) goRet(c *conv, r string, mode string, ctx *Module) string {
 	panic("goRet")
 }
 
-func (g *Gen) wrapExpr(cls *Class, p, mode string, ctx *Module) string {
-	if g.retOwner != "" && cls.Kind == KindPlain && mode != "rt.TakeOwned" && mode != "rt.NewOwned" && mode != "rt.NewParented" {
-		return fmt.Sprintf("rt.View[%s](rt.WrapClassFrom(%s, %q, %s, %s), %s)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name, mode, g.retOwner, p)
+func (g *Gen) wrapExpr(cls *Class, p, mode string, ctx *Module, owner string) string {
+	if owner != "" && cls.Kind == KindPlain && mode != "rt.TakeOwned" && mode != "rt.NewOwned" && mode != "rt.NewParented" {
+		return fmt.Sprintf("rt.View[%s](rt.WrapClassFrom(%s, %q, %s, %s), %s)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name, mode, owner, p)
 	}
 	return fmt.Sprintf("rt.View[%s](rt.WrapClass(%s, %q, %s), %s)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name, mode, p)
 }

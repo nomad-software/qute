@@ -337,7 +337,8 @@ func QSystemTrayIconSupportsMessages() bool {
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSystemTrayIcon::activated(QSystemTrayIcon::ActivationReason reason) [signal]
 //
@@ -353,7 +354,8 @@ func (this *QSystemTrayIcon) OnActivated(f func(reason QSystemTrayIconActivation
 }
 
 // OnMessageClicked connects f to the messageClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSystemTrayIcon::messageClicked() [signal]
 //

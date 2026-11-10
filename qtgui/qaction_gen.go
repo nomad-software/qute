@@ -854,7 +854,8 @@ func (this *QAction) ShowStatusTextFull(object qtcore.QObjectLike) bool {
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::changed() [signal]
 //
@@ -869,7 +870,8 @@ func (this *QAction) OnChanged(f func()) qtcore.Connection {
 }
 
 // OnEnabledChanged connects f to the enabledChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::enabledChanged(bool enabled) [signal]
 //
@@ -885,7 +887,8 @@ func (this *QAction) OnEnabledChanged(f func(enabled bool)) qtcore.Connection {
 }
 
 // OnCheckableChanged connects f to the checkableChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::checkableChanged(bool checkable) [signal]
 //
@@ -901,7 +904,8 @@ func (this *QAction) OnCheckableChanged(f func(checkable bool)) qtcore.Connectio
 }
 
 // OnVisibleChanged connects f to the visibleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::visibleChanged() [signal]
 //
@@ -916,7 +920,8 @@ func (this *QAction) OnVisibleChanged(f func()) qtcore.Connection {
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::triggered(bool checked = …) [signal]
 //
@@ -932,7 +937,8 @@ func (this *QAction) OnTriggered(f func(checked bool)) qtcore.Connection {
 }
 
 // OnHovered connects f to the hovered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::hovered() [signal]
 //
@@ -947,7 +953,8 @@ func (this *QAction) OnHovered(f func()) qtcore.Connection {
 }
 
 // OnToggled connects f to the toggled signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAction::toggled(bool) [signal]
 //

@@ -990,7 +990,8 @@ func QGraphicsWidgetSetTabOrder(first QGraphicsWidgetLike, second QGraphicsWidge
 }
 
 // OnGeometryChanged connects f to the geometryChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsWidget::geometryChanged() [signal]
 //
@@ -1005,7 +1006,8 @@ func (this *QGraphicsWidget) OnGeometryChanged(f func()) qtcore.Connection {
 }
 
 // OnLayoutChanged connects f to the layoutChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsWidget::layoutChanged() [signal]
 //

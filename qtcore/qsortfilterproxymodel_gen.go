@@ -460,7 +460,8 @@ func (this *QSortFilterProxyModel) EmitAutoAcceptChildRowsChanged(autoAcceptChil
 }
 
 // OnDynamicSortFilterChanged connects f to the dynamicSortFilterChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::dynamicSortFilterChanged(bool dynamicSortFilter) [signal]
 //
@@ -476,7 +477,8 @@ func (this *QSortFilterProxyModel) OnDynamicSortFilterChanged(f func(dynamicSort
 }
 
 // OnFilterCaseSensitivityChanged connects f to the filterCaseSensitivityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::filterCaseSensitivityChanged(Qt::CaseSensitivity filterCaseSensitivity) [signal]
 //
@@ -492,7 +494,8 @@ func (this *QSortFilterProxyModel) OnFilterCaseSensitivityChanged(f func(filterC
 }
 
 // OnSortCaseSensitivityChanged connects f to the sortCaseSensitivityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::sortCaseSensitivityChanged(Qt::CaseSensitivity sortCaseSensitivity) [signal]
 //
@@ -508,7 +511,8 @@ func (this *QSortFilterProxyModel) OnSortCaseSensitivityChanged(f func(sortCaseS
 }
 
 // OnSortLocaleAwareChanged connects f to the sortLocaleAwareChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::sortLocaleAwareChanged(bool sortLocaleAware) [signal]
 //
@@ -524,7 +528,8 @@ func (this *QSortFilterProxyModel) OnSortLocaleAwareChanged(f func(sortLocaleAwa
 }
 
 // OnSortRoleChanged connects f to the sortRoleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::sortRoleChanged(int sortRole) [signal]
 //
@@ -540,7 +545,8 @@ func (this *QSortFilterProxyModel) OnSortRoleChanged(f func(sortRole int)) Conne
 }
 
 // OnFilterRoleChanged connects f to the filterRoleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::filterRoleChanged(int filterRole) [signal]
 //
@@ -556,7 +562,8 @@ func (this *QSortFilterProxyModel) OnFilterRoleChanged(f func(filterRole int)) C
 }
 
 // OnRecursiveFilteringEnabledChanged connects f to the recursiveFilteringEnabledChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::recursiveFilteringEnabledChanged(bool recursiveFilteringEnabled) [signal]
 //
@@ -572,7 +579,8 @@ func (this *QSortFilterProxyModel) OnRecursiveFilteringEnabledChanged(f func(rec
 }
 
 // OnAutoAcceptChildRowsChanged connects f to the autoAcceptChildRowsChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSortFilterProxyModel::autoAcceptChildRowsChanged(bool autoAcceptChildRows) [signal]
 //
@@ -1829,8 +1837,9 @@ func (b *QSortFilterProxyModelBase) PersistentIndexList() []*QModelIndex {
 }
 
 // NewQSortFilterProxyModelWith constructs a QSortFilterProxyModel whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQSortFilterProxyModelWith(v QSortFilterProxyModelSubclass, parent QObjectLike) *QSortFilterProxyModel {
 	rt.CheckThread("NewQSortFilterProxyModelWith")
 	base := v.quteQSortFilterProxyModelBase()

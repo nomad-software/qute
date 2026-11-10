@@ -978,7 +978,8 @@ func (this *QLineEdit) CursorBackwardFull(mark bool, steps int) {
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::textChanged(const QString &) [signal]
 //
@@ -994,7 +995,8 @@ func (this *QLineEdit) OnTextChanged(f func(stringArg string)) qtcore.Connection
 }
 
 // OnTextEdited connects f to the textEdited signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::textEdited(const QString &) [signal]
 //
@@ -1010,7 +1012,8 @@ func (this *QLineEdit) OnTextEdited(f func(stringArg string)) qtcore.Connection 
 }
 
 // OnCursorPositionChanged connects f to the cursorPositionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::cursorPositionChanged(int, int) [signal]
 //
@@ -1027,7 +1030,8 @@ func (this *QLineEdit) OnCursorPositionChanged(f func(arg0 int, arg1 int)) qtcor
 }
 
 // OnReturnPressed connects f to the returnPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::returnPressed() [signal]
 //
@@ -1042,7 +1046,8 @@ func (this *QLineEdit) OnReturnPressed(f func()) qtcore.Connection {
 }
 
 // OnEditingFinished connects f to the editingFinished signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::editingFinished() [signal]
 //
@@ -1057,7 +1062,8 @@ func (this *QLineEdit) OnEditingFinished(f func()) qtcore.Connection {
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::selectionChanged() [signal]
 //
@@ -1072,7 +1078,8 @@ func (this *QLineEdit) OnSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnInputRejected connects f to the inputRejected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QLineEdit::inputRejected() [signal]
 //

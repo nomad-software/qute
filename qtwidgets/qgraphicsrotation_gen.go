@@ -192,7 +192,8 @@ func (this *QGraphicsRotation) EmitAxisChanged() {
 }
 
 // OnOriginChanged connects f to the originChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsRotation::originChanged() [signal]
 //
@@ -207,7 +208,8 @@ func (this *QGraphicsRotation) OnOriginChanged(f func()) qtcore.Connection {
 }
 
 // OnAngleChanged connects f to the angleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsRotation::angleChanged() [signal]
 //
@@ -222,7 +224,8 @@ func (this *QGraphicsRotation) OnAngleChanged(f func()) qtcore.Connection {
 }
 
 // OnAxisChanged connects f to the axisChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsRotation::axisChanged() [signal]
 //

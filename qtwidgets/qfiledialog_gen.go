@@ -1069,7 +1069,8 @@ func QFileDialogSaveFileContentFull(fileContent []byte, fileNameHint string, par
 }
 
 // OnFileSelected connects f to the fileSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::fileSelected(const QString & file) [signal]
 //
@@ -1085,7 +1086,8 @@ func (this *QFileDialog) OnFileSelected(f func(file string)) qtcore.Connection {
 }
 
 // OnFilesSelected connects f to the filesSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::filesSelected(const QStringList & files) [signal]
 //
@@ -1101,7 +1103,8 @@ func (this *QFileDialog) OnFilesSelected(f func(files []string)) qtcore.Connecti
 }
 
 // OnCurrentChanged connects f to the currentChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::currentChanged(const QString & path) [signal]
 //
@@ -1117,7 +1120,8 @@ func (this *QFileDialog) OnCurrentChanged(f func(path string)) qtcore.Connection
 }
 
 // OnDirectoryEntered connects f to the directoryEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::directoryEntered(const QString & directory) [signal]
 //
@@ -1133,7 +1137,8 @@ func (this *QFileDialog) OnDirectoryEntered(f func(directory string)) qtcore.Con
 }
 
 // OnUrlSelected connects f to the urlSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::urlSelected(const QUrl & url) [signal]
 //
@@ -1149,7 +1154,8 @@ func (this *QFileDialog) OnUrlSelected(f func(url *qtcore.QUrl)) qtcore.Connecti
 }
 
 // OnUrlsSelected connects f to the urlsSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::urlsSelected(const QList<QUrl> & urls) [signal]
 //
@@ -1167,7 +1173,8 @@ func (this *QFileDialog) OnUrlsSelected(f func(urls []*qtcore.QUrl)) qtcore.Conn
 }
 
 // OnCurrentUrlChanged connects f to the currentUrlChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::currentUrlChanged(const QUrl & url) [signal]
 //
@@ -1183,7 +1190,8 @@ func (this *QFileDialog) OnCurrentUrlChanged(f func(url *qtcore.QUrl)) qtcore.Co
 }
 
 // OnDirectoryUrlEntered connects f to the directoryUrlEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::directoryUrlEntered(const QUrl & directory) [signal]
 //
@@ -1199,7 +1207,8 @@ func (this *QFileDialog) OnDirectoryUrlEntered(f func(directory *qtcore.QUrl)) q
 }
 
 // OnFilterSelected connects f to the filterSelected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QFileDialog::filterSelected(const QString & filter) [signal]
 //

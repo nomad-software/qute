@@ -1105,7 +1105,8 @@ func (this *QTableWidget) ScrollToItemFull(item QTableWidgetItemLike, hint QAbst
 }
 
 // OnItemPressed connects f to the itemPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemPressed(QTableWidgetItem * item) [signal]
 //
@@ -1121,7 +1122,8 @@ func (this *QTableWidget) OnItemPressed(f func(item *QTableWidgetItem)) qtcore.C
 }
 
 // OnItemClicked connects f to the itemClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemClicked(QTableWidgetItem * item) [signal]
 //
@@ -1137,7 +1139,8 @@ func (this *QTableWidget) OnItemClicked(f func(item *QTableWidgetItem)) qtcore.C
 }
 
 // OnItemDoubleClicked connects f to the itemDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemDoubleClicked(QTableWidgetItem * item) [signal]
 //
@@ -1153,7 +1156,8 @@ func (this *QTableWidget) OnItemDoubleClicked(f func(item *QTableWidgetItem)) qt
 }
 
 // OnItemActivated connects f to the itemActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemActivated(QTableWidgetItem * item) [signal]
 //
@@ -1169,7 +1173,8 @@ func (this *QTableWidget) OnItemActivated(f func(item *QTableWidgetItem)) qtcore
 }
 
 // OnItemEntered connects f to the itemEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemEntered(QTableWidgetItem * item) [signal]
 //
@@ -1185,7 +1190,8 @@ func (this *QTableWidget) OnItemEntered(f func(item *QTableWidgetItem)) qtcore.C
 }
 
 // OnItemChanged connects f to the itemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemChanged(QTableWidgetItem * item) [signal]
 //
@@ -1201,7 +1207,8 @@ func (this *QTableWidget) OnItemChanged(f func(item *QTableWidgetItem)) qtcore.C
 }
 
 // OnCurrentItemChanged connects f to the currentItemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::currentItemChanged(QTableWidgetItem * current, QTableWidgetItem * previous) [signal]
 //
@@ -1218,7 +1225,8 @@ func (this *QTableWidget) OnCurrentItemChanged(f func(current *QTableWidgetItem,
 }
 
 // OnItemSelectionChanged connects f to the itemSelectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::itemSelectionChanged() [signal]
 //
@@ -1233,7 +1241,8 @@ func (this *QTableWidget) OnItemSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnCellPressed connects f to the cellPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::cellPressed(int row, int column) [signal]
 //
@@ -1250,7 +1259,8 @@ func (this *QTableWidget) OnCellPressed(f func(row int, column int)) qtcore.Conn
 }
 
 // OnCellClicked connects f to the cellClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::cellClicked(int row, int column) [signal]
 //
@@ -1267,7 +1277,8 @@ func (this *QTableWidget) OnCellClicked(f func(row int, column int)) qtcore.Conn
 }
 
 // OnCellDoubleClicked connects f to the cellDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::cellDoubleClicked(int row, int column) [signal]
 //
@@ -1284,7 +1295,8 @@ func (this *QTableWidget) OnCellDoubleClicked(f func(row int, column int)) qtcor
 }
 
 // OnCellActivated connects f to the cellActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::cellActivated(int row, int column) [signal]
 //
@@ -1301,7 +1313,8 @@ func (this *QTableWidget) OnCellActivated(f func(row int, column int)) qtcore.Co
 }
 
 // OnCellEntered connects f to the cellEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::cellEntered(int row, int column) [signal]
 //
@@ -1318,7 +1331,8 @@ func (this *QTableWidget) OnCellEntered(f func(row int, column int)) qtcore.Conn
 }
 
 // OnCellChanged connects f to the cellChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::cellChanged(int row, int column) [signal]
 //
@@ -1335,7 +1349,8 @@ func (this *QTableWidget) OnCellChanged(f func(row int, column int)) qtcore.Conn
 }
 
 // OnCurrentCellChanged connects f to the currentCellChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QTableWidget::currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn) [signal]
 //

@@ -1027,8 +1027,9 @@ func (b *QFrameBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetr
 }
 
 // NewQFrameWith constructs a QFrame whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQFrameWith(v QFrameSubclass, parent QWidgetLike) *QFrame {
 	rt.CheckThread("NewQFrameWith")
 	base := v.quteQFrameBase()

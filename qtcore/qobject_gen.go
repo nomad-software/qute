@@ -500,7 +500,8 @@ func (this *QObject) StartTimerDurationFull(time time.Duration, timerType TimerT
 }
 
 // OnDestroyed connects f to the destroyed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QObject::destroyed(QObject * = …) [signal]
 //
@@ -516,7 +517,8 @@ func (this *QObject) OnDestroyed(f func(object *QObject)) Connection {
 }
 
 // OnObjectNameChanged connects f to the objectNameChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QObject::objectNameChanged(const QString & objectName, QPrivateSignal) [signal]
 //
@@ -670,8 +672,9 @@ func (s *QObjectSuper) CustomEvent(event *QEvent) {
 }
 
 // NewQObjectWith constructs a QObject whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQObjectWith(v QObjectSubclass, parent QObjectLike) *QObject {
 	rt.CheckThread("NewQObjectWith")
 	base := v.quteQObjectBase()

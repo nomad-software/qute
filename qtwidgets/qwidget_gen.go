@@ -3332,7 +3332,8 @@ func QWidgetFind(wId uint64) *QWidget {
 }
 
 // OnWindowTitleChanged connects f to the windowTitleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWidget::windowTitleChanged(const QString & title) [signal]
 //
@@ -3348,7 +3349,8 @@ func (this *QWidget) OnWindowTitleChanged(f func(title string)) qtcore.Connectio
 }
 
 // OnWindowIconChanged connects f to the windowIconChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWidget::windowIconChanged(const QIcon & icon) [signal]
 //
@@ -3364,7 +3366,8 @@ func (this *QWidget) OnWindowIconChanged(f func(icon *qtgui.QIcon)) qtcore.Conne
 }
 
 // OnWindowIconTextChanged connects f to the windowIconTextChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWidget::windowIconTextChanged(const QString & iconText) [signal]
 //
@@ -3380,7 +3383,8 @@ func (this *QWidget) OnWindowIconTextChanged(f func(iconText string)) qtcore.Con
 }
 
 // OnCustomContextMenuRequested connects f to the customContextMenuRequested signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWidget::customContextMenuRequested(const QPoint & pos) [signal]
 //
@@ -4161,8 +4165,9 @@ func (b *QWidgetBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMet
 }
 
 // NewQWidgetWith constructs a QWidget whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQWidgetWith(v QWidgetSubclass, parent QWidgetLike) *QWidget {
 	rt.CheckThread("NewQWidgetWith")
 	base := v.quteQWidgetBase()

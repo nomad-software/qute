@@ -44,13 +44,6 @@ func TransferTo(container, h *Handle) {
 	adoptMu.Unlock()
 }
 
-// Adopted reports how many parentless objects container took (for tests).
-func Adopted(container *Handle) int {
-	adoptMu.Lock()
-	defer adoptMu.Unlock()
-	return len(adoptions[container.ptr])
-}
-
 // orphaned runs when the container at key is destroyed: what it took and
 // left without a parent is Go's again.
 func orphaned(key unsafe.Pointer) {

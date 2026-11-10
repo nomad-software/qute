@@ -1128,7 +1128,8 @@ func (this *QComboBox) SetItemDataFull(index int, value *qtcore.QVariant, role i
 }
 
 // OnEditTextChanged connects f to the editTextChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::editTextChanged(const QString &) [signal]
 //
@@ -1144,7 +1145,8 @@ func (this *QComboBox) OnEditTextChanged(f func(stringArg string)) qtcore.Connec
 }
 
 // OnActivated connects f to the activated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::activated(int index) [signal]
 //
@@ -1160,7 +1162,8 @@ func (this *QComboBox) OnActivated(f func(index int)) qtcore.Connection {
 }
 
 // OnTextActivated connects f to the textActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::textActivated(const QString &) [signal]
 //
@@ -1176,7 +1179,8 @@ func (this *QComboBox) OnTextActivated(f func(stringArg string)) qtcore.Connecti
 }
 
 // OnHighlighted connects f to the highlighted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::highlighted(int index) [signal]
 //
@@ -1192,7 +1196,8 @@ func (this *QComboBox) OnHighlighted(f func(index int)) qtcore.Connection {
 }
 
 // OnTextHighlighted connects f to the textHighlighted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::textHighlighted(const QString &) [signal]
 //
@@ -1208,7 +1213,8 @@ func (this *QComboBox) OnTextHighlighted(f func(stringArg string)) qtcore.Connec
 }
 
 // OnCurrentIndexChanged connects f to the currentIndexChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::currentIndexChanged(int index) [signal]
 //
@@ -1224,7 +1230,8 @@ func (this *QComboBox) OnCurrentIndexChanged(f func(index int)) qtcore.Connectio
 }
 
 // OnCurrentTextChanged connects f to the currentTextChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QComboBox::currentTextChanged(const QString &) [signal]
 //

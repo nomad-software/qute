@@ -467,7 +467,8 @@ func (this *QClipboard) SetPixmapFull(pixmap *QPixmap, mode QClipboardMode) {
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QClipboard::changed(QClipboard::Mode mode) [signal]
 //
@@ -483,7 +484,8 @@ func (this *QClipboard) OnChanged(f func(mode QClipboardMode)) qtcore.Connection
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QClipboard::selectionChanged() [signal]
 //
@@ -498,7 +500,8 @@ func (this *QClipboard) OnSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnFindBufferChanged connects f to the findBufferChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QClipboard::findBufferChanged() [signal]
 //
@@ -513,7 +516,8 @@ func (this *QClipboard) OnFindBufferChanged(f func()) qtcore.Connection {
 }
 
 // OnDataChanged connects f to the dataChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QClipboard::dataChanged() [signal]
 //

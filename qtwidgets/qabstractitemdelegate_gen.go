@@ -305,7 +305,8 @@ func (this *QAbstractItemDelegate) EmitSizeHintChanged(modelIndex *qtcore.QModel
 }
 
 // OnCommitData connects f to the commitData signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemDelegate::commitData(QWidget * editor) [signal]
 //
@@ -321,7 +322,8 @@ func (this *QAbstractItemDelegate) OnCommitData(f func(editor *QWidget)) qtcore.
 }
 
 // OnCloseEditor connects f to the closeEditor signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemDelegate::closeEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint = …) [signal]
 //
@@ -338,7 +340,8 @@ func (this *QAbstractItemDelegate) OnCloseEditor(f func(editor *QWidget, hint QA
 }
 
 // OnSizeHintChanged connects f to the sizeHintChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemDelegate::sizeHintChanged(const QModelIndex &) [signal]
 //

@@ -232,8 +232,9 @@ func TestDumpTree(t *testing.T) {
 		b := qtwidgets.NewQPushButtonWithText("ok", nil)
 		b.SetObjectName("ok")
 		lay.AddWidget(b)
+		b.OnClicked(func(bool) {}) // its window's handle holds the handler
 		s := qute.DumpTree(w)
-		for _, want := range []string{`"class": "QWidget"`, `"objectName": "root"`, `"class": "QPushButton"`, `"ownership": "Parented"`} {
+		for _, want := range []string{`"class": "QWidget"`, `"objectName": "root"`, `"class": "QPushButton"`, `"ownership": "Parented"`, `"anchored": "root"`} {
 			if !strings.Contains(s, want) {
 				t.Errorf("tree missing %s:\n%s", want, s)
 			}

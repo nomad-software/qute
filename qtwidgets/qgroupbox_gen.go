@@ -232,7 +232,8 @@ func (this *QGroupBox) EmitToggled(arg0 bool) {
 }
 
 // OnClicked connects f to the clicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGroupBox::clicked(bool checked = …) [signal]
 //
@@ -248,7 +249,8 @@ func (this *QGroupBox) OnClicked(f func(checked bool)) qtcore.Connection {
 }
 
 // OnToggled connects f to the toggled signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGroupBox::toggled(bool) [signal]
 //

@@ -9,7 +9,6 @@ import (
 type Report struct {
 	warnings []string
 	noTest   []string
-	blind    []string
 }
 
 func (r *Report) untested(m *Method, why string) {
@@ -43,6 +42,7 @@ func (g *Gen) writeReport(path string) error {
 	type row struct{ cls, text string }
 	var rules, numbered, skipped []row
 	total, fulls, tied := 0, 0, 0
+	var blind []string // results whose death qute cannot see
 	for _, m := range g.modules {
 		for _, c := range m.Classes {
 			all := append(append(append([]*Method{}, c.Ctors...), c.Methods...), c.Statics...)
@@ -56,7 +56,7 @@ func (g *Gen) writeReport(path string) error {
 				case "tied":
 					tied++
 				case "blind":
-					g.report.blind = append(g.report.blind, fmt.Sprintf("- `%s`", mm.Sig))
+					blind = append(blind, fmt.Sprintf("- `%s`", mm.Sig))
 				}
 				var defaults []string
 				for _, prm := range mm.Params {
@@ -170,12 +170,12 @@ func (g *Gen) writeReport(path string) error {
 		}
 		p("")
 	}
-	if len(g.report.blind) > 0 {
-		p("## Results whose death qute cannot see (%d)\n", len(g.report.blind))
+	if len(blind) > 0 {
+		p("## Results whose death qute cannot see (%d)\n", len(blind))
 		p("These functions return an object Qt made that is neither a QObject nor a")
 		p("notifying subclass, and they have no receiver the result could depend on,")
 		p("so nothing tells Go when it is freed. Do not keep the result.\n")
-		for _, w := range g.report.blind {
+		for _, w := range blind {
 			p("%s", w)
 		}
 		p("")
@@ -186,7 +186,7 @@ func (g *Gen) writeReport(path string) error {
 			p("- %s", w)
 		}
 	}
-	open := len(rules) + len(numbered) + len(missing) + len(g.report.noTest) + len(g.report.blind)
+	open := len(rules) + len(numbered) + len(missing) + len(g.report.noTest) + len(blind)
 	var sum strings.Builder
 	fmt.Fprintf(&sum, "## Summary\n\n| | Count |\n| --- | --- |\n")
 	fmt.Fprintf(&sum, "| Bound constructors, methods and functions | %d |\n", total)
@@ -197,7 +197,7 @@ func (g *Gen) writeReport(path string) error {
 	fmt.Fprintf(&sum, "| Numbered overload names | %d |\n", len(numbered))
 	fmt.Fprintf(&sum, "| Waiting for type support | %d |\n", len(missing))
 	fmt.Fprintf(&sum, "| Ownership rules without a generated test | %d |\n", len(g.report.noTest))
-	fmt.Fprintf(&sum, "| Results whose death qute cannot see | %d |\n\n", len(g.report.blind))
+	fmt.Fprintf(&sum, "| Results whose death qute cannot see | %d |\n\n", len(blind))
 	if open == 0 {
 		fmt.Fprintf(&sum, "Nothing is open.\n\n")
 	} else {

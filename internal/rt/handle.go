@@ -75,8 +75,8 @@ type Handle struct {
 	cache      []any
 	selfSlot   uintptr // the id the shim dispatches virtuals with
 	deathNote  string
-	callbacks  map[uintptr]*callback // closures of live connections this object sends
-	memBytes   int64                 // external memory counted for this value (memory.go)
+	callbacks  map[uintptr]func(args unsafe.Pointer) // closures of the connections it sends
+	memBytes   int64                                 // external memory counted for this value (memory.go)
 
 	keeps map[string]any // kept references (guarded by keepMu)
 
@@ -364,7 +364,7 @@ func (h *Handle) attachCleanup() {
 		return
 	}
 	arg := cleanupArg{key: h.ptr, serial: h.serial, kind: h.kind, deleter: h.deleter,
-		registered: h.kind == KindQObject || h.kind == KindNotify, mem: h.memBytes}
+		registered: h.registeredKind(), mem: h.memBytes}
 	h.cleanup = runtime.AddCleanup(h, enqueueCleanup, arg)
 	h.hasCleanup = true
 }
@@ -529,15 +529,15 @@ func (h *Handle) Delete(method string) {
 	h.mu.Lock()
 	h.deathNote = "deleted by Delete()"
 	h.mu.Unlock()
-	key, del, kind := h.ptr, h.deleter, h.kind
-	if kind == KindQObject || kind == KindNotify {
+	key, del := h.ptr, h.deleter
+	if h.registeredKind() {
 		del(key) // the death notice marks the handle Dead
 		Destroyed(key, "deleted by Delete()")
+		h.markDead("deleted by Delete()")
+		return
 	}
 	h.markDead("deleted by Delete()")
-	if kind != KindQObject && kind != KindNotify {
-		del(key)
-	}
+	del(key)
 }
 
 // Use checks that the wrapper is usable and returns its C++ pointer. It is the
@@ -567,6 +567,15 @@ func UseArg(wrapper unsafe.Pointer, method string) unsafe.Pointer {
 		return nil
 	}
 	return Use(wrapper, method)
+}
+
+// GUIOnly panics when called off the GUI thread, in every build. Generated
+// methods check in their C shim instead; hand-written helpers (qute.Click,
+// qute.Screenshot) call this.
+func GUIOnly(method string) {
+	if AppExists() {
+		checkThread(method)
+	}
 }
 
 // CheckThread panics when called off the GUI thread in debug builds.
@@ -636,12 +645,18 @@ func RegisterClass(name string, kind Kind, deleter func(unsafe.Pointer)) {
 // QObject's handle, so it shares the object's state and death notice instead
 // of getting a second handle that never learns the object died.
 func RegisterBaseOfQObject(name string, toObject func(unsafe.Pointer) unsafe.Pointer) {
+	updateClass(name, func(ci *classInfo) { ci.toObject = toObject })
+}
+
+// updateClass changes the record of a class RegisterClass already made. It
+// runs from the generated init functions, which register a class first.
+func updateClass(name string, f func(*classInfo)) {
 	v, ok := classes.Load(name)
 	if !ok {
-		panic("qute: RegisterBaseOfQObject before RegisterClass for " + name)
+		panic("qute: class " + name + " is updated before RegisterClass")
 	}
 	ci := v.(classInfo)
-	ci.toObject = toObject
+	f(&ci)
 	classes.Store(name, ci)
 }
 

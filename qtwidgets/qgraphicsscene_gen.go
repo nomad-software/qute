@@ -1361,7 +1361,8 @@ func (this *QGraphicsScene) SetFocusFull(focusReason qtcore.FocusReason) {
 }
 
 // OnChanged connects f to the changed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScene::changed(const QList<QRectF> & region) [signal]
 //
@@ -1377,7 +1378,8 @@ func (this *QGraphicsScene) OnChanged(f func(region []qtcore.QRectF)) qtcore.Con
 }
 
 // OnSceneRectChanged connects f to the sceneRectChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScene::sceneRectChanged(const QRectF & rect) [signal]
 //
@@ -1393,7 +1395,8 @@ func (this *QGraphicsScene) OnSceneRectChanged(f func(rect qtcore.QRectF)) qtcor
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScene::selectionChanged() [signal]
 //
@@ -1408,7 +1411,8 @@ func (this *QGraphicsScene) OnSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnFocusItemChanged connects f to the focusItemChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScene::focusItemChanged(QGraphicsItem * newFocus, QGraphicsItem * oldFocus, Qt::FocusReason reason) [signal]
 //

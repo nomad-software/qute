@@ -481,7 +481,8 @@ func (this *QGraphicsTextItem) EmitLinkHovered(stringArg string) {
 }
 
 // OnLinkActivated connects f to the linkActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsTextItem::linkActivated(const QString &) [signal]
 //
@@ -497,7 +498,8 @@ func (this *QGraphicsTextItem) OnLinkActivated(f func(stringArg string)) qtcore.
 }
 
 // OnLinkHovered connects f to the linkHovered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsTextItem::linkHovered(const QString &) [signal]
 //

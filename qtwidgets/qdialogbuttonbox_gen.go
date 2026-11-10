@@ -429,7 +429,8 @@ func QDialogButtonBoxStandardButtonShortcut(button QDialogButtonBoxStandardButto
 }
 
 // OnClicked connects f to the clicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialogButtonBox::clicked(QAbstractButton * button) [signal]
 //
@@ -445,7 +446,8 @@ func (this *QDialogButtonBox) OnClicked(f func(button *QAbstractButton)) qtcore.
 }
 
 // OnAccepted connects f to the accepted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialogButtonBox::accepted() [signal]
 //
@@ -460,7 +462,8 @@ func (this *QDialogButtonBox) OnAccepted(f func()) qtcore.Connection {
 }
 
 // OnHelpRequested connects f to the helpRequested signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialogButtonBox::helpRequested() [signal]
 //
@@ -475,7 +478,8 @@ func (this *QDialogButtonBox) OnHelpRequested(f func()) qtcore.Connection {
 }
 
 // OnRejected connects f to the rejected signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDialogButtonBox::rejected() [signal]
 //

@@ -375,7 +375,8 @@ func QInputMethodQueryFocusObject(query qtcore.InputMethodQueries, argument *qtc
 }
 
 // OnCursorRectangleChanged connects f to the cursorRectangleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::cursorRectangleChanged() [signal]
 //
@@ -390,7 +391,8 @@ func (this *QInputMethod) OnCursorRectangleChanged(f func()) qtcore.Connection {
 }
 
 // OnAnchorRectangleChanged connects f to the anchorRectangleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::anchorRectangleChanged() [signal]
 //
@@ -405,7 +407,8 @@ func (this *QInputMethod) OnAnchorRectangleChanged(f func()) qtcore.Connection {
 }
 
 // OnKeyboardRectangleChanged connects f to the keyboardRectangleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::keyboardRectangleChanged() [signal]
 //
@@ -420,7 +423,8 @@ func (this *QInputMethod) OnKeyboardRectangleChanged(f func()) qtcore.Connection
 }
 
 // OnInputItemClipRectangleChanged connects f to the inputItemClipRectangleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::inputItemClipRectangleChanged() [signal]
 //
@@ -435,7 +439,8 @@ func (this *QInputMethod) OnInputItemClipRectangleChanged(f func()) qtcore.Conne
 }
 
 // OnVisibleChanged connects f to the visibleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::visibleChanged() [signal]
 //
@@ -450,7 +455,8 @@ func (this *QInputMethod) OnVisibleChanged(f func()) qtcore.Connection {
 }
 
 // OnAnimatingChanged connects f to the animatingChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::animatingChanged() [signal]
 //
@@ -465,7 +471,8 @@ func (this *QInputMethod) OnAnimatingChanged(f func()) qtcore.Connection {
 }
 
 // OnLocaleChanged connects f to the localeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::localeChanged() [signal]
 //
@@ -480,7 +487,8 @@ func (this *QInputMethod) OnLocaleChanged(f func()) qtcore.Connection {
 }
 
 // OnInputDirectionChanged connects f to the inputDirectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QInputMethod::inputDirectionChanged(Qt::LayoutDirection newDirection) [signal]
 //

@@ -1214,8 +1214,9 @@ func (b *QAbstractScrollAreaBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePa
 }
 
 // NewQAbstractScrollAreaWith constructs a QAbstractScrollArea whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQAbstractScrollAreaWith(v QAbstractScrollAreaSubclass, parent QWidgetLike) *QAbstractScrollArea {
 	rt.CheckThread("NewQAbstractScrollAreaWith")
 	base := v.quteQAbstractScrollAreaBase()

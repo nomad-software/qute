@@ -1023,7 +1023,8 @@ func (this *QAbstractItemModel) CheckIndexFull(index *QModelIndex, options QAbst
 }
 
 // OnDataChanged connects f to the dataChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QList<int> & roles = …) [signal]
 //
@@ -1041,7 +1042,8 @@ func (this *QAbstractItemModel) OnDataChanged(f func(topLeft *QModelIndex, botto
 }
 
 // OnHeaderDataChanged connects f to the headerDataChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::headerDataChanged(Qt::Orientation orientation, int first, int last) [signal]
 //
@@ -1059,7 +1061,8 @@ func (this *QAbstractItemModel) OnHeaderDataChanged(f func(orientation Orientati
 }
 
 // OnLayoutChanged connects f to the layoutChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::layoutChanged(const QList<QPersistentModelIndex> & parents = …, QAbstractItemModel::LayoutChangeHint hint = …) [signal]
 //
@@ -1078,7 +1081,8 @@ func (this *QAbstractItemModel) OnLayoutChanged(f func(parents []*QPersistentMod
 }
 
 // OnLayoutAboutToBeChanged connects f to the layoutAboutToBeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::layoutAboutToBeChanged(const QList<QPersistentModelIndex> & parents = …, QAbstractItemModel::LayoutChangeHint hint = …) [signal]
 //
@@ -1097,7 +1101,8 @@ func (this *QAbstractItemModel) OnLayoutAboutToBeChanged(f func(parents []*QPers
 }
 
 // OnRowsAboutToBeInserted connects f to the rowsAboutToBeInserted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::rowsAboutToBeInserted(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1115,7 +1120,8 @@ func (this *QAbstractItemModel) OnRowsAboutToBeInserted(f func(parent *QModelInd
 }
 
 // OnRowsInserted connects f to the rowsInserted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::rowsInserted(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1133,7 +1139,8 @@ func (this *QAbstractItemModel) OnRowsInserted(f func(parent *QModelIndex, first
 }
 
 // OnRowsAboutToBeRemoved connects f to the rowsAboutToBeRemoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1151,7 +1158,8 @@ func (this *QAbstractItemModel) OnRowsAboutToBeRemoved(f func(parent *QModelInde
 }
 
 // OnRowsRemoved connects f to the rowsRemoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::rowsRemoved(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1169,7 +1177,8 @@ func (this *QAbstractItemModel) OnRowsRemoved(f func(parent *QModelIndex, first 
 }
 
 // OnColumnsAboutToBeInserted connects f to the columnsAboutToBeInserted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::columnsAboutToBeInserted(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1187,7 +1196,8 @@ func (this *QAbstractItemModel) OnColumnsAboutToBeInserted(f func(parent *QModel
 }
 
 // OnColumnsInserted connects f to the columnsInserted signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::columnsInserted(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1205,7 +1215,8 @@ func (this *QAbstractItemModel) OnColumnsInserted(f func(parent *QModelIndex, fi
 }
 
 // OnColumnsAboutToBeRemoved connects f to the columnsAboutToBeRemoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::columnsAboutToBeRemoved(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1223,7 +1234,8 @@ func (this *QAbstractItemModel) OnColumnsAboutToBeRemoved(f func(parent *QModelI
 }
 
 // OnColumnsRemoved connects f to the columnsRemoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::columnsRemoved(const QModelIndex & parent, int first, int last, QPrivateSignal) [signal]
 //
@@ -1241,7 +1253,8 @@ func (this *QAbstractItemModel) OnColumnsRemoved(f func(parent *QModelIndex, fir
 }
 
 // OnModelAboutToBeReset connects f to the modelAboutToBeReset signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::modelAboutToBeReset(QPrivateSignal) [signal]
 //
@@ -1256,7 +1269,8 @@ func (this *QAbstractItemModel) OnModelAboutToBeReset(f func()) Connection {
 }
 
 // OnModelReset connects f to the modelReset signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::modelReset(QPrivateSignal) [signal]
 //
@@ -1271,7 +1285,8 @@ func (this *QAbstractItemModel) OnModelReset(f func()) Connection {
 }
 
 // OnRowsAboutToBeMoved connects f to the rowsAboutToBeMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::rowsAboutToBeMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow, QPrivateSignal) [signal]
 //
@@ -1291,7 +1306,8 @@ func (this *QAbstractItemModel) OnRowsAboutToBeMoved(f func(sourceParent *QModel
 }
 
 // OnRowsMoved connects f to the rowsMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::rowsMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow, QPrivateSignal) [signal]
 //
@@ -1311,7 +1327,8 @@ func (this *QAbstractItemModel) OnRowsMoved(f func(sourceParent *QModelIndex, so
 }
 
 // OnColumnsAboutToBeMoved connects f to the columnsAboutToBeMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::columnsAboutToBeMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn, QPrivateSignal) [signal]
 //
@@ -1331,7 +1348,8 @@ func (this *QAbstractItemModel) OnColumnsAboutToBeMoved(f func(sourceParent *QMo
 }
 
 // OnColumnsMoved connects f to the columnsMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractItemModel::columnsMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn, QPrivateSignal) [signal]
 //
@@ -2340,8 +2358,9 @@ func (b *QAbstractItemModelBase) PersistentIndexList() []*QModelIndex {
 }
 
 // NewQAbstractItemModelWith constructs a QAbstractItemModel whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQAbstractItemModelWith(v QAbstractItemModelSubclass, parent QObjectLike) *QAbstractItemModel {
 	rt.CheckThread("NewQAbstractItemModelWith")
 	base := v.quteQAbstractItemModelBase()

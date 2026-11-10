@@ -716,7 +716,8 @@ func (this *QStyleHints) EmitToolTipWakeUpDelayAsMSecChanged(toolTipWakeUpDelay 
 }
 
 // OnCursorFlashTimeChanged connects f to the cursorFlashTimeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::cursorFlashTimeChanged(int cursorFlashTime) [signal]
 //
@@ -732,7 +733,8 @@ func (this *QStyleHints) OnCursorFlashTimeChanged(f func(cursorFlashTime int)) q
 }
 
 // OnKeyboardInputIntervalChanged connects f to the keyboardInputIntervalChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::keyboardInputIntervalChanged(int keyboardInputInterval) [signal]
 //
@@ -748,7 +750,8 @@ func (this *QStyleHints) OnKeyboardInputIntervalChanged(f func(keyboardInputInte
 }
 
 // OnMouseDoubleClickIntervalChanged connects f to the mouseDoubleClickIntervalChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::mouseDoubleClickIntervalChanged(int mouseDoubleClickInterval) [signal]
 //
@@ -764,7 +767,8 @@ func (this *QStyleHints) OnMouseDoubleClickIntervalChanged(f func(mouseDoubleCli
 }
 
 // OnMousePressAndHoldIntervalChanged connects f to the mousePressAndHoldIntervalChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::mousePressAndHoldIntervalChanged(int mousePressAndHoldInterval) [signal]
 //
@@ -780,7 +784,8 @@ func (this *QStyleHints) OnMousePressAndHoldIntervalChanged(f func(mousePressAnd
 }
 
 // OnStartDragDistanceChanged connects f to the startDragDistanceChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::startDragDistanceChanged(int startDragDistance) [signal]
 //
@@ -796,7 +801,8 @@ func (this *QStyleHints) OnStartDragDistanceChanged(f func(startDragDistance int
 }
 
 // OnStartDragTimeChanged connects f to the startDragTimeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::startDragTimeChanged(int startDragTime) [signal]
 //
@@ -812,7 +818,8 @@ func (this *QStyleHints) OnStartDragTimeChanged(f func(startDragTime int)) qtcor
 }
 
 // OnTabFocusBehaviorChanged connects f to the tabFocusBehaviorChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::tabFocusBehaviorChanged(Qt::TabFocusBehavior tabFocusBehavior) [signal]
 //
@@ -828,7 +835,8 @@ func (this *QStyleHints) OnTabFocusBehaviorChanged(f func(tabFocusBehavior qtcor
 }
 
 // OnUseHoverEffectsChanged connects f to the useHoverEffectsChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::useHoverEffectsChanged(bool useHoverEffects) [signal]
 //
@@ -844,7 +852,8 @@ func (this *QStyleHints) OnUseHoverEffectsChanged(f func(useHoverEffects bool)) 
 }
 
 // OnShowShortcutsInContextMenusChanged connects f to the showShortcutsInContextMenusChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::showShortcutsInContextMenusChanged(bool) [signal]
 //
@@ -860,7 +869,8 @@ func (this *QStyleHints) OnShowShortcutsInContextMenusChanged(f func(arg0 bool))
 }
 
 // OnContextMenuTriggerChanged connects f to the contextMenuTriggerChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::contextMenuTriggerChanged(Qt::ContextMenuTrigger contextMenuTrigger) [signal]
 //
@@ -876,7 +886,8 @@ func (this *QStyleHints) OnContextMenuTriggerChanged(f func(contextMenuTrigger q
 }
 
 // OnWheelScrollLinesChanged connects f to the wheelScrollLinesChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::wheelScrollLinesChanged(int scrollLines) [signal]
 //
@@ -892,7 +903,8 @@ func (this *QStyleHints) OnWheelScrollLinesChanged(f func(scrollLines int)) qtco
 }
 
 // OnMouseQuickSelectionThresholdChanged connects f to the mouseQuickSelectionThresholdChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::mouseQuickSelectionThresholdChanged(int threshold) [signal]
 //
@@ -908,7 +920,8 @@ func (this *QStyleHints) OnMouseQuickSelectionThresholdChanged(f func(threshold 
 }
 
 // OnColorSchemeChanged connects f to the colorSchemeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::colorSchemeChanged(Qt::ColorScheme colorScheme) [signal]
 //
@@ -924,7 +937,8 @@ func (this *QStyleHints) OnColorSchemeChanged(f func(colorScheme qtcore.ColorSch
 }
 
 // OnToolTipWakeUpDelayChanged connects f to the toolTipWakeUpDelayChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::toolTipWakeUpDelayChanged(std::chrono::milliseconds toolTipWakeUpDelay) [signal]
 //
@@ -940,7 +954,8 @@ func (this *QStyleHints) OnToolTipWakeUpDelayChanged(f func(toolTipWakeUpDelay t
 }
 
 // OnToolTipWakeUpDelayAsMSecChanged connects f to the toolTipWakeUpDelayAsMSecChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QStyleHints::toolTipWakeUpDelayAsMSecChanged(int toolTipWakeUpDelay) [signal]
 //

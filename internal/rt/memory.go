@@ -34,13 +34,7 @@ var (
 // RegisterMemory gives class a function that reports how many bytes one
 // object holds outside the Go heap.
 func RegisterMemory(class string, size func(unsafe.Pointer) int64) {
-	v, ok := classes.Load(class)
-	if !ok {
-		panic("qute: RegisterMemory before RegisterClass for " + class)
-	}
-	ci := v.(classInfo)
-	ci.memory = size
-	classes.Store(class, ci)
+	updateClass(class, func(ci *classInfo) { ci.memory = size })
 }
 
 // trackNew measures a value object Go just took ownership of.

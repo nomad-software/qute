@@ -1648,7 +1648,8 @@ func QWindowFromWinId(idArg uint64) *QWindow {
 }
 
 // OnScreenChanged connects f to the screenChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::screenChanged(QScreen * screen) [signal]
 //
@@ -1664,7 +1665,8 @@ func (this *QWindow) OnScreenChanged(f func(screen *QScreen)) qtcore.Connection 
 }
 
 // OnModalityChanged connects f to the modalityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::modalityChanged(Qt::WindowModality modality) [signal]
 //
@@ -1680,7 +1682,8 @@ func (this *QWindow) OnModalityChanged(f func(modality qtcore.WindowModality)) q
 }
 
 // OnFlagsChanged connects f to the flagsChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::flagsChanged(Qt::WindowFlags flags) [signal]
 //
@@ -1696,7 +1699,8 @@ func (this *QWindow) OnFlagsChanged(f func(flags qtcore.WindowFlags)) qtcore.Con
 }
 
 // OnWindowStateChanged connects f to the windowStateChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::windowStateChanged(Qt::WindowState windowState) [signal]
 //
@@ -1712,7 +1716,8 @@ func (this *QWindow) OnWindowStateChanged(f func(windowState qtcore.WindowStates
 }
 
 // OnWindowTitleChanged connects f to the windowTitleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::windowTitleChanged(const QString & title) [signal]
 //
@@ -1728,7 +1733,8 @@ func (this *QWindow) OnWindowTitleChanged(f func(title string)) qtcore.Connectio
 }
 
 // OnXChanged connects f to the xChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::xChanged(int arg) [signal]
 //
@@ -1744,7 +1750,8 @@ func (this *QWindow) OnXChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnYChanged connects f to the yChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::yChanged(int arg) [signal]
 //
@@ -1760,7 +1767,8 @@ func (this *QWindow) OnYChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnWidthChanged connects f to the widthChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::widthChanged(int arg) [signal]
 //
@@ -1776,7 +1784,8 @@ func (this *QWindow) OnWidthChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnHeightChanged connects f to the heightChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::heightChanged(int arg) [signal]
 //
@@ -1792,7 +1801,8 @@ func (this *QWindow) OnHeightChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnMinimumWidthChanged connects f to the minimumWidthChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::minimumWidthChanged(int arg) [signal]
 //
@@ -1808,7 +1818,8 @@ func (this *QWindow) OnMinimumWidthChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnMinimumHeightChanged connects f to the minimumHeightChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::minimumHeightChanged(int arg) [signal]
 //
@@ -1824,7 +1835,8 @@ func (this *QWindow) OnMinimumHeightChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnMaximumWidthChanged connects f to the maximumWidthChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::maximumWidthChanged(int arg) [signal]
 //
@@ -1840,7 +1852,8 @@ func (this *QWindow) OnMaximumWidthChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnMaximumHeightChanged connects f to the maximumHeightChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::maximumHeightChanged(int arg) [signal]
 //
@@ -1856,7 +1869,8 @@ func (this *QWindow) OnMaximumHeightChanged(f func(arg int)) qtcore.Connection {
 }
 
 // OnSafeAreaMarginsChanged connects f to the safeAreaMarginsChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::safeAreaMarginsChanged(QMargins arg) [signal]
 //
@@ -1872,7 +1886,8 @@ func (this *QWindow) OnSafeAreaMarginsChanged(f func(arg qtcore.QMargins)) qtcor
 }
 
 // OnVisibleChanged connects f to the visibleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::visibleChanged(bool arg) [signal]
 //
@@ -1888,7 +1903,8 @@ func (this *QWindow) OnVisibleChanged(f func(arg bool)) qtcore.Connection {
 }
 
 // OnVisibilityChanged connects f to the visibilityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::visibilityChanged(QWindow::Visibility visibility) [signal]
 //
@@ -1904,7 +1920,8 @@ func (this *QWindow) OnVisibilityChanged(f func(visibility QWindowVisibility)) q
 }
 
 // OnActiveChanged connects f to the activeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::activeChanged() [signal]
 //
@@ -1919,7 +1936,8 @@ func (this *QWindow) OnActiveChanged(f func()) qtcore.Connection {
 }
 
 // OnContentOrientationChanged connects f to the contentOrientationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::contentOrientationChanged(Qt::ScreenOrientation orientation) [signal]
 //
@@ -1935,7 +1953,8 @@ func (this *QWindow) OnContentOrientationChanged(f func(orientation qtcore.Scree
 }
 
 // OnFocusObjectChanged connects f to the focusObjectChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::focusObjectChanged(QObject * object) [signal]
 //
@@ -1951,7 +1970,8 @@ func (this *QWindow) OnFocusObjectChanged(f func(object *qtcore.QObject)) qtcore
 }
 
 // OnOpacityChanged connects f to the opacityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::opacityChanged(qreal opacity) [signal]
 //
@@ -1967,7 +1987,8 @@ func (this *QWindow) OnOpacityChanged(f func(opacity float64)) qtcore.Connection
 }
 
 // OnTransientParentChanged connects f to the transientParentChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QWindow::transientParentChanged(QWindow * transientParent) [signal]
 //

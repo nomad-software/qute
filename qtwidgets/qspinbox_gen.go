@@ -301,7 +301,8 @@ func (this *QSpinBox) EmitTextChanged(stringArg string) {
 }
 
 // OnValueChanged connects f to the valueChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSpinBox::valueChanged(int) [signal]
 //
@@ -317,7 +318,8 @@ func (this *QSpinBox) OnValueChanged(f func(arg0 int)) qtcore.Connection {
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QSpinBox::textChanged(const QString &) [signal]
 //

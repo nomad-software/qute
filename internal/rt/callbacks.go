@@ -70,24 +70,19 @@ func catchPanic() {
 	}
 }
 
-type callback struct {
-	fn  func(args unsafe.Pointer)
-	fnr func(args, ret unsafe.Pointer)
-}
-
 // NewFunc stores a Go func passed to Qt as a std::function. Qt releases it
 // (through the same release path as signals) when it drops the function.
 func NewFunc(fn func(args, ret unsafe.Pointer)) uintptr {
-	return uintptr(cgo.NewHandle(&callback{fnr: fn})) | funcBit
+	return uintptr(cgo.NewHandle(fn)) | funcBit
 }
 
 // InvokeFunc runs a std::function callback and lets it write its result.
 func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
-	cb := cgo.Handle(id &^ funcBit).Value().(*callback)
+	fn := cgo.Handle(id &^ funcBit).Value().(func(args, ret unsafe.Pointer))
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
-	cb.fnr(args, ret)
+	fn(args, ret)
 }
 
 // NewCallback stores fn for a C++ lambda that captures only the returned id.
@@ -95,44 +90,39 @@ func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
 // while the connection is live: by the root of its object tree, or globally
 // when the sender is itself a root.
 func NewCallback(sender *Handle, fn func(args unsafe.Pointer)) uintptr {
-	if sender == nil {
-		return uintptr(cgo.NewHandle(&callback{fn: fn})) | funcBit
-	}
 	id := newSlot(sender)
 	sender.mu.Lock()
 	if sender.callbacks == nil {
-		sender.callbacks = map[uintptr]*callback{}
+		sender.callbacks = map[uintptr]func(args unsafe.Pointer){}
 	}
-	sender.callbacks[id] = &callback{fn: fn}
+	sender.callbacks[id] = fn
 	sender.mu.Unlock()
 	sender.anchorPin()
 	return id
 }
 
-// funcBit marks a callback id that is a cgo.Handle rather than a slot id (a
-// std::function, or a connection without a sender handle). cgo handles start
-// at 1 and grow by one, so the top bit is free.
+// funcBit marks a std::function callback id, a cgo.Handle, apart from the
+// slot ids of connections: both come to ReleaseCallback. cgo handles start at
+// 1 and grow by one, so the top bit is free.
 const funcBit = uintptr(1) << (unsafe.Sizeof(uintptr(0))*8 - 1)
 
 // InvokeCallback runs the closure stored under id with the shim's argument
 // array. A closure whose object tree GC already collected (its deletion is
 // still queued) is skipped.
 func InvokeCallback(id uintptr, args unsafe.Pointer) {
-	var cb *callback
-	if id&funcBit != 0 {
-		cb = cgo.Handle(id &^ funcBit).Value().(*callback)
-	} else if h := slotHandle(id); h != nil {
+	var fn func(args unsafe.Pointer)
+	if h := slotHandle(id); h != nil {
 		h.mu.Lock()
-		cb = h.callbacks[id]
+		fn = h.callbacks[id]
 		h.mu.Unlock()
 	}
-	if cb == nil {
+	if fn == nil {
 		return
 	}
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
-	cb.fn(args)
+	fn(args)
 }
 
 // ReleaseCallback is called when Qt destroys the slot object, on Disconnect or

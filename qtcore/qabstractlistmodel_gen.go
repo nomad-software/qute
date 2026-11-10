@@ -1009,8 +1009,9 @@ func (b *QAbstractListModelBase) PersistentIndexList() []*QModelIndex {
 }
 
 // NewQAbstractListModelWith constructs a QAbstractListModel whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQAbstractListModelWith(v QAbstractListModelSubclass, parent QObjectLike) *QAbstractListModel {
 	rt.CheckThread("NewQAbstractListModelWith")
 	base := v.quteQAbstractListModelBase()

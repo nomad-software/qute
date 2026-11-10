@@ -99,6 +99,9 @@ func (h *Handle) Anchored() string {
 // a root handle. The new holder takes h before the old one lets go, so a
 // concurrent GC never sees it unheld. The caller holds anchorMu.
 func (h *Handle) placeLocked(placed bool, holder *Handle) {
+	if !placed {
+		holder = nil
+	}
 	wasGlobal := h.placed && h.holder == nil
 	nowGlobal := placed && holder == nil
 	if placed && holder != nil {
@@ -116,32 +119,27 @@ func (h *Handle) placeLocked(placed bool, holder *Handle) {
 	if wasGlobal && !nowGlobal {
 		h.Unpin()
 	}
-	h.placed = placed
-	if placed {
-		h.holder = holder
-	} else {
-		h.holder = nil
-	}
+	h.placed, h.holder = placed, holder
 }
 
-// eligibleRoot reports whether r can hold the Go state of its tree: an Owned
-// QObject, which GC frees together with everything it holds.
-func eligibleRoot(r *Handle) bool {
-	return r != nil && r.kind == KindQObject && r.State() == Owned
+// rootHolder returns the handle of the tree root at root if it can hold the
+// Go state of its tree: an Owned QObject, which GC frees together with
+// everything it holds. Otherwise nil, for the global set.
+func rootHolder(root unsafe.Pointer) *Handle {
+	if r := Lookup(root); r != nil && r.kind == KindQObject && r.State() == Owned {
+		return r
+	}
+	return nil
 }
 
 // holderFor picks the holder of h's Go state: the Owned root of its tree, or
-// nil for the global set. The caller holds anchorMu.
+// nil for the global set (also when h is the root). The caller holds anchorMu.
 func holderFor(h *Handle) *Handle {
 	if h.kind != KindQObject || h.State() == Dead || rootOfC == nil {
 		return nil
 	}
-	root := rootOfC(h.ptr)
-	if root == h.ptr {
-		return nil
-	}
-	if r := Lookup(root); eligibleRoot(r) {
-		return r
+	if root := rootOfC(h.ptr); root != h.ptr {
+		return rootHolder(root)
 	}
 	return nil
 }
@@ -195,9 +193,7 @@ func reanchorSubtree(obj unsafe.Pointer, toGlobal bool) {
 	defer anchorMu.Unlock()
 	var rootH *Handle
 	if !toGlobal {
-		if r := Lookup(root); eligibleRoot(r) {
-			rootH = r
-		}
+		rootH = rootHolder(root)
 	}
 	for _, p := range objs {
 		h := Lookup(p)

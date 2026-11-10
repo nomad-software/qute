@@ -22,6 +22,7 @@ func widgetPtr(w qtwidgets.QWidgetLike, method string) unsafe.Pointer {
 	if w == nil {
 		panic(method + ": widget is nil")
 	}
+	rt.GUIOnly(method)
 	return rt.Use(unsafe.Pointer(w.AsQWidget()), method)
 }
 
@@ -58,6 +59,7 @@ type Node struct {
 	ObjectName string        `json:"objectName,omitempty"`
 	Ownership  string        `json:"ownership"`
 	Pins       int           `json:"pins,omitempty"`
+	Anchored   string        `json:"anchored,omitempty"` // Go state held by its tree's root ("root") or pinned ("global")
 	Geometry   *qtcore.QRect `json:"geometry,omitempty"`
 	Visible    *bool         `json:"visible,omitempty"`
 	Window     bool          `json:"window,omitempty"`
@@ -65,12 +67,14 @@ type Node struct {
 }
 
 // Tree returns the object tree under o with each object's class, objectName,
-// ownership state and (for widgets) geometry. Objects Go has never wrapped
+// ownership state, pins and anchoring (who holds its Go state: handlers, Go
+// subclass value, kept references) and, for widgets, geometry. Objects Go has never wrapped
 // show ownership "untracked".
 func Tree(o qtcore.QObjectLike) *Node {
 	if o == nil {
 		return nil
 	}
+	rt.GUIOnly("qute.Tree")
 	return tree(rt.Use(unsafe.Pointer(o.AsQObject()), "qute.Tree"))
 }
 
@@ -82,6 +86,7 @@ func tree(p unsafe.Pointer) *Node {
 	if h := rt.Lookup(p); h != nil {
 		n.Ownership = h.State().String()
 		n.Pins = h.Pins()
+		n.Anchored = h.Anchored()
 	}
 	if info.widget {
 		g := qtcore.QRect{X: int(info.x), Y: int(info.y), Width: int(info.w), Height: int(info.h)}
@@ -137,14 +142,14 @@ func Key(w qtwidgets.QWidgetLike, key qtcore.Key, mods qtcore.KeyboardModifiers)
 // Wait runs the event loop for ms milliseconds (timers, deferred deletes).
 // Call it on the GUI thread.
 func Wait(ms int) {
-	rt.CheckThread("qute.Wait")
+	rt.GUIOnly("qute.Wait")
 	C.qute_tools_wait(C.int(ms))
 	rt.RethrowCallbackPanic()
 }
 
 // ProcessEvents handles pending events once. Call it on the GUI thread.
 func ProcessEvents() {
-	rt.CheckThread("qute.ProcessEvents")
+	rt.GUIOnly("qute.ProcessEvents")
 	C.qute_tools_process()
 	rt.RethrowCallbackPanic()
 }

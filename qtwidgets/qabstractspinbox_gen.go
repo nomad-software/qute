@@ -442,7 +442,8 @@ func (this *QAbstractSpinBox) EmitReturnPressed() {
 }
 
 // OnEditingFinished connects f to the editingFinished signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSpinBox::editingFinished() [signal]
 //
@@ -457,7 +458,8 @@ func (this *QAbstractSpinBox) OnEditingFinished(f func()) qtcore.Connection {
 }
 
 // OnReturnPressed connects f to the returnPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QAbstractSpinBox::returnPressed() [signal]
 //

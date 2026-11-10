@@ -115,18 +115,27 @@ func TestPostSyncHandlerPanic(t *testing.T) {
 
 func handlerThatPanics() { panic("handler boom") }
 
-// Qt calls from another goroutine panic in release builds too.
+// Qt calls from another goroutine panic in release builds too: generated
+// methods and the hand-written helpers alike.
 func TestOffThreadCallPanics(t *testing.T) {
 	var w *qtwidgets.QWidget
 	qute.Run(t, func() { w = qtwidgets.NewQWidget(nil) })
 	defer qute.Run(t, func() { w.Delete() })
-	defer func() {
-		p := recover()
-		if msg, _ := p.(string); !strings.Contains(msg, "off the GUI thread") {
-			t.Errorf("off-thread call: panic %v, want an off-thread message", p)
-		}
-	}()
-	_ = w.ObjectName() // the test goroutine is not the GUI thread
+	for name, f := range map[string]func(){
+		"ObjectName": func() { _ = w.ObjectName() },
+		"qute.Click": func() { qute.Click(w) },
+		"qute.Tree":  func() { qute.Tree(w) },
+	} {
+		func() {
+			defer func() {
+				p := recover()
+				if msg, _ := p.(string); !strings.Contains(msg, "off the GUI thread") {
+					t.Errorf("%s off the GUI thread: panic %v, want an off-thread message", name, p)
+				}
+			}()
+			f() // the test goroutine is not the GUI thread
+		}()
+	}
 }
 
 // Arguments with C++ defaults can be passed through each method's Full form.

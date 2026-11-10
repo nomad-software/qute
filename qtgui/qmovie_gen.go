@@ -580,7 +580,8 @@ func QMovieSupportedFormats() [][]byte {
 }
 
 // OnStarted connects f to the started signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::started() [signal]
 //
@@ -595,7 +596,8 @@ func (this *QMovie) OnStarted(f func()) qtcore.Connection {
 }
 
 // OnResized connects f to the resized signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::resized(const QSize & size) [signal]
 //
@@ -611,7 +613,8 @@ func (this *QMovie) OnResized(f func(size qtcore.QSize)) qtcore.Connection {
 }
 
 // OnUpdated connects f to the updated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::updated(const QRect & rect) [signal]
 //
@@ -627,7 +630,8 @@ func (this *QMovie) OnUpdated(f func(rect qtcore.QRect)) qtcore.Connection {
 }
 
 // OnStateChanged connects f to the stateChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::stateChanged(QMovie::MovieState state) [signal]
 //
@@ -643,7 +647,8 @@ func (this *QMovie) OnStateChanged(f func(state QMovieMovieState)) qtcore.Connec
 }
 
 // OnError connects f to the error signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::error(QImageReader::ImageReaderError error) [signal]
 //
@@ -659,7 +664,8 @@ func (this *QMovie) OnError(f func(errorArg QImageReaderImageReaderError)) qtcor
 }
 
 // OnFinished connects f to the finished signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::finished() [signal]
 //
@@ -674,7 +680,8 @@ func (this *QMovie) OnFinished(f func()) qtcore.Connection {
 }
 
 // OnFrameChanged connects f to the frameChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMovie::frameChanged(int frameNumber) [signal]
 //

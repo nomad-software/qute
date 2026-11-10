@@ -30,7 +30,7 @@ func main() {
 
 Requirements: Go 1.26+, Qt 6 development packages, `pkg-config` and a C++17
 compiler. Linux is the supported platform for now. The first build compiles
-the C++ shims, which takes about a minute; after that Go's build cache keeps
+the C++ shims, which takes about two minutes; after that Go's build cache keeps
 rebuilds fast.
 
 ## Why qute
@@ -87,8 +87,8 @@ to see the UI:
   PNG an agent can open and inspect. Layout bugs (clipped text, a widget the
   wrong size, a missing button) are visible without a person at the screen.
 - **The agent can read the window.** `qute.DumpTree(w)` returns the object
-  tree as JSON: class, `objectName`, ownership state, pins, geometry and
-  visibility. It is a precise, text-only view of what is on screen.
+  tree as JSON: class, `objectName`, ownership state, pins, what holds its Go
+  state (`anchored`), geometry and visibility. It is a precise, text-only view of what is on screen.
 - **The agent can use the window.** `qute.Click`, `ClickAt`, `DoubleClick`,
   `Type` (including non-ASCII text), `Key` and `Wait` drive real Qt input
   events through QTest, so behaviour tests exercise signals and handlers the

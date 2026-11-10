@@ -790,7 +790,8 @@ func QGuiApplicationSync() {
 }
 
 // OnFontDatabaseChanged connects f to the fontDatabaseChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::fontDatabaseChanged() [signal]
 //
@@ -805,7 +806,8 @@ func (this *QGuiApplication) OnFontDatabaseChanged(f func()) qtcore.Connection {
 }
 
 // OnScreenAdded connects f to the screenAdded signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::screenAdded(QScreen * screen) [signal]
 //
@@ -821,7 +823,8 @@ func (this *QGuiApplication) OnScreenAdded(f func(screen *QScreen)) qtcore.Conne
 }
 
 // OnScreenRemoved connects f to the screenRemoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::screenRemoved(QScreen * screen) [signal]
 //
@@ -837,7 +840,8 @@ func (this *QGuiApplication) OnScreenRemoved(f func(screen *QScreen)) qtcore.Con
 }
 
 // OnPrimaryScreenChanged connects f to the primaryScreenChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::primaryScreenChanged(QScreen * screen) [signal]
 //
@@ -853,7 +857,8 @@ func (this *QGuiApplication) OnPrimaryScreenChanged(f func(screen *QScreen)) qtc
 }
 
 // OnLastWindowClosed connects f to the lastWindowClosed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::lastWindowClosed() [signal]
 //
@@ -868,7 +873,8 @@ func (this *QGuiApplication) OnLastWindowClosed(f func()) qtcore.Connection {
 }
 
 // OnFocusObjectChanged connects f to the focusObjectChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::focusObjectChanged(QObject * focusObject) [signal]
 //
@@ -884,7 +890,8 @@ func (this *QGuiApplication) OnFocusObjectChanged(f func(focusObject *qtcore.QOb
 }
 
 // OnFocusWindowChanged connects f to the focusWindowChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::focusWindowChanged(QWindow * focusWindow) [signal]
 //
@@ -900,7 +907,8 @@ func (this *QGuiApplication) OnFocusWindowChanged(f func(focusWindow *QWindow)) 
 }
 
 // OnApplicationStateChanged connects f to the applicationStateChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::applicationStateChanged(Qt::ApplicationState state) [signal]
 //
@@ -916,7 +924,8 @@ func (this *QGuiApplication) OnApplicationStateChanged(f func(state qtcore.Appli
 }
 
 // OnLayoutDirectionChanged connects f to the layoutDirectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::layoutDirectionChanged(Qt::LayoutDirection direction) [signal]
 //
@@ -932,7 +941,8 @@ func (this *QGuiApplication) OnLayoutDirectionChanged(f func(direction qtcore.La
 }
 
 // OnCommitDataRequest connects f to the commitDataRequest signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::commitDataRequest(QSessionManager & sessionManager) [signal]
 //
@@ -948,7 +958,8 @@ func (this *QGuiApplication) OnCommitDataRequest(f func(sessionManager *QSession
 }
 
 // OnSaveStateRequest connects f to the saveStateRequest signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::saveStateRequest(QSessionManager & sessionManager) [signal]
 //
@@ -964,7 +975,8 @@ func (this *QGuiApplication) OnSaveStateRequest(f func(sessionManager *QSessionM
 }
 
 // OnApplicationDisplayNameChanged connects f to the applicationDisplayNameChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGuiApplication::applicationDisplayNameChanged() [signal]
 //

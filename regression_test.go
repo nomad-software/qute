@@ -290,8 +290,8 @@ func TestWidgetKeepsActions(t *testing.T) {
 	})
 }
 
-// A widget's kept references go when the widget dies, even though its Go
-// handle may be long gone (references are stored by object address).
+// A widget's kept references go when the widget dies, even though no Go
+// variable refers to it any more (its handle is anchored while it keeps them).
 func TestKeptReferencesDropWithOwner(t *testing.T) {
 	qute.Run(t, func() {
 		root := qtwidgets.NewQWidget(nil)

@@ -223,7 +223,8 @@ func (this *QGraphicsScale) EmitScaleChanged() {
 }
 
 // OnOriginChanged connects f to the originChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScale::originChanged() [signal]
 //
@@ -238,7 +239,8 @@ func (this *QGraphicsScale) OnOriginChanged(f func()) qtcore.Connection {
 }
 
 // OnXScaleChanged connects f to the xScaleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScale::xScaleChanged() [signal]
 //
@@ -253,7 +255,8 @@ func (this *QGraphicsScale) OnXScaleChanged(f func()) qtcore.Connection {
 }
 
 // OnYScaleChanged connects f to the yScaleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScale::yScaleChanged() [signal]
 //
@@ -268,7 +271,8 @@ func (this *QGraphicsScale) OnYScaleChanged(f func()) qtcore.Connection {
 }
 
 // OnZScaleChanged connects f to the zScaleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScale::zScaleChanged() [signal]
 //
@@ -283,7 +287,8 @@ func (this *QGraphicsScale) OnZScaleChanged(f func()) qtcore.Connection {
 }
 
 // OnScaleChanged connects f to the scaleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsScale::scaleChanged() [signal]
 //

@@ -641,7 +641,8 @@ func QApplicationSetEffectEnabledFull(uIEffect qtcore.UIEffect, enable bool) {
 }
 
 // OnFocusChanged connects f to the focusChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QApplication::focusChanged(QWidget * old, QWidget * now) [signal]
 //

@@ -506,7 +506,8 @@ func (this *QToolBar) EmitVisibilityChanged(visible bool) {
 }
 
 // OnActionTriggered connects f to the actionTriggered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::actionTriggered(QAction * action) [signal]
 //
@@ -522,7 +523,8 @@ func (this *QToolBar) OnActionTriggered(f func(action *qtgui.QAction)) qtcore.Co
 }
 
 // OnMovableChanged connects f to the movableChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::movableChanged(bool movable) [signal]
 //
@@ -538,7 +540,8 @@ func (this *QToolBar) OnMovableChanged(f func(movable bool)) qtcore.Connection {
 }
 
 // OnAllowedAreasChanged connects f to the allowedAreasChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::allowedAreasChanged(Qt::ToolBarAreas allowedAreas) [signal]
 //
@@ -554,7 +557,8 @@ func (this *QToolBar) OnAllowedAreasChanged(f func(allowedAreas qtcore.ToolBarAr
 }
 
 // OnOrientationChanged connects f to the orientationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::orientationChanged(Qt::Orientation orientation) [signal]
 //
@@ -570,7 +574,8 @@ func (this *QToolBar) OnOrientationChanged(f func(orientation qtcore.Orientation
 }
 
 // OnIconSizeChanged connects f to the iconSizeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::iconSizeChanged(const QSize & iconSize) [signal]
 //
@@ -586,7 +591,8 @@ func (this *QToolBar) OnIconSizeChanged(f func(iconSize qtcore.QSize)) qtcore.Co
 }
 
 // OnToolButtonStyleChanged connects f to the toolButtonStyleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::toolButtonStyleChanged(Qt::ToolButtonStyle toolButtonStyle) [signal]
 //
@@ -602,7 +608,8 @@ func (this *QToolBar) OnToolButtonStyleChanged(f func(toolButtonStyle qtcore.Too
 }
 
 // OnTopLevelChanged connects f to the topLevelChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::topLevelChanged(bool topLevel) [signal]
 //
@@ -618,7 +625,8 @@ func (this *QToolBar) OnTopLevelChanged(f func(topLevel bool)) qtcore.Connection
 }
 
 // OnVisibilityChanged connects f to the visibilityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QToolBar::visibilityChanged(bool visible) [signal]
 //

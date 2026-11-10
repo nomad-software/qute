@@ -147,7 +147,8 @@ func (this *QGraphicsOpacityEffect) EmitOpacityMaskChanged(maskArg *qtgui.QBrush
 }
 
 // OnOpacityChanged connects f to the opacityChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsOpacityEffect::opacityChanged(qreal opacity) [signal]
 //
@@ -163,7 +164,8 @@ func (this *QGraphicsOpacityEffect) OnOpacityChanged(f func(opacity float64)) qt
 }
 
 // OnOpacityMaskChanged connects f to the opacityMaskChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsOpacityEffect::opacityMaskChanged(const QBrush & mask) [signal]
 //

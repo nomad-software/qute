@@ -933,7 +933,8 @@ func (this *QHeaderView) EmitSortIndicatorClearableChanged(clearable bool) {
 }
 
 // OnSectionMoved connects f to the sectionMoved signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex) [signal]
 //
@@ -951,7 +952,8 @@ func (this *QHeaderView) OnSectionMoved(f func(logicalIndex int, oldVisualIndex 
 }
 
 // OnSectionResized connects f to the sectionResized signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionResized(int logicalIndex, int oldSize, int newSize) [signal]
 //
@@ -969,7 +971,8 @@ func (this *QHeaderView) OnSectionResized(f func(logicalIndex int, oldSize int, 
 }
 
 // OnSectionPressed connects f to the sectionPressed signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionPressed(int logicalIndex) [signal]
 //
@@ -985,7 +988,8 @@ func (this *QHeaderView) OnSectionPressed(f func(logicalIndex int)) qtcore.Conne
 }
 
 // OnSectionClicked connects f to the sectionClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionClicked(int logicalIndex) [signal]
 //
@@ -1001,7 +1005,8 @@ func (this *QHeaderView) OnSectionClicked(f func(logicalIndex int)) qtcore.Conne
 }
 
 // OnSectionEntered connects f to the sectionEntered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionEntered(int logicalIndex) [signal]
 //
@@ -1017,7 +1022,8 @@ func (this *QHeaderView) OnSectionEntered(f func(logicalIndex int)) qtcore.Conne
 }
 
 // OnSectionDoubleClicked connects f to the sectionDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionDoubleClicked(int logicalIndex) [signal]
 //
@@ -1033,7 +1039,8 @@ func (this *QHeaderView) OnSectionDoubleClicked(f func(logicalIndex int)) qtcore
 }
 
 // OnSectionCountChanged connects f to the sectionCountChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionCountChanged(int oldCount, int newCount) [signal]
 //
@@ -1050,7 +1057,8 @@ func (this *QHeaderView) OnSectionCountChanged(f func(oldCount int, newCount int
 }
 
 // OnSectionHandleDoubleClicked connects f to the sectionHandleDoubleClicked signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sectionHandleDoubleClicked(int logicalIndex) [signal]
 //
@@ -1066,7 +1074,8 @@ func (this *QHeaderView) OnSectionHandleDoubleClicked(f func(logicalIndex int)) 
 }
 
 // OnGeometriesChanged connects f to the geometriesChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::geometriesChanged() [signal]
 //
@@ -1081,7 +1090,8 @@ func (this *QHeaderView) OnGeometriesChanged(f func()) qtcore.Connection {
 }
 
 // OnSortIndicatorChanged connects f to the sortIndicatorChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sortIndicatorChanged(int logicalIndex, Qt::SortOrder order) [signal]
 //
@@ -1098,7 +1108,8 @@ func (this *QHeaderView) OnSortIndicatorChanged(f func(logicalIndex int, order q
 }
 
 // OnSortIndicatorClearableChanged connects f to the sortIndicatorClearableChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QHeaderView::sortIndicatorClearableChanged(bool clearable) [signal]
 //

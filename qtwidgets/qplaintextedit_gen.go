@@ -1070,7 +1070,8 @@ func (this *QPlainTextEdit) ZoomOutFull(rangeArg int) {
 }
 
 // OnTextChanged connects f to the textChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::textChanged() [signal]
 //
@@ -1085,7 +1086,8 @@ func (this *QPlainTextEdit) OnTextChanged(f func()) qtcore.Connection {
 }
 
 // OnUndoAvailable connects f to the undoAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::undoAvailable(bool b) [signal]
 //
@@ -1101,7 +1103,8 @@ func (this *QPlainTextEdit) OnUndoAvailable(f func(bArg bool)) qtcore.Connection
 }
 
 // OnRedoAvailable connects f to the redoAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::redoAvailable(bool b) [signal]
 //
@@ -1117,7 +1120,8 @@ func (this *QPlainTextEdit) OnRedoAvailable(f func(bArg bool)) qtcore.Connection
 }
 
 // OnCopyAvailable connects f to the copyAvailable signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::copyAvailable(bool b) [signal]
 //
@@ -1133,7 +1137,8 @@ func (this *QPlainTextEdit) OnCopyAvailable(f func(bArg bool)) qtcore.Connection
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::selectionChanged() [signal]
 //
@@ -1148,7 +1153,8 @@ func (this *QPlainTextEdit) OnSelectionChanged(f func()) qtcore.Connection {
 }
 
 // OnCursorPositionChanged connects f to the cursorPositionChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::cursorPositionChanged() [signal]
 //
@@ -1163,7 +1169,8 @@ func (this *QPlainTextEdit) OnCursorPositionChanged(f func()) qtcore.Connection 
 }
 
 // OnUpdateRequest connects f to the updateRequest signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::updateRequest(const QRect & rect, int dy) [signal]
 //
@@ -1180,7 +1187,8 @@ func (this *QPlainTextEdit) OnUpdateRequest(f func(rect qtcore.QRect, dy int)) q
 }
 
 // OnBlockCountChanged connects f to the blockCountChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::blockCountChanged(int newBlockCount) [signal]
 //
@@ -1196,7 +1204,8 @@ func (this *QPlainTextEdit) OnBlockCountChanged(f func(newBlockCount int)) qtcor
 }
 
 // OnModificationChanged connects f to the modificationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QPlainTextEdit::modificationChanged(bool) [signal]
 //

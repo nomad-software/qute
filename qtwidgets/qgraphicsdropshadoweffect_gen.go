@@ -236,7 +236,8 @@ func (this *QGraphicsDropShadowEffect) EmitColorChanged(color qtgui.QColor) {
 }
 
 // OnOffsetChanged connects f to the offsetChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsDropShadowEffect::offsetChanged(const QPointF & offset) [signal]
 //
@@ -252,7 +253,8 @@ func (this *QGraphicsDropShadowEffect) OnOffsetChanged(f func(offset qtcore.QPoi
 }
 
 // OnBlurRadiusChanged connects f to the blurRadiusChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsDropShadowEffect::blurRadiusChanged(qreal blurRadius) [signal]
 //
@@ -268,7 +270,8 @@ func (this *QGraphicsDropShadowEffect) OnBlurRadiusChanged(f func(blurRadius flo
 }
 
 // OnColorChanged connects f to the colorChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QGraphicsDropShadowEffect::colorChanged(const QColor & color) [signal]
 //

@@ -962,7 +962,8 @@ func (this *QMainWindow) RestoreStateFull(state []byte, version int) bool {
 }
 
 // OnIconSizeChanged connects f to the iconSizeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMainWindow::iconSizeChanged(const QSize & iconSize) [signal]
 //
@@ -978,7 +979,8 @@ func (this *QMainWindow) OnIconSizeChanged(f func(iconSize qtcore.QSize)) qtcore
 }
 
 // OnToolButtonStyleChanged connects f to the toolButtonStyleChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMainWindow::toolButtonStyleChanged(Qt::ToolButtonStyle toolButtonStyle) [signal]
 //
@@ -994,7 +996,8 @@ func (this *QMainWindow) OnToolButtonStyleChanged(f func(toolButtonStyle qtcore.
 }
 
 // OnTabifiedDockWidgetActivated connects f to the tabifiedDockWidgetActivated signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMainWindow::tabifiedDockWidgetActivated(QDockWidget * dockWidget) [signal]
 //
@@ -1792,8 +1795,9 @@ func (b *QMainWindowBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDevic
 }
 
 // NewQMainWindowWith constructs a QMainWindow whose virtual methods dispatch to v. The
-// object stays pinned while it lives, so v's Go state survives even when only
-// Qt references it.
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
 func NewQMainWindowWith(v QMainWindowSubclass, parent QWidgetLike) *QMainWindow {
 	rt.CheckThread("NewQMainWindowWith")
 	base := v.quteQMainWindowBase()

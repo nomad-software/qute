@@ -572,7 +572,8 @@ func (this *QScreen) GrabWindowFull(window uint64, x int, y int, w int, hArg int
 }
 
 // OnGeometryChanged connects f to the geometryChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::geometryChanged(const QRect & geometry) [signal]
 //
@@ -588,7 +589,8 @@ func (this *QScreen) OnGeometryChanged(f func(geometry qtcore.QRect)) qtcore.Con
 }
 
 // OnAvailableGeometryChanged connects f to the availableGeometryChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::availableGeometryChanged(const QRect & geometry) [signal]
 //
@@ -604,7 +606,8 @@ func (this *QScreen) OnAvailableGeometryChanged(f func(geometry qtcore.QRect)) q
 }
 
 // OnPhysicalSizeChanged connects f to the physicalSizeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::physicalSizeChanged(const QSizeF & size) [signal]
 //
@@ -620,7 +623,8 @@ func (this *QScreen) OnPhysicalSizeChanged(f func(size qtcore.QSizeF)) qtcore.Co
 }
 
 // OnPhysicalDotsPerInchChanged connects f to the physicalDotsPerInchChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::physicalDotsPerInchChanged(qreal dpi) [signal]
 //
@@ -636,7 +640,8 @@ func (this *QScreen) OnPhysicalDotsPerInchChanged(f func(dpi float64)) qtcore.Co
 }
 
 // OnLogicalDotsPerInchChanged connects f to the logicalDotsPerInchChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::logicalDotsPerInchChanged(qreal dpi) [signal]
 //
@@ -652,7 +657,8 @@ func (this *QScreen) OnLogicalDotsPerInchChanged(f func(dpi float64)) qtcore.Con
 }
 
 // OnVirtualGeometryChanged connects f to the virtualGeometryChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::virtualGeometryChanged(const QRect & rect) [signal]
 //
@@ -668,7 +674,8 @@ func (this *QScreen) OnVirtualGeometryChanged(f func(rect qtcore.QRect)) qtcore.
 }
 
 // OnPrimaryOrientationChanged connects f to the primaryOrientationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::primaryOrientationChanged(Qt::ScreenOrientation orientation) [signal]
 //
@@ -684,7 +691,8 @@ func (this *QScreen) OnPrimaryOrientationChanged(f func(orientation qtcore.Scree
 }
 
 // OnOrientationChanged connects f to the orientationChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::orientationChanged(Qt::ScreenOrientation orientation) [signal]
 //
@@ -700,7 +708,8 @@ func (this *QScreen) OnOrientationChanged(f func(orientation qtcore.ScreenOrient
 }
 
 // OnRefreshRateChanged connects f to the refreshRateChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QScreen::refreshRateChanged(qreal refreshRate) [signal]
 //

@@ -410,7 +410,8 @@ func (this *QMenuBar) CornerWidgetFull(corner qtcore.Corner) *QWidget {
 }
 
 // OnTriggered connects f to the triggered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMenuBar::triggered(QAction * action) [signal]
 //
@@ -426,7 +427,8 @@ func (this *QMenuBar) OnTriggered(f func(action *qtgui.QAction)) qtcore.Connecti
 }
 
 // OnHovered connects f to the hovered signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QMenuBar::hovered(QAction * action) [signal]
 //

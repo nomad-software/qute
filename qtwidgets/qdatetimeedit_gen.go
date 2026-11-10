@@ -758,7 +758,8 @@ func (this *QDateTimeEdit) EmitDateChanged(date *qtcore.QDate) {
 }
 
 // OnDateTimeChanged connects f to the dateTimeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDateTimeEdit::dateTimeChanged(const QDateTime & dateTime) [signal]
 //
@@ -774,7 +775,8 @@ func (this *QDateTimeEdit) OnDateTimeChanged(f func(dateTime *qtcore.QDateTime))
 }
 
 // OnTimeChanged connects f to the timeChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDateTimeEdit::timeChanged(QTime time) [signal]
 //
@@ -790,7 +792,8 @@ func (this *QDateTimeEdit) OnTimeChanged(f func(time *qtcore.QTime)) qtcore.Conn
 }
 
 // OnDateChanged connects f to the dateChanged signal. The connection ends when the
-// sender is destroyed or Disconnect is called; until then the sender is pinned.
+// sender is destroyed or Disconnect is called; until then f is held for as
+// long as the sender lives (by its window's handle, or pinned if it has no parent).
 //
 //	C++: void QDateTimeEdit::dateChanged(QDate date) [signal]
 //
