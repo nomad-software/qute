@@ -53,6 +53,7 @@ QOpenGLTexture:
       view.Delete()
 
 QOpenGLShaderProgram:
+  hasOpenGLShaderPrograms: { reviewed: true }
   setAttributeValue(int, GLfloat): { name: SetAttributeFloat }
   setAttributeValue(int, GLfloat, GLfloat): { name: SetAttributeFloat2 }
   setAttributeValue(int, GLfloat, GLfloat, GLfloat): { name: SetAttributeFloat3 }
@@ -163,3 +164,6 @@ QOpenGLWindow:
   QOpenGLWindow(QOpenGLContext*, QOpenGLWindow::UpdateBehavior, QWindow*): { name: NewQOpenGLWindowShared, args: { shareContext: keep } }
   context: { return: borrowed }
   shareContext: { return: borrowed }
+
+QOpenGLShader:
+  hasOpenGLShaders: { reviewed: true }

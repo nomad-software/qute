@@ -394,3 +394,477 @@ func QFileSetPermissions(filename string, permissionSpec QFileDevicePermissions)
 	r := C.qute_QFile_setPermissions((*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)), C.int64_t(permissionSpec))
 	return bool(r)
 }
+
+var qFileVTable = []rt.Virtual{
+	{Name: "FileName", Has: func(v any) bool { _, ok := v.(interface{ FileName() string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ FileName() string }).FileName()
+			*(*C.qute_str)(ret) = quteCStr(r)
+		}},
+	{Name: "Open", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Open(QIODeviceBaseOpenMode) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			flags := QIODeviceBaseOpenMode(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Open(QIODeviceBaseOpenMode) bool
+			}).Open(flags)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() int64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Size() int64 }).Size()
+			*(*C.longlong)(ret) = C.longlong(r)
+		}},
+	{Name: "Resize", Has: func(v any) bool { _, ok := v.(interface{ Resize(int64) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			sz := int64(*(*C.longlong)(a[0]))
+			r := v.(interface{ Resize(int64) bool }).Resize(sz)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Permissions", Has: func(v any) bool { _, ok := v.(interface{ Permissions() QFileDevicePermissions }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Permissions() QFileDevicePermissions }).Permissions()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "SetPermissions", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetPermissions(QFileDevicePermissions) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			permissionSpec := QFileDevicePermissions(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				SetPermissions(QFileDevicePermissions) bool
+			}).SetPermissions(permissionSpec)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Close", Has: func(v any) bool { _, ok := v.(interface{ Close() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Close() }).Close()
+		}},
+	{Name: "IsSequential", Has: func(v any) bool { _, ok := v.(interface{ IsSequential() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsSequential() bool }).IsSequential()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Pos", Has: func(v any) bool { _, ok := v.(interface{ Pos() int64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Pos() int64 }).Pos()
+			*(*C.longlong)(ret) = C.longlong(r)
+		}},
+	{Name: "SeekTo", Has: func(v any) bool { _, ok := v.(interface{ SeekTo(int64) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			offset := int64(*(*C.longlong)(a[0]))
+			r := v.(interface{ SeekTo(int64) bool }).SeekTo(offset)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "AtEnd", Has: func(v any) bool { _, ok := v.(interface{ AtEnd() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ AtEnd() bool }).AtEnd()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "WriteData", Has: func(v any) bool { _, ok := v.(interface{ WriteData(string, int64) int64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			data := C.GoString(*(**C.char)(a[0]))
+			lenArg := int64(*(*C.longlong)(a[1]))
+			r := v.(interface{ WriteData(string, int64) int64 }).WriteData(data, lenArg)
+			*(*C.longlong)(ret) = C.longlong(r)
+		}},
+	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Reset() bool }).Reset()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "BytesAvailable", Has: func(v any) bool { _, ok := v.(interface{ BytesAvailable() int64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ BytesAvailable() int64 }).BytesAvailable()
+			*(*C.longlong)(ret) = C.longlong(r)
+		}},
+	{Name: "BytesToWrite", Has: func(v any) bool { _, ok := v.(interface{ BytesToWrite() int64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ BytesToWrite() int64 }).BytesToWrite()
+			*(*C.longlong)(ret) = C.longlong(r)
+		}},
+	{Name: "CanReadLine", Has: func(v any) bool { _, ok := v.(interface{ CanReadLine() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ CanReadLine() bool }).CanReadLine()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "WaitForReadyRead", Has: func(v any) bool { _, ok := v.(interface{ WaitForReadyRead(int) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			msecs := int(*(*C.int)(a[0]))
+			r := v.(interface{ WaitForReadyRead(int) bool }).WaitForReadyRead(msecs)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "WaitForBytesWritten", Has: func(v any) bool { _, ok := v.(interface{ WaitForBytesWritten(int) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			msecs := int(*(*C.int)(a[0]))
+			r := v.(interface{ WaitForBytesWritten(int) bool }).WaitForBytesWritten(msecs)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SkipData", Has: func(v any) bool { _, ok := v.(interface{ SkipData(int64) int64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			maxSize := int64(*(*C.longlong)(a[0]))
+			r := v.(interface{ SkipData(int64) int64 }).SkipData(maxSize)
+			*(*C.longlong)(ret) = C.longlong(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QFileBase is embedded in Go types that subclass QFile:
+//
+//	type MyFile struct{ qtcore.QFileBase }
+//
+// Define any of the virtual methods listed on QFileSuper to override them,
+// then construct the value with NewQFileWith. Call b.Super().X() for the
+// base implementation.
+type QFileBase struct{ *QFile }
+
+func (b *QFileBase) quteQFileBase() *QFileBase { return b }
+
+// QFileSubclass is implemented by every type that embeds QFileBase.
+type QFileSubclass interface{ quteQFileBase() *QFileBase }
+
+// Super returns the C++ base implementations of QFile's virtual methods.
+func (b *QFileBase) Super() *QFileSuper { return &QFileSuper{this: b.QFile} }
+
+// QFileSuper calls the C++ base implementations of QFile's virtuals.
+type QFileSuper struct{ this *QFile }
+
+// FileName calls QFile::fileName.
+func (s *QFileSuper) FileName() string {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.FileName")
+	r := C.qute_QFile_super_0(self)
+	runtime.KeepAlive(s.this)
+	return quteStr(r)
+}
+
+// Open calls QFile::open.
+func (s *QFileSuper) Open(flags QIODeviceBaseOpenMode) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Open")
+	r := C.qute_QFile_super_1(self, C.int64_t(flags))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Size calls QFile::size.
+func (s *QFileSuper) Size() int64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Size")
+	r := C.qute_QFile_super_2(self)
+	runtime.KeepAlive(s.this)
+	return int64(r)
+}
+
+// Resize calls QFile::resize.
+func (s *QFileSuper) Resize(sz int64) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Resize")
+	r := C.qute_QFile_super_3(self, C.longlong(sz))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Permissions calls QFile::permissions.
+func (s *QFileSuper) Permissions() QFileDevicePermissions {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Permissions")
+	r := C.qute_QFile_super_4(self)
+	runtime.KeepAlive(s.this)
+	return QFileDevicePermissions(r)
+}
+
+// SetPermissions calls QFile::setPermissions.
+func (s *QFileSuper) SetPermissions(permissionSpec QFileDevicePermissions) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.SetPermissions")
+	r := C.qute_QFile_super_5(self, C.int64_t(permissionSpec))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Close calls QFileDevice::close.
+func (s *QFileSuper) Close() {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Close")
+	C.qute_QFile_super_6(self)
+	runtime.KeepAlive(s.this)
+}
+
+// IsSequential calls QFileDevice::isSequential.
+func (s *QFileSuper) IsSequential() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.IsSequential")
+	r := C.qute_QFile_super_7(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Pos calls QFileDevice::pos.
+func (s *QFileSuper) Pos() int64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Pos")
+	r := C.qute_QFile_super_8(self)
+	runtime.KeepAlive(s.this)
+	return int64(r)
+}
+
+// SeekTo calls QFileDevice::seek.
+func (s *QFileSuper) SeekTo(offset int64) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.SeekTo")
+	r := C.qute_QFile_super_9(self, C.longlong(offset))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// AtEnd calls QFileDevice::atEnd.
+func (s *QFileSuper) AtEnd() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.AtEnd")
+	r := C.qute_QFile_super_10(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// WriteData calls QFileDevice::writeData.
+func (s *QFileSuper) WriteData(data string, lenArg int64) int64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.WriteData")
+	dataCStr := C.CString(data)
+	defer C.free(unsafe.Pointer(dataCStr))
+	r := C.qute_QFile_super_11(self, dataCStr, C.longlong(lenArg))
+	runtime.KeepAlive(s.this)
+	return int64(r)
+}
+
+// Reset calls QIODevice::reset.
+func (s *QFileSuper) Reset() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Reset")
+	r := C.qute_QFile_super_12(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// BytesAvailable calls QIODevice::bytesAvailable.
+func (s *QFileSuper) BytesAvailable() int64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.BytesAvailable")
+	r := C.qute_QFile_super_13(self)
+	runtime.KeepAlive(s.this)
+	return int64(r)
+}
+
+// BytesToWrite calls QIODevice::bytesToWrite.
+func (s *QFileSuper) BytesToWrite() int64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.BytesToWrite")
+	r := C.qute_QFile_super_14(self)
+	runtime.KeepAlive(s.this)
+	return int64(r)
+}
+
+// CanReadLine calls QIODevice::canReadLine.
+func (s *QFileSuper) CanReadLine() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.CanReadLine")
+	r := C.qute_QFile_super_15(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// WaitForReadyRead calls QIODevice::waitForReadyRead.
+func (s *QFileSuper) WaitForReadyRead(msecs int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.WaitForReadyRead")
+	r := C.qute_QFile_super_16(self, C.int(msecs))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// WaitForBytesWritten calls QIODevice::waitForBytesWritten.
+func (s *QFileSuper) WaitForBytesWritten(msecs int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.WaitForBytesWritten")
+	r := C.qute_QFile_super_17(self, C.int(msecs))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// SkipData calls QIODevice::skipData.
+func (s *QFileSuper) SkipData(maxSize int64) int64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.SkipData")
+	r := C.qute_QFile_super_18(self, C.longlong(maxSize))
+	runtime.KeepAlive(s.this)
+	return int64(r)
+}
+
+// Event calls QObject::event.
+func (s *QFileSuper) Event(event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFile.Super.Event")
+	}
+	r := C.qute_QFile_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QFileSuper) EventFilter(watched *QObject, event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QFile.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFile.Super.EventFilter")
+	}
+	r := C.qute_QFile_super_20(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QFileSuper) TimerEvent(event *QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QFile.Super.TimerEvent")
+	}
+	C.qute_QFile_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QFileSuper) ChildEvent(event *QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QFile.Super.ChildEvent")
+	}
+	C.qute_QFile_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QFileSuper) CustomEvent(event *QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFile.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFile.Super.CustomEvent")
+	}
+	C.qute_QFile_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// SetOpenMode wraps the protected QIODevice::setOpenMode for subclasses.
+func (b *QFileBase) SetOpenMode(openMode QIODeviceBaseOpenMode) {
+	this := b.QFile // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFile.SetOpenMode")
+	C.qute_QFile_prot_setOpenMode(self, C.int64_t(openMode))
+	runtime.KeepAlive(this)
+}
+
+// SetErrorString wraps the protected QIODevice::setErrorString for subclasses.
+func (b *QFileBase) SetErrorString(errorString string) {
+	this := b.QFile // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFile.SetErrorString")
+	C.qute_QFile_prot_setErrorString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(errorString))), C.ptrdiff_t(len(errorString)))
+	runtime.KeepAlive(this)
+}
+
+// NewQFileWith constructs a QFile whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQFileWith(v QFileSubclass, parent QObjectLike) *QFile {
+	rt.CheckThread("NewQFileWith")
+	base := v.quteQFileBase()
+	if base.QFile != nil {
+		panic("NewQFileWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileWith")
+	}
+	p := C.qute_QFile_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QFile", mode)
+	base.QFile = rt.View[QFile](h, p)
+	id := h.SetSelf(v, qFileVTable)
+	mask := rt.Mask(v, qFileVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QFile
+}

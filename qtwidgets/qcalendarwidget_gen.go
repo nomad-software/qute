@@ -689,3 +689,925 @@ func (this *QCalendarWidget) OnCurrentPageChanged(f func(year int, month int)) q
 	})
 	return rt.NewConnection(C.qute_QCalendarWidget_currentPageChanged(self, C.uintptr_t(id)))
 }
+
+var qCalendarWidgetVTable = []rt.Virtual{
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+		}},
+	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
+			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+		}},
+	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+		}},
+	{Name: "PaintCell", Has: func(v any) bool {
+		_, ok := v.(interface {
+			PaintCell(*qtgui.QPainter, qtcore.QRect, *qtcore.QDate)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			rect := goQRect(*(*C.qute_rect)(a[1]))
+			date := rt.View[qtcore.QDate](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QDate", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			v.(interface {
+				PaintCell(*qtgui.QPainter, qtcore.QRect, *qtcore.QDate)
+			}).PaintCell(painter, rect, date)
+		}},
+	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			visible := bool(*(*C.bool)(a[0]))
+			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+		}},
+	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+		}},
+	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+		}},
+	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QWheelEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QWheelEvent](eventH, eventP)
+			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+		}},
+	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+		}},
+	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+		}},
+	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+		}},
+	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
+			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+		}},
+	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+		}},
+	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
+			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+		}},
+	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
+			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+		}},
+	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
+			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+		}},
+	{Name: "ContextMenuEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ContextMenuEvent(*qtgui.QContextMenuEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QContextMenuEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QContextMenuEvent](eventH, eventP)
+			v.(interface {
+				ContextMenuEvent(*qtgui.QContextMenuEvent)
+			}).ContextMenuEvent(event)
+		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
+	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
+			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+		}},
+	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
+			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+		}},
+	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
+			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+		}},
+	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDropEvent](eventH, eventP)
+			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+		}},
+	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QShowEvent](eventH, eventP)
+			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+		}},
+	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QHideEvent](eventH, eventP)
+			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			next := bool(*(*C.bool)(a[0]))
+			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QCalendarWidgetBase is embedded in Go types that subclass QCalendarWidget:
+//
+//	type MyCalendarWidget struct{ qtwidgets.QCalendarWidgetBase }
+//
+// Define any of the virtual methods listed on QCalendarWidgetSuper to override them,
+// then construct the value with NewQCalendarWidgetWith. Call b.Super().X() for the
+// base implementation.
+type QCalendarWidgetBase struct{ *QCalendarWidget }
+
+func (b *QCalendarWidgetBase) quteQCalendarWidgetBase() *QCalendarWidgetBase { return b }
+
+// QCalendarWidgetSubclass is implemented by every type that embeds QCalendarWidgetBase.
+type QCalendarWidgetSubclass interface{ quteQCalendarWidgetBase() *QCalendarWidgetBase }
+
+// Super returns the C++ base implementations of QCalendarWidget's virtual methods.
+func (b *QCalendarWidgetBase) Super() *QCalendarWidgetSuper {
+	return &QCalendarWidgetSuper{this: b.QCalendarWidget}
+}
+
+// QCalendarWidgetSuper calls the C++ base implementations of QCalendarWidget's virtuals.
+type QCalendarWidgetSuper struct{ this *QCalendarWidget }
+
+// SizeHint calls QCalendarWidget::sizeHint.
+func (s *QCalendarWidgetSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.SizeHint")
+	r := C.qute_QCalendarWidget_super_0(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// MinimumSizeHint calls QCalendarWidget::minimumSizeHint.
+func (s *QCalendarWidgetSuper) MinimumSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.MinimumSizeHint")
+	r := C.qute_QCalendarWidget_super_1(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// Event calls QCalendarWidget::event.
+func (s *QCalendarWidgetSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCalendarWidget.Super.Event")
+	}
+	r := C.qute_QCalendarWidget_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QCalendarWidget::eventFilter.
+func (s *QCalendarWidgetSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QCalendarWidget.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCalendarWidget.Super.EventFilter")
+	}
+	r := C.qute_QCalendarWidget_super_3(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// MousePressEvent calls QCalendarWidget::mousePressEvent.
+func (s *QCalendarWidgetSuper) MousePressEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.MousePressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QCalendarWidget.Super.MousePressEvent")
+	}
+	C.qute_QCalendarWidget_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ResizeEvent calls QCalendarWidget::resizeEvent.
+func (s *QCalendarWidgetSuper) ResizeEvent(event *qtgui.QResizeEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.ResizeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QCalendarWidget.Super.ResizeEvent")
+	}
+	C.qute_QCalendarWidget_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyPressEvent calls QCalendarWidget::keyPressEvent.
+func (s *QCalendarWidgetSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.KeyPressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QCalendarWidget.Super.KeyPressEvent")
+	}
+	C.qute_QCalendarWidget_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// PaintCell calls QCalendarWidget::paintCell.
+func (s *QCalendarWidgetSuper) PaintCell(painter *qtgui.QPainter, rect qtcore.QRect, date *qtcore.QDate) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.PaintCell")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QCalendarWidget.Super.PaintCell")
+	}
+	C.qute_QCalendarWidget_super_7(self, painterPtr, cQRect(rect), rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.Super.PaintCell"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(date)
+}
+
+// SetVisible calls QWidget::setVisible.
+func (s *QCalendarWidgetSuper) SetVisible(visible bool) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.SetVisible")
+	C.qute_QCalendarWidget_super_8(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
+}
+
+// HeightForWidth calls QWidget::heightForWidth.
+func (s *QCalendarWidgetSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.HeightForWidth")
+	r := C.qute_QCalendarWidget_super_9(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// HasHeightForWidth calls QWidget::hasHeightForWidth.
+func (s *QCalendarWidgetSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.HasHeightForWidth")
+	r := C.qute_QCalendarWidget_super_10(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// MouseReleaseEvent calls QWidget::mouseReleaseEvent.
+func (s *QCalendarWidgetSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.MouseReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QCalendarWidget.Super.MouseReleaseEvent")
+	}
+	C.qute_QCalendarWidget_super_11(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseDoubleClickEvent calls QWidget::mouseDoubleClickEvent.
+func (s *QCalendarWidgetSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.MouseDoubleClickEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QCalendarWidget.Super.MouseDoubleClickEvent")
+	}
+	C.qute_QCalendarWidget_super_12(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseMoveEvent calls QWidget::mouseMoveEvent.
+func (s *QCalendarWidgetSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.MouseMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QCalendarWidget.Super.MouseMoveEvent")
+	}
+	C.qute_QCalendarWidget_super_13(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// WheelEvent calls QWidget::wheelEvent.
+func (s *QCalendarWidgetSuper) WheelEvent(event *qtgui.QWheelEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.WheelEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QCalendarWidget.Super.WheelEvent")
+	}
+	C.qute_QCalendarWidget_super_14(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyReleaseEvent calls QWidget::keyReleaseEvent.
+func (s *QCalendarWidgetSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.KeyReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QCalendarWidget.Super.KeyReleaseEvent")
+	}
+	C.qute_QCalendarWidget_super_15(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusInEvent calls QWidget::focusInEvent.
+func (s *QCalendarWidgetSuper) FocusInEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.FocusInEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QCalendarWidget.Super.FocusInEvent")
+	}
+	C.qute_QCalendarWidget_super_16(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusOutEvent calls QWidget::focusOutEvent.
+func (s *QCalendarWidgetSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.FocusOutEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QCalendarWidget.Super.FocusOutEvent")
+	}
+	C.qute_QCalendarWidget_super_17(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// EnterEvent calls QWidget::enterEvent.
+func (s *QCalendarWidgetSuper) EnterEvent(event *qtgui.QEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.EnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QCalendarWidget.Super.EnterEvent")
+	}
+	C.qute_QCalendarWidget_super_18(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// LeaveEvent calls QWidget::leaveEvent.
+func (s *QCalendarWidgetSuper) LeaveEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.LeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCalendarWidget.Super.LeaveEvent")
+	}
+	C.qute_QCalendarWidget_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// PaintEvent calls QWidget::paintEvent.
+func (s *QCalendarWidgetSuper) PaintEvent(event *qtgui.QPaintEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.PaintEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPaintEvent()), "QCalendarWidget.Super.PaintEvent")
+	}
+	C.qute_QCalendarWidget_super_20(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MoveEvent calls QWidget::moveEvent.
+func (s *QCalendarWidgetSuper) MoveEvent(event *qtgui.QMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.MoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QCalendarWidget.Super.MoveEvent")
+	}
+	C.qute_QCalendarWidget_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CloseEvent calls QWidget::closeEvent.
+func (s *QCalendarWidgetSuper) CloseEvent(event *qtgui.QCloseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.CloseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QCalendarWidget.Super.CloseEvent")
+	}
+	C.qute_QCalendarWidget_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ContextMenuEvent calls QWidget::contextMenuEvent.
+func (s *QCalendarWidgetSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.ContextMenuEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QCalendarWidget.Super.ContextMenuEvent")
+	}
+	C.qute_QCalendarWidget_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QCalendarWidgetSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QCalendarWidget.Super.TabletEvent")
+	}
+	C.qute_QCalendarWidget_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QCalendarWidgetSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QCalendarWidget.Super.ActionEvent")
+	}
+	C.qute_QCalendarWidget_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragEnterEvent calls QWidget::dragEnterEvent.
+func (s *QCalendarWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.DragEnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QCalendarWidget.Super.DragEnterEvent")
+	}
+	C.qute_QCalendarWidget_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragMoveEvent calls QWidget::dragMoveEvent.
+func (s *QCalendarWidgetSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.DragMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QCalendarWidget.Super.DragMoveEvent")
+	}
+	C.qute_QCalendarWidget_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragLeaveEvent calls QWidget::dragLeaveEvent.
+func (s *QCalendarWidgetSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.DragLeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QCalendarWidget.Super.DragLeaveEvent")
+	}
+	C.qute_QCalendarWidget_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DropEvent calls QWidget::dropEvent.
+func (s *QCalendarWidgetSuper) DropEvent(event *qtgui.QDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.DropEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QCalendarWidget.Super.DropEvent")
+	}
+	C.qute_QCalendarWidget_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ShowEvent calls QWidget::showEvent.
+func (s *QCalendarWidgetSuper) ShowEvent(event *qtgui.QShowEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.ShowEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QCalendarWidget.Super.ShowEvent")
+	}
+	C.qute_QCalendarWidget_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HideEvent calls QWidget::hideEvent.
+func (s *QCalendarWidgetSuper) HideEvent(event *qtgui.QHideEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.HideEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QCalendarWidget.Super.HideEvent")
+	}
+	C.qute_QCalendarWidget_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChangeEvent calls QWidget::changeEvent.
+func (s *QCalendarWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.ChangeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCalendarWidget.Super.ChangeEvent")
+	}
+	C.qute_QCalendarWidget_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QCalendarWidgetSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QCalendarWidget.Super.InputMethodEvent")
+	}
+	C.qute_QCalendarWidget_super_33(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
+}
+
+// FocusNextPrevChild calls QWidget::focusNextPrevChild.
+func (s *QCalendarWidgetSuper) FocusNextPrevChild(next bool) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.FocusNextPrevChild")
+	r := C.qute_QCalendarWidget_super_34(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QCalendarWidgetSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QCalendarWidget.Super.TimerEvent")
+	}
+	C.qute_QCalendarWidget_super_35(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QCalendarWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QCalendarWidget.Super.ChildEvent")
+	}
+	C.qute_QCalendarWidget_super_36(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QCalendarWidgetSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCalendarWidget.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCalendarWidget.Super.CustomEvent")
+	}
+	C.qute_QCalendarWidget_super_37(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// UpdateCell wraps the protected QCalendarWidget::updateCell for subclasses.
+func (b *QCalendarWidgetBase) UpdateCell(date *qtcore.QDate) {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.UpdateCell")
+	C.qute_QCalendarWidget_prot_updateCell(self, rt.UseArg(unsafe.Pointer(date), "QCalendarWidget.UpdateCell"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(date)
+}
+
+// UpdateCells wraps the protected QCalendarWidget::updateCells for subclasses.
+func (b *QCalendarWidgetBase) UpdateCells() {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.UpdateCells")
+	C.qute_QCalendarWidget_prot_updateCells(self)
+	runtime.KeepAlive(this)
+}
+
+// UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
+func (b *QCalendarWidgetBase) UpdateMicroFocus() {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.UpdateMicroFocus")
+	C.qute_QCalendarWidget_prot_updateMicroFocus(self)
+	runtime.KeepAlive(this)
+}
+
+// Create wraps the protected QWidget::create for subclasses.
+func (b *QCalendarWidgetBase) Create() {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.Create")
+	C.qute_QCalendarWidget_prot_create(self)
+	runtime.KeepAlive(this)
+}
+
+// Destroy wraps the protected QWidget::destroy for subclasses.
+func (b *QCalendarWidgetBase) Destroy() {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.Destroy")
+	C.qute_QCalendarWidget_prot_destroy(self)
+	runtime.KeepAlive(this)
+}
+
+// FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
+func (b *QCalendarWidgetBase) FocusNextChild() bool {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.FocusNextChild")
+	r := C.qute_QCalendarWidget_prot_focusNextChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
+func (b *QCalendarWidgetBase) FocusPreviousChild() bool {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.FocusPreviousChild")
+	r := C.qute_QCalendarWidget_prot_focusPreviousChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QCalendarWidgetBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QCalendarWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCalendarWidget.GetDecodedMetricF")
+	r := C.qute_QCalendarWidget_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQCalendarWidgetWith constructs a QCalendarWidget whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCalendarWidgetWith(v QCalendarWidgetSubclass, parent QWidgetLike) *QCalendarWidget {
+	rt.CheckThread("NewQCalendarWidgetWith")
+	base := v.quteQCalendarWidgetBase()
+	if base.QCalendarWidget != nil {
+		panic("NewQCalendarWidgetWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCalendarWidgetWith")
+	}
+	p := C.qute_QCalendarWidget_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCalendarWidget", mode)
+	base.QCalendarWidget = rt.View[QCalendarWidget](h, p)
+	id := h.SetSelf(v, qCalendarWidgetVTable)
+	mask := rt.Mask(v, qCalendarWidgetVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCalendarWidget_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCalendarWidget
+}

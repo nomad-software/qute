@@ -23,8 +23,16 @@ type classOpts struct {
 	// Kind: object (default for QObjects and polymorphic classes), value
 	// (copyable Qt value class held in an owned handle) or event.
 	Kind string `yaml:"kind"`
-	// Subclass generates a shim with Go-overridable virtuals and a Base type.
-	Subclass bool `yaml:"subclass"`
+	// SubclassOpt is the spec's subclass option. Unset, every class that can
+	// be subclassed from Go is (a constructible QObject or polymorphic class
+	// with virtuals Go can implement); false turns it off, and true insists on
+	// it, so the generator warns when the class cannot be.
+	SubclassOpt *bool `yaml:"subclass"`
+	// Subclass says the class gets a shim with Go-overridable virtuals and a
+	// Base type; the generator decides it from SubclassOpt.
+	Subclass bool `yaml:"-"`
+	// NoSubclass is why a class Go cannot subclass is left out, for COVERAGE.md.
+	NoSubclass string `yaml:"-"`
 	// NotifyDtor generates a shim whose destructor tells Go the object died
 	// (for non-QObject classes with a virtual destructor).
 	NotifyDtor bool `yaml:"notify-dtor"`

@@ -65,10 +65,12 @@ exact version if you use it.
   `QPoint`/`QRect`/`QColor` are plain structs, out-parameters are extra
   results, failures return `error`, and `std::function` parameters take Go
   funcs.
-- **Broad coverage.** About 390 classes across eleven Qt modules (widgets,
+- **Broad coverage.** About 420 classes across eleven Qt modules (widgets,
   OpenGL, SVG, multimedia and the web engine): over 10,000 constructors,
-  methods and functions, plus subclassing (virtual overrides, item models,
-  `QOpenGLWidget`, web URL scheme handlers). A method with C++ default arguments has a short form and
+  methods and functions. Any class with virtuals can be subclassed from Go
+  (about 190: widgets, views, delegates, validators, layouts, item models,
+  graphics items, styles, syntax highlighters, `QOpenGLWidget`, web URL
+  scheme handlers); `COVERAGE.md` lists the few Qt doesn't allow and why. A method with C++ default arguments has a short form and
   a `Full` form that takes them all (`Index(row, col)` and
   `IndexFull(row, col, parent)`).
 - **Checked, not hoped.** Every ownership rule lives in a small YAML file
@@ -123,8 +125,9 @@ buffers and web notifications. `COVERAGE.md` lists every one with its reason.
 on a network thread, so it gets plain Go values (`CookieFilterRequest`) and
 must not touch Qt objects.
 
-`QIODevice` can't be subclassed from Go, so there are no custom streams yet:
-no pull-mode audio from a Go source, no custom media source and no streaming
+`QIODevice` can't be subclassed from Go, and a Go subclass of `QBuffer` or
+`QFile` can't override `readData`, so there are no custom streams yet: no
+pull-mode audio from a Go source, no custom media source and no streaming
 replies from a URL scheme handler. Use a `QBuffer` or `QFile` instead. (Qt
 Multimedia and the web engine read devices from their own threads, so a Go
 device needs the same care as the cookie filter.)
@@ -364,6 +367,33 @@ out the values you need. Call `c.Super().PaintEvent(e)` for the base
 implementation. Models work the same way: embed
 `qtcore.QAbstractListModelBase` and define `RowCount` and `Data`.
 
+Every class with virtuals works like this, with no opt-in: embed
+`<Class>Base`, define the virtuals you want, build it with
+`New<Class>With(v, ...)`. Abstract classes (`QGraphicsItem`, `QLayout`,
+`QValidator`, `QSyntaxHighlighter`) are built only that way, and a pure
+virtual you don't define returns its zero value. An override has the same
+Go signature as the method's binding, so in-out parameters are a parameter
+plus a result:
+
+```go
+type upper struct{ qtgui.QValidatorBase }
+
+func (u *upper) Validate(input string, pos int) (qtgui.QValidatorState, string, int) {
+	return qtgui.QValidatorAcceptable, strings.ToUpper(input), pos
+}
+
+u := &upper{}
+qtgui.NewQValidatorWith(u, edit)
+edit.SetValidator(u)
+```
+
+The Base type also carries the class's protected methods (`SetFormat` on a
+syntax highlighter, `SetState` on a view). `GoValue()` finds your Go value
+behind a pointer Qt hands back: `view.ItemDelegate().GoValue().(*MyDelegate)`,
+or the Go state you stored on a text block with `QTextBlock.SetUserData`.
+`COVERAGE.md` lists the classes Go can't subclass (singletons only Qt
+creates, `QIODevice`) and the few virtuals Go can't override, with reasons.
+
 All Qt calls happen on the GUI thread (the main goroutine inside
 `qute.Main`); a call from another goroutine panics. From other goroutines use
 `qute.Post(f)` or `qute.PostSync(f)`. A panic in a handler that `f` triggers
@@ -568,7 +598,8 @@ flowchart LR
 - `tools/irgen/irgen.py` parses the Qt headers into the IR. The IR is
   checked in, so the generator runs without Qt or libclang.
 - `spec/classes/<module>.yaml` picks the classes and their options (`kind:
-  value|event`, `subclass`, `notify-dtor`, ...).
+  value|event`, `notify-dtor`, `subclass: false`, ...). Classes with
+  virtuals are subclassable unless the spec says otherwise.
 - `spec/overlays/<module>.yaml` holds the ownership rules per method, using
   PyQt's vocabulary:
 
@@ -635,18 +666,18 @@ To fix a binding, edit `spec/overlays/<module>.yaml`, run `go generate
 The runtime, the bindings for the eleven modules above and Go subclassing are
 done. No method is waiting for type support, every ownership rule has been
 reviewed, every overload has a proper name, every out-parameter is confirmed
-by a rule, and every rule but `QEvent::clone` and
-`QWebEngineUrlRequestJob::reply` has a generated test (about 570 in all;
-`reply` is covered by a hand-written test, since a job exists only while Qt
-loads a URL).
+by a rule, and every rule but `QEvent::clone`,
+`QWebEngineUrlRequestJob::reply` and `QSyntaxHighlighter::setCurrentBlockUserData`
+has a generated test (about 585 in all; the last two are covered by
+hand-written tests, since a job exists only while Qt loads a URL and the user
+data only matters inside `highlightBlock`).
 
 Not done yet:
 
 - About 650 methods are skipped on purpose, each with its reason in
   `COVERAGE.md`: C++ move overloads, `QBindable`, iterators, Qt's private
   and platform internals, `QStringView` and plain-number twins, printing page
-  setup, accessibility, Vulkan, types from modules that aren't bound, and
-  interfaces that need C++ subclassing. About 500 operators, conversion
+  setup, accessibility, Vulkan and types from modules that aren't bound. About 500 operators, conversion
   operators and member templates are not in the IR at all; `COVERAGE.md`
   lists them too.
 - `QThread` affinity, QtQuick/QML and the other modules listed under

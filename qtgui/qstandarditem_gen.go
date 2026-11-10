@@ -63,6 +63,17 @@ func (this *QStandardItem) Delete() {
 	this.quteRef.H.Delete("QStandardItem.Delete")
 }
 
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QStandardItem) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
+}
+
 // Keep pins the object so GC never frees it, until Unkeep.
 func (this *QStandardItem) Keep() {
 	if this != nil {
@@ -1317,4 +1328,162 @@ func (this *QStandardItem) SortChildrenFull(column int, order qtcore.SortOrder) 
 	self := rt.Use(unsafe.Pointer(this), "QStandardItem.SortChildrenFull")
 	C.qute_QStandardItem_sortChildren_1(self, C.int(column), C.int64_t(order))
 	runtime.KeepAlive(this)
+}
+
+var qStandardItemVTable = []rt.Virtual{
+	{Name: "Data", Has: func(v any) bool { _, ok := v.(interface{ Data(int) *qtcore.QVariant }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			role := int(*(*C.int)(a[0]))
+			r := v.(interface{ Data(int) *qtcore.QVariant }).Data(role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItem.Data")
+		}},
+	{Name: "SetData", Has: func(v any) bool { _, ok := v.(interface{ SetData(*qtcore.QVariant, int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			v.(interface{ SetData(*qtcore.QVariant, int) }).SetData(value, role)
+		}},
+	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QStandardItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Clone() *QStandardItem }).Clone()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItem.Clone")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Type() int }).Type()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inP := *(*unsafe.Pointer)(a[0])
+			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
+			defer inH.Expire()
+			in := rt.View[qtcore.QDataStream](inH, inP)
+			v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+		}},
+	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			outP := *(*unsafe.Pointer)(a[0])
+			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
+			defer outH.Expire()
+			out := rt.View[qtcore.QDataStream](outH, outP)
+			v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+		}},
+}
+
+// QStandardItemBase is embedded in Go types that subclass QStandardItem:
+//
+//	type MyStandardItem struct{ qtgui.QStandardItemBase }
+//
+// Define any of the virtual methods listed on QStandardItemSuper to override them,
+// then construct the value with NewQStandardItemWith. Call b.Super().X() for the
+// base implementation.
+type QStandardItemBase struct{ *QStandardItem }
+
+func (b *QStandardItemBase) quteQStandardItemBase() *QStandardItemBase { return b }
+
+// QStandardItemSubclass is implemented by every type that embeds QStandardItemBase.
+type QStandardItemSubclass interface{ quteQStandardItemBase() *QStandardItemBase }
+
+// Super returns the C++ base implementations of QStandardItem's virtual methods.
+func (b *QStandardItemBase) Super() *QStandardItemSuper {
+	return &QStandardItemSuper{this: b.QStandardItem}
+}
+
+// QStandardItemSuper calls the C++ base implementations of QStandardItem's virtuals.
+type QStandardItemSuper struct{ this *QStandardItem }
+
+// Data calls QStandardItem::data.
+func (s *QStandardItemSuper) Data(role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItem.Super.Data")
+	r := C.qute_QStandardItem_super_0(self, C.int(role))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetData calls QStandardItem::setData.
+func (s *QStandardItemSuper) SetData(value *qtcore.QVariant, role int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItem.Super.SetData")
+	C.qute_QStandardItem_super_1(self, rt.UseArg(unsafe.Pointer(value), "QStandardItem.Super.SetData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+}
+
+// Clone calls QStandardItem::clone.
+func (s *QStandardItemSuper) Clone() *QStandardItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItem.Super.Clone")
+	r := C.qute_QStandardItem_super_2(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QStandardItem](rt.WrapClass(r, "QStandardItem", rt.KeepOrBorrow), r)
+}
+
+// Type calls QStandardItem::type.
+func (s *QStandardItemSuper) Type() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItem.Super.Type")
+	r := C.qute_QStandardItem_super_3(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// Read calls QStandardItem::read.
+func (s *QStandardItemSuper) Read(in *qtcore.QDataStream) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItem.Super.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QStandardItem.Super.Read")
+	}
+	C.qute_QStandardItem_super_4(self, inPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(in)
+}
+
+// Write calls QStandardItem::write.
+func (s *QStandardItemSuper) Write(out *qtcore.QDataStream) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItem.Super.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QStandardItem.Super.Write")
+	}
+	C.qute_QStandardItem_super_5(self, outPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(out)
+}
+
+// EmitDataChanged wraps the protected QStandardItem::emitDataChanged for subclasses.
+func (b *QStandardItemBase) EmitDataChanged() {
+	this := b.QStandardItem // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItem.EmitDataChanged")
+	C.qute_QStandardItem_prot_emitDataChanged(self)
+	runtime.KeepAlive(this)
+}
+
+// NewQStandardItemWith constructs a QStandardItem whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStandardItemWith(v QStandardItemSubclass) *QStandardItem {
+	rt.CheckThread("NewQStandardItemWith")
+	base := v.quteQStandardItemBase()
+	if base.QStandardItem != nil {
+		panic("NewQStandardItemWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QStandardItem_new_shim()
+	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	base.QStandardItem = rt.View[QStandardItem](h, p)
+	id := h.SetSelf(v, qStandardItemVTable)
+	mask := rt.Mask(v, qStandardItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStandardItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStandardItem
 }

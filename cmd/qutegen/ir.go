@@ -47,6 +47,9 @@ type irEnum struct {
 	Scoped     bool          `json:"scoped"`
 	Underlying string        `json:"underlying"`
 	Values     []irEnumValue `json:"values"`
+	// Protected enums type the protected methods a Go subclass calls; Go
+	// binds them like public ones.
+	Protected bool `json:"protected"`
 }
 
 type irFlags struct {

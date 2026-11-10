@@ -326,3 +326,634 @@ func (this *QStackedLayout) OnWidgetAdded(f func(index int)) qtcore.Connection {
 	})
 	return rt.NewConnection(C.qute_QStackedLayout_widgetAdded(self, C.uintptr_t(id)))
 }
+
+var qStackedLayoutVTable = []rt.Virtual{
+	{Name: "Count", Has: func(v any) bool { _, ok := v.(interface{ Count() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Count() int }).Count()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "AddItem", Has: func(v any) bool { _, ok := v.(interface{ AddItem(*QLayoutItem) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			item := rt.View[QLayoutItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QLayoutItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ AddItem(*QLayoutItem) }).AddItem(item)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "MinimumSize", Has: func(v any) bool { _, ok := v.(interface{ MinimumSize() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "ItemAt", Has: func(v any) bool { _, ok := v.(interface{ ItemAt(int) *QLayoutItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ ItemAt(int) *QLayoutItem }).ItemAt(arg0)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStackedLayout.ItemAt")
+		}},
+	{Name: "TakeAt", Has: func(v any) bool { _, ok := v.(interface{ TakeAt(int) *QLayoutItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ TakeAt(int) *QLayoutItem }).TakeAt(arg0)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStackedLayout.TakeAt")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRect) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			rect := goQRect(*(*C.qute_rect)(a[0]))
+			v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(rect)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			width := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(width)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Spacing", Has: func(v any) bool { _, ok := v.(interface{ Spacing() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Spacing() int }).Spacing()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "SetSpacing", Has: func(v any) bool { _, ok := v.(interface{ SetSpacing(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			spacing := int(*(*C.int)(a[0]))
+			v.(interface{ SetSpacing(int) }).SetSpacing(spacing)
+		}},
+	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Invalidate() }).Invalidate()
+		}},
+	{Name: "Geometry", Has: func(v any) bool { _, ok := v.(interface{ Geometry() qtcore.QRect }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "ExpandingDirections", Has: func(v any) bool { _, ok := v.(interface{ ExpandingDirections() qtcore.Orientations }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "MaximumSize", Has: func(v any) bool { _, ok := v.(interface{ MaximumSize() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "IndexOf", Has: func(v any) bool { _, ok := v.(interface{ IndexOf(*QWidget) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ IndexOf(*QWidget) int }).IndexOf(widget)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "IndexOfItem", Has: func(v any) bool { _, ok := v.(interface{ IndexOfItem(*QLayoutItem) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			layoutItem := rt.View[QLayoutItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QLayoutItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ IndexOfItem(*QLayoutItem) int }).IndexOfItem(layoutItem)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ControlTypes", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ControlTypes() QSizePolicyControlTypes
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface {
+				ControlTypes() QSizePolicyControlTypes
+			}).ControlTypes()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "ReplaceWidget", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ReplaceWidget(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			from := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			to := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
+			options := qtcore.FindChildOptions(*(*C.int64_t)(a[2]))
+			r := v.(interface {
+				ReplaceWidget(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem
+			}).ReplaceWidget(from, to, options)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStackedLayout.ReplaceWidget")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "Layout", Has: func(v any) bool { _, ok := v.(interface{ Layout() *QLayout }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Layout() *QLayout }).Layout()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStackedLayout.Layout")
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QChildEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QChildEvent](eArgH, eArgP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(eArg)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Widget", Has: func(v any) bool { _, ok := v.(interface{ Widget() *QWidget }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Widget() *QWidget }).Widget()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStackedLayout.Widget")
+		}},
+	{Name: "SpacerItem", Has: func(v any) bool { _, ok := v.(interface{ SpacerItem() *QSpacerItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStackedLayout.SpacerItem")
+		}},
+}
+
+// QStackedLayoutBase is embedded in Go types that subclass QStackedLayout:
+//
+//	type MyStackedLayout struct{ qtwidgets.QStackedLayoutBase }
+//
+// Define any of the virtual methods listed on QStackedLayoutSuper to override them,
+// then construct the value with NewQStackedLayoutWith. Call b.Super().X() for the
+// base implementation.
+type QStackedLayoutBase struct{ *QStackedLayout }
+
+func (b *QStackedLayoutBase) quteQStackedLayoutBase() *QStackedLayoutBase { return b }
+
+// QStackedLayoutSubclass is implemented by every type that embeds QStackedLayoutBase.
+type QStackedLayoutSubclass interface{ quteQStackedLayoutBase() *QStackedLayoutBase }
+
+// Super returns the C++ base implementations of QStackedLayout's virtual methods.
+func (b *QStackedLayoutBase) Super() *QStackedLayoutSuper {
+	return &QStackedLayoutSuper{this: b.QStackedLayout}
+}
+
+// QStackedLayoutSuper calls the C++ base implementations of QStackedLayout's virtuals.
+type QStackedLayoutSuper struct{ this *QStackedLayout }
+
+// Count calls QStackedLayout::count.
+func (s *QStackedLayoutSuper) Count() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Count")
+	r := C.qute_QStackedLayout_super_0(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// AddItem calls QStackedLayout::addItem.
+func (s *QStackedLayoutSuper) AddItem(item *QLayoutItem) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.AddItem")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQLayoutItem()), "QStackedLayout.Super.AddItem")
+	}
+	C.qute_QStackedLayout_super_1(self, itemPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(item)
+}
+
+// SizeHint calls QStackedLayout::sizeHint.
+func (s *QStackedLayoutSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.SizeHint")
+	r := C.qute_QStackedLayout_super_2(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// MinimumSize calls QStackedLayout::minimumSize.
+func (s *QStackedLayoutSuper) MinimumSize() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.MinimumSize")
+	r := C.qute_QStackedLayout_super_3(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// ItemAt calls QStackedLayout::itemAt.
+func (s *QStackedLayoutSuper) ItemAt(arg0 int) *QLayoutItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.ItemAt")
+	r := C.qute_QStackedLayout_super_4(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+}
+
+// TakeAt calls QStackedLayout::takeAt.
+func (s *QStackedLayoutSuper) TakeAt(arg0 int) *QLayoutItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.TakeAt")
+	r := C.qute_QStackedLayout_super_5(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+}
+
+// SetGeometry calls QStackedLayout::setGeometry.
+func (s *QStackedLayoutSuper) SetGeometry(rect qtcore.QRect) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.SetGeometry")
+	C.qute_QStackedLayout_super_6(self, cQRect(rect))
+	runtime.KeepAlive(s.this)
+}
+
+// HasHeightForWidth calls QStackedLayout::hasHeightForWidth.
+func (s *QStackedLayoutSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.HasHeightForWidth")
+	r := C.qute_QStackedLayout_super_7(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// HeightForWidth calls QStackedLayout::heightForWidth.
+func (s *QStackedLayoutSuper) HeightForWidth(width int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.HeightForWidth")
+	r := C.qute_QStackedLayout_super_8(self, C.int(width))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// Spacing calls QLayout::spacing.
+func (s *QStackedLayoutSuper) Spacing() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Spacing")
+	r := C.qute_QStackedLayout_super_9(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// SetSpacing calls QLayout::setSpacing.
+func (s *QStackedLayoutSuper) SetSpacing(spacing int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.SetSpacing")
+	C.qute_QStackedLayout_super_10(self, C.int(spacing))
+	runtime.KeepAlive(s.this)
+}
+
+// Invalidate calls QLayout::invalidate.
+func (s *QStackedLayoutSuper) Invalidate() {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Invalidate")
+	C.qute_QStackedLayout_super_11(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Geometry calls QLayout::geometry.
+func (s *QStackedLayoutSuper) Geometry() qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Geometry")
+	r := C.qute_QStackedLayout_super_12(self)
+	runtime.KeepAlive(s.this)
+	return goQRect(r)
+}
+
+// ExpandingDirections calls QLayout::expandingDirections.
+func (s *QStackedLayoutSuper) ExpandingDirections() qtcore.Orientations {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.ExpandingDirections")
+	r := C.qute_QStackedLayout_super_13(self)
+	runtime.KeepAlive(s.this)
+	return qtcore.Orientations(r)
+}
+
+// MaximumSize calls QLayout::maximumSize.
+func (s *QStackedLayoutSuper) MaximumSize() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.MaximumSize")
+	r := C.qute_QStackedLayout_super_14(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// IndexOf calls QLayout::indexOf.
+func (s *QStackedLayoutSuper) IndexOf(widget *QWidget) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.IndexOf")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStackedLayout.Super.IndexOf")
+	}
+	r := C.qute_QStackedLayout_super_15(self, widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(widget)
+	return int(r)
+}
+
+// IndexOfItem calls QLayout::indexOf.
+func (s *QStackedLayoutSuper) IndexOfItem(layoutItem *QLayoutItem) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.IndexOfItem")
+	var layoutItemPtr unsafe.Pointer
+	if layoutItem != nil {
+		layoutItemPtr = rt.UseArg(unsafe.Pointer(layoutItem.AsQLayoutItem()), "QStackedLayout.Super.IndexOfItem")
+	}
+	r := C.qute_QStackedLayout_super_16(self, layoutItemPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(layoutItem)
+	return int(r)
+}
+
+// IsEmpty calls QLayout::isEmpty.
+func (s *QStackedLayoutSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.IsEmpty")
+	r := C.qute_QStackedLayout_super_17(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// ControlTypes calls QLayout::controlTypes.
+func (s *QStackedLayoutSuper) ControlTypes() QSizePolicyControlTypes {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.ControlTypes")
+	r := C.qute_QStackedLayout_super_18(self)
+	runtime.KeepAlive(s.this)
+	return QSizePolicyControlTypes(r)
+}
+
+// ReplaceWidget calls QLayout::replaceWidget.
+func (s *QStackedLayoutSuper) ReplaceWidget(from *QWidget, to *QWidget, options qtcore.FindChildOptions) *QLayoutItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.ReplaceWidget")
+	var fromPtr unsafe.Pointer
+	if from != nil {
+		fromPtr = rt.UseArg(unsafe.Pointer(from.AsQWidget()), "QStackedLayout.Super.ReplaceWidget")
+	}
+	var toPtr unsafe.Pointer
+	if to != nil {
+		toPtr = rt.UseArg(unsafe.Pointer(to.AsQWidget()), "QStackedLayout.Super.ReplaceWidget")
+	}
+	r := C.qute_QStackedLayout_super_19(self, fromPtr, toPtr, C.int64_t(options))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+}
+
+// Layout calls QLayout::layout.
+func (s *QStackedLayoutSuper) Layout() *QLayout {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Layout")
+	r := C.qute_QStackedLayout_super_20(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QLayout](rt.WrapClass(r, "QLayout", rt.KeepOrBorrow), r)
+}
+
+// ChildEvent calls QLayout::childEvent.
+func (s *QStackedLayoutSuper) ChildEvent(eArg *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.ChildEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQChildEvent()), "QStackedLayout.Super.ChildEvent")
+	}
+	C.qute_QStackedLayout_super_21(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// Event calls QObject::event.
+func (s *QStackedLayoutSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStackedLayout.Super.Event")
+	}
+	r := C.qute_QStackedLayout_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QStackedLayoutSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QStackedLayout.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStackedLayout.Super.EventFilter")
+	}
+	r := C.qute_QStackedLayout_super_23(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QStackedLayoutSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QStackedLayout.Super.TimerEvent")
+	}
+	C.qute_QStackedLayout_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QStackedLayoutSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStackedLayout.Super.CustomEvent")
+	}
+	C.qute_QStackedLayout_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MinimumHeightForWidth calls QLayoutItem::minimumHeightForWidth.
+func (s *QStackedLayoutSuper) MinimumHeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.MinimumHeightForWidth")
+	r := C.qute_QStackedLayout_super_26(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// Widget calls QLayoutItem::widget.
+func (s *QStackedLayoutSuper) Widget() *QWidget {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.Widget")
+	r := C.qute_QStackedLayout_super_27(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
+}
+
+// SpacerItem calls QLayoutItem::spacerItem.
+func (s *QStackedLayoutSuper) SpacerItem() *QSpacerItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QStackedLayout.Super.SpacerItem")
+	r := C.qute_QStackedLayout_super_28(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QSpacerItem](rt.WrapClass(r, "QSpacerItem", rt.KeepOrBorrow), r)
+}
+
+// WidgetEvent wraps the protected QLayout::widgetEvent for subclasses.
+func (b *QStackedLayoutBase) WidgetEvent(event qtcore.QEventLike) {
+	this := b.QStackedLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.WidgetEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStackedLayout.WidgetEvent")
+	}
+	C.qute_QStackedLayout_prot_widgetEvent(self, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(event)
+}
+
+// AddChildLayout wraps the protected QLayout::addChildLayout for subclasses.
+func (b *QStackedLayoutBase) AddChildLayout(l QLayoutLike) {
+	this := b.QStackedLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.AddChildLayout")
+	var lPtr unsafe.Pointer
+	var lH *rt.Handle
+	if l != nil {
+		lPtr, lH = rt.Arg(unsafe.Pointer(l.AsQLayout()), "QStackedLayout.AddChildLayout")
+	}
+	C.qute_QStackedLayout_prot_addChildLayout(self, lPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, lH)
+}
+
+// AddChildWidget wraps the protected QLayout::addChildWidget for subclasses.
+func (b *QStackedLayoutBase) AddChildWidget(w QWidgetLike) {
+	this := b.QStackedLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.AddChildWidget")
+	var wPtr unsafe.Pointer
+	var wH *rt.Handle
+	if w != nil {
+		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QStackedLayout.AddChildWidget")
+	}
+	C.qute_QStackedLayout_prot_addChildWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
+}
+
+// AdoptLayout wraps the protected QLayout::adoptLayout for subclasses.
+func (b *QStackedLayoutBase) AdoptLayout(layout QLayoutLike) bool {
+	this := b.QStackedLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.AdoptLayout")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QStackedLayout.AdoptLayout")
+	}
+	r := C.qute_QStackedLayout_prot_adoptLayout(self, layoutPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
+	return bool(r)
+}
+
+// AlignmentRect wraps the protected QLayout::alignmentRect for subclasses.
+func (b *QStackedLayoutBase) AlignmentRect(rect qtcore.QRect) qtcore.QRect {
+	this := b.QStackedLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStackedLayout.AlignmentRect")
+	r := C.qute_QStackedLayout_prot_alignmentRect(self, cQRect(rect))
+	runtime.KeepAlive(this)
+	return goQRect(r)
+}
+
+// NewQStackedLayoutWith constructs a QStackedLayout whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStackedLayoutWith(v QStackedLayoutSubclass, parent QWidgetLike) *QStackedLayout {
+	rt.CheckThread("NewQStackedLayoutWith")
+	base := v.quteQStackedLayoutBase()
+	if base.QStackedLayout != nil {
+		panic("NewQStackedLayoutWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQStackedLayoutWith")
+	}
+	p := C.qute_QStackedLayout_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QStackedLayout", mode)
+	base.QStackedLayout = rt.View[QStackedLayout](h, p)
+	id := h.SetSelf(v, qStackedLayoutVTable)
+	mask := rt.Mask(v, qStackedLayoutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStackedLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStackedLayout
+}

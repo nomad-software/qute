@@ -741,3 +741,588 @@ func QLayoutClosestAcceptableSize(w QWidgetLike, sArg qtcore.QSize) qtcore.QSize
 	runtime.KeepAlive(w)
 	return goQSize(r)
 }
+
+var qLayoutVTable = []rt.Virtual{
+	{Name: "Spacing", Has: func(v any) bool { _, ok := v.(interface{ Spacing() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Spacing() int }).Spacing()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "SetSpacing", Has: func(v any) bool { _, ok := v.(interface{ SetSpacing(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			spacing := int(*(*C.int)(a[0]))
+			v.(interface{ SetSpacing(int) }).SetSpacing(spacing)
+		}},
+	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Invalidate() }).Invalidate()
+		}},
+	{Name: "Geometry", Has: func(v any) bool { _, ok := v.(interface{ Geometry() qtcore.QRect }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "AddItem", Has: func(v any) bool { _, ok := v.(interface{ AddItem(*QLayoutItem) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			layoutItem := rt.View[QLayoutItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QLayoutItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ AddItem(*QLayoutItem) }).AddItem(layoutItem)
+		}},
+	{Name: "ExpandingDirections", Has: func(v any) bool { _, ok := v.(interface{ ExpandingDirections() qtcore.Orientations }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "MinimumSize", Has: func(v any) bool { _, ok := v.(interface{ MinimumSize() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "MaximumSize", Has: func(v any) bool { _, ok := v.(interface{ MaximumSize() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRect) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			geometry := goQRect(*(*C.qute_rect)(a[0]))
+			v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(geometry)
+		}},
+	{Name: "ItemAt", Has: func(v any) bool { _, ok := v.(interface{ ItemAt(int) *QLayoutItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := int(*(*C.int)(a[0]))
+			r := v.(interface{ ItemAt(int) *QLayoutItem }).ItemAt(index)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.ItemAt")
+		}},
+	{Name: "TakeAt", Has: func(v any) bool { _, ok := v.(interface{ TakeAt(int) *QLayoutItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := int(*(*C.int)(a[0]))
+			r := v.(interface{ TakeAt(int) *QLayoutItem }).TakeAt(index)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.TakeAt")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "IndexOf", Has: func(v any) bool { _, ok := v.(interface{ IndexOf(*QWidget) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ IndexOf(*QWidget) int }).IndexOf(widget)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "IndexOfItem", Has: func(v any) bool { _, ok := v.(interface{ IndexOfItem(*QLayoutItem) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			layoutItem := rt.View[QLayoutItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QLayoutItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ IndexOfItem(*QLayoutItem) int }).IndexOfItem(layoutItem)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Count", Has: func(v any) bool { _, ok := v.(interface{ Count() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Count() int }).Count()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ControlTypes", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ControlTypes() QSizePolicyControlTypes
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface {
+				ControlTypes() QSizePolicyControlTypes
+			}).ControlTypes()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "ReplaceWidget", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ReplaceWidget(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			from := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			to := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
+			options := qtcore.FindChildOptions(*(*C.int64_t)(a[2]))
+			r := v.(interface {
+				ReplaceWidget(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem
+			}).ReplaceWidget(from, to, options)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.ReplaceWidget")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "Layout", Has: func(v any) bool { _, ok := v.(interface{ Layout() *QLayout }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Layout() *QLayout }).Layout()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.Layout")
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QChildEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QChildEvent](eArgH, eArgP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(eArg)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Widget", Has: func(v any) bool { _, ok := v.(interface{ Widget() *QWidget }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Widget() *QWidget }).Widget()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.Widget")
+		}},
+	{Name: "SpacerItem", Has: func(v any) bool { _, ok := v.(interface{ SpacerItem() *QSpacerItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.SpacerItem")
+		}},
+}
+
+// QLayoutBase is embedded in Go types that subclass QLayout:
+//
+//	type MyLayout struct{ qtwidgets.QLayoutBase }
+//
+// Define any of the virtual methods listed on QLayoutSuper to override them,
+// then construct the value with NewQLayoutWith. Call b.Super().X() for the
+// base implementation.
+type QLayoutBase struct{ *QLayout }
+
+func (b *QLayoutBase) quteQLayoutBase() *QLayoutBase { return b }
+
+// QLayoutSubclass is implemented by every type that embeds QLayoutBase.
+type QLayoutSubclass interface{ quteQLayoutBase() *QLayoutBase }
+
+// Super returns the C++ base implementations of QLayout's virtual methods.
+func (b *QLayoutBase) Super() *QLayoutSuper { return &QLayoutSuper{this: b.QLayout} }
+
+// QLayoutSuper calls the C++ base implementations of QLayout's virtuals.
+type QLayoutSuper struct{ this *QLayout }
+
+// Spacing calls QLayout::spacing.
+func (s *QLayoutSuper) Spacing() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.Spacing")
+	r := C.qute_QLayout_super_0(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// SetSpacing calls QLayout::setSpacing.
+func (s *QLayoutSuper) SetSpacing(spacing int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.SetSpacing")
+	C.qute_QLayout_super_1(self, C.int(spacing))
+	runtime.KeepAlive(s.this)
+}
+
+// Invalidate calls QLayout::invalidate.
+func (s *QLayoutSuper) Invalidate() {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.Invalidate")
+	C.qute_QLayout_super_2(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Geometry calls QLayout::geometry.
+func (s *QLayoutSuper) Geometry() qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.Geometry")
+	r := C.qute_QLayout_super_3(self)
+	runtime.KeepAlive(s.this)
+	return goQRect(r)
+}
+
+// ExpandingDirections calls QLayout::expandingDirections.
+func (s *QLayoutSuper) ExpandingDirections() qtcore.Orientations {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.ExpandingDirections")
+	r := C.qute_QLayout_super_5(self)
+	runtime.KeepAlive(s.this)
+	return qtcore.Orientations(r)
+}
+
+// MinimumSize calls QLayout::minimumSize.
+func (s *QLayoutSuper) MinimumSize() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.MinimumSize")
+	r := C.qute_QLayout_super_6(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// MaximumSize calls QLayout::maximumSize.
+func (s *QLayoutSuper) MaximumSize() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.MaximumSize")
+	r := C.qute_QLayout_super_7(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SetGeometry calls QLayout::setGeometry.
+func (s *QLayoutSuper) SetGeometry(geometry qtcore.QRect) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.SetGeometry")
+	C.qute_QLayout_super_8(self, cQRect(geometry))
+	runtime.KeepAlive(s.this)
+}
+
+// IndexOf calls QLayout::indexOf.
+func (s *QLayoutSuper) IndexOf(widget *QWidget) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.IndexOf")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QLayout.Super.IndexOf")
+	}
+	r := C.qute_QLayout_super_11(self, widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(widget)
+	return int(r)
+}
+
+// IndexOfItem calls QLayout::indexOf.
+func (s *QLayoutSuper) IndexOfItem(layoutItem *QLayoutItem) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.IndexOfItem")
+	var layoutItemPtr unsafe.Pointer
+	if layoutItem != nil {
+		layoutItemPtr = rt.UseArg(unsafe.Pointer(layoutItem.AsQLayoutItem()), "QLayout.Super.IndexOfItem")
+	}
+	r := C.qute_QLayout_super_12(self, layoutItemPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(layoutItem)
+	return int(r)
+}
+
+// IsEmpty calls QLayout::isEmpty.
+func (s *QLayoutSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.IsEmpty")
+	r := C.qute_QLayout_super_14(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// ControlTypes calls QLayout::controlTypes.
+func (s *QLayoutSuper) ControlTypes() QSizePolicyControlTypes {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.ControlTypes")
+	r := C.qute_QLayout_super_15(self)
+	runtime.KeepAlive(s.this)
+	return QSizePolicyControlTypes(r)
+}
+
+// ReplaceWidget calls QLayout::replaceWidget.
+func (s *QLayoutSuper) ReplaceWidget(from *QWidget, to *QWidget, options qtcore.FindChildOptions) *QLayoutItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.ReplaceWidget")
+	var fromPtr unsafe.Pointer
+	if from != nil {
+		fromPtr = rt.UseArg(unsafe.Pointer(from.AsQWidget()), "QLayout.Super.ReplaceWidget")
+	}
+	var toPtr unsafe.Pointer
+	if to != nil {
+		toPtr = rt.UseArg(unsafe.Pointer(to.AsQWidget()), "QLayout.Super.ReplaceWidget")
+	}
+	r := C.qute_QLayout_super_16(self, fromPtr, toPtr, C.int64_t(options))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+	return rt.View[QLayoutItem](rt.WrapClass(r, "QLayoutItem", rt.KeepOrBorrow), r)
+}
+
+// Layout calls QLayout::layout.
+func (s *QLayoutSuper) Layout() *QLayout {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.Layout")
+	r := C.qute_QLayout_super_17(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QLayout](rt.WrapClass(r, "QLayout", rt.KeepOrBorrow), r)
+}
+
+// ChildEvent calls QLayout::childEvent.
+func (s *QLayoutSuper) ChildEvent(eArg *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.ChildEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQChildEvent()), "QLayout.Super.ChildEvent")
+	}
+	C.qute_QLayout_super_18(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// Event calls QObject::event.
+func (s *QLayoutSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLayout.Super.Event")
+	}
+	r := C.qute_QLayout_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QLayoutSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QLayout.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLayout.Super.EventFilter")
+	}
+	r := C.qute_QLayout_super_20(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QLayoutSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QLayout.Super.TimerEvent")
+	}
+	C.qute_QLayout_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QLayoutSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLayout.Super.CustomEvent")
+	}
+	C.qute_QLayout_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HasHeightForWidth calls QLayoutItem::hasHeightForWidth.
+func (s *QLayoutSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.HasHeightForWidth")
+	r := C.qute_QLayout_super_24(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// HeightForWidth calls QLayoutItem::heightForWidth.
+func (s *QLayoutSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.HeightForWidth")
+	r := C.qute_QLayout_super_25(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// MinimumHeightForWidth calls QLayoutItem::minimumHeightForWidth.
+func (s *QLayoutSuper) MinimumHeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.MinimumHeightForWidth")
+	r := C.qute_QLayout_super_26(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// Widget calls QLayoutItem::widget.
+func (s *QLayoutSuper) Widget() *QWidget {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.Widget")
+	r := C.qute_QLayout_super_27(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
+}
+
+// SpacerItem calls QLayoutItem::spacerItem.
+func (s *QLayoutSuper) SpacerItem() *QSpacerItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QLayout.Super.SpacerItem")
+	r := C.qute_QLayout_super_28(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QSpacerItem](rt.WrapClass(r, "QSpacerItem", rt.KeepOrBorrow), r)
+}
+
+// WidgetEvent wraps the protected QLayout::widgetEvent for subclasses.
+func (b *QLayoutBase) WidgetEvent(event qtcore.QEventLike) {
+	this := b.QLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QLayout.WidgetEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLayout.WidgetEvent")
+	}
+	C.qute_QLayout_prot_widgetEvent(self, eventPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(event)
+}
+
+// AddChildLayout wraps the protected QLayout::addChildLayout for subclasses.
+func (b *QLayoutBase) AddChildLayout(l QLayoutLike) {
+	this := b.QLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QLayout.AddChildLayout")
+	var lPtr unsafe.Pointer
+	var lH *rt.Handle
+	if l != nil {
+		lPtr, lH = rt.Arg(unsafe.Pointer(l.AsQLayout()), "QLayout.AddChildLayout")
+	}
+	C.qute_QLayout_prot_addChildLayout(self, lPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, lH)
+}
+
+// AddChildWidget wraps the protected QLayout::addChildWidget for subclasses.
+func (b *QLayoutBase) AddChildWidget(w QWidgetLike) {
+	this := b.QLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QLayout.AddChildWidget")
+	var wPtr unsafe.Pointer
+	var wH *rt.Handle
+	if w != nil {
+		wPtr, wH = rt.Arg(unsafe.Pointer(w.AsQWidget()), "QLayout.AddChildWidget")
+	}
+	C.qute_QLayout_prot_addChildWidget(self, wPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(w)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, wH)
+}
+
+// AdoptLayout wraps the protected QLayout::adoptLayout for subclasses.
+func (b *QLayoutBase) AdoptLayout(layout QLayoutLike) bool {
+	this := b.QLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QLayout.AdoptLayout")
+	var layoutPtr unsafe.Pointer
+	var layoutH *rt.Handle
+	if layout != nil {
+		layoutPtr, layoutH = rt.Arg(unsafe.Pointer(layout.AsQLayout()), "QLayout.AdoptLayout")
+	}
+	r := C.qute_QLayout_prot_adoptLayout(self, layoutPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layout)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, layoutH)
+	return bool(r)
+}
+
+// AlignmentRect wraps the protected QLayout::alignmentRect for subclasses.
+func (b *QLayoutBase) AlignmentRect(rect qtcore.QRect) qtcore.QRect {
+	this := b.QLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QLayout.AlignmentRect")
+	r := C.qute_QLayout_prot_alignmentRect(self, cQRect(rect))
+	runtime.KeepAlive(this)
+	return goQRect(r)
+}
+
+// NewQLayoutWith constructs a QLayout whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQLayoutWith(v QLayoutSubclass, parent QWidgetLike) *QLayout {
+	rt.CheckThread("NewQLayoutWith")
+	base := v.quteQLayoutBase()
+	if base.QLayout != nil {
+		panic("NewQLayoutWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLayoutWith")
+	}
+	p := C.qute_QLayout_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QLayout", mode)
+	base.QLayout = rt.View[QLayout](h, p)
+	id := h.SetSelf(v, qLayoutVTable)
+	mask := rt.Mask(v, qLayoutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QLayout
+}

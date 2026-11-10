@@ -200,3 +200,181 @@ func QOpenGLShaderHasOpenGLShadersFull(typeArg QOpenGLShaderShaderType, context 
 	runtime.KeepAlive(context)
 	return bool(r)
 }
+
+var qOpenGLShaderVTable = []rt.Virtual{
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QOpenGLShaderBase is embedded in Go types that subclass QOpenGLShader:
+//
+//	type MyOpenGLShader struct{ qtopengl.QOpenGLShaderBase }
+//
+// Define any of the virtual methods listed on QOpenGLShaderSuper to override them,
+// then construct the value with NewQOpenGLShaderWith. Call b.Super().X() for the
+// base implementation.
+type QOpenGLShaderBase struct{ *QOpenGLShader }
+
+func (b *QOpenGLShaderBase) quteQOpenGLShaderBase() *QOpenGLShaderBase { return b }
+
+// QOpenGLShaderSubclass is implemented by every type that embeds QOpenGLShaderBase.
+type QOpenGLShaderSubclass interface{ quteQOpenGLShaderBase() *QOpenGLShaderBase }
+
+// Super returns the C++ base implementations of QOpenGLShader's virtual methods.
+func (b *QOpenGLShaderBase) Super() *QOpenGLShaderSuper {
+	return &QOpenGLShaderSuper{this: b.QOpenGLShader}
+}
+
+// QOpenGLShaderSuper calls the C++ base implementations of QOpenGLShader's virtuals.
+type QOpenGLShaderSuper struct{ this *QOpenGLShader }
+
+// Event calls QObject::event.
+func (s *QOpenGLShaderSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLShader.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLShader.Super.Event")
+	}
+	r := C.qute_QOpenGLShader_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QOpenGLShaderSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLShader.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QOpenGLShader.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLShader.Super.EventFilter")
+	}
+	r := C.qute_QOpenGLShader_super_1(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QOpenGLShaderSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLShader.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QOpenGLShader.Super.TimerEvent")
+	}
+	C.qute_QOpenGLShader_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QOpenGLShaderSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLShader.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QOpenGLShader.Super.ChildEvent")
+	}
+	C.qute_QOpenGLShader_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QOpenGLShaderSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLShader.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLShader.Super.CustomEvent")
+	}
+	C.qute_QOpenGLShader_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQOpenGLShaderWith constructs a QOpenGLShader whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLShaderWith(v QOpenGLShaderSubclass, typeArg QOpenGLShaderShaderType, parent qtcore.QObjectLike) *QOpenGLShader {
+	rt.CheckThread("NewQOpenGLShaderWith")
+	base := v.quteQOpenGLShaderBase()
+	if base.QOpenGLShader != nil {
+		panic("NewQOpenGLShaderWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLShaderWith")
+	}
+	p := C.qute_QOpenGLShader_new_shim(C.int64_t(typeArg), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QOpenGLShader", mode)
+	base.QOpenGLShader = rt.View[QOpenGLShader](h, p)
+	id := h.SetSelf(v, qOpenGLShaderVTable)
+	mask := rt.Mask(v, qOpenGLShaderVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLShader_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLShader
+}

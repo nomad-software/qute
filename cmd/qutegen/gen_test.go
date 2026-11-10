@@ -704,3 +704,279 @@ func TestReportListsWhatIRLeavesOut(t *testing.T) {
 		t.Error("the IR records nothing dropped for QIcon")
 	}
 }
+
+// Subclassing is on by default: a class with virtuals Go can implement is
+// subclassable without a spec entry, whatever its kind (QObject, plain
+// polymorphic, abstract with only a shim constructor).
+func TestSubclassByDefault(t *testing.T) {
+	g := gen(t)
+	for _, n := range []string{"QWidget", "QTreeView", "QStyledItemDelegate", "QLayout", "QValidator",
+		"QProxyStyle", "QGraphicsItem", "QGraphicsObject", "QGraphicsEffect", "QLayoutItem", "QSyntaxHighlighter"} {
+		c := class(t, n)
+		if !c.Opts.Subclass || !c.Shim || c.Opts.NoSubclass != "" {
+			t.Errorf("%s: Subclass=%v Shim=%v NoSubclass=%q, want subclassable", n, c.Opts.Subclass, c.Shim, c.Opts.NoSubclass)
+		}
+		if c.Opts.SubclassOpt != nil {
+			t.Errorf("%s: the spec still sets subclass, which is the default", n)
+		}
+	}
+	// no spec entry insists on the default any more, nor asks for the death
+	// notice a subclass shim already gives (buildShim warns about it)
+	for _, m := range g.modules {
+		for _, c := range m.Classes {
+			if o := c.Opts.SubclassOpt; o != nil && *o {
+				t.Errorf("%s: subclass: true is the default; drop it", c.Name)
+			}
+			if c.Opts.NotifyDtor && c.Opts.Subclass {
+				t.Errorf("%s: notify-dtor is redundant on a subclassable class", c.Name)
+			}
+		}
+	}
+	// an abstract class is built only through its shim
+	c := class(t, "QGraphicsItem")
+	if len(c.Ctors) != 0 || len(c.ShimCtors) == 0 {
+		t.Errorf("QGraphicsItem: %d public and %d shim constructors, want only shim ones", len(c.Ctors), len(c.ShimCtors))
+	}
+}
+
+// A class Go cannot subclass says why (COVERAGE.md lists it); values, events
+// and classes without virtuals are not candidates at all.
+func TestSubclassRefused(t *testing.T) {
+	for n, why := range map[string]string{
+		"QIODevice":    "pure virtual QIODevice::readData",
+		"QApplication": "no-construct",
+		"QTextObject":  "destructor is not public",
+		"QPaintDevice": "pure virtual QPaintDevice::paintEngine",
+	} {
+		c := class(t, n)
+		if c.Opts.Subclass || !strings.Contains(c.Opts.NoSubclass, why) {
+			t.Errorf("%s: Subclass=%v NoSubclass=%q, want refused because %q", n, c.Opts.Subclass, c.Opts.NoSubclass, why)
+		}
+		if len(c.Virtuals) != 0 || len(c.Protected) != 0 {
+			t.Errorf("%s: refused but still has %d virtuals and %d protected methods", n, len(c.Virtuals), len(c.Protected))
+		}
+	}
+	for _, n := range []string{"QFont", "QMouseEvent", "QStyleOptionButton"} {
+		if c := class(t, n); c.Opts.Subclass || c.Opts.NoSubclass != "" {
+			t.Errorf("%s: Subclass=%v NoSubclass=%q, want not a candidate", n, c.Opts.Subclass, c.Opts.NoSubclass)
+		}
+	}
+	// QIODevice's subclasses still are subclassable, without readData
+	c := class(t, "QBuffer")
+	if !c.Opts.Subclass {
+		t.Fatal("QBuffer is not subclassable")
+	}
+	for _, v := range c.Virtuals {
+		if v.IR.Name == "readData" {
+			t.Error("QBuffer.ReadData is overridable, but Go cannot fill a char buffer")
+		}
+	}
+}
+
+// subclass: false turns subclassing off; subclass: true on a class that
+// cannot be subclassed is a warning, the default silently lists why.
+func TestSubclassOption(t *testing.T) {
+	g := gen(t)
+	no, yes := false, true
+	warns := len(g.report.warnings)
+	defer func() { g.report.warnings = g.report.warnings[:warns] }()
+	off := &Class{Name: "QOff", QObject: true, HasDtor: true, IR: &irClass{}, Opts: &classOpts{SubclassOpt: &no}}
+	g.chooseSubclass(off)
+	if off.Opts.Subclass || !strings.Contains(off.Opts.NoSubclass, "subclass: false") {
+		t.Errorf("subclass: false: Subclass=%v NoSubclass=%q", off.Opts.Subclass, off.Opts.NoSubclass)
+	}
+	def := &Class{Name: "QHidden", QObject: true, HasDtor: true, IR: &irClass{}, Opts: &classOpts{NoConstruct: true}}
+	g.chooseSubclass(def)
+	if len(g.report.warnings) != warns {
+		t.Errorf("the default warned: %v", g.report.warnings[warns:])
+	}
+	insist := &Class{Name: "QInsist", QObject: true, HasDtor: true, IR: &irClass{}, Opts: &classOpts{SubclassOpt: &yes, NoConstruct: true}}
+	g.chooseSubclass(insist)
+	if insist.Opts.Subclass || len(g.report.warnings) != warns+1 {
+		t.Errorf("subclass: true on a no-construct class: Subclass=%v, warnings %v", insist.Opts.Subclass, g.report.warnings[warns:])
+	}
+	g.noSubclass(insist, "it has no public constructor")
+	if len(g.report.warnings) != warns+2 {
+		t.Error("subclass: true on a class buildShim refuses does not warn")
+	}
+}
+
+func virtualNamed(t *testing.T, cls, name string) *Method {
+	t.Helper()
+	for _, v := range class(t, cls).Virtuals {
+		if v.IR.Name == name && (len(v.Params) == 0 || name != "indexOf" || strings.Contains(v.Sig, "QLayoutItem")) {
+			return v
+		}
+	}
+	t.Fatalf("%s: %s is not overridable", cls, name)
+	return nil
+}
+
+// An overridden overload takes the name of its binding (QLayout.IndexOfItem),
+// so no override gets a numbered name.
+func TestVirtualNamesFollowBindings(t *testing.T) {
+	if v := virtualNamed(t, "QBoxLayout", "indexOf"); v.GoName != "IndexOfItem" {
+		t.Errorf("indexOf(const QLayoutItem *): %s, want IndexOfItem", v.GoName)
+	}
+	for _, m := range gen(t).modules {
+		for _, c := range m.Classes {
+			for _, v := range c.Virtuals {
+				if v.Numbered {
+					t.Errorf("%s: virtual %s has a numbered name %s", c.Name, v.Sig, v.GoName)
+				}
+			}
+		}
+	}
+}
+
+// A confirmed in-out parameter of a virtual (validate(QString &, int &)) is
+// a parameter and a result of the override, as in the method's binding; a
+// derived override that names the parameter differently (QSpinBox::fixup(str))
+// finds the base's rule by position.
+func TestVirtualInOut(t *testing.T) {
+	g := gen(t)
+	v := virtualNamed(t, "QValidator", "validate")
+	if got, want := g.virtualSig(class(t, "QValidator"), v), "Validate(string, int) (QValidatorState, string, int)"; got != want {
+		t.Errorf("override signature %q, want %q", got, want)
+	}
+	if got := g.virtualSig(class(t, "QSpinBox"), virtualNamed(t, "QSpinBox", "fixup")); got != "Fixup(string) string" {
+		t.Errorf("QSpinBox fixup override %q", got)
+	}
+	var b buf
+	g.emitShimClass(class(t, "QValidator"), &b)
+	shim := b.String()
+	for _, want := range []string{"qute_str c0 = qute_ret_str(a0);", "a0 = qute_take_qstr(c0);", "std::free(c0.data);"} {
+		if !strings.Contains(shim, want) {
+			t.Errorf("QValidator shim lacks %q", want)
+		}
+	}
+	// an out-parameter that is a pointer may be null: no slot then
+	if got := g.virtualSig(class(t, "QWebEnginePage"), virtualNamed(t, "QWebEnginePage", "javaScriptPrompt")); !strings.HasSuffix(got, "(bool, string)") {
+		t.Errorf("javaScriptPrompt override %q, want results (bool, string)", got)
+	}
+}
+
+// Lists and maps can come back from an override (roleNames, itemData,
+// selectedIndexes).
+func TestVirtualListAndMapResults(t *testing.T) {
+	g := gen(t)
+	for cls, name := range map[string]string{"QAbstractItemModel": "roleNames", "QStandardItemModel": "itemData", "QTreeView": "selectedIndexes"} {
+		v := virtualNamed(t, cls, name)
+		if _, ok := g.goVirtRet(v.Ret, "r", "x", class(t, cls).Module); !ok {
+			t.Errorf("%s::%s: no Go conversion for the result", cls, name)
+		}
+	}
+}
+
+// Protected enums are bound for the protected methods that use them, and
+// the shim re-exports them so its C functions may name them.
+func TestProtectedEnums(t *testing.T) {
+	g := gen(t)
+	if e := g.enums["QAbstractItemView::State"]; e == nil || e.goName == "" {
+		t.Fatal("QAbstractItemView::State is not bound")
+	}
+	c := class(t, "QTreeView")
+	found := false
+	for _, p := range c.Protected {
+		found = found || p.GoName == "SetState"
+	}
+	if !found {
+		t.Error("QTreeViewBase has no SetState")
+	}
+	var b buf
+	g.emitShimClass(c, &b)
+	if !strings.Contains(b.String(), "using QAbstractItemView::State;") {
+		t.Error("the QTreeView shim does not re-export QAbstractItemView::State")
+	}
+	for _, f := range g.classCFuncs(c) {
+		if strings.Contains(f.body, "QAbstractItemView::State") {
+			t.Errorf("%s names the protected enum directly: %s", f.decl, f.body)
+		}
+	}
+}
+
+// The shim forwards to any base constructor, protected ones included, and a
+// protected constructor taking Qt's d-pointer is left out.
+func TestShimConstructors(t *testing.T) {
+	g := gen(t)
+	var b buf
+	g.emitShimClass(class(t, "QWidget"), &b)
+	if !strings.Contains(b.String(), "template <class... A> explicit qute_QWidget(A &&...a) : QWidget(std::forward<A>(a)...) {}") {
+		t.Error("the QWidget shim has no forwarding constructor")
+	}
+	for _, m := range g.modules {
+		for _, c := range m.Classes {
+			for _, ctor := range c.ShimCtors {
+				if privateCtor(ctor.IR) {
+					t.Errorf("%s: shim constructor %s takes Qt's private data", c.Name, ctor.Sig)
+				}
+			}
+		}
+	}
+}
+
+// Protected methods take their declaring class's overlay: a skip there is
+// honoured and a rule there gets a generated test (on a Go subclass).
+func TestProtectedOverlays(t *testing.T) {
+	g := gen(t)
+	for _, p := range class(t, "QPlainTextEdit").Protected {
+		if p.IR.Name == "getPaintContext" {
+			t.Error("QPlainTextEdit.GetPaintContext is bound, but its overlay skips it")
+		}
+	}
+	var add *Method
+	for _, p := range g.protectedOf(class(t, "QLayout")) {
+		if p.IR.Name == "addChildWidget" {
+			add = p
+		}
+	}
+	if add == nil || add.Params[0].Rule != "transfer-to-cpp" {
+		t.Fatal("QLayout.AddChildWidget has no transfer-to-cpp rule")
+	}
+	tc := &testCtx{g: g, m: g.byName["QtWidgets"], imports: map[string]bool{}}
+	var b buf
+	g.emitGenericTest(tc, class(t, "QLayout"), add, &b)
+	if s := b.String(); !strings.Contains(s, "func TestOwnership_QLayout_AddChildWidget") || !strings.Contains(s, "NewQLayoutWith(v, root)") {
+		t.Errorf("no test that builds a Go subclass:\n%s", s)
+	}
+}
+
+// The report lists the object arguments only a Full form takes
+// (QProxyStyle(QStyle *style = nullptr) took ownership unnoticed), protected
+// methods and virtual results on default rules, and the classes and virtuals
+// Go cannot subclass or override.
+func TestReportSubclassSections(t *testing.T) {
+	g := gen(t)
+	var full *Method
+	for _, c := range class(t, "QProxyStyle").Ctors {
+		if c.FullOf != nil && strings.Contains(c.Sig, "QStyle *") {
+			full = c
+		}
+	}
+	if full == nil {
+		t.Fatal("QProxyStyle(QStyle *) has no Full form")
+	}
+	// as before its overlay entry: the argument on the default rule
+	p := full.Params[len(full.Params)-1]
+	saved, savedRule := p.Ruled, p.Rule
+	p.Ruled, p.Rule = false, "borrowed"
+	defer func() { p.Ruled, p.Rule = saved, savedRule }()
+	path := filepath.Join(t.TempDir(), "COVERAGE.md")
+	if err := g.writeReport(path); err != nil {
+		t.Fatal(err)
+	}
+	b, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(b)
+	for _, want := range []string{
+		"`QProxyStyle::QProxyStyle(QStyle * style = …)` (Full form) → `style`: borrowed",
+		"## Classes Go cannot subclass", "- `QIODevice`: Go cannot implement its pure virtual QIODevice::readData",
+		"## Virtuals Go cannot override", "| Classes Go can subclass |",
+	} {
+		if !strings.Contains(s, want) {
+			t.Errorf("report lacks %q", want)
+		}
+	}
+}

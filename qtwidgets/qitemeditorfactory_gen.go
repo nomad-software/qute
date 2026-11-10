@@ -24,7 +24,7 @@ type QItemEditorFactoryLike interface{ AsQItemEditorFactory() *QItemEditorFactor
 func (this *QItemEditorFactory) AsQItemEditorFactory() *QItemEditorFactory { return this }
 
 func init() {
-	rt.RegisterClass("QItemEditorFactory", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QItemEditorFactory_delete(p) })
+	rt.RegisterClass("QItemEditorFactory", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QItemEditorFactory_delete(p) })
 }
 
 // QItemEditorFactoryFromPtr wraps an existing C++ QItemEditorFactory. This is an unsafe escape hatch: own says
@@ -61,6 +61,17 @@ func (this *QItemEditorFactory) Delete() {
 	}
 	rt.CheckThread("QItemEditorFactory.Delete")
 	this.quteRef.H.Delete("QItemEditorFactory.Delete")
+}
+
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QItemEditorFactory) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
 }
 
 // Keep pins the object so GC never frees it, until Unkeep.
@@ -156,4 +167,92 @@ func QItemEditorFactorySetDefaultFactory(factory QItemEditorFactoryLike) {
 	C.qute_QItemEditorFactory_setDefaultFactory(factoryPtr)
 	runtime.KeepAlive(factory)
 	factoryH.TransferToCpp()
+}
+
+var qItemEditorFactoryVTable = []rt.Virtual{
+	{Name: "CreateEditor", Has: func(v any) bool { _, ok := v.(interface{ CreateEditor(int, *QWidget) *QWidget }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			userType := int(*(*C.int)(a[0]))
+			parent := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
+			r := v.(interface{ CreateEditor(int, *QWidget) *QWidget }).CreateEditor(userType, parent)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QItemEditorFactory.CreateEditor")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "ValuePropertyName", Has: func(v any) bool { _, ok := v.(interface{ ValuePropertyName(int) []byte }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			userType := int(*(*C.int)(a[0]))
+			r := v.(interface{ ValuePropertyName(int) []byte }).ValuePropertyName(userType)
+			*(*C.qute_str)(ret) = quteCBytes(r)
+		}},
+}
+
+// QItemEditorFactoryBase is embedded in Go types that subclass QItemEditorFactory:
+//
+//	type MyItemEditorFactory struct{ qtwidgets.QItemEditorFactoryBase }
+//
+// Define any of the virtual methods listed on QItemEditorFactorySuper to override them,
+// then construct the value with NewQItemEditorFactoryWith. Call b.Super().X() for the
+// base implementation.
+type QItemEditorFactoryBase struct{ *QItemEditorFactory }
+
+func (b *QItemEditorFactoryBase) quteQItemEditorFactoryBase() *QItemEditorFactoryBase { return b }
+
+// QItemEditorFactorySubclass is implemented by every type that embeds QItemEditorFactoryBase.
+type QItemEditorFactorySubclass interface {
+	quteQItemEditorFactoryBase() *QItemEditorFactoryBase
+}
+
+// Super returns the C++ base implementations of QItemEditorFactory's virtual methods.
+func (b *QItemEditorFactoryBase) Super() *QItemEditorFactorySuper {
+	return &QItemEditorFactorySuper{this: b.QItemEditorFactory}
+}
+
+// QItemEditorFactorySuper calls the C++ base implementations of QItemEditorFactory's virtuals.
+type QItemEditorFactorySuper struct{ this *QItemEditorFactory }
+
+// CreateEditor calls QItemEditorFactory::createEditor.
+func (s *QItemEditorFactorySuper) CreateEditor(userType int, parent *QWidget) *QWidget {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemEditorFactory.Super.CreateEditor")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QItemEditorFactory.Super.CreateEditor")
+	}
+	r := C.qute_QItemEditorFactory_super_0(self, C.int(userType), parentPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
+}
+
+// ValuePropertyName calls QItemEditorFactory::valuePropertyName.
+func (s *QItemEditorFactorySuper) ValuePropertyName(userType int) []byte {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemEditorFactory.Super.ValuePropertyName")
+	r := C.qute_QItemEditorFactory_super_1(self, C.int(userType))
+	runtime.KeepAlive(s.this)
+	return quteBytes(r)
+}
+
+// NewQItemEditorFactoryWith constructs a QItemEditorFactory whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQItemEditorFactoryWith(v QItemEditorFactorySubclass) *QItemEditorFactory {
+	rt.CheckThread("NewQItemEditorFactoryWith")
+	base := v.quteQItemEditorFactoryBase()
+	if base.QItemEditorFactory != nil {
+		panic("NewQItemEditorFactoryWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QItemEditorFactory_new_shim()
+	h := rt.WrapClass(p, "QItemEditorFactory", rt.NewOwned)
+	base.QItemEditorFactory = rt.View[QItemEditorFactory](h, p)
+	id := h.SetSelf(v, qItemEditorFactoryVTable)
+	mask := rt.Mask(v, qItemEditorFactoryVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QItemEditorFactory_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QItemEditorFactory
 }

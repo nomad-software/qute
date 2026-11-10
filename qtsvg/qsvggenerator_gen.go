@@ -25,7 +25,7 @@ type QSvgGeneratorLike interface{ AsQSvgGenerator() *QSvgGenerator }
 func (this *QSvgGenerator) AsQSvgGenerator() *QSvgGenerator { return this }
 
 func init() {
-	rt.RegisterClass("QSvgGenerator", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QSvgGenerator_delete(p) })
+	rt.RegisterClass("QSvgGenerator", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QSvgGenerator_delete(p) })
 }
 
 // QSvgGeneratorFromPtr wraps an existing C++ QSvgGenerator. This is an unsafe escape hatch: own says
@@ -265,4 +265,59 @@ func (this *QSvgGenerator) SvgVersion() QSvgGeneratorSvgVersion {
 	r := C.qute_QSvgGenerator_svgVersion(self)
 	runtime.KeepAlive(this)
 	return QSvgGeneratorSvgVersion(r)
+}
+
+var qSvgGeneratorVTable = []rt.Virtual{}
+
+// QSvgGeneratorBase is embedded in Go types that subclass QSvgGenerator:
+//
+//	type MySvgGenerator struct{ qtsvg.QSvgGeneratorBase }
+//
+// Define any of the virtual methods listed on QSvgGeneratorSuper to override them,
+// then construct the value with NewQSvgGeneratorWith. Call b.Super().X() for the
+// base implementation.
+type QSvgGeneratorBase struct{ *QSvgGenerator }
+
+func (b *QSvgGeneratorBase) quteQSvgGeneratorBase() *QSvgGeneratorBase { return b }
+
+// QSvgGeneratorSubclass is implemented by every type that embeds QSvgGeneratorBase.
+type QSvgGeneratorSubclass interface{ quteQSvgGeneratorBase() *QSvgGeneratorBase }
+
+// Super returns the C++ base implementations of QSvgGenerator's virtual methods.
+func (b *QSvgGeneratorBase) Super() *QSvgGeneratorSuper {
+	return &QSvgGeneratorSuper{this: b.QSvgGenerator}
+}
+
+// QSvgGeneratorSuper calls the C++ base implementations of QSvgGenerator's virtuals.
+type QSvgGeneratorSuper struct{ this *QSvgGenerator }
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QSvgGeneratorBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QSvgGenerator // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSvgGenerator.GetDecodedMetricF")
+	r := C.qute_QSvgGenerator_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQSvgGeneratorWith constructs a QSvgGenerator whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSvgGeneratorWith(v QSvgGeneratorSubclass) *QSvgGenerator {
+	rt.CheckThread("NewQSvgGeneratorWith")
+	base := v.quteQSvgGeneratorBase()
+	if base.QSvgGenerator != nil {
+		panic("NewQSvgGeneratorWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QSvgGenerator_new_shim()
+	h := rt.WrapClass(p, "QSvgGenerator", rt.NewOwned)
+	base.QSvgGenerator = rt.View[QSvgGenerator](h, p)
+	id := h.SetSelf(v, qSvgGeneratorVTable)
+	mask := rt.Mask(v, qSvgGeneratorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSvgGenerator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSvgGenerator
 }

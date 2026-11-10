@@ -706,3 +706,1206 @@ func (this *QStandardItemModel) OnItemChanged(f func(item *QStandardItem)) qtcor
 	})
 	return rt.NewConnection(C.qute_QStandardItemModel_itemChanged(self, C.uintptr_t(id)))
 }
+
+var qStandardItemModelVTable = []rt.Virtual{
+	{Name: "RoleNames", Has: func(v any) bool { _, ok := v.(interface{ RoleNames() map[int][]byte }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ RoleNames() map[int][]byte }).RoleNames()
+			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e []byte) C.qute_str { return quteCBytes(e) })
+		}},
+	{Name: "Index", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Index(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			column := int(*(*C.int)(a[1]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				Index(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex
+			}).Index(row, column, parent)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.Index")
+		}},
+	{Name: "Parent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Parent(*qtcore.QModelIndex) *qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			child := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Parent(*qtcore.QModelIndex) *qtcore.QModelIndex
+			}).Parent(child)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.Parent")
+		}},
+	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*qtcore.QModelIndex) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ RowCount(*qtcore.QModelIndex) int }).RowCount(parent)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*qtcore.QModelIndex) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ ColumnCount(*qtcore.QModelIndex) int }).ColumnCount(parent)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HasChildren", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HasChildren(*qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				HasChildren(*qtcore.QModelIndex) bool
+			}).HasChildren(parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Data", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Data(*qtcore.QModelIndex, int) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			r := v.(interface {
+				Data(*qtcore.QModelIndex, int) *qtcore.QVariant
+			}).Data(index, role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.Data")
+		}},
+	{Name: "SetData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetData(*qtcore.QModelIndex, *qtcore.QVariant, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			role := int(*(*C.int)(a[2]))
+			r := v.(interface {
+				SetData(*qtcore.QModelIndex, *qtcore.QVariant, int) bool
+			}).SetData(index, value, role)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ClearItemData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ClearItemData(*qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				ClearItemData(*qtcore.QModelIndex) bool
+			}).ClearItemData(index)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "HeaderData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HeaderData(int, qtcore.Orientations, int) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			section := int(*(*C.int)(a[0]))
+			orientation := qtcore.Orientations(*(*C.int64_t)(a[1]))
+			role := int(*(*C.int)(a[2]))
+			r := v.(interface {
+				HeaderData(int, qtcore.Orientations, int) *qtcore.QVariant
+			}).HeaderData(section, orientation, role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.HeaderData")
+		}},
+	{Name: "SetHeaderData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetHeaderData(int, qtcore.Orientations, *qtcore.QVariant, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			section := int(*(*C.int)(a[0]))
+			orientation := qtcore.Orientations(*(*C.int64_t)(a[1]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			role := int(*(*C.int)(a[3]))
+			r := v.(interface {
+				SetHeaderData(int, qtcore.Orientations, *qtcore.QVariant, int) bool
+			}).SetHeaderData(section, orientation, value, role)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "InsertRows", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InsertRows(int, int, *qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				InsertRows(int, int, *qtcore.QModelIndex) bool
+			}).InsertRows(row, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "InsertColumns", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InsertColumns(int, int, *qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			column := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				InsertColumns(int, int, *qtcore.QModelIndex) bool
+			}).InsertColumns(column, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "RemoveRows", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RemoveRows(int, int, *qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				RemoveRows(int, int, *qtcore.QModelIndex) bool
+			}).RemoveRows(row, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "RemoveColumns", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RemoveColumns(int, int, *qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			column := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				RemoveColumns(int, int, *qtcore.QModelIndex) bool
+			}).RemoveColumns(column, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Flags", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Flags(*qtcore.QModelIndex) qtcore.ItemFlags
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Flags(*qtcore.QModelIndex) qtcore.ItemFlags
+			}).Flags(index)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "SupportedDropActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDropActions() qtcore.DropActions }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SupportedDropActions() qtcore.DropActions }).SupportedDropActions()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "ItemData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemData(*qtcore.QModelIndex) map[int]*qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				ItemData(*qtcore.QModelIndex) map[int]*qtcore.QVariant
+			}).ItemData(index)
+			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e *qtcore.QVariant) unsafe.Pointer {
+				return rt.UseArg(unsafe.Pointer(e), "QStandardItemModel.ItemData")
+			})
+		}},
+	{Name: "SetItemData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetItemData(*qtcore.QModelIndex, map[int]*qtcore.QVariant) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *qtcore.QVariant {
+				return rt.View[qtcore.QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+			})
+			r := v.(interface {
+				SetItemData(*qtcore.QModelIndex, map[int]*qtcore.QVariant) bool
+			}).SetItemData(index, roles)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Sort", Has: func(v any) bool { _, ok := v.(interface{ Sort(int, qtcore.SortOrder) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			column := int(*(*C.int)(a[0]))
+			order := qtcore.SortOrder(*(*C.int64_t)(a[1]))
+			v.(interface{ Sort(int, qtcore.SortOrder) }).Sort(column, order)
+		}},
+	{Name: "MimeTypes", Has: func(v any) bool { _, ok := v.(interface{ MimeTypes() []string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MimeTypes() []string }).MimeTypes()
+			*(*C.qute_list)(ret) = quteCStrList(r)
+		}},
+	{Name: "MimeData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MimeData([]*qtcore.QModelIndex) *qtcore.QMimeData
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *qtcore.QModelIndex {
+				return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+			})
+			r := v.(interface {
+				MimeData([]*qtcore.QModelIndex) *qtcore.QMimeData
+			}).MimeData(indexes)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.MimeData")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "DropMimeData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DropMimeData(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			data := rt.View[qtcore.QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			action := qtcore.DropActions(*(*C.int64_t)(a[1]))
+			row := int(*(*C.int)(a[2]))
+			column := int(*(*C.int)(a[3]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[4]))
+			r := v.(interface {
+				DropMimeData(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool
+			}).DropMimeData(data, action, row, column, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Sibling", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Sibling(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			column := int(*(*C.int)(a[1]))
+			idx := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				Sibling(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex
+			}).Sibling(row, column, idx)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.Sibling")
+		}},
+	{Name: "CanDropMimeData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CanDropMimeData(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			data := rt.View[qtcore.QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			action := qtcore.DropActions(*(*C.int64_t)(a[1]))
+			row := int(*(*C.int)(a[2]))
+			column := int(*(*C.int)(a[3]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[4]))
+			r := v.(interface {
+				CanDropMimeData(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool
+			}).CanDropMimeData(data, action, row, column, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SupportedDragActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDragActions() qtcore.DropActions }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SupportedDragActions() qtcore.DropActions }).SupportedDragActions()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "MoveRows", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MoveRows(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			sourceParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceRow := int(*(*C.int)(a[1]))
+			count := int(*(*C.int)(a[2]))
+			destinationParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			destinationChild := int(*(*C.int)(a[4]))
+			r := v.(interface {
+				MoveRows(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool
+			}).MoveRows(sourceParent, sourceRow, count, destinationParent, destinationChild)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MoveColumns", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MoveColumns(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			sourceParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceColumn := int(*(*C.int)(a[1]))
+			count := int(*(*C.int)(a[2]))
+			destinationParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			destinationChild := int(*(*C.int)(a[4]))
+			r := v.(interface {
+				MoveColumns(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool
+			}).MoveColumns(sourceParent, sourceColumn, count, destinationParent, destinationChild)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*qtcore.QModelIndex) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ FetchMore(*qtcore.QModelIndex) }).FetchMore(parent)
+		}},
+	{Name: "CanFetchMore", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CanFetchMore(*qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				CanFetchMore(*qtcore.QModelIndex) bool
+			}).CanFetchMore(parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Buddy", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Buddy(*qtcore.QModelIndex) *qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Buddy(*qtcore.QModelIndex) *qtcore.QModelIndex
+			}).Buddy(index)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItemModel.Buddy")
+		}},
+	{Name: "Match", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Match(*qtcore.QModelIndex, int, *qtcore.QVariant, int, qtcore.MatchFlags) []*qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			start := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			hits := int(*(*C.int)(a[3]))
+			flags := qtcore.MatchFlags(*(*C.int64_t)(a[4]))
+			r := v.(interface {
+				Match(*qtcore.QModelIndex, int, *qtcore.QVariant, int, qtcore.MatchFlags) []*qtcore.QModelIndex
+			}).Match(start, role, value, hits, flags)
+			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
+				for i, e := range r {
+					d[i] = rt.UseArg(unsafe.Pointer(e), "QStandardItemModel.Match")
+				}
+			})
+		}},
+	{Name: "Span", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Span(*qtcore.QModelIndex) qtcore.QSize
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Span(*qtcore.QModelIndex) qtcore.QSize
+			}).Span(index)
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "Submit", Has: func(v any) bool { _, ok := v.(interface{ Submit() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Submit() bool }).Submit()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Revert", Has: func(v any) bool { _, ok := v.(interface{ Revert() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Revert() }).Revert()
+		}},
+	{Name: "ResetInternalData", Has: func(v any) bool { _, ok := v.(interface{ ResetInternalData() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ ResetInternalData() }).ResetInternalData()
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QStandardItemModelBase is embedded in Go types that subclass QStandardItemModel:
+//
+//	type MyStandardItemModel struct{ qtgui.QStandardItemModelBase }
+//
+// Define any of the virtual methods listed on QStandardItemModelSuper to override them,
+// then construct the value with NewQStandardItemModelWith. Call b.Super().X() for the
+// base implementation.
+type QStandardItemModelBase struct{ *QStandardItemModel }
+
+func (b *QStandardItemModelBase) quteQStandardItemModelBase() *QStandardItemModelBase { return b }
+
+// QStandardItemModelSubclass is implemented by every type that embeds QStandardItemModelBase.
+type QStandardItemModelSubclass interface {
+	quteQStandardItemModelBase() *QStandardItemModelBase
+}
+
+// Super returns the C++ base implementations of QStandardItemModel's virtual methods.
+func (b *QStandardItemModelBase) Super() *QStandardItemModelSuper {
+	return &QStandardItemModelSuper{this: b.QStandardItemModel}
+}
+
+// QStandardItemModelSuper calls the C++ base implementations of QStandardItemModel's virtuals.
+type QStandardItemModelSuper struct{ this *QStandardItemModel }
+
+// RoleNames calls QStandardItemModel::roleNames.
+func (s *QStandardItemModelSuper) RoleNames() map[int][]byte {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.RoleNames")
+	r := C.qute_QStandardItemModel_super_0(self)
+	runtime.KeepAlive(s.this)
+	return quteMap(r, func(k C.int) int { return int(k) }, func(v C.qute_str) []byte { return quteBytes(v) })
+}
+
+// Index calls QStandardItemModel::index.
+func (s *QStandardItemModelSuper) Index(row int, column int, parent *qtcore.QModelIndex) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Index")
+	r := C.qute_QStandardItemModel_super_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.Index"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// Parent calls QStandardItemModel::parent.
+func (s *QStandardItemModelSuper) Parent(child *qtcore.QModelIndex) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Parent")
+	r := C.qute_QStandardItemModel_super_2(self, rt.UseArg(unsafe.Pointer(child), "QStandardItemModel.Super.Parent"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(child)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// RowCount calls QStandardItemModel::rowCount.
+func (s *QStandardItemModelSuper) RowCount(parent *qtcore.QModelIndex) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.RowCount")
+	r := C.qute_QStandardItemModel_super_3(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.RowCount"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return int(r)
+}
+
+// ColumnCount calls QStandardItemModel::columnCount.
+func (s *QStandardItemModelSuper) ColumnCount(parent *qtcore.QModelIndex) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.ColumnCount")
+	r := C.qute_QStandardItemModel_super_4(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.ColumnCount"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return int(r)
+}
+
+// HasChildren calls QStandardItemModel::hasChildren.
+func (s *QStandardItemModelSuper) HasChildren(parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.HasChildren")
+	r := C.qute_QStandardItemModel_super_5(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.HasChildren"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// Data calls QStandardItemModel::data.
+func (s *QStandardItemModelSuper) Data(index *qtcore.QModelIndex, role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Data")
+	r := C.qute_QStandardItemModel_super_6(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.Data"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetData calls QStandardItemModel::setData.
+func (s *QStandardItemModelSuper) SetData(index *qtcore.QModelIndex, value *qtcore.QVariant, role int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.SetData")
+	r := C.qute_QStandardItemModel_super_7(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.SetData"), rt.UseArg(unsafe.Pointer(value), "QStandardItemModel.Super.SetData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(value)
+	return bool(r)
+}
+
+// ClearItemData calls QStandardItemModel::clearItemData.
+func (s *QStandardItemModelSuper) ClearItemData(index *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.ClearItemData")
+	r := C.qute_QStandardItemModel_super_8(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.ClearItemData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return bool(r)
+}
+
+// HeaderData calls QStandardItemModel::headerData.
+func (s *QStandardItemModelSuper) HeaderData(section int, orientation qtcore.Orientations, role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.HeaderData")
+	r := C.qute_QStandardItemModel_super_9(self, C.int(section), C.int64_t(orientation), C.int(role))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetHeaderData calls QStandardItemModel::setHeaderData.
+func (s *QStandardItemModelSuper) SetHeaderData(section int, orientation qtcore.Orientations, value *qtcore.QVariant, role int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.SetHeaderData")
+	r := C.qute_QStandardItemModel_super_10(self, C.int(section), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(value), "QStandardItemModel.Super.SetHeaderData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+	return bool(r)
+}
+
+// InsertRows calls QStandardItemModel::insertRows.
+func (s *QStandardItemModelSuper) InsertRows(row int, count int, parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.InsertRows")
+	r := C.qute_QStandardItemModel_super_11(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.InsertRows"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// InsertColumns calls QStandardItemModel::insertColumns.
+func (s *QStandardItemModelSuper) InsertColumns(column int, count int, parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.InsertColumns")
+	r := C.qute_QStandardItemModel_super_12(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.InsertColumns"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveRows calls QStandardItemModel::removeRows.
+func (s *QStandardItemModelSuper) RemoveRows(row int, count int, parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.RemoveRows")
+	r := C.qute_QStandardItemModel_super_13(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.RemoveRows"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveColumns calls QStandardItemModel::removeColumns.
+func (s *QStandardItemModelSuper) RemoveColumns(column int, count int, parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.RemoveColumns")
+	r := C.qute_QStandardItemModel_super_14(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.RemoveColumns"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// Flags calls QStandardItemModel::flags.
+func (s *QStandardItemModelSuper) Flags(index *qtcore.QModelIndex) qtcore.ItemFlags {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Flags")
+	r := C.qute_QStandardItemModel_super_15(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.Flags"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return qtcore.ItemFlags(r)
+}
+
+// SupportedDropActions calls QStandardItemModel::supportedDropActions.
+func (s *QStandardItemModelSuper) SupportedDropActions() qtcore.DropActions {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.SupportedDropActions")
+	r := C.qute_QStandardItemModel_super_16(self)
+	runtime.KeepAlive(s.this)
+	return qtcore.DropActions(r)
+}
+
+// ItemData calls QStandardItemModel::itemData.
+func (s *QStandardItemModelSuper) ItemData(index *qtcore.QModelIndex) map[int]*qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.ItemData")
+	r := C.qute_QStandardItemModel_super_17(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.ItemData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return quteMap(r, func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *qtcore.QVariant {
+		return rt.View[qtcore.QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+	})
+}
+
+// SetItemData calls QStandardItemModel::setItemData.
+func (s *QStandardItemModelSuper) SetItemData(index *qtcore.QModelIndex, roles map[int]*qtcore.QVariant) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.SetItemData")
+	rolesK := make([]C.int, 0, len(roles))
+	rolesV := make([]unsafe.Pointer, 0, len(roles))
+	for k, x := range roles {
+		rolesK = append(rolesK, C.int(k))
+		rolesV = append(rolesV, rt.UseArg(unsafe.Pointer(x), "QStandardItemModel.Super.SetItemData"))
+	}
+	r := C.qute_QStandardItemModel_super_18(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.SetItemData"), unsafe.Pointer(unsafe.SliceData(rolesK)), unsafe.Pointer(unsafe.SliceData(rolesV)), C.ptrdiff_t(len(roles)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(roles)
+	return bool(r)
+}
+
+// Sort calls QStandardItemModel::sort.
+func (s *QStandardItemModelSuper) Sort(column int, order qtcore.SortOrder) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Sort")
+	C.qute_QStandardItemModel_super_19(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(s.this)
+}
+
+// MimeTypes calls QStandardItemModel::mimeTypes.
+func (s *QStandardItemModelSuper) MimeTypes() []string {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.MimeTypes")
+	r := C.qute_QStandardItemModel_super_20(self)
+	runtime.KeepAlive(s.this)
+	return quteStrList(r)
+}
+
+// MimeData calls QStandardItemModel::mimeData.
+func (s *QStandardItemModelSuper) MimeData(indexes []*qtcore.QModelIndex) *qtcore.QMimeData {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.MimeData")
+	indexesC := make([]unsafe.Pointer, len(indexes))
+	for i := range indexes {
+		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QStandardItemModel.Super.MimeData")
+	}
+	r := C.qute_QStandardItemModel_super_21(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(indexes)
+	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
+}
+
+// DropMimeData calls QStandardItemModel::dropMimeData.
+func (s *QStandardItemModelSuper) DropMimeData(data *qtcore.QMimeData, action qtcore.DropActions, row int, column int, parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.DropMimeData")
+	var dataPtr unsafe.Pointer
+	if data != nil {
+		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QStandardItemModel.Super.DropMimeData")
+	}
+	r := C.qute_QStandardItemModel_super_22(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.DropMimeData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(data)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// Sibling calls QAbstractItemModel::sibling.
+func (s *QStandardItemModelSuper) Sibling(row int, column int, idx *qtcore.QModelIndex) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Sibling")
+	r := C.qute_QStandardItemModel_super_23(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QStandardItemModel.Super.Sibling"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(idx)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// CanDropMimeData calls QAbstractItemModel::canDropMimeData.
+func (s *QStandardItemModelSuper) CanDropMimeData(data *qtcore.QMimeData, action qtcore.DropActions, row int, column int, parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.CanDropMimeData")
+	var dataPtr unsafe.Pointer
+	if data != nil {
+		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QStandardItemModel.Super.CanDropMimeData")
+	}
+	r := C.qute_QStandardItemModel_super_24(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.CanDropMimeData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(data)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// SupportedDragActions calls QAbstractItemModel::supportedDragActions.
+func (s *QStandardItemModelSuper) SupportedDragActions() qtcore.DropActions {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.SupportedDragActions")
+	r := C.qute_QStandardItemModel_super_25(self)
+	runtime.KeepAlive(s.this)
+	return qtcore.DropActions(r)
+}
+
+// MoveRows calls QAbstractItemModel::moveRows.
+func (s *QStandardItemModelSuper) MoveRows(sourceParent *qtcore.QModelIndex, sourceRow int, count int, destinationParent *qtcore.QModelIndex, destinationChild int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.MoveRows")
+	r := C.qute_QStandardItemModel_super_26(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStandardItemModel.Super.MoveRows"), C.int(sourceRow), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QStandardItemModel.Super.MoveRows"), C.int(destinationChild))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// MoveColumns calls QAbstractItemModel::moveColumns.
+func (s *QStandardItemModelSuper) MoveColumns(sourceParent *qtcore.QModelIndex, sourceColumn int, count int, destinationParent *qtcore.QModelIndex, destinationChild int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.MoveColumns")
+	r := C.qute_QStandardItemModel_super_27(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStandardItemModel.Super.MoveColumns"), C.int(sourceColumn), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QStandardItemModel.Super.MoveColumns"), C.int(destinationChild))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// FetchMore calls QAbstractItemModel::fetchMore.
+func (s *QStandardItemModelSuper) FetchMore(parent *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.FetchMore")
+	C.qute_QStandardItemModel_super_28(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.FetchMore"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+}
+
+// CanFetchMore calls QAbstractItemModel::canFetchMore.
+func (s *QStandardItemModelSuper) CanFetchMore(parent *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.CanFetchMore")
+	r := C.qute_QStandardItemModel_super_29(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.CanFetchMore"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// Buddy calls QAbstractItemModel::buddy.
+func (s *QStandardItemModelSuper) Buddy(index *qtcore.QModelIndex) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Buddy")
+	r := C.qute_QStandardItemModel_super_30(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.Buddy"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// Match calls QAbstractItemModel::match.
+func (s *QStandardItemModelSuper) Match(start *qtcore.QModelIndex, role int, value *qtcore.QVariant, hits int, flags qtcore.MatchFlags) []*qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Match")
+	r := C.qute_QStandardItemModel_super_31(self, rt.UseArg(unsafe.Pointer(start), "QStandardItemModel.Super.Match"), C.int(role), rt.UseArg(unsafe.Pointer(value), "QStandardItemModel.Super.Match"), C.int(hits), C.int64_t(flags))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(start)
+	runtime.KeepAlive(value)
+	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
+		return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// Span calls QAbstractItemModel::span.
+func (s *QStandardItemModelSuper) Span(index *qtcore.QModelIndex) qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Span")
+	r := C.qute_QStandardItemModel_super_32(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.Span"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return goQSize(r)
+}
+
+// Submit calls QAbstractItemModel::submit.
+func (s *QStandardItemModelSuper) Submit() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Submit")
+	r := C.qute_QStandardItemModel_super_33(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Revert calls QAbstractItemModel::revert.
+func (s *QStandardItemModelSuper) Revert() {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Revert")
+	C.qute_QStandardItemModel_super_34(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ResetInternalData calls QAbstractItemModel::resetInternalData.
+func (s *QStandardItemModelSuper) ResetInternalData() {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.ResetInternalData")
+	C.qute_QStandardItemModel_super_35(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Event calls QObject::event.
+func (s *QStandardItemModelSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStandardItemModel.Super.Event")
+	}
+	r := C.qute_QStandardItemModel_super_36(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QStandardItemModelSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QStandardItemModel.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStandardItemModel.Super.EventFilter")
+	}
+	r := C.qute_QStandardItemModel_super_37(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QStandardItemModelSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QStandardItemModel.Super.TimerEvent")
+	}
+	C.qute_QStandardItemModel_super_38(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QStandardItemModelSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QStandardItemModel.Super.ChildEvent")
+	}
+	C.qute_QStandardItemModel_super_39(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QStandardItemModelSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStandardItemModel.Super.CustomEvent")
+	}
+	C.qute_QStandardItemModel_super_40(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
+func (b *QStandardItemModelBase) CreateIndex(row int, column int) *qtcore.QModelIndex {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.CreateIndex")
+	r := C.qute_QStandardItemModel_prot_createIndex(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// CreateIndexWithUint64 wraps the protected QAbstractItemModel::createIndex for subclasses.
+func (b *QStandardItemModelBase) CreateIndexWithUint64(row int, column int, idArg uint64) *qtcore.QModelIndex {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.CreateIndexWithUint64")
+	r := C.qute_QStandardItemModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// EncodeData wraps the protected QAbstractItemModel::encodeData for subclasses.
+func (b *QStandardItemModelBase) EncodeData(indexes []*qtcore.QModelIndex, stream qtcore.QDataStreamLike) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EncodeData")
+	indexesC := make([]unsafe.Pointer, len(indexes))
+	for i := range indexes {
+		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QStandardItemModel.EncodeData")
+	}
+	var streamPtr unsafe.Pointer
+	if stream != nil {
+		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QStandardItemModel.EncodeData")
+	}
+	C.qute_QStandardItemModel_prot_encodeData(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)), streamPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(indexes)
+	runtime.KeepAlive(stream)
+}
+
+// DecodeData wraps the protected QAbstractItemModel::decodeData for subclasses.
+func (b *QStandardItemModelBase) DecodeData(row int, column int, parent *qtcore.QModelIndex, stream qtcore.QDataStreamLike) bool {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.DecodeData")
+	var streamPtr unsafe.Pointer
+	if stream != nil {
+		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QStandardItemModel.DecodeData")
+	}
+	r := C.qute_QStandardItemModel_prot_decodeData(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.DecodeData"), streamPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(stream)
+	return bool(r)
+}
+
+// BeginInsertRows wraps the protected QAbstractItemModel::beginInsertRows for subclasses.
+func (b *QStandardItemModelBase) BeginInsertRows(parent *qtcore.QModelIndex, first int, last int) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginInsertRows")
+	C.qute_QStandardItemModel_prot_beginInsertRows(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.BeginInsertRows"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndInsertRows wraps the protected QAbstractItemModel::endInsertRows for subclasses.
+func (b *QStandardItemModelBase) EndInsertRows() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndInsertRows")
+	C.qute_QStandardItemModel_prot_endInsertRows(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginRemoveRows wraps the protected QAbstractItemModel::beginRemoveRows for subclasses.
+func (b *QStandardItemModelBase) BeginRemoveRows(parent *qtcore.QModelIndex, first int, last int) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginRemoveRows")
+	C.qute_QStandardItemModel_prot_beginRemoveRows(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.BeginRemoveRows"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndRemoveRows wraps the protected QAbstractItemModel::endRemoveRows for subclasses.
+func (b *QStandardItemModelBase) EndRemoveRows() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndRemoveRows")
+	C.qute_QStandardItemModel_prot_endRemoveRows(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginMoveRows wraps the protected QAbstractItemModel::beginMoveRows for subclasses.
+func (b *QStandardItemModelBase) BeginMoveRows(sourceParent *qtcore.QModelIndex, sourceFirst int, sourceLast int, destinationParent *qtcore.QModelIndex, destinationRow int) bool {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginMoveRows")
+	r := C.qute_QStandardItemModel_prot_beginMoveRows(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStandardItemModel.BeginMoveRows"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QStandardItemModel.BeginMoveRows"), C.int(destinationRow))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// EndMoveRows wraps the protected QAbstractItemModel::endMoveRows for subclasses.
+func (b *QStandardItemModelBase) EndMoveRows() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndMoveRows")
+	C.qute_QStandardItemModel_prot_endMoveRows(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginInsertColumns wraps the protected QAbstractItemModel::beginInsertColumns for subclasses.
+func (b *QStandardItemModelBase) BeginInsertColumns(parent *qtcore.QModelIndex, first int, last int) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginInsertColumns")
+	C.qute_QStandardItemModel_prot_beginInsertColumns(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.BeginInsertColumns"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndInsertColumns wraps the protected QAbstractItemModel::endInsertColumns for subclasses.
+func (b *QStandardItemModelBase) EndInsertColumns() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndInsertColumns")
+	C.qute_QStandardItemModel_prot_endInsertColumns(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginRemoveColumns wraps the protected QAbstractItemModel::beginRemoveColumns for subclasses.
+func (b *QStandardItemModelBase) BeginRemoveColumns(parent *qtcore.QModelIndex, first int, last int) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginRemoveColumns")
+	C.qute_QStandardItemModel_prot_beginRemoveColumns(self, rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.BeginRemoveColumns"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndRemoveColumns wraps the protected QAbstractItemModel::endRemoveColumns for subclasses.
+func (b *QStandardItemModelBase) EndRemoveColumns() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndRemoveColumns")
+	C.qute_QStandardItemModel_prot_endRemoveColumns(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginMoveColumns wraps the protected QAbstractItemModel::beginMoveColumns for subclasses.
+func (b *QStandardItemModelBase) BeginMoveColumns(sourceParent *qtcore.QModelIndex, sourceFirst int, sourceLast int, destinationParent *qtcore.QModelIndex, destinationColumn int) bool {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginMoveColumns")
+	r := C.qute_QStandardItemModel_prot_beginMoveColumns(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStandardItemModel.BeginMoveColumns"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QStandardItemModel.BeginMoveColumns"), C.int(destinationColumn))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// EndMoveColumns wraps the protected QAbstractItemModel::endMoveColumns for subclasses.
+func (b *QStandardItemModelBase) EndMoveColumns() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndMoveColumns")
+	C.qute_QStandardItemModel_prot_endMoveColumns(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginResetModel wraps the protected QAbstractItemModel::beginResetModel for subclasses.
+func (b *QStandardItemModelBase) BeginResetModel() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.BeginResetModel")
+	C.qute_QStandardItemModel_prot_beginResetModel(self)
+	runtime.KeepAlive(this)
+}
+
+// EndResetModel wraps the protected QAbstractItemModel::endResetModel for subclasses.
+func (b *QStandardItemModelBase) EndResetModel() {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.EndResetModel")
+	C.qute_QStandardItemModel_prot_endResetModel(self)
+	runtime.KeepAlive(this)
+}
+
+// ChangePersistentIndex wraps the protected QAbstractItemModel::changePersistentIndex for subclasses.
+func (b *QStandardItemModelBase) ChangePersistentIndex(from *qtcore.QModelIndex, to *qtcore.QModelIndex) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.ChangePersistentIndex")
+	C.qute_QStandardItemModel_prot_changePersistentIndex(self, rt.UseArg(unsafe.Pointer(from), "QStandardItemModel.ChangePersistentIndex"), rt.UseArg(unsafe.Pointer(to), "QStandardItemModel.ChangePersistentIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+}
+
+// ChangePersistentIndexList wraps the protected QAbstractItemModel::changePersistentIndexList for subclasses.
+func (b *QStandardItemModelBase) ChangePersistentIndexList(from []*qtcore.QModelIndex, to []*qtcore.QModelIndex) {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.ChangePersistentIndexList")
+	fromC := make([]unsafe.Pointer, len(from))
+	for i := range from {
+		fromC[i] = rt.UseArg(unsafe.Pointer(from[i]), "QStandardItemModel.ChangePersistentIndexList")
+	}
+	toC := make([]unsafe.Pointer, len(to))
+	for i := range to {
+		toC[i] = rt.UseArg(unsafe.Pointer(to[i]), "QStandardItemModel.ChangePersistentIndexList")
+	}
+	C.qute_QStandardItemModel_prot_changePersistentIndexList(self, unsafe.Pointer(unsafe.SliceData(fromC)), C.ptrdiff_t(len(from)), unsafe.Pointer(unsafe.SliceData(toC)), C.ptrdiff_t(len(to)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+}
+
+// PersistentIndexList wraps the protected QAbstractItemModel::persistentIndexList for subclasses.
+func (b *QStandardItemModelBase) PersistentIndexList() []*qtcore.QModelIndex {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.PersistentIndexList")
+	r := C.qute_QStandardItemModel_prot_persistentIndexList(self)
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
+		return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// NewQStandardItemModelWith constructs a QStandardItemModel whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStandardItemModelWith(v QStandardItemModelSubclass, parent qtcore.QObjectLike) *QStandardItemModel {
+	rt.CheckThread("NewQStandardItemModelWith")
+	base := v.quteQStandardItemModelBase()
+	if base.QStandardItemModel != nil {
+		panic("NewQStandardItemModelWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStandardItemModelWith")
+	}
+	p := C.qute_QStandardItemModel_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QStandardItemModel", mode)
+	base.QStandardItemModel = rt.View[QStandardItemModel](h, p)
+	id := h.SetSelf(v, qStandardItemModelVTable)
+	mask := rt.Mask(v, qStandardItemModelVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStandardItemModel_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStandardItemModel
+}

@@ -105,3 +105,264 @@ func (this *QSpacerItem) ChangeSizeFull(w int, hArg int, hData QSizePolicyPolicy
 	C.qute_QSpacerItem_changeSize_1(self, C.int(w), C.int(hArg), C.int64_t(hData), C.int64_t(vData))
 	runtime.KeepAlive(this)
 }
+
+var qSpacerItemVTable = []rt.Virtual{
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "MinimumSize", Has: func(v any) bool { _, ok := v.(interface{ MinimumSize() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "MaximumSize", Has: func(v any) bool { _, ok := v.(interface{ MaximumSize() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "ExpandingDirections", Has: func(v any) bool { _, ok := v.(interface{ ExpandingDirections() qtcore.Orientations }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRect) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			geometry := goQRect(*(*C.qute_rect)(a[0]))
+			v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(geometry)
+		}},
+	{Name: "Geometry", Has: func(v any) bool { _, ok := v.(interface{ Geometry() qtcore.QRect }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "SpacerItem", Has: func(v any) bool { _, ok := v.(interface{ SpacerItem() *QSpacerItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QSpacerItem.SpacerItem")
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Invalidate() }).Invalidate()
+		}},
+	{Name: "Widget", Has: func(v any) bool { _, ok := v.(interface{ Widget() *QWidget }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Widget() *QWidget }).Widget()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QSpacerItem.Widget")
+		}},
+	{Name: "Layout", Has: func(v any) bool { _, ok := v.(interface{ Layout() *QLayout }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Layout() *QLayout }).Layout()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QSpacerItem.Layout")
+		}},
+	{Name: "ControlTypes", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ControlTypes() QSizePolicyControlTypes
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface {
+				ControlTypes() QSizePolicyControlTypes
+			}).ControlTypes()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+}
+
+// QSpacerItemBase is embedded in Go types that subclass QSpacerItem:
+//
+//	type MySpacerItem struct{ qtwidgets.QSpacerItemBase }
+//
+// Define any of the virtual methods listed on QSpacerItemSuper to override them,
+// then construct the value with NewQSpacerItemWith. Call b.Super().X() for the
+// base implementation.
+type QSpacerItemBase struct{ *QSpacerItem }
+
+func (b *QSpacerItemBase) quteQSpacerItemBase() *QSpacerItemBase { return b }
+
+// QSpacerItemSubclass is implemented by every type that embeds QSpacerItemBase.
+type QSpacerItemSubclass interface{ quteQSpacerItemBase() *QSpacerItemBase }
+
+// Super returns the C++ base implementations of QSpacerItem's virtual methods.
+func (b *QSpacerItemBase) Super() *QSpacerItemSuper { return &QSpacerItemSuper{this: b.QSpacerItem} }
+
+// QSpacerItemSuper calls the C++ base implementations of QSpacerItem's virtuals.
+type QSpacerItemSuper struct{ this *QSpacerItem }
+
+// SizeHint calls QSpacerItem::sizeHint.
+func (s *QSpacerItemSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.SizeHint")
+	r := C.qute_QSpacerItem_super_0(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// MinimumSize calls QSpacerItem::minimumSize.
+func (s *QSpacerItemSuper) MinimumSize() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.MinimumSize")
+	r := C.qute_QSpacerItem_super_1(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// MaximumSize calls QSpacerItem::maximumSize.
+func (s *QSpacerItemSuper) MaximumSize() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.MaximumSize")
+	r := C.qute_QSpacerItem_super_2(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// ExpandingDirections calls QSpacerItem::expandingDirections.
+func (s *QSpacerItemSuper) ExpandingDirections() qtcore.Orientations {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.ExpandingDirections")
+	r := C.qute_QSpacerItem_super_3(self)
+	runtime.KeepAlive(s.this)
+	return qtcore.Orientations(r)
+}
+
+// IsEmpty calls QSpacerItem::isEmpty.
+func (s *QSpacerItemSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.IsEmpty")
+	r := C.qute_QSpacerItem_super_4(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// SetGeometry calls QSpacerItem::setGeometry.
+func (s *QSpacerItemSuper) SetGeometry(geometry qtcore.QRect) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.SetGeometry")
+	C.qute_QSpacerItem_super_5(self, cQRect(geometry))
+	runtime.KeepAlive(s.this)
+}
+
+// Geometry calls QSpacerItem::geometry.
+func (s *QSpacerItemSuper) Geometry() qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.Geometry")
+	r := C.qute_QSpacerItem_super_6(self)
+	runtime.KeepAlive(s.this)
+	return goQRect(r)
+}
+
+// SpacerItem calls QSpacerItem::spacerItem.
+func (s *QSpacerItemSuper) SpacerItem() *QSpacerItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.SpacerItem")
+	r := C.qute_QSpacerItem_super_7(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QSpacerItem](rt.WrapClass(r, "QSpacerItem", rt.KeepOrBorrow), r)
+}
+
+// HasHeightForWidth calls QLayoutItem::hasHeightForWidth.
+func (s *QSpacerItemSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.HasHeightForWidth")
+	r := C.qute_QSpacerItem_super_8(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// HeightForWidth calls QLayoutItem::heightForWidth.
+func (s *QSpacerItemSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.HeightForWidth")
+	r := C.qute_QSpacerItem_super_9(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// MinimumHeightForWidth calls QLayoutItem::minimumHeightForWidth.
+func (s *QSpacerItemSuper) MinimumHeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.MinimumHeightForWidth")
+	r := C.qute_QSpacerItem_super_10(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// Invalidate calls QLayoutItem::invalidate.
+func (s *QSpacerItemSuper) Invalidate() {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.Invalidate")
+	C.qute_QSpacerItem_super_11(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Widget calls QLayoutItem::widget.
+func (s *QSpacerItemSuper) Widget() *QWidget {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.Widget")
+	r := C.qute_QSpacerItem_super_12(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
+}
+
+// Layout calls QLayoutItem::layout.
+func (s *QSpacerItemSuper) Layout() *QLayout {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.Layout")
+	r := C.qute_QSpacerItem_super_13(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QLayout](rt.WrapClass(r, "QLayout", rt.KeepOrBorrow), r)
+}
+
+// ControlTypes calls QLayoutItem::controlTypes.
+func (s *QSpacerItemSuper) ControlTypes() QSizePolicyControlTypes {
+	self := rt.Use(unsafe.Pointer(s.this), "QSpacerItem.Super.ControlTypes")
+	r := C.qute_QSpacerItem_super_14(self)
+	runtime.KeepAlive(s.this)
+	return QSizePolicyControlTypes(r)
+}
+
+// NewQSpacerItemWith constructs a QSpacerItem whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSpacerItemWith(v QSpacerItemSubclass, w int, hArg int) *QSpacerItem {
+	rt.CheckThread("NewQSpacerItemWith")
+	base := v.quteQSpacerItemBase()
+	if base.QSpacerItem != nil {
+		panic("NewQSpacerItemWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QSpacerItem_new_shim(C.int(w), C.int(hArg))
+	h := rt.WrapClass(p, "QSpacerItem", rt.NewOwned)
+	base.QSpacerItem = rt.View[QSpacerItem](h, p)
+	id := h.SetSelf(v, qSpacerItemVTable)
+	mask := rt.Mask(v, qSpacerItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSpacerItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSpacerItem
+}

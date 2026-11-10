@@ -312,3 +312,193 @@ func (this *QPdfWriter) AddFileAttachmentFull(fileName string, data []byte, mime
 	C.qute_QPdfWriter_addFileAttachment_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), (*C.char)(unsafe.Pointer(unsafe.StringData(mimeType))), C.ptrdiff_t(len(mimeType)))
 	runtime.KeepAlive(this)
 }
+
+var qPdfWriterVTable = []rt.Virtual{
+	{Name: "NewPage", Has: func(v any) bool { _, ok := v.(interface{ NewPage() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ NewPage() bool }).NewPage()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QPdfWriterBase is embedded in Go types that subclass QPdfWriter:
+//
+//	type MyPdfWriter struct{ qtgui.QPdfWriterBase }
+//
+// Define any of the virtual methods listed on QPdfWriterSuper to override them,
+// then construct the value with NewQPdfWriterWith. Call b.Super().X() for the
+// base implementation.
+type QPdfWriterBase struct{ *QPdfWriter }
+
+func (b *QPdfWriterBase) quteQPdfWriterBase() *QPdfWriterBase { return b }
+
+// QPdfWriterSubclass is implemented by every type that embeds QPdfWriterBase.
+type QPdfWriterSubclass interface{ quteQPdfWriterBase() *QPdfWriterBase }
+
+// Super returns the C++ base implementations of QPdfWriter's virtual methods.
+func (b *QPdfWriterBase) Super() *QPdfWriterSuper { return &QPdfWriterSuper{this: b.QPdfWriter} }
+
+// QPdfWriterSuper calls the C++ base implementations of QPdfWriter's virtuals.
+type QPdfWriterSuper struct{ this *QPdfWriter }
+
+// NewPage calls QPdfWriter::newPage.
+func (s *QPdfWriterSuper) NewPage() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.NewPage")
+	r := C.qute_QPdfWriter_super_0(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Event calls QObject::event.
+func (s *QPdfWriterSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPdfWriter.Super.Event")
+	}
+	r := C.qute_QPdfWriter_super_1(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QPdfWriterSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QPdfWriter.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPdfWriter.Super.EventFilter")
+	}
+	r := C.qute_QPdfWriter_super_2(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QPdfWriterSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QPdfWriter.Super.TimerEvent")
+	}
+	C.qute_QPdfWriter_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QPdfWriterSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QPdfWriter.Super.ChildEvent")
+	}
+	C.qute_QPdfWriter_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QPdfWriterSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPdfWriter.Super.CustomEvent")
+	}
+	C.qute_QPdfWriter_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QPdfWriterBase) GetDecodedMetricF(metricA QPaintDevicePaintDeviceMetric, metricB QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QPdfWriter // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.GetDecodedMetricF")
+	r := C.qute_QPdfWriter_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQPdfWriterWith constructs a QPdfWriter whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPdfWriterWith(v QPdfWriterSubclass, filename string) *QPdfWriter {
+	rt.CheckThread("NewQPdfWriterWith")
+	base := v.quteQPdfWriterBase()
+	if base.QPdfWriter != nil {
+		panic("NewQPdfWriterWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QPdfWriter_new_shim((*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)))
+	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	base.QPdfWriter = rt.View[QPdfWriter](h, p)
+	id := h.SetSelf(v, qPdfWriterVTable)
+	mask := rt.Mask(v, qPdfWriterVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPdfWriter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPdfWriter
+}

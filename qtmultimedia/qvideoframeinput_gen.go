@@ -162,3 +162,181 @@ func (this *QVideoFrameInput) OnReadyToSendVideoFrame(f func()) qtcore.Connectio
 	})
 	return rt.NewConnection(C.qute_QVideoFrameInput_readyToSendVideoFrame(self, C.uintptr_t(id)))
 }
+
+var qVideoFrameInputVTable = []rt.Virtual{
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QVideoFrameInputBase is embedded in Go types that subclass QVideoFrameInput:
+//
+//	type MyVideoFrameInput struct{ qtmultimedia.QVideoFrameInputBase }
+//
+// Define any of the virtual methods listed on QVideoFrameInputSuper to override them,
+// then construct the value with NewQVideoFrameInputWith. Call b.Super().X() for the
+// base implementation.
+type QVideoFrameInputBase struct{ *QVideoFrameInput }
+
+func (b *QVideoFrameInputBase) quteQVideoFrameInputBase() *QVideoFrameInputBase { return b }
+
+// QVideoFrameInputSubclass is implemented by every type that embeds QVideoFrameInputBase.
+type QVideoFrameInputSubclass interface{ quteQVideoFrameInputBase() *QVideoFrameInputBase }
+
+// Super returns the C++ base implementations of QVideoFrameInput's virtual methods.
+func (b *QVideoFrameInputBase) Super() *QVideoFrameInputSuper {
+	return &QVideoFrameInputSuper{this: b.QVideoFrameInput}
+}
+
+// QVideoFrameInputSuper calls the C++ base implementations of QVideoFrameInput's virtuals.
+type QVideoFrameInputSuper struct{ this *QVideoFrameInput }
+
+// Event calls QObject::event.
+func (s *QVideoFrameInputSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoFrameInput.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QVideoFrameInput.Super.Event")
+	}
+	r := C.qute_QVideoFrameInput_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QVideoFrameInputSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoFrameInput.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QVideoFrameInput.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QVideoFrameInput.Super.EventFilter")
+	}
+	r := C.qute_QVideoFrameInput_super_1(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QVideoFrameInputSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoFrameInput.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QVideoFrameInput.Super.TimerEvent")
+	}
+	C.qute_QVideoFrameInput_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QVideoFrameInputSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoFrameInput.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QVideoFrameInput.Super.ChildEvent")
+	}
+	C.qute_QVideoFrameInput_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QVideoFrameInputSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoFrameInput.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QVideoFrameInput.Super.CustomEvent")
+	}
+	C.qute_QVideoFrameInput_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQVideoFrameInputWith constructs a QVideoFrameInput whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQVideoFrameInputWith(v QVideoFrameInputSubclass, parent qtcore.QObjectLike) *QVideoFrameInput {
+	rt.CheckThread("NewQVideoFrameInputWith")
+	base := v.quteQVideoFrameInputBase()
+	if base.QVideoFrameInput != nil {
+		panic("NewQVideoFrameInputWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQVideoFrameInputWith")
+	}
+	p := C.qute_QVideoFrameInput_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QVideoFrameInput", mode)
+	base.QVideoFrameInput = rt.View[QVideoFrameInput](h, p)
+	id := h.SetSelf(v, qVideoFrameInputVTable)
+	mask := rt.Mask(v, qVideoFrameInputVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QVideoFrameInput_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QVideoFrameInput
+}

@@ -16,18 +16,21 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 10091 |
-| of which Full forms (every argument, defaults included) | 627 |
-| Plain-object results that depend on their receiver | 88 |
-| Skipped on purpose (with reasons below) | 652 |
-| Operators, conversions and member templates not in the IR | 506 |
+| Bound constructors, methods and functions | 10473 |
+| of which Full forms (every argument, defaults included) | 628 |
+| Plain-object results that depend on their receiver | 89 |
+| Skipped on purpose (with reasons below) | 654 |
+| Classes Go can subclass | 189 |
+| Classes Go cannot subclass (with reasons below) | 29 |
+| Virtuals Go cannot override (with reasons below) | 20 |
+| Operators, conversions and member templates not in the IR | 520 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
-| Ownership rules without a generated test | 2 |
+| Ownership rules without a generated test | 3 |
 | Results whose death qute cannot see | 0 |
 
-2 item(s) open; see their sections below.
+3 item(s) open; see their sections below.
 
 ## Default ownership rules (0)
 
@@ -45,7 +48,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (652)
+## Skipped on purpose (654)
 
 
 ### QAbstractItemModel
@@ -55,6 +58,10 @@ These bind once the generator learns the type. Counts by type:
 ### QAbstractProxyModel
 
 - `QBindable<QAbstractItemModel *> QAbstractProxyModel::bindableSourceModel()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
+### QAbstractScrollArea
+
+- `void QAbstractScrollArea::setViewportMargins(int left, int top, int right, int bottom)`: on purpose: plain-number twin of the struct overload
 
 ### QApplication
 
@@ -163,6 +170,7 @@ These bind once the generator learns the type. Counts by type:
 ### QFileDialog
 
 - `void QFileDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+- `QFileDialog::QFileDialog(const QFileDialogArgs & args)`: on purpose: Qt's private internals
 
 ### QFileInfo
 
@@ -316,7 +324,7 @@ These bind once the generator learns the type. Counts by type:
 
 - `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own)
 - `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own)
-- `QImage::QImage(const char *const[] xpm)`: on purpose: a fixed-size C array; use the string or byte-array form
+- `QImage::QImage(const char *const[] xpm)`: on purpose: a C array; use the string or byte-array form
 - `QImage QImage::copy(int x, int y, int w, int h) const`: skipped by overlay (use Copy(rect))
 - `bool QImage::valid(const QPoint & pt) const`: skipped by overlay (use Valid(x, y))
 - `int QImage::pixelIndex(const QPoint & pt) const`: skipped by overlay (use PixelIndex(x, y))
@@ -598,9 +606,9 @@ These bind once the generator learns the type. Counts by type:
 - `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x4 & value)`: on purpose: a template class; use QMatrix4x4
 - `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix4x2 & value)`: on purpose: a template class; use QMatrix4x4
 - `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix4x3 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[2][2] value)`: on purpose: a fixed-size C array; use the string or byte-array form
-- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[3][3] value)`: on purpose: a fixed-size C array; use the string or byte-array form
-- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[4][4] value)`: on purpose: a fixed-size C array; use the string or byte-array form
+- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[2][2] value)`: on purpose: a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[3][3] value)`: on purpose: a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[4][4] value)`: on purpose: a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, GLfloat value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, GLint value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, GLuint value)`: skipped by overlay (use UniformLocation(name) with the location overload)
@@ -670,6 +678,7 @@ These bind once the generator learns the type. Counts by type:
 - `QPageLayout QPagedPaintDevice::pageLayout() const`: return: on purpose: printing page setup is not bound yet
 - `void QPagedPaintDevice::setPageRanges(const QPageRanges & ranges)`: on purpose: printing page setup is not bound yet
 - `QPageRanges QPagedPaintDevice::pageRanges() const`: return: on purpose: printing page setup is not bound yet
+- `QPagedPaintDevicePrivate * QPagedPaintDevice::dd()`: return: on purpose: private API
 
 ### QPainter
 
@@ -770,12 +779,16 @@ These bind once the generator learns the type. Counts by type:
 
 - `QPixmap::QPixmap(QPlatformPixmap * data)`: on purpose: private platform API
 - `QPixmap::QPixmap(const QSize &)`: skipped by overlay (use NewQPixmapWithW(w, h))
-- `QPixmap::QPixmap(const char *const[] xpm)`: on purpose: a fixed-size C array; use the string or byte-array form
+- `QPixmap::QPixmap(const char *const[] xpm)`: on purpose: a C array; use the string or byte-array form
 - `QPixmap QPixmap::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
 - `QPixmap QPixmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QPixmap QPixmap::copy(int x, int y, int width, int height) const`: skipped by overlay (use Copy(rect))
 - `void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion * exposed = …)`: skipped by overlay (out parameter)
 - `bool QPixmap::loadFromData(const QByteArray & data, const char * format = …, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QPlainTextEdit
+
+- `QAbstractTextDocumentLayout::PaintContext QPlainTextEdit::getPaintContext() const`: skipped by overlay (on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound)
 
 ### QProgressDialog
 
@@ -875,8 +888,6 @@ These bind once the generator learns the type. Counts by type:
 - `QTextBlock::QTextBlock(QTextDocumentPrivate * priv, int b)`: on purpose: private API
 - `QTextLayout * QTextBlock::layout() const`: return: on purpose: low-level text layout; use QTextDocument and QTextCursor
 - `QList<QTextLayout::FormatRange> QTextBlock::textFormats() const`: return: on purpose: low-level text layout; use QTextDocument and QTextCursor
-- `QTextBlockUserData * QTextBlock::userData() const`: return: on purpose: per-block user data needs C++ subclassing
-- `void QTextBlock::setUserData(QTextBlockUserData * data)`: on purpose: per-block user data needs C++ subclassing
 - `iterator QTextBlock::begin() const`: on purpose: iterator; use the method that returns a list
 - `iterator QTextBlock::end() const`: on purpose: iterator; use the method that returns a list
 
@@ -953,7 +964,7 @@ These bind once the generator learns the type. Counts by type:
 
 - `QUuid::QUuid(Id128Bytes id128, QSysInfo::Endian order = …)`: on purpose: a C union; use the string and byte-array forms
 - `Id128Bytes QUuid::toBytes(QSysInfo::Endian order = …) const`: return: on purpose: a C union; use the string and byte-array forms
-- `uchar[8] QUuid::data4() const`: field: on purpose: a fixed-size C array; use the string or byte-array form
+- `uchar[8] QUuid::data4() const`: field: on purpose: a C array; use the string or byte-array form
 
 ### QVBoxLayout
 
@@ -1102,14 +1113,114 @@ These bind once the generator learns the type. Counts by type:
 - `void QWindowCapture::setMaximumFrameRate(std::optional<qreal> frameRate)`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 - `std::optional<qreal> QWindowCapture::maximumFrameRate() const`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 
-## Not in the IR: operators, conversions and member templates (506)
+## Virtuals Go cannot override (20)
+
+
+### QAbstractItemModel
+
+- `void QAbstractItemModel::multiData(const QModelIndex & index, QModelRoleDataSpan roleDataSpan) const`: parameter roleDataSpan: on purpose: a batching optimisation of data(); use Data
+
+### QBuffer
+
+- `qint64 QBuffer::readData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
+
+### QCommonStyle
+
+- `void QCommonStyle::polish(QPalette &)`: parameter palette: an override cannot fill in QPalette &
+
+### QFileDevice
+
+- `qint64 QFileDevice::readData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
+- `qint64 QFileDevice::readLineData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
+
+### QGraphicsScene
+
+- `void QGraphicsScene::drawItems(QPainter * painter, int numItems, QGraphicsItem *[] items, const QStyleOptionGraphicsItem[] options, QWidget * widget = …)`: parameter items: on purpose: a C array of objects; reimplement the per-item method instead (QGraphicsItem.Paint)
+
+### QGraphicsView
+
+- `void QGraphicsView::drawItems(QPainter * painter, int numItems, QGraphicsItem *[] items, const QStyleOptionGraphicsItem[] options)`: parameter items: on purpose: a C array of objects; reimplement the per-item method instead (QGraphicsItem.Paint)
+
+### QIODevice
+
+- `qint64 QIODevice::readLineData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
+- `qint64 QIODevice::readData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
+
+### QPagedPaintDevice
+
+- `bool QPagedPaintDevice::setPageLayout(const QPageLayout & pageLayout)`: parameter pageLayout: on purpose: printing page setup is not bound yet
+- `bool QPagedPaintDevice::setPageSize(const QPageSize & pageSize)`: parameter pageSize: on purpose: printing page setup is not bound yet
+- `bool QPagedPaintDevice::setPageOrientation(QPageLayout::Orientation orientation)`: parameter orientation: on purpose: printing page setup is not bound yet
+- `bool QPagedPaintDevice::setPageMargins(const QMarginsF & margins, QPageLayout::Unit units = …)`: parameter units: on purpose: printing page setup is not bound yet
+- `void QPagedPaintDevice::setPageRanges(const QPageRanges & ranges)`: parameter ranges: on purpose: printing page setup is not bound yet
+
+### QProxyStyle
+
+- `void QProxyStyle::polish(QPalette & pal)`: parameter pal: an override cannot fill in QPalette &
+
+### QStandardItem
+
+- `void QStandardItem::multiData(QModelRoleDataSpan roleDataSpan) const`: parameter roleDataSpan: on purpose: a batching optimisation of data(); use Data
+
+### QStandardItemModel
+
+- `void QStandardItemModel::multiData(const QModelIndex & index, QModelRoleDataSpan roleDataSpan) const`: parameter roleDataSpan: on purpose: a batching optimisation of data(); use Data
+
+### QStyle
+
+- `void QStyle::polish(QPalette & palette)`: parameter palette: an override cannot fill in QPalette &
+
+### QSurface
+
+- `QPlatformSurface * QSurface::surfaceHandle() const`: result: on purpose: private platform API
+
+### QWindow
+
+- `QAccessibleInterface * QWindow::accessibleRoot() const`: result: on purpose: the accessibility API is not bound
+
+## Classes Go cannot subclass (29)
+
+Every other bound class with virtuals can be subclassed from Go: embed its
+Base and construct with New<Class>With. These cannot:
+
+- `QApplication`: only Qt creates these objects (no-construct)
+- `QClipboard`: only Qt creates these objects (no-construct)
+- `QCoreApplication`: only Qt creates these objects (no-construct)
+- `QGuiApplication`: only Qt creates these objects (no-construct)
+- `QIODevice`: Go cannot implement its pure virtual QIODevice::readData
+- `QInputMethod`: only Qt creates these objects (no-construct)
+- `QOpenGLContextGroup`: only Qt creates these objects (no-construct)
+- `QPagedPaintDevice`: Go cannot implement its pure virtual QPaintDevice::paintEngine
+- `QPaintDevice`: Go cannot implement its pure virtual QPaintDevice::paintEngine
+- `QPaintDeviceWindow`: it has no public constructor
+- `QScreen`: only Qt creates these objects (no-construct)
+- `QSessionManager`: only Qt creates these objects (no-construct)
+- `QStyleHints`: only Qt creates these objects (no-construct)
+- `QSurface`: Go cannot implement its pure virtual QSurface::surfaceHandle
+- `QTextBlockGroup`: its destructor is not public
+- `QTextList`: only Qt creates these objects (no-construct)
+- `QTextObject`: its destructor is not public
+- `QTextTable`: only Qt creates these objects (no-construct)
+- `QWebEngineClientHints`: only Qt creates these objects (no-construct)
+- `QWebEngineContextMenuRequest`: only Qt creates these objects (no-construct)
+- `QWebEngineCookieStore`: only Qt creates these objects (no-construct)
+- `QWebEngineDownloadRequest`: only Qt creates these objects (no-construct)
+- `QWebEngineExtensionManager`: only Qt creates these objects (no-construct)
+- `QWebEngineHistory`: only Qt creates these objects (no-construct)
+- `QWebEngineHistoryModel`: only Qt creates these objects (no-construct)
+- `QWebEngineNavigationRequest`: only Qt creates these objects (no-construct)
+- `QWebEngineNewWindowRequest`: only Qt creates these objects (no-construct)
+- `QWebEngineUrlRequestJob`: only Qt creates these objects (no-construct)
+- `QWebEngineWebAuthUxRequest`: only Qt creates these objects (no-construct)
+
+## Not in the IR: operators, conversions and member templates (520)
 
 tools/irgen leaves these out before the IR is written, so the generator never
 sees them and they are not counted as bound or skipped above. Go has no
 operator overloading: comparisons and arithmetic are done on the Go structs or
 through named methods. Conversions to QVariant are covered by
 `qtgui.NewQVariantOf`, and `QVariant::value<T>()` by `QVariant.Value` and
-`qtgui.VariantValue`. Counts: 371 operators, 26 conversion operators, 109 member templates.
+`qtgui.VariantValue`. Counts: 385 operators, 26 conversion operators, 109 member templates.
 
 
 ### QAction
@@ -1454,13 +1565,69 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QStyleOptionButton &)`
 
+### QStyleOptionComboBox
+
+- operators: `operator=(const QStyleOptionComboBox &)`
+
 ### QStyleOptionComplex
 
 - operators: `operator=(const QStyleOptionComplex &)`
 
+### QStyleOptionDockWidget
+
+- operators: `operator=(const QStyleOptionDockWidget &)`
+
+### QStyleOptionFrame
+
+- operators: `operator=(const QStyleOptionFrame &)`
+
 ### QStyleOptionGraphicsItem
 
 - operators: `operator=(const QStyleOptionGraphicsItem &)`
+
+### QStyleOptionGroupBox
+
+- operators: `operator=(const QStyleOptionGroupBox &)`
+
+### QStyleOptionHeader
+
+- operators: `operator=(const QStyleOptionHeader &)`
+
+### QStyleOptionMenuItem
+
+- operators: `operator=(const QStyleOptionMenuItem &)`
+
+### QStyleOptionProgressBar
+
+- operators: `operator=(const QStyleOptionProgressBar &)`
+
+### QStyleOptionRubberBand
+
+- operators: `operator=(const QStyleOptionRubberBand &)`
+
+### QStyleOptionSlider
+
+- operators: `operator=(const QStyleOptionSlider &)`
+
+### QStyleOptionSpinBox
+
+- operators: `operator=(const QStyleOptionSpinBox &)`
+
+### QStyleOptionTab
+
+- operators: `operator=(const QStyleOptionTab &)`
+
+### QStyleOptionTabWidgetFrame
+
+- operators: `operator=(const QStyleOptionTabWidgetFrame &)`
+
+### QStyleOptionToolBar
+
+- operators: `operator=(const QStyleOptionToolBar &)`
+
+### QStyleOptionToolButton
+
+- operators: `operator=(const QStyleOptionToolButton &)`
 
 ### QStyleOptionViewItem
 
@@ -1633,10 +1800,11 @@ through named methods. Conversions to QVariant are covered by
 
 - templates: `nativeInterface()`
 
-## Ownership rules without a generated test (2)
+## Ownership rules without a generated test (3)
 
 Add a `test:` snippet to the overlay entry to cover these.
 
 - `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
+- `void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData * data)`: skipped in overlay: only valid inside highlightBlock, which a snippet cannot override; covered by subclass_test.go
 - `void QWebEngineUrlRequestJob::reply(const QByteArray & contentType, QIODevice * device)`: skipped in overlay: a job exists only while Qt loads a URL of a scheme registered before the application starts; covered by qtwebenginewidgets/lifetime_test.go
 

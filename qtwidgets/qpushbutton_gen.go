@@ -472,6 +472,24 @@ var qPushButtonVTable = []rt.Virtual{
 				ContextMenuEvent(*qtgui.QContextMenuEvent)
 			}).ContextMenuEvent(event)
 		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -525,6 +543,22 @@ var qPushButtonVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -889,6 +923,30 @@ func (s *QPushButtonSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 	runtime.KeepAlive(event)
 }
 
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QPushButtonSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QPushButton.Super.TabletEvent")
+	}
+	C.qute_QPushButton_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QPushButtonSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QPushButton.Super.ActionEvent")
+	}
+	C.qute_QPushButton_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
 // DragEnterEvent calls QWidget::dragEnterEvent.
 func (s *QPushButtonSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.DragEnterEvent")
@@ -896,7 +954,7 @@ func (s *QPushButtonSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QPushButton.Super.DragEnterEvent")
 	}
-	C.qute_QPushButton_super_28(self, eventPtr)
+	C.qute_QPushButton_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -908,7 +966,7 @@ func (s *QPushButtonSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QPushButton.Super.DragMoveEvent")
 	}
-	C.qute_QPushButton_super_29(self, eventPtr)
+	C.qute_QPushButton_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -920,7 +978,7 @@ func (s *QPushButtonSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QPushButton.Super.DragLeaveEvent")
 	}
-	C.qute_QPushButton_super_30(self, eventPtr)
+	C.qute_QPushButton_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -932,7 +990,7 @@ func (s *QPushButtonSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QPushButton.Super.DropEvent")
 	}
-	C.qute_QPushButton_super_31(self, eventPtr)
+	C.qute_QPushButton_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -944,7 +1002,7 @@ func (s *QPushButtonSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QPushButton.Super.ShowEvent")
 	}
-	C.qute_QPushButton_super_32(self, eventPtr)
+	C.qute_QPushButton_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -956,15 +1014,27 @@ func (s *QPushButtonSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QPushButton.Super.HideEvent")
 	}
-	C.qute_QPushButton_super_33(self, eventPtr)
+	C.qute_QPushButton_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QPushButtonSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QPushButton.Super.InputMethodEvent")
+	}
+	C.qute_QPushButton_super_36(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QPushButtonSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPushButton.Super.FocusNextPrevChild")
-	r := C.qute_QPushButton_super_34(self, C.bool(next))
+	r := C.qute_QPushButton_super_37(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -980,7 +1050,7 @@ func (s *QPushButtonSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QE
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPushButton.Super.EventFilter")
 	}
-	r := C.qute_QPushButton_super_35(self, watchedPtr, eventPtr)
+	r := C.qute_QPushButton_super_38(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -994,7 +1064,7 @@ func (s *QPushButtonSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QPushButton.Super.ChildEvent")
 	}
-	C.qute_QPushButton_super_36(self, eventPtr)
+	C.qute_QPushButton_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1006,53 +1076,59 @@ func (s *QPushButtonSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPushButton.Super.CustomEvent")
 	}
-	C.qute_QPushButton_super_37(self, eventPtr)
+	C.qute_QPushButton_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QPushButtonBase) UpdateMicroFocus() {
-	self := rt.Use(unsafe.Pointer(b.QPushButton), "QPushButton.UpdateMicroFocus")
+	this := b.QPushButton // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPushButton.UpdateMicroFocus")
 	C.qute_QPushButton_prot_updateMicroFocus(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QPushButtonBase) Create() {
-	self := rt.Use(unsafe.Pointer(b.QPushButton), "QPushButton.Create")
+	this := b.QPushButton // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPushButton.Create")
 	C.qute_QPushButton_prot_create(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QPushButtonBase) Destroy() {
-	self := rt.Use(unsafe.Pointer(b.QPushButton), "QPushButton.Destroy")
+	this := b.QPushButton // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPushButton.Destroy")
 	C.qute_QPushButton_prot_destroy(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QPushButtonBase) FocusNextChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QPushButton), "QPushButton.FocusNextChild")
+	this := b.QPushButton // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPushButton.FocusNextChild")
 	r := C.qute_QPushButton_prot_focusNextChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
 func (b *QPushButtonBase) FocusPreviousChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QPushButton), "QPushButton.FocusPreviousChild")
+	this := b.QPushButton // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPushButton.FocusPreviousChild")
 	r := C.qute_QPushButton_prot_focusPreviousChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QPushButtonBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
-	self := rt.Use(unsafe.Pointer(b.QPushButton), "QPushButton.GetDecodedMetricF")
+	this := b.QPushButton // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPushButton.GetDecodedMetricF")
 	r := C.qute_QPushButton_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

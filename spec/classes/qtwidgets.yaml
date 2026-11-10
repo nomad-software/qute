@@ -2,11 +2,11 @@ module: QtWidgets
 package: qtwidgets
 classes:
   QApplication: { no-construct: true }
-  QWidget: { subclass: true }
-  QFrame: { subclass: true }
-  QLabel: { subclass: true }
+  QWidget: {}
+  QFrame: {}
+  QLabel: {}
   QAbstractButton: {}
-  QPushButton: { subclass: true }
+  QPushButton: {}
   QCheckBox: {}
   QRadioButton: {}
   QToolButton: {}
@@ -16,7 +16,7 @@ classes:
   QTextEdit: {}
   QPlainTextEdit: {}
   QTextBrowser: {}
-  QAbstractScrollArea: { subclass: true }
+  QAbstractScrollArea: {}
   QScrollArea: {}
   QAbstractSlider: {}
   QSlider: {}
@@ -37,13 +37,13 @@ classes:
   QStackedWidget: {}
   QSplitter: {}
   QToolBox: {}
-  QMainWindow: { subclass: true }
+  QMainWindow: {}
   QMenuBar: {}
   QMenu: {}
   QToolBar: {}
   QStatusBar: {}
   QDockWidget: {}
-  QDialog: { subclass: true }
+  QDialog: {}
   QMessageBox: {}
   QFileDialog: {}
   QInputDialog: {}
@@ -54,10 +54,10 @@ classes:
   # Qt makes most layout items itself and frees them with their layout, which
   # qute cannot watch: an item handed out by a layout depends on it (see
   # WrapClassFrom), and on its widget, whose deletion also frees the item.
-  # Items built in Go report their death themselves (notify-dtor).
-  QLayoutItem: { no-construct: true, depends-on: widget, parented-delete: "take it out of its layout with the layout's TakeAt or RemoveItem first, which makes it Owned" }
-  QSpacerItem: { notify-dtor: true }
-  QWidgetItem: { notify-dtor: true, depends-on: widget }
+  # Items built in Go report their death themselves (the subclass shim).
+  QLayoutItem: { depends-on: widget, parented-delete: "take it out of its layout with the layout's TakeAt or RemoveItem first, which makes it Owned" }
+  QSpacerItem: {}
+  QWidgetItem: { depends-on: widget }
   QLayout: {}
   QBoxLayout: {}
   QHBoxLayout: {}
@@ -72,18 +72,23 @@ classes:
   QTableView: {}
   QHeaderView: {}
   QListWidget: {}
-  QListWidgetItem: { notify-dtor: true }
+  QListWidgetItem: {}
   QTreeWidget: {}
-  QTreeWidgetItem: { notify-dtor: true }
+  QTreeWidgetItem: {}
   QTableWidget: {}
-  QTableWidgetItem: { notify-dtor: true }
+  QTableWidgetItem: {}
   QAbstractItemDelegate: {}
   QStyledItemDelegate: {}
   QCompleter: {}
   QCalendarWidget: {}
   QLCDNumber: {}
   QKeySequenceEdit: {}
-  QStyle: { no-construct: true }
+  QStyle: {}
+  QCommonStyle: {}
+  QProxyStyle: {}
+  QStyleHintReturn: { kind: value }
+  QStyleHintReturnMask: { kind: value }
+  QStyleHintReturnVariant: { kind: value }
   QStyleFactory: { no-construct: true }
   QSystemTrayIcon: {}
   QWidgetAction: {}
@@ -93,40 +98,65 @@ classes:
   QMdiSubWindow: {}
   QGraphicsScene: {}
   QGraphicsView: {}
-  QGraphicsItem: { notify-dtor: true, no-construct: true }
-  QAbstractGraphicsShapeItem: { no-construct: true }
-  QGraphicsRectItem: { notify-dtor: true }
-  QGraphicsEllipseItem: { notify-dtor: true }
-  QGraphicsSimpleTextItem: { notify-dtor: true }
-  QGraphicsPixmapItem: { notify-dtor: true }
-  QGraphicsObject: { no-construct: true }
+  QGraphicsItem: {}
+  QAbstractGraphicsShapeItem: {}
+  QGraphicsRectItem: {}
+  QGraphicsEllipseItem: {}
+  QGraphicsSimpleTextItem: {}
+  QGraphicsPixmapItem: {}
+  QGraphicsObject: {}
   QGraphicsTextItem: {}
   QToolTip: { no-construct: true }
   "QTextEdit::ExtraSelection": { kind: value }
   "QFormLayout::TakeRowResult": { kind: value }
-  QGraphicsLayoutItem: { no-construct: true }
+  QGraphicsLayoutItem: {}
   QGraphicsWidget: {}
   QGraphicsProxyWidget: {}
-  QGraphicsEffect: { no-construct: true }
+  QGraphicsEffect: {}
   QGraphicsBlurEffect: {}
   QGraphicsColorizeEffect: {}
   QGraphicsDropShadowEffect: {}
   QGraphicsOpacityEffect: {}
-  QGraphicsTransform: { no-construct: true }
+  QGraphicsTransform: {}
   QGraphicsRotation: {}
   QGraphicsScale: {}
-  QGraphicsItemGroup: { notify-dtor: true }
-  QGraphicsLineItem: { notify-dtor: true }
-  QGraphicsPathItem: { notify-dtor: true }
-  QGraphicsPolygonItem: { notify-dtor: true }
+  QGraphicsItemGroup: {}
+  QGraphicsLineItem: {}
+  QGraphicsPathItem: {}
+  QGraphicsPolygonItem: {}
   QStyleOption: { kind: value }
   QStyleOptionViewItem: { kind: value }
   QStyleOptionComplex: { kind: value }
   QStyleOptionButton: { kind: value }
   QStyleOptionGraphicsItem: { kind: value }
+  QStyleOptionFrame: { kind: value }
+  QStyleOptionTabWidgetFrame: { kind: value }
+  QStyleOptionTab: { kind: value }
+  QStyleOptionToolBar: { kind: value }
+  QStyleOptionProgressBar: { kind: value }
+  QStyleOptionMenuItem: { kind: value }
+  QStyleOptionDockWidget: { kind: value }
+  QStyleOptionRubberBand: { kind: value }
+  QStyleOptionHeader: { kind: value }
+  QStyleOptionSlider: { kind: value }
+  QStyleOptionSpinBox: { kind: value }
+  QStyleOptionToolButton: { kind: value }
+  QStyleOptionComboBox: { kind: value }
+  QStyleOptionGroupBox: { kind: value }
+  # graphics-scene events: what a QGraphicsItem or QGraphicsScene subclass handles
+  QGraphicsSceneEvent: { kind: event }
+  QGraphicsSceneMouseEvent: { kind: event }
+  QGraphicsSceneWheelEvent: { kind: event }
+  QGraphicsSceneContextMenuEvent: { kind: event }
+  QGraphicsSceneHoverEvent: { kind: event }
+  QGraphicsSceneHelpEvent: { kind: event }
+  QGraphicsSceneDragDropEvent: { kind: event }
+  QGraphicsSceneResizeEvent: { kind: event }
+  QGraphicsSceneMoveEvent: { kind: event }
+  QSplitterHandle: {}
   QItemEditorFactory: {}
   QTableWidgetSelectionRange: { kind: value }
   QFileIconProvider: {}
-  QGraphicsLayout: { no-construct: true }
-  QGraphicsLinearLayout: { notify-dtor: true }
-  QGraphicsGridLayout: { notify-dtor: true }
+  QGraphicsLayout: {}
+  QGraphicsLinearLayout: {}
+  QGraphicsGridLayout: {}

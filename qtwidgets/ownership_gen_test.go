@@ -274,6 +274,26 @@ func TestOwnership_NewQAbstractSpinBox(t *testing.T) {
 	})
 }
 
+// void QAbstractSpinBox::setLineEdit(QLineEdit * edit)
+func TestOwnership_QAbstractSpinBox_SetLineEdit(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := func() *struct{ qtwidgets.QAbstractSpinBoxBase } {
+			v := &struct{ qtwidgets.QAbstractSpinBoxBase }{}
+			qtwidgets.NewQAbstractSpinBoxWith(v, nil)
+			return v
+		}()
+		a0 := qtwidgets.NewQLineEdit(nil)
+		recv.SetLineEdit(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("edit: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
 // QBoxLayout::QBoxLayout(Direction, QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQBoxLayoutWithDirection(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -2125,6 +2145,27 @@ func TestOwnership_QGraphicsItemGroup_AddToGroup(t *testing.T) {
 	})
 }
 
+// void QGraphicsLayoutItem::setGraphicsItem(QGraphicsItem * item): keep rules
+func TestKeep_QGraphicsLayoutItem_SetGraphicsItem(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := func() *struct {
+			qtwidgets.QGraphicsLayoutItemBase
+		} {
+			v := &struct {
+				qtwidgets.QGraphicsLayoutItemBase
+			}{}
+			qtwidgets.NewQGraphicsLayoutItemWith(v, nil)
+			return v
+		}()
+		a0 := qtwidgets.NewQGraphicsItemGroup(nil)
+		recv.SetGraphicsItem(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv.QGraphicsLayoutItem), unsafe.Pointer(a0)) {
+			t.Error("item: not kept by the receiver")
+		}
+		recv.QGraphicsLayoutItem.Delete()
+	})
+}
+
 // QGraphicsLineItem::QGraphicsLineItem(QGraphicsItem * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQGraphicsLineItem(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -2471,6 +2512,33 @@ func TestOwnership_QGraphicsProxyWidget_CreateProxyForChildWidget(t *testing.T) 
 		sc.Delete()
 		if res.Alive() {
 			t.Error("child proxy alive after the scene was deleted")
+		}
+	})
+}
+
+// QGraphicsProxyWidget * QGraphicsProxyWidget::newProxyWidget(const QWidget *)
+func TestOwnership_QGraphicsProxyWidget_NewProxyWidget(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := func() *struct {
+			qtwidgets.QGraphicsProxyWidgetBase
+		} {
+			v := &struct {
+				qtwidgets.QGraphicsProxyWidgetBase
+			}{}
+			qtwidgets.NewQGraphicsProxyWidgetWith(v, nil)
+			return v
+		}()
+		res := recv.NewProxyWidget(nil)
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		recv.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
 		}
 	})
 }
@@ -3682,6 +3750,78 @@ func TestOwnership_QLayout_ReplaceWidget(t *testing.T) {
 		w.Delete()
 		if b.Alive() {
 			t.Error("new widget alive after its parent was deleted")
+		}
+	})
+}
+
+// void QLayout::addChildLayout(QLayout * l)
+func TestOwnership_QLayout_AddChildLayout(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := func() *struct{ qtwidgets.QLayoutBase } {
+			v := &struct{ qtwidgets.QLayoutBase }{}
+			qtwidgets.NewQLayoutWith(v, root)
+			return v
+		}()
+		a0 := qtwidgets.NewQBoxLayoutWithDirection(qtwidgets.QBoxLayoutDirection(0), nil)
+		recv.AddChildLayout(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("l: %v, want Parented", got)
+		}
+		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// void QLayout::addChildWidget(QWidget * w)
+func TestOwnership_QLayout_AddChildWidget(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := func() *struct{ qtwidgets.QLayoutBase } {
+			v := &struct{ qtwidgets.QLayoutBase }{}
+			qtwidgets.NewQLayoutWith(v, root)
+			return v
+		}()
+		a0 := qtwidgets.NewQWidget(nil)
+		recv.AddChildWidget(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("w: %v, want Parented", got)
+		}
+		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// bool QLayout::adoptLayout(QLayout * layout)
+func TestOwnership_QLayout_AdoptLayout(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := func() *struct{ qtwidgets.QLayoutBase } {
+			v := &struct{ qtwidgets.QLayoutBase }{}
+			qtwidgets.NewQLayoutWith(v, root)
+			return v
+		}()
+		a0 := qtwidgets.NewQBoxLayoutWithDirection(qtwidgets.QBoxLayoutDirection(0), nil)
+		_ = recv.AdoptLayout(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("layout: %v, want Parented", got)
+		}
+		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
 		}
 	})
 }
@@ -5099,6 +5239,22 @@ func TestOwnership_QProgressDialog_SetBar(t *testing.T) {
 	})
 }
 
+// void QProxyStyle::setBaseStyle(QStyle * style)
+func TestOwnership_QProxyStyle_SetBaseStyle(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtwidgets.NewQProxyStyleWithKey("x")
+		a0 := qtwidgets.NewQCommonStyle()
+		recv.SetBaseStyle(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("style: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
 // QPushButton::QPushButton(QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQPushButton(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -5217,6 +5373,29 @@ func TestOwnership_NewQRadioButtonWithText(t *testing.T) {
 			t.Error("still alive after its parent was deleted")
 		}
 		y := qtwidgets.NewQRadioButtonWithText("x", nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QRubberBand::QRubberBand(Shape, QWidget * = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQRubberBandWithShape(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		x := qtwidgets.NewQRubberBandWithShape(qtwidgets.QRubberBandShape(0), root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtwidgets.NewQRubberBandWithShape(qtwidgets.QRubberBandShape(0), nil)
 		if got := y.Ownership(); got != qtcore.Owned {
 			t.Errorf("without parent: %v, want Owned", got)
 		}
@@ -5537,6 +5716,29 @@ func TestOwnership_QSplitter_ReplaceWidget(t *testing.T) {
 			t.Errorf("after delete: new alive=%v old alive=%v", repl.Alive(), old.Alive())
 		}
 		old.Delete()
+	})
+}
+
+// QSplitterHandle::QSplitterHandle(Qt::Orientation o, QSplitter * parent): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSplitterHandleWithOrientation(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQSplitter(nil)
+		x := qtwidgets.NewQSplitterHandleWithOrientation(qtcore.Orientations(1), root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtwidgets.NewQSplitterHandleWithOrientation(qtcore.Orientations(1), nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
 	})
 }
 
@@ -5978,6 +6180,26 @@ func TestOwnership_QTabWidget_SetCornerWidget(t *testing.T) {
 		recv.SetCornerWidget(a0)
 		if got := a0.Ownership(); got != qtcore.Parented {
 			t.Errorf("w: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
+// void QTabWidget::setTabBar(QTabBar *)
+func TestOwnership_QTabWidget_SetTabBar(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := func() *struct{ qtwidgets.QTabWidgetBase } {
+			v := &struct{ qtwidgets.QTabWidgetBase }{}
+			qtwidgets.NewQTabWidgetWith(v, nil)
+			return v
+		}()
+		a0 := qtwidgets.NewQTabBar(nil)
+		recv.SetTabBar(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("tabBar: %v, want Parented", got)
 		}
 		recv.Delete()
 		if a0.Alive() {

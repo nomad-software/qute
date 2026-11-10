@@ -64,6 +64,17 @@ func (this *QTreeWidgetItem) Delete() {
 	this.quteRef.H.Delete("QTreeWidgetItem.Delete")
 }
 
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QTreeWidgetItem) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
+}
+
 // Keep pins the object so GC never frees it, until Unkeep.
 func (this *QTreeWidgetItem) Keep() {
 	if this != nil {
@@ -1200,4 +1211,164 @@ func (this *QTreeWidgetItem) SortChildren(column int, order qtcore.SortOrder) {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.SortChildren")
 	C.qute_QTreeWidgetItem_sortChildren(self, C.int(column), C.int64_t(order))
 	runtime.KeepAlive(this)
+}
+
+var qTreeWidgetItemVTable = []rt.Virtual{
+	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QTreeWidgetItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Clone() *QTreeWidgetItem }).Clone()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidgetItem.Clone")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "Data", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Data(int, int) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			column := int(*(*C.int)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			r := v.(interface {
+				Data(int, int) *qtcore.QVariant
+			}).Data(column, role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidgetItem.Data")
+		}},
+	{Name: "SetData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetData(int, int, *qtcore.QVariant)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			column := int(*(*C.int)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			v.(interface {
+				SetData(int, int, *qtcore.QVariant)
+			}).SetData(column, role, value)
+		}},
+	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inP := *(*unsafe.Pointer)(a[0])
+			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
+			defer inH.Expire()
+			in := rt.View[qtcore.QDataStream](inH, inP)
+			v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+		}},
+	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			outP := *(*unsafe.Pointer)(a[0])
+			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
+			defer outH.Expire()
+			out := rt.View[qtcore.QDataStream](outH, outP)
+			v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+		}},
+}
+
+// QTreeWidgetItemBase is embedded in Go types that subclass QTreeWidgetItem:
+//
+//	type MyTreeWidgetItem struct{ qtwidgets.QTreeWidgetItemBase }
+//
+// Define any of the virtual methods listed on QTreeWidgetItemSuper to override them,
+// then construct the value with NewQTreeWidgetItemWith. Call b.Super().X() for the
+// base implementation.
+type QTreeWidgetItemBase struct{ *QTreeWidgetItem }
+
+func (b *QTreeWidgetItemBase) quteQTreeWidgetItemBase() *QTreeWidgetItemBase { return b }
+
+// QTreeWidgetItemSubclass is implemented by every type that embeds QTreeWidgetItemBase.
+type QTreeWidgetItemSubclass interface{ quteQTreeWidgetItemBase() *QTreeWidgetItemBase }
+
+// Super returns the C++ base implementations of QTreeWidgetItem's virtual methods.
+func (b *QTreeWidgetItemBase) Super() *QTreeWidgetItemSuper {
+	return &QTreeWidgetItemSuper{this: b.QTreeWidgetItem}
+}
+
+// QTreeWidgetItemSuper calls the C++ base implementations of QTreeWidgetItem's virtuals.
+type QTreeWidgetItemSuper struct{ this *QTreeWidgetItem }
+
+// Clone calls QTreeWidgetItem::clone.
+func (s *QTreeWidgetItemSuper) Clone() *QTreeWidgetItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidgetItem.Super.Clone")
+	r := C.qute_QTreeWidgetItem_super_0(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QTreeWidgetItem](rt.WrapClass(r, "QTreeWidgetItem", rt.KeepOrBorrow), r)
+}
+
+// Data calls QTreeWidgetItem::data.
+func (s *QTreeWidgetItemSuper) Data(column int, role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidgetItem.Super.Data")
+	r := C.qute_QTreeWidgetItem_super_1(self, C.int(column), C.int(role))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetData calls QTreeWidgetItem::setData.
+func (s *QTreeWidgetItemSuper) SetData(column int, role int, value *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidgetItem.Super.SetData")
+	C.qute_QTreeWidgetItem_super_2(self, C.int(column), C.int(role), rt.UseArg(unsafe.Pointer(value), "QTreeWidgetItem.Super.SetData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+}
+
+// Read calls QTreeWidgetItem::read.
+func (s *QTreeWidgetItemSuper) Read(in *qtcore.QDataStream) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidgetItem.Super.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QTreeWidgetItem.Super.Read")
+	}
+	C.qute_QTreeWidgetItem_super_3(self, inPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(in)
+}
+
+// Write calls QTreeWidgetItem::write.
+func (s *QTreeWidgetItemSuper) Write(out *qtcore.QDataStream) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidgetItem.Super.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QTreeWidgetItem.Super.Write")
+	}
+	C.qute_QTreeWidgetItem_super_4(self, outPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(out)
+}
+
+// EmitDataChanged wraps the protected QTreeWidgetItem::emitDataChanged for subclasses.
+func (b *QTreeWidgetItemBase) EmitDataChanged() {
+	this := b.QTreeWidgetItem // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidgetItem.EmitDataChanged")
+	C.qute_QTreeWidgetItem_prot_emitDataChanged(self)
+	runtime.KeepAlive(this)
+}
+
+// NewQTreeWidgetItemWith constructs a QTreeWidgetItem whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemWith(v QTreeWidgetItemSubclass) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QTreeWidgetItem_new_shim()
+	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
 }

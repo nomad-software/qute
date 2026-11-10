@@ -352,6 +352,8 @@ func (this *QStyle) SizeFromContents(ct QStyleContentsType, opt *QStyleOption, c
 //
 //	C++: int QStyle::styleHint(StyleHint stylehint, const QStyleOption * opt = …, const QWidget * widget = …, QStyleHintReturn * returnData = …) const
 //
+// Arguments with C++ defaults are left at them; StyleHintFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qstyle.html#styleHint
 func (this *QStyle) StyleHint(stylehint QStyleStyleHint) int {
 	self := rt.Use(unsafe.Pointer(this), "QStyle.StyleHint")
@@ -641,6 +643,27 @@ func (this *QStyle) SizeFromContentsFull(ct QStyleContentsType, opt *QStyleOptio
 	return goQSize(r)
 }
 
+// StyleHintFull wraps QStyle::styleHint.
+//
+//	C++: int QStyle::styleHint(StyleHint stylehint, const QStyleOption * opt = …, const QWidget * widget = …, QStyleHintReturn * returnData = …) const
+//
+// StyleHintFull is StyleHint with every argument, including those StyleHint leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qstyle.html#styleHint
+func (this *QStyle) StyleHintFull(stylehint QStyleStyleHint, opt *QStyleOption, widget QWidgetLike, returnData *QStyleHintReturn) int {
+	self := rt.Use(unsafe.Pointer(this), "QStyle.StyleHintFull")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.StyleHintFull")
+	}
+	r := C.qute_QStyle_styleHint_1(self, C.int64_t(stylehint), rt.UseArg(unsafe.Pointer(opt), "QStyle.StyleHintFull"), widgetPtr, rt.UseArg(unsafe.Pointer(returnData), "QStyle.StyleHintFull"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(opt)
+	runtime.KeepAlive(widget)
+	runtime.KeepAlive(returnData)
+	return int(r)
+}
+
 // StandardPixmapFull wraps QStyle::standardPixmap.
 //
 //	C++: QPixmap QStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption * opt = …, const QWidget * widget = …) const
@@ -819,4 +842,602 @@ func QStyleSliderValueFromPositionFull(min int, max int, pos int, space int, ups
 	rt.CheckThread("QStyleSliderValueFromPositionFull")
 	r := C.qute_QStyle_sliderValueFromPosition_1(C.int(min), C.int(max), C.int(pos), C.int(space), C.bool(upsideDown))
 	return int(r)
+}
+
+var qStyleVTable = []rt.Virtual{
+	{Name: "Polish", Has: func(v any) bool { _, ok := v.(interface{ Polish(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ Polish(*QWidget) }).Polish(widget)
+		}},
+	{Name: "Unpolish", Has: func(v any) bool { _, ok := v.(interface{ Unpolish(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ Unpolish(*QWidget) }).Unpolish(widget)
+		}},
+	{Name: "PolishApplication", Has: func(v any) bool { _, ok := v.(interface{ PolishApplication(*QApplication) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			application := rt.View[QApplication](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QApplication", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ PolishApplication(*QApplication) }).PolishApplication(application)
+		}},
+	{Name: "UnpolishApplication", Has: func(v any) bool { _, ok := v.(interface{ UnpolishApplication(*QApplication) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			application := rt.View[QApplication](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QApplication", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ UnpolishApplication(*QApplication) }).UnpolishApplication(application)
+		}},
+	{Name: "ItemTextRect", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemTextRect(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			fm := rt.View[qtgui.QFontMetrics](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFontMetrics", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			rArg := goQRect(*(*C.qute_rect)(a[1]))
+			flags := int(*(*C.int)(a[2]))
+			enabled := bool(*(*C.bool)(a[3]))
+			text := quteStr(*(*C.qute_str)(a[4]))
+			r := v.(interface {
+				ItemTextRect(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect
+			}).ItemTextRect(fm, rArg, flags, enabled, text)
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "ItemPixmapRect", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemPixmapRect(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			rArg := goQRect(*(*C.qute_rect)(a[0]))
+			flags := int(*(*C.int)(a[1]))
+			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				ItemPixmapRect(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect
+			}).ItemPixmapRect(rArg, flags, pixmap)
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "DrawItemText", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawItemText(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 7)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			rect := goQRect(*(*C.qute_rect)(a[1]))
+			flags := int(*(*C.int)(a[2]))
+			pal := rt.View[qtgui.QPalette](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QPalette", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			enabled := bool(*(*C.bool)(a[4]))
+			text := quteStr(*(*C.qute_str)(a[5]))
+			textRole := qtgui.QPaletteColorRole(*(*C.int64_t)(a[6]))
+			v.(interface {
+				DrawItemText(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole)
+			}).DrawItemText(painter, rect, flags, pal, enabled, text, textRole)
+		}},
+	{Name: "DrawItemPixmap", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawItemPixmap(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			rect := goQRect(*(*C.qute_rect)(a[1]))
+			alignment := int(*(*C.int)(a[2]))
+			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			v.(interface {
+				DrawItemPixmap(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap)
+			}).DrawItemPixmap(painter, rect, alignment, pixmap)
+		}},
+	{Name: "StandardPalette", Has: func(v any) bool { _, ok := v.(interface{ StandardPalette() *qtgui.QPalette }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ StandardPalette() *qtgui.QPalette }).StandardPalette()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.StandardPalette")
+		}},
+	{Name: "DrawPrimitive", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawPrimitive(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			pe := QStylePrimitiveElement(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			pArgP := *(*unsafe.Pointer)(a[2])
+			pArgH := rt.WrapClass(pArgP, "QPainter", rt.NewScoped)
+			defer pArgH.Expire()
+			pArg := rt.View[qtgui.QPainter](pArgH, pArgP)
+			w := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
+			v.(interface {
+				DrawPrimitive(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget)
+			}).DrawPrimitive(pe, opt, pArg, w)
+		}},
+	{Name: "DrawControl", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawControl(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			element := QStyleControlElement(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			pArgP := *(*unsafe.Pointer)(a[2])
+			pArgH := rt.WrapClass(pArgP, "QPainter", rt.NewScoped)
+			defer pArgH.Expire()
+			pArg := rt.View[qtgui.QPainter](pArgH, pArgP)
+			w := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
+			v.(interface {
+				DrawControl(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget)
+			}).DrawControl(element, opt, pArg, w)
+		}},
+	{Name: "SubElementRect", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SubElementRect(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			subElement := QStyleSubElement(*(*C.int64_t)(a[0]))
+			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				SubElementRect(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect
+			}).SubElementRect(subElement, option, widget)
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "DrawComplexControl", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawComplexControl(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOptionComplex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionComplex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			pArgP := *(*unsafe.Pointer)(a[2])
+			pArgH := rt.WrapClass(pArgP, "QPainter", rt.NewScoped)
+			defer pArgH.Expire()
+			pArg := rt.View[qtgui.QPainter](pArgH, pArgP)
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
+			v.(interface {
+				DrawComplexControl(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget)
+			}).DrawComplexControl(cc, opt, pArg, widget)
+		}},
+	{Name: "HitTestComplexControl", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HitTestComplexControl(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOptionComplex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionComplex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			pt := goQPoint(*(*C.qute_point)(a[2]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
+			r := v.(interface {
+				HitTestComplexControl(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls
+			}).HitTestComplexControl(cc, opt, pt, widget)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "SubControlRect", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SubControlRect(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOptionComplex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionComplex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			sc := QStyleSubControls(*(*C.int64_t)(a[2]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
+			r := v.(interface {
+				SubControlRect(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect
+			}).SubControlRect(cc, opt, sc, widget)
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "PixelMetric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			PixelMetric(QStylePixelMetric, *QStyleOption, *QWidget) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			metric := QStylePixelMetric(*(*C.int64_t)(a[0]))
+			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				PixelMetric(QStylePixelMetric, *QStyleOption, *QWidget) int
+			}).PixelMetric(metric, option, widget)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "SizeFromContents", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SizeFromContents(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			ct := QStyleContentsType(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			contentsSize := goQSize(*(*C.qute_size)(a[2]))
+			w := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
+			r := v.(interface {
+				SizeFromContents(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize
+			}).SizeFromContents(ct, opt, contentsSize, w)
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "StyleHint", Has: func(v any) bool {
+		_, ok := v.(interface {
+			StyleHint(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			stylehint := QStyleStyleHint(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			returnDataP := *(*unsafe.Pointer)(a[3])
+			returnDataH := rt.WrapClass(returnDataP, "QStyleHintReturn", rt.NewScoped)
+			defer returnDataH.Expire()
+			returnData := rt.View[QStyleHintReturn](returnDataH, returnDataP)
+			r := v.(interface {
+				StyleHint(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int
+			}).StyleHint(stylehint, opt, widget, returnData)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "StandardPixmap", Has: func(v any) bool {
+		_, ok := v.(interface {
+			StandardPixmap(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			standardPixmap := QStyleStandardPixmap(*(*C.int64_t)(a[0]))
+			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				StandardPixmap(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap
+			}).StandardPixmap(standardPixmap, opt, widget)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.StandardPixmap")
+		}},
+	{Name: "StandardIcon", Has: func(v any) bool {
+		_, ok := v.(interface {
+			StandardIcon(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			standardIcon := QStyleStandardPixmap(*(*C.int64_t)(a[0]))
+			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				StandardIcon(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon
+			}).StandardIcon(standardIcon, option, widget)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.StandardIcon")
+		}},
+	{Name: "GeneratedIconPixmap", Has: func(v any) bool {
+		_, ok := v.(interface {
+			GeneratedIconPixmap(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			iconMode := qtgui.QIconMode(*(*C.int64_t)(a[0]))
+			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				GeneratedIconPixmap(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap
+			}).GeneratedIconPixmap(iconMode, pixmap, opt)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.GeneratedIconPixmap")
+		}},
+	{Name: "LayoutSpacing", Has: func(v any) bool {
+		_, ok := v.(interface {
+			LayoutSpacing(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			control1 := QSizePolicyControlTypes(*(*C.int64_t)(a[0]))
+			control2 := QSizePolicyControlTypes(*(*C.int64_t)(a[1]))
+			orientation := qtcore.Orientations(*(*C.int64_t)(a[2]))
+			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[4]))
+			r := v.(interface {
+				LayoutSpacing(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int
+			}).LayoutSpacing(control1, control2, orientation, option, widget)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QStyleBase is embedded in Go types that subclass QStyle:
+//
+//	type MyStyle struct{ qtwidgets.QStyleBase }
+//
+// Define any of the virtual methods listed on QStyleSuper to override them,
+// then construct the value with NewQStyleWith. Call b.Super().X() for the
+// base implementation.
+type QStyleBase struct{ *QStyle }
+
+func (b *QStyleBase) quteQStyleBase() *QStyleBase { return b }
+
+// QStyleSubclass is implemented by every type that embeds QStyleBase.
+type QStyleSubclass interface{ quteQStyleBase() *QStyleBase }
+
+// Super returns the C++ base implementations of QStyle's virtual methods.
+func (b *QStyleBase) Super() *QStyleSuper { return &QStyleSuper{this: b.QStyle} }
+
+// QStyleSuper calls the C++ base implementations of QStyle's virtuals.
+type QStyleSuper struct{ this *QStyle }
+
+// Polish calls QStyle::polish.
+func (s *QStyleSuper) Polish(widget *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.Polish")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.Super.Polish")
+	}
+	C.qute_QStyle_super_0(self, widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(widget)
+}
+
+// Unpolish calls QStyle::unpolish.
+func (s *QStyleSuper) Unpolish(widget *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.Unpolish")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QStyle.Super.Unpolish")
+	}
+	C.qute_QStyle_super_1(self, widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(widget)
+}
+
+// PolishApplication calls QStyle::polish.
+func (s *QStyleSuper) PolishApplication(application *QApplication) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.PolishApplication")
+	var applicationPtr unsafe.Pointer
+	if application != nil {
+		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.Super.PolishApplication")
+	}
+	C.qute_QStyle_super_2(self, applicationPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(application)
+}
+
+// UnpolishApplication calls QStyle::unpolish.
+func (s *QStyleSuper) UnpolishApplication(application *QApplication) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.UnpolishApplication")
+	var applicationPtr unsafe.Pointer
+	if application != nil {
+		applicationPtr = rt.UseArg(unsafe.Pointer(application.AsQApplication()), "QStyle.Super.UnpolishApplication")
+	}
+	C.qute_QStyle_super_3(self, applicationPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(application)
+}
+
+// ItemTextRect calls QStyle::itemTextRect.
+func (s *QStyleSuper) ItemTextRect(fm *qtgui.QFontMetrics, rArg qtcore.QRect, flags int, enabled bool, text string) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.ItemTextRect")
+	r := C.qute_QStyle_super_4(self, rt.Use(unsafe.Pointer(fm), "QStyle.Super.ItemTextRect"), cQRect(rArg), C.int(flags), C.bool(enabled), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(fm)
+	return goQRect(r)
+}
+
+// ItemPixmapRect calls QStyle::itemPixmapRect.
+func (s *QStyleSuper) ItemPixmapRect(rArg qtcore.QRect, flags int, pixmap *qtgui.QPixmap) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.ItemPixmapRect")
+	r := C.qute_QStyle_super_5(self, cQRect(rArg), C.int(flags), rt.UseArg(unsafe.Pointer(pixmap), "QStyle.Super.ItemPixmapRect"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(pixmap)
+	return goQRect(r)
+}
+
+// DrawItemText calls QStyle::drawItemText.
+func (s *QStyleSuper) DrawItemText(painter *qtgui.QPainter, rect qtcore.QRect, flags int, pal *qtgui.QPalette, enabled bool, text string, textRole qtgui.QPaletteColorRole) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.DrawItemText")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QStyle.Super.DrawItemText")
+	}
+	C.qute_QStyle_super_6(self, painterPtr, cQRect(rect), C.int(flags), rt.UseArg(unsafe.Pointer(pal), "QStyle.Super.DrawItemText"), C.bool(enabled), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int64_t(textRole))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(pal)
+}
+
+// DrawItemPixmap calls QStyle::drawItemPixmap.
+func (s *QStyleSuper) DrawItemPixmap(painter *qtgui.QPainter, rect qtcore.QRect, alignment int, pixmap *qtgui.QPixmap) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.DrawItemPixmap")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QStyle.Super.DrawItemPixmap")
+	}
+	C.qute_QStyle_super_7(self, painterPtr, cQRect(rect), C.int(alignment), rt.UseArg(unsafe.Pointer(pixmap), "QStyle.Super.DrawItemPixmap"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(pixmap)
+}
+
+// StandardPalette calls QStyle::standardPalette.
+func (s *QStyleSuper) StandardPalette() *qtgui.QPalette {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.StandardPalette")
+	r := C.qute_QStyle_super_8(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[qtgui.QPalette](rt.WrapClass(r, "QPalette", rt.TakeOwned), r)
+}
+
+// Event calls QObject::event.
+func (s *QStyleSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStyle.Super.Event")
+	}
+	r := C.qute_QStyle_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QStyleSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QStyle.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStyle.Super.EventFilter")
+	}
+	r := C.qute_QStyle_super_23(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QStyleSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QStyle.Super.TimerEvent")
+	}
+	C.qute_QStyle_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QStyleSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QStyle.Super.ChildEvent")
+	}
+	C.qute_QStyle_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QStyleSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStyle.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStyle.Super.CustomEvent")
+	}
+	C.qute_QStyle_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQStyleWith constructs a QStyle whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStyleWith(v QStyleSubclass) *QStyle {
+	rt.CheckThread("NewQStyleWith")
+	base := v.quteQStyleBase()
+	if base.QStyle != nil {
+		panic("NewQStyleWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QStyle_new_shim()
+	h := rt.WrapClass(p, "QStyle", rt.NewOwned)
+	base.QStyle = rt.View[QStyle](h, p)
+	id := h.SetSelf(v, qStyleVTable)
+	mask := rt.Mask(v, qStyleVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStyle_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStyle
 }

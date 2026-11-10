@@ -126,7 +126,8 @@ QWidget:
   setWindowIcon: { reviewed: true }
   createWindowContainer: { skip: "QWindow is not bound" }
 
-QFrame: {}
+QFrame:
+  drawFrame: { args: { painter: scoped } }
 
 QLabel:
   setMovie: { args: { movie: keep }, reviewed: true, doc: "The label does not take ownership of the movie; it keeps the movie from being garbage collected." }
@@ -170,6 +171,7 @@ QLineEdit:
   createStandardContextMenu: { return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QTextEdit:
+  createMimeDataFromSelection: { return: transfer-to-go }
   print: { reviewed: true }
   setDocument: { args: { document: keep }, reviewed: true, doc: "The text edit does not take ownership of the document." }
   document: { return: borrowed }
@@ -177,6 +179,8 @@ QTextEdit:
   createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QPlainTextEdit:
+  createMimeDataFromSelection: { return: transfer-to-go }
+  getPaintContext: { skip: "on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound" }
   print: { reviewed: true }
   setDocument: { args: { document: keep }, reviewed: true }
   document: { return: borrowed }
@@ -216,6 +220,8 @@ QScrollArea:
   ensureWidgetVisible: { reviewed: true }
 
 QAbstractSpinBox:
+  setLineEdit: { args: { edit: transfer-to-cpp } } # the spin box takes ownership and deletes the old line edit
+  lineEdit: { return: borrowed }
   validate: { args: { input: in-out, pos: in-out } }
   fixup: { args: { input: in-out } }
 
@@ -240,6 +246,7 @@ QComboBox:
   insertItem(int, const QIcon&, const QString&, const QVariant&): { name: InsertItemIcon }
 
 QTabWidget:
+  setTabBar: { args: { tabBar: transfer-to-cpp } } # the tab widget takes ownership
   addTab(QWidget*, const QString&): { name: AddTab, args: { widget: transfer-to-cpp } }
   addTab(QWidget*, const QIcon&, const QString&): { name: AddTabIcon, args: { widget: transfer-to-cpp } }
   insertTab(int, QWidget*, const QString&): { name: InsertTab, args: { widget: transfer-to-cpp } }
@@ -273,6 +280,7 @@ QToolBox:
   setCurrentWidget: { reviewed: true }
 
 QSplitter:
+  createHandle: { return: parented } # the handle is created with the splitter as parent
   QSplitter(Qt::Orientation, QWidget*): { name: NewQSplitterWithOrientation }
   addWidget: { args: { widget: transfer-to-cpp } }
   insertWidget: { args: { widget: transfer-to-cpp } }
@@ -505,6 +513,10 @@ QProgressDialog:
   setBar: { args: { bar: transfer-to-cpp } }
 
 QLayout:
+  adoptLayout: { args: { layout: transfer-to-cpp } }
+  addChildWidget: { args: { w: transfer-to-cpp } }
+  addChildLayout: { args: { l: transfer-to-cpp } }
+  widgetEvent: { reviewed: true }
   layout: { return: borrowed }
   closestAcceptableSize: { reviewed: true }
   addWidget: { args: { w: transfer-to-cpp } }
@@ -689,6 +701,7 @@ QAbstractItemView:
   indexWidget: { return: borrowed }
 
 QTreeView:
+  drawTree: { args: { painter: scoped } }
   setHeader: { args: { header: transfer-to-cpp } }
   header: { return: borrowed }
 
@@ -708,6 +721,7 @@ QListWidgetItem:
   clone: { return: transfer-to-go }
 
 QListWidget:
+  mimeData: { return: transfer-to-go }
   items: { return: borrowed, reviewed: true }
   addItem(QListWidgetItem*): { name: AddItem, args: { item: transfer-to-cpp } }
   addItem(const QString&): { name: AddItemText }
@@ -821,6 +835,7 @@ QTreeWidgetItem:
   clone: { return: transfer-to-go }
 
 QTreeWidget:
+  mimeData: { return: transfer-to-go }
   addTopLevelItem: { args: { item: transfer-to-cpp } }
   insertTopLevelItem: { args: { item: transfer-to-cpp } }
   addTopLevelItems: { args: { items: transfer-to-cpp } }
@@ -879,6 +894,7 @@ QTreeWidget:
   itemFromIndex: { return: borrowed }
 
 QTableWidget:
+  mimeData: { return: transfer-to-go }
   items: { return: borrowed, reviewed: true }
   setItem: { args: { item: transfer-to-cpp } }
   takeItem:
@@ -962,6 +978,8 @@ QCompleter:
   completionModel: { return: borrowed }
 
 QWidgetAction:
+  createWidget: { return: parented } # the widget is created with the container as parent; deleteWidget frees it
+  createdWidgets: { return: borrowed }
   setDefaultWidget: { args: { w: transfer-to-cpp } }
   defaultWidget: { return: borrowed }
   requestWidget:
@@ -1237,6 +1255,16 @@ QGraphicsItem:
   removeSceneEventFilter: { reviewed: true }
 
 QStyle:
+  combinedLayoutSpacing: { reviewed: true }
+  layoutSpacing: { reviewed: true }
+  standardIcon: { reviewed: true }
+  standardPixmap: { reviewed: true }
+  styleHint: { reviewed: true }
+  sizeFromContents: { reviewed: true }
+  pixelMetric: { reviewed: true }
+  subControlRect: { reviewed: true }
+  hitTestComplexControl: { reviewed: true }
+  subElementRect: { reviewed: true }
   drawComplexControl: { reviewed: true }
   drawControl: { reviewed: true }
   drawPrimitive: { reviewed: true }
@@ -1281,6 +1309,10 @@ QAbstractItemDelegate:
   closeEditor: { reviewed: true }
 
 QFileDialog:
+  saveFileContent: { reviewed: true }
+  getOpenFileContent: { reviewed: true }
+  getExistingDirectoryUrl: { reviewed: true }
+  getExistingDirectory: { reviewed: true }
   setIconProvider: { args: { provider: keep }, reviewed: true, doc: "The dialog does not take ownership of the provider; it keeps the provider from being garbage collected." }
   iconProvider: { return: borrowed }
   setItemDelegate: { args: { delegate: keep }, reviewed: true, doc: "QFileDialog does not take ownership of the delegate (Qt docs)." }
@@ -1330,6 +1362,7 @@ QCommandLinkButton:
 
 
 QHeaderView:
+  "resizeSections()": { name: ResizeSectionsToHints, doc: "Resizes the sections according to their size hints." }
   logicalIndexAt(int, int): { skip: "use the QPoint overload" }
   logicalIndexAt(const QPoint&): { name: LogicalIndexAtPoint }
   setSectionResizeMode(QHeaderView::ResizeMode): { name: SetSectionResizeModeAll }
@@ -1386,6 +1419,7 @@ QGraphicsItemGroup:
   removeFromGroup: { reviewed: true, doc: "The item is reparented to the group's parent, which keeps owning it." }
 
 QGraphicsProxyWidget:
+  newProxyWidget: { return: parented, reviewed: true } # the new proxy is a child of this one; the widget is only read
   subWidgetRect: { reviewed: true }
   createProxyForChildWidget:
     reviewed: true
@@ -1502,6 +1536,7 @@ QGraphicsGridLayout:
   alignment: { reviewed: true }
 
 QGraphicsLayout:
+  addChildLayoutItem: { reviewed: true } # reparents the item's graphics item; the layout item stays where it is
   widgetEvent: { reviewed: true }
   itemAt: { return: borrowed }
 
@@ -1536,6 +1571,7 @@ QGraphicsWidget:
   getWindowFrameMargins: { args: { left: out, top: out, right: out, bottom: out } }
 
 QGraphicsLayoutItem:
+  setGraphicsItem: { args: { item: keep } } # stored, not owned
   parentLayoutItem: { return: borrowed }
   setParentLayoutItem: { reviewed: true }
   graphicsItem: { return: borrowed }
@@ -1545,7 +1581,41 @@ QStyleOption:
   initFrom: { reviewed: true }
 
 QFontDialog:
-  getFont: { args: { ok: out } }
+  getFont: { args: { ok: out }, reviewed: true } # parent only centres the dialog during the call
 
 QStyleFactory:
   create: { return: transfer-to-go }
+
+QDialog:
+  adjustPosition: { reviewed: true }
+
+
+QGraphicsEffect:
+  drawSource: { args: { painter: scoped } }
+
+QGraphicsSceneDragDropEvent:
+  setMimeData: { reviewed: true } # the event only records the pointer
+  mimeData: { return: borrowed }
+  setSource: { reviewed: true } # the event only records the pointer
+  source: { return: borrowed }
+
+QGraphicsSceneEvent:
+  setWidget: { reviewed: true } # the event only records the pointer
+  widget: { return: borrowed }
+
+QSplitterHandle:
+  splitter: { return: borrowed }
+
+QColorDialog:
+  getColor: { reviewed: true }
+
+QProxyStyle:
+  baseStyle: { return: borrowed }
+  setBaseStyle: { args: { style: transfer-to-cpp } } # the proxy takes ownership of its base style
+  QProxyStyle(QStyle*): { args: { style: transfer-to-cpp } } # the proxy takes ownership of its base style
+
+QRubberBand:
+  QRubberBand: { args: { 1: transfer-this } }
+
+QToolTip:
+  showText: { reviewed: true }

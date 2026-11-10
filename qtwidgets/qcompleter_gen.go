@@ -670,3 +670,217 @@ func (this *QCompleter) OnHighlightedIndex(f func(index *qtcore.QModelIndex)) qt
 	})
 	return rt.NewConnection(C.qute_QCompleter_highlighted_1(self, C.uintptr_t(id)))
 }
+
+var qCompleterVTable = []rt.Virtual{
+	{Name: "PathFromIndex", Has: func(v any) bool {
+		_, ok := v.(interface {
+			PathFromIndex(*qtcore.QModelIndex) string
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				PathFromIndex(*qtcore.QModelIndex) string
+			}).PathFromIndex(index)
+			*(*C.qute_str)(ret) = quteCStr(r)
+		}},
+	{Name: "SplitPath", Has: func(v any) bool { _, ok := v.(interface{ SplitPath(string) []string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			path := quteStr(*(*C.qute_str)(a[0]))
+			r := v.(interface{ SplitPath(string) []string }).SplitPath(path)
+			*(*C.qute_list)(ret) = quteCStrList(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			o := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eArgP := *(*unsafe.Pointer)(a[1])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(o, eArg)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QCompleterBase is embedded in Go types that subclass QCompleter:
+//
+//	type MyCompleter struct{ qtwidgets.QCompleterBase }
+//
+// Define any of the virtual methods listed on QCompleterSuper to override them,
+// then construct the value with NewQCompleterWith. Call b.Super().X() for the
+// base implementation.
+type QCompleterBase struct{ *QCompleter }
+
+func (b *QCompleterBase) quteQCompleterBase() *QCompleterBase { return b }
+
+// QCompleterSubclass is implemented by every type that embeds QCompleterBase.
+type QCompleterSubclass interface{ quteQCompleterBase() *QCompleterBase }
+
+// Super returns the C++ base implementations of QCompleter's virtual methods.
+func (b *QCompleterBase) Super() *QCompleterSuper { return &QCompleterSuper{this: b.QCompleter} }
+
+// QCompleterSuper calls the C++ base implementations of QCompleter's virtuals.
+type QCompleterSuper struct{ this *QCompleter }
+
+// PathFromIndex calls QCompleter::pathFromIndex.
+func (s *QCompleterSuper) PathFromIndex(index *qtcore.QModelIndex) string {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.PathFromIndex")
+	r := C.qute_QCompleter_super_0(self, rt.UseArg(unsafe.Pointer(index), "QCompleter.Super.PathFromIndex"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return quteStr(r)
+}
+
+// SplitPath calls QCompleter::splitPath.
+func (s *QCompleterSuper) SplitPath(path string) []string {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.SplitPath")
+	r := C.qute_QCompleter_super_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
+	runtime.KeepAlive(s.this)
+	return quteStrList(r)
+}
+
+// EventFilter calls QCompleter::eventFilter.
+func (s *QCompleterSuper) EventFilter(o *qtcore.QObject, eArg *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.EventFilter")
+	var oPtr unsafe.Pointer
+	if o != nil {
+		oPtr = rt.UseArg(unsafe.Pointer(o.AsQObject()), "QCompleter.Super.EventFilter")
+	}
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QCompleter.Super.EventFilter")
+	}
+	r := C.qute_QCompleter_super_2(self, oPtr, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(o)
+	runtime.KeepAlive(eArg)
+	return bool(r)
+}
+
+// Event calls QCompleter::event.
+func (s *QCompleterSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCompleter.Super.Event")
+	}
+	r := C.qute_QCompleter_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QCompleterSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QCompleter.Super.TimerEvent")
+	}
+	C.qute_QCompleter_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QCompleterSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QCompleter.Super.ChildEvent")
+	}
+	C.qute_QCompleter_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QCompleterSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCompleter.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QCompleter.Super.CustomEvent")
+	}
+	C.qute_QCompleter_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQCompleterWith constructs a QCompleter whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCompleterWith(v QCompleterSubclass, parent qtcore.QObjectLike) *QCompleter {
+	rt.CheckThread("NewQCompleterWith")
+	base := v.quteQCompleterBase()
+	if base.QCompleter != nil {
+		panic("NewQCompleterWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleterWith")
+	}
+	p := C.qute_QCompleter_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCompleter", mode)
+	base.QCompleter = rt.View[QCompleter](h, p)
+	id := h.SetSelf(v, qCompleterVTable)
+	mask := rt.Mask(v, qCompleterVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCompleter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCompleter
+}

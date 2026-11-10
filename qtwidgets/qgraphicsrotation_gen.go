@@ -238,3 +238,206 @@ func (this *QGraphicsRotation) OnAxisChanged(f func()) qtcore.Connection {
 	})
 	return rt.NewConnection(C.qute_QGraphicsRotation_axisChanged(self, C.uintptr_t(id)))
 }
+
+var qGraphicsRotationVTable = []rt.Virtual{
+	{Name: "ApplyTo", Has: func(v any) bool { _, ok := v.(interface{ ApplyTo(*qtgui.QMatrix4x4) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			matrixP := *(*unsafe.Pointer)(a[0])
+			matrixH := rt.WrapClass(matrixP, "QMatrix4x4", rt.NewScoped)
+			defer matrixH.Expire()
+			matrix := rt.View[qtgui.QMatrix4x4](matrixH, matrixP)
+			v.(interface{ ApplyTo(*qtgui.QMatrix4x4) }).ApplyTo(matrix)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QGraphicsRotationBase is embedded in Go types that subclass QGraphicsRotation:
+//
+//	type MyGraphicsRotation struct{ qtwidgets.QGraphicsRotationBase }
+//
+// Define any of the virtual methods listed on QGraphicsRotationSuper to override them,
+// then construct the value with NewQGraphicsRotationWith. Call b.Super().X() for the
+// base implementation.
+type QGraphicsRotationBase struct{ *QGraphicsRotation }
+
+func (b *QGraphicsRotationBase) quteQGraphicsRotationBase() *QGraphicsRotationBase { return b }
+
+// QGraphicsRotationSubclass is implemented by every type that embeds QGraphicsRotationBase.
+type QGraphicsRotationSubclass interface{ quteQGraphicsRotationBase() *QGraphicsRotationBase }
+
+// Super returns the C++ base implementations of QGraphicsRotation's virtual methods.
+func (b *QGraphicsRotationBase) Super() *QGraphicsRotationSuper {
+	return &QGraphicsRotationSuper{this: b.QGraphicsRotation}
+}
+
+// QGraphicsRotationSuper calls the C++ base implementations of QGraphicsRotation's virtuals.
+type QGraphicsRotationSuper struct{ this *QGraphicsRotation }
+
+// ApplyTo calls QGraphicsRotation::applyTo.
+func (s *QGraphicsRotationSuper) ApplyTo(matrix *qtgui.QMatrix4x4) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.ApplyTo")
+	C.qute_QGraphicsRotation_super_0(self, rt.UseArg(unsafe.Pointer(matrix), "QGraphicsRotation.Super.ApplyTo"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(matrix)
+}
+
+// Event calls QObject::event.
+func (s *QGraphicsRotationSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsRotation.Super.Event")
+	}
+	r := C.qute_QGraphicsRotation_super_1(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QGraphicsRotationSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QGraphicsRotation.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsRotation.Super.EventFilter")
+	}
+	r := C.qute_QGraphicsRotation_super_2(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QGraphicsRotationSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QGraphicsRotation.Super.TimerEvent")
+	}
+	C.qute_QGraphicsRotation_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QGraphicsRotationSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QGraphicsRotation.Super.ChildEvent")
+	}
+	C.qute_QGraphicsRotation_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QGraphicsRotationSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsRotation.Super.CustomEvent")
+	}
+	C.qute_QGraphicsRotation_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// Update wraps the protected QGraphicsTransform::update for subclasses.
+func (b *QGraphicsRotationBase) Update() {
+	this := b.QGraphicsRotation // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Update")
+	C.qute_QGraphicsRotation_prot_update(self)
+	runtime.KeepAlive(this)
+}
+
+// NewQGraphicsRotationWith constructs a QGraphicsRotation whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsRotationWith(v QGraphicsRotationSubclass, parent qtcore.QObjectLike) *QGraphicsRotation {
+	rt.CheckThread("NewQGraphicsRotationWith")
+	base := v.quteQGraphicsRotationBase()
+	if base.QGraphicsRotation != nil {
+		panic("NewQGraphicsRotationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsRotationWith")
+	}
+	p := C.qute_QGraphicsRotation_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsRotation", mode)
+	base.QGraphicsRotation = rt.View[QGraphicsRotation](h, p)
+	id := h.SetSelf(v, qGraphicsRotationVTable)
+	mask := rt.Mask(v, qGraphicsRotationVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsRotation_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsRotation
+}

@@ -15,7 +15,9 @@
 #include <QCameraDevice>
 #include <QCameraFormat>
 #include <QCapturableWindow>
+#include <QChildEvent>
 #include <QCoreApplication>
+#include <QEvent>
 #include <QIODevice>
 #include <QImage>
 #include <QImageCapture>
@@ -33,6 +35,7 @@
 #include <QScreen>
 #include <QScreenCapture>
 #include <QSoundEffect>
+#include <QTimerEvent>
 #include <QUrl>
 #include <QVariant>
 #include <QVideoFrame>
@@ -79,6 +82,1194 @@ struct GoSlot {
 	~GoSlot() { qute_qtmultimedia_release(id); }
 };
 } // namespace
+
+class qute_QAudioBufferInput : public QAudioBufferInput {
+public:
+	template <class... A> explicit qute_QAudioBufferInput(A &&...a) : QAudioBufferInput(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QAudioBufferOutput : public QAudioBufferOutput {
+public:
+	template <class... A> explicit qute_QAudioBufferOutput(A &&...a) : QAudioBufferOutput(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QAudioDecoder : public QAudioDecoder {
+public:
+	template <class... A> explicit qute_QAudioDecoder(A &&...a) : QAudioDecoder(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QAudioInput : public QAudioInput {
+public:
+	template <class... A> explicit qute_QAudioInput(A &&...a) : QAudioInput(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QAudioOutput : public QAudioOutput {
+public:
+	template <class... A> explicit qute_QAudioOutput(A &&...a) : QAudioOutput(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QAudioSink : public QAudioSink {
+public:
+	template <class... A> explicit qute_QAudioSink(A &&...a) : QAudioSink(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QAudioSource : public QAudioSource {
+public:
+	template <class... A> explicit qute_QAudioSource(A &&...a) : QAudioSource(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QCamera : public QCamera {
+public:
+	template <class... A> explicit qute_QCamera(A &&...a) : QCamera(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QImageCapture : public QImageCapture {
+public:
+	template <class... A> explicit qute_QImageCapture(A &&...a) : QImageCapture(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QMediaCaptureSession : public QMediaCaptureSession {
+public:
+	template <class... A> explicit qute_QMediaCaptureSession(A &&...a) : QMediaCaptureSession(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QMediaDevices : public QMediaDevices {
+public:
+	template <class... A> explicit qute_QMediaDevices(A &&...a) : QMediaDevices(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QMediaPlayer : public QMediaPlayer {
+public:
+	template <class... A> explicit qute_QMediaPlayer(A &&...a) : QMediaPlayer(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QMediaRecorder : public QMediaRecorder {
+public:
+	template <class... A> explicit qute_QMediaRecorder(A &&...a) : QMediaRecorder(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QScreenCapture : public QScreenCapture {
+public:
+	template <class... A> explicit qute_QScreenCapture(A &&...a) : QScreenCapture(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QSoundEffect : public QSoundEffect {
+public:
+	template <class... A> explicit qute_QSoundEffect(A &&...a) : QSoundEffect(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QVideoFrameInput : public QVideoFrameInput {
+public:
+	template <class... A> explicit qute_QVideoFrameInput(A &&...a) : QVideoFrameInput(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QVideoSink : public QVideoSink {
+public:
+	template <class... A> explicit qute_QVideoSink(A &&...a) : QVideoSink(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QWindowCapture : public QWindowCapture {
+public:
+	template <class... A> explicit qute_QWindowCapture(A &&...a) : QWindowCapture(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
 
 extern "C" {
 
@@ -171,6 +1362,34 @@ void * qute_QAudioBufferInput_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QAudioBufferInput *>(new QAudioBufferInput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
+void * qute_QAudioBufferInput_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QAudioBufferInput *>(new qute_QAudioBufferInput(static_cast<QObject *>(a0)));
+}
+void qute_QAudioBufferInput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioBufferInput_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioBufferInput_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioBufferInput_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioBufferInput_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioBufferInput_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QAudioBufferInput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioBufferInput *>(static_cast<QObject *>(obj)));
@@ -207,6 +1426,34 @@ void * qute_QAudioBufferOutput_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QAudioBufferOutput *>(new QAudioBufferOutput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
+void * qute_QAudioBufferOutput_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QAudioBufferOutput *>(new qute_QAudioBufferOutput(static_cast<QObject *>(a0)));
+}
+void qute_QAudioBufferOutput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioBufferOutput_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioBufferOutput_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioBufferOutput_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioBufferOutput_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioBufferOutput_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QAudioBufferOutput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioBufferOutput *>(static_cast<QObject *>(obj)));
@@ -230,6 +1477,34 @@ void * qute_QAudioBufferOutput_audioBufferReceived(void *self, uintptr_t id) {
 void * qute_QAudioDecoder_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QAudioDecoder *>(new QAudioDecoder(static_cast<QObject *>(a0)));
+}
+void * qute_QAudioDecoder_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QAudioDecoder *>(new qute_QAudioDecoder(static_cast<QObject *>(a0)));
+}
+void qute_QAudioDecoder_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioDecoder_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioDecoder_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioDecoder_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioDecoder_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioDecoder_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QAudioDecoder_cast(void *obj) {
 	qute_gui_only();
@@ -551,6 +1826,34 @@ void * qute_QAudioInput_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QAudioInput *>(new QAudioInput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
 }
+void * qute_QAudioInput_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QAudioInput *>(new qute_QAudioInput(static_cast<QObject *>(a0)));
+}
+void qute_QAudioInput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioInput_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioInput_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioInput_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioInput_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioInput_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QAudioInput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioInput *>(static_cast<QObject *>(obj)));
@@ -619,6 +1922,34 @@ void * qute_QAudioOutput_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QAudioOutput *>(new QAudioOutput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
 }
+void * qute_QAudioOutput_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QAudioOutput *>(new qute_QAudioOutput(static_cast<QObject *>(a0)));
+}
+void qute_QAudioOutput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioOutput_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioOutput_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioOutput_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioOutput_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioOutput_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QAudioOutput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioOutput *>(static_cast<QObject *>(obj)));
@@ -686,6 +2017,34 @@ void * qute_QAudioSink_new(void * a0, void * a1) {
 void * qute_QAudioSink_new_1(void * a0, void * a1, void * a2) {
 	qute_gui_only();
 	return static_cast<QAudioSink *>(new QAudioSink((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
+}
+void * qute_QAudioSink_new_shim(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QAudioSink *>(new qute_QAudioSink((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+}
+void qute_QAudioSink_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioSink_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioSink_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioSink_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioSink_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioSink_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QAudioSink_cast(void *obj) {
 	qute_gui_only();
@@ -798,6 +2157,34 @@ void * qute_QAudioSource_new(void * a0, void * a1) {
 void * qute_QAudioSource_new_1(void * a0, void * a1, void * a2) {
 	qute_gui_only();
 	return static_cast<QAudioSource *>(new QAudioSource((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
+}
+void * qute_QAudioSource_new_shim(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QAudioSource *>(new qute_QAudioSource((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+}
+void qute_QAudioSource_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QAudioSource_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QAudioSource_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QAudioSource_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QAudioSource_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QAudioSource_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QAudioSource_cast(void *obj) {
 	qute_gui_only();
@@ -914,6 +2301,34 @@ void * qute_QCamera_new_1(void * a0, void * a1) {
 void * qute_QCamera_new_2(int64_t a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QCamera *>(new QCamera(static_cast<QCameraDevice::Position>(a0), static_cast<QObject *>(a1)));
+}
+void * qute_QCamera_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QCamera *>(new qute_QCamera(static_cast<QObject *>(a0)));
+}
+void qute_QCamera_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QCamera *>(static_cast<QCamera *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QCamera_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QCamera_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QCamera_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QCamera_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QCamera_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QCamera_cast(void *obj) {
 	qute_gui_only();
@@ -1519,6 +2934,34 @@ void * qute_QImageCapture_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QImageCapture *>(new QImageCapture(static_cast<QObject *>(a0)));
 }
+void * qute_QImageCapture_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QImageCapture *>(new qute_QImageCapture(static_cast<QObject *>(a0)));
+}
+void qute_QImageCapture_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QImageCapture_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QImageCapture_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QImageCapture_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QImageCapture_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QImageCapture_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QImageCapture_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QImageCapture *>(static_cast<QObject *>(obj)));
@@ -1728,6 +3171,34 @@ void * qute_QImageCapture_imageSaved(void *self, uintptr_t id) {
 void * qute_QMediaCaptureSession_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QMediaCaptureSession *>(new QMediaCaptureSession(static_cast<QObject *>(a0)));
+}
+void * qute_QMediaCaptureSession_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QMediaCaptureSession *>(new qute_QMediaCaptureSession(static_cast<QObject *>(a0)));
+}
+void qute_QMediaCaptureSession_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QMediaCaptureSession_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QMediaCaptureSession_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QMediaCaptureSession_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QMediaCaptureSession_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QMediaCaptureSession_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QMediaCaptureSession_cast(void *obj) {
 	qute_gui_only();
@@ -1945,6 +3416,34 @@ void * qute_QMediaDevices_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QMediaDevices *>(new QMediaDevices(static_cast<QObject *>(a0)));
 }
+void * qute_QMediaDevices_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QMediaDevices *>(new qute_QMediaDevices(static_cast<QObject *>(a0)));
+}
+void qute_QMediaDevices_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QMediaDevices_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QMediaDevices_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QMediaDevices_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QMediaDevices_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QMediaDevices_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QMediaDevices_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMediaDevices *>(static_cast<QObject *>(obj)));
@@ -2132,6 +3631,34 @@ qute_str qute_QMediaMetaData_metaDataKeyToString(int64_t a0) {
 void * qute_QMediaPlayer_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QMediaPlayer *>(new QMediaPlayer(static_cast<QObject *>(a0)));
+}
+void * qute_QMediaPlayer_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QMediaPlayer *>(new qute_QMediaPlayer(static_cast<QObject *>(a0)));
+}
+void qute_QMediaPlayer_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QMediaPlayer_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QMediaPlayer_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QMediaPlayer_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QMediaPlayer_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QMediaPlayer_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QMediaPlayer_cast(void *obj) {
 	qute_gui_only();
@@ -2562,6 +4089,34 @@ void * qute_QMediaPlayer_playbackOptionsChanged(void *self, uintptr_t id) {
 void * qute_QMediaRecorder_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QMediaRecorder *>(new QMediaRecorder(static_cast<QObject *>(a0)));
+}
+void * qute_QMediaRecorder_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QMediaRecorder *>(new qute_QMediaRecorder(static_cast<QObject *>(a0)));
+}
+void qute_QMediaRecorder_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QMediaRecorder_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QMediaRecorder_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QMediaRecorder_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QMediaRecorder_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QMediaRecorder_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QMediaRecorder_cast(void *obj) {
 	qute_gui_only();
@@ -3035,6 +4590,34 @@ void * qute_QScreenCapture_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QScreenCapture *>(new QScreenCapture(static_cast<QObject *>(a0)));
 }
+void * qute_QScreenCapture_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QScreenCapture *>(new qute_QScreenCapture(static_cast<QObject *>(a0)));
+}
+void qute_QScreenCapture_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QScreenCapture_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QScreenCapture_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QScreenCapture_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QScreenCapture_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QScreenCapture_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QScreenCapture_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QScreenCapture *>(static_cast<QObject *>(obj)));
@@ -3134,6 +4717,34 @@ void * qute_QSoundEffect_new(void * a0) {
 void * qute_QSoundEffect_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QSoundEffect *>(new QSoundEffect((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+}
+void * qute_QSoundEffect_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QSoundEffect *>(new qute_QSoundEffect(static_cast<QObject *>(a0)));
+}
+void qute_QSoundEffect_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QSoundEffect_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QSoundEffect_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QSoundEffect_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QSoundEffect_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QSoundEffect_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QSoundEffect_cast(void *obj) {
 	qute_gui_only();
@@ -3627,6 +5238,34 @@ void * qute_QVideoFrameInput_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QVideoFrameInput *>(new QVideoFrameInput((a0 ? *static_cast<QVideoFrameFormat *>(a0) : QVideoFrameFormat()), static_cast<QObject *>(a1)));
 }
+void * qute_QVideoFrameInput_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QVideoFrameInput *>(new qute_QVideoFrameInput(static_cast<QObject *>(a0)));
+}
+void qute_QVideoFrameInput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QVideoFrameInput_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QVideoFrameInput_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QVideoFrameInput_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QVideoFrameInput_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QVideoFrameInput_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
 void * qute_QVideoFrameInput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QVideoFrameInput *>(static_cast<QObject *>(obj)));
@@ -3658,6 +5297,34 @@ void * qute_QVideoFrameInput_readyToSendVideoFrame(void *self, uintptr_t id) {
 void * qute_QVideoSink_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QVideoSink *>(new QVideoSink(static_cast<QObject *>(a0)));
+}
+void * qute_QVideoSink_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QVideoSink *>(new qute_QVideoSink(static_cast<QObject *>(a0)));
+}
+void qute_QVideoSink_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QVideoSink_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QVideoSink_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QVideoSink_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QVideoSink_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QVideoSink_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QVideoSink_cast(void *obj) {
 	qute_gui_only();
@@ -3718,6 +5385,34 @@ void * qute_QVideoSink_videoSizeChanged(void *self, uintptr_t id) {
 void * qute_QWindowCapture_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QWindowCapture *>(new QWindowCapture(static_cast<QObject *>(a0)));
+}
+void * qute_QWindowCapture_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QWindowCapture *>(new qute_QWindowCapture(static_cast<QObject *>(a0)));
+}
+void qute_QWindowCapture_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QWindowCapture_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QWindowCapture_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QWindowCapture_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QWindowCapture_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QWindowCapture_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QWindowCapture_cast(void *obj) {
 	qute_gui_only();

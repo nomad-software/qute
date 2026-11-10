@@ -28,7 +28,7 @@ func (this *QAbstractFileIconProvider) AsQAbstractFileIconProvider() *QAbstractF
 }
 
 func init() {
-	rt.RegisterClass("QAbstractFileIconProvider", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QAbstractFileIconProvider_delete(p) })
+	rt.RegisterClass("QAbstractFileIconProvider", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QAbstractFileIconProvider_delete(p) })
 }
 
 // QAbstractFileIconProviderFromPtr wraps an existing C++ QAbstractFileIconProvider. This is an unsafe escape hatch: own says
@@ -65,6 +65,17 @@ func (this *QAbstractFileIconProvider) Delete() {
 	}
 	rt.CheckThread("QAbstractFileIconProvider.Delete")
 	this.quteRef.H.Delete("QAbstractFileIconProvider.Delete")
+}
+
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QAbstractFileIconProvider) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
 }
 
 // Keep pins the object so GC never frees it, until Unkeep.
@@ -156,4 +167,164 @@ func (this *QAbstractFileIconProvider) Options() QAbstractFileIconProviderOption
 	r := C.qute_QAbstractFileIconProvider_options(self)
 	runtime.KeepAlive(this)
 	return QAbstractFileIconProviderOptions(r)
+}
+
+var qAbstractFileIconProviderVTable = []rt.Virtual{
+	{Name: "Icon", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Icon(QAbstractFileIconProviderIconType) *QIcon
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			iconType := QAbstractFileIconProviderIconType(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Icon(QAbstractFileIconProviderIconType) *QIcon
+			}).Icon(iconType)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractFileIconProvider.Icon")
+		}},
+	{Name: "IconFileInfo", Has: func(v any) bool {
+		_, ok := v.(interface {
+			IconFileInfo(*qtcore.QFileInfo) *QIcon
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			fileInfo := rt.View[qtcore.QFileInfo](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFileInfo", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				IconFileInfo(*qtcore.QFileInfo) *QIcon
+			}).IconFileInfo(fileInfo)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractFileIconProvider.IconFileInfo")
+		}},
+	{Name: "Type", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Type(*qtcore.QFileInfo) string
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			fileInfo := rt.View[qtcore.QFileInfo](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFileInfo", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Type(*qtcore.QFileInfo) string
+			}).Type(fileInfo)
+			*(*C.qute_str)(ret) = quteCStr(r)
+		}},
+	{Name: "SetOptions", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetOptions(QAbstractFileIconProviderOptions)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			options := QAbstractFileIconProviderOptions(*(*C.int64_t)(a[0]))
+			v.(interface {
+				SetOptions(QAbstractFileIconProviderOptions)
+			}).SetOptions(options)
+		}},
+	{Name: "Options", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Options() QAbstractFileIconProviderOptions
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface {
+				Options() QAbstractFileIconProviderOptions
+			}).Options()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+}
+
+// QAbstractFileIconProviderBase is embedded in Go types that subclass QAbstractFileIconProvider:
+//
+//	type MyAbstractFileIconProvider struct{ qtgui.QAbstractFileIconProviderBase }
+//
+// Define any of the virtual methods listed on QAbstractFileIconProviderSuper to override them,
+// then construct the value with NewQAbstractFileIconProviderWith. Call b.Super().X() for the
+// base implementation.
+type QAbstractFileIconProviderBase struct{ *QAbstractFileIconProvider }
+
+func (b *QAbstractFileIconProviderBase) quteQAbstractFileIconProviderBase() *QAbstractFileIconProviderBase {
+	return b
+}
+
+// QAbstractFileIconProviderSubclass is implemented by every type that embeds QAbstractFileIconProviderBase.
+type QAbstractFileIconProviderSubclass interface {
+	quteQAbstractFileIconProviderBase() *QAbstractFileIconProviderBase
+}
+
+// Super returns the C++ base implementations of QAbstractFileIconProvider's virtual methods.
+func (b *QAbstractFileIconProviderBase) Super() *QAbstractFileIconProviderSuper {
+	return &QAbstractFileIconProviderSuper{this: b.QAbstractFileIconProvider}
+}
+
+// QAbstractFileIconProviderSuper calls the C++ base implementations of QAbstractFileIconProvider's virtuals.
+type QAbstractFileIconProviderSuper struct{ this *QAbstractFileIconProvider }
+
+// Icon calls QAbstractFileIconProvider::icon.
+func (s *QAbstractFileIconProviderSuper) Icon(iconType QAbstractFileIconProviderIconType) *QIcon {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractFileIconProvider.Super.Icon")
+	r := C.qute_QAbstractFileIconProvider_super_0(self, C.int64_t(iconType))
+	runtime.KeepAlive(s.this)
+	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
+}
+
+// IconFileInfo calls QAbstractFileIconProvider::icon.
+func (s *QAbstractFileIconProviderSuper) IconFileInfo(fileInfo *qtcore.QFileInfo) *QIcon {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractFileIconProvider.Super.IconFileInfo")
+	r := C.qute_QAbstractFileIconProvider_super_1(self, rt.UseArg(unsafe.Pointer(fileInfo), "QAbstractFileIconProvider.Super.IconFileInfo"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(fileInfo)
+	return rt.View[QIcon](rt.WrapClass(r, "QIcon", rt.TakeOwned), r)
+}
+
+// Type calls QAbstractFileIconProvider::type.
+func (s *QAbstractFileIconProviderSuper) Type(fileInfo *qtcore.QFileInfo) string {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractFileIconProvider.Super.Type")
+	r := C.qute_QAbstractFileIconProvider_super_2(self, rt.UseArg(unsafe.Pointer(fileInfo), "QAbstractFileIconProvider.Super.Type"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(fileInfo)
+	return quteStr(r)
+}
+
+// SetOptions calls QAbstractFileIconProvider::setOptions.
+func (s *QAbstractFileIconProviderSuper) SetOptions(options QAbstractFileIconProviderOptions) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractFileIconProvider.Super.SetOptions")
+	C.qute_QAbstractFileIconProvider_super_3(self, C.int64_t(options))
+	runtime.KeepAlive(s.this)
+}
+
+// Options calls QAbstractFileIconProvider::options.
+func (s *QAbstractFileIconProviderSuper) Options() QAbstractFileIconProviderOptions {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractFileIconProvider.Super.Options")
+	r := C.qute_QAbstractFileIconProvider_super_4(self)
+	runtime.KeepAlive(s.this)
+	return QAbstractFileIconProviderOptions(r)
+}
+
+// NewQAbstractFileIconProviderWith constructs a QAbstractFileIconProvider whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQAbstractFileIconProviderWith(v QAbstractFileIconProviderSubclass) *QAbstractFileIconProvider {
+	rt.CheckThread("NewQAbstractFileIconProviderWith")
+	base := v.quteQAbstractFileIconProviderBase()
+	if base.QAbstractFileIconProvider != nil {
+		panic("NewQAbstractFileIconProviderWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QAbstractFileIconProvider_new_shim()
+	h := rt.WrapClass(p, "QAbstractFileIconProvider", rt.NewOwned)
+	base.QAbstractFileIconProvider = rt.View[QAbstractFileIconProvider](h, p)
+	id := h.SetSelf(v, qAbstractFileIconProviderVTable)
+	mask := rt.Mask(v, qAbstractFileIconProviderVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QAbstractFileIconProvider_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QAbstractFileIconProvider
 }

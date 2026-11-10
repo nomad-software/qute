@@ -227,3 +227,217 @@ func (this *QTranslator) LoadBytesFull(data []byte, directory string) bool {
 	runtime.KeepAlive(this)
 	return bool(r)
 }
+
+var qTranslatorVTable = []rt.Virtual{
+	{Name: "Translate", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Translate(string, string, string, int) string
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			context := C.GoString(*(**C.char)(a[0]))
+			sourceText := C.GoString(*(**C.char)(a[1]))
+			disambiguation := C.GoString(*(**C.char)(a[2]))
+			n := int(*(*C.int)(a[3]))
+			r := v.(interface {
+				Translate(string, string, string, int) string
+			}).Translate(context, sourceText, disambiguation, n)
+			*(*C.qute_str)(ret) = quteCStr(r)
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QTranslatorBase is embedded in Go types that subclass QTranslator:
+//
+//	type MyTranslator struct{ qtcore.QTranslatorBase }
+//
+// Define any of the virtual methods listed on QTranslatorSuper to override them,
+// then construct the value with NewQTranslatorWith. Call b.Super().X() for the
+// base implementation.
+type QTranslatorBase struct{ *QTranslator }
+
+func (b *QTranslatorBase) quteQTranslatorBase() *QTranslatorBase { return b }
+
+// QTranslatorSubclass is implemented by every type that embeds QTranslatorBase.
+type QTranslatorSubclass interface{ quteQTranslatorBase() *QTranslatorBase }
+
+// Super returns the C++ base implementations of QTranslator's virtual methods.
+func (b *QTranslatorBase) Super() *QTranslatorSuper { return &QTranslatorSuper{this: b.QTranslator} }
+
+// QTranslatorSuper calls the C++ base implementations of QTranslator's virtuals.
+type QTranslatorSuper struct{ this *QTranslator }
+
+// Translate calls QTranslator::translate.
+func (s *QTranslatorSuper) Translate(context string, sourceText string, disambiguation string, n int) string {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.Translate")
+	contextCStr := C.CString(context)
+	defer C.free(unsafe.Pointer(contextCStr))
+	sourceTextCStr := C.CString(sourceText)
+	defer C.free(unsafe.Pointer(sourceTextCStr))
+	disambiguationCStr := C.CString(disambiguation)
+	defer C.free(unsafe.Pointer(disambiguationCStr))
+	r := C.qute_QTranslator_super_0(self, contextCStr, sourceTextCStr, disambiguationCStr, C.int(n))
+	runtime.KeepAlive(s.this)
+	return quteStr(r)
+}
+
+// IsEmpty calls QTranslator::isEmpty.
+func (s *QTranslatorSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.IsEmpty")
+	r := C.qute_QTranslator_super_1(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Event calls QObject::event.
+func (s *QTranslatorSuper) Event(event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTranslator.Super.Event")
+	}
+	r := C.qute_QTranslator_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QTranslatorSuper) EventFilter(watched *QObject, event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QTranslator.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTranslator.Super.EventFilter")
+	}
+	r := C.qute_QTranslator_super_3(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QTranslatorSuper) TimerEvent(event *QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QTranslator.Super.TimerEvent")
+	}
+	C.qute_QTranslator_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QTranslatorSuper) ChildEvent(event *QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTranslator.Super.ChildEvent")
+	}
+	C.qute_QTranslator_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QTranslatorSuper) CustomEvent(event *QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTranslator.Super.CustomEvent")
+	}
+	C.qute_QTranslator_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQTranslatorWith constructs a QTranslator whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTranslatorWith(v QTranslatorSubclass, parent QObjectLike) *QTranslator {
+	rt.CheckThread("NewQTranslatorWith")
+	base := v.quteQTranslatorBase()
+	if base.QTranslator != nil {
+		panic("NewQTranslatorWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTranslatorWith")
+	}
+	p := C.qute_QTranslator_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTranslator", mode)
+	base.QTranslator = rt.View[QTranslator](h, p)
+	id := h.SetSelf(v, qTranslatorVTable)
+	mask := rt.Mask(v, qTranslatorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTranslator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTranslator
+}

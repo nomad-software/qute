@@ -387,3 +387,279 @@ func (this *QGraphicsLinearLayout) DumpFull(indent int) {
 	C.qute_QGraphicsLinearLayout_dump_1(self, C.int(indent))
 	runtime.KeepAlive(this)
 }
+
+var qGraphicsLinearLayoutVTable = []rt.Virtual{
+	{Name: "RemoveAt", Has: func(v any) bool { _, ok := v.(interface{ RemoveAt(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := int(*(*C.int)(a[0]))
+			v.(interface{ RemoveAt(int) }).RemoveAt(index)
+		}},
+	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			rect := goQRectF(*(*C.qute_rectf)(a[0]))
+			v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+		}},
+	{Name: "Count", Has: func(v any) bool { _, ok := v.(interface{ Count() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Count() int }).Count()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "ItemAt", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemAt(int) *QGraphicsLayoutItem
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := int(*(*C.int)(a[0]))
+			r := v.(interface {
+				ItemAt(int) *QGraphicsLayoutItem
+			}).ItemAt(index)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsLinearLayout.ItemAt")
+		}},
+	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Invalidate() }).Invalidate()
+		}},
+	{Name: "SizeHint", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			which := qtcore.SizeHint(*(*C.int64_t)(a[0]))
+			constraint := goQSizeF(*(*C.qute_sizef)(a[1]))
+			r := v.(interface {
+				SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+			}).SizeHint(which, constraint)
+			*(*C.qute_sizef)(ret) = cQSizeF(r)
+		}},
+	{Name: "GetContentsMargins", Has: func(v any) bool {
+		_, ok := v.(interface {
+			GetContentsMargins() (float64, float64, float64, float64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			o0, o1, o2, o3 := v.(interface {
+				GetContentsMargins() (float64, float64, float64, float64)
+			}).GetContentsMargins()
+			if a[0] != nil {
+				*(*C.double)(a[0]) = C.double(o0)
+			}
+			if a[1] != nil {
+				*(*C.double)(a[1]) = C.double(o1)
+			}
+			if a[2] != nil {
+				*(*C.double)(a[2]) = C.double(o2)
+			}
+			if a[3] != nil {
+				*(*C.double)(a[3]) = C.double(o3)
+			}
+		}},
+	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ UpdateGeometry() }).UpdateGeometry()
+		}},
+	{Name: "WidgetEvent", Has: func(v any) bool { _, ok := v.(interface{ WidgetEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			v.(interface{ WidgetEvent(*qtcore.QEvent) }).WidgetEvent(eArg)
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+}
+
+// QGraphicsLinearLayoutBase is embedded in Go types that subclass QGraphicsLinearLayout:
+//
+//	type MyGraphicsLinearLayout struct{ qtwidgets.QGraphicsLinearLayoutBase }
+//
+// Define any of the virtual methods listed on QGraphicsLinearLayoutSuper to override them,
+// then construct the value with NewQGraphicsLinearLayoutWith. Call b.Super().X() for the
+// base implementation.
+type QGraphicsLinearLayoutBase struct{ *QGraphicsLinearLayout }
+
+func (b *QGraphicsLinearLayoutBase) quteQGraphicsLinearLayoutBase() *QGraphicsLinearLayoutBase {
+	return b
+}
+
+// QGraphicsLinearLayoutSubclass is implemented by every type that embeds QGraphicsLinearLayoutBase.
+type QGraphicsLinearLayoutSubclass interface {
+	quteQGraphicsLinearLayoutBase() *QGraphicsLinearLayoutBase
+}
+
+// Super returns the C++ base implementations of QGraphicsLinearLayout's virtual methods.
+func (b *QGraphicsLinearLayoutBase) Super() *QGraphicsLinearLayoutSuper {
+	return &QGraphicsLinearLayoutSuper{this: b.QGraphicsLinearLayout}
+}
+
+// QGraphicsLinearLayoutSuper calls the C++ base implementations of QGraphicsLinearLayout's virtuals.
+type QGraphicsLinearLayoutSuper struct{ this *QGraphicsLinearLayout }
+
+// RemoveAt calls QGraphicsLinearLayout::removeAt.
+func (s *QGraphicsLinearLayoutSuper) RemoveAt(index int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.RemoveAt")
+	C.qute_QGraphicsLinearLayout_super_0(self, C.int(index))
+	runtime.KeepAlive(s.this)
+}
+
+// SetGeometry calls QGraphicsLinearLayout::setGeometry.
+func (s *QGraphicsLinearLayoutSuper) SetGeometry(rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.SetGeometry")
+	C.qute_QGraphicsLinearLayout_super_1(self, cQRectF(rect))
+	runtime.KeepAlive(s.this)
+}
+
+// Count calls QGraphicsLinearLayout::count.
+func (s *QGraphicsLinearLayoutSuper) Count() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.Count")
+	r := C.qute_QGraphicsLinearLayout_super_2(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// ItemAt calls QGraphicsLinearLayout::itemAt.
+func (s *QGraphicsLinearLayoutSuper) ItemAt(index int) *QGraphicsLayoutItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.ItemAt")
+	r := C.qute_QGraphicsLinearLayout_super_3(self, C.int(index))
+	runtime.KeepAlive(s.this)
+	return rt.View[QGraphicsLayoutItem](rt.WrapClass(r, "QGraphicsLayoutItem", rt.KeepOrBorrow), r)
+}
+
+// Invalidate calls QGraphicsLinearLayout::invalidate.
+func (s *QGraphicsLinearLayoutSuper) Invalidate() {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.Invalidate")
+	C.qute_QGraphicsLinearLayout_super_4(self)
+	runtime.KeepAlive(s.this)
+}
+
+// SizeHint calls QGraphicsLinearLayout::sizeHint.
+func (s *QGraphicsLinearLayoutSuper) SizeHint(which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.SizeHint")
+	r := C.qute_QGraphicsLinearLayout_super_5(self, C.int64_t(which), cQSizeF(constraint))
+	runtime.KeepAlive(s.this)
+	return goQSizeF(r)
+}
+
+// GetContentsMargins calls QGraphicsLayout::getContentsMargins.
+func (s *QGraphicsLinearLayoutSuper) GetContentsMargins() (float64, float64, float64, float64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.GetContentsMargins")
+	var leftOut C.double
+	var topOut C.double
+	var rightOut C.double
+	var bottomOut C.double
+	C.qute_QGraphicsLinearLayout_super_6(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(s.this)
+	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
+}
+
+// UpdateGeometry calls QGraphicsLayout::updateGeometry.
+func (s *QGraphicsLinearLayoutSuper) UpdateGeometry() {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.UpdateGeometry")
+	C.qute_QGraphicsLinearLayout_super_7(self)
+	runtime.KeepAlive(s.this)
+}
+
+// WidgetEvent calls QGraphicsLayout::widgetEvent.
+func (s *QGraphicsLinearLayoutSuper) WidgetEvent(eArg *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.WidgetEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QGraphicsLinearLayout.Super.WidgetEvent")
+	}
+	C.qute_QGraphicsLinearLayout_super_8(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// IsEmpty calls QGraphicsLayoutItem::isEmpty.
+func (s *QGraphicsLinearLayoutSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLinearLayout.Super.IsEmpty")
+	r := C.qute_QGraphicsLinearLayout_super_9(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// AddChildLayoutItem wraps the protected QGraphicsLayout::addChildLayoutItem for subclasses.
+func (b *QGraphicsLinearLayoutBase) AddChildLayoutItem(layoutItem QGraphicsLayoutItemLike) {
+	this := b.QGraphicsLinearLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.AddChildLayoutItem")
+	var layoutItemPtr unsafe.Pointer
+	if layoutItem != nil {
+		layoutItemPtr = rt.UseArg(unsafe.Pointer(layoutItem.AsQGraphicsLayoutItem()), "QGraphicsLinearLayout.AddChildLayoutItem")
+	}
+	C.qute_QGraphicsLinearLayout_prot_addChildLayoutItem(self, layoutItemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(layoutItem)
+}
+
+// SetGraphicsItem wraps the protected QGraphicsLayoutItem::setGraphicsItem for subclasses.
+func (b *QGraphicsLinearLayoutBase) SetGraphicsItem(item QGraphicsItemLike) {
+	this := b.QGraphicsLinearLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SetGraphicsItem")
+	var itemPtr unsafe.Pointer
+	var itemH *rt.Handle
+	if item != nil {
+		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsLinearLayout.SetGraphicsItem")
+	}
+	C.qute_QGraphicsLinearLayout_prot_setGraphicsItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setGraphicsItem.item", itemH, true)
+}
+
+// SetOwnedByLayout wraps the protected QGraphicsLayoutItem::setOwnedByLayout for subclasses.
+func (b *QGraphicsLinearLayoutBase) SetOwnedByLayout(ownedByLayout bool) {
+	this := b.QGraphicsLinearLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLinearLayout.SetOwnedByLayout")
+	C.qute_QGraphicsLinearLayout_prot_setOwnedByLayout(self, C.bool(ownedByLayout))
+	runtime.KeepAlive(this)
+}
+
+// NewQGraphicsLinearLayoutWith constructs a QGraphicsLinearLayout whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsLinearLayoutWith(v QGraphicsLinearLayoutSubclass, parent QGraphicsLayoutItemLike) *QGraphicsLinearLayout {
+	rt.CheckThread("NewQGraphicsLinearLayoutWith")
+	base := v.quteQGraphicsLinearLayoutBase()
+	if base.QGraphicsLinearLayout != nil {
+		panic("NewQGraphicsLinearLayoutWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsLayoutItem()), "NewQGraphicsLinearLayoutWith")
+	}
+	p := C.qute_QGraphicsLinearLayout_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsLinearLayout", mode)
+	base.QGraphicsLinearLayout = rt.View[QGraphicsLinearLayout](h, p)
+	id := h.SetSelf(v, qGraphicsLinearLayoutVTable)
+	mask := rt.Mask(v, qGraphicsLinearLayoutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsLinearLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsLinearLayout
+}

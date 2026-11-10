@@ -3,7 +3,7 @@
 module: QtWebEngineCore
 package: qtwebenginecore
 classes:
-  QWebEnginePage: { subclass: true }
+  QWebEnginePage: {}
   QWebEngineProfile: {}
   QWebEngineProfileBuilder: {}
   QWebEngineSettings: { no-construct: true }
@@ -31,9 +31,9 @@ classes:
   QWebEnginePermission: { kind: value }
   QWebEngineFrame: { kind: value }
   QWebEngineUrlScheme: { kind: value }
-  QWebEngineUrlSchemeHandler: { subclass: true }
+  QWebEngineUrlSchemeHandler: {}
   QWebEngineUrlRequestJob: { no-construct: true }
-  QWebEngineUrlRequestInterceptor: { subclass: true }
+  QWebEngineUrlRequestInterceptor: {}
   QWebEngineUrlRequestInfo: { no-construct: true }
   QWebEngineWebAuthUxRequest: { no-construct: true }
   QWebEngineWebAuthPinRequest: { kind: value }

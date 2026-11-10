@@ -155,6 +155,74 @@ func (t *testCtx) constructPref(cls *Class, parent string, longest bool) (string
 	return "", nil, false
 }
 
+// protectedOf returns the protected methods c declares, each as bound on
+// the Base of a class Go can subclass (c itself when it can be, else the
+// nearest subclassable derived class, preferring c's own module), for tests.
+func (g *Gen) protectedOf(c *Class) []*Method {
+	var host *Class
+	for _, d := range g.concreteFor(c) {
+		if d.Opts.Subclass && (host == nil || d.Module == c.Module && host.Module != c.Module) {
+			host = d
+		}
+	}
+	if host == nil {
+		return nil
+	}
+	var out []*Method
+	for _, mm := range host.Protected {
+		if mm.Owner == c {
+			out = append(out, mm)
+		}
+	}
+	return out
+}
+
+// receiver builds the receiver of mm. A protected method is only callable on
+// a Go subclass, so its receiver is one: an empty struct embedding the Base
+// of the class that binds it, constructed with New<Class>With.
+func (t *testCtx) receiver(c *Class, mm *Method, parent string, longest bool) (string, *Class, bool) {
+	if mm.IR.Access != "protected" {
+		return t.constructPref(c, parent, longest)
+	}
+	host := mm.Class
+	pc := primaryCtor(host)
+	if pc == nil {
+		return "", nil, false
+	}
+	base := t.q(host.Module, host.Name+"Base")
+	args := []string{"v"}
+	for _, p := range pc.Params {
+		if p.Out {
+			continue
+		}
+		if p.Rule == "transfer-this" && p.T.k == kObj {
+			if parent != "nil" && !acceptsWidget(p.T.cls) {
+				args = append(args, "nil")
+				continue
+			}
+			args = append(args, parent)
+			continue
+		}
+		a, ok := t.zeroArg(p)
+		if !ok {
+			return "", nil, false
+		}
+		args = append(args, a)
+	}
+	return fmt.Sprintf("func() *struct{ %s } {\n\t\t\tv := &struct{ %s }{}\n\t\t\t%s(%s)\n\t\t\treturn v\n\t\t}()",
+		base, base, t.q(host.Module, "New"+host.Name+"With"), strings.Join(args, ", ")), host, true
+}
+
+// path returns the selector from the receiver to the method's binding: the
+// embedded-field chain from concrete down to declaring, or nothing for a
+// protected method, which is promoted from the receiver's Base.
+func (t *testCtx) path(concrete, declaring *Class, mm *Method) string {
+	if mm.IR.Access == "protected" {
+		return ""
+	}
+	return path(concrete, declaring)
+}
+
 // path returns the embedded-field selector from concrete down to declaring.
 func path(concrete, declaring *Class) string {
 	var parts []string
@@ -255,6 +323,9 @@ func (g *Gen) emitTests(m *Module, dir string) error {
 		for _, mm := range c.Methods {
 			g.emitMethodTest(t, c, mm, b)
 		}
+		for _, mm := range g.protectedOf(c) {
+			g.emitMethodTest(t, c, mm, b)
+		}
 	}
 	var out buf
 	out.p("%s", strings.TrimSuffix(genHeader, "\n"))
@@ -314,7 +385,7 @@ func (g *Gen) emitKeepTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	if !ctor {
 		// the first usable constructor: the longest one may want a real
 		// argument that zeroArg would pass as nil (QMovie's device)
-		ex, rc, ok := t.construct(c, "nil")
+		ex, rc, ok := t.receiver(c, mm, "nil", false)
 		if !ok {
 			g.report.untested(mm, "cannot construct the receiver")
 			return
@@ -357,16 +428,19 @@ func (g *Gen) emitKeepTest(t *testCtx, c *Class, mm *Method, b *buf) {
 		b.p("\t\t%s", l)
 	}
 	owner := "recv"
+	if mm.IR.Access == "protected" {
+		owner = "recv." + recvCls.Name // the wrapper inside the Go subclass
+	}
 	if ctor {
 		owner = "x"
 		b.p("\t\tx := %s(%s)", t.q(c.Module, mm.GoName), strings.Join(args, ", "))
 	} else {
 		for _, p := range keeps {
 			if p.Keep == "release" {
-				b.p("\t\trt.KeepEachArg(unsafe.Pointer(recv), unsafe.Pointer(%s))", vars[p])
+				b.p("\t\trt.KeepEachArg(unsafe.Pointer(%s), unsafe.Pointer(%s))", owner, vars[p])
 			}
 		}
-		call := fmt.Sprintf("recv%s.%s(%s)", path(recvCls, c), mm.GoName, strings.Join(args, ", "))
+		call := fmt.Sprintf("recv%s.%s(%s)", t.path(recvCls, c, mm), mm.GoName, strings.Join(args, ", "))
 		if n := results(mm); n > 0 {
 			call = strings.TrimSuffix(strings.Repeat("_, ", n), ", ") + " = " + call
 		}
@@ -463,7 +537,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	if !thisRule && c.QObject && !isWidget(c) {
 		parentForRecv = "root"
 	}
-	recvExpr, recvCls, ok := t.constructPref(c, parentForRecv, true)
+	recvExpr, recvCls, ok := t.receiver(c, mm, parentForRecv, true)
 	if !ok {
 		g.report.untested(mm, "cannot construct the receiver")
 		return
@@ -535,7 +609,7 @@ func (g *Gen) emitGenericTest(t *testCtx, c *Class, mm *Method, b *buf) {
 	for _, l := range pre {
 		b.p("\t\t%s", l)
 	}
-	call := fmt.Sprintf("recv%s.%s(%s)", path(recvCls, c), mm.GoName, strings.Join(args, ", "))
+	call := fmt.Sprintf("recv%s.%s(%s)", t.path(recvCls, c, mm), mm.GoName, strings.Join(args, ", "))
 	if mm.Ret != nil && mm.Ret.k != kVoid {
 		if retRule != "" {
 			call = "res := " + call

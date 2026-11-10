@@ -210,6 +210,22 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			strings.Join(append(pre, fmt.Sprintf("return static_cast<%s *>(new %s(%s));", cpp, ctorClass, strings.Join(args, ", "))), "\n\t"))
 	}
 	if c.Opts.Subclass && c.Shim {
+		// the shim re-exports protected enums, which code outside the class
+		// can then name through it
+		var hidden []string
+		for _, e := range protectedEnums(c) {
+			hidden = append(hidden, regexp.QuoteMeta(e))
+		}
+		var prot *regexp.Regexp
+		if len(hidden) > 0 {
+			prot = regexp.MustCompile(`\b(?:` + strings.Join(hidden, "|") + `)\b`)
+		}
+		add := func(decl, body string) {
+			if prot != nil {
+				body = prot.ReplaceAllStringFunc(body, func(e string) string { return "qute_" + cls + "::" + lastName(e) })
+			}
+			add(decl, body)
+		}
 		if pc := primaryCtor(c); pc != nil {
 			var args []string
 			for _, p := range pc.Params {
@@ -224,16 +240,9 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			if v.IR.Pure {
 				continue
 			}
-			var args []string
-			for _, p := range v.Params {
-				args = append(args, g.cppArg(p.T, p.CName))
-			}
+			pre, args, post := g.cppCall(v.Params)
 			call := fmt.Sprintf("static_cast<qute_%s *>(static_cast<%s *>(self))->qute_super_%d(%s)", cls, cpp, v.VIndex, strings.Join(args, ", "))
-			body := call + ";"
-			if v.Ret.k != kVoid {
-				body = "return " + g.cppRet(v.Ret, call) + ";"
-			}
-			add(cDecl(cType(v.Ret), v.CName, methodCParams(v, true)), body)
+			add(cDecl(retCType(v), v.CName, methodCParams(v, true)), g.cppBody(v.Ret, call, pre, post))
 		}
 		for _, v := range c.Protected {
 			var args []string
@@ -499,11 +508,16 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		n = 1
 	}
 	b.p("class qute_%s : public %s {\npublic:", cls, c.Cpp)
-	b.p("\tusing %s::%s;", c.Cpp, lastName(c.Cpp))
+	// a forwarding constructor, not "using Base::Base": a using-declaration
+	// keeps a protected constructor protected, and New<Class>With needs it
+	b.p("\ttemplate <class... A> explicit qute_%s(A &&...a) : %s(std::forward<A>(a)...) {}", cls, c.Cpp)
 	b.p("\tuintptr_t qute_id = 0;\n\tuint64_t qute_mask[%d] = {};", n)
 	b.p("\tbool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i %% 64)) & 1); }")
 	if c.Kind != KindObject {
 		b.p("\t~qute_%s() override { qute_%s_dead(static_cast<void *>(static_cast<%s *>(this))); }", cls, c.Module.Pkg, c.Cpp)
+	}
+	for _, e := range protectedEnums(c) {
+		b.p("\tusing %s;", e)
 	}
 	protNames := map[string]bool{}
 	for _, v := range c.Protected {
@@ -525,9 +539,32 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		rt := v.IR.Return.Canonical
 		b.p("\t%s %s(%s)%s override {", rt, v.IR.Name, strings.Join(decl, ", "), cst)
 		b.p("\t\tif (qute_has(%d)) {", v.VIndex)
-		var refs []string
+		var refs, back, free []string
 		for i, p := range v.Params {
 			switch {
+			case p.Out || p.InOut:
+				// a local the Go override reads (in-out) and writes; a null
+				// pointer argument passes no slot
+				ct := cType(p.T)
+				switch {
+				case p.InOut && p.ByPtr:
+					b.p("\t\t\t%s c%d{};\n\t\t\tif (%s) {\n\t\t\t\tc%d = %s;\n\t\t\t}", ct, i, p.CName, i, g.cppRet(p.T, "*"+p.CName))
+				case p.InOut:
+					b.p("\t\t\t%s c%d = %s;", ct, i, g.cppRet(p.T, p.CName))
+				default:
+					b.p("\t\t\t%s c%d{};", ct, i)
+				}
+				if p.ByPtr {
+					refs = append(refs, fmt.Sprintf("%s ? static_cast<void *>(&c%d) : nullptr", p.CName, i))
+					back = append(back, fmt.Sprintf("if (%s) {\n\t\t\t\t\t*%s = %s;\n\t\t\t\t}", p.CName, p.CName, g.cppVirtRet(p.T, fmt.Sprintf("c%d", i))))
+				} else {
+					refs = append(refs, fmt.Sprintf("&c%d", i))
+					back = append(back, fmt.Sprintf("%s = %s;", p.CName, g.cppVirtRet(p.T, fmt.Sprintf("c%d", i))))
+				}
+				if p.T.k == kString || p.T.k == kBytes {
+					free = append(free, fmt.Sprintf("std::free(c%d.data);", i))
+				}
+				continue
 			case p.View && p.T.inplace:
 				b.p("\t\t\tvoid * c%d = static_cast<void *>(&%s);", i, p.CName)
 			case p.View:
@@ -537,6 +574,10 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 			}
 			refs = append(refs, fmt.Sprintf("&c%d", i))
 		}
+		wb := ""
+		for _, x := range back {
+			wb += "\n\t\t\t\t" + x
+		}
 		args := "nullptr"
 		if len(refs) > 0 {
 			b.p("\t\t\tvoid *args[] = {%s};", strings.Join(refs, ", "))
@@ -545,21 +586,29 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		// false: the Go value is gone (its tree was collected and is about to
 		// be deleted), so the C++ implementation runs instead
 		if v.Ret.k == kVoid {
-			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, nullptr)) {\n\t\t\t\treturn;\n\t\t\t}", c.Module.Pkg, v.VIndex, args)
+			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, nullptr)) {%s\n\t\t\t\treturn;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb)
 		} else {
 			if v.Ret.k == kValue || v.Ret.k == kObj {
 				b.p("\t\t\t%s r = nullptr;", cType(v.Ret))
 			} else {
 				b.p("\t\t\t%s r{};", cType(v.Ret))
 			}
-			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {\n\t\t\t\treturn %s;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, g.cppVirtRet(v.Ret, "r"))
+			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn %s;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb, g.cppVirtRet(v.Ret, "r"))
+		}
+		for _, x := range free {
+			b.p("\t\t\t%s // not taken: Go emptied it, or never ran", x)
 		}
 		b.p("\t\t}")
 		if v.IR.Pure {
 			if v.Ret.k == kVoid {
 				b.p("\t\treturn;")
 			} else {
-				b.p("\t\treturn %s();", strings.TrimSuffix(strings.TrimPrefix(v.IR.Return.Canonical, "const "), " &"))
+				if strings.HasSuffix(v.IR.Return.Canonical, "&") {
+					// a reference needs an object that outlives the call
+					b.p("\t\tstatic std::remove_cv_t<std::remove_reference_t<%s>> qute_zero{};\n\t\treturn qute_zero;", v.IR.Return.Canonical)
+				} else {
+					b.p("\t\treturn {};")
+				}
 			}
 		} else {
 			call := fmt.Sprintf("%s::%s(%s)", v.Owner.Cpp, v.IR.Name, strings.Join(names, ", "))
@@ -575,6 +624,30 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		}
 	}
 	b.p("};\n")
+}
+
+// protectedEnums returns the C++ names of the protected enums c inherits or
+// declares (QAbstractItemView::State), which only the shim may name.
+func protectedEnums(c *Class) []string {
+	var out []string
+	seen := map[string]bool{}
+	var walk func(x *Class)
+	walk = func(x *Class) {
+		for _, e := range x.IR.Enums {
+			if e.Protected && !seen[e.Name] {
+				seen[e.Name] = true
+				out = append(out, x.Cpp+"::"+e.Name)
+			}
+		}
+		if x.Base != nil {
+			walk(x.Base)
+		}
+		for _, s := range x.Secondary {
+			walk(s)
+		}
+	}
+	walk(c)
+	return out
 }
 
 func indexOf(m *Method, p *Param) int {
@@ -680,6 +753,8 @@ var (
 
 var _ = quteMap[C.int, C.int, int, int]
 var _ = qutePairs[C.int, C.int, int, int, int]
+var _ = quteCList[C.int]
+var _ = quteCMap[int, int, C.int, C.int]
 
 // quteStr copies a malloc'd UTF-8 buffer into a Go string and frees it.
 func quteStr(s C.qute_str) string {
@@ -770,6 +845,35 @@ func quteCStrList(v []string) C.qute_list {
 		ss[i] = quteCStr(s)
 	}
 	return C.qute_list{data: p, len: C.ptrdiff_t(len(v))}
+}
+
+// quteCList copies n elements, filled in by fill, into a malloc'd C array
+// that the shim takes over (a list a Go override returns).
+func quteCList[T any](n int, fill func(d []T)) C.qute_list {
+	var z T
+	p := C.malloc(C.size_t(max(n, 1)) * C.size_t(unsafe.Sizeof(z)))
+	fill(unsafe.Slice((*T)(p), n))
+	return C.qute_list{data: p, len: C.ptrdiff_t(n)}
+}
+
+// quteCMap copies a Go map into malloc'd key and value arrays that the shim
+// takes over (a map a Go override returns).
+func quteCMap[K comparable, V, CK, CV any](m map[K]V, kf func(K) CK, vf func(V) CV) C.qute_map {
+	ks := make([]K, 0, len(m))
+	for k := range m {
+		ks = append(ks, k)
+	}
+	keys := quteCList(len(ks), func(d []CK) {
+		for i, k := range ks {
+			d[i] = kf(k)
+		}
+	})
+	values := quteCList(len(ks), func(d []CV) {
+		for i, k := range ks {
+			d[i] = vf(m[k])
+		}
+	})
+	return C.qute_map{keys: keys, values: values}
 }
 
 func quteFreeStrs(v []C.qute_str) {
@@ -1037,6 +1141,13 @@ func (g *Gen) emitRootMethods(c *Class, b *buf) {
 	b.p("// Parented objects; on Borrowed objects it panics. Inside a signal or event")
 	b.p("// handler use DeleteLater() instead.")
 	b.p("func (this *%s) Delete() {\n\tif this == nil {\n\t\treturn\n\t}\n\trt.CheckThread(%q)\n\tthis.quteRef.H.Delete(%q)\n}\n", cls, cls+".Delete", cls+".Delete")
+	if c.Kind != KindValue {
+		b.p("// GoValue returns the Go value the object was built from with a")
+		b.p("// New<Class>With constructor (the Go subclass), or nil for an object Qt or")
+		b.p("// a plain constructor made. It finds the Go type behind a pointer Qt hands")
+		b.p("// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).")
+		b.p("func (this *%s) GoValue() any {\n\tif this == nil {\n\t\treturn nil\n\t}\n\treturn this.quteRef.H.GoValue()\n}\n", cls)
+	}
 	b.p("// Keep pins the object so GC never frees it, until Unkeep.")
 	b.p("func (this *%s) Keep() {\n\tif this != nil {\n\t\tthis.quteRef.H.Keep()\n\t}\n}\n", cls)
 	b.p("// Unkeep releases one Keep.")
@@ -1430,6 +1541,23 @@ func (g *Gen) unpackArgs(c *Class, mm *Method, b *buf, indent string) []string {
 	b.p("%sa := unsafe.Slice((*unsafe.Pointer)(args), %d)", indent, len(mm.Params))
 	for i, p := range mm.Params {
 		cv := fmt.Sprintf("*(*%s)(a[%d])", g.cgoType(p.T), i)
+		if p.Out {
+			continue // the override returns it
+		}
+		if p.InOut {
+			// the slot is read once and emptied: a C buffer is Go's to free
+			// from here, and the shim frees whatever is left in the slot if
+			// the override does not complete
+			b.p("%svar %s %s", indent, p.GoName, g.goType(p.T, m, false))
+			b.p("%sif a[%d] != nil {", indent, i)
+			b.p("%s\t%s = %s", indent, p.GoName, g.goRet(p.T, cv, "rt.KeepOrBorrow", m))
+			if p.T.k == kString || p.T.k == kBytes {
+				b.p("%s\t%s = %s{}", indent, cv, g.cgoType(p.T))
+			}
+			b.p("%s}", indent)
+			names = append(names, p.GoName)
+			continue
+		}
 		if (p.T.k == kObj || p.View) && p.Rule == "scoped" {
 			hn := p.GoName + "H"
 			cls := g.qual(p.T.cls.Module, m, p.T.cls.Name)
@@ -1475,14 +1603,35 @@ func (g *Gen) emitSignal(c *Class, sg *Method, b *buf) {
 	b.p("\treturn rt.NewConnection(C.%s(self, C.uintptr_t(id)))\n}\n", sg.CName)
 }
 
+// virtualSig is the Go method an override defines. Out and in-out
+// parameters are results after the virtual's own, as in the binding of the
+// method: Validate(input string, pos int) (QValidatorState, string, int).
 func (g *Gen) virtualSig(c *Class, v *Method) string {
 	m := c.Module
 	var ps []string
 	for _, p := range v.Params {
-		ps = append(ps, g.goType(p.T, m, false))
+		if !p.Out {
+			ps = append(ps, g.goType(p.T, m, false))
+		}
 	}
-	r := g.goType(v.Ret, m, false)
-	return fmt.Sprintf("%s(%s) %s", v.GoName, strings.Join(ps, ", "), r)
+	return fmt.Sprintf("%s(%s) %s", v.GoName, strings.Join(ps, ", "), g.virtualResults(c, v))
+}
+
+// virtualResults is the Go result list of an override (and of its Super).
+func (g *Gen) virtualResults(c *Class, v *Method) string {
+	var rs []string
+	if v.Ret.k != kVoid {
+		rs = append(rs, g.goType(v.Ret, c.Module, false))
+	}
+	for _, p := range v.Params {
+		if p.Out || p.InOut {
+			rs = append(rs, g.goType(p.T, c.Module, false))
+		}
+	}
+	if len(rs) > 1 {
+		return "(" + strings.Join(rs, ", ") + ")"
+	}
+	return strings.Join(rs, "")
 }
 
 func (g *Gen) emitSubclass(c *Class, b *buf) {
@@ -1502,21 +1651,36 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 		b.p("\t\tCall: func(v any, args, ret unsafe.Pointer) {")
 		names := g.unpackArgs(c, v, b, "\t\t\t")
 		call := fmt.Sprintf("v.(%s).%s(%s)", iface, v.GoName, strings.Join(names, ", "))
-		if v.Ret.k == kVoid {
-			if len(v.Params) == 0 {
-				b.p("\t\t\t_ = args")
+		if len(v.Params) == 0 {
+			b.p("\t\t\t_ = args")
+		}
+		var results []string
+		if v.Ret.k != kVoid {
+			results = append(results, "r")
+		}
+		for i, p := range v.Params {
+			if p.Out || p.InOut {
+				results = append(results, fmt.Sprintf("o%d", i))
 			}
+		}
+		if len(results) == 0 {
 			b.p("\t\t\t%s", call)
 		} else {
-			if len(v.Params) == 0 {
-				b.p("\t\t\t_ = args")
-			}
-			b.p("\t\t\tr := %s", call)
+			b.p("\t\t\t%s := %s", strings.Join(results, ", "), call)
+		}
+		if v.Ret.k != kVoid {
 			ex, _ := g.goVirtRet(v.Ret, "r", cls+"."+v.GoName, m)
 			b.p("\t\t\t*(*%s)(ret) = %s", g.cgoType(v.Ret), ex)
 			if v.RetRule != "" {
 				// the C++ caller owns what the override returns (rule 2)
 				b.p("\t\t\tif r != nil {\n\t\t\t\trt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()\n\t\t\t}")
+			}
+		}
+		for i, p := range v.Params {
+			if p.Out || p.InOut {
+				// a null pointer argument (Qt does not want the value) has no slot
+				ex, _ := g.goVirtRet(p.T, fmt.Sprintf("o%d", i), cls+"."+v.GoName, m)
+				b.p("\t\t\tif a[%d] != nil {\n\t\t\t\t*(*%s)(a[%d]) = %s\n\t\t\t}", i, g.cgoType(p.T), i, ex)
 			}
 		}
 		b.p("\t\t}},")
@@ -1541,40 +1705,43 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 			continue
 		}
 		gc := g.prepCall(c, v, cls+".Super."+v.GoName, true)
-		r := g.goType(v.Ret, m, false)
 		b.p("// %s calls %s::%s.", v.GoName, v.Owner.Name, v.IR.Name)
-		b.p("func (s *%sSuper) %s(%s) %s {", cls, v.GoName, strings.Join(gc.params, ", "), r)
+		b.p("func (s *%sSuper) %s(%s) %s {", cls, v.GoName, strings.Join(gc.params, ", "), g.virtualResults(c, v))
 		b.p("\tself := rt.Use(unsafe.Pointer(s.this), %q)", cls+".Super."+v.GoName)
 		for _, x := range gc.pre {
 			b.p("\t%s", x)
 		}
 		call := fmt.Sprintf("C.%s(%s)", v.CName, strings.Join(append([]string{"self"}, gc.args...), ", "))
-		keep := keepAlive("s.this", gc)
-		if v.Ret.k == kVoid {
-			b.p("\t%s", call)
-			for _, x := range keep {
-				b.p("\t%s", x)
-			}
-			b.p("}\n")
-		} else {
-			b.p("\tr := %s", call)
-			for _, x := range keep {
-				b.p("\t%s", x)
-			}
-			b.p("\treturn %s\n}\n", g.goRet(v.Ret, "r", "rt.KeepOrBorrow", m))
+		var outs []string
+		if v.Ret.k != kVoid {
+			call = "r := " + call
+			outs = append(outs, g.goRet(v.Ret, "r", "rt.KeepOrBorrow", m))
 		}
+		outs = append(outs, gc.outExpr...)
+		b.p("\t%s", call)
+		for _, x := range keepAlive("s.this", gc) {
+			b.p("\t%s", x)
+		}
+		for _, x := range gc.post {
+			b.p("\t%s", x)
+		}
+		if len(outs) > 0 {
+			b.p("\treturn %s", strings.Join(outs, ", "))
+		}
+		b.p("}\n")
 	}
 	for _, v := range c.Protected {
 		gc := g.prepCall(c, v, cls+"."+v.GoName, false)
 		r := g.goType(v.Ret, m, false)
 		b.p("// %s wraps the protected %s::%s for subclasses.", v.GoName, v.Owner.Name, v.IR.Name)
 		b.p("func (b *%sBase) %s(%s) %s {", cls, v.GoName, strings.Join(gc.params, ", "), r)
-		b.p("\tself := rt.Use(unsafe.Pointer(b.%s), %q)", cls, cls+"."+v.GoName)
+		b.p("\tthis := b.%s // the receiver the ownership code below acts on", cls)
+		b.p("\tself := rt.Use(unsafe.Pointer(this), %q)", cls+"."+v.GoName)
 		for _, x := range gc.pre {
 			b.p("\t%s", x)
 		}
 		call := fmt.Sprintf("C.%s(%s)", v.CName, strings.Join(append([]string{"self"}, gc.args...), ", "))
-		keep := keepAlive("b", gc)
+		keep := keepAlive("this", gc)
 		if v.Ret.k == kVoid {
 			b.p("\t%s", call)
 			for _, x := range keep {

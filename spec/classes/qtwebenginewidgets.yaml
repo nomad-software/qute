@@ -2,4 +2,4 @@
 module: QtWebEngineWidgets
 package: qtwebenginewidgets
 classes:
-  QWebEngineView: { subclass: true }
+  QWebEngineView: {}

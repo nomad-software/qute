@@ -151,7 +151,7 @@ free it underneath Qt (PySide's reference-keeping). `keep` fills one slot per
 method (`keep:<slot>` shares one, e.g. `QDataStream` constructor and
 `setDevice`); passing another argument or nil replaces it. `keep-each` holds
 every distinct argument until a `release` method drops it. References live
-on the receiver's handle; a QObject or notify-dtor receiver is anchored while
+on the receiver's handle; a QObject or notifying (shim) receiver is anchored while
 it keeps anything, because its Parented handle could otherwise be collected
 while the object lives. The death notice drops them.
 A keeper and what it keeps are often collected in the same GC cycle, and Go
@@ -205,8 +205,9 @@ class: <bound class>}` when Qt has no getter; a class may list several
   otherwise let the cleanup queue free it mid-call (miqt #366).
   `keepalive_test.go` guards this. Values returned from Go overrides are safe
   without it: the shim copies them before returning to Qt.
-- **Non-QObject classes.** With `notify-dtor` the shim subclass reports death
-  from its destructor; only objects built by our constructors are registered.
+- **Non-QObject classes.** The shim subclass (built for subclassing, or with
+  `notify-dtor` where subclassing is off) reports death from its destructor;
+  only objects built by our constructors are registered.
   Other non-QObjects (`KindPlain`) are never registered and get a fresh handle
   per wrap. Such a handle handed out by a method (a layout's `itemAt`, a
   painter's `device`) depends on the receiver and on what it depends on
@@ -286,8 +287,7 @@ C++ move overloads, `QBindable`, `QThread`, iterators, Qt's private and
 platform internals, C function pointers, returned `std::function`s,
 `std::initializer_list`, fixed-size C arrays, C++20 ordering types, template
 classes (`QGenericMatrix`, `QRgbaFloat`), printing page setup, accessibility,
-Vulkan, low-level font and text-layout internals, and interfaces that need
-C++ subclassing.
+Vulkan and low-level font and text-layout internals.
 
 Go strings go in as `(ptr, len)` into `QString::fromUtf8`, which copies, so
 cgo pointer rules hold. Results come back malloc'd and are copied and freed in
@@ -342,14 +342,29 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   (marked by the top bit of the id).
 - `model.EmitDataChanged(...)` emits a signal.
 - Subclassing: embed `qtwidgets.QWidgetBase` (etc.), define virtual methods
-  by name, construct with `NewQWidgetWith(v, parent)`. The shim subclass
-  (`qute_QWidget`) checks a per-instance bitmask, so non-overridden virtuals
+  by name, construct with `NewQWidgetWith(v, parent)`. It is on by default
+  for every bound class with virtuals (QObject or polymorphic plain class);
+  `chooseSubclass` and `buildShim` turn it off, with the reason in
+  `COVERAGE.md`, for values, events, `no-construct` classes, a non-public
+  destructor, no constructor, or a pure virtual Go cannot implement.
+  `subclass: false` opts out; `subclass: true` only insists (a warning if
+  it cannot be). The shim subclass (`qute_QWidget`) has a forwarding
+  constructor, so it also reaches protected constructors (those taking Qt's
+  d-pointer are left out), and an abstract class is built only through it.
+  It checks a per-instance bitmask, so non-overridden virtuals
   skip the cgo hop. Overrides are detected with interface assertions plus
   `rt.UserDefined`, which rejects promoted (compiler-generated) methods so a
   public virtual like `SizeHint` can't dispatch to itself. `b.Super().X()`
-  calls the C++ base; protected methods are on the Base type. Pure virtuals
-  not overridden return a default value. Classes whose pure virtuals can't be
-  bound aren't subclassable. The Go value is anchored like a connection.
+  calls the C++ base. An override has the Go name and signature of the
+  method's binding (`IndexOfItem`; a confirmed in-out parameter is a
+  parameter plus a result, `Validate(input string, pos int) (State, string,
+  int)`), and may return lists and maps. Protected methods are on the Base
+  type, built and named once per declaring class (`ownProtected`) with its
+  overlay, so their rules get generated tests on a Go subclass; protected
+  enums are bound and the shim re-exports them (`using`) for its C
+  functions. Pure virtuals not overridden return their zero value. The Go
+  value is anchored like a connection, and `GoValue()` on any non-value
+  wrapper returns it (a view's delegate, a block's user data).
   An override's object result follows the method's return rule in the other
   direction: `transfer-to-go` or `parented` (the C++ caller owns it, e.g.
   `mimeData`, `createPopupMenu`) makes it Parented; the rule may sit on the
@@ -374,14 +389,16 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   the oldest Qt the bindings compile against: they call that version's API.
   Re-running irgen on a newer Qt raises the minimum; update the README's
   requirements and check CI's Qt with it. It records public and protected
-  members, signals and slots (via `QT_ANNOTATE_ACCESS_SPECIFIER`), enums,
+  members, signals and slots (via `QT_ANNOTATE_ACCESS_SPECIFIER`), enums
+  (protected ones marked `protected`),
   `QFlags` typedefs, and private virtual overrides (which hide base virtuals
   from the shim), and lists (`dropped`) the public operators, conversion
   operators and member templates it leaves out. Public fields named `_…`
   (reserved) are skipped by the generator. Each shim includes the headers of
   its own module's classes and of the dependency classes its code names.
 - **Classes** (`spec/classes/<module>.yaml`): which classes are bound, with
-  options `kind: value|event`, `subclass`, `notify-dtor`, `no-construct`,
+  options `kind: value|event`, `subclass: false` (see Signals and
+  subclassing), `notify-dtor`, `no-construct` (only Qt creates it),
   `skip-virtuals`, `raw-pointers`, `enums-only` (enums but no wrapper, e.g.
   `QChar`, which is a `rune` in Go), `depends-on` (see Kept references; on a
   QObject class it does nothing and the generator warns), `memory` (`size:`
@@ -450,7 +467,11 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   numbered names, skipped methods (split into missing type support, counted
   by type, and skipped on purpose), rules without a test, and results whose
   death qute can't observe (a plain object from a function with no receiver
-  to depend on, unless an overlay marks it `reviewed`). The summary also
+  to depend on, unless an overlay marks it `reviewed`), the classes Go
+  cannot subclass and the virtuals Go cannot override, each with its reason.
+  Protected methods and virtual object results on default rules are listed
+  once, under the declaring class, and so are object arguments only a Full
+  form takes. The summary also
   counts Full forms and plain results tied to their receiver. Signal
   emitters count as reviewed, since emitting never changes ownership.
 - **Escape hatches**: `.Ptr()`, `XFromPtr(p, qtcore.Borrowed)`, `XCast(obj)`
@@ -550,13 +571,17 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Roadmap
 
 1. Runtime: done.
-2. Widgets: done for 388 classes in eleven modules, including OpenGL,
+2. Widgets: done for 425 classes in eleven modules, including OpenGL,
    SVG, multimedia and the web engine. No method waits for type support,
    every ownership rule is reviewed, every overload has a proper name, every
-   out-parameter is confirmed by a rule, and all rules but `QEvent::clone`
-   and `QWebEngineUrlRequestJob::reply` have a generated test (`reply` is
-   covered by `qtwebenginewidgets/lifetime_test.go`).
-3. Subclassing and models: done (virtual overrides, item models).
+   out-parameter is confirmed by a rule, and all rules but `QEvent::clone`,
+   `QWebEngineUrlRequestJob::reply` and `QSyntaxHighlighter::setCurrentBlockUserData`
+   have a generated test (`reply` is covered by
+   `qtwebenginewidgets/lifetime_test.go`, `setCurrentBlockUserData`, valid
+   only inside `highlightBlock`, by `subclass_test.go`).
+3. Subclassing and models: done. Every class with virtuals is subclassable
+   by default (187 classes; `COVERAGE.md` lists the 29 that are not, and
+   the virtuals Go cannot override).
 4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
    more modules (QtNetwork, QtPrintSupport and QtWebChannel would fill the
    gaps the web engine's skipped methods name), Qt's summary text in doc comments, then macOS and Windows.
@@ -570,6 +595,11 @@ Known limitations:
   (`QLayout::removeWidget` deleting the item) is not. Functions with no
   receiver are listed in `COVERAGE.md` under "Results whose death qute cannot
   see" (none today).
+- A Go override never runs from a C++ destructor (the object is already
+  Dead to Go), so a Go `QLayout` subclass cannot delete its items there as a
+  C++ layout does: the `QLayoutItem`s it holds outlive it (its widgets are
+  still freed by their parent). Take them out with `TakeAt` and `Delete()`
+  them before deleting such a layout.
 - When GC frees a window, Go handlers of its children no longer run, even
   ones Qt would call while the tree is being destroyed (`OnDestroyed`): their
   closures were collected with the window. `Delete()` the window to have them
@@ -582,7 +612,8 @@ Known limitations:
   crashes Qt), so no Qt destructor runs at exit. Objects whose teardown
   matters (a web engine profile flushing storage) must be deleted while the
   loop runs; the README says so.
-- `QIODevice` is not subclassable, so there are no Go streams (pull-mode
+- `QIODevice` is not subclassable, and `readData` cannot be overridden on
+  its subclasses (`QBuffer`, `QFile`), so there are no Go streams (pull-mode
   audio, custom media sources, streaming scheme replies). Qt Multimedia and
   the web engine read devices on their own threads, so one would need a
   thread-safe hand-written binding like the cookie filter.
@@ -624,7 +655,11 @@ Layout:
 - Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, tests
   (`tools_test.go` covers the inspection helpers and `ProcessEvents`;
   `regression_test.go` covers bindings whose signature was once wrong:
-  out-parameters, kept references, in-place virtual arguments, handler panics).
+  out-parameters, kept references, in-place virtual arguments, handler panics;
+  `subclass_test.go` covers subclassing by default: a view's events and
+  protected enums, in-out validator overrides and their Super, map results,
+  a Go graphics item, a syntax highlighter's per-block Go state, `GoValue`,
+  and an abstract class with no overrides).
 - `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed) and
   `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and

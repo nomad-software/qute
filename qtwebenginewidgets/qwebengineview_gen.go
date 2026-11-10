@@ -1223,6 +1223,24 @@ var qWebEngineViewVTable = []rt.Virtual{
 			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
 			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
 		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1231,6 +1249,22 @@ var qWebEngineViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -1632,6 +1666,30 @@ func (s *QWebEngineViewSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	runtime.KeepAlive(event)
 }
 
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QWebEngineViewSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QWebEngineView.Super.TabletEvent")
+	}
+	C.qute_QWebEngineView_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QWebEngineViewSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QWebEngineView.Super.ActionEvent")
+	}
+	C.qute_QWebEngineView_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
 // ChangeEvent calls QWidget::changeEvent.
 func (s *QWebEngineViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.ChangeEvent")
@@ -1639,15 +1697,27 @@ func (s *QWebEngineViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEngineView.Super.ChangeEvent")
 	}
-	C.qute_QWebEngineView_super_29(self, eventPtr)
+	C.qute_QWebEngineView_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QWebEngineViewSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QWebEngineView.Super.InputMethodEvent")
+	}
+	C.qute_QWebEngineView_super_32(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QWebEngineViewSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.FocusNextPrevChild")
-	r := C.qute_QWebEngineView_super_30(self, C.bool(next))
+	r := C.qute_QWebEngineView_super_33(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1663,7 +1733,7 @@ func (s *QWebEngineViewSuper) EventFilter(watched *qtcore.QObject, event *qtcore
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEngineView.Super.EventFilter")
 	}
-	r := C.qute_QWebEngineView_super_31(self, watchedPtr, eventPtr)
+	r := C.qute_QWebEngineView_super_34(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1677,7 +1747,7 @@ func (s *QWebEngineViewSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QWebEngineView.Super.TimerEvent")
 	}
-	C.qute_QWebEngineView_super_32(self, eventPtr)
+	C.qute_QWebEngineView_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1689,7 +1759,7 @@ func (s *QWebEngineViewSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QWebEngineView.Super.ChildEvent")
 	}
-	C.qute_QWebEngineView_super_33(self, eventPtr)
+	C.qute_QWebEngineView_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1701,53 +1771,59 @@ func (s *QWebEngineViewSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEngineView.Super.CustomEvent")
 	}
-	C.qute_QWebEngineView_super_34(self, eventPtr)
+	C.qute_QWebEngineView_super_37(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QWebEngineViewBase) UpdateMicroFocus() {
-	self := rt.Use(unsafe.Pointer(b.QWebEngineView), "QWebEngineView.UpdateMicroFocus")
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.UpdateMicroFocus")
 	C.qute_QWebEngineView_prot_updateMicroFocus(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QWebEngineViewBase) Create() {
-	self := rt.Use(unsafe.Pointer(b.QWebEngineView), "QWebEngineView.Create")
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.Create")
 	C.qute_QWebEngineView_prot_create(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QWebEngineViewBase) Destroy() {
-	self := rt.Use(unsafe.Pointer(b.QWebEngineView), "QWebEngineView.Destroy")
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.Destroy")
 	C.qute_QWebEngineView_prot_destroy(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QWebEngineViewBase) FocusNextChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QWebEngineView), "QWebEngineView.FocusNextChild")
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.FocusNextChild")
 	r := C.qute_QWebEngineView_prot_focusNextChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
 func (b *QWebEngineViewBase) FocusPreviousChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QWebEngineView), "QWebEngineView.FocusPreviousChild")
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.FocusPreviousChild")
 	r := C.qute_QWebEngineView_prot_focusPreviousChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QWebEngineViewBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
-	self := rt.Use(unsafe.Pointer(b.QWebEngineView), "QWebEngineView.GetDecodedMetricF")
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.GetDecodedMetricF")
 	r := C.qute_QWebEngineView_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

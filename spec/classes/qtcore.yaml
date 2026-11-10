@@ -1,8 +1,11 @@
 # Classes bound in package qtcore. Options:
 #   kind: value        copyable Qt value class held in an owned handle
 #   kind: event        an event class (arguments are scoped to their handler)
-#   subclass: true     generate a shim so Go types can override virtuals
-#   notify-dtor: true  shim destructor tells Go when a non-QObject dies
+#   subclass: false    do not let Go subclass it. Every class with virtuals is
+#                      subclassable unless Qt prevents it (COVERAGE.md lists why);
+#                      subclass: true insists, so the generator warns if it cannot be
+#   notify-dtor: true  shim destructor tells Go when a non-QObject dies; only
+#                      needed with subclass: false (a subclass shim does it)
 #   no-construct: true hide constructors
 #   skip-virtuals: [x] virtuals Go may not override
 #   raw-pointers: true pass pointer-to-number arguments as unsafe.Pointer (GL)
@@ -14,16 +17,16 @@
 module: QtCore
 package: qtcore
 classes:
-  QObject: { subclass: true }
+  QObject: {}
   QTimer: {}
   QCoreApplication: { no-construct: true }
-  QAbstractItemModel: { subclass: true }
-  QAbstractListModel: { subclass: true }
-  QAbstractTableModel: { subclass: true }
+  QAbstractItemModel: {}
+  QAbstractListModel: {}
+  QAbstractTableModel: {}
   QStringListModel: {}
   QItemSelectionModel: {}
   QAbstractProxyModel: {}
-  QSortFilterProxyModel: { subclass: true }
+  QSortFilterProxyModel: {}
   QIODeviceBase: { no-construct: true }
   QIODevice: {}
   QFileDevice: {}

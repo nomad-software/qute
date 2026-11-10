@@ -2,5 +2,5 @@
 module: QtSvgWidgets
 package: qtsvgwidgets
 classes:
-  QSvgWidget: { subclass: true }
+  QSvgWidget: {}
   QGraphicsSvgItem: {}

@@ -179,3 +179,296 @@ func (this *QGraphicsOpacityEffect) OnOpacityMaskChanged(f func(maskArg *qtgui.Q
 	})
 	return rt.NewConnection(C.qute_QGraphicsOpacityEffect_opacityMaskChanged(self, C.uintptr_t(id)))
 }
+
+var qGraphicsOpacityEffectVTable = []rt.Virtual{
+	{Name: "Draw", Has: func(v any) bool { _, ok := v.(interface{ Draw(*qtgui.QPainter) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			v.(interface{ Draw(*qtgui.QPainter) }).Draw(painter)
+		}},
+	{Name: "BoundingRectFor", Has: func(v any) bool {
+		_, ok := v.(interface {
+			BoundingRectFor(qtcore.QRectF) qtcore.QRectF
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			sourceRect := goQRectF(*(*C.qute_rectf)(a[0]))
+			r := v.(interface {
+				BoundingRectFor(qtcore.QRectF) qtcore.QRectF
+			}).BoundingRectFor(sourceRect)
+			*(*C.qute_rectf)(ret) = cQRectF(r)
+		}},
+	{Name: "SourceChanged", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SourceChanged(QGraphicsEffectChangeFlags)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			flags := QGraphicsEffectChangeFlags(*(*C.int64_t)(a[0]))
+			v.(interface {
+				SourceChanged(QGraphicsEffectChangeFlags)
+			}).SourceChanged(flags)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QGraphicsOpacityEffectBase is embedded in Go types that subclass QGraphicsOpacityEffect:
+//
+//	type MyGraphicsOpacityEffect struct{ qtwidgets.QGraphicsOpacityEffectBase }
+//
+// Define any of the virtual methods listed on QGraphicsOpacityEffectSuper to override them,
+// then construct the value with NewQGraphicsOpacityEffectWith. Call b.Super().X() for the
+// base implementation.
+type QGraphicsOpacityEffectBase struct{ *QGraphicsOpacityEffect }
+
+func (b *QGraphicsOpacityEffectBase) quteQGraphicsOpacityEffectBase() *QGraphicsOpacityEffectBase {
+	return b
+}
+
+// QGraphicsOpacityEffectSubclass is implemented by every type that embeds QGraphicsOpacityEffectBase.
+type QGraphicsOpacityEffectSubclass interface {
+	quteQGraphicsOpacityEffectBase() *QGraphicsOpacityEffectBase
+}
+
+// Super returns the C++ base implementations of QGraphicsOpacityEffect's virtual methods.
+func (b *QGraphicsOpacityEffectBase) Super() *QGraphicsOpacityEffectSuper {
+	return &QGraphicsOpacityEffectSuper{this: b.QGraphicsOpacityEffect}
+}
+
+// QGraphicsOpacityEffectSuper calls the C++ base implementations of QGraphicsOpacityEffect's virtuals.
+type QGraphicsOpacityEffectSuper struct{ this *QGraphicsOpacityEffect }
+
+// Draw calls QGraphicsOpacityEffect::draw.
+func (s *QGraphicsOpacityEffectSuper) Draw(painter *qtgui.QPainter) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.Draw")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsOpacityEffect.Super.Draw")
+	}
+	C.qute_QGraphicsOpacityEffect_super_0(self, painterPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+}
+
+// BoundingRectFor calls QGraphicsEffect::boundingRectFor.
+func (s *QGraphicsOpacityEffectSuper) BoundingRectFor(sourceRect qtcore.QRectF) qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.BoundingRectFor")
+	r := C.qute_QGraphicsOpacityEffect_super_1(self, cQRectF(sourceRect))
+	runtime.KeepAlive(s.this)
+	return goQRectF(r)
+}
+
+// SourceChanged calls QGraphicsEffect::sourceChanged.
+func (s *QGraphicsOpacityEffectSuper) SourceChanged(flags QGraphicsEffectChangeFlags) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.SourceChanged")
+	C.qute_QGraphicsOpacityEffect_super_2(self, C.int64_t(flags))
+	runtime.KeepAlive(s.this)
+}
+
+// Event calls QObject::event.
+func (s *QGraphicsOpacityEffectSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsOpacityEffect.Super.Event")
+	}
+	r := C.qute_QGraphicsOpacityEffect_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QGraphicsOpacityEffectSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QGraphicsOpacityEffect.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsOpacityEffect.Super.EventFilter")
+	}
+	r := C.qute_QGraphicsOpacityEffect_super_4(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QGraphicsOpacityEffectSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QGraphicsOpacityEffect.Super.TimerEvent")
+	}
+	C.qute_QGraphicsOpacityEffect_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QGraphicsOpacityEffectSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QGraphicsOpacityEffect.Super.ChildEvent")
+	}
+	C.qute_QGraphicsOpacityEffect_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QGraphicsOpacityEffectSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsOpacityEffect.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsOpacityEffect.Super.CustomEvent")
+	}
+	C.qute_QGraphicsOpacityEffect_super_7(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// UpdateBoundingRect wraps the protected QGraphicsEffect::updateBoundingRect for subclasses.
+func (b *QGraphicsOpacityEffectBase) UpdateBoundingRect() {
+	this := b.QGraphicsOpacityEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.UpdateBoundingRect")
+	C.qute_QGraphicsOpacityEffect_prot_updateBoundingRect(self)
+	runtime.KeepAlive(this)
+}
+
+// SourceIsPixmap wraps the protected QGraphicsEffect::sourceIsPixmap for subclasses.
+func (b *QGraphicsOpacityEffectBase) SourceIsPixmap() bool {
+	this := b.QGraphicsOpacityEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.SourceIsPixmap")
+	r := C.qute_QGraphicsOpacityEffect_prot_sourceIsPixmap(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// SourceBoundingRect wraps the protected QGraphicsEffect::sourceBoundingRect for subclasses.
+func (b *QGraphicsOpacityEffectBase) SourceBoundingRect() qtcore.QRectF {
+	this := b.QGraphicsOpacityEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.SourceBoundingRect")
+	r := C.qute_QGraphicsOpacityEffect_prot_sourceBoundingRect(self)
+	runtime.KeepAlive(this)
+	return goQRectF(r)
+}
+
+// DrawSource wraps the protected QGraphicsEffect::drawSource for subclasses.
+func (b *QGraphicsOpacityEffectBase) DrawSource(painter qtgui.QPainterLike) {
+	this := b.QGraphicsOpacityEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.DrawSource")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsOpacityEffect.DrawSource")
+	}
+	C.qute_QGraphicsOpacityEffect_prot_drawSource(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// SourcePixmap wraps the protected QGraphicsEffect::sourcePixmap for subclasses.
+func (b *QGraphicsOpacityEffectBase) SourcePixmap() *qtgui.QPixmap {
+	this := b.QGraphicsOpacityEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsOpacityEffect.SourcePixmap")
+	r := C.qute_QGraphicsOpacityEffect_prot_sourcePixmap(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// NewQGraphicsOpacityEffectWith constructs a QGraphicsOpacityEffect whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsOpacityEffectWith(v QGraphicsOpacityEffectSubclass, parent qtcore.QObjectLike) *QGraphicsOpacityEffect {
+	rt.CheckThread("NewQGraphicsOpacityEffectWith")
+	base := v.quteQGraphicsOpacityEffectBase()
+	if base.QGraphicsOpacityEffect != nil {
+		panic("NewQGraphicsOpacityEffectWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsOpacityEffectWith")
+	}
+	p := C.qute_QGraphicsOpacityEffect_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsOpacityEffect", mode)
+	base.QGraphicsOpacityEffect = rt.View[QGraphicsOpacityEffect](h, p)
+	id := h.SetSelf(v, qGraphicsOpacityEffectVTable)
+	mask := rt.Mask(v, qGraphicsOpacityEffectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsOpacityEffect_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsOpacityEffect
+}

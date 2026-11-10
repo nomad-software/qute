@@ -927,6 +927,18 @@ const (
 	QInputMethodContextMenu QInputMethodAction = 1
 )
 
+// QInputMethodEventAttributeType wraps the enum QInputMethodEvent::AttributeType.
+type QInputMethodEventAttributeType int64
+
+const (
+	QInputMethodEventTextFormat QInputMethodEventAttributeType = 0
+	QInputMethodEventCursor     QInputMethodEventAttributeType = 1
+	QInputMethodEventLanguage   QInputMethodEventAttributeType = 2
+	QInputMethodEventRuby       QInputMethodEventAttributeType = 3
+	QInputMethodEventSelection  QInputMethodEventAttributeType = 4
+	QInputMethodEventMimeData   QInputMethodEventAttributeType = 5
+)
+
 // QKeySequenceStandardKey wraps the enum QKeySequence::StandardKey.
 type QKeySequenceStandardKey int64
 

@@ -243,3 +243,239 @@ func (this *QOffscreenSurface) OnScreenChanged(f func(screen *QScreen)) qtcore.C
 	})
 	return rt.NewConnection(C.qute_QOffscreenSurface_screenChanged(self, C.uintptr_t(id)))
 }
+
+var qOffscreenSurfaceVTable = []rt.Virtual{
+	{Name: "SurfaceType", Has: func(v any) bool { _, ok := v.(interface{ SurfaceType() QSurfaceSurfaceType }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SurfaceType() QSurfaceSurfaceType }).SurfaceType()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "Format", Has: func(v any) bool { _, ok := v.(interface{ Format() *QSurfaceFormat }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Format() *QSurfaceFormat }).Format()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QOffscreenSurface.Format")
+		}},
+	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Size() qtcore.QSize }).Size()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QOffscreenSurfaceBase is embedded in Go types that subclass QOffscreenSurface:
+//
+//	type MyOffscreenSurface struct{ qtgui.QOffscreenSurfaceBase }
+//
+// Define any of the virtual methods listed on QOffscreenSurfaceSuper to override them,
+// then construct the value with NewQOffscreenSurfaceWith. Call b.Super().X() for the
+// base implementation.
+type QOffscreenSurfaceBase struct{ *QOffscreenSurface }
+
+func (b *QOffscreenSurfaceBase) quteQOffscreenSurfaceBase() *QOffscreenSurfaceBase { return b }
+
+// QOffscreenSurfaceSubclass is implemented by every type that embeds QOffscreenSurfaceBase.
+type QOffscreenSurfaceSubclass interface{ quteQOffscreenSurfaceBase() *QOffscreenSurfaceBase }
+
+// Super returns the C++ base implementations of QOffscreenSurface's virtual methods.
+func (b *QOffscreenSurfaceBase) Super() *QOffscreenSurfaceSuper {
+	return &QOffscreenSurfaceSuper{this: b.QOffscreenSurface}
+}
+
+// QOffscreenSurfaceSuper calls the C++ base implementations of QOffscreenSurface's virtuals.
+type QOffscreenSurfaceSuper struct{ this *QOffscreenSurface }
+
+// SurfaceType calls QOffscreenSurface::surfaceType.
+func (s *QOffscreenSurfaceSuper) SurfaceType() QSurfaceSurfaceType {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.SurfaceType")
+	r := C.qute_QOffscreenSurface_super_0(self)
+	runtime.KeepAlive(s.this)
+	return QSurfaceSurfaceType(r)
+}
+
+// Format calls QOffscreenSurface::format.
+func (s *QOffscreenSurfaceSuper) Format() *QSurfaceFormat {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.Format")
+	r := C.qute_QOffscreenSurface_super_1(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
+}
+
+// Size calls QOffscreenSurface::size.
+func (s *QOffscreenSurfaceSuper) Size() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.Size")
+	r := C.qute_QOffscreenSurface_super_2(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// Event calls QObject::event.
+func (s *QOffscreenSurfaceSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOffscreenSurface.Super.Event")
+	}
+	r := C.qute_QOffscreenSurface_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QOffscreenSurfaceSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QOffscreenSurface.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOffscreenSurface.Super.EventFilter")
+	}
+	r := C.qute_QOffscreenSurface_super_4(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QOffscreenSurfaceSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QOffscreenSurface.Super.TimerEvent")
+	}
+	C.qute_QOffscreenSurface_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QOffscreenSurfaceSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QOffscreenSurface.Super.ChildEvent")
+	}
+	C.qute_QOffscreenSurface_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QOffscreenSurfaceSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOffscreenSurface.Super.CustomEvent")
+	}
+	C.qute_QOffscreenSurface_super_7(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ResolveInterface wraps the protected QOffscreenSurface::resolveInterface for subclasses.
+func (b *QOffscreenSurfaceBase) ResolveInterface(name string, revision int) unsafe.Pointer {
+	this := b.QOffscreenSurface // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.ResolveInterface")
+	nameCStr := C.CString(name)
+	defer C.free(unsafe.Pointer(nameCStr))
+	r := C.qute_QOffscreenSurface_prot_resolveInterface(self, nameCStr, C.int(revision))
+	runtime.KeepAlive(this)
+	return r
+}
+
+// NewQOffscreenSurfaceWith constructs a QOffscreenSurface whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOffscreenSurfaceWith(v QOffscreenSurfaceSubclass, screen QScreenLike, parent qtcore.QObjectLike) *QOffscreenSurface {
+	rt.CheckThread("NewQOffscreenSurfaceWith")
+	base := v.quteQOffscreenSurfaceBase()
+	if base.QOffscreenSurface != nil {
+		panic("NewQOffscreenSurfaceWith: value is already constructed; use a fresh value")
+	}
+	var screenPtr unsafe.Pointer
+	if screen != nil {
+		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "NewQOffscreenSurfaceWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOffscreenSurfaceWith")
+	}
+	p := C.qute_QOffscreenSurface_new_shim(screenPtr, parentPtr)
+	runtime.KeepAlive(screen)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QOffscreenSurface", mode)
+	base.QOffscreenSurface = rt.View[QOffscreenSurface](h, p)
+	id := h.SetSelf(v, qOffscreenSurfaceVTable)
+	mask := rt.Mask(v, qOffscreenSurfaceVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOffscreenSurface_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOffscreenSurface
+}

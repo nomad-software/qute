@@ -544,6 +544,15 @@ var qAbstractScrollAreaVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
 		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionFrame](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -626,6 +635,24 @@ var qAbstractScrollAreaVTable = []rt.Virtual{
 			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
 			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
 		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -643,6 +670,22 @@ var qAbstractScrollAreaVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -959,17 +1002,25 @@ func (s *QAbstractScrollAreaSuper) ChangeEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// InitStyleOption calls QFrame::initStyleOption.
+func (s *QAbstractScrollAreaSuper) InitStyleOption(option *QStyleOptionFrame) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.InitStyleOption")
+	C.qute_QAbstractScrollArea_super_22(self, rt.UseArg(unsafe.Pointer(option), "QAbstractScrollArea.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
 // SetVisible calls QWidget::setVisible.
 func (s *QAbstractScrollAreaSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.SetVisible")
-	C.qute_QAbstractScrollArea_super_22(self, C.bool(visible))
+	C.qute_QAbstractScrollArea_super_23(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QAbstractScrollAreaSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.HeightForWidth")
-	r := C.qute_QAbstractScrollArea_super_23(self, C.int(arg0))
+	r := C.qute_QAbstractScrollArea_super_24(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -977,7 +1028,7 @@ func (s *QAbstractScrollAreaSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QAbstractScrollAreaSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.HasHeightForWidth")
-	r := C.qute_QAbstractScrollArea_super_24(self)
+	r := C.qute_QAbstractScrollArea_super_25(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -989,7 +1040,7 @@ func (s *QAbstractScrollAreaSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QAbstractScrollArea.Super.KeyReleaseEvent")
 	}
-	C.qute_QAbstractScrollArea_super_25(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1001,7 +1052,7 @@ func (s *QAbstractScrollAreaSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractScrollArea.Super.FocusInEvent")
 	}
-	C.qute_QAbstractScrollArea_super_26(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1013,7 +1064,7 @@ func (s *QAbstractScrollAreaSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractScrollArea.Super.FocusOutEvent")
 	}
-	C.qute_QAbstractScrollArea_super_27(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1025,7 +1076,7 @@ func (s *QAbstractScrollAreaSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QAbstractScrollArea.Super.EnterEvent")
 	}
-	C.qute_QAbstractScrollArea_super_28(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1037,7 +1088,7 @@ func (s *QAbstractScrollAreaSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.LeaveEvent")
 	}
-	C.qute_QAbstractScrollArea_super_29(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1049,7 +1100,7 @@ func (s *QAbstractScrollAreaSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QAbstractScrollArea.Super.MoveEvent")
 	}
-	C.qute_QAbstractScrollArea_super_30(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1061,7 +1112,31 @@ func (s *QAbstractScrollAreaSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QAbstractScrollArea.Super.CloseEvent")
 	}
-	C.qute_QAbstractScrollArea_super_31(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QAbstractScrollAreaSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QAbstractScrollArea.Super.TabletEvent")
+	}
+	C.qute_QAbstractScrollArea_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QAbstractScrollAreaSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QAbstractScrollArea.Super.ActionEvent")
+	}
+	C.qute_QAbstractScrollArea_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1073,7 +1148,7 @@ func (s *QAbstractScrollAreaSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QAbstractScrollArea.Super.ShowEvent")
 	}
-	C.qute_QAbstractScrollArea_super_32(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1085,15 +1160,27 @@ func (s *QAbstractScrollAreaSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QAbstractScrollArea.Super.HideEvent")
 	}
-	C.qute_QAbstractScrollArea_super_33(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QAbstractScrollAreaSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QAbstractScrollArea.Super.InputMethodEvent")
+	}
+	C.qute_QAbstractScrollArea_super_37(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QAbstractScrollAreaSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractScrollArea.Super.FocusNextPrevChild")
-	r := C.qute_QAbstractScrollArea_super_34(self, C.bool(next))
+	r := C.qute_QAbstractScrollArea_super_38(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1105,7 +1192,7 @@ func (s *QAbstractScrollAreaSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QAbstractScrollArea.Super.TimerEvent")
 	}
-	C.qute_QAbstractScrollArea_super_35(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1117,7 +1204,7 @@ func (s *QAbstractScrollAreaSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QAbstractScrollArea.Super.ChildEvent")
 	}
-	C.qute_QAbstractScrollArea_super_36(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1129,87 +1216,89 @@ func (s *QAbstractScrollAreaSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractScrollArea.Super.CustomEvent")
 	}
-	C.qute_QAbstractScrollArea_super_37(self, eventPtr)
+	C.qute_QAbstractScrollArea_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // SetViewportMargins wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
-func (b *QAbstractScrollAreaBase) SetViewportMargins(left int, top int, right int, bottom int) {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.SetViewportMargins")
-	C.qute_QAbstractScrollArea_prot_setViewportMargins(self, C.int(left), C.int(top), C.int(right), C.int(bottom))
-	runtime.KeepAlive(b)
-}
-
-// SetViewportMargins2 wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
-func (b *QAbstractScrollAreaBase) SetViewportMargins2(margins qtcore.QMargins) {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.SetViewportMargins2")
-	C.qute_QAbstractScrollArea_prot_setViewportMargins_1(self, cQMargins(margins))
-	runtime.KeepAlive(b)
+func (b *QAbstractScrollAreaBase) SetViewportMargins(margins qtcore.QMargins) {
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.SetViewportMargins")
+	C.qute_QAbstractScrollArea_prot_setViewportMargins(self, cQMargins(margins))
+	runtime.KeepAlive(this)
 }
 
 // ViewportMargins wraps the protected QAbstractScrollArea::viewportMargins for subclasses.
 func (b *QAbstractScrollAreaBase) ViewportMargins() qtcore.QMargins {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.ViewportMargins")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.ViewportMargins")
 	r := C.qute_QAbstractScrollArea_prot_viewportMargins(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return goQMargins(r)
 }
 
 // DrawFrame wraps the protected QFrame::drawFrame for subclasses.
 func (b *QAbstractScrollAreaBase) DrawFrame(painter qtgui.QPainterLike) {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.DrawFrame")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.DrawFrame")
 	var painterPtr unsafe.Pointer
 	if painter != nil {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QAbstractScrollArea.DrawFrame")
 	}
 	C.qute_QAbstractScrollArea_prot_drawFrame(self, painterPtr)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(painter)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QAbstractScrollAreaBase) UpdateMicroFocus() {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.UpdateMicroFocus")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.UpdateMicroFocus")
 	C.qute_QAbstractScrollArea_prot_updateMicroFocus(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QAbstractScrollAreaBase) Create() {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.Create")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.Create")
 	C.qute_QAbstractScrollArea_prot_create(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QAbstractScrollAreaBase) Destroy() {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.Destroy")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.Destroy")
 	C.qute_QAbstractScrollArea_prot_destroy(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QAbstractScrollAreaBase) FocusNextChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.FocusNextChild")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.FocusNextChild")
 	r := C.qute_QAbstractScrollArea_prot_focusNextChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
 func (b *QAbstractScrollAreaBase) FocusPreviousChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.FocusPreviousChild")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.FocusPreviousChild")
 	r := C.qute_QAbstractScrollArea_prot_focusPreviousChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QAbstractScrollAreaBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
-	self := rt.Use(unsafe.Pointer(b.QAbstractScrollArea), "QAbstractScrollArea.GetDecodedMetricF")
+	this := b.QAbstractScrollArea // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractScrollArea.GetDecodedMetricF")
 	r := C.qute_QAbstractScrollArea_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

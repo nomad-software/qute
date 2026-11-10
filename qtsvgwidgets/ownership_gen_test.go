@@ -23,10 +23,56 @@ func TestLayout(t *testing.T) {
 	}
 }
 
+// QGraphicsSvgItem::QGraphicsSvgItem(QGraphicsItem * parentItem = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQGraphicsSvgItem(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQGraphicsItemGroup(nil)
+		x := qtsvgwidgets.NewQGraphicsSvgItem(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtsvgwidgets.NewQGraphicsSvgItem(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QGraphicsSvgItem::QGraphicsSvgItem(const QString & fileName, QGraphicsItem * parentItem = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQGraphicsSvgItemWithFileName(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQGraphicsItemGroup(nil)
+		x := qtsvgwidgets.NewQGraphicsSvgItemWithFileName("x", root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtsvgwidgets.NewQGraphicsSvgItemWithFileName("x", nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // void QGraphicsSvgItem::setSharedRenderer(QSvgRenderer * renderer): keep rules
 func TestKeep_QGraphicsSvgItem_SetSharedRenderer(t *testing.T) {
 	qutetest.Run(t, func() {
-		recv := qtsvgwidgets.NewQGraphicsSvgItem()
+		recv := qtsvgwidgets.NewQGraphicsSvgItem(nil)
 		a0 := qtsvg.NewQSvgRenderer(nil)
 		recv.SetSharedRenderer(a0)
 		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {

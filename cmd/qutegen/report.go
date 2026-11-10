@@ -44,13 +44,22 @@ func (g *Gen) writeReport(path string) error {
 	droppedBy := map[string]int{}
 	total, fulls, tied := 0, 0, 0
 	var blind []string // results whose death qute cannot see
+	var noSub []row    // object classes Go cannot subclass, with why
+	subclassable := 0
+	var noVirt []row // virtuals Go cannot override, with why
+	inherited := map[string]bool{}
 	for _, m := range g.modules {
 		for _, c := range m.Classes {
 			all := append(append(append([]*Method{}, c.Ctors...), c.Methods...), c.Statics...)
 			for _, mm := range all {
 				total++
 				if mm.FullOf != nil {
-					fulls++ // same rules as its short form, reported there
+					// the same rules as its short form, reported there, except
+					// for the defaulted arguments only the Full form takes
+					fulls++
+					if d := defaultRules(&Method{IR: mm.IR, Params: mm.Params[len(mm.FullOf.Params):]}); len(d) > 0 && !reviewed(c, mm) {
+						rules = append(rules, row{c.Name, fmt.Sprintf("- `%s` (Full form) → %s", mm.Sig, strings.Join(d, ", "))})
+					}
 					continue
 				}
 				switch plainResult(mm) {
@@ -59,25 +68,10 @@ func (g *Gen) writeReport(path string) error {
 				case "blind":
 					blind = append(blind, fmt.Sprintf("- `%s`", mm.Sig))
 				}
-				var defaults []string
-				for _, prm := range mm.Params {
-					if mm.IR.Kind == "ctor" && prm.Rule == "transfer-this" && prm.Name == "parent" {
-						continue // the constructor parent heuristic is the one default treated as reviewed
-					}
-					if (prm.T.k == kObj || prm.T.k == kList && prm.T.elem.k == kObj) && !prm.Ruled {
-						defaults = append(defaults, fmt.Sprintf("`%s`: %s", prm.GoName, prm.Rule))
-					}
-					if (prm.Out || prm.InOut) && !prm.Ruled {
-						// guessed from the type: Qt may want an array, or read the value too
-						defaults = append(defaults, fmt.Sprintf("`%s`: %s (inferred)", prm.GoName, prm.Rule))
-					}
-				}
-				if mm.RetRule != "" && !mm.RetRuled {
-					defaults = append(defaults, "return: "+mm.RetRule)
-				}
+				defaults := defaultRules(mm)
 				// emitting a signal never changes ownership; an inferred
 				// out-parameter needs its own `out`/`in-out` rule
-				rev := c.Opts.Reviewed || mm.Emit || (mm.Overlay != nil && mm.Overlay.Reviewed)
+				rev := reviewed(c, mm)
 				for _, prm := range mm.Params {
 					if (prm.Out || prm.InOut) && !prm.Ruled {
 						rev = false
@@ -89,6 +83,35 @@ func (g *Gen) writeReport(path string) error {
 				if mm.Numbered {
 					numbered = append(numbered, row{c.Name, fmt.Sprintf("- `%s` → `%s`", mm.Sig, mm.GoName)})
 				}
+			}
+			// Protected methods and virtuals are inherited by every subclass's
+			// Base; they are reviewed once, on the class that declares them.
+			for _, mm := range c.Protected {
+				if key := mm.Owner.Name + "|" + mm.Sig; !inherited[key] {
+					inherited[key] = true
+					if mm.Numbered {
+						numbered = append(numbered, row{mm.Owner.Name, fmt.Sprintf("- protected `%s` → `%s`", mm.Sig, mm.GoName)})
+					}
+					if d := defaultRules(mm); len(d) > 0 && !(mm.Overlay != nil && mm.Overlay.Reviewed) && !mm.Owner.Opts.Reviewed {
+						rules = append(rules, row{mm.Owner.Name, fmt.Sprintf("- protected `%s` → %s", mm.Sig, strings.Join(d, ", "))})
+					}
+				}
+			}
+			for _, v := range c.Virtuals {
+				if key := "virtual|" + v.Owner.Name + "|" + v.Sig; !inherited[key] {
+					inherited[key] = true
+					if d := virtualDefaults(v); len(d) > 0 {
+						rules = append(rules, row{v.Owner.Name, fmt.Sprintf("- virtual `%s` → %s", v.Sig, strings.Join(d, ", "))})
+					}
+				}
+			}
+			for _, n := range c.NoVirtuals {
+				noVirt = append(noVirt, row{c.Name, fmt.Sprintf("- `%s`: %s", n.Sig, n.Why)})
+			}
+			if c.Opts.Subclass {
+				subclassable++
+			} else if c.Opts.NoSubclass != "" {
+				noSub = append(noSub, row{c.Name, "- " + c.Opts.NoSubclass})
 			}
 			for _, sg := range c.Signals {
 				if sg.Numbered {
@@ -173,6 +196,15 @@ func (g *Gen) writeReport(path string) error {
 	p("")
 	section("Skipped: missing type support, by class", missing)
 	section("Skipped on purpose", onPurpose)
+	section("Virtuals Go cannot override", noVirt)
+	p("## Classes Go cannot subclass (%d)\n", len(noSub))
+	p("Every other bound class with virtuals can be subclassed from Go: embed its")
+	p("Base and construct with New<Class>With. These cannot:\n")
+	sort.SliceStable(noSub, func(i, j int) bool { return noSub[i].cls < noSub[j].cls })
+	for _, r := range noSub {
+		p("- `%s`: %s", r.cls, strings.TrimPrefix(r.text, "- "))
+	}
+	p("")
 	p("## Not in the IR: operators, conversions and member templates (%d)\n", droppedBy["operator"]+droppedBy["conversion"]+droppedBy["template"])
 	p("tools/irgen leaves these out before the IR is written, so the generator never")
 	p("sees them and they are not counted as bound or skipped above. Go has no")
@@ -222,6 +254,9 @@ func (g *Gen) writeReport(path string) error {
 	fmt.Fprintf(&sum, "| of which Full forms (every argument, defaults included) | %d |\n", fulls)
 	fmt.Fprintf(&sum, "| Plain-object results that depend on their receiver | %d |\n", tied)
 	fmt.Fprintf(&sum, "| Skipped on purpose (with reasons below) | %d |\n", len(onPurpose))
+	fmt.Fprintf(&sum, "| Classes Go can subclass | %d |\n", subclassable)
+	fmt.Fprintf(&sum, "| Classes Go cannot subclass (with reasons below) | %d |\n", len(noSub))
+	fmt.Fprintf(&sum, "| Virtuals Go cannot override (with reasons below) | %d |\n", len(noVirt))
 	fmt.Fprintf(&sum, "| Operators, conversions and member templates not in the IR | %d |\n",
 		droppedBy["operator"]+droppedBy["conversion"]+droppedBy["template"])
 	fmt.Fprintf(&sum, "| Default ownership rules to review | %d |\n", len(rules))
@@ -243,6 +278,43 @@ func (g *Gen) writeReport(path string) error {
 // panics once the receiver is gone), "blind" for a function with no
 // receiver (unless an overlay marks it reviewed), "" otherwise. A plain base of QObject classes (QPaintDevice)
 // still counts: the pointer may be a plain object too.
+// reviewed reports whether the default rules of mm were checked: by the
+// overlay, or because emitting a signal never changes ownership.
+func reviewed(c *Class, mm *Method) bool {
+	return c.Opts.Reviewed || mm.Emit || (mm.Overlay != nil && mm.Overlay.Reviewed)
+}
+
+// defaultRules lists the ownership rules of mm that no overlay states.
+func defaultRules(mm *Method) []string {
+	var defaults []string
+	for _, prm := range mm.Params {
+		if mm.IR.Kind == "ctor" && prm.Rule == "transfer-this" && prm.Name == "parent" {
+			continue // the constructor parent heuristic is the one default treated as reviewed
+		}
+		if (prm.T.k == kObj || prm.T.k == kList && prm.T.elem.k == kObj) && !prm.Ruled {
+			defaults = append(defaults, fmt.Sprintf("`%s`: %s", prm.GoName, prm.Rule))
+		}
+		if (prm.Out || prm.InOut) && !prm.Ruled {
+			// guessed from the type: Qt may want an array, or read the value too
+			defaults = append(defaults, fmt.Sprintf("`%s`: %s (inferred)", prm.GoName, prm.Rule))
+		}
+	}
+	if mm.RetRule != "" && !mm.RetRuled {
+		defaults = append(defaults, "return: "+mm.RetRule)
+	}
+	return defaults
+}
+
+// virtualDefaults lists what a Go override of v returns to Qt on a default
+// rule: an object result says nothing about who owns it until an overlay on
+// the declaring class gives a return rule (or marks it reviewed).
+func virtualDefaults(v *Method) []string {
+	if v.Ret.k != kObj || v.RetRuled || v.Overlay != nil && v.Overlay.Reviewed {
+		return nil
+	}
+	return []string{"result kept by Go (no return rule)"}
+}
+
 func plainResult(mm *Method) string {
 	if mm.Ret == nil || mm.IR == nil || mm.IR.Kind == "ctor" || mm.Overlay != nil && mm.Overlay.Created {
 		return ""

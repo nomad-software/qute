@@ -162,6 +162,26 @@ inline QList<QString> qute_take_qstrlist(qute_list l) {
     return out;
 }
 
+// qute_take_list builds the QList a Go override returned and frees its array.
+template <class Q, class C, class F> inline QList<Q> qute_take_list(qute_list l, F f) {
+    QList<Q> out;
+    out.reserve(l.len);
+    auto d = static_cast<C *>(l.data);
+    for (ptrdiff_t i = 0; i < l.len; i++) out.append(f(d[i]));
+    std::free(l.data);
+    return out;
+}
+// qute_take_map builds the QMap or QHash a Go override returned and frees its arrays.
+template <class M, class KC, class VC, class KF, class VF> inline M qute_take_map(qute_map m, KF kf, VF vf) {
+    M out;
+    auto k = static_cast<KC *>(m.keys.data);
+    auto v = static_cast<VC *>(m.values.data);
+    for (ptrdiff_t i = 0; i < m.keys.len; i++) out.insert(kf(k[i]), vf(v[i]));
+    std::free(m.keys.data);
+    std::free(m.values.data);
+    return out;
+}
+
 inline QPoint qute_to_QPoint(qute_point c) { return QPoint(c.x, c.y); }
 inline qute_point qute_from_QPoint(const QPoint &v) { return qute_point{v.x(), v.y()}; }
 inline QPointF qute_to_QPointF(qute_pointf c) { return QPointF(c.x, c.y); }

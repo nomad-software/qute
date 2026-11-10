@@ -8,6 +8,7 @@ QIODevice:
   getChar: { args: { c: out } }
   readLineInto(QByteArray*, qint64): { args: { result: out } }
 QCoreApplication:
+  sendPostedEvents: { reviewed: true }
   installTranslator: { reviewed: true, doc: "The application does not take ownership of the translator; keep it alive." }
   removeTranslator: { reviewed: true }
   notify: { reviewed: true }
@@ -34,6 +35,8 @@ QTimer:
   start: { keep-defaults: false }
 
 QAbstractItemModel:
+  decodeData: { reviewed: true } # the stream is used during the call only
+  encodeData: { reviewed: true } # the stream is used during the call only
   mimeData:
     return: transfer-to-go
     doc: "The default implementation returns a new QMimeData with no parent; the caller (normally QDrag) owns it."
@@ -59,6 +62,8 @@ QEvent:
   clone: { return: transfer-to-go, doc: "Returns a new copy; the caller owns it.", test: "skip: event objects cannot be constructed from Go" }
 
 QItemSelectionModel:
+  emitSelectionChanged: { name: EmitSelectionChangedBetween, doc: "Emits selectionChanged with the differences between newSelection and oldSelection." }
+  "QItemSelectionModel(QAbstractItemModel*)": { args: { model: keep:model } }
   QItemSelectionModel(QAbstractItemModel*, QObject*): { args: { model: keep:model } }
   model: { return: borrowed }
   setModel: { args: { model: keep:model }, reviewed: true }

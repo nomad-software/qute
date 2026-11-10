@@ -64,6 +64,17 @@ func (this *QOpenGLTexture) Delete() {
 	this.quteRef.H.Delete("QOpenGLTexture.Delete")
 }
 
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QOpenGLTexture) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
+}
+
 // Keep pins the object so GC never frees it, until Unkeep.
 func (this *QOpenGLTexture) Keep() {
 	if this != nil {

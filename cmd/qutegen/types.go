@@ -126,7 +126,6 @@ var deliberateBases = map[string]string{
 	"QDebug":                      "debug streams; use fmt with the Go values",
 	"QGraphicsEffectSource":       "custom graphics effects need C++ subclassing",
 	"QItemEditorCreatorBase":      "custom editor creators need C++ subclassing",
-	"QTextBlockUserData":          "per-block user data needs C++ subclassing",
 	"QTextFrameLayoutData":        "text layout internals",
 	"QTextCursorPrivate":          "private API",
 	"QTextDocumentPrivate":        "private API",
@@ -150,7 +149,9 @@ var deliberateBases = map[string]string{
 	"QPageRanges":                 "printing page setup is not bound yet",
 	"QPdfOutputIntent":            "printing page setup is not bound yet",
 	"QPageLayout::Orientation":    "printing page setup is not bound yet",
+	"QPageLayout::Unit":           "printing page setup is not bound yet",
 	"QUuid::Id128Bytes":           "a C union; use the string and byte-array forms",
+	"QFileDialogArgs":             "Qt's private internals",
 	"Qt::partial_ordering":        "C++20 comparison types; use the comparison methods",
 	"Qt::weak_ordering":           "C++20 comparison types; use the comparison methods",
 	"Qt::strong_ordering":         "C++20 comparison types; use the comparison methods",
@@ -190,8 +191,12 @@ func deliberate(can, base string, ptr, ref, rref, ret bool) string {
 		return "a template class; use QColor or QRgba64"
 	case has("QMap<QFont::Tag"):
 		return "a map keyed by a value class; use the single-tag methods"
+	case strings.Contains(can, "[") && (strings.Contains(can, "char") || strings.HasPrefix(can, "uchar")):
+		return "a C array; use the string or byte-array form"
+	case strings.Contains(can, "[") && strings.Contains(can, "float"):
+		return "a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)"
 	case strings.Contains(can, "["):
-		return "a fixed-size C array; use the string or byte-array form"
+		return "a C array of objects; reimplement the per-item method instead (QGraphicsItem.Paint)"
 	case base == "char" && ptr && ref:
 		return "returns memory allocated with new[]; use the QByteArray overload"
 	case has("QMap<") && strings.Contains(base, "QDate,"):
@@ -872,6 +877,14 @@ func (g *Gen) goVirtRet(c *conv, v, method string, ctx *Module) (string, bool) {
 	case kDur, kTime, kRaw:
 		_, a := g.goArg(c, v, method, ctx)
 		return a[0], true
+	case kList:
+		// a malloc'd array the shim copies into a QList and frees
+		return fmt.Sprintf("quteCList(len(%s), func(d []%s) {\n\tfor i, e := range %s {\n\t\td[i] = %s\n\t}\n})",
+			v, g.cgoType(c.elem), v, g.elemArg(c.elem, "e", method, ctx)), true
+	case kMap:
+		return fmt.Sprintf("quteCMap(%s, func(k %s) %s { return %s }, func(e %s) %s { return %s })",
+			v, g.goType(c.key, ctx, false), g.cgoType(c.key), g.elemArg(c.key, "k", method, ctx),
+			g.goType(c.elem, ctx, false), g.cgoType(c.elem), g.elemArg(c.elem, "e", method, ctx)), true
 	}
 	return "", false
 }
@@ -1088,8 +1101,30 @@ func (g *Gen) cppVirtRet(c *conv, n string) string {
 		return fmt.Sprintf("qute_take_qstrlist(%s)", n)
 	case kObj:
 		return fmt.Sprintf("static_cast<%s *>(%s)", c.cls.Cpp, n)
+	case kList:
+		ex := fmt.Sprintf("qute_take_list<%s, %s>(%s, [](%s e) { return %s; })",
+			c.elem.cppBase(), elemCType(c.elem), n, elemCType(c.elem), g.takeElem(c.elem, "e"))
+		if c.wrap != "" {
+			ex = c.wrap + "(" + ex + ")"
+		}
+		return ex
+	case kMap:
+		return fmt.Sprintf("qute_take_map<%s, %s, %s>(%s, [](%s k) { return %s; }, [](%s e) { return %s; })",
+			c.base, elemCType(c.key), elemCType(c.elem), n, elemCType(c.key), g.takeElem(c.key, "k"), elemCType(c.elem), g.takeElem(c.elem, "e"))
 	}
 	return g.cppArg(c, n)
+}
+
+// takeElem builds one Qt list or map element from the C element a Go
+// override wrote, freeing a string's buffer.
+func (g *Gen) takeElem(c *conv, e string) string {
+	switch c.k {
+	case kString:
+		return fmt.Sprintf("qute_take_qstr(%s)", e)
+	case kBytes:
+		return fmt.Sprintf("qute_take_qbytes(%s)", e)
+	}
+	return g.cppArg(c, e)
 }
 
 // virtRetSupported reports whether a type can be returned from a Go override.
@@ -1097,6 +1132,20 @@ func virtRetSupported(c *conv) bool {
 	switch c.k {
 	case kVoid, kPrim, kEnum, kFlags, kChar, kStruct, kValue, kObj, kString, kBytes, kStrList, kDur, kTime, kRaw:
 		return !(c.k == kObj && c.ref) && !c.span && !c.bytes
+	case kList:
+		return !c.span && virtElemSupported(c.elem)
+	case kMap:
+		return !c.pairs && virtElemSupported(c.key) && virtElemSupported(c.elem)
+	}
+	return false
+}
+
+// virtElemSupported reports whether a list or map element can come from a
+// Go override.
+func virtElemSupported(c *conv) bool {
+	switch c.k {
+	case kPrim, kEnum, kFlags, kStruct, kValue, kObj, kString, kBytes:
+		return !c.span && !c.bytes && !(c.k == kObj && c.ref) && !(c.k == kValue && c.ptr)
 	}
 	return false
 }

@@ -117,3 +117,1105 @@ func (this *QStringListModel) SetStringList(strings []string) {
 	C.qute_QStringListModel_setStringList(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
 	runtime.KeepAlive(this)
 }
+
+var qStringListModelVTable = []rt.Virtual{
+	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*QModelIndex) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ RowCount(*QModelIndex) int }).RowCount(parent)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Sibling", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Sibling(int, int, *QModelIndex) *QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			column := int(*(*C.int)(a[1]))
+			idx := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				Sibling(int, int, *QModelIndex) *QModelIndex
+			}).Sibling(row, column, idx)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStringListModel.Sibling")
+		}},
+	{Name: "Data", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Data(*QModelIndex, int) *QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			r := v.(interface {
+				Data(*QModelIndex, int) *QVariant
+			}).Data(index, role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStringListModel.Data")
+		}},
+	{Name: "SetData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetData(*QModelIndex, *QVariant, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			role := int(*(*C.int)(a[2]))
+			r := v.(interface {
+				SetData(*QModelIndex, *QVariant, int) bool
+			}).SetData(index, value, role)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ClearItemData", Has: func(v any) bool { _, ok := v.(interface{ ClearItemData(*QModelIndex) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ ClearItemData(*QModelIndex) bool }).ClearItemData(index)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Flags", Has: func(v any) bool { _, ok := v.(interface{ Flags(*QModelIndex) ItemFlags }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ Flags(*QModelIndex) ItemFlags }).Flags(index)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "InsertRows", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InsertRows(int, int, *QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				InsertRows(int, int, *QModelIndex) bool
+			}).InsertRows(row, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "RemoveRows", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RemoveRows(int, int, *QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				RemoveRows(int, int, *QModelIndex) bool
+			}).RemoveRows(row, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MoveRows", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceRow := int(*(*C.int)(a[1]))
+			count := int(*(*C.int)(a[2]))
+			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			destinationChild := int(*(*C.int)(a[4]))
+			r := v.(interface {
+				MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
+			}).MoveRows(sourceParent, sourceRow, count, destinationParent, destinationChild)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ItemData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemData(*QModelIndex) map[int]*QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				ItemData(*QModelIndex) map[int]*QVariant
+			}).ItemData(index)
+			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e *QVariant) unsafe.Pointer { return rt.UseArg(unsafe.Pointer(e), "QStringListModel.ItemData") })
+		}},
+	{Name: "SetItemData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetItemData(*QModelIndex, map[int]*QVariant) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
+				return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+			})
+			r := v.(interface {
+				SetItemData(*QModelIndex, map[int]*QVariant) bool
+			}).SetItemData(index, roles)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Sort", Has: func(v any) bool { _, ok := v.(interface{ Sort(int, SortOrder) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			column := int(*(*C.int)(a[0]))
+			order := SortOrder(*(*C.int64_t)(a[1]))
+			v.(interface{ Sort(int, SortOrder) }).Sort(column, order)
+		}},
+	{Name: "SupportedDropActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDropActions() DropActions }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SupportedDropActions() DropActions }).SupportedDropActions()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "Index", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Index(int, int, *QModelIndex) *QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			row := int(*(*C.int)(a[0]))
+			column := int(*(*C.int)(a[1]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				Index(int, int, *QModelIndex) *QModelIndex
+			}).Index(row, column, parent)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStringListModel.Index")
+		}},
+	{Name: "DropMimeData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			data := rt.View[QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			action := DropActions(*(*C.int64_t)(a[1]))
+			row := int(*(*C.int)(a[2]))
+			column := int(*(*C.int)(a[3]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[4]))
+			r := v.(interface {
+				DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
+			}).DropMimeData(data, action, row, column, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "HeaderData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HeaderData(int, Orientations, int) *QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			section := int(*(*C.int)(a[0]))
+			orientation := Orientations(*(*C.int64_t)(a[1]))
+			role := int(*(*C.int)(a[2]))
+			r := v.(interface {
+				HeaderData(int, Orientations, int) *QVariant
+			}).HeaderData(section, orientation, role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStringListModel.HeaderData")
+		}},
+	{Name: "SetHeaderData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetHeaderData(int, Orientations, *QVariant, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			section := int(*(*C.int)(a[0]))
+			orientation := Orientations(*(*C.int64_t)(a[1]))
+			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			role := int(*(*C.int)(a[3]))
+			r := v.(interface {
+				SetHeaderData(int, Orientations, *QVariant, int) bool
+			}).SetHeaderData(section, orientation, value, role)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MimeTypes", Has: func(v any) bool { _, ok := v.(interface{ MimeTypes() []string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MimeTypes() []string }).MimeTypes()
+			*(*C.qute_list)(ret) = quteCStrList(r)
+		}},
+	{Name: "MimeData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MimeData([]*QModelIndex) *QMimeData
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *QModelIndex {
+				return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+			})
+			r := v.(interface {
+				MimeData([]*QModelIndex) *QMimeData
+			}).MimeData(indexes)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStringListModel.MimeData")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "CanDropMimeData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			data := rt.View[QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			action := DropActions(*(*C.int64_t)(a[1]))
+			row := int(*(*C.int)(a[2]))
+			column := int(*(*C.int)(a[3]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[4]))
+			r := v.(interface {
+				CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
+			}).CanDropMimeData(data, action, row, column, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SupportedDragActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDragActions() DropActions }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SupportedDragActions() DropActions }).SupportedDragActions()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "InsertColumns", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InsertColumns(int, int, *QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			column := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				InsertColumns(int, int, *QModelIndex) bool
+			}).InsertColumns(column, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "RemoveColumns", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RemoveColumns(int, int, *QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			column := int(*(*C.int)(a[0]))
+			count := int(*(*C.int)(a[1]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			r := v.(interface {
+				RemoveColumns(int, int, *QModelIndex) bool
+			}).RemoveColumns(column, count, parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MoveColumns", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceColumn := int(*(*C.int)(a[1]))
+			count := int(*(*C.int)(a[2]))
+			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			destinationChild := int(*(*C.int)(a[4]))
+			r := v.(interface {
+				MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
+			}).MoveColumns(sourceParent, sourceColumn, count, destinationParent, destinationChild)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*QModelIndex) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ FetchMore(*QModelIndex) }).FetchMore(parent)
+		}},
+	{Name: "CanFetchMore", Has: func(v any) bool { _, ok := v.(interface{ CanFetchMore(*QModelIndex) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ CanFetchMore(*QModelIndex) bool }).CanFetchMore(parent)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Buddy", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Buddy(*QModelIndex) *QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Buddy(*QModelIndex) *QModelIndex
+			}).Buddy(index)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStringListModel.Buddy")
+		}},
+	{Name: "Match", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			start := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			hits := int(*(*C.int)(a[3]))
+			flags := MatchFlags(*(*C.int64_t)(a[4]))
+			r := v.(interface {
+				Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
+			}).Match(start, role, value, hits, flags)
+			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
+				for i, e := range r {
+					d[i] = rt.UseArg(unsafe.Pointer(e), "QStringListModel.Match")
+				}
+			})
+		}},
+	{Name: "Span", Has: func(v any) bool { _, ok := v.(interface{ Span(*QModelIndex) QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ Span(*QModelIndex) QSize }).Span(index)
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "RoleNames", Has: func(v any) bool { _, ok := v.(interface{ RoleNames() map[int][]byte }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ RoleNames() map[int][]byte }).RoleNames()
+			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e []byte) C.qute_str { return quteCBytes(e) })
+		}},
+	{Name: "Submit", Has: func(v any) bool { _, ok := v.(interface{ Submit() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Submit() bool }).Submit()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Revert", Has: func(v any) bool { _, ok := v.(interface{ Revert() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Revert() }).Revert()
+		}},
+	{Name: "ResetInternalData", Has: func(v any) bool { _, ok := v.(interface{ ResetInternalData() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ ResetInternalData() }).ResetInternalData()
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QStringListModelBase is embedded in Go types that subclass QStringListModel:
+//
+//	type MyStringListModel struct{ qtcore.QStringListModelBase }
+//
+// Define any of the virtual methods listed on QStringListModelSuper to override them,
+// then construct the value with NewQStringListModelWith. Call b.Super().X() for the
+// base implementation.
+type QStringListModelBase struct{ *QStringListModel }
+
+func (b *QStringListModelBase) quteQStringListModelBase() *QStringListModelBase { return b }
+
+// QStringListModelSubclass is implemented by every type that embeds QStringListModelBase.
+type QStringListModelSubclass interface{ quteQStringListModelBase() *QStringListModelBase }
+
+// Super returns the C++ base implementations of QStringListModel's virtual methods.
+func (b *QStringListModelBase) Super() *QStringListModelSuper {
+	return &QStringListModelSuper{this: b.QStringListModel}
+}
+
+// QStringListModelSuper calls the C++ base implementations of QStringListModel's virtuals.
+type QStringListModelSuper struct{ this *QStringListModel }
+
+// RowCount calls QStringListModel::rowCount.
+func (s *QStringListModelSuper) RowCount(parent *QModelIndex) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.RowCount")
+	r := C.qute_QStringListModel_super_0(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.RowCount"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return int(r)
+}
+
+// Sibling calls QStringListModel::sibling.
+func (s *QStringListModelSuper) Sibling(row int, column int, idx *QModelIndex) *QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Sibling")
+	r := C.qute_QStringListModel_super_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QStringListModel.Super.Sibling"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(idx)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// Data calls QStringListModel::data.
+func (s *QStringListModelSuper) Data(index *QModelIndex, role int) *QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Data")
+	r := C.qute_QStringListModel_super_2(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.Data"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetData calls QStringListModel::setData.
+func (s *QStringListModelSuper) SetData(index *QModelIndex, value *QVariant, role int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.SetData")
+	r := C.qute_QStringListModel_super_3(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.SetData"), rt.UseArg(unsafe.Pointer(value), "QStringListModel.Super.SetData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(value)
+	return bool(r)
+}
+
+// ClearItemData calls QStringListModel::clearItemData.
+func (s *QStringListModelSuper) ClearItemData(index *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.ClearItemData")
+	r := C.qute_QStringListModel_super_4(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.ClearItemData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return bool(r)
+}
+
+// Flags calls QStringListModel::flags.
+func (s *QStringListModelSuper) Flags(index *QModelIndex) ItemFlags {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Flags")
+	r := C.qute_QStringListModel_super_5(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.Flags"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return ItemFlags(r)
+}
+
+// InsertRows calls QStringListModel::insertRows.
+func (s *QStringListModelSuper) InsertRows(row int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.InsertRows")
+	r := C.qute_QStringListModel_super_6(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.InsertRows"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveRows calls QStringListModel::removeRows.
+func (s *QStringListModelSuper) RemoveRows(row int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.RemoveRows")
+	r := C.qute_QStringListModel_super_7(self, C.int(row), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.RemoveRows"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// MoveRows calls QStringListModel::moveRows.
+func (s *QStringListModelSuper) MoveRows(sourceParent *QModelIndex, sourceRow int, count int, destinationParent *QModelIndex, destinationChild int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.MoveRows")
+	r := C.qute_QStringListModel_super_8(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStringListModel.Super.MoveRows"), C.int(sourceRow), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QStringListModel.Super.MoveRows"), C.int(destinationChild))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// ItemData calls QStringListModel::itemData.
+func (s *QStringListModelSuper) ItemData(index *QModelIndex) map[int]*QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.ItemData")
+	r := C.qute_QStringListModel_super_9(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.ItemData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return quteMap(r, func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
+		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+	})
+}
+
+// SetItemData calls QStringListModel::setItemData.
+func (s *QStringListModelSuper) SetItemData(index *QModelIndex, roles map[int]*QVariant) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.SetItemData")
+	rolesK := make([]C.int, 0, len(roles))
+	rolesV := make([]unsafe.Pointer, 0, len(roles))
+	for k, x := range roles {
+		rolesK = append(rolesK, C.int(k))
+		rolesV = append(rolesV, rt.UseArg(unsafe.Pointer(x), "QStringListModel.Super.SetItemData"))
+	}
+	r := C.qute_QStringListModel_super_10(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.SetItemData"), unsafe.Pointer(unsafe.SliceData(rolesK)), unsafe.Pointer(unsafe.SliceData(rolesV)), C.ptrdiff_t(len(roles)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(roles)
+	return bool(r)
+}
+
+// Sort calls QStringListModel::sort.
+func (s *QStringListModelSuper) Sort(column int, order SortOrder) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Sort")
+	C.qute_QStringListModel_super_11(self, C.int(column), C.int64_t(order))
+	runtime.KeepAlive(s.this)
+}
+
+// SupportedDropActions calls QStringListModel::supportedDropActions.
+func (s *QStringListModelSuper) SupportedDropActions() DropActions {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.SupportedDropActions")
+	r := C.qute_QStringListModel_super_12(self)
+	runtime.KeepAlive(s.this)
+	return DropActions(r)
+}
+
+// Index calls QAbstractListModel::index.
+func (s *QStringListModelSuper) Index(row int, column int, parent *QModelIndex) *QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Index")
+	r := C.qute_QStringListModel_super_13(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.Index"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// DropMimeData calls QAbstractListModel::dropMimeData.
+func (s *QStringListModelSuper) DropMimeData(data *QMimeData, action DropActions, row int, column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.DropMimeData")
+	var dataPtr unsafe.Pointer
+	if data != nil {
+		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QStringListModel.Super.DropMimeData")
+	}
+	r := C.qute_QStringListModel_super_14(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.DropMimeData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(data)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// HeaderData calls QAbstractItemModel::headerData.
+func (s *QStringListModelSuper) HeaderData(section int, orientation Orientations, role int) *QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.HeaderData")
+	r := C.qute_QStringListModel_super_15(self, C.int(section), C.int64_t(orientation), C.int(role))
+	runtime.KeepAlive(s.this)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetHeaderData calls QAbstractItemModel::setHeaderData.
+func (s *QStringListModelSuper) SetHeaderData(section int, orientation Orientations, value *QVariant, role int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.SetHeaderData")
+	r := C.qute_QStringListModel_super_16(self, C.int(section), C.int64_t(orientation), rt.UseArg(unsafe.Pointer(value), "QStringListModel.Super.SetHeaderData"), C.int(role))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+	return bool(r)
+}
+
+// MimeTypes calls QAbstractItemModel::mimeTypes.
+func (s *QStringListModelSuper) MimeTypes() []string {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.MimeTypes")
+	r := C.qute_QStringListModel_super_17(self)
+	runtime.KeepAlive(s.this)
+	return quteStrList(r)
+}
+
+// MimeData calls QAbstractItemModel::mimeData.
+func (s *QStringListModelSuper) MimeData(indexes []*QModelIndex) *QMimeData {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.MimeData")
+	indexesC := make([]unsafe.Pointer, len(indexes))
+	for i := range indexes {
+		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QStringListModel.Super.MimeData")
+	}
+	r := C.qute_QStringListModel_super_18(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(indexes)
+	return rt.View[QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
+}
+
+// CanDropMimeData calls QAbstractItemModel::canDropMimeData.
+func (s *QStringListModelSuper) CanDropMimeData(data *QMimeData, action DropActions, row int, column int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.CanDropMimeData")
+	var dataPtr unsafe.Pointer
+	if data != nil {
+		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QStringListModel.Super.CanDropMimeData")
+	}
+	r := C.qute_QStringListModel_super_19(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.CanDropMimeData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(data)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// SupportedDragActions calls QAbstractItemModel::supportedDragActions.
+func (s *QStringListModelSuper) SupportedDragActions() DropActions {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.SupportedDragActions")
+	r := C.qute_QStringListModel_super_20(self)
+	runtime.KeepAlive(s.this)
+	return DropActions(r)
+}
+
+// InsertColumns calls QAbstractItemModel::insertColumns.
+func (s *QStringListModelSuper) InsertColumns(column int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.InsertColumns")
+	r := C.qute_QStringListModel_super_21(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.InsertColumns"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// RemoveColumns calls QAbstractItemModel::removeColumns.
+func (s *QStringListModelSuper) RemoveColumns(column int, count int, parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.RemoveColumns")
+	r := C.qute_QStringListModel_super_22(self, C.int(column), C.int(count), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.RemoveColumns"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// MoveColumns calls QAbstractItemModel::moveColumns.
+func (s *QStringListModelSuper) MoveColumns(sourceParent *QModelIndex, sourceColumn int, count int, destinationParent *QModelIndex, destinationChild int) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.MoveColumns")
+	r := C.qute_QStringListModel_super_23(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStringListModel.Super.MoveColumns"), C.int(sourceColumn), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QStringListModel.Super.MoveColumns"), C.int(destinationChild))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// FetchMore calls QAbstractItemModel::fetchMore.
+func (s *QStringListModelSuper) FetchMore(parent *QModelIndex) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.FetchMore")
+	C.qute_QStringListModel_super_24(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.FetchMore"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+}
+
+// CanFetchMore calls QAbstractItemModel::canFetchMore.
+func (s *QStringListModelSuper) CanFetchMore(parent *QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.CanFetchMore")
+	r := C.qute_QStringListModel_super_25(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.Super.CanFetchMore"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return bool(r)
+}
+
+// Buddy calls QAbstractItemModel::buddy.
+func (s *QStringListModelSuper) Buddy(index *QModelIndex) *QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Buddy")
+	r := C.qute_QStringListModel_super_26(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.Buddy"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// Match calls QAbstractItemModel::match.
+func (s *QStringListModelSuper) Match(start *QModelIndex, role int, value *QVariant, hits int, flags MatchFlags) []*QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Match")
+	r := C.qute_QStringListModel_super_27(self, rt.UseArg(unsafe.Pointer(start), "QStringListModel.Super.Match"), C.int(role), rt.UseArg(unsafe.Pointer(value), "QStringListModel.Super.Match"), C.int(hits), C.int64_t(flags))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(start)
+	runtime.KeepAlive(value)
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
+		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// Span calls QAbstractItemModel::span.
+func (s *QStringListModelSuper) Span(index *QModelIndex) QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Span")
+	r := C.qute_QStringListModel_super_28(self, rt.UseArg(unsafe.Pointer(index), "QStringListModel.Super.Span"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return goQSize(r)
+}
+
+// RoleNames calls QAbstractItemModel::roleNames.
+func (s *QStringListModelSuper) RoleNames() map[int][]byte {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.RoleNames")
+	r := C.qute_QStringListModel_super_29(self)
+	runtime.KeepAlive(s.this)
+	return quteMap(r, func(k C.int) int { return int(k) }, func(v C.qute_str) []byte { return quteBytes(v) })
+}
+
+// Submit calls QAbstractItemModel::submit.
+func (s *QStringListModelSuper) Submit() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Submit")
+	r := C.qute_QStringListModel_super_30(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Revert calls QAbstractItemModel::revert.
+func (s *QStringListModelSuper) Revert() {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Revert")
+	C.qute_QStringListModel_super_31(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ResetInternalData calls QAbstractItemModel::resetInternalData.
+func (s *QStringListModelSuper) ResetInternalData() {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.ResetInternalData")
+	C.qute_QStringListModel_super_32(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Event calls QObject::event.
+func (s *QStringListModelSuper) Event(event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStringListModel.Super.Event")
+	}
+	r := C.qute_QStringListModel_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QStringListModelSuper) EventFilter(watched *QObject, event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QStringListModel.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStringListModel.Super.EventFilter")
+	}
+	r := C.qute_QStringListModel_super_34(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QStringListModelSuper) TimerEvent(event *QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QStringListModel.Super.TimerEvent")
+	}
+	C.qute_QStringListModel_super_35(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QStringListModelSuper) ChildEvent(event *QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QStringListModel.Super.ChildEvent")
+	}
+	C.qute_QStringListModel_super_36(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QStringListModelSuper) CustomEvent(event *QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QStringListModel.Super.CustomEvent")
+	}
+	C.qute_QStringListModel_super_37(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
+func (b *QStringListModelBase) CreateIndex(row int, column int) *QModelIndex {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.CreateIndex")
+	r := C.qute_QStringListModel_prot_createIndex(self, C.int(row), C.int(column))
+	runtime.KeepAlive(this)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// CreateIndexWithUint64 wraps the protected QAbstractItemModel::createIndex for subclasses.
+func (b *QStringListModelBase) CreateIndexWithUint64(row int, column int, idArg uint64) *QModelIndex {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.CreateIndexWithUint64")
+	r := C.qute_QStringListModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
+	runtime.KeepAlive(this)
+	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// EncodeData wraps the protected QAbstractItemModel::encodeData for subclasses.
+func (b *QStringListModelBase) EncodeData(indexes []*QModelIndex, stream QDataStreamLike) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EncodeData")
+	indexesC := make([]unsafe.Pointer, len(indexes))
+	for i := range indexes {
+		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QStringListModel.EncodeData")
+	}
+	var streamPtr unsafe.Pointer
+	if stream != nil {
+		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QStringListModel.EncodeData")
+	}
+	C.qute_QStringListModel_prot_encodeData(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)), streamPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(indexes)
+	runtime.KeepAlive(stream)
+}
+
+// DecodeData wraps the protected QAbstractItemModel::decodeData for subclasses.
+func (b *QStringListModelBase) DecodeData(row int, column int, parent *QModelIndex, stream QDataStreamLike) bool {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.DecodeData")
+	var streamPtr unsafe.Pointer
+	if stream != nil {
+		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QStringListModel.DecodeData")
+	}
+	r := C.qute_QStringListModel_prot_decodeData(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStringListModel.DecodeData"), streamPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(stream)
+	return bool(r)
+}
+
+// BeginInsertRows wraps the protected QAbstractItemModel::beginInsertRows for subclasses.
+func (b *QStringListModelBase) BeginInsertRows(parent *QModelIndex, first int, last int) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginInsertRows")
+	C.qute_QStringListModel_prot_beginInsertRows(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.BeginInsertRows"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndInsertRows wraps the protected QAbstractItemModel::endInsertRows for subclasses.
+func (b *QStringListModelBase) EndInsertRows() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndInsertRows")
+	C.qute_QStringListModel_prot_endInsertRows(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginRemoveRows wraps the protected QAbstractItemModel::beginRemoveRows for subclasses.
+func (b *QStringListModelBase) BeginRemoveRows(parent *QModelIndex, first int, last int) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginRemoveRows")
+	C.qute_QStringListModel_prot_beginRemoveRows(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.BeginRemoveRows"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndRemoveRows wraps the protected QAbstractItemModel::endRemoveRows for subclasses.
+func (b *QStringListModelBase) EndRemoveRows() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndRemoveRows")
+	C.qute_QStringListModel_prot_endRemoveRows(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginMoveRows wraps the protected QAbstractItemModel::beginMoveRows for subclasses.
+func (b *QStringListModelBase) BeginMoveRows(sourceParent *QModelIndex, sourceFirst int, sourceLast int, destinationParent *QModelIndex, destinationRow int) bool {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginMoveRows")
+	r := C.qute_QStringListModel_prot_beginMoveRows(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStringListModel.BeginMoveRows"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QStringListModel.BeginMoveRows"), C.int(destinationRow))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// EndMoveRows wraps the protected QAbstractItemModel::endMoveRows for subclasses.
+func (b *QStringListModelBase) EndMoveRows() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndMoveRows")
+	C.qute_QStringListModel_prot_endMoveRows(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginInsertColumns wraps the protected QAbstractItemModel::beginInsertColumns for subclasses.
+func (b *QStringListModelBase) BeginInsertColumns(parent *QModelIndex, first int, last int) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginInsertColumns")
+	C.qute_QStringListModel_prot_beginInsertColumns(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.BeginInsertColumns"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndInsertColumns wraps the protected QAbstractItemModel::endInsertColumns for subclasses.
+func (b *QStringListModelBase) EndInsertColumns() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndInsertColumns")
+	C.qute_QStringListModel_prot_endInsertColumns(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginRemoveColumns wraps the protected QAbstractItemModel::beginRemoveColumns for subclasses.
+func (b *QStringListModelBase) BeginRemoveColumns(parent *QModelIndex, first int, last int) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginRemoveColumns")
+	C.qute_QStringListModel_prot_beginRemoveColumns(self, rt.UseArg(unsafe.Pointer(parent), "QStringListModel.BeginRemoveColumns"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// EndRemoveColumns wraps the protected QAbstractItemModel::endRemoveColumns for subclasses.
+func (b *QStringListModelBase) EndRemoveColumns() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndRemoveColumns")
+	C.qute_QStringListModel_prot_endRemoveColumns(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginMoveColumns wraps the protected QAbstractItemModel::beginMoveColumns for subclasses.
+func (b *QStringListModelBase) BeginMoveColumns(sourceParent *QModelIndex, sourceFirst int, sourceLast int, destinationParent *QModelIndex, destinationColumn int) bool {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginMoveColumns")
+	r := C.qute_QStringListModel_prot_beginMoveColumns(self, rt.UseArg(unsafe.Pointer(sourceParent), "QStringListModel.BeginMoveColumns"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QStringListModel.BeginMoveColumns"), C.int(destinationColumn))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(sourceParent)
+	runtime.KeepAlive(destinationParent)
+	return bool(r)
+}
+
+// EndMoveColumns wraps the protected QAbstractItemModel::endMoveColumns for subclasses.
+func (b *QStringListModelBase) EndMoveColumns() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndMoveColumns")
+	C.qute_QStringListModel_prot_endMoveColumns(self)
+	runtime.KeepAlive(this)
+}
+
+// BeginResetModel wraps the protected QAbstractItemModel::beginResetModel for subclasses.
+func (b *QStringListModelBase) BeginResetModel() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.BeginResetModel")
+	C.qute_QStringListModel_prot_beginResetModel(self)
+	runtime.KeepAlive(this)
+}
+
+// EndResetModel wraps the protected QAbstractItemModel::endResetModel for subclasses.
+func (b *QStringListModelBase) EndResetModel() {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.EndResetModel")
+	C.qute_QStringListModel_prot_endResetModel(self)
+	runtime.KeepAlive(this)
+}
+
+// ChangePersistentIndex wraps the protected QAbstractItemModel::changePersistentIndex for subclasses.
+func (b *QStringListModelBase) ChangePersistentIndex(from *QModelIndex, to *QModelIndex) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.ChangePersistentIndex")
+	C.qute_QStringListModel_prot_changePersistentIndex(self, rt.UseArg(unsafe.Pointer(from), "QStringListModel.ChangePersistentIndex"), rt.UseArg(unsafe.Pointer(to), "QStringListModel.ChangePersistentIndex"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+}
+
+// ChangePersistentIndexList wraps the protected QAbstractItemModel::changePersistentIndexList for subclasses.
+func (b *QStringListModelBase) ChangePersistentIndexList(from []*QModelIndex, to []*QModelIndex) {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.ChangePersistentIndexList")
+	fromC := make([]unsafe.Pointer, len(from))
+	for i := range from {
+		fromC[i] = rt.UseArg(unsafe.Pointer(from[i]), "QStringListModel.ChangePersistentIndexList")
+	}
+	toC := make([]unsafe.Pointer, len(to))
+	for i := range to {
+		toC[i] = rt.UseArg(unsafe.Pointer(to[i]), "QStringListModel.ChangePersistentIndexList")
+	}
+	C.qute_QStringListModel_prot_changePersistentIndexList(self, unsafe.Pointer(unsafe.SliceData(fromC)), C.ptrdiff_t(len(from)), unsafe.Pointer(unsafe.SliceData(toC)), C.ptrdiff_t(len(to)))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(from)
+	runtime.KeepAlive(to)
+}
+
+// PersistentIndexList wraps the protected QAbstractItemModel::persistentIndexList for subclasses.
+func (b *QStringListModelBase) PersistentIndexList() []*QModelIndex {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.PersistentIndexList")
+	r := C.qute_QStringListModel_prot_persistentIndexList(self)
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
+		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// NewQStringListModelWith constructs a QStringListModel whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStringListModelWith(v QStringListModelSubclass, parent QObjectLike) *QStringListModel {
+	rt.CheckThread("NewQStringListModelWith")
+	base := v.quteQStringListModelBase()
+	if base.QStringListModel != nil {
+		panic("NewQStringListModelWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQStringListModelWith")
+	}
+	p := C.qute_QStringListModel_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QStringListModel", mode)
+	base.QStringListModel = rt.View[QStringListModel](h, p)
+	id := h.SetSelf(v, qStringListModelVTable)
+	mask := rt.Mask(v, qStringListModelVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStringListModel_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStringListModel
+}

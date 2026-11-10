@@ -24,7 +24,7 @@ type QGraphicsLayoutItemLike interface{ AsQGraphicsLayoutItem() *QGraphicsLayout
 func (this *QGraphicsLayoutItem) AsQGraphicsLayoutItem() *QGraphicsLayoutItem { return this }
 
 func init() {
-	rt.RegisterClass("QGraphicsLayoutItem", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsLayoutItem_delete(p) })
+	rt.RegisterClass("QGraphicsLayoutItem", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsLayoutItem_delete(p) })
 }
 
 // A QGraphicsLayoutItem may be a QObject (through a QObject subclass); its wrapper then
@@ -67,6 +67,17 @@ func (this *QGraphicsLayoutItem) Delete() {
 	}
 	rt.CheckThread("QGraphicsLayoutItem.Delete")
 	this.quteRef.H.Delete("QGraphicsLayoutItem.Delete")
+}
+
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QGraphicsLayoutItem) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
 }
 
 // Keep pins the object so GC never frees it, until Unkeep.
@@ -510,4 +521,175 @@ func (this *QGraphicsLayoutItem) EffectiveSizeHintFull(which qtcore.SizeHint, co
 	r := C.qute_QGraphicsLayoutItem_effectiveSizeHint_1(self, C.int64_t(which), cQSizeF(constraint))
 	runtime.KeepAlive(this)
 	return goQSizeF(r)
+}
+
+var qGraphicsLayoutItemVTable = []rt.Virtual{
+	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			rect := goQRectF(*(*C.qute_rectf)(a[0]))
+			v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+		}},
+	{Name: "GetContentsMargins", Has: func(v any) bool {
+		_, ok := v.(interface {
+			GetContentsMargins() (float64, float64, float64, float64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			o0, o1, o2, o3 := v.(interface {
+				GetContentsMargins() (float64, float64, float64, float64)
+			}).GetContentsMargins()
+			if a[0] != nil {
+				*(*C.double)(a[0]) = C.double(o0)
+			}
+			if a[1] != nil {
+				*(*C.double)(a[1]) = C.double(o1)
+			}
+			if a[2] != nil {
+				*(*C.double)(a[2]) = C.double(o2)
+			}
+			if a[3] != nil {
+				*(*C.double)(a[3]) = C.double(o3)
+			}
+		}},
+	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ UpdateGeometry() }).UpdateGeometry()
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			which := qtcore.SizeHint(*(*C.int64_t)(a[0]))
+			constraint := goQSizeF(*(*C.qute_sizef)(a[1]))
+			r := v.(interface {
+				SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+			}).SizeHint(which, constraint)
+			*(*C.qute_sizef)(ret) = cQSizeF(r)
+		}},
+}
+
+// QGraphicsLayoutItemBase is embedded in Go types that subclass QGraphicsLayoutItem:
+//
+//	type MyGraphicsLayoutItem struct{ qtwidgets.QGraphicsLayoutItemBase }
+//
+// Define any of the virtual methods listed on QGraphicsLayoutItemSuper to override them,
+// then construct the value with NewQGraphicsLayoutItemWith. Call b.Super().X() for the
+// base implementation.
+type QGraphicsLayoutItemBase struct{ *QGraphicsLayoutItem }
+
+func (b *QGraphicsLayoutItemBase) quteQGraphicsLayoutItemBase() *QGraphicsLayoutItemBase { return b }
+
+// QGraphicsLayoutItemSubclass is implemented by every type that embeds QGraphicsLayoutItemBase.
+type QGraphicsLayoutItemSubclass interface {
+	quteQGraphicsLayoutItemBase() *QGraphicsLayoutItemBase
+}
+
+// Super returns the C++ base implementations of QGraphicsLayoutItem's virtual methods.
+func (b *QGraphicsLayoutItemBase) Super() *QGraphicsLayoutItemSuper {
+	return &QGraphicsLayoutItemSuper{this: b.QGraphicsLayoutItem}
+}
+
+// QGraphicsLayoutItemSuper calls the C++ base implementations of QGraphicsLayoutItem's virtuals.
+type QGraphicsLayoutItemSuper struct{ this *QGraphicsLayoutItem }
+
+// SetGeometry calls QGraphicsLayoutItem::setGeometry.
+func (s *QGraphicsLayoutItemSuper) SetGeometry(rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLayoutItem.Super.SetGeometry")
+	C.qute_QGraphicsLayoutItem_super_0(self, cQRectF(rect))
+	runtime.KeepAlive(s.this)
+}
+
+// GetContentsMargins calls QGraphicsLayoutItem::getContentsMargins.
+func (s *QGraphicsLayoutItemSuper) GetContentsMargins() (float64, float64, float64, float64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLayoutItem.Super.GetContentsMargins")
+	var leftOut C.double
+	var topOut C.double
+	var rightOut C.double
+	var bottomOut C.double
+	C.qute_QGraphicsLayoutItem_super_1(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(s.this)
+	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
+}
+
+// UpdateGeometry calls QGraphicsLayoutItem::updateGeometry.
+func (s *QGraphicsLayoutItemSuper) UpdateGeometry() {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLayoutItem.Super.UpdateGeometry")
+	C.qute_QGraphicsLayoutItem_super_2(self)
+	runtime.KeepAlive(s.this)
+}
+
+// IsEmpty calls QGraphicsLayoutItem::isEmpty.
+func (s *QGraphicsLayoutItemSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsLayoutItem.Super.IsEmpty")
+	r := C.qute_QGraphicsLayoutItem_super_3(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// SetGraphicsItem wraps the protected QGraphicsLayoutItem::setGraphicsItem for subclasses.
+func (b *QGraphicsLayoutItemBase) SetGraphicsItem(item QGraphicsItemLike) {
+	this := b.QGraphicsLayoutItem // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetGraphicsItem")
+	var itemPtr unsafe.Pointer
+	var itemH *rt.Handle
+	if item != nil {
+		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsLayoutItem.SetGraphicsItem")
+	}
+	C.qute_QGraphicsLayoutItem_prot_setGraphicsItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setGraphicsItem.item", itemH, true)
+}
+
+// SetOwnedByLayout wraps the protected QGraphicsLayoutItem::setOwnedByLayout for subclasses.
+func (b *QGraphicsLayoutItemBase) SetOwnedByLayout(ownedByLayout bool) {
+	this := b.QGraphicsLayoutItem // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsLayoutItem.SetOwnedByLayout")
+	C.qute_QGraphicsLayoutItem_prot_setOwnedByLayout(self, C.bool(ownedByLayout))
+	runtime.KeepAlive(this)
+}
+
+// NewQGraphicsLayoutItemWith constructs a QGraphicsLayoutItem whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsLayoutItemWith(v QGraphicsLayoutItemSubclass, parent QGraphicsLayoutItemLike) *QGraphicsLayoutItem {
+	rt.CheckThread("NewQGraphicsLayoutItemWith")
+	base := v.quteQGraphicsLayoutItemBase()
+	if base.QGraphicsLayoutItem != nil {
+		panic("NewQGraphicsLayoutItemWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsLayoutItem()), "NewQGraphicsLayoutItemWith")
+	}
+	p := C.qute_QGraphicsLayoutItem_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsLayoutItem", mode)
+	base.QGraphicsLayoutItem = rt.View[QGraphicsLayoutItem](h, p)
+	id := h.SetSelf(v, qGraphicsLayoutItemVTable)
+	mask := rt.Mask(v, qGraphicsLayoutItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsLayoutItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsLayoutItem
 }

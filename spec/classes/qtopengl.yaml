@@ -14,4 +14,4 @@ classes:
   QOpenGLDebugMessage: { kind: value }
   QOpenGLTextureBlitter: {}
   QOpenGLPixelTransferOptions: { kind: value }
-  QOpenGLWindow: { subclass: true }
+  QOpenGLWindow: {}

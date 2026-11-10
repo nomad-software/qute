@@ -285,3 +285,296 @@ func (this *QGraphicsDropShadowEffect) OnColorChanged(f func(color qtgui.QColor)
 	})
 	return rt.NewConnection(C.qute_QGraphicsDropShadowEffect_colorChanged(self, C.uintptr_t(id)))
 }
+
+var qGraphicsDropShadowEffectVTable = []rt.Virtual{
+	{Name: "BoundingRectFor", Has: func(v any) bool {
+		_, ok := v.(interface {
+			BoundingRectFor(qtcore.QRectF) qtcore.QRectF
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			rect := goQRectF(*(*C.qute_rectf)(a[0]))
+			r := v.(interface {
+				BoundingRectFor(qtcore.QRectF) qtcore.QRectF
+			}).BoundingRectFor(rect)
+			*(*C.qute_rectf)(ret) = cQRectF(r)
+		}},
+	{Name: "Draw", Has: func(v any) bool { _, ok := v.(interface{ Draw(*qtgui.QPainter) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			v.(interface{ Draw(*qtgui.QPainter) }).Draw(painter)
+		}},
+	{Name: "SourceChanged", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SourceChanged(QGraphicsEffectChangeFlags)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			flags := QGraphicsEffectChangeFlags(*(*C.int64_t)(a[0]))
+			v.(interface {
+				SourceChanged(QGraphicsEffectChangeFlags)
+			}).SourceChanged(flags)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QGraphicsDropShadowEffectBase is embedded in Go types that subclass QGraphicsDropShadowEffect:
+//
+//	type MyGraphicsDropShadowEffect struct{ qtwidgets.QGraphicsDropShadowEffectBase }
+//
+// Define any of the virtual methods listed on QGraphicsDropShadowEffectSuper to override them,
+// then construct the value with NewQGraphicsDropShadowEffectWith. Call b.Super().X() for the
+// base implementation.
+type QGraphicsDropShadowEffectBase struct{ *QGraphicsDropShadowEffect }
+
+func (b *QGraphicsDropShadowEffectBase) quteQGraphicsDropShadowEffectBase() *QGraphicsDropShadowEffectBase {
+	return b
+}
+
+// QGraphicsDropShadowEffectSubclass is implemented by every type that embeds QGraphicsDropShadowEffectBase.
+type QGraphicsDropShadowEffectSubclass interface {
+	quteQGraphicsDropShadowEffectBase() *QGraphicsDropShadowEffectBase
+}
+
+// Super returns the C++ base implementations of QGraphicsDropShadowEffect's virtual methods.
+func (b *QGraphicsDropShadowEffectBase) Super() *QGraphicsDropShadowEffectSuper {
+	return &QGraphicsDropShadowEffectSuper{this: b.QGraphicsDropShadowEffect}
+}
+
+// QGraphicsDropShadowEffectSuper calls the C++ base implementations of QGraphicsDropShadowEffect's virtuals.
+type QGraphicsDropShadowEffectSuper struct{ this *QGraphicsDropShadowEffect }
+
+// BoundingRectFor calls QGraphicsDropShadowEffect::boundingRectFor.
+func (s *QGraphicsDropShadowEffectSuper) BoundingRectFor(rect qtcore.QRectF) qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.BoundingRectFor")
+	r := C.qute_QGraphicsDropShadowEffect_super_0(self, cQRectF(rect))
+	runtime.KeepAlive(s.this)
+	return goQRectF(r)
+}
+
+// Draw calls QGraphicsDropShadowEffect::draw.
+func (s *QGraphicsDropShadowEffectSuper) Draw(painter *qtgui.QPainter) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.Draw")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsDropShadowEffect.Super.Draw")
+	}
+	C.qute_QGraphicsDropShadowEffect_super_1(self, painterPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+}
+
+// SourceChanged calls QGraphicsEffect::sourceChanged.
+func (s *QGraphicsDropShadowEffectSuper) SourceChanged(flags QGraphicsEffectChangeFlags) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.SourceChanged")
+	C.qute_QGraphicsDropShadowEffect_super_2(self, C.int64_t(flags))
+	runtime.KeepAlive(s.this)
+}
+
+// Event calls QObject::event.
+func (s *QGraphicsDropShadowEffectSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsDropShadowEffect.Super.Event")
+	}
+	r := C.qute_QGraphicsDropShadowEffect_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QGraphicsDropShadowEffectSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QGraphicsDropShadowEffect.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsDropShadowEffect.Super.EventFilter")
+	}
+	r := C.qute_QGraphicsDropShadowEffect_super_4(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QGraphicsDropShadowEffectSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QGraphicsDropShadowEffect.Super.TimerEvent")
+	}
+	C.qute_QGraphicsDropShadowEffect_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QGraphicsDropShadowEffectSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QGraphicsDropShadowEffect.Super.ChildEvent")
+	}
+	C.qute_QGraphicsDropShadowEffect_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QGraphicsDropShadowEffectSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsDropShadowEffect.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsDropShadowEffect.Super.CustomEvent")
+	}
+	C.qute_QGraphicsDropShadowEffect_super_7(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// UpdateBoundingRect wraps the protected QGraphicsEffect::updateBoundingRect for subclasses.
+func (b *QGraphicsDropShadowEffectBase) UpdateBoundingRect() {
+	this := b.QGraphicsDropShadowEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.UpdateBoundingRect")
+	C.qute_QGraphicsDropShadowEffect_prot_updateBoundingRect(self)
+	runtime.KeepAlive(this)
+}
+
+// SourceIsPixmap wraps the protected QGraphicsEffect::sourceIsPixmap for subclasses.
+func (b *QGraphicsDropShadowEffectBase) SourceIsPixmap() bool {
+	this := b.QGraphicsDropShadowEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SourceIsPixmap")
+	r := C.qute_QGraphicsDropShadowEffect_prot_sourceIsPixmap(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// SourceBoundingRect wraps the protected QGraphicsEffect::sourceBoundingRect for subclasses.
+func (b *QGraphicsDropShadowEffectBase) SourceBoundingRect() qtcore.QRectF {
+	this := b.QGraphicsDropShadowEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SourceBoundingRect")
+	r := C.qute_QGraphicsDropShadowEffect_prot_sourceBoundingRect(self)
+	runtime.KeepAlive(this)
+	return goQRectF(r)
+}
+
+// DrawSource wraps the protected QGraphicsEffect::drawSource for subclasses.
+func (b *QGraphicsDropShadowEffectBase) DrawSource(painter qtgui.QPainterLike) {
+	this := b.QGraphicsDropShadowEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.DrawSource")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsDropShadowEffect.DrawSource")
+	}
+	C.qute_QGraphicsDropShadowEffect_prot_drawSource(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// SourcePixmap wraps the protected QGraphicsEffect::sourcePixmap for subclasses.
+func (b *QGraphicsDropShadowEffectBase) SourcePixmap() *qtgui.QPixmap {
+	this := b.QGraphicsDropShadowEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsDropShadowEffect.SourcePixmap")
+	r := C.qute_QGraphicsDropShadowEffect_prot_sourcePixmap(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// NewQGraphicsDropShadowEffectWith constructs a QGraphicsDropShadowEffect whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsDropShadowEffectWith(v QGraphicsDropShadowEffectSubclass, parent qtcore.QObjectLike) *QGraphicsDropShadowEffect {
+	rt.CheckThread("NewQGraphicsDropShadowEffectWith")
+	base := v.quteQGraphicsDropShadowEffectBase()
+	if base.QGraphicsDropShadowEffect != nil {
+		panic("NewQGraphicsDropShadowEffectWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsDropShadowEffectWith")
+	}
+	p := C.qute_QGraphicsDropShadowEffect_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsDropShadowEffect", mode)
+	base.QGraphicsDropShadowEffect = rt.View[QGraphicsDropShadowEffect](h, p)
+	id := h.SetSelf(v, qGraphicsDropShadowEffectVTable)
+	mask := rt.Mask(v, qGraphicsDropShadowEffectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsDropShadowEffect_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsDropShadowEffect
+}

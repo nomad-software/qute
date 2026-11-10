@@ -1265,6 +1265,38 @@ func TestOwnership_QStandardItemModel_SetItemPrototype(t *testing.T) {
 	})
 }
 
+// void QSyntaxHighlighter::setDocument(QTextDocument * doc) (test from the overlay)
+func TestOwnership_QSyntaxHighlighter_SetDocument(t *testing.T) {
+	qutetest.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		h := &struct{ qtgui.QSyntaxHighlighterBase }{}
+		qtgui.NewQSyntaxHighlighterWith(h, nil)
+		h.SetDocument(doc)
+		if !rt.KeepsArg(unsafe.Pointer(h.QSyntaxHighlighter), unsafe.Pointer(doc)) {
+			t.Error("doc: not kept by the highlighter")
+		}
+		h.Delete()
+		doc.Delete()
+	})
+}
+
+// void QTextBlock::setUserData(QTextBlockUserData * data) (test from the overlay)
+func TestOwnership_QTextBlock_SetUserData(t *testing.T) {
+	qutetest.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		doc.SetPlainText("a")
+		data := qtgui.NewQTextBlockUserData()
+		doc.FirstBlock().SetUserData(data)
+		if got := data.Ownership(); got != qtcore.Parented {
+			t.Errorf("data: %v, want Parented", got)
+		}
+		doc.Delete()
+		if data.Alive() {
+			t.Error("user data alive after its document was deleted")
+		}
+	})
+}
+
 // QTextCursor::QTextCursor(QTextDocument * document): keep rules
 func TestKeep_QTextCursor_QTextCursorWithTextDocument(t *testing.T) {
 	qutetest.Run(t, func() {

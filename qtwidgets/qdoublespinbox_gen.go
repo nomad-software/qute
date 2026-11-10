@@ -10,6 +10,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QDoubleSpinBox wraps Qt's QDoubleSpinBox.
@@ -356,4 +357,1055 @@ func (this *QDoubleSpinBox) OnTextChanged(f func(stringArg string)) qtcore.Conne
 		f(stringArg)
 	})
 	return rt.NewConnection(C.qute_QDoubleSpinBox_textChanged(self, C.uintptr_t(id)))
+}
+
+var qDoubleSpinBoxVTable = []rt.Virtual{
+	{Name: "Validate", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Validate(string, int) (qtgui.QValidatorState, string, int)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			var input string
+			if a[0] != nil {
+				input = quteStr(*(*C.qute_str)(a[0]))
+				*(*C.qute_str)(a[0]) = C.qute_str{}
+			}
+			var pos int
+			if a[1] != nil {
+				pos = int(*(*C.int)(a[1]))
+			}
+			r, o0, o1 := v.(interface {
+				Validate(string, int) (qtgui.QValidatorState, string, int)
+			}).Validate(input, pos)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+			if a[0] != nil {
+				*(*C.qute_str)(a[0]) = quteCStr(o0)
+			}
+			if a[1] != nil {
+				*(*C.int)(a[1]) = C.int(o1)
+			}
+		}},
+	{Name: "ValueFromText", Has: func(v any) bool { _, ok := v.(interface{ ValueFromText(string) float64 }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			text := quteStr(*(*C.qute_str)(a[0]))
+			r := v.(interface{ ValueFromText(string) float64 }).ValueFromText(text)
+			*(*C.double)(ret) = C.double(r)
+		}},
+	{Name: "TextFromValue", Has: func(v any) bool { _, ok := v.(interface{ TextFromValue(float64) string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			val := float64(*(*C.double)(a[0]))
+			r := v.(interface{ TextFromValue(float64) string }).TextFromValue(val)
+			*(*C.qute_str)(ret) = quteCStr(r)
+		}},
+	{Name: "Fixup", Has: func(v any) bool { _, ok := v.(interface{ Fixup(string) string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			var str string
+			if a[0] != nil {
+				str = quteStr(*(*C.qute_str)(a[0]))
+				*(*C.qute_str)(a[0]) = C.qute_str{}
+			}
+			o0 := v.(interface{ Fixup(string) string }).Fixup(str)
+			if a[0] != nil {
+				*(*C.qute_str)(a[0]) = quteCStr(o0)
+			}
+		}},
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "StepBy", Has: func(v any) bool { _, ok := v.(interface{ StepBy(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			steps := int(*(*C.int)(a[0]))
+			v.(interface{ StepBy(int) }).StepBy(steps)
+		}},
+	{Name: "Clear", Has: func(v any) bool { _, ok := v.(interface{ Clear() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Clear() }).Clear()
+		}},
+	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
+			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+		}},
+	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+		}},
+	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+		}},
+	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QWheelEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QWheelEvent](eventH, eventP)
+			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+		}},
+	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+		}},
+	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+		}},
+	{Name: "ContextMenuEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ContextMenuEvent(*qtgui.QContextMenuEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QContextMenuEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QContextMenuEvent](eventH, eventP)
+			v.(interface {
+				ContextMenuEvent(*qtgui.QContextMenuEvent)
+			}).ContextMenuEvent(event)
+		}},
+	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
+			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+		}},
+	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QHideEvent](eventH, eventP)
+			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+		}},
+	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+		}},
+	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
+			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+		}},
+	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QShowEvent](eventH, eventP)
+			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionSpinBox) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionSpinBox", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionSpinBox](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOptionSpinBox) }).InitStyleOption(option)
+		}},
+	{Name: "StepEnabled", Has: func(v any) bool {
+		_, ok := v.(interface {
+			StepEnabled() QAbstractSpinBoxStepEnabled
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface {
+				StepEnabled() QAbstractSpinBoxStepEnabled
+			}).StepEnabled()
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			visible := bool(*(*C.bool)(a[0]))
+			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+		}},
+	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
+			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+		}},
+	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+		}},
+	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
+			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
+	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
+			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+		}},
+	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
+			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+		}},
+	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
+			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+		}},
+	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDropEvent](eventH, eventP)
+			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			next := bool(*(*C.bool)(a[0]))
+			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QDoubleSpinBoxBase is embedded in Go types that subclass QDoubleSpinBox:
+//
+//	type MyDoubleSpinBox struct{ qtwidgets.QDoubleSpinBoxBase }
+//
+// Define any of the virtual methods listed on QDoubleSpinBoxSuper to override them,
+// then construct the value with NewQDoubleSpinBoxWith. Call b.Super().X() for the
+// base implementation.
+type QDoubleSpinBoxBase struct{ *QDoubleSpinBox }
+
+func (b *QDoubleSpinBoxBase) quteQDoubleSpinBoxBase() *QDoubleSpinBoxBase { return b }
+
+// QDoubleSpinBoxSubclass is implemented by every type that embeds QDoubleSpinBoxBase.
+type QDoubleSpinBoxSubclass interface{ quteQDoubleSpinBoxBase() *QDoubleSpinBoxBase }
+
+// Super returns the C++ base implementations of QDoubleSpinBox's virtual methods.
+func (b *QDoubleSpinBoxBase) Super() *QDoubleSpinBoxSuper {
+	return &QDoubleSpinBoxSuper{this: b.QDoubleSpinBox}
+}
+
+// QDoubleSpinBoxSuper calls the C++ base implementations of QDoubleSpinBox's virtuals.
+type QDoubleSpinBoxSuper struct{ this *QDoubleSpinBox }
+
+// Validate calls QDoubleSpinBox::validate.
+func (s *QDoubleSpinBoxSuper) Validate(input string, pos int) (qtgui.QValidatorState, string, int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.Validate")
+	var inputOut C.qute_str
+	var posOut C.int
+	r := C.qute_QDoubleSpinBox_super_0(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut, C.int(pos), &posOut)
+	runtime.KeepAlive(s.this)
+	return qtgui.QValidatorState(r), quteStr(inputOut), int(posOut)
+}
+
+// ValueFromText calls QDoubleSpinBox::valueFromText.
+func (s *QDoubleSpinBoxSuper) ValueFromText(text string) float64 {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ValueFromText")
+	r := C.qute_QDoubleSpinBox_super_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(s.this)
+	return float64(r)
+}
+
+// TextFromValue calls QDoubleSpinBox::textFromValue.
+func (s *QDoubleSpinBoxSuper) TextFromValue(val float64) string {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.TextFromValue")
+	r := C.qute_QDoubleSpinBox_super_2(self, C.double(val))
+	runtime.KeepAlive(s.this)
+	return quteStr(r)
+}
+
+// Fixup calls QDoubleSpinBox::fixup.
+func (s *QDoubleSpinBoxSuper) Fixup(str string) string {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.Fixup")
+	var strOut C.qute_str
+	C.qute_QDoubleSpinBox_super_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(str))), C.ptrdiff_t(len(str)), &strOut)
+	runtime.KeepAlive(s.this)
+	return quteStr(strOut)
+}
+
+// SizeHint calls QAbstractSpinBox::sizeHint.
+func (s *QDoubleSpinBoxSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.SizeHint")
+	r := C.qute_QDoubleSpinBox_super_4(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// MinimumSizeHint calls QAbstractSpinBox::minimumSizeHint.
+func (s *QDoubleSpinBoxSuper) MinimumSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.MinimumSizeHint")
+	r := C.qute_QDoubleSpinBox_super_5(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// Event calls QAbstractSpinBox::event.
+func (s *QDoubleSpinBoxSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDoubleSpinBox.Super.Event")
+	}
+	r := C.qute_QDoubleSpinBox_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// StepBy calls QAbstractSpinBox::stepBy.
+func (s *QDoubleSpinBoxSuper) StepBy(steps int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.StepBy")
+	C.qute_QDoubleSpinBox_super_7(self, C.int(steps))
+	runtime.KeepAlive(s.this)
+}
+
+// Clear calls QAbstractSpinBox::clear.
+func (s *QDoubleSpinBoxSuper) Clear() {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.Clear")
+	C.qute_QDoubleSpinBox_super_8(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ResizeEvent calls QAbstractSpinBox::resizeEvent.
+func (s *QDoubleSpinBoxSuper) ResizeEvent(event *qtgui.QResizeEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ResizeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QDoubleSpinBox.Super.ResizeEvent")
+	}
+	C.qute_QDoubleSpinBox_super_9(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyPressEvent calls QAbstractSpinBox::keyPressEvent.
+func (s *QDoubleSpinBoxSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.KeyPressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QDoubleSpinBox.Super.KeyPressEvent")
+	}
+	C.qute_QDoubleSpinBox_super_10(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyReleaseEvent calls QAbstractSpinBox::keyReleaseEvent.
+func (s *QDoubleSpinBoxSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.KeyReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QDoubleSpinBox.Super.KeyReleaseEvent")
+	}
+	C.qute_QDoubleSpinBox_super_11(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// WheelEvent calls QAbstractSpinBox::wheelEvent.
+func (s *QDoubleSpinBoxSuper) WheelEvent(event *qtgui.QWheelEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.WheelEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QDoubleSpinBox.Super.WheelEvent")
+	}
+	C.qute_QDoubleSpinBox_super_12(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusInEvent calls QAbstractSpinBox::focusInEvent.
+func (s *QDoubleSpinBoxSuper) FocusInEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.FocusInEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QDoubleSpinBox.Super.FocusInEvent")
+	}
+	C.qute_QDoubleSpinBox_super_13(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusOutEvent calls QAbstractSpinBox::focusOutEvent.
+func (s *QDoubleSpinBoxSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.FocusOutEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QDoubleSpinBox.Super.FocusOutEvent")
+	}
+	C.qute_QDoubleSpinBox_super_14(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ContextMenuEvent calls QAbstractSpinBox::contextMenuEvent.
+func (s *QDoubleSpinBoxSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ContextMenuEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QDoubleSpinBox.Super.ContextMenuEvent")
+	}
+	C.qute_QDoubleSpinBox_super_15(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChangeEvent calls QAbstractSpinBox::changeEvent.
+func (s *QDoubleSpinBoxSuper) ChangeEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ChangeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDoubleSpinBox.Super.ChangeEvent")
+	}
+	C.qute_QDoubleSpinBox_super_16(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CloseEvent calls QAbstractSpinBox::closeEvent.
+func (s *QDoubleSpinBoxSuper) CloseEvent(event *qtgui.QCloseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.CloseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QDoubleSpinBox.Super.CloseEvent")
+	}
+	C.qute_QDoubleSpinBox_super_17(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HideEvent calls QAbstractSpinBox::hideEvent.
+func (s *QDoubleSpinBoxSuper) HideEvent(event *qtgui.QHideEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.HideEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QDoubleSpinBox.Super.HideEvent")
+	}
+	C.qute_QDoubleSpinBox_super_18(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MousePressEvent calls QAbstractSpinBox::mousePressEvent.
+func (s *QDoubleSpinBoxSuper) MousePressEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.MousePressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDoubleSpinBox.Super.MousePressEvent")
+	}
+	C.qute_QDoubleSpinBox_super_19(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseReleaseEvent calls QAbstractSpinBox::mouseReleaseEvent.
+func (s *QDoubleSpinBoxSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.MouseReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDoubleSpinBox.Super.MouseReleaseEvent")
+	}
+	C.qute_QDoubleSpinBox_super_20(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseMoveEvent calls QAbstractSpinBox::mouseMoveEvent.
+func (s *QDoubleSpinBoxSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.MouseMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDoubleSpinBox.Super.MouseMoveEvent")
+	}
+	C.qute_QDoubleSpinBox_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TimerEvent calls QAbstractSpinBox::timerEvent.
+func (s *QDoubleSpinBoxSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QDoubleSpinBox.Super.TimerEvent")
+	}
+	C.qute_QDoubleSpinBox_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// PaintEvent calls QAbstractSpinBox::paintEvent.
+func (s *QDoubleSpinBoxSuper) PaintEvent(event *qtgui.QPaintEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.PaintEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPaintEvent()), "QDoubleSpinBox.Super.PaintEvent")
+	}
+	C.qute_QDoubleSpinBox_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ShowEvent calls QAbstractSpinBox::showEvent.
+func (s *QDoubleSpinBoxSuper) ShowEvent(event *qtgui.QShowEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ShowEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QDoubleSpinBox.Super.ShowEvent")
+	}
+	C.qute_QDoubleSpinBox_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// InitStyleOption calls QAbstractSpinBox::initStyleOption.
+func (s *QDoubleSpinBoxSuper) InitStyleOption(option *QStyleOptionSpinBox) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.InitStyleOption")
+	C.qute_QDoubleSpinBox_super_25(self, rt.UseArg(unsafe.Pointer(option), "QDoubleSpinBox.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
+// StepEnabled calls QAbstractSpinBox::stepEnabled.
+func (s *QDoubleSpinBoxSuper) StepEnabled() QAbstractSpinBoxStepEnabled {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.StepEnabled")
+	r := C.qute_QDoubleSpinBox_super_26(self)
+	runtime.KeepAlive(s.this)
+	return QAbstractSpinBoxStepEnabled(r)
+}
+
+// SetVisible calls QWidget::setVisible.
+func (s *QDoubleSpinBoxSuper) SetVisible(visible bool) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.SetVisible")
+	C.qute_QDoubleSpinBox_super_27(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
+}
+
+// HeightForWidth calls QWidget::heightForWidth.
+func (s *QDoubleSpinBoxSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.HeightForWidth")
+	r := C.qute_QDoubleSpinBox_super_28(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// HasHeightForWidth calls QWidget::hasHeightForWidth.
+func (s *QDoubleSpinBoxSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.HasHeightForWidth")
+	r := C.qute_QDoubleSpinBox_super_29(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// MouseDoubleClickEvent calls QWidget::mouseDoubleClickEvent.
+func (s *QDoubleSpinBoxSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.MouseDoubleClickEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDoubleSpinBox.Super.MouseDoubleClickEvent")
+	}
+	C.qute_QDoubleSpinBox_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// EnterEvent calls QWidget::enterEvent.
+func (s *QDoubleSpinBoxSuper) EnterEvent(event *qtgui.QEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.EnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QDoubleSpinBox.Super.EnterEvent")
+	}
+	C.qute_QDoubleSpinBox_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// LeaveEvent calls QWidget::leaveEvent.
+func (s *QDoubleSpinBoxSuper) LeaveEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.LeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDoubleSpinBox.Super.LeaveEvent")
+	}
+	C.qute_QDoubleSpinBox_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MoveEvent calls QWidget::moveEvent.
+func (s *QDoubleSpinBoxSuper) MoveEvent(event *qtgui.QMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.MoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QDoubleSpinBox.Super.MoveEvent")
+	}
+	C.qute_QDoubleSpinBox_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QDoubleSpinBoxSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QDoubleSpinBox.Super.TabletEvent")
+	}
+	C.qute_QDoubleSpinBox_super_34(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QDoubleSpinBoxSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QDoubleSpinBox.Super.ActionEvent")
+	}
+	C.qute_QDoubleSpinBox_super_35(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragEnterEvent calls QWidget::dragEnterEvent.
+func (s *QDoubleSpinBoxSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.DragEnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QDoubleSpinBox.Super.DragEnterEvent")
+	}
+	C.qute_QDoubleSpinBox_super_36(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragMoveEvent calls QWidget::dragMoveEvent.
+func (s *QDoubleSpinBoxSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.DragMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QDoubleSpinBox.Super.DragMoveEvent")
+	}
+	C.qute_QDoubleSpinBox_super_37(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragLeaveEvent calls QWidget::dragLeaveEvent.
+func (s *QDoubleSpinBoxSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.DragLeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QDoubleSpinBox.Super.DragLeaveEvent")
+	}
+	C.qute_QDoubleSpinBox_super_38(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DropEvent calls QWidget::dropEvent.
+func (s *QDoubleSpinBoxSuper) DropEvent(event *qtgui.QDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.DropEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QDoubleSpinBox.Super.DropEvent")
+	}
+	C.qute_QDoubleSpinBox_super_39(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QDoubleSpinBoxSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QDoubleSpinBox.Super.InputMethodEvent")
+	}
+	C.qute_QDoubleSpinBox_super_40(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
+}
+
+// FocusNextPrevChild calls QWidget::focusNextPrevChild.
+func (s *QDoubleSpinBoxSuper) FocusNextPrevChild(next bool) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.FocusNextPrevChild")
+	r := C.qute_QDoubleSpinBox_super_41(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QDoubleSpinBoxSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QDoubleSpinBox.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDoubleSpinBox.Super.EventFilter")
+	}
+	r := C.qute_QDoubleSpinBox_super_42(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QDoubleSpinBoxSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QDoubleSpinBox.Super.ChildEvent")
+	}
+	C.qute_QDoubleSpinBox_super_43(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QDoubleSpinBoxSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleSpinBox.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDoubleSpinBox.Super.CustomEvent")
+	}
+	C.qute_QDoubleSpinBox_super_44(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// LineEdit wraps the protected QAbstractSpinBox::lineEdit for subclasses.
+func (b *QDoubleSpinBoxBase) LineEdit() *QLineEdit {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.LineEdit")
+	r := C.qute_QDoubleSpinBox_prot_lineEdit(self)
+	runtime.KeepAlive(this)
+	return rt.View[QLineEdit](rt.WrapClass(r, "QLineEdit", rt.KeepOrBorrow), r)
+}
+
+// SetLineEdit wraps the protected QAbstractSpinBox::setLineEdit for subclasses.
+func (b *QDoubleSpinBoxBase) SetLineEdit(edit QLineEditLike) {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.SetLineEdit")
+	var editPtr unsafe.Pointer
+	var editH *rt.Handle
+	if edit != nil {
+		editPtr, editH = rt.Arg(unsafe.Pointer(edit.AsQLineEdit()), "QDoubleSpinBox.SetLineEdit")
+	}
+	C.qute_QDoubleSpinBox_prot_setLineEdit(self, editPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(edit)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, editH)
+}
+
+// UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
+func (b *QDoubleSpinBoxBase) UpdateMicroFocus() {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.UpdateMicroFocus")
+	C.qute_QDoubleSpinBox_prot_updateMicroFocus(self)
+	runtime.KeepAlive(this)
+}
+
+// Create wraps the protected QWidget::create for subclasses.
+func (b *QDoubleSpinBoxBase) Create() {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Create")
+	C.qute_QDoubleSpinBox_prot_create(self)
+	runtime.KeepAlive(this)
+}
+
+// Destroy wraps the protected QWidget::destroy for subclasses.
+func (b *QDoubleSpinBoxBase) Destroy() {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.Destroy")
+	C.qute_QDoubleSpinBox_prot_destroy(self)
+	runtime.KeepAlive(this)
+}
+
+// FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
+func (b *QDoubleSpinBoxBase) FocusNextChild() bool {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.FocusNextChild")
+	r := C.qute_QDoubleSpinBox_prot_focusNextChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
+func (b *QDoubleSpinBoxBase) FocusPreviousChild() bool {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.FocusPreviousChild")
+	r := C.qute_QDoubleSpinBox_prot_focusPreviousChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QDoubleSpinBoxBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QDoubleSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleSpinBox.GetDecodedMetricF")
+	r := C.qute_QDoubleSpinBox_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQDoubleSpinBoxWith constructs a QDoubleSpinBox whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDoubleSpinBoxWith(v QDoubleSpinBoxSubclass, parent QWidgetLike) *QDoubleSpinBox {
+	rt.CheckThread("NewQDoubleSpinBoxWith")
+	base := v.quteQDoubleSpinBoxBase()
+	if base.QDoubleSpinBox != nil {
+		panic("NewQDoubleSpinBoxWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDoubleSpinBoxWith")
+	}
+	p := C.qute_QDoubleSpinBox_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDoubleSpinBox", mode)
+	base.QDoubleSpinBox = rt.View[QDoubleSpinBox](h, p)
+	id := h.SetSelf(v, qDoubleSpinBoxVTable)
+	mask := rt.Mask(v, qDoubleSpinBoxVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDoubleSpinBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDoubleSpinBox
 }

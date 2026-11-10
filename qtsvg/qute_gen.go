@@ -54,6 +54,8 @@ var (
 
 var _ = quteMap[C.int, C.int, int, int]
 var _ = qutePairs[C.int, C.int, int, int, int]
+var _ = quteCList[C.int]
+var _ = quteCMap[int, int, C.int, C.int]
 
 // quteStr copies a malloc'd UTF-8 buffer into a Go string and frees it.
 func quteStr(s C.qute_str) string {
@@ -144,6 +146,35 @@ func quteCStrList(v []string) C.qute_list {
 		ss[i] = quteCStr(s)
 	}
 	return C.qute_list{data: p, len: C.ptrdiff_t(len(v))}
+}
+
+// quteCList copies n elements, filled in by fill, into a malloc'd C array
+// that the shim takes over (a list a Go override returns).
+func quteCList[T any](n int, fill func(d []T)) C.qute_list {
+	var z T
+	p := C.malloc(C.size_t(max(n, 1)) * C.size_t(unsafe.Sizeof(z)))
+	fill(unsafe.Slice((*T)(p), n))
+	return C.qute_list{data: p, len: C.ptrdiff_t(n)}
+}
+
+// quteCMap copies a Go map into malloc'd key and value arrays that the shim
+// takes over (a map a Go override returns).
+func quteCMap[K comparable, V, CK, CV any](m map[K]V, kf func(K) CK, vf func(V) CV) C.qute_map {
+	ks := make([]K, 0, len(m))
+	for k := range m {
+		ks = append(ks, k)
+	}
+	keys := quteCList(len(ks), func(d []CK) {
+		for i, k := range ks {
+			d[i] = kf(k)
+		}
+	})
+	values := quteCList(len(ks), func(d []CV) {
+		for i, k := range ks {
+			d[i] = vf(m[k])
+		}
+	})
+	return C.qute_map{keys: keys, values: values}
 }
 
 func quteFreeStrs(v []C.qute_str) {

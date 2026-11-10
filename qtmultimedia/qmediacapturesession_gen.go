@@ -799,3 +799,183 @@ func (this *QMediaCaptureSession) OnAudioOutputChanged(f func()) qtcore.Connecti
 	})
 	return rt.NewConnection(C.qute_QMediaCaptureSession_audioOutputChanged(self, C.uintptr_t(id)))
 }
+
+var qMediaCaptureSessionVTable = []rt.Virtual{
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QMediaCaptureSessionBase is embedded in Go types that subclass QMediaCaptureSession:
+//
+//	type MyMediaCaptureSession struct{ qtmultimedia.QMediaCaptureSessionBase }
+//
+// Define any of the virtual methods listed on QMediaCaptureSessionSuper to override them,
+// then construct the value with NewQMediaCaptureSessionWith. Call b.Super().X() for the
+// base implementation.
+type QMediaCaptureSessionBase struct{ *QMediaCaptureSession }
+
+func (b *QMediaCaptureSessionBase) quteQMediaCaptureSessionBase() *QMediaCaptureSessionBase { return b }
+
+// QMediaCaptureSessionSubclass is implemented by every type that embeds QMediaCaptureSessionBase.
+type QMediaCaptureSessionSubclass interface {
+	quteQMediaCaptureSessionBase() *QMediaCaptureSessionBase
+}
+
+// Super returns the C++ base implementations of QMediaCaptureSession's virtual methods.
+func (b *QMediaCaptureSessionBase) Super() *QMediaCaptureSessionSuper {
+	return &QMediaCaptureSessionSuper{this: b.QMediaCaptureSession}
+}
+
+// QMediaCaptureSessionSuper calls the C++ base implementations of QMediaCaptureSession's virtuals.
+type QMediaCaptureSessionSuper struct{ this *QMediaCaptureSession }
+
+// Event calls QObject::event.
+func (s *QMediaCaptureSessionSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaCaptureSession.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMediaCaptureSession.Super.Event")
+	}
+	r := C.qute_QMediaCaptureSession_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QMediaCaptureSessionSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaCaptureSession.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QMediaCaptureSession.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMediaCaptureSession.Super.EventFilter")
+	}
+	r := C.qute_QMediaCaptureSession_super_1(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QMediaCaptureSessionSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaCaptureSession.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QMediaCaptureSession.Super.TimerEvent")
+	}
+	C.qute_QMediaCaptureSession_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QMediaCaptureSessionSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaCaptureSession.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QMediaCaptureSession.Super.ChildEvent")
+	}
+	C.qute_QMediaCaptureSession_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QMediaCaptureSessionSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaCaptureSession.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMediaCaptureSession.Super.CustomEvent")
+	}
+	C.qute_QMediaCaptureSession_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQMediaCaptureSessionWith constructs a QMediaCaptureSession whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQMediaCaptureSessionWith(v QMediaCaptureSessionSubclass, parent qtcore.QObjectLike) *QMediaCaptureSession {
+	rt.CheckThread("NewQMediaCaptureSessionWith")
+	base := v.quteQMediaCaptureSessionBase()
+	if base.QMediaCaptureSession != nil {
+		panic("NewQMediaCaptureSessionWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQMediaCaptureSessionWith")
+	}
+	p := C.qute_QMediaCaptureSession_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMediaCaptureSession", mode)
+	base.QMediaCaptureSession = rt.View[QMediaCaptureSession](h, p)
+	id := h.SetSelf(v, qMediaCaptureSessionVTable)
+	mask := rt.Mask(v, qMediaCaptureSessionVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QMediaCaptureSession_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QMediaCaptureSession
+}

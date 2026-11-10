@@ -215,6 +215,7 @@ QKeySequence:
   QKeySequence(QKeySequence::StandardKey): { name: NewQKeySequenceStandard }
 
 QAction:
+  showStatusText: { reviewed: true }
   setActionGroup: { reviewed: true }
   actionGroup: { return: borrowed }
   setShortcuts(QKeySequence::StandardKey): { name: SetStandardShortcuts }
@@ -389,16 +390,17 @@ QStandardItem:
   child: { return: borrowed }
   parent: { return: borrowed }
   model: { return: borrowed }
-  clone: { return: transfer-to-go }
+  clone: { return: transfer-to-go, reviewed: true } # with a parent the clone is Parented (rule 3)
 
 QTextDocument:
+  createObject: { return: parented } # an override creates the object with the document as parent
   print: { reviewed: true }
   frameAt: { return: borrowed }
   rootFrame: { return: borrowed }
   objectForFormat: { return: borrowed }
   object: { return: borrowed }
   drawContents: { reviewed: true }
-  clone: { return: transfer-to-go }
+  clone: { return: transfer-to-go, reviewed: true } # with a parent the clone is Parented (rule 3)
   documentLayout: { skip: "QAbstractTextDocumentLayout is not bound" }
 
 QFont:
@@ -696,6 +698,7 @@ QFontDatabase:
   systemFont: { name: QFontDatabaseGetSystemFont }
 
 QEventPoint:
+  QEventPoint: { reviewed: true } # pointing devices live as long as the application
   device: { return: borrowed }
 
 QImageReader:
@@ -723,10 +726,27 @@ QPointingDevice:
   primaryPointingDevice: { return: borrowed }
 
 QTextBlock:
+  userData: { return: borrowed }
+  setUserData:
+    args: { data: transfer-to-cpp }
+    doc: "The document takes ownership of data and deletes the block's previous user data. Embed QTextBlockUserDataBase in a Go type to store Go state per block; GoValue returns it."
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      doc.SetPlainText("a")
+      data := qtgui.NewQTextBlockUserData()
+      doc.FirstBlock().SetUserData(data)
+      if got := data.Ownership(); got != qtcore.Parented {
+      	t.Errorf("data: %v, want Parented", got)
+      }
+      doc.Delete()
+      if data.Alive() {
+      	t.Error("user data alive after its document was deleted")
+      }
   document: { return: borrowed }
   textList: { return: borrowed }
 
 QTextDocumentFragment:
+  fromHtml: { reviewed: true } # the document is only read during the call
   QTextDocumentFragment(const QTextDocument*): { reviewed: true }
 
 QTextObject:
@@ -818,3 +838,33 @@ QValidator:
 
 QMatrix4x4:
   copyDataTo: { skip: "on purpose: Qt writes 16 floats through the pointer; use CopyDataTo in qmatrix4x4_manual.go" }
+
+QActionEvent:
+  before: { return: borrowed }
+  action: { return: borrowed }
+
+QTouchEvent:
+  target: { return: borrowed }
+
+QInputMethodEventAttribute:
+  "Attribute(QInputMethodEvent::AttributeType, int, int, QVariant)": { name: NewQInputMethodEventAttributeWithValue }
+
+QSyntaxHighlighter:
+  document: { return: borrowed }
+  setDocument:
+    args: { doc: keep } # stored, not owned
+    test: |
+      doc := qtgui.NewQTextDocument(nil)
+      h := &struct{ qtgui.QSyntaxHighlighterBase }{}
+      qtgui.NewQSyntaxHighlighterWith(h, nil)
+      h.SetDocument(doc)
+      if !rt.KeepsArg(unsafe.Pointer(h.QSyntaxHighlighter), unsafe.Pointer(doc)) {
+      	t.Error("doc: not kept by the highlighter")
+      }
+      h.Delete()
+      doc.Delete()
+  currentBlockUserData: { return: borrowed }
+  setCurrentBlockUserData:
+    args: { data: transfer-to-cpp }
+    doc: "The document takes ownership of data; see QTextBlock.SetUserData. Call it only from HighlightBlock: outside it there is no current block and Qt ignores data."
+    test: "skip: only valid inside highlightBlock, which a snippet cannot override; covered by subclass_test.go"

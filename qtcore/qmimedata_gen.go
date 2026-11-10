@@ -313,3 +313,216 @@ func (this *QMimeData) Clear() {
 	C.qute_QMimeData_clear(self)
 	runtime.KeepAlive(this)
 }
+
+var qMimeDataVTable = []rt.Virtual{
+	{Name: "HasFormat", Has: func(v any) bool { _, ok := v.(interface{ HasFormat(string) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			mimetype := quteStr(*(*C.qute_str)(a[0]))
+			r := v.(interface{ HasFormat(string) bool }).HasFormat(mimetype)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Formats", Has: func(v any) bool { _, ok := v.(interface{ Formats() []string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Formats() []string }).Formats()
+			*(*C.qute_list)(ret) = quteCStrList(r)
+		}},
+	{Name: "RetrieveData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RetrieveData(string, *QMetaType) *QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			mimetype := quteStr(*(*C.qute_str)(a[0]))
+			preferredType := rt.View[QMetaType](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QMetaType", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			r := v.(interface {
+				RetrieveData(string, *QMetaType) *QVariant
+			}).RetrieveData(mimetype, preferredType)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QMimeData.RetrieveData")
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QMimeDataBase is embedded in Go types that subclass QMimeData:
+//
+//	type MyMimeData struct{ qtcore.QMimeDataBase }
+//
+// Define any of the virtual methods listed on QMimeDataSuper to override them,
+// then construct the value with NewQMimeDataWith. Call b.Super().X() for the
+// base implementation.
+type QMimeDataBase struct{ *QMimeData }
+
+func (b *QMimeDataBase) quteQMimeDataBase() *QMimeDataBase { return b }
+
+// QMimeDataSubclass is implemented by every type that embeds QMimeDataBase.
+type QMimeDataSubclass interface{ quteQMimeDataBase() *QMimeDataBase }
+
+// Super returns the C++ base implementations of QMimeData's virtual methods.
+func (b *QMimeDataBase) Super() *QMimeDataSuper { return &QMimeDataSuper{this: b.QMimeData} }
+
+// QMimeDataSuper calls the C++ base implementations of QMimeData's virtuals.
+type QMimeDataSuper struct{ this *QMimeData }
+
+// HasFormat calls QMimeData::hasFormat.
+func (s *QMimeDataSuper) HasFormat(mimetype string) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.HasFormat")
+	r := C.qute_QMimeData_super_0(self, (*C.char)(unsafe.Pointer(unsafe.StringData(mimetype))), C.ptrdiff_t(len(mimetype)))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Formats calls QMimeData::formats.
+func (s *QMimeDataSuper) Formats() []string {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.Formats")
+	r := C.qute_QMimeData_super_1(self)
+	runtime.KeepAlive(s.this)
+	return quteStrList(r)
+}
+
+// RetrieveData calls QMimeData::retrieveData.
+func (s *QMimeDataSuper) RetrieveData(mimetype string, preferredType *QMetaType) *QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.RetrieveData")
+	r := C.qute_QMimeData_super_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(mimetype))), C.ptrdiff_t(len(mimetype)), rt.UseArg(unsafe.Pointer(preferredType), "QMimeData.Super.RetrieveData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(preferredType)
+	return rt.View[QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// Event calls QObject::event.
+func (s *QMimeDataSuper) Event(event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMimeData.Super.Event")
+	}
+	r := C.qute_QMimeData_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QMimeDataSuper) EventFilter(watched *QObject, event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QMimeData.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMimeData.Super.EventFilter")
+	}
+	r := C.qute_QMimeData_super_4(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QMimeDataSuper) TimerEvent(event *QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QMimeData.Super.TimerEvent")
+	}
+	C.qute_QMimeData_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QMimeDataSuper) ChildEvent(event *QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QMimeData.Super.ChildEvent")
+	}
+	C.qute_QMimeData_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QMimeDataSuper) CustomEvent(event *QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMimeData.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMimeData.Super.CustomEvent")
+	}
+	C.qute_QMimeData_super_7(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQMimeDataWith constructs a QMimeData whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQMimeDataWith(v QMimeDataSubclass) *QMimeData {
+	rt.CheckThread("NewQMimeDataWith")
+	base := v.quteQMimeDataBase()
+	if base.QMimeData != nil {
+		panic("NewQMimeDataWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QMimeData_new_shim()
+	h := rt.WrapClass(p, "QMimeData", rt.NewOwned)
+	base.QMimeData = rt.View[QMimeData](h, p)
+	id := h.SetSelf(v, qMimeDataVTable)
+	mask := rt.Mask(v, qMimeDataVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QMimeData_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QMimeData
+}

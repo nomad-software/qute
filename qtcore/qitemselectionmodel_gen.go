@@ -95,18 +95,22 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 //
 //	C++: QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model = …)
 //
+// Ownership: model is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
 // NewQItemSelectionModelFull is NewQItemSelectionModel with every argument, including those NewQItemSelectionModel leaves at their C++ defaults.
 //
 // Qt docs: https://doc.qt.io/qt-6/qitemselectionmodel.html#QItemSelectionModel
 func NewQItemSelectionModelFull(model QAbstractItemModelLike) *QItemSelectionModel {
 	rt.CheckThread("NewQItemSelectionModelFull")
 	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
 	if model != nil {
-		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelFull")
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelFull")
 	}
 	p := C.qute_QItemSelectionModel_new_2(modelPtr)
 	runtime.KeepAlive(model)
 	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QItemSelectionModel](h, p)
 }
 
@@ -626,4 +630,280 @@ func (this *QItemSelectionModel) OnModelChanged(f func(model *QAbstractItemModel
 		f(model)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_modelChanged(self, C.uintptr_t(id)))
+}
+
+var qItemSelectionModelVTable = []rt.Virtual{
+	{Name: "SetCurrentIndex", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetCurrentIndex(*QModelIndex, QItemSelectionModelSelectionFlags)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
+			v.(interface {
+				SetCurrentIndex(*QModelIndex, QItemSelectionModelSelectionFlags)
+			}).SetCurrentIndex(index, command)
+		}},
+	{Name: "Select", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Select(*QModelIndex, QItemSelectionModelSelectionFlags)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
+			v.(interface {
+				Select(*QModelIndex, QItemSelectionModelSelectionFlags)
+			}).Select(index, command)
+		}},
+	{Name: "SelectItemSelection", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SelectItemSelection(*QItemSelection, QItemSelectionModelSelectionFlags)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			selection := rt.View[QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
+			v.(interface {
+				SelectItemSelection(*QItemSelection, QItemSelectionModelSelectionFlags)
+			}).SelectItemSelection(selection, command)
+		}},
+	{Name: "Clear", Has: func(v any) bool { _, ok := v.(interface{ Clear() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Clear() }).Clear()
+		}},
+	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Reset() }).Reset()
+		}},
+	{Name: "ClearCurrentIndex", Has: func(v any) bool { _, ok := v.(interface{ ClearCurrentIndex() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ ClearCurrentIndex() }).ClearCurrentIndex()
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QItemSelectionModelBase is embedded in Go types that subclass QItemSelectionModel:
+//
+//	type MyItemSelectionModel struct{ qtcore.QItemSelectionModelBase }
+//
+// Define any of the virtual methods listed on QItemSelectionModelSuper to override them,
+// then construct the value with NewQItemSelectionModelWith. Call b.Super().X() for the
+// base implementation.
+type QItemSelectionModelBase struct{ *QItemSelectionModel }
+
+func (b *QItemSelectionModelBase) quteQItemSelectionModelBase() *QItemSelectionModelBase { return b }
+
+// QItemSelectionModelSubclass is implemented by every type that embeds QItemSelectionModelBase.
+type QItemSelectionModelSubclass interface {
+	quteQItemSelectionModelBase() *QItemSelectionModelBase
+}
+
+// Super returns the C++ base implementations of QItemSelectionModel's virtual methods.
+func (b *QItemSelectionModelBase) Super() *QItemSelectionModelSuper {
+	return &QItemSelectionModelSuper{this: b.QItemSelectionModel}
+}
+
+// QItemSelectionModelSuper calls the C++ base implementations of QItemSelectionModel's virtuals.
+type QItemSelectionModelSuper struct{ this *QItemSelectionModel }
+
+// SetCurrentIndex calls QItemSelectionModel::setCurrentIndex.
+func (s *QItemSelectionModelSuper) SetCurrentIndex(index *QModelIndex, command QItemSelectionModelSelectionFlags) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.SetCurrentIndex")
+	C.qute_QItemSelectionModel_super_0(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionModel.Super.SetCurrentIndex"), C.int64_t(command))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+}
+
+// Select calls QItemSelectionModel::select.
+func (s *QItemSelectionModelSuper) Select(index *QModelIndex, command QItemSelectionModelSelectionFlags) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.Select")
+	C.qute_QItemSelectionModel_super_1(self, rt.UseArg(unsafe.Pointer(index), "QItemSelectionModel.Super.Select"), C.int64_t(command))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+}
+
+// SelectItemSelection calls QItemSelectionModel::select.
+func (s *QItemSelectionModelSuper) SelectItemSelection(selection *QItemSelection, command QItemSelectionModelSelectionFlags) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.SelectItemSelection")
+	C.qute_QItemSelectionModel_super_2(self, rt.Use(unsafe.Pointer(selection), "QItemSelectionModel.Super.SelectItemSelection"), C.int64_t(command))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(selection)
+}
+
+// Clear calls QItemSelectionModel::clear.
+func (s *QItemSelectionModelSuper) Clear() {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.Clear")
+	C.qute_QItemSelectionModel_super_3(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Reset calls QItemSelectionModel::reset.
+func (s *QItemSelectionModelSuper) Reset() {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.Reset")
+	C.qute_QItemSelectionModel_super_4(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ClearCurrentIndex calls QItemSelectionModel::clearCurrentIndex.
+func (s *QItemSelectionModelSuper) ClearCurrentIndex() {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.ClearCurrentIndex")
+	C.qute_QItemSelectionModel_super_5(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Event calls QObject::event.
+func (s *QItemSelectionModelSuper) Event(event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QItemSelectionModel.Super.Event")
+	}
+	r := C.qute_QItemSelectionModel_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QItemSelectionModelSuper) EventFilter(watched *QObject, event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QItemSelectionModel.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QItemSelectionModel.Super.EventFilter")
+	}
+	r := C.qute_QItemSelectionModel_super_7(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QItemSelectionModelSuper) TimerEvent(event *QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QItemSelectionModel.Super.TimerEvent")
+	}
+	C.qute_QItemSelectionModel_super_8(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QItemSelectionModelSuper) ChildEvent(event *QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QItemSelectionModel.Super.ChildEvent")
+	}
+	C.qute_QItemSelectionModel_super_9(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QItemSelectionModelSuper) CustomEvent(event *QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QItemSelectionModel.Super.CustomEvent")
+	}
+	C.qute_QItemSelectionModel_super_10(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// EmitSelectionChangedBetween wraps the protected QItemSelectionModel::emitSelectionChanged for subclasses.
+func (b *QItemSelectionModelBase) EmitSelectionChangedBetween(newSelection *QItemSelection, oldSelection *QItemSelection) {
+	this := b.QItemSelectionModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.EmitSelectionChangedBetween")
+	C.qute_QItemSelectionModel_prot_emitSelectionChanged(self, rt.Use(unsafe.Pointer(newSelection), "QItemSelectionModel.EmitSelectionChangedBetween"), rt.Use(unsafe.Pointer(oldSelection), "QItemSelectionModel.EmitSelectionChangedBetween"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(newSelection)
+	runtime.KeepAlive(oldSelection)
+}
+
+// NewQItemSelectionModelWith constructs a QItemSelectionModel whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQItemSelectionModelWith(v QItemSelectionModelSubclass) *QItemSelectionModel {
+	rt.CheckThread("NewQItemSelectionModelWith")
+	base := v.quteQItemSelectionModelBase()
+	if base.QItemSelectionModel != nil {
+		panic("NewQItemSelectionModelWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QItemSelectionModel_new_shim()
+	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	base.QItemSelectionModel = rt.View[QItemSelectionModel](h, p)
+	id := h.SetSelf(v, qItemSelectionModelVTable)
+	mask := rt.Mask(v, qItemSelectionModelVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QItemSelectionModel_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QItemSelectionModel
 }

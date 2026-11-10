@@ -29,6 +29,13 @@ long long qute_QAudioBuffer_startTime(void *self);
 // QAudioBufferInput
 void * qute_QAudioBufferInput_new(void * a0);
 void * qute_QAudioBufferInput_new_1(void * a0, void * a1);
+void * qute_QAudioBufferInput_new_shim(void * a0);
+void qute_QAudioBufferInput_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioBufferInput_super_0(void *self, void * a0);
+bool qute_QAudioBufferInput_super_1(void *self, void * a0, void * a1);
+void qute_QAudioBufferInput_super_2(void *self, void * a0);
+void qute_QAudioBufferInput_super_3(void *self, void * a0);
+void qute_QAudioBufferInput_super_4(void *self, void * a0);
 void * qute_QAudioBufferInput_cast(void *obj);
 bool qute_QAudioBufferInput_sendAudioBuffer(void *self, void * a0);
 void * qute_QAudioBufferInput_format(void *self);
@@ -39,6 +46,13 @@ void * qute_QAudioBufferInput_readyToSendAudioBuffer(void *self, uintptr_t id);
 // QAudioBufferOutput
 void * qute_QAudioBufferOutput_new(void * a0);
 void * qute_QAudioBufferOutput_new_1(void * a0, void * a1);
+void * qute_QAudioBufferOutput_new_shim(void * a0);
+void qute_QAudioBufferOutput_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioBufferOutput_super_0(void *self, void * a0);
+bool qute_QAudioBufferOutput_super_1(void *self, void * a0, void * a1);
+void qute_QAudioBufferOutput_super_2(void *self, void * a0);
+void qute_QAudioBufferOutput_super_3(void *self, void * a0);
+void qute_QAudioBufferOutput_super_4(void *self, void * a0);
 void * qute_QAudioBufferOutput_cast(void *obj);
 void * qute_QAudioBufferOutput_format(void *self);
 void qute_QAudioBufferOutput_audioBufferReceived_1(void *self, void * a0);
@@ -46,6 +60,13 @@ void * qute_QAudioBufferOutput_audioBufferReceived(void *self, uintptr_t id);
 
 // QAudioDecoder
 void * qute_QAudioDecoder_new(void * a0);
+void * qute_QAudioDecoder_new_shim(void * a0);
+void qute_QAudioDecoder_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioDecoder_super_0(void *self, void * a0);
+bool qute_QAudioDecoder_super_1(void *self, void * a0, void * a1);
+void qute_QAudioDecoder_super_2(void *self, void * a0);
+void qute_QAudioDecoder_super_3(void *self, void * a0);
+void qute_QAudioDecoder_super_4(void *self, void * a0);
 void * qute_QAudioDecoder_cast(void *obj);
 bool qute_QAudioDecoder_isSupported(void *self);
 bool qute_QAudioDecoder_isDecoding(void *self);
@@ -126,6 +147,13 @@ int64_t qute_QAudioFormat_defaultChannelConfigForChannelCount(int a0);
 // QAudioInput
 void * qute_QAudioInput_new(void * a0);
 void * qute_QAudioInput_new_1(void * a0, void * a1);
+void * qute_QAudioInput_new_shim(void * a0);
+void qute_QAudioInput_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioInput_super_0(void *self, void * a0);
+bool qute_QAudioInput_super_1(void *self, void * a0, void * a1);
+void qute_QAudioInput_super_2(void *self, void * a0);
+void qute_QAudioInput_super_3(void *self, void * a0);
+void qute_QAudioInput_super_4(void *self, void * a0);
 void * qute_QAudioInput_cast(void *obj);
 void * qute_QAudioInput_device(void *self);
 float qute_QAudioInput_volume(void *self);
@@ -143,6 +171,13 @@ void * qute_QAudioInput_mutedChanged(void *self, uintptr_t id);
 // QAudioOutput
 void * qute_QAudioOutput_new(void * a0);
 void * qute_QAudioOutput_new_1(void * a0, void * a1);
+void * qute_QAudioOutput_new_shim(void * a0);
+void qute_QAudioOutput_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioOutput_super_0(void *self, void * a0);
+bool qute_QAudioOutput_super_1(void *self, void * a0, void * a1);
+void qute_QAudioOutput_super_2(void *self, void * a0);
+void qute_QAudioOutput_super_3(void *self, void * a0);
+void qute_QAudioOutput_super_4(void *self, void * a0);
 void * qute_QAudioOutput_cast(void *obj);
 void * qute_QAudioOutput_device(void *self);
 float qute_QAudioOutput_volume(void *self);
@@ -160,6 +195,13 @@ void * qute_QAudioOutput_mutedChanged(void *self, uintptr_t id);
 // QAudioSink
 void * qute_QAudioSink_new(void * a0, void * a1);
 void * qute_QAudioSink_new_1(void * a0, void * a1, void * a2);
+void * qute_QAudioSink_new_shim(void * a0, void * a1);
+void qute_QAudioSink_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioSink_super_0(void *self, void * a0);
+bool qute_QAudioSink_super_1(void *self, void * a0, void * a1);
+void qute_QAudioSink_super_2(void *self, void * a0);
+void qute_QAudioSink_super_3(void *self, void * a0);
+void qute_QAudioSink_super_4(void *self, void * a0);
 void * qute_QAudioSink_cast(void *obj);
 bool qute_QAudioSink_isNull(void *self);
 void * qute_QAudioSink_format(void *self);
@@ -189,6 +231,13 @@ void * qute_QAudioSink_stateChanged(void *self, uintptr_t id);
 // QAudioSource
 void * qute_QAudioSource_new(void * a0, void * a1);
 void * qute_QAudioSource_new_1(void * a0, void * a1, void * a2);
+void * qute_QAudioSource_new_shim(void * a0, void * a1);
+void qute_QAudioSource_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAudioSource_super_0(void *self, void * a0);
+bool qute_QAudioSource_super_1(void *self, void * a0, void * a1);
+void qute_QAudioSource_super_2(void *self, void * a0);
+void qute_QAudioSource_super_3(void *self, void * a0);
+void qute_QAudioSource_super_4(void *self, void * a0);
 void * qute_QAudioSource_cast(void *obj);
 bool qute_QAudioSource_isNull(void *self);
 void * qute_QAudioSource_format(void *self);
@@ -219,6 +268,13 @@ void * qute_QAudioSource_stateChanged(void *self, uintptr_t id);
 void * qute_QCamera_new(void * a0);
 void * qute_QCamera_new_1(void * a0, void * a1);
 void * qute_QCamera_new_2(int64_t a0, void * a1);
+void * qute_QCamera_new_shim(void * a0);
+void qute_QCamera_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QCamera_super_0(void *self, void * a0);
+bool qute_QCamera_super_1(void *self, void * a0, void * a1);
+void qute_QCamera_super_2(void *self, void * a0);
+void qute_QCamera_super_3(void *self, void * a0);
+void qute_QCamera_super_4(void *self, void * a0);
 void * qute_QCamera_cast(void *obj);
 bool qute_QCamera_isAvailable(void *self);
 bool qute_QCamera_isActive(void *self);
@@ -362,6 +418,13 @@ qute_str qute_QCapturableWindow_description(void *self);
 
 // QImageCapture
 void * qute_QImageCapture_new(void * a0);
+void * qute_QImageCapture_new_shim(void * a0);
+void qute_QImageCapture_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QImageCapture_super_0(void *self, void * a0);
+bool qute_QImageCapture_super_1(void *self, void * a0, void * a1);
+void qute_QImageCapture_super_2(void *self, void * a0);
+void qute_QImageCapture_super_3(void *self, void * a0);
+void qute_QImageCapture_super_4(void *self, void * a0);
 void * qute_QImageCapture_cast(void *obj);
 bool qute_QImageCapture_isAvailable(void *self);
 void * qute_QImageCapture_captureSession(void *self);
@@ -410,6 +473,13 @@ void * qute_QImageCapture_imageSaved(void *self, uintptr_t id);
 
 // QMediaCaptureSession
 void * qute_QMediaCaptureSession_new(void * a0);
+void * qute_QMediaCaptureSession_new_shim(void * a0);
+void qute_QMediaCaptureSession_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QMediaCaptureSession_super_0(void *self, void * a0);
+bool qute_QMediaCaptureSession_super_1(void *self, void * a0, void * a1);
+void qute_QMediaCaptureSession_super_2(void *self, void * a0);
+void qute_QMediaCaptureSession_super_3(void *self, void * a0);
+void qute_QMediaCaptureSession_super_4(void *self, void * a0);
 void * qute_QMediaCaptureSession_cast(void *obj);
 void * qute_QMediaCaptureSession_audioInput(void *self);
 void qute_QMediaCaptureSession_setAudioInput(void *self, void * a0);
@@ -460,6 +530,13 @@ void * qute_QMediaCaptureSession_audioOutputChanged(void *self, uintptr_t id);
 
 // QMediaDevices
 void * qute_QMediaDevices_new(void * a0);
+void * qute_QMediaDevices_new_shim(void * a0);
+void qute_QMediaDevices_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QMediaDevices_super_0(void *self, void * a0);
+bool qute_QMediaDevices_super_1(void *self, void * a0, void * a1);
+void qute_QMediaDevices_super_2(void *self, void * a0);
+void qute_QMediaDevices_super_3(void *self, void * a0);
+void qute_QMediaDevices_super_4(void *self, void * a0);
 void * qute_QMediaDevices_cast(void *obj);
 void qute_QMediaDevices_audioInputsChanged_1(void *self);
 void qute_QMediaDevices_audioOutputsChanged_1(void *self);
@@ -510,6 +587,13 @@ qute_str qute_QMediaMetaData_metaDataKeyToString(int64_t a0);
 
 // QMediaPlayer
 void * qute_QMediaPlayer_new(void * a0);
+void * qute_QMediaPlayer_new_shim(void * a0);
+void qute_QMediaPlayer_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QMediaPlayer_super_0(void *self, void * a0);
+bool qute_QMediaPlayer_super_1(void *self, void * a0, void * a1);
+void qute_QMediaPlayer_super_2(void *self, void * a0);
+void qute_QMediaPlayer_super_3(void *self, void * a0);
+void qute_QMediaPlayer_super_4(void *self, void * a0);
 void * qute_QMediaPlayer_cast(void *obj);
 qute_list qute_QMediaPlayer_audioTracks(void *self);
 qute_list qute_QMediaPlayer_videoTracks(void *self);
@@ -608,6 +692,13 @@ void * qute_QMediaPlayer_playbackOptionsChanged(void *self, uintptr_t id);
 
 // QMediaRecorder
 void * qute_QMediaRecorder_new(void * a0);
+void * qute_QMediaRecorder_new_shim(void * a0);
+void qute_QMediaRecorder_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QMediaRecorder_super_0(void *self, void * a0);
+bool qute_QMediaRecorder_super_1(void *self, void * a0, void * a1);
+void qute_QMediaRecorder_super_2(void *self, void * a0);
+void qute_QMediaRecorder_super_3(void *self, void * a0);
+void qute_QMediaRecorder_super_4(void *self, void * a0);
 void * qute_QMediaRecorder_cast(void *obj);
 bool qute_QMediaRecorder_isAvailable(void *self);
 void * qute_QMediaRecorder_outputLocation(void *self);
@@ -724,6 +815,13 @@ void qute_QPlaybackOptions_resetProbeSize(void *self);
 
 // QScreenCapture
 void * qute_QScreenCapture_new(void * a0);
+void * qute_QScreenCapture_new_shim(void * a0);
+void qute_QScreenCapture_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QScreenCapture_super_0(void *self, void * a0);
+bool qute_QScreenCapture_super_1(void *self, void * a0, void * a1);
+void qute_QScreenCapture_super_2(void *self, void * a0);
+void qute_QScreenCapture_super_3(void *self, void * a0);
+void qute_QScreenCapture_super_4(void *self, void * a0);
 void * qute_QScreenCapture_cast(void *obj);
 void * qute_QScreenCapture_captureSession(void *self);
 void qute_QScreenCapture_setScreen(void *self, void * a0);
@@ -748,6 +846,13 @@ void * qute_QScreenCapture_maximumFrameRateChanged(void *self, uintptr_t id);
 // QSoundEffect
 void * qute_QSoundEffect_new(void * a0);
 void * qute_QSoundEffect_new_1(void * a0, void * a1);
+void * qute_QSoundEffect_new_shim(void * a0);
+void qute_QSoundEffect_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QSoundEffect_super_0(void *self, void * a0);
+bool qute_QSoundEffect_super_1(void *self, void * a0, void * a1);
+void qute_QSoundEffect_super_2(void *self, void * a0);
+void qute_QSoundEffect_super_3(void *self, void * a0);
+void qute_QSoundEffect_super_4(void *self, void * a0);
 void * qute_QSoundEffect_cast(void *obj);
 void * qute_QSoundEffect_source(void *self);
 void qute_QSoundEffect_setSource(void *self, void * a0);
@@ -872,6 +977,13 @@ qute_str qute_QVideoFrameFormat_pixelFormatToString(int64_t a0);
 // QVideoFrameInput
 void * qute_QVideoFrameInput_new(void * a0);
 void * qute_QVideoFrameInput_new_1(void * a0, void * a1);
+void * qute_QVideoFrameInput_new_shim(void * a0);
+void qute_QVideoFrameInput_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QVideoFrameInput_super_0(void *self, void * a0);
+bool qute_QVideoFrameInput_super_1(void *self, void * a0, void * a1);
+void qute_QVideoFrameInput_super_2(void *self, void * a0);
+void qute_QVideoFrameInput_super_3(void *self, void * a0);
+void qute_QVideoFrameInput_super_4(void *self, void * a0);
 void * qute_QVideoFrameInput_cast(void *obj);
 bool qute_QVideoFrameInput_sendVideoFrame(void *self, void * a0);
 void * qute_QVideoFrameInput_format(void *self);
@@ -881,6 +993,13 @@ void * qute_QVideoFrameInput_readyToSendVideoFrame(void *self, uintptr_t id);
 
 // QVideoSink
 void * qute_QVideoSink_new(void * a0);
+void * qute_QVideoSink_new_shim(void * a0);
+void qute_QVideoSink_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QVideoSink_super_0(void *self, void * a0);
+bool qute_QVideoSink_super_1(void *self, void * a0, void * a1);
+void qute_QVideoSink_super_2(void *self, void * a0);
+void qute_QVideoSink_super_3(void *self, void * a0);
+void qute_QVideoSink_super_4(void *self, void * a0);
 void * qute_QVideoSink_cast(void *obj);
 qute_size qute_QVideoSink_videoSize(void *self);
 qute_str qute_QVideoSink_subtitleText(void *self);
@@ -896,6 +1015,13 @@ void * qute_QVideoSink_videoSizeChanged(void *self, uintptr_t id);
 
 // QWindowCapture
 void * qute_QWindowCapture_new(void * a0);
+void * qute_QWindowCapture_new_shim(void * a0);
+void qute_QWindowCapture_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QWindowCapture_super_0(void *self, void * a0);
+bool qute_QWindowCapture_super_1(void *self, void * a0, void * a1);
+void qute_QWindowCapture_super_2(void *self, void * a0);
+void qute_QWindowCapture_super_3(void *self, void * a0);
+void qute_QWindowCapture_super_4(void *self, void * a0);
 void * qute_QWindowCapture_cast(void *obj);
 void * qute_QWindowCapture_captureSession(void *self);
 void qute_QWindowCapture_setWindow(void *self, void * a0);

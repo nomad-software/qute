@@ -484,14 +484,25 @@ func (h *Handle) SetVisiblePin(visible bool) {
 // else by the root of its tree, see anchor.go), and returns the id the shim
 // dispatches with.
 func (h *Handle) SetSelf(self any, vt []Virtual) uintptr {
+	h.mu.Lock()
 	h.Self = self
 	h.VTable = vt
-	h.mu.Lock()
 	h.selfSlot = newSlot(h)
 	id := h.selfSlot
 	h.mu.Unlock()
 	h.anchorPin()
 	return id
+}
+
+// GoValue returns the Go value set by SetSelf (a Go subclass), or nil. It
+// stays readable after the object dies.
+func (h *Handle) GoValue() any {
+	if h == nil {
+		return nil
+	}
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	return h.Self
 }
 
 // Destroyed is called when Qt (or a shim destructor) reports that the object

@@ -2,4 +2,4 @@
 module: QtOpenGLWidgets
 package: qtopenglwidgets
 classes:
-  QOpenGLWidget: { subclass: true }
+  QOpenGLWidget: {}

@@ -143,3 +143,185 @@ func (this *QOpenGLVertexArrayObject) Release() {
 	C.qute_QOpenGLVertexArrayObject_release(self)
 	runtime.KeepAlive(this)
 }
+
+var qOpenGLVertexArrayObjectVTable = []rt.Virtual{
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QOpenGLVertexArrayObjectBase is embedded in Go types that subclass QOpenGLVertexArrayObject:
+//
+//	type MyOpenGLVertexArrayObject struct{ qtopengl.QOpenGLVertexArrayObjectBase }
+//
+// Define any of the virtual methods listed on QOpenGLVertexArrayObjectSuper to override them,
+// then construct the value with NewQOpenGLVertexArrayObjectWith. Call b.Super().X() for the
+// base implementation.
+type QOpenGLVertexArrayObjectBase struct{ *QOpenGLVertexArrayObject }
+
+func (b *QOpenGLVertexArrayObjectBase) quteQOpenGLVertexArrayObjectBase() *QOpenGLVertexArrayObjectBase {
+	return b
+}
+
+// QOpenGLVertexArrayObjectSubclass is implemented by every type that embeds QOpenGLVertexArrayObjectBase.
+type QOpenGLVertexArrayObjectSubclass interface {
+	quteQOpenGLVertexArrayObjectBase() *QOpenGLVertexArrayObjectBase
+}
+
+// Super returns the C++ base implementations of QOpenGLVertexArrayObject's virtual methods.
+func (b *QOpenGLVertexArrayObjectBase) Super() *QOpenGLVertexArrayObjectSuper {
+	return &QOpenGLVertexArrayObjectSuper{this: b.QOpenGLVertexArrayObject}
+}
+
+// QOpenGLVertexArrayObjectSuper calls the C++ base implementations of QOpenGLVertexArrayObject's virtuals.
+type QOpenGLVertexArrayObjectSuper struct{ this *QOpenGLVertexArrayObject }
+
+// Event calls QObject::event.
+func (s *QOpenGLVertexArrayObjectSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLVertexArrayObject.Super.Event")
+	}
+	r := C.qute_QOpenGLVertexArrayObject_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QOpenGLVertexArrayObjectSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QOpenGLVertexArrayObject.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLVertexArrayObject.Super.EventFilter")
+	}
+	r := C.qute_QOpenGLVertexArrayObject_super_1(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QOpenGLVertexArrayObjectSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QOpenGLVertexArrayObject.Super.TimerEvent")
+	}
+	C.qute_QOpenGLVertexArrayObject_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QOpenGLVertexArrayObjectSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QOpenGLVertexArrayObject.Super.ChildEvent")
+	}
+	C.qute_QOpenGLVertexArrayObject_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QOpenGLVertexArrayObjectSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLVertexArrayObject.Super.CustomEvent")
+	}
+	C.qute_QOpenGLVertexArrayObject_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQOpenGLVertexArrayObjectWith constructs a QOpenGLVertexArrayObject whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLVertexArrayObjectWith(v QOpenGLVertexArrayObjectSubclass, parent qtcore.QObjectLike) *QOpenGLVertexArrayObject {
+	rt.CheckThread("NewQOpenGLVertexArrayObjectWith")
+	base := v.quteQOpenGLVertexArrayObjectBase()
+	if base.QOpenGLVertexArrayObject != nil {
+		panic("NewQOpenGLVertexArrayObjectWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQOpenGLVertexArrayObjectWith")
+	}
+	p := C.qute_QOpenGLVertexArrayObject_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QOpenGLVertexArrayObject", mode)
+	base.QOpenGLVertexArrayObject = rt.View[QOpenGLVertexArrayObject](h, p)
+	id := h.SetSelf(v, qOpenGLVertexArrayObjectVTable)
+	mask := rt.Mask(v, qOpenGLVertexArrayObjectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLVertexArrayObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLVertexArrayObject
+}

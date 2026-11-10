@@ -955,6 +955,28 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			}).Buddy(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QSortFilterProxyModel.Buddy")
 		}},
+	{Name: "Match", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
+			start := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			role := int(*(*C.int)(a[1]))
+			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			hits := int(*(*C.int)(a[3]))
+			flags := MatchFlags(*(*C.int64_t)(a[4]))
+			r := v.(interface {
+				Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
+			}).Match(start, role, value, hits, flags)
+			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
+				for i, e := range r {
+					d[i] = rt.UseArg(unsafe.Pointer(e), "QSortFilterProxyModel.Match")
+				}
+			})
+		}},
 	{Name: "Span", Has: func(v any) bool { _, ok := v.(interface{ Span(*QModelIndex) QSize }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -991,6 +1013,22 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
 			v.(interface{ Revert() }).Revert()
+		}},
+	{Name: "ItemData", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemData(*QModelIndex) map[int]*QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				ItemData(*QModelIndex) map[int]*QVariant
+			}).ItemData(index)
+			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e *QVariant) unsafe.Pointer {
+				return rt.UseArg(unsafe.Pointer(e), "QSortFilterProxyModel.ItemData")
+			})
 		}},
 	{Name: "SetItemData", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1039,6 +1077,12 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			_ = args
 			r := v.(interface{ SupportedDragActions() DropActions }).SupportedDragActions()
 			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "RoleNames", Has: func(v any) bool { _, ok := v.(interface{ RoleNames() map[int][]byte }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ RoleNames() map[int][]byte }).RoleNames()
+			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e []byte) C.qute_str { return quteCBytes(e) })
 		}},
 	{Name: "MoveRows", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1421,10 +1465,22 @@ func (s *QSortFilterProxyModelSuper) Buddy(index *QModelIndex) *QModelIndex {
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
+// Match calls QSortFilterProxyModel::match.
+func (s *QSortFilterProxyModelSuper) Match(start *QModelIndex, role int, value *QVariant, hits int, flags MatchFlags) []*QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.Match")
+	r := C.qute_QSortFilterProxyModel_super_28(self, rt.UseArg(unsafe.Pointer(start), "QSortFilterProxyModel.Super.Match"), C.int(role), rt.UseArg(unsafe.Pointer(value), "QSortFilterProxyModel.Super.Match"), C.int(hits), C.int64_t(flags))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(start)
+	runtime.KeepAlive(value)
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
+		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
 // Span calls QSortFilterProxyModel::span.
 func (s *QSortFilterProxyModelSuper) Span(index *QModelIndex) QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.Span")
-	r := C.qute_QSortFilterProxyModel_super_28(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.Span"))
+	r := C.qute_QSortFilterProxyModel_super_29(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.Span"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	return goQSize(r)
@@ -1433,14 +1489,14 @@ func (s *QSortFilterProxyModelSuper) Span(index *QModelIndex) QSize {
 // Sort calls QSortFilterProxyModel::sort.
 func (s *QSortFilterProxyModelSuper) Sort(column int, order SortOrder) {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.Sort")
-	C.qute_QSortFilterProxyModel_super_29(self, C.int(column), C.int64_t(order))
+	C.qute_QSortFilterProxyModel_super_30(self, C.int(column), C.int64_t(order))
 	runtime.KeepAlive(s.this)
 }
 
 // MimeTypes calls QSortFilterProxyModel::mimeTypes.
 func (s *QSortFilterProxyModelSuper) MimeTypes() []string {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.MimeTypes")
-	r := C.qute_QSortFilterProxyModel_super_30(self)
+	r := C.qute_QSortFilterProxyModel_super_31(self)
 	runtime.KeepAlive(s.this)
 	return quteStrList(r)
 }
@@ -1448,7 +1504,7 @@ func (s *QSortFilterProxyModelSuper) MimeTypes() []string {
 // SupportedDropActions calls QSortFilterProxyModel::supportedDropActions.
 func (s *QSortFilterProxyModelSuper) SupportedDropActions() DropActions {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.SupportedDropActions")
-	r := C.qute_QSortFilterProxyModel_super_31(self)
+	r := C.qute_QSortFilterProxyModel_super_32(self)
 	runtime.KeepAlive(s.this)
 	return DropActions(r)
 }
@@ -1456,7 +1512,7 @@ func (s *QSortFilterProxyModelSuper) SupportedDropActions() DropActions {
 // Submit calls QAbstractProxyModel::submit.
 func (s *QSortFilterProxyModelSuper) Submit() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.Submit")
-	r := C.qute_QSortFilterProxyModel_super_32(self)
+	r := C.qute_QSortFilterProxyModel_super_33(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1464,8 +1520,19 @@ func (s *QSortFilterProxyModelSuper) Submit() bool {
 // Revert calls QAbstractProxyModel::revert.
 func (s *QSortFilterProxyModelSuper) Revert() {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.Revert")
-	C.qute_QSortFilterProxyModel_super_33(self)
+	C.qute_QSortFilterProxyModel_super_34(self)
 	runtime.KeepAlive(s.this)
+}
+
+// ItemData calls QAbstractProxyModel::itemData.
+func (s *QSortFilterProxyModelSuper) ItemData(index *QModelIndex) map[int]*QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.ItemData")
+	r := C.qute_QSortFilterProxyModel_super_35(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.ItemData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return quteMap(r, func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
+		return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
+	})
 }
 
 // SetItemData calls QAbstractProxyModel::setItemData.
@@ -1477,7 +1544,7 @@ func (s *QSortFilterProxyModelSuper) SetItemData(index *QModelIndex, roles map[i
 		rolesK = append(rolesK, C.int(k))
 		rolesV = append(rolesV, rt.UseArg(unsafe.Pointer(x), "QSortFilterProxyModel.Super.SetItemData"))
 	}
-	r := C.qute_QSortFilterProxyModel_super_34(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.SetItemData"), unsafe.Pointer(unsafe.SliceData(rolesK)), unsafe.Pointer(unsafe.SliceData(rolesV)), C.ptrdiff_t(len(roles)))
+	r := C.qute_QSortFilterProxyModel_super_36(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.SetItemData"), unsafe.Pointer(unsafe.SliceData(rolesK)), unsafe.Pointer(unsafe.SliceData(rolesV)), C.ptrdiff_t(len(roles)))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(roles)
@@ -1487,7 +1554,7 @@ func (s *QSortFilterProxyModelSuper) SetItemData(index *QModelIndex, roles map[i
 // ClearItemData calls QAbstractProxyModel::clearItemData.
 func (s *QSortFilterProxyModelSuper) ClearItemData(index *QModelIndex) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.ClearItemData")
-	r := C.qute_QSortFilterProxyModel_super_35(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.ClearItemData"))
+	r := C.qute_QSortFilterProxyModel_super_37(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.ClearItemData"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	return bool(r)
@@ -1500,7 +1567,7 @@ func (s *QSortFilterProxyModelSuper) CanDropMimeData(data *QMimeData, action Dro
 	if data != nil {
 		dataPtr = rt.UseArg(unsafe.Pointer(data.AsQMimeData()), "QSortFilterProxyModel.Super.CanDropMimeData")
 	}
-	r := C.qute_QSortFilterProxyModel_super_36(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.Super.CanDropMimeData"))
+	r := C.qute_QSortFilterProxyModel_super_38(self, dataPtr, C.int64_t(action), C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.Super.CanDropMimeData"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(data)
 	runtime.KeepAlive(parent)
@@ -1510,15 +1577,23 @@ func (s *QSortFilterProxyModelSuper) CanDropMimeData(data *QMimeData, action Dro
 // SupportedDragActions calls QAbstractProxyModel::supportedDragActions.
 func (s *QSortFilterProxyModelSuper) SupportedDragActions() DropActions {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.SupportedDragActions")
-	r := C.qute_QSortFilterProxyModel_super_37(self)
+	r := C.qute_QSortFilterProxyModel_super_39(self)
 	runtime.KeepAlive(s.this)
 	return DropActions(r)
+}
+
+// RoleNames calls QAbstractProxyModel::roleNames.
+func (s *QSortFilterProxyModelSuper) RoleNames() map[int][]byte {
+	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.RoleNames")
+	r := C.qute_QSortFilterProxyModel_super_40(self)
+	runtime.KeepAlive(s.this)
+	return quteMap(r, func(k C.int) int { return int(k) }, func(v C.qute_str) []byte { return quteBytes(v) })
 }
 
 // MoveRows calls QAbstractItemModel::moveRows.
 func (s *QSortFilterProxyModelSuper) MoveRows(sourceParent *QModelIndex, sourceRow int, count int, destinationParent *QModelIndex, destinationChild int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.MoveRows")
-	r := C.qute_QSortFilterProxyModel_super_38(self, rt.UseArg(unsafe.Pointer(sourceParent), "QSortFilterProxyModel.Super.MoveRows"), C.int(sourceRow), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QSortFilterProxyModel.Super.MoveRows"), C.int(destinationChild))
+	r := C.qute_QSortFilterProxyModel_super_41(self, rt.UseArg(unsafe.Pointer(sourceParent), "QSortFilterProxyModel.Super.MoveRows"), C.int(sourceRow), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QSortFilterProxyModel.Super.MoveRows"), C.int(destinationChild))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(sourceParent)
 	runtime.KeepAlive(destinationParent)
@@ -1528,7 +1603,7 @@ func (s *QSortFilterProxyModelSuper) MoveRows(sourceParent *QModelIndex, sourceR
 // MoveColumns calls QAbstractItemModel::moveColumns.
 func (s *QSortFilterProxyModelSuper) MoveColumns(sourceParent *QModelIndex, sourceColumn int, count int, destinationParent *QModelIndex, destinationChild int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.MoveColumns")
-	r := C.qute_QSortFilterProxyModel_super_39(self, rt.UseArg(unsafe.Pointer(sourceParent), "QSortFilterProxyModel.Super.MoveColumns"), C.int(sourceColumn), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QSortFilterProxyModel.Super.MoveColumns"), C.int(destinationChild))
+	r := C.qute_QSortFilterProxyModel_super_42(self, rt.UseArg(unsafe.Pointer(sourceParent), "QSortFilterProxyModel.Super.MoveColumns"), C.int(sourceColumn), C.int(count), rt.UseArg(unsafe.Pointer(destinationParent), "QSortFilterProxyModel.Super.MoveColumns"), C.int(destinationChild))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(sourceParent)
 	runtime.KeepAlive(destinationParent)
@@ -1538,7 +1613,7 @@ func (s *QSortFilterProxyModelSuper) MoveColumns(sourceParent *QModelIndex, sour
 // ResetInternalData calls QAbstractItemModel::resetInternalData.
 func (s *QSortFilterProxyModelSuper) ResetInternalData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.ResetInternalData")
-	C.qute_QSortFilterProxyModel_super_40(self)
+	C.qute_QSortFilterProxyModel_super_43(self)
 	runtime.KeepAlive(s.this)
 }
 
@@ -1549,7 +1624,7 @@ func (s *QSortFilterProxyModelSuper) Event(event *QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QSortFilterProxyModel.Super.Event")
 	}
-	r := C.qute_QSortFilterProxyModel_super_41(self, eventPtr)
+	r := C.qute_QSortFilterProxyModel_super_44(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -1566,7 +1641,7 @@ func (s *QSortFilterProxyModelSuper) EventFilter(watched *QObject, event *QEvent
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QSortFilterProxyModel.Super.EventFilter")
 	}
-	r := C.qute_QSortFilterProxyModel_super_42(self, watchedPtr, eventPtr)
+	r := C.qute_QSortFilterProxyModel_super_45(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1580,7 +1655,7 @@ func (s *QSortFilterProxyModelSuper) TimerEvent(event *QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QSortFilterProxyModel.Super.TimerEvent")
 	}
-	C.qute_QSortFilterProxyModel_super_43(self, eventPtr)
+	C.qute_QSortFilterProxyModel_super_46(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1592,7 +1667,7 @@ func (s *QSortFilterProxyModelSuper) ChildEvent(event *QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QSortFilterProxyModel.Super.ChildEvent")
 	}
-	C.qute_QSortFilterProxyModel_super_44(self, eventPtr)
+	C.qute_QSortFilterProxyModel_super_47(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1604,20 +1679,21 @@ func (s *QSortFilterProxyModelSuper) CustomEvent(event *QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QSortFilterProxyModel.Super.CustomEvent")
 	}
-	C.qute_QSortFilterProxyModel_super_45(self, eventPtr)
+	C.qute_QSortFilterProxyModel_super_48(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // DataChangeRelevanceFlags wraps the protected QSortFilterProxyModel::dataChangeRelevanceFlags for subclasses.
 func (b *QSortFilterProxyModelBase) DataChangeRelevanceFlags(sourceTopLeft *QModelIndex, sourceBottomRight *QModelIndex, roles []int) QSortFilterProxyModelDataChangeRelevanceFlags {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.DataChangeRelevanceFlags")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.DataChangeRelevanceFlags")
 	rolesC := make([]C.int, len(roles))
 	for i := range roles {
 		rolesC[i] = C.int(roles[i])
 	}
 	r := C.qute_QSortFilterProxyModel_prot_dataChangeRelevanceFlags(self, rt.UseArg(unsafe.Pointer(sourceTopLeft), "QSortFilterProxyModel.DataChangeRelevanceFlags"), rt.UseArg(unsafe.Pointer(sourceBottomRight), "QSortFilterProxyModel.DataChangeRelevanceFlags"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(sourceTopLeft)
 	runtime.KeepAlive(sourceBottomRight)
 	return QSortFilterProxyModelDataChangeRelevanceFlags(r)
@@ -1625,45 +1701,51 @@ func (b *QSortFilterProxyModelBase) DataChangeRelevanceFlags(sourceTopLeft *QMod
 
 // BeginFilterChange wraps the protected QSortFilterProxyModel::beginFilterChange for subclasses.
 func (b *QSortFilterProxyModelBase) BeginFilterChange() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginFilterChange")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginFilterChange")
 	C.qute_QSortFilterProxyModel_prot_beginFilterChange(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // EndFilterChange wraps the protected QSortFilterProxyModel::endFilterChange for subclasses.
 func (b *QSortFilterProxyModelBase) EndFilterChange() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndFilterChange")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndFilterChange")
 	C.qute_QSortFilterProxyModel_prot_endFilterChange(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // CreateSourceIndex wraps the protected QAbstractProxyModel::createSourceIndex for subclasses.
 func (b *QSortFilterProxyModelBase) CreateSourceIndex(row int, col int, internalPtr unsafe.Pointer) *QModelIndex {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.CreateSourceIndex")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.CreateSourceIndex")
 	r := C.qute_QSortFilterProxyModel_prot_createSourceIndex(self, C.int(row), C.int(col), internalPtr)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QSortFilterProxyModelBase) CreateIndex(row int, column int) *QModelIndex {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.CreateIndex")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.CreateIndex")
 	r := C.qute_QSortFilterProxyModel_prot_createIndex(self, C.int(row), C.int(column))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
-// CreateIndex2 wraps the protected QAbstractItemModel::createIndex for subclasses.
-func (b *QSortFilterProxyModelBase) CreateIndex2(row int, column int, idArg uint64) *QModelIndex {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.CreateIndex2")
+// CreateIndexWithUint64 wraps the protected QAbstractItemModel::createIndex for subclasses.
+func (b *QSortFilterProxyModelBase) CreateIndexWithUint64(row int, column int, idArg uint64) *QModelIndex {
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.CreateIndexWithUint64")
 	r := C.qute_QSortFilterProxyModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
 }
 
 // EncodeData wraps the protected QAbstractItemModel::encodeData for subclasses.
 func (b *QSortFilterProxyModelBase) EncodeData(indexes []*QModelIndex, stream QDataStreamLike) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EncodeData")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EncodeData")
 	indexesC := make([]unsafe.Pointer, len(indexes))
 	for i := range indexes {
 		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QSortFilterProxyModel.EncodeData")
@@ -1673,20 +1755,21 @@ func (b *QSortFilterProxyModelBase) EncodeData(indexes []*QModelIndex, stream QD
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QSortFilterProxyModel.EncodeData")
 	}
 	C.qute_QSortFilterProxyModel_prot_encodeData(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)), streamPtr)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(indexes)
 	runtime.KeepAlive(stream)
 }
 
 // DecodeData wraps the protected QAbstractItemModel::decodeData for subclasses.
 func (b *QSortFilterProxyModelBase) DecodeData(row int, column int, parent *QModelIndex, stream QDataStreamLike) bool {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.DecodeData")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.DecodeData")
 	var streamPtr unsafe.Pointer
 	if stream != nil {
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QSortFilterProxyModel.DecodeData")
 	}
 	r := C.qute_QSortFilterProxyModel_prot_decodeData(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.DecodeData"), streamPtr)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(parent)
 	runtime.KeepAlive(stream)
 	return bool(r)
@@ -1694,39 +1777,44 @@ func (b *QSortFilterProxyModelBase) DecodeData(row int, column int, parent *QMod
 
 // BeginInsertRows wraps the protected QAbstractItemModel::beginInsertRows for subclasses.
 func (b *QSortFilterProxyModelBase) BeginInsertRows(parent *QModelIndex, first int, last int) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginInsertRows")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginInsertRows")
 	C.qute_QSortFilterProxyModel_prot_beginInsertRows(self, rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.BeginInsertRows"), C.int(first), C.int(last))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(parent)
 }
 
 // EndInsertRows wraps the protected QAbstractItemModel::endInsertRows for subclasses.
 func (b *QSortFilterProxyModelBase) EndInsertRows() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndInsertRows")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndInsertRows")
 	C.qute_QSortFilterProxyModel_prot_endInsertRows(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // BeginRemoveRows wraps the protected QAbstractItemModel::beginRemoveRows for subclasses.
 func (b *QSortFilterProxyModelBase) BeginRemoveRows(parent *QModelIndex, first int, last int) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginRemoveRows")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginRemoveRows")
 	C.qute_QSortFilterProxyModel_prot_beginRemoveRows(self, rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.BeginRemoveRows"), C.int(first), C.int(last))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(parent)
 }
 
 // EndRemoveRows wraps the protected QAbstractItemModel::endRemoveRows for subclasses.
 func (b *QSortFilterProxyModelBase) EndRemoveRows() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndRemoveRows")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndRemoveRows")
 	C.qute_QSortFilterProxyModel_prot_endRemoveRows(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // BeginMoveRows wraps the protected QAbstractItemModel::beginMoveRows for subclasses.
 func (b *QSortFilterProxyModelBase) BeginMoveRows(sourceParent *QModelIndex, sourceFirst int, sourceLast int, destinationParent *QModelIndex, destinationRow int) bool {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginMoveRows")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginMoveRows")
 	r := C.qute_QSortFilterProxyModel_prot_beginMoveRows(self, rt.UseArg(unsafe.Pointer(sourceParent), "QSortFilterProxyModel.BeginMoveRows"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QSortFilterProxyModel.BeginMoveRows"), C.int(destinationRow))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(sourceParent)
 	runtime.KeepAlive(destinationParent)
 	return bool(r)
@@ -1734,46 +1822,52 @@ func (b *QSortFilterProxyModelBase) BeginMoveRows(sourceParent *QModelIndex, sou
 
 // EndMoveRows wraps the protected QAbstractItemModel::endMoveRows for subclasses.
 func (b *QSortFilterProxyModelBase) EndMoveRows() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndMoveRows")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndMoveRows")
 	C.qute_QSortFilterProxyModel_prot_endMoveRows(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // BeginInsertColumns wraps the protected QAbstractItemModel::beginInsertColumns for subclasses.
 func (b *QSortFilterProxyModelBase) BeginInsertColumns(parent *QModelIndex, first int, last int) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginInsertColumns")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginInsertColumns")
 	C.qute_QSortFilterProxyModel_prot_beginInsertColumns(self, rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.BeginInsertColumns"), C.int(first), C.int(last))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(parent)
 }
 
 // EndInsertColumns wraps the protected QAbstractItemModel::endInsertColumns for subclasses.
 func (b *QSortFilterProxyModelBase) EndInsertColumns() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndInsertColumns")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndInsertColumns")
 	C.qute_QSortFilterProxyModel_prot_endInsertColumns(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // BeginRemoveColumns wraps the protected QAbstractItemModel::beginRemoveColumns for subclasses.
 func (b *QSortFilterProxyModelBase) BeginRemoveColumns(parent *QModelIndex, first int, last int) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginRemoveColumns")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginRemoveColumns")
 	C.qute_QSortFilterProxyModel_prot_beginRemoveColumns(self, rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.BeginRemoveColumns"), C.int(first), C.int(last))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(parent)
 }
 
 // EndRemoveColumns wraps the protected QAbstractItemModel::endRemoveColumns for subclasses.
 func (b *QSortFilterProxyModelBase) EndRemoveColumns() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndRemoveColumns")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndRemoveColumns")
 	C.qute_QSortFilterProxyModel_prot_endRemoveColumns(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // BeginMoveColumns wraps the protected QAbstractItemModel::beginMoveColumns for subclasses.
 func (b *QSortFilterProxyModelBase) BeginMoveColumns(sourceParent *QModelIndex, sourceFirst int, sourceLast int, destinationParent *QModelIndex, destinationColumn int) bool {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginMoveColumns")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginMoveColumns")
 	r := C.qute_QSortFilterProxyModel_prot_beginMoveColumns(self, rt.UseArg(unsafe.Pointer(sourceParent), "QSortFilterProxyModel.BeginMoveColumns"), C.int(sourceFirst), C.int(sourceLast), rt.UseArg(unsafe.Pointer(destinationParent), "QSortFilterProxyModel.BeginMoveColumns"), C.int(destinationColumn))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(sourceParent)
 	runtime.KeepAlive(destinationParent)
 	return bool(r)
@@ -1781,37 +1875,42 @@ func (b *QSortFilterProxyModelBase) BeginMoveColumns(sourceParent *QModelIndex, 
 
 // EndMoveColumns wraps the protected QAbstractItemModel::endMoveColumns for subclasses.
 func (b *QSortFilterProxyModelBase) EndMoveColumns() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndMoveColumns")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndMoveColumns")
 	C.qute_QSortFilterProxyModel_prot_endMoveColumns(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // BeginResetModel wraps the protected QAbstractItemModel::beginResetModel for subclasses.
 func (b *QSortFilterProxyModelBase) BeginResetModel() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.BeginResetModel")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.BeginResetModel")
 	C.qute_QSortFilterProxyModel_prot_beginResetModel(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // EndResetModel wraps the protected QAbstractItemModel::endResetModel for subclasses.
 func (b *QSortFilterProxyModelBase) EndResetModel() {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.EndResetModel")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.EndResetModel")
 	C.qute_QSortFilterProxyModel_prot_endResetModel(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // ChangePersistentIndex wraps the protected QAbstractItemModel::changePersistentIndex for subclasses.
 func (b *QSortFilterProxyModelBase) ChangePersistentIndex(from *QModelIndex, to *QModelIndex) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.ChangePersistentIndex")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.ChangePersistentIndex")
 	C.qute_QSortFilterProxyModel_prot_changePersistentIndex(self, rt.UseArg(unsafe.Pointer(from), "QSortFilterProxyModel.ChangePersistentIndex"), rt.UseArg(unsafe.Pointer(to), "QSortFilterProxyModel.ChangePersistentIndex"))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(from)
 	runtime.KeepAlive(to)
 }
 
 // ChangePersistentIndexList wraps the protected QAbstractItemModel::changePersistentIndexList for subclasses.
 func (b *QSortFilterProxyModelBase) ChangePersistentIndexList(from []*QModelIndex, to []*QModelIndex) {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.ChangePersistentIndexList")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.ChangePersistentIndexList")
 	fromC := make([]unsafe.Pointer, len(from))
 	for i := range from {
 		fromC[i] = rt.UseArg(unsafe.Pointer(from[i]), "QSortFilterProxyModel.ChangePersistentIndexList")
@@ -1821,16 +1920,17 @@ func (b *QSortFilterProxyModelBase) ChangePersistentIndexList(from []*QModelInde
 		toC[i] = rt.UseArg(unsafe.Pointer(to[i]), "QSortFilterProxyModel.ChangePersistentIndexList")
 	}
 	C.qute_QSortFilterProxyModel_prot_changePersistentIndexList(self, unsafe.Pointer(unsafe.SliceData(fromC)), C.ptrdiff_t(len(from)), unsafe.Pointer(unsafe.SliceData(toC)), C.ptrdiff_t(len(to)))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(from)
 	runtime.KeepAlive(to)
 }
 
 // PersistentIndexList wraps the protected QAbstractItemModel::persistentIndexList for subclasses.
 func (b *QSortFilterProxyModelBase) PersistentIndexList() []*QModelIndex {
-	self := rt.Use(unsafe.Pointer(b.QSortFilterProxyModel), "QSortFilterProxyModel.PersistentIndexList")
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.PersistentIndexList")
 	r := C.qute_QSortFilterProxyModel_prot_persistentIndexList(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
 		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
 	})

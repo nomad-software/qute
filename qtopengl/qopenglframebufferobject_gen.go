@@ -29,7 +29,7 @@ func (this *QOpenGLFramebufferObject) AsQOpenGLFramebufferObject() *QOpenGLFrame
 }
 
 func init() {
-	rt.RegisterClass("QOpenGLFramebufferObject", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QOpenGLFramebufferObject_delete(p) })
+	rt.RegisterClass("QOpenGLFramebufferObject", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QOpenGLFramebufferObject_delete(p) })
 }
 
 // QOpenGLFramebufferObjectFromPtr wraps an existing C++ QOpenGLFramebufferObject. This is an unsafe escape hatch: own says
@@ -66,6 +66,17 @@ func (this *QOpenGLFramebufferObject) Delete() {
 	}
 	rt.CheckThread("QOpenGLFramebufferObject.Delete")
 	this.quteRef.H.Delete("QOpenGLFramebufferObject.Delete")
+}
+
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QOpenGLFramebufferObject) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
 }
 
 // Keep pins the object so GC never frees it, until Unkeep.
@@ -563,4 +574,54 @@ func QOpenGLFramebufferObjectBlitFramebufferFull(target QOpenGLFramebufferObject
 	C.qute_QOpenGLFramebufferObject_blitFramebuffer_5(targetPtr, sourcePtr, C.uint(buffers), C.uint(filter))
 	runtime.KeepAlive(target)
 	runtime.KeepAlive(source)
+}
+
+var qOpenGLFramebufferObjectVTable = []rt.Virtual{}
+
+// QOpenGLFramebufferObjectBase is embedded in Go types that subclass QOpenGLFramebufferObject:
+//
+//	type MyOpenGLFramebufferObject struct{ qtopengl.QOpenGLFramebufferObjectBase }
+//
+// Define any of the virtual methods listed on QOpenGLFramebufferObjectSuper to override them,
+// then construct the value with NewQOpenGLFramebufferObjectWith. Call b.Super().X() for the
+// base implementation.
+type QOpenGLFramebufferObjectBase struct{ *QOpenGLFramebufferObject }
+
+func (b *QOpenGLFramebufferObjectBase) quteQOpenGLFramebufferObjectBase() *QOpenGLFramebufferObjectBase {
+	return b
+}
+
+// QOpenGLFramebufferObjectSubclass is implemented by every type that embeds QOpenGLFramebufferObjectBase.
+type QOpenGLFramebufferObjectSubclass interface {
+	quteQOpenGLFramebufferObjectBase() *QOpenGLFramebufferObjectBase
+}
+
+// Super returns the C++ base implementations of QOpenGLFramebufferObject's virtual methods.
+func (b *QOpenGLFramebufferObjectBase) Super() *QOpenGLFramebufferObjectSuper {
+	return &QOpenGLFramebufferObjectSuper{this: b.QOpenGLFramebufferObject}
+}
+
+// QOpenGLFramebufferObjectSuper calls the C++ base implementations of QOpenGLFramebufferObject's virtuals.
+type QOpenGLFramebufferObjectSuper struct{ this *QOpenGLFramebufferObject }
+
+// NewQOpenGLFramebufferObjectWith constructs a QOpenGLFramebufferObject whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLFramebufferObjectWith(v QOpenGLFramebufferObjectSubclass, size qtcore.QSize) *QOpenGLFramebufferObject {
+	rt.CheckThread("NewQOpenGLFramebufferObjectWith")
+	base := v.quteQOpenGLFramebufferObjectBase()
+	if base.QOpenGLFramebufferObject != nil {
+		panic("NewQOpenGLFramebufferObjectWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QOpenGLFramebufferObject_new_shim(cQSize(size))
+	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
+	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
+	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLFramebufferObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLFramebufferObject
 }

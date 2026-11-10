@@ -10,6 +10,7 @@ import (
 
 	rt "github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // QTreeView wraps Qt's QTreeView.
@@ -799,4 +800,1958 @@ func (this *QTreeView) OnCollapsed(f func(index *qtcore.QModelIndex)) qtcore.Con
 		f(index)
 	})
 	return rt.NewConnection(C.qute_QTreeView_collapsed(self, C.uintptr_t(id)))
+}
+
+var qTreeViewVTable = []rt.Virtual{
+	{Name: "SetModel", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetModel(*qtcore.QAbstractItemModel)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			model := rt.View[qtcore.QAbstractItemModel](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QAbstractItemModel", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface {
+				SetModel(*qtcore.QAbstractItemModel)
+			}).SetModel(model)
+		}},
+	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ SetRootIndex(*qtcore.QModelIndex) }).SetRootIndex(index)
+		}},
+	{Name: "SetSelectionModel", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetSelectionModel(*qtcore.QItemSelectionModel)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			selectionModel := rt.View[qtcore.QItemSelectionModel](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelectionModel", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface {
+				SetSelectionModel(*qtcore.QItemSelectionModel)
+			}).SetSelectionModel(selectionModel)
+		}},
+	{Name: "KeyboardSearch", Has: func(v any) bool { _, ok := v.(interface{ KeyboardSearch(string) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			search := quteStr(*(*C.qute_str)(a[0]))
+			v.(interface{ KeyboardSearch(string) }).KeyboardSearch(search)
+		}},
+	{Name: "VisualRect", Has: func(v any) bool {
+		_, ok := v.(interface {
+			VisualRect(*qtcore.QModelIndex) qtcore.QRect
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				VisualRect(*qtcore.QModelIndex) qtcore.QRect
+			}).VisualRect(index)
+			*(*C.qute_rect)(ret) = cQRect(r)
+		}},
+	{Name: "ScrollTo", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			hint := QAbstractItemViewScrollHint(*(*C.int64_t)(a[1]))
+			v.(interface {
+				ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
+			}).ScrollTo(index, hint)
+		}},
+	{Name: "IndexAt", Has: func(v any) bool {
+		_, ok := v.(interface {
+			IndexAt(qtcore.QPoint) *qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			pArg := goQPoint(*(*C.qute_point)(a[0]))
+			r := v.(interface {
+				IndexAt(qtcore.QPoint) *qtcore.QModelIndex
+			}).IndexAt(pArg)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeView.IndexAt")
+		}},
+	{Name: "DoItemsLayout", Has: func(v any) bool { _, ok := v.(interface{ DoItemsLayout() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ DoItemsLayout() }).DoItemsLayout()
+		}},
+	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Reset() }).Reset()
+		}},
+	{Name: "DataChanged", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			topLeft := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			bottomRight := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			roles := quteList(*(*C.qute_list)(a[2]), func(e C.int) int { return int(e) })
+			v.(interface {
+				DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
+			}).DataChanged(topLeft, bottomRight, roles)
+		}},
+	{Name: "SelectAll", Has: func(v any) bool { _, ok := v.(interface{ SelectAll() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ SelectAll() }).SelectAll()
+		}},
+	{Name: "VerticalScrollbarValueChanged", Has: func(v any) bool { _, ok := v.(interface{ VerticalScrollbarValueChanged(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			value := int(*(*C.int)(a[0]))
+			v.(interface{ VerticalScrollbarValueChanged(int) }).VerticalScrollbarValueChanged(value)
+		}},
+	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			dx := int(*(*C.int)(a[0]))
+			dy := int(*(*C.int)(a[1]))
+			v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+		}},
+	{Name: "RowsInserted", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RowsInserted(*qtcore.QModelIndex, int, int)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			start := int(*(*C.int)(a[1]))
+			end := int(*(*C.int)(a[2]))
+			v.(interface {
+				RowsInserted(*qtcore.QModelIndex, int, int)
+			}).RowsInserted(parent, start, end)
+		}},
+	{Name: "RowsAboutToBeRemoved", Has: func(v any) bool {
+		_, ok := v.(interface {
+			RowsAboutToBeRemoved(*qtcore.QModelIndex, int, int)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			start := int(*(*C.int)(a[1]))
+			end := int(*(*C.int)(a[2]))
+			v.(interface {
+				RowsAboutToBeRemoved(*qtcore.QModelIndex, int, int)
+			}).RowsAboutToBeRemoved(parent, start, end)
+		}},
+	{Name: "MoveCursor", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MoveCursor(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			cursorAction := QAbstractItemViewCursorAction(*(*C.int64_t)(a[0]))
+			modifiers := qtcore.KeyboardModifiers(*(*C.int64_t)(a[1]))
+			r := v.(interface {
+				MoveCursor(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex
+			}).MoveCursor(cursorAction, modifiers)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeView.MoveCursor")
+		}},
+	{Name: "HorizontalOffset", Has: func(v any) bool { _, ok := v.(interface{ HorizontalOffset() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HorizontalOffset() int }).HorizontalOffset()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "VerticalOffset", Has: func(v any) bool { _, ok := v.(interface{ VerticalOffset() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ VerticalOffset() int }).VerticalOffset()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "SetSelection", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetSelection(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			rect := goQRect(*(*C.qute_rect)(a[0]))
+			command := qtcore.QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
+			v.(interface {
+				SetSelection(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags)
+			}).SetSelection(rect, command)
+		}},
+	{Name: "VisualRegionForSelection", Has: func(v any) bool {
+		_, ok := v.(interface {
+			VisualRegionForSelection(*qtcore.QItemSelection) *qtgui.QRegion
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			selection := rt.View[qtcore.QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				VisualRegionForSelection(*qtcore.QItemSelection) *qtgui.QRegion
+			}).VisualRegionForSelection(selection)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeView.VisualRegionForSelection")
+		}},
+	{Name: "SelectedIndexes", Has: func(v any) bool { _, ok := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }).SelectedIndexes()
+			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
+				for i, e := range r {
+					d[i] = rt.UseArg(unsafe.Pointer(e), "QTreeView.SelectedIndexes")
+				}
+			})
+		}},
+	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
+			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+		}},
+	{Name: "DrawRow", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawRow(*qtgui.QPainter, *QStyleOptionViewItem, *qtcore.QModelIndex)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			options := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			v.(interface {
+				DrawRow(*qtgui.QPainter, *QStyleOptionViewItem, *qtcore.QModelIndex)
+			}).DrawRow(painter, options, index)
+		}},
+	{Name: "DrawBranches", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DrawBranches(*qtgui.QPainter, qtcore.QRect, *qtcore.QModelIndex)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			rect := goQRect(*(*C.qute_rect)(a[1]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			v.(interface {
+				DrawBranches(*qtgui.QPainter, qtcore.QRect, *qtcore.QModelIndex)
+			}).DrawBranches(painter, rect, index)
+		}},
+	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+		}},
+	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+		}},
+	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+		}},
+	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
+			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+		}},
+	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+		}},
+	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
+			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+		}},
+	{Name: "ViewportEvent", Has: func(v any) bool { _, ok := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "UpdateGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometries() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ UpdateGeometries() }).UpdateGeometries()
+		}},
+	{Name: "ViewportSizeHint", Has: func(v any) bool { _, ok := v.(interface{ ViewportSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SizeHintForColumn", Has: func(v any) bool { _, ok := v.(interface{ SizeHintForColumn(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			column := int(*(*C.int)(a[0]))
+			r := v.(interface{ SizeHintForColumn(int) int }).SizeHintForColumn(column)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HorizontalScrollbarAction", Has: func(v any) bool { _, ok := v.(interface{ HorizontalScrollbarAction(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			action := int(*(*C.int)(a[0]))
+			v.(interface{ HorizontalScrollbarAction(int) }).HorizontalScrollbarAction(action)
+		}},
+	{Name: "IsIndexHidden", Has: func(v any) bool {
+		_, ok := v.(interface {
+			IsIndexHidden(*qtcore.QModelIndex) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				IsIndexHidden(*qtcore.QModelIndex) bool
+			}).IsIndexHidden(index)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SelectionChanged", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SelectionChanged(*qtcore.QItemSelection, *qtcore.QItemSelection)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			selected := rt.View[qtcore.QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			deselected := rt.View[qtcore.QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			v.(interface {
+				SelectionChanged(*qtcore.QItemSelection, *qtcore.QItemSelection)
+			}).SelectionChanged(selected, deselected)
+		}},
+	{Name: "CurrentChanged", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			current := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			previous := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			v.(interface {
+				CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
+			}).CurrentChanged(current, previous)
+		}},
+	{Name: "SizeHintForRow", Has: func(v any) bool { _, ok := v.(interface{ SizeHintForRow(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			row := int(*(*C.int)(a[0]))
+			r := v.(interface{ SizeHintForRow(int) int }).SizeHintForRow(row)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "ItemDelegateForIndex", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
+			}).ItemDelegateForIndex(index)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeView.ItemDelegateForIndex")
+		}},
+	{Name: "UpdateEditorData", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorData() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ UpdateEditorData() }).UpdateEditorData()
+		}},
+	{Name: "UpdateEditorGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorGeometries() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ UpdateEditorGeometries() }).UpdateEditorGeometries()
+		}},
+	{Name: "VerticalScrollbarAction", Has: func(v any) bool { _, ok := v.(interface{ VerticalScrollbarAction(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			action := int(*(*C.int)(a[0]))
+			v.(interface{ VerticalScrollbarAction(int) }).VerticalScrollbarAction(action)
+		}},
+	{Name: "HorizontalScrollbarValueChanged", Has: func(v any) bool { _, ok := v.(interface{ HorizontalScrollbarValueChanged(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			value := int(*(*C.int)(a[0]))
+			v.(interface{ HorizontalScrollbarValueChanged(int) }).HorizontalScrollbarValueChanged(value)
+		}},
+	{Name: "CloseEditor", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CloseEditor(*QWidget, QAbstractItemDelegateEndEditHint)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			hint := QAbstractItemDelegateEndEditHint(*(*C.int64_t)(a[1]))
+			v.(interface {
+				CloseEditor(*QWidget, QAbstractItemDelegateEndEditHint)
+			}).CloseEditor(editor, hint)
+		}},
+	{Name: "CommitData", Has: func(v any) bool { _, ok := v.(interface{ CommitData(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ CommitData(*QWidget) }).CommitData(editor)
+		}},
+	{Name: "EditorDestroyed", Has: func(v any) bool { _, ok := v.(interface{ EditorDestroyed(*qtcore.QObject) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			editor := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ EditorDestroyed(*qtcore.QObject) }).EditorDestroyed(editor)
+		}},
+	{Name: "Edit", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Edit(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			trigger := QAbstractItemViewEditTriggers(*(*C.int64_t)(a[1]))
+			eventP := *(*unsafe.Pointer)(a[2])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				Edit(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool
+			}).Edit(index, trigger, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SelectionCommand", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SelectionCommand(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				SelectionCommand(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags
+			}).SelectionCommand(index, event)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "StartDrag", Has: func(v any) bool { _, ok := v.(interface{ StartDrag(qtcore.DropActions) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			supportedActions := qtcore.DropActions(*(*C.int64_t)(a[0]))
+			v.(interface{ StartDrag(qtcore.DropActions) }).StartDrag(supportedActions)
+		}},
+	{Name: "InitViewItemOption", Has: func(v any) bool { _, ok := v.(interface{ InitViewItemOption(*QStyleOptionViewItem) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionViewItem", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionViewItem](optionH, optionP)
+			v.(interface{ InitViewItemOption(*QStyleOptionViewItem) }).InitViewItemOption(option)
+		}},
+	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			next := bool(*(*C.bool)(a[0]))
+			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
+			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+		}},
+	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
+			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+		}},
+	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QDropEvent](eventH, eventP)
+			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+		}},
+	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+		}},
+	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+		}},
+	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
+			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(event)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(object, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SetupViewport", Has: func(v any) bool { _, ok := v.(interface{ SetupViewport(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			viewport := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ SetupViewport(*QWidget) }).SetupViewport(viewport)
+		}},
+	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			wheelEventP := *(*unsafe.Pointer)(a[0])
+			wheelEventH := rt.WrapClass(wheelEventP, "QWheelEvent", rt.NewScoped)
+			defer wheelEventH.Expire()
+			wheelEvent := rt.View[qtgui.QWheelEvent](wheelEventH, wheelEventP)
+			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(wheelEvent)
+		}},
+	{Name: "ContextMenuEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ContextMenuEvent(*qtgui.QContextMenuEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			contextMenuEventP := *(*unsafe.Pointer)(a[0])
+			contextMenuEventH := rt.WrapClass(contextMenuEventP, "QContextMenuEvent", rt.NewScoped)
+			defer contextMenuEventH.Expire()
+			contextMenuEvent := rt.View[qtgui.QContextMenuEvent](contextMenuEventH, contextMenuEventP)
+			v.(interface {
+				ContextMenuEvent(*qtgui.QContextMenuEvent)
+			}).ContextMenuEvent(contextMenuEvent)
+		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionFrame](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+		}},
+	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			visible := bool(*(*C.bool)(a[0]))
+			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+		}},
+	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
+			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+		}},
+	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+		}},
+	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
+			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+		}},
+	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
+			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
+	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QShowEvent](eventH, eventP)
+			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+		}},
+	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QHideEvent](eventH, eventP)
+			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QTreeViewBase is embedded in Go types that subclass QTreeView:
+//
+//	type MyTreeView struct{ qtwidgets.QTreeViewBase }
+//
+// Define any of the virtual methods listed on QTreeViewSuper to override them,
+// then construct the value with NewQTreeViewWith. Call b.Super().X() for the
+// base implementation.
+type QTreeViewBase struct{ *QTreeView }
+
+func (b *QTreeViewBase) quteQTreeViewBase() *QTreeViewBase { return b }
+
+// QTreeViewSubclass is implemented by every type that embeds QTreeViewBase.
+type QTreeViewSubclass interface{ quteQTreeViewBase() *QTreeViewBase }
+
+// Super returns the C++ base implementations of QTreeView's virtual methods.
+func (b *QTreeViewBase) Super() *QTreeViewSuper { return &QTreeViewSuper{this: b.QTreeView} }
+
+// QTreeViewSuper calls the C++ base implementations of QTreeView's virtuals.
+type QTreeViewSuper struct{ this *QTreeView }
+
+// SetModel calls QTreeView::setModel.
+func (s *QTreeViewSuper) SetModel(model *qtcore.QAbstractItemModel) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SetModel")
+	var modelPtr unsafe.Pointer
+	if model != nil {
+		modelPtr = rt.UseArg(unsafe.Pointer(model.AsQAbstractItemModel()), "QTreeView.Super.SetModel")
+	}
+	C.qute_QTreeView_super_0(self, modelPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(model)
+}
+
+// SetRootIndex calls QTreeView::setRootIndex.
+func (s *QTreeViewSuper) SetRootIndex(index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SetRootIndex")
+	C.qute_QTreeView_super_1(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.SetRootIndex"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+}
+
+// SetSelectionModel calls QTreeView::setSelectionModel.
+func (s *QTreeViewSuper) SetSelectionModel(selectionModel *qtcore.QItemSelectionModel) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SetSelectionModel")
+	var selectionModelPtr unsafe.Pointer
+	if selectionModel != nil {
+		selectionModelPtr = rt.UseArg(unsafe.Pointer(selectionModel.AsQItemSelectionModel()), "QTreeView.Super.SetSelectionModel")
+	}
+	C.qute_QTreeView_super_2(self, selectionModelPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(selectionModel)
+}
+
+// KeyboardSearch calls QTreeView::keyboardSearch.
+func (s *QTreeViewSuper) KeyboardSearch(search string) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.KeyboardSearch")
+	C.qute_QTreeView_super_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(search))), C.ptrdiff_t(len(search)))
+	runtime.KeepAlive(s.this)
+}
+
+// VisualRect calls QTreeView::visualRect.
+func (s *QTreeViewSuper) VisualRect(index *qtcore.QModelIndex) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.VisualRect")
+	r := C.qute_QTreeView_super_4(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.VisualRect"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return goQRect(r)
+}
+
+// ScrollTo calls QTreeView::scrollTo.
+func (s *QTreeViewSuper) ScrollTo(index *qtcore.QModelIndex, hint QAbstractItemViewScrollHint) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ScrollTo")
+	C.qute_QTreeView_super_5(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.ScrollTo"), C.int64_t(hint))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+}
+
+// IndexAt calls QTreeView::indexAt.
+func (s *QTreeViewSuper) IndexAt(pArg qtcore.QPoint) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.IndexAt")
+	r := C.qute_QTreeView_super_6(self, cQPoint(pArg))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// DoItemsLayout calls QTreeView::doItemsLayout.
+func (s *QTreeViewSuper) DoItemsLayout() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DoItemsLayout")
+	C.qute_QTreeView_super_7(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Reset calls QTreeView::reset.
+func (s *QTreeViewSuper) Reset() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.Reset")
+	C.qute_QTreeView_super_8(self)
+	runtime.KeepAlive(s.this)
+}
+
+// DataChanged calls QTreeView::dataChanged.
+func (s *QTreeViewSuper) DataChanged(topLeft *qtcore.QModelIndex, bottomRight *qtcore.QModelIndex, roles []int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DataChanged")
+	rolesC := make([]C.int, len(roles))
+	for i := range roles {
+		rolesC[i] = C.int(roles[i])
+	}
+	C.qute_QTreeView_super_9(self, rt.UseArg(unsafe.Pointer(topLeft), "QTreeView.Super.DataChanged"), rt.UseArg(unsafe.Pointer(bottomRight), "QTreeView.Super.DataChanged"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(topLeft)
+	runtime.KeepAlive(bottomRight)
+}
+
+// SelectAll calls QTreeView::selectAll.
+func (s *QTreeViewSuper) SelectAll() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SelectAll")
+	C.qute_QTreeView_super_10(self)
+	runtime.KeepAlive(s.this)
+}
+
+// VerticalScrollbarValueChanged calls QTreeView::verticalScrollbarValueChanged.
+func (s *QTreeViewSuper) VerticalScrollbarValueChanged(value int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.VerticalScrollbarValueChanged")
+	C.qute_QTreeView_super_11(self, C.int(value))
+	runtime.KeepAlive(s.this)
+}
+
+// ScrollContentsBy calls QTreeView::scrollContentsBy.
+func (s *QTreeViewSuper) ScrollContentsBy(dx int, dy int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ScrollContentsBy")
+	C.qute_QTreeView_super_12(self, C.int(dx), C.int(dy))
+	runtime.KeepAlive(s.this)
+}
+
+// RowsInserted calls QTreeView::rowsInserted.
+func (s *QTreeViewSuper) RowsInserted(parent *qtcore.QModelIndex, start int, end int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.RowsInserted")
+	C.qute_QTreeView_super_13(self, rt.UseArg(unsafe.Pointer(parent), "QTreeView.Super.RowsInserted"), C.int(start), C.int(end))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+}
+
+// RowsAboutToBeRemoved calls QTreeView::rowsAboutToBeRemoved.
+func (s *QTreeViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex, start int, end int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.RowsAboutToBeRemoved")
+	C.qute_QTreeView_super_14(self, rt.UseArg(unsafe.Pointer(parent), "QTreeView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+}
+
+// MoveCursor calls QTreeView::moveCursor.
+func (s *QTreeViewSuper) MoveCursor(cursorAction QAbstractItemViewCursorAction, modifiers qtcore.KeyboardModifiers) *qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MoveCursor")
+	r := C.qute_QTreeView_super_15(self, C.int64_t(cursorAction), C.int64_t(modifiers))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+}
+
+// HorizontalOffset calls QTreeView::horizontalOffset.
+func (s *QTreeViewSuper) HorizontalOffset() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.HorizontalOffset")
+	r := C.qute_QTreeView_super_16(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// VerticalOffset calls QTreeView::verticalOffset.
+func (s *QTreeViewSuper) VerticalOffset() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.VerticalOffset")
+	r := C.qute_QTreeView_super_17(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// SetSelection calls QTreeView::setSelection.
+func (s *QTreeViewSuper) SetSelection(rect qtcore.QRect, command qtcore.QItemSelectionModelSelectionFlags) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SetSelection")
+	C.qute_QTreeView_super_18(self, cQRect(rect), C.int64_t(command))
+	runtime.KeepAlive(s.this)
+}
+
+// VisualRegionForSelection calls QTreeView::visualRegionForSelection.
+func (s *QTreeViewSuper) VisualRegionForSelection(selection *qtcore.QItemSelection) *qtgui.QRegion {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.VisualRegionForSelection")
+	r := C.qute_QTreeView_super_19(self, rt.Use(unsafe.Pointer(selection), "QTreeView.Super.VisualRegionForSelection"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(selection)
+	return rt.View[qtgui.QRegion](rt.WrapClass(r, "QRegion", rt.TakeOwned), r)
+}
+
+// SelectedIndexes calls QTreeView::selectedIndexes.
+func (s *QTreeViewSuper) SelectedIndexes() []*qtcore.QModelIndex {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SelectedIndexes")
+	r := C.qute_QTreeView_super_20(self)
+	runtime.KeepAlive(s.this)
+	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
+		return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+	})
+}
+
+// ChangeEvent calls QTreeView::changeEvent.
+func (s *QTreeViewSuper) ChangeEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ChangeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.ChangeEvent")
+	}
+	C.qute_QTreeView_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TimerEvent calls QTreeView::timerEvent.
+func (s *QTreeViewSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QTreeView.Super.TimerEvent")
+	}
+	C.qute_QTreeView_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// PaintEvent calls QTreeView::paintEvent.
+func (s *QTreeViewSuper) PaintEvent(event *qtgui.QPaintEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.PaintEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPaintEvent()), "QTreeView.Super.PaintEvent")
+	}
+	C.qute_QTreeView_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DrawRow calls QTreeView::drawRow.
+func (s *QTreeViewSuper) DrawRow(painter *qtgui.QPainter, options *QStyleOptionViewItem, index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DrawRow")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTreeView.Super.DrawRow")
+	}
+	C.qute_QTreeView_super_24(self, painterPtr, rt.UseArg(unsafe.Pointer(options), "QTreeView.Super.DrawRow"), rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.DrawRow"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(options)
+	runtime.KeepAlive(index)
+}
+
+// DrawBranches calls QTreeView::drawBranches.
+func (s *QTreeViewSuper) DrawBranches(painter *qtgui.QPainter, rect qtcore.QRect, index *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DrawBranches")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTreeView.Super.DrawBranches")
+	}
+	C.qute_QTreeView_super_25(self, painterPtr, cQRect(rect), rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.DrawBranches"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(index)
+}
+
+// MousePressEvent calls QTreeView::mousePressEvent.
+func (s *QTreeViewSuper) MousePressEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MousePressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QTreeView.Super.MousePressEvent")
+	}
+	C.qute_QTreeView_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseReleaseEvent calls QTreeView::mouseReleaseEvent.
+func (s *QTreeViewSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MouseReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QTreeView.Super.MouseReleaseEvent")
+	}
+	C.qute_QTreeView_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseDoubleClickEvent calls QTreeView::mouseDoubleClickEvent.
+func (s *QTreeViewSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MouseDoubleClickEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QTreeView.Super.MouseDoubleClickEvent")
+	}
+	C.qute_QTreeView_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseMoveEvent calls QTreeView::mouseMoveEvent.
+func (s *QTreeViewSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MouseMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QTreeView.Super.MouseMoveEvent")
+	}
+	C.qute_QTreeView_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyPressEvent calls QTreeView::keyPressEvent.
+func (s *QTreeViewSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.KeyPressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QTreeView.Super.KeyPressEvent")
+	}
+	C.qute_QTreeView_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragMoveEvent calls QTreeView::dragMoveEvent.
+func (s *QTreeViewSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DragMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QTreeView.Super.DragMoveEvent")
+	}
+	C.qute_QTreeView_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ViewportEvent calls QTreeView::viewportEvent.
+func (s *QTreeViewSuper) ViewportEvent(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ViewportEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.ViewportEvent")
+	}
+	r := C.qute_QTreeView_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// UpdateGeometries calls QTreeView::updateGeometries.
+func (s *QTreeViewSuper) UpdateGeometries() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.UpdateGeometries")
+	C.qute_QTreeView_super_33(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ViewportSizeHint calls QTreeView::viewportSizeHint.
+func (s *QTreeViewSuper) ViewportSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ViewportSizeHint")
+	r := C.qute_QTreeView_super_34(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SizeHintForColumn calls QTreeView::sizeHintForColumn.
+func (s *QTreeViewSuper) SizeHintForColumn(column int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SizeHintForColumn")
+	r := C.qute_QTreeView_super_35(self, C.int(column))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// HorizontalScrollbarAction calls QTreeView::horizontalScrollbarAction.
+func (s *QTreeViewSuper) HorizontalScrollbarAction(action int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.HorizontalScrollbarAction")
+	C.qute_QTreeView_super_36(self, C.int(action))
+	runtime.KeepAlive(s.this)
+}
+
+// IsIndexHidden calls QTreeView::isIndexHidden.
+func (s *QTreeViewSuper) IsIndexHidden(index *qtcore.QModelIndex) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.IsIndexHidden")
+	r := C.qute_QTreeView_super_37(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.IsIndexHidden"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return bool(r)
+}
+
+// SelectionChanged calls QTreeView::selectionChanged.
+func (s *QTreeViewSuper) SelectionChanged(selected *qtcore.QItemSelection, deselected *qtcore.QItemSelection) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SelectionChanged")
+	C.qute_QTreeView_super_38(self, rt.Use(unsafe.Pointer(selected), "QTreeView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QTreeView.Super.SelectionChanged"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(selected)
+	runtime.KeepAlive(deselected)
+}
+
+// CurrentChanged calls QTreeView::currentChanged.
+func (s *QTreeViewSuper) CurrentChanged(current *qtcore.QModelIndex, previous *qtcore.QModelIndex) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.CurrentChanged")
+	C.qute_QTreeView_super_39(self, rt.UseArg(unsafe.Pointer(current), "QTreeView.Super.CurrentChanged"), rt.UseArg(unsafe.Pointer(previous), "QTreeView.Super.CurrentChanged"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(current)
+	runtime.KeepAlive(previous)
+}
+
+// SizeHintForRow calls QAbstractItemView::sizeHintForRow.
+func (s *QTreeViewSuper) SizeHintForRow(row int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SizeHintForRow")
+	r := C.qute_QTreeView_super_40(self, C.int(row))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// ItemDelegateForIndex calls QAbstractItemView::itemDelegateForIndex.
+func (s *QTreeViewSuper) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbstractItemDelegate {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ItemDelegateForIndex")
+	r := C.qute_QTreeView_super_41(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.ItemDelegateForIndex"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
+}
+
+// UpdateEditorData calls QAbstractItemView::updateEditorData.
+func (s *QTreeViewSuper) UpdateEditorData() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.UpdateEditorData")
+	C.qute_QTreeView_super_42(self)
+	runtime.KeepAlive(s.this)
+}
+
+// UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
+func (s *QTreeViewSuper) UpdateEditorGeometries() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.UpdateEditorGeometries")
+	C.qute_QTreeView_super_43(self)
+	runtime.KeepAlive(s.this)
+}
+
+// VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
+func (s *QTreeViewSuper) VerticalScrollbarAction(action int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.VerticalScrollbarAction")
+	C.qute_QTreeView_super_44(self, C.int(action))
+	runtime.KeepAlive(s.this)
+}
+
+// HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
+func (s *QTreeViewSuper) HorizontalScrollbarValueChanged(value int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.HorizontalScrollbarValueChanged")
+	C.qute_QTreeView_super_45(self, C.int(value))
+	runtime.KeepAlive(s.this)
+}
+
+// CloseEditor calls QAbstractItemView::closeEditor.
+func (s *QTreeViewSuper) CloseEditor(editor *QWidget, hint QAbstractItemDelegateEndEditHint) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.CloseEditor")
+	var editorPtr unsafe.Pointer
+	if editor != nil {
+		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QTreeView.Super.CloseEditor")
+	}
+	C.qute_QTreeView_super_46(self, editorPtr, C.int64_t(hint))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(editor)
+}
+
+// CommitData calls QAbstractItemView::commitData.
+func (s *QTreeViewSuper) CommitData(editor *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.CommitData")
+	var editorPtr unsafe.Pointer
+	if editor != nil {
+		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QTreeView.Super.CommitData")
+	}
+	C.qute_QTreeView_super_47(self, editorPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(editor)
+}
+
+// EditorDestroyed calls QAbstractItemView::editorDestroyed.
+func (s *QTreeViewSuper) EditorDestroyed(editor *qtcore.QObject) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.EditorDestroyed")
+	var editorPtr unsafe.Pointer
+	if editor != nil {
+		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QTreeView.Super.EditorDestroyed")
+	}
+	C.qute_QTreeView_super_48(self, editorPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(editor)
+}
+
+// Edit calls QAbstractItemView::edit.
+func (s *QTreeViewSuper) Edit(index *qtcore.QModelIndex, trigger QAbstractItemViewEditTriggers, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.Edit")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.Edit")
+	}
+	r := C.qute_QTreeView_super_49(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.Edit"), C.int64_t(trigger), eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// SelectionCommand calls QAbstractItemView::selectionCommand.
+func (s *QTreeViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SelectionCommand")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.SelectionCommand")
+	}
+	r := C.qute_QTreeView_super_50(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.Super.SelectionCommand"), eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(index)
+	runtime.KeepAlive(event)
+	return qtcore.QItemSelectionModelSelectionFlags(r)
+}
+
+// StartDrag calls QAbstractItemView::startDrag.
+func (s *QTreeViewSuper) StartDrag(supportedActions qtcore.DropActions) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.StartDrag")
+	C.qute_QTreeView_super_51(self, C.int64_t(supportedActions))
+	runtime.KeepAlive(s.this)
+}
+
+// InitViewItemOption calls QAbstractItemView::initViewItemOption.
+func (s *QTreeViewSuper) InitViewItemOption(option *QStyleOptionViewItem) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.InitViewItemOption")
+	C.qute_QTreeView_super_52(self, rt.UseArg(unsafe.Pointer(option), "QTreeView.Super.InitViewItemOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
+// FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
+func (s *QTreeViewSuper) FocusNextPrevChild(next bool) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.FocusNextPrevChild")
+	r := C.qute_QTreeView_super_53(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// Event calls QAbstractItemView::event.
+func (s *QTreeViewSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.Event")
+	}
+	r := C.qute_QTreeView_super_54(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// DragEnterEvent calls QAbstractItemView::dragEnterEvent.
+func (s *QTreeViewSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DragEnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QTreeView.Super.DragEnterEvent")
+	}
+	C.qute_QTreeView_super_55(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragLeaveEvent calls QAbstractItemView::dragLeaveEvent.
+func (s *QTreeViewSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DragLeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QTreeView.Super.DragLeaveEvent")
+	}
+	C.qute_QTreeView_super_56(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DropEvent calls QAbstractItemView::dropEvent.
+func (s *QTreeViewSuper) DropEvent(event *qtgui.QDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.DropEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QTreeView.Super.DropEvent")
+	}
+	C.qute_QTreeView_super_57(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusInEvent calls QAbstractItemView::focusInEvent.
+func (s *QTreeViewSuper) FocusInEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.FocusInEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QTreeView.Super.FocusInEvent")
+	}
+	C.qute_QTreeView_super_58(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusOutEvent calls QAbstractItemView::focusOutEvent.
+func (s *QTreeViewSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.FocusOutEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QTreeView.Super.FocusOutEvent")
+	}
+	C.qute_QTreeView_super_59(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ResizeEvent calls QAbstractItemView::resizeEvent.
+func (s *QTreeViewSuper) ResizeEvent(event *qtgui.QResizeEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ResizeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QTreeView.Super.ResizeEvent")
+	}
+	C.qute_QTreeView_super_60(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QAbstractItemView::inputMethodEvent.
+func (s *QTreeViewSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.InputMethodEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QTreeView.Super.InputMethodEvent")
+	}
+	C.qute_QTreeView_super_61(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// EventFilter calls QAbstractItemView::eventFilter.
+func (s *QTreeViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.EventFilter")
+	var objectPtr unsafe.Pointer
+	if object != nil {
+		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QTreeView.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.EventFilter")
+	}
+	r := C.qute_QTreeView_super_62(self, objectPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
+func (s *QTreeViewSuper) MinimumSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MinimumSizeHint")
+	r := C.qute_QTreeView_super_63(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SizeHint calls QAbstractScrollArea::sizeHint.
+func (s *QTreeViewSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SizeHint")
+	r := C.qute_QTreeView_super_64(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SetupViewport calls QAbstractScrollArea::setupViewport.
+func (s *QTreeViewSuper) SetupViewport(viewport *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SetupViewport")
+	var viewportPtr unsafe.Pointer
+	if viewport != nil {
+		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QTreeView.Super.SetupViewport")
+	}
+	C.qute_QTreeView_super_65(self, viewportPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(viewport)
+}
+
+// WheelEvent calls QAbstractScrollArea::wheelEvent.
+func (s *QTreeViewSuper) WheelEvent(wheelEvent *qtgui.QWheelEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.WheelEvent")
+	var wheelEventPtr unsafe.Pointer
+	if wheelEvent != nil {
+		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QTreeView.Super.WheelEvent")
+	}
+	C.qute_QTreeView_super_66(self, wheelEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(wheelEvent)
+}
+
+// ContextMenuEvent calls QAbstractScrollArea::contextMenuEvent.
+func (s *QTreeViewSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenuEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ContextMenuEvent")
+	var contextMenuEventPtr unsafe.Pointer
+	if contextMenuEvent != nil {
+		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QTreeView.Super.ContextMenuEvent")
+	}
+	C.qute_QTreeView_super_67(self, contextMenuEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(contextMenuEvent)
+}
+
+// InitStyleOption calls QFrame::initStyleOption.
+func (s *QTreeViewSuper) InitStyleOption(option *QStyleOptionFrame) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.InitStyleOption")
+	C.qute_QTreeView_super_68(self, rt.UseArg(unsafe.Pointer(option), "QTreeView.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
+// SetVisible calls QWidget::setVisible.
+func (s *QTreeViewSuper) SetVisible(visible bool) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.SetVisible")
+	C.qute_QTreeView_super_69(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
+}
+
+// HeightForWidth calls QWidget::heightForWidth.
+func (s *QTreeViewSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.HeightForWidth")
+	r := C.qute_QTreeView_super_70(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// HasHeightForWidth calls QWidget::hasHeightForWidth.
+func (s *QTreeViewSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.HasHeightForWidth")
+	r := C.qute_QTreeView_super_71(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// KeyReleaseEvent calls QWidget::keyReleaseEvent.
+func (s *QTreeViewSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.KeyReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QTreeView.Super.KeyReleaseEvent")
+	}
+	C.qute_QTreeView_super_72(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// EnterEvent calls QWidget::enterEvent.
+func (s *QTreeViewSuper) EnterEvent(event *qtgui.QEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.EnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QTreeView.Super.EnterEvent")
+	}
+	C.qute_QTreeView_super_73(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// LeaveEvent calls QWidget::leaveEvent.
+func (s *QTreeViewSuper) LeaveEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.LeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.LeaveEvent")
+	}
+	C.qute_QTreeView_super_74(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MoveEvent calls QWidget::moveEvent.
+func (s *QTreeViewSuper) MoveEvent(event *qtgui.QMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.MoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QTreeView.Super.MoveEvent")
+	}
+	C.qute_QTreeView_super_75(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CloseEvent calls QWidget::closeEvent.
+func (s *QTreeViewSuper) CloseEvent(event *qtgui.QCloseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.CloseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QTreeView.Super.CloseEvent")
+	}
+	C.qute_QTreeView_super_76(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QTreeViewSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QTreeView.Super.TabletEvent")
+	}
+	C.qute_QTreeView_super_77(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QTreeViewSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QTreeView.Super.ActionEvent")
+	}
+	C.qute_QTreeView_super_78(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ShowEvent calls QWidget::showEvent.
+func (s *QTreeViewSuper) ShowEvent(event *qtgui.QShowEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ShowEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QTreeView.Super.ShowEvent")
+	}
+	C.qute_QTreeView_super_79(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HideEvent calls QWidget::hideEvent.
+func (s *QTreeViewSuper) HideEvent(event *qtgui.QHideEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.HideEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QTreeView.Super.HideEvent")
+	}
+	C.qute_QTreeView_super_80(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QTreeViewSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTreeView.Super.ChildEvent")
+	}
+	C.qute_QTreeView_super_81(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QTreeViewSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeView.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeView.Super.CustomEvent")
+	}
+	C.qute_QTreeView_super_82(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ColumnResized wraps the protected QTreeView::columnResized for subclasses.
+func (b *QTreeViewBase) ColumnResized(column int, oldSize int, newSize int) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ColumnResized")
+	C.qute_QTreeView_prot_columnResized(self, C.int(column), C.int(oldSize), C.int(newSize))
+	runtime.KeepAlive(this)
+}
+
+// ColumnCountChanged wraps the protected QTreeView::columnCountChanged for subclasses.
+func (b *QTreeViewBase) ColumnCountChanged(oldCount int, newCount int) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ColumnCountChanged")
+	C.qute_QTreeView_prot_columnCountChanged(self, C.int(oldCount), C.int(newCount))
+	runtime.KeepAlive(this)
+}
+
+// ColumnMoved wraps the protected QTreeView::columnMoved for subclasses.
+func (b *QTreeViewBase) ColumnMoved() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ColumnMoved")
+	C.qute_QTreeView_prot_columnMoved(self)
+	runtime.KeepAlive(this)
+}
+
+// Reexpand wraps the protected QTreeView::reexpand for subclasses.
+func (b *QTreeViewBase) Reexpand() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.Reexpand")
+	C.qute_QTreeView_prot_reexpand(self)
+	runtime.KeepAlive(this)
+}
+
+// RowsRemoved wraps the protected QTreeView::rowsRemoved for subclasses.
+func (b *QTreeViewBase) RowsRemoved(parent *qtcore.QModelIndex, first int, last int) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.RowsRemoved")
+	C.qute_QTreeView_prot_rowsRemoved(self, rt.UseArg(unsafe.Pointer(parent), "QTreeView.RowsRemoved"), C.int(first), C.int(last))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(parent)
+}
+
+// DrawTree wraps the protected QTreeView::drawTree for subclasses.
+func (b *QTreeViewBase) DrawTree(painter qtgui.QPainterLike, region *qtgui.QRegion) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.DrawTree")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTreeView.DrawTree")
+	}
+	C.qute_QTreeView_prot_drawTree(self, painterPtr, rt.UseArg(unsafe.Pointer(region), "QTreeView.DrawTree"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(region)
+}
+
+// IndexRowSizeHint wraps the protected QTreeView::indexRowSizeHint for subclasses.
+func (b *QTreeViewBase) IndexRowSizeHint(index *qtcore.QModelIndex) int {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.IndexRowSizeHint")
+	r := C.qute_QTreeView_prot_indexRowSizeHint(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.IndexRowSizeHint"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+	return int(r)
+}
+
+// RowHeight wraps the protected QTreeView::rowHeight for subclasses.
+func (b *QTreeViewBase) RowHeight(index *qtcore.QModelIndex) int {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.RowHeight")
+	r := C.qute_QTreeView_prot_rowHeight(self, rt.UseArg(unsafe.Pointer(index), "QTreeView.RowHeight"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(index)
+	return int(r)
+}
+
+// State wraps the protected QAbstractItemView::state for subclasses.
+func (b *QTreeViewBase) State() QAbstractItemViewState {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.State")
+	r := C.qute_QTreeView_prot_state(self)
+	runtime.KeepAlive(this)
+	return QAbstractItemViewState(r)
+}
+
+// SetState wraps the protected QAbstractItemView::setState for subclasses.
+func (b *QTreeViewBase) SetState(state QAbstractItemViewState) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetState")
+	C.qute_QTreeView_prot_setState(self, C.int64_t(state))
+	runtime.KeepAlive(this)
+}
+
+// ScheduleDelayedItemsLayout wraps the protected QAbstractItemView::scheduleDelayedItemsLayout for subclasses.
+func (b *QTreeViewBase) ScheduleDelayedItemsLayout() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ScheduleDelayedItemsLayout")
+	C.qute_QTreeView_prot_scheduleDelayedItemsLayout(self)
+	runtime.KeepAlive(this)
+}
+
+// ExecuteDelayedItemsLayout wraps the protected QAbstractItemView::executeDelayedItemsLayout for subclasses.
+func (b *QTreeViewBase) ExecuteDelayedItemsLayout() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ExecuteDelayedItemsLayout")
+	C.qute_QTreeView_prot_executeDelayedItemsLayout(self)
+	runtime.KeepAlive(this)
+}
+
+// SetDirtyRegion wraps the protected QAbstractItemView::setDirtyRegion for subclasses.
+func (b *QTreeViewBase) SetDirtyRegion(region *qtgui.QRegion) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetDirtyRegion")
+	C.qute_QTreeView_prot_setDirtyRegion(self, rt.UseArg(unsafe.Pointer(region), "QTreeView.SetDirtyRegion"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(region)
+}
+
+// ScrollDirtyRegion wraps the protected QAbstractItemView::scrollDirtyRegion for subclasses.
+func (b *QTreeViewBase) ScrollDirtyRegion(dx int, dy int) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ScrollDirtyRegion")
+	C.qute_QTreeView_prot_scrollDirtyRegion(self, C.int(dx), C.int(dy))
+	runtime.KeepAlive(this)
+}
+
+// DirtyRegionOffset wraps the protected QAbstractItemView::dirtyRegionOffset for subclasses.
+func (b *QTreeViewBase) DirtyRegionOffset() qtcore.QPoint {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.DirtyRegionOffset")
+	r := C.qute_QTreeView_prot_dirtyRegionOffset(self)
+	runtime.KeepAlive(this)
+	return goQPoint(r)
+}
+
+// StartAutoScroll wraps the protected QAbstractItemView::startAutoScroll for subclasses.
+func (b *QTreeViewBase) StartAutoScroll() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.StartAutoScroll")
+	C.qute_QTreeView_prot_startAutoScroll(self)
+	runtime.KeepAlive(this)
+}
+
+// StopAutoScroll wraps the protected QAbstractItemView::stopAutoScroll for subclasses.
+func (b *QTreeViewBase) StopAutoScroll() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.StopAutoScroll")
+	C.qute_QTreeView_prot_stopAutoScroll(self)
+	runtime.KeepAlive(this)
+}
+
+// DoAutoScroll wraps the protected QAbstractItemView::doAutoScroll for subclasses.
+func (b *QTreeViewBase) DoAutoScroll() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.DoAutoScroll")
+	C.qute_QTreeView_prot_doAutoScroll(self)
+	runtime.KeepAlive(this)
+}
+
+// DropIndicatorPosition wraps the protected QAbstractItemView::dropIndicatorPosition for subclasses.
+func (b *QTreeViewBase) DropIndicatorPosition() QAbstractItemViewDropIndicatorPosition {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.DropIndicatorPosition")
+	r := C.qute_QTreeView_prot_dropIndicatorPosition(self)
+	runtime.KeepAlive(this)
+	return QAbstractItemViewDropIndicatorPosition(r)
+}
+
+// SetViewportMargins wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
+func (b *QTreeViewBase) SetViewportMargins(margins qtcore.QMargins) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.SetViewportMargins")
+	C.qute_QTreeView_prot_setViewportMargins(self, cQMargins(margins))
+	runtime.KeepAlive(this)
+}
+
+// ViewportMargins wraps the protected QAbstractScrollArea::viewportMargins for subclasses.
+func (b *QTreeViewBase) ViewportMargins() qtcore.QMargins {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.ViewportMargins")
+	r := C.qute_QTreeView_prot_viewportMargins(self)
+	runtime.KeepAlive(this)
+	return goQMargins(r)
+}
+
+// DrawFrame wraps the protected QFrame::drawFrame for subclasses.
+func (b *QTreeViewBase) DrawFrame(painter qtgui.QPainterLike) {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.DrawFrame")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTreeView.DrawFrame")
+	}
+	C.qute_QTreeView_prot_drawFrame(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
+func (b *QTreeViewBase) UpdateMicroFocus() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.UpdateMicroFocus")
+	C.qute_QTreeView_prot_updateMicroFocus(self)
+	runtime.KeepAlive(this)
+}
+
+// Create wraps the protected QWidget::create for subclasses.
+func (b *QTreeViewBase) Create() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.Create")
+	C.qute_QTreeView_prot_create(self)
+	runtime.KeepAlive(this)
+}
+
+// Destroy wraps the protected QWidget::destroy for subclasses.
+func (b *QTreeViewBase) Destroy() {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.Destroy")
+	C.qute_QTreeView_prot_destroy(self)
+	runtime.KeepAlive(this)
+}
+
+// FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
+func (b *QTreeViewBase) FocusNextChild() bool {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.FocusNextChild")
+	r := C.qute_QTreeView_prot_focusNextChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
+func (b *QTreeViewBase) FocusPreviousChild() bool {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.FocusPreviousChild")
+	r := C.qute_QTreeView_prot_focusPreviousChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QTreeViewBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QTreeView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeView.GetDecodedMetricF")
+	r := C.qute_QTreeView_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQTreeViewWith constructs a QTreeView whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeViewWith(v QTreeViewSubclass, parent QWidgetLike) *QTreeView {
+	rt.CheckThread("NewQTreeViewWith")
+	base := v.quteQTreeViewBase()
+	if base.QTreeView != nil {
+		panic("NewQTreeViewWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTreeViewWith")
+	}
+	p := C.qute_QTreeView_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeView", mode)
+	base.QTreeView = rt.View[QTreeView](h, p)
+	id := h.SetSelf(v, qTreeViewVTable)
+	mask := rt.Mask(v, qTreeViewVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeView
 }

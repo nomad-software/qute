@@ -2001,6 +2001,117 @@
        "value": 4
       }
      ]
+    },
+    {
+     "name": "CursorAction",
+     "protected": true,
+     "scope": "QAbstractItemView",
+     "scoped": false,
+     "underlying": "unsigned int",
+     "values": [
+      {
+       "name": "MoveUp",
+       "value": 0
+      },
+      {
+       "name": "MoveDown",
+       "value": 1
+      },
+      {
+       "name": "MoveLeft",
+       "value": 2
+      },
+      {
+       "name": "MoveRight",
+       "value": 3
+      },
+      {
+       "name": "MoveHome",
+       "value": 4
+      },
+      {
+       "name": "MoveEnd",
+       "value": 5
+      },
+      {
+       "name": "MovePageUp",
+       "value": 6
+      },
+      {
+       "name": "MovePageDown",
+       "value": 7
+      },
+      {
+       "name": "MoveNext",
+       "value": 8
+      },
+      {
+       "name": "MovePrevious",
+       "value": 9
+      }
+     ]
+    },
+    {
+     "name": "State",
+     "protected": true,
+     "scope": "QAbstractItemView",
+     "scoped": false,
+     "underlying": "unsigned int",
+     "values": [
+      {
+       "name": "NoState",
+       "value": 0
+      },
+      {
+       "name": "DraggingState",
+       "value": 1
+      },
+      {
+       "name": "DragSelectingState",
+       "value": 2
+      },
+      {
+       "name": "EditingState",
+       "value": 3
+      },
+      {
+       "name": "ExpandingState",
+       "value": 4
+      },
+      {
+       "name": "CollapsingState",
+       "value": 5
+      },
+      {
+       "name": "AnimatingState",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "name": "DropIndicatorPosition",
+     "protected": true,
+     "scope": "QAbstractItemView",
+     "scoped": false,
+     "underlying": "unsigned int",
+     "values": [
+      {
+       "name": "OnItem",
+       "value": 0
+      },
+      {
+       "name": "AboveItem",
+       "value": 1
+      },
+      {
+       "name": "BelowItem",
+       "value": 2
+      },
+      {
+       "name": "OnViewport",
+       "value": 3
+      }
+     ]
     }
    ],
    "fields": [],
@@ -6271,6 +6382,31 @@
       {
        "name": "SliderMove",
        "value": 7
+      }
+     ]
+    },
+    {
+     "name": "SliderChange",
+     "protected": true,
+     "scope": "QAbstractSlider",
+     "scoped": false,
+     "underlying": "unsigned int",
+     "values": [
+      {
+       "name": "SliderRangeChange",
+       "value": 0
+      },
+      {
+       "name": "SliderOrientationChange",
+       "value": 1
+      },
+      {
+       "name": "SliderStepsChange",
+       "value": 2
+      },
+      {
+       "name": "SliderValueChange",
+       "value": 3
       }
      ]
     }
@@ -36451,6 +36587,19 @@
       {
        "name": "UserType",
        "value": 65536
+      }
+     ]
+    },
+    {
+     "name": "Extension",
+     "protected": true,
+     "scope": "QGraphicsItem",
+     "scoped": false,
+     "underlying": "unsigned int",
+     "values": [
+      {
+       "name": "UserExtension",
+       "value": 2147483648
       }
      ]
     }

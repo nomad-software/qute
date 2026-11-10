@@ -1020,3 +1020,1525 @@ func (this *QGraphicsWidget) OnLayoutChanged(f func()) qtcore.Connection {
 	})
 	return rt.NewConnection(C.qute_QGraphicsWidget_layoutChanged(self, C.uintptr_t(id)))
 }
+
+var qGraphicsWidgetVTable = []rt.Virtual{
+	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			rect := goQRectF(*(*C.qute_rectf)(a[0]))
+			v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+		}},
+	{Name: "GetContentsMargins", Has: func(v any) bool {
+		_, ok := v.(interface {
+			GetContentsMargins() (float64, float64, float64, float64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			o0, o1, o2, o3 := v.(interface {
+				GetContentsMargins() (float64, float64, float64, float64)
+			}).GetContentsMargins()
+			if a[0] != nil {
+				*(*C.double)(a[0]) = C.double(o0)
+			}
+			if a[1] != nil {
+				*(*C.double)(a[1]) = C.double(o1)
+			}
+			if a[2] != nil {
+				*(*C.double)(a[2]) = C.double(o2)
+			}
+			if a[3] != nil {
+				*(*C.double)(a[3]) = C.double(o3)
+			}
+		}},
+	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Type() int }).Type()
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "Paint", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Paint(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			option := rt.View[QStyleOptionGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionGraphicsItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			v.(interface {
+				Paint(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)
+			}).Paint(painter, option, widget)
+		}},
+	{Name: "PaintWindowFrame", Has: func(v any) bool {
+		_, ok := v.(interface {
+			PaintWindowFrame(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			painterP := *(*unsafe.Pointer)(a[0])
+			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
+			defer painterH.Expire()
+			painter := rt.View[qtgui.QPainter](painterH, painterP)
+			option := rt.View[QStyleOptionGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionGraphicsItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
+			v.(interface {
+				PaintWindowFrame(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)
+			}).PaintWindowFrame(painter, option, widget)
+		}},
+	{Name: "BoundingRect", Has: func(v any) bool { _, ok := v.(interface{ BoundingRect() qtcore.QRectF }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ BoundingRect() qtcore.QRectF }).BoundingRect()
+			*(*C.qute_rectf)(ret) = cQRectF(r)
+		}},
+	{Name: "Shape", Has: func(v any) bool { _, ok := v.(interface{ Shape() *qtgui.QPainterPath }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Shape() *qtgui.QPainterPath }).Shape()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsWidget.Shape")
+		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOption) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOption) }).InitStyleOption(option)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			which := qtcore.SizeHint(*(*C.int64_t)(a[0]))
+			constraint := goQSizeF(*(*C.qute_sizef)(a[1]))
+			r := v.(interface {
+				SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+			}).SizeHint(which, constraint)
+			*(*C.qute_sizef)(ret) = cQSizeF(r)
+		}},
+	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ UpdateGeometry() }).UpdateGeometry()
+		}},
+	{Name: "ItemChange", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			change := QGraphicsItemGraphicsItemChange(*(*C.int64_t)(a[0]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			r := v.(interface {
+				ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
+			}).ItemChange(change, value)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsWidget.ItemChange")
+		}},
+	{Name: "PropertyChange", Has: func(v any) bool {
+		_, ok := v.(interface {
+			PropertyChange(string, *qtcore.QVariant) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			propertyName := quteStr(*(*C.qute_str)(a[0]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			r := v.(interface {
+				PropertyChange(string, *qtcore.QVariant) *qtcore.QVariant
+			}).PropertyChange(propertyName, value)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsWidget.PropertyChange")
+		}},
+	{Name: "SceneEvent", Has: func(v any) bool { _, ok := v.(interface{ SceneEvent(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ SceneEvent(*qtcore.QEvent) bool }).SceneEvent(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "WindowFrameEvent", Has: func(v any) bool { _, ok := v.(interface{ WindowFrameEvent(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			r := v.(interface{ WindowFrameEvent(*qtcore.QEvent) bool }).WindowFrameEvent(eArg)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "WindowFrameSectionAt", Has: func(v any) bool {
+		_, ok := v.(interface {
+			WindowFrameSectionAt(qtcore.QPointF) qtcore.WindowFrameSection
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			pos := goQPointF(*(*C.qute_pointf)(a[0]))
+			r := v.(interface {
+				WindowFrameSectionAt(qtcore.QPointF) qtcore.WindowFrameSection
+			}).WindowFrameSectionAt(pos)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
+			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+		}},
+	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+		}},
+	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			next := bool(*(*C.bool)(a[0]))
+			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
+			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+		}},
+	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QHideEvent](eventH, eventP)
+			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "MoveEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MoveEvent(*QGraphicsSceneMoveEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneMoveEvent](eventH, eventP)
+			v.(interface {
+				MoveEvent(*QGraphicsSceneMoveEvent)
+			}).MoveEvent(event)
+		}},
+	{Name: "PolishEvent", Has: func(v any) bool { _, ok := v.(interface{ PolishEvent() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ PolishEvent() }).PolishEvent()
+		}},
+	{Name: "ResizeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ResizeEvent(*QGraphicsSceneResizeEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneResizeEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneResizeEvent](eventH, eventP)
+			v.(interface {
+				ResizeEvent(*QGraphicsSceneResizeEvent)
+			}).ResizeEvent(event)
+		}},
+	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QShowEvent](eventH, eventP)
+			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+		}},
+	{Name: "HoverMoveEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HoverMoveEvent(*QGraphicsSceneHoverEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneHoverEvent](eventH, eventP)
+			v.(interface {
+				HoverMoveEvent(*QGraphicsSceneHoverEvent)
+			}).HoverMoveEvent(event)
+		}},
+	{Name: "HoverLeaveEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HoverLeaveEvent(*QGraphicsSceneHoverEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneHoverEvent](eventH, eventP)
+			v.(interface {
+				HoverLeaveEvent(*QGraphicsSceneHoverEvent)
+			}).HoverLeaveEvent(event)
+		}},
+	{Name: "GrabMouseEvent", Has: func(v any) bool { _, ok := v.(interface{ GrabMouseEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ GrabMouseEvent(*qtcore.QEvent) }).GrabMouseEvent(event)
+		}},
+	{Name: "UngrabMouseEvent", Has: func(v any) bool { _, ok := v.(interface{ UngrabMouseEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ UngrabMouseEvent(*qtcore.QEvent) }).UngrabMouseEvent(event)
+		}},
+	{Name: "GrabKeyboardEvent", Has: func(v any) bool { _, ok := v.(interface{ GrabKeyboardEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ GrabKeyboardEvent(*qtcore.QEvent) }).GrabKeyboardEvent(event)
+		}},
+	{Name: "UngrabKeyboardEvent", Has: func(v any) bool { _, ok := v.(interface{ UngrabKeyboardEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ UngrabKeyboardEvent(*qtcore.QEvent) }).UngrabKeyboardEvent(event)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "Advance", Has: func(v any) bool { _, ok := v.(interface{ Advance(int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			phase := int(*(*C.int)(a[0]))
+			v.(interface{ Advance(int) }).Advance(phase)
+		}},
+	{Name: "Contains", Has: func(v any) bool { _, ok := v.(interface{ Contains(qtcore.QPointF) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			point := goQPointF(*(*C.qute_pointf)(a[0]))
+			r := v.(interface{ Contains(qtcore.QPointF) bool }).Contains(point)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "CollidesWithItem", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CollidesWithItem(*QGraphicsItem, qtcore.ItemSelectionMode) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			other := rt.View[QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			mode := qtcore.ItemSelectionMode(*(*C.int64_t)(a[1]))
+			r := v.(interface {
+				CollidesWithItem(*QGraphicsItem, qtcore.ItemSelectionMode) bool
+			}).CollidesWithItem(other, mode)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "CollidesWithPath", Has: func(v any) bool {
+		_, ok := v.(interface {
+			CollidesWithPath(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			path := rt.View[qtgui.QPainterPath](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QPainterPath", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			mode := qtcore.ItemSelectionMode(*(*C.int64_t)(a[1]))
+			r := v.(interface {
+				CollidesWithPath(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool
+			}).CollidesWithPath(path, mode)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "IsObscuredBy", Has: func(v any) bool { _, ok := v.(interface{ IsObscuredBy(*QGraphicsItem) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			item := rt.View[QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ IsObscuredBy(*QGraphicsItem) bool }).IsObscuredBy(item)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "OpaqueArea", Has: func(v any) bool { _, ok := v.(interface{ OpaqueArea() *qtgui.QPainterPath }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ OpaqueArea() *qtgui.QPainterPath }).OpaqueArea()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsWidget.OpaqueArea")
+		}},
+	{Name: "SceneEventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SceneEventFilter(*QGraphicsItem, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				SceneEventFilter(*QGraphicsItem, *qtcore.QEvent) bool
+			}).SceneEventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ContextMenuEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ContextMenuEvent(*QGraphicsSceneContextMenuEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneContextMenuEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneContextMenuEvent](eventH, eventP)
+			v.(interface {
+				ContextMenuEvent(*QGraphicsSceneContextMenuEvent)
+			}).ContextMenuEvent(event)
+		}},
+	{Name: "DragEnterEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DragEnterEvent(*QGraphicsSceneDragDropEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
+			v.(interface {
+				DragEnterEvent(*QGraphicsSceneDragDropEvent)
+			}).DragEnterEvent(event)
+		}},
+	{Name: "DragLeaveEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DragLeaveEvent(*QGraphicsSceneDragDropEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
+			v.(interface {
+				DragLeaveEvent(*QGraphicsSceneDragDropEvent)
+			}).DragLeaveEvent(event)
+		}},
+	{Name: "DragMoveEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DragMoveEvent(*QGraphicsSceneDragDropEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
+			v.(interface {
+				DragMoveEvent(*QGraphicsSceneDragDropEvent)
+			}).DragMoveEvent(event)
+		}},
+	{Name: "DropEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DropEvent(*QGraphicsSceneDragDropEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
+			v.(interface {
+				DropEvent(*QGraphicsSceneDragDropEvent)
+			}).DropEvent(event)
+		}},
+	{Name: "HoverEnterEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			HoverEnterEvent(*QGraphicsSceneHoverEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneHoverEvent](eventH, eventP)
+			v.(interface {
+				HoverEnterEvent(*QGraphicsSceneHoverEvent)
+			}).HoverEnterEvent(event)
+		}},
+	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+		}},
+	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
+			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+		}},
+	{Name: "MousePressEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MousePressEvent(*QGraphicsSceneMouseEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
+			v.(interface {
+				MousePressEvent(*QGraphicsSceneMouseEvent)
+			}).MousePressEvent(event)
+		}},
+	{Name: "MouseMoveEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MouseMoveEvent(*QGraphicsSceneMouseEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
+			v.(interface {
+				MouseMoveEvent(*QGraphicsSceneMouseEvent)
+			}).MouseMoveEvent(event)
+		}},
+	{Name: "MouseReleaseEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MouseReleaseEvent(*QGraphicsSceneMouseEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
+			v.(interface {
+				MouseReleaseEvent(*QGraphicsSceneMouseEvent)
+			}).MouseReleaseEvent(event)
+		}},
+	{Name: "MouseDoubleClickEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			MouseDoubleClickEvent(*QGraphicsSceneMouseEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
+			v.(interface {
+				MouseDoubleClickEvent(*QGraphicsSceneMouseEvent)
+			}).MouseDoubleClickEvent(event)
+		}},
+	{Name: "WheelEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			WheelEvent(*QGraphicsSceneWheelEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QGraphicsSceneWheelEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QGraphicsSceneWheelEvent](eventH, eventP)
+			v.(interface {
+				WheelEvent(*QGraphicsSceneWheelEvent)
+			}).WheelEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(event)
+		}},
+	{Name: "SupportsExtension", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SupportsExtension(QGraphicsItemExtension) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			extension := QGraphicsItemExtension(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				SupportsExtension(QGraphicsItemExtension) bool
+			}).SupportsExtension(extension)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "SetExtension", Has: func(v any) bool {
+		_, ok := v.(interface {
+			SetExtension(QGraphicsItemExtension, *qtcore.QVariant)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			extension := QGraphicsItemExtension(*(*C.int64_t)(a[0]))
+			variant := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			v.(interface {
+				SetExtension(QGraphicsItemExtension, *qtcore.QVariant)
+			}).SetExtension(extension, variant)
+		}},
+	{Name: "Extension", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Extension(*qtcore.QVariant) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			variant := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface {
+				Extension(*qtcore.QVariant) *qtcore.QVariant
+			}).Extension(variant)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsWidget.Extension")
+		}},
+	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+}
+
+// QGraphicsWidgetBase is embedded in Go types that subclass QGraphicsWidget:
+//
+//	type MyGraphicsWidget struct{ qtwidgets.QGraphicsWidgetBase }
+//
+// Define any of the virtual methods listed on QGraphicsWidgetSuper to override them,
+// then construct the value with NewQGraphicsWidgetWith. Call b.Super().X() for the
+// base implementation.
+type QGraphicsWidgetBase struct{ *QGraphicsWidget }
+
+func (b *QGraphicsWidgetBase) quteQGraphicsWidgetBase() *QGraphicsWidgetBase { return b }
+
+// QGraphicsWidgetSubclass is implemented by every type that embeds QGraphicsWidgetBase.
+type QGraphicsWidgetSubclass interface{ quteQGraphicsWidgetBase() *QGraphicsWidgetBase }
+
+// Super returns the C++ base implementations of QGraphicsWidget's virtual methods.
+func (b *QGraphicsWidgetBase) Super() *QGraphicsWidgetSuper {
+	return &QGraphicsWidgetSuper{this: b.QGraphicsWidget}
+}
+
+// QGraphicsWidgetSuper calls the C++ base implementations of QGraphicsWidget's virtuals.
+type QGraphicsWidgetSuper struct{ this *QGraphicsWidget }
+
+// SetGeometry calls QGraphicsWidget::setGeometry.
+func (s *QGraphicsWidgetSuper) SetGeometry(rect qtcore.QRectF) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.SetGeometry")
+	C.qute_QGraphicsWidget_super_0(self, cQRectF(rect))
+	runtime.KeepAlive(s.this)
+}
+
+// GetContentsMargins calls QGraphicsWidget::getContentsMargins.
+func (s *QGraphicsWidgetSuper) GetContentsMargins() (float64, float64, float64, float64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.GetContentsMargins")
+	var leftOut C.double
+	var topOut C.double
+	var rightOut C.double
+	var bottomOut C.double
+	C.qute_QGraphicsWidget_super_1(self, &leftOut, &topOut, &rightOut, &bottomOut)
+	runtime.KeepAlive(s.this)
+	return float64(leftOut), float64(topOut), float64(rightOut), float64(bottomOut)
+}
+
+// Type calls QGraphicsWidget::type.
+func (s *QGraphicsWidgetSuper) Type() int {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Type")
+	r := C.qute_QGraphicsWidget_super_2(self)
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// Paint calls QGraphicsWidget::paint.
+func (s *QGraphicsWidgetSuper) Paint(painter *qtgui.QPainter, option *QStyleOptionGraphicsItem, widget *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Paint")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsWidget.Super.Paint")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsWidget.Super.Paint")
+	}
+	C.qute_QGraphicsWidget_super_3(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.Super.Paint"), widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+}
+
+// PaintWindowFrame calls QGraphicsWidget::paintWindowFrame.
+func (s *QGraphicsWidgetSuper) PaintWindowFrame(painter *qtgui.QPainter, option *QStyleOptionGraphicsItem, widget *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.PaintWindowFrame")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsWidget.Super.PaintWindowFrame")
+	}
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QGraphicsWidget.Super.PaintWindowFrame")
+	}
+	C.qute_QGraphicsWidget_super_4(self, painterPtr, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.Super.PaintWindowFrame"), widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(painter)
+	runtime.KeepAlive(option)
+	runtime.KeepAlive(widget)
+}
+
+// BoundingRect calls QGraphicsWidget::boundingRect.
+func (s *QGraphicsWidgetSuper) BoundingRect() qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.BoundingRect")
+	r := C.qute_QGraphicsWidget_super_5(self)
+	runtime.KeepAlive(s.this)
+	return goQRectF(r)
+}
+
+// Shape calls QGraphicsWidget::shape.
+func (s *QGraphicsWidgetSuper) Shape() *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Shape")
+	r := C.qute_QGraphicsWidget_super_6(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
+}
+
+// InitStyleOption calls QGraphicsWidget::initStyleOption.
+func (s *QGraphicsWidgetSuper) InitStyleOption(option *QStyleOption) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.InitStyleOption")
+	C.qute_QGraphicsWidget_super_7(self, rt.UseArg(unsafe.Pointer(option), "QGraphicsWidget.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
+// SizeHint calls QGraphicsWidget::sizeHint.
+func (s *QGraphicsWidgetSuper) SizeHint(which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.SizeHint")
+	r := C.qute_QGraphicsWidget_super_8(self, C.int64_t(which), cQSizeF(constraint))
+	runtime.KeepAlive(s.this)
+	return goQSizeF(r)
+}
+
+// UpdateGeometry calls QGraphicsWidget::updateGeometry.
+func (s *QGraphicsWidgetSuper) UpdateGeometry() {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.UpdateGeometry")
+	C.qute_QGraphicsWidget_super_9(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ItemChange calls QGraphicsWidget::itemChange.
+func (s *QGraphicsWidgetSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.ItemChange")
+	r := C.qute_QGraphicsWidget_super_10(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsWidget.Super.ItemChange"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// PropertyChange calls QGraphicsWidget::propertyChange.
+func (s *QGraphicsWidgetSuper) PropertyChange(propertyName string, value *qtcore.QVariant) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.PropertyChange")
+	r := C.qute_QGraphicsWidget_super_11(self, (*C.char)(unsafe.Pointer(unsafe.StringData(propertyName))), C.ptrdiff_t(len(propertyName)), rt.UseArg(unsafe.Pointer(value), "QGraphicsWidget.Super.PropertyChange"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SceneEvent calls QGraphicsWidget::sceneEvent.
+func (s *QGraphicsWidgetSuper) SceneEvent(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.SceneEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.SceneEvent")
+	}
+	r := C.qute_QGraphicsWidget_super_12(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// WindowFrameEvent calls QGraphicsWidget::windowFrameEvent.
+func (s *QGraphicsWidgetSuper) WindowFrameEvent(eArg *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.WindowFrameEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QGraphicsWidget.Super.WindowFrameEvent")
+	}
+	r := C.qute_QGraphicsWidget_super_13(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+	return bool(r)
+}
+
+// WindowFrameSectionAt calls QGraphicsWidget::windowFrameSectionAt.
+func (s *QGraphicsWidgetSuper) WindowFrameSectionAt(pos qtcore.QPointF) qtcore.WindowFrameSection {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.WindowFrameSectionAt")
+	r := C.qute_QGraphicsWidget_super_14(self, cQPointF(pos))
+	runtime.KeepAlive(s.this)
+	return qtcore.WindowFrameSection(r)
+}
+
+// Event calls QGraphicsWidget::event.
+func (s *QGraphicsWidgetSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.Event")
+	}
+	r := C.qute_QGraphicsWidget_super_15(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ChangeEvent calls QGraphicsWidget::changeEvent.
+func (s *QGraphicsWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.ChangeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.ChangeEvent")
+	}
+	C.qute_QGraphicsWidget_super_16(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CloseEvent calls QGraphicsWidget::closeEvent.
+func (s *QGraphicsWidgetSuper) CloseEvent(event *qtgui.QCloseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.CloseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QGraphicsWidget.Super.CloseEvent")
+	}
+	C.qute_QGraphicsWidget_super_17(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusInEvent calls QGraphicsWidget::focusInEvent.
+func (s *QGraphicsWidgetSuper) FocusInEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.FocusInEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QGraphicsWidget.Super.FocusInEvent")
+	}
+	C.qute_QGraphicsWidget_super_18(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// FocusNextPrevChild calls QGraphicsWidget::focusNextPrevChild.
+func (s *QGraphicsWidgetSuper) FocusNextPrevChild(next bool) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.FocusNextPrevChild")
+	r := C.qute_QGraphicsWidget_super_19(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// FocusOutEvent calls QGraphicsWidget::focusOutEvent.
+func (s *QGraphicsWidgetSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.FocusOutEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QGraphicsWidget.Super.FocusOutEvent")
+	}
+	C.qute_QGraphicsWidget_super_20(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HideEvent calls QGraphicsWidget::hideEvent.
+func (s *QGraphicsWidgetSuper) HideEvent(event *qtgui.QHideEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.HideEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QGraphicsWidget.Super.HideEvent")
+	}
+	C.qute_QGraphicsWidget_super_21(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MoveEvent calls QGraphicsWidget::moveEvent.
+func (s *QGraphicsWidgetSuper) MoveEvent(event *QGraphicsSceneMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.MoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMoveEvent()), "QGraphicsWidget.Super.MoveEvent")
+	}
+	C.qute_QGraphicsWidget_super_22(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// PolishEvent calls QGraphicsWidget::polishEvent.
+func (s *QGraphicsWidgetSuper) PolishEvent() {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.PolishEvent")
+	C.qute_QGraphicsWidget_super_23(self)
+	runtime.KeepAlive(s.this)
+}
+
+// ResizeEvent calls QGraphicsWidget::resizeEvent.
+func (s *QGraphicsWidgetSuper) ResizeEvent(event *QGraphicsSceneResizeEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.ResizeEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneResizeEvent()), "QGraphicsWidget.Super.ResizeEvent")
+	}
+	C.qute_QGraphicsWidget_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ShowEvent calls QGraphicsWidget::showEvent.
+func (s *QGraphicsWidgetSuper) ShowEvent(event *qtgui.QShowEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.ShowEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QGraphicsWidget.Super.ShowEvent")
+	}
+	C.qute_QGraphicsWidget_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HoverMoveEvent calls QGraphicsWidget::hoverMoveEvent.
+func (s *QGraphicsWidgetSuper) HoverMoveEvent(event *QGraphicsSceneHoverEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.HoverMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHoverEvent()), "QGraphicsWidget.Super.HoverMoveEvent")
+	}
+	C.qute_QGraphicsWidget_super_26(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HoverLeaveEvent calls QGraphicsWidget::hoverLeaveEvent.
+func (s *QGraphicsWidgetSuper) HoverLeaveEvent(event *QGraphicsSceneHoverEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.HoverLeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHoverEvent()), "QGraphicsWidget.Super.HoverLeaveEvent")
+	}
+	C.qute_QGraphicsWidget_super_27(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// GrabMouseEvent calls QGraphicsWidget::grabMouseEvent.
+func (s *QGraphicsWidgetSuper) GrabMouseEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.GrabMouseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.GrabMouseEvent")
+	}
+	C.qute_QGraphicsWidget_super_28(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// UngrabMouseEvent calls QGraphicsWidget::ungrabMouseEvent.
+func (s *QGraphicsWidgetSuper) UngrabMouseEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.UngrabMouseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.UngrabMouseEvent")
+	}
+	C.qute_QGraphicsWidget_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// GrabKeyboardEvent calls QGraphicsWidget::grabKeyboardEvent.
+func (s *QGraphicsWidgetSuper) GrabKeyboardEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.GrabKeyboardEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.GrabKeyboardEvent")
+	}
+	C.qute_QGraphicsWidget_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// UngrabKeyboardEvent calls QGraphicsWidget::ungrabKeyboardEvent.
+func (s *QGraphicsWidgetSuper) UngrabKeyboardEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.UngrabKeyboardEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.UngrabKeyboardEvent")
+	}
+	C.qute_QGraphicsWidget_super_31(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QGraphicsWidgetSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QGraphicsWidget.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.EventFilter")
+	}
+	r := C.qute_QGraphicsWidget_super_32(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QGraphicsWidgetSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QGraphicsWidget.Super.TimerEvent")
+	}
+	C.qute_QGraphicsWidget_super_33(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QGraphicsWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QGraphicsWidget.Super.ChildEvent")
+	}
+	C.qute_QGraphicsWidget_super_34(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QGraphicsWidgetSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.CustomEvent")
+	}
+	C.qute_QGraphicsWidget_super_35(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// Advance calls QGraphicsItem::advance.
+func (s *QGraphicsWidgetSuper) Advance(phase int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Advance")
+	C.qute_QGraphicsWidget_super_36(self, C.int(phase))
+	runtime.KeepAlive(s.this)
+}
+
+// Contains calls QGraphicsItem::contains.
+func (s *QGraphicsWidgetSuper) Contains(point qtcore.QPointF) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Contains")
+	r := C.qute_QGraphicsWidget_super_37(self, cQPointF(point))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// CollidesWithItem calls QGraphicsItem::collidesWithItem.
+func (s *QGraphicsWidgetSuper) CollidesWithItem(other *QGraphicsItem, mode qtcore.ItemSelectionMode) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.CollidesWithItem")
+	var otherPtr unsafe.Pointer
+	if other != nil {
+		otherPtr = rt.UseArg(unsafe.Pointer(other.AsQGraphicsItem()), "QGraphicsWidget.Super.CollidesWithItem")
+	}
+	r := C.qute_QGraphicsWidget_super_38(self, otherPtr, C.int64_t(mode))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(other)
+	return bool(r)
+}
+
+// CollidesWithPath calls QGraphicsItem::collidesWithPath.
+func (s *QGraphicsWidgetSuper) CollidesWithPath(path *qtgui.QPainterPath, mode qtcore.ItemSelectionMode) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.CollidesWithPath")
+	r := C.qute_QGraphicsWidget_super_39(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsWidget.Super.CollidesWithPath"), C.int64_t(mode))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(path)
+	return bool(r)
+}
+
+// IsObscuredBy calls QGraphicsItem::isObscuredBy.
+func (s *QGraphicsWidgetSuper) IsObscuredBy(item *QGraphicsItem) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.IsObscuredBy")
+	var itemPtr unsafe.Pointer
+	if item != nil {
+		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsWidget.Super.IsObscuredBy")
+	}
+	r := C.qute_QGraphicsWidget_super_40(self, itemPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(item)
+	return bool(r)
+}
+
+// OpaqueArea calls QGraphicsItem::opaqueArea.
+func (s *QGraphicsWidgetSuper) OpaqueArea() *qtgui.QPainterPath {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.OpaqueArea")
+	r := C.qute_QGraphicsWidget_super_41(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
+}
+
+// SceneEventFilter calls QGraphicsItem::sceneEventFilter.
+func (s *QGraphicsWidgetSuper) SceneEventFilter(watched *QGraphicsItem, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.SceneEventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQGraphicsItem()), "QGraphicsWidget.Super.SceneEventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsWidget.Super.SceneEventFilter")
+	}
+	r := C.qute_QGraphicsWidget_super_42(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ContextMenuEvent calls QGraphicsItem::contextMenuEvent.
+func (s *QGraphicsWidgetSuper) ContextMenuEvent(event *QGraphicsSceneContextMenuEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.ContextMenuEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneContextMenuEvent()), "QGraphicsWidget.Super.ContextMenuEvent")
+	}
+	C.qute_QGraphicsWidget_super_43(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragEnterEvent calls QGraphicsItem::dragEnterEvent.
+func (s *QGraphicsWidgetSuper) DragEnterEvent(event *QGraphicsSceneDragDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.DragEnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsWidget.Super.DragEnterEvent")
+	}
+	C.qute_QGraphicsWidget_super_44(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragLeaveEvent calls QGraphicsItem::dragLeaveEvent.
+func (s *QGraphicsWidgetSuper) DragLeaveEvent(event *QGraphicsSceneDragDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.DragLeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsWidget.Super.DragLeaveEvent")
+	}
+	C.qute_QGraphicsWidget_super_45(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DragMoveEvent calls QGraphicsItem::dragMoveEvent.
+func (s *QGraphicsWidgetSuper) DragMoveEvent(event *QGraphicsSceneDragDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.DragMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsWidget.Super.DragMoveEvent")
+	}
+	C.qute_QGraphicsWidget_super_46(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// DropEvent calls QGraphicsItem::dropEvent.
+func (s *QGraphicsWidgetSuper) DropEvent(event *QGraphicsSceneDragDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.DropEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsWidget.Super.DropEvent")
+	}
+	C.qute_QGraphicsWidget_super_47(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HoverEnterEvent calls QGraphicsItem::hoverEnterEvent.
+func (s *QGraphicsWidgetSuper) HoverEnterEvent(event *QGraphicsSceneHoverEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.HoverEnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHoverEvent()), "QGraphicsWidget.Super.HoverEnterEvent")
+	}
+	C.qute_QGraphicsWidget_super_48(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyPressEvent calls QGraphicsItem::keyPressEvent.
+func (s *QGraphicsWidgetSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.KeyPressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QGraphicsWidget.Super.KeyPressEvent")
+	}
+	C.qute_QGraphicsWidget_super_49(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// KeyReleaseEvent calls QGraphicsItem::keyReleaseEvent.
+func (s *QGraphicsWidgetSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.KeyReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QGraphicsWidget.Super.KeyReleaseEvent")
+	}
+	C.qute_QGraphicsWidget_super_50(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MousePressEvent calls QGraphicsItem::mousePressEvent.
+func (s *QGraphicsWidgetSuper) MousePressEvent(event *QGraphicsSceneMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.MousePressEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsWidget.Super.MousePressEvent")
+	}
+	C.qute_QGraphicsWidget_super_51(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseMoveEvent calls QGraphicsItem::mouseMoveEvent.
+func (s *QGraphicsWidgetSuper) MouseMoveEvent(event *QGraphicsSceneMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.MouseMoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsWidget.Super.MouseMoveEvent")
+	}
+	C.qute_QGraphicsWidget_super_52(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseReleaseEvent calls QGraphicsItem::mouseReleaseEvent.
+func (s *QGraphicsWidgetSuper) MouseReleaseEvent(event *QGraphicsSceneMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.MouseReleaseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsWidget.Super.MouseReleaseEvent")
+	}
+	C.qute_QGraphicsWidget_super_53(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MouseDoubleClickEvent calls QGraphicsItem::mouseDoubleClickEvent.
+func (s *QGraphicsWidgetSuper) MouseDoubleClickEvent(event *QGraphicsSceneMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.MouseDoubleClickEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsWidget.Super.MouseDoubleClickEvent")
+	}
+	C.qute_QGraphicsWidget_super_54(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// WheelEvent calls QGraphicsItem::wheelEvent.
+func (s *QGraphicsWidgetSuper) WheelEvent(event *QGraphicsSceneWheelEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.WheelEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneWheelEvent()), "QGraphicsWidget.Super.WheelEvent")
+	}
+	C.qute_QGraphicsWidget_super_55(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QGraphicsItem::inputMethodEvent.
+func (s *QGraphicsWidgetSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.InputMethodEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QGraphicsWidget.Super.InputMethodEvent")
+	}
+	C.qute_QGraphicsWidget_super_56(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// SupportsExtension calls QGraphicsItem::supportsExtension.
+func (s *QGraphicsWidgetSuper) SupportsExtension(extension QGraphicsItemExtension) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.SupportsExtension")
+	r := C.qute_QGraphicsWidget_super_57(self, C.int64_t(extension))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// SetExtension calls QGraphicsItem::setExtension.
+func (s *QGraphicsWidgetSuper) SetExtension(extension QGraphicsItemExtension, variant *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.SetExtension")
+	C.qute_QGraphicsWidget_super_58(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsWidget.Super.SetExtension"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(variant)
+}
+
+// Extension calls QGraphicsItem::extension.
+func (s *QGraphicsWidgetSuper) Extension(variant *qtcore.QVariant) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.Extension")
+	r := C.qute_QGraphicsWidget_super_59(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsWidget.Super.Extension"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(variant)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// IsEmpty calls QGraphicsLayoutItem::isEmpty.
+func (s *QGraphicsWidgetSuper) IsEmpty() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsWidget.Super.IsEmpty")
+	r := C.qute_QGraphicsWidget_super_60(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// UpdateMicroFocus wraps the protected QGraphicsObject::updateMicroFocus for subclasses.
+func (b *QGraphicsWidgetBase) UpdateMicroFocus() {
+	this := b.QGraphicsWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.UpdateMicroFocus")
+	C.qute_QGraphicsWidget_prot_updateMicroFocus(self)
+	runtime.KeepAlive(this)
+}
+
+// AddToIndex wraps the protected QGraphicsItem::addToIndex for subclasses.
+func (b *QGraphicsWidgetBase) AddToIndex() {
+	this := b.QGraphicsWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.AddToIndex")
+	C.qute_QGraphicsWidget_prot_addToIndex(self)
+	runtime.KeepAlive(this)
+}
+
+// RemoveFromIndex wraps the protected QGraphicsItem::removeFromIndex for subclasses.
+func (b *QGraphicsWidgetBase) RemoveFromIndex() {
+	this := b.QGraphicsWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.RemoveFromIndex")
+	C.qute_QGraphicsWidget_prot_removeFromIndex(self)
+	runtime.KeepAlive(this)
+}
+
+// PrepareGeometryChange wraps the protected QGraphicsItem::prepareGeometryChange for subclasses.
+func (b *QGraphicsWidgetBase) PrepareGeometryChange() {
+	this := b.QGraphicsWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.PrepareGeometryChange")
+	C.qute_QGraphicsWidget_prot_prepareGeometryChange(self)
+	runtime.KeepAlive(this)
+}
+
+// SetGraphicsItem wraps the protected QGraphicsLayoutItem::setGraphicsItem for subclasses.
+func (b *QGraphicsWidgetBase) SetGraphicsItem(item QGraphicsItemLike) {
+	this := b.QGraphicsWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetGraphicsItem")
+	var itemPtr unsafe.Pointer
+	var itemH *rt.Handle
+	if item != nil {
+		itemPtr, itemH = rt.Arg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsWidget.SetGraphicsItem")
+	}
+	C.qute_QGraphicsWidget_prot_setGraphicsItem(self, itemPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(item)
+	rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "setGraphicsItem.item", itemH, true)
+}
+
+// SetOwnedByLayout wraps the protected QGraphicsLayoutItem::setOwnedByLayout for subclasses.
+func (b *QGraphicsWidgetBase) SetOwnedByLayout(ownedByLayout bool) {
+	this := b.QGraphicsWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.SetOwnedByLayout")
+	C.qute_QGraphicsWidget_prot_setOwnedByLayout(self, C.bool(ownedByLayout))
+	runtime.KeepAlive(this)
+}
+
+// NewQGraphicsWidgetWith constructs a QGraphicsWidget whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsWidgetWith(v QGraphicsWidgetSubclass, parent QGraphicsItemLike) *QGraphicsWidget {
+	rt.CheckThread("NewQGraphicsWidgetWith")
+	base := v.quteQGraphicsWidgetBase()
+	if base.QGraphicsWidget != nil {
+		panic("NewQGraphicsWidgetWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsWidgetWith")
+	}
+	p := C.qute_QGraphicsWidget_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsWidget", mode)
+	base.QGraphicsWidget = rt.View[QGraphicsWidget](h, p)
+	id := h.SetSelf(v, qGraphicsWidgetVTable)
+	mask := rt.Mask(v, qGraphicsWidgetVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsWidget_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsWidget
+}

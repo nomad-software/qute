@@ -1440,3 +1440,1092 @@ func (this *QTextEdit) OnCursorPositionChanged(f func()) qtcore.Connection {
 	})
 	return rt.NewConnection(C.qute_QTextEdit_cursorPositionChanged(self, C.uintptr_t(id)))
 }
+
+var qTextEditVTable = []rt.Virtual{
+	{Name: "LoadResource", Has: func(v any) bool {
+		_, ok := v.(interface {
+			LoadResource(int, *qtcore.QUrl) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			typeArg := int(*(*C.int)(a[0]))
+			name := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			r := v.(interface {
+				LoadResource(int, *qtcore.QUrl) *qtcore.QVariant
+			}).LoadResource(typeArg, name)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextEdit.LoadResource")
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(eArg)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QTimerEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QTimerEvent](eArgH, eArgP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(eArg)
+		}},
+	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QKeyEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QKeyEvent](eArgH, eArgP)
+			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(eArg)
+		}},
+	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QKeyEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QKeyEvent](eArgH, eArgP)
+			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(eArg)
+		}},
+	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QResizeEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QResizeEvent](eArgH, eArgP)
+			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(eArg)
+		}},
+	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QPaintEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QPaintEvent](eArgH, eArgP)
+			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(eArg)
+		}},
+	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QMouseEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QMouseEvent](eArgH, eArgP)
+			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(eArg)
+		}},
+	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QMouseEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QMouseEvent](eArgH, eArgP)
+			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(eArg)
+		}},
+	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QMouseEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QMouseEvent](eArgH, eArgP)
+			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(eArg)
+		}},
+	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QMouseEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QMouseEvent](eArgH, eArgP)
+			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(eArg)
+		}},
+	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			next := bool(*(*C.bool)(a[0]))
+			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ContextMenuEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ContextMenuEvent(*qtgui.QContextMenuEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QContextMenuEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QContextMenuEvent](eArgH, eArgP)
+			v.(interface {
+				ContextMenuEvent(*qtgui.QContextMenuEvent)
+			}).ContextMenuEvent(eArg)
+		}},
+	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDragEnterEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDragEnterEvent](eArgH, eArgP)
+			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(eArg)
+		}},
+	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDragLeaveEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDragLeaveEvent](eArgH, eArgP)
+			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(eArg)
+		}},
+	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDragMoveEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDragMoveEvent](eArgH, eArgP)
+			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(eArg)
+		}},
+	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDropEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDropEvent](eArgH, eArgP)
+			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(eArg)
+		}},
+	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QFocusEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QFocusEvent](eArgH, eArgP)
+			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(eArg)
+		}},
+	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QFocusEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QFocusEvent](eArgH, eArgP)
+			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(eArg)
+		}},
+	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			showEventP := *(*unsafe.Pointer)(a[0])
+			showEventH := rt.WrapClass(showEventP, "QShowEvent", rt.NewScoped)
+			defer showEventH.Expire()
+			showEvent := rt.View[qtgui.QShowEvent](showEventH, showEventP)
+			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+		}},
+	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(eArg)
+		}},
+	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QWheelEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QWheelEvent](eArgH, eArgP)
+			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(eArg)
+		}},
+	{Name: "CreateMimeDataFromSelection", Has: func(v any) bool { _, ok := v.(interface{ CreateMimeDataFromSelection() *qtcore.QMimeData }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ CreateMimeDataFromSelection() *qtcore.QMimeData }).CreateMimeDataFromSelection()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextEdit.CreateMimeDataFromSelection")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "CanInsertFromMimeData", Has: func(v any) bool { _, ok := v.(interface{ CanInsertFromMimeData(*qtcore.QMimeData) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			source := rt.View[qtcore.QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ CanInsertFromMimeData(*qtcore.QMimeData) bool }).CanInsertFromMimeData(source)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "InsertFromMimeData", Has: func(v any) bool { _, ok := v.(interface{ InsertFromMimeData(*qtcore.QMimeData) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			source := rt.View[qtcore.QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ InsertFromMimeData(*qtcore.QMimeData) }).InsertFromMimeData(source)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			dx := int(*(*C.int)(a[0]))
+			dy := int(*(*C.int)(a[1]))
+			v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+		}},
+	{Name: "DoSetTextCursor", Has: func(v any) bool { _, ok := v.(interface{ DoSetTextCursor(*qtgui.QTextCursor) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			cursor := rt.View[qtgui.QTextCursor](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QTextCursor", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DoSetTextCursor(*qtgui.QTextCursor) }).DoSetTextCursor(cursor)
+		}},
+	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SetupViewport", Has: func(v any) bool { _, ok := v.(interface{ SetupViewport(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			viewport := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ SetupViewport(*QWidget) }).SetupViewport(viewport)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(object, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ViewportEvent", Has: func(v any) bool { _, ok := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ViewportSizeHint", Has: func(v any) bool { _, ok := v.(interface{ ViewportSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionFrame](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+		}},
+	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			visible := bool(*(*C.bool)(a[0]))
+			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
+			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+		}},
+	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+		}},
+	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
+			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+		}},
+	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
+			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
+	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QHideEvent](eventH, eventP)
+			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QTextEditBase is embedded in Go types that subclass QTextEdit:
+//
+//	type MyTextEdit struct{ qtwidgets.QTextEditBase }
+//
+// Define any of the virtual methods listed on QTextEditSuper to override them,
+// then construct the value with NewQTextEditWith. Call b.Super().X() for the
+// base implementation.
+type QTextEditBase struct{ *QTextEdit }
+
+func (b *QTextEditBase) quteQTextEditBase() *QTextEditBase { return b }
+
+// QTextEditSubclass is implemented by every type that embeds QTextEditBase.
+type QTextEditSubclass interface{ quteQTextEditBase() *QTextEditBase }
+
+// Super returns the C++ base implementations of QTextEdit's virtual methods.
+func (b *QTextEditBase) Super() *QTextEditSuper { return &QTextEditSuper{this: b.QTextEdit} }
+
+// QTextEditSuper calls the C++ base implementations of QTextEdit's virtuals.
+type QTextEditSuper struct{ this *QTextEdit }
+
+// LoadResource calls QTextEdit::loadResource.
+func (s *QTextEditSuper) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.LoadResource")
+	r := C.qute_QTextEdit_super_0(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QTextEdit.Super.LoadResource"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(name)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// Event calls QTextEdit::event.
+func (s *QTextEditSuper) Event(eArg *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.Event")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QTextEdit.Super.Event")
+	}
+	r := C.qute_QTextEdit_super_1(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+	return bool(r)
+}
+
+// TimerEvent calls QTextEdit::timerEvent.
+func (s *QTextEditSuper) TimerEvent(eArg *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.TimerEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQTimerEvent()), "QTextEdit.Super.TimerEvent")
+	}
+	C.qute_QTextEdit_super_2(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// KeyPressEvent calls QTextEdit::keyPressEvent.
+func (s *QTextEditSuper) KeyPressEvent(eArg *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.KeyPressEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QTextEdit.Super.KeyPressEvent")
+	}
+	C.qute_QTextEdit_super_3(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// KeyReleaseEvent calls QTextEdit::keyReleaseEvent.
+func (s *QTextEditSuper) KeyReleaseEvent(eArg *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.KeyReleaseEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QTextEdit.Super.KeyReleaseEvent")
+	}
+	C.qute_QTextEdit_super_4(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// ResizeEvent calls QTextEdit::resizeEvent.
+func (s *QTextEditSuper) ResizeEvent(eArg *qtgui.QResizeEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ResizeEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQResizeEvent()), "QTextEdit.Super.ResizeEvent")
+	}
+	C.qute_QTextEdit_super_5(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// PaintEvent calls QTextEdit::paintEvent.
+func (s *QTextEditSuper) PaintEvent(eArg *qtgui.QPaintEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.PaintEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQPaintEvent()), "QTextEdit.Super.PaintEvent")
+	}
+	C.qute_QTextEdit_super_6(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// MousePressEvent calls QTextEdit::mousePressEvent.
+func (s *QTextEditSuper) MousePressEvent(eArg *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.MousePressEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QTextEdit.Super.MousePressEvent")
+	}
+	C.qute_QTextEdit_super_7(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// MouseMoveEvent calls QTextEdit::mouseMoveEvent.
+func (s *QTextEditSuper) MouseMoveEvent(eArg *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.MouseMoveEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QTextEdit.Super.MouseMoveEvent")
+	}
+	C.qute_QTextEdit_super_8(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// MouseReleaseEvent calls QTextEdit::mouseReleaseEvent.
+func (s *QTextEditSuper) MouseReleaseEvent(eArg *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.MouseReleaseEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QTextEdit.Super.MouseReleaseEvent")
+	}
+	C.qute_QTextEdit_super_9(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// MouseDoubleClickEvent calls QTextEdit::mouseDoubleClickEvent.
+func (s *QTextEditSuper) MouseDoubleClickEvent(eArg *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.MouseDoubleClickEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QTextEdit.Super.MouseDoubleClickEvent")
+	}
+	C.qute_QTextEdit_super_10(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// FocusNextPrevChild calls QTextEdit::focusNextPrevChild.
+func (s *QTextEditSuper) FocusNextPrevChild(next bool) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.FocusNextPrevChild")
+	r := C.qute_QTextEdit_super_11(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// ContextMenuEvent calls QTextEdit::contextMenuEvent.
+func (s *QTextEditSuper) ContextMenuEvent(eArg *qtgui.QContextMenuEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ContextMenuEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQContextMenuEvent()), "QTextEdit.Super.ContextMenuEvent")
+	}
+	C.qute_QTextEdit_super_12(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DragEnterEvent calls QTextEdit::dragEnterEvent.
+func (s *QTextEditSuper) DragEnterEvent(eArg *qtgui.QDragEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.DragEnterEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragEnterEvent()), "QTextEdit.Super.DragEnterEvent")
+	}
+	C.qute_QTextEdit_super_13(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DragLeaveEvent calls QTextEdit::dragLeaveEvent.
+func (s *QTextEditSuper) DragLeaveEvent(eArg *qtgui.QDragLeaveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.DragLeaveEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragLeaveEvent()), "QTextEdit.Super.DragLeaveEvent")
+	}
+	C.qute_QTextEdit_super_14(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DragMoveEvent calls QTextEdit::dragMoveEvent.
+func (s *QTextEditSuper) DragMoveEvent(eArg *qtgui.QDragMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.DragMoveEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragMoveEvent()), "QTextEdit.Super.DragMoveEvent")
+	}
+	C.qute_QTextEdit_super_15(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DropEvent calls QTextEdit::dropEvent.
+func (s *QTextEditSuper) DropEvent(eArg *qtgui.QDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.DropEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDropEvent()), "QTextEdit.Super.DropEvent")
+	}
+	C.qute_QTextEdit_super_16(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// FocusInEvent calls QTextEdit::focusInEvent.
+func (s *QTextEditSuper) FocusInEvent(eArg *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.FocusInEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QTextEdit.Super.FocusInEvent")
+	}
+	C.qute_QTextEdit_super_17(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// FocusOutEvent calls QTextEdit::focusOutEvent.
+func (s *QTextEditSuper) FocusOutEvent(eArg *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.FocusOutEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QTextEdit.Super.FocusOutEvent")
+	}
+	C.qute_QTextEdit_super_18(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// ShowEvent calls QTextEdit::showEvent.
+func (s *QTextEditSuper) ShowEvent(showEvent *qtgui.QShowEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ShowEvent")
+	var showEventPtr unsafe.Pointer
+	if showEvent != nil {
+		showEventPtr = rt.UseArg(unsafe.Pointer(showEvent.AsQShowEvent()), "QTextEdit.Super.ShowEvent")
+	}
+	C.qute_QTextEdit_super_19(self, showEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(showEvent)
+}
+
+// ChangeEvent calls QTextEdit::changeEvent.
+func (s *QTextEditSuper) ChangeEvent(eArg *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ChangeEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QTextEdit.Super.ChangeEvent")
+	}
+	C.qute_QTextEdit_super_20(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// WheelEvent calls QTextEdit::wheelEvent.
+func (s *QTextEditSuper) WheelEvent(eArg *qtgui.QWheelEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.WheelEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQWheelEvent()), "QTextEdit.Super.WheelEvent")
+	}
+	C.qute_QTextEdit_super_21(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// CreateMimeDataFromSelection calls QTextEdit::createMimeDataFromSelection.
+func (s *QTextEditSuper) CreateMimeDataFromSelection() *qtcore.QMimeData {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.CreateMimeDataFromSelection")
+	r := C.qute_QTextEdit_super_22(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
+}
+
+// CanInsertFromMimeData calls QTextEdit::canInsertFromMimeData.
+func (s *QTextEditSuper) CanInsertFromMimeData(source *qtcore.QMimeData) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.CanInsertFromMimeData")
+	var sourcePtr unsafe.Pointer
+	if source != nil {
+		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQMimeData()), "QTextEdit.Super.CanInsertFromMimeData")
+	}
+	r := C.qute_QTextEdit_super_23(self, sourcePtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(source)
+	return bool(r)
+}
+
+// InsertFromMimeData calls QTextEdit::insertFromMimeData.
+func (s *QTextEditSuper) InsertFromMimeData(source *qtcore.QMimeData) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.InsertFromMimeData")
+	var sourcePtr unsafe.Pointer
+	if source != nil {
+		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQMimeData()), "QTextEdit.Super.InsertFromMimeData")
+	}
+	C.qute_QTextEdit_super_24(self, sourcePtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(source)
+}
+
+// InputMethodEvent calls QTextEdit::inputMethodEvent.
+func (s *QTextEditSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QTextEdit.Super.InputMethodEvent")
+	}
+	C.qute_QTextEdit_super_25(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
+}
+
+// ScrollContentsBy calls QTextEdit::scrollContentsBy.
+func (s *QTextEditSuper) ScrollContentsBy(dx int, dy int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ScrollContentsBy")
+	C.qute_QTextEdit_super_26(self, C.int(dx), C.int(dy))
+	runtime.KeepAlive(s.this)
+}
+
+// DoSetTextCursor calls QTextEdit::doSetTextCursor.
+func (s *QTextEditSuper) DoSetTextCursor(cursor *qtgui.QTextCursor) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.DoSetTextCursor")
+	C.qute_QTextEdit_super_27(self, rt.UseArg(unsafe.Pointer(cursor), "QTextEdit.Super.DoSetTextCursor"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(cursor)
+}
+
+// MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
+func (s *QTextEditSuper) MinimumSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.MinimumSizeHint")
+	r := C.qute_QTextEdit_super_28(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SizeHint calls QAbstractScrollArea::sizeHint.
+func (s *QTextEditSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.SizeHint")
+	r := C.qute_QTextEdit_super_29(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SetupViewport calls QAbstractScrollArea::setupViewport.
+func (s *QTextEditSuper) SetupViewport(viewport *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.SetupViewport")
+	var viewportPtr unsafe.Pointer
+	if viewport != nil {
+		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QTextEdit.Super.SetupViewport")
+	}
+	C.qute_QTextEdit_super_30(self, viewportPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(viewport)
+}
+
+// EventFilter calls QAbstractScrollArea::eventFilter.
+func (s *QTextEditSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.EventFilter")
+	var objectPtr unsafe.Pointer
+	if object != nil {
+		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QTextEdit.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextEdit.Super.EventFilter")
+	}
+	r := C.qute_QTextEdit_super_31(self, objectPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ViewportEvent calls QAbstractScrollArea::viewportEvent.
+func (s *QTextEditSuper) ViewportEvent(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ViewportEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextEdit.Super.ViewportEvent")
+	}
+	r := C.qute_QTextEdit_super_32(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ViewportSizeHint calls QAbstractScrollArea::viewportSizeHint.
+func (s *QTextEditSuper) ViewportSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ViewportSizeHint")
+	r := C.qute_QTextEdit_super_33(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// InitStyleOption calls QFrame::initStyleOption.
+func (s *QTextEditSuper) InitStyleOption(option *QStyleOptionFrame) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.InitStyleOption")
+	C.qute_QTextEdit_super_34(self, rt.UseArg(unsafe.Pointer(option), "QTextEdit.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
+// SetVisible calls QWidget::setVisible.
+func (s *QTextEditSuper) SetVisible(visible bool) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.SetVisible")
+	C.qute_QTextEdit_super_35(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
+}
+
+// HeightForWidth calls QWidget::heightForWidth.
+func (s *QTextEditSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.HeightForWidth")
+	r := C.qute_QTextEdit_super_36(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// HasHeightForWidth calls QWidget::hasHeightForWidth.
+func (s *QTextEditSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.HasHeightForWidth")
+	r := C.qute_QTextEdit_super_37(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// EnterEvent calls QWidget::enterEvent.
+func (s *QTextEditSuper) EnterEvent(event *qtgui.QEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.EnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QTextEdit.Super.EnterEvent")
+	}
+	C.qute_QTextEdit_super_38(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// LeaveEvent calls QWidget::leaveEvent.
+func (s *QTextEditSuper) LeaveEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.LeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextEdit.Super.LeaveEvent")
+	}
+	C.qute_QTextEdit_super_39(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MoveEvent calls QWidget::moveEvent.
+func (s *QTextEditSuper) MoveEvent(event *qtgui.QMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.MoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QTextEdit.Super.MoveEvent")
+	}
+	C.qute_QTextEdit_super_40(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CloseEvent calls QWidget::closeEvent.
+func (s *QTextEditSuper) CloseEvent(event *qtgui.QCloseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.CloseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QTextEdit.Super.CloseEvent")
+	}
+	C.qute_QTextEdit_super_41(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QTextEditSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QTextEdit.Super.TabletEvent")
+	}
+	C.qute_QTextEdit_super_42(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QTextEditSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QTextEdit.Super.ActionEvent")
+	}
+	C.qute_QTextEdit_super_43(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HideEvent calls QWidget::hideEvent.
+func (s *QTextEditSuper) HideEvent(event *qtgui.QHideEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.HideEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QTextEdit.Super.HideEvent")
+	}
+	C.qute_QTextEdit_super_44(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QTextEditSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTextEdit.Super.ChildEvent")
+	}
+	C.qute_QTextEdit_super_45(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QTextEditSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextEdit.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextEdit.Super.CustomEvent")
+	}
+	C.qute_QTextEdit_super_46(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ZoomInF wraps the protected QTextEdit::zoomInF for subclasses.
+func (b *QTextEditBase) ZoomInF(rangeArg float32) {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ZoomInF")
+	C.qute_QTextEdit_prot_zoomInF(self, C.float(rangeArg))
+	runtime.KeepAlive(this)
+}
+
+// SetViewportMargins wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
+func (b *QTextEditBase) SetViewportMargins(margins qtcore.QMargins) {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.SetViewportMargins")
+	C.qute_QTextEdit_prot_setViewportMargins(self, cQMargins(margins))
+	runtime.KeepAlive(this)
+}
+
+// ViewportMargins wraps the protected QAbstractScrollArea::viewportMargins for subclasses.
+func (b *QTextEditBase) ViewportMargins() qtcore.QMargins {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.ViewportMargins")
+	r := C.qute_QTextEdit_prot_viewportMargins(self)
+	runtime.KeepAlive(this)
+	return goQMargins(r)
+}
+
+// DrawFrame wraps the protected QFrame::drawFrame for subclasses.
+func (b *QTextEditBase) DrawFrame(painter qtgui.QPainterLike) {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.DrawFrame")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTextEdit.DrawFrame")
+	}
+	C.qute_QTextEdit_prot_drawFrame(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
+func (b *QTextEditBase) UpdateMicroFocus() {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.UpdateMicroFocus")
+	C.qute_QTextEdit_prot_updateMicroFocus(self)
+	runtime.KeepAlive(this)
+}
+
+// Create wraps the protected QWidget::create for subclasses.
+func (b *QTextEditBase) Create() {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Create")
+	C.qute_QTextEdit_prot_create(self)
+	runtime.KeepAlive(this)
+}
+
+// Destroy wraps the protected QWidget::destroy for subclasses.
+func (b *QTextEditBase) Destroy() {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.Destroy")
+	C.qute_QTextEdit_prot_destroy(self)
+	runtime.KeepAlive(this)
+}
+
+// FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
+func (b *QTextEditBase) FocusNextChild() bool {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FocusNextChild")
+	r := C.qute_QTextEdit_prot_focusNextChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
+func (b *QTextEditBase) FocusPreviousChild() bool {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.FocusPreviousChild")
+	r := C.qute_QTextEdit_prot_focusPreviousChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QTextEditBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextEdit.GetDecodedMetricF")
+	r := C.qute_QTextEdit_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQTextEditWith constructs a QTextEdit whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTextEditWith(v QTextEditSubclass, parent QWidgetLike) *QTextEdit {
+	rt.CheckThread("NewQTextEditWith")
+	base := v.quteQTextEditBase()
+	if base.QTextEdit != nil {
+		panic("NewQTextEditWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTextEditWith")
+	}
+	p := C.qute_QTextEdit_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTextEdit", mode)
+	base.QTextEdit = rt.View[QTextEdit](h, p)
+	id := h.SetSelf(v, qTextEditVTable)
+	mask := rt.Mask(v, qTextEditVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTextEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTextEdit
+}

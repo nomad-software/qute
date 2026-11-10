@@ -180,3 +180,188 @@ func (this *QTextFrame) ParentFrame() *QTextFrame {
 	runtime.KeepAlive(this)
 	return rt.View[QTextFrame](rt.WrapClass(r, "QTextFrame", rt.KeepOrBorrow), r)
 }
+
+var qTextFrameVTable = []rt.Virtual{
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QTextFrameBase is embedded in Go types that subclass QTextFrame:
+//
+//	type MyTextFrame struct{ qtgui.QTextFrameBase }
+//
+// Define any of the virtual methods listed on QTextFrameSuper to override them,
+// then construct the value with NewQTextFrameWith. Call b.Super().X() for the
+// base implementation.
+type QTextFrameBase struct{ *QTextFrame }
+
+func (b *QTextFrameBase) quteQTextFrameBase() *QTextFrameBase { return b }
+
+// QTextFrameSubclass is implemented by every type that embeds QTextFrameBase.
+type QTextFrameSubclass interface{ quteQTextFrameBase() *QTextFrameBase }
+
+// Super returns the C++ base implementations of QTextFrame's virtual methods.
+func (b *QTextFrameBase) Super() *QTextFrameSuper { return &QTextFrameSuper{this: b.QTextFrame} }
+
+// QTextFrameSuper calls the C++ base implementations of QTextFrame's virtuals.
+type QTextFrameSuper struct{ this *QTextFrame }
+
+// Event calls QObject::event.
+func (s *QTextFrameSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextFrame.Super.Event")
+	}
+	r := C.qute_QTextFrame_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QTextFrameSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QTextFrame.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextFrame.Super.EventFilter")
+	}
+	r := C.qute_QTextFrame_super_1(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QTextFrameSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QTextFrame.Super.TimerEvent")
+	}
+	C.qute_QTextFrame_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QTextFrameSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTextFrame.Super.ChildEvent")
+	}
+	C.qute_QTextFrame_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QTextFrameSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextFrame.Super.CustomEvent")
+	}
+	C.qute_QTextFrame_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// SetFormat wraps the protected QTextObject::setFormat for subclasses.
+func (b *QTextFrameBase) SetFormat(format *QTextFormat) {
+	this := b.QTextFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextFrame.SetFormat")
+	C.qute_QTextFrame_prot_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextFrame.SetFormat"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(format)
+}
+
+// NewQTextFrameWith constructs a QTextFrame whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTextFrameWith(v QTextFrameSubclass, doc QTextDocumentLike) *QTextFrame {
+	rt.CheckThread("NewQTextFrameWith")
+	base := v.quteQTextFrameBase()
+	if base.QTextFrame != nil {
+		panic("NewQTextFrameWith: value is already constructed; use a fresh value")
+	}
+	var docPtr unsafe.Pointer
+	if doc != nil {
+		docPtr = rt.UseArg(unsafe.Pointer(doc.AsQTextDocument()), "NewQTextFrameWith")
+	}
+	p := C.qute_QTextFrame_new_shim(docPtr)
+	runtime.KeepAlive(doc)
+	mode := rt.NewOwned
+	if docPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTextFrame", mode)
+	base.QTextFrame = rt.View[QTextFrame](h, p)
+	id := h.SetSelf(v, qTextFrameVTable)
+	mask := rt.Mask(v, qTextFrameVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTextFrame_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTextFrame
+}

@@ -36,7 +36,7 @@ func TestSvgItemKeepsSharedRenderer(t *testing.T) {
 	var view *qtwidgets.QGraphicsView
 	qutetest.Run(t, func() {
 		scene := qtwidgets.NewQGraphicsScene(nil)
-		item := qtsvgwidgets.NewQGraphicsSvgItem()
+		item := qtsvgwidgets.NewQGraphicsSvgItem(nil)
 		item.SetSharedRenderer(qtsvg.NewQSvgRendererWithBytes([]byte(redSquare), nil))
 		scene.AddItem(item)
 		view = qtwidgets.NewQGraphicsViewWithScene(scene, nil)

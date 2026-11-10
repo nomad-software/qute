@@ -127,3 +127,229 @@ func (this *QValidator) OnChanged(f func()) qtcore.Connection {
 	})
 	return rt.NewConnection(C.qute_QValidator_changed(self, C.uintptr_t(id)))
 }
+
+var qValidatorVTable = []rt.Virtual{
+	{Name: "Validate", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Validate(string, int) (QValidatorState, string, int)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			var stringArg string
+			if a[0] != nil {
+				stringArg = quteStr(*(*C.qute_str)(a[0]))
+				*(*C.qute_str)(a[0]) = C.qute_str{}
+			}
+			var arg1 int
+			if a[1] != nil {
+				arg1 = int(*(*C.int)(a[1]))
+			}
+			r, o0, o1 := v.(interface {
+				Validate(string, int) (QValidatorState, string, int)
+			}).Validate(stringArg, arg1)
+			*(*C.int64_t)(ret) = C.int64_t(r)
+			if a[0] != nil {
+				*(*C.qute_str)(a[0]) = quteCStr(o0)
+			}
+			if a[1] != nil {
+				*(*C.int)(a[1]) = C.int(o1)
+			}
+		}},
+	{Name: "Fixup", Has: func(v any) bool { _, ok := v.(interface{ Fixup(string) string }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			var stringArg string
+			if a[0] != nil {
+				stringArg = quteStr(*(*C.qute_str)(a[0]))
+				*(*C.qute_str)(a[0]) = C.qute_str{}
+			}
+			o0 := v.(interface{ Fixup(string) string }).Fixup(stringArg)
+			if a[0] != nil {
+				*(*C.qute_str)(a[0]) = quteCStr(o0)
+			}
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QValidatorBase is embedded in Go types that subclass QValidator:
+//
+//	type MyValidator struct{ qtgui.QValidatorBase }
+//
+// Define any of the virtual methods listed on QValidatorSuper to override them,
+// then construct the value with NewQValidatorWith. Call b.Super().X() for the
+// base implementation.
+type QValidatorBase struct{ *QValidator }
+
+func (b *QValidatorBase) quteQValidatorBase() *QValidatorBase { return b }
+
+// QValidatorSubclass is implemented by every type that embeds QValidatorBase.
+type QValidatorSubclass interface{ quteQValidatorBase() *QValidatorBase }
+
+// Super returns the C++ base implementations of QValidator's virtual methods.
+func (b *QValidatorBase) Super() *QValidatorSuper { return &QValidatorSuper{this: b.QValidator} }
+
+// QValidatorSuper calls the C++ base implementations of QValidator's virtuals.
+type QValidatorSuper struct{ this *QValidator }
+
+// Fixup calls QValidator::fixup.
+func (s *QValidatorSuper) Fixup(stringArg string) string {
+	self := rt.Use(unsafe.Pointer(s.this), "QValidator.Super.Fixup")
+	var stringArgOut C.qute_str
+	C.qute_QValidator_super_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), &stringArgOut)
+	runtime.KeepAlive(s.this)
+	return quteStr(stringArgOut)
+}
+
+// Event calls QObject::event.
+func (s *QValidatorSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QValidator.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QValidator.Super.Event")
+	}
+	r := C.qute_QValidator_super_2(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QValidatorSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QValidator.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QValidator.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QValidator.Super.EventFilter")
+	}
+	r := C.qute_QValidator_super_3(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QValidatorSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QValidator.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QValidator.Super.TimerEvent")
+	}
+	C.qute_QValidator_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QValidatorSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QValidator.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QValidator.Super.ChildEvent")
+	}
+	C.qute_QValidator_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QValidatorSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QValidator.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QValidator.Super.CustomEvent")
+	}
+	C.qute_QValidator_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQValidatorWith constructs a QValidator whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQValidatorWith(v QValidatorSubclass, parent qtcore.QObjectLike) *QValidator {
+	rt.CheckThread("NewQValidatorWith")
+	base := v.quteQValidatorBase()
+	if base.QValidator != nil {
+		panic("NewQValidatorWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQValidatorWith")
+	}
+	p := C.qute_QValidator_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QValidator", mode)
+	base.QValidator = rt.View[QValidator](h, p)
+	id := h.SetSelf(v, qValidatorVTable)
+	mask := rt.Mask(v, qValidatorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QValidator
+}

@@ -541,6 +541,24 @@ var qDialogVTable = []rt.Virtual{
 			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
 			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
 		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -594,6 +612,22 @@ var qDialogVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -961,6 +995,30 @@ func (s *QDialogSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	runtime.KeepAlive(event)
 }
 
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QDialogSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDialog.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QDialog.Super.TabletEvent")
+	}
+	C.qute_QDialog_super_29(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QDialogSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDialog.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QDialog.Super.ActionEvent")
+	}
+	C.qute_QDialog_super_30(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
 // DragEnterEvent calls QWidget::dragEnterEvent.
 func (s *QDialogSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QDialog.Super.DragEnterEvent")
@@ -968,7 +1026,7 @@ func (s *QDialogSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QDialog.Super.DragEnterEvent")
 	}
-	C.qute_QDialog_super_29(self, eventPtr)
+	C.qute_QDialog_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -980,7 +1038,7 @@ func (s *QDialogSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QDialog.Super.DragMoveEvent")
 	}
-	C.qute_QDialog_super_30(self, eventPtr)
+	C.qute_QDialog_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -992,7 +1050,7 @@ func (s *QDialogSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QDialog.Super.DragLeaveEvent")
 	}
-	C.qute_QDialog_super_31(self, eventPtr)
+	C.qute_QDialog_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1004,7 +1062,7 @@ func (s *QDialogSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QDialog.Super.DropEvent")
 	}
-	C.qute_QDialog_super_32(self, eventPtr)
+	C.qute_QDialog_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1016,7 +1074,7 @@ func (s *QDialogSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QDialog.Super.HideEvent")
 	}
-	C.qute_QDialog_super_33(self, eventPtr)
+	C.qute_QDialog_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1028,15 +1086,27 @@ func (s *QDialogSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDialog.Super.ChangeEvent")
 	}
-	C.qute_QDialog_super_34(self, eventPtr)
+	C.qute_QDialog_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QDialogSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDialog.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QDialog.Super.InputMethodEvent")
+	}
+	C.qute_QDialog_super_37(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QDialogSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QDialog.Super.FocusNextPrevChild")
-	r := C.qute_QDialog_super_35(self, C.bool(next))
+	r := C.qute_QDialog_super_38(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1048,7 +1118,7 @@ func (s *QDialogSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QDialog.Super.TimerEvent")
 	}
-	C.qute_QDialog_super_36(self, eventPtr)
+	C.qute_QDialog_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1060,7 +1130,7 @@ func (s *QDialogSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QDialog.Super.ChildEvent")
 	}
-	C.qute_QDialog_super_37(self, eventPtr)
+	C.qute_QDialog_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1072,65 +1142,72 @@ func (s *QDialogSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDialog.Super.CustomEvent")
 	}
-	C.qute_QDialog_super_38(self, eventPtr)
+	C.qute_QDialog_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // AdjustPosition wraps the protected QDialog::adjustPosition for subclasses.
 func (b *QDialogBase) AdjustPosition(widget QWidgetLike) {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.AdjustPosition")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.AdjustPosition")
 	var widgetPtr unsafe.Pointer
 	if widget != nil {
 		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QDialog.AdjustPosition")
 	}
 	C.qute_QDialog_prot_adjustPosition(self, widgetPtr)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QDialogBase) UpdateMicroFocus() {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.UpdateMicroFocus")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.UpdateMicroFocus")
 	C.qute_QDialog_prot_updateMicroFocus(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QDialogBase) Create() {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.Create")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.Create")
 	C.qute_QDialog_prot_create(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QDialogBase) Destroy() {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.Destroy")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.Destroy")
 	C.qute_QDialog_prot_destroy(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QDialogBase) FocusNextChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.FocusNextChild")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.FocusNextChild")
 	r := C.qute_QDialog_prot_focusNextChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
 func (b *QDialogBase) FocusPreviousChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.FocusPreviousChild")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.FocusPreviousChild")
 	r := C.qute_QDialog_prot_focusPreviousChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QDialogBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
-	self := rt.Use(unsafe.Pointer(b.QDialog), "QDialog.GetDecodedMetricF")
+	this := b.QDialog // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDialog.GetDecodedMetricF")
 	r := C.qute_QDialog_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

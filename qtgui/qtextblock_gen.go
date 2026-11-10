@@ -260,6 +260,42 @@ func (this *QTextBlock) TextList() *QTextList {
 	return rt.View[QTextList](rt.WrapClass(r, "QTextList", rt.KeepOrBorrow), r)
 }
 
+// UserData wraps QTextBlock::userData.
+//
+//	C++: QTextBlockUserData * QTextBlock::userData() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextblock.html#userData
+func (this *QTextBlock) UserData() *QTextBlockUserData {
+	self := rt.Use(unsafe.Pointer(this), "QTextBlock.UserData")
+	r := C.qute_QTextBlock_userData(self)
+	runtime.KeepAlive(this)
+	return rt.View[QTextBlockUserData](rt.WrapClassFrom(r, "QTextBlockUserData", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(this)).H), r)
+}
+
+// SetUserData wraps QTextBlock::setUserData.
+//
+//	C++: void QTextBlock::setUserData(QTextBlockUserData * data)
+//
+// Ownership: data becomes Parented: Qt frees it from now on.
+//
+// The document takes ownership of data and deletes the block's previous user data. Embed QTextBlockUserDataBase in a Go type to store Go state per block; GoValue returns it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextblock.html#setUserData
+func (this *QTextBlock) SetUserData(data QTextBlockUserDataLike) {
+	self := rt.Use(unsafe.Pointer(this), "QTextBlock.SetUserData")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQTextBlockUserData()), "QTextBlock.SetUserData")
+	}
+	C.qute_QTextBlock_setUserData(self, dataPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(data)
+	rt.TransferTo(rt.RefOf(unsafe.Pointer(this)).H, dataH)
+}
+
 // UserState wraps QTextBlock::userState.
 //
 //	C++: int QTextBlock::userState() const

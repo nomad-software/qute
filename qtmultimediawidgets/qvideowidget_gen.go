@@ -391,6 +391,24 @@ var qVideoWidgetVTable = []rt.Virtual{
 				ContextMenuEvent(*qtgui.QContextMenuEvent)
 			}).ContextMenuEvent(event)
 		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -435,6 +453,22 @@ var qVideoWidgetVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -780,6 +814,30 @@ func (s *QVideoWidgetSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 	runtime.KeepAlive(event)
 }
 
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QVideoWidgetSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoWidget.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QVideoWidget.Super.TabletEvent")
+	}
+	C.qute_QVideoWidget_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QVideoWidgetSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoWidget.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QVideoWidget.Super.ActionEvent")
+	}
+	C.qute_QVideoWidget_super_25(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
 // DragEnterEvent calls QWidget::dragEnterEvent.
 func (s *QVideoWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QVideoWidget.Super.DragEnterEvent")
@@ -787,7 +845,7 @@ func (s *QVideoWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QVideoWidget.Super.DragEnterEvent")
 	}
-	C.qute_QVideoWidget_super_24(self, eventPtr)
+	C.qute_QVideoWidget_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -799,7 +857,7 @@ func (s *QVideoWidgetSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QVideoWidget.Super.DragMoveEvent")
 	}
-	C.qute_QVideoWidget_super_25(self, eventPtr)
+	C.qute_QVideoWidget_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -811,7 +869,7 @@ func (s *QVideoWidgetSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QVideoWidget.Super.DragLeaveEvent")
 	}
-	C.qute_QVideoWidget_super_26(self, eventPtr)
+	C.qute_QVideoWidget_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -823,7 +881,7 @@ func (s *QVideoWidgetSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QVideoWidget.Super.DropEvent")
 	}
-	C.qute_QVideoWidget_super_27(self, eventPtr)
+	C.qute_QVideoWidget_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -835,15 +893,27 @@ func (s *QVideoWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QVideoWidget.Super.ChangeEvent")
 	}
-	C.qute_QVideoWidget_super_28(self, eventPtr)
+	C.qute_QVideoWidget_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QVideoWidgetSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QVideoWidget.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QVideoWidget.Super.InputMethodEvent")
+	}
+	C.qute_QVideoWidget_super_31(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QVideoWidgetSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QVideoWidget.Super.FocusNextPrevChild")
-	r := C.qute_QVideoWidget_super_29(self, C.bool(next))
+	r := C.qute_QVideoWidget_super_32(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -859,7 +929,7 @@ func (s *QVideoWidgetSuper) EventFilter(watched *qtcore.QObject, event *qtcore.Q
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QVideoWidget.Super.EventFilter")
 	}
-	r := C.qute_QVideoWidget_super_30(self, watchedPtr, eventPtr)
+	r := C.qute_QVideoWidget_super_33(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -873,7 +943,7 @@ func (s *QVideoWidgetSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QVideoWidget.Super.TimerEvent")
 	}
-	C.qute_QVideoWidget_super_31(self, eventPtr)
+	C.qute_QVideoWidget_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -885,7 +955,7 @@ func (s *QVideoWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QVideoWidget.Super.ChildEvent")
 	}
-	C.qute_QVideoWidget_super_32(self, eventPtr)
+	C.qute_QVideoWidget_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -897,53 +967,59 @@ func (s *QVideoWidgetSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QVideoWidget.Super.CustomEvent")
 	}
-	C.qute_QVideoWidget_super_33(self, eventPtr)
+	C.qute_QVideoWidget_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QVideoWidgetBase) UpdateMicroFocus() {
-	self := rt.Use(unsafe.Pointer(b.QVideoWidget), "QVideoWidget.UpdateMicroFocus")
+	this := b.QVideoWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QVideoWidget.UpdateMicroFocus")
 	C.qute_QVideoWidget_prot_updateMicroFocus(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QVideoWidgetBase) Create() {
-	self := rt.Use(unsafe.Pointer(b.QVideoWidget), "QVideoWidget.Create")
+	this := b.QVideoWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QVideoWidget.Create")
 	C.qute_QVideoWidget_prot_create(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QVideoWidgetBase) Destroy() {
-	self := rt.Use(unsafe.Pointer(b.QVideoWidget), "QVideoWidget.Destroy")
+	this := b.QVideoWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QVideoWidget.Destroy")
 	C.qute_QVideoWidget_prot_destroy(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QVideoWidgetBase) FocusNextChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QVideoWidget), "QVideoWidget.FocusNextChild")
+	this := b.QVideoWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QVideoWidget.FocusNextChild")
 	r := C.qute_QVideoWidget_prot_focusNextChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
 func (b *QVideoWidgetBase) FocusPreviousChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QVideoWidget), "QVideoWidget.FocusPreviousChild")
+	this := b.QVideoWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QVideoWidget.FocusPreviousChild")
 	r := C.qute_QVideoWidget_prot_focusPreviousChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QVideoWidgetBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
-	self := rt.Use(unsafe.Pointer(b.QVideoWidget), "QVideoWidget.GetDecodedMetricF")
+	this := b.QVideoWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QVideoWidget.GetDecodedMetricF")
 	r := C.qute_QVideoWidget_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

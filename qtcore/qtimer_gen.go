@@ -282,3 +282,172 @@ func (this *QTimer) OnTimeout(f func()) Connection {
 	})
 	return rt.NewConnection(C.qute_QTimer_timeout(self, C.uintptr_t(id)))
 }
+
+var qTimerVTable = []rt.Virtual{
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			timerEventP := *(*unsafe.Pointer)(a[0])
+			timerEventH := rt.WrapClass(timerEventP, "QTimerEvent", rt.NewScoped)
+			defer timerEventH.Expire()
+			timerEvent := rt.View[QTimerEvent](timerEventH, timerEventP)
+			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(timerEvent)
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QTimerBase is embedded in Go types that subclass QTimer:
+//
+//	type MyTimer struct{ qtcore.QTimerBase }
+//
+// Define any of the virtual methods listed on QTimerSuper to override them,
+// then construct the value with NewQTimerWith. Call b.Super().X() for the
+// base implementation.
+type QTimerBase struct{ *QTimer }
+
+func (b *QTimerBase) quteQTimerBase() *QTimerBase { return b }
+
+// QTimerSubclass is implemented by every type that embeds QTimerBase.
+type QTimerSubclass interface{ quteQTimerBase() *QTimerBase }
+
+// Super returns the C++ base implementations of QTimer's virtual methods.
+func (b *QTimerBase) Super() *QTimerSuper { return &QTimerSuper{this: b.QTimer} }
+
+// QTimerSuper calls the C++ base implementations of QTimer's virtuals.
+type QTimerSuper struct{ this *QTimer }
+
+// TimerEvent calls QTimer::timerEvent.
+func (s *QTimerSuper) TimerEvent(timerEvent *QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimer.Super.TimerEvent")
+	var timerEventPtr unsafe.Pointer
+	if timerEvent != nil {
+		timerEventPtr = rt.UseArg(unsafe.Pointer(timerEvent.AsQTimerEvent()), "QTimer.Super.TimerEvent")
+	}
+	C.qute_QTimer_super_0(self, timerEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(timerEvent)
+}
+
+// Event calls QObject::event.
+func (s *QTimerSuper) Event(event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimer.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTimer.Super.Event")
+	}
+	r := C.qute_QTimer_super_1(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QObject::eventFilter.
+func (s *QTimerSuper) EventFilter(watched *QObject, event *QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimer.Super.EventFilter")
+	var watchedPtr unsafe.Pointer
+	if watched != nil {
+		watchedPtr = rt.UseArg(unsafe.Pointer(watched.AsQObject()), "QTimer.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTimer.Super.EventFilter")
+	}
+	r := C.qute_QTimer_super_2(self, watchedPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(watched)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QTimerSuper) ChildEvent(event *QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimer.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTimer.Super.ChildEvent")
+	}
+	C.qute_QTimer_super_3(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QTimerSuper) CustomEvent(event *QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimer.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTimer.Super.CustomEvent")
+	}
+	C.qute_QTimer_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// NewQTimerWith constructs a QTimer whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTimerWith(v QTimerSubclass, parent QObjectLike) *QTimer {
+	rt.CheckThread("NewQTimerWith")
+	base := v.quteQTimerBase()
+	if base.QTimer != nil {
+		panic("NewQTimerWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTimerWith")
+	}
+	p := C.qute_QTimer_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTimer", mode)
+	base.QTimer = rt.View[QTimer](h, p)
+	id := h.SetSelf(v, qTimerVTable)
+	mask := rt.Mask(v, qTimerVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTimer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTimer
+}

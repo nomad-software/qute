@@ -64,6 +64,17 @@ func (this *QTableWidgetItem) Delete() {
 	this.quteRef.H.Delete("QTableWidgetItem.Delete")
 }
 
+// GoValue returns the Go value the object was built from with a
+// New<Class>With constructor (the Go subclass), or nil for an object Qt or
+// a plain constructor made. It finds the Go type behind a pointer Qt hands
+// back: d, ok := view.ItemDelegate().GoValue().(*MyDelegate).
+func (this *QTableWidgetItem) GoValue() any {
+	if this == nil {
+		return nil
+	}
+	return this.quteRef.H.GoValue()
+}
+
 // Keep pins the object so GC never frees it, until Unkeep.
 func (this *QTableWidgetItem) Keep() {
 	if this != nil {
@@ -595,4 +606,140 @@ func (this *QTableWidgetItem) Type() int {
 	r := C.qute_QTableWidgetItem_type(self)
 	runtime.KeepAlive(this)
 	return int(r)
+}
+
+var qTableWidgetItemVTable = []rt.Virtual{
+	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QTableWidgetItem }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ Clone() *QTableWidgetItem }).Clone()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTableWidgetItem.Clone")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "Data", Has: func(v any) bool { _, ok := v.(interface{ Data(int) *qtcore.QVariant }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			role := int(*(*C.int)(a[0]))
+			r := v.(interface{ Data(int) *qtcore.QVariant }).Data(role)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTableWidgetItem.Data")
+		}},
+	{Name: "SetData", Has: func(v any) bool { _, ok := v.(interface{ SetData(int, *qtcore.QVariant) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			role := int(*(*C.int)(a[0]))
+			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			v.(interface{ SetData(int, *qtcore.QVariant) }).SetData(role, value)
+		}},
+	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inP := *(*unsafe.Pointer)(a[0])
+			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
+			defer inH.Expire()
+			in := rt.View[qtcore.QDataStream](inH, inP)
+			v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+		}},
+	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			outP := *(*unsafe.Pointer)(a[0])
+			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
+			defer outH.Expire()
+			out := rt.View[qtcore.QDataStream](outH, outP)
+			v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+		}},
+}
+
+// QTableWidgetItemBase is embedded in Go types that subclass QTableWidgetItem:
+//
+//	type MyTableWidgetItem struct{ qtwidgets.QTableWidgetItemBase }
+//
+// Define any of the virtual methods listed on QTableWidgetItemSuper to override them,
+// then construct the value with NewQTableWidgetItemWith. Call b.Super().X() for the
+// base implementation.
+type QTableWidgetItemBase struct{ *QTableWidgetItem }
+
+func (b *QTableWidgetItemBase) quteQTableWidgetItemBase() *QTableWidgetItemBase { return b }
+
+// QTableWidgetItemSubclass is implemented by every type that embeds QTableWidgetItemBase.
+type QTableWidgetItemSubclass interface{ quteQTableWidgetItemBase() *QTableWidgetItemBase }
+
+// Super returns the C++ base implementations of QTableWidgetItem's virtual methods.
+func (b *QTableWidgetItemBase) Super() *QTableWidgetItemSuper {
+	return &QTableWidgetItemSuper{this: b.QTableWidgetItem}
+}
+
+// QTableWidgetItemSuper calls the C++ base implementations of QTableWidgetItem's virtuals.
+type QTableWidgetItemSuper struct{ this *QTableWidgetItem }
+
+// Clone calls QTableWidgetItem::clone.
+func (s *QTableWidgetItemSuper) Clone() *QTableWidgetItem {
+	self := rt.Use(unsafe.Pointer(s.this), "QTableWidgetItem.Super.Clone")
+	r := C.qute_QTableWidgetItem_super_0(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[QTableWidgetItem](rt.WrapClass(r, "QTableWidgetItem", rt.KeepOrBorrow), r)
+}
+
+// Data calls QTableWidgetItem::data.
+func (s *QTableWidgetItemSuper) Data(role int) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QTableWidgetItem.Super.Data")
+	r := C.qute_QTableWidgetItem_super_1(self, C.int(role))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// SetData calls QTableWidgetItem::setData.
+func (s *QTableWidgetItemSuper) SetData(role int, value *qtcore.QVariant) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTableWidgetItem.Super.SetData")
+	C.qute_QTableWidgetItem_super_2(self, C.int(role), rt.UseArg(unsafe.Pointer(value), "QTableWidgetItem.Super.SetData"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(value)
+}
+
+// Read calls QTableWidgetItem::read.
+func (s *QTableWidgetItemSuper) Read(in *qtcore.QDataStream) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTableWidgetItem.Super.Read")
+	var inPtr unsafe.Pointer
+	if in != nil {
+		inPtr = rt.UseArg(unsafe.Pointer(in.AsQDataStream()), "QTableWidgetItem.Super.Read")
+	}
+	C.qute_QTableWidgetItem_super_3(self, inPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(in)
+}
+
+// Write calls QTableWidgetItem::write.
+func (s *QTableWidgetItemSuper) Write(out *qtcore.QDataStream) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTableWidgetItem.Super.Write")
+	var outPtr unsafe.Pointer
+	if out != nil {
+		outPtr = rt.UseArg(unsafe.Pointer(out.AsQDataStream()), "QTableWidgetItem.Super.Write")
+	}
+	C.qute_QTableWidgetItem_super_4(self, outPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(out)
+}
+
+// NewQTableWidgetItemWith constructs a QTableWidgetItem whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTableWidgetItemWith(v QTableWidgetItemSubclass) *QTableWidgetItem {
+	rt.CheckThread("NewQTableWidgetItemWith")
+	base := v.quteQTableWidgetItemBase()
+	if base.QTableWidgetItem != nil {
+		panic("NewQTableWidgetItemWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QTableWidgetItem_new_shim()
+	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	base.QTableWidgetItem = rt.View[QTableWidgetItem](h, p)
+	id := h.SetSelf(v, qTableWidgetItemVTable)
+	mask := rt.Mask(v, qTableWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTableWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTableWidgetItem
 }

@@ -2,7 +2,7 @@ module: QtGui
 package: qtgui
 classes:
   QGuiApplication: { no-construct: true }
-  QPaintDevice: { no-construct: true }
+  QPaintDevice: {}
   QImage:
     kind: value
     memory: { size: "$self->sizeInBytes()", changed-by: [load, loadFromData, convertTo] }
@@ -28,7 +28,7 @@ classes:
   QClipboard: { no-construct: true }
   QScreen: { no-construct: true }
   QStandardItemModel: {}
-  QStandardItem: { notify-dtor: true }
+  QStandardItem: {}
   QValidator: {}
   QIntValidator: {}
   QDoubleValidator: {}
@@ -60,7 +60,7 @@ classes:
   QTextFrameFormat: { kind: value }
   QTextBlock: { kind: value, depends-on: document }
   QTextOption: { kind: value }
-  QTextObject: { no-construct: true }
+  QTextObject: {}
   QTextFrame: {}
   QTextDocumentFragment: { kind: value }
   QBitmap:
@@ -73,7 +73,7 @@ classes:
     kind: value
     memory: { size: "$self->size()", changed-by: [load, setData] }
   "QFont::Tag": { kind: value }
-  QSurface: { no-construct: true }
+  QSurface: {}
   QWindow: {}
   QSessionManager: { no-construct: true }
   QPixelFormat: { kind: value }
@@ -98,7 +98,13 @@ classes:
   "QPainterPath::Element": { kind: value }
   QAbstractFileIconProvider: {}
   QHelpEvent: { kind: event }
-  QPagedPaintDevice: { no-construct: true }
+  QInputMethodEvent: { kind: event }
+  "QInputMethodEvent::Attribute": { kind: value }
+  QActionEvent: { kind: event }
+  QTabletEvent: { kind: event }
+  QTouchEvent: { kind: event }
+  QExposeEvent: { kind: event }
+  QPagedPaintDevice: {}
   QPdfWriter: {}
   QVector3D: { kind: value }
   QVector4D: { kind: value }
@@ -110,7 +116,9 @@ classes:
   QTextTableFormat: { kind: value }
   QTextTableCellFormat: { kind: value }
   QTextImageFormat: { kind: value }
-  QTextBlockGroup: { no-construct: true }
+  QTextBlockGroup: {}
+  QSyntaxHighlighter: {}
+  QTextBlockUserData: {}
   QTextList: { no-construct: true }
   QTextTable: { no-construct: true }
   QTextTableCell:
@@ -137,4 +145,4 @@ classes:
   QOpenGLFunctions: { raw-pointers: true }
   QOpenGLExtraFunctions: { raw-pointers: true }
   QOffscreenSurface: {}
-  QPaintDeviceWindow: { no-construct: true }
+  QPaintDeviceWindow: {}

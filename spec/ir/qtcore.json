@@ -52296,6 +52296,48 @@
        "value": 128
       }
      ]
+    },
+    {
+     "name": "ContinuationType",
+     "protected": true,
+     "scope": "QFutureInterfaceBase",
+     "scoped": true,
+     "underlying": "unsigned char",
+     "values": [
+      {
+       "name": "Unknown",
+       "value": 0
+      },
+      {
+       "name": "Then",
+       "value": 1
+      },
+      {
+       "name": "OnFailed",
+       "value": 2
+      },
+      {
+       "name": "OnCanceled",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "name": "CancelMode",
+     "protected": true,
+     "scope": "QFutureInterfaceBase",
+     "scoped": true,
+     "underlying": "int",
+     "values": [
+      {
+       "name": "CancelOnly",
+       "value": 0
+      },
+      {
+       "name": "CancelAndFinish",
+       "value": 1
+      }
+     ]
     }
    ],
    "fields": [],
@@ -97180,7 +97222,16 @@
     "access": "public",
     "virtual": false
    },
-   "enums": [],
+   "enums": [
+    {
+     "name": "System",
+     "protected": true,
+     "scope": "QRandomGenerator",
+     "scoped": false,
+     "underlying": "unsigned int",
+     "values": []
+    }
+   ],
    "fields": [],
    "flags": [],
    "gadget": false,

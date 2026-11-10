@@ -494,3 +494,1164 @@ func (this *QTextBrowser) OnAnchorClicked(f func(url *qtcore.QUrl)) qtcore.Conne
 	})
 	return rt.NewConnection(C.qute_QTextBrowser_anchorClicked(self, C.uintptr_t(id)))
 }
+
+var qTextBrowserVTable = []rt.Virtual{
+	{Name: "LoadResource", Has: func(v any) bool {
+		_, ok := v.(interface {
+			LoadResource(int, *qtcore.QUrl) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			typeArg := int(*(*C.int)(a[0]))
+			name := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			r := v.(interface {
+				LoadResource(int, *qtcore.QUrl) *qtcore.QVariant
+			}).LoadResource(typeArg, name)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextBrowser.LoadResource")
+		}},
+	{Name: "Backward", Has: func(v any) bool { _, ok := v.(interface{ Backward() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Backward() }).Backward()
+		}},
+	{Name: "Forward", Has: func(v any) bool { _, ok := v.(interface{ Forward() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Forward() }).Forward()
+		}},
+	{Name: "Home", Has: func(v any) bool { _, ok := v.(interface{ Home() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Home() }).Home()
+		}},
+	{Name: "Reload", Has: func(v any) bool { _, ok := v.(interface{ Reload() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ Reload() }).Reload()
+		}},
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(eArg)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			evP := *(*unsafe.Pointer)(a[0])
+			evH := rt.WrapClass(evP, "QKeyEvent", rt.NewScoped)
+			defer evH.Expire()
+			ev := rt.View[qtgui.QKeyEvent](evH, evP)
+			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(ev)
+		}},
+	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			evP := *(*unsafe.Pointer)(a[0])
+			evH := rt.WrapClass(evP, "QMouseEvent", rt.NewScoped)
+			defer evH.Expire()
+			ev := rt.View[qtgui.QMouseEvent](evH, evP)
+			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(ev)
+		}},
+	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			evP := *(*unsafe.Pointer)(a[0])
+			evH := rt.WrapClass(evP, "QMouseEvent", rt.NewScoped)
+			defer evH.Expire()
+			ev := rt.View[qtgui.QMouseEvent](evH, evP)
+			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(ev)
+		}},
+	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			evP := *(*unsafe.Pointer)(a[0])
+			evH := rt.WrapClass(evP, "QMouseEvent", rt.NewScoped)
+			defer evH.Expire()
+			ev := rt.View[qtgui.QMouseEvent](evH, evP)
+			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(ev)
+		}},
+	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			evP := *(*unsafe.Pointer)(a[0])
+			evH := rt.WrapClass(evP, "QFocusEvent", rt.NewScoped)
+			defer evH.Expire()
+			ev := rt.View[qtgui.QFocusEvent](evH, evP)
+			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(ev)
+		}},
+	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			next := bool(*(*C.bool)(a[0]))
+			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QPaintEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QPaintEvent](eArgH, eArgP)
+			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(eArg)
+		}},
+	{Name: "DoSetSource", Has: func(v any) bool {
+		_, ok := v.(interface {
+			DoSetSource(*qtcore.QUrl, qtgui.QTextDocumentResourceType)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			name := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			typeArg := qtgui.QTextDocumentResourceType(*(*C.int64_t)(a[1]))
+			v.(interface {
+				DoSetSource(*qtcore.QUrl, qtgui.QTextDocumentResourceType)
+			}).DoSetSource(name, typeArg)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QTimerEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QTimerEvent](eArgH, eArgP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(eArg)
+		}},
+	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QKeyEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QKeyEvent](eArgH, eArgP)
+			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(eArg)
+		}},
+	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QResizeEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QResizeEvent](eArgH, eArgP)
+			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(eArg)
+		}},
+	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QMouseEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QMouseEvent](eArgH, eArgP)
+			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(eArg)
+		}},
+	{Name: "ContextMenuEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			ContextMenuEvent(*qtgui.QContextMenuEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QContextMenuEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QContextMenuEvent](eArgH, eArgP)
+			v.(interface {
+				ContextMenuEvent(*qtgui.QContextMenuEvent)
+			}).ContextMenuEvent(eArg)
+		}},
+	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDragEnterEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDragEnterEvent](eArgH, eArgP)
+			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(eArg)
+		}},
+	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDragLeaveEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDragLeaveEvent](eArgH, eArgP)
+			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(eArg)
+		}},
+	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDragMoveEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDragMoveEvent](eArgH, eArgP)
+			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(eArg)
+		}},
+	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QDropEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QDropEvent](eArgH, eArgP)
+			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(eArg)
+		}},
+	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QFocusEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QFocusEvent](eArgH, eArgP)
+			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(eArg)
+		}},
+	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			showEventP := *(*unsafe.Pointer)(a[0])
+			showEventH := rt.WrapClass(showEventP, "QShowEvent", rt.NewScoped)
+			defer showEventH.Expire()
+			showEvent := rt.View[qtgui.QShowEvent](showEventH, showEventP)
+			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+		}},
+	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
+			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(eArg)
+		}},
+	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eArgP := *(*unsafe.Pointer)(a[0])
+			eArgH := rt.WrapClass(eArgP, "QWheelEvent", rt.NewScoped)
+			defer eArgH.Expire()
+			eArg := rt.View[qtgui.QWheelEvent](eArgH, eArgP)
+			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(eArg)
+		}},
+	{Name: "CreateMimeDataFromSelection", Has: func(v any) bool { _, ok := v.(interface{ CreateMimeDataFromSelection() *qtcore.QMimeData }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ CreateMimeDataFromSelection() *qtcore.QMimeData }).CreateMimeDataFromSelection()
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextBrowser.CreateMimeDataFromSelection")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "CanInsertFromMimeData", Has: func(v any) bool { _, ok := v.(interface{ CanInsertFromMimeData(*qtcore.QMimeData) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			source := rt.View[qtcore.QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ CanInsertFromMimeData(*qtcore.QMimeData) bool }).CanInsertFromMimeData(source)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "InsertFromMimeData", Has: func(v any) bool { _, ok := v.(interface{ InsertFromMimeData(*qtcore.QMimeData) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			source := rt.View[qtcore.QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ InsertFromMimeData(*qtcore.QMimeData) }).InsertFromMimeData(source)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			dx := int(*(*C.int)(a[0]))
+			dy := int(*(*C.int)(a[1]))
+			v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+		}},
+	{Name: "DoSetTextCursor", Has: func(v any) bool { _, ok := v.(interface{ DoSetTextCursor(*qtgui.QTextCursor) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			cursor := rt.View[qtgui.QTextCursor](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QTextCursor", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DoSetTextCursor(*qtgui.QTextCursor) }).DoSetTextCursor(cursor)
+		}},
+	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "SetupViewport", Has: func(v any) bool { _, ok := v.(interface{ SetupViewport(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			viewport := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ SetupViewport(*QWidget) }).SetupViewport(viewport)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(object, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ViewportEvent", Has: func(v any) bool { _, ok := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "ViewportSizeHint", Has: func(v any) bool { _, ok := v.(interface{ ViewportSizeHint() qtcore.QSize }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			*(*C.qute_size)(ret) = cQSize(r)
+		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionFrame](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+		}},
+	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			visible := bool(*(*C.bool)(a[0]))
+			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+		}},
+	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			arg0 := int(*(*C.int)(a[0]))
+			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			*(*C.int)(ret) = C.int(r)
+		}},
+	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
+			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+		}},
+	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+		}},
+	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
+			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+		}},
+	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
+			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
+	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QHideEvent](eventH, eventP)
+			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QTextBrowserBase is embedded in Go types that subclass QTextBrowser:
+//
+//	type MyTextBrowser struct{ qtwidgets.QTextBrowserBase }
+//
+// Define any of the virtual methods listed on QTextBrowserSuper to override them,
+// then construct the value with NewQTextBrowserWith. Call b.Super().X() for the
+// base implementation.
+type QTextBrowserBase struct{ *QTextBrowser }
+
+func (b *QTextBrowserBase) quteQTextBrowserBase() *QTextBrowserBase { return b }
+
+// QTextBrowserSubclass is implemented by every type that embeds QTextBrowserBase.
+type QTextBrowserSubclass interface{ quteQTextBrowserBase() *QTextBrowserBase }
+
+// Super returns the C++ base implementations of QTextBrowser's virtual methods.
+func (b *QTextBrowserBase) Super() *QTextBrowserSuper {
+	return &QTextBrowserSuper{this: b.QTextBrowser}
+}
+
+// QTextBrowserSuper calls the C++ base implementations of QTextBrowser's virtuals.
+type QTextBrowserSuper struct{ this *QTextBrowser }
+
+// LoadResource calls QTextBrowser::loadResource.
+func (s *QTextBrowserSuper) LoadResource(typeArg int, name *qtcore.QUrl) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.LoadResource")
+	r := C.qute_QTextBrowser_super_0(self, C.int(typeArg), rt.UseArg(unsafe.Pointer(name), "QTextBrowser.Super.LoadResource"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(name)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
+// Backward calls QTextBrowser::backward.
+func (s *QTextBrowserSuper) Backward() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.Backward")
+	C.qute_QTextBrowser_super_1(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Forward calls QTextBrowser::forward.
+func (s *QTextBrowserSuper) Forward() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.Forward")
+	C.qute_QTextBrowser_super_2(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Home calls QTextBrowser::home.
+func (s *QTextBrowserSuper) Home() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.Home")
+	C.qute_QTextBrowser_super_3(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Reload calls QTextBrowser::reload.
+func (s *QTextBrowserSuper) Reload() {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.Reload")
+	C.qute_QTextBrowser_super_4(self)
+	runtime.KeepAlive(s.this)
+}
+
+// Event calls QTextBrowser::event.
+func (s *QTextBrowserSuper) Event(eArg *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.Event")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QTextBrowser.Super.Event")
+	}
+	r := C.qute_QTextBrowser_super_5(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+	return bool(r)
+}
+
+// KeyPressEvent calls QTextBrowser::keyPressEvent.
+func (s *QTextBrowserSuper) KeyPressEvent(ev *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.KeyPressEvent")
+	var evPtr unsafe.Pointer
+	if ev != nil {
+		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQKeyEvent()), "QTextBrowser.Super.KeyPressEvent")
+	}
+	C.qute_QTextBrowser_super_6(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
+}
+
+// MouseMoveEvent calls QTextBrowser::mouseMoveEvent.
+func (s *QTextBrowserSuper) MouseMoveEvent(ev *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.MouseMoveEvent")
+	var evPtr unsafe.Pointer
+	if ev != nil {
+		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQMouseEvent()), "QTextBrowser.Super.MouseMoveEvent")
+	}
+	C.qute_QTextBrowser_super_7(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
+}
+
+// MousePressEvent calls QTextBrowser::mousePressEvent.
+func (s *QTextBrowserSuper) MousePressEvent(ev *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.MousePressEvent")
+	var evPtr unsafe.Pointer
+	if ev != nil {
+		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQMouseEvent()), "QTextBrowser.Super.MousePressEvent")
+	}
+	C.qute_QTextBrowser_super_8(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
+}
+
+// MouseReleaseEvent calls QTextBrowser::mouseReleaseEvent.
+func (s *QTextBrowserSuper) MouseReleaseEvent(ev *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.MouseReleaseEvent")
+	var evPtr unsafe.Pointer
+	if ev != nil {
+		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQMouseEvent()), "QTextBrowser.Super.MouseReleaseEvent")
+	}
+	C.qute_QTextBrowser_super_9(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
+}
+
+// FocusOutEvent calls QTextBrowser::focusOutEvent.
+func (s *QTextBrowserSuper) FocusOutEvent(ev *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.FocusOutEvent")
+	var evPtr unsafe.Pointer
+	if ev != nil {
+		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQFocusEvent()), "QTextBrowser.Super.FocusOutEvent")
+	}
+	C.qute_QTextBrowser_super_10(self, evPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(ev)
+}
+
+// FocusNextPrevChild calls QTextBrowser::focusNextPrevChild.
+func (s *QTextBrowserSuper) FocusNextPrevChild(next bool) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.FocusNextPrevChild")
+	r := C.qute_QTextBrowser_super_11(self, C.bool(next))
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// PaintEvent calls QTextBrowser::paintEvent.
+func (s *QTextBrowserSuper) PaintEvent(eArg *qtgui.QPaintEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.PaintEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQPaintEvent()), "QTextBrowser.Super.PaintEvent")
+	}
+	C.qute_QTextBrowser_super_12(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DoSetSource calls QTextBrowser::doSetSource.
+func (s *QTextBrowserSuper) DoSetSource(name *qtcore.QUrl, typeArg qtgui.QTextDocumentResourceType) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.DoSetSource")
+	C.qute_QTextBrowser_super_13(self, rt.UseArg(unsafe.Pointer(name), "QTextBrowser.Super.DoSetSource"), C.int64_t(typeArg))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(name)
+}
+
+// TimerEvent calls QTextEdit::timerEvent.
+func (s *QTextBrowserSuper) TimerEvent(eArg *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.TimerEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQTimerEvent()), "QTextBrowser.Super.TimerEvent")
+	}
+	C.qute_QTextBrowser_super_14(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// KeyReleaseEvent calls QTextEdit::keyReleaseEvent.
+func (s *QTextBrowserSuper) KeyReleaseEvent(eArg *qtgui.QKeyEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.KeyReleaseEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QTextBrowser.Super.KeyReleaseEvent")
+	}
+	C.qute_QTextBrowser_super_15(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// ResizeEvent calls QTextEdit::resizeEvent.
+func (s *QTextBrowserSuper) ResizeEvent(eArg *qtgui.QResizeEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ResizeEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQResizeEvent()), "QTextBrowser.Super.ResizeEvent")
+	}
+	C.qute_QTextBrowser_super_16(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// MouseDoubleClickEvent calls QTextEdit::mouseDoubleClickEvent.
+func (s *QTextBrowserSuper) MouseDoubleClickEvent(eArg *qtgui.QMouseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.MouseDoubleClickEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QTextBrowser.Super.MouseDoubleClickEvent")
+	}
+	C.qute_QTextBrowser_super_17(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// ContextMenuEvent calls QTextEdit::contextMenuEvent.
+func (s *QTextBrowserSuper) ContextMenuEvent(eArg *qtgui.QContextMenuEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ContextMenuEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQContextMenuEvent()), "QTextBrowser.Super.ContextMenuEvent")
+	}
+	C.qute_QTextBrowser_super_18(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DragEnterEvent calls QTextEdit::dragEnterEvent.
+func (s *QTextBrowserSuper) DragEnterEvent(eArg *qtgui.QDragEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.DragEnterEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragEnterEvent()), "QTextBrowser.Super.DragEnterEvent")
+	}
+	C.qute_QTextBrowser_super_19(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DragLeaveEvent calls QTextEdit::dragLeaveEvent.
+func (s *QTextBrowserSuper) DragLeaveEvent(eArg *qtgui.QDragLeaveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.DragLeaveEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragLeaveEvent()), "QTextBrowser.Super.DragLeaveEvent")
+	}
+	C.qute_QTextBrowser_super_20(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DragMoveEvent calls QTextEdit::dragMoveEvent.
+func (s *QTextBrowserSuper) DragMoveEvent(eArg *qtgui.QDragMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.DragMoveEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragMoveEvent()), "QTextBrowser.Super.DragMoveEvent")
+	}
+	C.qute_QTextBrowser_super_21(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// DropEvent calls QTextEdit::dropEvent.
+func (s *QTextBrowserSuper) DropEvent(eArg *qtgui.QDropEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.DropEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDropEvent()), "QTextBrowser.Super.DropEvent")
+	}
+	C.qute_QTextBrowser_super_22(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// FocusInEvent calls QTextEdit::focusInEvent.
+func (s *QTextBrowserSuper) FocusInEvent(eArg *qtgui.QFocusEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.FocusInEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QTextBrowser.Super.FocusInEvent")
+	}
+	C.qute_QTextBrowser_super_23(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// ShowEvent calls QTextEdit::showEvent.
+func (s *QTextBrowserSuper) ShowEvent(showEvent *qtgui.QShowEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ShowEvent")
+	var showEventPtr unsafe.Pointer
+	if showEvent != nil {
+		showEventPtr = rt.UseArg(unsafe.Pointer(showEvent.AsQShowEvent()), "QTextBrowser.Super.ShowEvent")
+	}
+	C.qute_QTextBrowser_super_24(self, showEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(showEvent)
+}
+
+// ChangeEvent calls QTextEdit::changeEvent.
+func (s *QTextBrowserSuper) ChangeEvent(eArg *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ChangeEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QTextBrowser.Super.ChangeEvent")
+	}
+	C.qute_QTextBrowser_super_25(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// WheelEvent calls QTextEdit::wheelEvent.
+func (s *QTextBrowserSuper) WheelEvent(eArg *qtgui.QWheelEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.WheelEvent")
+	var eArgPtr unsafe.Pointer
+	if eArg != nil {
+		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQWheelEvent()), "QTextBrowser.Super.WheelEvent")
+	}
+	C.qute_QTextBrowser_super_26(self, eArgPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(eArg)
+}
+
+// CreateMimeDataFromSelection calls QTextEdit::createMimeDataFromSelection.
+func (s *QTextBrowserSuper) CreateMimeDataFromSelection() *qtcore.QMimeData {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.CreateMimeDataFromSelection")
+	r := C.qute_QTextBrowser_super_27(self)
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
+}
+
+// CanInsertFromMimeData calls QTextEdit::canInsertFromMimeData.
+func (s *QTextBrowserSuper) CanInsertFromMimeData(source *qtcore.QMimeData) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.CanInsertFromMimeData")
+	var sourcePtr unsafe.Pointer
+	if source != nil {
+		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQMimeData()), "QTextBrowser.Super.CanInsertFromMimeData")
+	}
+	r := C.qute_QTextBrowser_super_28(self, sourcePtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(source)
+	return bool(r)
+}
+
+// InsertFromMimeData calls QTextEdit::insertFromMimeData.
+func (s *QTextBrowserSuper) InsertFromMimeData(source *qtcore.QMimeData) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.InsertFromMimeData")
+	var sourcePtr unsafe.Pointer
+	if source != nil {
+		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQMimeData()), "QTextBrowser.Super.InsertFromMimeData")
+	}
+	C.qute_QTextBrowser_super_29(self, sourcePtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(source)
+}
+
+// InputMethodEvent calls QTextEdit::inputMethodEvent.
+func (s *QTextBrowserSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QTextBrowser.Super.InputMethodEvent")
+	}
+	C.qute_QTextBrowser_super_30(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
+}
+
+// ScrollContentsBy calls QTextEdit::scrollContentsBy.
+func (s *QTextBrowserSuper) ScrollContentsBy(dx int, dy int) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ScrollContentsBy")
+	C.qute_QTextBrowser_super_31(self, C.int(dx), C.int(dy))
+	runtime.KeepAlive(s.this)
+}
+
+// DoSetTextCursor calls QTextEdit::doSetTextCursor.
+func (s *QTextBrowserSuper) DoSetTextCursor(cursor *qtgui.QTextCursor) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.DoSetTextCursor")
+	C.qute_QTextBrowser_super_32(self, rt.UseArg(unsafe.Pointer(cursor), "QTextBrowser.Super.DoSetTextCursor"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(cursor)
+}
+
+// MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
+func (s *QTextBrowserSuper) MinimumSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.MinimumSizeHint")
+	r := C.qute_QTextBrowser_super_33(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SizeHint calls QAbstractScrollArea::sizeHint.
+func (s *QTextBrowserSuper) SizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.SizeHint")
+	r := C.qute_QTextBrowser_super_34(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// SetupViewport calls QAbstractScrollArea::setupViewport.
+func (s *QTextBrowserSuper) SetupViewport(viewport *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.SetupViewport")
+	var viewportPtr unsafe.Pointer
+	if viewport != nil {
+		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QTextBrowser.Super.SetupViewport")
+	}
+	C.qute_QTextBrowser_super_35(self, viewportPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(viewport)
+}
+
+// EventFilter calls QAbstractScrollArea::eventFilter.
+func (s *QTextBrowserSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.EventFilter")
+	var objectPtr unsafe.Pointer
+	if object != nil {
+		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QTextBrowser.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextBrowser.Super.EventFilter")
+	}
+	r := C.qute_QTextBrowser_super_36(self, objectPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ViewportEvent calls QAbstractScrollArea::viewportEvent.
+func (s *QTextBrowserSuper) ViewportEvent(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ViewportEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextBrowser.Super.ViewportEvent")
+	}
+	r := C.qute_QTextBrowser_super_37(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// ViewportSizeHint calls QAbstractScrollArea::viewportSizeHint.
+func (s *QTextBrowserSuper) ViewportSizeHint() qtcore.QSize {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ViewportSizeHint")
+	r := C.qute_QTextBrowser_super_38(self)
+	runtime.KeepAlive(s.this)
+	return goQSize(r)
+}
+
+// InitStyleOption calls QFrame::initStyleOption.
+func (s *QTextBrowserSuper) InitStyleOption(option *QStyleOptionFrame) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.InitStyleOption")
+	C.qute_QTextBrowser_super_39(self, rt.UseArg(unsafe.Pointer(option), "QTextBrowser.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
+// SetVisible calls QWidget::setVisible.
+func (s *QTextBrowserSuper) SetVisible(visible bool) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.SetVisible")
+	C.qute_QTextBrowser_super_40(self, C.bool(visible))
+	runtime.KeepAlive(s.this)
+}
+
+// HeightForWidth calls QWidget::heightForWidth.
+func (s *QTextBrowserSuper) HeightForWidth(arg0 int) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.HeightForWidth")
+	r := C.qute_QTextBrowser_super_41(self, C.int(arg0))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
+// HasHeightForWidth calls QWidget::hasHeightForWidth.
+func (s *QTextBrowserSuper) HasHeightForWidth() bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.HasHeightForWidth")
+	r := C.qute_QTextBrowser_super_42(self)
+	runtime.KeepAlive(s.this)
+	return bool(r)
+}
+
+// EnterEvent calls QWidget::enterEvent.
+func (s *QTextBrowserSuper) EnterEvent(event *qtgui.QEnterEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.EnterEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QTextBrowser.Super.EnterEvent")
+	}
+	C.qute_QTextBrowser_super_43(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// LeaveEvent calls QWidget::leaveEvent.
+func (s *QTextBrowserSuper) LeaveEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.LeaveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextBrowser.Super.LeaveEvent")
+	}
+	C.qute_QTextBrowser_super_44(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// MoveEvent calls QWidget::moveEvent.
+func (s *QTextBrowserSuper) MoveEvent(event *qtgui.QMoveEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.MoveEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QTextBrowser.Super.MoveEvent")
+	}
+	C.qute_QTextBrowser_super_45(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CloseEvent calls QWidget::closeEvent.
+func (s *QTextBrowserSuper) CloseEvent(event *qtgui.QCloseEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.CloseEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QTextBrowser.Super.CloseEvent")
+	}
+	C.qute_QTextBrowser_super_46(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QTextBrowserSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QTextBrowser.Super.TabletEvent")
+	}
+	C.qute_QTextBrowser_super_47(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QTextBrowserSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QTextBrowser.Super.ActionEvent")
+	}
+	C.qute_QTextBrowser_super_48(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// HideEvent calls QWidget::hideEvent.
+func (s *QTextBrowserSuper) HideEvent(event *qtgui.QHideEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.HideEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QTextBrowser.Super.HideEvent")
+	}
+	C.qute_QTextBrowser_super_49(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QTextBrowserSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTextBrowser.Super.ChildEvent")
+	}
+	C.qute_QTextBrowser_super_50(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QTextBrowserSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextBrowser.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTextBrowser.Super.CustomEvent")
+	}
+	C.qute_QTextBrowser_super_51(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ZoomInF wraps the protected QTextEdit::zoomInF for subclasses.
+func (b *QTextBrowserBase) ZoomInF(rangeArg float32) {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.ZoomInF")
+	C.qute_QTextBrowser_prot_zoomInF(self, C.float(rangeArg))
+	runtime.KeepAlive(this)
+}
+
+// SetViewportMargins wraps the protected QAbstractScrollArea::setViewportMargins for subclasses.
+func (b *QTextBrowserBase) SetViewportMargins(margins qtcore.QMargins) {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.SetViewportMargins")
+	C.qute_QTextBrowser_prot_setViewportMargins(self, cQMargins(margins))
+	runtime.KeepAlive(this)
+}
+
+// ViewportMargins wraps the protected QAbstractScrollArea::viewportMargins for subclasses.
+func (b *QTextBrowserBase) ViewportMargins() qtcore.QMargins {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.ViewportMargins")
+	r := C.qute_QTextBrowser_prot_viewportMargins(self)
+	runtime.KeepAlive(this)
+	return goQMargins(r)
+}
+
+// DrawFrame wraps the protected QFrame::drawFrame for subclasses.
+func (b *QTextBrowserBase) DrawFrame(painter qtgui.QPainterLike) {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.DrawFrame")
+	var painterPtr unsafe.Pointer
+	if painter != nil {
+		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QTextBrowser.DrawFrame")
+	}
+	C.qute_QTextBrowser_prot_drawFrame(self, painterPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(painter)
+}
+
+// UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
+func (b *QTextBrowserBase) UpdateMicroFocus() {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.UpdateMicroFocus")
+	C.qute_QTextBrowser_prot_updateMicroFocus(self)
+	runtime.KeepAlive(this)
+}
+
+// Create wraps the protected QWidget::create for subclasses.
+func (b *QTextBrowserBase) Create() {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Create")
+	C.qute_QTextBrowser_prot_create(self)
+	runtime.KeepAlive(this)
+}
+
+// Destroy wraps the protected QWidget::destroy for subclasses.
+func (b *QTextBrowserBase) Destroy() {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.Destroy")
+	C.qute_QTextBrowser_prot_destroy(self)
+	runtime.KeepAlive(this)
+}
+
+// FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
+func (b *QTextBrowserBase) FocusNextChild() bool {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.FocusNextChild")
+	r := C.qute_QTextBrowser_prot_focusNextChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
+func (b *QTextBrowserBase) FocusPreviousChild() bool {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.FocusPreviousChild")
+	r := C.qute_QTextBrowser_prot_focusPreviousChild(self)
+	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QTextBrowserBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QTextBrowser // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextBrowser.GetDecodedMetricF")
+	r := C.qute_QTextBrowser_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQTextBrowserWith constructs a QTextBrowser whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTextBrowserWith(v QTextBrowserSubclass, parent QWidgetLike) *QTextBrowser {
+	rt.CheckThread("NewQTextBrowserWith")
+	base := v.quteQTextBrowserBase()
+	if base.QTextBrowser != nil {
+		panic("NewQTextBrowserWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTextBrowserWith")
+	}
+	p := C.qute_QTextBrowser_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTextBrowser", mode)
+	base.QTextBrowser = rt.View[QTextBrowser](h, p)
+	id := h.SetSelf(v, qTextBrowserVTable)
+	mask := rt.Mask(v, qTextBrowserVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTextBrowser_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTextBrowser
+}

@@ -142,3 +142,233 @@ func (this *QWidgetAction) ReleaseWidget(widget QWidgetLike) {
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(widget)
 }
+
+var qWidgetActionVTable = []rt.Virtual{
+	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "EventFilter", Has: func(v any) bool {
+		_, ok := v.(interface {
+			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			eventP := *(*unsafe.Pointer)(a[1])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			r := v.(interface {
+				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+			}).EventFilter(object, event)
+			*(*C.bool)(ret) = C.bool(r)
+		}},
+	{Name: "CreateWidget", Has: func(v any) bool { _, ok := v.(interface{ CreateWidget(*QWidget) *QWidget }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			parent := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			r := v.(interface{ CreateWidget(*QWidget) *QWidget }).CreateWidget(parent)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWidgetAction.CreateWidget")
+			if r != nil {
+				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
+			}
+		}},
+	{Name: "DeleteWidget", Has: func(v any) bool { _, ok := v.(interface{ DeleteWidget(*QWidget) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DeleteWidget(*QWidget) }).DeleteWidget(widget)
+		}},
+	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
+			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+		}},
+	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QChildEvent](eventH, eventP)
+			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+		}},
+	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtcore.QEvent](eventH, eventP)
+			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+}
+
+// QWidgetActionBase is embedded in Go types that subclass QWidgetAction:
+//
+//	type MyWidgetAction struct{ qtwidgets.QWidgetActionBase }
+//
+// Define any of the virtual methods listed on QWidgetActionSuper to override them,
+// then construct the value with NewQWidgetActionWith. Call b.Super().X() for the
+// base implementation.
+type QWidgetActionBase struct{ *QWidgetAction }
+
+func (b *QWidgetActionBase) quteQWidgetActionBase() *QWidgetActionBase { return b }
+
+// QWidgetActionSubclass is implemented by every type that embeds QWidgetActionBase.
+type QWidgetActionSubclass interface{ quteQWidgetActionBase() *QWidgetActionBase }
+
+// Super returns the C++ base implementations of QWidgetAction's virtual methods.
+func (b *QWidgetActionBase) Super() *QWidgetActionSuper {
+	return &QWidgetActionSuper{this: b.QWidgetAction}
+}
+
+// QWidgetActionSuper calls the C++ base implementations of QWidgetAction's virtuals.
+type QWidgetActionSuper struct{ this *QWidgetAction }
+
+// Event calls QWidgetAction::event.
+func (s *QWidgetActionSuper) Event(event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.Event")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWidgetAction.Super.Event")
+	}
+	r := C.qute_QWidgetAction_super_0(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// EventFilter calls QWidgetAction::eventFilter.
+func (s *QWidgetActionSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEvent) bool {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.EventFilter")
+	var objectPtr unsafe.Pointer
+	if object != nil {
+		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QWidgetAction.Super.EventFilter")
+	}
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWidgetAction.Super.EventFilter")
+	}
+	r := C.qute_QWidgetAction_super_1(self, objectPtr, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(object)
+	runtime.KeepAlive(event)
+	return bool(r)
+}
+
+// CreateWidget calls QWidgetAction::createWidget.
+func (s *QWidgetActionSuper) CreateWidget(parent *QWidget) *QWidget {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.CreateWidget")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QWidgetAction.Super.CreateWidget")
+	}
+	r := C.qute_QWidgetAction_super_2(self, parentPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(parent)
+	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
+}
+
+// DeleteWidget calls QWidgetAction::deleteWidget.
+func (s *QWidgetActionSuper) DeleteWidget(widget *QWidget) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.DeleteWidget")
+	var widgetPtr unsafe.Pointer
+	if widget != nil {
+		widgetPtr = rt.UseArg(unsafe.Pointer(widget.AsQWidget()), "QWidgetAction.Super.DeleteWidget")
+	}
+	C.qute_QWidgetAction_super_3(self, widgetPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(widget)
+}
+
+// TimerEvent calls QObject::timerEvent.
+func (s *QWidgetActionSuper) TimerEvent(event *qtcore.QTimerEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.TimerEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QWidgetAction.Super.TimerEvent")
+	}
+	C.qute_QWidgetAction_super_4(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ChildEvent calls QObject::childEvent.
+func (s *QWidgetActionSuper) ChildEvent(event *qtcore.QChildEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.ChildEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QWidgetAction.Super.ChildEvent")
+	}
+	C.qute_QWidgetAction_super_5(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CustomEvent calls QObject::customEvent.
+func (s *QWidgetActionSuper) CustomEvent(event *qtcore.QEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.CustomEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWidgetAction.Super.CustomEvent")
+	}
+	C.qute_QWidgetAction_super_6(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// CreatedWidgets wraps the protected QWidgetAction::createdWidgets for subclasses.
+func (b *QWidgetActionBase) CreatedWidgets() []*QWidget {
+	this := b.QWidgetAction // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWidgetAction.CreatedWidgets")
+	r := C.qute_QWidgetAction_prot_createdWidgets(self)
+	runtime.KeepAlive(this)
+	return quteList(r, func(e unsafe.Pointer) *QWidget {
+		return rt.View[QWidget](rt.WrapClass(e, "QWidget", rt.KeepOrBorrow), e)
+	})
+}
+
+// NewQWidgetActionWith constructs a QWidgetAction whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQWidgetActionWith(v QWidgetActionSubclass, parent qtcore.QObjectLike) *QWidgetAction {
+	rt.CheckThread("NewQWidgetActionWith")
+	base := v.quteQWidgetActionBase()
+	if base.QWidgetAction != nil {
+		panic("NewQWidgetActionWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQWidgetActionWith")
+	}
+	p := C.qute_QWidgetAction_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QWidgetAction", mode)
+	base.QWidgetAction = rt.View[QWidgetAction](h, p)
+	id := h.SetSelf(v, qWidgetActionVTable)
+	mask := rt.Mask(v, qWidgetActionVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QWidgetAction_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QWidgetAction
+}

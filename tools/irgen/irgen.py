@@ -176,15 +176,20 @@ def class_info(c, module, header, name=None, nested_out=None):
         elif ch.kind == K.FUNCTION_TEMPLATE and access == "public" and not deprecated(ch) \
                 and not ch.spelling.startswith("qt_"):
             dropped.append({"kind": "template", "name": ch.displayname})
-        elif ch.kind == K.ENUM_DECL and ch.spelling and access == "public":
-            enums.append(enum_info(ch, name))
+        elif ch.kind == K.ENUM_DECL and ch.spelling and access in ("public", "protected"):
+            # protected enums type the protected methods Go subclasses call
+            # (QAbstractItemView::State for state() and setState())
+            e = enum_info(ch, name)
+            if access == "protected":
+                e["protected"] = True
+            enums.append(e)
         elif ch.kind == K.FIELD_DECL and access == "public" and not deprecated(ch):
             fields.append({"name": ch.spelling, "type": type_info(ch.type)})
         elif ch.kind in (K.CLASS_DECL, K.STRUCT_DECL) and access == "public" and ch.is_definition() \
                 and ch.spelling and nested_out is not None:
             # public nested classes become "Outer::Inner"
             nested_out.append(class_info(ch, module, header, name + "::" + ch.spelling, nested_out))
-        elif ch.kind == K.TYPEDEF_DECL and access == "public":
+        elif ch.kind == K.TYPEDEF_DECL and access in ("public", "protected"):
             f = flags_typedef(ch)
             if f:
                 flags.append(f)

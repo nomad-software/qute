@@ -25,7 +25,7 @@ type QOpenGLPaintDeviceLike interface{ AsQOpenGLPaintDevice() *QOpenGLPaintDevic
 func (this *QOpenGLPaintDevice) AsQOpenGLPaintDevice() *QOpenGLPaintDevice { return this }
 
 func init() {
-	rt.RegisterClass("QOpenGLPaintDevice", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QOpenGLPaintDevice_delete(p) })
+	rt.RegisterClass("QOpenGLPaintDevice", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QOpenGLPaintDevice_delete(p) })
 }
 
 // QOpenGLPaintDeviceFromPtr wraps an existing C++ QOpenGLPaintDevice. This is an unsafe escape hatch: own says
@@ -184,4 +184,74 @@ func (this *QOpenGLPaintDevice) EnsureActiveTarget() {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.EnsureActiveTarget")
 	C.qute_QOpenGLPaintDevice_ensureActiveTarget(self)
 	runtime.KeepAlive(this)
+}
+
+var qOpenGLPaintDeviceVTable = []rt.Virtual{
+	{Name: "EnsureActiveTarget", Has: func(v any) bool { _, ok := v.(interface{ EnsureActiveTarget() }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			_ = args
+			v.(interface{ EnsureActiveTarget() }).EnsureActiveTarget()
+		}},
+}
+
+// QOpenGLPaintDeviceBase is embedded in Go types that subclass QOpenGLPaintDevice:
+//
+//	type MyOpenGLPaintDevice struct{ qtopengl.QOpenGLPaintDeviceBase }
+//
+// Define any of the virtual methods listed on QOpenGLPaintDeviceSuper to override them,
+// then construct the value with NewQOpenGLPaintDeviceWith. Call b.Super().X() for the
+// base implementation.
+type QOpenGLPaintDeviceBase struct{ *QOpenGLPaintDevice }
+
+func (b *QOpenGLPaintDeviceBase) quteQOpenGLPaintDeviceBase() *QOpenGLPaintDeviceBase { return b }
+
+// QOpenGLPaintDeviceSubclass is implemented by every type that embeds QOpenGLPaintDeviceBase.
+type QOpenGLPaintDeviceSubclass interface {
+	quteQOpenGLPaintDeviceBase() *QOpenGLPaintDeviceBase
+}
+
+// Super returns the C++ base implementations of QOpenGLPaintDevice's virtual methods.
+func (b *QOpenGLPaintDeviceBase) Super() *QOpenGLPaintDeviceSuper {
+	return &QOpenGLPaintDeviceSuper{this: b.QOpenGLPaintDevice}
+}
+
+// QOpenGLPaintDeviceSuper calls the C++ base implementations of QOpenGLPaintDevice's virtuals.
+type QOpenGLPaintDeviceSuper struct{ this *QOpenGLPaintDevice }
+
+// EnsureActiveTarget calls QOpenGLPaintDevice::ensureActiveTarget.
+func (s *QOpenGLPaintDeviceSuper) EnsureActiveTarget() {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLPaintDevice.Super.EnsureActiveTarget")
+	C.qute_QOpenGLPaintDevice_super_0(self)
+	runtime.KeepAlive(s.this)
+}
+
+// GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
+func (b *QOpenGLPaintDeviceBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
+	this := b.QOpenGLPaintDevice // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLPaintDevice.GetDecodedMetricF")
+	r := C.qute_QOpenGLPaintDevice_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
+	runtime.KeepAlive(this)
+	return float64(r)
+}
+
+// NewQOpenGLPaintDeviceWith constructs a QOpenGLPaintDevice whose virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLPaintDeviceWith(v QOpenGLPaintDeviceSubclass) *QOpenGLPaintDevice {
+	rt.CheckThread("NewQOpenGLPaintDeviceWith")
+	base := v.quteQOpenGLPaintDeviceBase()
+	if base.QOpenGLPaintDevice != nil {
+		panic("NewQOpenGLPaintDeviceWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QOpenGLPaintDevice_new_shim()
+	h := rt.WrapClass(p, "QOpenGLPaintDevice", rt.NewOwned)
+	base.QOpenGLPaintDevice = rt.View[QOpenGLPaintDevice](h, p)
+	id := h.SetSelf(v, qOpenGLPaintDeviceVTable)
+	mask := rt.Mask(v, qOpenGLPaintDeviceVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLPaintDevice_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLPaintDevice
 }

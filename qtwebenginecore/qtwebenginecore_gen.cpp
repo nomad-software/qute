@@ -90,7 +90,7 @@ struct GoSlot {
 
 class qute_QWebEnginePage : public QWebEnginePage {
 public:
-	using QWebEnginePage::QWebEnginePage;
+	template <class... A> explicit qute_QWebEnginePage(A &&...a) : QWebEnginePage(std::forward<A>(a)...) {}
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
@@ -169,59 +169,67 @@ public:
 		return QWebEnginePage::javaScriptConfirm(a0, a1);
 	}
 	bool qute_super_5(const QUrl & a0, const QString & a1) { return QWebEnginePage::javaScriptConfirm(a0, a1); }
-	void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel a0, const QString & a1, int a2, const QString & a3) override {
+	bool javaScriptPrompt(const QUrl & a0, const QString & a1, const QString & a2, QString * a3) override {
 		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QUrl(a0));
+			qute_str c1 = qute_ret_str(a1);
+			qute_str c2 = qute_ret_str(a2);
+			qute_str c3{};
+			void *args[] = {&c0, &c1, &c2, a3 ? static_cast<void *>(&c3) : nullptr};
+			bool r{};
+			if (qute_qtwebenginecore_virtual(qute_id, 6, args, &r)) {
+				if (a3) {
+					*a3 = qute_take_qstr(c3);
+				}
+				return static_cast<bool>(r);
+			}
+			std::free(c3.data); // not taken: Go emptied it, or never ran
+		}
+		return QWebEnginePage::javaScriptPrompt(a0, a1, a2, a3);
+	}
+	bool qute_super_6(const QUrl & a0, const QString & a1, const QString & a2, QString * a3) { return QWebEnginePage::javaScriptPrompt(a0, a1, a2, a3); }
+	void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel a0, const QString & a1, int a2, const QString & a3) override {
+		if (qute_has(7)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			qute_str c1 = qute_ret_str(a1);
 			int c2 = static_cast<int>(a2);
 			qute_str c3 = qute_ret_str(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
-			if (qute_qtwebenginecore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_qtwebenginecore_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
 		QWebEnginePage::javaScriptConsoleMessage(a0, a1, a2, a3);
 	}
-	void qute_super_6(QWebEnginePage::JavaScriptConsoleMessageLevel a0, const QString & a1, int a2, const QString & a3) { return QWebEnginePage::javaScriptConsoleMessage(a0, a1, a2, a3); }
+	void qute_super_7(QWebEnginePage::JavaScriptConsoleMessageLevel a0, const QString & a1, int a2, const QString & a3) { return QWebEnginePage::javaScriptConsoleMessage(a0, a1, a2, a3); }
 	bool acceptNavigationRequest(const QUrl & a0, QWebEnginePage::NavigationType a1, bool a2) override {
-		if (qute_has(7)) {
+		if (qute_has(8)) {
 			void * c0 = static_cast<void *>(new QUrl(a0));
 			int64_t c1 = static_cast<int64_t>(a1);
 			bool c2 = static_cast<bool>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 7, args, &r)) {
+			if (qute_qtwebenginecore_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QWebEnginePage::acceptNavigationRequest(a0, a1, a2);
 	}
-	bool qute_super_7(const QUrl & a0, QWebEnginePage::NavigationType a1, bool a2) { return QWebEnginePage::acceptNavigationRequest(a0, a1, a2); }
+	bool qute_super_8(const QUrl & a0, QWebEnginePage::NavigationType a1, bool a2) { return QWebEnginePage::acceptNavigationRequest(a0, a1, a2); }
 	bool eventFilter(QObject * a0, QEvent * a1) override {
-		if (qute_has(8)) {
+		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 8, args, &r)) {
+			if (qute_qtwebenginecore_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
-	bool qute_super_8(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	bool qute_super_9(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
 	void timerEvent(QTimerEvent * a0) override {
-		if (qute_has(9)) {
-			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 9, args, nullptr)) {
-				return;
-			}
-		}
-		QObject::timerEvent(a0);
-	}
-	void qute_super_9(QTimerEvent * a0) { return QObject::timerEvent(a0); }
-	void childEvent(QChildEvent * a0) override {
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -229,10 +237,10 @@ public:
 				return;
 			}
 		}
-		QObject::childEvent(a0);
+		QObject::timerEvent(a0);
 	}
-	void qute_super_10(QChildEvent * a0) { return QObject::childEvent(a0); }
-	void customEvent(QEvent * a0) override {
+	void qute_super_10(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -240,14 +248,91 @@ public:
 				return;
 			}
 		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_11(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(12)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtwebenginecore_virtual(qute_id, 12, args, nullptr)) {
+				return;
+			}
+		}
 		QObject::customEvent(a0);
 	}
-	void qute_super_11(QEvent * a0) { return QObject::customEvent(a0); }
+	void qute_super_12(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QWebEngineProfile : public QWebEngineProfile {
+public:
+	template <class... A> explicit qute_QWebEngineProfile(A &&...a) : QWebEngineProfile(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	bool event(QEvent * a0) override {
+		if (qute_has(0)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			bool r{};
+			if (qute_qtwebenginecore_virtual(qute_id, 0, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::event(a0);
+	}
+	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(1)) {
+			void * c0 = (void *)(a0);
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_qtwebenginecore_virtual(qute_id, 1, args, &r)) {
+				return static_cast<bool>(r);
+			}
+		}
+		return QObject::eventFilter(a0, a1);
+	}
+	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
+		if (qute_has(2)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtwebenginecore_virtual(qute_id, 2, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(3)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtwebenginecore_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_qtwebenginecore_virtual(qute_id, 4, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::customEvent(a0);
+	}
+	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
 class qute_QWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor {
 public:
-	using QWebEngineUrlRequestInterceptor::QWebEngineUrlRequestInterceptor;
+	template <class... A> explicit qute_QWebEngineUrlRequestInterceptor(A &&...a) : QWebEngineUrlRequestInterceptor(std::forward<A>(a)...) {}
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
@@ -323,7 +408,7 @@ public:
 
 class qute_QWebEngineUrlSchemeHandler : public QWebEngineUrlSchemeHandler {
 public:
-	using QWebEngineUrlSchemeHandler::QWebEngineUrlSchemeHandler;
+	template <class... A> explicit qute_QWebEngineUrlSchemeHandler(A &&...a) : QWebEngineUrlSchemeHandler(std::forward<A>(a)...) {}
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
@@ -1447,29 +1532,36 @@ bool qute_QWebEnginePage_super_5(void *self, void * a0, const char *a1, ptrdiff_
 	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_5((a0 ? *static_cast<QUrl *>(a0) : QUrl()), QString::fromUtf8(a1, a1_len)));
 }
-void qute_QWebEnginePage_super_6(void *self, int64_t a0, const char *a1, ptrdiff_t a1_len, int a2, const char *a3, ptrdiff_t a3_len) {
+bool qute_QWebEnginePage_super_6(void *self, void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, qute_str *a3_out) {
 	qute_gui_only();
-	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_6(static_cast<QWebEnginePage::JavaScriptConsoleMessageLevel>(a0), QString::fromUtf8(a1, a1_len), static_cast<int>(a2), QString::fromUtf8(a3, a3_len));
+	QString t3{};
+	auto &&r = static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_6((a0 ? *static_cast<QUrl *>(a0) : QUrl()), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), &t3);
+	*a3_out = qute_ret_str(t3);
+	return static_cast<bool>(r);
 }
-bool qute_QWebEnginePage_super_7(void *self, void * a0, int64_t a1, bool a2) {
+void qute_QWebEnginePage_super_7(void *self, int64_t a0, const char *a1, ptrdiff_t a1_len, int a2, const char *a3, ptrdiff_t a3_len) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_7((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<QWebEnginePage::NavigationType>(a1), static_cast<bool>(a2)));
+	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_7(static_cast<QWebEnginePage::JavaScriptConsoleMessageLevel>(a0), QString::fromUtf8(a1, a1_len), static_cast<int>(a2), QString::fromUtf8(a3, a3_len));
 }
-bool qute_QWebEnginePage_super_8(void *self, void * a0, void * a1) {
+bool qute_QWebEnginePage_super_8(void *self, void * a0, int64_t a1, bool a2) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_8(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+	return static_cast<bool>(static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_8((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<QWebEnginePage::NavigationType>(a1), static_cast<bool>(a2)));
 }
-void qute_QWebEnginePage_super_9(void *self, void * a0) {
+bool qute_QWebEnginePage_super_9(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_9(static_cast<QTimerEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_9(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QWebEnginePage_super_10(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_10(static_cast<QChildEvent *>(a0));
+	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_10(static_cast<QTimerEvent *>(a0));
 }
 void qute_QWebEnginePage_super_11(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_11(static_cast<QEvent *>(a0));
+	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_11(static_cast<QChildEvent *>(a0));
+}
+void qute_QWebEnginePage_super_12(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_12(static_cast<QEvent *>(a0));
 }
 void * qute_QWebEnginePage_cast(void *obj) {
 	qute_gui_only();
@@ -2136,6 +2228,34 @@ void * qute_QWebEngineProfile_new(void * a0) {
 void * qute_QWebEngineProfile_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
 	return static_cast<QWebEngineProfile *>(new QWebEngineProfile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+}
+void * qute_QWebEngineProfile_new_shim(void * a0) {
+	qute_gui_only();
+	return static_cast<QWebEngineProfile *>(new qute_QWebEngineProfile(static_cast<QObject *>(a0)));
+}
+void qute_QWebEngineProfile_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
+	qute_gui_only();
+	auto s = static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+bool qute_QWebEngineProfile_super_0(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+}
+bool qute_QWebEngineProfile_super_1(void *self, void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QWebEngineProfile_super_2(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+}
+void qute_QWebEngineProfile_super_3(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+}
+void qute_QWebEngineProfile_super_4(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
 void * qute_QWebEngineProfile_cast(void *obj) {
 	qute_gui_only();

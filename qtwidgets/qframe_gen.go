@@ -284,6 +284,15 @@ var qFrameVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
 		}},
+	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			optionP := *(*unsafe.Pointer)(a[0])
+			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionFrame](optionH, optionP)
+			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -451,6 +460,24 @@ var qFrameVTable = []rt.Virtual{
 				ContextMenuEvent(*qtgui.QContextMenuEvent)
 			}).ContextMenuEvent(event)
 		}},
+	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
+			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+		}},
+	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			eventP := *(*unsafe.Pointer)(a[0])
+			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
+			defer eventH.Expire()
+			event := rt.View[qtgui.QActionEvent](eventH, eventP)
+			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -504,6 +531,22 @@ var qFrameVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+		}},
+	{Name: "InputMethodEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodEvent(*qtgui.QInputMethodEvent)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodEventP := *(*unsafe.Pointer)(a[0])
+			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
+			defer inputMethodEventH.Expire()
+			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
+			v.(interface {
+				InputMethodEvent(*qtgui.QInputMethodEvent)
+			}).InputMethodEvent(inputMethodEvent)
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -624,17 +667,25 @@ func (s *QFrameSuper) ChangeEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// InitStyleOption calls QFrame::initStyleOption.
+func (s *QFrameSuper) InitStyleOption(option *QStyleOptionFrame) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.InitStyleOption")
+	C.qute_QFrame_super_4(self, rt.UseArg(unsafe.Pointer(option), "QFrame.Super.InitStyleOption"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(option)
+}
+
 // SetVisible calls QWidget::setVisible.
 func (s *QFrameSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.SetVisible")
-	C.qute_QFrame_super_4(self, C.bool(visible))
+	C.qute_QFrame_super_5(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // MinimumSizeHint calls QWidget::minimumSizeHint.
 func (s *QFrameSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.MinimumSizeHint")
-	r := C.qute_QFrame_super_5(self)
+	r := C.qute_QFrame_super_6(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -642,7 +693,7 @@ func (s *QFrameSuper) MinimumSizeHint() qtcore.QSize {
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QFrameSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.HeightForWidth")
-	r := C.qute_QFrame_super_6(self, C.int(arg0))
+	r := C.qute_QFrame_super_7(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -650,7 +701,7 @@ func (s *QFrameSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QFrameSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.HasHeightForWidth")
-	r := C.qute_QFrame_super_7(self)
+	r := C.qute_QFrame_super_8(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -662,7 +713,7 @@ func (s *QFrameSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QFrame.Super.MousePressEvent")
 	}
-	C.qute_QFrame_super_8(self, eventPtr)
+	C.qute_QFrame_super_9(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -674,7 +725,7 @@ func (s *QFrameSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QFrame.Super.MouseReleaseEvent")
 	}
-	C.qute_QFrame_super_9(self, eventPtr)
+	C.qute_QFrame_super_10(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -686,7 +737,7 @@ func (s *QFrameSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QFrame.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QFrame_super_10(self, eventPtr)
+	C.qute_QFrame_super_11(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -698,7 +749,7 @@ func (s *QFrameSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QFrame.Super.MouseMoveEvent")
 	}
-	C.qute_QFrame_super_11(self, eventPtr)
+	C.qute_QFrame_super_12(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -710,7 +761,7 @@ func (s *QFrameSuper) WheelEvent(event *qtgui.QWheelEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QFrame.Super.WheelEvent")
 	}
-	C.qute_QFrame_super_12(self, eventPtr)
+	C.qute_QFrame_super_13(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -722,7 +773,7 @@ func (s *QFrameSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QFrame.Super.KeyPressEvent")
 	}
-	C.qute_QFrame_super_13(self, eventPtr)
+	C.qute_QFrame_super_14(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -734,7 +785,7 @@ func (s *QFrameSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QFrame.Super.KeyReleaseEvent")
 	}
-	C.qute_QFrame_super_14(self, eventPtr)
+	C.qute_QFrame_super_15(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -746,7 +797,7 @@ func (s *QFrameSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QFrame.Super.FocusInEvent")
 	}
-	C.qute_QFrame_super_15(self, eventPtr)
+	C.qute_QFrame_super_16(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -758,7 +809,7 @@ func (s *QFrameSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QFrame.Super.FocusOutEvent")
 	}
-	C.qute_QFrame_super_16(self, eventPtr)
+	C.qute_QFrame_super_17(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -770,7 +821,7 @@ func (s *QFrameSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QFrame.Super.EnterEvent")
 	}
-	C.qute_QFrame_super_17(self, eventPtr)
+	C.qute_QFrame_super_18(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -782,7 +833,7 @@ func (s *QFrameSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFrame.Super.LeaveEvent")
 	}
-	C.qute_QFrame_super_18(self, eventPtr)
+	C.qute_QFrame_super_19(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -794,7 +845,7 @@ func (s *QFrameSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QFrame.Super.MoveEvent")
 	}
-	C.qute_QFrame_super_19(self, eventPtr)
+	C.qute_QFrame_super_20(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -806,7 +857,7 @@ func (s *QFrameSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QFrame.Super.ResizeEvent")
 	}
-	C.qute_QFrame_super_20(self, eventPtr)
+	C.qute_QFrame_super_21(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -818,7 +869,7 @@ func (s *QFrameSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QFrame.Super.CloseEvent")
 	}
-	C.qute_QFrame_super_21(self, eventPtr)
+	C.qute_QFrame_super_22(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -830,7 +881,31 @@ func (s *QFrameSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QFrame.Super.ContextMenuEvent")
 	}
-	C.qute_QFrame_super_22(self, eventPtr)
+	C.qute_QFrame_super_23(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// TabletEvent calls QWidget::tabletEvent.
+func (s *QFrameSuper) TabletEvent(event *qtgui.QTabletEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.TabletEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QFrame.Super.TabletEvent")
+	}
+	C.qute_QFrame_super_24(self, eventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(event)
+}
+
+// ActionEvent calls QWidget::actionEvent.
+func (s *QFrameSuper) ActionEvent(event *qtgui.QActionEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.ActionEvent")
+	var eventPtr unsafe.Pointer
+	if event != nil {
+		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QFrame.Super.ActionEvent")
+	}
+	C.qute_QFrame_super_25(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -842,7 +917,7 @@ func (s *QFrameSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QFrame.Super.DragEnterEvent")
 	}
-	C.qute_QFrame_super_23(self, eventPtr)
+	C.qute_QFrame_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -854,7 +929,7 @@ func (s *QFrameSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QFrame.Super.DragMoveEvent")
 	}
-	C.qute_QFrame_super_24(self, eventPtr)
+	C.qute_QFrame_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -866,7 +941,7 @@ func (s *QFrameSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QFrame.Super.DragLeaveEvent")
 	}
-	C.qute_QFrame_super_25(self, eventPtr)
+	C.qute_QFrame_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -878,7 +953,7 @@ func (s *QFrameSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QFrame.Super.DropEvent")
 	}
-	C.qute_QFrame_super_26(self, eventPtr)
+	C.qute_QFrame_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -890,7 +965,7 @@ func (s *QFrameSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QFrame.Super.ShowEvent")
 	}
-	C.qute_QFrame_super_27(self, eventPtr)
+	C.qute_QFrame_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -902,15 +977,27 @@ func (s *QFrameSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QFrame.Super.HideEvent")
 	}
-	C.qute_QFrame_super_28(self, eventPtr)
+	C.qute_QFrame_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodEvent calls QWidget::inputMethodEvent.
+func (s *QFrameSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.InputMethodEvent")
+	var inputMethodEventPtr unsafe.Pointer
+	if inputMethodEvent != nil {
+		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QFrame.Super.InputMethodEvent")
+	}
+	C.qute_QFrame_super_32(self, inputMethodEventPtr)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(inputMethodEvent)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QFrameSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QFrame.Super.FocusNextPrevChild")
-	r := C.qute_QFrame_super_29(self, C.bool(next))
+	r := C.qute_QFrame_super_33(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -926,7 +1013,7 @@ func (s *QFrameSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFrame.Super.EventFilter")
 	}
-	r := C.qute_QFrame_super_30(self, watchedPtr, eventPtr)
+	r := C.qute_QFrame_super_34(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -940,7 +1027,7 @@ func (s *QFrameSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QFrame.Super.TimerEvent")
 	}
-	C.qute_QFrame_super_31(self, eventPtr)
+	C.qute_QFrame_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -952,7 +1039,7 @@ func (s *QFrameSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QFrame.Super.ChildEvent")
 	}
-	C.qute_QFrame_super_32(self, eventPtr)
+	C.qute_QFrame_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -964,65 +1051,72 @@ func (s *QFrameSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFrame.Super.CustomEvent")
 	}
-	C.qute_QFrame_super_33(self, eventPtr)
+	C.qute_QFrame_super_37(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
 
 // DrawFrame wraps the protected QFrame::drawFrame for subclasses.
 func (b *QFrameBase) DrawFrame(painter qtgui.QPainterLike) {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.DrawFrame")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.DrawFrame")
 	var painterPtr unsafe.Pointer
 	if painter != nil {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QFrame.DrawFrame")
 	}
 	C.qute_QFrame_prot_drawFrame(self, painterPtr)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	runtime.KeepAlive(painter)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
 func (b *QFrameBase) UpdateMicroFocus() {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.UpdateMicroFocus")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.UpdateMicroFocus")
 	C.qute_QFrame_prot_updateMicroFocus(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Create wraps the protected QWidget::create for subclasses.
 func (b *QFrameBase) Create() {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.Create")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.Create")
 	C.qute_QFrame_prot_create(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // Destroy wraps the protected QWidget::destroy for subclasses.
 func (b *QFrameBase) Destroy() {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.Destroy")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.Destroy")
 	C.qute_QFrame_prot_destroy(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 }
 
 // FocusNextChild wraps the protected QWidget::focusNextChild for subclasses.
 func (b *QFrameBase) FocusNextChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.FocusNextChild")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.FocusNextChild")
 	r := C.qute_QFrame_prot_focusNextChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // FocusPreviousChild wraps the protected QWidget::focusPreviousChild for subclasses.
 func (b *QFrameBase) FocusPreviousChild() bool {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.FocusPreviousChild")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.FocusPreviousChild")
 	r := C.qute_QFrame_prot_focusPreviousChild(self)
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QFrameBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {
-	self := rt.Use(unsafe.Pointer(b.QFrame), "QFrame.GetDecodedMetricF")
+	this := b.QFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFrame.GetDecodedMetricF")
 	r := C.qute_QFrame_prot_getDecodedMetricF(self, C.int64_t(metricA), C.int64_t(metricB))
-	runtime.KeepAlive(b)
+	runtime.KeepAlive(this)
 	return float64(r)
 }
 

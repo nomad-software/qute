@@ -2071,6 +2071,25 @@ var qWebEnginePageVTable = []rt.Virtual{
 			}).JavaScriptConfirm(securityOrigin, msg)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+	{Name: "JavaScriptPrompt", Has: func(v any) bool {
+		_, ok := v.(interface {
+			JavaScriptPrompt(*qtcore.QUrl, string, string) (bool, string)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
+			securityOrigin := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			msg := quteStr(*(*C.qute_str)(a[1]))
+			defaultValue := quteStr(*(*C.qute_str)(a[2]))
+			r, o3 := v.(interface {
+				JavaScriptPrompt(*qtcore.QUrl, string, string) (bool, string)
+			}).JavaScriptPrompt(securityOrigin, msg, defaultValue)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[3] != nil {
+				*(*C.qute_str)(a[3]) = quteCStr(o3)
+			}
+		}},
 	{Name: "JavaScriptConsoleMessage", Has: func(v any) bool {
 		_, ok := v.(interface {
 			JavaScriptConsoleMessage(QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string)
@@ -2227,17 +2246,27 @@ func (s *QWebEnginePageSuper) JavaScriptConfirm(securityOrigin *qtcore.QUrl, msg
 	return bool(r)
 }
 
+// JavaScriptPrompt calls QWebEnginePage::javaScriptPrompt.
+func (s *QWebEnginePageSuper) JavaScriptPrompt(securityOrigin *qtcore.QUrl, msg string, defaultValue string) (bool, string) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEnginePage.Super.JavaScriptPrompt")
+	var resultOut C.qute_str
+	r := C.qute_QWebEnginePage_super_6(self, rt.UseArg(unsafe.Pointer(securityOrigin), "QWebEnginePage.Super.JavaScriptPrompt"), (*C.char)(unsafe.Pointer(unsafe.StringData(msg))), C.ptrdiff_t(len(msg)), (*C.char)(unsafe.Pointer(unsafe.StringData(defaultValue))), C.ptrdiff_t(len(defaultValue)), &resultOut)
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(securityOrigin)
+	return bool(r), quteStr(resultOut)
+}
+
 // JavaScriptConsoleMessage calls QWebEnginePage::javaScriptConsoleMessage.
 func (s *QWebEnginePageSuper) JavaScriptConsoleMessage(level QWebEnginePageJavaScriptConsoleMessageLevel, message string, lineNumber int, sourceID string) {
 	self := rt.Use(unsafe.Pointer(s.this), "QWebEnginePage.Super.JavaScriptConsoleMessage")
-	C.qute_QWebEnginePage_super_6(self, C.int64_t(level), (*C.char)(unsafe.Pointer(unsafe.StringData(message))), C.ptrdiff_t(len(message)), C.int(lineNumber), (*C.char)(unsafe.Pointer(unsafe.StringData(sourceID))), C.ptrdiff_t(len(sourceID)))
+	C.qute_QWebEnginePage_super_7(self, C.int64_t(level), (*C.char)(unsafe.Pointer(unsafe.StringData(message))), C.ptrdiff_t(len(message)), C.int(lineNumber), (*C.char)(unsafe.Pointer(unsafe.StringData(sourceID))), C.ptrdiff_t(len(sourceID)))
 	runtime.KeepAlive(s.this)
 }
 
 // AcceptNavigationRequest calls QWebEnginePage::acceptNavigationRequest.
 func (s *QWebEnginePageSuper) AcceptNavigationRequest(url *qtcore.QUrl, typeArg QWebEnginePageNavigationType, isMainFrame bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QWebEnginePage.Super.AcceptNavigationRequest")
-	r := C.qute_QWebEnginePage_super_7(self, rt.UseArg(unsafe.Pointer(url), "QWebEnginePage.Super.AcceptNavigationRequest"), C.int64_t(typeArg), C.bool(isMainFrame))
+	r := C.qute_QWebEnginePage_super_8(self, rt.UseArg(unsafe.Pointer(url), "QWebEnginePage.Super.AcceptNavigationRequest"), C.int64_t(typeArg), C.bool(isMainFrame))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(url)
 	return bool(r)
@@ -2254,7 +2283,7 @@ func (s *QWebEnginePageSuper) EventFilter(watched *qtcore.QObject, event *qtcore
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEnginePage.Super.EventFilter")
 	}
-	r := C.qute_QWebEnginePage_super_8(self, watchedPtr, eventPtr)
+	r := C.qute_QWebEnginePage_super_9(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -2268,7 +2297,7 @@ func (s *QWebEnginePageSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QWebEnginePage.Super.TimerEvent")
 	}
-	C.qute_QWebEnginePage_super_9(self, eventPtr)
+	C.qute_QWebEnginePage_super_10(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2280,7 +2309,7 @@ func (s *QWebEnginePageSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QWebEnginePage.Super.ChildEvent")
 	}
-	C.qute_QWebEnginePage_super_10(self, eventPtr)
+	C.qute_QWebEnginePage_super_11(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2292,7 +2321,7 @@ func (s *QWebEnginePageSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEnginePage.Super.CustomEvent")
 	}
-	C.qute_QWebEnginePage_super_11(self, eventPtr)
+	C.qute_QWebEnginePage_super_12(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }

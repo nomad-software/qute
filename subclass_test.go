@@ -1,0 +1,290 @@
+package qute_test
+
+import (
+	"strings"
+	"testing"
+
+	"github.com/nomad-software/qute"
+	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
+	"github.com/nomad-software/qute/qtwidgets"
+	"github.com/nomad-software/qute/qutetest"
+)
+
+// Subclassing is on for every class Qt lets Go subclass. These tests cover
+// classes and shapes that needed a spec entry, or were impossible, before:
+// views, validators, graphics items, models returning maps, protected enums,
+// abstract classes with no override at all, and finding the Go value again.
+
+type keyTree struct {
+	qtwidgets.QTreeViewBase
+	keys []qtcore.Key
+}
+
+func (v *keyTree) KeyPressEvent(e *qtgui.QKeyEvent) {
+	v.keys = append(v.keys, qtcore.Key(e.Key()))
+	v.Super().KeyPressEvent(e)
+}
+
+// A QTreeView subclass gets its events, and its Base reaches the protected
+// methods and enums of QAbstractItemView.
+func TestSubclassTreeView(t *testing.T) {
+	qutetest.Run(t, func() {
+		v := &keyTree{}
+		qtwidgets.NewQTreeViewWith(v, nil)
+		defer v.Delete()
+		qutetest.Key(v, qtcore.Key_Down, 0)
+		if len(v.keys) != 1 || v.keys[0] != qtcore.Key_Down {
+			t.Errorf("KeyPressEvent saw %v, want [Key_Down]", v.keys)
+		}
+		v.SetState(qtwidgets.QAbstractItemViewEditingState)
+		if got := v.State(); got != qtwidgets.QAbstractItemViewEditingState {
+			t.Errorf("State() = %v after SetState(EditingState)", got)
+		}
+		v.SetState(qtwidgets.QAbstractItemViewNoState)
+	})
+}
+
+type upperValidator struct {
+	qtgui.QValidatorBase
+	fixed int
+}
+
+// Validate upper-cases what is typed: the in-out string goes back to Qt.
+func (u *upperValidator) Validate(input string, pos int) (qtgui.QValidatorState, string, int) {
+	return qtgui.QValidatorAcceptable, strings.ToUpper(input), pos
+}
+
+func (u *upperValidator) Fixup(input string) string {
+	u.fixed++
+	return strings.TrimSpace(input)
+}
+
+// An override with in-out parameters (validate(QString &, int &)) changes
+// what Qt sees, through a QLineEdit and through the binding.
+func TestSubclassValidatorInOut(t *testing.T) {
+	qutetest.Run(t, func() {
+		edit := qtwidgets.NewQLineEdit(nil)
+		defer edit.Delete()
+		u := &upperValidator{}
+		qtgui.NewQValidatorWith(u, edit)
+		edit.SetValidator(u)
+		qutetest.Type(edit, "abc")
+		if got := edit.Text(); got != "ABC" {
+			t.Errorf("text %q, want the validator's ABC", got)
+		}
+		// the binding dispatches virtually, so it reaches the override too
+		state, s, pos := u.QValidator.Validate("xyz", 2)
+		if state != qtgui.QValidatorAcceptable || s != "XYZ" || pos != 2 {
+			t.Errorf("Validate = %v, %q, %d", state, s, pos)
+		}
+		if got := u.QValidator.Fixup("  a  "); got != "a" || u.fixed != 1 {
+			t.Errorf("Fixup = %q (called %d times)", got, u.fixed)
+		}
+	})
+}
+
+type evenValidator struct{ qtgui.QIntValidatorBase }
+
+// Validate accepts only even numbers, on top of QIntValidator's own check.
+func (e *evenValidator) Validate(input string, pos int) (qtgui.QValidatorState, string, int) {
+	state, input, pos := e.Super().Validate(input, pos)
+	if state == qtgui.QValidatorAcceptable && (input[len(input)-1]-'0')%2 != 0 {
+		state = qtgui.QValidatorIntermediate
+	}
+	return state, input, pos
+}
+
+// Super() of an in-out virtual calls the C++ implementation and returns its
+// results.
+func TestSubclassValidatorSuper(t *testing.T) {
+	qutetest.Run(t, func() {
+		e := &evenValidator{}
+		qtgui.NewQIntValidatorWith(e, nil)
+		defer e.Delete()
+		for in, want := range map[string]qtgui.QValidatorState{
+			"12": qtgui.QValidatorAcceptable, "13": qtgui.QValidatorIntermediate, "1x": qtgui.QValidatorInvalid,
+		} {
+			if got, _, _ := e.QValidator.Validate(in, 0); got != want {
+				t.Errorf("Validate(%q) = %v, want %v", in, got, want)
+			}
+		}
+	})
+}
+
+type roleModel struct{ qtgui.QStandardItemModelBase }
+
+func (m *roleModel) RoleNames() map[int][]byte {
+	return map[int][]byte{int(qtcore.DisplayRole): []byte("title"), int(qtcore.UserRole): []byte("sender")}
+}
+
+func (m *roleModel) ItemData(index *qtcore.QModelIndex) map[int]*qtcore.QVariant {
+	return map[int]*qtcore.QVariant{int(qtcore.UserRole): qtcore.NewQVariantWithInt(index.Row() + 40)}
+}
+
+// Maps come back from an override (QHash<int, QByteArray>, QMap<int, QVariant>).
+func TestSubclassMapResults(t *testing.T) {
+	qutetest.Run(t, func() {
+		m := &roleModel{}
+		qtgui.NewQStandardItemModelWith(m, nil)
+		defer m.Delete()
+		m.AppendRow(qtgui.NewQStandardItemWithText("a"))
+		m.AppendRow(qtgui.NewQStandardItemWithText("b"))
+		names := m.QAbstractItemModel.RoleNames()
+		if string(names[int(qtcore.UserRole)]) != "sender" || string(names[int(qtcore.DisplayRole)]) != "title" || len(names) != 2 {
+			t.Errorf("RoleNames = %v", names)
+		}
+		data := m.QAbstractItemModel.ItemData(m.Index(1, 0))
+		if v := data[int(qtcore.UserRole)]; len(data) != 1 || v == nil || v.ToInt() != 41 {
+			t.Errorf("ItemData = %v", data)
+		}
+	})
+}
+
+type redItem struct {
+	qtwidgets.QGraphicsItemBase
+	painted int
+}
+
+func (r *redItem) BoundingRect() qtcore.QRectF { return qtcore.QRectF{Width: 20, Height: 20} }
+
+func (r *redItem) Paint(p *qtgui.QPainter, _ *qtwidgets.QStyleOptionGraphicsItem, _ *qtwidgets.QWidget) {
+	r.painted++
+	p.FillRectF(r.BoundingRect(), qtgui.RGB(220, 0, 0))
+}
+
+// A Go QGraphicsItem (abstract in C++, so only built through its shim)
+// paints into a scene, comes back from the scene as itself, and dies with it.
+func TestSubclassGraphicsItem(t *testing.T) {
+	qutetest.Run(t, func() {
+		scene := qtwidgets.NewQGraphicsScene(nil)
+		item := &redItem{}
+		qtwidgets.NewQGraphicsItemWith(item, nil)
+		scene.AddItem(item)
+		if got := item.Ownership(); got != qtcore.Parented {
+			t.Errorf("item after AddItem: %v, want Parented", got)
+		}
+		img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 20, Height: 20}, qtgui.QImageFormat_ARGB32)
+		img.FillColor(qtgui.RGB(255, 255, 255))
+		p := qtgui.NewQPainterOn(img)
+		scene.Render(p)
+		p.End()
+		p.Delete()
+		if c := img.PixelColor(10, 10); item.painted == 0 || c.R < 200 || c.G > 20 {
+			t.Errorf("painted %d times, centre pixel %v, want red", item.painted, c)
+		}
+		items := scene.Items()
+		if len(items) != 1 {
+			t.Fatalf("scene has %d items", len(items))
+		}
+		if got, ok := items[0].GoValue().(*redItem); !ok || got != item {
+			t.Errorf("GoValue of the scene's item = %v, want the Go item", items[0].GoValue())
+		}
+		scene.Delete()
+		if item.Alive() {
+			t.Error("the Go item is alive after its scene was deleted")
+		}
+	})
+}
+
+type plainDelegate struct {
+	qtwidgets.QStyledItemDelegateBase
+}
+
+type blockState struct {
+	qtgui.QTextBlockUserDataBase
+	words int
+}
+
+// GoValue finds the Go value behind a pointer Qt hands back: a view's
+// delegate, a block's user data. An object built without one has none.
+func TestGoValue(t *testing.T) {
+	qutetest.Run(t, func() {
+		view := qtwidgets.NewQListView(nil)
+		defer view.Delete()
+		d := &plainDelegate{}
+		qtwidgets.NewQStyledItemDelegateWith(d, view)
+		view.SetItemDelegate(d)
+		if got, ok := view.ItemDelegate().GoValue().(*plainDelegate); !ok || got != d {
+			t.Errorf("ItemDelegate().GoValue() = %v, want the Go delegate", view.ItemDelegate().GoValue())
+		}
+		if v := qtwidgets.NewQStyledItemDelegate(view).GoValue(); v != nil {
+			t.Errorf("a plain delegate has Go value %v", v)
+		}
+		doc := qtgui.NewQTextDocument(nil)
+		defer doc.Delete()
+		doc.SetPlainText("one two three")
+		bs := &blockState{words: 3}
+		qtgui.NewQTextBlockUserDataWith(bs)
+		doc.FirstBlock().SetUserData(bs)
+		if got, ok := doc.FirstBlock().UserData().GoValue().(*blockState); !ok || got.words != 3 {
+			t.Errorf("UserData().GoValue() = %v, want the block state", doc.FirstBlock().UserData().GoValue())
+		}
+	})
+}
+
+type wordHighlighter struct {
+	qtgui.QSyntaxHighlighterBase
+	blocks []string
+}
+
+// HighlightBlock bolds the first word and records the block's word count as
+// Go state on the block.
+func (h *wordHighlighter) HighlightBlock(text string) {
+	h.blocks = append(h.blocks, text)
+	f := qtgui.NewQTextCharFormat()
+	f.SetFontWeight(int(qtgui.QFontBold))
+	h.SetFormat(0, strings.IndexByte(text+" ", ' '), f)
+	st := &blockState{words: len(strings.Fields(text))}
+	qtgui.NewQTextBlockUserDataWith(st)
+	h.SetCurrentBlockUserData(st)
+}
+
+// A Go QSyntaxHighlighter (abstract: highlightBlock is pure) runs for each
+// block and hands its per-block state to the document, which frees it.
+func TestSubclassSyntaxHighlighter(t *testing.T) {
+	qutetest.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		h := &wordHighlighter{}
+		qtgui.NewQSyntaxHighlighterWith(h, doc) // the QObject constructor: parented, but not attached
+		h.SetDocument(doc)
+		doc.SetPlainText("hello world\nsecond line here")
+		h.blocks = nil
+		h.Rehighlight() // Qt otherwise highlights the new text from a deferred call
+		if len(h.blocks) != 2 {
+			t.Fatalf("HighlightBlock ran for %q", h.blocks)
+		}
+		second := doc.FirstBlock().Next()
+		st, ok := second.UserData().GoValue().(*blockState)
+		if !ok || st.words != 3 {
+			t.Fatalf("second block's state = %v", second.UserData().GoValue())
+		}
+		if got := st.Ownership(); got != qtcore.Parented {
+			t.Errorf("block state: %v, want Parented (the document owns it)", got)
+		}
+		doc.Delete()
+		if st.Alive() || h.Alive() {
+			t.Errorf("after the document died: state alive %v, highlighter alive %v", st.Alive(), h.Alive())
+		}
+	})
+}
+
+type emptyLayout struct{ qtwidgets.QLayoutBase }
+
+// An abstract class whose pure virtuals Go leaves alone returns their zero
+// value (itemAt, takeAt: nullptr; count: 0), so Qt can use it.
+func TestSubclassPureVirtualDefaults(t *testing.T) {
+	qutetest.Run(t, func() {
+		w := qtwidgets.NewQWidget(nil)
+		defer w.Delete()
+		l := &emptyLayout{}
+		qtwidgets.NewQLayoutWith(l, w)
+		w.Resize(100, 50)
+		w.Show()
+		qute.ProcessEvents()
+		if l.Count() != 0 || l.ItemAt(0) != nil || l.TakeAt(0) != nil {
+			t.Errorf("Count %d, ItemAt %v, TakeAt %v, want the zero values", l.Count(), l.ItemAt(0), l.TakeAt(0))
+		}
+		w.Hide()
+	})
+}

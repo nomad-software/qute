@@ -58,8 +58,11 @@ type Class struct {
 	DefCtor   bool // has a public constructor callable with no arguments
 	HasDtor   bool
 	Skipped   []skipNote
-	cNames    map[string]int
-	goNames   map[string]string
+	// NoVirtuals are the virtuals this class declares that Go cannot override.
+	NoVirtuals []skipNote
+	protected  map[string]*Method // its own protected methods, built once (ownProtected)
+	cNames     map[string]int
+	goNames    map[string]string
 }
 
 type skipNote struct {
@@ -329,6 +332,11 @@ func (g *Gen) build() error {
 			}
 		}
 	}
+	for _, m := range g.modules {
+		for _, c := range m.Classes {
+			g.chooseSubclass(c)
+		}
+	}
 	// 3. enums
 	for _, m := range g.modules {
 		g.collectEnums(m)
@@ -359,6 +367,58 @@ func (g *Gen) build() error {
 		}
 	}
 	return nil
+}
+
+// chooseSubclass decides whether Go may subclass c, before its members are
+// built (an abstract class's constructors are only bound for its shim).
+// Subclassing is on wherever it can work; buildShim turns it off again when
+// the class has no constructor or a pure virtual Go cannot implement.
+func (g *Gen) chooseSubclass(c *Class) {
+	o := c.Opts
+	o.Subclass, o.NoSubclass = false, ""
+	if o.EnumsOnly || c.Kind == KindValue || c.Event {
+		if o.SubclassOpt != nil && *o.SubclassOpt {
+			g.report.warn("%s: subclass: true on a value, event or enums-only class", c.Name)
+		}
+		return // values and events are not objects Go code would subclass
+	}
+	if !c.QObject && !polymorphic(c.IR) {
+		if o.SubclassOpt != nil && *o.SubclassOpt {
+			g.report.warn("%s: subclass: true on a class without virtuals", c.Name)
+		}
+		return
+	}
+	why := ""
+	switch {
+	case o.SubclassOpt != nil && !*o.SubclassOpt:
+		why = "turned off in the spec (subclass: false)"
+	case o.NoConstruct:
+		why = "only Qt creates these objects (no-construct)"
+	case !c.HasDtor:
+		why = "its destructor is not public"
+	}
+	if why != "" {
+		if o.SubclassOpt != nil && *o.SubclassOpt {
+			g.report.warn("%s: subclass: true, but %s", c.Name, why)
+		}
+		o.NoSubclass = why
+		return
+	}
+	o.Subclass = true
+}
+
+// noSubclass turns subclassing off after buildShim found why it cannot work.
+// Only a class the spec insists on warns; the others are listed in COVERAGE.md.
+func (g *Gen) noSubclass(c *Class, why string) {
+	if c.Opts.SubclassOpt != nil && *c.Opts.SubclassOpt {
+		g.report.warn("%s: %s, so the class cannot be subclassed from Go", c.Name, why)
+	}
+	c.Opts.Subclass = false
+	c.Opts.NoSubclass = why
+	c.Virtuals = nil
+	c.Protected = nil
+	c.ShimCtors = nil
+	c.Shim = c.Opts.NotifyDtor && !c.Opts.NoConstruct
 }
 
 // markQBases marks the plain, polymorphic classes a QObject class derives
@@ -527,6 +587,15 @@ func (g *Gen) buildMembers(c *Class) {
 	inherited := map[string]bool{}                    // names whose inherited binding must stay visible
 	for i := range c.IR.Methods {
 		im := &c.IR.Methods[i]
+		if im.Access == "protected" && im.Kind == "ctor" && c.Opts.Subclass && !im.Copy && !im.Move && !privateCtor(im) {
+			// a protected constructor (QTextObject(QTextDocument *)) is only
+			// callable by a subclass, so it builds the shim
+			if mm := g.newMethod(c, im, nil, true, false); mm != nil {
+				mm.CName = c.cName("new")
+				c.ShimCtors = append(c.ShimCtors, mm)
+			}
+			continue
+		}
 		if im.Access != "public" {
 			continue // protected members are bound on the Base type by buildShim
 		}
@@ -1231,7 +1300,7 @@ func (g *Gen) buildShim(c *Class) {
 	walk(c)
 	// Names declared in more-derived classes hide base overloads in C++.
 	hidden := map[string]*Class{}
-	pureMissing := false
+	pureMissing := "" // the first pure virtual Go cannot implement
 	for _, x := range chain {
 		for i := range x.IR.Methods {
 			im := &x.IR.Methods[i]
@@ -1270,15 +1339,16 @@ func (g *Gen) buildShim(c *Class) {
 				hidden[im.Name] = x
 			}
 			if im.Final || globalSkip[im.Name] || strings.HasPrefix(im.Name, "operator") || skipV[im.Name] || im.Deprecated {
-				if im.Pure {
-					pureMissing = true
+				if im.Pure && pureMissing == "" {
+					pureMissing = x.Cpp + "::" + im.Name
 				}
 				continue
 			}
-			mm := g.newVirtual(c, x, im)
+			mm, why := g.newVirtual(c, x, im)
 			if mm == nil {
-				if im.Pure {
-					pureMissing = true
+				g.noVirtual(x, im, why)
+				if im.Pure && pureMissing == "" {
+					pureMissing = x.Cpp + "::" + im.Name
 				}
 				continue
 			}
@@ -1286,17 +1356,39 @@ func (g *Gen) buildShim(c *Class) {
 			c.Virtuals = append(c.Virtuals, mm)
 		}
 	}
-	if pureMissing {
-		g.report.warn("%s: a pure virtual cannot be bound, so the class cannot be subclassed from Go", c.Name)
-		c.Opts.Subclass = false
-		c.Virtuals = nil
-		c.Protected = nil
-		c.Shim = c.Opts.NotifyDtor
+	if pureMissing != "" {
+		g.noSubclass(c, "Go cannot implement its pure virtual "+pureMissing)
 		return
 	}
-	// name the Go override methods
+	if primaryCtor(c) == nil {
+		g.noSubclass(c, "it has no public constructor")
+		return
+	}
+	// Name the Go override methods. A public virtual keeps the name of its
+	// binding, so an overload is overridden under the name it is called by
+	// (QLayout.IndexOfItem); the others take the C++ name.
+	bound := map[string]string{}
+	for _, x := range chain {
+		for _, m := range x.Methods {
+			if !m.Full && !m.Emit {
+				if _, ok := bound[paramKey(m.IR)]; !ok {
+					bound[paramKey(m.IR)] = m.GoName
+				}
+			}
+		}
+	}
 	used := map[string]int{}
 	for _, v := range c.Virtuals {
+		if n, ok := bound[paramKey(v.IR)]; ok {
+			v.GoName = n
+			used[n]++
+		}
+	}
+	for _, v := range c.Virtuals {
+		v.CName = fmt.Sprintf("qute_%s_super_%d", c.Name, v.VIndex)
+		if v.GoName != "" {
+			continue
+		}
 		n := exportName(v.IR.Name)
 		used[n]++
 		if used[n] > 1 {
@@ -1304,28 +1396,76 @@ func (g *Gen) buildShim(c *Class) {
 			v.Numbered = true
 		}
 		v.GoName = n
-		v.CName = fmt.Sprintf("qute_%s_super_%d", c.Name, v.VIndex)
 	}
-	pused := map[string]int{}
 	for _, v := range c.Protected {
-		n := exportName(v.IR.Name)
-		pused[n]++
-		if pused[n] > 1 {
-			n = fmt.Sprintf("%s%d", n, pused[n])
-		}
-		v.GoName = n
 		v.CName = c.cName("prot_" + v.IR.Name)
+	}
+	if c.Opts.NotifyDtor {
+		g.report.warn("%s: notify-dtor is redundant: its subclass shim reports its death", c.Name)
 	}
 }
 
-func (g *Gen) newVirtual(c, owner *Class, im *irMethod) *Method {
+// noVirtual records, once per declaring class, a virtual Go cannot override.
+func (g *Gen) noVirtual(owner *Class, im *irMethod, why string) {
+	sig := g.methodSig(owner, im)
+	for _, n := range owner.NoVirtuals {
+		if n.Sig == sig {
+			return
+		}
+	}
+	owner.NoVirtuals = append(owner.NoVirtuals, skipNote{Sig: sig, Why: why})
+}
+
+func (g *Gen) newVirtual(c, owner *Class, im *irMethod) (*Method, string) {
 	mm := &Method{Class: c, Owner: owner, IR: im, Sig: g.methodSig(owner, im)}
+	// The overlays of the declaring class and its bases rule the virtual: a
+	// derived class's override has no binding of its own (the base's
+	// dispatches), so its rules sit on the base. A virtual that is only
+	// protected has no public binding to claim its overlay entry, so every
+	// entry is claimed here.
+	var ovs []*overlay
+	var ovDecl []*irMethod // each overlay's class's own declaration, for its parameter names
+	for x := owner; x != nil; x = x.Base {
+		ov, used := x.Module.Overlays.overlayFor(x.Name, im)
+		for _, u := range used {
+			x.Module.usedOver[x.Name+"::"+u] = true
+		}
+		if ov != nil {
+			ovs = append(ovs, ov)
+			ovDecl = append(ovDecl, declIn(x, im))
+		}
+	}
+	names := paramNames(im)
 	for i, p := range im.Params {
+		// a confirmed out or in-out parameter (validate(QString &, int &)):
+		// the override takes the value and returns the new one, as the
+		// method's binding does. A base may name the parameter differently
+		// (QAbstractSpinBox::fixup(input), QSpinBox::fixup(str)).
+		outRule := ""
+		for k, ov := range ovs {
+			d := ovDecl[k]
+			if outRule = ruleFor(ov, d.Params[i].Name, i); outRule == "" {
+				outRule = ruleFor(ov, paramNames(d)[i], i)
+			}
+			if outRule != "" {
+				break
+			}
+		}
+		if outRule == "out" || outRule == "in-out" {
+			oc, inout, byPtr, cppT := g.outConv(p, false, outRule)
+			if oc == nil || oc.k == kValue {
+				return nil, fmt.Sprintf("parameter %s: an override cannot fill in %s", names[i], p.Type.Canonical)
+			}
+			pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: oc,
+				Out: !inout, InOut: inout, ByPtr: byPtr, CppT: cppT, Rule: outRule, Ruled: true}
+			mm.Params = append(mm.Params, pp)
+			continue
+		}
 		t, err := g.resolve(p.Type, true)
 		if err != nil {
-			return nil
+			return nil, fmt.Sprintf("parameter %s: %v", names[i], err)
 		}
-		pp := &Param{Name: p.Name, GoName: paramNames(im)[i], CName: fmt.Sprintf("a%d", i), T: t, Rule: "borrowed"}
+		pp := &Param{Name: p.Name, GoName: names[i], CName: fmt.Sprintf("a%d", i), T: t, Rule: "borrowed"}
 		if t.k == kObj && t.ref {
 			// interceptRequest(QWebEngineUrlRequestInfo &): Qt's object on
 			// its stack, so Go gets that object, valid for the call only
@@ -1352,41 +1492,114 @@ func (g *Gen) newVirtual(c, owner *Class, im *irMethod) *Method {
 		mm.Params = append(mm.Params, pp)
 	}
 	t, err := g.resolve(im.Return, true)
-	if err != nil || !virtRetSupported(t) {
-		return nil
+	if err != nil {
+		return nil, fmt.Sprintf("result: %v", err)
+	}
+	if !virtRetSupported(t) {
+		return nil, "result: a Go override cannot return " + im.Return.Canonical
 	}
 	mm.Ret = t
 	// A result the caller owns (mimeData, clone, createPopupMenu): from a Go
 	// override it goes the other way, to the C++ caller, which frees it. The
 	// overlay's return rule says so for both directions.
-	// The rule may sit on the base that first declares the virtual.
-	for x := owner; t.k == kObj && x != nil && mm.RetRule == ""; x = x.Base {
-		if ov, _ := x.Module.Overlays.overlayFor(x.Name, im); ov != nil && ov.Return != "" {
-			if ov.Return == "transfer-to-go" || ov.Return == "parented" {
-				mm.RetRule, mm.RetRuled = ov.Return, true
-			}
-			break
+	for _, ov := range ovs {
+		if ov.Return == "" && !ov.Reviewed {
+			continue
 		}
+		mm.Overlay = ov
+		if ov.Return == "transfer-to-go" || ov.Return == "parented" {
+			mm.RetRule = ov.Return
+		}
+		mm.RetRuled = ov.Return != ""
+		break
 	}
-	return mm
+	return mm, ""
 }
 
-func (g *Gen) newProtected(c, owner *Class, im *irMethod) *Method {
-	if im.Static {
-		return nil
-	}
-	mm := g.newMethod(owner, im, nil, false, false)
-	if mm == nil {
-		return nil
-	}
-	for _, p := range mm.Params {
-		if p.Out || p.InOut || p.Pair != "" {
-			return nil
+// privateCtor reports a constructor that takes Qt's private d-pointer
+// (QTextObject(QTextObjectPrivate &, QTextDocument *)), for Qt's own subclasses.
+func privateCtor(im *irMethod) bool {
+	for _, p := range im.Params {
+		if strings.Contains(p.Type.Canonical, "Private") {
+			return true
 		}
 	}
+	return false
+}
+
+// declIn returns x's own declaration of the method im overrides or declares
+// (same parameter types), or im when x declares none.
+func declIn(x *Class, im *irMethod) *irMethod {
+	key := paramKey(im)
+	for i := range x.IR.Methods {
+		if d := &x.IR.Methods[i]; d.Kind != "ctor" && paramKey(d) == key {
+			return d
+		}
+	}
+	return im
+}
+
+// newProtected returns c's copy of a protected method its ancestor owner
+// declares, or nil when it is not bound. The owner's protected methods are
+// built and named once (protectedOf), so every subclass's Base calls them the same.
+func (g *Gen) newProtected(c, owner *Class, im *irMethod) *Method {
+	tmpl := g.ownProtected(owner)[paramKey(im)]
+	if tmpl == nil {
+		return nil
+	}
+	mm := *tmpl
 	mm.Class = c
-	mm.Owner = owner
-	return mm
+	return &mm
+}
+
+// ownProtected builds and names the protected non-virtual methods x
+// declares, keyed by parameter key. They are named together, like public
+// overloads (SetFormat, SetFormatWithColor), and never take the name of a
+// public method x or a base binds, which they would hide on the Base type.
+func (g *Gen) ownProtected(x *Class) map[string]*Method {
+	if x.protected != nil {
+		return x.protected
+	}
+	x.protected = map[string]*Method{}
+	var ms []*Method
+	for i := range x.IR.Methods {
+		im := &x.IR.Methods[i]
+		if im.Access != "protected" || im.Kind != "method" && im.Kind != "slot" || im.Virtual || im.Static ||
+			globalSkip[im.Name] || strings.HasPrefix(im.Name, "operator") || im.Deprecated {
+			continue
+		}
+		// the overlay of the declaring class rules every subclass's copy
+		ov, used := x.Module.Overlays.overlayFor(x.Name, im)
+		for _, u := range used {
+			x.Module.usedOver[x.Name+"::"+u] = true
+		}
+		if ov.skipped() {
+			g.skip(x, im, fmt.Sprintf("skipped by overlay (%v)", ov.Skip))
+			continue
+		}
+		mm := g.newMethod(x, im, ov, false, false)
+		if mm == nil {
+			continue
+		}
+		ok := true
+		for _, p := range mm.Params {
+			ok = ok && !p.Out && !p.InOut && p.Pair == ""
+		}
+		if ok {
+			ms = append(ms, mm)
+		}
+	}
+	var taken []*Method
+	for b := x; b != nil; b = b.Base {
+		taken = append(taken, b.Methods...)
+	}
+	cnames := x.cNames
+	x.cNames = map[string]int{} // nameMethods numbers C names; the shim names its own
+	for _, mm := range g.nameMethods(x, ms, "", taken) {
+		x.protected[paramKey(mm.IR)] = mm
+	}
+	x.cNames = cnames
+	return x.protected
 }
 
 func (m *Module) dependsOn(x *Module) bool {
