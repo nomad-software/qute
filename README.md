@@ -387,6 +387,9 @@ qtgui.NewQValidatorWith(u, edit)
 edit.SetValidator(u)
 ```
 
+Overrides are found through embedding, so a type that embeds your `Canvas`
+inherits its `PaintEvent`.
+
 The Base type also carries the class's protected methods (`SetFormat` on a
 syntax highlighter, `SetState` on a view). `GoValue()` finds your Go value
 behind a pointer Qt hands back: `view.ItemDelegate().GoValue().(*MyDelegate)`,
@@ -400,7 +403,9 @@ All Qt calls happen on the GUI thread (the main goroutine inside
 is re-raised by `PostSync` with the handler's stack.
 
 In tests, `t.Fatal` and `t.Skip` work inside `qutetest.Run` and end the test
-as usual.
+as usual. A test may close or delete its windows: under `qutetest.TestMain`
+closing the last window does not quit the application, as it does under
+`qute.Main`.
 
 The application object is never destroyed: once the event loop exits, qute
 drops the cleanups still queued instead of running them, because deleting
@@ -445,9 +450,10 @@ a triangle with a shader program, a vertex buffer and a VAO.
 - `qute new app <dir> [module]` writes `main.go`, a window, a behaviour test
   and a screenshot test.
 - `qute vet ./...` reports Owned objects with connections, and parentless Go
-  subclasses, that are never deleted or parented, `Delete()` inside handlers,
-  Qt calls (including `qute.Screenshot` and the `qutetest` input helpers)
-  from goroutines, and event arguments stored past their callback.
+  subclasses, that are never deleted or parented, `Delete()` inside handlers
+  and overrides, Qt calls (including `qute.Screenshot` and the `qutetest`
+  input helpers) from goroutines, and event, painter and style-option
+  arguments stored past their callback.
 
 Try the example: `go run ./examples/hello`, or render it headlessly with
 `go run ./examples/hello -screenshot out.png -tree`.

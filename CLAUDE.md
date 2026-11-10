@@ -353,8 +353,11 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   d-pointer are left out), and an abstract class is built only through it.
   It checks a per-instance bitmask, so non-overridden virtuals
   skip the cgo hop. Overrides are detected with interface assertions plus
-  `rt.UserDefined`, which rejects promoted (compiler-generated) methods so a
-  public virtual like `SizeHint` can't dispatch to itself. `b.Super().X()`
+  `rt.UserDefined`, which follows a promoted method to the type that declares
+  it and rejects the generated wrappers and Base types, so a public virtual
+  like `SizeHint` can't dispatch to itself, while an override declared on a
+  user type that another user type embeds (`type Fancy struct{ Canvas }`)
+  still counts. `b.Super().X()`
   calls the C++ base. An override has the Go name and signature of the
   method's binding (`IndexOfItem`; a confirmed in-out parameter is a
   parameter plus a result, `Validate(input string, pos int) (State, string,
@@ -364,7 +367,9 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   enums are bound and the shim re-exports them (`using`) for its C
   functions. Pure virtuals not overridden return their zero value. The Go
   value is anchored like a connection, and `GoValue()` on any non-value
-  wrapper returns it (a view's delegate, a block's user data).
+  wrapper returns it (a view's delegate, a block's user data). The id the
+  shim dispatches with is dropped by the death notice, or by a cleanup on the
+  handle when GC collects it first (with its tree).
   An override's object result follows the method's return rule in the other
   direction: `transfer-to-go` or `parented` (the C++ caller owns it, e.g.
   `mimeData`, `createPopupMenu`) makes it Parented; the rule may sit on the
@@ -500,6 +505,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `Wait`, over QTest, and `qute.ProcessEvents`.
 - `qutetest.TestMain(m)` and `qutetest.Run(t, f)` run tests on the GUI thread,
   offscreen; `qutetest.CollectGarbage()` / `qutetest.Freed()` check that GC frees.
+  `TestMain` turns off Qt's quit-on-last-window-closed, so a test that closes
+  or deletes its last visible window does not stop the event loop under the
+  tests after it (`qutetest/window_test.go`).
   Inside `Run`, a panic in a signal, virtual or callback handler is recovered
   at the cgo boundary (so Qt's C++ frames return normally), re-raised by the
   input helpers and `ProcessEvents`/`Wait`, and fails the test. Under
@@ -513,7 +521,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   parent is any non-nil object argument; `Show` counts as keeping a window
   for the program's life, `Exec` does not), delete-handler, gui-goroutine
   (also the inspection helpers of `qute` and the input helpers of
-  `qutetest`), scoped-escape.
+  `qutetest`), scoped-escape. A handler is an `On*` closure or an override: a
+  method of a type that embeds a Base (directly or through a type it embeds)
+  whose name ends in `Event` or that takes a scoped argument (`Paint` of a
+  graphics item or delegate).
 - `qute new app <dir> [module]`: main.go, a window, a behaviour test and a
   screenshot test.
 
@@ -580,7 +591,7 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
    `qtwebenginewidgets/lifetime_test.go`, `setCurrentBlockUserData`, valid
    only inside `highlightBlock`, by `subclass_test.go`).
 3. Subclassing and models: done. Every class with virtuals is subclassable
-   by default (187 classes; `COVERAGE.md` lists the 29 that are not, and
+   by default (189 classes; `COVERAGE.md` lists the 29 that are not, and
    the virtuals Go cannot override).
 4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
    more modules (QtNetwork, QtPrintSupport and QtWebChannel would fill the
@@ -659,7 +670,8 @@ Layout:
   `subclass_test.go` covers subclassing by default: a view's events and
   protected enums, in-out validator overrides and their Super, map results,
   a Go graphics item, a syntax highlighter's per-block Go state, `GoValue`,
-  and an abstract class with no overrides).
+  an abstract class with no overrides, and overrides reached through an
+  embedded user type).
 - `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed) and
   `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and

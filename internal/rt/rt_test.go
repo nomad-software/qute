@@ -540,6 +540,50 @@ func TestAnchoring(t *testing.T) {
 	}
 }
 
+// The id a shim dispatches virtuals with refers to its handle weakly. When
+// the handle of a Go subclass is collected with its tree, before Qt destroys
+// the object, the id's table entry must go too: it used to stay for good, one
+// entry per collected Go subclass.
+func TestSelfSlotDroppedWithCollectedHandle(t *testing.T) {
+	// nothing but the test's variables may hold the handles, so no helpers
+	mem := make([]byte, 16)
+	rootP, childP := unsafe.Pointer(&mem[0]), unsafe.Pointer(&mem[8])
+	root := newHandle(rootP, "QObject", KindQObject, Owned, nil)
+	child := newHandle(childP, "QObject", KindQObject, Parented, nil)
+	regMu.Lock()
+	registry[rootP] = &regEntry{w: weak.Make(root), serial: root.serial}
+	registry[childP] = &regEntry{w: weak.Make(child), serial: child.serial}
+	regMu.Unlock()
+	oldRoot := rootOfC
+	rootOfC = func(unsafe.Pointer) unsafe.Pointer { return rootP }
+	defer func() {
+		rootOfC = oldRoot
+		regMu.Lock()
+		delete(registry, rootP)
+		delete(registry, childP)
+		regMu.Unlock()
+	}()
+	id := child.SetSelf(&struct{ n int }{}, nil)
+	if child.Anchored() != "root" {
+		t.Fatalf("child anchored %q, want root", child.Anchored())
+	}
+	if slotHandle(id) != child {
+		t.Fatal("the id does not find its handle")
+	}
+	root, child = nil, nil
+	has := func() bool { _, ok := slots.Load(id); return ok }
+	for i := 0; i < 50 && has(); i++ {
+		runtime.GC()
+		time.Sleep(time.Millisecond)
+	}
+	if has() {
+		t.Fatal("the id of a collected Go subclass is still in the table")
+	}
+	if Dispatch(id, 0, nil, nil) {
+		t.Fatal("a virtual dispatched to a collected Go value")
+	}
+}
+
 // A connection's closure lives on its sender's handle; the id table holds the
 // handle weakly, and releasing the connection drops the closure and anchor.
 func TestCallbackSlots(t *testing.T) {

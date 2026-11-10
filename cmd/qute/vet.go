@@ -195,7 +195,11 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 }
 
 // handlerBodies yields closures passed to On* methods and bodies of methods
-// that override a virtual on a type embedding a generated *Base.
+// that override a virtual on a type embedding a generated *Base. An override
+// is told by its name (an event handler) or by a parameter Qt hands over for
+// the call only: Paint(painter, option, widget) of a graphics item or a
+// delegate, DrawControl of a style. An unexported method is a helper, never
+// an override, and the painter it is given may be one the program made.
 func (v *vetter) handlerBodies(f *ast.File, visit func(body *ast.BlockStmt, params *ast.FieldList, what string)) {
 	ast.Inspect(f, func(n ast.Node) bool {
 		switch x := n.(type) {
@@ -208,7 +212,8 @@ func (v *vetter) handlerBodies(f *ast.File, visit func(body *ast.BlockStmt, para
 				}
 			}
 		case *ast.FuncDecl:
-			if x.Recv != nil && x.Body != nil && v.embedsBase(x) && strings.HasSuffix(x.Name.Name, "Event") {
+			if x.Recv != nil && x.Body != nil && v.embedsBase(x) &&
+				(strings.HasSuffix(x.Name.Name, "Event") || x.Name.IsExported() && v.hasScopedParam(x)) {
 				visit(x.Body, x.Type.Params, x.Name.Name)
 			}
 		}
@@ -216,11 +221,34 @@ func (v *vetter) handlerBodies(f *ast.File, visit func(body *ast.BlockStmt, para
 	})
 }
 
+// hasScopedParam reports whether a method takes an argument that is valid
+// only during the call (an event, a painter, a style option).
+func (v *vetter) hasScopedParam(fd *ast.FuncDecl) bool {
+	if fd.Type.Params == nil {
+		return false
+	}
+	for _, fld := range fd.Type.Params.List {
+		if t := v.pkg.TypesInfo.TypeOf(fld.Type); t != nil && isScopedType(t) {
+			return true
+		}
+	}
+	return false
+}
+
+// embedsBase reports whether the method's receiver is a Go subclass: its
+// type embeds a generated Base, directly or through a type it embeds.
 func (v *vetter) embedsBase(fd *ast.FuncDecl) bool {
 	if len(fd.Recv.List) == 0 {
 		return false
 	}
-	t := v.pkg.TypesInfo.TypeOf(fd.Recv.List[0].Type)
+	return embedsBaseType(v.pkg.TypesInfo.TypeOf(fd.Recv.List[0].Type), map[types.Type]bool{})
+}
+
+func embedsBaseType(t types.Type, seen map[types.Type]bool) bool {
+	if t == nil || seen[t] {
+		return false
+	}
+	seen[t] = true
 	if p, ok := t.(*types.Pointer); ok {
 		t = p.Elem()
 	}
@@ -230,10 +258,25 @@ func (v *vetter) embedsBase(fd *ast.FuncDecl) bool {
 	}
 	for i := 0; i < st.NumFields(); i++ {
 		f := st.Field(i)
-		if f.Embedded() && strings.HasSuffix(f.Type().String(), "Base") && f.Pkg() != nil {
-			if n, ok := f.Type().(*types.Named); ok && n.Obj().Pkg() != nil && qtPkgs[n.Obj().Pkg().Path()] {
+		if !f.Embedded() {
+			continue
+		}
+		ft := f.Type()
+		if p, ok := ft.(*types.Pointer); ok {
+			ft = p.Elem()
+		}
+		n, ok := ft.(*types.Named)
+		if !ok || n.Obj().Pkg() == nil {
+			continue
+		}
+		if qtPkgs[n.Obj().Pkg().Path()] {
+			if strings.HasSuffix(n.Obj().Name(), "Base") {
 				return true
 			}
+			continue // a generated wrapper, not a subclass
+		}
+		if embedsBaseType(n, seen) {
+			return true
 		}
 	}
 	return false

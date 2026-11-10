@@ -80,3 +80,34 @@ func GLGoroutine(buf *qtopengl.QOpenGLBuffer) {
 		buf.Bind() // want gui-goroutine
 	}()
 }
+
+var lastPainter *qtgui.QPainter
+
+// Dot overrides a virtual that is no event handler: its painter is scoped
+// all the same, and it runs inside Qt like any handler.
+type Dot struct {
+	qtwidgets.QGraphicsItemBase
+	owner *qtwidgets.QWidget
+}
+
+func (d *Dot) Paint(painter *qtgui.QPainter, option *qtwidgets.QStyleOptionGraphicsItem, widget *qtwidgets.QWidget) {
+	lastPainter = painter // want scoped-escape
+	d.owner.Delete()      // want delete-handler
+}
+
+// Ring gets its subclass from the type it embeds.
+type Ring struct{ Dot }
+
+func (r *Ring) MousePressEvent(e *qtwidgets.QGraphicsSceneMouseEvent) {
+	r.owner.Delete() // want delete-handler
+}
+
+// Helper is no override: it has no scoped argument and is not an event handler.
+func (d *Dot) Helper() {
+	d.owner.Delete()
+}
+
+// drawGrid is a helper, not an override: the painter may be the program's own.
+func (d *Dot) drawGrid(p *qtgui.QPainter) {
+	lastPainter = p
+}

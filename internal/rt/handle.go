@@ -490,9 +490,15 @@ func (h *Handle) SetSelf(self any, vt []Virtual) uintptr {
 	h.selfSlot = newSlot(h)
 	id := h.selfSlot
 	h.mu.Unlock()
+	// The death notice drops the id. A handle collected first (with its tree,
+	// which the GUI thread then deletes) is gone by then, so its id goes with
+	// it; the shim finds nothing under it and runs the C++ implementation.
+	runtime.AddCleanup(h, dropSlot, id)
 	h.anchorPin()
 	return id
 }
+
+func dropSlot(id uintptr) { slots.Delete(id) }
 
 // GoValue returns the Go value set by SetSelf (a Go subclass), or nil. It
 // stays readable after the object dies.

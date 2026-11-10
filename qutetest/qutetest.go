@@ -28,6 +28,7 @@ import (
 
 	"github.com/nomad-software/qute"
 	rt "github.com/nomad-software/qute/internal/rt"
+	"github.com/nomad-software/qute/qtgui"
 )
 
 // TestMain runs a package's tests with a QApplication on the main thread.
@@ -36,7 +37,9 @@ import (
 //	func TestMain(m *testing.M) { qutetest.TestMain(m) }
 //
 // Test functions run on other goroutines, so wrap Qt calls in Run(t, ...).
-// QT_QPA_PLATFORM defaults to offscreen, so tests need no display.
+// QT_QPA_PLATFORM defaults to offscreen, so tests need no display. Closing the
+// last window does not quit the application here (as it does under qute.Main),
+// so a test may close or delete its windows and later tests still run.
 func TestMain(m *testing.M) {
 	if os.Getenv("QT_QPA_PLATFORM") == "" {
 		os.Setenv("QT_QPA_PLATFORM", "offscreen")
@@ -46,6 +49,9 @@ func TestMain(m *testing.M) {
 	// Qt from a nested event loop, and once that quits the binary exits here.
 	rt.AfterRescue = func() { os.Exit(<-done) }
 	qute.Main(func() {
+		// A test that closes or deletes its last visible window must not quit
+		// the application: every later test would find no event loop.
+		qtgui.QGuiApplicationSetQuitOnLastWindowClosed(false)
 		go func() {
 			code := m.Run()
 			done <- code

@@ -288,3 +288,49 @@ func TestSubclassPureVirtualDefaults(t *testing.T) {
 		w.Hide()
 	})
 }
+
+type hintCanvas struct {
+	qtwidgets.QWidgetBase
+	hints int
+}
+
+func (c *hintCanvas) SizeHint() qtcore.QSize {
+	c.hints++
+	return qtcore.QSize{Width: 123, Height: 45}
+}
+
+// fancyCanvas gets SizeHint from the user type it embeds.
+type fancyCanvas struct{ hintCanvas }
+
+type deepCanvas struct {
+	fancyCanvas
+	extra int
+}
+
+type plainCanvas struct{ qtwidgets.QWidgetBase }
+
+// An override declared on a user type that another user type embeds is still
+// an override: it was once taken for a promoted generated method and ignored
+// without a word. A type that defines nothing keeps the C++ implementation.
+func TestSubclassOverrideThroughEmbedding(t *testing.T) {
+	qutetest.Run(t, func() {
+		f := &fancyCanvas{}
+		w := qtwidgets.NewQWidgetWith(f, nil)
+		defer w.Delete()
+		if got := w.SizeHint(); got.Width != 123 || f.hints != 1 {
+			t.Errorf("embedded override: SizeHint = %v after %d calls, want 123x45 after 1", got, f.hints)
+		}
+		d := &deepCanvas{}
+		dw := qtwidgets.NewQWidgetWith(d, nil)
+		defer dw.Delete()
+		if got := dw.SizeHint(); got.Width != 123 || d.hints != 1 {
+			t.Errorf("override two embeddings deep: SizeHint = %v after %d calls", got, d.hints)
+		}
+		p := &plainCanvas{}
+		pw := qtwidgets.NewQWidgetWith(p, nil)
+		defer pw.Delete()
+		if got := pw.SizeHint(); got.Width == 123 {
+			t.Errorf("no override: SizeHint = %v", got)
+		}
+	})
+}
