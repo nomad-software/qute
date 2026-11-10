@@ -317,7 +317,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Generator and spec
 
 - **IR** (`spec/ir/*.json`) from `tools/irgen/irgen.py`, checked in, so the
-  generator needs neither Qt nor libclang. It records public and protected
+  generator needs neither Qt nor libclang. Its `qt_version` (6.12.0 today) is
+  the oldest Qt the bindings compile against: they call that version's API.
+  Re-running irgen on a newer Qt raises the minimum; update the README's
+  requirements and check CI's Qt with it. It records public and protected
   members, signals and slots (via `QT_ANNOTATE_ACCESS_SPECIFIER`), enums,
   `QFlags` typedefs, and private virtual overrides (which hide base virtuals
   from the shim).
@@ -451,9 +454,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   process), `PostSync` handler panics, the off-thread check and Full forms.
 - `.github/workflows/ci.yml`: Linux runs test (with `gofmt -l` and
   `qute vet ./examples/...`), `qute_debug`, `-asan`,
-  `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check. The macOS and
-  Windows jobs are kept for later but are not yet verified; they are
-  non-blocking (`continue-on-error`) until that work starts.
+  `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check, each in an
+  `archlinux` container because the bindings need Qt 6.12+ and Ubuntu's Qt
+  is older (Go itself comes from `setup-go`, pinned to the 1.26 minimum). CI
+  is Linux only; macOS and Windows jobs come back when that work starts.
 
 ## Roadmap
 

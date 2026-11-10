@@ -8,15 +8,20 @@ env:
 jobs:
   linux:
     runs-on: ubuntu-24.04
+    # The bindings are generated from Qt 6.12 headers (spec/ir) and need Qt
+    # 6.12 or newer; Ubuntu's packages are older, Arch tracks current Qt.
+    container: archlinux:latest
     strategy:
       matrix:
         mode: [test, debug, asan, cgocheck2, generate]
     steps:
+      - name: Qt 6, compiler and tools
+        run: pacman -Syu --noconfirm --needed qt6-base gcc pkgconf mesa git ttf-dejavu
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with: { go-version: "1.26" }
-      - name: Qt 6
-        run: sudo apt-get update && sudo apt-get install -y qt6-base-dev libqt6opengl6-dev libgl1-mesa-dri pkg-config
+      - name: Qt version
+        run: pkg-config --modversion Qt6Core
       - name: test
         if: matrix.mode == 'test'
         run: |
@@ -24,7 +29,7 @@ jobs:
           test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
           go run ./cmd/qute vet ./examples/...
           go test ./...
-      - name: debug build (thread checks, call sites)
+      - name: debug build (call sites, rule 5, named thread checks)
         if: matrix.mode == 'debug'
         run: go test -tags qute_debug ./...
       - name: AddressSanitizer and LeakSanitizer
@@ -40,28 +45,3 @@ jobs:
           go generate ./qtcore
           git diff --exit-code
           test -z "$(git status --porcelain)" || { git status --porcelain; exit 1; }
-
-  # macOS and Windows support comes later: these jobs are kept but do not
-  # fail the build until that work starts.
-  macos:
-    runs-on: macos-14
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with: { go-version: "1.26" }
-      - run: brew install qt pkg-config
-      - run: go test ./...
-
-  windows:
-    runs-on: windows-2022
-    continue-on-error: true
-    defaults:
-      run: { shell: "msys2 {0}" }
-    steps:
-      - uses: actions/checkout@v4
-      - uses: msys2/setup-msys2@v2
-        with:
-          msystem: UCRT64
-          install: mingw-w64-ucrt-x86_64-go mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-qt6-base mingw-w64-ucrt-x86_64-pkgconf
-      - run: go test ./...

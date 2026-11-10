@@ -28,8 +28,9 @@ func main() {
 }
 ```
 
-Requirements: Go 1.26+, Qt 6 development packages, `pkg-config` and a C++17
-compiler. Linux is the supported platform for now. The first build compiles
+Requirements: Go 1.26+, Qt 6.12 or newer (development packages), `pkg-config`
+and a C++17 compiler. The bindings are generated from Qt 6.12 and use its
+API, so older Qt (Ubuntu 24.04 ships 6.4) fails to compile them. Linux is the supported platform for now. The first build compiles
 the C++ shims, which takes about two minutes; after that Go's build cache keeps
 rebuilds fast.
 
@@ -390,8 +391,8 @@ Not done yet:
   setup, accessibility, Vulkan, and interfaces that need C++ subclassing.
 - `QThread` affinity, QtQuick/QML and other modules.
 - Doc comments link to the Qt docs but don't include Qt's summary text.
-- Linux comes first for now; macOS and Windows support comes later. Their
-  jobs in `.github/workflows/ci.yml` are kept, unverified and non-blocking.
+- Linux comes first for now; macOS and Windows support (and CI for them)
+  comes later.
 
 ## Licence
 
