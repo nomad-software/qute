@@ -414,10 +414,17 @@ func (h *Handle) stopCleanup() {
 func (h *Handle) Pin() {
 	strongMu.Lock()
 	if h.pins.Add(1) == 1 {
+		if testHookPin != nil {
+			testHookPin() // between the count and the set (tests only)
+		}
 		strong[h] = struct{}{}
 	}
 	strongMu.Unlock()
 }
+
+// testHookPin runs inside Pin after the count changed and before the strong
+// set does, where a racing Unpin used to slip in (tests only).
+var testHookPin func()
 
 // Unpin releases one Pin.
 func (h *Handle) Unpin() {

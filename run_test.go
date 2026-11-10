@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/nomad-software/qute"
@@ -197,4 +198,27 @@ func TestFullForms(t *testing.T) {
 			t.Errorf("font %d italic %v, want 17 true", f.PointSize(), f.Italic())
 		}
 	})
+}
+
+// Qt calling a Go handler from another thread is a clear panic, not a
+// corrupted runtime.
+func TestHandlerOffGUIThreadPanics(t *testing.T) {
+	var wg sync.WaitGroup
+	entries := map[string]func(){
+		"signal":   func() { rt.InvokeCallback(0, nil) },
+		"virtual":  func() { rt.Dispatch(0, 0, nil, nil) },
+		"function": func() { rt.InvokeFunc(0, nil, nil) },
+	}
+	for name, f := range entries {
+		var msg string
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			msg = panicText(f)
+		}()
+		wg.Wait()
+		if !strings.Contains(msg, "thread other than the GUI thread") {
+			t.Errorf("off-thread %s entry: panic %q", name, msg)
+		}
+	}
 }

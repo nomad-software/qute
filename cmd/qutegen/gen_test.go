@@ -520,3 +520,187 @@ func TestModuleNamespaceEnums(t *testing.T) {
 		}
 	}
 }
+
+// A keep is guarded (Delete of the kept object panics) when the receiver or
+// the argument is not a QObject, unless the overlay says otherwise.
+func TestKeepGuards(t *testing.T) {
+	cases := []struct {
+		cls, sig string
+		guard    bool
+	}{
+		{"QPainter", "QPainter(QPaintDevice *", true},                  // plain keeper, plain device
+		{"QPainter", "begin(", true},                                   // same slot through begin
+		{"QDataStream", "QDataStream(QIODevice *", true},               // plain keeper of a QObject
+		{"QAbstractItemView", "setModel(", false},                      // QObject to QObject: Qt watches it
+		{"QTextCursor", "QTextCursor(QTextDocument *", false},          // kept-delete: allow
+		{"QWebEnginePage", "QWebEnginePage(QWebEngineProfile *", true}, // kept-delete: guard
+	}
+	for _, c := range cases {
+		mm := method(t, c.cls, c.sig)
+		var p *Param
+		for _, x := range mm.Params {
+			if x.Keep != "" {
+				p = x
+			}
+		}
+		if p == nil {
+			t.Errorf("%s: no kept argument", mm.Sig)
+			continue
+		}
+		if p.KeepGuard != c.guard {
+			t.Errorf("%s: guard %v, want %v", mm.Sig, p.KeepGuard, c.guard)
+		}
+	}
+	// the guard reaches the generated call
+	g := gen(t)
+	mm := method(t, "QPainter", "begin(")
+	if post := strings.Join(g.prepCall(mm.Class, mm, "QPainter.Begin", false).post, "\n"); !strings.Contains(post, `rt.KeepArg(rt.RefOf(unsafe.Pointer(this)).H, "device", paintDeviceH, true)`) {
+		t.Errorf("QPainter.Begin keeps without the guard: %s", post)
+	}
+}
+
+func TestKeptDeleteWarnsOnUnknownValue(t *testing.T) {
+	g := &Gen{report: &Report{}}
+	c := &Class{Name: "QX", Cpp: "QX"}
+	p := &Param{Name: "thing", GoName: "thing", T: &conv{k: kObj, cls: c}}
+	g.applyArgRule(c, &irMethod{Name: "setThing", Params: []irParam{{Name: "thing"}}},
+		&overlay{Args: map[string]string{"thing": "keep"}, KeptDelete: "sometimes"}, p, 0, false)
+	if len(g.report.warnings) != 1 || !strings.Contains(g.report.warnings[0], "kept-delete") {
+		t.Errorf("warnings %v, want one about kept-delete", g.report.warnings)
+	}
+}
+
+// release-slot empties the slot after the call: an ended painter frees its
+// device.
+func TestReleaseSlotEmitted(t *testing.T) {
+	g := gen(t)
+	mm := method(t, "QPainter", "end()")
+	post := strings.Join(g.prepCall(mm.Class, mm, "QPainter.End", false).post, "\n")
+	if !strings.Contains(post, `rt.ReleaseSlot(rt.RefOf(unsafe.Pointer(this)).H, "device")`) {
+		t.Errorf("QPainter.End does not drop its device: %q", post)
+	}
+}
+
+// parented-delete applies to the class and its non-QObject subclasses only:
+// a QLayout's destructor takes it out of its parent layout.
+func TestParentedDelete(t *testing.T) {
+	for _, n := range []string{"QLayoutItem", "QSpacerItem", "QWidgetItem"} {
+		if parentedDelete(class(t, n)) == "" {
+			t.Errorf("%s: no parented-delete fix", n)
+		}
+	}
+	for _, n := range []string{"QLayout", "QBoxLayout", "QWidget"} {
+		if h := parentedDelete(class(t, n)); h != "" {
+			t.Errorf("%s: parented-delete %q, want none (a QObject)", n, h)
+		}
+	}
+}
+
+// A T& result of a non-QObject class is the receiver, for chaining; a return
+// rule on it is a warning, since nothing is handed over.
+func TestReceiverResultChains(t *testing.T) {
+	for _, c := range []struct{ cls, sig string }{
+		{"QWebEngineProfileBuilder", "setCachePath("},
+		{"QTransform", "translate("},
+		{"QDataStream", "writeBytes("},
+	} {
+		if mm := method(t, c.cls, c.sig); mm.Ret.k != kSelf {
+			t.Errorf("%s: result kind %v, want the receiver", mm.Sig, mm.Ret.k)
+		}
+	}
+	g := gen(t)
+	saved := g.report
+	g.report = &Report{}
+	defer func() { g.report = saved }()
+	c := class(t, "QWebEngineProfileBuilder")
+	var im *irMethod
+	for i := range c.IR.Methods {
+		if c.IR.Methods[i].Name == "setCachePath" {
+			im = &c.IR.Methods[i]
+		}
+	}
+	g.newMethod(c, im, &overlay{Return: "borrowed"}, false, false)
+	if len(g.report.warnings) != 1 || !strings.Contains(g.report.warnings[0], "is the receiver") {
+		t.Errorf("warnings %v, want one about the receiver", g.report.warnings)
+	}
+}
+
+// Public fields named _… are reserved padding, not API.
+func TestReservedFieldsSkipped(t *testing.T) {
+	g := gen(t)
+	boolT := irType{Spelling: "bool", Canonical: "bool"}
+	c := &Class{Name: "QReserved", Cpp: "QReserved", Module: g.byName["QtCore"], Opts: &classOpts{},
+		IR: &irClass{Name: "QReserved", Fields: []irField{{Name: "thirdParty", Type: boolT}, {Name: "_reservedFlag", Type: boolT}}}}
+	for _, m := range g.fieldMethods(c) {
+		if strings.Contains(m.Sig, "_reserved") {
+			t.Errorf("reserved field bound: %s", m.Sig)
+		}
+	}
+	if len(c.Skipped) != 1 || !strings.Contains(c.Skipped[0].Why, "reserved field") {
+		t.Errorf("skipped %v, want the reserved field listed", c.Skipped)
+	}
+}
+
+func TestCppNames(t *testing.T) {
+	cases := []struct {
+		code, name string
+		want       bool
+	}{
+		{"QWidget *w;", "QWidget", true},
+		{"(QWidget*)p", "QWidget", true},
+		{"QWidgetItem *it;", "QWidget", false},
+		{"qute_QWidget_new", "QWidget", false},
+		{"QWebEngineCookieStore::FilterRequest", "QWebEngineCookieStore", true},
+		{"QWidget", "QWidget", true},
+		{"", "QWidget", false},
+	}
+	for _, c := range cases {
+		if got := cppNames(c.code, c.name); got != c.want {
+			t.Errorf("cppNames(%q, %q) = %v, want %v", c.code, c.name, got, c.want)
+		}
+	}
+}
+
+// A shim includes its own module's headers and only the dependency headers
+// its code names.
+func TestIncludesOnlyNamedDependencies(t *testing.T) {
+	g := gen(t)
+	inc := g.includes(g.byName["QtSvg"], "void f(QPainter *p, QObject *o);")
+	has := map[string]bool{}
+	for _, n := range inc {
+		has[n] = true
+	}
+	for _, n := range []string{"QSvgRenderer", "QSvgGenerator", "QPainter", "QObject"} {
+		if !has[n] {
+			t.Errorf("includes lack %s: %v", n, inc)
+		}
+	}
+	for _, n := range []string{"QAbstractItemModel", "QWidget", "QImage"} {
+		if has[n] {
+			t.Errorf("includes %s, which the code does not name", n)
+		}
+	}
+}
+
+// COVERAGE.md lists what irgen left out of the IR.
+func TestReportListsWhatIRLeavesOut(t *testing.T) {
+	g := gen(t)
+	path := filepath.Join(t.TempDir(), "COVERAGE.md")
+	if err := g.writeReport(path); err != nil {
+		t.Fatal(err)
+	}
+	b, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(b)
+	for _, want := range []string{"## Not in the IR: operators, conversions and member templates",
+		"| Operators, conversions and member templates not in the IR |", "`operator QVariant()`"} {
+		if !strings.Contains(s, want) {
+			t.Errorf("report lacks %q", want)
+		}
+	}
+	if n := len(class(t, "QIcon").IR.Dropped); n == 0 {
+		t.Error("the IR records nothing dropped for QIcon")
+	}
+}

@@ -1,6 +1,6 @@
 // Package qute runs Qt applications from Go and provides the tools that make
-// them checkable without a human at the screen: headless screenshots, an
-// object tree dump and scripted input.
+// them checkable without a human at the screen: headless screenshots and an
+// object tree dump. Tests and scripted input are in package qutetest.
 //
 // A minimal program:
 //

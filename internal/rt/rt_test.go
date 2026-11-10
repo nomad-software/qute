@@ -3,6 +3,7 @@ package rt
 import (
 	"runtime"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 	"unsafe"
@@ -609,7 +610,7 @@ func TestGuardedKeepBlocksDelete(t *testing.T) {
 		}()
 		kept.Delete("Image.Delete")
 	}()
-	Unkeep(owner, "device")
+	ReleaseSlot(owner, "device")
 	kept.Delete("Image.Delete")
 	if kept.State() != Dead {
 		t.Fatalf("kept = %v after Delete, want Dead", kept.State())
@@ -621,12 +622,9 @@ func TestGuardedKeepBlocksDelete(t *testing.T) {
 // of deleting it underneath.
 func TestQueuedFreeOfRewrappedObject(t *testing.T) {
 	key := fakePtr(3)
+	old := serialCounter.Add(1) // the collected Owned handle, whose free is queued
 	regMu.Lock()
-	registry[key] = &regEntry{serial: 0} // the collected handle's entry
-	regMu.Unlock()
-	old := serialCounter.Add(1)
-	regMu.Lock()
-	registry[key].serial = old
+	registry[key] = &regEntry{serial: old} // its weak pointer is empty: collected
 	regMu.Unlock()
 	h := Wrap(key, "Obj", KindNotify, KeepOrBorrow, func(unsafe.Pointer) { t.Error("object deleted under its new handle") })
 	defer Destroyed(key, "test")
@@ -638,4 +636,47 @@ func TestQueuedFreeOfRewrappedObject(t *testing.T) {
 		t.Fatalf("after the stale free: %v, want Owned (Go still owns it)", h.State())
 	}
 	h.stopCleanup()
+}
+
+// When the safety net refuses to free an object Qt has parented, it says so
+// once per class instead of letting the tree's handlers stop silently.
+func TestParentedFreeWarns(t *testing.T) {
+	old, oldOut := hasParentC, warnOut
+	var out strings.Builder
+	hasParentC, warnOut = func(unsafe.Pointer) bool { return true }, &out
+	defer func() { hasParentC, warnOut = old, oldOut }()
+	for i := 0; i < 2; i++ {
+		h := fakeQObject(t, Owned)
+		freeNode(cleanupArg{key: h.ptr, serial: h.serial, class: "QWarnedThing", kind: KindQObject, registered: true,
+			deleter: func(unsafe.Pointer) { t.Error("an object with a parent was deleted") }})
+	}
+	if n := strings.Count(out.String(), "QWarnedThing that Qt has given a parent"); n != 1 {
+		t.Errorf("warned %d times, want once: %q", n, out.String())
+	}
+}
+
+// An Unpin racing a Pin cannot slip in between the count and the strong
+// set: the handle ends up held iff it has pins. (Pin used to change the
+// count, then take the lock; an Unpin in that gap deleted the handle from
+// the set, and Pin then added it back with no pins.)
+func TestPinUnpinRace(t *testing.T) {
+	h := newPlain("Raced")
+	h.Pin() // the racing Unpin's pin
+	var wg sync.WaitGroup
+	testHookPin = func() {
+		testHookPin = nil
+		wg.Add(1)
+		go func() { defer wg.Done(); h.Unpin(); h.Unpin() }()
+		time.Sleep(20 * time.Millisecond) // the Unpins run now if nothing stops them
+	}
+	defer func() { testHookPin = nil }()
+	h.Unpin() // back to 0, so the next Pin reaches the hook
+	h.Pin()
+	wg.Wait()
+	strongMu.Lock()
+	_, held := strong[h]
+	strongMu.Unlock()
+	if held != (h.Pins() > 0) {
+		t.Fatalf("pins %d but held in the strong set = %v", h.Pins(), held)
+	}
 }

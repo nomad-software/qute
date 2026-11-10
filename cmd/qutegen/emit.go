@@ -1232,11 +1232,11 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 			gc.post = append(gc.post, fmt.Sprintf("for _, x := range %s {\n\t\tif x != nil {\n\t\t\trt.TransferTo(%s, rt.RefOf(unsafe.Pointer(x)).H)\n\t\t}\n\t}", p.GoName, owner))
 		}
 	}
-	if ov := mm.Overlay; ov != nil && ov.Unkeep != "" {
+	if ov := mm.Overlay; ov != nil && ov.ReleaseSlot != "" {
 		if mm.IR.Kind == "ctor" || mm.IR.Static || virtualParams {
-			g.report.warn("%s: unkeep needs a receiver", mm.Sig)
+			g.report.warn("%s: release-slot needs a receiver", mm.Sig)
 		} else {
-			gc.post = append(gc.post, fmt.Sprintf("rt.Unkeep(rt.RefOf(unsafe.Pointer(this)).H, %q)", ov.Unkeep))
+			gc.post = append(gc.post, fmt.Sprintf("rt.ReleaseSlot(rt.RefOf(unsafe.Pointer(this)).H, %q)", ov.ReleaseSlot))
 		}
 	}
 	return gc

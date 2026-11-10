@@ -111,3 +111,23 @@ func TestVideoSinkDeliversFrames(t *testing.T) {
 		sink.Delete()
 	})
 }
+
+// A capture session's video output and sink share one kept slot too.
+func TestCaptureSessionVideoOutputReplacesSink(t *testing.T) {
+	qutetest.Run(t, func() {
+		session := qtmultimedia.NewQMediaCaptureSession(nil)
+		first := qtmultimedia.NewQVideoSink(nil)
+		second := qtmultimedia.NewQVideoSink(nil)
+		session.SetVideoSink(first)
+		session.SetVideoOutput(second)
+		if rt.KeepsArg(unsafe.Pointer(session), unsafe.Pointer(first)) {
+			t.Error("the replaced sink is still kept")
+		}
+		if !rt.KeepsArg(unsafe.Pointer(session), unsafe.Pointer(second)) {
+			t.Error("the new output is not kept")
+		}
+		session.Delete()
+		first.Delete()
+		second.Delete()
+	})
+}

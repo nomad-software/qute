@@ -1,6 +1,7 @@
 package qute_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -147,6 +148,89 @@ func TestCallbackArgument(t *testing.T) {
 		qute.Screenshot(lbl) // rendering asks the provider for the image
 		if asked != "pic.png" {
 			t.Errorf("resource provider asked for %q", asked)
+		}
+	})
+}
+
+// NewQImageFromBytes copies, so the Go slice may change afterwards.
+func TestImageFromBytesCopies(t *testing.T) {
+	qutetest.Run(t, func() {
+		data := make([]byte, 2*2*4)
+		for i := range data {
+			data[i] = 0xff
+		}
+		img := qtgui.NewQImageFromBytes(data, 2, 2, 8, qtgui.QImageFormat_ARGB32)
+		for i := range data {
+			data[i] = 0
+		}
+		if got := img.Pixel(1, 1); got != 0xffffffff {
+			t.Errorf("Pixel = %#x, want 0xffffffff", got)
+		}
+		short := qtgui.NewQImageFromBytes(data[:8], 2, 2, 8, qtgui.QImageFormat_ARGB32)
+		if got := short.Pixel(0, 1); got != 0 {
+			t.Errorf("a row missing from the data = %#x, want 0", got)
+		}
+	})
+}
+
+// GUI values go into a QVariant and come back out, so a Go item model can
+// return icons, colours and fonts for their roles.
+func TestGUIValuesInVariants(t *testing.T) {
+	qutetest.Run(t, func() {
+		pix := qtgui.NewQPixmapWithW(4, 4)
+		pix.FillFull(qtgui.RGB(10, 20, 30))
+		icon := qtgui.NewQIconWithPixmap(pix)
+		font := qtgui.NewQFontWithFamilyFull("Sans", 17, -1, false)
+
+		model := qtgui.NewQStandardItemModel(nil)
+		item := qtgui.NewQStandardItemWithText("x")
+		item.SetDataFull(qtgui.NewQVariantOf(icon), int(qtcore.DecorationRole))
+		item.SetDataFull(qtgui.NewQVariantOf(qtgui.RGB(1, 2, 3)), int(qtcore.ForegroundRole))
+		item.SetDataFull(qtgui.NewQVariantOf(font), int(qtcore.FontRole))
+		model.AppendRow(item)
+		idx := model.Index(0, 0)
+
+		if got, ok := qtgui.VariantValue(model.DataFull(idx, int(qtcore.DecorationRole))).(*qtgui.QIcon); !ok || got.IsNull() {
+			t.Errorf("DecorationRole = %T, want a non-null *QIcon", got)
+		} else if got.Ownership() != qtcore.Owned {
+			t.Errorf("icon from a variant: %v, want Owned", got.Ownership())
+		}
+		if got := qtgui.VariantValue(model.DataFull(idx, int(qtcore.ForegroundRole))); got != qtgui.RGB(1, 2, 3) {
+			t.Errorf("ForegroundRole = %v, want RGB(1, 2, 3)", got)
+		}
+		if got, ok := qtgui.VariantValue(model.DataFull(idx, int(qtcore.FontRole))).(*qtgui.QFont); !ok || got.PointSize() != 17 {
+			t.Errorf("FontRole = %v, want a 17pt *QFont", got)
+		}
+		if got := qtgui.VariantValue(qtgui.NewQVariantOf("plain")); got != "plain" {
+			t.Errorf("a plain value = %v, want it passed through", got)
+		}
+		var nilIcon *qtgui.QIcon
+		if v := qtgui.NewQVariantOf(nilIcon); v.IsValid() {
+			t.Error("a nil icon gave a valid variant")
+		}
+		model.Delete()
+	})
+}
+
+// Every GUI kind NewQVariantOf takes comes back from VariantValue as an
+// Owned copy of the same type.
+func TestEveryGUIVariantKindRoundTrips(t *testing.T) {
+	qutetest.Run(t, func() {
+		values := []any{
+			qtgui.NewQIcon(), qtgui.NewQFont(), qtgui.NewQBrush(), qtgui.NewQPixmapWithW(2, 2),
+			qtgui.NewQImageWithSize(qtcore.QSize{Width: 2, Height: 2}, qtgui.QImageFormat_ARGB32),
+			qtgui.NewQPen(), qtgui.NewQKeySequence(), qtgui.NewQCursor(), qtgui.NewQPalette(),
+			qtgui.NewQTransform(), qtgui.NewQRegion(),
+		}
+		for _, v := range values {
+			got := qtgui.VariantValue(qtgui.NewQVariantOf(v))
+			if fmt.Sprintf("%T", got) != fmt.Sprintf("%T", v) {
+				t.Errorf("%T came back as %T", v, got)
+				continue
+			}
+			if o, ok := got.(interface{ Ownership() qtcore.Ownership }); !ok || o.Ownership() != qtcore.Owned {
+				t.Errorf("%T from a variant is not Owned", got)
+			}
 		}
 	})
 }

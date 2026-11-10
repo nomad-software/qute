@@ -244,9 +244,9 @@ func KeepEach(owner *Handle, arg *Handle, guard bool) {
 	KeepArg(owner, eachSlot(arg), arg, guard)
 }
 
-// Unkeep drops what owner holds under slot (a QPainter's device once End
-// returns, since an inactive painter no longer uses it).
-func Unkeep(owner *Handle, slot string) {
+// ReleaseSlot drops what owner holds under slot (a QPainter's device once
+// End returns, since an inactive painter no longer uses it).
+func ReleaseSlot(owner *Handle, slot string) {
 	if owner == nil {
 		return
 	}

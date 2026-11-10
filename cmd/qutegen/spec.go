@@ -125,9 +125,9 @@ type overlay struct {
 	Reviewed bool              `yaml:"reviewed"`
 	Test     string            `yaml:"test"`
 	Doc      string            `yaml:"doc"`
-	// Unkeep names a keep slot the method empties: after it returns, Qt no
-	// longer uses what the slot held (QPainter::end and its device).
-	Unkeep string `yaml:"unkeep"`
+	// ReleaseSlot names a keep slot the method empties: after it returns, Qt
+	// no longer uses what the slot held (QPainter::end and its device).
+	ReleaseSlot string `yaml:"release-slot"`
 	// KeptDelete says whether Delete() of what the method's keep rules keep
 	// is allowed while the receiver lives: "allow" when Qt notices the kept
 	// object's destruction, "guard" when it would follow a dangling pointer.
@@ -225,8 +225,8 @@ func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) 
 		if o.Doc != "" {
 			out.Doc = o.Doc
 		}
-		if o.Unkeep != "" {
-			out.Unkeep = o.Unkeep
+		if o.ReleaseSlot != "" {
+			out.ReleaseSlot = o.ReleaseSlot
 		}
 		if o.KeptDelete != "" {
 			out.KeptDelete = o.KeptDelete

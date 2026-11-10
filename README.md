@@ -239,6 +239,25 @@ Each handle is in one state, changed only by annotated methods:
 | Borrowed | someone else; Go never frees   | `QApplicationFocusWidget()`       |
 | Dead     | already destroyed              | any handle after its object died  |
 
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Owned: NewX(nil)
+    [*] --> Parented: NewX(parent)
+    [*] --> Borrowed: returned by Qt
+    Owned --> Parented: transfer-to-cpp, SetParent(p), Qt gives it a parent
+    Parented --> Owned: transfer-to-go, SetParent(nil)
+    Borrowed --> Owned: transfer-to-go
+    Borrowed --> Parented: transfer-to-cpp
+    Owned --> Dead: GC cleanup or Delete()
+    Parented --> Dead: parent destroys it, or Delete()
+    Borrowed --> Dead: its owner destroys it
+    Dead --> [*]
+```
+
+A Dead handle stays valid Go memory; every method on it panics with what
+happened and the fix.
+
 - Using a Dead handle panics with the class, method and fix, and so does a
   Qt call off the GUI thread, and `Delete()` of a QObject inside a handler
   (use `DeleteLater()`). Build with `-tags qute_debug` to also get the
@@ -403,12 +422,147 @@ a triangle with a shader program, a vertex buffer and a VAO.
 Try the example: `go run ./examples/hello`, or render it headlessly with
 `go run ./examples/hello -screenshot out.png -tree`.
 
+## Architecture
+
+qute has two halves: a generator that turns Qt's headers and a few YAML files
+into Go packages, and a small runtime that every generated call goes through.
+At run time an app talks to the generated packages, which call Qt through a
+C++ shim; the shim calls back into Go when Qt destroys an object, emits a
+signal or runs an overridden virtual. Only the runtime (`internal/rt`)
+decides who frees what.
+
+```mermaid
+flowchart TB
+    app["Your app<br/>main.go, handlers, Go subclasses"]
+    tests["Your tests"]
+    qute["qute<br/>Main, Post, PostSync,<br/>Screenshot, DumpTree"]
+    qutetest["qutetest<br/>TestMain, Run, Click, Type,<br/>Key, Wait, CollectGarbage"]
+    gen["Generated packages<br/>qtcore, qtgui, qtwidgets, ...<br/>Go wrappers: one checked call per method"]
+    shim["C++ shims, *_gen.cpp<br/>thread check, conversions,<br/>subclasses for virtuals and death notices"]
+    rt["internal/rt<br/>handles and registry, ownership states,<br/>pins and anchors, kept references,<br/>cleanup queue, Post and PostSync"]
+    filter["rt.cpp<br/>application event filter"]
+    qt[("Qt 6 libraries")]
+
+    app --> qute
+    app --> gen
+    tests --> qutetest
+    tests --> gen
+    qutetest --> qute
+    qutetest -- "QTest input" --> qt
+    qute --> gen
+    gen -- "rt.Use, rt.Wrap, rt.KeepArg ..." --> rt
+    gen -- "cgo, plain C types only" --> shim
+    shim --> qt
+    shim -- "destroyed, signals, virtuals,<br/>std::function callbacks" --> rt
+    qt -- "show, hide, reparent events" --> filter
+    filter -- "window pins, re-anchoring" --> rt
+    rt -- "delete on the GUI thread" --> shim
+```
+
+Each Qt module is one Go package with its own cgo shim, built through
+`pkg-config`. A package may only use the modules it depends on, so an app
+links exactly the Qt modules it imports:
+
+```mermaid
+flowchart BT
+    qtgui --> qtcore
+    qtwidgets --> qtgui
+    qtopengl --> qtgui
+    qtopenglwidgets --> qtwidgets
+    qtopenglwidgets --> qtopengl
+    qtsvg --> qtgui
+    qtsvgwidgets --> qtwidgets
+    qtsvgwidgets --> qtsvg
+    qtmultimedia --> qtgui
+    qtmultimediawidgets --> qtwidgets
+    qtmultimediawidgets --> qtmultimedia
+    qtwebenginecore --> qtgui
+    qtwebenginewidgets --> qtwidgets
+    qtwebenginewidgets --> qtwebenginecore
+```
+
+### Freeing objects: the GC and the GUI thread
+
+Qt objects may only be deleted on the GUI thread, but Go runs cleanups on a
+goroutine of its own. So a cleanup never deletes anything: it queues the
+object, and the GUI thread frees it from a posted event. Before deleting, the
+runtime checks that the object is still the one the handle knew (addresses
+get reused), that Qt hasn't given it a parent since, and that nothing still
+keeps it (a page's profile waits for the page).
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant GC as Go GC
+    participant CL as cleanup goroutine
+    participant Q as cleanup queue
+    participant GUI as GUI thread (rt.Drain)
+    participant Qt
+
+    GC->>CL: Owned, unpinned handle unreachable
+    CL->>Q: push (address, serial, deleter)
+    CL->>GUI: post one drain event
+    GUI->>Q: take everything queued
+    loop each queued object
+        alt a live keeper still holds it
+            GUI->>GUI: defer until the keeper is freed
+        else stale serial, or Qt gave it a parent
+            GUI->>GUI: skip (and warn on a missed rule)
+        else
+            GUI->>Qt: delete
+            Qt-->>GUI: destroyed notice
+            GUI->>GUI: handle Dead, release what it kept
+        end
+    end
+```
+
+Images and other memory-heavy values also count their bytes outside the Go
+heap. Enough of them run the GC, and on the GUI thread the values already
+queued are freed at once, so a loop inside one handler stays bounded.
+
+### Calling back into Go
+
+A C++ lambda or shim subclass never holds a Go pointer, only an id. The id
+refers to the sender's handle weakly; the Go closure lives on that handle,
+which the root of its object tree holds. So a window nobody refers to is
+collected together with its handlers, even when a handler mentions the
+window.
+
+```mermaid
+sequenceDiagram
+    participant Qt
+    participant Shim as C++ shim
+    participant RT as internal/rt
+    participant H as your handler
+
+    Qt->>Shim: signal emitted, or virtual called
+    Shim->>RT: qute_pkg_signal(id, args)
+    RT->>RT: on the GUI thread? otherwise panic
+    RT->>RT: id to handle (weak) to closure
+    alt tree already collected
+        RT-->>Shim: skip (a virtual runs the C++ base)
+    else
+        RT->>H: call with converted arguments
+        H-->>RT: return, or panic
+        Note over RT: inside qutetest.Run or PostSync a panic<br/>is recovered here and re-raised in Go
+        RT-->>Shim: result
+    end
+    Shim-->>Qt: return normally
+    Note over Shim: event arguments are marked Dead<br/>when the handler returns
+```
+
 ## How the bindings are made
 
-```
-Qt headers --libclang--> spec/ir/*.json --+
-                         spec/classes/    +--> cmd/qutegen --> qtcore/ qtgui/ qtwidgets/ qtopengl/ ... (one per module)
-                         spec/overlays/ --+                    COVERAGE.md, ownership tests
+```mermaid
+flowchart LR
+    hdr[("Qt 6 headers")] -- "tools/irgen<br/>libclang, new Qt version only" --> ir["spec/ir/*.json<br/>checked in"]
+    cls["spec/classes/*.yaml<br/>which classes, options"] --> qutegen
+    ov["spec/overlays/*.yaml<br/>ownership rules, names, skips"] --> qutegen
+    ir --> qutegen["cmd/qutegen<br/>go generate ./qtcore"]
+    qutegen --> pkgs["qtcore, qtgui, qtwidgets, ...<br/>*_gen.go, *_gen.cpp, *_gen.h"]
+    qutegen --> otests["ownership_gen_test.go<br/>one test per rule"]
+    qutegen --> cov["COVERAGE.md"]
+    manual["*_manual.go, .cpp, .h<br/>hand-written"] --- pkgs
 ```
 
 - `tools/irgen/irgen.py` parses the Qt headers into the IR. The IR is
@@ -459,6 +613,7 @@ go test -tags qute_debug ./...         # with call sites and method names in thr
 LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
 GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
 go generate ./qtcore                   # regenerate packages, tests, COVERAGE.md
+staticcheck ./...                      # optional lint; staticcheck.conf allows `this` receivers
 python3 tools/irgen/irgen.py           # re-parse headers (new Qt version only; needs python3-clang)
 ```
 

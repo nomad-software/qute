@@ -158,7 +158,7 @@ func (this *QPainter) End() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.End")
 	r := C.qute_QPainter_end(self)
 	runtime.KeepAlive(this)
-	rt.Unkeep(rt.RefOf(unsafe.Pointer(this)).H, "device")
+	rt.ReleaseSlot(rt.RefOf(unsafe.Pointer(this)).H, "device")
 	return bool(r)
 }
 

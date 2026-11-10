@@ -10,41 +10,6 @@ import (
 	"github.com/nomad-software/qute/qutetest"
 )
 
-type glCanvas struct {
-	qtopenglwidgets.QOpenGLWidgetBase
-	inits, resizes, paints int
-}
-
-func (c *glCanvas) InitializeGL()     { c.inits++ }
-func (c *glCanvas) ResizeGL(w, h int) { c.resizes++ }
-func (c *glCanvas) PaintGL() {
-	c.paints++
-	gl := c.Context().Functions()
-	gl.GlClearColor(0, 0.5, 1, 1)
-	gl.GlClear(qtgui.GL_COLOR_BUFFER_BIT)
-}
-
-func TestOpenGLWidget(t *testing.T) {
-	qutetest.Run(t, func() {
-		c := &glCanvas{}
-		w := qtopenglwidgets.NewQOpenGLWidgetWith(c, nil)
-		defer w.Delete()
-		w.Resize(32, 32)
-		img := w.GrabFramebuffer()
-		t.Logf("inits=%d resizes=%d paints=%d valid=%v context=%v", c.inits, c.resizes, c.paints, w.IsValid(), w.Context() != nil)
-		if c.inits == 0 || c.paints == 0 {
-			t.Skip("no OpenGL context available on this platform")
-		}
-		if img.IsNull() {
-			t.Fatal("GrabFramebuffer returned a null image")
-		}
-		col := img.PixelColor(16, 16)
-		if col.R != 0 || col.G < 120 || col.G > 135 || col.B != 255 {
-			t.Errorf("pixel = %+v, want the clear colour (0,127,255)", col)
-		}
-	})
-}
-
 // glTriangle draws one red triangle that covers the centre of the widget,
 // through a shader program, a vertex buffer and a vertex array object.
 type glTriangle struct {

@@ -2,6 +2,7 @@ package rt
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"runtime/cgo"
 	"sync"
@@ -135,7 +136,7 @@ func freeNode(a cleanupArg) {
 		if !ok {
 			return // already destroyed, or the address was reused
 		}
-		if a.kind == KindQObject && HasParent(a.key) {
+		if a.kind == KindQObject && hasParentC(a.key) {
 			// Safety net: an ownership rule was missed and Qt now owns the
 			// object. Never delete something with a parent. The Go state its
 			// handle anchored was collected with it, so say so instead of
@@ -165,13 +166,15 @@ var (
 
 // warnParentedFree reports, once per class, that GC collected the Owned
 // handle of an object Qt had given a parent (rule 7).
+var warnOut io.Writer = os.Stderr // tests capture it
+
 func warnParentedFree(class string) {
 	warnedMu.Lock()
 	seen := warned[class]
 	warned[class] = true
 	warnedMu.Unlock()
 	if !seen {
-		fmt.Fprintf(os.Stderr, "qute: GC collected the Owned handle of a %s that Qt has given a parent; "+
+		fmt.Fprintf(warnOut, "qute: GC collected the Owned handle of a %s that Qt has given a parent; "+
 			"the object is left to its parent (rule 7), but the Go handlers of its tree no longer run. "+
 			"An ownership rule is missing: the method that gave it the parent needs transfer-to-cpp\n", class)
 	}

@@ -38,7 +38,7 @@ QPainter:
   boundingRect(const QRectF&, const QString&, const QTextOption&): { name: BoundingRectTextF }
   QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: keep:device }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
   begin: { args: { 0: keep:device }, reviewed: true }
-  end: { unkeep: device, reviewed: true, doc: "An inactive painter no longer uses its device, so End() drops the painter's reference to it: the device may be deleted afterwards." }
+  end: { release-slot: device, reviewed: true, doc: "An inactive painter no longer uses its device, so End() drops the painter's reference to it: the device may be deleted afterwards." }
   device: { return: borrowed }
   setPen(const QColor&): { name: SetPenColor }
   setPen(const QPen&): { name: SetPen }

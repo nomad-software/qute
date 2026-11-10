@@ -171,7 +171,8 @@ keeper still uses it would leave Qt with a dangling pointer. A keep is
 QObject references are usually watched by Qt; `Delete()` of a guarded object
 panics, naming the keeper. The overlay key `kept-delete: allow|guard`
 overrides it per method (`QTextCursor` allows, a page's profile guards), and
-`unkeep: <slot>` empties a slot when a method ends the use (`QPainter::end`).
+`release-slot: <slot>` empties a slot when a method ends the use
+(`QPainter::end`).
 A value only valid with another object (`QModelIndex` and its model,
 `QTextBlock` and its document, `QWidgetItem` and its widget) uses the class
 option `depends-on`: each wrapper holds that object, and `rt.Use` panics once
@@ -412,7 +413,7 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `error`,
   `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…), `created: true` (the
   result is built by the binding, so it is registered and its death seen),
-  `kept-delete: allow|guard` and `unkeep: <slot>` (see Kept references).
+  `kept-delete: allow|guard` and `release-slot: <slot>` (see Kept references).
   `QGraphicsScene::addRect` and friends use `cpp` + `created` to build
   qute's notifying item subclasses instead of Qt's, so those items report
   their death however they die.
@@ -519,7 +520,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   items and paint devices after their owner died, a QObject through its
   second base, visible `QWindow`s, windows kept alive by their handlers,
   subclass children or kept models, orphaned layout widgets, image memory,
-  override results. The newer modules carry their own lifetime tests:
+  override results, and misuse that used to crash: the memory path freeing a
+  painter's image first, `Delete()` of a guarded kept object or of a layout
+  item in a layout, `Delete()` inside a handler, a transfer-to-go result Qt
+  had parented. The newer modules carry their own lifetime tests:
   `qtsvg/render_test.go`, `qtmultimedia/lifetime_test.go` (kept outputs
   through GC, `QVideoSink` death, frame memory) and
   `qtwebenginewidgets/lifetime_test.go` (a custom-scheme reply device kept
@@ -529,13 +533,11 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   draw the SVG), `qtmultimedia` (a sink delivers real frames, outputs and
   sinks share one kept slot), `qtmultimediawidgets/videowidget_test.go`,
   `qtopenglwidgets/lifetime_test.go` and `qtwebenginecore/behaviour_test.go`
-  (the cookie filter on a local HTTP server, builder chaining).
-  `review_test.go` covers misuse that once crashed: the memory path freeing a
-  painter's image first, `Delete()` of a guarded kept object or of a layout
-  item in a layout, `Delete()` inside a handler, an off-thread handler entry,
-  GUI values in variants. `bench_test.go` measures the reparenting walk
-  (linear in the subtree). `run_test.go` covers `t.Fatal` inside `Run` (in a child
-  process), `PostSync` handler panics, the off-thread check and Full forms.
+  (the cookie filter on a local HTTP server, its panic recovery, builder
+  chaining, a guarded profile). `bench_test.go` measures the reparenting walk
+  (linear in the subtree). `run_test.go` covers `t.Fatal` inside `Run` (in a
+  child process), `PostSync` handler panics, the off-thread checks (Qt calls
+  and handler entries) and Full forms.
 - `.github/workflows/ci.yml` runs when a release tag (`v*`) is pushed and on
   demand (`workflow_dispatch`, from the Actions tab), so run it, or the
   commands under "Working in the repo", before tagging. It
@@ -602,6 +604,7 @@ LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwi
 GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
 go generate ./qtcore                            # = go run ./cmd/qutegen -root .
 go vet ./... && gofmt -l .
+staticcheck ./...                               # optional; staticcheck.conf allows `this` receivers
 go run ./examples/hello -screenshot out.png     # render offscreen, then Read the PNG
 python3 tools/irgen/irgen.py                    # only for a new Qt version (needs python3-clang)
 ```
@@ -619,11 +622,11 @@ python3 tools/irgen/irgen.py                    # only for a new Qt version (nee
 Layout:
 
 - Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, tests
-  (`tools_test.go` covers every input and inspection helper;
+  (`tools_test.go` covers the inspection helpers and `ProcessEvents`;
   `regression_test.go` covers bindings whose signature was once wrong:
   out-parameters, kept references, in-place virtual arguments, handler panics).
 - `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed) and
-  `input.{go,cpp,h}` (the QTest input helpers).
+  `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and
   the generator directly (no QApplication; the generator test loads the real
   spec).
@@ -642,13 +645,16 @@ Layout:
   rules, out-parameters, pairs, fields), `emit.go` (Go/C/C++ output),
   `tests.go`, `report.go`.
 - `features_test.go` checks each extra type kind end to end (out-parameters,
-  chaining, buffers, maps, durations, fields, callbacks).
+  chaining, buffers, maps, durations, fields, callbacks, GUI values in
+  variants, images from bytes).
 - `keepalive_test.go` runs the GC inside a call (nested event loop, a
   synchronous event) and checks the receiver and arguments survive it.
 - Inside `qutetest.Run`, prefer `t.Error` and `return`. `t.Fatal` works (it ends
   the test), but each one ends the GUI goroutine, which the runtime replaces
   with a nested event loop.
-- `cmd/qute`: `vet` and `new`. `testdata/bad/bad.go` holds `// want <rule>`
+- `cmd/qute`: `vet` and `new`. `new_test.go` writes a starter app, points it
+  at this checkout and runs its tests and `qute vet` offline.
+  `testdata/bad/bad.go` holds `// want <rule>`
   comments that `vet_test.go` checks.
 
 Invariants:
@@ -678,5 +684,8 @@ Conventions:
   `features_test.go`).
 - After generator changes: regenerate, `go vet ./...`, `gofmt -l .`, and the
   affected tests.
+- Every fix and behaviour change lands with a test that guards it against
+  regression (runtime, generator in `gen_test.go`, spec rules, hand-written
+  bindings); where practical, check the test fails without the fix.
 - Ask before committing. Commit messages end with the attribution line the
   harness supplies.
