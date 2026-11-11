@@ -961,11 +961,131 @@ func TestInlineViews(t *testing.T) {
 	if View[wrapper](w.H, unsafe.Pointer(&v)) != w {
 		t.Error("View does not return the wrapper made with the handle")
 	}
-	if n := testing.AllocsPerRun(100, func() { InlineArgView[wrapper](unsafe.Pointer(&arg), "InlineView") }); n > 2 {
+	// (a debug build also records each handle's call site)
+	if n := testing.AllocsPerRun(100, func() { InlineArgView[wrapper](unsafe.Pointer(&arg), "InlineView") }); n > 2 && !debugEnabled {
 		t.Errorf("an inline argument costs %v allocations, want 2", n)
 	}
 	o := InlineOwnedView[wrapper](unsafe.Pointer(&v), "InlineView")
 	if freed != 1 || *(*int64)(o.P) != 9 || o.H.State() != Owned || len(o.H.deps) != 1 {
 		t.Errorf("owned view: freed %d, state %v, deps %d", freed, o.H.State(), len(o.H.deps))
 	}
+}
+
+// A destructor may run a Go handler that runs the event loop, and with it a
+// nested Drain. What the nested one could not free yet (its keeper lives)
+// must still be waiting when the outer one returns. (The outer Drain used to
+// overwrite the list, so such an object was never freed.)
+func TestNestedDrainKeepsDeferred(t *testing.T) {
+	queueHead.Store(nil)
+	defer queueHead.Store(nil)
+	freed := 0
+	key := fakePtr(3)
+	keeper := Wrap(key, "Page", KindNotify, KeepOrBorrow, nil)
+	kept := &Handle{ptr: fakePtr(4), class: "Profile", kind: KindPlain, serial: serialCounter.Add(1)}
+	KeepArg(keeper, "profile", kept, false)
+	enqueueCleanup(cleanupArg{key: fakePtr(5), kind: KindPlain, quiet: true, deleter: func(unsafe.Pointer) {
+		// queued while the outer Drain runs, and drained inside it
+		enqueueCleanup(cleanupArg{key: kept.ptr, serial: kept.serial, kind: KindPlain, deleter: func(unsafe.Pointer) { freed++ }})
+		Drain()
+	}})
+	Drain()
+	if freed != 0 {
+		t.Fatal("kept object freed while its keeper lives")
+	}
+	if deferredN.Load() != 1 {
+		t.Fatalf("%d frees waiting after a nested Drain, want 1", deferredN.Load())
+	}
+	Destroyed(key, "test")
+	Drain()
+	if freed != 1 || deferredN.Load() != 0 {
+		t.Fatalf("freed %d after the keeper died (%d waiting), want 1 (0)", freed, deferredN.Load())
+	}
+}
+
+// A keeper whose handle GC collected and that Qt then hands out again gets a
+// new handle, with a new serial. Its death releases what the first handle
+// kept as well, or that object's free would wait forever.
+func TestDeathReleasesHoldsOfEarlierHandle(t *testing.T) {
+	key := fakePtr(6)
+	first := Wrap(key, "View", KindNotify, KeepOrBorrow, nil)
+	kept := &Handle{ptr: fakePtr(7), class: "Model", kind: KindPlain, serial: serialCounter.Add(1)}
+	KeepArg(first, "model", kept, false)
+	regMu.Lock()
+	registry[key].w = weak.Pointer[Handle]{} // as if the first handle were collected
+	regMu.Unlock()
+	second := Wrap(key, "View", KindNotify, KeepOrBorrow, nil)
+	if second == first {
+		t.Fatal("the collected handle was handed out again")
+	}
+	Destroyed(key, "test")
+	if isKept(kept.serial) {
+		t.Fatal("the hold of the keeper's first handle outlived the keeper")
+	}
+	runtime.KeepAlive(first)
+}
+
+// Debug call sites name the program's code, its main function included:
+// most small programs build their window inside the function they pass to
+// qute.Main. Only the main that "go test" generates is passed over. (Every
+// frame of main.main used to be skipped, so such objects had no call site.)
+func TestUserFrame(t *testing.T) {
+	for _, c := range []struct {
+		fn, file string
+		want     bool
+	}{
+		{"main.main", "/app/main.go", true},
+		{"main.main.func1", "/app/main.go", true},
+		{"main.build", "/app/window.go", true},
+		{"main.main", "_testmain.go", false},
+		{"example.com/app_test.TestWindow.func1", "/app/window_test.go", true},
+		{modulePrefix + "qtwidgets.NewQWidget", "/qute/qtwidgets/qwidget_gen.go", false},
+		{modulePrefix + "qtwidgets_test.TestLayout", "/qute/qtwidgets/layout_test.go", true},
+		{strings.TrimSuffix(modulePrefix, "/") + ".Main", "/qute/qute.go", false},
+		{modulePrefix + "internal/rt.Wrap", "/qute/internal/rt/handle.go", false},
+		{"runtime.main", "/go/src/runtime/proc.go", false},
+		{"testing.tRunner", "/go/src/testing/testing.go", false},
+		{"_cgoexp_1234", "_cgo_export.c", false},
+		{"", "", false},
+	} {
+		if got := userFrame(c.fn, c.file); got != c.want {
+			t.Errorf("userFrame(%q, %q) = %v, want %v", c.fn, c.file, got, c.want)
+		}
+	}
+}
+
+// Asking about a handle makes no extension: the reparenting walk asks every
+// wrapped object in a subtree whether it is anchored, and DumpTree every
+// object of a tree.
+func TestQueriesMakeNoExtension(t *testing.T) {
+	if debugEnabled {
+		t.Skip("a debug build records every handle's call site in its extension")
+	}
+	h, other := newPlain("Asked"), newPlain("Other")
+	h.Unkeep()
+	h.anchorUnpin()
+	h.releaseAnchored()
+	ReleaseSlot(h, "slot")
+	Release(h, other)
+	if h.Anchored() != "" || Keeps(h, other) || h.GoValue() != nil {
+		t.Fatal("a fresh handle reports state it does not have")
+	}
+	if h.ext.Load() != nil {
+		t.Fatal("a query made the handle's extension")
+	}
+}
+
+// Before the application exists there is no GUI thread to be off: a debug
+// build checks no more than the generated shims do, so a goroutine may use a
+// value then (a test goroutine here). The debug check used to compare with
+// the main OS thread, and panicked where a release build does not.
+func TestUseBeforeApplication(t *testing.T) {
+	type wrapper struct{ Ref }
+	h := Wrap(fakePtr(1), "Early", KindValue, TakeOwned, func(unsafe.Pointer) {})
+	defer h.stopCleanup()
+	w := View[wrapper](h, h.ptr)
+	if Use(unsafe.Pointer(w), "Early.Method") != h.ptr {
+		t.Fatal("Use returned another pointer")
+	}
+	CheckThread("Early.Method")
+	GUIOnly("Early.Method")
 }

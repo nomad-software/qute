@@ -18,15 +18,26 @@ func callSite() string {
 	frames := runtime.CallersFrames(pcs[:n])
 	for {
 		f, more := frames.Next()
-		fn := f.Function
-		if fn != "" && !libraryFrame(fn) && !strings.HasPrefix(fn, "runtime.") &&
-			!strings.HasPrefix(fn, "_cgo") && !strings.HasPrefix(fn, "testing.") && !strings.HasPrefix(fn, "main.main") {
+		if userFrame(f.Function, f.File) {
 			return fmt.Sprintf("%s:%d", filepath.Base(f.File), f.Line)
 		}
 		if !more {
 			return ""
 		}
 	}
+}
+
+// userFrame reports whether a frame is the program's own code: not the
+// binding, the Go runtime, cgo or the testing package, and not the main
+// function "go test" generates (_testmain.go), which is all that is left when
+// the library made the object itself. A program's own main is user code: most
+// small programs build their window in the function they pass to qute.Main.
+func userFrame(fn, file string) bool {
+	if fn == "" || libraryFrame(fn) || strings.HasPrefix(fn, "runtime.") ||
+		strings.HasPrefix(fn, "_cgo") || strings.HasPrefix(fn, "testing.") {
+		return false
+	}
+	return filepath.Base(file) != "_testmain.go"
 }
 
 // libraryPkgs are the runtime and the generated packages. Their external test

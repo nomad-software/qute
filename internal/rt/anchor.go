@@ -73,7 +73,7 @@ func (h *Handle) anchorPin() {
 func (h *Handle) anchorUnpin() {
 	anchorMu.Lock()
 	defer anchorMu.Unlock()
-	if h.x().anchorN == 0 {
+	if h.anchorCount() == 0 {
 		return
 	}
 	h.x().anchorN--
@@ -87,13 +87,24 @@ func (h *Handle) anchorUnpin() {
 func (h *Handle) Anchored() string {
 	anchorMu.Lock()
 	defer anchorMu.Unlock()
+	e := h.ext.Load()
 	switch {
-	case !h.x().placed:
+	case e == nil || !e.placed:
 		return ""
-	case h.x().holder == nil:
+	case e.holder == nil:
 		return "global"
 	}
 	return "root"
+}
+
+// anchorCount is the number of reasons h is anchored for, read without
+// making its extension: the reparenting walk asks every wrapped object in a
+// subtree, and most have none. The caller holds anchorMu.
+func (h *Handle) anchorCount() int32 {
+	if e := h.ext.Load(); e != nil {
+		return e.anchorN
+	}
+	return 0
 }
 
 // placeLocked moves h to a new holder: the global strong set (holder nil) or
@@ -149,10 +160,14 @@ func holderFor(h *Handle) *Handle {
 // can no longer hold it (it became Parented, or died). The caller holds
 // anchorMu.
 func (r *Handle) releaseAnchoredLocked() {
-	for a := range r.x().anchored {
+	e := r.ext.Load()
+	if e == nil {
+		return // it never held anything
+	}
+	for a := range e.anchored {
 		a.placeLocked(true, nil)
 	}
-	r.x().anchored = nil
+	e.anchored = nil
 }
 
 func (r *Handle) releaseAnchored() {
@@ -198,7 +213,7 @@ func reanchorSubtree(obj unsafe.Pointer, toGlobal bool) {
 	}
 	for _, p := range objs {
 		h := Lookup(p)
-		if h == nil || h.x().anchorN == 0 {
+		if h == nil || h.anchorCount() == 0 {
 			continue
 		}
 		holder := rootH

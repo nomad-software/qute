@@ -182,8 +182,8 @@ to see the UI:
   `-tags qute_debug` the messages also give the call sites where the object
   was created and destroyed, and the thread check names the method.
 - **Static checks catch the common mistakes.** `qute vet ./...` reports
-  leaked Owned objects and Go subclasses, `Delete()` inside a handler, Qt
-  calls from a goroutine and event arguments kept past their callback.
+  leaked Owned objects and Go subclasses, `Delete()` of a QObject inside a
+  handler, Qt calls from a goroutine and event arguments kept past their callback.
 - **A known-good starting point.** `qute new app <dir>` writes a window, a
   `main.go`, a behaviour test and a screenshot test that pass from the start.
 - **The API is predictable.** Names map one-to-one from the Qt docs an agent
@@ -227,8 +227,8 @@ lines are a good start:
 - To check a layout, save a screenshot with qute.SaveScreenshot and open
   the PNG; use qute.DumpTree for exact geometry.
 - Drive the UI in tests with qutetest.Click/Type/Key inside qutetest.Run.
-- Run `qute vet ./...` before finishing. Inside handlers use DeleteLater,
-  never Delete. From goroutines use qute.Post.
+- Run `qute vet ./...` before finishing. Inside handlers delete QObjects
+  with DeleteLater, never Delete. From goroutines use qute.Post.
 ```
 
 ## Ownership
@@ -264,7 +264,8 @@ happened and the fix.
 - Using a Dead handle panics with the class, method and fix, and so does a
   Qt call off the GUI thread, and `Delete()` of a QObject inside a handler
   (use `DeleteLater()`). Build with `-tags qute_debug` to also get the
-  creation and destruction call sites and the method name in thread panics.
+  creation and destruction call sites (the first frame of your own code,
+  `main` included) and the method name in thread panics.
 - `Delete()` also panics where Qt would be left with a dangling pointer: on
   an object something still uses without watching for its destruction (the
   image a `QPainter` draws on until `End()`, a stream's device), and on a
@@ -464,8 +465,9 @@ a triangle with a shader program, a vertex buffer and a VAO.
 - `qute new app <dir> [module]` writes `main.go`, a window, a behaviour test
   and a screenshot test.
 - `qute vet ./...` reports Owned objects with connections, and parentless Go
-  subclasses, that are never deleted or parented, `Delete()` inside handlers
-  and overrides, Qt calls (including `qute.Screenshot` and the `qutetest`
+  subclasses, that are never deleted or parented, `Delete()` of a QObject
+  inside handlers and overrides (a painter, image or other non-QObject made
+  in a handler is deleted there), Qt calls (including `qute.Screenshot` and the `qutetest`
   input helpers) from goroutines, and event, painter and style-option
   arguments stored past their callback.
 

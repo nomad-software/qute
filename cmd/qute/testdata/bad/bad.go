@@ -66,6 +66,20 @@ func DeleteInHandler(w *qtwidgets.QWidget) {
 	})
 }
 
+// Rule 5 is about QObjects: values and plain objects made in a handler are
+// deleted there.
+func DeleteValueInHandler(w *qtwidgets.QWidget, img *qtgui.QImage) {
+	btn := qtwidgets.NewQPushButtonWithText("x", w)
+	btn.OnClicked(func(bool) {
+		p := qtgui.NewQPainterOn(img)
+		path := qtgui.NewQPainterPath()
+		p.DrawPath(path)
+		path.Delete()
+		p.Delete()
+		img.Delete()
+	})
+}
+
 func Goroutine(lbl *qtwidgets.QLabel) {
 	go func() {
 		lbl.SetText("x") // want gui-goroutine

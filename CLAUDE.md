@@ -165,7 +165,8 @@ counts holds by handle serial, which outlives the handle, and `rt.Drain`
 frees a kept object only once no keeper holds it: a keeper freed in the same
 drain releases it at once, and one Qt destroys later (a page inside a
 collected window) releases it through its death notice, even when its handle
-is already gone. The memory path (`drainValues`) frees through the same check.
+is already gone, or was collected and replaced by a new one when Qt handed
+the keeper out again (the registry entry's `prevSerial`). The memory path (`drainValues`) frees through the same check.
 An unregistered keeper Go does not free (Parented after a transfer) releases
 what it holds when its handle is collected instead.
 GC is not the only way a kept object can go: `Delete()` of it while the
@@ -198,7 +199,9 @@ class: <bound class>}` when Qt has no getter; a class may list several
 - **Handles are small.** What every handle needs is on `Handle`; state only
   some objects have (pins, connections, keeps, anchoring, a Go subclass,
   debug call sites) is in a `handleExt` made on first use, and the first
-  wrapper is cached without a slice. A value Qt hands an override for every
+  wrapper is cached without a slice. Code that only asks (`Anchored`,
+  `Keeps`, `Unkeep`, the reparenting walk's `anchorCount`) reads
+  `h.ext.Load()` and must not call `h.x()`, which makes the extension. A value Qt hands an override for every
   row costs two allocations, its bytes and its handle and wrapper made
   together (`rt.InlineArgView`, `InlineOwnedView`), and no call into C++: the
   shim passes the objects it depends on (`qute_inline_arg`, filled from its
@@ -373,11 +376,16 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   that converts its arguments to plain Go values and skips the runtime
   (`QWebEngineCookieStore.SetCookieFilter`, `cookiefilter_manual.go`).
 - GC cleanups never call `delete`: they push onto a lock-free queue that the
-  GUI thread drains from a posted event. After the event loop exits, queued
+  GUI thread drains from a posted event. `rt.Drain` may be re-entered (a
+  destructor runs a Go handler that runs the event loop), so it merges what
+  a nested drain left waiting instead of overwriting it. After the event loop exits, queued
   cleanups are dropped, since deleting after the app is gone crashes Qt.
   Unreachable `qtcore.Connection`s are freed through the same queue.
 - Build tag `qute_debug` adds a Go-side GUI-thread check that names the
-  method, and records creation and death call sites.
+  method (like the shims, it checks nothing before the application exists),
+  and records creation and death call sites: the first frame that
+  is the program's own (`userFrame` in `site.go`; its `main` counts, only
+  the `_testmain.go` main of a test binary does not).
 
 ## Signals and subclassing
 
@@ -594,7 +602,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   Threading).
 - `qute vet`: owned-leak (also a parentless Go subclass never deleted; a
   parent is any non-nil object argument; `Show` counts as keeping a window
-  for the program's life, `Exec` does not), delete-handler, gui-goroutine
+  for the program's life, `Exec` does not), delete-handler (QObjects only,
+  as rule 5: a type with `AsQObject`), gui-goroutine
   (also the inspection helpers of `qute` and the input helpers of
   `qutetest`), scoped-escape. A handler is an `On*` closure or an override: a
   method of a type that embeds a Base (directly or through a type it embeds)
@@ -747,7 +756,8 @@ python3 tools/irgen/irgen.py                    # only for a new Qt version (nee
 Layout:
 
 - Root package `qute`: `qute.go`, `tools.{go,cpp,h}`, tests
-  (`tools_test.go` covers the inspection helpers and `ProcessEvents`;
+  (`tools_test.go` covers the inspection helpers, `SaveScreenshot`,
+  `Keep`/`Unkeep` and `ProcessEvents`;
   `regression_test.go` covers bindings whose signature was once wrong:
   out-parameters, kept references, in-place virtual arguments, handler panics,
   the object a `destroyed` handler is given;
@@ -760,7 +770,9 @@ Layout:
   `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and
   the generator directly (no QApplication; the generator test loads the real
-  spec).
+  spec). The runtime tests use fake addresses and stub the Qt hooks
+  (`rootOfC`, `subtreeC`, `hasParentC`), which is how the queue, keep and
+  anchoring edge cases (a nested drain, a re-wrapped keeper) are reached.
 - `internal/rt`: runtime (hand-written): `handle.go` (states, registry,
   wrapping), `anchor.go` (Go state held by tree roots), `keep.go` (kept
   references, depends-on), `adopt.go` (parentless transfers), `memory.go`

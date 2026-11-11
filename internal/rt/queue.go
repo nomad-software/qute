@@ -78,8 +78,11 @@ func Drain() {
 		pending = append(pending, n.arg)
 	}
 	pending = freeReady(pending)
-	deferred = pending
-	deferredN.Store(int32(len(pending)))
+	// A destructor may run a Go handler that runs the event loop, and with it
+	// a nested Drain, which leaves what it could not free in deferred: keep
+	// those too.
+	deferred = append(pending, deferred...)
+	deferredN.Store(int32(len(deferred)))
 }
 
 // freeReady frees every object in pending that no live keeper holds, again

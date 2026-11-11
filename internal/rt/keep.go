@@ -191,7 +191,7 @@ func (h *Handle) syncRelease() {
 // unslotLocked drops one slot and the owner's anchor once nothing is kept.
 // The caller holds keepMu.
 func unslotLocked(owner *Handle, slot string) {
-	if owner.x().keeps == nil {
+	if e := owner.ext.Load(); e == nil || e.keeps == nil {
 		return
 	}
 	if old, ok := owner.x().keeps[slot].(*Handle); ok && unholdLocked(owner.serial, old.serial) {
@@ -341,7 +341,11 @@ func Keeps(owner, arg *Handle) bool {
 	}
 	keepMu.Lock()
 	defer keepMu.Unlock()
-	for _, v := range owner.x().keeps {
+	e := owner.ext.Load()
+	if e == nil {
+		return false
+	}
+	for _, v := range e.keeps {
 		if v == arg {
 			return true
 		}

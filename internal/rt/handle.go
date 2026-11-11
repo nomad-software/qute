@@ -529,11 +529,12 @@ func (h *Handle) Keep() {
 // Unkeep releases one Keep.
 func (h *Handle) Unkeep() {
 	h.mu.Lock()
-	if h.x().keepPins == 0 {
+	e := h.ext.Load()
+	if e == nil || e.keepPins == 0 {
 		h.mu.Unlock()
 		return
 	}
-	h.x().keepPins--
+	e.keepPins--
 	h.mu.Unlock()
 	h.Unpin()
 }
@@ -622,6 +623,11 @@ func Destroyed(key unsafe.Pointer, why string) {
 			// the handle was collected first (its tree is being freed):
 			// what it kept may go now
 			releaseHolds(e.serial)
+		}
+		if e.prevSerial != 0 {
+			// and what an earlier handle of the object kept, collected
+			// before Qt handed the object out again
+			releaseHolds(e.prevSerial)
 		}
 	}
 	orphaned(key)
@@ -735,7 +741,7 @@ func Use(wrapper unsafe.Pointer, method string) unsafe.Pointer {
 	}
 	checkDependency(r.H, method)
 	if debugEnabled {
-		checkThread(method)
+		GUIOnly(method)
 	}
 	return r.P
 }
@@ -750,7 +756,8 @@ func UseArg(wrapper unsafe.Pointer, method string) unsafe.Pointer {
 
 // GUIOnly panics when called off the GUI thread, in every build. Generated
 // methods check in their C shim instead; hand-written helpers (qutetest.Click,
-// qute.Screenshot) call this.
+// qute.Screenshot) call this. Before the application exists nothing is
+// checked, as in the shims: there is no GUI thread yet.
 func GUIOnly(method string) {
 	if AppExists() {
 		checkThread(method)
@@ -760,7 +767,7 @@ func GUIOnly(method string) {
 // CheckThread panics when called off the GUI thread in debug builds.
 func CheckThread(method string) {
 	if debugEnabled {
-		checkThread(method)
+		GUIOnly(method)
 	}
 }
 

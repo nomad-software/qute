@@ -34,7 +34,8 @@ type finding struct {
 //	owned-leak      an Owned object with signal connections, or a parentless
 //	                Go subclass, is never deleted, parented or shown (its
 //	                connections or Go value pin it forever)
-//	delete-handler  Delete() inside a signal or event handler (use DeleteLater)
+//	delete-handler  Delete() of a QObject inside a signal or event handler (use
+//	                DeleteLater)
 //	gui-goroutine   Qt calls inside a goroutine (use qute.Post)
 //	scoped-escape   an event or painter argument stored past its callback
 func vet(args []string) int {
@@ -282,7 +283,7 @@ func embedsBaseType(t types.Type, seen map[types.Type]bool) bool {
 	return false
 }
 
-// delete-handler: Delete() inside a handler.
+// delete-handler: Delete() of a QObject inside a handler.
 func (v *vetter) checkHandlers(f *ast.File) {
 	v.handlerBodies(f, func(body *ast.BlockStmt, _ *ast.FieldList, what string) {
 		ast.Inspect(body, func(n ast.Node) bool {
@@ -297,14 +298,26 @@ func (v *vetter) checkHandlers(f *ast.File) {
 			if fn == nil || name != "Delete" {
 				return true
 			}
-			recv := v.pkg.TypesInfo.TypeOf(call.Fun.(*ast.SelectorExpr).X)
-			if recv != nil && strings.Contains(recv.String(), "QPainter") {
-				return true // painters are created and ended inside paint handlers
+			if !isQObject(v.pkg.TypesInfo.TypeOf(call.Fun.(*ast.SelectorExpr).X)) {
+				// rule 5 is about QObjects: a painter, an image or a state
+				// guard made inside a handler is deleted there
+				return true
 			}
 			v.report(call, "delete-handler", "Delete() inside %s; Qt may still be using the object, call DeleteLater() instead (rule 5)", what)
 			return true
 		})
 	})
+}
+
+// isQObject reports whether t is a generated wrapper of a QObject class, or
+// a type that embeds one: every such wrapper has AsQObject.
+func isQObject(t types.Type) bool {
+	if t == nil {
+		return false
+	}
+	obj, _, _ := types.LookupFieldOrMethod(t, true, nil, "AsQObject")
+	_, ok := obj.(*types.Func)
+	return ok
 }
 
 func isScopedType(t types.Type) bool {
