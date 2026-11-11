@@ -15,6 +15,9 @@ env:
   # machines the probe leaks from a library it unloads (see lsan.supp)
   QT_FFMPEG_DECODING_HW_DEVICE_TYPES: ","
   QT_FFMPEG_ENCODING_HW_DEVICE_TYPES: ","
+  # fixed paths for the caches below
+  GOCACHE: /github/home/go-build
+  GOMODCACHE: /github/home/go-mod
 
 jobs:
   linux:
@@ -26,33 +29,55 @@ jobs:
       matrix:
         mode: [test, debug, asan, cgocheck2, generate]
     steps:
+      - name: Week (pacman cache key)
+        id: week
+        run: echo "week=$(date +%G-%V)" >> "$GITHUB_OUTPUT"
+      # Qt WebEngine and its friends are a large download; reuse the
+      # packages the week's first run fetched (pacman fetches only what is newer)
+      - uses: actions/cache@v4
+        if: matrix.mode != 'generate'
+        with:
+          path: /var/cache/pacman/pkg
+          key: pacman-${{ steps.week.outputs.week }}
       - name: Qt 6, compiler and tools
+        if: matrix.mode != 'generate'
         run: pacman -Syu --noconfirm --needed qt6-base qt6-svg qt6-multimedia qt6-multimedia-ffmpeg qt6-webengine gcc pkgconf mesa git ttf-dejavu
+      # the generator needs neither Qt nor a C compiler
+      - name: git
+        if: matrix.mode == 'generate'
+        run: pacman -Syu --noconfirm --needed git
       - uses: actions/checkout@v4
       # steps run as root in the container but the checkout belongs to the
       # runner's user, and git ignores a repository owned by someone else
       - name: Trust the checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - uses: actions/setup-go@v5
-        with: { go-version: "1.26" }
+        with: { go-version: "1.26", cache: false }
       - name: Qt version
-        run: pkg-config --modversion Qt6Core
+        id: qt
+        if: matrix.mode != 'generate'
+        run: echo "version=$(pkg-config --modversion Qt6Core)" >> "$GITHUB_OUTPUT"
+      # Compiling the Qt bindings from cold is most of a run. Each mode builds
+      # with its own flags, so each keeps its own cache; the key changes with
+      # the sources and the Qt version, and the newest cache of the mode is
+      # restored when it does, so only what changed is compiled again.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            /github/home/go-build
+            /github/home/go-mod
+          key: go-${{ matrix.mode }}-qt${{ steps.qt.outputs.version }}-${{ hashFiles('go.sum', '**/*.go', '**/*.cpp', '**/*.h') }}
+          restore-keys: go-${{ matrix.mode }}-qt${{ steps.qt.outputs.version }}-
       - name: test
         if: matrix.mode == 'test'
         run: |
           go vet ./...
           test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
           go run ./cmd/qute vet ./examples/...
-          go build ./...
           go test ./...
       - name: debug build (call sites, rule 5, named thread checks)
         if: matrix.mode == 'debug'
-        # build first: cmd/qute's TestNewAppPasses builds a starter app
-        # against the same packages, and a cold cache under its 10m timeout
-        # once timed out
-        run: |
-          go build -tags qute_debug ./...
-          go test -tags qute_debug ./...
+        run: go test -tags qute_debug ./...
       - name: AddressSanitizer and LeakSanitizer
         if: matrix.mode == 'asan'
         run: LSAN_OPTIONS=suppressions=$PWD/lsan.supp go test -asan . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
@@ -61,6 +86,7 @@ jobs:
         run: GOEXPERIMENT=cgocheck2 go test . ./qtcore ./qtgui ./qtwidgets ./qtopengl ./qtopenglwidgets ./qtsvg ./qtsvgwidgets ./qtmultimedia ./qtmultimediawidgets ./qtwebenginecore ./qtwebenginewidgets ./qutetest
       - name: generated code is up to date
         if: matrix.mode == 'generate'
+        env: { CGO_ENABLED: "0" }
         # git status also catches new untracked files the generator wrote
         run: |
           go generate ./qtcore

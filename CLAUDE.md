@@ -649,7 +649,11 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   runs test (with `gofmt -l` and `qute vet ./examples/...`), `qute_debug`,
   `-asan`, `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check, each in an
   `archlinux` container because the bindings need Qt 6.12+ and Ubuntu's Qt
-  is older (Go itself comes from `setup-go`, pinned to the 1.26 minimum). CI
+  is older (Go itself comes from `setup-go`, pinned to the 1.26 minimum).
+  Keep it quick: each mode caches Go's build cache (keyed on the sources and
+  the Qt version, restoring the mode's newest), pacman's downloads are cached
+  for the week, the generate job installs no Qt, and nothing builds the same
+  packages twice or builds apps on top of the library. CI
   is Linux only; macOS and Windows jobs come back when that work starts.
 
 ## Roadmap
@@ -785,8 +789,9 @@ Layout:
 - Inside `qutetest.Run`, prefer `t.Error` and `return`. `t.Fatal` works (it ends
   the test), but each one ends the GUI goroutine, which the runtime replaces
   with a nested event loop.
-- `cmd/qute`: `vet` and `new`. `new_test.go` writes a starter app, points it
-  at this checkout and runs its tests and `qute vet` offline.
+- `cmd/qute`: `vet` and `new`. `new_test.go`
+  checks that `qute new` writes the starter app's files and that they parse;
+  it builds nothing (tests here test the library, not apps built on it).
   `testdata/bad/bad.go` holds `// want <rule>`
   comments that `vet_test.go` checks.
 
