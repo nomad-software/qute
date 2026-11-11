@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
 	"testing"
 	"unsafe"
@@ -178,6 +179,138 @@ func TestInitStyleOptionArgumentIsScoped(t *testing.T) {
 		}
 		if v.opt.Alive() {
 			t.Error("option still alive after the override returned; it is Qt's stack object")
+		}
+	})
+}
+
+// passStyle overrides the style virtuals that take a const QStyleOption *
+// and hands each call straight to Super.
+type passStyle struct {
+	qtwidgets.QProxyStyleBase
+	calls int
+}
+
+func (s *passStyle) DrawPrimitive(e qtwidgets.QStylePrimitiveElement, opt *qtwidgets.QStyleOption, p *qtgui.QPainter, w *qtwidgets.QWidget) {
+	s.calls++
+	s.Super().DrawPrimitive(e, opt, p, w)
+}
+
+func (s *passStyle) DrawControl(e qtwidgets.QStyleControlElement, opt *qtwidgets.QStyleOption, p *qtgui.QPainter, w *qtwidgets.QWidget) {
+	s.calls++
+	s.Super().DrawControl(e, opt, p, w)
+}
+
+// A style override's const QStyleOption * used to be copied as a plain
+// QStyleOption, slicing off the QStyleOptionViewItem or QStyleOptionHeader
+// Qt passed: Super() then drew a selected row blank and the header without
+// its sort arrow. A pass-through override must paint exactly as the style.
+func TestStyleOverrideOptionNotSliced(t *testing.T) {
+	qutetest.Run(t, func() {
+		shot := func(style qtwidgets.QStyleLike) []byte {
+			tw := qtwidgets.NewQTreeWidget(nil)
+			defer tw.Delete()
+			tw.SetStyle(style)
+			tw.Header().SetStyle(style) // setStyle does not reach child widgets
+			tw.SetHeaderLabels([]string{"Subject", "From"})
+			tw.Header().SetSortIndicatorShown(true)
+			tw.Header().SetSortIndicator(0, qtcore.AscendingOrder)
+			var sel *qtwidgets.QTreeWidgetItem
+			for _, s := range []string{"one", "two", "three"} {
+				it := qtwidgets.NewQTreeWidgetItemInWithStrings(tw, []string{s, "someone"})
+				if s == "two" {
+					sel = it
+				}
+			}
+			tw.SetCurrentItem(sel)
+			tw.Resize(300, 140)
+			return qute.Screenshot(tw).Pix
+		}
+		fusion := qtwidgets.QStyleFactoryCreate("Fusion")
+		defer fusion.Delete()
+		v := &passStyle{}
+		proxy := qtwidgets.NewQProxyStyleWithKeyWith(v, "Fusion")
+		defer proxy.Delete()
+		want, got := shot(fusion), shot(proxy)
+		if v.calls == 0 {
+			t.Error("the overrides were never called")
+		}
+		if !bytes.Equal(got, want) {
+			t.Error("a pass-through style override paints differently from the style it forwards to")
+		}
+	})
+}
+
+// readStyle reads the derived options Qt passes a style override through
+// the qstyleoption_cast bindings.
+type readStyle struct {
+	qtwidgets.QProxyStyleBase
+	rows     []string
+	selected []string
+	sort     qtwidgets.QStyleOptionHeaderSortIndicator
+	wrong    bool                            // a cast to the wrong option type was not nil
+	kept     *qtwidgets.QStyleOptionViewItem // a cast kept past the override
+}
+
+func (s *readStyle) DrawControl(e qtwidgets.QStyleControlElement, opt *qtwidgets.QStyleOption, p *qtgui.QPainter, w *qtwidgets.QWidget) {
+	switch e {
+	case qtwidgets.QStyleCE_ItemViewItem:
+		if vi := qtwidgets.QStyleOptionViewItemCast(opt); vi != nil {
+			s.rows = append(s.rows, vi.Text())
+			if vi.State()&qtwidgets.QStyleState_Selected != 0 {
+				s.selected = append(s.selected, vi.Text())
+			}
+			s.kept = vi
+		}
+		if qtwidgets.QStyleOptionHeaderCast(opt) != nil || qtwidgets.QStyleOptionButtonCast(opt) != nil {
+			s.wrong = true
+		}
+	case qtwidgets.QStyleCE_Header:
+		if h := qtwidgets.QStyleOptionHeaderCast(opt); h != nil && h.Section() == 0 {
+			s.sort = h.SortIndicator()
+		}
+	}
+	s.Super().DrawControl(e, opt, p, w)
+}
+
+// An override reads the derived option Qt passed (a row's text and
+// selection, a header's sort arrow) through <Option>Cast, which is nil for
+// the wrong type and dies with the option when the override returns.
+func TestStyleOptionCast(t *testing.T) {
+	qutetest.Run(t, func() {
+		v := &readStyle{}
+		style := qtwidgets.NewQProxyStyleWithKeyWith(v, "Fusion")
+		defer style.Delete()
+		tw := qtwidgets.NewQTreeWidget(nil)
+		defer tw.Delete()
+		tw.SetStyle(style)
+		tw.Header().SetStyle(style) // setStyle does not reach child widgets
+		tw.SetHeaderLabels([]string{"Subject"})
+		tw.Header().SetSortIndicatorShown(true)
+		tw.Header().SetSortIndicator(0, qtcore.AscendingOrder)
+		var sel *qtwidgets.QTreeWidgetItem
+		for _, s := range []string{"one", "two"} {
+			it := qtwidgets.NewQTreeWidgetItemInWithStrings(tw, []string{s})
+			if s == "two" {
+				sel = it
+			}
+		}
+		tw.SetCurrentItem(sel)
+		tw.Resize(200, 100)
+		qute.Screenshot(tw)
+		if !slices.Contains(v.rows, "one") || !slices.Contains(v.rows, "two") {
+			t.Errorf("rows read through the cast = %q, want one and two", v.rows)
+		}
+		if !slices.Equal(slices.Compact(v.selected), []string{"two"}) {
+			t.Errorf("selected rows = %q, want [two]", v.selected)
+		}
+		if v.sort == qtwidgets.QStyleOptionHeaderNone {
+			t.Error("the header's sort indicator was not seen through the cast")
+		}
+		if v.wrong {
+			t.Error("a cast to another option type returned non-nil")
+		}
+		if v.kept == nil || v.kept.Alive() {
+			t.Error("a cast of a scoped option is still alive after the override returned")
 		}
 	})
 }

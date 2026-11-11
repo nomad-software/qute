@@ -280,6 +280,10 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(qobject_cast<%s *>(static_cast<QObject *>(obj)));", cpp))
 	}
+	if valueCast(c) {
+		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
+			fmt.Sprintf("return static_cast<void *>(%s<%s *>(static_cast<%s *>(obj)));", c.Root.Opts.Cast, cpp, c.Root.Cpp))
+	}
 	if c.Event && c.Base != nil {
 		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(dynamic_cast<%s *>(static_cast<QEvent *>(obj)));", cpp))
@@ -629,9 +633,11 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 				}
 				continue
 			case p.View && p.T.inplace:
-				b.p("\t\t\tvoid * c%d = static_cast<void *>(&%s);", i, p.CName)
+				// const_cast: a const option is Qt's object too (Go may only
+				// read it, or hand it back to Super)
+				b.p("\t\t\tvoid * c%d = const_cast<void *>(static_cast<const void *>(&%s));", i, p.CName)
 			case p.View:
-				b.p("\t\t\tvoid * c%d = static_cast<void *>(%s);", i, p.CName)
+				b.p("\t\t\tvoid * c%d = const_cast<void *>(static_cast<const void *>(%s));", i, p.CName)
 			case inlineVal(p.T):
 				// lent for the call: Go copies its bytes, and takes the objects
 				// it depends on from here (rt.InlineArg)
@@ -1168,6 +1174,22 @@ func (g *Gen) emitClass(c *Class) []byte {
 		b.p("\tp := C.qute_%s_cast(self)\n\tif p == nil {\n\t\treturn nil\n\t}", cls)
 		b.p("\tr := rt.View[%s](rt.WrapClassFrom(p, %q, rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)", cls, cls)
 		b.p("\truntime.KeepAlive(e)\n\treturn r\n}\n")
+	}
+	if valueCast(c) {
+		// A style override gets a *QStyleOption that is often a derived
+		// option; the cast reads it as that. The result depends on o, so a
+		// scoped option's cast is Dead when the handler returns, like o.
+		r := c.Root
+		rl := g.qual(r.Module, m, r.Name+"Like")
+		b.p("// %sCast returns o as a *%s if it is one (%s), or nil. The", cls, cls, c.Root.Opts.Cast)
+		b.p("// result is valid as long as o is: inside a handler, until it returns.")
+		b.p("func %sCast(o %s) *%s {", cls, rl, cls)
+		b.p("\tif o == nil {\n\t\treturn nil\n\t}")
+		b.p("\tself := rt.UseArg(unsafe.Pointer(o.As%s()), %q)", r.Name, cls+"Cast")
+		b.p("\tif self == nil {\n\t\treturn nil\n\t}")
+		b.p("\tp := C.qute_%s_cast(self)\n\tif p == nil {\n\t\treturn nil\n\t}", cls)
+		b.p("\tr := rt.View[%s](rt.WrapClassFrom(p, %q, rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.As%s())).H), p)", cls, cls, r.Name)
+		b.p("\truntime.KeepAlive(o)\n\treturn r\n}\n")
 	}
 	if c.Base == nil {
 		g.emitRootMethods(c, &b)
@@ -1935,4 +1957,10 @@ func (g *Gen) emitGLConstants(m *Module) []byte {
 	}
 	b.p(")")
 	return b.Bytes()
+}
+
+// valueCast reports whether c gets a <Class>Cast from the root of its value
+// hierarchy (the class option cast: QStyleOption's qstyleoption_cast).
+func valueCast(c *Class) bool {
+	return c.Base != nil && c.Root.Opts.Cast != ""
 }

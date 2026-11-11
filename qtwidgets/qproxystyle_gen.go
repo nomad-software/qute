@@ -142,7 +142,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			element := QStylePrimitiveElement(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			painterP := *(*unsafe.Pointer)(a[2])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
@@ -161,7 +164,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			element := QStyleControlElement(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			painterP := *(*unsafe.Pointer)(a[2])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
@@ -180,7 +186,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			control := QStyleComplexControl(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOptionComplex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionComplex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOptionComplex", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionComplex](optionH, optionP)
 			painterP := *(*unsafe.Pointer)(a[2])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
@@ -240,7 +249,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			typeArg := QStyleContentsType(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			size := goQSize(*(*C.qute_size)(a[2]))
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
 			r := v.(interface {
@@ -257,7 +269,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			element := QStyleSubElement(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				SubElementRect(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect
@@ -273,7 +288,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
-			opt := rt.View[QStyleOptionComplex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionComplex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optP := *(*unsafe.Pointer)(a[1])
+			optH := rt.WrapClass(optP, "QStyleOptionComplex", rt.NewScoped)
+			defer optH.Expire()
+			opt := rt.View[QStyleOptionComplex](optH, optP)
 			sc := QStyleSubControls(*(*C.int64_t)(a[2]))
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
 			r := v.(interface {
@@ -324,7 +342,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			control := QStyleComplexControl(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOptionComplex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionComplex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOptionComplex", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOptionComplex](optionH, optionP)
 			pos := goQPoint(*(*C.qute_point)(a[2]))
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
 			r := v.(interface {
@@ -341,7 +362,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			hint := QStyleStyleHint(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
 			returnDataP := *(*unsafe.Pointer)(a[3])
 			returnDataH := rt.WrapClass(returnDataP, "QStyleHintReturn", rt.NewScoped)
@@ -361,7 +385,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			metric := QStylePixelMetric(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				PixelMetric(QStylePixelMetric, *QStyleOption, *QWidget) int
@@ -379,7 +406,10 @@ var qProxyStyleVTable = []rt.Virtual{
 			control1 := QSizePolicyControlTypes(*(*C.int64_t)(a[0]))
 			control2 := QSizePolicyControlTypes(*(*C.int64_t)(a[1]))
 			orientation := qtcore.Orientations(*(*C.int64_t)(a[2]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			optionP := *(*unsafe.Pointer)(a[3])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[4]))
 			r := v.(interface {
 				LayoutSpacing(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int
@@ -395,7 +425,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			standardIcon := QStyleStandardPixmap(*(*C.int64_t)(a[0]))
-			option := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optionP := *(*unsafe.Pointer)(a[1])
+			optionH := rt.WrapClass(optionP, "QStyleOption", rt.NewScoped)
+			defer optionH.Expire()
+			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				StandardIcon(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon
@@ -411,7 +444,10 @@ var qProxyStyleVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			standardPixmap := QStyleStandardPixmap(*(*C.int64_t)(a[0]))
-			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			optP := *(*unsafe.Pointer)(a[1])
+			optH := rt.WrapClass(optP, "QStyleOption", rt.NewScoped)
+			defer optH.Expire()
+			opt := rt.View[QStyleOption](optH, optP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				StandardPixmap(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap
@@ -428,7 +464,10 @@ var qProxyStyleVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			iconMode := qtgui.QIconMode(*(*C.int64_t)(a[0]))
 			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			opt := rt.View[QStyleOption](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QStyleOption", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			optP := *(*unsafe.Pointer)(a[2])
+			optH := rt.WrapClass(optP, "QStyleOption", rt.NewScoped)
+			defer optH.Expire()
+			opt := rt.View[QStyleOption](optH, optP)
 			r := v.(interface {
 				GeneratedIconPixmap(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap
 			}).GeneratedIconPixmap(iconMode, pixmap, opt)

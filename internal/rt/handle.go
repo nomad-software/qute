@@ -934,7 +934,9 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 // destroyed, instead of following a pointer Qt may have freed with it.
 func WrapClassFrom(p unsafe.Pointer, class string, mode WrapMode, owner *Handle) *Handle {
 	h := WrapClass(p, class, mode)
-	if h == nil || owner == nil || h == owner || h.kind != KindPlain || h.State() == Owned {
+	// a value handle Go does not own (a QStyleOptionViewItemCast of a scoped
+	// option) is Qt's object too, and dies with owner the same way
+	if h == nil || owner == nil || h == owner || (h.kind != KindPlain && h.kind != KindValue) || h.State() == Owned {
 		return h
 	}
 	// a fresh plain handle, not yet shared: its deps may still be set

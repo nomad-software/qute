@@ -7917,12 +7917,14 @@ void qute_QStyleHintReturn_set_type(void *self, int a0);
 // QStyleHintReturnMask
 void * qute_QStyleHintReturnMask_new(void);
 void qute_QStyleHintReturnMask_delete(void *self);
+void * qute_QStyleHintReturnMask_cast(void *obj);
 void * qute_QStyleHintReturnMask_get_region(void *self);
 void qute_QStyleHintReturnMask_set_region(void *self, void * a0);
 
 // QStyleHintReturnVariant
 void * qute_QStyleHintReturnVariant_new(void);
 void qute_QStyleHintReturnVariant_delete(void *self);
+void * qute_QStyleHintReturnVariant_cast(void *obj);
 void * qute_QStyleHintReturnVariant_get_variant(void *self);
 void qute_QStyleHintReturnVariant_set_variant(void *self, void * a0);
 
@@ -7951,6 +7953,7 @@ void qute_QStyleOption_set_styleObject(void *self, void * a0);
 // QStyleOptionButton
 void * qute_QStyleOptionButton_new(void);
 void qute_QStyleOptionButton_delete(void *self);
+void * qute_QStyleOptionButton_cast(void *obj);
 int64_t qute_QStyleOptionButton_get_features(void *self);
 void qute_QStyleOptionButton_set_features(void *self, int64_t a0);
 qute_str qute_QStyleOptionButton_get_text(void *self);
@@ -7963,6 +7966,7 @@ void qute_QStyleOptionButton_set_iconSize(void *self, qute_size a0);
 // QStyleOptionComboBox
 void * qute_QStyleOptionComboBox_new(void);
 void qute_QStyleOptionComboBox_delete(void *self);
+void * qute_QStyleOptionComboBox_cast(void *obj);
 bool qute_QStyleOptionComboBox_get_editable(void *self);
 void qute_QStyleOptionComboBox_set_editable(void *self, bool a0);
 qute_rect qute_QStyleOptionComboBox_get_popupRect(void *self);
@@ -7982,6 +7986,7 @@ void qute_QStyleOptionComboBox_set_textAlignment(void *self, int64_t a0);
 void * qute_QStyleOptionComplex_new(void);
 void * qute_QStyleOptionComplex_new_1(int a0, int a1);
 void qute_QStyleOptionComplex_delete(void *self);
+void * qute_QStyleOptionComplex_cast(void *obj);
 int64_t qute_QStyleOptionComplex_get_subControls(void *self);
 void qute_QStyleOptionComplex_set_subControls(void *self, int64_t a0);
 int64_t qute_QStyleOptionComplex_get_activeSubControls(void *self);
@@ -7990,6 +7995,7 @@ void qute_QStyleOptionComplex_set_activeSubControls(void *self, int64_t a0);
 // QStyleOptionDockWidget
 void * qute_QStyleOptionDockWidget_new(void);
 void qute_QStyleOptionDockWidget_delete(void *self);
+void * qute_QStyleOptionDockWidget_cast(void *obj);
 qute_str qute_QStyleOptionDockWidget_get_title(void *self);
 void qute_QStyleOptionDockWidget_set_title(void *self, const char *a0, ptrdiff_t a0_len);
 bool qute_QStyleOptionDockWidget_get_closable(void *self);
@@ -8004,12 +8010,14 @@ void qute_QStyleOptionDockWidget_set_verticalTitleBar(void *self, bool a0);
 // QStyleOptionFocusRect
 void * qute_QStyleOptionFocusRect_new(void);
 void qute_QStyleOptionFocusRect_delete(void *self);
+void * qute_QStyleOptionFocusRect_cast(void *obj);
 qute_color qute_QStyleOptionFocusRect_get_backgroundColor(void *self);
 void qute_QStyleOptionFocusRect_set_backgroundColor(void *self, qute_color a0);
 
 // QStyleOptionFrame
 void * qute_QStyleOptionFrame_new(void);
 void qute_QStyleOptionFrame_delete(void *self);
+void * qute_QStyleOptionFrame_cast(void *obj);
 int qute_QStyleOptionFrame_get_lineWidth(void *self);
 void qute_QStyleOptionFrame_set_lineWidth(void *self, int a0);
 int qute_QStyleOptionFrame_get_midLineWidth(void *self);
@@ -8022,6 +8030,7 @@ void qute_QStyleOptionFrame_set_frameShape(void *self, int64_t a0);
 // QStyleOptionGraphicsItem
 void * qute_QStyleOptionGraphicsItem_new(void);
 void qute_QStyleOptionGraphicsItem_delete(void *self);
+void * qute_QStyleOptionGraphicsItem_cast(void *obj);
 qute_rectf qute_QStyleOptionGraphicsItem_get_exposedRect(void *self);
 void qute_QStyleOptionGraphicsItem_set_exposedRect(void *self, qute_rectf a0);
 double qute_QStyleOptionGraphicsItem_levelOfDetailFromTransform(void * a0);
@@ -8029,6 +8038,7 @@ double qute_QStyleOptionGraphicsItem_levelOfDetailFromTransform(void * a0);
 // QStyleOptionGroupBox
 void * qute_QStyleOptionGroupBox_new(void);
 void qute_QStyleOptionGroupBox_delete(void *self);
+void * qute_QStyleOptionGroupBox_cast(void *obj);
 int64_t qute_QStyleOptionGroupBox_get_features(void *self);
 void qute_QStyleOptionGroupBox_set_features(void *self, int64_t a0);
 qute_str qute_QStyleOptionGroupBox_get_text(void *self);
@@ -8045,6 +8055,7 @@ void qute_QStyleOptionGroupBox_set_midLineWidth(void *self, int a0);
 // QStyleOptionHeader
 void * qute_QStyleOptionHeader_new(void);
 void qute_QStyleOptionHeader_delete(void *self);
+void * qute_QStyleOptionHeader_cast(void *obj);
 int qute_QStyleOptionHeader_get_section(void *self);
 void qute_QStyleOptionHeader_set_section(void *self, int a0);
 qute_str qute_QStyleOptionHeader_get_text(void *self);
@@ -8067,6 +8078,7 @@ void qute_QStyleOptionHeader_set_orientation(void *self, int64_t a0);
 // QStyleOptionHeaderV2
 void * qute_QStyleOptionHeaderV2_new(void);
 void qute_QStyleOptionHeaderV2_delete(void *self);
+void * qute_QStyleOptionHeaderV2_cast(void *obj);
 int64_t qute_QStyleOptionHeaderV2_get_textElideMode(void *self);
 void qute_QStyleOptionHeaderV2_set_textElideMode(void *self, int64_t a0);
 bool qute_QStyleOptionHeaderV2_get_isSectionDragTarget(void *self);
@@ -8077,6 +8089,7 @@ void qute_QStyleOptionHeaderV2_set_unused(void *self, int a0);
 // QStyleOptionMenuItem
 void * qute_QStyleOptionMenuItem_new(void);
 void qute_QStyleOptionMenuItem_delete(void *self);
+void * qute_QStyleOptionMenuItem_cast(void *obj);
 int64_t qute_QStyleOptionMenuItem_get_menuItemType(void *self);
 void qute_QStyleOptionMenuItem_set_menuItemType(void *self, int64_t a0);
 int64_t qute_QStyleOptionMenuItem_get_checkType(void *self);
@@ -8101,6 +8114,7 @@ void qute_QStyleOptionMenuItem_set_font(void *self, void * a0);
 // QStyleOptionMenuItemV2
 void * qute_QStyleOptionMenuItemV2_new(void);
 void qute_QStyleOptionMenuItemV2_delete(void *self);
+void * qute_QStyleOptionMenuItemV2_cast(void *obj);
 bool qute_QStyleOptionMenuItemV2_get_mouseDown(void *self);
 void qute_QStyleOptionMenuItemV2_set_mouseDown(void *self, bool a0);
 int qute_QStyleOptionMenuItemV2_get_unused(void *self);
@@ -8109,6 +8123,7 @@ void qute_QStyleOptionMenuItemV2_set_unused(void *self, int a0);
 // QStyleOptionProgressBar
 void * qute_QStyleOptionProgressBar_new(void);
 void qute_QStyleOptionProgressBar_delete(void *self);
+void * qute_QStyleOptionProgressBar_cast(void *obj);
 int qute_QStyleOptionProgressBar_get_minimum(void *self);
 void qute_QStyleOptionProgressBar_set_minimum(void *self, int a0);
 int qute_QStyleOptionProgressBar_get_maximum(void *self);
@@ -8129,6 +8144,7 @@ void qute_QStyleOptionProgressBar_set_bottomToTop(void *self, bool a0);
 // QStyleOptionRubberBand
 void * qute_QStyleOptionRubberBand_new(void);
 void qute_QStyleOptionRubberBand_delete(void *self);
+void * qute_QStyleOptionRubberBand_cast(void *obj);
 int64_t qute_QStyleOptionRubberBand_get_shape(void *self);
 void qute_QStyleOptionRubberBand_set_shape(void *self, int64_t a0);
 bool qute_QStyleOptionRubberBand_get_opaque(void *self);
@@ -8137,12 +8153,14 @@ void qute_QStyleOptionRubberBand_set_opaque(void *self, bool a0);
 // QStyleOptionSizeGrip
 void * qute_QStyleOptionSizeGrip_new(void);
 void qute_QStyleOptionSizeGrip_delete(void *self);
+void * qute_QStyleOptionSizeGrip_cast(void *obj);
 int64_t qute_QStyleOptionSizeGrip_get_corner(void *self);
 void qute_QStyleOptionSizeGrip_set_corner(void *self, int64_t a0);
 
 // QStyleOptionSlider
 void * qute_QStyleOptionSlider_new(void);
 void qute_QStyleOptionSlider_delete(void *self);
+void * qute_QStyleOptionSlider_cast(void *obj);
 int64_t qute_QStyleOptionSlider_get_orientation(void *self);
 void qute_QStyleOptionSlider_set_orientation(void *self, int64_t a0);
 int qute_QStyleOptionSlider_get_minimum(void *self);
@@ -8173,6 +8191,7 @@ void qute_QStyleOptionSlider_set_keyboardModifiers(void *self, int64_t a0);
 // QStyleOptionSpinBox
 void * qute_QStyleOptionSpinBox_new(void);
 void qute_QStyleOptionSpinBox_delete(void *self);
+void * qute_QStyleOptionSpinBox_cast(void *obj);
 int64_t qute_QStyleOptionSpinBox_get_buttonSymbols(void *self);
 void qute_QStyleOptionSpinBox_set_buttonSymbols(void *self, int64_t a0);
 int64_t qute_QStyleOptionSpinBox_get_stepEnabled(void *self);
@@ -8183,6 +8202,7 @@ void qute_QStyleOptionSpinBox_set_frame(void *self, bool a0);
 // QStyleOptionTab
 void * qute_QStyleOptionTab_new(void);
 void qute_QStyleOptionTab_delete(void *self);
+void * qute_QStyleOptionTab_cast(void *obj);
 int64_t qute_QStyleOptionTab_get_shape(void *self);
 void qute_QStyleOptionTab_set_shape(void *self, int64_t a0);
 qute_str qute_QStyleOptionTab_get_text(void *self);
@@ -8213,6 +8233,7 @@ void qute_QStyleOptionTab_set_tabIndex(void *self, int a0);
 // QStyleOptionTabBarBase
 void * qute_QStyleOptionTabBarBase_new(void);
 void qute_QStyleOptionTabBarBase_delete(void *self);
+void * qute_QStyleOptionTabBarBase_cast(void *obj);
 int64_t qute_QStyleOptionTabBarBase_get_shape(void *self);
 void qute_QStyleOptionTabBarBase_set_shape(void *self, int64_t a0);
 qute_rect qute_QStyleOptionTabBarBase_get_tabBarRect(void *self);
@@ -8225,6 +8246,7 @@ void qute_QStyleOptionTabBarBase_set_documentMode(void *self, bool a0);
 // QStyleOptionTabWidgetFrame
 void * qute_QStyleOptionTabWidgetFrame_new(void);
 void qute_QStyleOptionTabWidgetFrame_delete(void *self);
+void * qute_QStyleOptionTabWidgetFrame_cast(void *obj);
 int qute_QStyleOptionTabWidgetFrame_get_lineWidth(void *self);
 void qute_QStyleOptionTabWidgetFrame_set_lineWidth(void *self, int a0);
 int qute_QStyleOptionTabWidgetFrame_get_midLineWidth(void *self);
@@ -8245,6 +8267,7 @@ void qute_QStyleOptionTabWidgetFrame_set_selectedTabRect(void *self, qute_rect a
 // QStyleOptionTitleBar
 void * qute_QStyleOptionTitleBar_new(void);
 void qute_QStyleOptionTitleBar_delete(void *self);
+void * qute_QStyleOptionTitleBar_cast(void *obj);
 qute_str qute_QStyleOptionTitleBar_get_text(void *self);
 void qute_QStyleOptionTitleBar_set_text(void *self, const char *a0, ptrdiff_t a0_len);
 void * qute_QStyleOptionTitleBar_get_icon(void *self);
@@ -8257,6 +8280,7 @@ void qute_QStyleOptionTitleBar_set_titleBarFlags(void *self, int64_t a0);
 // QStyleOptionToolBar
 void * qute_QStyleOptionToolBar_new(void);
 void qute_QStyleOptionToolBar_delete(void *self);
+void * qute_QStyleOptionToolBar_cast(void *obj);
 int64_t qute_QStyleOptionToolBar_get_positionOfLine(void *self);
 void qute_QStyleOptionToolBar_set_positionOfLine(void *self, int64_t a0);
 int64_t qute_QStyleOptionToolBar_get_positionWithinLine(void *self);
@@ -8273,6 +8297,7 @@ void qute_QStyleOptionToolBar_set_midLineWidth(void *self, int a0);
 // QStyleOptionToolBox
 void * qute_QStyleOptionToolBox_new(void);
 void qute_QStyleOptionToolBox_delete(void *self);
+void * qute_QStyleOptionToolBox_cast(void *obj);
 qute_str qute_QStyleOptionToolBox_get_text(void *self);
 void qute_QStyleOptionToolBox_set_text(void *self, const char *a0, ptrdiff_t a0_len);
 void * qute_QStyleOptionToolBox_get_icon(void *self);
@@ -8285,6 +8310,7 @@ void qute_QStyleOptionToolBox_set_selectedPosition(void *self, int64_t a0);
 // QStyleOptionToolButton
 void * qute_QStyleOptionToolButton_new(void);
 void qute_QStyleOptionToolButton_delete(void *self);
+void * qute_QStyleOptionToolButton_cast(void *obj);
 int64_t qute_QStyleOptionToolButton_get_features(void *self);
 void qute_QStyleOptionToolButton_set_features(void *self, int64_t a0);
 void * qute_QStyleOptionToolButton_get_icon(void *self);
@@ -8305,6 +8331,7 @@ void qute_QStyleOptionToolButton_set_font(void *self, void * a0);
 // QStyleOptionViewItem
 void * qute_QStyleOptionViewItem_new(void);
 void qute_QStyleOptionViewItem_delete(void *self);
+void * qute_QStyleOptionViewItem_cast(void *obj);
 int64_t qute_QStyleOptionViewItem_get_displayAlignment(void *self);
 void qute_QStyleOptionViewItem_set_displayAlignment(void *self, int64_t a0);
 int64_t qute_QStyleOptionViewItem_get_decorationAlignment(void *self);

@@ -34,6 +34,25 @@ func QStyleOptionToolBarFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyleO
 	return rt.View[QStyleOptionToolBar](rt.WrapClass(p, "QStyleOptionToolBar", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionToolBarCast returns o as a *QStyleOptionToolBar if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionToolBarCast(o QStyleOptionLike) *QStyleOptionToolBar {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionToolBarCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionToolBar_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionToolBar](rt.WrapClassFrom(p, "QStyleOptionToolBar", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionToolBar wraps the QStyleOptionToolBar constructor.
 //
 //	C++: QStyleOptionToolBar::QStyleOptionToolBar()

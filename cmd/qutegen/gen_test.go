@@ -200,8 +200,67 @@ func TestVirtualValuePointerInPlace(t *testing.T) {
 		t.Fatal("no initStyleOption override in the shim")
 	}
 	body := shim[i : i+strings.Index(shim[i:], "\n\t}")]
-	if strings.Contains(body, "new QStyleOptionButton") || !strings.Contains(body, "static_cast<void *>(a0)") {
+	if strings.Contains(body, "new QStyleOptionButton") || !strings.Contains(body, "static_cast<const void *>(a0)") {
 		t.Errorf("initStyleOption override does not pass the option in place:\n%s", body)
+	}
+}
+
+// A style virtual's const QStyleOption * is usually a derived option
+// (QStyleOptionViewItem, QStyleOptionHeader): the override must get Qt's
+// object in place (scoped), not a QStyleOption copy that slices it, or
+// Super() hands the C++ style only the base part.
+func TestVirtualConstDerivedValueInPlace(t *testing.T) {
+	c := class(t, "QProxyStyle")
+	for name, want := range map[string]bool{"QStyleOption": true, "QStyleOptionComplex": true, "QStyleOptionHeaderV2": false, "QPixmap": false, "QTextFormat": false} {
+		if got := class(t, name).Sliced; got != want {
+			t.Errorf("%s: Sliced = %v, want %v", name, got, want)
+		}
+	}
+	var b buf
+	gen(t).emitShimClass(c, &b)
+	shim := b.String()
+	for _, name := range []string{"drawPrimitive", "drawControl", "drawComplexControl", "subElementRect", "sizeFromContents", "pixelMetric", "styleHint"} {
+		var v *Method
+		for _, x := range c.Virtuals {
+			if x.IR.Name == name {
+				v = x
+			}
+		}
+		if v == nil {
+			t.Errorf("QProxyStyle::%s is not overridable", name)
+			continue
+		}
+		for _, p := range v.Params {
+			if p.T.k == kValue && strings.HasPrefix(p.T.cls.Name, "QStyleOption") && (!p.View || p.Rule != "scoped") {
+				t.Errorf("%s(%s): View=%v Rule=%q, want an in-place scoped argument", name, p.GoName, p.View, p.Rule)
+			}
+		}
+		i := strings.Index(shim, " "+name+"(")
+		if i < 0 {
+			t.Errorf("no %s override in the shim", name)
+			continue
+		}
+		body := shim[i : i+strings.Index(shim[i:], "\n\t}")]
+		if strings.Contains(body, "new QStyleOption") {
+			t.Errorf("%s override copies the option:\n%s", name, body)
+		}
+	}
+}
+
+// The class option cast gives every class below the root a <Class>Cast
+// from the root (QStyleOption's qstyleoption_cast), and the root none.
+func TestValueCastEmitted(t *testing.T) {
+	g := gen(t)
+	src := string(g.emitClass(class(t, "QStyleOptionViewItem")))
+	if !strings.Contains(src, "func QStyleOptionViewItemCast(o QStyleOptionLike) *QStyleOptionViewItem {") ||
+		!strings.Contains(src, "rt.WrapClassFrom(p, \"QStyleOptionViewItem\", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H)") {
+		t.Errorf("QStyleOptionViewItemCast missing or not tied to its option:\n%s", src)
+	}
+	if src := string(g.emitClass(class(t, "QStyleOption"))); strings.Contains(src, "func QStyleOptionCast(") {
+		t.Error("the root QStyleOption has a cast to itself")
+	}
+	if !valueCast(class(t, "QStyleHintReturnMask")) || valueCast(class(t, "QPixmap")) {
+		t.Error("valueCast: want QStyleHintReturnMask and not QPixmap")
 	}
 }
 
@@ -482,7 +541,7 @@ func TestVirtualObjectReferenceInPlace(t *testing.T) {
 	}
 	var b buf
 	gen(t).emitShimClass(c, &b)
-	if !strings.Contains(b.String(), "static_cast<void *>(&a0)") {
+	if !strings.Contains(b.String(), "static_cast<const void *>(&a0)") {
 		t.Error("the shim does not pass the address of Qt's object")
 	}
 }

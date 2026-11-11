@@ -36,6 +36,25 @@ func QStyleOptionTabBarBaseFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSty
 	return rt.View[QStyleOptionTabBarBase](rt.WrapClass(p, "QStyleOptionTabBarBase", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionTabBarBaseCast returns o as a *QStyleOptionTabBarBase if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionTabBarBaseCast(o QStyleOptionLike) *QStyleOptionTabBarBase {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionTabBarBaseCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionTabBarBase_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionTabBarBase](rt.WrapClassFrom(p, "QStyleOptionTabBarBase", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionTabBarBase wraps the QStyleOptionTabBarBase constructor.
 //
 //	C++: QStyleOptionTabBarBase::QStyleOptionTabBarBase()

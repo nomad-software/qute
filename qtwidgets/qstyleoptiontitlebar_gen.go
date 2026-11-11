@@ -35,6 +35,25 @@ func QStyleOptionTitleBarFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionTitleBar](rt.WrapClass(p, "QStyleOptionTitleBar", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionTitleBarCast returns o as a *QStyleOptionTitleBar if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionTitleBarCast(o QStyleOptionLike) *QStyleOptionTitleBar {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionTitleBarCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionTitleBar_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionTitleBar](rt.WrapClassFrom(p, "QStyleOptionTitleBar", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionTitleBar wraps the QStyleOptionTitleBar constructor.
 //
 //	C++: QStyleOptionTitleBar::QStyleOptionTitleBar()

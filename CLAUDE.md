@@ -306,7 +306,10 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
 - a virtual's non-const value-class pointer or reference
   (`initStyleOption(QStyleOptionButton *)`) to Qt's own object, in place and
   scoped, so what the override writes reaches Qt; an object reference in a
-  virtual (`interceptRequest(QWebEngineUrlRequestInfo &)`) likewise;
+  virtual (`interceptRequest(QWebEngineUrlRequestInfo &)`) likewise; and a
+  const one whose class a bound subclass extends with data members
+  (`drawPrimitive(const QStyleOption *)`, `Class.Sliced`), since Qt passes a
+  derived option a copy would slice and `Super()` would hand on cut down;
 - a non-QObject class's `T &` result that is `*this` to the receiver, for
   chaining (`QTransform`, `QWebEngineProfileBuilder`); a return rule there
   is a warning;
@@ -461,7 +464,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `QChar`, which is a `rune` in Go), `depends-on` (see Kept references; on a
   QObject class it does nothing and the generator warns), `memory` (`size:`
   a C++ expression over `$self`, `changed-by:` the methods after which it is
-  measured again; see Value classes), `parented-delete` (the fix Delete()
+  measured again; see Value classes), `cast` (on the root of a value hierarchy, the C++ cast that gives every
+  class below it an `XCast`: `qstyleoption_cast`), `parented-delete` (the fix Delete()
   names when it refuses a Parented object of the class or of a non-QObject
   subclass, because the container does not notice its destructor:
   `QLayoutItem`), `reviewed`. A class's primary base must
@@ -545,7 +549,10 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   (`qobject_cast`), `XCast(e)` for every event class (`dynamic_cast` from a
   `QEvent`, which is how most events reach an `event`, `eventFilter` or
   `changeEvent` handler; the result depends on `e`, so it is Dead when the
-  handler returns, like the event), and hand-written `*_manual.{go,cpp,h}` files the
+  handler returns, like the event), `XCast(opt)` for every style option and
+  style hint result (`qstyleoption_cast`, from the class option `cast:` on
+  `QStyleOption` and `QStyleHintReturn`; a style override's option is often
+  a derived one, and the cast is Dead when the override returns), and hand-written `*_manual.{go,cpp,h}` files the
   generator never touches (`QObject.MetaObject` is one: read-only, because
   the generator skips the moc virtual `metaObject` everywhere;
   `QXmlStreamAttributes.Size` and `At` are two more: the list part of that

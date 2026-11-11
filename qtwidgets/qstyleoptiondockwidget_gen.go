@@ -36,6 +36,25 @@ func QStyleOptionDockWidgetFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSty
 	return rt.View[QStyleOptionDockWidget](rt.WrapClass(p, "QStyleOptionDockWidget", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionDockWidgetCast returns o as a *QStyleOptionDockWidget if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionDockWidgetCast(o QStyleOptionLike) *QStyleOptionDockWidget {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionDockWidgetCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionDockWidget_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionDockWidget](rt.WrapClassFrom(p, "QStyleOptionDockWidget", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionDockWidget wraps the QStyleOptionDockWidget constructor.
 //
 //	C++: QStyleOptionDockWidget::QStyleOptionDockWidget()

@@ -36,6 +36,25 @@ func QStyleOptionRubberBandFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSty
 	return rt.View[QStyleOptionRubberBand](rt.WrapClass(p, "QStyleOptionRubberBand", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionRubberBandCast returns o as a *QStyleOptionRubberBand if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionRubberBandCast(o QStyleOptionLike) *QStyleOptionRubberBand {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionRubberBandCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionRubberBand_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionRubberBand](rt.WrapClassFrom(p, "QStyleOptionRubberBand", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionRubberBand wraps the QStyleOptionRubberBand constructor.
 //
 //	C++: QStyleOptionRubberBand::QStyleOptionRubberBand()

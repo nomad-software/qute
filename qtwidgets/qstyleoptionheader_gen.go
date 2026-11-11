@@ -35,6 +35,25 @@ func QStyleOptionHeaderFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyleOp
 	return rt.View[QStyleOptionHeader](rt.WrapClass(p, "QStyleOptionHeader", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionHeaderCast returns o as a *QStyleOptionHeader if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionHeaderCast(o QStyleOptionLike) *QStyleOptionHeader {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionHeaderCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionHeader_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionHeader](rt.WrapClassFrom(p, "QStyleOptionHeader", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionHeader wraps the QStyleOptionHeader constructor.
 //
 //	C++: QStyleOptionHeader::QStyleOptionHeader()

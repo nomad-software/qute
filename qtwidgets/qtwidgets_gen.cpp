@@ -1811,7 +1811,7 @@ public:
 	void qute_super_37(QFlags<Qt::DropAction> a0) { return QAbstractItemView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(38)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 38, args, nullptr)) {
 				return;
@@ -2122,7 +2122,7 @@ public:
 	void qute_super_65(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(66)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 66, args, nullptr)) {
 				return;
@@ -2548,7 +2548,7 @@ public:
 	void qute_super_21(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(22)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
@@ -3479,7 +3479,7 @@ public:
 	void qute_super_22(QShowEvent * a0) { return QAbstractSpinBox::showEvent(a0); }
 	void initStyleOption(QStyleOptionSpinBox * a0) const override {
 		if (qute_has(23)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
@@ -4632,7 +4632,7 @@ public:
 	void qute_super_7(QMouseEvent * a0) { return QCheckBox::mouseMoveEvent(a0); }
 	void initStyleOption(QStyleOptionButton * a0) const override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
@@ -5975,7 +5975,7 @@ public:
 	void qute_super_41(QFlags<Qt::DropAction> a0) { return QAbstractItemView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(42)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 42, args, nullptr)) {
 				return;
@@ -6253,7 +6253,7 @@ public:
 	void qute_super_66(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(67)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 67, args, nullptr)) {
 				return;
@@ -6647,7 +6647,7 @@ public:
 	void qute_super_19(QInputMethodEvent * a0) { return QComboBox::inputMethodEvent(a0); }
 	void initStyleOption(QStyleOptionComboBox * a0) const override {
 		if (qute_has(20)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
@@ -6927,7 +6927,7 @@ public:
 	QSize qute_super_2() const { return QCommandLinkButton::minimumSizeHint(); }
 	void initStyleOption(QStyleOptionButton * a0) const override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
@@ -7354,7 +7354,7 @@ public:
 	void drawPrimitive(QStyle::PrimitiveElement a0, const QStyleOption * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(0)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -7368,7 +7368,7 @@ public:
 	void drawControl(QStyle::ControlElement a0, const QStyleOption * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(1)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -7382,7 +7382,7 @@ public:
 	QRect subElementRect(QStyle::SubElement a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(2)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			qute_rect r{};
@@ -7396,7 +7396,7 @@ public:
 	void drawComplexControl(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(3)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -7410,7 +7410,7 @@ public:
 	QStyle::SubControl hitTestComplexControl(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, const QPoint & a2, const QWidget * a3) const override {
 		if (qute_has(4)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			qute_point c2 = qute_from_QPoint(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -7425,7 +7425,7 @@ public:
 	QRect subControlRect(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, QStyle::SubControl a2, const QWidget * a3) const override {
 		if (qute_has(5)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			int64_t c2 = static_cast<int64_t>(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -7440,7 +7440,7 @@ public:
 	QSize sizeFromContents(QStyle::ContentsType a0, const QStyleOption * a1, const QSize & a2, const QWidget * a3) const override {
 		if (qute_has(6)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			qute_size c2 = qute_from_QSize(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -7455,7 +7455,7 @@ public:
 	int pixelMetric(QStyle::PixelMetric a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(7)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			int r{};
@@ -7469,9 +7469,9 @@ public:
 	int styleHint(QStyle::StyleHint a0, const QStyleOption * a1, const QWidget * a2, QStyleHintReturn * a3) const override {
 		if (qute_has(8)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
-			void * c3 = static_cast<void *>(a3);
+			void * c3 = const_cast<void *>(static_cast<const void *>(a3));
 			void *args[] = {&c0, &c1, &c2, &c3};
 			int r{};
 			if (qute_virtual(qute_id, 8, args, &r)) {
@@ -7484,7 +7484,7 @@ public:
 	QIcon standardIcon(QStyle::StandardPixmap a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(9)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
@@ -7498,7 +7498,7 @@ public:
 	QPixmap standardPixmap(QStyle::StandardPixmap a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(10)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
@@ -7513,7 +7513,7 @@ public:
 		if (qute_has(11)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void * c1 = static_cast<void *>(new QPixmap(a1));
-			void * c2 = [&]() -> void * { auto p = a2; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c2 = const_cast<void *>(static_cast<const void *>(a2));
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
 			if (qute_virtual(qute_id, 11, args, &r)) {
@@ -7528,7 +7528,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			int64_t c2 = static_cast<int64_t>(a2);
-			void * c3 = [&]() -> void * { auto p = a3; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c3 = const_cast<void *>(static_cast<const void *>(a3));
 			void * c4 = (void *)(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			int r{};
@@ -8069,7 +8069,7 @@ public:
 	void qute_super_14(QPaintEvent * a0) { return QDateTimeEdit::paintEvent(a0); }
 	void initStyleOption(QStyleOptionSpinBox * a0) const override {
 		if (qute_has(15)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 15, args, nullptr)) {
 				return;
@@ -8588,7 +8588,7 @@ public:
 	void qute_super_14(QPaintEvent * a0) { return QDateTimeEdit::paintEvent(a0); }
 	void initStyleOption(QStyleOptionSpinBox * a0) const override {
 		if (qute_has(15)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 15, args, nullptr)) {
 				return;
@@ -9034,7 +9034,7 @@ public:
 	void qute_super_8(QAbstractSlider::SliderChange a0) { return QDial::sliderChange(a0); }
 	void initStyleOption(QStyleOptionSlider * a0) const override {
 		if (qute_has(9)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 9, args, nullptr)) {
 				return;
@@ -10321,7 +10321,7 @@ public:
 	bool qute_super_3(QEvent * a0) { return QDockWidget::event(a0); }
 	void initStyleOption(QStyleOptionDockWidget * a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -10993,7 +10993,7 @@ public:
 	void qute_super_24(QShowEvent * a0) { return QAbstractSpinBox::showEvent(a0); }
 	void initStyleOption(QStyleOptionSpinBox * a0) const override {
 		if (qute_has(25)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
@@ -12275,7 +12275,7 @@ public:
 	void qute_super_2(QPaintEvent * a0) { return QFocusFrame::paintEvent(a0); }
 	void initStyleOption(QStyleOption * a0) const override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
@@ -12888,7 +12888,7 @@ public:
 	void qute_super_19(QInputMethodEvent * a0) { return QComboBox::inputMethodEvent(a0); }
 	void initStyleOption(QStyleOptionComboBox * a0) const override {
 		if (qute_has(20)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
@@ -13982,7 +13982,7 @@ public:
 	void qute_super_3(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -19379,7 +19379,7 @@ public:
 	QPainterPath qute_super_34() const { return QGraphicsWidget::shape(); }
 	void initStyleOption(QStyleOption * a0) const override {
 		if (qute_has(35)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 35, args, nullptr)) {
 				return;
@@ -20084,7 +20084,7 @@ public:
 	using QGraphicsTransform::update;
 	void applyTo(QMatrix4x4 * a0) const override {
 		if (qute_has(0)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
@@ -20162,7 +20162,7 @@ public:
 	using QGraphicsTransform::update;
 	void applyTo(QMatrix4x4 * a0) const override {
 		if (qute_has(0)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
@@ -21456,7 +21456,7 @@ public:
 	using QGraphicsTransform::update;
 	void applyTo(QMatrix4x4 * a0) const override {
 		if (qute_has(0)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
@@ -21876,7 +21876,7 @@ public:
 	void qute_super_29(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(30)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 30, args, nullptr)) {
 				return;
@@ -22138,7 +22138,7 @@ public:
 	QPainterPath qute_super_6() const { return QGraphicsWidget::shape(); }
 	void initStyleOption(QStyleOption * a0) const override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
@@ -23203,7 +23203,7 @@ public:
 	void qute_super_9(QMouseEvent * a0) { return QGroupBox::mouseReleaseEvent(a0); }
 	void initStyleOption(QStyleOptionGroupBox * a0) const override {
 		if (qute_has(10)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
@@ -24197,7 +24197,7 @@ public:
 	QRegion qute_super_27(const QItemSelection & a0) const { return QHeaderView::visualRegionForSelection(a0); }
 	void initStyleOptionForIndex(QStyleOptionHeader * a0, int a1) const override {
 		if (qute_has(28)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			if (qute_virtual(qute_id, 28, args, nullptr)) {
@@ -24209,7 +24209,7 @@ public:
 	void qute_super_28(QStyleOptionHeader * a0, int a1) const { return QHeaderView::initStyleOptionForIndex(a0, a1); }
 	void initStyleOption(QStyleOptionHeader * a0) const override {
 		if (qute_has(29)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 29, args, nullptr)) {
 				return;
@@ -24467,7 +24467,7 @@ public:
 	void qute_super_51(QFlags<Qt::DropAction> a0) { return QAbstractItemView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(52)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 52, args, nullptr)) {
 				return;
@@ -26065,7 +26065,7 @@ public:
 	void qute_super_3(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -26611,7 +26611,7 @@ public:
 	bool qute_super_13(bool a0) { return QLabel::focusNextPrevChild(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(14)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 14, args, nullptr)) {
 				return;
@@ -27567,7 +27567,7 @@ public:
 	void qute_super_17(QInputMethodEvent * a0) { return QLineEdit::inputMethodEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(18)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
@@ -28053,7 +28053,7 @@ public:
 	void qute_super_19(QFlags<Qt::DropAction> a0) { return QListView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(20)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
@@ -28565,7 +28565,7 @@ public:
 	void qute_super_65(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(66)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 66, args, nullptr)) {
 				return;
@@ -29049,7 +29049,7 @@ public:
 	void qute_super_24(QFlags<Qt::DropAction> a0) { return QListView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(25)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
@@ -29539,7 +29539,7 @@ public:
 	void qute_super_68(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(69)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 69, args, nullptr)) {
 				return;
@@ -29747,7 +29747,7 @@ public:
 	void qute_super_2(int a0, const QVariant & a1) { return QListWidgetItem::setData(a0, a1); }
 	void read(QDataStream & a0) override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
@@ -29758,7 +29758,7 @@ public:
 	void qute_super_3(QDataStream & a0) { return QListWidgetItem::read(a0); }
 	void write(QDataStream & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -30496,7 +30496,7 @@ public:
 	void qute_super_24(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(25)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
@@ -31288,7 +31288,7 @@ public:
 	bool qute_super_14(bool a0) { return QMenu::focusNextPrevChild(a0); }
 	void initStyleOption(QStyleOptionMenuItem * a0, const QAction * a1) const override {
 		if (qute_has(15)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			if (qute_virtual(qute_id, 15, args, nullptr)) {
@@ -31757,7 +31757,7 @@ public:
 	bool qute_super_17(QEvent * a0) { return QMenuBar::event(a0); }
 	void initStyleOption(QStyleOptionMenuItem * a0, const QAction * a1) const override {
 		if (qute_has(18)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			if (qute_virtual(qute_id, 18, args, nullptr)) {
@@ -32983,7 +32983,7 @@ public:
 	QSize qute_super_33() const { return QAbstractScrollArea::viewportSizeHint(); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(34)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 34, args, nullptr)) {
 				return;
@@ -33193,7 +33193,7 @@ public:
 	void qute_super_4(QPaintEvent * a0) { return QProgressBar::paintEvent(a0); }
 	void initStyleOption(QStyleOptionProgressBar * a0) const override {
 		if (qute_has(5)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
@@ -34052,7 +34052,7 @@ public:
 	void drawPrimitive(QStyle::PrimitiveElement a0, const QStyleOption * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(0)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -34066,7 +34066,7 @@ public:
 	void drawControl(QStyle::ControlElement a0, const QStyleOption * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(1)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -34080,7 +34080,7 @@ public:
 	void drawComplexControl(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(2)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -34125,7 +34125,7 @@ public:
 	QSize sizeFromContents(QStyle::ContentsType a0, const QStyleOption * a1, const QSize & a2, const QWidget * a3) const override {
 		if (qute_has(5)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			qute_size c2 = qute_from_QSize(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -34140,7 +34140,7 @@ public:
 	QRect subElementRect(QStyle::SubElement a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(6)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			qute_rect r{};
@@ -34154,7 +34154,7 @@ public:
 	QRect subControlRect(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, QStyle::SubControl a2, const QWidget * a3) const override {
 		if (qute_has(7)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			int64_t c2 = static_cast<int64_t>(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -34199,7 +34199,7 @@ public:
 	QStyle::SubControl hitTestComplexControl(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, const QPoint & a2, const QWidget * a3) const override {
 		if (qute_has(10)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			qute_point c2 = qute_from_QPoint(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -34214,9 +34214,9 @@ public:
 	int styleHint(QStyle::StyleHint a0, const QStyleOption * a1, const QWidget * a2, QStyleHintReturn * a3) const override {
 		if (qute_has(11)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
-			void * c3 = static_cast<void *>(a3);
+			void * c3 = const_cast<void *>(static_cast<const void *>(a3));
 			void *args[] = {&c0, &c1, &c2, &c3};
 			int r{};
 			if (qute_virtual(qute_id, 11, args, &r)) {
@@ -34229,7 +34229,7 @@ public:
 	int pixelMetric(QStyle::PixelMetric a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(12)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			int r{};
@@ -34245,7 +34245,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			int64_t c2 = static_cast<int64_t>(a2);
-			void * c3 = [&]() -> void * { auto p = a3; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c3 = const_cast<void *>(static_cast<const void *>(a3));
 			void * c4 = (void *)(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			int r{};
@@ -34259,7 +34259,7 @@ public:
 	QIcon standardIcon(QStyle::StandardPixmap a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(14)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
@@ -34273,7 +34273,7 @@ public:
 	QPixmap standardPixmap(QStyle::StandardPixmap a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(15)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
@@ -34288,7 +34288,7 @@ public:
 		if (qute_has(16)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void * c1 = static_cast<void *>(new QPixmap(a1));
-			void * c2 = [&]() -> void * { auto p = a2; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c2 = const_cast<void *>(static_cast<const void *>(a2));
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
 			if (qute_virtual(qute_id, 16, args, &r)) {
@@ -34513,7 +34513,7 @@ public:
 	void qute_super_7(QMouseEvent * a0) { return QPushButton::mouseMoveEvent(a0); }
 	void initStyleOption(QStyleOptionButton * a0) const override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
@@ -34956,7 +34956,7 @@ public:
 	void qute_super_5(QMouseEvent * a0) { return QRadioButton::mouseMoveEvent(a0); }
 	void initStyleOption(QStyleOptionButton * a0) const override {
 		if (qute_has(6)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
@@ -35421,7 +35421,7 @@ public:
 	void qute_super_5(QMoveEvent * a0) { return QRubberBand::moveEvent(a0); }
 	void initStyleOption(QStyleOptionRubberBand * a0) const override {
 		if (qute_has(6)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
@@ -36047,7 +36047,7 @@ public:
 	void qute_super_22(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(23)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
@@ -36383,7 +36383,7 @@ public:
 	void qute_super_9(QContextMenuEvent * a0) { return QScrollBar::contextMenuEvent(a0); }
 	void initStyleOption(QStyleOptionSlider * a0) const override {
 		if (qute_has(10)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
@@ -37220,7 +37220,7 @@ public:
 	void qute_super_6(QMouseEvent * a0) { return QSlider::mouseMoveEvent(a0); }
 	void initStyleOption(QStyleOptionSlider * a0) const override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
@@ -38035,7 +38035,7 @@ public:
 	void qute_super_24(QShowEvent * a0) { return QAbstractSpinBox::showEvent(a0); }
 	void initStyleOption(QStyleOptionSpinBox * a0) const override {
 		if (qute_has(25)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
@@ -38795,7 +38795,7 @@ public:
 	void qute_super_7(QPaintEvent * a0) { return QFrame::paintEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
@@ -39952,7 +39952,7 @@ public:
 	void qute_super_3(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -40877,7 +40877,7 @@ public:
 	void drawPrimitive(QStyle::PrimitiveElement a0, const QStyleOption * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(9)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -40890,7 +40890,7 @@ public:
 	void drawControl(QStyle::ControlElement a0, const QStyleOption * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(10)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -40903,7 +40903,7 @@ public:
 	QRect subElementRect(QStyle::SubElement a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(11)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			qute_rect r{};
@@ -40916,7 +40916,7 @@ public:
 	void drawComplexControl(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, QPainter * a2, const QWidget * a3) const override {
 		if (qute_has(12)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -40929,7 +40929,7 @@ public:
 	QStyle::SubControl hitTestComplexControl(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, const QPoint & a2, const QWidget * a3) const override {
 		if (qute_has(13)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			qute_point c2 = qute_from_QPoint(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -40943,7 +40943,7 @@ public:
 	QRect subControlRect(QStyle::ComplexControl a0, const QStyleOptionComplex * a1, QStyle::SubControl a2, const QWidget * a3) const override {
 		if (qute_has(14)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOptionComplex(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			int64_t c2 = static_cast<int64_t>(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -40957,7 +40957,7 @@ public:
 	int pixelMetric(QStyle::PixelMetric a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(15)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			int r{};
@@ -40970,7 +40970,7 @@ public:
 	QSize sizeFromContents(QStyle::ContentsType a0, const QStyleOption * a1, const QSize & a2, const QWidget * a3) const override {
 		if (qute_has(16)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			qute_size c2 = qute_from_QSize(a2);
 			void * c3 = (void *)(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
@@ -40984,9 +40984,9 @@ public:
 	int styleHint(QStyle::StyleHint a0, const QStyleOption * a1, const QWidget * a2, QStyleHintReturn * a3) const override {
 		if (qute_has(17)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
-			void * c3 = static_cast<void *>(a3);
+			void * c3 = const_cast<void *>(static_cast<const void *>(a3));
 			void *args[] = {&c0, &c1, &c2, &c3};
 			int r{};
 			if (qute_virtual(qute_id, 17, args, &r)) {
@@ -40998,7 +40998,7 @@ public:
 	QPixmap standardPixmap(QStyle::StandardPixmap a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(18)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
@@ -41011,7 +41011,7 @@ public:
 	QIcon standardIcon(QStyle::StandardPixmap a0, const QStyleOption * a1, const QWidget * a2) const override {
 		if (qute_has(19)) {
 			int64_t c0 = static_cast<int64_t>(a0);
-			void * c1 = [&]() -> void * { auto p = a1; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c1 = const_cast<void *>(static_cast<const void *>(a1));
 			void * c2 = (void *)(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
@@ -41025,7 +41025,7 @@ public:
 		if (qute_has(20)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void * c1 = static_cast<void *>(new QPixmap(a1));
-			void * c2 = [&]() -> void * { auto p = a2; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c2 = const_cast<void *>(static_cast<const void *>(a2));
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
 			if (qute_virtual(qute_id, 20, args, &r)) {
@@ -41039,7 +41039,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			int64_t c2 = static_cast<int64_t>(a2);
-			void * c3 = [&]() -> void * { auto p = a3; return p ? static_cast<void *>(new QStyleOption(*p)) : nullptr; }();
+			void * c3 = const_cast<void *>(static_cast<const void *>(a3));
 			void * c4 = (void *)(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			int r{};
@@ -41208,7 +41208,7 @@ public:
 	QString qute_super_6(const QVariant & a0, const QLocale & a1) const { return QStyledItemDelegate::displayText(a0, a1); }
 	void initStyleOption(QStyleOptionViewItem * a0, const QModelIndex & a1) const override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}};
 			void *args[] = {&c0, &c1};
 			if (qute_virtual(qute_id, 7, args, nullptr)) {
@@ -41695,7 +41695,7 @@ public:
 	void qute_super_19(QTimerEvent * a0) { return QTabBar::timerEvent(a0); }
 	void initStyleOption(QStyleOptionTab * a0, int a1) const override {
 		if (qute_has(20)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			if (qute_virtual(qute_id, 20, args, nullptr)) {
@@ -42098,7 +42098,7 @@ public:
 	bool qute_super_11(QEvent * a0) { return QTabWidget::event(a0); }
 	void initStyleOption(QStyleOptionTabWidgetFrame * a0) const override {
 		if (qute_has(12)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
@@ -42536,7 +42536,7 @@ public:
 	void qute_super_7(int a0, int a1) { return QTableView::scrollContentsBy(a0, a1); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
@@ -43185,7 +43185,7 @@ public:
 	void qute_super_65(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(66)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 66, args, nullptr)) {
 				return;
@@ -43536,7 +43536,7 @@ public:
 	void qute_super_12(int a0, int a1) { return QTableView::scrollContentsBy(a0, a1); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(13)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 13, args, nullptr)) {
 				return;
@@ -44162,7 +44162,7 @@ public:
 	void qute_super_68(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(69)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 69, args, nullptr)) {
 				return;
@@ -44370,7 +44370,7 @@ public:
 	void qute_super_2(int a0, const QVariant & a1) { return QTableWidgetItem::setData(a0, a1); }
 	void read(QDataStream & a0) override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
@@ -44381,7 +44381,7 @@ public:
 	void qute_super_3(QDataStream & a0) { return QTableWidgetItem::read(a0); }
 	void write(QDataStream & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -44969,7 +44969,7 @@ public:
 	QSize qute_super_38() const { return QAbstractScrollArea::viewportSizeHint(); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(39)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 39, args, nullptr)) {
 				return;
@@ -45509,7 +45509,7 @@ public:
 	QSize qute_super_33() const { return QAbstractScrollArea::viewportSizeHint(); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(34)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 34, args, nullptr)) {
 				return;
@@ -45840,7 +45840,7 @@ public:
 	void qute_super_14(QPaintEvent * a0) { return QDateTimeEdit::paintEvent(a0); }
 	void initStyleOption(QStyleOptionSpinBox * a0) const override {
 		if (qute_has(15)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 15, args, nullptr)) {
 				return;
@@ -46230,7 +46230,7 @@ public:
 	bool qute_super_3(QEvent * a0) { return QToolBar::event(a0); }
 	void initStyleOption(QStyleOptionToolBar * a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -46697,7 +46697,7 @@ public:
 	void qute_super_6(QPaintEvent * a0) { return QFrame::paintEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
@@ -47226,7 +47226,7 @@ public:
 	void qute_super_13() { return QToolButton::nextCheckState(); }
 	void initStyleOption(QStyleOptionToolButton * a0) const override {
 		if (qute_has(14)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 14, args, nullptr)) {
 				return;
@@ -48152,7 +48152,7 @@ public:
 	void qute_super_51(QFlags<Qt::DropAction> a0) { return QAbstractItemView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(52)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 52, args, nullptr)) {
 				return;
@@ -48330,7 +48330,7 @@ public:
 	void qute_super_67(QContextMenuEvent * a0) { return QAbstractScrollArea::contextMenuEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(68)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 68, args, nullptr)) {
 				return;
@@ -49180,7 +49180,7 @@ public:
 	void qute_super_56(QFlags<Qt::DropAction> a0) { return QAbstractItemView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(57)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 57, args, nullptr)) {
 				return;
@@ -49335,7 +49335,7 @@ public:
 	void qute_super_70(QContextMenuEvent * a0) { return QAbstractScrollArea::contextMenuEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(71)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 71, args, nullptr)) {
 				return;
@@ -49546,7 +49546,7 @@ public:
 	void qute_super_2(int a0, int a1, const QVariant & a2) { return QTreeWidgetItem::setData(a0, a1, a2); }
 	void read(QDataStream & a0) override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
@@ -49557,7 +49557,7 @@ public:
 	void qute_super_3(QDataStream & a0) { return QTreeWidgetItem::read(a0); }
 	void write(QDataStream & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -49830,7 +49830,7 @@ public:
 	void qute_super_19(QFlags<Qt::DropAction> a0) { return QListView::startDrag(a0); }
 	void initViewItemOption(QStyleOptionViewItem * a0) const override {
 		if (qute_has(20)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
@@ -50342,7 +50342,7 @@ public:
 	void qute_super_65(QEvent * a0) { return QFrame::changeEvent(a0); }
 	void initStyleOption(QStyleOptionFrame * a0) const override {
 		if (qute_has(66)) {
-			void * c0 = static_cast<void *>(a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 66, args, nullptr)) {
 				return;
@@ -84309,6 +84309,10 @@ void qute_QStyleHintReturnMask_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleHintReturnMask *>(self);
 }
+void * qute_QStyleHintReturnMask_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleHintReturnMask *>(static_cast<QStyleHintReturn *>(obj)));
+}
 void * qute_QStyleHintReturnMask_get_region(void *self) {
 	qute_gui_only();
 	return static_cast<void *>(new QRegion(static_cast<QStyleHintReturnMask *>(self)->region));
@@ -84326,6 +84330,10 @@ void * qute_QStyleHintReturnVariant_new(void) {
 void qute_QStyleHintReturnVariant_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleHintReturnVariant *>(self);
+}
+void * qute_QStyleHintReturnVariant_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleHintReturnVariant *>(static_cast<QStyleHintReturn *>(obj)));
 }
 void * qute_QStyleHintReturnVariant_get_variant(void *self) {
 	qute_gui_only();
@@ -84427,6 +84435,10 @@ void qute_QStyleOptionButton_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionButton *>(self);
 }
+void * qute_QStyleOptionButton_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionButton *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionButton_get_features(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionButton *>(self)->features).toInt());
@@ -84468,6 +84480,10 @@ void * qute_QStyleOptionComboBox_new(void) {
 void qute_QStyleOptionComboBox_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionComboBox *>(self);
+}
+void * qute_QStyleOptionComboBox_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionComboBox *>(static_cast<QStyleOption *>(obj)));
 }
 bool qute_QStyleOptionComboBox_get_editable(void *self) {
 	qute_gui_only();
@@ -84539,6 +84555,10 @@ void qute_QStyleOptionComplex_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionComplex *>(self);
 }
+void * qute_QStyleOptionComplex_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionComplex *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionComplex_get_subControls(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QStyleOptionComplex *>(self)->subControls).toInt());
@@ -84564,6 +84584,10 @@ void * qute_QStyleOptionDockWidget_new(void) {
 void qute_QStyleOptionDockWidget_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionDockWidget *>(self);
+}
+void * qute_QStyleOptionDockWidget_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionDockWidget *>(static_cast<QStyleOption *>(obj)));
 }
 qute_str qute_QStyleOptionDockWidget_get_title(void *self) {
 	qute_gui_only();
@@ -84615,6 +84639,10 @@ void qute_QStyleOptionFocusRect_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionFocusRect *>(self);
 }
+void * qute_QStyleOptionFocusRect_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionFocusRect *>(static_cast<QStyleOption *>(obj)));
+}
 qute_color qute_QStyleOptionFocusRect_get_backgroundColor(void *self) {
 	qute_gui_only();
 	return qute_from_QColor(static_cast<QStyleOptionFocusRect *>(self)->backgroundColor);
@@ -84632,6 +84660,10 @@ void * qute_QStyleOptionFrame_new(void) {
 void qute_QStyleOptionFrame_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionFrame *>(self);
+}
+void * qute_QStyleOptionFrame_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionFrame *>(static_cast<QStyleOption *>(obj)));
 }
 int qute_QStyleOptionFrame_get_lineWidth(void *self) {
 	qute_gui_only();
@@ -84675,6 +84707,10 @@ void qute_QStyleOptionGraphicsItem_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionGraphicsItem *>(self);
 }
+void * qute_QStyleOptionGraphicsItem_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionGraphicsItem *>(static_cast<QStyleOption *>(obj)));
+}
 qute_rectf qute_QStyleOptionGraphicsItem_get_exposedRect(void *self) {
 	qute_gui_only();
 	return qute_from_QRectF(static_cast<QStyleOptionGraphicsItem *>(self)->exposedRect);
@@ -84696,6 +84732,10 @@ void * qute_QStyleOptionGroupBox_new(void) {
 void qute_QStyleOptionGroupBox_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionGroupBox *>(self);
+}
+void * qute_QStyleOptionGroupBox_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionGroupBox *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionGroupBox_get_features(void *self) {
 	qute_gui_only();
@@ -84754,6 +84794,10 @@ void * qute_QStyleOptionHeader_new(void) {
 void qute_QStyleOptionHeader_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionHeader *>(self);
+}
+void * qute_QStyleOptionHeader_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionHeader *>(static_cast<QStyleOption *>(obj)));
 }
 int qute_QStyleOptionHeader_get_section(void *self) {
 	qute_gui_only();
@@ -84837,6 +84881,10 @@ void qute_QStyleOptionHeaderV2_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionHeaderV2 *>(self);
 }
+void * qute_QStyleOptionHeaderV2_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionHeaderV2 *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionHeaderV2_get_textElideMode(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionHeaderV2 *>(self)->textElideMode);
@@ -84870,6 +84918,10 @@ void * qute_QStyleOptionMenuItem_new(void) {
 void qute_QStyleOptionMenuItem_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionMenuItem *>(self);
+}
+void * qute_QStyleOptionMenuItem_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionMenuItem *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionMenuItem_get_menuItemType(void *self) {
 	qute_gui_only();
@@ -84961,6 +85013,10 @@ void qute_QStyleOptionMenuItemV2_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionMenuItemV2 *>(self);
 }
+void * qute_QStyleOptionMenuItemV2_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionMenuItemV2 *>(static_cast<QStyleOption *>(obj)));
+}
 bool qute_QStyleOptionMenuItemV2_get_mouseDown(void *self) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<QStyleOptionMenuItemV2 *>(self)->mouseDown);
@@ -84986,6 +85042,10 @@ void * qute_QStyleOptionProgressBar_new(void) {
 void qute_QStyleOptionProgressBar_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionProgressBar *>(self);
+}
+void * qute_QStyleOptionProgressBar_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionProgressBar *>(static_cast<QStyleOption *>(obj)));
 }
 int qute_QStyleOptionProgressBar_get_minimum(void *self) {
 	qute_gui_only();
@@ -85061,6 +85121,10 @@ void qute_QStyleOptionRubberBand_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionRubberBand *>(self);
 }
+void * qute_QStyleOptionRubberBand_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionRubberBand *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionRubberBand_get_shape(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionRubberBand *>(self)->shape);
@@ -85087,6 +85151,10 @@ void qute_QStyleOptionSizeGrip_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionSizeGrip *>(self);
 }
+void * qute_QStyleOptionSizeGrip_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionSizeGrip *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionSizeGrip_get_corner(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionSizeGrip *>(self)->corner);
@@ -85104,6 +85172,10 @@ void * qute_QStyleOptionSlider_new(void) {
 void qute_QStyleOptionSlider_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionSlider *>(self);
+}
+void * qute_QStyleOptionSlider_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionSlider *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionSlider_get_orientation(void *self) {
 	qute_gui_only();
@@ -85219,6 +85291,10 @@ void qute_QStyleOptionSpinBox_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionSpinBox *>(self);
 }
+void * qute_QStyleOptionSpinBox_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionSpinBox *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionSpinBox_get_buttonSymbols(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionSpinBox *>(self)->buttonSymbols);
@@ -85252,6 +85328,10 @@ void * qute_QStyleOptionTab_new(void) {
 void qute_QStyleOptionTab_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionTab *>(self);
+}
+void * qute_QStyleOptionTab_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionTab *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionTab_get_shape(void *self) {
 	qute_gui_only();
@@ -85367,6 +85447,10 @@ void qute_QStyleOptionTabBarBase_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionTabBarBase *>(self);
 }
+void * qute_QStyleOptionTabBarBase_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionTabBarBase *>(static_cast<QStyleOption *>(obj)));
+}
 int64_t qute_QStyleOptionTabBarBase_get_shape(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QStyleOptionTabBarBase *>(self)->shape);
@@ -85408,6 +85492,10 @@ void * qute_QStyleOptionTabWidgetFrame_new(void) {
 void qute_QStyleOptionTabWidgetFrame_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionTabWidgetFrame *>(self);
+}
+void * qute_QStyleOptionTabWidgetFrame_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionTabWidgetFrame *>(static_cast<QStyleOption *>(obj)));
 }
 int qute_QStyleOptionTabWidgetFrame_get_lineWidth(void *self) {
 	qute_gui_only();
@@ -85483,6 +85571,10 @@ void qute_QStyleOptionTitleBar_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionTitleBar *>(self);
 }
+void * qute_QStyleOptionTitleBar_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionTitleBar *>(static_cast<QStyleOption *>(obj)));
+}
 qute_str qute_QStyleOptionTitleBar_get_text(void *self) {
 	qute_gui_only();
 	return qute_ret_str(static_cast<QStyleOptionTitleBar *>(self)->text);
@@ -85524,6 +85616,10 @@ void * qute_QStyleOptionToolBar_new(void) {
 void qute_QStyleOptionToolBar_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionToolBar *>(self);
+}
+void * qute_QStyleOptionToolBar_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionToolBar *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionToolBar_get_positionOfLine(void *self) {
 	qute_gui_only();
@@ -85583,6 +85679,10 @@ void qute_QStyleOptionToolBox_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionToolBox *>(self);
 }
+void * qute_QStyleOptionToolBox_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionToolBox *>(static_cast<QStyleOption *>(obj)));
+}
 qute_str qute_QStyleOptionToolBox_get_text(void *self) {
 	qute_gui_only();
 	return qute_ret_str(static_cast<QStyleOptionToolBox *>(self)->text);
@@ -85624,6 +85724,10 @@ void * qute_QStyleOptionToolButton_new(void) {
 void qute_QStyleOptionToolButton_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionToolButton *>(self);
+}
+void * qute_QStyleOptionToolButton_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionToolButton *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionToolButton_get_features(void *self) {
 	qute_gui_only();
@@ -85698,6 +85802,10 @@ void * qute_QStyleOptionViewItem_new(void) {
 void qute_QStyleOptionViewItem_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStyleOptionViewItem *>(self);
+}
+void * qute_QStyleOptionViewItem_cast(void *obj) {
+	qute_gui_only();
+	return static_cast<void *>(qstyleoption_cast<QStyleOptionViewItem *>(static_cast<QStyleOption *>(obj)));
 }
 int64_t qute_QStyleOptionViewItem_get_displayAlignment(void *self) {
 	qute_gui_only();

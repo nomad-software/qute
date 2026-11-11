@@ -35,6 +35,25 @@ func QStyleHintReturnMaskFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleHintReturnMask](rt.WrapClass(p, "QStyleHintReturnMask", rt.ModeFor(own)), p)
 }
 
+// QStyleHintReturnMaskCast returns o as a *QStyleHintReturnMask if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleHintReturnMaskCast(o QStyleHintReturnLike) *QStyleHintReturnMask {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleHintReturn()), "QStyleHintReturnMaskCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleHintReturnMask_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleHintReturnMask](rt.WrapClassFrom(p, "QStyleHintReturnMask", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleHintReturn())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleHintReturnMask wraps the QStyleHintReturnMask constructor.
 //
 //	C++: QStyleHintReturnMask::QStyleHintReturnMask()

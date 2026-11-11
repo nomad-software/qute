@@ -35,6 +35,25 @@ func QStyleOptionViewItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionViewItem](rt.WrapClass(p, "QStyleOptionViewItem", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionViewItemCast returns o as a *QStyleOptionViewItem if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionViewItemCast(o QStyleOptionLike) *QStyleOptionViewItem {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionViewItemCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionViewItem_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionViewItem](rt.WrapClassFrom(p, "QStyleOptionViewItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionViewItem wraps the QStyleOptionViewItem constructor.
 //
 //	C++: QStyleOptionViewItem::QStyleOptionViewItem()

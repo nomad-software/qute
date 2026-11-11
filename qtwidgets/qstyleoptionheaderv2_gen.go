@@ -34,6 +34,25 @@ func QStyleOptionHeaderV2FromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionHeaderV2](rt.WrapClass(p, "QStyleOptionHeaderV2", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionHeaderV2Cast returns o as a *QStyleOptionHeaderV2 if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionHeaderV2Cast(o QStyleOptionLike) *QStyleOptionHeaderV2 {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionHeaderV2Cast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionHeaderV2_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionHeaderV2](rt.WrapClassFrom(p, "QStyleOptionHeaderV2", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionHeaderV2 wraps the QStyleOptionHeaderV2 constructor.
 //
 //	C++: QStyleOptionHeaderV2::QStyleOptionHeaderV2()

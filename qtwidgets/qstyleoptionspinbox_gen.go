@@ -34,6 +34,25 @@ func QStyleOptionSpinBoxFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyleO
 	return rt.View[QStyleOptionSpinBox](rt.WrapClass(p, "QStyleOptionSpinBox", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionSpinBoxCast returns o as a *QStyleOptionSpinBox if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionSpinBoxCast(o QStyleOptionLike) *QStyleOptionSpinBox {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionSpinBoxCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionSpinBox_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionSpinBox](rt.WrapClassFrom(p, "QStyleOptionSpinBox", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionSpinBox wraps the QStyleOptionSpinBox constructor.
 //
 //	C++: QStyleOptionSpinBox::QStyleOptionSpinBox()

@@ -39,6 +39,25 @@ func QStyleOptionGraphicsItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QS
 	return rt.View[QStyleOptionGraphicsItem](rt.WrapClass(p, "QStyleOptionGraphicsItem", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionGraphicsItemCast returns o as a *QStyleOptionGraphicsItem if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionGraphicsItemCast(o QStyleOptionLike) *QStyleOptionGraphicsItem {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionGraphicsItemCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionGraphicsItem_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionGraphicsItem](rt.WrapClassFrom(p, "QStyleOptionGraphicsItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionGraphicsItem wraps the QStyleOptionGraphicsItem constructor.
 //
 //	C++: QStyleOptionGraphicsItem::QStyleOptionGraphicsItem()

@@ -37,6 +37,25 @@ func QStyleOptionToolButtonFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSty
 	return rt.View[QStyleOptionToolButton](rt.WrapClass(p, "QStyleOptionToolButton", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionToolButtonCast returns o as a *QStyleOptionToolButton if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionToolButtonCast(o QStyleOptionLike) *QStyleOptionToolButton {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionToolButtonCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionToolButton_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionToolButton](rt.WrapClassFrom(p, "QStyleOptionToolButton", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionToolButton wraps the QStyleOptionToolButton constructor.
 //
 //	C++: QStyleOptionToolButton::QStyleOptionToolButton()

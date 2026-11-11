@@ -35,6 +35,25 @@ func QStyleOptionGroupBoxFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionGroupBox](rt.WrapClass(p, "QStyleOptionGroupBox", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionGroupBoxCast returns o as a *QStyleOptionGroupBox if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionGroupBoxCast(o QStyleOptionLike) *QStyleOptionGroupBox {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionGroupBoxCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionGroupBox_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionGroupBox](rt.WrapClassFrom(p, "QStyleOptionGroupBox", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionGroupBox wraps the QStyleOptionGroupBox constructor.
 //
 //	C++: QStyleOptionGroupBox::QStyleOptionGroupBox()

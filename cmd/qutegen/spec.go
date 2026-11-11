@@ -66,6 +66,12 @@ type classOpts struct {
 	// of its non-QObject subclasses) panic with this fix: its container keeps
 	// a pointer to it and does not notice its destructor (QLayoutItem).
 	ParentedDelete string `yaml:"parented-delete"`
+	// Cast, on the root of a value hierarchy, names the C++ cast template
+	// that finds a derived object behind a pointer to the root (QStyleOption:
+	// qstyleoption_cast, which reads the option's type and version). Every
+	// class below the root gets <Class>Cast(o <Root>Like), whose result
+	// depends on o.
+	Cast string `yaml:"cast"`
 }
 
 type memSpec struct {

@@ -35,6 +35,25 @@ func QStyleOptionComboBoxFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionComboBox](rt.WrapClass(p, "QStyleOptionComboBox", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionComboBoxCast returns o as a *QStyleOptionComboBox if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionComboBoxCast(o QStyleOptionLike) *QStyleOptionComboBox {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionComboBoxCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionComboBox_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionComboBox](rt.WrapClassFrom(p, "QStyleOptionComboBox", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionComboBox wraps the QStyleOptionComboBox constructor.
 //
 //	C++: QStyleOptionComboBox::QStyleOptionComboBox()

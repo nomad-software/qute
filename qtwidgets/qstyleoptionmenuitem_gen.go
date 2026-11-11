@@ -35,6 +35,25 @@ func QStyleOptionMenuItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionMenuItem](rt.WrapClass(p, "QStyleOptionMenuItem", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionMenuItemCast returns o as a *QStyleOptionMenuItem if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionMenuItemCast(o QStyleOptionLike) *QStyleOptionMenuItem {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionMenuItemCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionMenuItem_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionMenuItem](rt.WrapClassFrom(p, "QStyleOptionMenuItem", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionMenuItem wraps the QStyleOptionMenuItem constructor.
 //
 //	C++: QStyleOptionMenuItem::QStyleOptionMenuItem()

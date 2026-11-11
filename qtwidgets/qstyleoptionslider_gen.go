@@ -34,6 +34,25 @@ func QStyleOptionSliderFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyleOp
 	return rt.View[QStyleOptionSlider](rt.WrapClass(p, "QStyleOptionSlider", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionSliderCast returns o as a *QStyleOptionSlider if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionSliderCast(o QStyleOptionLike) *QStyleOptionSlider {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionSliderCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionSlider_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionSlider](rt.WrapClassFrom(p, "QStyleOptionSlider", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionSlider wraps the QStyleOptionSlider constructor.
 //
 //	C++: QStyleOptionSlider::QStyleOptionSlider()

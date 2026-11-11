@@ -38,6 +38,25 @@ func QStyleOptionTabWidgetFrameFromPtr(p unsafe.Pointer, own qtcore.Ownership) *
 	return rt.View[QStyleOptionTabWidgetFrame](rt.WrapClass(p, "QStyleOptionTabWidgetFrame", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionTabWidgetFrameCast returns o as a *QStyleOptionTabWidgetFrame if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionTabWidgetFrameCast(o QStyleOptionLike) *QStyleOptionTabWidgetFrame {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionTabWidgetFrameCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionTabWidgetFrame_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionTabWidgetFrame](rt.WrapClassFrom(p, "QStyleOptionTabWidgetFrame", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionTabWidgetFrame wraps the QStyleOptionTabWidgetFrame constructor.
 //
 //	C++: QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame()

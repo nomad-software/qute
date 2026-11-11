@@ -35,6 +35,25 @@ func QStyleOptionFocusRectFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyl
 	return rt.View[QStyleOptionFocusRect](rt.WrapClass(p, "QStyleOptionFocusRect", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionFocusRectCast returns o as a *QStyleOptionFocusRect if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionFocusRectCast(o QStyleOptionLike) *QStyleOptionFocusRect {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionFocusRectCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionFocusRect_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionFocusRect](rt.WrapClassFrom(p, "QStyleOptionFocusRect", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionFocusRect wraps the QStyleOptionFocusRect constructor.
 //
 //	C++: QStyleOptionFocusRect::QStyleOptionFocusRect()

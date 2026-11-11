@@ -1371,7 +1371,7 @@ public:
 	}
 	bool read(QDataStream & a0) override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_virtual(qute_id, 7, args, &r)) {
@@ -1383,7 +1383,7 @@ public:
 	bool qute_super_7(QDataStream & a0) { return QIconEngine::read(a0); }
 	bool write(QDataStream & a0) const override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_virtual(qute_id, 8, args, &r)) {
@@ -2654,7 +2654,7 @@ public:
 	int qute_super_3() const { return QStandardItem::type(); }
 	void read(QDataStream & a0) override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
@@ -2665,7 +2665,7 @@ public:
 	void qute_super_4(QDataStream & a0) { return QStandardItem::read(a0); }
 	void write(QDataStream & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;

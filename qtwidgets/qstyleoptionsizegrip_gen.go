@@ -34,6 +34,25 @@ func QStyleOptionSizeGripFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyle
 	return rt.View[QStyleOptionSizeGrip](rt.WrapClass(p, "QStyleOptionSizeGrip", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionSizeGripCast returns o as a *QStyleOptionSizeGrip if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionSizeGripCast(o QStyleOptionLike) *QStyleOptionSizeGrip {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionSizeGripCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionSizeGrip_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionSizeGrip](rt.WrapClassFrom(p, "QStyleOptionSizeGrip", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionSizeGrip wraps the QStyleOptionSizeGrip constructor.
 //
 //	C++: QStyleOptionSizeGrip::QStyleOptionSizeGrip()

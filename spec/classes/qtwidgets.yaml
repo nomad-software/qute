@@ -86,7 +86,7 @@ classes:
   QStyle: {}
   QCommonStyle: {}
   QProxyStyle: {}
-  QStyleHintReturn: { kind: value }
+  QStyleHintReturn: { kind: value, cast: qstyleoption_cast }
   QStyleHintReturnMask: { kind: value }
   QStyleHintReturnVariant: { kind: value }
   QStyleFactory: { no-construct: true }
@@ -124,7 +124,7 @@ classes:
   QGraphicsLineItem: {}
   QGraphicsPathItem: {}
   QGraphicsPolygonItem: {}
-  QStyleOption: { kind: value }
+  QStyleOption: { kind: value, cast: qstyleoption_cast }
   QStyleOptionViewItem: { kind: value }
   QStyleOptionComplex: { kind: value }
   QStyleOptionButton: { kind: value }

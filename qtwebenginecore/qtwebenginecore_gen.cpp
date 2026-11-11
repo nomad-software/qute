@@ -350,7 +350,7 @@ public:
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	void interceptRequest(QWebEngineUrlRequestInfo & a0) override {
 		if (qute_has(0)) {
-			void * c0 = static_cast<void *>(&a0);
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;

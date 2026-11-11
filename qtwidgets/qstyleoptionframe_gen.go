@@ -34,6 +34,25 @@ func QStyleOptionFrameFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStyleOpt
 	return rt.View[QStyleOptionFrame](rt.WrapClass(p, "QStyleOptionFrame", rt.ModeFor(own)), p)
 }
 
+// QStyleOptionFrameCast returns o as a *QStyleOptionFrame if it is one (qstyleoption_cast), or nil. The
+// result is valid as long as o is: inside a handler, until it returns.
+func QStyleOptionFrameCast(o QStyleOptionLike) *QStyleOptionFrame {
+	if o == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(o.AsQStyleOption()), "QStyleOptionFrameCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QStyleOptionFrame_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QStyleOptionFrame](rt.WrapClassFrom(p, "QStyleOptionFrame", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(o.AsQStyleOption())).H), p)
+	runtime.KeepAlive(o)
+	return r
+}
+
 // NewQStyleOptionFrame wraps the QStyleOptionFrame constructor.
 //
 //	C++: QStyleOptionFrame::QStyleOptionFrame()

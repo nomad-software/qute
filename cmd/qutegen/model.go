@@ -59,8 +59,13 @@ type Class struct {
 	Abstract  bool
 	QBase     bool // a polymorphic plain base of a QObject class (QPaintDevice, QGraphicsItem)
 	DefCtor   bool // has a public constructor callable with no arguments
-	HasDtor   bool
-	Skipped   []skipNote
+	// Sliced: a bound class derived from it adds data members, so a pointer
+	// or reference to it may be to a derived object (a QStyleOption that is
+	// really a QStyleOptionViewItem) that a copy would slice. A QPixmap
+	// (QBitmap) or QTextFormat (QTextCharFormat) loses nothing in a copy.
+	Sliced  bool
+	HasDtor bool
+	Skipped []skipNote
 	// NoFull are methods whose Full form cannot be built (a defaulted
 	// argument with no Go type, such as an unconfirmed bool *ok).
 	NoFull []skipNote
@@ -122,7 +127,7 @@ type Param struct {
 	// KeepGuard makes Delete() of the kept argument panic while the receiver
 	// keeps it (see the overlay key kept-delete).
 	KeepGuard bool
-	View      bool // a virtual's non-const value-class pointer or reference: passed in place, not copied
+	View      bool // a virtual's non-const (or Sliced) value-class pointer or reference: passed in place, not copied
 }
 
 type Method struct {
@@ -290,6 +295,15 @@ func (g *Gen) build() error {
 					c.Base = bc
 				} else {
 					c.Secondary = append(c.Secondary, bc)
+				}
+			}
+		}
+	}
+	for _, m := range g.modules {
+		for _, c := range m.Classes {
+			if len(c.IR.Fields) > 0 {
+				for b := c.Base; b != nil; b = b.Base {
+					b.Sliced = true
 				}
 			}
 		}
@@ -1583,10 +1597,14 @@ func (g *Gen) newVirtual(c, owner *Class, im *irMethod) (*Method, string) {
 		if t.k == kObj && (t.cls.Event || t.cls.Name == "QPainter" || strings.HasPrefix(t.cls.Name, "QStyleOption")) {
 			pp.Rule = "scoped"
 		}
-		if _, cnst, ptr, ref, _ := parseCpp(p.Type.Canonical); t.k == kValue && !cnst && (ptr || ref) {
+		if _, cnst, ptr, ref, _ := parseCpp(p.Type.Canonical); t.k == kValue && (ptr || ref) && (!cnst || t.cls.Sliced) && !inlineVal(t) {
 			// initStyleOption(QStyleOptionButton *), polish(QPalette &): the
 			// override fills in Qt's object, so Go gets that object itself
-			// (valid for the call only), never a copy Qt would not see
+			// (valid for the call only), never a copy Qt would not see.
+			// drawPrimitive(const QStyleOption *): the option is often a
+			// derived one (QStyleOptionViewItem, QStyleOptionHeader), so a
+			// copy would slice it and Super() would hand the base part to
+			// the C++ style; Go gets Qt's object itself here too.
 			pp.View, pp.Rule = true, "scoped"
 			if ref {
 				tc := *t
