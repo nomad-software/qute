@@ -75,8 +75,7 @@ exact version if you use it.
   `IndexFull(row, col, parent)`).
 - **Checked, not hoped.** Every ownership rule lives in a small YAML file
   and has a generated test (create, transfer, delete the owner, check the
-  handle is Dead). CI runs those tests under AddressSanitizer and
-  `cgocheck2`. `COVERAGE.md` lists every method left out and why.
+  handle is Dead). They also run under AddressSanitizer and `cgocheck2`. `COVERAGE.md` lists every method left out and why.
 - **Plain `go build`.** One cgo package per Qt module, found through
   `pkg-config`. You don't need a separate build system or code generation
   step in your app.
@@ -705,8 +704,7 @@ Not done yet:
 - `QThread` affinity, QtQuick/QML and the other modules listed under
   [Qt modules](#qt-modules).
 - Doc comments link to the Qt docs but don't include Qt's summary text.
-- Linux comes first for now; macOS and Windows support (and CI for them)
-  comes later.
+- Linux comes first for now; macOS and Windows support comes later.
 
 ## Licence
 

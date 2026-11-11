@@ -68,9 +68,8 @@ packages must include it: `mods` in `cmd/qutegen/main.go`, `libraryPkgs` in
 `internal/rt/site.go` (debug call sites), `qtPkgs` in `cmd/qute/vet.go`
 (otherwise `qute vet` silently ignores the package), `goKeywords` in
 `cmd/qutegen/model.go`, `MODULES` in `tools/irgen/irgen.py` (plus
-`NAMESPACES` for a module namespace with enums, like `QAudio`), the Qt
-packages CI installs, and the package lists in CI, the README (including its
-"Qt modules" table) and below. A module needs a `doc_manual.go` with its
+`NAMESPACES` for a module namespace with enums, like `QAudio`), and the
+package lists in the README (including its "Qt modules" table) and below. A module needs a `doc_manual.go` with its
 package doc.
 
 ## Ownership model
@@ -441,7 +440,7 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   generator needs neither Qt nor libclang. Its `qt_version` (6.12.0 today) is
   the oldest Qt the bindings compile against: they call that version's API.
   Re-running irgen on a newer Qt raises the minimum; update the README's
-  requirements and check CI's Qt with it. It records public and protected
+  requirements with it. It records public and protected
   members, signals and slots (via `QT_ANNOTATE_ACCESS_SPECIFIER`), enums
   (protected ones marked `protected`),
   `QFlags` typedefs, and private virtual overrides (which hide base virtuals
@@ -593,7 +592,7 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 - `qute new app <dir> [module]`: main.go, a window, a behaviour test and a
   screenshot test.
 
-## Testing and CI
+## Testing
 
 - Every transfer rule gets a generated test (`*/ownership_gen_test.go`):
   create, transfer, delete the owner, assert Dead. Return rules are tested by
@@ -608,8 +607,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   Chromium (`libQt6WebEngineCore`) keep until exit (third-party libraries
   only), for `LSAN_OPTIONS=suppressions=$PWD/lsan.supp`. On a CUDA machine
   set `QT_FFMPEG_DECODING_HW_DEVICE_TYPES=,` and
-  `QT_FFMPEG_ENCODING_HW_DEVICE_TYPES=,` for `-asan`; CI sets them, and
-  `QTWEBENGINE_DISABLE_SANDBOX=1` because its container runs as root.
+  `QT_FFMPEG_ENCODING_HW_DEVICE_TYPES=,` for `-asan`, and
+  `QTWEBENGINE_DISABLE_SANDBOX=1` when running as root (a container).
 - `opengl_test.go` draws a triangle (shader program, buffer, VAO) and checks
   the pixels; `scene_test.go` checks scene items die with the scene, with
   `Clear()` and with their parent item.
@@ -645,18 +644,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   (linear in the subtree). `run_test.go` covers `t.Fatal` inside `Run` (in a
   child process), `PostSync` handler panics, the off-thread checks (Qt calls
   and handler entries) and Full forms.
-- `.github/workflows/ci.yml` runs when a release tag (`v*`) is pushed and on
-  demand (`workflow_dispatch`, from the Actions tab), so run it, or the
-  commands under "Working in the repo", before tagging. It
-  runs test (with `gofmt -l` and `qute vet ./examples/...`), `qute_debug`,
-  `-asan`, `GOEXPERIMENT=cgocheck2` and a regenerate-and-diff check, each in an
-  `archlinux` container because the bindings need Qt 6.12+ and Ubuntu's Qt
-  is older (Go itself comes from `setup-go`, pinned to the 1.26 minimum).
-  Keep it quick: each mode caches Go's build cache (keyed on the sources and
-  the Qt version, restoring the mode's newest), pacman's downloads are cached
-  for the week, the generate job installs no Qt, and nothing builds the same
-  packages twice or builds apps on top of the library. CI
-  is Linux only; macOS and Windows jobs come back when that work starts.
+- There is no CI workflow. Before tagging, run the commands under "Working
+  in the repo": the tests, `qute_debug`, `-asan`, `GOEXPERIMENT=cgocheck2`,
+  `gofmt -l`, `qute vet ./examples/...` and a regenerate-and-diff check.
 
 ## Roadmap
 
@@ -734,8 +724,8 @@ python3 tools/irgen/irgen.py                    # only for a new Qt version (nee
 ```
 
 - Go 1.26 is the minimum: `golang.org/x/tools` (used by `qute vet`) needs it,
-  and `go mod tidy` raises the `go` line back if it is lowered. Keep CI's
-  `go-version` and the `go.mod` that `qute new` writes in step.
+  and `go mod tidy` raises the `go` line back if it is lowered. Keep the
+  `go.mod` that `qute new` writes in step.
 - A cold build compiles ~22k lines of C++ for qtwidgets alone, about two
   minutes for everything on 8 cores; `go test ./qtwidgets` takes about a
   minute more. Use long timeouts.
