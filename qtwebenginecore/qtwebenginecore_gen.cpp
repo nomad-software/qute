@@ -8,6 +8,7 @@
 #include <QEvent>
 #include <QIODevice>
 #include <QIcon>
+#include <QMetaObject>
 #include <QModelIndex>
 #include <QObject>
 #include <QTimerEvent>

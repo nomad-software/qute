@@ -160,3 +160,36 @@ classes:
   QGraphicsLayout: {}
   QGraphicsLinearLayout: {}
   QGraphicsGridLayout: {}
+  QColumnView: {}
+  QDataWidgetMapper: {}
+  QErrorMessage: {}
+  QFocusFrame: {}
+  QGesture: {}
+  QGestureEvent: { kind: event }
+  QGestureRecognizer: {}
+  QPanGesture: {}
+  QPinchGesture: {}
+  QSwipeGesture: {}
+  QTapAndHoldGesture: {}
+  QTapGesture: {}
+  QGraphicsAnchor: { no-construct: true }
+  QGraphicsAnchorLayout: {}
+  QGraphicsItemAnimation: {}
+  QItemDelegate: {}
+  QScroller: { no-construct: true }
+  QScrollerProperties: { kind: value }
+  QSplashScreen: {}
+  QStyleOptionFocusRect: { kind: value }
+  QStyleOptionHeaderV2: { kind: value }
+  QStyleOptionSizeGrip: { kind: value }
+  QStyleOptionTabBarBase: { kind: value }
+  QStyleOptionTitleBar: { kind: value }
+  QStyleOptionToolBox: { kind: value }
+  QStyleOptionMenuItemV2: { kind: value }
+  QStylePainter: {}
+  QTileRules: { kind: value }
+  QUndoView: {}
+  QWhatsThis: { no-construct: true }
+  QWidgetItemV2: { depends-on: widget }
+  QWizard: {}
+  QWizardPage: {}

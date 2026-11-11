@@ -571,9 +571,27 @@ func QJsonValueFromVariant(variant *QVariant) *QJsonValue {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QJsonValueFromJsonFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#fromJson
 func QJsonValueFromJson(json []byte) *QJsonValue {
 	rt.CheckThread("QJsonValueFromJson")
 	r := C.qute_QJsonValue_fromJson((*C.char)(unsafe.Pointer(unsafe.SliceData(json))), C.ptrdiff_t(len(json)))
+	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
+}
+
+// QJsonValueFromJsonFull wraps QJsonValue::fromJson.
+//
+//	C++: QJsonValue QJsonValue::fromJson(QByteArrayView json, QJsonParseError * error = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QJsonValueFromJsonFull is QJsonValueFromJson with every argument, including those QJsonValueFromJson leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsonvalue.html#fromJson
+func QJsonValueFromJsonFull(json []byte, errorArg *QJsonParseError) *QJsonValue {
+	rt.CheckThread("QJsonValueFromJsonFull")
+	r := C.qute_QJsonValue_fromJson_1((*C.char)(unsafe.Pointer(unsafe.SliceData(json))), C.ptrdiff_t(len(json)), rt.UseArg(unsafe.Pointer(errorArg), "QJsonValueFromJsonFull"))
+	runtime.KeepAlive(errorArg)
 	return rt.View[QJsonValue](rt.WrapClass(r, "QJsonValue", rt.TakeOwned), r)
 }

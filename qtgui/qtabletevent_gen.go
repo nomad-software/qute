@@ -34,6 +34,25 @@ func QTabletEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTabletEvent {
 	return rt.View[QTabletEvent](rt.WrapClass(p, "QTabletEvent", rt.ModeFor(own)), p)
 }
 
+// QTabletEventCast returns e as a *QTabletEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QTabletEventCast(e qtcore.QEventLike) *QTabletEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QTabletEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QTabletEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QTabletEvent](rt.WrapClassFrom(p, "QTabletEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pressure wraps QTabletEvent::pressure.
 //
 //	C++: qreal QTabletEvent::pressure() const

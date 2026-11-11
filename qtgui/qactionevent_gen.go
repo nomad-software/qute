@@ -34,6 +34,25 @@ func QActionEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QActionEvent {
 	return rt.View[QActionEvent](rt.WrapClass(p, "QActionEvent", rt.ModeFor(own)), p)
 }
 
+// QActionEventCast returns e as a *QActionEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QActionEventCast(e qtcore.QEventLike) *QActionEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QActionEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QActionEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QActionEvent](rt.WrapClassFrom(p, "QActionEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Action wraps QActionEvent::action.
 //
 //	C++: QAction * QActionEvent::action() const

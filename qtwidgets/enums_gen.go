@@ -294,6 +294,14 @@ const (
 	QCompleterCaseInsensitivelySortedModel QCompleterModelSorting = 2
 )
 
+// QDataWidgetMapperSubmitPolicy wraps the enum QDataWidgetMapper::SubmitPolicy.
+type QDataWidgetMapperSubmitPolicy int64
+
+const (
+	QDataWidgetMapperAutoSubmit   QDataWidgetMapperSubmitPolicy = 0
+	QDataWidgetMapperManualSubmit QDataWidgetMapperSubmitPolicy = 1
+)
+
 // QDateTimeEditSections is the flags type for QDateTimeEdit::Section (QFlags<QDateTimeEdit::Section>).
 type QDateTimeEditSections int64
 
@@ -551,6 +559,34 @@ type QFrameStyleMask int64
 const (
 	QFrameShadow_Mask QFrameStyleMask = 240
 	QFrameShape_Mask  QFrameStyleMask = 15
+)
+
+// QGestureGestureCancelPolicy wraps the enum QGesture::GestureCancelPolicy.
+type QGestureGestureCancelPolicy int64
+
+const (
+	QGestureCancelNone         QGestureGestureCancelPolicy = 0
+	QGestureCancelAllInContext QGestureGestureCancelPolicy = 1
+)
+
+// QGestureRecognizerResult is the flags type for QGestureRecognizer::ResultFlag (QFlags<QGestureRecognizer::ResultFlag>).
+type QGestureRecognizerResult int64
+
+// Has reports whether every bit of x is set in f.
+func (f QGestureRecognizerResult) Has(x QGestureRecognizerResult) bool { return f&x == x }
+
+// QGestureRecognizerResultFlag wraps the enum QGestureRecognizer::ResultFlag. It is the same type as QGestureRecognizerResult, so values combine with |.
+type QGestureRecognizerResultFlag = QGestureRecognizerResult
+
+const (
+	QGestureRecognizerIgnore           QGestureRecognizerResult = 1
+	QGestureRecognizerMayBeGesture     QGestureRecognizerResult = 2
+	QGestureRecognizerTriggerGesture   QGestureRecognizerResult = 4
+	QGestureRecognizerFinishGesture    QGestureRecognizerResult = 8
+	QGestureRecognizerCancelGesture    QGestureRecognizerResult = 16
+	QGestureRecognizerResultState_Mask QGestureRecognizerResult = 255
+	QGestureRecognizerConsumeEventHint QGestureRecognizerResult = 256
+	QGestureRecognizerResultHint_Mask  QGestureRecognizerResult = 65280
 )
 
 // QGraphicsBlurEffectBlurHints is the flags type for QGraphicsBlurEffect::BlurHint (QFlags<QGraphicsBlurEffect::BlurHint>).
@@ -1127,6 +1163,21 @@ const (
 	QMessageBoxButtonMask      QMessageBoxStandardButtons = -769
 )
 
+// QPinchGestureChangeFlags is the flags type for QPinchGesture::ChangeFlag (QFlags<QPinchGesture::ChangeFlag>).
+type QPinchGestureChangeFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QPinchGestureChangeFlags) Has(x QPinchGestureChangeFlags) bool { return f&x == x }
+
+// QPinchGestureChangeFlag wraps the enum QPinchGesture::ChangeFlag. It is the same type as QPinchGestureChangeFlags, so values combine with |.
+type QPinchGestureChangeFlag = QPinchGestureChangeFlags
+
+const (
+	QPinchGestureScaleFactorChanged   QPinchGestureChangeFlags = 1
+	QPinchGestureRotationAngleChanged QPinchGestureChangeFlags = 2
+	QPinchGestureCenterPointChanged   QPinchGestureChangeFlags = 4
+)
+
 // QPlainTextEditLineWrapMode wraps the enum QPlainTextEdit::LineWrapMode.
 type QPlainTextEditLineWrapMode int64
 
@@ -1149,6 +1200,81 @@ type QRubberBandShape int64
 const (
 	QRubberBandLine      QRubberBandShape = 0
 	QRubberBandRectangle QRubberBandShape = 1
+)
+
+// QScrollerState wraps the enum QScroller::State.
+type QScrollerState int64
+
+const (
+	QScrollerInactive  QScrollerState = 0
+	QScrollerPressed   QScrollerState = 1
+	QScrollerDragging  QScrollerState = 2
+	QScrollerScrolling QScrollerState = 3
+)
+
+// QScrollerScrollerGestureType wraps the enum QScroller::ScrollerGestureType.
+type QScrollerScrollerGestureType int64
+
+const (
+	QScrollerTouchGesture             QScrollerScrollerGestureType = 0
+	QScrollerLeftMouseButtonGesture   QScrollerScrollerGestureType = 1
+	QScrollerRightMouseButtonGesture  QScrollerScrollerGestureType = 2
+	QScrollerMiddleMouseButtonGesture QScrollerScrollerGestureType = 3
+)
+
+// QScrollerInput wraps the enum QScroller::Input.
+type QScrollerInput int64
+
+const (
+	QScrollerInputPress   QScrollerInput = 1
+	QScrollerInputMove    QScrollerInput = 2
+	QScrollerInputRelease QScrollerInput = 3
+)
+
+// QScrollerPropertiesOvershootPolicy wraps the enum QScrollerProperties::OvershootPolicy.
+type QScrollerPropertiesOvershootPolicy int64
+
+const (
+	QScrollerPropertiesOvershootWhenScrollable QScrollerPropertiesOvershootPolicy = 0
+	QScrollerPropertiesOvershootAlwaysOff      QScrollerPropertiesOvershootPolicy = 1
+	QScrollerPropertiesOvershootAlwaysOn       QScrollerPropertiesOvershootPolicy = 2
+)
+
+// QScrollerPropertiesFrameRates wraps the enum QScrollerProperties::FrameRates.
+type QScrollerPropertiesFrameRates int64
+
+const (
+	QScrollerPropertiesStandard QScrollerPropertiesFrameRates = 0
+	QScrollerPropertiesFps60    QScrollerPropertiesFrameRates = 1
+	QScrollerPropertiesFps30    QScrollerPropertiesFrameRates = 2
+	QScrollerPropertiesFps20    QScrollerPropertiesFrameRates = 3
+)
+
+// QScrollerPropertiesScrollMetric wraps the enum QScrollerProperties::ScrollMetric.
+type QScrollerPropertiesScrollMetric int64
+
+const (
+	QScrollerPropertiesMousePressEventDelay           QScrollerPropertiesScrollMetric = 0
+	QScrollerPropertiesDragStartDistance              QScrollerPropertiesScrollMetric = 1
+	QScrollerPropertiesDragVelocitySmoothingFactor    QScrollerPropertiesScrollMetric = 2
+	QScrollerPropertiesAxisLockThreshold              QScrollerPropertiesScrollMetric = 3
+	QScrollerPropertiesScrollingCurve                 QScrollerPropertiesScrollMetric = 4
+	QScrollerPropertiesDecelerationFactor             QScrollerPropertiesScrollMetric = 5
+	QScrollerPropertiesMinimumVelocity                QScrollerPropertiesScrollMetric = 6
+	QScrollerPropertiesMaximumVelocity                QScrollerPropertiesScrollMetric = 7
+	QScrollerPropertiesMaximumClickThroughVelocity    QScrollerPropertiesScrollMetric = 8
+	QScrollerPropertiesAcceleratingFlickMaximumTime   QScrollerPropertiesScrollMetric = 9
+	QScrollerPropertiesAcceleratingFlickSpeedupFactor QScrollerPropertiesScrollMetric = 10
+	QScrollerPropertiesSnapPositionRatio              QScrollerPropertiesScrollMetric = 11
+	QScrollerPropertiesSnapTime                       QScrollerPropertiesScrollMetric = 12
+	QScrollerPropertiesOvershootDragResistanceFactor  QScrollerPropertiesScrollMetric = 13
+	QScrollerPropertiesOvershootDragDistanceFactor    QScrollerPropertiesScrollMetric = 14
+	QScrollerPropertiesOvershootScrollDistanceFactor  QScrollerPropertiesScrollMetric = 15
+	QScrollerPropertiesOvershootScrollTime            QScrollerPropertiesScrollMetric = 16
+	QScrollerPropertiesHorizontalOvershootPolicy      QScrollerPropertiesScrollMetric = 17
+	QScrollerPropertiesVerticalOvershootPolicy        QScrollerPropertiesScrollMetric = 18
+	QScrollerPropertiesFrameRate                      QScrollerPropertiesScrollMetric = 19
+	QScrollerPropertiesScrollMetricCount              QScrollerPropertiesScrollMetric = 20
 )
 
 // QSizePolicyPolicyFlag wraps the enum QSizePolicy::PolicyFlag.
@@ -2038,6 +2164,20 @@ const (
 	QStyleOptionDockWidgetVersion QStyleOptionDockWidgetStyleOptionVersion = 1
 )
 
+// QStyleOptionFocusRectStyleOptionType wraps the enum QStyleOptionFocusRect::StyleOptionType.
+type QStyleOptionFocusRectStyleOptionType int64
+
+const (
+	QStyleOptionFocusRectType QStyleOptionFocusRectStyleOptionType = 1
+)
+
+// QStyleOptionFocusRectStyleOptionVersion wraps the enum QStyleOptionFocusRect::StyleOptionVersion.
+type QStyleOptionFocusRectStyleOptionVersion int64
+
+const (
+	QStyleOptionFocusRectVersion QStyleOptionFocusRectStyleOptionVersion = 1
+)
+
 // QStyleOptionFrameStyleOptionType wraps the enum QStyleOptionFrame::StyleOptionType.
 type QStyleOptionFrameStyleOptionType int64
 
@@ -2138,6 +2278,20 @@ const (
 	QStyleOptionHeaderSortDown QStyleOptionHeaderSortIndicator = 2
 )
 
+// QStyleOptionHeaderV2StyleOptionType wraps the enum QStyleOptionHeaderV2::StyleOptionType.
+type QStyleOptionHeaderV2StyleOptionType int64
+
+const (
+	QStyleOptionHeaderV2Type QStyleOptionHeaderV2StyleOptionType = 8
+)
+
+// QStyleOptionHeaderV2StyleOptionVersion wraps the enum QStyleOptionHeaderV2::StyleOptionVersion.
+type QStyleOptionHeaderV2StyleOptionVersion int64
+
+const (
+	QStyleOptionHeaderV2Version QStyleOptionHeaderV2StyleOptionVersion = 2
+)
+
 // QStyleOptionMenuItemStyleOptionType wraps the enum QStyleOptionMenuItem::StyleOptionType.
 type QStyleOptionMenuItemStyleOptionType int64
 
@@ -2174,6 +2328,13 @@ const (
 	QStyleOptionMenuItemNonExclusive QStyleOptionMenuItemCheckType = 2
 )
 
+// QStyleOptionMenuItemV2StyleOptionVersion wraps the enum QStyleOptionMenuItemV2::StyleOptionVersion.
+type QStyleOptionMenuItemV2StyleOptionVersion int64
+
+const (
+	QStyleOptionMenuItemV2Version QStyleOptionMenuItemV2StyleOptionVersion = 2
+)
+
 // QStyleOptionProgressBarStyleOptionType wraps the enum QStyleOptionProgressBar::StyleOptionType.
 type QStyleOptionProgressBarStyleOptionType int64
 
@@ -2200,6 +2361,20 @@ type QStyleOptionRubberBandStyleOptionVersion int64
 
 const (
 	QStyleOptionRubberBandVersion QStyleOptionRubberBandStyleOptionVersion = 1
+)
+
+// QStyleOptionSizeGripStyleOptionType wraps the enum QStyleOptionSizeGrip::StyleOptionType.
+type QStyleOptionSizeGripStyleOptionType int64
+
+const (
+	QStyleOptionSizeGripType QStyleOptionSizeGripStyleOptionType = 983047
+)
+
+// QStyleOptionSizeGripStyleOptionVersion wraps the enum QStyleOptionSizeGrip::StyleOptionVersion.
+type QStyleOptionSizeGripStyleOptionVersion int64
+
+const (
+	QStyleOptionSizeGripVersion QStyleOptionSizeGripStyleOptionVersion = 1
 )
 
 // QStyleOptionSliderStyleOptionType wraps the enum QStyleOptionSlider::StyleOptionType.
@@ -2294,6 +2469,20 @@ const (
 	QStyleOptionTabMinimumSizeHint QStyleOptionTabTabFeatures = 2
 )
 
+// QStyleOptionTabBarBaseStyleOptionType wraps the enum QStyleOptionTabBarBase::StyleOptionType.
+type QStyleOptionTabBarBaseStyleOptionType int64
+
+const (
+	QStyleOptionTabBarBaseType QStyleOptionTabBarBaseStyleOptionType = 12
+)
+
+// QStyleOptionTabBarBaseStyleOptionVersion wraps the enum QStyleOptionTabBarBase::StyleOptionVersion.
+type QStyleOptionTabBarBaseStyleOptionVersion int64
+
+const (
+	QStyleOptionTabBarBaseVersion QStyleOptionTabBarBaseStyleOptionVersion = 1
+)
+
 // QStyleOptionTabWidgetFrameStyleOptionType wraps the enum QStyleOptionTabWidgetFrame::StyleOptionType.
 type QStyleOptionTabWidgetFrameStyleOptionType int64
 
@@ -2306,6 +2495,20 @@ type QStyleOptionTabWidgetFrameStyleOptionVersion int64
 
 const (
 	QStyleOptionTabWidgetFrameVersion QStyleOptionTabWidgetFrameStyleOptionVersion = 1
+)
+
+// QStyleOptionTitleBarStyleOptionType wraps the enum QStyleOptionTitleBar::StyleOptionType.
+type QStyleOptionTitleBarStyleOptionType int64
+
+const (
+	QStyleOptionTitleBarType QStyleOptionTitleBarStyleOptionType = 983045
+)
+
+// QStyleOptionTitleBarStyleOptionVersion wraps the enum QStyleOptionTitleBar::StyleOptionVersion.
+type QStyleOptionTitleBarStyleOptionVersion int64
+
+const (
+	QStyleOptionTitleBarVersion QStyleOptionTitleBarStyleOptionVersion = 1
 )
 
 // QStyleOptionToolBarStyleOptionType wraps the enum QStyleOptionToolBar::StyleOptionType.
@@ -2346,6 +2549,39 @@ type QStyleOptionToolBarToolBarFeature = QStyleOptionToolBarToolBarFeatures
 const (
 	QStyleOptionToolBarNone    QStyleOptionToolBarToolBarFeatures = 0
 	QStyleOptionToolBarMovable QStyleOptionToolBarToolBarFeatures = 1
+)
+
+// QStyleOptionToolBoxStyleOptionType wraps the enum QStyleOptionToolBox::StyleOptionType.
+type QStyleOptionToolBoxStyleOptionType int64
+
+const (
+	QStyleOptionToolBoxType QStyleOptionToolBoxStyleOptionType = 7
+)
+
+// QStyleOptionToolBoxStyleOptionVersion wraps the enum QStyleOptionToolBox::StyleOptionVersion.
+type QStyleOptionToolBoxStyleOptionVersion int64
+
+const (
+	QStyleOptionToolBoxVersion QStyleOptionToolBoxStyleOptionVersion = 1
+)
+
+// QStyleOptionToolBoxTabPosition wraps the enum QStyleOptionToolBox::TabPosition.
+type QStyleOptionToolBoxTabPosition int64
+
+const (
+	QStyleOptionToolBoxBeginning  QStyleOptionToolBoxTabPosition = 0
+	QStyleOptionToolBoxMiddle     QStyleOptionToolBoxTabPosition = 1
+	QStyleOptionToolBoxEnd        QStyleOptionToolBoxTabPosition = 2
+	QStyleOptionToolBoxOnlyOneTab QStyleOptionToolBoxTabPosition = 3
+)
+
+// QStyleOptionToolBoxSelectedPosition wraps the enum QStyleOptionToolBox::SelectedPosition.
+type QStyleOptionToolBoxSelectedPosition int64
+
+const (
+	QStyleOptionToolBoxNotAdjacent        QStyleOptionToolBoxSelectedPosition = 0
+	QStyleOptionToolBoxNextIsSelected     QStyleOptionToolBoxSelectedPosition = 1
+	QStyleOptionToolBoxPreviousIsSelected QStyleOptionToolBoxSelectedPosition = 2
 )
 
 // QStyleOptionToolButtonStyleOptionType wraps the enum QStyleOptionToolButton::StyleOptionType.
@@ -2437,6 +2673,17 @@ const (
 	QStyleOptionViewItemMiddle    QStyleOptionViewItemViewItemPosition = 2
 	QStyleOptionViewItemEnd       QStyleOptionViewItemViewItemPosition = 3
 	QStyleOptionViewItemOnlyOne   QStyleOptionViewItemViewItemPosition = 4
+)
+
+// QSwipeGestureSwipeDirection wraps the enum QSwipeGesture::SwipeDirection.
+type QSwipeGestureSwipeDirection int64
+
+const (
+	QSwipeGestureNoDirection QSwipeGestureSwipeDirection = 0
+	QSwipeGestureLeft        QSwipeGestureSwipeDirection = 1
+	QSwipeGestureRight       QSwipeGestureSwipeDirection = 2
+	QSwipeGestureUp          QSwipeGestureSwipeDirection = 3
+	QSwipeGestureDown        QSwipeGestureSwipeDirection = 4
 )
 
 // QSystemTrayIconActivationReason wraps the enum QSystemTrayIcon::ActivationReason.
@@ -2581,4 +2828,75 @@ const (
 	QWidgetDrawWindowBackground QWidgetRenderFlags = 1
 	QWidgetDrawChildren         QWidgetRenderFlags = 2
 	QWidgetIgnoreMask           QWidgetRenderFlags = 4
+)
+
+// QWizardWizardButton wraps the enum QWizard::WizardButton.
+type QWizardWizardButton int64
+
+const (
+	QWizardBackButton       QWizardWizardButton = 0
+	QWizardNextButton       QWizardWizardButton = 1
+	QWizardCommitButton     QWizardWizardButton = 2
+	QWizardFinishButton     QWizardWizardButton = 3
+	QWizardCancelButton     QWizardWizardButton = 4
+	QWizardHelpButton       QWizardWizardButton = 5
+	QWizardCustomButton1    QWizardWizardButton = 6
+	QWizardCustomButton2    QWizardWizardButton = 7
+	QWizardCustomButton3    QWizardWizardButton = 8
+	QWizardStretch          QWizardWizardButton = 9
+	QWizardNoButton         QWizardWizardButton = -1
+	QWizardNStandardButtons QWizardWizardButton = 6
+	QWizardNButtons         QWizardWizardButton = 9
+)
+
+// QWizardWizardPixmap wraps the enum QWizard::WizardPixmap.
+type QWizardWizardPixmap int64
+
+const (
+	QWizardWatermarkPixmap  QWizardWizardPixmap = 0
+	QWizardLogoPixmap       QWizardWizardPixmap = 1
+	QWizardBannerPixmap     QWizardWizardPixmap = 2
+	QWizardBackgroundPixmap QWizardWizardPixmap = 3
+	QWizardNPixmaps         QWizardWizardPixmap = 4
+)
+
+// QWizardWizardStyle wraps the enum QWizard::WizardStyle.
+type QWizardWizardStyle int64
+
+const (
+	QWizardClassicStyle QWizardWizardStyle = 0
+	QWizardModernStyle  QWizardWizardStyle = 1
+	QWizardMacStyle     QWizardWizardStyle = 2
+	QWizardAeroStyle    QWizardWizardStyle = 3
+	QWizardNStyles      QWizardWizardStyle = 4
+)
+
+// QWizardWizardOptions is the flags type for QWizard::WizardOption (QFlags<QWizard::WizardOption>).
+type QWizardWizardOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QWizardWizardOptions) Has(x QWizardWizardOptions) bool { return f&x == x }
+
+// QWizardWizardOption wraps the enum QWizard::WizardOption. It is the same type as QWizardWizardOptions, so values combine with |.
+type QWizardWizardOption = QWizardWizardOptions
+
+const (
+	QWizardIndependentPages             QWizardWizardOptions = 1
+	QWizardIgnoreSubTitles              QWizardWizardOptions = 2
+	QWizardExtendedWatermarkPixmap      QWizardWizardOptions = 4
+	QWizardNoDefaultButton              QWizardWizardOptions = 8
+	QWizardNoBackButtonOnStartPage      QWizardWizardOptions = 16
+	QWizardNoBackButtonOnLastPage       QWizardWizardOptions = 32
+	QWizardDisabledBackButtonOnLastPage QWizardWizardOptions = 64
+	QWizardHaveNextButtonOnLastPage     QWizardWizardOptions = 128
+	QWizardHaveFinishButtonOnEarlyPages QWizardWizardOptions = 256
+	QWizardNoCancelButton               QWizardWizardOptions = 512
+	QWizardCancelButtonOnLeft           QWizardWizardOptions = 1024
+	QWizardHaveHelpButton               QWizardWizardOptions = 2048
+	QWizardHelpButtonOnRight            QWizardWizardOptions = 4096
+	QWizardHaveCustomButton1            QWizardWizardOptions = 8192
+	QWizardHaveCustomButton2            QWizardWizardOptions = 16384
+	QWizardHaveCustomButton3            QWizardWizardOptions = 32768
+	QWizardNoCancelButtonOnLastPage     QWizardWizardOptions = 65536
+	QWizardStretchBanner                QWizardWizardOptions = 131072
 )

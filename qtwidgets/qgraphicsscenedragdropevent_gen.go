@@ -38,6 +38,25 @@ func QGraphicsSceneDragDropEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) 
 	return rt.View[QGraphicsSceneDragDropEvent](rt.WrapClass(p, "QGraphicsSceneDragDropEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneDragDropEventCast returns e as a *QGraphicsSceneDragDropEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneDragDropEventCast(e qtcore.QEventLike) *QGraphicsSceneDragDropEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneDragDropEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneDragDropEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneDragDropEvent](rt.WrapClassFrom(p, "QGraphicsSceneDragDropEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pos wraps QGraphicsSceneDragDropEvent::pos.
 //
 //	C++: QPointF QGraphicsSceneDragDropEvent::pos() const

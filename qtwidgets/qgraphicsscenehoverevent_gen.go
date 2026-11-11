@@ -38,6 +38,25 @@ func QGraphicsSceneHoverEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QG
 	return rt.View[QGraphicsSceneHoverEvent](rt.WrapClass(p, "QGraphicsSceneHoverEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneHoverEventCast returns e as a *QGraphicsSceneHoverEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneHoverEventCast(e qtcore.QEventLike) *QGraphicsSceneHoverEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneHoverEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneHoverEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneHoverEvent](rt.WrapClassFrom(p, "QGraphicsSceneHoverEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pos wraps QGraphicsSceneHoverEvent::pos.
 //
 //	C++: QPointF QGraphicsSceneHoverEvent::pos() const

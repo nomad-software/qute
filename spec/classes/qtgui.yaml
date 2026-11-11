@@ -146,3 +146,35 @@ classes:
   QOpenGLExtraFunctions: { raw-pointers: true }
   QOffscreenSurface: {}
   QPaintDeviceWindow: {}
+  QDesktopServices: { no-construct: true }
+  QDrag: {}
+  QFileSystemModel: {}
+  QFontMetricsF: { kind: value }
+  QIconEngine: {}
+  "QIconEngine::ScaledPixmapArgument": { kind: value }
+  QImageWriter: {}
+  QPainterPathStroker: { kind: value }
+  QPainterStateGuard: {}
+  QPixmapCache: { no-construct: true }
+  "QPixmapCache::Key": { kind: value }
+  QRasterWindow: {}
+  QRegularExpressionValidator: {}
+  QTextDocumentWriter: {}
+  QUndoCommand: {}
+  QUndoGroup: {}
+  QUndoStack: {}
+  QApplicationStateChangeEvent: { kind: event }
+  QChildWindowEvent: { kind: event }
+  QFileOpenEvent: { kind: event }
+  QIconDragEvent: { kind: event }
+  QInputMethodQueryEvent: { kind: event }
+  QNativeGestureEvent: { kind: event }
+  QPlatformSurfaceEvent: { kind: event }
+  QScreenOrientationChangeEvent: { kind: event }
+  QScrollEvent: { kind: event }
+  QScrollPrepareEvent: { kind: event }
+  QShortcutEvent: { kind: event }
+  QStatusTipEvent: { kind: event }
+  QToolBarChangeEvent: { kind: event }
+  QWhatsThisClickedEvent: { kind: event }
+  QWindowStateChangeEvent: { kind: event }

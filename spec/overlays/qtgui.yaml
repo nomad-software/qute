@@ -197,6 +197,7 @@ QPixmap:
   scroll(int, int, const QRect&, QRegion*): { name: Scroll }
 
 QIcon:
+  QIcon(QIconEngine*): { args: { engine: transfer-to-cpp }, doc: "The icon takes ownership of the engine; it is deleted with the last copy of the icon." }
   pixmap(const QSize&, QIcon::Mode, QIcon::State): { name: Pixmap }
   pixmap(int, int, QIcon::Mode, QIcon::State): { skip: "use Pixmap(size)" }
   pixmap(int, QIcon::Mode, QIcon::State): { name: PixmapExtent }
@@ -868,3 +869,68 @@ QSyntaxHighlighter:
     args: { data: transfer-to-cpp }
     doc: "The document takes ownership of data; see QTextBlock.SetUserData. Call it only from HighlightBlock: outside it there is no current block and Qt ignores data."
     test: "skip: only valid inside highlightBlock, which a snippet cannot override; covered by subclass_test.go"
+
+QChildWindowEvent:
+  child: { return: borrowed }
+
+QScreenOrientationChangeEvent:
+  screen: { return: borrowed }
+
+QDesktopServices:
+  setUrlHandler: { skip: "calls a Qt slot by name, which a Go object does not have (cgo builds run no moc)" }
+  unsetUrlHandler: { skip: "only undoes SetUrlHandler, which is not bound" }
+
+QDrag:
+  QDrag(QObject*): { args: { dragSource: transfer-this }, doc: "The drag source becomes the drag's parent." }
+  setMimeData: { args: { data: transfer-to-cpp }, doc: "The drag takes ownership of the data and deletes any data set before." }
+  mimeData: { return: borrowed }
+  source: { return: borrowed }
+  target: { return: borrowed }
+
+QFileSystemModel:
+  index(const QString&, int): { name: IndexOfPath }
+  setIconProvider: { args: { provider: keep }, reviewed: true, doc: "The model does not take ownership of the icon provider." }
+  iconProvider: { return: borrowed }
+
+QFontMetricsF:
+  QFontMetricsF(const QFont&, const QPaintDevice*): { reviewed: true } # the device is read during the call only
+
+
+QIconEngine:
+  paint: { reviewed: true }
+  clone: { return: transfer-to-go, doc: "Returns a new engine; the caller owns it. A Go override's result is owned by the C++ caller.", test: "skip: QIconEngine is abstract, and a snippet cannot declare the override; covered by subclass_test.go" }
+  read: { reviewed: true }
+  write: { reviewed: true }
+
+QImageWriter:
+  QImageWriter(QIODevice*, const QByteArray&): { args: { device: keep:device }, reviewed: true }
+  setDevice: { args: { device: keep:device }, reviewed: true }
+  device: { return: borrowed }
+
+QPainterStateGuard:
+  QPainterStateGuard(QPainter*, QPainterStateGuard::InitialState): { args: { painter: keep }, reviewed: true, doc: "The guard restores the painter when it is deleted; Delete() it (defer g.Delete()) before the painter ends." }
+
+QTextDocumentWriter:
+  QTextDocumentWriter(QIODevice*, const QByteArray&): { args: { device: keep:device }, reviewed: true }
+  setDevice: { args: { device: keep:device }, reviewed: true }
+  device: { return: borrowed }
+  write(const QTextDocument*): { reviewed: true }
+
+QUndoCommand:
+  mergeWith: { reviewed: true }
+  child: { return: borrowed }
+
+QUndoGroup:
+  addStack: { args: { stack: keep-each }, reviewed: true, doc: "The group does not take ownership of the stack." }
+  removeStack: { args: { stack: release }, reviewed: true }
+  stacks: { return: borrowed }
+  activeStack: { return: borrowed }
+  setActiveStack: { reviewed: true }
+  createUndoAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
+  createRedoAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
+
+QUndoStack:
+  push: { args: { cmd: transfer-to-cpp }, doc: "The stack takes ownership of the command; a command merged into the previous one is deleted at once." }
+  createUndoAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
+  createRedoAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
+  command: { return: borrowed }

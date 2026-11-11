@@ -33,6 +33,25 @@ func QTimerEventFromPtr(p unsafe.Pointer, own Ownership) *QTimerEvent {
 	return rt.View[QTimerEvent](rt.WrapClass(p, "QTimerEvent", rt.ModeFor(own)), p)
 }
 
+// QTimerEventCast returns e as a *QTimerEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QTimerEventCast(e QEventLike) *QTimerEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QTimerEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QTimerEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QTimerEvent](rt.WrapClassFrom(p, "QTimerEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // TimerId wraps QTimerEvent::timerId.
 //
 //	C++: int QTimerEvent::timerId() const

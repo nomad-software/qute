@@ -38,6 +38,25 @@ func QGraphicsSceneMoveEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QGr
 	return rt.View[QGraphicsSceneMoveEvent](rt.WrapClass(p, "QGraphicsSceneMoveEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneMoveEventCast returns e as a *QGraphicsSceneMoveEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneMoveEventCast(e qtcore.QEventLike) *QGraphicsSceneMoveEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneMoveEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneMoveEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneMoveEvent](rt.WrapClassFrom(p, "QGraphicsSceneMoveEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // OldPos wraps QGraphicsSceneMoveEvent::oldPos.
 //
 //	C++: QPointF QGraphicsSceneMoveEvent::oldPos() const

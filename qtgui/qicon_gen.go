@@ -115,6 +115,29 @@ func NewQIconWithFileName(fileName string) *QIcon {
 	return rt.View[QIcon](h, p)
 }
 
+// NewQIconWithIconEngine wraps the QIcon constructor.
+//
+//	C++: QIcon::QIcon(QIconEngine * engine)
+//
+// Ownership: engine becomes Parented: Qt frees it from now on.
+//
+// The icon takes ownership of the engine; it is deleted with the last copy of the icon.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#QIcon
+func NewQIconWithIconEngine(engine QIconEngineLike) *QIcon {
+	rt.CheckThread("NewQIconWithIconEngine")
+	var enginePtr unsafe.Pointer
+	var engineH *rt.Handle
+	if engine != nil {
+		enginePtr, engineH = rt.Arg(unsafe.Pointer(engine.AsQIconEngine()), "NewQIconWithIconEngine")
+	}
+	p := C.qute_QIcon_new_3(enginePtr)
+	runtime.KeepAlive(engine)
+	h := rt.WrapClass(p, "QIcon", rt.NewOwned)
+	rt.TransferTo(h, engineH)
+	return rt.View[QIcon](h, p)
+}
+
 // Pixmap wraps QIcon::pixmap.
 //
 //	C++: QPixmap QIcon::pixmap(const QSize & size, Mode mode = …, State state = …) const

@@ -34,6 +34,25 @@ func QTouchEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTouchEvent {
 	return rt.View[QTouchEvent](rt.WrapClass(p, "QTouchEvent", rt.ModeFor(own)), p)
 }
 
+// QTouchEventCast returns e as a *QTouchEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QTouchEventCast(e qtcore.QEventLike) *QTouchEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QTouchEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QTouchEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QTouchEvent](rt.WrapClassFrom(p, "QTouchEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Target wraps QTouchEvent::target.
 //
 //	C++: QObject * QTouchEvent::target() const

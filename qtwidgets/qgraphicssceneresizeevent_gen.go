@@ -38,6 +38,25 @@ func QGraphicsSceneResizeEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *Q
 	return rt.View[QGraphicsSceneResizeEvent](rt.WrapClass(p, "QGraphicsSceneResizeEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneResizeEventCast returns e as a *QGraphicsSceneResizeEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneResizeEventCast(e qtcore.QEventLike) *QGraphicsSceneResizeEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneResizeEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneResizeEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneResizeEvent](rt.WrapClassFrom(p, "QGraphicsSceneResizeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // OldSize wraps QGraphicsSceneResizeEvent::oldSize.
 //
 //	C++: QSizeF QGraphicsSceneResizeEvent::oldSize() const

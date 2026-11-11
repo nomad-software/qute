@@ -277,9 +277,27 @@ func QJsonDocumentFromVariant(variant *QVariant) *QJsonDocument {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QJsonDocumentFromJsonFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qjsondocument.html#fromJson
 func QJsonDocumentFromJson(json []byte) *QJsonDocument {
 	rt.CheckThread("QJsonDocumentFromJson")
 	r := C.qute_QJsonDocument_fromJson((*C.char)(unsafe.Pointer(unsafe.SliceData(json))), C.ptrdiff_t(len(json)))
+	return rt.View[QJsonDocument](rt.WrapClass(r, "QJsonDocument", rt.TakeOwned), r)
+}
+
+// QJsonDocumentFromJsonFull wraps QJsonDocument::fromJson.
+//
+//	C++: QJsonDocument QJsonDocument::fromJson(const QByteArray & json, QJsonParseError * error = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QJsonDocumentFromJsonFull is QJsonDocumentFromJson with every argument, including those QJsonDocumentFromJson leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qjsondocument.html#fromJson
+func QJsonDocumentFromJsonFull(json []byte, errorArg *QJsonParseError) *QJsonDocument {
+	rt.CheckThread("QJsonDocumentFromJsonFull")
+	r := C.qute_QJsonDocument_fromJson_1((*C.char)(unsafe.Pointer(unsafe.SliceData(json))), C.ptrdiff_t(len(json)), rt.UseArg(unsafe.Pointer(errorArg), "QJsonDocumentFromJsonFull"))
+	runtime.KeepAlive(errorArg)
 	return rt.View[QJsonDocument](rt.WrapClass(r, "QJsonDocument", rt.TakeOwned), r)
 }

@@ -16,21 +16,21 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 10473 |
-| of which Full forms (every argument, defaults included) | 628 |
-| Plain-object results that depend on their receiver | 89 |
-| Skipped on purpose (with reasons below) | 654 |
-| Classes Go can subclass | 189 |
-| Classes Go cannot subclass (with reasons below) | 29 |
-| Virtuals Go cannot override (with reasons below) | 20 |
-| Operators, conversions and member templates not in the IR | 520 |
+| Bound constructors, methods and functions | 12094 |
+| of which Full forms (every argument, defaults included) | 710 |
+| Plain-object results that depend on their receiver | 100 |
+| Skipped on purpose (with reasons below) | 836 |
+| Classes Go can subclass | 237 |
+| Classes Go cannot subclass (with reasons below) | 31 |
+| Virtuals Go cannot override (with reasons below) | 21 |
+| Operators, conversions and member templates not in the IR | 622 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
-| Ownership rules without a generated test | 3 |
+| Ownership rules without a generated test | 5 |
 | Results whose death qute cannot see | 0 |
 
-3 item(s) open; see their sections below.
+5 item(s) open; see their sections below.
 
 ## Default ownership rules (0)
 
@@ -48,8 +48,16 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (654)
+## Skipped on purpose (836)
 
+
+### QAbstractAnimation
+
+- `QBindable<QAbstractAnimation::State> QAbstractAnimation::bindableState() const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<Direction> QAbstractAnimation::bindableDirection()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QAbstractAnimation::bindableCurrentTime()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QAbstractAnimation::bindableLoopCount()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QAbstractAnimation::bindableCurrentLoop() const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
 ### QAbstractItemModel
 
@@ -90,6 +98,136 @@ These bind once the generator learns the type. Counts by type:
 ### QCalendarWidget
 
 - `QMap<QDate, QTextCharFormat> QCalendarWidget::dateTextFormat() const`: return: on purpose: a map keyed by a value class; use the single-key getter
+
+### QCborArray
+
+- `QCborArray::QCborArray(std::initializer_list<QCborValue> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `QCborValue QCborArray::first() const`: skipped by overlay (returns a reference into the array; use At(0))
+- `QCborValue QCborArray::last() const`: skipped by overlay (returns a reference into the array; use At(Size()-1))
+- `QCborValueRef QCborArray::first()`: skipped by overlay (returns a reference into the array; use At(0))
+- `QCborValueRef QCborArray::last()`: skipped by overlay (returns a reference into the array; use At(Size()-1))
+- `void QCborArray::insert(qsizetype i, QCborValue && value)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QCborArray::prepend(QCborValue && value)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QCborArray::append(QCborValue && value)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QCborValue QCborArray::extract(ConstIterator it)`: on purpose: iterator; use At, Insert and RemoveAt
+- `QCborValue QCborArray::extract(Iterator it)`: on purpose: iterator; use At, Insert and RemoveAt
+- `iterator QCborArray::begin()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborArray::constBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborArray::begin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborArray::cbegin() const`: on purpose: iterator; use the method that returns a list
+- `iterator QCborArray::end()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborArray::constEnd() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborArray::end() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborArray::cend() const`: on purpose: iterator; use the method that returns a list
+- `iterator QCborArray::insert(iterator before, const QCborValue & value)`: on purpose: iterator; use At, Insert and RemoveAt
+- `iterator QCborArray::insert(const_iterator before, const QCborValue & value)`: on purpose: iterator; use At, Insert and RemoveAt
+- `iterator QCborArray::erase(iterator it)`: on purpose: iterator; use At, Insert and RemoveAt
+- `iterator QCborArray::erase(const_iterator it)`: on purpose: iterator; use At, Insert and RemoveAt
+- `QCborArray QCborArray::fromJsonArray(QJsonArray && array)`: on purpose: C++ move overload; the copying overload does the same in Go
+
+### QCborMap
+
+- `QCborMap::QCborMap(std::initializer_list<value_type> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `QCborValue QCborMap::value(QLatin1StringView key) const`: on purpose: use the string overload
+- `QCborValue QCborMap::take(QLatin1StringView key)`: on purpose: use the string overload
+- `void QCborMap::remove(QLatin1StringView key)`: on purpose: use the string overload
+- `bool QCborMap::contains(QLatin1StringView key) const`: on purpose: use the string overload
+- `iterator QCborMap::begin()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborMap::constBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborMap::begin() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborMap::cbegin() const`: on purpose: iterator; use the method that returns a list
+- `iterator QCborMap::end()`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborMap::constEnd() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborMap::end() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QCborMap::cend() const`: on purpose: iterator; use the method that returns a list
+- `iterator QCborMap::erase(iterator it)`: on purpose: iterator; use Value, Contains, Keys and Remove
+- `iterator QCborMap::erase(const_iterator it)`: on purpose: iterator; use Value, Contains, Keys and Remove
+- `QCborValue QCborMap::extract(iterator it)`: on purpose: iterator; use Value, Contains, Keys and Remove
+- `QCborValue QCborMap::extract(const_iterator it)`: on purpose: iterator; use Value, Contains, Keys and Remove
+- `key_value_iterator QCborMap::keyValueBegin()`: on purpose: iterator; use the method that returns a list
+- `key_value_iterator QCborMap::keyValueEnd()`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QCborMap::keyValueBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QCborMap::constKeyValueBegin() const`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QCborMap::keyValueEnd() const`: on purpose: iterator; use the method that returns a list
+- `const_key_value_iterator QCborMap::constKeyValueEnd() const`: on purpose: iterator; use the method that returns a list
+- `QtPrivate::QKeyValueRange<QCborMap &> QCborMap::asKeyValueRange()`: return: on purpose: Qt's private internals
+- `QtPrivate::QKeyValueRange<const QCborMap &> QCborMap::asKeyValueRange() const`: return: on purpose: Qt's private internals
+- `QtPrivate::QKeyValueRange<QCborMap> QCborMap::asKeyValueRange()`: return: on purpose: Qt's private internals
+- `QtPrivate::QKeyValueRange<QCborMap> QCborMap::asKeyValueRange() const`: return: on purpose: Qt's private internals
+- `iterator QCborMap::find(qint64 key)`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `iterator QCborMap::find(QLatin1StringView key)`: on purpose: use the string overload
+- `iterator QCborMap::find(const QString & key)`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `iterator QCborMap::find(const QCborValue & key)`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `const_iterator QCborMap::constFind(qint64 key) const`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `const_iterator QCborMap::constFind(QLatin1StringView key) const`: on purpose: use the string overload
+- `const_iterator QCborMap::constFind(const QString & key) const`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `const_iterator QCborMap::constFind(const QCborValue & key) const`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `const_iterator QCborMap::find(qint64 key) const`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `const_iterator QCborMap::find(QLatin1StringView key) const`: on purpose: use the string overload
+- `const_iterator QCborMap::find(const QString & key) const`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `const_iterator QCborMap::find(const QCborValue & key) const`: return: on purpose: iterator; use Value, Contains, Keys and Remove
+- `iterator QCborMap::insert(qint64 key, const QCborValue & value_)`: skipped by overlay (returns an iterator, which is not bound; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject)
+- `iterator QCborMap::insert(QLatin1StringView key, const QCborValue & value_)`: on purpose: use the string overload
+- `iterator QCborMap::insert(const QString & key, const QCborValue & value_)`: skipped by overlay (returns an iterator, which is not bound; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject)
+- `iterator QCborMap::insert(const QCborValue & key, const QCborValue & value_)`: skipped by overlay (returns an iterator, which is not bound; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject)
+- `iterator QCborMap::insert(value_type v)`: skipped by overlay (takes a key-value pair and returns an iterator; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject)
+- `QCborMap QCborMap::fromJsonObject(QJsonObject && o)`: on purpose: C++ move overload; the copying overload does the same in Go
+
+### QCborStreamReader
+
+- `QCborStreamReader::QCborStreamReader(const QCborStreamReader &)`: deprecated or variadic
+- `bool QCborStreamReader::isSimpleType(QCborSimpleType st) const`: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
+- `StringResult<QString> QCborStreamReader::readString()`: skipped by overlay (returns a chunk status template; use ReadAllString)
+- `StringResult<QByteArray> QCborStreamReader::readUtf8String()`: skipped by overlay (returns a chunk status template; use ReadAllUtf8String)
+- `StringResult<QByteArray> QCborStreamReader::readByteArray()`: skipped by overlay (returns a chunk status template; use ReadAllByteArray)
+- `StringResult<qsizetype> QCborStreamReader::readStringChunk(char * ptr, qsizetype maxlen)`: skipped by overlay (returns a chunk status template; use ReadAllString or ReadAllByteArray)
+- `QCborTag QCborStreamReader::toTag() const`: return: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
+- `QCborNegativeInteger QCborStreamReader::toNegativeInteger() const`: return: on purpose: a global enum the IR does not record; use ToInteger
+- `QCborSimpleType QCborStreamReader::toSimpleType() const`: return: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
+- `qfloat16 QCborStreamReader::toFloat16() const`: return: on purpose: half-precision floats; use the float32 and float64 forms
+- `QCborStreamReader::QCborStreamReader(const quint8 * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QCborStreamReader::QCborStreamReader(const QByteArray & data)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `void QCborStreamReader::addData(const char * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `void QCborStreamReader::addData(const quint8 * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QCborStreamWriter
+
+- `QCborStreamWriter::QCborStreamWriter(QByteArray * data)`: skipped by overlay (on purpose: the writer keeps a pointer to the byte array, which Go cannot keep alive; use NewQCborStreamWriter over a QBuffer (NewQBuffer, then Data()))
+- `QCborStreamWriter::QCborStreamWriter(const QCborStreamWriter &)`: deprecated or variadic
+- `void QCborStreamWriter::append(QCborNegativeInteger n)`: on purpose: a global enum the IR does not record; use ToInteger
+- `void QCborStreamWriter::append(QLatin1StringView str)`: on purpose: use the string overload
+- `void QCborStreamWriter::append(QUtf8StringView str)`: on purpose: use the string overload
+- `void QCborStreamWriter::append(QCborTag tag)`: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
+- `void QCborStreamWriter::append(QCborKnownTags tag)`: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
+- `void QCborStreamWriter::append(QCborSimpleType st)`: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
+- `void QCborStreamWriter::append(std::nullptr_t)`: on purpose: a null-only overload; use the Null type or value instead
+- `void QCborStreamWriter::append(qfloat16 f)`: on purpose: half-precision floats; use the float32 and float64 forms
+- `void QCborStreamWriter::append(const char * str, qsizetype size = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QCborValue
+
+- `QCborValue::QCborValue(std::nullptr_t)`: on purpose: a null-only overload; use the Null type or value instead
+- `QCborValue::QCborValue(QCborSimpleType st)`: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
+- `QCborValue::QCborValue(QLatin1StringView s)`: on purpose: use the string overload
+- `QCborValue::QCborValue(QCborArray && a)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QCborValue::QCborValue(QCborMap && m)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QCborValue::QCborValue(QCborTag tag, const QCborValue & taggedValue = …)`: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
+- `QCborValue::QCborValue(QCborKnownTags t_, const QCborValue & tv = …)`: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
+- `QCborValue::QCborValue(const void *)`: deprecated or variadic
+- `bool QCborValue::isSimpleType(QCborSimpleType st) const`: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
+- `QCborSimpleType QCborValue::toSimpleType(QCborSimpleType defaultValue = …) const`: return: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
+- `QCborTag QCborValue::tag(QCborTag defaultValue = …) const`: return: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
+- `QCborValue::QCborValue(QStringView s)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QCborValue::QCborValue(const char * s)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QCborValue QCborValue::fromCbor(const char * data, qsizetype len, QCborParserError * error = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+- `QCborValue QCborValue::fromCbor(const quint8 * data, qsizetype len, QCborParserError * error = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QChronoTimer
+
+- `QBindable<bool> QChronoTimer::bindableActive()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<std::chrono::nanoseconds> QChronoTimer::bindableInterval()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<Qt::TimerType> QChronoTimer::bindableTimerType()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<bool> QChronoTimer::bindableSingleShot()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
 ### QColorDialog
 
@@ -147,6 +285,11 @@ These bind once the generator learns the type. Counts by type:
 - `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QDesktopServices
+
+- `void QDesktopServices::setUrlHandler(const QString & scheme, QObject * receiver, const char * method)`: skipped by overlay (calls a Qt slot by name, which a Go object does not have (cgo builds run no moc))
+- `void QDesktopServices::unsetUrlHandler(const QString & scheme)`: skipped by overlay (only undoes SetUrlHandler, which is not bound)
+
 ### QDragEnterEvent
 
 - `QDragEnterEvent::QDragEnterEvent(const QPoint & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)`: deprecated or variadic
@@ -159,6 +302,10 @@ These bind once the generator learns the type. Counts by type:
 
 - `void QEasingCurve::setCustomType(EasingFunction func)`: on purpose: C function pointer; a Go closure cannot become one
 - `EasingFunction QEasingCurve::customType() const`: return: on purpose: C function pointer; a Go closure cannot become one
+
+### QEventLoopLocker
+
+- `QEventLoopLocker::QEventLoopLocker(QThread * thread)`: on purpose: threads are not supported yet: the runtime is GUI-thread-only (roadmap)
 
 ### QFile
 
@@ -316,7 +463,6 @@ These bind once the generator learns the type. Counts by type:
 
 ### QIcon
 
-- `QIcon::QIcon(QIconEngine * engine)`: on purpose: custom icon engines need C++ subclassing
 - `QPixmap QIcon::pixmap(int w, int h, Mode mode = …, State state = …) const`: skipped by overlay (use Pixmap(size))
 - `void QIcon::paint(QPainter * painter, int x, int y, int w, int h, Qt::Alignment alignment = …, Mode mode = …, State state = …) const`: skipped by overlay (use Paint(painter, rect))
 
@@ -359,6 +505,10 @@ These bind once the generator learns the type. Counts by type:
 ### QInputDialog
 
 - `void QInputDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QItemDelegate
+
+- `void QItemDelegate::doLayout(const QStyleOptionViewItem & option, QRect * checkRect, QRect * iconRect, QRect * textRect, bool hint) const`: skipped by overlay (takes QRect pointers it reads and writes, which the generator does not map; use the style option rectangles)
 
 ### QItemEditorFactory
 
@@ -490,6 +640,12 @@ These bind once the generator learns the type. Counts by type:
 - `QString QLocale::toString(const QDateTime & dateTime, QStringView format) const`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QString QLocale::quoteString(QStringView str, QuotationStyle style = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QLoggingCategory
+
+- `bool QLoggingCategory::isEnabled(QtMsgType type) const`: skipped by overlay (QtMsgType is a global enum the IR does not record; use IsDebugEnabled, IsInfoEnabled, IsWarningEnabled or IsCriticalEnabled)
+- `void QLoggingCategory::setEnabled(QtMsgType type, bool enable)`: skipped by overlay (QtMsgType is a global enum the IR does not record; use QLoggingCategorySetFilterRules)
+- `CategoryFilter QLoggingCategory::installFilter(CategoryFilter)`: on purpose: C function pointer; a Go closure cannot become one
+
 ### QMatrix4x4
 
 - `QMatrix3x3 QMatrix4x4::normalMatrix() const`: return: on purpose: a template class; use QMatrix4x4
@@ -500,10 +656,6 @@ These bind once the generator learns the type. Counts by type:
 ### QMediaCaptureSession
 
 - `QPlatformMediaCaptureSession * QMediaCaptureSession::platformSession() const`: return: on purpose: private platform API
-
-### QMediaFormat
-
-- `QMimeType QMediaFormat::mimeType() const`: return: on purpose: the MIME database is not bound; use the file format enum
 
 ### QMediaRecorder
 
@@ -527,12 +679,54 @@ These bind once the generator learns the type. Counts by type:
 - `int QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
 - `int QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButton button0, StandardButton button1)`: skipped by overlay (obsolete overload)
 
+### QMetaEnum
+
+- `std::optional<quint64> QMetaEnum::value64(int index) const`: skipped by overlay (an optional integer result; use Value)
+- `std::optional<quint64> QMetaEnum::keyToValue64(const char * key) const`: skipped by overlay (an optional integer result; use KeyToValue)
+- `std::optional<quint64> QMetaEnum::keysToValue64(const char * keys) const`: skipped by overlay (an optional integer result; use KeysToValue)
+
+### QMetaMethod
+
+- `void QMetaMethod::getParameterTypes(int * types) const`: skipped by overlay (writes an array; use ParameterType(i) for each of ParameterCount())
+- `bool QMetaMethod::invoke(QObject * object, Qt::ConnectionType connectionType, QGenericReturnArgument returnValue, QGenericArgument val0 = …, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_RETURN_ARG); call the Go method instead
+- `bool QMetaMethod::invoke(QObject * object, QGenericReturnArgument returnValue, QGenericArgument val0 = …, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_RETURN_ARG); call the Go method instead
+- `bool QMetaMethod::invoke(QObject * object, Qt::ConnectionType connectionType, QGenericArgument val0, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_ARG); call the Go method instead
+- `bool QMetaMethod::invoke(QObject * object, QGenericArgument val0, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_ARG); call the Go method instead
+- `bool QMetaMethod::invokeOnGadget(void * gadget, QGenericReturnArgument returnValue, QGenericArgument val0 = …, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_RETURN_ARG); call the Go method instead
+- `bool QMetaMethod::invokeOnGadget(void * gadget, QGenericArgument val0, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_ARG); call the Go method instead
+
+### QMetaObject
+
+- `int QMetaObject::indexOfSlot(const char * slot) const`: string-based SLOT() connection; use the On* signal methods instead
+- `void QMetaObject::activate(QObject * sender, int signal_index, void ** argv)`: skipped by overlay (on purpose: moc internals (raw signal argument arrays))
+- `void QMetaObject::activate(QObject * sender, const QMetaObject *, int local_signal_index, void ** argv)`: skipped by overlay (on purpose: moc internals (raw signal argument arrays))
+- `void QMetaObject::activate(QObject * sender, int signal_offset, int local_signal_index, void ** argv)`: skipped by overlay (on purpose: moc internals (raw signal argument arrays))
+- `bool QMetaObject::invokeMethod(QObject * obj, const char * member, Qt::ConnectionType, QGenericReturnArgument ret, QGenericArgument val0 = …, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …)`: string-based SLOT() connection; use the On* signal methods instead
+- `bool QMetaObject::invokeMethod(QObject * obj, const char * member, QGenericReturnArgument ret, QGenericArgument val0 = …, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …)`: string-based SLOT() connection; use the On* signal methods instead
+- `bool QMetaObject::invokeMethod(QObject * obj, const char * member, Qt::ConnectionType type, QGenericArgument val0, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …)`: string-based SLOT() connection; use the On* signal methods instead
+- `bool QMetaObject::invokeMethod(QObject * obj, const char * member, QGenericArgument val0, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …)`: string-based SLOT() connection; use the On* signal methods instead
+- `QObject * QMetaObject::newInstance(QGenericArgument val0, QGenericArgument val1 = …, QGenericArgument val2 = …, QGenericArgument val3 = …, QGenericArgument val4 = …, QGenericArgument val5 = …, QGenericArgument val6 = …, QGenericArgument val7 = …, QGenericArgument val8 = …, QGenericArgument val9 = …) const`: on purpose: type-erased C++ argument pointers (Q_ARG); call the Go method instead
+- `int QMetaObject::static_metacall(Call, int, void **) const`: skipped by overlay (on purpose: moc internals (raw argument arrays))
+- `int QMetaObject::metacall(QObject *, Call, int, void **)`: skipped by overlay (on purpose: moc internals (raw argument arrays))
+- `struct Data QMetaObject::d() const`: field: on purpose: moc internals
+- `const QObject * QMetaObject::cast(const QObject * obj) const`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QMetaProperty
+
+- `bool QMetaProperty::write(QObject * obj, QVariant && value) const`: on purpose: C++ move overload; the copying overload does the same in Go
+- `QUntypedBindable QMetaProperty::bindable(QObject * object) const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `bool QMetaProperty::writeOnGadget(void * gadget, QVariant && value) const`: on purpose: C++ move overload; the copying overload does the same in Go
+
 ### QMetaType
 
 - `QMetaType::QMetaType(const QtPrivate::QMetaTypeInterface * d)`: on purpose: Qt's private internals
 - `bool QMetaType::debugStream(QDebug & dbg, const void * rhs)`: on purpose: debug streams; use fmt with the Go values
 - `const QtPrivate::QMetaTypeInterface * QMetaType::iface()`: return: on purpose: Qt's private internals
 - `const QtPrivate::QMetaTypeInterface * QMetaType::iface() const`: return: on purpose: Qt's private internals
+
+### QMimeType
+
+- `QMimeType::QMimeType(const QMimeTypePrivate & dd)`: on purpose: private API
 
 ### QModelIndex
 
@@ -670,6 +864,15 @@ These bind once the generator learns the type. Counts by type:
 - `void QOpenGLTextureBlitter::blit(GLuint texture, const QMatrix4x4 & targetTransform, const QMatrix3x3 & sourceTransform)`: on purpose: a template class; use QMatrix4x4
 - `QMatrix3x3 QOpenGLTextureBlitter::sourceTransform(const QRectF & subTexture, const QSize & textureSize, Origin origin)`: return: on purpose: a template class; use QMatrix4x4
 
+### QOperatingSystemVersion
+
+- `bool QOperatingSystemVersion::isAnyOfType(std::initializer_list<OSType> types) const`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+
+### QOperatingSystemVersionBase
+
+- `bool QOperatingSystemVersionBase::isAnyOfType(std::initializer_list<OSType> types, OSType type)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `bool QOperatingSystemVersionBase::isAnyOfType(std::initializer_list<OSType> types) const`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+
 ### QPagedPaintDevice
 
 - `bool QPagedPaintDevice::setPageLayout(const QPageLayout & pageLayout)`: on purpose: printing page setup is not bound yet
@@ -766,6 +969,10 @@ These bind once the generator learns the type. Counts by type:
 - `QPartialOrdering::QPartialOrdering(Qt::weak_ordering stdorder)`: on purpose: C++20 comparison types; use the comparison methods
 - `QPartialOrdering::QPartialOrdering(Qt::strong_ordering stdorder)`: on purpose: C++20 comparison types; use the comparison methods
 
+### QPauseAnimation
+
+- `QBindable<int> QPauseAnimation::bindableDuration()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
 ### QPdfWriter
 
 - `QPdfOutputIntent QPdfWriter::outputIntent() const`: return: on purpose: printing page setup is not bound yet
@@ -790,9 +997,24 @@ These bind once the generator learns the type. Counts by type:
 
 - `QAbstractTextDocumentLayout::PaintContext QPlainTextEdit::getPaintContext() const`: skipped by overlay (on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound)
 
+### QProcess
+
+- `std::function<void ()> QProcess::childProcessModifier() const`: return: on purpose: a C++ function cannot be turned back into a Go func
+- `void QProcess::setChildProcessModifier(const std::function<void ()> & modifier)`: skipped by overlay (on purpose: the modifier runs in the forked child, where the Go runtime cannot run)
+- `void QProcess::failChildProcessModifier(const char * description, int error = …)`: skipped by overlay (on purpose: only valid inside a child process modifier, which is not bound)
+
+### QProcessUnixProcessParameters
+
+- `quint32[6] QProcessUnixProcessParameters::_reserved() const`: on purpose: reserved field
+
 ### QProgressDialog
 
 - `void QProgressDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+
+### QPropertyAnimation
+
+- `QBindable<QObject *> QPropertyAnimation::bindableTargetObject()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<QByteArray> QPropertyAnimation::bindablePropertyName()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
 ### QQuaternion
 
@@ -837,6 +1059,14 @@ These bind once the generator learns the type. Counts by type:
 - `void QScreenCapture::setMaximumFrameRate(std::optional<qreal> frameRate)`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 - `std::optional<qreal> QScreenCapture::maximumFrameRate() const`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 
+### QScroller
+
+- `const QScroller * QScroller::scroller(const QObject * target)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QSequentialAnimationGroup
+
+- `QBindable<QAbstractAnimation *> QSequentialAnimationGroup::bindableCurrentAnimation() const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
 ### QSettings
 
 - `Format QSettings::registerFormat(const QString & extension, ReadFunc readFunc, WriteFunc writeFunc, Qt::CaseSensitivity caseSensitivity = …)`: on purpose: C function pointer; a Go closure cannot become one
@@ -874,14 +1104,13 @@ These bind once the generator learns the type. Counts by type:
 
 - `QPlatformSurface * QSurface::surfaceHandle() const`: return: on purpose: private platform API
 
-### QSvgRenderer
-
-- `QSvgRenderer::QSvgRenderer(QXmlStreamReader * contents, QObject * parent = …)`: on purpose: XML streams are not bound; use the file name or byte-array overloads
-- `bool QSvgRenderer::load(QXmlStreamReader * contents)`: on purpose: XML streams are not bound; use the file name or byte-array overloads
-
 ### QTableWidget
 
 - `QTableWidgetItem * QTableWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QTemporaryFile
+
+- `QTemporaryFile::QTemporaryFile()`: redundant: call NewQTemporaryFile(nil)
 
 ### QTextBlock
 
@@ -929,6 +1158,15 @@ These bind once the generator learns the type. Counts by type:
 - `QTime QTime::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
 - `QTime QTime::fromString(QStringView string, QStringView format)`: skipped by overlay (use the QString overload)
 - `QTime QTime::fromString(const QString & string, QStringView format)`: skipped by overlay (use the QString overload)
+
+### QTimeLine
+
+- `QBindable<int> QTimeLine::bindableLoopCount()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<Direction> QTimeLine::bindableDirection()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QTimeLine::bindableDuration()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QTimeLine::bindableUpdateInterval()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<QEasingCurve> QTimeLine::bindableEasingCurve()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<int> QTimeLine::bindableCurrentTime()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
 ### QTimer
 
@@ -995,9 +1233,29 @@ These bind once the generator learns the type. Counts by type:
 - `QVariant::QVariant(const char * str)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `const void * QVariant::data() const`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QVariantAnimation
+
+- `QBindable<int> QVariantAnimation::bindableDuration()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QBindable<QEasingCurve> QVariantAnimation::bindableEasingCurve()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+
 ### QVector2D
 
 - `QVector2D::QVector2D(float xpos, float ypos)`: on purpose: plain-number twin of the struct overload
+
+### QVersionNumber
+
+- `QVersionNumber::QVersionNumber(std::initializer_list<int> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `QVersionNumber::QVersionNumber(QSpan<const int> args)`: skipped by overlay (use the major, minor and micro constructors)
+- `const_iterator QVersionNumber::begin() const`: return: on purpose: iterator; use Segments and SegmentAt
+- `const_iterator QVersionNumber::end() const`: return: on purpose: iterator; use Segments and SegmentAt
+- `const_iterator QVersionNumber::cbegin() const`: return: on purpose: iterator; use Segments and SegmentAt
+- `const_iterator QVersionNumber::cend() const`: return: on purpose: iterator; use Segments and SegmentAt
+- `const_reverse_iterator QVersionNumber::rbegin() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QVersionNumber::rend() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QVersionNumber::crbegin() const`: on purpose: iterator; use the method that returns a list
+- `const_reverse_iterator QVersionNumber::crend() const`: on purpose: iterator; use the method that returns a list
+- `const_iterator QVersionNumber::constBegin() const`: return: on purpose: iterator; use Segments and SegmentAt
+- `const_iterator QVersionNumber::constEnd() const`: return: on purpose: iterator; use Segments and SegmentAt
 
 ### QVideoFrame
 
@@ -1113,7 +1371,12 @@ These bind once the generator learns the type. Counts by type:
 - `void QWindowCapture::setMaximumFrameRate(std::optional<qreal> frameRate)`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 - `std::optional<qreal> QWindowCapture::maximumFrameRate() const`: skipped by overlay (on purpose: std::optional<qreal> is not supported yet)
 
-## Virtuals Go cannot override (20)
+### QXmlStreamWriter
+
+- `QXmlStreamWriter::QXmlStreamWriter(QByteArray * array)`: skipped by overlay (on purpose: the writer keeps a pointer to the byte array, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data()))
+- `QXmlStreamWriter::QXmlStreamWriter(QString * string)`: skipped by overlay (on purpose: the writer keeps a pointer to the string, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data()))
+
+## Virtuals Go cannot override (21)
 
 
 ### QAbstractItemModel
@@ -1154,6 +1417,10 @@ These bind once the generator learns the type. Counts by type:
 - `bool QPagedPaintDevice::setPageMargins(const QMarginsF & margins, QPageLayout::Unit units = …)`: parameter units: on purpose: printing page setup is not bound yet
 - `void QPagedPaintDevice::setPageRanges(const QPageRanges & ranges)`: parameter ranges: on purpose: printing page setup is not bound yet
 
+### QProcess
+
+- `qint64 QProcess::readData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
+
 ### QProxyStyle
 
 - `void QProxyStyle::polish(QPalette & pal)`: parameter pal: an override cannot fill in QPalette &
@@ -1178,7 +1445,7 @@ These bind once the generator learns the type. Counts by type:
 
 - `QAccessibleInterface * QWindow::accessibleRoot() const`: result: on purpose: the accessibility API is not bound
 
-## Classes Go cannot subclass (29)
+## Classes Go cannot subclass (31)
 
 Every other bound class with virtuals can be subclassed from Go: embed its
 Base and construct with New<Class>With. These cannot:
@@ -1186,6 +1453,7 @@ Base and construct with New<Class>With. These cannot:
 - `QApplication`: only Qt creates these objects (no-construct)
 - `QClipboard`: only Qt creates these objects (no-construct)
 - `QCoreApplication`: only Qt creates these objects (no-construct)
+- `QGraphicsAnchor`: only Qt creates these objects (no-construct)
 - `QGuiApplication`: only Qt creates these objects (no-construct)
 - `QIODevice`: Go cannot implement its pure virtual QIODevice::readData
 - `QInputMethod`: only Qt creates these objects (no-construct)
@@ -1194,6 +1462,7 @@ Base and construct with New<Class>With. These cannot:
 - `QPaintDevice`: Go cannot implement its pure virtual QPaintDevice::paintEngine
 - `QPaintDeviceWindow`: it has no public constructor
 - `QScreen`: only Qt creates these objects (no-construct)
+- `QScroller`: only Qt creates these objects (no-construct)
 - `QSessionManager`: only Qt creates these objects (no-construct)
 - `QStyleHints`: only Qt creates these objects (no-construct)
 - `QSurface`: Go cannot implement its pure virtual QSurface::surfaceHandle
@@ -1213,14 +1482,14 @@ Base and construct with New<Class>With. These cannot:
 - `QWebEngineUrlRequestJob`: only Qt creates these objects (no-construct)
 - `QWebEngineWebAuthUxRequest`: only Qt creates these objects (no-construct)
 
-## Not in the IR: operators, conversions and member templates (520)
+## Not in the IR: operators, conversions and member templates (622)
 
 tools/irgen leaves these out before the IR is written, so the generator never
 sees them and they are not counted as bound or skipped above. Go has no
 operator overloading: comparisons and arithmetic are done on the Go structs or
 through named methods. Conversions to QVariant are covered by
 `qtgui.NewQVariantOf`, and `QVariant::value<T>()` by `QVariant.Value` and
-`qtgui.VariantValue`. Counts: 385 operators, 26 conversion operators, 109 member templates.
+`qtgui.VariantValue`. Counts: 442 operators, 28 conversion operators, 152 member templates.
 
 
 ### QAction
@@ -1281,9 +1550,34 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QCapturableWindow &)`, `operator=(QCapturableWindow &&)`
 
+### QCborArray
+
+- operators: `operator=(const QCborArray &)`, `operator=(QCborArray &&)`, `operator[](qsizetype)`, `operator[](qsizetype)`, `operator+(const QCborValue &)`, `operator+=(const QCborValue &)`, `operator<<(const QCborValue &)`
+
+### QCborError
+
+- conversions: `operator QCborError::Code()`
+
+### QCborMap
+
+- operators: `operator=(const QCborMap &)`, `operator=(QCborMap &&)`, `operator[](qint64)`, `operator[](QLatin1StringView)`, `operator[](const QString &)`, `operator[](const QCborValue &)`, `operator[](qint64)`, `operator[](QLatin1StringView)`, `operator[](const QString &)`, `operator[](const QCborValue &)`
+- templates: `value(const char (&)[N])`, `operator[](const char (&)[N])`
+
+### QCborStreamWriter
+
+- templates: `append(const QByteArray &)`
+
+### QCborValue
+
+- operators: `operator=(const QCborValue &)`, `operator=(QCborValue &&)`, `operator[](const QString &)`, `operator[](QLatin1StringView)`, `operator[](qint64)`, `operator[](qint64)`, `operator[](QLatin1StringView)`, `operator[](const QString &)`
+
 ### QChar
 
 - templates: `QChar(const Char)`, `QChar(const Char)`, `QChar(const Char)`, `QChar(const Char)`
+
+### QChronoTimer
+
+- templates: `callOnTimeout(Args &&...)`
 
 ### QColorSpace
 
@@ -1293,6 +1587,10 @@ through named methods. Conversions to QVariant are covered by
 ### QColorTransform
 
 - operators: `operator=(const QColorTransform &)`, `operator=(QColorTransform &&)`
+
+### QCommandLineOption
+
+- operators: `operator=(const QCommandLineOption &)`, `operator=(QCommandLineOption &&)`
 
 ### QCoreApplication
 
@@ -1327,6 +1625,10 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QEasingCurve &)`, `operator=(QEasingCurve &&)`
 
+### QEventLoopLocker
+
+- operators: `operator=(QEventLoopLocker &&)`
+
 ### QEventPoint
 
 - operators: `operator=(const QEventPoint &)`, `operator=(QEventPoint &&)`, `operator==(const QEventPoint &)`, `operator!=(const QEventPoint &)`
@@ -1352,6 +1654,10 @@ through named methods. Conversions to QVariant are covered by
 ### QFontMetrics
 
 - operators: `operator=(const QFontMetrics &)`, `operator=(QFontMetrics &&)`, `operator==(const QFontMetrics &)`, `operator!=(const QFontMetrics &)`
+
+### QFontMetricsF
+
+- operators: `operator=(const QFontMetricsF &)`, `operator=(const QFontMetrics &)`, `operator=(QFontMetricsF &&)`, `operator==(const QFontMetricsF &)`, `operator!=(const QFontMetricsF &)`
 
 ### QFontTag
 
@@ -1412,6 +1718,10 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(QLocale &&)`, `operator=(const QLocale &)`
 
+### QLoggingCategory
+
+- operators: `operator()()`, `operator()()`
+
 ### QMatrix4x4
 
 - conversions: `operator QVariant()`
@@ -1431,9 +1741,25 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QMediaTimeRange &)`, `operator=(QMediaTimeRange &&)`, `operator=(const Interval &)`, `operator+=(const QMediaTimeRange &)`, `operator+=(const Interval &)`, `operator-=(const QMediaTimeRange &)`, `operator-=(const Interval &)`
 
+### QMetaEnum
+
+- templates: `fromType()`
+
+### QMetaMethod
+
+- templates: `invoke(QObject *, Qt::ConnectionType, QTemplatedMetaMethodReturnArgument<ReturnArg>, Args &&...)`, `invoke(QObject *, Qt::ConnectionType, Args &&...)`, `invoke(QObject *, QTemplatedMetaMethodReturnArgument<ReturnArg>, Args &&...)`, `invoke(QObject *, Args &&...)`, `invokeOnGadget(void *, QTemplatedMetaMethodReturnArgument<ReturnArg>, Args &&...)`, `invokeOnGadget(void *, Args &&...)`, `fromSignal(PointerToMemberFunction)`
+
+### QMetaObject
+
+- templates: `connect(const QObject *, const QMetaMethod &, const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, Qt::ConnectionType)`, `activate(QObject *, const QMetaObject *, int, Ret *, const Args &...)`, `invokeMethod(QObject *, const char *, Qt::ConnectionType, QTemplatedMetaMethodReturnArgument<ReturnArg>, Args &&...)`, `invokeMethod(QObject *, const char *, Qt::ConnectionType, Args &&...)`, `invokeMethod(QObject *, const char *, QTemplatedMetaMethodReturnArgument<ReturnArg>, Args &&...)`, `invokeMethod(QObject *, const char *, Args &&...)`, `invokeMethod(typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, Qt::ConnectionType, typename QtPrivate::Callable<Func>::ReturnType *)`, `invokeMethod(typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, typename QtPrivate::Callable<Func>::ReturnType *)`, `invokeMethod(typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, Qt::ConnectionType, QTemplatedMetaMethodReturnArgument<typename QtPrivate::Callable<Func, Args...>::ReturnType>, Args &&...)`, `invokeMethod(typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, Qt::ConnectionType, Args &&...)`, `invokeMethod(typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, QTemplatedMetaMethodReturnArgument<typename QtPrivate::Callable<Func, Args...>::ReturnType>, Args &&...)`, `invokeMethod(typename QtPrivate::ContextTypeForFunctor<Func>::ContextType *, Func &&, Args &&...)`, `newInstance(Args &&...)`, `staticMetaObject()`
+
 ### QMetaType
 
 - templates: `fromType()`, `registerConverter()`, `registerConverter(To (From::*)() const)`, `registerMutableView(To (From::*)())`, `registerConverter(To (From::*)(bool *) const)`, `registerConverter(UnaryFunction)`, `registerMutableView(UnaryFunction)`, `hasRegisteredConverterFunction()`, `hasRegisteredMutableViewFunction()`
+
+### QMimeType
+
+- operators: `operator=(const QMimeType &)`, `operator=(QMimeType &&)`
 
 ### QObject
 
@@ -1472,6 +1798,10 @@ through named methods. Conversions to QVariant are covered by
 - conversions: `operator QPointF()`
 - operators: `operator==(const Element &)`, `operator!=(const Element &)`
 
+### QPainterStateGuard
+
+- operators: `operator=(QPainterStateGuard &&)`
+
 ### QPalette
 
 - conversions: `operator QVariant()`
@@ -1500,6 +1830,10 @@ through named methods. Conversions to QVariant are covered by
 - conversions: `operator QVariant()`
 - operators: `operator=(const QPixmap &)`, `operator=(QPixmap &&)`, `operator!()`
 
+### QPixmapCacheKey
+
+- operators: `operator=(Key &&)`, `operator==(const Key &)`, `operator!=(const Key &)`, `operator=(const Key &)`
+
 ### QPlaybackOptions
 
 - operators: `operator=(const QPlaybackOptions &)`, `operator=(QPlaybackOptions &&)`
@@ -1507,6 +1841,10 @@ through named methods. Conversions to QVariant are covered by
 ### QPointingDevice
 
 - operators: `operator==(const QPointingDevice &)`
+
+### QProcessEnvironment
+
+- operators: `operator=(QProcessEnvironment &&)`, `operator=(const QProcessEnvironment &)`
 
 ### QQuaternion
 
@@ -1536,9 +1874,17 @@ through named methods. Conversions to QVariant are covered by
 - conversions: `operator unsigned long long()`
 - operators: `operator=(quint64)`
 
+### QSaveFile
+
+- templates: `QSaveFile(const std::filesystem::path &, QObject *)`, `setFileName(const std::filesystem::path &)`
+
 ### QScreen
 
 - templates: `nativeInterface()`
+
+### QScrollerProperties
+
+- operators: `operator=(const QScrollerProperties &)`, `operator==(const QScrollerProperties &)`, `operator!=(const QScrollerProperties &)`
 
 ### QShortcut
 
@@ -1549,6 +1895,10 @@ through named methods. Conversions to QVariant are covered by
 - conversions: `operator QVariant()`
 - operators: `operator==(const QSizePolicy &)`, `operator!=(const QSizePolicy &)`
 
+### QSocketDescriptor
+
+- conversions: `operator int()`
+
 ### QStandardItem
 
 - operators: `operator<(const QStandardItem &)`
@@ -1556,6 +1906,10 @@ through named methods. Conversions to QVariant are covered by
 ### QStaticText
 
 - operators: `operator=(QStaticText &&)`, `operator=(const QStaticText &)`, `operator==(const QStaticText &)`, `operator!=(const QStaticText &)`
+
+### QStorageInfo
+
+- operators: `operator=(const QStorageInfo &)`, `operator=(QStorageInfo &&)`
 
 ### QStyleOption
 
@@ -1577,6 +1931,10 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QStyleOptionDockWidget &)`
 
+### QStyleOptionFocusRect
+
+- operators: `operator=(const QStyleOptionFocusRect &)`
+
 ### QStyleOptionFrame
 
 - operators: `operator=(const QStyleOptionFrame &)`
@@ -1593,9 +1951,17 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QStyleOptionHeader &)`
 
+### QStyleOptionHeaderV2
+
+- operators: `operator=(const QStyleOptionHeaderV2 &)`
+
 ### QStyleOptionMenuItem
 
 - operators: `operator=(const QStyleOptionMenuItem &)`
+
+### QStyleOptionMenuItemV2
+
+- operators: `operator=(const QStyleOptionMenuItemV2 &)`
 
 ### QStyleOptionProgressBar
 
@@ -1604,6 +1970,10 @@ through named methods. Conversions to QVariant are covered by
 ### QStyleOptionRubberBand
 
 - operators: `operator=(const QStyleOptionRubberBand &)`
+
+### QStyleOptionSizeGrip
+
+- operators: `operator=(const QStyleOptionSizeGrip &)`
 
 ### QStyleOptionSlider
 
@@ -1617,13 +1987,25 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QStyleOptionTab &)`
 
+### QStyleOptionTabBarBase
+
+- operators: `operator=(const QStyleOptionTabBarBase &)`
+
 ### QStyleOptionTabWidgetFrame
 
 - operators: `operator=(const QStyleOptionTabWidgetFrame &)`
 
+### QStyleOptionTitleBar
+
+- operators: `operator=(const QStyleOptionTitleBar &)`
+
 ### QStyleOptionToolBar
 
 - operators: `operator=(const QStyleOptionToolBar &)`
+
+### QStyleOptionToolBox
+
+- operators: `operator=(const QStyleOptionToolBox &)`
 
 ### QStyleOptionToolButton
 
@@ -1640,6 +2022,14 @@ through named methods. Conversions to QVariant are covered by
 ### QTableWidgetItem
 
 - operators: `operator<(const QTableWidgetItem &)`, `operator=(const QTableWidgetItem &)`
+
+### QTemporaryDir
+
+- operators: `operator=(QTemporaryDir &&)`
+
+### QTemporaryFile
+
+- templates: `QTemporaryFile(const std::filesystem::path &, QObject *)`, `setFileTemplate(const std::filesystem::path &)`, `rename(const std::filesystem::path &)`, `renameOverwrite(const std::filesystem::path &)`, `createNativeFile(const std::filesystem::path &)`
 
 ### QTextBlock
 
@@ -1692,6 +2082,10 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator<(const QTreeWidgetItem &)`, `operator=(const QTreeWidgetItem &)`
 
+### QTypeRevision
+
+- templates: `isValidSegment(Integer)`, `fromVersion(Major, Minor)`, `fromMajorVersion(Major)`, `fromMinorVersion(Minor)`, `fromEncodedVersion(Integer)`, `toEncodedVersion()`
+
 ### QUrl
 
 - operators: `operator=(const QUrl &)`, `operator=(const QString &)`, `operator=(QUrl &&)`
@@ -1723,6 +2117,10 @@ through named methods. Conversions to QVariant are covered by
 
 - conversions: `operator QVariant()`
 - operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector4D)`, `operator-=(QVector4D)`, `operator*=(float)`, `operator*=(QVector4D)`, `operator/=(float)`, `operator/=(QVector4D)`
+
+### QVersionNumber
+
+- templates: `QVersionNumber(const QList<int> &)`, `QVersionNumber(QList<int> &&)`
 
 ### QVideoFrame
 
@@ -1800,11 +2198,17 @@ through named methods. Conversions to QVariant are covered by
 
 - templates: `nativeInterface()`
 
-## Ownership rules without a generated test (3)
+### QXmlStreamReader
+
+- templates: `QXmlStreamReader(const QByteArray &)`, `addData(const QByteArray &)`
+
+## Ownership rules without a generated test (5)
 
 Add a `test:` snippet to the overlay entry to cover these.
 
 - `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
+- `QIconEngine * QIconEngine::clone() const`: skipped in overlay: QIconEngine is abstract, and a snippet cannot declare the override; covered by subclass_test.go
 - `void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData * data)`: skipped in overlay: only valid inside highlightBlock, which a snippet cannot override; covered by subclass_test.go
+- `QGesture * QGestureRecognizer::create(QObject * target)`: skipped in overlay: QGestureRecognizer is abstract, and a snippet cannot declare the override; covered by subclass_test.go
 - `void QWebEngineUrlRequestJob::reply(const QByteArray & contentType, QIODevice * device)`: skipped in overlay: a job exists only while Qt loads a URL of a scheme registered before the application starts; covered by qtwebenginewidgets/lifetime_test.go
 

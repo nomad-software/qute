@@ -181,3 +181,244 @@ QTimerEvent:
 
 QCalendarYearMonthDay:
   YearMonthDay(int, int, int): { name: NewQCalendarYearMonthDayWithYear }
+
+QAbstractAnimation:
+  group: { return: borrowed }
+
+QAnimationGroup:
+  animationAt: { return: borrowed }
+  indexOfAnimation: { reviewed: true }
+  addAnimation: { args: { animation: transfer-to-cpp }, doc: "The group takes ownership of the animation." }
+  insertAnimation: { args: { animation: transfer-to-cpp }, doc: "The group takes ownership of the animation." }
+  removeAnimation:
+    args: { animation: transfer-to-go }
+    doc: "Ownership of the animation passes to the caller (Qt docs)."
+    test: |
+      g := qtcore.NewQParallelAnimationGroup(nil)
+      a := qtcore.NewQPauseAnimation(nil)
+      g.AddAnimation(a)
+      if got := a.Ownership(); got != qtcore.Parented {
+      	t.Errorf("after AddAnimation: %v, want Parented", got)
+      }
+      g.RemoveAnimation(a)
+      if got := a.Ownership(); got != qtcore.Owned {
+      	t.Errorf("after RemoveAnimation: %v, want Owned", got)
+      }
+      g.Delete()
+      if !a.Alive() {
+      	t.Error("removed animation died with the group")
+      }
+      a.Delete()
+  takeAnimation:
+    return: transfer-to-go
+    doc: "Ownership of the animation passes to the caller (Qt docs)."
+    test: |
+      g := qtcore.NewQSequentialAnimationGroup(nil)
+      g.AddAnimation(qtcore.NewQPauseAnimation(nil))
+      a := g.TakeAnimation(0)
+      if a == nil || a.Ownership() != qtcore.Owned {
+      	t.Fatalf("TakeAnimation: %v, want an Owned animation", a)
+      }
+      if g.AnimationCount() != 0 {
+      	t.Errorf("group still has %d animations", g.AnimationCount())
+      }
+      g.Delete()
+      if !a.Alive() {
+      	t.Error("taken animation died with the group")
+      }
+      a.Delete()
+
+QSequentialAnimationGroup:
+  addPause: { return: parented, doc: "The pause animation is created and owned by the group." }
+  insertPause: { return: parented, doc: "The pause animation is created and owned by the group." }
+  currentAnimation: { return: borrowed }
+
+QPropertyAnimation:
+  QPropertyAnimation(QObject*, const QByteArray&, QObject*): { args: { target: keep:target } }
+  setTargetObject: { args: { target: keep:target }, reviewed: true, doc: "The animation does not own its target; it keeps the target from being garbage collected while it animates it." }
+  targetObject: { return: borrowed }
+
+QCborStreamReader:
+  QCborStreamReader(QIODevice*): { args: { device: keep:device }, reviewed: true }
+  setDevice: { args: { device: keep:device }, reviewed: true }
+  device: { return: borrowed }
+  readAndAppendToString: { args: { dst: in-out } }
+  readAndAppendToUtf8String: { args: { dst: in-out } }
+  readAndAppendToByteArray: { args: { dst: in-out } }
+  readString: { skip: "returns a chunk status template; use ReadAllString" }
+  readUtf8String: { skip: "returns a chunk status template; use ReadAllUtf8String" }
+  readByteArray: { skip: "returns a chunk status template; use ReadAllByteArray" }
+  readStringChunk: { skip: "returns a chunk status template; use ReadAllString or ReadAllByteArray" }
+
+QCborStreamWriter:
+  QCborStreamWriter(QIODevice*): { args: { device: keep:device }, reviewed: true }
+  setDevice: { args: { device: keep:device }, reviewed: true }
+  device: { return: borrowed }
+  QCborStreamWriter(QByteArray*): { skip: "on purpose: the writer keeps a pointer to the byte array, which Go cannot keep alive; use NewQCborStreamWriter over a QBuffer (NewQBuffer, then Data())" }
+
+QCborValue:
+  toCbor(QCborStreamWriter&, QCborValue::EncodingOptions): { reviewed: true }
+  fromCbor(QCborStreamReader&): { reviewed: true }
+
+QCborArray:
+  first: { skip: "returns a reference into the array; use At(0)" }
+  last: { skip: "returns a reference into the array; use At(Size()-1)" }
+
+QCborMap:
+  insert(QCborMap::value_type): { skip: "takes a key-value pair and returns an iterator; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject" }
+  insert(qint64, const QCborValue&): { skip: "returns an iterator, which is not bound; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject" }
+  insert(const QString&, const QCborValue&): { skip: "returns an iterator, which is not bound; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject" }
+  insert(const QCborValue&, const QCborValue&): { skip: "returns an iterator, which is not bound; build the map with QCborMapFromVariantMap or QCborMapFromJsonObject" }
+
+QCommandLineParser:
+  process(const QCoreApplication&): { reviewed: true }
+
+QConcatenateTablesProxyModel:
+  sourceModels: { return: borrowed }
+  addSourceModel: { args: { sourceModel: keep-each }, reviewed: true, doc: "The proxy does not take ownership of the source model; it keeps it from being garbage collected until RemoveSourceModel." }
+  removeSourceModel:
+    args: { sourceModel: release }
+    reviewed: true
+    # Qt indexes its list with the model's position unchecked: removing a model that is not a source crashes
+    cpp: "[&] { if ($self->sourceModels().contains($0)) $self->removeSourceModel($0); }()"
+    doc: "A model that is not a source of the proxy is ignored."
+    test: |
+      p := qtcore.NewQConcatenateTablesProxyModel(nil)
+      m := qtcore.NewQStringListModelWithStrings([]string{"a", "b"}, nil)
+      p.RemoveSourceModel(m) // not a source: ignored
+      p.AddSourceModel(m)
+      if p.RowCount() != 2 {
+      	t.Errorf("rows %d, want 2", p.RowCount())
+      }
+      p.RemoveSourceModel(m)
+      if p.RowCount() != 0 || len(p.SourceModels()) != 0 {
+      	t.Errorf("after RemoveSourceModel: rows %d, sources %d", p.RowCount(), len(p.SourceModels()))
+      }
+      if rt.KeepsArg(unsafe.Pointer(p), unsafe.Pointer(m)) {
+      	t.Error("source model still kept after RemoveSourceModel")
+      }
+      p.Delete()
+      m.Delete()
+
+QEventLoopLocker:
+  QEventLoopLocker(QEventLoop*): { args: { loop: keep }, reviewed: true }
+
+QLockFile:
+  getLockInfo: { args: { pid: out, hostname: out, appname: out } }
+
+QLoggingCategory:
+  QLoggingCategory:
+    # Qt keeps the pointer (it expects a string literal); the Go string's C copy is freed after the call
+    cpp: "new $class(qstrdup($0))"
+    doc: "Qt keeps the category name for the life of the program, so each new category holds a small copy of it that is never freed; create categories once (package-level), not per call."
+  defaultCategory: { return: borrowed, reviewed: true, doc: "The default category is a static object that lives as long as the program." }
+  isEnabled: { skip: "QtMsgType is a global enum the IR does not record; use IsDebugEnabled, IsInfoEnabled, IsWarningEnabled or IsCriticalEnabled" }
+  setEnabled: { skip: "QtMsgType is a global enum the IR does not record; use QLoggingCategorySetFilterRules" }
+
+QMetaMethod:
+  enclosingMetaObject: { return: borrowed }
+  getParameterTypes: { skip: "writes an array; use ParameterType(i) for each of ParameterCount()" }
+
+QMetaObject:
+  static_metacall: { skip: "on purpose: moc internals (raw argument arrays)" }
+  superClass: { return: borrowed }
+  inherits: { reviewed: true }
+  cast: { args: { obj: borrowed }, return: borrowed }
+  disconnectOne: { reviewed: true }
+  connectSlotsByName: { reviewed: true }
+  activate: { skip: "on purpose: moc internals (raw signal argument arrays)" }
+  metacall: { skip: "on purpose: moc internals (raw argument arrays)" }
+
+QMetaProperty:
+  enclosingMetaObject: { return: borrowed }
+  read: { reviewed: true }
+  write: { reviewed: true }
+  reset: { reviewed: true }
+
+QMimeDatabase:
+  mimeTypeForData(QIODevice*): { reviewed: true }
+  mimeTypeForFileNameAndData(const QString&, QIODevice*): { reviewed: true }
+
+QObjectCleanupHandler:
+  add: { args: { object: transfer-to-cpp }, return: borrowed, doc: "The handler deletes the object when the handler is destroyed or Clear is called, unless the object dies first." }
+  remove:
+    args: { object: transfer-to-go }
+    doc: "The handler no longer deletes the object; ownership passes back to the caller."
+    test: |
+      h := qtcore.NewQObjectCleanupHandler()
+      o := qtcore.NewQObject(nil)
+      h.Add(o)
+      if got := o.Ownership(); got != qtcore.Parented {
+      	t.Errorf("after Add: %v, want Parented", got)
+      }
+      h.Remove(o)
+      if got := o.Ownership(); got != qtcore.Owned {
+      	t.Errorf("after Remove: %v, want Owned", got)
+      }
+      h.Delete()
+      if !o.Alive() {
+      	t.Error("removed object died with the handler")
+      }
+      o.Delete()
+
+QProcess:
+  setChildProcessModifier: { skip: "on purpose: the modifier runs in the forked child, where the Go runtime cannot run" }
+  failChildProcessModifier: { skip: "on purpose: only valid inside a child process modifier, which is not bound" }
+  setStandardOutputProcess: { args: { destination: keep }, reviewed: true }
+
+QSignalMapper:
+  setMapping: { reviewed: true }
+  removeMappings: { reviewed: true }
+  mapping: { return: borrowed, reviewed: true }
+  map(QObject*): { reviewed: true }
+
+QTemporaryFile:
+  createNativeFile: { return: transfer-to-go, reviewed: true, doc: "Returns a new temporary file, or nil if the file is already native; the caller owns it." }
+
+QVersionNumber:
+  QVersionNumber(QSpan<const int>): { skip: "use the major, minor and micro constructors" }
+
+QXmlStreamReader:
+  QXmlStreamReader(QIODevice*): { args: { device: keep:device }, reviewed: true }
+  setDevice: { args: { device: keep:device }, reviewed: true }
+  device: { return: borrowed }
+  setEntityResolver: { args: { resolver: keep }, reviewed: true, doc: "The reader does not take ownership of the resolver." }
+  entityResolver: { return: borrowed }
+
+QXmlStreamWriter:
+  QXmlStreamWriter(QIODevice*): { args: { device: keep:device }, reviewed: true }
+  setDevice: { args: { device: keep:device }, reviewed: true }
+  device: { return: borrowed }
+  writeCurrentToken: { reviewed: true }
+  QXmlStreamWriter(QByteArray*): { skip: "on purpose: the writer keeps a pointer to the byte array, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data())" }
+  QXmlStreamWriter(QString*): { skip: "on purpose: the writer keeps a pointer to the string, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data())" }
+
+QMetaEnum:
+  enclosingMetaObject: { return: borrowed }
+  value64: { skip: "an optional integer result; use Value" }
+  keyToValue64: { skip: "an optional integer result; use KeyToValue" }
+  keysToValue64: { skip: "an optional integer result; use KeysToValue" }
+
+QMetaClassInfo:
+  enclosingMetaObject: { return: borrowed }
+
+
+
+
+QChronoTimer:
+  QChronoTimer(std::chrono::nanoseconds, QObject*):
+    args: { parent: transfer-this }
+    test: |
+      p := qtcore.NewQObject(nil)
+      tm := qtcore.NewQChronoTimerWithDuration(1_000_000_000, p)
+      if got := tm.Ownership(); got != qtcore.Parented {
+      	t.Errorf("with a parent: %v, want Parented", got)
+      }
+      p.Delete()
+      if tm.Alive() {
+      	t.Error("timer alive after its parent was deleted")
+      }
+
+QProcessEnvironment:
+  insert(const QString&, const QString&): { name: Insert }
+  insert(const QProcessEnvironment&): { name: InsertEnvironment }

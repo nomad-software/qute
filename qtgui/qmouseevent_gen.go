@@ -34,6 +34,25 @@ func QMouseEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QMouseEvent {
 	return rt.View[QMouseEvent](rt.WrapClass(p, "QMouseEvent", rt.ModeFor(own)), p)
 }
 
+// QMouseEventCast returns e as a *QMouseEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QMouseEventCast(e qtcore.QEventLike) *QMouseEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QMouseEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QMouseEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QMouseEvent](rt.WrapClassFrom(p, "QMouseEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pos wraps QMouseEvent::pos.
 //
 //	C++: QPoint QMouseEvent::pos() const

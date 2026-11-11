@@ -118,6 +118,34 @@ func NewQSvgRendererWithBytes(contents []byte, parent qtcore.QObjectLike) *QSvgR
 	return rt.View[QSvgRenderer](h, p)
 }
 
+// NewQSvgRendererWithXmlStreamReader wraps the QSvgRenderer constructor.
+//
+//	C++: QSvgRenderer::QSvgRenderer(QXmlStreamReader * contents, QObject * parent = …)
+//
+// Ownership: parent the receiver becomes Parented when it is non-nil, Owned when nil.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsvgrenderer.html#QSvgRenderer
+func NewQSvgRendererWithXmlStreamReader(contents qtcore.QXmlStreamReaderLike, parent qtcore.QObjectLike) *QSvgRenderer {
+	rt.CheckThread("NewQSvgRendererWithXmlStreamReader")
+	var contentsPtr unsafe.Pointer
+	if contents != nil {
+		contentsPtr = rt.UseArg(unsafe.Pointer(contents.AsQXmlStreamReader()), "NewQSvgRendererWithXmlStreamReader")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSvgRendererWithXmlStreamReader")
+	}
+	p := C.qute_QSvgRenderer_new_3(contentsPtr, parentPtr)
+	runtime.KeepAlive(contents)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	return rt.View[QSvgRenderer](h, p)
+}
+
 // IsValid wraps QSvgRenderer::isValid.
 //
 //	C++: bool QSvgRenderer::isValid() const
@@ -386,6 +414,23 @@ func (this *QSvgRenderer) LoadBytes(contents []byte) bool {
 	self := rt.Use(unsafe.Pointer(this), "QSvgRenderer.LoadBytes")
 	r := C.qute_QSvgRenderer_load_1(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(contents))), C.ptrdiff_t(len(contents)))
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// LoadXmlStreamReader wraps QSvgRenderer::load.
+//
+//	C++: bool QSvgRenderer::load(QXmlStreamReader * contents)
+//
+// Qt docs: https://doc.qt.io/qt-6/qsvgrenderer.html#load
+func (this *QSvgRenderer) LoadXmlStreamReader(contents qtcore.QXmlStreamReaderLike) bool {
+	self := rt.Use(unsafe.Pointer(this), "QSvgRenderer.LoadXmlStreamReader")
+	var contentsPtr unsafe.Pointer
+	if contents != nil {
+		contentsPtr = rt.UseArg(unsafe.Pointer(contents.AsQXmlStreamReader()), "QSvgRenderer.LoadXmlStreamReader")
+	}
+	r := C.qute_QSvgRenderer_load_2(self, contentsPtr)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(contents)
 	return bool(r)
 }
 

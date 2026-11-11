@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QEvent>
 #include <QIODevice>
+#include <QMetaObject>
 #include <QObject>
 #include <QPaintDevice>
 #include <QPainter>
@@ -12,6 +13,7 @@
 #include <QSvgRenderer>
 #include <QTimerEvent>
 #include <QTransform>
+#include <QXmlStreamReader>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QThread>
@@ -242,6 +244,10 @@ void * qute_QSvgRenderer_new_2(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
 	return static_cast<QSvgRenderer *>(new QSvgRenderer(QByteArray(a0, a0_len), static_cast<QObject *>(a1)));
 }
+void * qute_QSvgRenderer_new_3(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QSvgRenderer *>(new QSvgRenderer(static_cast<QXmlStreamReader *>(a0), static_cast<QObject *>(a1)));
+}
 void * qute_QSvgRenderer_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(static_cast<QObject *>(a0)));
@@ -365,6 +371,10 @@ bool qute_QSvgRenderer_load(void *self, const char *a0, ptrdiff_t a0_len) {
 bool qute_QSvgRenderer_load_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<QSvgRenderer *>(self)->load(QByteArray(a0, a0_len)));
+}
+bool qute_QSvgRenderer_load_2(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<QSvgRenderer *>(self)->load(static_cast<QXmlStreamReader *>(a0)));
 }
 void qute_QSvgRenderer_render(void *self, void * a0) {
 	qute_gui_only();

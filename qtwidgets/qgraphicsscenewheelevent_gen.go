@@ -38,6 +38,25 @@ func QGraphicsSceneWheelEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QG
 	return rt.View[QGraphicsSceneWheelEvent](rt.WrapClass(p, "QGraphicsSceneWheelEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneWheelEventCast returns e as a *QGraphicsSceneWheelEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneWheelEventCast(e qtcore.QEventLike) *QGraphicsSceneWheelEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneWheelEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneWheelEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneWheelEvent](rt.WrapClassFrom(p, "QGraphicsSceneWheelEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pos wraps QGraphicsSceneWheelEvent::pos.
 //
 //	C++: QPointF QGraphicsSceneWheelEvent::pos() const

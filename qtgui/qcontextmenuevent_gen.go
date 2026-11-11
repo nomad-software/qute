@@ -34,6 +34,25 @@ func QContextMenuEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QContextM
 	return rt.View[QContextMenuEvent](rt.WrapClass(p, "QContextMenuEvent", rt.ModeFor(own)), p)
 }
 
+// QContextMenuEventCast returns e as a *QContextMenuEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QContextMenuEventCast(e qtcore.QEventLike) *QContextMenuEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QContextMenuEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QContextMenuEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QContextMenuEvent](rt.WrapClassFrom(p, "QContextMenuEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // X wraps QContextMenuEvent::x.
 //
 //	C++: int QContextMenuEvent::x() const

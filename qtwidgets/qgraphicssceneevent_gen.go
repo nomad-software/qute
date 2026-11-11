@@ -34,6 +34,25 @@ func QGraphicsSceneEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QGraphi
 	return rt.View[QGraphicsSceneEvent](rt.WrapClass(p, "QGraphicsSceneEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneEventCast returns e as a *QGraphicsSceneEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneEventCast(e qtcore.QEventLike) *QGraphicsSceneEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneEvent](rt.WrapClassFrom(p, "QGraphicsSceneEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Widget wraps QGraphicsSceneEvent::widget.
 //
 //	C++: QWidget * QGraphicsSceneEvent::widget() const

@@ -433,7 +433,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   or a return rule on a result that is not an object pointer, is a generator
   warning.
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `error`,
-  `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…), `created: true` (the
+  `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…; on a
+  constructor it builds the object, `$class` naming the class to construct,
+  the shim when there is one: `QLoggingCategory` copies the name Qt keeps), `created: true` (the
   result is built by the binding, so it is registered and its death seen),
   `kept-delete: allow|guard` and `release-slot: <slot>` (see Kept references).
   `QGraphicsScene::addRect` and friends use `cpp` + `created` to build
@@ -480,8 +482,12 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   counts Full forms and plain results tied to their receiver. Signal
   emitters count as reviewed, since emitting never changes ownership.
 - **Escape hatches**: `.Ptr()`, `XFromPtr(p, qtcore.Borrowed)`, `XCast(obj)`
-  (`qobject_cast`), and hand-written `*_manual.{go,cpp,h}` files the
-  generator never touches.
+  (`qobject_cast`), `XCast(e)` for every event class (`dynamic_cast` from a
+  `QEvent`, which is how most events reach an `event`, `eventFilter` or
+  `changeEvent` handler; the result depends on `e`, so it is Dead when the
+  handler returns, like the event), and hand-written `*_manual.{go,cpp,h}` files the
+  generator never touches (`QObject.MetaObject` is one: read-only, because
+  the generator skips the moc virtual `metaObject` everywhere).
 
 ## Errors and ergonomics
 
@@ -566,7 +572,15 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   sinks share one kept slot), `qtmultimediawidgets/videowidget_test.go`,
   `qtopenglwidgets/lifetime_test.go` and `qtwebenginecore/behaviour_test.go`
   (the cookie filter on a local HTTP server, its panic recovery, builder
-  chaining, a guarded profile). `bench_test.go` measures the reparenting walk
+  chaining, a guarded profile). Behaviour tests cover the later qtcore,
+  qtgui and qtwidgets classes: `qtcore/{animation,system,data,objects}_test.go`
+  (animations, files, processes, command lines, MIME, XML and CBOR streams,
+  meta-objects, proxy models, socket notifiers), `qtgui/undo_test.go`
+  and `qtgui/newclasses_test.go` (drags, file system model, writers, the
+  event casts on events Qt really sends), `qtwidgets/newclasses_test.go`
+  (wizard, column view, mapper, anchors, scroller and its events, style
+  painter); `subclass_test.go` drives a Go icon engine and a Go gesture
+  recognizer. `bench_test.go` measures the reparenting walk
   (linear in the subtree). `run_test.go` covers `t.Fatal` inside `Run` (in a
   child process), `PostSync` handler panics, the off-thread checks (Qt calls
   and handler entries) and Full forms.
@@ -582,16 +596,18 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ## Roadmap
 
 1. Runtime: done.
-2. Widgets: done for 425 classes in eleven modules, including OpenGL,
+2. Widgets: done for 553 classes in eleven modules, including OpenGL,
    SVG, multimedia and the web engine. No method waits for type support,
    every ownership rule is reviewed, every overload has a proper name, every
    out-parameter is confirmed by a rule, and all rules but `QEvent::clone`,
-   `QWebEngineUrlRequestJob::reply` and `QSyntaxHighlighter::setCurrentBlockUserData`
-   have a generated test (`reply` is covered by
-   `qtwebenginewidgets/lifetime_test.go`, `setCurrentBlockUserData`, valid
-   only inside `highlightBlock`, by `subclass_test.go`).
+   `QWebEngineUrlRequestJob::reply`, `QSyntaxHighlighter::setCurrentBlockUserData`,
+   `QIconEngine::clone` and `QGestureRecognizer::create` have a generated test
+   (`reply` is covered by `qtwebenginewidgets/lifetime_test.go`;
+   `setCurrentBlockUserData`, valid only inside `highlightBlock`, and the
+   two abstract classes' results, which need a Go override, by
+   `subclass_test.go`).
 3. Subclassing and models: done. Every class with virtuals is subclassable
-   by default (189 classes; `COVERAGE.md` lists the 29 that are not, and
+   by default (237 classes; `COVERAGE.md` lists the 31 that are not, and
    the virtuals Go cannot override).
 4. Beyond: `QThread` affinity (one cleanup queue per thread), QtQuick/QML,
    more modules (QtNetwork, QtPrintSupport and QtWebChannel would fill the

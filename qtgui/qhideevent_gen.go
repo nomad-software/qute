@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -31,4 +32,23 @@ func init() {
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QHideEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QHideEvent {
 	return rt.View[QHideEvent](rt.WrapClass(p, "QHideEvent", rt.ModeFor(own)), p)
+}
+
+// QHideEventCast returns e as a *QHideEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QHideEventCast(e qtcore.QEventLike) *QHideEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QHideEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QHideEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QHideEvent](rt.WrapClassFrom(p, "QHideEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
 }

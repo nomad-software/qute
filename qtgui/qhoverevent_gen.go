@@ -34,6 +34,25 @@ func QHoverEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QHoverEvent {
 	return rt.View[QHoverEvent](rt.WrapClass(p, "QHoverEvent", rt.ModeFor(own)), p)
 }
 
+// QHoverEventCast returns e as a *QHoverEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QHoverEventCast(e qtcore.QEventLike) *QHoverEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QHoverEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QHoverEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QHoverEvent](rt.WrapClassFrom(p, "QHoverEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // OldPos wraps QHoverEvent::oldPos.
 //
 //	C++: QPoint QHoverEvent::oldPos() const

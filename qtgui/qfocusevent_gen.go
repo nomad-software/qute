@@ -34,6 +34,25 @@ func QFocusEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QFocusEvent {
 	return rt.View[QFocusEvent](rt.WrapClass(p, "QFocusEvent", rt.ModeFor(own)), p)
 }
 
+// QFocusEventCast returns e as a *QFocusEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QFocusEventCast(e qtcore.QEventLike) *QFocusEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QFocusEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QFocusEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QFocusEvent](rt.WrapClassFrom(p, "QFocusEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // GotFocus wraps QFocusEvent::gotFocus.
 //
 //	C++: bool QFocusEvent::gotFocus() const

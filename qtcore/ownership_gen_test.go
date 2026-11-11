@@ -6,7 +6,7 @@ import (
 
 	"github.com/nomad-software/qute/internal/rt"
 	"github.com/nomad-software/qute/qtcore"
-	"github.com/nomad-software/qute/qtgui"
+	"github.com/nomad-software/qute/qtwidgets"
 	"github.com/nomad-software/qute/qutetest"
 	"unsafe"
 )
@@ -37,13 +37,94 @@ func TestOwnership_QAbstractItemModel_MimeData(t *testing.T) {
 // void QAbstractProxyModel::setSourceModel(QAbstractItemModel * sourceModel): keep rules
 func TestKeep_QAbstractProxyModel_SetSourceModel(t *testing.T) {
 	qutetest.Run(t, func() {
-		recv := qtcore.NewQSortFilterProxyModel(nil)
-		a0 := qtgui.NewQStandardItemModel(nil)
+		recv := qtcore.NewQIdentityProxyModel(nil)
+		a0 := qtcore.NewQConcatenateTablesProxyModel(nil)
 		recv.QAbstractProxyModel.SetSourceModel(a0)
 		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
 			t.Error("sourceModel: not kept by the receiver")
 		}
 		recv.Delete()
+	})
+}
+
+// void QAnimationGroup::addAnimation(QAbstractAnimation * animation)
+func TestOwnership_QAnimationGroup_AddAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtcore.NewQParallelAnimationGroup(root)
+		a0 := qtcore.NewQPauseAnimation(nil)
+		recv.QAnimationGroup.AddAnimation(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("animation: %v, want Parented", got)
+		}
+		root.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// void QAnimationGroup::insertAnimation(int index, QAbstractAnimation * animation)
+func TestOwnership_QAnimationGroup_InsertAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtcore.NewQParallelAnimationGroup(root)
+		a1 := qtcore.NewQPauseAnimation(nil)
+		recv.QAnimationGroup.InsertAnimation(0, a1)
+		if got := a1.Ownership(); got != qtcore.Parented {
+			t.Errorf("animation: %v, want Parented", got)
+		}
+		root.Delete()
+		if a1.Alive() {
+			t.Errorf("a1 alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// void QAnimationGroup::removeAnimation(QAbstractAnimation * animation) (test from the overlay)
+func TestOwnership_QAnimationGroup_RemoveAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		g := qtcore.NewQParallelAnimationGroup(nil)
+		a := qtcore.NewQPauseAnimation(nil)
+		g.AddAnimation(a)
+		if got := a.Ownership(); got != qtcore.Parented {
+			t.Errorf("after AddAnimation: %v, want Parented", got)
+		}
+		g.RemoveAnimation(a)
+		if got := a.Ownership(); got != qtcore.Owned {
+			t.Errorf("after RemoveAnimation: %v, want Owned", got)
+		}
+		g.Delete()
+		if !a.Alive() {
+			t.Error("removed animation died with the group")
+		}
+		a.Delete()
+	})
+}
+
+// QAbstractAnimation * QAnimationGroup::takeAnimation(int index) (test from the overlay)
+func TestOwnership_QAnimationGroup_TakeAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		g := qtcore.NewQSequentialAnimationGroup(nil)
+		g.AddAnimation(qtcore.NewQPauseAnimation(nil))
+		a := g.TakeAnimation(0)
+		if a == nil || a.Ownership() != qtcore.Owned {
+			t.Fatalf("TakeAnimation: %v, want an Owned animation", a)
+		}
+		if g.AnimationCount() != 0 {
+			t.Errorf("group still has %d animations", g.AnimationCount())
+		}
+		g.Delete()
+		if !a.Alive() {
+			t.Error("taken animation died with the group")
+		}
+		a.Delete()
 	})
 }
 
@@ -67,6 +148,152 @@ func TestOwnership_NewQBuffer(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// QCborStreamReader::QCborStreamReader(QIODevice * device): keep rules
+func TestKeep_QCborStreamReader_QCborStreamReaderWithIODevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		a0 := qtcore.NewQBuffer(nil)
+		x := qtcore.NewQCborStreamReaderWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// void QCborStreamReader::setDevice(QIODevice * device): keep rules
+func TestKeep_QCborStreamReader_SetDevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQCborStreamReader()
+		a0 := qtcore.NewQBuffer(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QCborStreamWriter::QCborStreamWriter(QIODevice * device): keep rules
+func TestKeep_QCborStreamWriter_QCborStreamWriterWithIODevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		a0 := qtcore.NewQBuffer(nil)
+		x := qtcore.NewQCborStreamWriterWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// void QCborStreamWriter::setDevice(QIODevice * device): keep rules
+func TestKeep_QCborStreamWriter_SetDevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQCborStreamWriterWithIODevice(nil)
+		a0 := qtcore.NewQBuffer(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QChronoTimer::QChronoTimer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQChronoTimer(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQChronoTimer(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQChronoTimer(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QChronoTimer::QChronoTimer(std::chrono::nanoseconds nsec, QObject * parent = …) (test from the overlay)
+func TestOwnership_QChronoTimer_NewQChronoTimerWithDuration(t *testing.T) {
+	qutetest.Run(t, func() {
+		p := qtcore.NewQObject(nil)
+		tm := qtcore.NewQChronoTimerWithDuration(1_000_000_000, p)
+		if got := tm.Ownership(); got != qtcore.Parented {
+			t.Errorf("with a parent: %v, want Parented", got)
+		}
+		p.Delete()
+		if tm.Alive() {
+			t.Error("timer alive after its parent was deleted")
+		}
+	})
+}
+
+// QConcatenateTablesProxyModel::QConcatenateTablesProxyModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQConcatenateTablesProxyModel(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQConcatenateTablesProxyModel(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQConcatenateTablesProxyModel(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// void QConcatenateTablesProxyModel::addSourceModel(QAbstractItemModel * sourceModel): keep rules
+func TestKeep_QConcatenateTablesProxyModel_AddSourceModel(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQConcatenateTablesProxyModel(nil)
+		a0 := qtcore.NewQConcatenateTablesProxyModel(nil)
+		recv.AddSourceModel(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("sourceModel: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QConcatenateTablesProxyModel::removeSourceModel(QAbstractItemModel * sourceModel) (test from the overlay)
+func TestOwnership_QConcatenateTablesProxyModel_RemoveSourceModel(t *testing.T) {
+	qutetest.Run(t, func() {
+		p := qtcore.NewQConcatenateTablesProxyModel(nil)
+		m := qtcore.NewQStringListModelWithStrings([]string{"a", "b"}, nil)
+		p.RemoveSourceModel(m) // not a source: ignored
+		p.AddSourceModel(m)
+		if p.RowCount() != 2 {
+			t.Errorf("rows %d, want 2", p.RowCount())
+		}
+		p.RemoveSourceModel(m)
+		if p.RowCount() != 0 || len(p.SourceModels()) != 0 {
+			t.Errorf("after RemoveSourceModel: rows %d, sources %d", p.RowCount(), len(p.SourceModels()))
+		}
+		if rt.KeepsArg(unsafe.Pointer(p), unsafe.Pointer(m)) {
+			t.Error("source model still kept after RemoveSourceModel")
+		}
+		p.Delete()
+		m.Delete()
 	})
 }
 
@@ -118,6 +345,18 @@ func TestOwnership_NewQEventLoop(t *testing.T) {
 	})
 }
 
+// QEventLoopLocker::QEventLoopLocker(QEventLoop * loop): keep rules
+func TestKeep_QEventLoopLocker_QEventLoopLockerWithEventLoop(t *testing.T) {
+	qutetest.Run(t, func() {
+		a0 := qtcore.NewQEventLoop(nil)
+		x := qtcore.NewQEventLoopLockerWithEventLoop(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("loop: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QFile::QFile(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQFile(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -164,10 +403,102 @@ func TestOwnership_NewQFileWithName(t *testing.T) {
 	})
 }
 
+// QFileSelector::QFileSelector(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQFileSelector(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQFileSelector(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQFileSelector(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QFileSystemWatcher::QFileSystemWatcher(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQFileSystemWatcher(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQFileSystemWatcher(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQFileSystemWatcher(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QFileSystemWatcher::QFileSystemWatcher(const QStringList & paths, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQFileSystemWatcherWithPaths(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQFileSystemWatcherWithPaths(nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQFileSystemWatcherWithPaths(nil, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QIdentityProxyModel::QIdentityProxyModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQIdentityProxyModel(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQIdentityProxyModel(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQIdentityProxyModel(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QItemSelectionModel::QItemSelectionModel(QAbstractItemModel * model, QObject * parent): keep rules
 func TestKeep_QItemSelectionModel_QItemSelectionModelWithAbstractItemModel(t *testing.T) {
 	qutetest.Run(t, func() {
-		a0 := qtgui.NewQStandardItemModel(nil)
+		a0 := qtcore.NewQConcatenateTablesProxyModel(nil)
 		x := qtcore.NewQItemSelectionModelWithAbstractItemModel(a0, nil)
 		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
 			t.Error("model: not kept by the new object")
@@ -203,7 +534,7 @@ func TestOwnership_NewQItemSelectionModelWithAbstractItemModel(t *testing.T) {
 func TestKeep_QItemSelectionModel_SetModel(t *testing.T) {
 	qutetest.Run(t, func() {
 		recv := qtcore.NewQItemSelectionModel()
-		a0 := qtgui.NewQStandardItemModel(nil)
+		a0 := qtcore.NewQConcatenateTablesProxyModel(nil)
 		recv.SetModel(a0)
 		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
 			t.Error("model: not kept by the receiver")
@@ -272,6 +603,334 @@ func TestKeep_QObject_RemoveEventFilter(t *testing.T) {
 			t.Error("obj: still kept after the call")
 		}
 		recv.Delete()
+	})
+}
+
+// QObject * QObjectCleanupHandler::add(QObject * object)
+func TestOwnership_QObjectCleanupHandler_Add(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQObjectCleanupHandler()
+		a0 := qtcore.NewQObject(nil)
+		_ = recv.Add(a0)
+		if got := a0.Ownership(); got != qtcore.Parented {
+			t.Errorf("object: %v, want Parented", got)
+		}
+		recv.Delete()
+		if a0.Alive() {
+			t.Errorf("a alive after its owner was deleted")
+		}
+	})
+}
+
+// void QObjectCleanupHandler::remove(QObject * object) (test from the overlay)
+func TestOwnership_QObjectCleanupHandler_Remove(t *testing.T) {
+	qutetest.Run(t, func() {
+		h := qtcore.NewQObjectCleanupHandler()
+		o := qtcore.NewQObject(nil)
+		h.Add(o)
+		if got := o.Ownership(); got != qtcore.Parented {
+			t.Errorf("after Add: %v, want Parented", got)
+		}
+		h.Remove(o)
+		if got := o.Ownership(); got != qtcore.Owned {
+			t.Errorf("after Remove: %v, want Owned", got)
+		}
+		h.Delete()
+		if !o.Alive() {
+			t.Error("removed object died with the handler")
+		}
+		o.Delete()
+	})
+}
+
+// QParallelAnimationGroup::QParallelAnimationGroup(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQParallelAnimationGroup(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQParallelAnimationGroup(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQParallelAnimationGroup(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QPauseAnimation::QPauseAnimation(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQPauseAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQPauseAnimation(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQPauseAnimation(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QPauseAnimation::QPauseAnimation(int msecs, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQPauseAnimationWithMsecs(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQPauseAnimationWithMsecs(1, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQPauseAnimationWithMsecs(1, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QProcess::QProcess(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQProcess(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQProcess(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQProcess(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// void QProcess::setStandardOutputProcess(QProcess * destination): keep rules
+func TestKeep_QProcess_SetStandardOutputProcess(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQProcess(nil)
+		a0 := qtcore.NewQProcess(nil)
+		recv.SetStandardOutputProcess(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("destination: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QPropertyAnimation::QPropertyAnimation(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQPropertyAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQPropertyAnimation(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQPropertyAnimation(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QPropertyAnimation::QPropertyAnimation(QObject * target, const QByteArray & propertyName, QObject * parent = …): keep rules
+func TestKeep_QPropertyAnimation_QPropertyAnimationWithObject(t *testing.T) {
+	qutetest.Run(t, func() {
+		a0 := qtcore.NewQObject(nil)
+		x := qtcore.NewQPropertyAnimationWithObject(a0, nil, nil)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("target: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// QPropertyAnimation::QPropertyAnimation(QObject * target, const QByteArray & propertyName, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQPropertyAnimationWithObject(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQPropertyAnimationWithObject(nil, nil, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQPropertyAnimationWithObject(nil, nil, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// void QPropertyAnimation::setTargetObject(QObject * target): keep rules
+func TestKeep_QPropertyAnimation_SetTargetObject(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQPropertyAnimation(nil)
+		a0 := qtcore.NewQObject(nil)
+		recv.SetTargetObject(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("target: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QSaveFile::QSaveFile(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSaveFile(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQSaveFile(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQSaveFile(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QSaveFile::QSaveFile(const QString & name, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSaveFileWithName(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQSaveFileWithName("x", root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQSaveFileWithName("x", nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QSequentialAnimationGroup::QSequentialAnimationGroup(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSequentialAnimationGroup(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQSequentialAnimationGroup(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQSequentialAnimationGroup(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QPauseAnimation * QSequentialAnimationGroup::addPause(int msecs)
+func TestOwnership_QSequentialAnimationGroup_AddPause(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtcore.NewQSequentialAnimationGroup(root)
+		res := recv.AddPause(1)
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
+	})
+}
+
+// QPauseAnimation * QSequentialAnimationGroup::insertPause(int index, int msecs)
+func TestOwnership_QSequentialAnimationGroup_InsertPause(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		recv := qtcore.NewQSequentialAnimationGroup(root)
+		res := recv.InsertPause(0, 1)
+		if res == nil {
+			t.Errorf("returned nil; give this rule a test: snippet")
+			return
+		}
+		if got := res.Ownership(); got != qtcore.Parented {
+			t.Errorf("result: %v, want Parented", got)
+		}
+		root.Delete()
+		if res.Alive() {
+			t.Errorf("res alive after its owner was deleted")
+		}
+		if recv.Alive() {
+			recv.Delete()
+		}
 	})
 }
 
@@ -413,6 +1072,75 @@ func TestOwnership_NewQSettingsWithScopeOnly(t *testing.T) {
 	})
 }
 
+// QSignalMapper::QSignalMapper(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSignalMapper(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQSignalMapper(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQSignalMapper(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QSocketNotifier::QSocketNotifier(Type, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSocketNotifierWithType(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQSocketNotifierWithType(qtcore.QSocketNotifierType(0), root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQSocketNotifierWithType(qtcore.QSocketNotifierType(0), nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QSocketNotifier::QSocketNotifier(qintptr socket, Type, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQSocketNotifierWithSocket(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQSocketNotifierWithSocket(1, qtcore.QSocketNotifierType(0), root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQSocketNotifierWithSocket(1, qtcore.QSocketNotifierType(0), nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QSortFilterProxyModel::QSortFilterProxyModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSortFilterProxyModel(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -482,6 +1210,75 @@ func TestOwnership_NewQStringListModelWithStrings(t *testing.T) {
 	})
 }
 
+// QTemporaryFile::QTemporaryFile(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQTemporaryFile(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQTemporaryFile(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQTemporaryFile(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QTemporaryFile::QTemporaryFile(const QString & templateName, QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQTemporaryFileWithTemplateNameObject(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQTemporaryFileWithTemplateNameObject("x", root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQTemporaryFileWithTemplateNameObject("x", nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QTimeLine::QTimeLine(int duration = …, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQTimeLineWithDuration(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQTimeLineWithDuration(1, root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQTimeLineWithDuration(1, nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // QTimer::QTimer(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQTimer(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -525,5 +1322,114 @@ func TestOwnership_NewQTranslator(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// QTransposeProxyModel::QTransposeProxyModel(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQTransposeProxyModel(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQTransposeProxyModel(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQTransposeProxyModel(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QVariantAnimation::QVariantAnimation(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQVariantAnimation(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtcore.NewQObject(nil)
+		x := qtcore.NewQVariantAnimation(root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtcore.NewQVariantAnimation(nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
+// QXmlStreamReader::QXmlStreamReader(QIODevice * device): keep rules
+func TestKeep_QXmlStreamReader_QXmlStreamReaderWithIODevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		a0 := qtcore.NewQBuffer(nil)
+		x := qtcore.NewQXmlStreamReaderWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// void QXmlStreamReader::setDevice(QIODevice * device): keep rules
+func TestKeep_QXmlStreamReader_SetDevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQXmlStreamReader()
+		a0 := qtcore.NewQBuffer(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// void QXmlStreamReader::setEntityResolver(QXmlStreamEntityResolver * resolver): keep rules
+func TestKeep_QXmlStreamReader_SetEntityResolver(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQXmlStreamReader()
+		a0 := qtcore.NewQXmlStreamEntityResolver()
+		recv.SetEntityResolver(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("resolver: not kept by the receiver")
+		}
+		recv.Delete()
+	})
+}
+
+// QXmlStreamWriter::QXmlStreamWriter(QIODevice * device): keep rules
+func TestKeep_QXmlStreamWriter_QXmlStreamWriterWithIODevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		a0 := qtcore.NewQBuffer(nil)
+		x := qtcore.NewQXmlStreamWriterWithIODevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// void QXmlStreamWriter::setDevice(QIODevice * device): keep rules
+func TestKeep_QXmlStreamWriter_SetDevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		recv := qtcore.NewQXmlStreamWriter()
+		a0 := qtcore.NewQBuffer(nil)
+		recv.SetDevice(a0)
+		if !rt.KeepsArg(unsafe.Pointer(recv), unsafe.Pointer(a0)) {
+			t.Error("device: not kept by the receiver")
+		}
+		recv.Delete()
 	})
 }

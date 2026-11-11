@@ -38,6 +38,25 @@ func QGraphicsSceneContextMenuEventFromPtr(p unsafe.Pointer, own qtcore.Ownershi
 	return rt.View[QGraphicsSceneContextMenuEvent](rt.WrapClass(p, "QGraphicsSceneContextMenuEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneContextMenuEventCast returns e as a *QGraphicsSceneContextMenuEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneContextMenuEventCast(e qtcore.QEventLike) *QGraphicsSceneContextMenuEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneContextMenuEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneContextMenuEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneContextMenuEvent](rt.WrapClassFrom(p, "QGraphicsSceneContextMenuEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pos wraps QGraphicsSceneContextMenuEvent::pos.
 //
 //	C++: QPointF QGraphicsSceneContextMenuEvent::pos() const

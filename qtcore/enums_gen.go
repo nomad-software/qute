@@ -1897,6 +1897,31 @@ const (
 	ReturnByValue ReturnByValueConstant = 0
 )
 
+// QAbstractAnimationDirection wraps the enum QAbstractAnimation::Direction.
+type QAbstractAnimationDirection int64
+
+const (
+	QAbstractAnimationForward  QAbstractAnimationDirection = 0
+	QAbstractAnimationBackward QAbstractAnimationDirection = 1
+)
+
+// QAbstractAnimationState wraps the enum QAbstractAnimation::State.
+type QAbstractAnimationState int64
+
+const (
+	QAbstractAnimationStopped QAbstractAnimationState = 0
+	QAbstractAnimationPaused  QAbstractAnimationState = 1
+	QAbstractAnimationRunning QAbstractAnimationState = 2
+)
+
+// QAbstractAnimationDeletionPolicy wraps the enum QAbstractAnimation::DeletionPolicy.
+type QAbstractAnimationDeletionPolicy int64
+
+const (
+	QAbstractAnimationKeepWhenStopped   QAbstractAnimationDeletionPolicy = 0
+	QAbstractAnimationDeleteWhenStopped QAbstractAnimationDeletionPolicy = 1
+)
+
 // QAbstractItemModelLayoutChangeHint wraps the enum QAbstractItemModel::LayoutChangeHint.
 type QAbstractItemModelLayoutChangeHint int64
 
@@ -1940,6 +1965,114 @@ const (
 	QCalendarSystemIslamicCivil QCalendarSystem = 11
 	QCalendarSystemLast         QCalendarSystem = 11
 	QCalendarSystemUser         QCalendarSystem = -1
+)
+
+// QCborErrorCode wraps the enum QCborError::Code.
+type QCborErrorCode int64
+
+const (
+	QCborErrorUnknownError      QCborErrorCode = 1
+	QCborErrorAdvancePastEnd    QCborErrorCode = 3
+	QCborErrorInputOutputError  QCborErrorCode = 4
+	QCborErrorGarbageAtEnd      QCborErrorCode = 256
+	QCborErrorEndOfFile         QCborErrorCode = 257
+	QCborErrorUnexpectedBreak   QCborErrorCode = 258
+	QCborErrorUnknownType       QCborErrorCode = 259
+	QCborErrorIllegalType       QCborErrorCode = 260
+	QCborErrorIllegalNumber     QCborErrorCode = 261
+	QCborErrorIllegalSimpleType QCborErrorCode = 262
+	QCborErrorInvalidUtf8String QCborErrorCode = 516
+	QCborErrorDataTooLarge      QCborErrorCode = 1024
+	QCborErrorNestingTooDeep    QCborErrorCode = 1025
+	QCborErrorUnsupportedType   QCborErrorCode = 1026
+	QCborErrorNoError           QCborErrorCode = 0
+)
+
+// QCborStreamReaderType wraps the enum QCborStreamReader::Type.
+type QCborStreamReaderType int64
+
+const (
+	QCborStreamReaderUnsignedInteger QCborStreamReaderType = 0
+	QCborStreamReaderNegativeInteger QCborStreamReaderType = 32
+	QCborStreamReaderByteString      QCborStreamReaderType = 64
+	QCborStreamReaderByteArray       QCborStreamReaderType = 64
+	QCborStreamReaderTextString      QCborStreamReaderType = 96
+	QCborStreamReaderString          QCborStreamReaderType = 96
+	QCborStreamReaderArray           QCborStreamReaderType = -128
+	QCborStreamReaderMap             QCborStreamReaderType = -96
+	QCborStreamReaderTag             QCborStreamReaderType = -64
+	QCborStreamReaderSimpleType      QCborStreamReaderType = -32
+	QCborStreamReaderHalfFloat       QCborStreamReaderType = -7
+	QCborStreamReaderFloat16         QCborStreamReaderType = -7
+	QCborStreamReaderFloat           QCborStreamReaderType = -6
+	QCborStreamReaderDouble          QCborStreamReaderType = -5
+	QCborStreamReaderInvalid         QCborStreamReaderType = -1
+)
+
+// QCborStreamReaderStringResultCode wraps the enum QCborStreamReader::StringResultCode.
+type QCborStreamReaderStringResultCode int64
+
+const (
+	QCborStreamReaderEndOfString QCborStreamReaderStringResultCode = 0
+	QCborStreamReaderOk          QCborStreamReaderStringResultCode = 1
+	QCborStreamReaderError       QCborStreamReaderStringResultCode = -1
+)
+
+// QCborValueEncodingOptions is the flags type for QCborValue::EncodingOption (QFlags<QCborValue::EncodingOption>).
+type QCborValueEncodingOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QCborValueEncodingOptions) Has(x QCborValueEncodingOptions) bool { return f&x == x }
+
+// QCborValueEncodingOption wraps the enum QCborValue::EncodingOption. It is the same type as QCborValueEncodingOptions, so values combine with |.
+type QCborValueEncodingOption = QCborValueEncodingOptions
+
+const (
+	QCborValueSortKeysInMaps   QCborValueEncodingOptions = 1
+	QCborValueUseFloat         QCborValueEncodingOptions = 2
+	QCborValueUseFloat16       QCborValueEncodingOptions = 6
+	QCborValueUseIntegers      QCborValueEncodingOptions = 8
+	QCborValueNoTransformation QCborValueEncodingOptions = 0
+)
+
+// QCborValueDiagnosticNotationOptions is the flags type for QCborValue::DiagnosticNotationOption (QFlags<QCborValue::DiagnosticNotationOption>).
+type QCborValueDiagnosticNotationOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QCborValueDiagnosticNotationOptions) Has(x QCborValueDiagnosticNotationOptions) bool {
+	return f&x == x
+}
+
+// QCborValueDiagnosticNotationOption wraps the enum QCborValue::DiagnosticNotationOption. It is the same type as QCborValueDiagnosticNotationOptions, so values combine with |.
+type QCborValueDiagnosticNotationOption = QCborValueDiagnosticNotationOptions
+
+const (
+	QCborValueCompact        QCborValueDiagnosticNotationOptions = 0
+	QCborValueLineWrapped    QCborValueDiagnosticNotationOptions = 1
+	QCborValueExtendedFormat QCborValueDiagnosticNotationOptions = 2
+)
+
+// QCborValueType wraps the enum QCborValue::Type.
+type QCborValueType int64
+
+const (
+	QCborValueInteger           QCborValueType = 0
+	QCborValueByteArray         QCborValueType = 64
+	QCborValueString            QCborValueType = 96
+	QCborValueArray             QCborValueType = 128
+	QCborValueMap               QCborValueType = 160
+	QCborValueTag               QCborValueType = 192
+	QCborValueSimpleType        QCborValueType = 256
+	QCborValueFalse             QCborValueType = 276
+	QCborValueTrue              QCborValueType = 277
+	QCborValueNull              QCborValueType = 278
+	QCborValueUndefined         QCborValueType = 279
+	QCborValueDouble            QCborValueType = 514
+	QCborValueDateTime          QCborValueType = 65536
+	QCborValueUrl               QCborValueType = 65568
+	QCborValueRegularExpression QCborValueType = 65571
+	QCborValueUuid              QCborValueType = 65573
+	QCborValueInvalid           QCborValueType = -1
 )
 
 // QCharSpecialCharacter wraps the enum QChar::SpecialCharacter.
@@ -2307,6 +2440,45 @@ const (
 	QCharUnicode_17_0       QCharUnicodeVersion = 28
 )
 
+// QCommandLineOptionFlags is the flags type for QCommandLineOption::Flag (QFlags<QCommandLineOption::Flag>).
+type QCommandLineOptionFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QCommandLineOptionFlags) Has(x QCommandLineOptionFlags) bool { return f&x == x }
+
+// QCommandLineOptionFlag wraps the enum QCommandLineOption::Flag. It is the same type as QCommandLineOptionFlags, so values combine with |.
+type QCommandLineOptionFlag = QCommandLineOptionFlags
+
+const (
+	QCommandLineOptionHiddenFromHelp     QCommandLineOptionFlags = 1
+	QCommandLineOptionShortOptionStyle   QCommandLineOptionFlags = 2
+	QCommandLineOptionIgnoreOptionsAfter QCommandLineOptionFlags = 4
+)
+
+// QCommandLineParserSingleDashWordOptionMode wraps the enum QCommandLineParser::SingleDashWordOptionMode.
+type QCommandLineParserSingleDashWordOptionMode int64
+
+const (
+	QCommandLineParserParseAsCompactedShortOptions QCommandLineParserSingleDashWordOptionMode = 0
+	QCommandLineParserParseAsLongOptions           QCommandLineParserSingleDashWordOptionMode = 1
+)
+
+// QCommandLineParserOptionsAfterPositionalArgumentsMode wraps the enum QCommandLineParser::OptionsAfterPositionalArgumentsMode.
+type QCommandLineParserOptionsAfterPositionalArgumentsMode int64
+
+const (
+	QCommandLineParserParseAsOptions             QCommandLineParserOptionsAfterPositionalArgumentsMode = 0
+	QCommandLineParserParseAsPositionalArguments QCommandLineParserOptionsAfterPositionalArgumentsMode = 1
+)
+
+// QCommandLineParserMessageType wraps the enum QCommandLineParser::MessageType.
+type QCommandLineParserMessageType int64
+
+const (
+	QCommandLineParserMessageTypeInformation QCommandLineParserMessageType = 0
+	QCommandLineParserMessageTypeError       QCommandLineParserMessageType = 1
+)
+
 // Constants from an unnamed enum in QCoreApplication.
 const (
 	QCoreApplicationApplicationFlags = 396288
@@ -2473,6 +2645,21 @@ const (
 	QDirLocaleAware QDirSortFlags = 64
 	QDirType        QDirSortFlags = 128
 	QDirNoSort      QDirSortFlags = -1
+)
+
+// QDirIteratorIteratorFlags is the flags type for QDirIterator::IteratorFlag (QFlags<QDirIterator::IteratorFlag>).
+type QDirIteratorIteratorFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QDirIteratorIteratorFlags) Has(x QDirIteratorIteratorFlags) bool { return f&x == x }
+
+// QDirIteratorIteratorFlag wraps the enum QDirIterator::IteratorFlag. It is the same type as QDirIteratorIteratorFlags, so values combine with |.
+type QDirIteratorIteratorFlag = QDirIteratorIteratorFlags
+
+const (
+	QDirIteratorNoIteratorFlags QDirIteratorIteratorFlags = 0
+	QDirIteratorFollowSymlinks  QDirIteratorIteratorFlags = 1
+	QDirIteratorSubdirectories  QDirIteratorIteratorFlags = 2
 )
 
 // QEasingCurveType wraps the enum QEasingCurve::Type.
@@ -2873,6 +3060,27 @@ const (
 	QJsonDocumentCompact  QJsonDocumentJsonFormat = 1
 )
 
+// QJsonParseErrorParseError wraps the enum QJsonParseError::ParseError.
+type QJsonParseErrorParseError int64
+
+const (
+	QJsonParseErrorNoError               QJsonParseErrorParseError = 0
+	QJsonParseErrorUnterminatedObject    QJsonParseErrorParseError = 1
+	QJsonParseErrorMissingNameSeparator  QJsonParseErrorParseError = 2
+	QJsonParseErrorUnterminatedArray     QJsonParseErrorParseError = 3
+	QJsonParseErrorMissingValueSeparator QJsonParseErrorParseError = 4
+	QJsonParseErrorIllegalValue          QJsonParseErrorParseError = 5
+	QJsonParseErrorTerminationByNumber   QJsonParseErrorParseError = 6
+	QJsonParseErrorIllegalNumber         QJsonParseErrorParseError = 7
+	QJsonParseErrorIllegalEscapeSequence QJsonParseErrorParseError = 8
+	QJsonParseErrorIllegalUTF8String     QJsonParseErrorParseError = 9
+	QJsonParseErrorUnterminatedString    QJsonParseErrorParseError = 10
+	QJsonParseErrorMissingObject         QJsonParseErrorParseError = 11
+	QJsonParseErrorDeepNesting           QJsonParseErrorParseError = 12
+	QJsonParseErrorDocumentTooLarge      QJsonParseErrorParseError = 13
+	QJsonParseErrorGarbageAtEnd          QJsonParseErrorParseError = 14
+)
+
 // QJsonValueType wraps the enum QJsonValue::Type.
 type QJsonValueType int64
 
@@ -2884,6 +3092,27 @@ const (
 	QJsonValueArray     QJsonValueType = 4
 	QJsonValueObject    QJsonValueType = 5
 	QJsonValueUndefined QJsonValueType = 128
+)
+
+// QLibraryInfoLibraryPath wraps the enum QLibraryInfo::LibraryPath.
+type QLibraryInfoLibraryPath int64
+
+const (
+	QLibraryInfoPrefixPath             QLibraryInfoLibraryPath = 0
+	QLibraryInfoDocumentationPath      QLibraryInfoLibraryPath = 1
+	QLibraryInfoHeadersPath            QLibraryInfoLibraryPath = 2
+	QLibraryInfoLibrariesPath          QLibraryInfoLibraryPath = 3
+	QLibraryInfoLibraryExecutablesPath QLibraryInfoLibraryPath = 4
+	QLibraryInfoBinariesPath           QLibraryInfoLibraryPath = 5
+	QLibraryInfoPluginsPath            QLibraryInfoLibraryPath = 6
+	QLibraryInfoQmlImportsPath         QLibraryInfoLibraryPath = 7
+	QLibraryInfoQml2ImportsPath        QLibraryInfoLibraryPath = 7
+	QLibraryInfoArchDataPath           QLibraryInfoLibraryPath = 8
+	QLibraryInfoDataPath               QLibraryInfoLibraryPath = 9
+	QLibraryInfoTranslationsPath       QLibraryInfoLibraryPath = 10
+	QLibraryInfoExamplesPath           QLibraryInfoLibraryPath = 11
+	QLibraryInfoTestsPath              QLibraryInfoLibraryPath = 12
+	QLibraryInfoSettingsPath           QLibraryInfoLibraryPath = 100
 )
 
 // QLineFIntersectionType wraps the enum QLineF::IntersectionType.
@@ -3828,6 +4057,61 @@ const (
 	QLocaleAlternateQuotation QLocaleQuotationStyle = 1
 )
 
+// QLockFileLockError wraps the enum QLockFile::LockError.
+type QLockFileLockError int64
+
+const (
+	QLockFileNoError         QLockFileLockError = 0
+	QLockFileLockFailedError QLockFileLockError = 1
+	QLockFilePermissionError QLockFileLockError = 2
+	QLockFileUnknownError    QLockFileLockError = 3
+)
+
+// QMetaMethodAccess wraps the enum QMetaMethod::Access.
+type QMetaMethodAccess int64
+
+const (
+	QMetaMethodPrivate   QMetaMethodAccess = 0
+	QMetaMethodProtected QMetaMethodAccess = 1
+	QMetaMethodPublic    QMetaMethodAccess = 2
+)
+
+// QMetaMethodMethodType wraps the enum QMetaMethod::MethodType.
+type QMetaMethodMethodType int64
+
+const (
+	QMetaMethodMethod      QMetaMethodMethodType = 0
+	QMetaMethodSignal      QMetaMethodMethodType = 1
+	QMetaMethodSlot        QMetaMethodMethodType = 2
+	QMetaMethodConstructor QMetaMethodMethodType = 3
+)
+
+// QMetaMethodAttributes wraps the enum QMetaMethod::Attributes.
+type QMetaMethodAttributes int64
+
+const (
+	QMetaMethodCompatibility QMetaMethodAttributes = 1
+	QMetaMethodCloned        QMetaMethodAttributes = 2
+	QMetaMethodScriptable    QMetaMethodAttributes = 4
+)
+
+// QMetaObjectCall wraps the enum QMetaObject::Call.
+type QMetaObjectCall int64
+
+const (
+	QMetaObjectInvokeMetaMethod               QMetaObjectCall = 0
+	QMetaObjectReadProperty                   QMetaObjectCall = 1
+	QMetaObjectWriteProperty                  QMetaObjectCall = 2
+	QMetaObjectResetProperty                  QMetaObjectCall = 3
+	QMetaObjectCreateInstance                 QMetaObjectCall = 4
+	QMetaObjectIndexOfMethod                  QMetaObjectCall = 5
+	QMetaObjectRegisterPropertyMetaType       QMetaObjectCall = 6
+	QMetaObjectRegisterMethodArgumentMetaType QMetaObjectCall = 7
+	QMetaObjectBindableProperty               QMetaObjectCall = 8
+	QMetaObjectCustomCall                     QMetaObjectCall = 9
+	QMetaObjectConstructInPlace               QMetaObjectCall = 10
+)
+
 // QMetaTypeType wraps the enum QMetaType::Type.
 type QMetaTypeType int64
 
@@ -3954,6 +4238,128 @@ const (
 	QMetaTypeNeedsMoveConstruction    QMetaTypeTypeFlags = 32768
 )
 
+// QMimeDatabaseMatchMode wraps the enum QMimeDatabase::MatchMode.
+type QMimeDatabaseMatchMode int64
+
+const (
+	QMimeDatabaseMatchDefault   QMimeDatabaseMatchMode = 0
+	QMimeDatabaseMatchExtension QMimeDatabaseMatchMode = 1
+	QMimeDatabaseMatchContent   QMimeDatabaseMatchMode = 2
+)
+
+// QOperatingSystemVersionOSType wraps the enum QOperatingSystemVersion::OSType.
+type QOperatingSystemVersionOSType int64
+
+const (
+	QOperatingSystemVersionUnknown   QOperatingSystemVersionOSType = 0
+	QOperatingSystemVersionWindows   QOperatingSystemVersionOSType = 1
+	QOperatingSystemVersionMacOS     QOperatingSystemVersionOSType = 2
+	QOperatingSystemVersionIOS       QOperatingSystemVersionOSType = 3
+	QOperatingSystemVersionTvOS      QOperatingSystemVersionOSType = 4
+	QOperatingSystemVersionWatchOS   QOperatingSystemVersionOSType = 5
+	QOperatingSystemVersionAndroid   QOperatingSystemVersionOSType = 6
+	QOperatingSystemVersionVisionOS  QOperatingSystemVersionOSType = 7
+	QOperatingSystemVersionHarmonyOS QOperatingSystemVersionOSType = 8
+)
+
+// QOperatingSystemVersionBaseOSType wraps the enum QOperatingSystemVersionBase::OSType.
+type QOperatingSystemVersionBaseOSType int64
+
+const (
+	QOperatingSystemVersionBaseUnknown   QOperatingSystemVersionBaseOSType = 0
+	QOperatingSystemVersionBaseWindows   QOperatingSystemVersionBaseOSType = 1
+	QOperatingSystemVersionBaseMacOS     QOperatingSystemVersionBaseOSType = 2
+	QOperatingSystemVersionBaseIOS       QOperatingSystemVersionBaseOSType = 3
+	QOperatingSystemVersionBaseTvOS      QOperatingSystemVersionBaseOSType = 4
+	QOperatingSystemVersionBaseWatchOS   QOperatingSystemVersionBaseOSType = 5
+	QOperatingSystemVersionBaseAndroid   QOperatingSystemVersionBaseOSType = 6
+	QOperatingSystemVersionBaseVisionOS  QOperatingSystemVersionBaseOSType = 7
+	QOperatingSystemVersionBaseHarmonyOS QOperatingSystemVersionBaseOSType = 8
+)
+
+// QProcessProcessError wraps the enum QProcess::ProcessError.
+type QProcessProcessError int64
+
+const (
+	QProcessFailedToStart QProcessProcessError = 0
+	QProcessCrashed       QProcessProcessError = 1
+	QProcessTimedout      QProcessProcessError = 2
+	QProcessReadError     QProcessProcessError = 3
+	QProcessWriteError    QProcessProcessError = 4
+	QProcessUnknownError  QProcessProcessError = 5
+)
+
+// QProcessProcessState wraps the enum QProcess::ProcessState.
+type QProcessProcessState int64
+
+const (
+	QProcessNotRunning QProcessProcessState = 0
+	QProcessStarting   QProcessProcessState = 1
+	QProcessRunning    QProcessProcessState = 2
+)
+
+// QProcessProcessChannel wraps the enum QProcess::ProcessChannel.
+type QProcessProcessChannel int64
+
+const (
+	QProcessStandardOutput QProcessProcessChannel = 0
+	QProcessStandardError  QProcessProcessChannel = 1
+)
+
+// QProcessProcessChannelMode wraps the enum QProcess::ProcessChannelMode.
+type QProcessProcessChannelMode int64
+
+const (
+	QProcessSeparateChannels       QProcessProcessChannelMode = 0
+	QProcessMergedChannels         QProcessProcessChannelMode = 1
+	QProcessForwardedChannels      QProcessProcessChannelMode = 2
+	QProcessForwardedOutputChannel QProcessProcessChannelMode = 3
+	QProcessForwardedErrorChannel  QProcessProcessChannelMode = 4
+)
+
+// QProcessInputChannelMode wraps the enum QProcess::InputChannelMode.
+type QProcessInputChannelMode int64
+
+const (
+	QProcessManagedInputChannel   QProcessInputChannelMode = 0
+	QProcessForwardedInputChannel QProcessInputChannelMode = 1
+)
+
+// QProcessExitStatus wraps the enum QProcess::ExitStatus.
+type QProcessExitStatus int64
+
+const (
+	QProcessNormalExit QProcessExitStatus = 0
+	QProcessCrashExit  QProcessExitStatus = 1
+)
+
+// QProcessUnixProcessFlags is the flags type for QProcess::UnixProcessFlag (QFlags<QProcess::UnixProcessFlag>).
+type QProcessUnixProcessFlags int64
+
+// Has reports whether every bit of x is set in f.
+func (f QProcessUnixProcessFlags) Has(x QProcessUnixProcessFlags) bool { return f&x == x }
+
+// QProcessUnixProcessFlag wraps the enum QProcess::UnixProcessFlag. It is the same type as QProcessUnixProcessFlags, so values combine with |.
+type QProcessUnixProcessFlag = QProcessUnixProcessFlags
+
+const (
+	QProcessUnixProcessFlagResetSignalHandlers           QProcessUnixProcessFlags = 1
+	QProcessUnixProcessFlagIgnoreSigPipe                 QProcessUnixProcessFlags = 2
+	QProcessUnixProcessFlagCloseFileDescriptors          QProcessUnixProcessFlags = 16
+	QProcessUnixProcessFlagUseVFork                      QProcessUnixProcessFlags = 32
+	QProcessUnixProcessFlagCreateNewSession              QProcessUnixProcessFlags = 64
+	QProcessUnixProcessFlagDisconnectControllingTerminal QProcessUnixProcessFlags = 128
+	QProcessUnixProcessFlagResetIds                      QProcessUnixProcessFlags = 256
+	QProcessUnixProcessFlagDisableCoreDumps              QProcessUnixProcessFlags = 512
+)
+
+// QProcessEnvironmentInitialization wraps the enum QProcessEnvironment::Initialization.
+type QProcessEnvironmentInitialization int64
+
+const (
+	QProcessEnvironmentInheritFromParent QProcessEnvironmentInitialization = 0
+)
+
 // QRegularExpressionPatternOptions is the flags type for QRegularExpression::PatternOption (QFlags<QRegularExpression::PatternOption>).
 type QRegularExpressionPatternOptions int64
 
@@ -4018,6 +4424,15 @@ const (
 	QRegularExpressionNonPathWildcardConversion    QRegularExpressionWildcardConversionOptions = 2
 )
 
+// QResourceCompression wraps the enum QResource::Compression.
+type QResourceCompression int64
+
+const (
+	QResourceNoCompression   QResourceCompression = 0
+	QResourceZlibCompression QResourceCompression = 1
+	QResourceZstdCompression QResourceCompression = 2
+)
+
 // QSettingsStatus wraps the enum QSettings::Status.
 type QSettingsStatus int64
 
@@ -4060,6 +4475,15 @@ const (
 	QSettingsSystemScope QSettingsScope = 1
 )
 
+// QSocketNotifierType wraps the enum QSocketNotifier::Type.
+type QSocketNotifierType int64
+
+const (
+	QSocketNotifierRead      QSocketNotifierType = 0
+	QSocketNotifierWrite     QSocketNotifierType = 1
+	QSocketNotifierException QSocketNotifierType = 2
+)
+
 // QSortFilterProxyModelDirections is the flags type for QSortFilterProxyModel::Direction (QFlags<QSortFilterProxyModel::Direction>).
 type QSortFilterProxyModelDirections int64
 
@@ -4093,6 +4517,49 @@ const (
 	QSortFilterProxyModelDataChangeRelevanceFlagRelevantForFilteringAndSorting QSortFilterProxyModelDataChangeRelevanceFlags = 3
 )
 
+// QStandardPathsStandardLocation wraps the enum QStandardPaths::StandardLocation.
+type QStandardPathsStandardLocation int64
+
+const (
+	QStandardPathsDesktopLocation       QStandardPathsStandardLocation = 0
+	QStandardPathsDocumentsLocation     QStandardPathsStandardLocation = 1
+	QStandardPathsFontsLocation         QStandardPathsStandardLocation = 2
+	QStandardPathsApplicationsLocation  QStandardPathsStandardLocation = 3
+	QStandardPathsMusicLocation         QStandardPathsStandardLocation = 4
+	QStandardPathsMoviesLocation        QStandardPathsStandardLocation = 5
+	QStandardPathsPicturesLocation      QStandardPathsStandardLocation = 6
+	QStandardPathsTempLocation          QStandardPathsStandardLocation = 7
+	QStandardPathsHomeLocation          QStandardPathsStandardLocation = 8
+	QStandardPathsAppLocalDataLocation  QStandardPathsStandardLocation = 9
+	QStandardPathsCacheLocation         QStandardPathsStandardLocation = 10
+	QStandardPathsGenericDataLocation   QStandardPathsStandardLocation = 11
+	QStandardPathsRuntimeLocation       QStandardPathsStandardLocation = 12
+	QStandardPathsConfigLocation        QStandardPathsStandardLocation = 13
+	QStandardPathsDownloadLocation      QStandardPathsStandardLocation = 14
+	QStandardPathsGenericCacheLocation  QStandardPathsStandardLocation = 15
+	QStandardPathsGenericConfigLocation QStandardPathsStandardLocation = 16
+	QStandardPathsAppDataLocation       QStandardPathsStandardLocation = 17
+	QStandardPathsAppConfigLocation     QStandardPathsStandardLocation = 18
+	QStandardPathsPublicShareLocation   QStandardPathsStandardLocation = 19
+	QStandardPathsTemplatesLocation     QStandardPathsStandardLocation = 20
+	QStandardPathsStateLocation         QStandardPathsStandardLocation = 21
+	QStandardPathsGenericStateLocation  QStandardPathsStandardLocation = 22
+)
+
+// QStandardPathsLocateOptions is the flags type for QStandardPaths::LocateOption (QFlags<QStandardPaths::LocateOption>).
+type QStandardPathsLocateOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QStandardPathsLocateOptions) Has(x QStandardPathsLocateOptions) bool { return f&x == x }
+
+// QStandardPathsLocateOption wraps the enum QStandardPaths::LocateOption. It is the same type as QStandardPathsLocateOptions, so values combine with |.
+type QStandardPathsLocateOption = QStandardPathsLocateOptions
+
+const (
+	QStandardPathsLocateFile      QStandardPathsLocateOptions = 0
+	QStandardPathsLocateDirectory QStandardPathsLocateOptions = 1
+)
+
 // QSysInfoSizes wraps the enum QSysInfo::Sizes.
 type QSysInfoSizes int64
 
@@ -4107,6 +4574,23 @@ const (
 	QSysInfoBigEndian    QSysInfoEndian = 0
 	QSysInfoLittleEndian QSysInfoEndian = 1
 	QSysInfoByteOrder    QSysInfoEndian = 1
+)
+
+// QTimeLineState wraps the enum QTimeLine::State.
+type QTimeLineState int64
+
+const (
+	QTimeLineNotRunning QTimeLineState = 0
+	QTimeLinePaused     QTimeLineState = 1
+	QTimeLineRunning    QTimeLineState = 2
+)
+
+// QTimeLineDirection wraps the enum QTimeLine::Direction.
+type QTimeLineDirection int64
+
+const (
+	QTimeLineForward  QTimeLineDirection = 0
+	QTimeLineBackward QTimeLineDirection = 1
 )
 
 // QTimeZoneInitialization wraps the enum QTimeZone::Initialization.
@@ -4244,4 +4728,52 @@ const (
 	QUuidWithBraces    QUuidStringFormat = 0
 	QUuidWithoutBraces QUuidStringFormat = 1
 	QUuidId128         QUuidStringFormat = 3
+)
+
+// QXmlStreamReaderTokenType wraps the enum QXmlStreamReader::TokenType.
+type QXmlStreamReaderTokenType int64
+
+const (
+	QXmlStreamReaderNoToken               QXmlStreamReaderTokenType = 0
+	QXmlStreamReaderInvalid               QXmlStreamReaderTokenType = 1
+	QXmlStreamReaderStartDocument         QXmlStreamReaderTokenType = 2
+	QXmlStreamReaderEndDocument           QXmlStreamReaderTokenType = 3
+	QXmlStreamReaderStartElement          QXmlStreamReaderTokenType = 4
+	QXmlStreamReaderEndElement            QXmlStreamReaderTokenType = 5
+	QXmlStreamReaderCharacters            QXmlStreamReaderTokenType = 6
+	QXmlStreamReaderComment               QXmlStreamReaderTokenType = 7
+	QXmlStreamReaderDTD                   QXmlStreamReaderTokenType = 8
+	QXmlStreamReaderEntityReference       QXmlStreamReaderTokenType = 9
+	QXmlStreamReaderProcessingInstruction QXmlStreamReaderTokenType = 10
+)
+
+// QXmlStreamReaderReadElementTextBehaviour wraps the enum QXmlStreamReader::ReadElementTextBehaviour.
+type QXmlStreamReaderReadElementTextBehaviour int64
+
+const (
+	QXmlStreamReaderErrorOnUnexpectedElement QXmlStreamReaderReadElementTextBehaviour = 0
+	QXmlStreamReaderIncludeChildElements     QXmlStreamReaderReadElementTextBehaviour = 1
+	QXmlStreamReaderSkipChildElements        QXmlStreamReaderReadElementTextBehaviour = 2
+)
+
+// QXmlStreamReaderError wraps the enum QXmlStreamReader::Error.
+type QXmlStreamReaderError int64
+
+const (
+	QXmlStreamReaderNoError                     QXmlStreamReaderError = 0
+	QXmlStreamReaderUnexpectedElementError      QXmlStreamReaderError = 1
+	QXmlStreamReaderCustomError                 QXmlStreamReaderError = 2
+	QXmlStreamReaderNotWellFormedError          QXmlStreamReaderError = 3
+	QXmlStreamReaderPrematureEndOfDocumentError QXmlStreamReaderError = 4
+)
+
+// QXmlStreamWriterError wraps the enum QXmlStreamWriter::Error.
+type QXmlStreamWriterError int64
+
+const (
+	QXmlStreamWriterErrorNone             QXmlStreamWriterError = 0
+	QXmlStreamWriterErrorIO               QXmlStreamWriterError = 1
+	QXmlStreamWriterErrorEncoding         QXmlStreamWriterError = 2
+	QXmlStreamWriterErrorInvalidCharacter QXmlStreamWriterError = 3
+	QXmlStreamWriterErrorCustom           QXmlStreamWriterError = 4
 )

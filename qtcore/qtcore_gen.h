@@ -10,6 +10,44 @@ extern "C" {
 
 const char *qute_qtcore_check_layout(void);
 
+// QAbstractAnimation
+void * qute_QAbstractAnimation_new_shim(void * a0);
+void qute_QAbstractAnimation_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAbstractAnimation_super_1(void *self, void * a0);
+void qute_QAbstractAnimation_super_3(void *self, int64_t a0, int64_t a1);
+void qute_QAbstractAnimation_super_4(void *self, int64_t a0);
+bool qute_QAbstractAnimation_super_5(void *self, void * a0, void * a1);
+void qute_QAbstractAnimation_super_6(void *self, void * a0);
+void qute_QAbstractAnimation_super_7(void *self, void * a0);
+void qute_QAbstractAnimation_super_8(void *self, void * a0);
+void * qute_QAbstractAnimation_cast(void *obj);
+int64_t qute_QAbstractAnimation_state(void *self);
+void * qute_QAbstractAnimation_group(void *self);
+int64_t qute_QAbstractAnimation_direction(void *self);
+void qute_QAbstractAnimation_setDirection(void *self, int64_t a0);
+int qute_QAbstractAnimation_currentTime(void *self);
+int qute_QAbstractAnimation_currentLoopTime(void *self);
+int qute_QAbstractAnimation_loopCount(void *self);
+void qute_QAbstractAnimation_setLoopCount(void *self, int a0);
+int qute_QAbstractAnimation_currentLoop(void *self);
+int qute_QAbstractAnimation_duration(void *self);
+int qute_QAbstractAnimation_totalDuration(void *self);
+void qute_QAbstractAnimation_start(void *self);
+void qute_QAbstractAnimation_pause(void *self);
+void qute_QAbstractAnimation_resume(void *self);
+void qute_QAbstractAnimation_setPaused(void *self, bool a0);
+void qute_QAbstractAnimation_stop(void *self);
+void qute_QAbstractAnimation_setCurrentTime(void *self, int a0);
+void qute_QAbstractAnimation_finished_1(void *self);
+void qute_QAbstractAnimation_stateChanged_1(void *self, int64_t a0, int64_t a1);
+void qute_QAbstractAnimation_currentLoopChanged_1(void *self, int a0);
+void qute_QAbstractAnimation_directionChanged_1(void *self, int64_t a0);
+void qute_QAbstractAnimation_start_1(void *self, int64_t a0);
+void * qute_QAbstractAnimation_finished(void *self, uintptr_t id);
+void * qute_QAbstractAnimation_stateChanged(void *self, uintptr_t id);
+void * qute_QAbstractAnimation_currentLoopChanged(void *self, uintptr_t id);
+void * qute_QAbstractAnimation_directionChanged(void *self, uintptr_t id);
+
 // QAbstractItemModel
 void * qute_QAbstractItemModel_new_shim(void * a0);
 void qute_QAbstractItemModel_shim_init(void *self, uintptr_t id, const uint64_t *mask);
@@ -355,6 +393,26 @@ void qute_QAbstractTableModel_prot_changePersistentIndexList(void *self, const v
 qute_list qute_QAbstractTableModel_prot_persistentIndexList(void *self);
 void * qute_QAbstractTableModel_cast(void *obj);
 
+// QAnimationGroup
+void * qute_QAnimationGroup_new_shim(void * a0);
+void qute_QAnimationGroup_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QAnimationGroup_super_0(void *self, void * a0);
+void qute_QAnimationGroup_super_3(void *self, int64_t a0, int64_t a1);
+void qute_QAnimationGroup_super_4(void *self, int64_t a0);
+bool qute_QAnimationGroup_super_5(void *self, void * a0, void * a1);
+void qute_QAnimationGroup_super_6(void *self, void * a0);
+void qute_QAnimationGroup_super_7(void *self, void * a0);
+void qute_QAnimationGroup_super_8(void *self, void * a0);
+void * qute_QAnimationGroup_cast(void *obj);
+void * qute_QAnimationGroup_animationAt(void *self, int a0);
+int qute_QAnimationGroup_animationCount(void *self);
+int qute_QAnimationGroup_indexOfAnimation(void *self, void * a0);
+void qute_QAnimationGroup_addAnimation(void *self, void * a0);
+void qute_QAnimationGroup_insertAnimation(void *self, int a0, void * a1);
+void qute_QAnimationGroup_removeAnimation(void *self, void * a0);
+void * qute_QAnimationGroup_takeAnimation(void *self, int a0);
+void qute_QAnimationGroup_clear(void *self);
+
 // QBasicTimer
 void * qute_QBasicTimer_new(void);
 void qute_QBasicTimer_delete(void *self);
@@ -481,14 +539,399 @@ void qute_QCalendarYearMonthDay_set_month(void *self, int a0);
 int qute_QCalendarYearMonthDay_get_day(void *self);
 void qute_QCalendarYearMonthDay_set_day(void *self, int a0);
 
+// QCborArray
+void * qute_QCborArray_new(void);
+void qute_QCborArray_delete(void *self);
+void * qute_QCborArray_toCborValue(void *self);
+long long qute_QCborArray_size(void *self);
+bool qute_QCborArray_isEmpty(void *self);
+void qute_QCborArray_clear(void *self);
+void * qute_QCborArray_at(void *self, long long a0);
+void qute_QCborArray_insert(void *self, long long a0, void * a1);
+void qute_QCborArray_prepend(void *self, void * a0);
+void qute_QCborArray_append(void *self, void * a0);
+void qute_QCborArray_removeAt(void *self, long long a0);
+void * qute_QCborArray_takeAt(void *self, long long a0);
+void qute_QCborArray_removeFirst(void *self);
+void qute_QCborArray_removeLast(void *self);
+void * qute_QCborArray_takeFirst(void *self);
+void * qute_QCborArray_takeLast(void *self);
+bool qute_QCborArray_contains(void *self, void * a0);
+int qute_QCborArray_compare(void *self, void * a0);
+void qute_QCborArray_push_back(void *self, void * a0);
+void qute_QCborArray_push_front(void *self, void * a0);
+void qute_QCborArray_pop_front(void *self);
+void qute_QCborArray_pop_back(void *self);
+bool qute_QCborArray_empty(void *self);
+qute_list qute_QCborArray_toVariantList(void *self);
+void * qute_QCborArray_toJsonArray(void *self);
+void * qute_QCborArray_fromStringList(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+void * qute_QCborArray_fromVariantList(const void *a0, ptrdiff_t a0_n);
+void * qute_QCborArray_fromJsonArray(void * a0);
+
+// QCborError
+void * qute_QCborError_new(void);
+void qute_QCborError_delete(void *self);
+qute_str qute_QCborError_toString(void *self);
+int64_t qute_QCborError_get_c(void *self);
+void qute_QCborError_set_c(void *self, int64_t a0);
+
+// QCborMap
+void * qute_QCborMap_new(void);
+void qute_QCborMap_delete(void *self);
+void * qute_QCborMap_toCborValue(void *self);
+long long qute_QCborMap_size(void *self);
+bool qute_QCborMap_isEmpty(void *self);
+void qute_QCborMap_clear(void *self);
+qute_list qute_QCborMap_keys(void *self);
+void * qute_QCborMap_value(void *self, long long a0);
+void * qute_QCborMap_value_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QCborMap_value_2(void *self, void * a0);
+void * qute_QCborMap_take(void *self, long long a0);
+void * qute_QCborMap_take_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QCborMap_take_2(void *self, void * a0);
+void qute_QCborMap_remove(void *self, long long a0);
+void qute_QCborMap_remove_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCborMap_remove_2(void *self, void * a0);
+bool qute_QCborMap_contains(void *self, long long a0);
+bool qute_QCborMap_contains_1(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QCborMap_contains_2(void *self, void * a0);
+int qute_QCborMap_compare(void *self, void * a0);
+bool qute_QCborMap_empty(void *self);
+qute_map qute_QCborMap_toVariantMap(void *self);
+qute_map qute_QCborMap_toVariantHash(void *self);
+void * qute_QCborMap_toJsonObject(void *self);
+void * qute_QCborMap_fromVariantMap(const void *a0, const void *a0_v, ptrdiff_t a0_n);
+void * qute_QCborMap_fromVariantHash(const void *a0, const void *a0_v, ptrdiff_t a0_n);
+void * qute_QCborMap_fromJsonObject(void * a0);
+
+// QCborParserError
+void * qute_QCborParserError_new(void);
+void qute_QCborParserError_delete(void *self);
+qute_str qute_QCborParserError_errorString(void *self);
+long long qute_QCborParserError_get_offset(void *self);
+void qute_QCborParserError_set_offset(void *self, long long a0);
+void * qute_QCborParserError_get_error(void *self);
+void qute_QCborParserError_set_error(void *self, void * a0);
+
+// QCborStreamReader
+void * qute_QCborStreamReader_new(void);
+void * qute_QCborStreamReader_new_1(const char *a0, ptrdiff_t a0_len);
+void * qute_QCborStreamReader_new_2(void * a0);
+void qute_QCborStreamReader_delete(void *self);
+void qute_QCborStreamReader_setDevice(void *self, void * a0);
+void * qute_QCborStreamReader_device(void *self);
+void qute_QCborStreamReader_addData(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCborStreamReader_reparse(void *self);
+void qute_QCborStreamReader_clear(void *self);
+void qute_QCborStreamReader_reset(void *self);
+void * qute_QCborStreamReader_lastError(void *self);
+long long qute_QCborStreamReader_currentOffset(void *self);
+bool qute_QCborStreamReader_isValid(void *self);
+int qute_QCborStreamReader_containerDepth(void *self);
+int64_t qute_QCborStreamReader_parentContainerType(void *self);
+bool qute_QCborStreamReader_hasNext(void *self);
+bool qute_QCborStreamReader_next(void *self);
+int64_t qute_QCborStreamReader_type(void *self);
+bool qute_QCborStreamReader_isUnsignedInteger(void *self);
+bool qute_QCborStreamReader_isNegativeInteger(void *self);
+bool qute_QCborStreamReader_isInteger(void *self);
+bool qute_QCborStreamReader_isByteArray(void *self);
+bool qute_QCborStreamReader_isString(void *self);
+bool qute_QCborStreamReader_isArray(void *self);
+bool qute_QCborStreamReader_isMap(void *self);
+bool qute_QCborStreamReader_isTag(void *self);
+bool qute_QCborStreamReader_isSimpleType(void *self);
+bool qute_QCborStreamReader_isFloat16(void *self);
+bool qute_QCborStreamReader_isFloat(void *self);
+bool qute_QCborStreamReader_isDouble(void *self);
+bool qute_QCborStreamReader_isInvalid(void *self);
+bool qute_QCborStreamReader_isFalse(void *self);
+bool qute_QCborStreamReader_isTrue(void *self);
+bool qute_QCborStreamReader_isBool(void *self);
+bool qute_QCborStreamReader_isNull(void *self);
+bool qute_QCborStreamReader_isUndefined(void *self);
+bool qute_QCborStreamReader_isLengthKnown(void *self);
+unsigned long long qute_QCborStreamReader_length(void *self);
+bool qute_QCborStreamReader_isContainer(void *self);
+bool qute_QCborStreamReader_enterContainer(void *self);
+bool qute_QCborStreamReader_leaveContainer(void *self);
+bool qute_QCborStreamReader_readAndAppendToString(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out);
+bool qute_QCborStreamReader_readAndAppendToUtf8String(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out);
+bool qute_QCborStreamReader_readAndAppendToByteArray(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out);
+long long qute_QCborStreamReader_currentStringChunkSize(void *self);
+bool qute_QCborStreamReader_toBool(void *self);
+unsigned long long qute_QCborStreamReader_toUnsignedInteger(void *self);
+float qute_QCborStreamReader_toFloat(void *self);
+double qute_QCborStreamReader_toDouble(void *self);
+long long qute_QCborStreamReader_toInteger(void *self);
+qute_str qute_QCborStreamReader_readAllString(void *self);
+qute_str qute_QCborStreamReader_readAllUtf8String(void *self);
+qute_str qute_QCborStreamReader_readAllByteArray(void *self);
+bool qute_QCborStreamReader_next_1(void *self, int a0);
+
+// QCborStreamWriter
+void * qute_QCborStreamWriter_new(void * a0);
+void qute_QCborStreamWriter_delete(void *self);
+void qute_QCborStreamWriter_setDevice(void *self, void * a0);
+void * qute_QCborStreamWriter_device(void *self);
+void qute_QCborStreamWriter_append(void *self, unsigned long long a0);
+void qute_QCborStreamWriter_append_1(void *self, long long a0);
+void qute_QCborStreamWriter_append_2(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCborStreamWriter_append_3(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCborStreamWriter_append_4(void *self, float a0);
+void qute_QCborStreamWriter_append_5(void *self, double a0);
+void qute_QCborStreamWriter_appendByteString(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCborStreamWriter_appendTextString(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCborStreamWriter_append_6(void *self, bool a0);
+void qute_QCborStreamWriter_appendNull(void *self);
+void qute_QCborStreamWriter_appendUndefined(void *self);
+void qute_QCborStreamWriter_append_7(void *self, int a0);
+void qute_QCborStreamWriter_append_8(void *self, unsigned int a0);
+void qute_QCborStreamWriter_startArray(void *self);
+void qute_QCborStreamWriter_startArray_1(void *self, unsigned long long a0);
+bool qute_QCborStreamWriter_endArray(void *self);
+void qute_QCborStreamWriter_startMap(void *self);
+void qute_QCborStreamWriter_startMap_1(void *self, unsigned long long a0);
+bool qute_QCborStreamWriter_endMap(void *self);
+
+// QCborValue
+void * qute_QCborValue_new(void);
+void * qute_QCborValue_new_1(int64_t a0);
+void * qute_QCborValue_new_2(bool a0);
+void * qute_QCborValue_new_3(int a0);
+void * qute_QCborValue_new_4(unsigned int a0);
+void * qute_QCborValue_new_5(long long a0);
+void * qute_QCborValue_new_6(double a0);
+void * qute_QCborValue_new_7(const char *a0, ptrdiff_t a0_len);
+void * qute_QCborValue_new_8(const char *a0, ptrdiff_t a0_len);
+void * qute_QCborValue_new_9(void * a0);
+void * qute_QCborValue_new_10(void * a0);
+void * qute_QCborValue_new_11(void * a0);
+void * qute_QCborValue_new_12(void * a0);
+void * qute_QCborValue_new_13(void * a0);
+void * qute_QCborValue_new_14(void * a0);
+void qute_QCborValue_delete(void *self);
+int64_t qute_QCborValue_type(void *self);
+bool qute_QCborValue_isInteger(void *self);
+bool qute_QCborValue_isByteArray(void *self);
+bool qute_QCborValue_isString(void *self);
+bool qute_QCborValue_isArray(void *self);
+bool qute_QCborValue_isMap(void *self);
+bool qute_QCborValue_isTag(void *self);
+bool qute_QCborValue_isFalse(void *self);
+bool qute_QCborValue_isTrue(void *self);
+bool qute_QCborValue_isBool(void *self);
+bool qute_QCborValue_isNull(void *self);
+bool qute_QCborValue_isUndefined(void *self);
+bool qute_QCborValue_isDouble(void *self);
+bool qute_QCborValue_isDateTime(void *self);
+bool qute_QCborValue_isUrl(void *self);
+bool qute_QCborValue_isRegularExpression(void *self);
+bool qute_QCborValue_isUuid(void *self);
+bool qute_QCborValue_isInvalid(void *self);
+bool qute_QCborValue_isContainer(void *self);
+bool qute_QCborValue_isSimpleType(void *self);
+long long qute_QCborValue_toInteger(void *self);
+bool qute_QCborValue_toBool(void *self);
+double qute_QCborValue_toDouble(void *self);
+void * qute_QCborValue_taggedValue(void *self);
+qute_str qute_QCborValue_toByteArray(void *self);
+qute_str qute_QCborValue_toString(void *self);
+qute_str qute_QCborValue_toStringView(void *self);
+void * qute_QCborValue_toDateTime(void *self);
+void * qute_QCborValue_toUrl(void *self);
+void * qute_QCborValue_toRegularExpression(void *self);
+void * qute_QCborValue_toUuid(void *self);
+void * qute_QCborValue_toArray(void *self);
+void * qute_QCborValue_toArray_1(void *self, void * a0);
+void * qute_QCborValue_toMap(void *self);
+void * qute_QCborValue_toMap_1(void *self, void * a0);
+int qute_QCborValue_compare(void *self, void * a0);
+void * qute_QCborValue_toVariant(void *self);
+void * qute_QCborValue_toJsonValue(void *self);
+qute_str qute_QCborValue_toCbor(void *self);
+void qute_QCborValue_toCbor_1(void *self, void * a0);
+qute_str qute_QCborValue_toDiagnosticNotation(void *self);
+long long qute_QCborValue_toInteger_1(void *self, long long a0);
+bool qute_QCborValue_toBool_1(void *self, bool a0);
+double qute_QCborValue_toDouble_1(void *self, double a0);
+void * qute_QCborValue_taggedValue_1(void *self, void * a0);
+qute_str qute_QCborValue_toByteArray_1(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QCborValue_toString_1(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QCborValue_toStringView_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QCborValue_toDateTime_1(void *self, void * a0);
+void * qute_QCborValue_toUrl_1(void *self, void * a0);
+void * qute_QCborValue_toRegularExpression_1(void *self, void * a0);
+void * qute_QCborValue_toUuid_1(void *self, void * a0);
+qute_str qute_QCborValue_toCbor_2(void *self, int64_t a0);
+void qute_QCborValue_toCbor_3(void *self, void * a0, int64_t a1);
+qute_str qute_QCborValue_toDiagnosticNotation_1(void *self, int64_t a0);
+void * qute_QCborValue_fromVariant(void * a0);
+void * qute_QCborValue_fromJsonValue(void * a0);
+void * qute_QCborValue_fromCbor(void * a0);
+void * qute_QCborValue_fromCbor_1(const char *a0, ptrdiff_t a0_len);
+void * qute_QCborValue_fromCbor_2(const char *a0, ptrdiff_t a0_len, void * a1);
+
 // QChar
 
 // QChildEvent
 void qute_QChildEvent_delete(void *self);
+void * qute_QChildEvent_cast(void *obj);
 void * qute_QChildEvent_child(void *self);
 bool qute_QChildEvent_added(void *self);
 bool qute_QChildEvent_polished(void *self);
 bool qute_QChildEvent_removed(void *self);
+
+// QChronoTimer
+void * qute_QChronoTimer_new(void * a0);
+void * qute_QChronoTimer_new_1(int64_t a0, void * a1);
+void * qute_QChronoTimer_new_shim(void * a0);
+void qute_QChronoTimer_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+void qute_QChronoTimer_super_0(void *self, void * a0);
+bool qute_QChronoTimer_super_1(void *self, void * a0);
+bool qute_QChronoTimer_super_2(void *self, void * a0, void * a1);
+void qute_QChronoTimer_super_3(void *self, void * a0);
+void qute_QChronoTimer_super_4(void *self, void * a0);
+void * qute_QChronoTimer_cast(void *obj);
+bool qute_QChronoTimer_isActive(void *self);
+int64_t qute_QChronoTimer_id(void *self);
+void qute_QChronoTimer_setInterval(void *self, int64_t a0);
+int64_t qute_QChronoTimer_interval(void *self);
+int64_t qute_QChronoTimer_remainingTime(void *self);
+void qute_QChronoTimer_setTimerType(void *self, int64_t a0);
+int64_t qute_QChronoTimer_timerType(void *self);
+void qute_QChronoTimer_setSingleShot(void *self, bool a0);
+bool qute_QChronoTimer_isSingleShot(void *self);
+void qute_QChronoTimer_start(void *self);
+void qute_QChronoTimer_stop(void *self);
+void * qute_QChronoTimer_timeout(void *self, uintptr_t id);
+
+// QCommandLineOption
+void * qute_QCommandLineOption_new(const char *a0, ptrdiff_t a0_len);
+void * qute_QCommandLineOption_new_1(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+void * qute_QCommandLineOption_new_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void * qute_QCommandLineOption_new_3(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, const char *a1, ptrdiff_t a1_len);
+void * qute_QCommandLineOption_new_4(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len);
+void * qute_QCommandLineOption_new_5(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len);
+void qute_QCommandLineOption_delete(void *self);
+qute_list qute_QCommandLineOption_names(void *self);
+void qute_QCommandLineOption_setValueName(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QCommandLineOption_valueName(void *self);
+void qute_QCommandLineOption_setDescription(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QCommandLineOption_description(void *self);
+void qute_QCommandLineOption_setDefaultValue(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QCommandLineOption_setDefaultValues(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+qute_list qute_QCommandLineOption_defaultValues(void *self);
+int64_t qute_QCommandLineOption_flags(void *self);
+void qute_QCommandLineOption_setFlags(void *self, int64_t a0);
+
+// QCommandLineParser
+void * qute_QCommandLineParser_new(void);
+void qute_QCommandLineParser_delete(void *self);
+void qute_QCommandLineParser_setSingleDashWordOptionMode(void *self, int64_t a0);
+void qute_QCommandLineParser_setOptionsAfterPositionalArgumentsMode(void *self, int64_t a0);
+bool qute_QCommandLineParser_addOption(void *self, void * a0);
+bool qute_QCommandLineParser_addOptions(void *self, const void *a0, ptrdiff_t a0_n);
+void * qute_QCommandLineParser_addVersionOption(void *self);
+void * qute_QCommandLineParser_addHelpOption(void *self);
+void qute_QCommandLineParser_setApplicationDescription(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QCommandLineParser_applicationDescription(void *self);
+void qute_QCommandLineParser_addPositionalArgument(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QCommandLineParser_clearPositionalArguments(void *self);
+void qute_QCommandLineParser_process(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+void qute_QCommandLineParser_process_1(void *self, void * a0);
+bool qute_QCommandLineParser_parse(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+qute_str qute_QCommandLineParser_errorText(void *self);
+bool qute_QCommandLineParser_isSet(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QCommandLineParser_value(void *self, const char *a0, ptrdiff_t a0_len);
+qute_list qute_QCommandLineParser_values(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QCommandLineParser_isSet_1(void *self, void * a0);
+qute_str qute_QCommandLineParser_value_1(void *self, void * a0);
+qute_list qute_QCommandLineParser_values_1(void *self, void * a0);
+qute_list qute_QCommandLineParser_positionalArguments(void *self);
+qute_list qute_QCommandLineParser_optionNames(void *self);
+qute_list qute_QCommandLineParser_unknownOptionNames(void *self);
+void qute_QCommandLineParser_showVersion(void *self);
+void qute_QCommandLineParser_showHelp(void *self);
+qute_str qute_QCommandLineParser_helpText(void *self);
+void qute_QCommandLineParser_addPositionalArgument_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len);
+void qute_QCommandLineParser_showHelp_1(void *self, int a0);
+void qute_QCommandLineParser_showMessageAndExit(int64_t a0, const char *a1, ptrdiff_t a1_len);
+void qute_QCommandLineParser_showMessageAndExit_1(int64_t a0, const char *a1, ptrdiff_t a1_len, int a2);
+
+// QConcatenateTablesProxyModel
+void * qute_QConcatenateTablesProxyModel_new(void * a0);
+void * qute_QConcatenateTablesProxyModel_new_shim(void * a0);
+void qute_QConcatenateTablesProxyModel_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+void * qute_QConcatenateTablesProxyModel_super_0(void *self, void * a0, int a1);
+bool qute_QConcatenateTablesProxyModel_super_1(void *self, void * a0, void * a1, int a2);
+qute_map qute_QConcatenateTablesProxyModel_super_2(void *self, void * a0);
+bool qute_QConcatenateTablesProxyModel_super_3(void *self, void * a0, const void *a1, const void *a1_v, ptrdiff_t a1_n);
+int64_t qute_QConcatenateTablesProxyModel_super_4(void *self, void * a0);
+void * qute_QConcatenateTablesProxyModel_super_5(void *self, int a0, int a1, void * a2);
+void * qute_QConcatenateTablesProxyModel_super_6(void *self, void * a0);
+int qute_QConcatenateTablesProxyModel_super_7(void *self, void * a0);
+void * qute_QConcatenateTablesProxyModel_super_8(void *self, int a0, int64_t a1, int a2);
+int qute_QConcatenateTablesProxyModel_super_9(void *self, void * a0);
+qute_list qute_QConcatenateTablesProxyModel_super_10(void *self);
+void * qute_QConcatenateTablesProxyModel_super_11(void *self, const void *a0, ptrdiff_t a0_n);
+bool qute_QConcatenateTablesProxyModel_super_12(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+bool qute_QConcatenateTablesProxyModel_super_13(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+qute_size qute_QConcatenateTablesProxyModel_super_14(void *self, void * a0);
+qute_map qute_QConcatenateTablesProxyModel_super_15(void *self);
+void * qute_QConcatenateTablesProxyModel_super_16(void *self, int a0, int a1, void * a2);
+bool qute_QConcatenateTablesProxyModel_super_17(void *self, void * a0);
+bool qute_QConcatenateTablesProxyModel_super_18(void *self, int a0, int64_t a1, void * a2, int a3);
+bool qute_QConcatenateTablesProxyModel_super_19(void *self, void * a0);
+int64_t qute_QConcatenateTablesProxyModel_super_20(void *self);
+int64_t qute_QConcatenateTablesProxyModel_super_21(void *self);
+bool qute_QConcatenateTablesProxyModel_super_22(void *self, int a0, int a1, void * a2);
+bool qute_QConcatenateTablesProxyModel_super_23(void *self, int a0, int a1, void * a2);
+bool qute_QConcatenateTablesProxyModel_super_24(void *self, int a0, int a1, void * a2);
+bool qute_QConcatenateTablesProxyModel_super_25(void *self, int a0, int a1, void * a2);
+bool qute_QConcatenateTablesProxyModel_super_26(void *self, void * a0, int a1, int a2, void * a3, int a4);
+bool qute_QConcatenateTablesProxyModel_super_27(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QConcatenateTablesProxyModel_super_28(void *self, void * a0);
+bool qute_QConcatenateTablesProxyModel_super_29(void *self, void * a0);
+void qute_QConcatenateTablesProxyModel_super_30(void *self, int a0, int64_t a1);
+void * qute_QConcatenateTablesProxyModel_super_31(void *self, void * a0);
+qute_list qute_QConcatenateTablesProxyModel_super_32(void *self, void * a0, int a1, void * a2, int a3, int64_t a4);
+bool qute_QConcatenateTablesProxyModel_super_33(void *self);
+void qute_QConcatenateTablesProxyModel_super_34(void *self);
+void qute_QConcatenateTablesProxyModel_super_35(void *self);
+bool qute_QConcatenateTablesProxyModel_super_36(void *self, void * a0);
+bool qute_QConcatenateTablesProxyModel_super_37(void *self, void * a0, void * a1);
+void qute_QConcatenateTablesProxyModel_super_38(void *self, void * a0);
+void qute_QConcatenateTablesProxyModel_super_39(void *self, void * a0);
+void qute_QConcatenateTablesProxyModel_super_40(void *self, void * a0);
+void * qute_QConcatenateTablesProxyModel_prot_createIndex(void *self, int a0, int a1);
+void * qute_QConcatenateTablesProxyModel_prot_createIndex_1(void *self, int a0, int a1, unsigned long long a2);
+void qute_QConcatenateTablesProxyModel_prot_encodeData(void *self, const void *a0, ptrdiff_t a0_n, void * a1);
+bool qute_QConcatenateTablesProxyModel_prot_decodeData(void *self, int a0, int a1, void * a2, void * a3);
+void qute_QConcatenateTablesProxyModel_prot_beginInsertRows(void *self, void * a0, int a1, int a2);
+void qute_QConcatenateTablesProxyModel_prot_endInsertRows(void *self);
+void qute_QConcatenateTablesProxyModel_prot_beginRemoveRows(void *self, void * a0, int a1, int a2);
+void qute_QConcatenateTablesProxyModel_prot_endRemoveRows(void *self);
+bool qute_QConcatenateTablesProxyModel_prot_beginMoveRows(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QConcatenateTablesProxyModel_prot_endMoveRows(void *self);
+void qute_QConcatenateTablesProxyModel_prot_beginInsertColumns(void *self, void * a0, int a1, int a2);
+void qute_QConcatenateTablesProxyModel_prot_endInsertColumns(void *self);
+void qute_QConcatenateTablesProxyModel_prot_beginRemoveColumns(void *self, void * a0, int a1, int a2);
+void qute_QConcatenateTablesProxyModel_prot_endRemoveColumns(void *self);
+bool qute_QConcatenateTablesProxyModel_prot_beginMoveColumns(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QConcatenateTablesProxyModel_prot_endMoveColumns(void *self);
+void qute_QConcatenateTablesProxyModel_prot_beginResetModel(void *self);
+void qute_QConcatenateTablesProxyModel_prot_endResetModel(void *self);
+void qute_QConcatenateTablesProxyModel_prot_changePersistentIndex(void *self, void * a0, void * a1);
+void qute_QConcatenateTablesProxyModel_prot_changePersistentIndexList(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n);
+qute_list qute_QConcatenateTablesProxyModel_prot_persistentIndexList(void *self);
+void * qute_QConcatenateTablesProxyModel_cast(void *obj);
+qute_list qute_QConcatenateTablesProxyModel_sourceModels(void *self);
+void qute_QConcatenateTablesProxyModel_addSourceModel(void *self, void * a0);
+void qute_QConcatenateTablesProxyModel_removeSourceModel(void *self, void * a0);
+void * qute_QConcatenateTablesProxyModel_mapFromSource(void *self, void * a0);
+void * qute_QConcatenateTablesProxyModel_mapToSource(void *self, void * a0);
 
 // QCoreApplication
 void * qute_QCoreApplication_cast(void *obj);
@@ -791,6 +1234,29 @@ bool qute_QDir_match(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, c
 bool qute_QDir_match_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
 qute_str qute_QDir_cleanPath(const char *a0, ptrdiff_t a0_len);
 
+// QDirIterator
+void * qute_QDirIterator_new(void * a0);
+void * qute_QDirIterator_new_1(const char *a0, ptrdiff_t a0_len);
+void * qute_QDirIterator_new_2(const char *a0, ptrdiff_t a0_len, int64_t a1);
+void * qute_QDirIterator_new_3(const char *a0, ptrdiff_t a0_len, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n);
+void * qute_QDirIterator_new_4(void * a0, int64_t a1);
+void * qute_QDirIterator_new_5(const char *a0, ptrdiff_t a0_len, int64_t a1);
+void * qute_QDirIterator_new_6(const char *a0, ptrdiff_t a0_len, int64_t a1, int64_t a2);
+void * qute_QDirIterator_new_7(const char *a0, ptrdiff_t a0_len, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n, int64_t a2, int64_t a3);
+void qute_QDirIterator_delete(void *self);
+qute_str qute_QDirIterator_next(void *self);
+void * qute_QDirIterator_nextFileInfo(void *self);
+bool qute_QDirIterator_hasNext(void *self);
+qute_str qute_QDirIterator_fileName(void *self);
+qute_str qute_QDirIterator_filePath(void *self);
+void * qute_QDirIterator_fileInfo(void *self);
+qute_str qute_QDirIterator_path(void *self);
+
+// QDynamicPropertyChangeEvent
+void qute_QDynamicPropertyChangeEvent_delete(void *self);
+void * qute_QDynamicPropertyChangeEvent_cast(void *obj);
+qute_str qute_QDynamicPropertyChangeEvent_propertyName(void *self);
+
 // QEasingCurve
 void * qute_QEasingCurve_new(void);
 void * qute_QEasingCurve_new_1(int64_t a0);
@@ -845,6 +1311,11 @@ void qute_QEventLoop_quit(void *self);
 bool qute_QEventLoop_processEvents_3(void *self, int64_t a0);
 int qute_QEventLoop_exec_1(void *self, int64_t a0);
 void qute_QEventLoop_exit_1(void *self, int a0);
+
+// QEventLoopLocker
+void * qute_QEventLoopLocker_new(void);
+void * qute_QEventLoopLocker_new_1(void * a0);
+void qute_QEventLoopLocker_delete(void *self);
 
 // QFile
 void * qute_QFile_new(void * a0);
@@ -1025,6 +1496,42 @@ void qute_QFileInfo_setCaching(void *self, bool a0);
 void qute_QFileInfo_stat(void *self);
 bool qute_QFileInfo_exists_1(const char *a0, ptrdiff_t a0_len);
 
+// QFileSelector
+void * qute_QFileSelector_new(void * a0);
+void * qute_QFileSelector_new_shim(void * a0);
+void qute_QFileSelector_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QFileSelector_super_0(void *self, void * a0);
+bool qute_QFileSelector_super_1(void *self, void * a0, void * a1);
+void qute_QFileSelector_super_2(void *self, void * a0);
+void qute_QFileSelector_super_3(void *self, void * a0);
+void qute_QFileSelector_super_4(void *self, void * a0);
+void * qute_QFileSelector_cast(void *obj);
+qute_str qute_QFileSelector_select(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QFileSelector_select_1(void *self, void * a0);
+qute_list qute_QFileSelector_extraSelectors(void *self);
+void qute_QFileSelector_setExtraSelectors(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+qute_list qute_QFileSelector_allSelectors(void *self);
+
+// QFileSystemWatcher
+void * qute_QFileSystemWatcher_new(void * a0);
+void * qute_QFileSystemWatcher_new_1(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, void * a1);
+void * qute_QFileSystemWatcher_new_shim(void * a0);
+void qute_QFileSystemWatcher_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QFileSystemWatcher_super_0(void *self, void * a0);
+bool qute_QFileSystemWatcher_super_1(void *self, void * a0, void * a1);
+void qute_QFileSystemWatcher_super_2(void *self, void * a0);
+void qute_QFileSystemWatcher_super_3(void *self, void * a0);
+void qute_QFileSystemWatcher_super_4(void *self, void * a0);
+void * qute_QFileSystemWatcher_cast(void *obj);
+bool qute_QFileSystemWatcher_addPath(void *self, const char *a0, ptrdiff_t a0_len);
+qute_list qute_QFileSystemWatcher_addPaths(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+bool qute_QFileSystemWatcher_removePath(void *self, const char *a0, ptrdiff_t a0_len);
+qute_list qute_QFileSystemWatcher_removePaths(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+qute_list qute_QFileSystemWatcher_files(void *self);
+qute_list qute_QFileSystemWatcher_directories(void *self);
+void * qute_QFileSystemWatcher_fileChanged(void *self, uintptr_t id);
+void * qute_QFileSystemWatcher_directoryChanged(void *self, uintptr_t id);
+
 // QIODevice
 void * qute_QIODevice_cast(void *obj);
 void * qute_QIODevice_as_QIODeviceBase(void *self);
@@ -1089,6 +1596,84 @@ void * qute_QIODevice_aboutToClose(void *self, uintptr_t id);
 void * qute_QIODevice_readChannelFinished(void *self, uintptr_t id);
 
 // QIODeviceBase
+
+// QIdentityProxyModel
+void * qute_QIdentityProxyModel_new(void * a0);
+void * qute_QIdentityProxyModel_new_shim(void * a0);
+void qute_QIdentityProxyModel_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+int qute_QIdentityProxyModel_super_0(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_1(void *self, int a0, int a1, void * a2);
+void * qute_QIdentityProxyModel_super_2(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_3(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_4(void *self, void * a0);
+int qute_QIdentityProxyModel_super_5(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_6(void *self, int a0, int64_t a1, int a2);
+bool qute_QIdentityProxyModel_super_7(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+void * qute_QIdentityProxyModel_super_8(void *self, int a0, int a1, void * a2);
+void * qute_QIdentityProxyModel_super_9(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_10(void *self, void * a0);
+qute_list qute_QIdentityProxyModel_super_11(void *self, void * a0, int a1, void * a2, int a3, int64_t a4);
+void qute_QIdentityProxyModel_super_12(void *self, void * a0);
+bool qute_QIdentityProxyModel_super_13(void *self, int a0, int a1, void * a2);
+bool qute_QIdentityProxyModel_super_14(void *self, int a0, int a1, void * a2);
+bool qute_QIdentityProxyModel_super_15(void *self, int a0, int a1, void * a2);
+bool qute_QIdentityProxyModel_super_16(void *self, int a0, int a1, void * a2);
+bool qute_QIdentityProxyModel_super_17(void *self, void * a0, int a1, int a2, void * a3, int a4);
+bool qute_QIdentityProxyModel_super_18(void *self, void * a0, int a1, int a2, void * a3, int a4);
+bool qute_QIdentityProxyModel_super_19(void *self);
+void qute_QIdentityProxyModel_super_20(void *self);
+void * qute_QIdentityProxyModel_super_21(void *self, void * a0, int a1);
+qute_map qute_QIdentityProxyModel_super_22(void *self, void * a0);
+int64_t qute_QIdentityProxyModel_super_23(void *self, void * a0);
+bool qute_QIdentityProxyModel_super_24(void *self, void * a0, void * a1, int a2);
+bool qute_QIdentityProxyModel_super_25(void *self, void * a0, const void *a1, const void *a1_v, ptrdiff_t a1_n);
+bool qute_QIdentityProxyModel_super_26(void *self, int a0, int64_t a1, void * a2, int a3);
+bool qute_QIdentityProxyModel_super_27(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_28(void *self, void * a0);
+bool qute_QIdentityProxyModel_super_29(void *self, void * a0);
+void qute_QIdentityProxyModel_super_30(void *self, void * a0);
+void qute_QIdentityProxyModel_super_31(void *self, int a0, int64_t a1);
+qute_size qute_QIdentityProxyModel_super_32(void *self, void * a0);
+bool qute_QIdentityProxyModel_super_33(void *self, void * a0);
+void * qute_QIdentityProxyModel_super_34(void *self, const void *a0, ptrdiff_t a0_n);
+bool qute_QIdentityProxyModel_super_35(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+qute_list qute_QIdentityProxyModel_super_36(void *self);
+int64_t qute_QIdentityProxyModel_super_37(void *self);
+int64_t qute_QIdentityProxyModel_super_38(void *self);
+qute_map qute_QIdentityProxyModel_super_39(void *self);
+void qute_QIdentityProxyModel_super_40(void *self);
+bool qute_QIdentityProxyModel_super_41(void *self, void * a0);
+bool qute_QIdentityProxyModel_super_42(void *self, void * a0, void * a1);
+void qute_QIdentityProxyModel_super_43(void *self, void * a0);
+void qute_QIdentityProxyModel_super_44(void *self, void * a0);
+void qute_QIdentityProxyModel_super_45(void *self, void * a0);
+void qute_QIdentityProxyModel_prot_setHandleSourceLayoutChanges(void *self, bool a0);
+void qute_QIdentityProxyModel_prot_setHandleSourceDataChanges(void *self, bool a0);
+void * qute_QIdentityProxyModel_prot_createSourceIndex(void *self, int a0, int a1, void * a2);
+void * qute_QIdentityProxyModel_prot_createIndex(void *self, int a0, int a1);
+void * qute_QIdentityProxyModel_prot_createIndex_1(void *self, int a0, int a1, unsigned long long a2);
+void qute_QIdentityProxyModel_prot_encodeData(void *self, const void *a0, ptrdiff_t a0_n, void * a1);
+bool qute_QIdentityProxyModel_prot_decodeData(void *self, int a0, int a1, void * a2, void * a3);
+void qute_QIdentityProxyModel_prot_beginInsertRows(void *self, void * a0, int a1, int a2);
+void qute_QIdentityProxyModel_prot_endInsertRows(void *self);
+void qute_QIdentityProxyModel_prot_beginRemoveRows(void *self, void * a0, int a1, int a2);
+void qute_QIdentityProxyModel_prot_endRemoveRows(void *self);
+bool qute_QIdentityProxyModel_prot_beginMoveRows(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QIdentityProxyModel_prot_endMoveRows(void *self);
+void qute_QIdentityProxyModel_prot_beginInsertColumns(void *self, void * a0, int a1, int a2);
+void qute_QIdentityProxyModel_prot_endInsertColumns(void *self);
+void qute_QIdentityProxyModel_prot_beginRemoveColumns(void *self, void * a0, int a1, int a2);
+void qute_QIdentityProxyModel_prot_endRemoveColumns(void *self);
+bool qute_QIdentityProxyModel_prot_beginMoveColumns(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QIdentityProxyModel_prot_endMoveColumns(void *self);
+void qute_QIdentityProxyModel_prot_beginResetModel(void *self);
+void qute_QIdentityProxyModel_prot_endResetModel(void *self);
+void qute_QIdentityProxyModel_prot_changePersistentIndex(void *self, void * a0, void * a1);
+void qute_QIdentityProxyModel_prot_changePersistentIndexList(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n);
+qute_list qute_QIdentityProxyModel_prot_persistentIndexList(void *self);
+void * qute_QIdentityProxyModel_cast(void *obj);
+bool qute_QIdentityProxyModel_handleSourceLayoutChanges(void *self);
+bool qute_QIdentityProxyModel_handleSourceDataChanges(void *self);
 
 // QItemSelection
 void * qute_QItemSelection_new(void * a0, void * a1);
@@ -1223,6 +1808,7 @@ bool qute_QJsonDocument_isNull(void *self);
 qute_str qute_QJsonDocument_toJson_1(void *self, int64_t a0);
 void * qute_QJsonDocument_fromVariant(void * a0);
 void * qute_QJsonDocument_fromJson(const char *a0, ptrdiff_t a0_len);
+void * qute_QJsonDocument_fromJson_1(const char *a0, ptrdiff_t a0_len, void * a1);
 
 // QJsonObject
 void * qute_QJsonObject_new(void);
@@ -1241,6 +1827,15 @@ bool qute_QJsonObject_contains(void *self, const char *a0, ptrdiff_t a0_len);
 bool qute_QJsonObject_empty(void *self);
 void * qute_QJsonObject_fromVariantMap(const void *a0, const void *a0_v, ptrdiff_t a0_n);
 void * qute_QJsonObject_fromVariantHash(const void *a0, const void *a0_v, ptrdiff_t a0_n);
+
+// QJsonParseError
+void * qute_QJsonParseError_new(void);
+void qute_QJsonParseError_delete(void *self);
+qute_str qute_QJsonParseError_errorString(void *self);
+int qute_QJsonParseError_get_offset(void *self);
+void qute_QJsonParseError_set_offset(void *self, int a0);
+int64_t qute_QJsonParseError_get_error(void *self);
+void qute_QJsonParseError_set_error(void *self, int64_t a0);
 
 // QJsonValue
 void * qute_QJsonValue_new(void);
@@ -1282,6 +1877,7 @@ double qute_QJsonValue_toDouble_1(void *self, double a0);
 qute_str qute_QJsonValue_toStringView_1(void *self, const char *a0, ptrdiff_t a0_len);
 void * qute_QJsonValue_fromVariant(void * a0);
 void * qute_QJsonValue_fromJson(const char *a0, ptrdiff_t a0_len);
+void * qute_QJsonValue_fromJson_1(const char *a0, ptrdiff_t a0_len, void * a1);
 
 // QKeyCombination
 void * qute_QKeyCombination_new(void);
@@ -1295,6 +1891,16 @@ int64_t qute_QKeyCombination_keyboardModifiers(void *self);
 int64_t qute_QKeyCombination_key(void *self);
 int qute_QKeyCombination_toCombined(void *self);
 void * qute_QKeyCombination_fromCombined(int a0);
+
+// QLibraryInfo
+void qute_QLibraryInfo_delete(void *self);
+const char * qute_QLibraryInfo_build(void);
+bool qute_QLibraryInfo_isDebugBuild(void);
+bool qute_QLibraryInfo_isSharedBuild(void);
+void * qute_QLibraryInfo_version(void);
+qute_str qute_QLibraryInfo_path(int64_t a0);
+qute_list qute_QLibraryInfo_paths(int64_t a0);
+qute_list qute_QLibraryInfo_platformPluginArguments(const char *a0, ptrdiff_t a0_len);
 
 // QLine
 void * qute_QLine_new(void);
@@ -1501,6 +2107,164 @@ qute_list qute_QLocale_matchingLocales(int64_t a0, int64_t a1, int64_t a2);
 qute_str qute_QLocale_languageToCode_1(int64_t a0, int64_t a1);
 int64_t qute_QLocale_codeToLanguage_1(const char *a0, ptrdiff_t a0_len, int64_t a1);
 
+// QLockFile
+void * qute_QLockFile_new(const char *a0, ptrdiff_t a0_len);
+void qute_QLockFile_delete(void *self);
+qute_str qute_QLockFile_fileName(void *self);
+bool qute_QLockFile_lock(void *self);
+bool qute_QLockFile_tryLock(void *self, int a0);
+void qute_QLockFile_unlock(void *self);
+void qute_QLockFile_setStaleLockTime(void *self, int a0);
+int qute_QLockFile_staleLockTime(void *self);
+bool qute_QLockFile_tryLock_1(void *self);
+void qute_QLockFile_setStaleLockTime_1(void *self, int64_t a0);
+int64_t qute_QLockFile_staleLockTimeAsDuration(void *self);
+bool qute_QLockFile_isLocked(void *self);
+bool qute_QLockFile_getLockInfo(void *self, long long *a0_out, qute_str *a1_out, qute_str *a2_out);
+bool qute_QLockFile_removeStaleLockFile(void *self);
+int64_t qute_QLockFile_error(void *self);
+bool qute_QLockFile_tryLock_2(void *self, int64_t a0);
+
+// QLoggingCategory
+void * qute_QLoggingCategory_new(const char * a0);
+void qute_QLoggingCategory_delete(void *self);
+bool qute_QLoggingCategory_isDebugEnabled(void *self);
+bool qute_QLoggingCategory_isInfoEnabled(void *self);
+bool qute_QLoggingCategory_isWarningEnabled(void *self);
+bool qute_QLoggingCategory_isCriticalEnabled(void *self);
+const char * qute_QLoggingCategory_categoryName(void *self);
+void * qute_QLoggingCategory_defaultCategory(void);
+void qute_QLoggingCategory_setFilterRules(const char *a0, ptrdiff_t a0_len);
+
+// QMetaClassInfo
+void * qute_QMetaClassInfo_new(void);
+void qute_QMetaClassInfo_delete(void *self);
+const char * qute_QMetaClassInfo_name(void *self);
+const char * qute_QMetaClassInfo_value(void *self);
+void * qute_QMetaClassInfo_enclosingMetaObject(void *self);
+
+// QMetaEnum
+void * qute_QMetaEnum_new(void);
+void qute_QMetaEnum_delete(void *self);
+const char * qute_QMetaEnum_name(void *self);
+const char * qute_QMetaEnum_enumName(void *self);
+void * qute_QMetaEnum_metaType(void *self);
+bool qute_QMetaEnum_isFlag(void *self);
+bool qute_QMetaEnum_isScoped(void *self);
+bool qute_QMetaEnum_is64Bit(void *self);
+int qute_QMetaEnum_keyCount(void *self);
+const char * qute_QMetaEnum_key(void *self, int a0);
+int qute_QMetaEnum_value(void *self, int a0);
+const char * qute_QMetaEnum_scope(void *self);
+int qute_QMetaEnum_keyToValue(void *self, const char * a0);
+int qute_QMetaEnum_keysToValue(void *self, const char * a0);
+const char * qute_QMetaEnum_valueToKey(void *self, unsigned long long a0);
+qute_str qute_QMetaEnum_valueToKeys(void *self, unsigned long long a0);
+void * qute_QMetaEnum_enclosingMetaObject(void *self);
+bool qute_QMetaEnum_isValid(void *self);
+
+// QMetaMethod
+void * qute_QMetaMethod_new(void);
+void qute_QMetaMethod_delete(void *self);
+qute_str qute_QMetaMethod_methodSignature(void *self);
+qute_str qute_QMetaMethod_name(void *self);
+qute_str qute_QMetaMethod_nameView(void *self);
+const char * qute_QMetaMethod_typeName(void *self);
+int qute_QMetaMethod_returnType(void *self);
+void * qute_QMetaMethod_returnMetaType(void *self);
+int qute_QMetaMethod_parameterCount(void *self);
+int qute_QMetaMethod_parameterType(void *self, int a0);
+void * qute_QMetaMethod_parameterMetaType(void *self, int a0);
+qute_list qute_QMetaMethod_parameterTypes(void *self);
+qute_str qute_QMetaMethod_parameterTypeName(void *self, int a0);
+qute_list qute_QMetaMethod_parameterNames(void *self);
+const char * qute_QMetaMethod_tag(void *self);
+int64_t qute_QMetaMethod_access(void *self);
+int64_t qute_QMetaMethod_methodType(void *self);
+int qute_QMetaMethod_attributes(void *self);
+int qute_QMetaMethod_methodIndex(void *self);
+int qute_QMetaMethod_relativeMethodIndex(void *self);
+int qute_QMetaMethod_revision(void *self);
+bool qute_QMetaMethod_isConst(void *self);
+void * qute_QMetaMethod_enclosingMetaObject(void *self);
+bool qute_QMetaMethod_isValid(void *self);
+
+// QMetaObject
+void qute_QMetaObject_delete(void *self);
+const char * qute_QMetaObject_className(void *self);
+void * qute_QMetaObject_superClass(void *self);
+bool qute_QMetaObject_inherits(void *self, void * a0);
+void * qute_QMetaObject_cast(void *self, void * a0);
+void * qute_QMetaObject_metaType(void *self);
+int qute_QMetaObject_methodOffset(void *self);
+int qute_QMetaObject_enumeratorOffset(void *self);
+int qute_QMetaObject_propertyOffset(void *self);
+int qute_QMetaObject_classInfoOffset(void *self);
+int qute_QMetaObject_constructorCount(void *self);
+int qute_QMetaObject_methodCount(void *self);
+int qute_QMetaObject_enumeratorCount(void *self);
+int qute_QMetaObject_propertyCount(void *self);
+int qute_QMetaObject_classInfoCount(void *self);
+int qute_QMetaObject_indexOfConstructor(void *self, const char * a0);
+int qute_QMetaObject_indexOfMethod(void *self, const char * a0);
+int qute_QMetaObject_indexOfSignal(void *self, const char * a0);
+int qute_QMetaObject_indexOfEnumerator(void *self, const char * a0);
+int qute_QMetaObject_indexOfProperty(void *self, const char * a0);
+int qute_QMetaObject_indexOfClassInfo(void *self, const char * a0);
+void * qute_QMetaObject_constructor(void *self, int a0);
+void * qute_QMetaObject_method(void *self, int a0);
+void * qute_QMetaObject_enumerator(void *self, int a0);
+void * qute_QMetaObject_property(void *self, int a0);
+void * qute_QMetaObject_classInfo(void *self, int a0);
+void * qute_QMetaObject_userProperty(void *self);
+bool qute_QMetaObject_checkConnectArgs(const char * a0, const char * a1);
+bool qute_QMetaObject_checkConnectArgs_1(void * a0, void * a1);
+qute_str qute_QMetaObject_normalizedSignature(const char * a0);
+qute_str qute_QMetaObject_normalizedType(const char * a0);
+bool qute_QMetaObject_disconnectOne(void * a0, int a1, void * a2, int a3);
+void qute_QMetaObject_connectSlotsByName(void * a0);
+
+// QMetaProperty
+void * qute_QMetaProperty_new(void);
+void qute_QMetaProperty_delete(void *self);
+const char * qute_QMetaProperty_name(void *self);
+const char * qute_QMetaProperty_typeName(void *self);
+int qute_QMetaProperty_userType(void *self);
+int qute_QMetaProperty_typeId(void *self);
+void * qute_QMetaProperty_metaType(void *self);
+int qute_QMetaProperty_propertyIndex(void *self);
+int qute_QMetaProperty_relativePropertyIndex(void *self);
+bool qute_QMetaProperty_isReadable(void *self);
+bool qute_QMetaProperty_isWritable(void *self);
+bool qute_QMetaProperty_isResettable(void *self);
+bool qute_QMetaProperty_isDesignable(void *self);
+bool qute_QMetaProperty_isScriptable(void *self);
+bool qute_QMetaProperty_isStored(void *self);
+bool qute_QMetaProperty_isUser(void *self);
+bool qute_QMetaProperty_isConstant(void *self);
+bool qute_QMetaProperty_isFinal(void *self);
+bool qute_QMetaProperty_isVirtual(void *self);
+bool qute_QMetaProperty_isOverride(void *self);
+bool qute_QMetaProperty_isRequired(void *self);
+bool qute_QMetaProperty_isBindable(void *self);
+bool qute_QMetaProperty_isFlagType(void *self);
+bool qute_QMetaProperty_isEnumType(void *self);
+void * qute_QMetaProperty_enumerator(void *self);
+bool qute_QMetaProperty_hasNotifySignal(void *self);
+void * qute_QMetaProperty_notifySignal(void *self);
+int qute_QMetaProperty_notifySignalIndex(void *self);
+int qute_QMetaProperty_revision(void *self);
+void * qute_QMetaProperty_read(void *self, void * a0);
+bool qute_QMetaProperty_write(void *self, void * a0, void * a1);
+bool qute_QMetaProperty_reset(void *self, void * a0);
+void * qute_QMetaProperty_readOnGadget(void *self, void * a0);
+bool qute_QMetaProperty_writeOnGadget(void *self, void * a0, void * a1);
+bool qute_QMetaProperty_resetOnGadget(void *self, void * a0);
+bool qute_QMetaProperty_hasStdCppSet(void *self);
+bool qute_QMetaProperty_isAlias(void *self);
+bool qute_QMetaProperty_isValid(void *self);
+void * qute_QMetaProperty_enclosingMetaObject(void *self);
+
 // QMetaType
 void * qute_QMetaType_new(int a0);
 void * qute_QMetaType_new_1(void);
@@ -1584,6 +2348,41 @@ bool qute_QMimeData_hasFormat(void *self, const char *a0, ptrdiff_t a0_len);
 qute_list qute_QMimeData_formats(void *self);
 void qute_QMimeData_clear(void *self);
 
+// QMimeDatabase
+void * qute_QMimeDatabase_new(void);
+void qute_QMimeDatabase_delete(void *self);
+void * qute_QMimeDatabase_mimeTypeForName(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QMimeDatabase_mimeTypeForFile(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QMimeDatabase_mimeTypeForFile_1(void *self, void * a0);
+qute_list qute_QMimeDatabase_mimeTypesForFileName(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QMimeDatabase_mimeTypeForData(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QMimeDatabase_mimeTypeForData_1(void *self, void * a0);
+void * qute_QMimeDatabase_mimeTypeForUrl(void *self, void * a0);
+void * qute_QMimeDatabase_mimeTypeForFileNameAndData(void *self, const char *a0, ptrdiff_t a0_len, void * a1);
+void * qute_QMimeDatabase_mimeTypeForFileNameAndData_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+qute_str qute_QMimeDatabase_suffixForFileName(void *self, const char *a0, ptrdiff_t a0_len);
+qute_list qute_QMimeDatabase_allMimeTypes(void *self);
+void * qute_QMimeDatabase_mimeTypeForFile_2(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1);
+void * qute_QMimeDatabase_mimeTypeForFile_3(void *self, void * a0, int64_t a1);
+
+// QMimeType
+void * qute_QMimeType_new(void);
+void qute_QMimeType_delete(void *self);
+bool qute_QMimeType_isValid(void *self);
+bool qute_QMimeType_isDefault(void *self);
+qute_str qute_QMimeType_name(void *self);
+qute_str qute_QMimeType_comment(void *self);
+qute_str qute_QMimeType_genericIconName(void *self);
+qute_str qute_QMimeType_iconName(void *self);
+qute_list qute_QMimeType_globPatterns(void *self);
+qute_list qute_QMimeType_parentMimeTypes(void *self);
+qute_list qute_QMimeType_allAncestors(void *self);
+qute_list qute_QMimeType_aliases(void *self);
+qute_list qute_QMimeType_suffixes(void *self);
+qute_str qute_QMimeType_preferredSuffix(void *self);
+bool qute_QMimeType_inherits(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QMimeType_filterString(void *self);
+
 // QModelIndex
 void * qute_QModelIndex_new(void);
 void qute_QModelIndex_delete(void *self);
@@ -1642,8 +2441,82 @@ int qute_QObject_startTimer_3(void *self, int64_t a0, int64_t a1);
 void * qute_QObject_destroyed(void *self, uintptr_t id);
 void * qute_QObject_objectNameChanged(void *self, uintptr_t id);
 
+// QObjectCleanupHandler
+void * qute_QObjectCleanupHandler_new(void);
+void * qute_QObjectCleanupHandler_new_shim(void);
+void qute_QObjectCleanupHandler_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QObjectCleanupHandler_super_0(void *self, void * a0);
+bool qute_QObjectCleanupHandler_super_1(void *self, void * a0, void * a1);
+void qute_QObjectCleanupHandler_super_2(void *self, void * a0);
+void qute_QObjectCleanupHandler_super_3(void *self, void * a0);
+void qute_QObjectCleanupHandler_super_4(void *self, void * a0);
+void * qute_QObjectCleanupHandler_cast(void *obj);
+void * qute_QObjectCleanupHandler_add(void *self, void * a0);
+void qute_QObjectCleanupHandler_remove(void *self, void * a0);
+bool qute_QObjectCleanupHandler_isEmpty(void *self);
+void qute_QObjectCleanupHandler_clear(void *self);
+
+// QOperatingSystemVersion
+void * qute_QOperatingSystemVersion_new(void * a0);
+void * qute_QOperatingSystemVersion_new_1(int64_t a0, int a1);
+void * qute_QOperatingSystemVersion_new_2(int64_t a0, int a1, int a2, int a3);
+void qute_QOperatingSystemVersion_delete(void *self);
+void * qute_QOperatingSystemVersion_current(void);
+int64_t qute_QOperatingSystemVersion_currentType(void);
+
+// QOperatingSystemVersionBase
+void * qute_QOperatingSystemVersionBase_new(int64_t a0, int a1);
+void * qute_QOperatingSystemVersionBase_new_1(int64_t a0, int a1, int a2, int a3);
+void qute_QOperatingSystemVersionBase_delete(void *self);
+void * qute_QOperatingSystemVersionBase_version(void *self);
+int qute_QOperatingSystemVersionBase_majorVersion(void *self);
+int qute_QOperatingSystemVersionBase_minorVersion(void *self);
+int qute_QOperatingSystemVersionBase_microVersion(void *self);
+int qute_QOperatingSystemVersionBase_segmentCount(void *self);
+int64_t qute_QOperatingSystemVersionBase_type(void *self);
+qute_str qute_QOperatingSystemVersionBase_name(void *self);
+void * qute_QOperatingSystemVersionBase_current(void);
+qute_str qute_QOperatingSystemVersionBase_name_1(void * a0);
+int64_t qute_QOperatingSystemVersionBase_currentType(void);
+
+// QOperatingSystemVersionUnexported
+void * qute_QOperatingSystemVersionUnexported_new(void * a0);
+void qute_QOperatingSystemVersionUnexported_delete(void *self);
+
+// QParallelAnimationGroup
+void * qute_QParallelAnimationGroup_new(void * a0);
+void * qute_QParallelAnimationGroup_new_shim(void * a0);
+void qute_QParallelAnimationGroup_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+int qute_QParallelAnimationGroup_super_0(void *self);
+bool qute_QParallelAnimationGroup_super_1(void *self, void * a0);
+void qute_QParallelAnimationGroup_super_2(void *self, int a0);
+void qute_QParallelAnimationGroup_super_3(void *self, int64_t a0, int64_t a1);
+void qute_QParallelAnimationGroup_super_4(void *self, int64_t a0);
+bool qute_QParallelAnimationGroup_super_5(void *self, void * a0, void * a1);
+void qute_QParallelAnimationGroup_super_6(void *self, void * a0);
+void qute_QParallelAnimationGroup_super_7(void *self, void * a0);
+void qute_QParallelAnimationGroup_super_8(void *self, void * a0);
+void * qute_QParallelAnimationGroup_cast(void *obj);
+
 // QPartialOrdering
 void qute_QPartialOrdering_delete(void *self);
+
+// QPauseAnimation
+void * qute_QPauseAnimation_new(void * a0);
+void * qute_QPauseAnimation_new_1(int a0, void * a1);
+void * qute_QPauseAnimation_new_shim(void * a0);
+void qute_QPauseAnimation_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+int qute_QPauseAnimation_super_0(void *self);
+bool qute_QPauseAnimation_super_1(void *self, void * a0);
+void qute_QPauseAnimation_super_2(void *self, int a0);
+void qute_QPauseAnimation_super_3(void *self, int64_t a0, int64_t a1);
+void qute_QPauseAnimation_super_4(void *self, int64_t a0);
+bool qute_QPauseAnimation_super_5(void *self, void * a0, void * a1);
+void qute_QPauseAnimation_super_6(void *self, void * a0);
+void qute_QPauseAnimation_super_7(void *self, void * a0);
+void qute_QPauseAnimation_super_8(void *self, void * a0);
+void * qute_QPauseAnimation_cast(void *obj);
+void qute_QPauseAnimation_setDuration(void *self, int a0);
 
 // QPersistentModelIndex
 void * qute_QPersistentModelIndex_new(void);
@@ -1661,6 +2534,143 @@ int64_t qute_QPersistentModelIndex_flags(void *self);
 void * qute_QPersistentModelIndex_model(void *self);
 bool qute_QPersistentModelIndex_isValid(void *self);
 void * qute_QPersistentModelIndex_data_1(void *self, int a0);
+
+// QProcess
+void * qute_QProcess_new(void * a0);
+void * qute_QProcess_new_shim(void * a0);
+void qute_QProcess_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QProcess_super_0(void *self, int64_t a0);
+bool qute_QProcess_super_1(void *self, int a0);
+bool qute_QProcess_super_2(void *self, int a0);
+long long qute_QProcess_super_3(void *self);
+bool qute_QProcess_super_4(void *self);
+void qute_QProcess_super_5(void *self);
+long long qute_QProcess_super_6(void *self, const char * a0, long long a1);
+long long qute_QProcess_super_7(void *self);
+long long qute_QProcess_super_8(void *self);
+bool qute_QProcess_super_9(void *self, long long a0);
+bool qute_QProcess_super_10(void *self);
+bool qute_QProcess_super_11(void *self);
+long long qute_QProcess_super_12(void *self);
+bool qute_QProcess_super_13(void *self);
+long long qute_QProcess_super_14(void *self, long long a0);
+bool qute_QProcess_super_15(void *self, void * a0);
+bool qute_QProcess_super_16(void *self, void * a0, void * a1);
+void qute_QProcess_super_17(void *self, void * a0);
+void qute_QProcess_super_18(void *self, void * a0);
+void qute_QProcess_super_19(void *self, void * a0);
+void qute_QProcess_prot_setProcessState(void *self, int64_t a0);
+void qute_QProcess_prot_setOpenMode(void *self, int64_t a0);
+void qute_QProcess_prot_setErrorString(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QProcess_cast(void *obj);
+void qute_QProcess_start(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QProcess_start_1(void *self);
+void qute_QProcess_startCommand(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QProcess_startDetached(void *self);
+qute_str qute_QProcess_program(void *self);
+void qute_QProcess_setProgram(void *self, const char *a0, ptrdiff_t a0_len);
+qute_list qute_QProcess_arguments(void *self);
+void qute_QProcess_setArguments(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+int64_t qute_QProcess_processChannelMode(void *self);
+void qute_QProcess_setProcessChannelMode(void *self, int64_t a0);
+int64_t qute_QProcess_inputChannelMode(void *self);
+void qute_QProcess_setInputChannelMode(void *self, int64_t a0);
+int64_t qute_QProcess_readChannel(void *self);
+void qute_QProcess_setReadChannel(void *self, int64_t a0);
+void qute_QProcess_closeReadChannel(void *self, int64_t a0);
+void qute_QProcess_closeWriteChannel(void *self);
+void qute_QProcess_setStandardInputFile(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QProcess_setStandardOutputFile(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QProcess_setStandardErrorFile(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QProcess_setStandardOutputProcess(void *self, void * a0);
+void * qute_QProcess_unixProcessParameters(void *self);
+void qute_QProcess_setUnixProcessParameters(void *self, void * a0);
+void qute_QProcess_setUnixProcessParameters_1(void *self, int64_t a0);
+qute_str qute_QProcess_workingDirectory(void *self);
+void qute_QProcess_setWorkingDirectory(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QProcess_setEnvironment(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+qute_list qute_QProcess_environment(void *self);
+void qute_QProcess_setProcessEnvironment(void *self, void * a0);
+void * qute_QProcess_processEnvironment(void *self);
+int64_t qute_QProcess_error(void *self);
+int64_t qute_QProcess_state(void *self);
+long long qute_QProcess_processId(void *self);
+bool qute_QProcess_waitForStarted(void *self);
+bool qute_QProcess_waitForFinished(void *self);
+qute_str qute_QProcess_readAllStandardOutput(void *self);
+qute_str qute_QProcess_readAllStandardError(void *self);
+int qute_QProcess_exitCode(void *self);
+int64_t qute_QProcess_exitStatus(void *self);
+void qute_QProcess_terminate(void *self);
+void qute_QProcess_kill(void *self);
+void qute_QProcess_finished_1(void *self, int a0);
+void qute_QProcess_errorOccurred_1(void *self, int64_t a0);
+void qute_QProcess_start_2(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n, int64_t a2);
+void qute_QProcess_start_3(void *self, int64_t a0);
+void qute_QProcess_startCommand_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1);
+void qute_QProcess_setStandardOutputFile_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1);
+void qute_QProcess_setStandardErrorFile_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1);
+bool qute_QProcess_waitForStarted_1(void *self, int a0);
+bool qute_QProcess_waitForFinished_1(void *self, int a0);
+int qute_QProcess_execute(const char *a0, ptrdiff_t a0_len);
+bool qute_QProcess_startDetached_1(const char *a0, ptrdiff_t a0_len);
+qute_list qute_QProcess_systemEnvironment(void);
+qute_str qute_QProcess_nullDevice(void);
+qute_list qute_QProcess_splitCommand(const char *a0, ptrdiff_t a0_len);
+int qute_QProcess_execute_1(const char *a0, ptrdiff_t a0_len, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n);
+void * qute_QProcess_started(void *self, uintptr_t id);
+void * qute_QProcess_finished(void *self, uintptr_t id);
+void * qute_QProcess_errorOccurred(void *self, uintptr_t id);
+void * qute_QProcess_stateChanged(void *self, uintptr_t id);
+void * qute_QProcess_readyReadStandardOutput(void *self, uintptr_t id);
+void * qute_QProcess_readyReadStandardError(void *self, uintptr_t id);
+
+// QProcessUnixProcessParameters
+void * qute_QProcessUnixProcessParameters_new(void);
+void qute_QProcessUnixProcessParameters_delete(void *self);
+int64_t qute_QProcessUnixProcessParameters_get_flags(void *self);
+void qute_QProcessUnixProcessParameters_set_flags(void *self, int64_t a0);
+int qute_QProcessUnixProcessParameters_get_lowestFileDescriptorToClose(void *self);
+void qute_QProcessUnixProcessParameters_set_lowestFileDescriptorToClose(void *self, int a0);
+
+// QProcessEnvironment
+void * qute_QProcessEnvironment_new(void);
+void * qute_QProcessEnvironment_new_1(int64_t a0);
+void qute_QProcessEnvironment_delete(void *self);
+bool qute_QProcessEnvironment_isEmpty(void *self);
+bool qute_QProcessEnvironment_inheritsFromParent(void *self);
+void qute_QProcessEnvironment_clear(void *self);
+bool qute_QProcessEnvironment_contains(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QProcessEnvironment_insert(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QProcessEnvironment_remove(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QProcessEnvironment_value(void *self, const char *a0, ptrdiff_t a0_len);
+qute_list qute_QProcessEnvironment_toStringList(void *self);
+qute_list qute_QProcessEnvironment_keys(void *self);
+void qute_QProcessEnvironment_insert_1(void *self, void * a0);
+qute_str qute_QProcessEnvironment_value_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void * qute_QProcessEnvironment_systemEnvironment(void);
+
+// QPropertyAnimation
+void * qute_QPropertyAnimation_new(void * a0);
+void * qute_QPropertyAnimation_new_1(void * a0, const char *a1, ptrdiff_t a1_len, void * a2);
+void * qute_QPropertyAnimation_new_shim(void * a0);
+void qute_QPropertyAnimation_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QPropertyAnimation_super_0(void *self, void * a0);
+void qute_QPropertyAnimation_super_1(void *self, void * a0);
+void qute_QPropertyAnimation_super_2(void *self, int64_t a0, int64_t a1);
+int qute_QPropertyAnimation_super_3(void *self);
+void qute_QPropertyAnimation_super_4(void *self, int a0);
+void * qute_QPropertyAnimation_super_5(void *self, void * a0, void * a1, double a2);
+void qute_QPropertyAnimation_super_6(void *self, int64_t a0);
+bool qute_QPropertyAnimation_super_7(void *self, void * a0, void * a1);
+void qute_QPropertyAnimation_super_8(void *self, void * a0);
+void qute_QPropertyAnimation_super_9(void *self, void * a0);
+void qute_QPropertyAnimation_super_10(void *self, void * a0);
+void * qute_QPropertyAnimation_cast(void *obj);
+void * qute_QPropertyAnimation_targetObject(void *self);
+void qute_QPropertyAnimation_setTargetObject(void *self, void * a0);
+qute_str qute_QPropertyAnimation_propertyName(void *self);
+void qute_QPropertyAnimation_setPropertyName(void *self, const char *a0, ptrdiff_t a0_len);
 
 // QRegularExpression
 void * qute_QRegularExpression_new(void);
@@ -1732,6 +2742,89 @@ void * qute_QRegularExpressionMatchIterator_regularExpression(void *self);
 int64_t qute_QRegularExpressionMatchIterator_matchType(void *self);
 int64_t qute_QRegularExpressionMatchIterator_matchOptions(void *self);
 
+// QResource
+void * qute_QResource_new(void);
+void * qute_QResource_new_1(const char *a0, ptrdiff_t a0_len, void * a1);
+void qute_QResource_delete(void *self);
+void qute_QResource_setFileName(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QResource_fileName(void *self);
+qute_str qute_QResource_absoluteFilePath(void *self);
+void qute_QResource_setLocale(void *self, void * a0);
+void * qute_QResource_locale(void *self);
+bool qute_QResource_isValid(void *self);
+int64_t qute_QResource_compressionAlgorithm(void *self);
+long long qute_QResource_size(void *self);
+void * qute_QResource_data(void *self);
+long long qute_QResource_uncompressedSize(void *self);
+qute_str qute_QResource_uncompressedData(void *self);
+void * qute_QResource_lastModified(void *self);
+bool qute_QResource_registerResource(const char *a0, ptrdiff_t a0_len);
+bool qute_QResource_unregisterResource(const char *a0, ptrdiff_t a0_len);
+bool qute_QResource_registerResource_1(void * a0);
+bool qute_QResource_unregisterResource_1(void * a0);
+bool qute_QResource_registerResource_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+bool qute_QResource_unregisterResource_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+bool qute_QResource_registerResource_3(void * a0, const char *a1, ptrdiff_t a1_len);
+bool qute_QResource_unregisterResource_3(void * a0, const char *a1, ptrdiff_t a1_len);
+
+// QSaveFile
+void * qute_QSaveFile_new(void * a0);
+void * qute_QSaveFile_new_1(const char *a0, ptrdiff_t a0_len, void * a1);
+void * qute_QSaveFile_new_shim(void * a0);
+void qute_QSaveFile_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+qute_str qute_QSaveFile_super_0(void *self);
+bool qute_QSaveFile_super_1(void *self, int64_t a0);
+long long qute_QSaveFile_super_2(void *self, const char * a0, long long a1);
+bool qute_QSaveFile_super_3(void *self);
+long long qute_QSaveFile_super_4(void *self);
+bool qute_QSaveFile_super_5(void *self, long long a0);
+bool qute_QSaveFile_super_6(void *self);
+long long qute_QSaveFile_super_7(void *self);
+bool qute_QSaveFile_super_8(void *self, long long a0);
+int64_t qute_QSaveFile_super_9(void *self);
+bool qute_QSaveFile_super_10(void *self, int64_t a0);
+bool qute_QSaveFile_super_11(void *self);
+long long qute_QSaveFile_super_12(void *self);
+long long qute_QSaveFile_super_13(void *self);
+bool qute_QSaveFile_super_14(void *self);
+bool qute_QSaveFile_super_15(void *self, int a0);
+bool qute_QSaveFile_super_16(void *self, int a0);
+long long qute_QSaveFile_super_17(void *self, long long a0);
+bool qute_QSaveFile_super_18(void *self, void * a0);
+bool qute_QSaveFile_super_19(void *self, void * a0, void * a1);
+void qute_QSaveFile_super_20(void *self, void * a0);
+void qute_QSaveFile_super_21(void *self, void * a0);
+void qute_QSaveFile_super_22(void *self, void * a0);
+void qute_QSaveFile_prot_setOpenMode(void *self, int64_t a0);
+void qute_QSaveFile_prot_setErrorString(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QSaveFile_cast(void *obj);
+void qute_QSaveFile_setFileName(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QSaveFile_commit(void *self);
+void qute_QSaveFile_cancelWriting(void *self);
+void qute_QSaveFile_setDirectWriteFallback(void *self, bool a0);
+bool qute_QSaveFile_directWriteFallback(void *self);
+qute_str qute_QSaveFile_filesystemFileName(void *self);
+
+// QSequentialAnimationGroup
+void * qute_QSequentialAnimationGroup_new(void * a0);
+void * qute_QSequentialAnimationGroup_new_shim(void * a0);
+void qute_QSequentialAnimationGroup_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+int qute_QSequentialAnimationGroup_super_0(void *self);
+bool qute_QSequentialAnimationGroup_super_1(void *self, void * a0);
+void qute_QSequentialAnimationGroup_super_2(void *self, int a0);
+void qute_QSequentialAnimationGroup_super_3(void *self, int64_t a0, int64_t a1);
+void qute_QSequentialAnimationGroup_super_4(void *self, int64_t a0);
+bool qute_QSequentialAnimationGroup_super_5(void *self, void * a0, void * a1);
+void qute_QSequentialAnimationGroup_super_6(void *self, void * a0);
+void qute_QSequentialAnimationGroup_super_7(void *self, void * a0);
+void qute_QSequentialAnimationGroup_super_8(void *self, void * a0);
+void * qute_QSequentialAnimationGroup_cast(void *obj);
+void * qute_QSequentialAnimationGroup_addPause(void *self, int a0);
+void * qute_QSequentialAnimationGroup_insertPause(void *self, int a0, int a1);
+void * qute_QSequentialAnimationGroup_currentAnimation(void *self);
+void qute_QSequentialAnimationGroup_currentAnimationChanged_1(void *self, void * a0);
+void * qute_QSequentialAnimationGroup_currentAnimationChanged(void *self, uintptr_t id);
+
 // QSettings
 void * qute_QSettings_new(void * a0);
 void * qute_QSettings_new_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2);
@@ -1779,6 +2872,57 @@ void qute_QSettings_beginWriteArray_1(void *self, const char *a0, ptrdiff_t a0_l
 void qute_QSettings_setDefaultFormat(int64_t a0);
 int64_t qute_QSettings_defaultFormat(void);
 void qute_QSettings_setPath(int64_t a0, int64_t a1, const char *a2, ptrdiff_t a2_len);
+
+// QSignalMapper
+void * qute_QSignalMapper_new(void * a0);
+void * qute_QSignalMapper_new_shim(void * a0);
+void qute_QSignalMapper_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QSignalMapper_super_0(void *self, void * a0);
+bool qute_QSignalMapper_super_1(void *self, void * a0, void * a1);
+void qute_QSignalMapper_super_2(void *self, void * a0);
+void qute_QSignalMapper_super_3(void *self, void * a0);
+void qute_QSignalMapper_super_4(void *self, void * a0);
+void * qute_QSignalMapper_cast(void *obj);
+void qute_QSignalMapper_setMapping(void *self, void * a0, int a1);
+void qute_QSignalMapper_setMapping_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len);
+void qute_QSignalMapper_setMapping_2(void *self, void * a0, void * a1);
+void qute_QSignalMapper_removeMappings(void *self, void * a0);
+void * qute_QSignalMapper_mapping(void *self, int a0);
+void * qute_QSignalMapper_mapping_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QSignalMapper_mapping_2(void *self, void * a0);
+void qute_QSignalMapper_map(void *self);
+void qute_QSignalMapper_map_1(void *self, void * a0);
+void qute_QSignalMapper_mappedInt_1(void *self, int a0);
+void qute_QSignalMapper_mappedString_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QSignalMapper_mappedObject_1(void *self, void * a0);
+void * qute_QSignalMapper_mappedInt(void *self, uintptr_t id);
+void * qute_QSignalMapper_mappedString(void *self, uintptr_t id);
+void * qute_QSignalMapper_mappedObject(void *self, uintptr_t id);
+
+// QSocketDescriptor
+void * qute_QSocketDescriptor_new(void);
+void * qute_QSocketDescriptor_new_1(int a0);
+void qute_QSocketDescriptor_delete(void *self);
+bool qute_QSocketDescriptor_isValid(void *self);
+
+// QSocketNotifier
+void * qute_QSocketNotifier_new(int64_t a0, void * a1);
+void * qute_QSocketNotifier_new_1(long long a0, int64_t a1, void * a2);
+void * qute_QSocketNotifier_new_shim(int64_t a0, void * a1);
+void qute_QSocketNotifier_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QSocketNotifier_super_0(void *self, void * a0);
+bool qute_QSocketNotifier_super_1(void *self, void * a0, void * a1);
+void qute_QSocketNotifier_super_2(void *self, void * a0);
+void qute_QSocketNotifier_super_3(void *self, void * a0);
+void qute_QSocketNotifier_super_4(void *self, void * a0);
+void * qute_QSocketNotifier_cast(void *obj);
+void qute_QSocketNotifier_setSocket(void *self, long long a0);
+long long qute_QSocketNotifier_socket(void *self);
+int64_t qute_QSocketNotifier_type(void *self);
+bool qute_QSocketNotifier_isValid(void *self);
+bool qute_QSocketNotifier_isEnabled(void *self);
+void qute_QSocketNotifier_setEnabled(void *self, bool a0);
+void * qute_QSocketNotifier_activated(void *self, uintptr_t id);
 
 // QSortFilterProxyModel
 void * qute_QSortFilterProxyModel_new(void * a0);
@@ -1902,6 +3046,43 @@ void * qute_QSortFilterProxyModel_filterRoleChanged(void *self, uintptr_t id);
 void * qute_QSortFilterProxyModel_recursiveFilteringEnabledChanged(void *self, uintptr_t id);
 void * qute_QSortFilterProxyModel_autoAcceptChildRowsChanged(void *self, uintptr_t id);
 
+// QStandardPaths
+qute_str qute_QStandardPaths_writableLocation(int64_t a0);
+qute_list qute_QStandardPaths_standardLocations(int64_t a0);
+qute_str qute_QStandardPaths_locate(int64_t a0, const char *a1, ptrdiff_t a1_len);
+qute_list qute_QStandardPaths_locateAll(int64_t a0, const char *a1, ptrdiff_t a1_len);
+qute_str qute_QStandardPaths_displayName(int64_t a0);
+qute_str qute_QStandardPaths_findExecutable(const char *a0, ptrdiff_t a0_len);
+void qute_QStandardPaths_setTestModeEnabled(bool a0);
+bool qute_QStandardPaths_isTestModeEnabled(void);
+qute_str qute_QStandardPaths_locate_1(int64_t a0, const char *a1, ptrdiff_t a1_len, int64_t a2);
+qute_list qute_QStandardPaths_locateAll_1(int64_t a0, const char *a1, ptrdiff_t a1_len, int64_t a2);
+qute_str qute_QStandardPaths_findExecutable_1(const char *a0, ptrdiff_t a0_len, const char *a1, const ptrdiff_t *a1_lens, ptrdiff_t a1_n);
+
+// QStorageInfo
+void * qute_QStorageInfo_new(void);
+void * qute_QStorageInfo_new_1(const char *a0, ptrdiff_t a0_len);
+void * qute_QStorageInfo_new_2(void * a0);
+void qute_QStorageInfo_delete(void *self);
+void qute_QStorageInfo_setPath(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QStorageInfo_rootPath(void *self);
+qute_str qute_QStorageInfo_device(void *self);
+qute_str qute_QStorageInfo_subvolume(void *self);
+qute_str qute_QStorageInfo_fileSystemType(void *self);
+qute_str qute_QStorageInfo_name(void *self);
+qute_str qute_QStorageInfo_displayName(void *self);
+long long qute_QStorageInfo_bytesTotal(void *self);
+long long qute_QStorageInfo_bytesFree(void *self);
+long long qute_QStorageInfo_bytesAvailable(void *self);
+int qute_QStorageInfo_blockSize(void *self);
+bool qute_QStorageInfo_isRoot(void *self);
+bool qute_QStorageInfo_isReadOnly(void *self);
+bool qute_QStorageInfo_isReady(void *self);
+bool qute_QStorageInfo_isValid(void *self);
+void qute_QStorageInfo_refresh(void *self);
+qute_list qute_QStorageInfo_mountedVolumes(void);
+void * qute_QStorageInfo_root(void);
+
 // QStringListModel
 void * qute_QStringListModel_new(void * a0);
 void * qute_QStringListModel_new_1(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, void * a1);
@@ -1984,6 +3165,60 @@ qute_str qute_QSysInfo_machineHostName(void);
 qute_str qute_QSysInfo_machineUniqueId(void);
 qute_str qute_QSysInfo_bootUniqueId(void);
 
+// QTemporaryDir
+void * qute_QTemporaryDir_new(void);
+void * qute_QTemporaryDir_new_1(const char *a0, ptrdiff_t a0_len);
+void qute_QTemporaryDir_delete(void *self);
+bool qute_QTemporaryDir_isValid(void *self);
+qute_str qute_QTemporaryDir_errorString(void *self);
+bool qute_QTemporaryDir_autoRemove(void *self);
+void qute_QTemporaryDir_setAutoRemove(void *self, bool a0);
+bool qute_QTemporaryDir_remove(void *self);
+qute_str qute_QTemporaryDir_path(void *self);
+qute_str qute_QTemporaryDir_filePath(void *self, const char *a0, ptrdiff_t a0_len);
+
+// QTemporaryFile
+void * qute_QTemporaryFile_new(void * a0);
+void * qute_QTemporaryFile_new_1(const char *a0, ptrdiff_t a0_len);
+void * qute_QTemporaryFile_new_2(const char *a0, ptrdiff_t a0_len, void * a1);
+void * qute_QTemporaryFile_new_shim(void * a0);
+void qute_QTemporaryFile_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+qute_str qute_QTemporaryFile_super_0(void *self);
+bool qute_QTemporaryFile_super_1(void *self, int64_t a0);
+long long qute_QTemporaryFile_super_2(void *self);
+bool qute_QTemporaryFile_super_3(void *self, long long a0);
+int64_t qute_QTemporaryFile_super_4(void *self);
+bool qute_QTemporaryFile_super_5(void *self, int64_t a0);
+void qute_QTemporaryFile_super_6(void *self);
+bool qute_QTemporaryFile_super_7(void *self);
+long long qute_QTemporaryFile_super_8(void *self);
+bool qute_QTemporaryFile_super_9(void *self, long long a0);
+bool qute_QTemporaryFile_super_10(void *self);
+long long qute_QTemporaryFile_super_11(void *self, const char * a0, long long a1);
+bool qute_QTemporaryFile_super_12(void *self);
+long long qute_QTemporaryFile_super_13(void *self);
+long long qute_QTemporaryFile_super_14(void *self);
+bool qute_QTemporaryFile_super_15(void *self);
+bool qute_QTemporaryFile_super_16(void *self, int a0);
+bool qute_QTemporaryFile_super_17(void *self, int a0);
+long long qute_QTemporaryFile_super_18(void *self, long long a0);
+bool qute_QTemporaryFile_super_19(void *self, void * a0);
+bool qute_QTemporaryFile_super_20(void *self, void * a0, void * a1);
+void qute_QTemporaryFile_super_21(void *self, void * a0);
+void qute_QTemporaryFile_super_22(void *self, void * a0);
+void qute_QTemporaryFile_super_23(void *self, void * a0);
+void qute_QTemporaryFile_prot_setOpenMode(void *self, int64_t a0);
+void qute_QTemporaryFile_prot_setErrorString(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QTemporaryFile_cast(void *obj);
+bool qute_QTemporaryFile_autoRemove(void *self);
+void qute_QTemporaryFile_setAutoRemove(void *self, bool a0);
+bool qute_QTemporaryFile_open(void *self);
+qute_str qute_QTemporaryFile_fileTemplate(void *self);
+void qute_QTemporaryFile_setFileTemplate(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QTemporaryFile_renameOverwrite(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QTemporaryFile_createNativeFile(const char *a0, ptrdiff_t a0_len);
+void * qute_QTemporaryFile_createNativeFile_1(void * a0);
+
 // QTime
 void * qute_QTime_new(void);
 void * qute_QTime_new_1(int a0, int a1);
@@ -2012,6 +3247,49 @@ void * qute_QTime_fromString_1(const char *a0, ptrdiff_t a0_len, const char *a1,
 bool qute_QTime_isValid_1(int a0, int a1, int a2);
 void * qute_QTime_fromString_2(const char *a0, ptrdiff_t a0_len, int64_t a1);
 bool qute_QTime_isValid_2(int a0, int a1, int a2, int a3);
+
+// QTimeLine
+void * qute_QTimeLine_new(int a0, void * a1);
+void * qute_QTimeLine_new_shim(int a0, void * a1);
+void qute_QTimeLine_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+double qute_QTimeLine_super_0(void *self, int a0);
+void qute_QTimeLine_super_1(void *self, void * a0);
+bool qute_QTimeLine_super_2(void *self, void * a0);
+bool qute_QTimeLine_super_3(void *self, void * a0, void * a1);
+void qute_QTimeLine_super_4(void *self, void * a0);
+void qute_QTimeLine_super_5(void *self, void * a0);
+void * qute_QTimeLine_cast(void *obj);
+int64_t qute_QTimeLine_state(void *self);
+int qute_QTimeLine_loopCount(void *self);
+void qute_QTimeLine_setLoopCount(void *self, int a0);
+int64_t qute_QTimeLine_direction(void *self);
+void qute_QTimeLine_setDirection(void *self, int64_t a0);
+int qute_QTimeLine_duration(void *self);
+void qute_QTimeLine_setDuration(void *self, int a0);
+int qute_QTimeLine_startFrame(void *self);
+void qute_QTimeLine_setStartFrame(void *self, int a0);
+int qute_QTimeLine_endFrame(void *self);
+void qute_QTimeLine_setEndFrame(void *self, int a0);
+void qute_QTimeLine_setFrameRange(void *self, int a0, int a1);
+int qute_QTimeLine_updateInterval(void *self);
+void qute_QTimeLine_setUpdateInterval(void *self, int a0);
+void * qute_QTimeLine_easingCurve(void *self);
+void qute_QTimeLine_setEasingCurve(void *self, void * a0);
+int qute_QTimeLine_currentTime(void *self);
+int qute_QTimeLine_currentFrame(void *self);
+double qute_QTimeLine_currentValue(void *self);
+int qute_QTimeLine_frameForTime(void *self, int a0);
+double qute_QTimeLine_valueForTime(void *self, int a0);
+void qute_QTimeLine_start(void *self);
+void qute_QTimeLine_resume(void *self);
+void qute_QTimeLine_stop(void *self);
+void qute_QTimeLine_setPaused(void *self, bool a0);
+void qute_QTimeLine_setCurrentTime(void *self, int a0);
+void qute_QTimeLine_toggleDirection(void *self);
+void * qute_QTimeLine_valueChanged(void *self, uintptr_t id);
+void * qute_QTimeLine_frameChanged(void *self, uintptr_t id);
+void * qute_QTimeLine_stateChanged(void *self, uintptr_t id);
+void * qute_QTimeLine_finished(void *self, uintptr_t id);
 
 // QTimeZone
 void * qute_QTimeZone_new(void);
@@ -2106,6 +3384,7 @@ void * qute_QTimer_timeout(void *self, uintptr_t id);
 
 // QTimerEvent
 void qute_QTimerEvent_delete(void *self);
+void * qute_QTimerEvent_cast(void *obj);
 int qute_QTimerEvent_timerId(void *self);
 int64_t qute_QTimerEvent_id(void *self);
 bool qute_QTimerEvent_matches(void *self, void * a0);
@@ -2133,6 +3412,90 @@ qute_str qute_QTranslator_translate_1(void *self, const char * a0, const char * 
 bool qute_QTranslator_load_3(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len);
 bool qute_QTranslator_load_4(void *self, void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len, const char *a4, ptrdiff_t a4_len);
 bool qute_QTranslator_load_5(void *self, const char *a0, ptrdiff_t a0_len, const char *a2, ptrdiff_t a2_len);
+
+// QTransposeProxyModel
+void * qute_QTransposeProxyModel_new(void * a0);
+void * qute_QTransposeProxyModel_new_shim(void * a0);
+void qute_QTransposeProxyModel_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+void qute_QTransposeProxyModel_super_0(void *self, void * a0);
+int qute_QTransposeProxyModel_super_1(void *self, void * a0);
+int qute_QTransposeProxyModel_super_2(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_3(void *self, int a0, int64_t a1, int a2);
+bool qute_QTransposeProxyModel_super_4(void *self, int a0, int64_t a1, void * a2, int a3);
+bool qute_QTransposeProxyModel_super_5(void *self, void * a0, const void *a1, const void *a1_v, ptrdiff_t a1_n);
+qute_size qute_QTransposeProxyModel_super_6(void *self, void * a0);
+qute_map qute_QTransposeProxyModel_super_7(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_8(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_9(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_10(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_11(void *self, int a0, int a1, void * a2);
+bool qute_QTransposeProxyModel_super_12(void *self, int a0, int a1, void * a2);
+bool qute_QTransposeProxyModel_super_13(void *self, int a0, int a1, void * a2);
+bool qute_QTransposeProxyModel_super_14(void *self, void * a0, int a1, int a2, void * a3, int a4);
+bool qute_QTransposeProxyModel_super_15(void *self, int a0, int a1, void * a2);
+bool qute_QTransposeProxyModel_super_16(void *self, int a0, int a1, void * a2);
+bool qute_QTransposeProxyModel_super_17(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QTransposeProxyModel_super_18(void *self, int a0, int64_t a1);
+void * qute_QTransposeProxyModel_super_19(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_20(void *self, void * a0);
+bool qute_QTransposeProxyModel_super_21(void *self);
+void qute_QTransposeProxyModel_super_22(void *self);
+void * qute_QTransposeProxyModel_super_23(void *self, void * a0, int a1);
+int64_t qute_QTransposeProxyModel_super_24(void *self, void * a0);
+bool qute_QTransposeProxyModel_super_25(void *self, void * a0, void * a1, int a2);
+bool qute_QTransposeProxyModel_super_26(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_27(void *self, void * a0);
+bool qute_QTransposeProxyModel_super_28(void *self, void * a0);
+void qute_QTransposeProxyModel_super_29(void *self, void * a0);
+bool qute_QTransposeProxyModel_super_30(void *self, void * a0);
+void * qute_QTransposeProxyModel_super_31(void *self, int a0, int a1, void * a2);
+void * qute_QTransposeProxyModel_super_32(void *self, const void *a0, ptrdiff_t a0_n);
+bool qute_QTransposeProxyModel_super_33(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+bool qute_QTransposeProxyModel_super_34(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+qute_list qute_QTransposeProxyModel_super_35(void *self);
+int64_t qute_QTransposeProxyModel_super_36(void *self);
+int64_t qute_QTransposeProxyModel_super_37(void *self);
+qute_map qute_QTransposeProxyModel_super_38(void *self);
+qute_list qute_QTransposeProxyModel_super_39(void *self, void * a0, int a1, void * a2, int a3, int64_t a4);
+void qute_QTransposeProxyModel_super_40(void *self);
+bool qute_QTransposeProxyModel_super_41(void *self, void * a0);
+bool qute_QTransposeProxyModel_super_42(void *self, void * a0, void * a1);
+void qute_QTransposeProxyModel_super_43(void *self, void * a0);
+void qute_QTransposeProxyModel_super_44(void *self, void * a0);
+void qute_QTransposeProxyModel_super_45(void *self, void * a0);
+void * qute_QTransposeProxyModel_prot_createSourceIndex(void *self, int a0, int a1, void * a2);
+void * qute_QTransposeProxyModel_prot_createIndex(void *self, int a0, int a1);
+void * qute_QTransposeProxyModel_prot_createIndex_1(void *self, int a0, int a1, unsigned long long a2);
+void qute_QTransposeProxyModel_prot_encodeData(void *self, const void *a0, ptrdiff_t a0_n, void * a1);
+bool qute_QTransposeProxyModel_prot_decodeData(void *self, int a0, int a1, void * a2, void * a3);
+void qute_QTransposeProxyModel_prot_beginInsertRows(void *self, void * a0, int a1, int a2);
+void qute_QTransposeProxyModel_prot_endInsertRows(void *self);
+void qute_QTransposeProxyModel_prot_beginRemoveRows(void *self, void * a0, int a1, int a2);
+void qute_QTransposeProxyModel_prot_endRemoveRows(void *self);
+bool qute_QTransposeProxyModel_prot_beginMoveRows(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QTransposeProxyModel_prot_endMoveRows(void *self);
+void qute_QTransposeProxyModel_prot_beginInsertColumns(void *self, void * a0, int a1, int a2);
+void qute_QTransposeProxyModel_prot_endInsertColumns(void *self);
+void qute_QTransposeProxyModel_prot_beginRemoveColumns(void *self, void * a0, int a1, int a2);
+void qute_QTransposeProxyModel_prot_endRemoveColumns(void *self);
+bool qute_QTransposeProxyModel_prot_beginMoveColumns(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QTransposeProxyModel_prot_endMoveColumns(void *self);
+void qute_QTransposeProxyModel_prot_beginResetModel(void *self);
+void qute_QTransposeProxyModel_prot_endResetModel(void *self);
+void qute_QTransposeProxyModel_prot_changePersistentIndex(void *self, void * a0, void * a1);
+void qute_QTransposeProxyModel_prot_changePersistentIndexList(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n);
+qute_list qute_QTransposeProxyModel_prot_persistentIndexList(void *self);
+void * qute_QTransposeProxyModel_cast(void *obj);
+
+// QTypeRevision
+void * qute_QTypeRevision_new(void);
+void qute_QTypeRevision_delete(void *self);
+bool qute_QTypeRevision_hasMajorVersion(void *self);
+unsigned char qute_QTypeRevision_majorVersion(void *self);
+bool qute_QTypeRevision_hasMinorVersion(void *self);
+unsigned char qute_QTypeRevision_minorVersion(void *self);
+bool qute_QTypeRevision_isValid(void *self);
+void * qute_QTypeRevision_zero(void);
 
 // QUrl
 void * qute_QUrl_new(void);
@@ -2375,6 +3738,219 @@ void qute_QVariant_setValue(void *self, void * a0);
 void * qute_QVariant_fromMetaType(void * a0);
 void * qute_QVariant_compare(void * a0, void * a1);
 void * qute_QVariant_fromMetaType_1(void * a0, void * a1);
+
+// QVariantAnimation
+void * qute_QVariantAnimation_new(void * a0);
+void * qute_QVariantAnimation_new_shim(void * a0);
+void qute_QVariantAnimation_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+int qute_QVariantAnimation_super_0(void *self);
+bool qute_QVariantAnimation_super_1(void *self, void * a0);
+void qute_QVariantAnimation_super_2(void *self, int a0);
+void qute_QVariantAnimation_super_3(void *self, int64_t a0, int64_t a1);
+void qute_QVariantAnimation_super_4(void *self, void * a0);
+void * qute_QVariantAnimation_super_5(void *self, void * a0, void * a1, double a2);
+void qute_QVariantAnimation_super_6(void *self, int64_t a0);
+bool qute_QVariantAnimation_super_7(void *self, void * a0, void * a1);
+void qute_QVariantAnimation_super_8(void *self, void * a0);
+void qute_QVariantAnimation_super_9(void *self, void * a0);
+void qute_QVariantAnimation_super_10(void *self, void * a0);
+void * qute_QVariantAnimation_cast(void *obj);
+void * qute_QVariantAnimation_startValue(void *self);
+void qute_QVariantAnimation_setStartValue(void *self, void * a0);
+void * qute_QVariantAnimation_endValue(void *self);
+void qute_QVariantAnimation_setEndValue(void *self, void * a0);
+void * qute_QVariantAnimation_keyValueAt(void *self, double a0);
+void qute_QVariantAnimation_setKeyValueAt(void *self, double a0, void * a1);
+qute_map qute_QVariantAnimation_keyValues(void *self);
+void qute_QVariantAnimation_setKeyValues(void *self, const void *a0, const void *a0_v, ptrdiff_t a0_n);
+void * qute_QVariantAnimation_currentValue(void *self);
+void qute_QVariantAnimation_setDuration(void *self, int a0);
+void * qute_QVariantAnimation_easingCurve(void *self);
+void qute_QVariantAnimation_setEasingCurve(void *self, void * a0);
+void qute_QVariantAnimation_valueChanged_1(void *self, void * a0);
+void * qute_QVariantAnimation_valueChanged(void *self, uintptr_t id);
+
+// QVersionNumber
+void * qute_QVersionNumber_new(void);
+void * qute_QVersionNumber_new_1(int a0);
+void * qute_QVersionNumber_new_2(int a0, int a1);
+void * qute_QVersionNumber_new_3(int a0, int a1, int a2);
+void qute_QVersionNumber_delete(void *self);
+bool qute_QVersionNumber_isNull(void *self);
+bool qute_QVersionNumber_isNormalized(void *self);
+int qute_QVersionNumber_majorVersion(void *self);
+int qute_QVersionNumber_minorVersion(void *self);
+int qute_QVersionNumber_microVersion(void *self);
+void * qute_QVersionNumber_normalized(void *self);
+qute_list qute_QVersionNumber_segments(void *self);
+int qute_QVersionNumber_segmentAt(void *self, long long a0);
+long long qute_QVersionNumber_segmentCount(void *self);
+bool qute_QVersionNumber_isPrefixOf(void *self, void * a0);
+qute_str qute_QVersionNumber_toString(void *self);
+int qute_QVersionNumber_compare(void * a0, void * a1);
+void * qute_QVersionNumber_commonPrefix(void * a0, void * a1);
+void * qute_QVersionNumber_fromString(const char *a0, ptrdiff_t a0_len);
+
+// QXmlStreamAttribute
+void * qute_QXmlStreamAttribute_new(void);
+void * qute_QXmlStreamAttribute_new_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void * qute_QXmlStreamAttribute_new_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len);
+void qute_QXmlStreamAttribute_delete(void *self);
+qute_str qute_QXmlStreamAttribute_namespaceUri(void *self);
+qute_str qute_QXmlStreamAttribute_name(void *self);
+qute_str qute_QXmlStreamAttribute_qualifiedName(void *self);
+qute_str qute_QXmlStreamAttribute_prefix(void *self);
+qute_str qute_QXmlStreamAttribute_value(void *self);
+bool qute_QXmlStreamAttribute_isDefault(void *self);
+
+// QXmlStreamAttributes
+void * qute_QXmlStreamAttributes_new(void);
+void qute_QXmlStreamAttributes_delete(void *self);
+qute_str qute_QXmlStreamAttributes_value(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+qute_str qute_QXmlStreamAttributes_value_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamAttributes_append(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len);
+void qute_QXmlStreamAttributes_append_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+bool qute_QXmlStreamAttributes_hasAttribute(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QXmlStreamAttributes_hasAttribute_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+
+// QXmlStreamEntityDeclaration
+void * qute_QXmlStreamEntityDeclaration_new(void);
+void qute_QXmlStreamEntityDeclaration_delete(void *self);
+qute_str qute_QXmlStreamEntityDeclaration_name(void *self);
+qute_str qute_QXmlStreamEntityDeclaration_notationName(void *self);
+qute_str qute_QXmlStreamEntityDeclaration_systemId(void *self);
+qute_str qute_QXmlStreamEntityDeclaration_publicId(void *self);
+qute_str qute_QXmlStreamEntityDeclaration_value(void *self);
+
+// QXmlStreamEntityResolver
+void * qute_QXmlStreamEntityResolver_new(void);
+void * qute_QXmlStreamEntityResolver_new_shim(void);
+void qute_QXmlStreamEntityResolver_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+qute_str qute_QXmlStreamEntityResolver_super_0(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamEntityResolver_delete(void *self);
+qute_str qute_QXmlStreamEntityResolver_resolveEntity(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+qute_str qute_QXmlStreamEntityResolver_resolveUndeclaredEntity(void *self, const char *a0, ptrdiff_t a0_len);
+
+// QXmlStreamNamespaceDeclaration
+void * qute_QXmlStreamNamespaceDeclaration_new(void);
+void * qute_QXmlStreamNamespaceDeclaration_new_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QXmlStreamNamespaceDeclaration_delete(void *self);
+qute_str qute_QXmlStreamNamespaceDeclaration_prefix(void *self);
+qute_str qute_QXmlStreamNamespaceDeclaration_namespaceUri(void *self);
+
+// QXmlStreamNotationDeclaration
+void * qute_QXmlStreamNotationDeclaration_new(void);
+void qute_QXmlStreamNotationDeclaration_delete(void *self);
+qute_str qute_QXmlStreamNotationDeclaration_name(void *self);
+qute_str qute_QXmlStreamNotationDeclaration_systemId(void *self);
+qute_str qute_QXmlStreamNotationDeclaration_publicId(void *self);
+
+// QXmlStreamReader
+void * qute_QXmlStreamReader_new(void);
+void * qute_QXmlStreamReader_new_1(void * a0);
+void * qute_QXmlStreamReader_new_2(const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamReader_delete(void *self);
+void qute_QXmlStreamReader_setDevice(void *self, void * a0);
+void * qute_QXmlStreamReader_device(void *self);
+void qute_QXmlStreamReader_addData(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamReader_clear(void *self);
+bool qute_QXmlStreamReader_atEnd(void *self);
+int64_t qute_QXmlStreamReader_readNext(void *self);
+bool qute_QXmlStreamReader_readNextStartElement(void *self);
+void qute_QXmlStreamReader_skipCurrentElement(void *self);
+qute_str qute_QXmlStreamReader_readRawInnerData(void *self);
+int64_t qute_QXmlStreamReader_tokenType(void *self);
+qute_str qute_QXmlStreamReader_tokenString(void *self);
+void qute_QXmlStreamReader_setNamespaceProcessing(void *self, bool a0);
+bool qute_QXmlStreamReader_namespaceProcessing(void *self);
+bool qute_QXmlStreamReader_isStartDocument(void *self);
+bool qute_QXmlStreamReader_isEndDocument(void *self);
+bool qute_QXmlStreamReader_isStartElement(void *self);
+bool qute_QXmlStreamReader_isEndElement(void *self);
+bool qute_QXmlStreamReader_isCharacters(void *self);
+bool qute_QXmlStreamReader_isWhitespace(void *self);
+bool qute_QXmlStreamReader_isCDATA(void *self);
+bool qute_QXmlStreamReader_isComment(void *self);
+bool qute_QXmlStreamReader_isDTD(void *self);
+bool qute_QXmlStreamReader_isEntityReference(void *self);
+bool qute_QXmlStreamReader_isProcessingInstruction(void *self);
+bool qute_QXmlStreamReader_isStandaloneDocument(void *self);
+bool qute_QXmlStreamReader_hasStandaloneDeclaration(void *self);
+qute_str qute_QXmlStreamReader_documentVersion(void *self);
+qute_str qute_QXmlStreamReader_documentEncoding(void *self);
+long long qute_QXmlStreamReader_lineNumber(void *self);
+long long qute_QXmlStreamReader_columnNumber(void *self);
+long long qute_QXmlStreamReader_characterOffset(void *self);
+void * qute_QXmlStreamReader_attributes(void *self);
+qute_str qute_QXmlStreamReader_readElementText(void *self);
+qute_str qute_QXmlStreamReader_name(void *self);
+qute_str qute_QXmlStreamReader_namespaceUri(void *self);
+qute_str qute_QXmlStreamReader_qualifiedName(void *self);
+qute_str qute_QXmlStreamReader_prefix(void *self);
+qute_str qute_QXmlStreamReader_processingInstructionTarget(void *self);
+qute_str qute_QXmlStreamReader_processingInstructionData(void *self);
+qute_str qute_QXmlStreamReader_text(void *self);
+qute_list qute_QXmlStreamReader_namespaceDeclarations(void *self);
+void qute_QXmlStreamReader_addExtraNamespaceDeclaration(void *self, void * a0);
+void qute_QXmlStreamReader_addExtraNamespaceDeclarations(void *self, const void *a0, ptrdiff_t a0_n);
+qute_list qute_QXmlStreamReader_notationDeclarations(void *self);
+qute_list qute_QXmlStreamReader_entityDeclarations(void *self);
+qute_str qute_QXmlStreamReader_dtdName(void *self);
+qute_str qute_QXmlStreamReader_dtdPublicId(void *self);
+qute_str qute_QXmlStreamReader_dtdSystemId(void *self);
+int qute_QXmlStreamReader_entityExpansionLimit(void *self);
+void qute_QXmlStreamReader_setEntityExpansionLimit(void *self, int a0);
+void qute_QXmlStreamReader_raiseError(void *self);
+qute_str qute_QXmlStreamReader_errorString(void *self);
+int64_t qute_QXmlStreamReader_error(void *self);
+bool qute_QXmlStreamReader_hasError(void *self);
+void qute_QXmlStreamReader_setEntityResolver(void *self, void * a0);
+void * qute_QXmlStreamReader_entityResolver(void *self);
+qute_str qute_QXmlStreamReader_readElementText_1(void *self, int64_t a0);
+void qute_QXmlStreamReader_raiseError_1(void *self, const char *a0, ptrdiff_t a0_len);
+
+// QXmlStreamWriter
+void * qute_QXmlStreamWriter_new(void);
+void * qute_QXmlStreamWriter_new_1(void * a0);
+void qute_QXmlStreamWriter_delete(void *self);
+void qute_QXmlStreamWriter_setDevice(void *self, void * a0);
+void * qute_QXmlStreamWriter_device(void *self);
+void qute_QXmlStreamWriter_setAutoFormatting(void *self, bool a0);
+bool qute_QXmlStreamWriter_autoFormatting(void *self);
+void qute_QXmlStreamWriter_setAutoFormattingIndent(void *self, int a0);
+int qute_QXmlStreamWriter_autoFormattingIndent(void *self);
+void qute_QXmlStreamWriter_setStopWritingOnError(void *self, bool a0);
+bool qute_QXmlStreamWriter_stopWritingOnError(void *self);
+void qute_QXmlStreamWriter_writeAttribute(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QXmlStreamWriter_writeAttribute_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len);
+void qute_QXmlStreamWriter_writeAttribute_2(void *self, void * a0);
+void qute_QXmlStreamWriter_writeAttributes(void *self, void * a0);
+void qute_QXmlStreamWriter_writeCDATA(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeCharacters(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeComment(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeDTD(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeEmptyElement(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeEmptyElement_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QXmlStreamWriter_writeTextElement(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QXmlStreamWriter_writeTextElement_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len);
+void qute_QXmlStreamWriter_writeEndDocument(void *self);
+void qute_QXmlStreamWriter_writeEndElement(void *self);
+void qute_QXmlStreamWriter_writeEntityReference(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeNamespace(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeDefaultNamespace(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeProcessingInstruction(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeStartDocument(void *self);
+void qute_QXmlStreamWriter_writeStartDocument_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeStartDocument_2(void *self, const char *a0, ptrdiff_t a0_len, bool a1);
+void qute_QXmlStreamWriter_writeStartElement(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QXmlStreamWriter_writeStartElement_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QXmlStreamWriter_writeCurrentToken(void *self, void * a0);
+void qute_QXmlStreamWriter_raiseError(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QXmlStreamWriter_errorString(void *self);
+int64_t qute_QXmlStreamWriter_error(void *self);
+bool qute_QXmlStreamWriter_hasError(void *self);
+void qute_QXmlStreamWriter_writeNamespace_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QXmlStreamWriter_writeProcessingInstruction_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
 
 #ifdef __cplusplus
 }

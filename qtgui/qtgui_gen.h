@@ -109,6 +109,7 @@ void * qute_QAction_toggled(void *self, uintptr_t id);
 
 // QActionEvent
 void qute_QActionEvent_delete(void *self);
+void * qute_QActionEvent_cast(void *obj);
 void * qute_QActionEvent_action(void *self);
 void * qute_QActionEvent_before(void *self);
 
@@ -141,6 +142,11 @@ void qute_QActionGroup_triggered_1(void *self, void * a0);
 void qute_QActionGroup_hovered_1(void *self, void * a0);
 void * qute_QActionGroup_triggered(void *self, uintptr_t id);
 void * qute_QActionGroup_hovered(void *self, uintptr_t id);
+
+// QApplicationStateChangeEvent
+void qute_QApplicationStateChangeEvent_delete(void *self);
+void * qute_QApplicationStateChangeEvent_cast(void *obj);
+int64_t qute_QApplicationStateChangeEvent_applicationState(void *self);
 
 // QBitmap
 void * qute_QBitmap_new(void);
@@ -180,6 +186,11 @@ void qute_QBrush_setColor(void *self, qute_color a0);
 void * qute_QBrush_gradient(void *self);
 bool qute_QBrush_isOpaque(void *self);
 
+// QChildWindowEvent
+void qute_QChildWindowEvent_delete(void *self);
+void * qute_QChildWindowEvent_cast(void *obj);
+void * qute_QChildWindowEvent_child(void *self);
+
 // QClipboard
 void * qute_QClipboard_cast(void *obj);
 void qute_QClipboard_clear(void *self);
@@ -218,6 +229,7 @@ void * qute_QClipboard_dataChanged(void *self, uintptr_t id);
 
 // QCloseEvent
 void qute_QCloseEvent_delete(void *self);
+void * qute_QCloseEvent_cast(void *obj);
 
 // QColorSpace
 void * qute_QColorSpace_new(void);
@@ -296,6 +308,7 @@ void qute_QConicalGradient_setAngle(void *self, double a0);
 
 // QContextMenuEvent
 void qute_QContextMenuEvent_delete(void *self);
+void * qute_QContextMenuEvent_cast(void *obj);
 int qute_QContextMenuEvent_x(void *self);
 int qute_QContextMenuEvent_y(void *self);
 int qute_QContextMenuEvent_globalX(void *self);
@@ -322,6 +335,10 @@ qute_point qute_QCursor_pos(void);
 qute_point qute_QCursor_pos_1(void * a0);
 void qute_QCursor_setPos(qute_point a0);
 void qute_QCursor_setPos_1(void * a0, qute_point a1);
+
+// QDesktopServices
+void qute_QDesktopServices_delete(void *self);
+bool qute_QDesktopServices_openUrl(void * a0);
 
 // QDoubleValidator
 void * qute_QDoubleValidator_new(void * a0);
@@ -355,20 +372,55 @@ void * qute_QDoubleValidator_topChanged(void *self, uintptr_t id);
 void * qute_QDoubleValidator_decimalsChanged(void *self, uintptr_t id);
 void * qute_QDoubleValidator_notationChanged(void *self, uintptr_t id);
 
+// QDrag
+void * qute_QDrag_new(void * a0);
+void * qute_QDrag_new_shim(void * a0);
+void qute_QDrag_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QDrag_super_0(void *self, void * a0);
+bool qute_QDrag_super_1(void *self, void * a0, void * a1);
+void qute_QDrag_super_2(void *self, void * a0);
+void qute_QDrag_super_3(void *self, void * a0);
+void qute_QDrag_super_4(void *self, void * a0);
+void * qute_QDrag_cast(void *obj);
+void qute_QDrag_setMimeData(void *self, void * a0);
+void * qute_QDrag_mimeData(void *self);
+void qute_QDrag_setPixmap(void *self, void * a0);
+void * qute_QDrag_pixmap(void *self);
+void qute_QDrag_setHotSpot(void *self, qute_point a0);
+qute_point qute_QDrag_hotSpot(void *self);
+void * qute_QDrag_source(void *self);
+void * qute_QDrag_target(void *self);
+int64_t qute_QDrag_exec(void *self);
+int64_t qute_QDrag_exec_1(void *self, int64_t a0, int64_t a1);
+void qute_QDrag_setDragCursor(void *self, void * a0, int64_t a1);
+void * qute_QDrag_dragCursor(void *self, int64_t a0);
+int64_t qute_QDrag_supportedActions(void *self);
+int64_t qute_QDrag_defaultAction(void *self);
+void qute_QDrag_actionChanged_1(void *self, int64_t a0);
+void qute_QDrag_targetChanged_1(void *self, void * a0);
+int64_t qute_QDrag_exec_2(void *self, int64_t a0);
+void qute_QDrag_cancel(void);
+void * qute_QDrag_actionChanged(void *self, uintptr_t id);
+void * qute_QDrag_targetChanged(void *self, uintptr_t id);
+
 // QDragEnterEvent
 void qute_QDragEnterEvent_delete(void *self);
+void * qute_QDragEnterEvent_cast(void *obj);
 
 // QDragLeaveEvent
 void qute_QDragLeaveEvent_delete(void *self);
+void * qute_QDragLeaveEvent_cast(void *obj);
 
 // QDragMoveEvent
 void qute_QDragMoveEvent_delete(void *self);
+void * qute_QDragMoveEvent_cast(void *obj);
 qute_rect qute_QDragMoveEvent_answerRect(void *self);
 void qute_QDragMoveEvent_accept(void *self, qute_rect a0);
 void qute_QDragMoveEvent_ignore(void *self, qute_rect a0);
 
 // QDropEvent
 void qute_QDropEvent_delete(void *self);
+void * qute_QDropEvent_cast(void *obj);
 qute_pointf qute_QDropEvent_position(void *self);
 int64_t qute_QDropEvent_buttons(void *self);
 int64_t qute_QDropEvent_modifiers(void *self);
@@ -382,6 +434,7 @@ void * qute_QDropEvent_mimeData(void *self);
 
 // QEnterEvent
 void qute_QEnterEvent_delete(void *self);
+void * qute_QEnterEvent_cast(void *obj);
 
 // QEventPoint
 void * qute_QEventPoint_new(void);
@@ -419,9 +472,128 @@ void qute_QEventPoint_setAccepted_1(void *self, bool a0);
 
 // QExposeEvent
 void qute_QExposeEvent_delete(void *self);
+void * qute_QExposeEvent_cast(void *obj);
+
+// QFileOpenEvent
+void qute_QFileOpenEvent_delete(void *self);
+void * qute_QFileOpenEvent_cast(void *obj);
+qute_str qute_QFileOpenEvent_file(void *self);
+void * qute_QFileOpenEvent_url(void *self);
+
+// QFileSystemModel
+void * qute_QFileSystemModel_new(void * a0);
+void * qute_QFileSystemModel_new_shim(void * a0);
+void qute_QFileSystemModel_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+void * qute_QFileSystemModel_super_0(void *self, int a0, int a1, void * a2);
+void * qute_QFileSystemModel_super_1(void *self, void * a0);
+void * qute_QFileSystemModel_super_2(void *self, int a0, int a1, void * a2);
+bool qute_QFileSystemModel_super_3(void *self, void * a0);
+bool qute_QFileSystemModel_super_4(void *self, void * a0);
+void qute_QFileSystemModel_super_5(void *self, void * a0);
+int qute_QFileSystemModel_super_6(void *self, void * a0);
+int qute_QFileSystemModel_super_7(void *self, void * a0);
+void * qute_QFileSystemModel_super_8(void *self, void * a0, int a1);
+bool qute_QFileSystemModel_super_9(void *self, void * a0, void * a1, int a2);
+void * qute_QFileSystemModel_super_10(void *self, int a0, int64_t a1, int a2);
+int64_t qute_QFileSystemModel_super_11(void *self, void * a0);
+void qute_QFileSystemModel_super_12(void *self, int a0, int64_t a1);
+qute_list qute_QFileSystemModel_super_13(void *self);
+void * qute_QFileSystemModel_super_14(void *self, const void *a0, ptrdiff_t a0_n);
+bool qute_QFileSystemModel_super_15(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+int64_t qute_QFileSystemModel_super_16(void *self);
+qute_map qute_QFileSystemModel_super_17(void *self);
+void qute_QFileSystemModel_super_18(void *self, void * a0);
+bool qute_QFileSystemModel_super_19(void *self, void * a0);
+bool qute_QFileSystemModel_super_20(void *self, int a0, int64_t a1, void * a2, int a3);
+qute_map qute_QFileSystemModel_super_21(void *self, void * a0);
+bool qute_QFileSystemModel_super_22(void *self, void * a0, const void *a1, const void *a1_v, ptrdiff_t a1_n);
+bool qute_QFileSystemModel_super_23(void *self, void * a0);
+bool qute_QFileSystemModel_super_24(void *self, void * a0, int64_t a1, int a2, int a3, void * a4);
+int64_t qute_QFileSystemModel_super_25(void *self);
+bool qute_QFileSystemModel_super_26(void *self, int a0, int a1, void * a2);
+bool qute_QFileSystemModel_super_27(void *self, int a0, int a1, void * a2);
+bool qute_QFileSystemModel_super_28(void *self, int a0, int a1, void * a2);
+bool qute_QFileSystemModel_super_29(void *self, int a0, int a1, void * a2);
+bool qute_QFileSystemModel_super_30(void *self, void * a0, int a1, int a2, void * a3, int a4);
+bool qute_QFileSystemModel_super_31(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void * qute_QFileSystemModel_super_32(void *self, void * a0);
+qute_list qute_QFileSystemModel_super_33(void *self, void * a0, int a1, void * a2, int a3, int64_t a4);
+qute_size qute_QFileSystemModel_super_34(void *self, void * a0);
+bool qute_QFileSystemModel_super_35(void *self);
+void qute_QFileSystemModel_super_36(void *self);
+void qute_QFileSystemModel_super_37(void *self);
+bool qute_QFileSystemModel_super_38(void *self, void * a0, void * a1);
+void qute_QFileSystemModel_super_39(void *self, void * a0);
+void qute_QFileSystemModel_super_40(void *self, void * a0);
+void * qute_QFileSystemModel_prot_createIndex(void *self, int a0, int a1);
+void * qute_QFileSystemModel_prot_createIndex_1(void *self, int a0, int a1, unsigned long long a2);
+void qute_QFileSystemModel_prot_encodeData(void *self, const void *a0, ptrdiff_t a0_n, void * a1);
+bool qute_QFileSystemModel_prot_decodeData(void *self, int a0, int a1, void * a2, void * a3);
+void qute_QFileSystemModel_prot_beginInsertRows(void *self, void * a0, int a1, int a2);
+void qute_QFileSystemModel_prot_endInsertRows(void *self);
+void qute_QFileSystemModel_prot_beginRemoveRows(void *self, void * a0, int a1, int a2);
+void qute_QFileSystemModel_prot_endRemoveRows(void *self);
+bool qute_QFileSystemModel_prot_beginMoveRows(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QFileSystemModel_prot_endMoveRows(void *self);
+void qute_QFileSystemModel_prot_beginInsertColumns(void *self, void * a0, int a1, int a2);
+void qute_QFileSystemModel_prot_endInsertColumns(void *self);
+void qute_QFileSystemModel_prot_beginRemoveColumns(void *self, void * a0, int a1, int a2);
+void qute_QFileSystemModel_prot_endRemoveColumns(void *self);
+bool qute_QFileSystemModel_prot_beginMoveColumns(void *self, void * a0, int a1, int a2, void * a3, int a4);
+void qute_QFileSystemModel_prot_endMoveColumns(void *self);
+void qute_QFileSystemModel_prot_beginResetModel(void *self);
+void qute_QFileSystemModel_prot_endResetModel(void *self);
+void qute_QFileSystemModel_prot_changePersistentIndex(void *self, void * a0, void * a1);
+void qute_QFileSystemModel_prot_changePersistentIndexList(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n);
+qute_list qute_QFileSystemModel_prot_persistentIndexList(void *self);
+void * qute_QFileSystemModel_cast(void *obj);
+void * qute_QFileSystemModel_index(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QFileSystemModel_myComputer(void *self);
+void * qute_QFileSystemModel_setRootPath(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QFileSystemModel_rootPath(void *self);
+void * qute_QFileSystemModel_rootDirectory(void *self);
+void qute_QFileSystemModel_setIconProvider(void *self, void * a0);
+void * qute_QFileSystemModel_iconProvider(void *self);
+void qute_QFileSystemModel_setFilter(void *self, int64_t a0);
+int64_t qute_QFileSystemModel_filter(void *self);
+void qute_QFileSystemModel_setResolveSymlinks(void *self, bool a0);
+bool qute_QFileSystemModel_resolveSymlinks(void *self);
+void qute_QFileSystemModel_setReadOnly(void *self, bool a0);
+bool qute_QFileSystemModel_isReadOnly(void *self);
+void qute_QFileSystemModel_setNameFilterDisables(void *self, bool a0);
+bool qute_QFileSystemModel_nameFilterDisables(void *self);
+void qute_QFileSystemModel_setNameFilters(void *self, const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n);
+qute_list qute_QFileSystemModel_nameFilters(void *self);
+void qute_QFileSystemModel_setOption(void *self, int64_t a0);
+bool qute_QFileSystemModel_testOption(void *self, int64_t a0);
+void qute_QFileSystemModel_setOptions(void *self, int64_t a0);
+int64_t qute_QFileSystemModel_options(void *self);
+qute_str qute_QFileSystemModel_filePath(void *self, void * a0);
+bool qute_QFileSystemModel_isDir(void *self, void * a0);
+long long qute_QFileSystemModel_size(void *self, void * a0);
+qute_str qute_QFileSystemModel_type(void *self, void * a0);
+void * qute_QFileSystemModel_lastModified(void *self, void * a0);
+void * qute_QFileSystemModel_lastModified_1(void *self, void * a0, void * a1);
+void * qute_QFileSystemModel_mkdir(void *self, void * a0, const char *a1, ptrdiff_t a1_len);
+bool qute_QFileSystemModel_rmdir(void *self, void * a0);
+qute_str qute_QFileSystemModel_fileName(void *self, void * a0);
+void * qute_QFileSystemModel_fileIcon(void *self, void * a0);
+int64_t qute_QFileSystemModel_permissions(void *self, void * a0);
+void * qute_QFileSystemModel_fileInfo(void *self, void * a0);
+bool qute_QFileSystemModel_remove(void *self, void * a0);
+void qute_QFileSystemModel_rootPathChanged_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QFileSystemModel_fileRenamed_1(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len);
+void qute_QFileSystemModel_directoryLoaded_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QFileSystemModel_index_1(void *self, const char *a0, ptrdiff_t a0_len, int a1);
+void * qute_QFileSystemModel_myComputer_1(void *self, int a0);
+void qute_QFileSystemModel_setOption_1(void *self, int64_t a0, bool a1);
+void * qute_QFileSystemModel_rootPathChanged(void *self, uintptr_t id);
+void * qute_QFileSystemModel_fileRenamed(void *self, uintptr_t id);
+void * qute_QFileSystemModel_directoryLoaded(void *self, uintptr_t id);
 
 // QFocusEvent
 void qute_QFocusEvent_delete(void *self);
+void * qute_QFocusEvent_cast(void *obj);
 bool qute_QFocusEvent_gotFocus(void *self);
 bool qute_QFocusEvent_lostFocus(void *self);
 int64_t qute_QFocusEvent_reason(void *self);
@@ -621,6 +793,45 @@ double qute_QFontMetrics_fontDpi(void *self);
 int qute_QFontMetrics_horizontalAdvance_3(void *self, const char *a0, ptrdiff_t a0_len, int a1);
 qute_str qute_QFontMetrics_elidedText_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1, int a2, int a3);
 
+// QFontMetricsF
+void * qute_QFontMetricsF_new(void * a0);
+void * qute_QFontMetricsF_new_1(void * a0, void * a1);
+void * qute_QFontMetricsF_new_2(void * a0);
+void qute_QFontMetricsF_delete(void *self);
+double qute_QFontMetricsF_ascent(void *self);
+double qute_QFontMetricsF_capHeight(void *self);
+double qute_QFontMetricsF_descent(void *self);
+double qute_QFontMetricsF_height(void *self);
+double qute_QFontMetricsF_leading(void *self);
+double qute_QFontMetricsF_lineSpacing(void *self);
+double qute_QFontMetricsF_minLeftBearing(void *self);
+double qute_QFontMetricsF_minRightBearing(void *self);
+double qute_QFontMetricsF_maxWidth(void *self);
+double qute_QFontMetricsF_xHeight(void *self);
+double qute_QFontMetricsF_averageCharWidth(void *self);
+bool qute_QFontMetricsF_inFont(void *self, unsigned int a0);
+bool qute_QFontMetricsF_inFontUcs4(void *self, unsigned int a0);
+double qute_QFontMetricsF_leftBearing(void *self, unsigned int a0);
+double qute_QFontMetricsF_rightBearing(void *self, unsigned int a0);
+double qute_QFontMetricsF_horizontalAdvance(void *self, const char *a0, ptrdiff_t a0_len);
+double qute_QFontMetricsF_horizontalAdvance_1(void *self, unsigned int a0);
+double qute_QFontMetricsF_horizontalAdvance_2(void *self, const char *a0, ptrdiff_t a0_len, void * a1);
+qute_rectf qute_QFontMetricsF_boundingRect(void *self, const char *a0, ptrdiff_t a0_len);
+qute_rectf qute_QFontMetricsF_boundingRect_1(void *self, const char *a0, ptrdiff_t a0_len, void * a1);
+qute_rectf qute_QFontMetricsF_boundingRect_2(void *self, unsigned int a0);
+qute_rectf qute_QFontMetricsF_boundingRect_3(void *self, qute_rectf a0, int a1, const char *a2, ptrdiff_t a2_len);
+qute_sizef qute_QFontMetricsF_size(void *self, int a0, const char *a1, ptrdiff_t a1_len);
+qute_rectf qute_QFontMetricsF_tightBoundingRect(void *self, const char *a0, ptrdiff_t a0_len);
+qute_rectf qute_QFontMetricsF_tightBoundingRect_1(void *self, const char *a0, ptrdiff_t a0_len, void * a1);
+qute_str qute_QFontMetricsF_elidedText(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1, double a2);
+double qute_QFontMetricsF_underlinePos(void *self);
+double qute_QFontMetricsF_overlinePos(void *self);
+double qute_QFontMetricsF_strikeOutPos(void *self);
+double qute_QFontMetricsF_lineWidth(void *self);
+double qute_QFontMetricsF_fontDpi(void *self);
+double qute_QFontMetricsF_horizontalAdvance_3(void *self, const char *a0, ptrdiff_t a0_len, int a1);
+qute_str qute_QFontMetricsF_elidedText_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1, double a2, int a3);
+
 // QGlyphRun
 void * qute_QGlyphRun_new(void);
 void qute_QGlyphRun_delete(void *self);
@@ -742,6 +953,7 @@ void * qute_QGuiApplication_applicationDisplayNameChanged(void *self, uintptr_t 
 
 // QHelpEvent
 void qute_QHelpEvent_delete(void *self);
+void * qute_QHelpEvent_cast(void *obj);
 int qute_QHelpEvent_x(void *self);
 int qute_QHelpEvent_y(void *self);
 int qute_QHelpEvent_globalX(void *self);
@@ -751,9 +963,11 @@ qute_point qute_QHelpEvent_globalPos(void *self);
 
 // QHideEvent
 void qute_QHideEvent_delete(void *self);
+void * qute_QHideEvent_cast(void *obj);
 
 // QHoverEvent
 void qute_QHoverEvent_delete(void *self);
+void * qute_QHoverEvent_cast(void *obj);
 qute_point qute_QHoverEvent_oldPos(void *self);
 qute_pointf qute_QHoverEvent_oldPosF(void *self);
 
@@ -761,6 +975,7 @@ qute_pointf qute_QHoverEvent_oldPosF(void *self);
 void * qute_QIcon_new(void);
 void * qute_QIcon_new_1(void * a0);
 void * qute_QIcon_new_2(const char *a0, ptrdiff_t a0_len);
+void * qute_QIcon_new_3(void * a0);
 void qute_QIcon_delete(void *self);
 void * qute_QIcon_pixmap(void *self, qute_size a0);
 void * qute_QIcon_pixmap_1(void *self, int a0);
@@ -797,6 +1012,56 @@ qute_str qute_QIcon_themeName(void);
 void qute_QIcon_setThemeName(const char *a0, ptrdiff_t a0_len);
 qute_str qute_QIcon_fallbackThemeName(void);
 void qute_QIcon_setFallbackThemeName(const char *a0, ptrdiff_t a0_len);
+
+// QIconDragEvent
+void qute_QIconDragEvent_delete(void *self);
+void * qute_QIconDragEvent_cast(void *obj);
+
+// QIconEngine
+void * qute_QIconEngine_new_shim(void);
+void qute_QIconEngine_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+qute_size qute_QIconEngine_super_1(void *self, qute_size a0, int64_t a1, int64_t a2);
+void * qute_QIconEngine_super_2(void *self, qute_size a0, int64_t a1, int64_t a2);
+void qute_QIconEngine_super_3(void *self, void * a0, int64_t a1, int64_t a2);
+void qute_QIconEngine_super_4(void *self, const char *a0, ptrdiff_t a0_len, qute_size a1, int64_t a2, int64_t a3);
+qute_str qute_QIconEngine_super_5(void *self);
+bool qute_QIconEngine_super_7(void *self, void * a0);
+bool qute_QIconEngine_super_8(void *self, void * a0);
+qute_list qute_QIconEngine_super_9(void *self, int64_t a0, int64_t a1);
+qute_str qute_QIconEngine_super_10(void *self);
+bool qute_QIconEngine_super_11(void *self);
+void * qute_QIconEngine_super_12(void *self, qute_size a0, int64_t a1, int64_t a2, double a3);
+void qute_QIconEngine_super_13(void *self, int a0, void * a1);
+void qute_QIconEngine_delete(void *self);
+void qute_QIconEngine_paint(void *self, void * a0, qute_rect a1, int64_t a2, int64_t a3);
+qute_size qute_QIconEngine_actualSize(void *self, qute_size a0, int64_t a1, int64_t a2);
+void * qute_QIconEngine_pixmap(void *self, qute_size a0, int64_t a1, int64_t a2);
+void qute_QIconEngine_addPixmap(void *self, void * a0, int64_t a1, int64_t a2);
+void qute_QIconEngine_addFile(void *self, const char *a0, ptrdiff_t a0_len, qute_size a1, int64_t a2, int64_t a3);
+qute_str qute_QIconEngine_key(void *self);
+void * qute_QIconEngine_clone(void *self);
+bool qute_QIconEngine_read(void *self, void * a0);
+bool qute_QIconEngine_write(void *self, void * a0);
+qute_list qute_QIconEngine_availableSizes(void *self);
+qute_str qute_QIconEngine_iconName(void *self);
+bool qute_QIconEngine_isNull(void *self);
+void * qute_QIconEngine_scaledPixmap(void *self, qute_size a0, int64_t a1, int64_t a2, double a3);
+void qute_QIconEngine_virtual_hook(void *self, int a0, void * a1);
+qute_list qute_QIconEngine_availableSizes_1(void *self, int64_t a0, int64_t a1);
+
+// QIconEngineScaledPixmapArgument
+void * qute_QIconEngineScaledPixmapArgument_new(void);
+void qute_QIconEngineScaledPixmapArgument_delete(void *self);
+qute_size qute_QIconEngineScaledPixmapArgument_get_size(void *self);
+void qute_QIconEngineScaledPixmapArgument_set_size(void *self, qute_size a0);
+int64_t qute_QIconEngineScaledPixmapArgument_get_mode(void *self);
+void qute_QIconEngineScaledPixmapArgument_set_mode(void *self, int64_t a0);
+int64_t qute_QIconEngineScaledPixmapArgument_get_state(void *self);
+void qute_QIconEngineScaledPixmapArgument_set_state(void *self, int64_t a0);
+double qute_QIconEngineScaledPixmapArgument_get_scale(void *self);
+void qute_QIconEngineScaledPixmapArgument_set_scale(void *self, double a0);
+void * qute_QIconEngineScaledPixmapArgument_get_pixmap(void *self);
+void qute_QIconEngineScaledPixmapArgument_set_pixmap(void *self, void * a0);
 
 // QImage
 void * qute_QImage_new(void);
@@ -972,6 +1237,41 @@ qute_list qute_QImageReader_imageFormatsForMimeType(const char *a0, ptrdiff_t a0
 int qute_QImageReader_allocationLimit(void);
 void qute_QImageReader_setAllocationLimit(int a0);
 
+// QImageWriter
+void * qute_QImageWriter_new(void);
+void * qute_QImageWriter_new_1(void * a0, const char *a1, ptrdiff_t a1_len);
+void * qute_QImageWriter_new_2(const char *a0, ptrdiff_t a0_len);
+void * qute_QImageWriter_new_3(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QImageWriter_delete(void *self);
+void qute_QImageWriter_setFormat(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QImageWriter_format(void *self);
+void qute_QImageWriter_setDevice(void *self, void * a0);
+void * qute_QImageWriter_device(void *self);
+void qute_QImageWriter_setFileName(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QImageWriter_fileName(void *self);
+void qute_QImageWriter_setQuality(void *self, int a0);
+int qute_QImageWriter_quality(void *self);
+void qute_QImageWriter_setCompression(void *self, int a0);
+int qute_QImageWriter_compression(void *self);
+void qute_QImageWriter_setSubType(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QImageWriter_subType(void *self);
+qute_list qute_QImageWriter_supportedSubTypes(void *self);
+void qute_QImageWriter_setOptimizedWrite(void *self, bool a0);
+bool qute_QImageWriter_optimizedWrite(void *self);
+void qute_QImageWriter_setProgressiveScanWrite(void *self, bool a0);
+bool qute_QImageWriter_progressiveScanWrite(void *self);
+int64_t qute_QImageWriter_transformation(void *self);
+void qute_QImageWriter_setTransformation(void *self, int64_t a0);
+void qute_QImageWriter_setText(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+bool qute_QImageWriter_canWrite(void *self);
+bool qute_QImageWriter_write(void *self, void * a0);
+int64_t qute_QImageWriter_error(void *self);
+qute_str qute_QImageWriter_errorString(void *self);
+bool qute_QImageWriter_supportsOption(void *self, int64_t a0);
+qute_list qute_QImageWriter_supportedImageFormats(void);
+qute_list qute_QImageWriter_supportedMimeTypes(void);
+qute_list qute_QImageWriter_imageFormatsForMimeType(const char *a0, ptrdiff_t a0_len);
+
 // QInputDevice
 void * qute_QInputDevice_new(void * a0);
 void * qute_QInputDevice_new_1(const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, const char *a3, ptrdiff_t a3_len, void * a4);
@@ -1001,6 +1301,7 @@ void * qute_QInputDevice_capabilitiesChanged(void *self, uintptr_t id);
 
 // QInputEvent
 void qute_QInputEvent_delete(void *self);
+void * qute_QInputEvent_cast(void *obj);
 void * qute_QInputEvent_device(void *self);
 int64_t qute_QInputEvent_deviceType(void *self);
 int64_t qute_QInputEvent_modifiers(void *self);
@@ -1049,6 +1350,7 @@ void * qute_QInputMethod_inputDirectionChanged(void *self, uintptr_t id);
 
 // QInputMethodEvent
 void qute_QInputMethodEvent_delete(void *self);
+void * qute_QInputMethodEvent_cast(void *obj);
 void qute_QInputMethodEvent_setCommitString(void *self, const char *a0, ptrdiff_t a0_len);
 qute_list qute_QInputMethodEvent_attributes(void *self);
 qute_str qute_QInputMethodEvent_preeditString(void *self);
@@ -1069,6 +1371,13 @@ int qute_QInputMethodEventAttribute_get_length(void *self);
 void qute_QInputMethodEventAttribute_set_length(void *self, int a0);
 void * qute_QInputMethodEventAttribute_get_value(void *self);
 void qute_QInputMethodEventAttribute_set_value(void *self, void * a0);
+
+// QInputMethodQueryEvent
+void qute_QInputMethodQueryEvent_delete(void *self);
+void * qute_QInputMethodQueryEvent_cast(void *obj);
+int64_t qute_QInputMethodQueryEvent_queries(void *self);
+void qute_QInputMethodQueryEvent_setValue(void *self, int64_t a0, void * a1);
+void * qute_QInputMethodQueryEvent_value(void *self, int64_t a0);
 
 // QIntValidator
 void * qute_QIntValidator_new(void * a0);
@@ -1095,6 +1404,7 @@ void * qute_QIntValidator_topChanged(void *self, uintptr_t id);
 
 // QKeyEvent
 void qute_QKeyEvent_delete(void *self);
+void * qute_QKeyEvent_cast(void *obj);
 int qute_QKeyEvent_key(void *self);
 bool qute_QKeyEvent_matches(void *self, int64_t a0);
 void * qute_QKeyEvent_keyCombination(void *self);
@@ -1195,12 +1505,14 @@ void qute_QMatrix4x4_rotate_3(void *self, float a0, float a1, float a2, float a3
 
 // QMouseEvent
 void qute_QMouseEvent_delete(void *self);
+void * qute_QMouseEvent_cast(void *obj);
 qute_point qute_QMouseEvent_pos(void *self);
 int64_t qute_QMouseEvent_source(void *self);
 int64_t qute_QMouseEvent_flags(void *self);
 
 // QMoveEvent
 void qute_QMoveEvent_delete(void *self);
+void * qute_QMoveEvent_cast(void *obj);
 qute_point qute_QMoveEvent_pos(void *self);
 qute_point qute_QMoveEvent_oldPos(void *self);
 
@@ -1261,6 +1573,14 @@ void * qute_QMovie_stateChanged(void *self, uintptr_t id);
 void * qute_QMovie_error(void *self, uintptr_t id);
 void * qute_QMovie_finished(void *self, uintptr_t id);
 void * qute_QMovie_frameChanged(void *self, uintptr_t id);
+
+// QNativeGestureEvent
+void qute_QNativeGestureEvent_delete(void *self);
+void * qute_QNativeGestureEvent_cast(void *obj);
+int64_t qute_QNativeGestureEvent_gestureType(void *self);
+int qute_QNativeGestureEvent_fingerCount(void *self);
+double qute_QNativeGestureEvent_value(void *self);
+qute_pointf qute_QNativeGestureEvent_delta(void *self);
 
 // QOffscreenSurface
 void * qute_QOffscreenSurface_new(void * a0, void * a1);
@@ -1737,6 +2057,7 @@ void qute_QPaintDeviceWindow_update_2(void *self);
 
 // QPaintEvent
 void qute_QPaintEvent_delete(void *self);
+void * qute_QPaintEvent_cast(void *obj);
 qute_rect qute_QPaintEvent_rect(void *self);
 void * qute_QPaintEvent_region(void *self);
 
@@ -2003,6 +2324,34 @@ void qute_QPainterPathElement_set_y(void *self, double a0);
 int64_t qute_QPainterPathElement_get_type(void *self);
 void qute_QPainterPathElement_set_type(void *self, int64_t a0);
 
+// QPainterPathStroker
+void * qute_QPainterPathStroker_new(void);
+void * qute_QPainterPathStroker_new_1(void * a0);
+void qute_QPainterPathStroker_delete(void *self);
+void qute_QPainterPathStroker_setWidth(void *self, double a0);
+double qute_QPainterPathStroker_width(void *self);
+void qute_QPainterPathStroker_setCapStyle(void *self, int64_t a0);
+int64_t qute_QPainterPathStroker_capStyle(void *self);
+void qute_QPainterPathStroker_setJoinStyle(void *self, int64_t a0);
+int64_t qute_QPainterPathStroker_joinStyle(void *self);
+void qute_QPainterPathStroker_setMiterLimit(void *self, double a0);
+double qute_QPainterPathStroker_miterLimit(void *self);
+void qute_QPainterPathStroker_setCurveThreshold(void *self, double a0);
+double qute_QPainterPathStroker_curveThreshold(void *self);
+void qute_QPainterPathStroker_setDashPattern(void *self, int64_t a0);
+void qute_QPainterPathStroker_setDashPattern_1(void *self, const void *a0, ptrdiff_t a0_n);
+qute_list qute_QPainterPathStroker_dashPattern(void *self);
+void qute_QPainterPathStroker_setDashOffset(void *self, double a0);
+double qute_QPainterPathStroker_dashOffset(void *self);
+void * qute_QPainterPathStroker_createStroke(void *self, void * a0);
+
+// QPainterStateGuard
+void * qute_QPainterStateGuard_new(void * a0);
+void * qute_QPainterStateGuard_new_1(void * a0, int64_t a1);
+void qute_QPainterStateGuard_delete(void *self);
+void qute_QPainterStateGuard_save(void *self);
+void qute_QPainterStateGuard_restore(void *self);
+
 // QPalette
 void * qute_QPalette_new(void);
 void * qute_QPalette_new_1(qute_color a0);
@@ -2214,8 +2563,31 @@ void * qute_QPixmap_fromImageReader(void * a0);
 void * qute_QPixmap_fromImage_1(void * a0, int64_t a1);
 void * qute_QPixmap_fromImageReader_1(void * a0, int64_t a1);
 
+// QPixmapCache
+void qute_QPixmapCache_delete(void *self);
+int qute_QPixmapCache_cacheLimit(void);
+void qute_QPixmapCache_setCacheLimit(int a0);
+bool qute_QPixmapCache_find(const char *a0, ptrdiff_t a0_len, void * a1);
+bool qute_QPixmapCache_find_1(void * a0, void * a1);
+bool qute_QPixmapCache_insert(const char *a0, ptrdiff_t a0_len, void * a1);
+void * qute_QPixmapCache_insert_1(void * a0);
+void qute_QPixmapCache_remove(const char *a0, ptrdiff_t a0_len);
+void qute_QPixmapCache_remove_1(void * a0);
+void qute_QPixmapCache_clear(void);
+
+// QPixmapCacheKey
+void * qute_QPixmapCacheKey_new(void);
+void qute_QPixmapCacheKey_delete(void *self);
+bool qute_QPixmapCacheKey_isValid(void *self);
+
+// QPlatformSurfaceEvent
+void qute_QPlatformSurfaceEvent_delete(void *self);
+void * qute_QPlatformSurfaceEvent_cast(void *obj);
+int64_t qute_QPlatformSurfaceEvent_surfaceEventType(void *self);
+
 // QPointerEvent
 void qute_QPointerEvent_delete(void *self);
+void * qute_QPointerEvent_cast(void *obj);
 void * qute_QPointerEvent_pointingDevice(void *self);
 int64_t qute_QPointerEvent_pointerType(void *self);
 long long qute_QPointerEvent_pointCount(void *self);
@@ -2321,6 +2693,41 @@ void qute_QRadialGradient_setCenterRadius(void *self, double a0);
 double qute_QRadialGradient_focalRadius(void *self);
 void qute_QRadialGradient_setFocalRadius(void *self, double a0);
 
+// QRasterWindow
+void * qute_QRasterWindow_new(void * a0);
+void * qute_QRasterWindow_new_shim(void * a0);
+void qute_QRasterWindow_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+void qute_QRasterWindow_super_0(void *self, void * a0);
+void qute_QRasterWindow_super_1(void *self, void * a0);
+void qute_QRasterWindow_super_2(void *self, void * a0);
+bool qute_QRasterWindow_super_3(void *self, void * a0);
+int64_t qute_QRasterWindow_super_4(void *self);
+void * qute_QRasterWindow_super_5(void *self);
+qute_size qute_QRasterWindow_super_6(void *self);
+void * qute_QRasterWindow_super_7(void *self);
+void qute_QRasterWindow_super_8(void *self, void * a0);
+void qute_QRasterWindow_super_9(void *self, void * a0);
+void qute_QRasterWindow_super_10(void *self, void * a0);
+void qute_QRasterWindow_super_11(void *self, void * a0);
+void qute_QRasterWindow_super_12(void *self, void * a0);
+void qute_QRasterWindow_super_13(void *self, void * a0);
+void qute_QRasterWindow_super_14(void *self, void * a0);
+void qute_QRasterWindow_super_15(void *self, void * a0);
+void qute_QRasterWindow_super_16(void *self, void * a0);
+void qute_QRasterWindow_super_17(void *self, void * a0);
+void qute_QRasterWindow_super_18(void *self, void * a0);
+void qute_QRasterWindow_super_19(void *self, void * a0);
+void qute_QRasterWindow_super_20(void *self, void * a0);
+void qute_QRasterWindow_super_21(void *self, void * a0);
+void qute_QRasterWindow_super_22(void *self, void * a0);
+bool qute_QRasterWindow_super_23(void *self, void * a0, void * a1);
+void qute_QRasterWindow_super_24(void *self, void * a0);
+void qute_QRasterWindow_super_25(void *self, void * a0);
+void qute_QRasterWindow_super_26(void *self, void * a0);
+void * qute_QRasterWindow_prot_resolveInterface(void *self, const char * a0, int a1);
+double qute_QRasterWindow_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1);
+void * qute_QRasterWindow_cast(void *obj);
+
 // QRegion
 void * qute_QRegion_new(void);
 void * qute_QRegion_new_1(qute_rect a0);
@@ -2348,8 +2755,27 @@ void qute_QRegion_setRects(void *self, const void *a0, ptrdiff_t a0_n);
 qute_list qute_QRegion_rects(void *self);
 int qute_QRegion_rectCount(void *self);
 
+// QRegularExpressionValidator
+void * qute_QRegularExpressionValidator_new(void * a0);
+void * qute_QRegularExpressionValidator_new_1(void * a0, void * a1);
+void * qute_QRegularExpressionValidator_new_shim(void * a0);
+void qute_QRegularExpressionValidator_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+int64_t qute_QRegularExpressionValidator_super_0(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out, int a1, int *a1_out);
+void qute_QRegularExpressionValidator_super_1(void *self, const char *a0, ptrdiff_t a0_len, qute_str *a0_out);
+bool qute_QRegularExpressionValidator_super_2(void *self, void * a0);
+bool qute_QRegularExpressionValidator_super_3(void *self, void * a0, void * a1);
+void qute_QRegularExpressionValidator_super_4(void *self, void * a0);
+void qute_QRegularExpressionValidator_super_5(void *self, void * a0);
+void qute_QRegularExpressionValidator_super_6(void *self, void * a0);
+void * qute_QRegularExpressionValidator_cast(void *obj);
+void * qute_QRegularExpressionValidator_regularExpression(void *self);
+void qute_QRegularExpressionValidator_setRegularExpression(void *self, void * a0);
+void qute_QRegularExpressionValidator_regularExpressionChanged_1(void *self, void * a0);
+void * qute_QRegularExpressionValidator_regularExpressionChanged(void *self, uintptr_t id);
+
 // QResizeEvent
 void qute_QResizeEvent_delete(void *self);
+void * qute_QResizeEvent_cast(void *obj);
 qute_size qute_QResizeEvent_size(void *self);
 qute_size qute_QResizeEvent_oldSize(void *self);
 
@@ -2434,6 +2860,30 @@ void * qute_QScreen_primaryOrientationChanged(void *self, uintptr_t id);
 void * qute_QScreen_orientationChanged(void *self, uintptr_t id);
 void * qute_QScreen_refreshRateChanged(void *self, uintptr_t id);
 
+// QScreenOrientationChangeEvent
+void qute_QScreenOrientationChangeEvent_delete(void *self);
+void * qute_QScreenOrientationChangeEvent_cast(void *obj);
+void * qute_QScreenOrientationChangeEvent_screen(void *self);
+int64_t qute_QScreenOrientationChangeEvent_orientation(void *self);
+
+// QScrollEvent
+void qute_QScrollEvent_delete(void *self);
+void * qute_QScrollEvent_cast(void *obj);
+qute_pointf qute_QScrollEvent_contentPos(void *self);
+qute_pointf qute_QScrollEvent_overshootDistance(void *self);
+int64_t qute_QScrollEvent_scrollState(void *self);
+
+// QScrollPrepareEvent
+void qute_QScrollPrepareEvent_delete(void *self);
+void * qute_QScrollPrepareEvent_cast(void *obj);
+qute_pointf qute_QScrollPrepareEvent_startPos(void *self);
+qute_sizef qute_QScrollPrepareEvent_viewportSize(void *self);
+qute_rectf qute_QScrollPrepareEvent_contentPosRange(void *self);
+qute_pointf qute_QScrollPrepareEvent_contentPos(void *self);
+void qute_QScrollPrepareEvent_setViewportSize(void *self, qute_sizef a0);
+void qute_QScrollPrepareEvent_setContentPosRange(void *self, qute_rectf a0);
+void qute_QScrollPrepareEvent_setContentPos(void *self, qute_pointf a0);
+
 // QSessionManager
 void * qute_QSessionManager_cast(void *obj);
 qute_str qute_QSessionManager_sessionId(void *self);
@@ -2485,11 +2935,20 @@ void qute_QShortcut_activatedAmbiguously_1(void *self);
 void * qute_QShortcut_activated(void *self, uintptr_t id);
 void * qute_QShortcut_activatedAmbiguously(void *self, uintptr_t id);
 
+// QShortcutEvent
+void qute_QShortcutEvent_delete(void *self);
+void * qute_QShortcutEvent_cast(void *obj);
+void * qute_QShortcutEvent_key(void *self);
+int qute_QShortcutEvent_shortcutId(void *self);
+bool qute_QShortcutEvent_isAmbiguous(void *self);
+
 // QShowEvent
 void qute_QShowEvent_delete(void *self);
+void * qute_QShowEvent_cast(void *obj);
 
 // QSinglePointEvent
 void qute_QSinglePointEvent_delete(void *self);
+void * qute_QSinglePointEvent_cast(void *obj);
 int64_t qute_QSinglePointEvent_button(void *self);
 int64_t qute_QSinglePointEvent_buttons(void *self);
 qute_pointf qute_QSinglePointEvent_position(void *self);
@@ -2726,6 +3185,11 @@ void qute_QStaticText_setPerformanceHint(void *self, int64_t a0);
 int64_t qute_QStaticText_performanceHint(void *self);
 void qute_QStaticText_prepare_1(void *self, void * a0, void * a1);
 
+// QStatusTipEvent
+void qute_QStatusTipEvent_delete(void *self);
+void * qute_QStatusTipEvent_cast(void *obj);
+qute_str qute_QStatusTipEvent_tip(void *self);
+
 // QStyleHints
 void * qute_QStyleHints_cast(void *obj);
 void qute_QStyleHints_setMouseDoubleClickInterval(void *self, int a0);
@@ -2882,6 +3346,7 @@ void qute_QSyntaxHighlighter_rehighlightBlock(void *self, void * a0);
 
 // QTabletEvent
 void qute_QTabletEvent_delete(void *self);
+void * qute_QTabletEvent_cast(void *obj);
 double qute_QTabletEvent_pressure(void *self);
 double qute_QTabletEvent_rotation(void *self);
 double qute_QTabletEvent_z(void *self);
@@ -3259,6 +3724,22 @@ void * qute_QTextDocumentFragment_fromMarkdown(const char *a0, ptrdiff_t a0_len)
 void * qute_QTextDocumentFragment_fromHtml_1(const char *a0, ptrdiff_t a0_len, void * a1);
 void * qute_QTextDocumentFragment_fromMarkdown_1(const char *a0, ptrdiff_t a0_len, int64_t a1);
 
+// QTextDocumentWriter
+void * qute_QTextDocumentWriter_new(void);
+void * qute_QTextDocumentWriter_new_1(void * a0, const char *a1, ptrdiff_t a1_len);
+void * qute_QTextDocumentWriter_new_2(const char *a0, ptrdiff_t a0_len);
+void * qute_QTextDocumentWriter_new_3(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len);
+void qute_QTextDocumentWriter_delete(void *self);
+void qute_QTextDocumentWriter_setFormat(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QTextDocumentWriter_format(void *self);
+void qute_QTextDocumentWriter_setDevice(void *self, void * a0);
+void * qute_QTextDocumentWriter_device(void *self);
+void qute_QTextDocumentWriter_setFileName(void *self, const char *a0, ptrdiff_t a0_len);
+qute_str qute_QTextDocumentWriter_fileName(void *self);
+bool qute_QTextDocumentWriter_write(void *self, void * a0);
+bool qute_QTextDocumentWriter_write_1(void *self, void * a0);
+qute_list qute_QTextDocumentWriter_supportedDocumentFormats(void);
+
 // QTextFormat
 void * qute_QTextFormat_new(void);
 void * qute_QTextFormat_new_1(int a0);
@@ -3556,8 +4037,14 @@ int qute_QTextTableFormat_headerRowCount(void *self);
 void qute_QTextTableFormat_setBorderCollapse(void *self, bool a0);
 bool qute_QTextTableFormat_borderCollapse(void *self);
 
+// QToolBarChangeEvent
+void qute_QToolBarChangeEvent_delete(void *self);
+void * qute_QToolBarChangeEvent_cast(void *obj);
+bool qute_QToolBarChangeEvent_toggle(void *self);
+
 // QTouchEvent
 void qute_QTouchEvent_delete(void *self);
+void * qute_QTouchEvent_cast(void *obj);
 void * qute_QTouchEvent_target(void *self);
 int64_t qute_QTouchEvent_touchPointStates(void *self);
 
@@ -3615,6 +4102,120 @@ bool qute_QTransform_quadToSquare(const void *a0, ptrdiff_t a0_n, void * *a1_out
 bool qute_QTransform_quadToQuad(const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n, void * *a2_out);
 void * qute_QTransform_fromTranslate(double a0, double a1);
 void * qute_QTransform_fromScale(double a0, double a1);
+
+// QUndoCommand
+void * qute_QUndoCommand_new(void * a0);
+void * qute_QUndoCommand_new_1(const char *a0, ptrdiff_t a0_len, void * a1);
+void * qute_QUndoCommand_new_shim(void * a0);
+void qute_QUndoCommand_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+void qute_QUndoCommand_super_0(void *self);
+void qute_QUndoCommand_super_1(void *self);
+int qute_QUndoCommand_super_2(void *self);
+bool qute_QUndoCommand_super_3(void *self, void * a0);
+void qute_QUndoCommand_delete(void *self);
+void qute_QUndoCommand_undo(void *self);
+void qute_QUndoCommand_redo(void *self);
+qute_str qute_QUndoCommand_text(void *self);
+qute_str qute_QUndoCommand_actionText(void *self);
+void qute_QUndoCommand_setText(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QUndoCommand_isObsolete(void *self);
+void qute_QUndoCommand_setObsolete(void *self, bool a0);
+int qute_QUndoCommand_id(void *self);
+bool qute_QUndoCommand_mergeWith(void *self, void * a0);
+int qute_QUndoCommand_childCount(void *self);
+void * qute_QUndoCommand_child(void *self, int a0);
+
+// QUndoGroup
+void * qute_QUndoGroup_new(void * a0);
+void * qute_QUndoGroup_new_shim(void * a0);
+void qute_QUndoGroup_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QUndoGroup_super_0(void *self, void * a0);
+bool qute_QUndoGroup_super_1(void *self, void * a0, void * a1);
+void qute_QUndoGroup_super_2(void *self, void * a0);
+void qute_QUndoGroup_super_3(void *self, void * a0);
+void qute_QUndoGroup_super_4(void *self, void * a0);
+void * qute_QUndoGroup_cast(void *obj);
+void qute_QUndoGroup_addStack(void *self, void * a0);
+void qute_QUndoGroup_removeStack(void *self, void * a0);
+qute_list qute_QUndoGroup_stacks(void *self);
+void * qute_QUndoGroup_activeStack(void *self);
+void * qute_QUndoGroup_createUndoAction(void *self, void * a0);
+void * qute_QUndoGroup_createRedoAction(void *self, void * a0);
+bool qute_QUndoGroup_canUndo(void *self);
+bool qute_QUndoGroup_canRedo(void *self);
+qute_str qute_QUndoGroup_undoText(void *self);
+qute_str qute_QUndoGroup_redoText(void *self);
+bool qute_QUndoGroup_isClean(void *self);
+void qute_QUndoGroup_undo(void *self);
+void qute_QUndoGroup_redo(void *self);
+void qute_QUndoGroup_setActiveStack(void *self, void * a0);
+void qute_QUndoGroup_activeStackChanged_1(void *self, void * a0);
+void qute_QUndoGroup_indexChanged_1(void *self, int a0);
+void qute_QUndoGroup_cleanChanged_1(void *self, bool a0);
+void qute_QUndoGroup_canUndoChanged_1(void *self, bool a0);
+void qute_QUndoGroup_canRedoChanged_1(void *self, bool a0);
+void qute_QUndoGroup_undoTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QUndoGroup_redoTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QUndoGroup_createUndoAction_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len);
+void * qute_QUndoGroup_createRedoAction_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len);
+void * qute_QUndoGroup_activeStackChanged(void *self, uintptr_t id);
+void * qute_QUndoGroup_indexChanged(void *self, uintptr_t id);
+void * qute_QUndoGroup_cleanChanged(void *self, uintptr_t id);
+void * qute_QUndoGroup_canUndoChanged(void *self, uintptr_t id);
+void * qute_QUndoGroup_canRedoChanged(void *self, uintptr_t id);
+void * qute_QUndoGroup_undoTextChanged(void *self, uintptr_t id);
+void * qute_QUndoGroup_redoTextChanged(void *self, uintptr_t id);
+
+// QUndoStack
+void * qute_QUndoStack_new(void * a0);
+void * qute_QUndoStack_new_shim(void * a0);
+void qute_QUndoStack_shim_init(void *self, uintptr_t id, const uint64_t *mask);
+bool qute_QUndoStack_super_0(void *self, void * a0);
+bool qute_QUndoStack_super_1(void *self, void * a0, void * a1);
+void qute_QUndoStack_super_2(void *self, void * a0);
+void qute_QUndoStack_super_3(void *self, void * a0);
+void qute_QUndoStack_super_4(void *self, void * a0);
+void * qute_QUndoStack_cast(void *obj);
+void qute_QUndoStack_clear(void *self);
+void qute_QUndoStack_push(void *self, void * a0);
+bool qute_QUndoStack_canUndo(void *self);
+bool qute_QUndoStack_canRedo(void *self);
+qute_str qute_QUndoStack_undoText(void *self);
+qute_str qute_QUndoStack_redoText(void *self);
+int qute_QUndoStack_count(void *self);
+int qute_QUndoStack_index(void *self);
+qute_str qute_QUndoStack_text(void *self, int a0);
+void * qute_QUndoStack_createUndoAction(void *self, void * a0);
+void * qute_QUndoStack_createRedoAction(void *self, void * a0);
+bool qute_QUndoStack_isActive(void *self);
+bool qute_QUndoStack_isClean(void *self);
+int qute_QUndoStack_cleanIndex(void *self);
+void qute_QUndoStack_beginMacro(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QUndoStack_endMacro(void *self);
+void qute_QUndoStack_setUndoLimit(void *self, int a0);
+int qute_QUndoStack_undoLimit(void *self);
+void * qute_QUndoStack_command(void *self, int a0);
+void qute_QUndoStack_setClean(void *self);
+void qute_QUndoStack_resetClean(void *self);
+void qute_QUndoStack_setIndex(void *self, int a0);
+void qute_QUndoStack_undo(void *self);
+void qute_QUndoStack_redo(void *self);
+void qute_QUndoStack_setActive(void *self);
+void qute_QUndoStack_indexChanged_1(void *self, int a0);
+void qute_QUndoStack_cleanChanged_1(void *self, bool a0);
+void qute_QUndoStack_canUndoChanged_1(void *self, bool a0);
+void qute_QUndoStack_canRedoChanged_1(void *self, bool a0);
+void qute_QUndoStack_undoTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len);
+void qute_QUndoStack_redoTextChanged_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QUndoStack_createUndoAction_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len);
+void * qute_QUndoStack_createRedoAction_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len);
+void qute_QUndoStack_setActive_1(void *self, bool a0);
+void * qute_QUndoStack_indexChanged(void *self, uintptr_t id);
+void * qute_QUndoStack_cleanChanged(void *self, uintptr_t id);
+void * qute_QUndoStack_canUndoChanged(void *self, uintptr_t id);
+void * qute_QUndoStack_canRedoChanged(void *self, uintptr_t id);
+void * qute_QUndoStack_undoTextChanged(void *self, uintptr_t id);
+void * qute_QUndoStack_redoTextChanged(void *self, uintptr_t id);
 
 // QValidator
 void * qute_QValidator_new_shim(void * a0);
@@ -3726,8 +4327,14 @@ qute_point qute_QVector4D_toPoint(void *self);
 qute_pointf qute_QVector4D_toPointF(void *self);
 float qute_QVector4D_dotProduct(void * a0, void * a1);
 
+// QWhatsThisClickedEvent
+void qute_QWhatsThisClickedEvent_delete(void *self);
+void * qute_QWhatsThisClickedEvent_cast(void *obj);
+qute_str qute_QWhatsThisClickedEvent_href(void *self);
+
 // QWheelEvent
 void qute_QWheelEvent_delete(void *self);
+void * qute_QWheelEvent_cast(void *obj);
 qute_point qute_QWheelEvent_pixelDelta(void *self);
 qute_point qute_QWheelEvent_angleDelta(void *self);
 int64_t qute_QWheelEvent_phase(void *self);
@@ -3921,6 +4528,12 @@ void * qute_QWindow_contentOrientationChanged(void *self, uintptr_t id);
 void * qute_QWindow_focusObjectChanged(void *self, uintptr_t id);
 void * qute_QWindow_opacityChanged(void *self, uintptr_t id);
 void * qute_QWindow_transientParentChanged(void *self, uintptr_t id);
+
+// QWindowStateChangeEvent
+void qute_QWindowStateChangeEvent_delete(void *self);
+void * qute_QWindowStateChangeEvent_cast(void *obj);
+int64_t qute_QWindowStateChangeEvent_oldState(void *self);
+bool qute_QWindowStateChangeEvent_isOverride(void *self);
 
 #ifdef __cplusplus
 }

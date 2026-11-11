@@ -1,5 +1,5 @@
 # Classes bound in package qtwebenginecore. See qtcore.yaml for options.
-# QWebEngineNotification is left out: Qt hands it over as a std::unique_ptr.
+
 module: QtWebEngineCore
 package: qtwebenginecore
 classes:

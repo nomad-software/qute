@@ -170,6 +170,32 @@ const (
 	QEventPointReleased   QEventPointStates = 8
 )
 
+// QFileSystemModelRoles wraps the enum QFileSystemModel::Roles.
+type QFileSystemModelRoles int64
+
+const (
+	QFileSystemModelFileIconRole    QFileSystemModelRoles = 1
+	QFileSystemModelFileInfoRole    QFileSystemModelRoles = 252
+	QFileSystemModelFilePathRole    QFileSystemModelRoles = 257
+	QFileSystemModelFileNameRole    QFileSystemModelRoles = 258
+	QFileSystemModelFilePermissions QFileSystemModelRoles = 259
+)
+
+// QFileSystemModelOptions is the flags type for QFileSystemModel::Option (QFlags<QFileSystemModel::Option>).
+type QFileSystemModelOptions int64
+
+// Has reports whether every bit of x is set in f.
+func (f QFileSystemModelOptions) Has(x QFileSystemModelOptions) bool { return f&x == x }
+
+// QFileSystemModelOption wraps the enum QFileSystemModel::Option. It is the same type as QFileSystemModelOptions, so values combine with |.
+type QFileSystemModelOption = QFileSystemModelOptions
+
+const (
+	QFileSystemModelDontWatchForChanges         QFileSystemModelOptions = 1
+	QFileSystemModelDontResolveSymlinks         QFileSystemModelOptions = 2
+	QFileSystemModelDontUseCustomDirectoryIcons QFileSystemModelOptions = 4
+)
+
 // QFontStyleHint wraps the enum QFont::StyleHint.
 type QFontStyleHint int64
 
@@ -762,6 +788,14 @@ const (
 	QIconThemeIconNThemeIcons             QIconThemeIcon = 150
 )
 
+// QIconEngineIconEngineHook wraps the enum QIconEngine::IconEngineHook.
+type QIconEngineIconEngineHook int64
+
+const (
+	QIconEngineIsNullHook       QIconEngineIconEngineHook = 3
+	QIconEngineScaledPixmapHook QIconEngineIconEngineHook = 4
+)
+
 // QImageInvertMode wraps the enum QImage::InvertMode.
 type QImageInvertMode int64
 
@@ -868,6 +902,16 @@ const (
 	QImageReaderDeviceError            QImageReaderImageReaderError = 2
 	QImageReaderUnsupportedFormatError QImageReaderImageReaderError = 3
 	QImageReaderInvalidDataError       QImageReaderImageReaderError = 4
+)
+
+// QImageWriterImageWriterError wraps the enum QImageWriter::ImageWriterError.
+type QImageWriterImageWriterError int64
+
+const (
+	QImageWriterUnknownError           QImageWriterImageWriterError = 0
+	QImageWriterDeviceError            QImageWriterImageWriterError = 1
+	QImageWriterUnsupportedFormatError QImageWriterImageWriterError = 2
+	QImageWriterInvalidImageError      QImageWriterImageWriterError = 3
 )
 
 // QInputDeviceDeviceTypes is the flags type for QInputDevice::DeviceType (QFlags<QInputDevice::DeviceType>).
@@ -1223,6 +1267,14 @@ const (
 	QPainterPathCurveToDataElement QPainterPathElementType = 3
 )
 
+// QPainterStateGuardInitialState wraps the enum QPainterStateGuard::InitialState.
+type QPainterStateGuardInitialState int64
+
+const (
+	QPainterStateGuardInitialStateSave   QPainterStateGuardInitialState = 0
+	QPainterStateGuardInitialStateNoSave QPainterStateGuardInitialState = 1
+)
+
 // QPaletteColorGroup wraps the enum QPalette::ColorGroup.
 type QPaletteColorGroup int64
 
@@ -1355,6 +1407,14 @@ const (
 	QPixelFormatCurrentSystemEndian QPixelFormatByteOrder = 2
 )
 
+// QPlatformSurfaceEventSurfaceEventType wraps the enum QPlatformSurfaceEvent::SurfaceEventType.
+type QPlatformSurfaceEventSurfaceEventType int64
+
+const (
+	QPlatformSurfaceEventSurfaceCreated            QPlatformSurfaceEventSurfaceEventType = 0
+	QPlatformSurfaceEventSurfaceAboutToBeDestroyed QPlatformSurfaceEventSurfaceEventType = 1
+)
+
 // QPointingDevicePointerTypes is the flags type for QPointingDevice::PointerType (QFlags<QPointingDevice::PointerType>).
 type QPointingDevicePointerTypes int64
 
@@ -1394,6 +1454,15 @@ type QRegionRegionType int64
 const (
 	QRegionRectangle QRegionRegionType = 0
 	QRegionEllipse   QRegionRegionType = 1
+)
+
+// QScrollEventScrollState wraps the enum QScrollEvent::ScrollState.
+type QScrollEventScrollState int64
+
+const (
+	QScrollEventScrollStarted  QScrollEventScrollState = 0
+	QScrollEventScrollUpdated  QScrollEventScrollState = 1
+	QScrollEventScrollFinished QScrollEventScrollState = 2
 )
 
 // QSessionManagerRestartHint wraps the enum QSessionManager::RestartHint.

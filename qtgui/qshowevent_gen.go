@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -31,4 +32,23 @@ func init() {
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QShowEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QShowEvent {
 	return rt.View[QShowEvent](rt.WrapClass(p, "QShowEvent", rt.ModeFor(own)), p)
+}
+
+// QShowEventCast returns e as a *QShowEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QShowEventCast(e qtcore.QEventLike) *QShowEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QShowEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QShowEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QShowEvent](rt.WrapClassFrom(p, "QShowEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
 }

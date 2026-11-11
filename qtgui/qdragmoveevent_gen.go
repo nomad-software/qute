@@ -34,6 +34,25 @@ func QDragMoveEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QDragMoveEve
 	return rt.View[QDragMoveEvent](rt.WrapClass(p, "QDragMoveEvent", rt.ModeFor(own)), p)
 }
 
+// QDragMoveEventCast returns e as a *QDragMoveEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QDragMoveEventCast(e qtcore.QEventLike) *QDragMoveEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QDragMoveEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QDragMoveEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QDragMoveEvent](rt.WrapClassFrom(p, "QDragMoveEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // AnswerRect wraps QDragMoveEvent::answerRect.
 //
 //	C++: QRect QDragMoveEvent::answerRect() const

@@ -1,6 +1,7 @@
 package qute_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -332,5 +333,130 @@ func TestSubclassOverrideThroughEmbedding(t *testing.T) {
 		if got := pw.SizeHint(); got.Width == 123 {
 			t.Errorf("no override: SizeHint = %v", got)
 		}
+	})
+}
+
+// swatch is a Go icon engine that paints one colour.
+type swatch struct {
+	qtgui.QIconEngineBase
+	color  qtgui.QColor
+	clones int
+}
+
+func (s *swatch) Paint(p *qtgui.QPainter, r qtcore.QRect, mode qtgui.QIconMode, state qtgui.QIconState) {
+	p.FillRect(r, s.color)
+}
+
+func (s *swatch) Clone() *qtgui.QIconEngine {
+	s.clones++
+	return qtgui.NewQIconEngineWith(&swatch{color: s.color})
+}
+
+func (s *swatch) Key() string { return "swatch" }
+
+// A QIcon draws through a Go engine, owns it, and frees it with its last
+// copy; Clone's result belongs to whoever asked for it (transfer-to-go).
+func TestGoIconEngine(t *testing.T) {
+	qutetest.Run(t, func() {
+		red := qtgui.RGB(220, 20, 20)
+		sw := &swatch{color: red}
+		e := qtgui.NewQIconEngineWith(sw)
+		icon := qtgui.NewQIconWithIconEngine(e)
+		if e.Ownership() != qtcore.Parented {
+			t.Errorf("engine in an icon: %v, want Parented", e.Ownership())
+		}
+		img := icon.Pixmap(qtcore.QSize{Width: 8, Height: 8}).ToImage()
+		if img.PixelColor(4, 4) != red {
+			t.Errorf("icon pixel %v, want %v", img.PixelColor(4, 4), red)
+		}
+		if e.Key() != "swatch" || e.GoValue() != sw {
+			t.Error("Key or GoValue does not reach the Go engine")
+		}
+		c := e.Clone()
+		if c == nil || c.Ownership() != qtcore.Owned || sw.clones != 1 {
+			t.Fatalf("clone: %v, %d clones", c, sw.clones)
+		}
+		if _, ok := c.GoValue().(*swatch); !ok {
+			t.Error("the clone is not the Go engine Clone returned")
+		}
+		c.Delete()
+		icon.Delete()
+		if e.Alive() {
+			t.Error("engine outlived its last icon")
+		}
+	})
+}
+
+// clickRecognizer turns a mouse press into a finished gesture.
+type clickRecognizer struct {
+	qtwidgets.QGestureRecognizerBase
+	created int
+}
+
+func (r *clickRecognizer) Create(target *qtcore.QObject) *qtwidgets.QGesture {
+	r.created++
+	return qtwidgets.NewQGesture(nil)
+}
+
+func (r *clickRecognizer) Recognize(g *qtwidgets.QGesture, watched *qtcore.QObject, e *qtcore.QEvent) qtwidgets.QGestureRecognizerResult {
+	if e.Type() == qtcore.QEventMouseButtonPress {
+		return qtwidgets.QGestureRecognizerFinishGesture
+	}
+	return qtwidgets.QGestureRecognizerIgnore
+}
+
+// gestureWidget records the gesture events it receives.
+type gestureWidget struct {
+	qtwidgets.QWidgetBase
+	typ   qtcore.GestureType
+	got   []qtcore.GestureState
+	event *qtwidgets.QGestureEvent
+}
+
+func (w *gestureWidget) Event(e *qtcore.QEvent) bool {
+	if ge := qtwidgets.QGestureEventCast(e); ge != nil {
+		w.event = ge
+		if g := ge.Gesture(w.typ); g != nil {
+			w.got = append(w.got, g.State())
+			ge.SetWidget(w.QWidget) // Qt fills it in only for graphics views
+			if g.GestureType() != w.typ || len(ge.Gestures()) != 1 || ge.Widget() != w.QWidget {
+				panic(fmt.Sprintf("gesture event: type %v (want %v), %d gestures, widget %v", g.GestureType(), w.typ, len(ge.Gestures()), ge.Widget()))
+			}
+			ge.Accept(g)
+		}
+		return true
+	}
+	return w.Super().Event(e)
+}
+
+// A Go recognizer, registered with Qt, turns clicks into gesture events for
+// widgets that grab its gesture type.
+func TestGoGestureRecognizer(t *testing.T) {
+	qutetest.Run(t, func() {
+		rec := &clickRecognizer{}
+		r := qtwidgets.NewQGestureRecognizerWith(rec)
+		typ := qtwidgets.QGestureRecognizerRegisterRecognizer(r)
+		if r.Ownership() != qtcore.Parented {
+			t.Errorf("registered recognizer: %v, want Parented", r.Ownership())
+		}
+		gw := &gestureWidget{typ: typ}
+		w := qtwidgets.NewQWidgetWith(gw, nil)
+		w.Resize(40, 40)
+		w.GrabGesture(typ)
+		w.Show()
+		qutetest.Click(w)
+		if rec.created == 0 || len(gw.got) == 0 || gw.got[len(gw.got)-1] != qtcore.GestureFinished {
+			t.Errorf("created %d gestures, states %v", rec.created, gw.got)
+		}
+		if gw.event == nil || gw.event.Alive() {
+			t.Error("the cast gesture event outlived its handler")
+		}
+		g := r.Create(nil) // from Go: the caller owns the result
+		if g == nil || g.Ownership() != qtcore.Owned {
+			t.Errorf("Create from Go: %v", g)
+		}
+		g.Delete()
+		w.Delete()
+		qtwidgets.QGestureRecognizerUnregisterRecognizer(typ)
 	})
 }

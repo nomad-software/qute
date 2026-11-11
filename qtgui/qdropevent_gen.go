@@ -34,6 +34,25 @@ func QDropEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QDropEvent {
 	return rt.View[QDropEvent](rt.WrapClass(p, "QDropEvent", rt.ModeFor(own)), p)
 }
 
+// QDropEventCast returns e as a *QDropEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QDropEventCast(e qtcore.QEventLike) *QDropEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QDropEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QDropEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QDropEvent](rt.WrapClassFrom(p, "QDropEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Position wraps QDropEvent::position.
 //
 //	C++: QPointF QDropEvent::position() const

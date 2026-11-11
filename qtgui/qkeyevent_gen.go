@@ -34,6 +34,25 @@ func QKeyEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QKeyEvent {
 	return rt.View[QKeyEvent](rt.WrapClass(p, "QKeyEvent", rt.ModeFor(own)), p)
 }
 
+// QKeyEventCast returns e as a *QKeyEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QKeyEventCast(e qtcore.QEventLike) *QKeyEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QKeyEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QKeyEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QKeyEvent](rt.WrapClassFrom(p, "QKeyEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Key wraps QKeyEvent::key.
 //
 //	C++: int QKeyEvent::key() const

@@ -38,6 +38,25 @@ func QGraphicsSceneHelpEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QGr
 	return rt.View[QGraphicsSceneHelpEvent](rt.WrapClass(p, "QGraphicsSceneHelpEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneHelpEventCast returns e as a *QGraphicsSceneHelpEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneHelpEventCast(e qtcore.QEventLike) *QGraphicsSceneHelpEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneHelpEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneHelpEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneHelpEvent](rt.WrapClassFrom(p, "QGraphicsSceneHelpEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // ScenePos wraps QGraphicsSceneHelpEvent::scenePos.
 //
 //	C++: QPointF QGraphicsSceneHelpEvent::scenePos() const

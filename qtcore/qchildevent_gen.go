@@ -33,6 +33,25 @@ func QChildEventFromPtr(p unsafe.Pointer, own Ownership) *QChildEvent {
 	return rt.View[QChildEvent](rt.WrapClass(p, "QChildEvent", rt.ModeFor(own)), p)
 }
 
+// QChildEventCast returns e as a *QChildEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QChildEventCast(e QEventLike) *QChildEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QChildEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QChildEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QChildEvent](rt.WrapClassFrom(p, "QChildEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Child wraps QChildEvent::child.
 //
 //	C++: QObject * QChildEvent::child() const

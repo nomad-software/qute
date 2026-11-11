@@ -34,6 +34,25 @@ func QWheelEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QWheelEvent {
 	return rt.View[QWheelEvent](rt.WrapClass(p, "QWheelEvent", rt.ModeFor(own)), p)
 }
 
+// QWheelEventCast returns e as a *QWheelEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QWheelEventCast(e qtcore.QEventLike) *QWheelEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QWheelEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QWheelEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QWheelEvent](rt.WrapClassFrom(p, "QWheelEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // PixelDelta wraps QWheelEvent::pixelDelta.
 //
 //	C++: QPoint QWheelEvent::pixelDelta() const

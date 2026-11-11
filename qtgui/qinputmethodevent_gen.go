@@ -34,6 +34,25 @@ func QInputMethodEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QInputMet
 	return rt.View[QInputMethodEvent](rt.WrapClass(p, "QInputMethodEvent", rt.ModeFor(own)), p)
 }
 
+// QInputMethodEventCast returns e as a *QInputMethodEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QInputMethodEventCast(e qtcore.QEventLike) *QInputMethodEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QInputMethodEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QInputMethodEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QInputMethodEvent](rt.WrapClassFrom(p, "QInputMethodEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // SetCommitString wraps QInputMethodEvent::setCommitString.
 //
 //	C++: void QInputMethodEvent::setCommitString(const QString & commitString, int replaceFrom = …, int replaceLength = …)

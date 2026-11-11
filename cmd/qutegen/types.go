@@ -116,7 +116,6 @@ var deliberateBases = map[string]string{
 	"_IO_FILE":                    "C FILE*; use the QFile name or file-descriptor overloads",
 	"QModelRoleDataSpan":          "a batching optimisation of data(); use Data",
 	"QAbstractUndoItem":           "custom undo items need C++ subclassing",
-	"QIconEngine":                 "custom icon engines need C++ subclassing",
 	"QAbstractTextDocumentLayout": "custom text layouts need C++ subclassing",
 	"QPermission":                 "a templated API",
 	"QLatin1String":               "use the string overload",
@@ -137,8 +136,6 @@ var deliberateBases = map[string]string{
 	"QWebChannel":                 "QtWebChannel is not bound",
 	"QPrinter":                    "QtPrintSupport is not bound",
 	"QRhi":                        "Qt's rendering hardware interface is not bound",
-	"QXmlStreamReader":            "XML streams are not bound; use the file name or byte-array overloads",
-	"QMimeType":                   "the MIME database is not bound; use the file format enum",
 	"QAbstractVideoBuffer":        "custom video buffers need C++ subclassing",
 	"QRawFont":                    "low-level font internals",
 	"QFontVariableAxis":           "low-level font internals",
@@ -161,6 +158,26 @@ var deliberateBases = map[string]string{
 	"QJsonArray::const_iterator":  "iterator; use At and Insert",
 	"QTextBlock::iterator":        "iterator; use the block and fragment methods",
 	"QTextFrame::iterator":        "iterator; use ChildFrames",
+	"QCborArray::Iterator":        "iterator; use At, Insert and RemoveAt",
+	"QCborArray::ConstIterator":   "iterator; use At, Insert and RemoveAt",
+	"QCborMap::Iterator":          "iterator; use Value, Contains, Keys and Remove",
+	"QCborMap::ConstIterator":     "iterator; use Value, Contains, Keys and Remove",
+	"QCborValueRef":               "a reference into a CBOR container; use the value getters",
+	"QVersionNumber::It":          "iterator; use Segments and SegmentAt",
+	"QCborSimpleType":             "a global enum the IR does not record; use the typed QCborValue constructors",
+	"QCborTag":                    "a global enum the IR does not record; tagged CBOR values are not bound",
+	"QCborKnownTags":              "a global enum the IR does not record; tagged CBOR values are not bound",
+	"QCborNegativeInteger":        "a global enum the IR does not record; use ToInteger",
+	"QtMsgType":                   "a global enum the IR does not record",
+	"qfloat16":                    "half-precision floats; use the float32 and float64 forms",
+	"std::nullptr_t":              "a null-only overload; use the Null type or value instead",
+	"QGenericArgument":            "type-erased C++ argument pointers (Q_ARG); call the Go method instead",
+	"QGenericReturnArgument":      "type-erased C++ argument pointers (Q_RETURN_ARG); call the Go method instead",
+	"QUntypedBindable":            "Qt's property-binding system; use the getters, setters and change signals",
+	"QMetaObject::Data":           "moc internals",
+	"QBasicUtf8StringView<false>": "use the string overload",
+	"QCollator":                   "collation is not bound; golang.org/x/text/collate covers it",
+	"QAbstractOpenGLFunctions":    "the versioned OpenGL function tables are not in the IR; use QOpenGLFunctions and QOpenGLExtraFunctions",
 }
 
 // deliberate returns why a type is left out by design, or "" if it is not.
@@ -177,7 +194,7 @@ func deliberate(can, base string, ptr, ref, rref, ret bool) string {
 		return "std::initializer_list cannot be built at run time; use the list overload"
 	case has("std::reverse_iterator<"), has("QList<QRect>::const_iterator"):
 		return "iterator; use the method that returns a list"
-	case has("QPlatform"):
+	case has("QPlatform") && !has("QPlatformSurfaceEvent"): // the surface event is public API
 		return "private platform API"
 	case strings.HasSuffix(base, "Private"):
 		return "private API"

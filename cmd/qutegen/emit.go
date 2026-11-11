@@ -206,8 +206,14 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	}
 	for _, mm := range c.Ctors {
 		pre, args, _ := g.cppCall(mm.Params)
+		build := fmt.Sprintf("new %s(%s)", ctorClass, strings.Join(args, ", "))
+		if mm.Overlay != nil && mm.Overlay.Cpp != "" {
+			// a constructor's cpp builds the object: $class is the class to
+			// construct (the shim when there is one), $0... the arguments
+			build = expandCpp(strings.ReplaceAll(mm.Overlay.Cpp, "$class", ctorClass), self, args)
+		}
 		add(cDecl("void *", mm.CName, methodCParams(mm, false)),
-			strings.Join(append(pre, fmt.Sprintf("return static_cast<%s *>(new %s(%s));", cpp, ctorClass, strings.Join(args, ", "))), "\n\t"))
+			strings.Join(append(pre, fmt.Sprintf("return static_cast<%s *>(%s);", cpp, build)), "\n\t"))
 	}
 	if c.Opts.Subclass && c.Shim {
 		// the shim re-exports protected enums, which code outside the class
@@ -271,6 +277,10 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	if c.QObject {
 		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(qobject_cast<%s *>(static_cast<QObject *>(obj)));", cpp))
+	}
+	if c.Event && c.Base != nil {
+		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
+			fmt.Sprintf("return static_cast<void *>(dynamic_cast<%s *>(static_cast<QEvent *>(obj)));", cpp))
 	}
 	for i, d := range c.Opts.DependsOn {
 		if d.Cpp != "" {
@@ -1084,6 +1094,21 @@ func (g *Gen) emitClass(c *Class) []byte {
 		b.p("\tif self == nil {\n\t\treturn nil\n\t}")
 		b.p("\tp := C.qute_%s_cast(self)\n\tif p == nil {\n\t\treturn nil\n\t}", cls)
 		b.p("\treturn rt.View[%s](rt.WrapClass(p, %q, rt.KeepOrBorrow), p)\n}\n", cls, cls)
+	}
+	if c.Event && c.Base != nil {
+		// Most event classes reach Go only as a QEvent (event, eventFilter,
+		// changeEvent). The cast depends on e, so it dies with it: a scoped
+		// event is Dead once its handler returns, and so is its cast.
+		el := g.qual(core, m, "QEventLike")
+		b.p("// %sCast returns e as a *%s if it is one (dynamic_cast), or nil. The", cls, cls)
+		b.p("// result is valid as long as e is: inside a handler, until it returns.")
+		b.p("func %sCast(e %s) *%s {", cls, el, cls)
+		b.p("\tif e == nil {\n\t\treturn nil\n\t}")
+		b.p("\tself := rt.UseArg(unsafe.Pointer(e.AsQEvent()), %q)", cls+"Cast")
+		b.p("\tif self == nil {\n\t\treturn nil\n\t}")
+		b.p("\tp := C.qute_%s_cast(self)\n\tif p == nil {\n\t\treturn nil\n\t}", cls)
+		b.p("\tr := rt.View[%s](rt.WrapClassFrom(p, %q, rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)", cls, cls)
+		b.p("\truntime.KeepAlive(e)\n\treturn r\n}\n")
 	}
 	if c.Base == nil {
 		g.emitRootMethods(c, &b)

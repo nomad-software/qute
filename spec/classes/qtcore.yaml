@@ -77,3 +77,66 @@ classes:
   "QTimeZone::OffsetData": { kind: value }
   QSysInfo: { no-construct: true }
   QChar: { enums-only: true }
+  QAbstractAnimation: {}
+  QAnimationGroup: {}
+  QParallelAnimationGroup: {}
+  QSequentialAnimationGroup: {}
+  QPauseAnimation: {}
+  QVariantAnimation: {}
+  QPropertyAnimation: {}
+  QTimeLine: {}
+  QChronoTimer: {}
+  QCommandLineOption: { kind: value }
+  QCommandLineParser: {}
+  QIdentityProxyModel: {}
+  QTransposeProxyModel: {}
+  QConcatenateTablesProxyModel: {}
+  QDirIterator: {}
+  QFileSelector: {}
+  QFileSystemWatcher: {}
+  QLibraryInfo: { no-construct: true }
+  QVersionNumber: { kind: value }
+  QLockFile: {}
+  QLoggingCategory: {}
+  QMimeDatabase: {}
+  QMimeType: { kind: value }
+  QOperatingSystemVersionBase: { kind: value }
+  QOperatingSystemVersionUnexported: { kind: value }
+  QOperatingSystemVersion: { kind: value }
+  QProcess: {}
+  QProcessEnvironment: { kind: value }
+  "QProcess::UnixProcessParameters": { kind: value }
+  QResource: {}
+  QSaveFile: {}
+  QSignalMapper: {}
+  QStandardPaths: { no-construct: true }
+  QStorageInfo: { kind: value }
+  QTemporaryDir: {}
+  QTemporaryFile: {}
+  QXmlStreamReader: {}
+  QXmlStreamWriter: {}
+  QXmlStreamAttribute: { kind: value }
+  QXmlStreamAttributes: { kind: value }
+  QXmlStreamEntityDeclaration: { kind: value }
+  QXmlStreamNamespaceDeclaration: { kind: value }
+  QXmlStreamNotationDeclaration: { kind: value }
+  QXmlStreamEntityResolver: {}
+  QCborValue: { kind: value }
+  QCborMap: { kind: value }
+  QCborArray: { kind: value }
+  QCborStreamReader: {}
+  QCborStreamWriter: {}
+  QCborParserError: { kind: value }
+  QCborError: { kind: value }
+  QJsonParseError: { kind: value }
+  QMetaObject: { no-construct: true }
+  QMetaMethod: { kind: value }
+  QMetaProperty: { kind: value }
+  QMetaEnum: { kind: value }
+  QMetaClassInfo: { kind: value }
+  QSocketDescriptor: { kind: value }
+  QSocketNotifier: {}
+  QEventLoopLocker: {}
+  QObjectCleanupHandler: {}
+  QDynamicPropertyChangeEvent: { kind: event }
+  QTypeRevision: { kind: value }

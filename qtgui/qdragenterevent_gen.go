@@ -5,6 +5,7 @@ package qtgui
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -31,4 +32,23 @@ func init() {
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QDragEnterEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QDragEnterEvent {
 	return rt.View[QDragEnterEvent](rt.WrapClass(p, "QDragEnterEvent", rt.ModeFor(own)), p)
+}
+
+// QDragEnterEventCast returns e as a *QDragEnterEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QDragEnterEventCast(e qtcore.QEventLike) *QDragEnterEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QDragEnterEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QDragEnterEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QDragEnterEvent](rt.WrapClassFrom(p, "QDragEnterEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
 }

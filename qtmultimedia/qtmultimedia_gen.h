@@ -562,6 +562,7 @@ int64_t qute_QMediaFormat_videoCodec(void *self);
 void qute_QMediaFormat_setAudioCodec(void *self, int64_t a0);
 int64_t qute_QMediaFormat_audioCodec(void *self);
 bool qute_QMediaFormat_isSupported(void *self, int64_t a0);
+void * qute_QMediaFormat_mimeType(void *self);
 qute_list qute_QMediaFormat_supportedFileFormats(void *self, int64_t a0);
 qute_list qute_QMediaFormat_supportedVideoCodecs(void *self, int64_t a0);
 qute_list qute_QMediaFormat_supportedAudioCodecs(void *self, int64_t a0);

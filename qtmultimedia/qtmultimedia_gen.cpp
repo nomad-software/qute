@@ -29,6 +29,8 @@
 #include <QMediaPlayer>
 #include <QMediaRecorder>
 #include <QMediaTimeRange>
+#include <QMetaObject>
+#include <QMimeType>
 #include <QObject>
 #include <QPainter>
 #include <QPlaybackOptions>
@@ -3543,6 +3545,10 @@ int64_t qute_QMediaFormat_audioCodec(void *self) {
 bool qute_QMediaFormat_isSupported(void *self, int64_t a0) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<QMediaFormat *>(self)->isSupported(static_cast<QMediaFormat::ConversionMode>(a0)));
+}
+void * qute_QMediaFormat_mimeType(void *self) {
+	qute_gui_only();
+	return static_cast<void *>(new QMimeType(static_cast<QMediaFormat *>(self)->mimeType()));
 }
 qute_list qute_QMediaFormat_supportedFileFormats(void *self, int64_t a0) {
 	qute_gui_only();

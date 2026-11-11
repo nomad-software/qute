@@ -39,6 +39,7 @@ int64_t qute_QSvgGenerator_svgVersion(void *self);
 void * qute_QSvgRenderer_new(void * a0);
 void * qute_QSvgRenderer_new_1(const char *a0, ptrdiff_t a0_len, void * a1);
 void * qute_QSvgRenderer_new_2(const char *a0, ptrdiff_t a0_len, void * a1);
+void * qute_QSvgRenderer_new_3(void * a0, void * a1);
 void * qute_QSvgRenderer_new_shim(void * a0);
 void qute_QSvgRenderer_shim_init(void *self, uintptr_t id, const uint64_t *mask);
 bool qute_QSvgRenderer_super_0(void *self, void * a0);
@@ -70,6 +71,7 @@ bool qute_QSvgRenderer_elementExists(void *self, const char *a0, ptrdiff_t a0_le
 void * qute_QSvgRenderer_transformForElement(void *self, const char *a0, ptrdiff_t a0_len);
 bool qute_QSvgRenderer_load(void *self, const char *a0, ptrdiff_t a0_len);
 bool qute_QSvgRenderer_load_1(void *self, const char *a0, ptrdiff_t a0_len);
+bool qute_QSvgRenderer_load_2(void *self, void * a0);
 void qute_QSvgRenderer_render(void *self, void * a0);
 void qute_QSvgRenderer_render_1(void *self, void * a0, qute_rectf a1);
 void qute_QSvgRenderer_render_2(void *self, void * a0, const char *a1, ptrdiff_t a1_len);

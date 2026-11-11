@@ -980,3 +980,45 @@ func TestReportSubclassSections(t *testing.T) {
 		}
 	}
 }
+
+// Event classes that reach Go only as a QEvent get a checked downcast that
+// depends on the event, so it is Dead whenever the event is.
+func TestEventCast(t *testing.T) {
+	g := gen(t)
+	src := string(g.emitClass(class(t, "QStatusTipEvent")))
+	for _, want := range []string{
+		"func QStatusTipEventCast(e qtcore.QEventLike) *QStatusTipEvent {",
+		`rt.WrapClassFrom(p, "QStatusTipEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H)`,
+	} {
+		if !strings.Contains(src, want) {
+			t.Errorf("QStatusTipEvent: missing %q", want)
+		}
+	}
+	if strings.Contains(string(g.emitClass(class(t, "QEvent"))), "func QEventCast(") {
+		t.Error("QEvent has a cast to itself")
+	}
+	if strings.Contains(string(g.emitClass(class(t, "QImage"))), "Cast(e ") {
+		t.Error("a value class has an event cast")
+	}
+}
+
+// A constructor's cpp overlay builds the object: QLoggingCategory keeps the
+// name pointer it is given, so the binding passes it a copy that lives on.
+func TestConstructorCpp(t *testing.T) {
+	g := gen(t)
+	var body string
+	for _, f := range g.classCFuncs(class(t, "QLoggingCategory")) {
+		if strings.Contains(f.decl, "qute_QLoggingCategory_new(") {
+			body = f.body
+		}
+	}
+	if !strings.Contains(body, "new QLoggingCategory(qstrdup(") {
+		t.Errorf("QLoggingCategory constructor body: %q", body)
+	}
+}
+
+// QPlatform* types are private platform API, but QPlatformSurfaceEvent and
+// its enum are public.
+func TestPlatformSurfaceEventBound(t *testing.T) {
+	method(t, "QPlatformSurfaceEvent", "surfaceEventType()")
+}

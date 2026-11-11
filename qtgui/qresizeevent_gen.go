@@ -34,6 +34,25 @@ func QResizeEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QResizeEvent {
 	return rt.View[QResizeEvent](rt.WrapClass(p, "QResizeEvent", rt.ModeFor(own)), p)
 }
 
+// QResizeEventCast returns e as a *QResizeEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QResizeEventCast(e qtcore.QEventLike) *QResizeEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QResizeEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QResizeEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QResizeEvent](rt.WrapClassFrom(p, "QResizeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Size wraps QResizeEvent::size.
 //
 //	C++: const QSize & QResizeEvent::size() const

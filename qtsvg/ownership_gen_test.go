@@ -102,3 +102,21 @@ func TestOwnership_NewQSvgRendererWithBytes(t *testing.T) {
 		}
 	})
 }
+
+// QSvgRenderer::QSvgRenderer(QXmlStreamReader * contents, QObject * parent = …) (test from the overlay)
+func TestOwnership_QSvgRenderer_NewQSvgRendererWithXmlStreamReader(t *testing.T) {
+	qutetest.Run(t, func() {
+		p := qtcore.NewQObject(nil)
+		r := qtsvg.NewQSvgRendererWithXmlStreamReader(qtcore.NewQXmlStreamReaderWithData(`<svg xmlns="http://www.w3.org/2000/svg" width="4" height="3"/>`), p)
+		if got := r.Ownership(); got != qtcore.Parented {
+			t.Errorf("with a parent: %v, want Parented", got)
+		}
+		if !r.IsValid() || r.DefaultSize() != (qtcore.QSize{Width: 4, Height: 3}) {
+			t.Errorf("valid %v, size %v; want a 4x3 document", r.IsValid(), r.DefaultSize())
+		}
+		p.Delete()
+		if r.Alive() {
+			t.Error("renderer alive after its parent was deleted")
+		}
+	})
+}

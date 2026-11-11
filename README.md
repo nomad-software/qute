@@ -65,12 +65,12 @@ exact version if you use it.
   `QPoint`/`QRect`/`QColor` are plain structs, out-parameters are extra
   results, failures return `error`, and `std::function` parameters take Go
   funcs.
-- **Broad coverage.** About 420 classes across eleven Qt modules (widgets,
-  OpenGL, SVG, multimedia and the web engine): over 10,000 constructors,
+- **Broad coverage.** About 550 classes across eleven Qt modules (widgets,
+  OpenGL, SVG, multimedia and the web engine): over 12,000 constructors,
   methods and functions. Any class with virtuals can be subclassed from Go
-  (about 190: widgets, views, delegates, validators, layouts, item models,
-  graphics items, styles, syntax highlighters, `QOpenGLWidget`, web URL
-  scheme handlers); `COVERAGE.md` lists the few Qt doesn't allow and why. A method with C++ default arguments has a short form and
+  (about 240: widgets, views, delegates, validators, layouts, item models,
+  graphics items, styles, syntax highlighters, undo commands, icon engines,
+  gesture recognizers, wizard pages, `QOpenGLWidget`, web URL scheme handlers); `COVERAGE.md` lists the few Qt doesn't allow and why. A method with C++ default arguments has a short form and
   a `Full` form that takes them all (`Index(row, col)` and
   `IndexFull(row, col, parent)`).
 - **Checked, not hoped.** Every ownership rule lives in a small YAML file
@@ -120,7 +120,8 @@ Within a bound module, a few methods are left out because they need a module
 qute doesn't bind or a type it can't map yet: printing (`QWebEngineView.Print`), `QWebChannel`,
 cookie objects, certificates and authentication (QtNetwork types), HTTP header maps
 keyed by byte arrays, `std::optional<qreal>` frame-rate limits, custom video
-buffers and web notifications. `COVERAGE.md` lists every one with its reason.
+buffers and web notifications (Qt hands a notification to its presenter as a
+`std::unique_ptr`, so `QWebEngineNotification` is not bound). `COVERAGE.md` lists every one with its reason.
 `QWebEngineCookieStore.SetCookieFilter` is hand-written: Qt calls the filter
 on a network thread, so it gets plain Go values (`CookieFilterRequest`) and
 must not touch Qt objects.

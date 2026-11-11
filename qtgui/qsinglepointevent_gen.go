@@ -34,6 +34,25 @@ func QSinglePointEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSinglePo
 	return rt.View[QSinglePointEvent](rt.WrapClass(p, "QSinglePointEvent", rt.ModeFor(own)), p)
 }
 
+// QSinglePointEventCast returns e as a *QSinglePointEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QSinglePointEventCast(e qtcore.QEventLike) *QSinglePointEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QSinglePointEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QSinglePointEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QSinglePointEvent](rt.WrapClassFrom(p, "QSinglePointEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Button wraps QSinglePointEvent::button.
 //
 //	C++: Qt::MouseButton QSinglePointEvent::button() const

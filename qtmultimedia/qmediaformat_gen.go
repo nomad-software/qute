@@ -187,6 +187,20 @@ func (this *QMediaFormat) IsSupported(mode QMediaFormatConversionMode) bool {
 	return bool(r)
 }
 
+// MimeType wraps QMediaFormat::mimeType.
+//
+//	C++: QMimeType QMediaFormat::mimeType() const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmediaformat.html#mimeType
+func (this *QMediaFormat) MimeType() *qtcore.QMimeType {
+	self := rt.Use(unsafe.Pointer(this), "QMediaFormat.MimeType")
+	r := C.qute_QMediaFormat_mimeType(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QMimeType](rt.WrapClass(r, "QMimeType", rt.TakeOwned), r)
+}
+
 // SupportedFileFormats wraps QMediaFormat::supportedFileFormats.
 //
 //	C++: QList<FileFormat> QMediaFormat::supportedFileFormats(ConversionMode m)

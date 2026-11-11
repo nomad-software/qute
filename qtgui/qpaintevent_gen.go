@@ -34,6 +34,25 @@ func QPaintEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPaintEvent {
 	return rt.View[QPaintEvent](rt.WrapClass(p, "QPaintEvent", rt.ModeFor(own)), p)
 }
 
+// QPaintEventCast returns e as a *QPaintEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QPaintEventCast(e qtcore.QEventLike) *QPaintEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QPaintEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QPaintEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QPaintEvent](rt.WrapClassFrom(p, "QPaintEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Rect wraps QPaintEvent::rect.
 //
 //	C++: const QRect & QPaintEvent::rect() const

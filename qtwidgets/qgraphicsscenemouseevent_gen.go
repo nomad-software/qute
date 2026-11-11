@@ -38,6 +38,25 @@ func QGraphicsSceneMouseEventFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QG
 	return rt.View[QGraphicsSceneMouseEvent](rt.WrapClass(p, "QGraphicsSceneMouseEvent", rt.ModeFor(own)), p)
 }
 
+// QGraphicsSceneMouseEventCast returns e as a *QGraphicsSceneMouseEvent if it is one (dynamic_cast), or nil. The
+// result is valid as long as e is: inside a handler, until it returns.
+func QGraphicsSceneMouseEventCast(e qtcore.QEventLike) *QGraphicsSceneMouseEvent {
+	if e == nil {
+		return nil
+	}
+	self := rt.UseArg(unsafe.Pointer(e.AsQEvent()), "QGraphicsSceneMouseEventCast")
+	if self == nil {
+		return nil
+	}
+	p := C.qute_QGraphicsSceneMouseEvent_cast(self)
+	if p == nil {
+		return nil
+	}
+	r := rt.View[QGraphicsSceneMouseEvent](rt.WrapClassFrom(p, "QGraphicsSceneMouseEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
+	runtime.KeepAlive(e)
+	return r
+}
+
 // Pos wraps QGraphicsSceneMouseEvent::pos.
 //
 //	C++: QPointF QGraphicsSceneMouseEvent::pos() const

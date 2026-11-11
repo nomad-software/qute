@@ -1619,3 +1619,158 @@ QRubberBand:
 
 QToolTip:
   showText: { reviewed: true }
+
+QColumnView:
+  previewWidget: { return: borrowed }
+  setPreviewWidget: { args: { widget: transfer-to-cpp }, doc: "The view takes ownership of the widget and deletes it when a new one is set or the view is deleted." }
+  initializeColumn: { reviewed: true }
+  createColumn: { return: transfer-to-go, doc: "Returns a new view for a column; a Go override's result is owned by the column view." }
+
+QDataWidgetMapper:
+  setModel: { args: { model: keep }, reviewed: true, doc: "The mapper does not take ownership of the model." }
+  model: { return: borrowed }
+  setItemDelegate: { args: { delegate: keep }, reviewed: true, doc: "The mapper does not take ownership of the delegate." }
+  itemDelegate: { return: borrowed }
+  addMapping: { reviewed: true } # the mapper tracks its widgets with QPointer and does not own them
+  removeMapping: { reviewed: true }
+  mappedSection: { reviewed: true }
+  mappedPropertyName: { reviewed: true }
+  mappedWidgetAt: { return: borrowed }
+
+QErrorMessage:
+  qtHandler: { return: borrowed, doc: "The handler's dialog is created and owned by Qt." }
+
+QFocusFrame:
+  setWidget: { args: { widget: keep }, reviewed: true }
+  widget: { return: borrowed }
+
+QGestureEvent:
+  gestures: { return: borrowed }
+  gesture: { return: borrowed }
+  activeGestures: { return: borrowed }
+  canceledGestures: { return: borrowed }
+  setAccepted(QGesture*, bool): { reviewed: true }
+  accept(QGesture*): { reviewed: true }
+  ignore(QGesture*): { reviewed: true }
+  isAccepted(QGesture*): { reviewed: true }
+  setWidget: { reviewed: true }
+  widget: { return: borrowed }
+
+QGestureRecognizer:
+  create: { args: { target: borrowed }, return: transfer-to-go, doc: "Returns a new gesture; Qt's gesture manager owns what it gets from an override.", test: "skip: QGestureRecognizer is abstract, and a snippet cannot declare the override; covered by subclass_test.go" }
+  recognize: { reviewed: true }
+  reset: { reviewed: true }
+  registerRecognizer: { args: { recognizer: transfer-to-cpp }, doc: "Qt takes ownership of the recognizer." }
+
+QGraphicsAnchorLayout:
+  QGraphicsAnchorLayout(QGraphicsLayoutItem*):
+    args: { parent: transfer-this }
+    doc: "A QGraphicsWidget parent installs and owns the layout; a layout parent does not."
+    test: |
+      w := qtwidgets.NewQGraphicsWidget(nil)
+      lay := qtwidgets.NewQGraphicsAnchorLayout(w)
+      if got := lay.Ownership(); got != qtcore.Parented {
+      	t.Errorf("with a widget parent: %v, want Parented", got)
+      }
+      w.Delete()
+      if lay.Alive() {
+      	t.Error("layout alive after its widget was deleted")
+      }
+  addAnchor: { args: { firstItem: transfer-to-cpp, secondItem: transfer-to-cpp }, return: borrowed, doc: "Items not yet in the layout are added to it, and the layout takes ownership of them (passing the layout itself is fine). The anchor is owned by the layout." }
+  anchor: { args: { firstItem: borrowed, secondItem: borrowed }, return: borrowed }
+  addCornerAnchors: { args: { firstItem: transfer-to-cpp, secondItem: transfer-to-cpp }, doc: "Items not yet in the layout are added to it, and the layout takes ownership of them." }
+  addAnchors: { args: { firstItem: transfer-to-cpp, secondItem: transfer-to-cpp }, doc: "Items not yet in the layout are added to it, and the layout takes ownership of them." }
+
+QGraphicsItemAnimation:
+  item: { return: borrowed }
+  setItem: { args: { item: keep }, reviewed: true, doc: "The animation does not take ownership of the item." }
+  timeLine: { return: borrowed }
+  setTimeLine: { args: { timeLine: keep }, reviewed: true, doc: "The animation does not take ownership of the time line." }
+
+QItemDelegate:
+  itemEditorFactory: { return: borrowed }
+  setItemEditorFactory: { args: { factory: keep }, reviewed: true, doc: "The delegate does not take ownership of the factory." }
+  drawBackground: { reviewed: true }
+  textRectangle: { reviewed: true }
+  doLayout: { skip: "takes QRect pointers it reads and writes, which the generator does not map; use the style option rectangles" }
+
+QScroller:
+  target: { return: borrowed }
+  hasScroller: { reviewed: true }
+  scroller(QObject*): { args: { target: borrowed }, return: borrowed, doc: "Qt creates and owns the scroller; it is deleted with its target." }
+  grabGesture: { reviewed: true }
+  grabbedGesture: { reviewed: true }
+  ungrabGesture: { reviewed: true }
+  activeScrollers: { return: borrowed }
+
+QSplashScreen:
+  QSplashScreen(QScreen*, const QPixmap&, Qt::WindowFlags): { reviewed: true }
+  finish: { reviewed: true } # waits for the widget during the call only
+
+QStylePainter:
+  QStylePainter(QWidget*): { args: { w: keep:device }, reviewed: true, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
+  QStylePainter(QPaintDevice*, QWidget*): { args: { pd: keep:device, w: keep:widget }, reviewed: true, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
+  begin(QWidget*): { args: { w: keep:device }, reviewed: true }
+  begin(QPaintDevice*, QWidget*): { args: { pd: keep:device, w: keep:widget }, reviewed: true }
+  style: { return: borrowed }
+
+QUndoView:
+  QUndoView(QUndoStack*, QWidget*): { args: { stack: keep:stack } }
+  QUndoView(QUndoGroup*, QWidget*): { args: { group: keep:group } }
+  stack: { return: borrowed }
+  group: { return: borrowed }
+  setStack: { args: { stack: keep:stack }, reviewed: true, doc: "The view does not take ownership of the stack." }
+  setGroup: { args: { group: keep:group }, reviewed: true, doc: "The view does not take ownership of the group." }
+
+QWhatsThis:
+  createAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
+  showText: { reviewed: true }
+
+QWidgetItemV2:
+  QWidgetItemV2(QWidget*): { args: { widget: borrowed } }
+
+QWizard:
+  addPage: { args: { page: transfer-to-cpp }, doc: "The wizard takes ownership of the page." }
+  setPage: { args: { page: transfer-to-cpp }, doc: "The wizard takes ownership of the page." }
+  page: { return: borrowed }
+  currentPage: { return: borrowed }
+  setButton: { args: { button: transfer-to-cpp }, doc: "The wizard takes ownership of the button and deletes the one it replaces." }
+  button: { return: borrowed }
+  setSideWidget:
+    args: { widget: transfer-to-cpp }
+    doc: "The wizard takes the widget. Qt reparents it into the wizard when the wizard lays itself out (when shown); until then, if the wizard dies first, the widget goes back to Go (Owned)."
+    test: |
+      // laid out (shown): Qt parents the widget into the wizard
+      w := qtwidgets.NewQWizard(nil)
+      w.SetWizardStyle(qtwidgets.QWizardClassicStyle)
+      w.AddPage(qtwidgets.NewQWizardPage(nil))
+      side := qtwidgets.NewQWidget(nil)
+      w.SetSideWidget(side)
+      w.Show()
+      if side.ParentWidget() == nil {
+      	t.Error("side widget has no parent after the wizard was shown")
+      }
+      if got := side.Ownership(); got != qtcore.Parented {
+      	t.Errorf("side widget: %v, want Parented", got)
+      }
+      w.Delete()
+      if side.Alive() {
+      	t.Error("side widget alive after its wizard was deleted")
+      }
+      // never laid out: Qt leaves it parentless and Go gets it back
+      w2 := qtwidgets.NewQWizard(nil)
+      w2.SetWizardStyle(qtwidgets.QWizardClassicStyle)
+      side2 := qtwidgets.NewQWidget(nil)
+      w2.SetSideWidget(side2)
+      w2.Delete()
+      if side2.Alive() && side2.Ownership() != qtcore.Owned {
+      	t.Errorf("unparented side widget after the wizard died: %v, want Owned", side2.Ownership())
+      }
+      if side2.Alive() {
+      	side2.Delete()
+      }
+  sideWidget: { return: borrowed }
+
+QWizardPage:
+  registerField: { reviewed: true }
+  wizard: { return: borrowed }

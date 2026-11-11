@@ -11,6 +11,7 @@
 #include <QImage>
 #include <QKeyEvent>
 #include <QMatrix4x4>
+#include <QMetaObject>
 #include <QMouseEvent>
 #include <QMoveEvent>
 #include <QObject>
