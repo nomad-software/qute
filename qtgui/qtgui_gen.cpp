@@ -178,15 +178,26 @@
 #include <memory>
 
 extern "C" {
-void qute_qtgui_signal(uintptr_t id, void *args);
+void qute_qtgui_signal(uintptr_t id, void *args, bool off);
 void qute_qtgui_release(uintptr_t id);
-bool qute_qtgui_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtgui_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);
 void qute_qtgui_wrong_thread(void);
 void qute_qtgui_dead(void *key);
-void qute_qtgui_call(uintptr_t id, void *args, void *ret);
+void qute_qtgui_call(uintptr_t id, void *args, void *ret, bool off);
 }
 
-static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtgui_call(id, args, ret); }
+// Every entry into a Go handler (signal, virtual, std::function) must come
+// from the GUI thread. The thread is looked up here, where it is cheap, and
+// passed in: the Go side panics when it is not the GUI thread, without a
+// call back into C++ to ask.
+static inline bool qute_off_gui() {
+	QCoreApplication *app = QCoreApplication::instance();
+	return app && QThread::currentThread() != app->thread();
+}
+
+static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtgui_call(id, args, ret, qute_off_gui()); }
+static inline void qute_signal(uintptr_t id, void *args) { qute_qtgui_signal(id, args, qute_off_gui()); }
+static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_qtgui_virtual(id, idx, args, ret, qute_off_gui()); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
 // It is checked here, in every build (qute_debug builds also name the
@@ -222,7 +233,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return (r ? *static_cast<QIcon *>(r) : QIcon());
 			}
 		}
@@ -234,7 +245,7 @@ public:
 			void * c0 = static_cast<void *>(new QFileInfo(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return (r ? *static_cast<QIcon *>(r) : QIcon());
 			}
 		}
@@ -246,7 +257,7 @@ public:
 			void * c0 = static_cast<void *>(new QFileInfo(a0));
 			void *args[] = {&c0};
 			qute_str r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -257,7 +268,7 @@ public:
 		if (qute_has(3)) {
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -267,7 +278,7 @@ public:
 	QFlags<QAbstractFileIconProvider::Option> options() const override {
 		if (qute_has(4)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 4, nullptr, &r)) {
 				return QFlags<QAbstractFileIconProvider::Option>::fromInt(static_cast<QFlags<QAbstractFileIconProvider::Option>::Int>(r));
 			}
 		}
@@ -287,7 +298,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -300,7 +311,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -311,7 +322,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -322,7 +333,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -333,7 +344,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -362,7 +373,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -375,7 +386,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -386,7 +397,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -397,7 +408,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -408,7 +419,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -465,7 +476,7 @@ public:
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				a0 = qute_take_qstr(c0);
 				a1 = static_cast<int>(c1);
 				return static_cast<QValidator::State>(r);
@@ -479,7 +490,7 @@ public:
 		if (qute_has(1)) {
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				a0 = qute_take_qstr(c0);
 				return;
 			}
@@ -493,7 +504,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -506,7 +517,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -517,7 +528,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -528,7 +539,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -539,7 +550,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -559,7 +570,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -572,7 +583,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -583,7 +594,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -594,7 +605,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -605,7 +616,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -707,10 +718,10 @@ public:
 		if (qute_has(0)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return r;
 			}
 		}
@@ -719,10 +730,10 @@ public:
 	QModelIndex qute_super_0(int a0, int a1, const QModelIndex & a2) const { return QFileSystemModel::index(a0, a1, a2); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -733,10 +744,10 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return r;
 			}
 		}
@@ -745,10 +756,10 @@ public:
 	QModelIndex qute_super_2(int a0, int a1, const QModelIndex & a2) const { return QFileSystemModel::sibling(a0, a1, a2); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -757,10 +768,10 @@ public:
 	bool qute_super_3(const QModelIndex & a0) const { return QFileSystemModel::hasChildren(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -769,9 +780,9 @@ public:
 	bool qute_super_4(const QModelIndex & a0) const { return QFileSystemModel::canFetchMore(a0); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -780,10 +791,10 @@ public:
 	void qute_super_5(const QModelIndex & a0) { return QFileSystemModel::fetchMore(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtgui_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -792,10 +803,10 @@ public:
 	int qute_super_6(const QModelIndex & a0) const { return QFileSystemModel::rowCount(a0); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtgui_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -804,11 +815,11 @@ public:
 	int qute_super_7(const QModelIndex & a0) const { return QFileSystemModel::columnCount(a0); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(8)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -817,12 +828,12 @@ public:
 	QVariant qute_super_8(const QModelIndex & a0, int a1) const { return QFileSystemModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -836,7 +847,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -845,10 +856,10 @@ public:
 	QVariant qute_super_10(int a0, Qt::Orientation a1, int a2) const { return QFileSystemModel::headerData(a0, a1, a2); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -860,7 +871,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtgui_virtual(qute_id, 12, args, nullptr)) {
+			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
 			}
 		}
@@ -870,7 +881,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(13)) {
 			qute_list r{};
-			if (qute_qtgui_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -882,7 +893,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -895,10 +906,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -908,7 +919,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(16)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 16, nullptr, &r)) {
+			if (qute_virtual(qute_id, 16, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -918,7 +929,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(17)) {
 			qute_map r{};
-			if (qute_qtgui_virtual(qute_id, 17, nullptr, &r)) {
+			if (qute_virtual(qute_id, 17, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -929,7 +940,7 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -941,7 +952,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -956,7 +967,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -965,10 +976,10 @@ public:
 	bool qute_super_20(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractItemModel::setHeaderData(a0, a1, a2, a3); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(21)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtgui_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -977,11 +988,11 @@ public:
 	QMap<int, QVariant> qute_super_21(const QModelIndex & a0) const { return QAbstractItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(22)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -990,10 +1001,10 @@ public:
 	bool qute_super_22(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QAbstractItemModel::setItemData(a0, a1); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1006,10 +1017,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1019,7 +1030,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(25)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 25, nullptr, &r)) {
+			if (qute_virtual(qute_id, 25, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -1030,10 +1041,10 @@ public:
 		if (qute_has(26)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1044,10 +1055,10 @@ public:
 		if (qute_has(27)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1058,10 +1069,10 @@ public:
 		if (qute_has(28)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1072,10 +1083,10 @@ public:
 		if (qute_has(29)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1084,14 +1095,14 @@ public:
 	bool qute_super_29(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(30)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 30, args, &r)) {
+			if (qute_virtual(qute_id, 30, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1100,14 +1111,14 @@ public:
 	bool qute_super_30(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(31)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 31, args, &r)) {
+			if (qute_virtual(qute_id, 31, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1116,10 +1127,10 @@ public:
 	bool qute_super_31(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(32)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 32, args, &r)) {
+			if (qute_virtual(qute_id, 32, args, &r)) {
 				return r;
 			}
 		}
@@ -1128,14 +1139,14 @@ public:
 	QModelIndex qute_super_32(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(33)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtgui_virtual(qute_id, 33, args, &r)) {
+			if (qute_virtual(qute_id, 33, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -1144,10 +1155,10 @@ public:
 	QList<QModelIndex> qute_super_33(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(34)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtgui_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -1157,7 +1168,7 @@ public:
 	bool submit() override {
 		if (qute_has(35)) {
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 35, nullptr, &r)) {
+			if (qute_virtual(qute_id, 35, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1166,7 +1177,7 @@ public:
 	bool qute_super_35() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(36)) {
-			if (qute_qtgui_virtual(qute_id, 36, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 36, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -1175,7 +1186,7 @@ public:
 	void qute_super_36() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(37)) {
-			if (qute_qtgui_virtual(qute_id, 37, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 37, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -1188,7 +1199,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 38, args, &r)) {
+			if (qute_virtual(qute_id, 38, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1199,7 +1210,7 @@ public:
 		if (qute_has(39)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 39, args, nullptr)) {
+			if (qute_virtual(qute_id, 39, args, nullptr)) {
 				return;
 			}
 		}
@@ -1210,7 +1221,7 @@ public:
 		if (qute_has(40)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 40, args, nullptr)) {
+			if (qute_virtual(qute_id, 40, args, nullptr)) {
 				return;
 			}
 		}
@@ -1278,7 +1289,7 @@ public:
 			int64_t c2 = static_cast<int64_t>(a2);
 			int64_t c3 = static_cast<int64_t>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
-			if (qute_qtgui_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -1291,7 +1302,7 @@ public:
 			int64_t c2 = static_cast<int64_t>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			qute_size r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -1305,7 +1316,7 @@ public:
 			int64_t c2 = static_cast<int64_t>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return (r ? *static_cast<QPixmap *>(r) : QPixmap());
 			}
 		}
@@ -1318,7 +1329,7 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int64_t c2 = static_cast<int64_t>(a2);
 			void *args[] = {&c0, &c1, &c2};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1332,7 +1343,7 @@ public:
 			int64_t c2 = static_cast<int64_t>(a2);
 			int64_t c3 = static_cast<int64_t>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1342,7 +1353,7 @@ public:
 	QString key() const override {
 		if (qute_has(5)) {
 			qute_str r{};
-			if (qute_qtgui_virtual(qute_id, 5, nullptr, &r)) {
+			if (qute_virtual(qute_id, 5, nullptr, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -1352,7 +1363,7 @@ public:
 	QIconEngine * clone() const override {
 		if (qute_has(6)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 6, nullptr, &r)) {
+			if (qute_virtual(qute_id, 6, nullptr, &r)) {
 				return static_cast<QIconEngine *>(r);
 			}
 		}
@@ -1363,7 +1374,7 @@ public:
 			void * c0 = static_cast<void *>(&a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1375,7 +1386,7 @@ public:
 			void * c0 = static_cast<void *>(&a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1388,7 +1399,7 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
 			qute_list r{};
-			if (qute_qtgui_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return qute_take_list<QSize, qute_size>(r, [](qute_size e) { return qute_to_QSize(e); });
 			}
 		}
@@ -1398,7 +1409,7 @@ public:
 	QString iconName() override {
 		if (qute_has(10)) {
 			qute_str r{};
-			if (qute_qtgui_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -1408,7 +1419,7 @@ public:
 	bool isNull() override {
 		if (qute_has(11)) {
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 11, nullptr, &r)) {
+			if (qute_virtual(qute_id, 11, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1423,7 +1434,7 @@ public:
 			double c3 = static_cast<double>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return (r ? *static_cast<QPixmap *>(r) : QPixmap());
 			}
 		}
@@ -1435,7 +1446,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtgui_virtual(qute_id, 13, args, nullptr)) {
+			if (qute_virtual(qute_id, 13, args, nullptr)) {
 				return;
 			}
 		}
@@ -1455,7 +1466,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1468,7 +1479,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1479,7 +1490,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1490,7 +1501,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1501,7 +1512,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1549,7 +1560,7 @@ public:
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				a0 = qute_take_qstr(c0);
 				a1 = static_cast<int>(c1);
 				return static_cast<QValidator::State>(r);
@@ -1563,7 +1574,7 @@ public:
 		if (qute_has(1)) {
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				a0 = qute_take_qstr(c0);
 				return;
 			}
@@ -1577,7 +1588,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1590,7 +1601,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1601,7 +1612,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1612,7 +1623,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -1623,7 +1634,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -1670,7 +1681,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1683,7 +1694,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1694,7 +1705,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1705,7 +1716,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1716,7 +1727,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1744,7 +1755,7 @@ public:
 	QSurface::SurfaceType surfaceType() const override {
 		if (qute_has(0)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<QSurface::SurfaceType>(r);
 			}
 		}
@@ -1754,7 +1765,7 @@ public:
 	QSurfaceFormat format() const override {
 		if (qute_has(1)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 1, nullptr, &r)) {
+			if (qute_virtual(qute_id, 1, nullptr, &r)) {
 				return (r ? *static_cast<QSurfaceFormat *>(r) : QSurfaceFormat());
 			}
 		}
@@ -1764,7 +1775,7 @@ public:
 	QSize size() const override {
 		if (qute_has(2)) {
 			qute_size r{};
-			if (qute_qtgui_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -1776,7 +1787,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1789,7 +1800,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1800,7 +1811,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -1811,7 +1822,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -1822,7 +1833,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -1843,7 +1854,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1856,7 +1867,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1867,7 +1878,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1878,7 +1889,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1889,7 +1900,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1917,7 +1928,7 @@ public:
 	bool newPage() override {
 		if (qute_has(0)) {
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1929,7 +1940,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1942,7 +1953,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1953,7 +1964,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1964,7 +1975,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1975,7 +1986,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -2013,7 +2024,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2026,7 +2037,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2037,7 +2048,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -2048,7 +2059,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -2059,7 +2070,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -2080,7 +2091,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -2091,7 +2102,7 @@ public:
 		if (qute_has(1)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				return;
 			}
 		}
@@ -2102,7 +2113,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -2114,7 +2125,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2124,7 +2135,7 @@ public:
 	QSurface::SurfaceType surfaceType() const override {
 		if (qute_has(4)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 4, nullptr, &r)) {
 				return static_cast<QSurface::SurfaceType>(r);
 			}
 		}
@@ -2134,7 +2145,7 @@ public:
 	QSurfaceFormat format() const override {
 		if (qute_has(5)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 5, nullptr, &r)) {
+			if (qute_virtual(qute_id, 5, nullptr, &r)) {
 				return (r ? *static_cast<QSurfaceFormat *>(r) : QSurfaceFormat());
 			}
 		}
@@ -2144,7 +2155,7 @@ public:
 	QSize size() const override {
 		if (qute_has(6)) {
 			qute_size r{};
-			if (qute_qtgui_virtual(qute_id, 6, nullptr, &r)) {
+			if (qute_virtual(qute_id, 6, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -2154,7 +2165,7 @@ public:
 	QObject * focusObject() const override {
 		if (qute_has(7)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return static_cast<QObject *>(r);
 			}
 		}
@@ -2165,7 +2176,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -2176,7 +2187,7 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 9, args, nullptr)) {
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
 				return;
 			}
 		}
@@ -2187,7 +2198,7 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 10, args, nullptr)) {
+			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
 			}
 		}
@@ -2198,7 +2209,7 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 11, args, nullptr)) {
+			if (qute_virtual(qute_id, 11, args, nullptr)) {
 				return;
 			}
 		}
@@ -2209,7 +2220,7 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 12, args, nullptr)) {
+			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
 			}
 		}
@@ -2220,7 +2231,7 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 13, args, nullptr)) {
+			if (qute_virtual(qute_id, 13, args, nullptr)) {
 				return;
 			}
 		}
@@ -2231,7 +2242,7 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 14, args, nullptr)) {
+			if (qute_virtual(qute_id, 14, args, nullptr)) {
 				return;
 			}
 		}
@@ -2242,7 +2253,7 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 15, args, nullptr)) {
+			if (qute_virtual(qute_id, 15, args, nullptr)) {
 				return;
 			}
 		}
@@ -2253,7 +2264,7 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 16, args, nullptr)) {
+			if (qute_virtual(qute_id, 16, args, nullptr)) {
 				return;
 			}
 		}
@@ -2264,7 +2275,7 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 17, args, nullptr)) {
+			if (qute_virtual(qute_id, 17, args, nullptr)) {
 				return;
 			}
 		}
@@ -2275,7 +2286,7 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -2286,7 +2297,7 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 19, args, nullptr)) {
+			if (qute_virtual(qute_id, 19, args, nullptr)) {
 				return;
 			}
 		}
@@ -2297,7 +2308,7 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 20, args, nullptr)) {
+			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
 			}
 		}
@@ -2308,7 +2319,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -2319,7 +2330,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -2332,7 +2343,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2343,7 +2354,7 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 24, args, nullptr)) {
+			if (qute_virtual(qute_id, 24, args, nullptr)) {
 				return;
 			}
 		}
@@ -2354,7 +2365,7 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 25, args, nullptr)) {
+			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
 			}
 		}
@@ -2365,7 +2376,7 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 26, args, nullptr)) {
+			if (qute_virtual(qute_id, 26, args, nullptr)) {
 				return;
 			}
 		}
@@ -2386,7 +2397,7 @@ public:
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				a0 = qute_take_qstr(c0);
 				a1 = static_cast<int>(c1);
 				return static_cast<QValidator::State>(r);
@@ -2400,7 +2411,7 @@ public:
 		if (qute_has(1)) {
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				a0 = qute_take_qstr(c0);
 				return;
 			}
@@ -2414,7 +2425,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2427,7 +2438,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2438,7 +2449,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -2449,7 +2460,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -2460,7 +2471,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -2516,7 +2527,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2529,7 +2540,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2540,7 +2551,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -2551,7 +2562,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -2562,7 +2573,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -2602,7 +2613,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2614,7 +2625,7 @@ public:
 			void * c0 = static_cast<void *>(new QVariant(a0));
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtgui_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				return;
 			}
 		}
@@ -2624,7 +2635,7 @@ public:
 	QStandardItem * clone() const override {
 		if (qute_has(2)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return static_cast<QStandardItem *>(r);
 			}
 		}
@@ -2634,7 +2645,7 @@ public:
 	int type() const override {
 		if (qute_has(3)) {
 			int r{};
-			if (qute_qtgui_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2645,7 +2656,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = static_cast<void *>(&a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -2656,7 +2667,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = static_cast<void *>(&a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -2694,7 +2705,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(0)) {
 			qute_map r{};
-			if (qute_qtgui_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -2705,10 +2716,10 @@ public:
 		if (qute_has(1)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -2717,10 +2728,10 @@ public:
 	QModelIndex qute_super_1(int a0, int a1, const QModelIndex & a2) const { return QStandardItemModel::index(a0, a1, a2); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return r;
 			}
 		}
@@ -2729,10 +2740,10 @@ public:
 	QModelIndex qute_super_2(const QModelIndex & a0) const { return QStandardItemModel::parent(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2741,10 +2752,10 @@ public:
 	int qute_super_3(const QModelIndex & a0) const { return QStandardItemModel::rowCount(a0); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtgui_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2753,10 +2764,10 @@ public:
 	int qute_super_4(const QModelIndex & a0) const { return QStandardItemModel::columnCount(a0); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2765,11 +2776,11 @@ public:
 	bool qute_super_5(const QModelIndex & a0) const { return QStandardItemModel::hasChildren(a0); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2778,12 +2789,12 @@ public:
 	QVariant qute_super_6(const QModelIndex & a0, int a1) const { return QStandardItemModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2792,10 +2803,10 @@ public:
 	bool qute_super_7(const QModelIndex & a0, const QVariant & a1, int a2) { return QStandardItemModel::setData(a0, a1, a2); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(8)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2809,7 +2820,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2824,7 +2835,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2835,10 +2846,10 @@ public:
 		if (qute_has(11)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2849,10 +2860,10 @@ public:
 		if (qute_has(12)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2863,10 +2874,10 @@ public:
 		if (qute_has(13)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2877,10 +2888,10 @@ public:
 		if (qute_has(14)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2889,10 +2900,10 @@ public:
 	bool qute_super_14(int a0, int a1, const QModelIndex & a2) { return QStandardItemModel::removeColumns(a0, a1, a2); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(15)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -2902,7 +2913,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(16)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 16, nullptr, &r)) {
+			if (qute_virtual(qute_id, 16, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -2911,10 +2922,10 @@ public:
 	QFlags<Qt::DropAction> qute_super_16() const { return QStandardItemModel::supportedDropActions(); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(17)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtgui_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -2923,11 +2934,11 @@ public:
 	QMap<int, QVariant> qute_super_17(const QModelIndex & a0) const { return QStandardItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(18)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2939,7 +2950,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtgui_virtual(qute_id, 19, args, nullptr)) {
+			if (qute_virtual(qute_id, 19, args, nullptr)) {
 				return;
 			}
 		}
@@ -2949,7 +2960,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(20)) {
 			qute_list r{};
-			if (qute_qtgui_virtual(qute_id, 20, nullptr, &r)) {
+			if (qute_virtual(qute_id, 20, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -2961,7 +2972,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -2974,10 +2985,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2988,10 +2999,10 @@ public:
 		if (qute_has(23)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return r;
 			}
 		}
@@ -3004,10 +3015,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3017,7 +3028,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(25)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 25, nullptr, &r)) {
+			if (qute_virtual(qute_id, 25, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -3026,14 +3037,14 @@ public:
 	QFlags<Qt::DropAction> qute_super_25() const { return QAbstractItemModel::supportedDragActions(); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3042,14 +3053,14 @@ public:
 	bool qute_super_26(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3058,9 +3069,9 @@ public:
 	bool qute_super_27(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 28, args, nullptr)) {
+			if (qute_virtual(qute_id, 28, args, nullptr)) {
 				return;
 			}
 		}
@@ -3069,10 +3080,10 @@ public:
 	void qute_super_28(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3081,10 +3092,10 @@ public:
 	bool qute_super_29(const QModelIndex & a0) const { return QAbstractItemModel::canFetchMore(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(30)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtgui_virtual(qute_id, 30, args, &r)) {
+			if (qute_virtual(qute_id, 30, args, &r)) {
 				return r;
 			}
 		}
@@ -3093,14 +3104,14 @@ public:
 	QModelIndex qute_super_30(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(31)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtgui_virtual(qute_id, 31, args, &r)) {
+			if (qute_virtual(qute_id, 31, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -3109,10 +3120,10 @@ public:
 	QList<QModelIndex> qute_super_31(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(32)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtgui_virtual(qute_id, 32, args, &r)) {
+			if (qute_virtual(qute_id, 32, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -3122,7 +3133,7 @@ public:
 	bool submit() override {
 		if (qute_has(33)) {
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 33, nullptr, &r)) {
+			if (qute_virtual(qute_id, 33, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3131,7 +3142,7 @@ public:
 	bool qute_super_33() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(34)) {
-			if (qute_qtgui_virtual(qute_id, 34, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 34, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3140,7 +3151,7 @@ public:
 	void qute_super_34() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(35)) {
-			if (qute_qtgui_virtual(qute_id, 35, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 35, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3152,7 +3163,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 36, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3165,7 +3176,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 37, args, &r)) {
+			if (qute_virtual(qute_id, 37, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3176,7 +3187,7 @@ public:
 		if (qute_has(38)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 38, args, nullptr)) {
+			if (qute_virtual(qute_id, 38, args, nullptr)) {
 				return;
 			}
 		}
@@ -3187,7 +3198,7 @@ public:
 		if (qute_has(39)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 39, args, nullptr)) {
+			if (qute_virtual(qute_id, 39, args, nullptr)) {
 				return;
 			}
 		}
@@ -3198,7 +3209,7 @@ public:
 		if (qute_has(40)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 40, args, nullptr)) {
+			if (qute_virtual(qute_id, 40, args, nullptr)) {
 				return;
 			}
 		}
@@ -3234,7 +3245,7 @@ public:
 		if (qute_has(0)) {
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -3245,7 +3256,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3258,7 +3269,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3269,7 +3280,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -3280,7 +3291,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3291,7 +3302,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -3326,7 +3337,7 @@ public:
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	void clear() override {
 		if (qute_has(0)) {
-			if (qute_qtgui_virtual(qute_id, 0, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 0, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3338,7 +3349,7 @@ public:
 			void * c0 = static_cast<void *>(new QTextFormat(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<QTextObject *>(r);
 			}
 		}
@@ -3351,7 +3362,7 @@ public:
 			void * c1 = static_cast<void *>(new QUrl(a1));
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -3363,7 +3374,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3376,7 +3387,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3387,7 +3398,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -3398,7 +3409,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -3409,7 +3420,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -3430,7 +3441,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3443,7 +3454,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3454,7 +3465,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -3465,7 +3476,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -3476,7 +3487,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3512,7 +3523,7 @@ public:
 	~qute_QUndoCommand() override { qute_qtgui_dead(static_cast<void *>(static_cast<QUndoCommand *>(this))); }
 	void undo() override {
 		if (qute_has(0)) {
-			if (qute_qtgui_virtual(qute_id, 0, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 0, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3521,7 +3532,7 @@ public:
 	void qute_super_0() { return QUndoCommand::undo(); }
 	void redo() override {
 		if (qute_has(1)) {
-			if (qute_qtgui_virtual(qute_id, 1, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 1, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3531,7 +3542,7 @@ public:
 	int id() const override {
 		if (qute_has(2)) {
 			int r{};
-			if (qute_qtgui_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -3543,7 +3554,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3563,7 +3574,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3576,7 +3587,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3587,7 +3598,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -3598,7 +3609,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -3609,7 +3620,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3629,7 +3640,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3642,7 +3653,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3653,7 +3664,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -3664,7 +3675,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -3675,7 +3686,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3696,7 +3707,7 @@ public:
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				a0 = qute_take_qstr(c0);
 				a1 = static_cast<int>(c1);
 				return static_cast<QValidator::State>(r);
@@ -3709,7 +3720,7 @@ public:
 		if (qute_has(1)) {
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				a0 = qute_take_qstr(c0);
 				return;
 			}
@@ -3723,7 +3734,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3736,7 +3747,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3747,7 +3758,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3758,7 +3769,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -3769,7 +3780,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -3806,7 +3817,7 @@ public:
 	QSurface::SurfaceType surfaceType() const override {
 		if (qute_has(0)) {
 			int64_t r{};
-			if (qute_qtgui_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<QSurface::SurfaceType>(r);
 			}
 		}
@@ -3816,7 +3827,7 @@ public:
 	QSurfaceFormat format() const override {
 		if (qute_has(1)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 1, nullptr, &r)) {
+			if (qute_virtual(qute_id, 1, nullptr, &r)) {
 				return (r ? *static_cast<QSurfaceFormat *>(r) : QSurfaceFormat());
 			}
 		}
@@ -3826,7 +3837,7 @@ public:
 	QSize size() const override {
 		if (qute_has(2)) {
 			qute_size r{};
-			if (qute_qtgui_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -3836,7 +3847,7 @@ public:
 	QObject * focusObject() const override {
 		if (qute_has(3)) {
 			void * r = nullptr;
-			if (qute_qtgui_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<QObject *>(r);
 			}
 		}
@@ -3847,7 +3858,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3858,7 +3869,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -3869,7 +3880,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -3880,7 +3891,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -3891,7 +3902,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -3902,7 +3913,7 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 9, args, nullptr)) {
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
 				return;
 			}
 		}
@@ -3913,7 +3924,7 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 10, args, nullptr)) {
+			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
 			}
 		}
@@ -3924,7 +3935,7 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 11, args, nullptr)) {
+			if (qute_virtual(qute_id, 11, args, nullptr)) {
 				return;
 			}
 		}
@@ -3935,7 +3946,7 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 12, args, nullptr)) {
+			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
 			}
 		}
@@ -3947,7 +3958,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3958,7 +3969,7 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 14, args, nullptr)) {
+			if (qute_virtual(qute_id, 14, args, nullptr)) {
 				return;
 			}
 		}
@@ -3969,7 +3980,7 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 15, args, nullptr)) {
+			if (qute_virtual(qute_id, 15, args, nullptr)) {
 				return;
 			}
 		}
@@ -3980,7 +3991,7 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 16, args, nullptr)) {
+			if (qute_virtual(qute_id, 16, args, nullptr)) {
 				return;
 			}
 		}
@@ -3991,7 +4002,7 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 17, args, nullptr)) {
+			if (qute_virtual(qute_id, 17, args, nullptr)) {
 				return;
 			}
 		}
@@ -4002,7 +4013,7 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -4013,7 +4024,7 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 19, args, nullptr)) {
+			if (qute_virtual(qute_id, 19, args, nullptr)) {
 				return;
 			}
 		}
@@ -4024,7 +4035,7 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 20, args, nullptr)) {
+			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
 			}
 		}
@@ -4035,7 +4046,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -4046,7 +4057,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -4059,7 +4070,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtgui_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4070,7 +4081,7 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 24, args, nullptr)) {
+			if (qute_virtual(qute_id, 24, args, nullptr)) {
 				return;
 			}
 		}
@@ -4081,7 +4092,7 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 25, args, nullptr)) {
+			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
 			}
 		}
@@ -4092,7 +4103,7 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtgui_virtual(qute_id, 26, args, nullptr)) {
+			if (qute_virtual(qute_id, 26, args, nullptr)) {
 				return;
 			}
 		}
@@ -4567,43 +4578,43 @@ void * qute_QAction_changed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::changed, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::changed, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAction_enabledChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::enabledChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::enabledChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAction_checkableChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::checkableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::checkableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAction_visibleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::visibleChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::visibleChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAction_triggered(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::triggered, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::triggered, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAction_hovered(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::hovered, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::hovered, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAction_toggled(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAction *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAction::toggled, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAction::toggled, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QActionEvent
@@ -4741,13 +4752,13 @@ void * qute_QActionGroup_triggered(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QActionGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QActionGroup::triggered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QActionGroup::triggered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QActionGroup_hovered(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QActionGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QActionGroup::hovered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QActionGroup::hovered, obj, [s](QAction * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QApplicationStateChangeEvent
@@ -5057,25 +5068,25 @@ void * qute_QClipboard_changed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QClipboard *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::changed, obj, [s](QClipboard::Mode a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::changed, obj, [s](QClipboard::Mode a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QClipboard_selectionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QClipboard *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::selectionChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::selectionChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QClipboard_findBufferChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QClipboard *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::findBufferChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::findBufferChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QClipboard_dataChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QClipboard *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::dataChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QClipboard::dataChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QCloseEvent
@@ -5614,25 +5625,25 @@ void * qute_QDoubleValidator_bottomChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDoubleValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::bottomChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::bottomChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QDoubleValidator_topChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDoubleValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::topChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::topChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QDoubleValidator_decimalsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDoubleValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::decimalsChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::decimalsChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QDoubleValidator_notationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDoubleValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::notationChanged, obj, [s](QDoubleValidator::Notation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QDoubleValidator::notationChanged, obj, [s](QDoubleValidator::Notation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QDrag
@@ -5748,13 +5759,13 @@ void * qute_QDrag_actionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDrag *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QDrag::actionChanged, obj, [s](Qt::DropAction a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QDrag::actionChanged, obj, [s](Qt::DropAction a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QDrag_targetChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QDrag *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QDrag::targetChanged, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QDrag::targetChanged, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QDragEnterEvent
@@ -6490,19 +6501,19 @@ void * qute_QFileSystemModel_rootPathChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileSystemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemModel::rootPathChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemModel::rootPathChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QFileSystemModel_fileRenamed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileSystemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemModel::fileRenamed, obj, [s](const QString & a0, const QString & a1, const QString & a2) { qute_str c0 = qute_ret_str(a0); qute_str c1 = qute_ret_str(a1); qute_str c2 = qute_ret_str(a2); void *args[] = {&c0, &c1, &c2}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemModel::fileRenamed, obj, [s](const QString & a0, const QString & a1, const QString & a2) { qute_str c0 = qute_ret_str(a0); qute_str c1 = qute_ret_str(a1); qute_str c2 = qute_ret_str(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QFileSystemModel_directoryLoaded(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileSystemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemModel::directoryLoaded, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemModel::directoryLoaded, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QFocusEvent
@@ -7848,73 +7859,73 @@ void * qute_QGuiApplication_fontDatabaseChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::fontDatabaseChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::fontDatabaseChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QGuiApplication_screenAdded(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::screenAdded, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::screenAdded, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_screenRemoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::screenRemoved, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::screenRemoved, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_primaryScreenChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::primaryScreenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::primaryScreenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_lastWindowClosed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::lastWindowClosed, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::lastWindowClosed, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QGuiApplication_focusObjectChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::focusObjectChanged, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::focusObjectChanged, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_focusWindowChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::focusWindowChanged, obj, [s](QWindow * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::focusWindowChanged, obj, [s](QWindow * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_applicationStateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::applicationStateChanged, obj, [s](Qt::ApplicationState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::applicationStateChanged, obj, [s](Qt::ApplicationState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_layoutDirectionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::layoutDirectionChanged, obj, [s](Qt::LayoutDirection a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::layoutDirectionChanged, obj, [s](Qt::LayoutDirection a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_commitDataRequest(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::commitDataRequest, obj, [s](QSessionManager & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::commitDataRequest, obj, [s](QSessionManager & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_saveStateRequest(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::saveStateRequest, obj, [s](QSessionManager & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::saveStateRequest, obj, [s](QSessionManager & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QGuiApplication_applicationDisplayNameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QGuiApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::applicationDisplayNameChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QGuiApplication::applicationDisplayNameChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QHelpEvent
@@ -9256,13 +9267,13 @@ void * qute_QInputDevice_availableVirtualGeometryChanged(void *self, uintptr_t i
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputDevice::availableVirtualGeometryChanged, obj, [s](QRect a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputDevice::availableVirtualGeometryChanged, obj, [s](QRect a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QInputDevice_capabilitiesChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputDevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputDevice::capabilitiesChanged, obj, [s](QFlags<QInputDevice::Capability> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputDevice::capabilitiesChanged, obj, [s](QFlags<QInputDevice::Capability> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QInputEvent
@@ -9428,49 +9439,49 @@ void * qute_QInputMethod_cursorRectangleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::cursorRectangleChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::cursorRectangleChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_anchorRectangleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::anchorRectangleChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::anchorRectangleChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_keyboardRectangleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::keyboardRectangleChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::keyboardRectangleChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_inputItemClipRectangleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::inputItemClipRectangleChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::inputItemClipRectangleChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_visibleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::visibleChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::visibleChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_animatingChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::animatingChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::animatingChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_localeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::localeChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::localeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QInputMethod_inputDirectionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QInputMethod *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::inputDirectionChanged, obj, [s](Qt::LayoutDirection a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QInputMethod::inputDirectionChanged, obj, [s](Qt::LayoutDirection a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QInputMethodEvent
@@ -9683,13 +9694,13 @@ void * qute_QIntValidator_bottomChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIntValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIntValidator::bottomChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIntValidator::bottomChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QIntValidator_topChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIntValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIntValidator::topChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIntValidator::topChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QKeyEvent
@@ -10372,43 +10383,43 @@ void * qute_QMovie_started(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::started, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::started, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMovie_resized(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::resized, obj, [s](const QSize & a0) { qute_size c0 = qute_from_QSize(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::resized, obj, [s](const QSize & a0) { qute_size c0 = qute_from_QSize(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMovie_updated(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::updated, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::updated, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMovie_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::stateChanged, obj, [s](QMovie::MovieState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::stateChanged, obj, [s](QMovie::MovieState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMovie_error(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::error, obj, [s](QImageReader::ImageReaderError a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::error, obj, [s](QImageReader::ImageReaderError a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMovie_finished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::finished, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::finished, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMovie_frameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMovie *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::frameChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMovie::frameChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QNativeGestureEvent
@@ -10550,7 +10561,7 @@ void * qute_QOffscreenSurface_screenChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QOffscreenSurface *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QOffscreenSurface::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QOffscreenSurface::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QOpenGLContext
@@ -10698,7 +10709,7 @@ void * qute_QOpenGLContext_aboutToBeDestroyed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QOpenGLContext *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLContext::aboutToBeDestroyed, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLContext::aboutToBeDestroyed, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QOpenGLContextGroup
@@ -14510,7 +14521,7 @@ void * qute_QPointingDevice_grabChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QPointingDevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QPointingDevice::grabChanged, obj, [s](QObject * a0, QPointingDevice::GrabTransition a1, const QPointerEvent * a2, const QEventPoint & a3) { void * c0 = (void *)(a0); int64_t c1 = static_cast<int64_t>(a1); void * c2 = (void *)(a2); void * c3 = static_cast<void *>(new QEventPoint(a3)); void *args[] = {&c0, &c1, &c2, &c3}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QPointingDevice::grabChanged, obj, [s](QObject * a0, QPointingDevice::GrabTransition a1, const QPointerEvent * a2, const QEventPoint & a3) { void * c0 = (void *)(a0); int64_t c1 = static_cast<int64_t>(a1); void * c2 = (void *)(a2); void * c3 = static_cast<void *>(new QEventPoint(a3)); void *args[] = {&c0, &c1, &c2, &c3}; qute_signal(s->id, args); }));
 }
 
 // ---- QPointingDeviceUniqueId
@@ -15090,7 +15101,7 @@ void * qute_QRegularExpressionValidator_regularExpressionChanged(void *self, uin
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QRegularExpressionValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QRegularExpressionValidator::regularExpressionChanged, obj, [s](const QRegularExpression & a0) { void * c0 = static_cast<void *>(new QRegularExpression(a0)); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QRegularExpressionValidator::regularExpressionChanged, obj, [s](const QRegularExpression & a0) { void * c0 = static_cast<void *>(new QRegularExpression(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QResizeEvent
@@ -15394,55 +15405,55 @@ void * qute_QScreen_geometryChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::geometryChanged, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::geometryChanged, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_availableGeometryChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::availableGeometryChanged, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::availableGeometryChanged, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_physicalSizeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::physicalSizeChanged, obj, [s](const QSizeF & a0) { qute_sizef c0 = qute_from_QSizeF(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::physicalSizeChanged, obj, [s](const QSizeF & a0) { qute_sizef c0 = qute_from_QSizeF(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_physicalDotsPerInchChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::physicalDotsPerInchChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::physicalDotsPerInchChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_logicalDotsPerInchChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::logicalDotsPerInchChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::logicalDotsPerInchChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_virtualGeometryChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::virtualGeometryChanged, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::virtualGeometryChanged, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_primaryOrientationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::primaryOrientationChanged, obj, [s](Qt::ScreenOrientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::primaryOrientationChanged, obj, [s](Qt::ScreenOrientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_orientationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::orientationChanged, obj, [s](Qt::ScreenOrientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::orientationChanged, obj, [s](Qt::ScreenOrientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreen_refreshRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreen *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::refreshRateChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreen::refreshRateChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QScreenOrientationChangeEvent
@@ -15730,13 +15741,13 @@ void * qute_QShortcut_activated(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QShortcut *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QShortcut::activated, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QShortcut::activated, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QShortcut_activatedAmbiguously(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QShortcut *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QShortcut::activatedAmbiguously, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QShortcut::activatedAmbiguously, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QShortcutEvent
@@ -16672,7 +16683,7 @@ void * qute_QStandardItemModel_itemChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStandardItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStandardItemModel::itemChanged, obj, [s](QStandardItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStandardItemModel::itemChanged, obj, [s](QStandardItem * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QStaticText
@@ -17000,91 +17011,91 @@ void * qute_QStyleHints_cursorFlashTimeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::cursorFlashTimeChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::cursorFlashTimeChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_keyboardInputIntervalChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::keyboardInputIntervalChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::keyboardInputIntervalChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_mouseDoubleClickIntervalChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::mouseDoubleClickIntervalChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::mouseDoubleClickIntervalChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_mousePressAndHoldIntervalChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::mousePressAndHoldIntervalChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::mousePressAndHoldIntervalChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_startDragDistanceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::startDragDistanceChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::startDragDistanceChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_startDragTimeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::startDragTimeChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::startDragTimeChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_tabFocusBehaviorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::tabFocusBehaviorChanged, obj, [s](Qt::TabFocusBehavior a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::tabFocusBehaviorChanged, obj, [s](Qt::TabFocusBehavior a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_useHoverEffectsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::useHoverEffectsChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::useHoverEffectsChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_showShortcutsInContextMenusChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::showShortcutsInContextMenusChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::showShortcutsInContextMenusChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_contextMenuTriggerChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::contextMenuTriggerChanged, obj, [s](Qt::ContextMenuTrigger a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::contextMenuTriggerChanged, obj, [s](Qt::ContextMenuTrigger a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_wheelScrollLinesChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::wheelScrollLinesChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::wheelScrollLinesChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_mouseQuickSelectionThresholdChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::mouseQuickSelectionThresholdChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::mouseQuickSelectionThresholdChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_colorSchemeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::colorSchemeChanged, obj, [s](Qt::ColorScheme a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::colorSchemeChanged, obj, [s](Qt::ColorScheme a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_toolTipWakeUpDelayChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::toolTipWakeUpDelayChanged, obj, [s](std::chrono::duration<long, std::ratio<1, 1000>> a0) { int64_t c0 = static_cast<int64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(a0).count()); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::toolTipWakeUpDelayChanged, obj, [s](std::chrono::duration<long, std::ratio<1, 1000>> a0) { int64_t c0 = static_cast<int64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(a0).count()); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QStyleHints_toolTipWakeUpDelayAsMSecChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QStyleHints *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::toolTipWakeUpDelayAsMSecChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QStyleHints::toolTipWakeUpDelayAsMSecChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QSurface
@@ -18766,61 +18777,61 @@ void * qute_QTextDocument_contentsChange(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::contentsChange, obj, [s](int a0, int a1, int a2) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::contentsChange, obj, [s](int a0, int a1, int a2) { int c0 = static_cast<int>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_contentsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::contentsChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::contentsChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QTextDocument_undoAvailable(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::undoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::undoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_redoAvailable(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::redoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::redoAvailable, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_undoCommandAdded(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::undoCommandAdded, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::undoCommandAdded, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QTextDocument_modificationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::modificationChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::modificationChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_cursorPositionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::cursorPositionChanged, obj, [s](const QTextCursor & a0) { void * c0 = static_cast<void *>(new QTextCursor(a0)); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::cursorPositionChanged, obj, [s](const QTextCursor & a0) { void * c0 = static_cast<void *>(new QTextCursor(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_blockCountChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::blockCountChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::blockCountChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_baseUrlChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::baseUrlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::baseUrlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTextDocument_documentLayoutChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTextDocument *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::documentLayoutChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTextDocument::documentLayoutChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QTextDocumentFragment
@@ -20539,43 +20550,43 @@ void * qute_QUndoGroup_activeStackChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::activeStackChanged, obj, [s](QUndoStack * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::activeStackChanged, obj, [s](QUndoStack * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoGroup_indexChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::indexChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::indexChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoGroup_cleanChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::cleanChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::cleanChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoGroup_canUndoChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::canUndoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::canUndoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoGroup_canRedoChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::canRedoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::canRedoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoGroup_undoTextChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::undoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::undoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoGroup_redoTextChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::redoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoGroup::redoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QUndoStack
@@ -20755,37 +20766,37 @@ void * qute_QUndoStack_indexChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoStack *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::indexChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::indexChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoStack_cleanChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoStack *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::cleanChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::cleanChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoStack_canUndoChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoStack *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::canUndoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::canUndoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoStack_canRedoChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoStack *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::canRedoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::canRedoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoStack_undoTextChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoStack *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::undoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::undoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QUndoStack_redoTextChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QUndoStack *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::redoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QUndoStack::redoTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QValidator
@@ -20858,7 +20869,7 @@ void * qute_QValidator_changed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QValidator *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QValidator::changed, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QValidator::changed, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QVector2D
@@ -21936,127 +21947,127 @@ void * qute_QWindow_screenChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_modalityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::modalityChanged, obj, [s](Qt::WindowModality a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::modalityChanged, obj, [s](Qt::WindowModality a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_flagsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::flagsChanged, obj, [s](QFlags<Qt::WindowType> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::flagsChanged, obj, [s](QFlags<Qt::WindowType> a0) { int64_t c0 = static_cast<int64_t>((a0).toInt()); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_windowStateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::windowStateChanged, obj, [s](Qt::WindowState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::windowStateChanged, obj, [s](Qt::WindowState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_windowTitleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::windowTitleChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::windowTitleChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_xChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::xChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::xChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_yChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::yChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::yChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_widthChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::widthChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::widthChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_heightChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::heightChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::heightChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_minimumWidthChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::minimumWidthChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::minimumWidthChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_minimumHeightChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::minimumHeightChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::minimumHeightChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_maximumWidthChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::maximumWidthChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::maximumWidthChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_maximumHeightChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::maximumHeightChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::maximumHeightChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_safeAreaMarginsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::safeAreaMarginsChanged, obj, [s](QMargins a0) { qute_margins c0 = qute_from_QMargins(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::safeAreaMarginsChanged, obj, [s](QMargins a0) { qute_margins c0 = qute_from_QMargins(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_visibleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::visibleChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::visibleChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_visibilityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::visibilityChanged, obj, [s](QWindow::Visibility a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::visibilityChanged, obj, [s](QWindow::Visibility a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_activeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::activeChanged, obj, [s]() {  qute_qtgui_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::activeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWindow_contentOrientationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::contentOrientationChanged, obj, [s](Qt::ScreenOrientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::contentOrientationChanged, obj, [s](Qt::ScreenOrientation a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_focusObjectChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::focusObjectChanged, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::focusObjectChanged, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_opacityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::opacityChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::opacityChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindow_transientParentChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindow *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::transientParentChanged, obj, [s](QWindow * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtgui_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindow::transientParentChanged, obj, [s](QWindow * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QWindowStateChangeEvent

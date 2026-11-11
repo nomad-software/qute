@@ -383,7 +383,7 @@ func TestShimFallbackAndThreadCheck(t *testing.T) {
 		t.Fatal("no sizeHint override in the QWidget shim")
 	}
 	body := shim[i : i+strings.Index(shim[i:], "\n\t}")]
-	if !strings.Contains(body, "if (qute_qtwidgets_virtual(") || !strings.Contains(body, "return QWidget::sizeHint()") {
+	if !strings.Contains(body, "if (qute_virtual(") || !strings.Contains(body, "return QWidget::sizeHint()") {
 		t.Errorf("sizeHint does not fall back to the C++ implementation:\n%s", body)
 	}
 	var cpp buf
@@ -392,6 +392,18 @@ func TestShimFallbackAndThreadCheck(t *testing.T) {
 	funcs := strings.Count(src, ") {\n\tqute_gui_only();")
 	if funcs < 1000 || !strings.Contains(src, "qute_qtcore_wrong_thread();") {
 		t.Errorf("only %d C functions check the thread", funcs)
+	}
+	// Every entry into a Go handler goes through the wrappers that pass the
+	// thread the call came from, so Go checks it without calling C++.
+	for _, entry := range []string{"qute_qtcore_signal(", "qute_qtcore_virtual(", "qute_qtcore_call("} {
+		if n := strings.Count(src, entry); n != 2 { // its declaration and its wrapper
+			t.Errorf("%s appears %d times, want only the declaration and the wrapper", entry, n)
+		}
+	}
+	for _, wrapper := range []string{"qute_signal(s->id", "if (qute_virtual(qute_id", "qute_call(s->id"} {
+		if !strings.Contains(src, wrapper) {
+			t.Errorf("no call through %s", wrapper)
+		}
 	}
 }
 
@@ -1165,18 +1177,20 @@ func TestInlineValueCode(t *testing.T) {
 		t.Fatal("no index override in the shim")
 	}
 	body := s[i : i+strings.Index(s[i:], "\n\t}")]
-	for _, want := range []string{"void * c2 = const_cast<void *>(static_cast<const void *>(&a2));", "QModelIndex r{};", "return r;"} {
+	// the index and its model, found here so Go need not ask C++
+	for _, want := range []string{"qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};", "QModelIndex r{};", "return r;"} {
 		if !strings.Contains(body, want) {
 			t.Errorf("index override lacks %s:\n%s", want, body)
 		}
 	}
 	src := string(g.emitClass(c))
-	for _, want := range []string{`rt.CopyInline)`, `rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex"`, `rt.InlineBlock("QModelIndex"`} {
+	for _, want := range []string{`rt.InlineArgView[QModelIndex](a[0], "QModelIndex")`, `rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex"`, `rt.InlineBlock("QModelIndex"`} {
 		if !strings.Contains(src, want) {
 			t.Errorf("QAbstractItemModel's Go code lacks %s", want)
 		}
 	}
-	if !strings.Contains(string(g.emitClass(class(t, "QModelIndex"))), `rt.RegisterInline("QModelIndex"`) {
-		t.Error("QModelIndex does not register as inline")
+	mi := string(g.emitClass(class(t, "QModelIndex")))
+	if !strings.Contains(mi, `rt.RegisterInline("QModelIndex"`) || !strings.Contains(mi, `rt.RegisterDependencyWrap("QModelIndex"`) {
+		t.Error("QModelIndex does not register as inline with a dependency wrap")
 	}
 }

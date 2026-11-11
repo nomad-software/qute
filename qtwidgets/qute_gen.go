@@ -15,14 +15,16 @@ import (
 )
 
 //export qute_qtwidgets_signal
-func qute_qtwidgets_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallback(uintptr(id), args) }
+func qute_qtwidgets_signal(id C.uintptr_t, args unsafe.Pointer, off C.bool) {
+	rt.InvokeCallback(uintptr(id), args, bool(off))
+}
 
 //export qute_qtwidgets_release
 func qute_qtwidgets_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtwidgets_virtual
-func qute_qtwidgets_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
-	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
+func qute_qtwidgets_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer, off C.bool) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret, bool(off)))
 }
 
 //export qute_qtwidgets_wrong_thread
@@ -32,8 +34,8 @@ func qute_qtwidgets_wrong_thread() { rt.WrongThread() }
 func qute_qtwidgets_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }
 
 //export qute_qtwidgets_call
-func qute_qtwidgets_call(id C.uintptr_t, args, ret unsafe.Pointer) {
-	rt.InvokeFunc(uintptr(id), args, ret)
+func qute_qtwidgets_call(id C.uintptr_t, args, ret unsafe.Pointer, off C.bool) {
+	rt.InvokeFunc(uintptr(id), args, ret, bool(off))
 }
 
 func checkLayout() string {

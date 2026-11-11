@@ -37,6 +37,7 @@ func init() {
 	rt.RegisterDependency("QWidgetItemV2", func(p unsafe.Pointer) *rt.Handle {
 		return rt.WrapClass(C.qute_QLayoutItem_widget(p), "QWidget", rt.KeepOrBorrow)
 	})
+	rt.RegisterDependencyWrap("QWidgetItemV2", func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, "QWidget", rt.KeepOrBorrow) })
 }
 
 // QWidgetItemV2FromPtr wraps an existing C++ QWidgetItemV2. This is an unsafe escape hatch: own says

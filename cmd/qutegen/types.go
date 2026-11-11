@@ -878,6 +878,10 @@ func (g *Gen) goRetFrom(c *conv, r string, mode string, ctx *Module, owner strin
 }
 
 func (g *Gen) wrapExpr(cls *Class, p, mode string, ctx *Module, owner string) string {
+	if cls.Opts.Inline && mode == "rt.TakeOwned" {
+		// a heap copy that is Go's: its bytes are kept, the copy freed now
+		return fmt.Sprintf("rt.InlineOwnedView[%s](%s, %q)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name)
+	}
 	if owner != "" && cls.Kind == KindPlain && mode != "rt.TakeOwned" && mode != "rt.NewOwned" && mode != "rt.NewParented" {
 		return fmt.Sprintf("rt.View[%s](rt.WrapClassFrom(%s, %q, %s, %s), %s)", g.qual(cls.Module, ctx, cls.Name), p, cls.Name, mode, owner, p)
 	}

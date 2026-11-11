@@ -127,15 +127,26 @@
 #include <memory>
 
 extern "C" {
-void qute_qtcore_signal(uintptr_t id, void *args);
+void qute_qtcore_signal(uintptr_t id, void *args, bool off);
 void qute_qtcore_release(uintptr_t id);
-bool qute_qtcore_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtcore_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);
 void qute_qtcore_wrong_thread(void);
 void qute_qtcore_dead(void *key);
-void qute_qtcore_call(uintptr_t id, void *args, void *ret);
+void qute_qtcore_call(uintptr_t id, void *args, void *ret, bool off);
 }
 
-static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtcore_call(id, args, ret); }
+// Every entry into a Go handler (signal, virtual, std::function) must come
+// from the GUI thread. The thread is looked up here, where it is cheap, and
+// passed in: the Go side panics when it is not the GUI thread, without a
+// call back into C++ to ask.
+static inline bool qute_off_gui() {
+	QCoreApplication *app = QCoreApplication::instance();
+	return app && QThread::currentThread() != app->thread();
+}
+
+static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtcore_call(id, args, ret, qute_off_gui()); }
+static inline void qute_signal(uintptr_t id, void *args) { qute_qtcore_signal(id, args, qute_off_gui()); }
+static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_qtcore_virtual(id, idx, args, ret, qute_off_gui()); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
 // It is checked here, in every build (qute_debug builds also name the
@@ -168,7 +179,7 @@ public:
 	int duration() const override {
 		if (qute_has(0)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -179,7 +190,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -190,7 +201,7 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -201,7 +212,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -212,7 +223,7 @@ public:
 		if (qute_has(4)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -225,7 +236,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -236,7 +247,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -247,7 +258,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -258,7 +269,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -297,10 +308,10 @@ public:
 		if (qute_has(0)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return r;
 			}
 		}
@@ -308,10 +319,10 @@ public:
 	}
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -321,10 +332,10 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return r;
 			}
 		}
@@ -333,10 +344,10 @@ public:
 	QModelIndex qute_super_2(int a0, int a1, const QModelIndex & a2) const { return QAbstractItemModel::sibling(a0, a1, a2); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -344,10 +355,10 @@ public:
 	}
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -355,10 +366,10 @@ public:
 	}
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -367,11 +378,11 @@ public:
 	bool qute_super_5(const QModelIndex & a0) const { return QAbstractItemModel::hasChildren(a0); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -379,12 +390,12 @@ public:
 	}
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -398,7 +409,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -413,7 +424,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -422,10 +433,10 @@ public:
 	bool qute_super_9(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractItemModel::setHeaderData(a0, a1, a2, a3); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(10)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -434,11 +445,11 @@ public:
 	QMap<int, QVariant> qute_super_10(const QModelIndex & a0) const { return QAbstractItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -447,10 +458,10 @@ public:
 	bool qute_super_11(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QAbstractItemModel::setItemData(a0, a1); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(12)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -460,7 +471,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(13)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -472,7 +483,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -485,10 +496,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -501,10 +512,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -514,7 +525,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(17)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 17, nullptr, &r)) {
+			if (qute_virtual(qute_id, 17, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -524,7 +535,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(18)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 18, nullptr, &r)) {
+			if (qute_virtual(qute_id, 18, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -535,10 +546,10 @@ public:
 		if (qute_has(19)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -549,10 +560,10 @@ public:
 		if (qute_has(20)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -563,10 +574,10 @@ public:
 		if (qute_has(21)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -577,10 +588,10 @@ public:
 		if (qute_has(22)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -589,14 +600,14 @@ public:
 	bool qute_super_22(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -605,14 +616,14 @@ public:
 	bool qute_super_23(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -621,9 +632,9 @@ public:
 	bool qute_super_24(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(25)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 25, args, nullptr)) {
+			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
 			}
 		}
@@ -632,10 +643,10 @@ public:
 	void qute_super_25(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -644,10 +655,10 @@ public:
 	bool qute_super_26(const QModelIndex & a0) const { return QAbstractItemModel::canFetchMore(a0); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -659,7 +670,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 28, args, nullptr)) {
+			if (qute_virtual(qute_id, 28, args, nullptr)) {
 				return;
 			}
 		}
@@ -668,10 +679,10 @@ public:
 	void qute_super_28(int a0, Qt::SortOrder a1) { return QAbstractItemModel::sort(a0, a1); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return r;
 			}
 		}
@@ -680,14 +691,14 @@ public:
 	QModelIndex qute_super_29(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(30)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 30, args, &r)) {
+			if (qute_virtual(qute_id, 30, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -696,10 +707,10 @@ public:
 	QList<QModelIndex> qute_super_30(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(31)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 31, args, &r)) {
+			if (qute_virtual(qute_id, 31, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -709,7 +720,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(32)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 32, nullptr, &r)) {
+			if (qute_virtual(qute_id, 32, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -719,7 +730,7 @@ public:
 	bool submit() override {
 		if (qute_has(33)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, nullptr, &r)) {
+			if (qute_virtual(qute_id, 33, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -728,7 +739,7 @@ public:
 	bool qute_super_33() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(34)) {
-			if (qute_qtcore_virtual(qute_id, 34, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 34, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -737,7 +748,7 @@ public:
 	void qute_super_34() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(35)) {
-			if (qute_qtcore_virtual(qute_id, 35, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 35, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -749,7 +760,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 36, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -762,7 +773,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 37, args, &r)) {
+			if (qute_virtual(qute_id, 37, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -773,7 +784,7 @@ public:
 		if (qute_has(38)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 38, args, nullptr)) {
+			if (qute_virtual(qute_id, 38, args, nullptr)) {
 				return;
 			}
 		}
@@ -784,7 +795,7 @@ public:
 		if (qute_has(39)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 39, args, nullptr)) {
+			if (qute_virtual(qute_id, 39, args, nullptr)) {
 				return;
 			}
 		}
@@ -795,7 +806,7 @@ public:
 		if (qute_has(40)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 40, args, nullptr)) {
+			if (qute_virtual(qute_id, 40, args, nullptr)) {
 				return;
 			}
 		}
@@ -834,10 +845,10 @@ public:
 		if (qute_has(0)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return r;
 			}
 		}
@@ -848,10 +859,10 @@ public:
 		if (qute_has(1)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -864,10 +875,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -876,10 +887,10 @@ public:
 	bool qute_super_2(const QMimeData * a0, Qt::DropAction a1, int a2, int a3, const QModelIndex & a4) { return QAbstractListModel::dropMimeData(a0, a1, a2, a3, a4); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -888,10 +899,10 @@ public:
 	QFlags<Qt::ItemFlag> qute_super_3(const QModelIndex & a0) const { return QAbstractListModel::flags(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -899,11 +910,11 @@ public:
 	}
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -911,12 +922,12 @@ public:
 	}
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -930,7 +941,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -945,7 +956,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -954,10 +965,10 @@ public:
 	bool qute_super_8(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractItemModel::setHeaderData(a0, a1, a2, a3); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -966,11 +977,11 @@ public:
 	QMap<int, QVariant> qute_super_9(const QModelIndex & a0) const { return QAbstractItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(10)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -979,10 +990,10 @@ public:
 	bool qute_super_10(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QAbstractItemModel::setItemData(a0, a1); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -992,7 +1003,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(12)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -1004,7 +1015,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -1017,10 +1028,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1030,7 +1041,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(15)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 15, nullptr, &r)) {
+			if (qute_virtual(qute_id, 15, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -1040,7 +1051,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(16)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 16, nullptr, &r)) {
+			if (qute_virtual(qute_id, 16, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -1051,10 +1062,10 @@ public:
 		if (qute_has(17)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1065,10 +1076,10 @@ public:
 		if (qute_has(18)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1079,10 +1090,10 @@ public:
 		if (qute_has(19)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1093,10 +1104,10 @@ public:
 		if (qute_has(20)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1105,14 +1116,14 @@ public:
 	bool qute_super_20(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(21)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1121,14 +1132,14 @@ public:
 	bool qute_super_21(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(22)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1137,9 +1148,9 @@ public:
 	bool qute_super_22(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 23, args, nullptr)) {
+			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
 			}
 		}
@@ -1148,10 +1159,10 @@ public:
 	void qute_super_23(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1163,7 +1174,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 25, args, nullptr)) {
+			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
 			}
 		}
@@ -1172,10 +1183,10 @@ public:
 	void qute_super_25(int a0, Qt::SortOrder a1) { return QAbstractItemModel::sort(a0, a1); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return r;
 			}
 		}
@@ -1184,14 +1195,14 @@ public:
 	QModelIndex qute_super_26(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -1200,10 +1211,10 @@ public:
 	QList<QModelIndex> qute_super_27(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -1213,7 +1224,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(29)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 29, nullptr, &r)) {
+			if (qute_virtual(qute_id, 29, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -1223,7 +1234,7 @@ public:
 	bool submit() override {
 		if (qute_has(30)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 30, nullptr, &r)) {
+			if (qute_virtual(qute_id, 30, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1232,7 +1243,7 @@ public:
 	bool qute_super_30() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(31)) {
-			if (qute_qtcore_virtual(qute_id, 31, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 31, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -1241,7 +1252,7 @@ public:
 	void qute_super_31() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(32)) {
-			if (qute_qtcore_virtual(qute_id, 32, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 32, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -1253,7 +1264,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, args, &r)) {
+			if (qute_virtual(qute_id, 33, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1266,7 +1277,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1277,7 +1288,7 @@ public:
 		if (qute_has(35)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 35, args, nullptr)) {
+			if (qute_virtual(qute_id, 35, args, nullptr)) {
 				return;
 			}
 		}
@@ -1288,7 +1299,7 @@ public:
 		if (qute_has(36)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 36, args, nullptr)) {
+			if (qute_virtual(qute_id, 36, args, nullptr)) {
 				return;
 			}
 		}
@@ -1299,7 +1310,7 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 37, args, nullptr)) {
+			if (qute_virtual(qute_id, 37, args, nullptr)) {
 				return;
 			}
 		}
@@ -1339,7 +1350,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -1348,10 +1359,10 @@ public:
 	void qute_super_0(QAbstractItemModel * a0) { return QAbstractProxyModel::setSourceModel(a0); }
 	QModelIndex mapToSource(const QModelIndex & a0) const override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -1359,10 +1370,10 @@ public:
 	}
 	QModelIndex mapFromSource(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return r;
 			}
 		}
@@ -1373,7 +1384,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -1385,7 +1396,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -1395,7 +1406,7 @@ public:
 	bool submit() override {
 		if (qute_has(5)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, nullptr, &r)) {
+			if (qute_virtual(qute_id, 5, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1404,7 +1415,7 @@ public:
 	bool qute_super_5() { return QAbstractProxyModel::submit(); }
 	void revert() override {
 		if (qute_has(6)) {
-			if (qute_qtcore_virtual(qute_id, 6, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 6, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -1413,11 +1424,11 @@ public:
 	void qute_super_6() { return QAbstractProxyModel::revert(); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -1431,7 +1442,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -1440,10 +1451,10 @@ public:
 	QVariant qute_super_8(int a0, Qt::Orientation a1, int a2) const { return QAbstractProxyModel::headerData(a0, a1, a2); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -1452,10 +1463,10 @@ public:
 	QMap<int, QVariant> qute_super_9(const QModelIndex & a0) const { return QAbstractProxyModel::itemData(a0); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(10)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -1464,12 +1475,12 @@ public:
 	QFlags<Qt::ItemFlag> qute_super_10(const QModelIndex & a0) const { return QAbstractProxyModel::flags(a0); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1478,11 +1489,11 @@ public:
 	bool qute_super_11(const QModelIndex & a0, const QVariant & a1, int a2) { return QAbstractProxyModel::setData(a0, a1, a2); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(12)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1497,7 +1508,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1506,10 +1517,10 @@ public:
 	bool qute_super_13(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractProxyModel::setHeaderData(a0, a1, a2, a3); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(14)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1518,10 +1529,10 @@ public:
 	bool qute_super_14(const QModelIndex & a0) { return QAbstractProxyModel::clearItemData(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(15)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return r;
 			}
 		}
@@ -1530,10 +1541,10 @@ public:
 	QModelIndex qute_super_15(const QModelIndex & a0) const { return QAbstractProxyModel::buddy(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(16)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1542,9 +1553,9 @@ public:
 	bool qute_super_16(const QModelIndex & a0) const { return QAbstractProxyModel::canFetchMore(a0); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(17)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 17, args, nullptr)) {
+			if (qute_virtual(qute_id, 17, args, nullptr)) {
 				return;
 			}
 		}
@@ -1556,7 +1567,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -1565,10 +1576,10 @@ public:
 	void qute_super_18(int a0, Qt::SortOrder a1) { return QAbstractProxyModel::sort(a0, a1); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(19)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -1577,10 +1588,10 @@ public:
 	QSize qute_super_19(const QModelIndex & a0) const { return QAbstractProxyModel::span(a0); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(20)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1591,10 +1602,10 @@ public:
 		if (qute_has(21)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return r;
 			}
 		}
@@ -1606,7 +1617,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -1619,10 +1630,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1635,10 +1646,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1648,7 +1659,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(25)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 25, nullptr, &r)) {
+			if (qute_virtual(qute_id, 25, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -1658,7 +1669,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(26)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 26, nullptr, &r)) {
+			if (qute_virtual(qute_id, 26, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -1668,7 +1679,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(27)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 27, nullptr, &r)) {
+			if (qute_virtual(qute_id, 27, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -1678,7 +1689,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(28)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 28, nullptr, &r)) {
+			if (qute_virtual(qute_id, 28, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -1689,10 +1700,10 @@ public:
 		if (qute_has(29)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return r;
 			}
 		}
@@ -1700,10 +1711,10 @@ public:
 	}
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(30)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 30, args, &r)) {
+			if (qute_virtual(qute_id, 30, args, &r)) {
 				return r;
 			}
 		}
@@ -1711,10 +1722,10 @@ public:
 	}
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(31)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 31, args, &r)) {
+			if (qute_virtual(qute_id, 31, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -1722,10 +1733,10 @@ public:
 	}
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(32)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 32, args, &r)) {
+			if (qute_virtual(qute_id, 32, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -1735,10 +1746,10 @@ public:
 		if (qute_has(33)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, args, &r)) {
+			if (qute_virtual(qute_id, 33, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1749,10 +1760,10 @@ public:
 		if (qute_has(34)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1763,10 +1774,10 @@ public:
 		if (qute_has(35)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 35, args, &r)) {
+			if (qute_virtual(qute_id, 35, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1777,10 +1788,10 @@ public:
 		if (qute_has(36)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 36, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1789,14 +1800,14 @@ public:
 	bool qute_super_36(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(37)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 37, args, &r)) {
+			if (qute_virtual(qute_id, 37, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1805,14 +1816,14 @@ public:
 	bool qute_super_37(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(38)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 38, args, &r)) {
+			if (qute_virtual(qute_id, 38, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1821,14 +1832,14 @@ public:
 	bool qute_super_38(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(39)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 39, args, &r)) {
+			if (qute_virtual(qute_id, 39, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -1837,7 +1848,7 @@ public:
 	QList<QModelIndex> qute_super_39(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	void resetInternalData() override {
 		if (qute_has(40)) {
-			if (qute_qtcore_virtual(qute_id, 40, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 40, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -1849,7 +1860,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 41, args, &r)) {
+			if (qute_virtual(qute_id, 41, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1862,7 +1873,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 42, args, &r)) {
+			if (qute_virtual(qute_id, 42, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1873,7 +1884,7 @@ public:
 		if (qute_has(43)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 43, args, nullptr)) {
+			if (qute_virtual(qute_id, 43, args, nullptr)) {
 				return;
 			}
 		}
@@ -1884,7 +1895,7 @@ public:
 		if (qute_has(44)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 44, args, nullptr)) {
+			if (qute_virtual(qute_id, 44, args, nullptr)) {
 				return;
 			}
 		}
@@ -1895,7 +1906,7 @@ public:
 		if (qute_has(45)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 45, args, nullptr)) {
+			if (qute_virtual(qute_id, 45, args, nullptr)) {
 				return;
 			}
 		}
@@ -1934,10 +1945,10 @@ public:
 		if (qute_has(0)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return r;
 			}
 		}
@@ -1948,10 +1959,10 @@ public:
 		if (qute_has(1)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -1964,10 +1975,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1976,10 +1987,10 @@ public:
 	bool qute_super_2(const QMimeData * a0, Qt::DropAction a1, int a2, int a3, const QModelIndex & a4) { return QAbstractTableModel::dropMimeData(a0, a1, a2, a3, a4); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -1988,10 +1999,10 @@ public:
 	QFlags<Qt::ItemFlag> qute_super_3(const QModelIndex & a0) const { return QAbstractTableModel::flags(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -1999,10 +2010,10 @@ public:
 	}
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2010,11 +2021,11 @@ public:
 	}
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2022,12 +2033,12 @@ public:
 	}
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2041,7 +2052,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2056,7 +2067,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2065,10 +2076,10 @@ public:
 	bool qute_super_9(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractItemModel::setHeaderData(a0, a1, a2, a3); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(10)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -2077,11 +2088,11 @@ public:
 	QMap<int, QVariant> qute_super_10(const QModelIndex & a0) const { return QAbstractItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2090,10 +2101,10 @@ public:
 	bool qute_super_11(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QAbstractItemModel::setItemData(a0, a1); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(12)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2103,7 +2114,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(13)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -2115,7 +2126,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -2128,10 +2139,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2141,7 +2152,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(16)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 16, nullptr, &r)) {
+			if (qute_virtual(qute_id, 16, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -2151,7 +2162,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(17)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 17, nullptr, &r)) {
+			if (qute_virtual(qute_id, 17, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -2162,10 +2173,10 @@ public:
 		if (qute_has(18)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2176,10 +2187,10 @@ public:
 		if (qute_has(19)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2190,10 +2201,10 @@ public:
 		if (qute_has(20)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2204,10 +2215,10 @@ public:
 		if (qute_has(21)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2216,14 +2227,14 @@ public:
 	bool qute_super_21(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(22)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2232,14 +2243,14 @@ public:
 	bool qute_super_22(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2248,9 +2259,9 @@ public:
 	bool qute_super_23(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 24, args, nullptr)) {
+			if (qute_virtual(qute_id, 24, args, nullptr)) {
 				return;
 			}
 		}
@@ -2259,10 +2270,10 @@ public:
 	void qute_super_24(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(25)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 25, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2274,7 +2285,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 26, args, nullptr)) {
+			if (qute_virtual(qute_id, 26, args, nullptr)) {
 				return;
 			}
 		}
@@ -2283,10 +2294,10 @@ public:
 	void qute_super_26(int a0, Qt::SortOrder a1) { return QAbstractItemModel::sort(a0, a1); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return r;
 			}
 		}
@@ -2295,14 +2306,14 @@ public:
 	QModelIndex qute_super_27(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -2311,10 +2322,10 @@ public:
 	QList<QModelIndex> qute_super_28(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -2324,7 +2335,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(30)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 30, nullptr, &r)) {
+			if (qute_virtual(qute_id, 30, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -2334,7 +2345,7 @@ public:
 	bool submit() override {
 		if (qute_has(31)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 31, nullptr, &r)) {
+			if (qute_virtual(qute_id, 31, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2343,7 +2354,7 @@ public:
 	bool qute_super_31() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(32)) {
-			if (qute_qtcore_virtual(qute_id, 32, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 32, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -2352,7 +2363,7 @@ public:
 	void qute_super_32() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(33)) {
-			if (qute_qtcore_virtual(qute_id, 33, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 33, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -2364,7 +2375,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2377,7 +2388,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 35, args, &r)) {
+			if (qute_virtual(qute_id, 35, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2388,7 +2399,7 @@ public:
 		if (qute_has(36)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 36, args, nullptr)) {
+			if (qute_virtual(qute_id, 36, args, nullptr)) {
 				return;
 			}
 		}
@@ -2399,7 +2410,7 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 37, args, nullptr)) {
+			if (qute_virtual(qute_id, 37, args, nullptr)) {
 				return;
 			}
 		}
@@ -2410,7 +2421,7 @@ public:
 		if (qute_has(38)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 38, args, nullptr)) {
+			if (qute_virtual(qute_id, 38, args, nullptr)) {
 				return;
 			}
 		}
@@ -2430,7 +2441,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2440,7 +2451,7 @@ public:
 	int duration() const override {
 		if (qute_has(1)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 1, nullptr, &r)) {
+			if (qute_virtual(qute_id, 1, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2450,7 +2461,7 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -2461,7 +2472,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -2472,7 +2483,7 @@ public:
 		if (qute_has(4)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -2485,7 +2496,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2496,7 +2507,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -2507,7 +2518,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -2518,7 +2529,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -2540,7 +2551,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2549,7 +2560,7 @@ public:
 	bool qute_super_0(QFlags<QIODeviceBase::OpenModeFlag> a0) { return QBuffer::open(a0); }
 	void close() override {
 		if (qute_has(1)) {
-			if (qute_qtcore_virtual(qute_id, 1, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 1, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -2559,7 +2570,7 @@ public:
 	long long size() const override {
 		if (qute_has(2)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -2569,7 +2580,7 @@ public:
 	long long pos() const override {
 		if (qute_has(3)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -2581,7 +2592,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2591,7 +2602,7 @@ public:
 	bool atEnd() const override {
 		if (qute_has(5)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, nullptr, &r)) {
+			if (qute_virtual(qute_id, 5, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2601,7 +2612,7 @@ public:
 	bool canReadLine() const override {
 		if (qute_has(6)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 6, nullptr, &r)) {
+			if (qute_virtual(qute_id, 6, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2614,7 +2625,7 @@ public:
 			long long c1 = static_cast<long long>(a1);
 			void *args[] = {&c0, &c1};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -2624,7 +2635,7 @@ public:
 	bool isSequential() const override {
 		if (qute_has(8)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 8, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2634,7 +2645,7 @@ public:
 	bool reset() override {
 		if (qute_has(9)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, nullptr, &r)) {
+			if (qute_virtual(qute_id, 9, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2644,7 +2655,7 @@ public:
 	long long bytesAvailable() const override {
 		if (qute_has(10)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -2654,7 +2665,7 @@ public:
 	long long bytesToWrite() const override {
 		if (qute_has(11)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 11, nullptr, &r)) {
+			if (qute_virtual(qute_id, 11, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -2666,7 +2677,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2678,7 +2689,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2690,7 +2701,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -2702,7 +2713,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2715,7 +2726,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2726,7 +2737,7 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 17, args, nullptr)) {
+			if (qute_virtual(qute_id, 17, args, nullptr)) {
 				return;
 			}
 		}
@@ -2737,7 +2748,7 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -2748,7 +2759,7 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 19, args, nullptr)) {
+			if (qute_virtual(qute_id, 19, args, nullptr)) {
 				return;
 			}
 		}
@@ -2767,7 +2778,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -2779,7 +2790,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2792,7 +2803,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2803,7 +2814,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -2814,7 +2825,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -2851,11 +2862,11 @@ public:
 	using QAbstractItemModel::persistentIndexList;
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(0)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2864,12 +2875,12 @@ public:
 	QVariant qute_super_0(const QModelIndex & a0, int a1) const { return QConcatenateTablesProxyModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2878,10 +2889,10 @@ public:
 	bool qute_super_1(const QModelIndex & a0, const QVariant & a1, int a2) { return QConcatenateTablesProxyModel::setData(a0, a1, a2); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -2890,11 +2901,11 @@ public:
 	QMap<int, QVariant> qute_super_2(const QModelIndex & a0) const { return QConcatenateTablesProxyModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -2903,10 +2914,10 @@ public:
 	bool qute_super_3(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QConcatenateTablesProxyModel::setItemData(a0, a1); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -2917,10 +2928,10 @@ public:
 		if (qute_has(5)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return r;
 			}
 		}
@@ -2929,10 +2940,10 @@ public:
 	QModelIndex qute_super_5(int a0, int a1, const QModelIndex & a2) const { return QConcatenateTablesProxyModel::index(a0, a1, a2); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return r;
 			}
 		}
@@ -2941,10 +2952,10 @@ public:
 	QModelIndex qute_super_6(const QModelIndex & a0) const { return QConcatenateTablesProxyModel::parent(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2958,7 +2969,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -2967,10 +2978,10 @@ public:
 	QVariant qute_super_8(int a0, Qt::Orientation a1, int a2) const { return QConcatenateTablesProxyModel::headerData(a0, a1, a2); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -2980,7 +2991,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(10)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -2992,7 +3003,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -3005,10 +3016,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3021,10 +3032,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3033,10 +3044,10 @@ public:
 	bool qute_super_13(const QMimeData * a0, Qt::DropAction a1, int a2, int a3, const QModelIndex & a4) { return QConcatenateTablesProxyModel::dropMimeData(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(14)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -3046,7 +3057,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(15)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 15, nullptr, &r)) {
+			if (qute_virtual(qute_id, 15, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -3057,10 +3068,10 @@ public:
 		if (qute_has(16)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return r;
 			}
 		}
@@ -3069,10 +3080,10 @@ public:
 	QModelIndex qute_super_16(int a0, int a1, const QModelIndex & a2) const { return QAbstractItemModel::sibling(a0, a1, a2); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(17)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3087,7 +3098,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3096,10 +3107,10 @@ public:
 	bool qute_super_18(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractItemModel::setHeaderData(a0, a1, a2, a3); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(19)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3109,7 +3120,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(20)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 20, nullptr, &r)) {
+			if (qute_virtual(qute_id, 20, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -3119,7 +3130,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(21)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 21, nullptr, &r)) {
+			if (qute_virtual(qute_id, 21, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -3130,10 +3141,10 @@ public:
 		if (qute_has(22)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3144,10 +3155,10 @@ public:
 		if (qute_has(23)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3158,10 +3169,10 @@ public:
 		if (qute_has(24)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3172,10 +3183,10 @@ public:
 		if (qute_has(25)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 25, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3184,14 +3195,14 @@ public:
 	bool qute_super_25(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3200,14 +3211,14 @@ public:
 	bool qute_super_26(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3216,9 +3227,9 @@ public:
 	bool qute_super_27(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 28, args, nullptr)) {
+			if (qute_virtual(qute_id, 28, args, nullptr)) {
 				return;
 			}
 		}
@@ -3227,10 +3238,10 @@ public:
 	void qute_super_28(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3242,7 +3253,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 30, args, nullptr)) {
+			if (qute_virtual(qute_id, 30, args, nullptr)) {
 				return;
 			}
 		}
@@ -3251,10 +3262,10 @@ public:
 	void qute_super_30(int a0, Qt::SortOrder a1) { return QAbstractItemModel::sort(a0, a1); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(31)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 31, args, &r)) {
+			if (qute_virtual(qute_id, 31, args, &r)) {
 				return r;
 			}
 		}
@@ -3263,14 +3274,14 @@ public:
 	QModelIndex qute_super_31(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(32)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 32, args, &r)) {
+			if (qute_virtual(qute_id, 32, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -3280,7 +3291,7 @@ public:
 	bool submit() override {
 		if (qute_has(33)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, nullptr, &r)) {
+			if (qute_virtual(qute_id, 33, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3289,7 +3300,7 @@ public:
 	bool qute_super_33() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(34)) {
-			if (qute_qtcore_virtual(qute_id, 34, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 34, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3298,7 +3309,7 @@ public:
 	void qute_super_34() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(35)) {
-			if (qute_qtcore_virtual(qute_id, 35, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 35, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3310,7 +3321,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 36, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3323,7 +3334,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 37, args, &r)) {
+			if (qute_virtual(qute_id, 37, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3334,7 +3345,7 @@ public:
 		if (qute_has(38)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 38, args, nullptr)) {
+			if (qute_virtual(qute_id, 38, args, nullptr)) {
 				return;
 			}
 		}
@@ -3345,7 +3356,7 @@ public:
 		if (qute_has(39)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 39, args, nullptr)) {
+			if (qute_virtual(qute_id, 39, args, nullptr)) {
 				return;
 			}
 		}
@@ -3356,7 +3367,7 @@ public:
 		if (qute_has(40)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 40, args, nullptr)) {
+			if (qute_virtual(qute_id, 40, args, nullptr)) {
 				return;
 			}
 		}
@@ -3394,7 +3405,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3407,7 +3418,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3418,7 +3429,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -3429,7 +3440,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -3440,7 +3451,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -3460,7 +3471,7 @@ public:
 	QString fileName() const override {
 		if (qute_has(0)) {
 			qute_str r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -3472,7 +3483,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3482,7 +3493,7 @@ public:
 	long long size() const override {
 		if (qute_has(2)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3494,7 +3505,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3504,7 +3515,7 @@ public:
 	QFlags<QFileDevice::Permission> permissions() const override {
 		if (qute_has(4)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 4, nullptr, &r)) {
 				return QFlags<QFileDevice::Permission>::fromInt(static_cast<QFlags<QFileDevice::Permission>::Int>(r));
 			}
 		}
@@ -3516,7 +3527,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3525,7 +3536,7 @@ public:
 	bool qute_super_5(QFlags<QFileDevice::Permission> a0) { return QFile::setPermissions(a0); }
 	void close() override {
 		if (qute_has(6)) {
-			if (qute_qtcore_virtual(qute_id, 6, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 6, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3535,7 +3546,7 @@ public:
 	bool isSequential() const override {
 		if (qute_has(7)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3545,7 +3556,7 @@ public:
 	long long pos() const override {
 		if (qute_has(8)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 8, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3557,7 +3568,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3567,7 +3578,7 @@ public:
 	bool atEnd() const override {
 		if (qute_has(10)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3580,7 +3591,7 @@ public:
 			long long c1 = static_cast<long long>(a1);
 			void *args[] = {&c0, &c1};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3590,7 +3601,7 @@ public:
 	bool reset() override {
 		if (qute_has(12)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3600,7 +3611,7 @@ public:
 	long long bytesAvailable() const override {
 		if (qute_has(13)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3610,7 +3621,7 @@ public:
 	long long bytesToWrite() const override {
 		if (qute_has(14)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 14, nullptr, &r)) {
+			if (qute_virtual(qute_id, 14, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3620,7 +3631,7 @@ public:
 	bool canReadLine() const override {
 		if (qute_has(15)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, nullptr, &r)) {
+			if (qute_virtual(qute_id, 15, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3632,7 +3643,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3644,7 +3655,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3656,7 +3667,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3668,7 +3679,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3681,7 +3692,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3692,7 +3703,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -3703,7 +3714,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -3714,7 +3725,7 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 23, args, nullptr)) {
+			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
 			}
 		}
@@ -3733,7 +3744,7 @@ public:
 	using QIODevice::setErrorString;
 	void close() override {
 		if (qute_has(0)) {
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 0, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -3743,7 +3754,7 @@ public:
 	bool isSequential() const override {
 		if (qute_has(1)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, nullptr, &r)) {
+			if (qute_virtual(qute_id, 1, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3753,7 +3764,7 @@ public:
 	QString fileName() const override {
 		if (qute_has(2)) {
 			qute_str r{};
-			if (qute_qtcore_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -3763,7 +3774,7 @@ public:
 	long long pos() const override {
 		if (qute_has(3)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3775,7 +3786,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3785,7 +3796,7 @@ public:
 	bool atEnd() const override {
 		if (qute_has(5)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, nullptr, &r)) {
+			if (qute_virtual(qute_id, 5, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3795,7 +3806,7 @@ public:
 	long long size() const override {
 		if (qute_has(6)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 6, nullptr, &r)) {
+			if (qute_virtual(qute_id, 6, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3807,7 +3818,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3817,7 +3828,7 @@ public:
 	QFlags<QFileDevice::Permission> permissions() const override {
 		if (qute_has(8)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 8, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return QFlags<QFileDevice::Permission>::fromInt(static_cast<QFlags<QFileDevice::Permission>::Int>(r));
 			}
 		}
@@ -3829,7 +3840,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3842,7 +3853,7 @@ public:
 			long long c1 = static_cast<long long>(a1);
 			void *args[] = {&c0, &c1};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3854,7 +3865,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3864,7 +3875,7 @@ public:
 	bool reset() override {
 		if (qute_has(12)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3874,7 +3885,7 @@ public:
 	long long bytesAvailable() const override {
 		if (qute_has(13)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3884,7 +3895,7 @@ public:
 	long long bytesToWrite() const override {
 		if (qute_has(14)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 14, nullptr, &r)) {
+			if (qute_virtual(qute_id, 14, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3894,7 +3905,7 @@ public:
 	bool canReadLine() const override {
 		if (qute_has(15)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, nullptr, &r)) {
+			if (qute_virtual(qute_id, 15, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3906,7 +3917,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3918,7 +3929,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3930,7 +3941,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -3942,7 +3953,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3955,7 +3966,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -3966,7 +3977,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -3977,7 +3988,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -3988,7 +3999,7 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 23, args, nullptr)) {
+			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
 			}
 		}
@@ -4008,7 +4019,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4021,7 +4032,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4032,7 +4043,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -4043,7 +4054,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -4054,7 +4065,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -4074,7 +4085,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4087,7 +4098,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4098,7 +4109,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -4109,7 +4120,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -4120,7 +4131,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -4160,10 +4171,10 @@ public:
 	using QAbstractItemModel::persistentIndexList;
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(0)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -4174,10 +4185,10 @@ public:
 		if (qute_has(1)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -4186,10 +4197,10 @@ public:
 	QModelIndex qute_super_1(int a0, int a1, const QModelIndex & a2) const { return QIdentityProxyModel::index(a0, a1, a2); }
 	QModelIndex mapFromSource(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return r;
 			}
 		}
@@ -4198,10 +4209,10 @@ public:
 	QModelIndex qute_super_2(const QModelIndex & a0) const { return QIdentityProxyModel::mapFromSource(a0); }
 	QModelIndex mapToSource(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return r;
 			}
 		}
@@ -4210,10 +4221,10 @@ public:
 	QModelIndex qute_super_3(const QModelIndex & a0) const { return QIdentityProxyModel::mapToSource(a0); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return r;
 			}
 		}
@@ -4222,10 +4233,10 @@ public:
 	QModelIndex qute_super_4(const QModelIndex & a0) const { return QIdentityProxyModel::parent(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -4239,7 +4250,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -4252,10 +4263,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4266,10 +4277,10 @@ public:
 		if (qute_has(8)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return r;
 			}
 		}
@@ -4281,7 +4292,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -4293,7 +4304,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -4302,14 +4313,14 @@ public:
 	QItemSelection qute_super_10(const QItemSelection & a0) const { return QIdentityProxyModel::mapSelectionToSource(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -4320,7 +4331,7 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 12, args, nullptr)) {
+			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
 			}
 		}
@@ -4331,10 +4342,10 @@ public:
 		if (qute_has(13)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4345,10 +4356,10 @@ public:
 		if (qute_has(14)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4359,10 +4370,10 @@ public:
 		if (qute_has(15)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4373,10 +4384,10 @@ public:
 		if (qute_has(16)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4385,14 +4396,14 @@ public:
 	bool qute_super_16(int a0, int a1, const QModelIndex & a2) { return QIdentityProxyModel::removeRows(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(17)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4401,14 +4412,14 @@ public:
 	bool qute_super_17(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QIdentityProxyModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(18)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4418,7 +4429,7 @@ public:
 	bool submit() override {
 		if (qute_has(19)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, nullptr, &r)) {
+			if (qute_virtual(qute_id, 19, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4427,7 +4438,7 @@ public:
 	bool qute_super_19() { return QAbstractProxyModel::submit(); }
 	void revert() override {
 		if (qute_has(20)) {
-			if (qute_qtcore_virtual(qute_id, 20, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 20, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -4436,11 +4447,11 @@ public:
 	void qute_super_20() { return QAbstractProxyModel::revert(); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(21)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -4449,10 +4460,10 @@ public:
 	QVariant qute_super_21(const QModelIndex & a0, int a1) const { return QAbstractProxyModel::data(a0, a1); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(22)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -4461,10 +4472,10 @@ public:
 	QMap<int, QVariant> qute_super_22(const QModelIndex & a0) const { return QAbstractProxyModel::itemData(a0); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -4473,12 +4484,12 @@ public:
 	QFlags<Qt::ItemFlag> qute_super_23(const QModelIndex & a0) const { return QAbstractProxyModel::flags(a0); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4487,11 +4498,11 @@ public:
 	bool qute_super_24(const QModelIndex & a0, const QVariant & a1, int a2) { return QAbstractProxyModel::setData(a0, a1, a2); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(25)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 25, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4506,7 +4517,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4515,10 +4526,10 @@ public:
 	bool qute_super_26(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractProxyModel::setHeaderData(a0, a1, a2, a3); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4527,10 +4538,10 @@ public:
 	bool qute_super_27(const QModelIndex & a0) { return QAbstractProxyModel::clearItemData(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return r;
 			}
 		}
@@ -4539,10 +4550,10 @@ public:
 	QModelIndex qute_super_28(const QModelIndex & a0) const { return QAbstractProxyModel::buddy(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4551,9 +4562,9 @@ public:
 	bool qute_super_29(const QModelIndex & a0) const { return QAbstractProxyModel::canFetchMore(a0); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(30)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 30, args, nullptr)) {
+			if (qute_virtual(qute_id, 30, args, nullptr)) {
 				return;
 			}
 		}
@@ -4565,7 +4576,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 31, args, nullptr)) {
+			if (qute_virtual(qute_id, 31, args, nullptr)) {
 				return;
 			}
 		}
@@ -4574,10 +4585,10 @@ public:
 	void qute_super_31(int a0, Qt::SortOrder a1) { return QAbstractProxyModel::sort(a0, a1); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(32)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 32, args, &r)) {
+			if (qute_virtual(qute_id, 32, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -4586,10 +4597,10 @@ public:
 	QSize qute_super_32(const QModelIndex & a0) const { return QAbstractProxyModel::span(a0); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(33)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, args, &r)) {
+			if (qute_virtual(qute_id, 33, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4601,7 +4612,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -4614,10 +4625,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 35, args, &r)) {
+			if (qute_virtual(qute_id, 35, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4627,7 +4638,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(36)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 36, nullptr, &r)) {
+			if (qute_virtual(qute_id, 36, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -4637,7 +4648,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(37)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 37, nullptr, &r)) {
+			if (qute_virtual(qute_id, 37, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -4647,7 +4658,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(38)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 38, nullptr, &r)) {
+			if (qute_virtual(qute_id, 38, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -4657,7 +4668,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(39)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 39, nullptr, &r)) {
+			if (qute_virtual(qute_id, 39, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -4666,7 +4677,7 @@ public:
 	QHash<int, QByteArray> qute_super_39() const { return QAbstractProxyModel::roleNames(); }
 	void resetInternalData() override {
 		if (qute_has(40)) {
-			if (qute_qtcore_virtual(qute_id, 40, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 40, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -4678,7 +4689,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 41, args, &r)) {
+			if (qute_virtual(qute_id, 41, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4691,7 +4702,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 42, args, &r)) {
+			if (qute_virtual(qute_id, 42, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4702,7 +4713,7 @@ public:
 		if (qute_has(43)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 43, args, nullptr)) {
+			if (qute_virtual(qute_id, 43, args, nullptr)) {
 				return;
 			}
 		}
@@ -4713,7 +4724,7 @@ public:
 		if (qute_has(44)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 44, args, nullptr)) {
+			if (qute_virtual(qute_id, 44, args, nullptr)) {
 				return;
 			}
 		}
@@ -4724,7 +4735,7 @@ public:
 		if (qute_has(45)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 45, args, nullptr)) {
+			if (qute_virtual(qute_id, 45, args, nullptr)) {
 				return;
 			}
 		}
@@ -4742,10 +4753,10 @@ public:
 	using QItemSelectionModel::emitSelectionChanged;
 	void setCurrentIndex(const QModelIndex & a0, QFlags<QItemSelectionModel::SelectionFlag> a1) override {
 		if (qute_has(0)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int64_t c1 = static_cast<int64_t>((a1).toInt());
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -4754,10 +4765,10 @@ public:
 	void qute_super_0(const QModelIndex & a0, QFlags<QItemSelectionModel::SelectionFlag> a1) { return QItemSelectionModel::setCurrentIndex(a0, a1); }
 	void select(const QModelIndex & a0, QFlags<QItemSelectionModel::SelectionFlag> a1) override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int64_t c1 = static_cast<int64_t>((a1).toInt());
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				return;
 			}
 		}
@@ -4769,7 +4780,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			int64_t c1 = static_cast<int64_t>((a1).toInt());
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -4778,7 +4789,7 @@ public:
 	void qute_super_2(const QItemSelection & a0, QFlags<QItemSelectionModel::SelectionFlag> a1) { return QItemSelectionModel::select(a0, a1); }
 	void clear() override {
 		if (qute_has(3)) {
-			if (qute_qtcore_virtual(qute_id, 3, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 3, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -4787,7 +4798,7 @@ public:
 	void qute_super_3() { return QItemSelectionModel::clear(); }
 	void reset() override {
 		if (qute_has(4)) {
-			if (qute_qtcore_virtual(qute_id, 4, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 4, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -4796,7 +4807,7 @@ public:
 	void qute_super_4() { return QItemSelectionModel::reset(); }
 	void clearCurrentIndex() override {
 		if (qute_has(5)) {
-			if (qute_qtcore_virtual(qute_id, 5, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 5, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -4808,7 +4819,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4821,7 +4832,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4832,7 +4843,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -4843,7 +4854,7 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 9, args, nullptr)) {
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
 				return;
 			}
 		}
@@ -4854,7 +4865,7 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 10, args, nullptr)) {
+			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
 			}
 		}
@@ -4874,7 +4885,7 @@ public:
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4884,7 +4895,7 @@ public:
 	QList<QString> formats() const override {
 		if (qute_has(1)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 1, nullptr, &r)) {
+			if (qute_virtual(qute_id, 1, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -4897,7 +4908,7 @@ public:
 			void * c1 = static_cast<void *>(new QMetaType(a1));
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -4909,7 +4920,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4922,7 +4933,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4933,7 +4944,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -4944,7 +4955,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -4955,7 +4966,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -4975,7 +4986,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4988,7 +4999,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -4999,7 +5010,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -5010,7 +5021,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -5021,7 +5032,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -5041,7 +5052,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5054,7 +5065,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5065,7 +5076,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -5076,7 +5087,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -5087,7 +5098,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -5105,7 +5116,7 @@ public:
 	int duration() const override {
 		if (qute_has(0)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -5117,7 +5128,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5128,7 +5139,7 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -5140,7 +5151,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -5151,7 +5162,7 @@ public:
 		if (qute_has(4)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -5164,7 +5175,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5175,7 +5186,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -5186,7 +5197,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -5197,7 +5208,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -5215,7 +5226,7 @@ public:
 	int duration() const override {
 		if (qute_has(0)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -5227,7 +5238,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5238,7 +5249,7 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -5250,7 +5261,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -5261,7 +5272,7 @@ public:
 		if (qute_has(4)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -5274,7 +5285,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5285,7 +5296,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -5296,7 +5307,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -5307,7 +5318,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -5330,7 +5341,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5342,7 +5353,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5354,7 +5365,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5364,7 +5375,7 @@ public:
 	long long bytesToWrite() const override {
 		if (qute_has(3)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5374,7 +5385,7 @@ public:
 	bool isSequential() const override {
 		if (qute_has(4)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 4, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5383,7 +5394,7 @@ public:
 	bool qute_super_4() const { return QProcess::isSequential(); }
 	void close() override {
 		if (qute_has(5)) {
-			if (qute_qtcore_virtual(qute_id, 5, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 5, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -5396,7 +5407,7 @@ public:
 			long long c1 = static_cast<long long>(a1);
 			void *args[] = {&c0, &c1};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5406,7 +5417,7 @@ public:
 	long long pos() const override {
 		if (qute_has(7)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5416,7 +5427,7 @@ public:
 	long long size() const override {
 		if (qute_has(8)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 8, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5428,7 +5439,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5438,7 +5449,7 @@ public:
 	bool atEnd() const override {
 		if (qute_has(10)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5448,7 +5459,7 @@ public:
 	bool reset() override {
 		if (qute_has(11)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, nullptr, &r)) {
+			if (qute_virtual(qute_id, 11, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5458,7 +5469,7 @@ public:
 	long long bytesAvailable() const override {
 		if (qute_has(12)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5468,7 +5479,7 @@ public:
 	bool canReadLine() const override {
 		if (qute_has(13)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5480,7 +5491,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5492,7 +5503,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5505,7 +5516,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5516,7 +5527,7 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 17, args, nullptr)) {
+			if (qute_virtual(qute_id, 17, args, nullptr)) {
 				return;
 			}
 		}
@@ -5527,7 +5538,7 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -5538,7 +5549,7 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 19, args, nullptr)) {
+			if (qute_virtual(qute_id, 19, args, nullptr)) {
 				return;
 			}
 		}
@@ -5558,7 +5569,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5569,7 +5580,7 @@ public:
 		if (qute_has(1)) {
 			void * c0 = static_cast<void *>(new QVariant(a0));
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				return;
 			}
 		}
@@ -5581,7 +5592,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -5591,7 +5602,7 @@ public:
 	int duration() const override {
 		if (qute_has(3)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -5602,7 +5613,7 @@ public:
 		if (qute_has(4)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -5616,7 +5627,7 @@ public:
 			double c2 = static_cast<double>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -5627,7 +5638,7 @@ public:
 		if (qute_has(6)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -5640,7 +5651,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5651,7 +5662,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -5662,7 +5673,7 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 9, args, nullptr)) {
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
 				return;
 			}
 		}
@@ -5673,7 +5684,7 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 10, args, nullptr)) {
+			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
 			}
 		}
@@ -5693,7 +5704,7 @@ public:
 	QString fileName() const override {
 		if (qute_has(0)) {
 			qute_str r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -5705,7 +5716,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5718,7 +5729,7 @@ public:
 			long long c1 = static_cast<long long>(a1);
 			void *args[] = {&c0, &c1};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5728,7 +5739,7 @@ public:
 	bool isSequential() const override {
 		if (qute_has(3)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, nullptr, &r)) {
+			if (qute_virtual(qute_id, 3, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5738,7 +5749,7 @@ public:
 	long long pos() const override {
 		if (qute_has(4)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 4, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5750,7 +5761,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5760,7 +5771,7 @@ public:
 	bool atEnd() const override {
 		if (qute_has(6)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 6, nullptr, &r)) {
+			if (qute_virtual(qute_id, 6, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5770,7 +5781,7 @@ public:
 	long long size() const override {
 		if (qute_has(7)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5782,7 +5793,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5792,7 +5803,7 @@ public:
 	QFlags<QFileDevice::Permission> permissions() const override {
 		if (qute_has(9)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 9, nullptr, &r)) {
+			if (qute_virtual(qute_id, 9, nullptr, &r)) {
 				return QFlags<QFileDevice::Permission>::fromInt(static_cast<QFlags<QFileDevice::Permission>::Int>(r));
 			}
 		}
@@ -5804,7 +5815,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5814,7 +5825,7 @@ public:
 	bool reset() override {
 		if (qute_has(11)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 11, nullptr, &r)) {
+			if (qute_virtual(qute_id, 11, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5824,7 +5835,7 @@ public:
 	long long bytesAvailable() const override {
 		if (qute_has(12)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5834,7 +5845,7 @@ public:
 	long long bytesToWrite() const override {
 		if (qute_has(13)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5844,7 +5855,7 @@ public:
 	bool canReadLine() const override {
 		if (qute_has(14)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 14, nullptr, &r)) {
+			if (qute_virtual(qute_id, 14, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5856,7 +5867,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5868,7 +5879,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5880,7 +5891,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -5892,7 +5903,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5905,7 +5916,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5916,7 +5927,7 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 20, args, nullptr)) {
+			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
 			}
 		}
@@ -5927,7 +5938,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -5938,7 +5949,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -5956,7 +5967,7 @@ public:
 	int duration() const override {
 		if (qute_has(0)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -5968,7 +5979,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -5979,7 +5990,7 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -5991,7 +6002,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -6002,7 +6013,7 @@ public:
 		if (qute_has(4)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -6015,7 +6026,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6026,7 +6037,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -6037,7 +6048,7 @@ public:
 		if (qute_has(7)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -6048,7 +6059,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -6068,7 +6079,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6081,7 +6092,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6092,7 +6103,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -6103,7 +6114,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -6114,7 +6125,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -6134,7 +6145,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6147,7 +6158,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6158,7 +6169,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -6169,7 +6180,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -6180,7 +6191,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -6200,7 +6211,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6213,7 +6224,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6224,7 +6235,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -6235,7 +6246,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -6246,7 +6257,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -6289,7 +6300,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -6298,10 +6309,10 @@ public:
 	void qute_super_0(QAbstractItemModel * a0) { return QSortFilterProxyModel::setSourceModel(a0); }
 	QModelIndex mapToSource(const QModelIndex & a0) const override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -6310,10 +6321,10 @@ public:
 	QModelIndex qute_super_1(const QModelIndex & a0) const { return QSortFilterProxyModel::mapToSource(a0); }
 	QModelIndex mapFromSource(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return r;
 			}
 		}
@@ -6325,7 +6336,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -6337,7 +6348,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -6347,10 +6358,10 @@ public:
 	bool filterAcceptsRow(int a0, const QModelIndex & a1) const override {
 		if (qute_has(5)) {
 			int c0 = static_cast<int>(a0);
-			void * c1 = const_cast<void *>(static_cast<const void *>(&a1));
+			qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}};
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6360,10 +6371,10 @@ public:
 	bool filterAcceptsColumn(int a0, const QModelIndex & a1) const override {
 		if (qute_has(6)) {
 			int c0 = static_cast<int>(a0);
-			void * c1 = const_cast<void *>(static_cast<const void *>(&a1));
+			qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}};
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6372,11 +6383,11 @@ public:
 	bool qute_super_6(int a0, const QModelIndex & a1) const { return QSortFilterProxyModel::filterAcceptsColumn(a0, a1); }
 	bool lessThan(const QModelIndex & a0, const QModelIndex & a1) const override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
-			void * c1 = const_cast<void *>(static_cast<const void *>(&a1));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
+			qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}};
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6387,10 +6398,10 @@ public:
 		if (qute_has(8)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return r;
 			}
 		}
@@ -6399,10 +6410,10 @@ public:
 	QModelIndex qute_super_8(int a0, int a1, const QModelIndex & a2) const { return QSortFilterProxyModel::index(a0, a1, a2); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return r;
 			}
 		}
@@ -6413,10 +6424,10 @@ public:
 		if (qute_has(10)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return r;
 			}
 		}
@@ -6425,10 +6436,10 @@ public:
 	QModelIndex qute_super_10(int a0, int a1, const QModelIndex & a2) const { return QSortFilterProxyModel::sibling(a0, a1, a2); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(11)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -6437,10 +6448,10 @@ public:
 	int qute_super_11(const QModelIndex & a0) const { return QSortFilterProxyModel::rowCount(a0); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(12)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -6449,10 +6460,10 @@ public:
 	int qute_super_12(const QModelIndex & a0) const { return QSortFilterProxyModel::columnCount(a0); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(13)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6461,11 +6472,11 @@ public:
 	bool qute_super_13(const QModelIndex & a0) const { return QSortFilterProxyModel::hasChildren(a0); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(14)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -6474,12 +6485,12 @@ public:
 	QVariant qute_super_14(const QModelIndex & a0, int a1) const { return QSortFilterProxyModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(15)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6493,7 +6504,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -6508,7 +6519,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6520,7 +6531,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -6533,10 +6544,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6547,10 +6558,10 @@ public:
 		if (qute_has(20)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6561,10 +6572,10 @@ public:
 		if (qute_has(21)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6575,10 +6586,10 @@ public:
 		if (qute_has(22)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6589,10 +6600,10 @@ public:
 		if (qute_has(23)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6601,9 +6612,9 @@ public:
 	bool qute_super_23(int a0, int a1, const QModelIndex & a2) { return QSortFilterProxyModel::removeColumns(a0, a1, a2); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 24, args, nullptr)) {
+			if (qute_virtual(qute_id, 24, args, nullptr)) {
 				return;
 			}
 		}
@@ -6612,10 +6623,10 @@ public:
 	void qute_super_24(const QModelIndex & a0) { return QSortFilterProxyModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(25)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 25, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6624,10 +6635,10 @@ public:
 	bool qute_super_25(const QModelIndex & a0) const { return QSortFilterProxyModel::canFetchMore(a0); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -6636,10 +6647,10 @@ public:
 	QFlags<Qt::ItemFlag> qute_super_26(const QModelIndex & a0) const { return QSortFilterProxyModel::flags(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return r;
 			}
 		}
@@ -6648,14 +6659,14 @@ public:
 	QModelIndex qute_super_27(const QModelIndex & a0) const { return QSortFilterProxyModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -6664,10 +6675,10 @@ public:
 	QList<QModelIndex> qute_super_28(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QSortFilterProxyModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 29, args, &r)) {
+			if (qute_virtual(qute_id, 29, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -6679,7 +6690,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 30, args, nullptr)) {
+			if (qute_virtual(qute_id, 30, args, nullptr)) {
 				return;
 			}
 		}
@@ -6689,7 +6700,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(31)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 31, nullptr, &r)) {
+			if (qute_virtual(qute_id, 31, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -6699,7 +6710,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(32)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 32, nullptr, &r)) {
+			if (qute_virtual(qute_id, 32, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -6709,7 +6720,7 @@ public:
 	bool submit() override {
 		if (qute_has(33)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, nullptr, &r)) {
+			if (qute_virtual(qute_id, 33, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6718,7 +6729,7 @@ public:
 	bool qute_super_33() { return QAbstractProxyModel::submit(); }
 	void revert() override {
 		if (qute_has(34)) {
-			if (qute_qtcore_virtual(qute_id, 34, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 34, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -6727,10 +6738,10 @@ public:
 	void qute_super_34() { return QAbstractProxyModel::revert(); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(35)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 35, args, &r)) {
+			if (qute_virtual(qute_id, 35, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -6739,11 +6750,11 @@ public:
 	QMap<int, QVariant> qute_super_35(const QModelIndex & a0) const { return QAbstractProxyModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(36)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 36, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6752,10 +6763,10 @@ public:
 	bool qute_super_36(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QAbstractProxyModel::setItemData(a0, a1); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(37)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 37, args, &r)) {
+			if (qute_virtual(qute_id, 37, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6768,10 +6779,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 38, args, &r)) {
+			if (qute_virtual(qute_id, 38, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6781,7 +6792,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(39)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 39, nullptr, &r)) {
+			if (qute_virtual(qute_id, 39, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -6791,7 +6802,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(40)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 40, nullptr, &r)) {
+			if (qute_virtual(qute_id, 40, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -6800,14 +6811,14 @@ public:
 	QHash<int, QByteArray> qute_super_40() const { return QAbstractProxyModel::roleNames(); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(41)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 41, args, &r)) {
+			if (qute_virtual(qute_id, 41, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6816,14 +6827,14 @@ public:
 	bool qute_super_41(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(42)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 42, args, &r)) {
+			if (qute_virtual(qute_id, 42, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6832,7 +6843,7 @@ public:
 	bool qute_super_42(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void resetInternalData() override {
 		if (qute_has(43)) {
-			if (qute_qtcore_virtual(qute_id, 43, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 43, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -6844,7 +6855,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 44, args, &r)) {
+			if (qute_virtual(qute_id, 44, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6857,7 +6868,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 45, args, &r)) {
+			if (qute_virtual(qute_id, 45, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6868,7 +6879,7 @@ public:
 		if (qute_has(46)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 46, args, nullptr)) {
+			if (qute_virtual(qute_id, 46, args, nullptr)) {
 				return;
 			}
 		}
@@ -6879,7 +6890,7 @@ public:
 		if (qute_has(47)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 47, args, nullptr)) {
+			if (qute_virtual(qute_id, 47, args, nullptr)) {
 				return;
 			}
 		}
@@ -6890,7 +6901,7 @@ public:
 		if (qute_has(48)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 48, args, nullptr)) {
+			if (qute_virtual(qute_id, 48, args, nullptr)) {
 				return;
 			}
 		}
@@ -6927,10 +6938,10 @@ public:
 	using QAbstractItemModel::persistentIndexList;
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(0)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -6941,10 +6952,10 @@ public:
 		if (qute_has(1)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return r;
 			}
 		}
@@ -6953,11 +6964,11 @@ public:
 	QModelIndex qute_super_1(int a0, int a1, const QModelIndex & a2) const { return QStringListModel::sibling(a0, a1, a2); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -6966,12 +6977,12 @@ public:
 	QVariant qute_super_2(const QModelIndex & a0, int a1) const { return QStringListModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(3)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6980,10 +6991,10 @@ public:
 	bool qute_super_3(const QModelIndex & a0, const QVariant & a1, int a2) { return QStringListModel::setData(a0, a1, a2); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(4)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -6992,10 +7003,10 @@ public:
 	bool qute_super_4(const QModelIndex & a0) { return QStringListModel::clearItemData(a0); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -7006,10 +7017,10 @@ public:
 		if (qute_has(6)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7020,10 +7031,10 @@ public:
 		if (qute_has(7)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7032,14 +7043,14 @@ public:
 	bool qute_super_7(int a0, int a1, const QModelIndex & a2) { return QStringListModel::removeRows(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(8)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7048,10 +7059,10 @@ public:
 	bool qute_super_8(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QStringListModel::moveRows(a0, a1, a2, a3, a4); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -7060,11 +7071,11 @@ public:
 	QMap<int, QVariant> qute_super_9(const QModelIndex & a0) const { return QStringListModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(10)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7076,7 +7087,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 11, args, nullptr)) {
+			if (qute_virtual(qute_id, 11, args, nullptr)) {
 				return;
 			}
 		}
@@ -7086,7 +7097,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(12)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -7097,10 +7108,10 @@ public:
 		if (qute_has(13)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return r;
 			}
 		}
@@ -7113,10 +7124,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7130,7 +7141,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -7145,7 +7156,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7155,7 +7166,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(17)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 17, nullptr, &r)) {
+			if (qute_virtual(qute_id, 17, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -7167,7 +7178,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -7180,10 +7191,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7193,7 +7204,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(20)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 20, nullptr, &r)) {
+			if (qute_virtual(qute_id, 20, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -7204,10 +7215,10 @@ public:
 		if (qute_has(21)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 21, args, &r)) {
+			if (qute_virtual(qute_id, 21, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7218,10 +7229,10 @@ public:
 		if (qute_has(22)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 22, args, &r)) {
+			if (qute_virtual(qute_id, 22, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7230,14 +7241,14 @@ public:
 	bool qute_super_22(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7246,9 +7257,9 @@ public:
 	bool qute_super_23(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 24, args, nullptr)) {
+			if (qute_virtual(qute_id, 24, args, nullptr)) {
 				return;
 			}
 		}
@@ -7257,10 +7268,10 @@ public:
 	void qute_super_24(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(25)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 25, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7269,10 +7280,10 @@ public:
 	bool qute_super_25(const QModelIndex & a0) const { return QAbstractItemModel::canFetchMore(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return r;
 			}
 		}
@@ -7281,14 +7292,14 @@ public:
 	QModelIndex qute_super_26(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -7297,10 +7308,10 @@ public:
 	QList<QModelIndex> qute_super_27(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -7310,7 +7321,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(29)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 29, nullptr, &r)) {
+			if (qute_virtual(qute_id, 29, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -7320,7 +7331,7 @@ public:
 	bool submit() override {
 		if (qute_has(30)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 30, nullptr, &r)) {
+			if (qute_virtual(qute_id, 30, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7329,7 +7340,7 @@ public:
 	bool qute_super_30() { return QAbstractItemModel::submit(); }
 	void revert() override {
 		if (qute_has(31)) {
-			if (qute_qtcore_virtual(qute_id, 31, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 31, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -7338,7 +7349,7 @@ public:
 	void qute_super_31() { return QAbstractItemModel::revert(); }
 	void resetInternalData() override {
 		if (qute_has(32)) {
-			if (qute_qtcore_virtual(qute_id, 32, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 32, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -7350,7 +7361,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, args, &r)) {
+			if (qute_virtual(qute_id, 33, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7363,7 +7374,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7374,7 +7385,7 @@ public:
 		if (qute_has(35)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 35, args, nullptr)) {
+			if (qute_virtual(qute_id, 35, args, nullptr)) {
 				return;
 			}
 		}
@@ -7385,7 +7396,7 @@ public:
 		if (qute_has(36)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 36, args, nullptr)) {
+			if (qute_virtual(qute_id, 36, args, nullptr)) {
 				return;
 			}
 		}
@@ -7396,7 +7407,7 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 37, args, nullptr)) {
+			if (qute_virtual(qute_id, 37, args, nullptr)) {
 				return;
 			}
 		}
@@ -7416,7 +7427,7 @@ public:
 	QString fileName() const override {
 		if (qute_has(0)) {
 			qute_str r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -7428,7 +7439,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7438,7 +7449,7 @@ public:
 	long long size() const override {
 		if (qute_has(2)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 2, nullptr, &r)) {
+			if (qute_virtual(qute_id, 2, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -7450,7 +7461,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7460,7 +7471,7 @@ public:
 	QFlags<QFileDevice::Permission> permissions() const override {
 		if (qute_has(4)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 4, nullptr, &r)) {
 				return QFlags<QFileDevice::Permission>::fromInt(static_cast<QFlags<QFileDevice::Permission>::Int>(r));
 			}
 		}
@@ -7472,7 +7483,7 @@ public:
 			int64_t c0 = static_cast<int64_t>((a0).toInt());
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7481,7 +7492,7 @@ public:
 	bool qute_super_5(QFlags<QFileDevice::Permission> a0) { return QFile::setPermissions(a0); }
 	void close() override {
 		if (qute_has(6)) {
-			if (qute_qtcore_virtual(qute_id, 6, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 6, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -7491,7 +7502,7 @@ public:
 	bool isSequential() const override {
 		if (qute_has(7)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7501,7 +7512,7 @@ public:
 	long long pos() const override {
 		if (qute_has(8)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 8, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -7513,7 +7524,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7523,7 +7534,7 @@ public:
 	bool atEnd() const override {
 		if (qute_has(10)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7536,7 +7547,7 @@ public:
 			long long c1 = static_cast<long long>(a1);
 			void *args[] = {&c0, &c1};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -7546,7 +7557,7 @@ public:
 	bool reset() override {
 		if (qute_has(12)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, nullptr, &r)) {
+			if (qute_virtual(qute_id, 12, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7556,7 +7567,7 @@ public:
 	long long bytesAvailable() const override {
 		if (qute_has(13)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 13, nullptr, &r)) {
+			if (qute_virtual(qute_id, 13, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -7566,7 +7577,7 @@ public:
 	long long bytesToWrite() const override {
 		if (qute_has(14)) {
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 14, nullptr, &r)) {
+			if (qute_virtual(qute_id, 14, nullptr, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -7576,7 +7587,7 @@ public:
 	bool canReadLine() const override {
 		if (qute_has(15)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, nullptr, &r)) {
+			if (qute_virtual(qute_id, 15, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7588,7 +7599,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7600,7 +7611,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7612,7 +7623,7 @@ public:
 			long long c0 = static_cast<long long>(a0);
 			void *args[] = {&c0};
 			long long r{};
-			if (qute_qtcore_virtual(qute_id, 18, args, &r)) {
+			if (qute_virtual(qute_id, 18, args, &r)) {
 				return static_cast<long long>(r);
 			}
 		}
@@ -7624,7 +7635,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7637,7 +7648,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7648,7 +7659,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -7659,7 +7670,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -7670,7 +7681,7 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 23, args, nullptr)) {
+			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
 			}
 		}
@@ -7690,7 +7701,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			double r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<double>(r);
 			}
 		}
@@ -7701,7 +7712,7 @@ public:
 		if (qute_has(1)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				return;
 			}
 		}
@@ -7713,7 +7724,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7726,7 +7737,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7737,7 +7748,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -7748,7 +7759,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -7767,7 +7778,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -7779,7 +7790,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7792,7 +7803,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7803,7 +7814,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -7814,7 +7825,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -7837,7 +7848,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			qute_str r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -7847,7 +7858,7 @@ public:
 	bool isEmpty() const override {
 		if (qute_has(1)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, nullptr, &r)) {
+			if (qute_virtual(qute_id, 1, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7859,7 +7870,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7872,7 +7883,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -7883,7 +7894,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -7894,7 +7905,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -7905,7 +7916,7 @@ public:
 		if (qute_has(6)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -7945,7 +7956,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -7954,10 +7965,10 @@ public:
 	void qute_super_0(QAbstractItemModel * a0) { return QTransposeProxyModel::setSourceModel(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(1)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -7966,10 +7977,10 @@ public:
 	int qute_super_1(const QModelIndex & a0) const { return QTransposeProxyModel::rowCount(a0); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -7983,7 +7994,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -7998,7 +8009,7 @@ public:
 			int c3 = static_cast<int>(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 4, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8007,11 +8018,11 @@ public:
 	bool qute_super_4(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QTransposeProxyModel::setHeaderData(a0, a1, a2, a3); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(5)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8020,10 +8031,10 @@ public:
 	bool qute_super_5(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QTransposeProxyModel::setItemData(a0, a1); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(6)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_size r{};
-			if (qute_qtcore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -8032,10 +8043,10 @@ public:
 	QSize qute_super_6(const QModelIndex & a0) const { return QTransposeProxyModel::span(a0); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(7)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return qute_take_map<QMap<int, QVariant>, int, void *>(r, [](int k) { return static_cast<int>(k); }, [](void * e) { return (e ? *static_cast<QVariant *>(e) : QVariant()); });
 			}
 		}
@@ -8044,10 +8055,10 @@ public:
 	QMap<int, QVariant> qute_super_7(const QModelIndex & a0) const { return QTransposeProxyModel::itemData(a0); }
 	QModelIndex mapFromSource(const QModelIndex & a0) const override {
 		if (qute_has(8)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return r;
 			}
 		}
@@ -8056,10 +8067,10 @@ public:
 	QModelIndex qute_super_8(const QModelIndex & a0) const { return QTransposeProxyModel::mapFromSource(a0); }
 	QModelIndex mapToSource(const QModelIndex & a0) const override {
 		if (qute_has(9)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return r;
 			}
 		}
@@ -8068,10 +8079,10 @@ public:
 	QModelIndex qute_super_9(const QModelIndex & a0) const { return QTransposeProxyModel::mapToSource(a0); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(10)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 10, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return r;
 			}
 		}
@@ -8082,10 +8093,10 @@ public:
 		if (qute_has(11)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 11, args, &r)) {
+			if (qute_virtual(qute_id, 11, args, &r)) {
 				return r;
 			}
 		}
@@ -8096,10 +8107,10 @@ public:
 		if (qute_has(12)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 12, args, &r)) {
+			if (qute_virtual(qute_id, 12, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8110,10 +8121,10 @@ public:
 		if (qute_has(13)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 13, args, &r)) {
+			if (qute_virtual(qute_id, 13, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8122,14 +8133,14 @@ public:
 	bool qute_super_13(int a0, int a1, const QModelIndex & a2) { return QTransposeProxyModel::removeRows(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(14)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 14, args, &r)) {
+			if (qute_virtual(qute_id, 14, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8140,10 +8151,10 @@ public:
 		if (qute_has(15)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 15, args, &r)) {
+			if (qute_virtual(qute_id, 15, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8154,10 +8165,10 @@ public:
 		if (qute_has(16)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 16, args, &r)) {
+			if (qute_virtual(qute_id, 16, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8166,14 +8177,14 @@ public:
 	bool qute_super_16(int a0, int a1, const QModelIndex & a2) { return QTransposeProxyModel::removeColumns(a0, a1, a2); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(17)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
+			qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}};
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 17, args, &r)) {
+			if (qute_virtual(qute_id, 17, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8185,7 +8196,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -8197,7 +8208,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 19, args, &r)) {
+			if (qute_virtual(qute_id, 19, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -8209,7 +8220,7 @@ public:
 			void * c0 = static_cast<void *>(new QItemSelection(a0));
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 20, args, &r)) {
+			if (qute_virtual(qute_id, 20, args, &r)) {
 				return *static_cast<QItemSelection *>(r);
 			}
 		}
@@ -8219,7 +8230,7 @@ public:
 	bool submit() override {
 		if (qute_has(21)) {
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 21, nullptr, &r)) {
+			if (qute_virtual(qute_id, 21, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8228,7 +8239,7 @@ public:
 	bool qute_super_21() { return QAbstractProxyModel::submit(); }
 	void revert() override {
 		if (qute_has(22)) {
-			if (qute_qtcore_virtual(qute_id, 22, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 22, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -8237,11 +8248,11 @@ public:
 	void qute_super_22() { return QAbstractProxyModel::revert(); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(23)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 23, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -8250,10 +8261,10 @@ public:
 	QVariant qute_super_23(const QModelIndex & a0, int a1) const { return QAbstractProxyModel::data(a0, a1); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(24)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 24, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return QFlags<Qt::ItemFlag>::fromInt(static_cast<QFlags<Qt::ItemFlag>::Int>(r));
 			}
 		}
@@ -8262,12 +8273,12 @@ public:
 	QFlags<Qt::ItemFlag> qute_super_24(const QModelIndex & a0) const { return QAbstractProxyModel::flags(a0); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(25)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 25, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8276,10 +8287,10 @@ public:
 	bool qute_super_25(const QModelIndex & a0, const QVariant & a1, int a2) { return QAbstractProxyModel::setData(a0, a1, a2); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(26)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 26, args, &r)) {
+			if (qute_virtual(qute_id, 26, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8288,10 +8299,10 @@ public:
 	bool qute_super_26(const QModelIndex & a0) { return QAbstractProxyModel::clearItemData(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(27)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 27, args, &r)) {
+			if (qute_virtual(qute_id, 27, args, &r)) {
 				return r;
 			}
 		}
@@ -8300,10 +8311,10 @@ public:
 	QModelIndex qute_super_27(const QModelIndex & a0) const { return QAbstractProxyModel::buddy(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(28)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 28, args, &r)) {
+			if (qute_virtual(qute_id, 28, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8312,9 +8323,9 @@ public:
 	bool qute_super_28(const QModelIndex & a0) const { return QAbstractProxyModel::canFetchMore(a0); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(29)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 29, args, nullptr)) {
+			if (qute_virtual(qute_id, 29, args, nullptr)) {
 				return;
 			}
 		}
@@ -8323,10 +8334,10 @@ public:
 	void qute_super_29(const QModelIndex & a0) { return QAbstractProxyModel::fetchMore(a0); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(30)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 30, args, &r)) {
+			if (qute_virtual(qute_id, 30, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8337,10 +8348,10 @@ public:
 		if (qute_has(31)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
+			qute_inline_arg c2 = {const_cast<void *>(static_cast<const void *>(&a2)), {const_cast<void *>(static_cast<const void *>(a2.model()))}};
 			void *args[] = {&c0, &c1, &c2};
 			QModelIndex r{};
-			if (qute_qtcore_virtual(qute_id, 31, args, &r)) {
+			if (qute_virtual(qute_id, 31, args, &r)) {
 				return r;
 			}
 		}
@@ -8352,7 +8363,7 @@ public:
 			qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 32, args, &r)) {
+			if (qute_virtual(qute_id, 32, args, &r)) {
 				return static_cast<QMimeData *>(r);
 			}
 		}
@@ -8365,10 +8376,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 33, args, &r)) {
+			if (qute_virtual(qute_id, 33, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8381,10 +8392,10 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
+			qute_inline_arg c4 = {const_cast<void *>(static_cast<const void *>(&a4)), {const_cast<void *>(static_cast<const void *>(a4.model()))}};
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 34, args, &r)) {
+			if (qute_virtual(qute_id, 34, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8394,7 +8405,7 @@ public:
 	QList<QString> mimeTypes() const override {
 		if (qute_has(35)) {
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 35, nullptr, &r)) {
+			if (qute_virtual(qute_id, 35, nullptr, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -8404,7 +8415,7 @@ public:
 	QFlags<Qt::DropAction> supportedDragActions() const override {
 		if (qute_has(36)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 36, nullptr, &r)) {
+			if (qute_virtual(qute_id, 36, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -8414,7 +8425,7 @@ public:
 	QFlags<Qt::DropAction> supportedDropActions() const override {
 		if (qute_has(37)) {
 			int64_t r{};
-			if (qute_qtcore_virtual(qute_id, 37, nullptr, &r)) {
+			if (qute_virtual(qute_id, 37, nullptr, &r)) {
 				return QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(r));
 			}
 		}
@@ -8424,7 +8435,7 @@ public:
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(38)) {
 			qute_map r{};
-			if (qute_qtcore_virtual(qute_id, 38, nullptr, &r)) {
+			if (qute_virtual(qute_id, 38, nullptr, &r)) {
 				return qute_take_map<QHash<int, QByteArray>, int, qute_str>(r, [](int k) { return static_cast<int>(k); }, [](qute_str e) { return qute_take_qbytes(e); });
 			}
 		}
@@ -8433,14 +8444,14 @@ public:
 	QHash<int, QByteArray> qute_super_38() const { return QAbstractProxyModel::roleNames(); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(39)) {
-			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
+			qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}};
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
 			int64_t c4 = static_cast<int64_t>((a4).toInt());
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
-			if (qute_qtcore_virtual(qute_id, 39, args, &r)) {
+			if (qute_virtual(qute_id, 39, args, &r)) {
 				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
@@ -8449,7 +8460,7 @@ public:
 	QList<QModelIndex> qute_super_39(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	void resetInternalData() override {
 		if (qute_has(40)) {
-			if (qute_qtcore_virtual(qute_id, 40, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 40, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -8461,7 +8472,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 41, args, &r)) {
+			if (qute_virtual(qute_id, 41, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8474,7 +8485,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 42, args, &r)) {
+			if (qute_virtual(qute_id, 42, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8485,7 +8496,7 @@ public:
 		if (qute_has(43)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 43, args, nullptr)) {
+			if (qute_virtual(qute_id, 43, args, nullptr)) {
 				return;
 			}
 		}
@@ -8496,7 +8507,7 @@ public:
 		if (qute_has(44)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 44, args, nullptr)) {
+			if (qute_virtual(qute_id, 44, args, nullptr)) {
 				return;
 			}
 		}
@@ -8507,7 +8518,7 @@ public:
 		if (qute_has(45)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 45, args, nullptr)) {
+			if (qute_virtual(qute_id, 45, args, nullptr)) {
 				return;
 			}
 		}
@@ -8525,7 +8536,7 @@ public:
 	int duration() const override {
 		if (qute_has(0)) {
 			int r{};
-			if (qute_qtcore_virtual(qute_id, 0, nullptr, &r)) {
+			if (qute_virtual(qute_id, 0, nullptr, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -8537,7 +8548,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8548,7 +8559,7 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -8560,7 +8571,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			int64_t c1 = static_cast<int64_t>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtcore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -8571,7 +8582,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = static_cast<void *>(new QVariant(a0));
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -8585,7 +8596,7 @@ public:
 			double c2 = static_cast<double>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			void * r = nullptr;
-			if (qute_qtcore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return (r ? *static_cast<QVariant *>(r) : QVariant());
 			}
 		}
@@ -8596,7 +8607,7 @@ public:
 		if (qute_has(6)) {
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -8609,7 +8620,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtcore_virtual(qute_id, 7, args, &r)) {
+			if (qute_virtual(qute_id, 7, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -8620,7 +8631,7 @@ public:
 		if (qute_has(8)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 8, args, nullptr)) {
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
 				return;
 			}
 		}
@@ -8631,7 +8642,7 @@ public:
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 9, args, nullptr)) {
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
 				return;
 			}
 		}
@@ -8642,7 +8653,7 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtcore_virtual(qute_id, 10, args, nullptr)) {
+			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
 			}
 		}
@@ -8663,7 +8674,7 @@ public:
 			qute_str c0 = qute_ret_str(a0);
 			void *args[] = {&c0};
 			qute_str r{};
-			if (qute_qtcore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return qute_take_qstr(r);
 			}
 		}
@@ -8854,25 +8865,25 @@ void * qute_QAbstractAnimation_finished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractAnimation *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::finished, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::finished, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractAnimation_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractAnimation *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::stateChanged, obj, [s](QAbstractAnimation::State a0, QAbstractAnimation::State a1) { int64_t c0 = static_cast<int64_t>(a0); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::stateChanged, obj, [s](QAbstractAnimation::State a0, QAbstractAnimation::State a1) { int64_t c0 = static_cast<int64_t>(a0); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractAnimation_currentLoopChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractAnimation *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::currentLoopChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::currentLoopChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractAnimation_directionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractAnimation *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::directionChanged, obj, [s](QAbstractAnimation::Direction a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractAnimation::directionChanged, obj, [s](QAbstractAnimation::Direction a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QAbstractItemModel
@@ -9388,109 +9399,109 @@ void * qute_QAbstractItemModel_dataChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::dataChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1, const QList<int> & a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); void * c1 = const_cast<void *>(static_cast<const void *>(&a1)); qute_list c2 = qute_ret_list<int>(a2, [](const auto &v) { return static_cast<int>(v); }); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::dataChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1, const QList<int> & a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}}; qute_list c2 = qute_ret_list<int>(a2, [](const auto &v) { return static_cast<int>(v); }); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_headerDataChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::headerDataChanged, obj, [s](Qt::Orientation a0, int a1, int a2) { int64_t c0 = static_cast<int64_t>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::headerDataChanged, obj, [s](Qt::Orientation a0, int a1, int a2) { int64_t c0 = static_cast<int64_t>(a0); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_layoutChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::layoutChanged, obj, [s](const QList<QPersistentModelIndex> & a0, QAbstractItemModel::LayoutChangeHint a1) { qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QPersistentModelIndex(v)); }); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::layoutChanged, obj, [s](const QList<QPersistentModelIndex> & a0, QAbstractItemModel::LayoutChangeHint a1) { qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QPersistentModelIndex(v)); }); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_layoutAboutToBeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::layoutAboutToBeChanged, obj, [s](const QList<QPersistentModelIndex> & a0, QAbstractItemModel::LayoutChangeHint a1) { qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QPersistentModelIndex(v)); }); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::layoutAboutToBeChanged, obj, [s](const QList<QPersistentModelIndex> & a0, QAbstractItemModel::LayoutChangeHint a1) { qute_list c0 = qute_ret_list<void *>(a0, [](const auto &v) { return static_cast<void *>(new QPersistentModelIndex(v)); }); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_rowsAboutToBeInserted(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsAboutToBeInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsAboutToBeInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_rowsInserted(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_rowsAboutToBeRemoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsAboutToBeRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsAboutToBeRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_rowsRemoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_columnsAboutToBeInserted(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsAboutToBeInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsAboutToBeInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_columnsInserted(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsInserted, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_columnsAboutToBeRemoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsAboutToBeRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsAboutToBeRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_columnsRemoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsRemoved, obj, [s](const QModelIndex & a0, int a1, int a2) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_modelAboutToBeReset(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::modelAboutToBeReset, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::modelAboutToBeReset, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractItemModel_modelReset(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::modelReset, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::modelReset, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAbstractItemModel_rowsAboutToBeMoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsAboutToBeMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void * c3 = const_cast<void *>(static_cast<const void *>(&a3)); int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsAboutToBeMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}}; int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_rowsMoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void * c3 = const_cast<void *>(static_cast<const void *>(&a3)); int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::rowsMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}}; int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_columnsAboutToBeMoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsAboutToBeMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void * c3 = const_cast<void *>(static_cast<const void *>(&a3)); int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsAboutToBeMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}}; int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_signal(s->id, args); }));
 }
 void * qute_QAbstractItemModel_columnsMoved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractItemModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); void * c3 = const_cast<void *>(static_cast<const void *>(&a3)); int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractItemModel::columnsMoved, obj, [s](const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; int c1 = static_cast<int>(a1); int c2 = static_cast<int>(a2); qute_inline_arg c3 = {const_cast<void *>(static_cast<const void *>(&a3)), {const_cast<void *>(static_cast<const void *>(a3.model()))}}; int c4 = static_cast<int>(a4); void *args[] = {&c0, &c1, &c2, &c3, &c4}; qute_signal(s->id, args); }));
 }
 
 // ---- QAbstractListModel
@@ -10024,7 +10035,7 @@ void * qute_QAbstractProxyModel_sourceModelChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAbstractProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractProxyModel::sourceModelChanged, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAbstractProxyModel::sourceModelChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QAbstractTableModel
@@ -11842,7 +11853,7 @@ void * qute_QChronoTimer_timeout(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QChronoTimer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QChronoTimer::timeout, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QChronoTimer::timeout, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QCommandLineOption
@@ -12540,31 +12551,31 @@ void * qute_QCoreApplication_aboutToQuit(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCoreApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::aboutToQuit, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::aboutToQuit, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCoreApplication_organizationNameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCoreApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::organizationNameChanged, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::organizationNameChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCoreApplication_organizationDomainChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCoreApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::organizationDomainChanged, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::organizationDomainChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCoreApplication_applicationNameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCoreApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::applicationNameChanged, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::applicationNameChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCoreApplication_applicationVersionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCoreApplication *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::applicationVersionChanged, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCoreApplication::applicationVersionChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QDataStream
@@ -14666,13 +14677,13 @@ void * qute_QFileSystemWatcher_fileChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileSystemWatcher *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemWatcher::fileChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemWatcher::fileChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QFileSystemWatcher_directoryChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QFileSystemWatcher *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemWatcher::directoryChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QFileSystemWatcher::directoryChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QIODevice
@@ -14909,37 +14920,37 @@ void * qute_QIODevice_readyRead(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIODevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::readyRead, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::readyRead, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QIODevice_channelReadyRead(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIODevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::channelReadyRead, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::channelReadyRead, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QIODevice_bytesWritten(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIODevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::bytesWritten, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::bytesWritten, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QIODevice_channelBytesWritten(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIODevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::channelBytesWritten, obj, [s](int a0, long long a1) { int c0 = static_cast<int>(a0); long long c1 = static_cast<long long>(a1); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::channelBytesWritten, obj, [s](int a0, long long a1) { int c0 = static_cast<int>(a0); long long c1 = static_cast<long long>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QIODevice_aboutToClose(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIODevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::aboutToClose, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::aboutToClose, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QIODevice_readChannelFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QIODevice *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::readChannelFinished, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QIODevice::readChannelFinished, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QIODeviceBase
@@ -15485,31 +15496,31 @@ void * qute_QItemSelectionModel_selectionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QItemSelectionModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::selectionChanged, obj, [s](const QItemSelection & a0, const QItemSelection & a1) { void * c0 = static_cast<void *>(new QItemSelection(a0)); void * c1 = static_cast<void *>(new QItemSelection(a1)); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::selectionChanged, obj, [s](const QItemSelection & a0, const QItemSelection & a1) { void * c0 = static_cast<void *>(new QItemSelection(a0)); void * c1 = static_cast<void *>(new QItemSelection(a1)); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QItemSelectionModel_currentChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QItemSelectionModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::currentChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); void * c1 = const_cast<void *>(static_cast<const void *>(&a1)); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::currentChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}}; void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QItemSelectionModel_currentRowChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QItemSelectionModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::currentRowChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); void * c1 = const_cast<void *>(static_cast<const void *>(&a1)); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::currentRowChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}}; void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QItemSelectionModel_currentColumnChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QItemSelectionModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::currentColumnChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1) { void * c0 = const_cast<void *>(static_cast<const void *>(&a0)); void * c1 = const_cast<void *>(static_cast<const void *>(&a1)); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::currentColumnChanged, obj, [s](const QModelIndex & a0, const QModelIndex & a1) { qute_inline_arg c0 = {const_cast<void *>(static_cast<const void *>(&a0)), {const_cast<void *>(static_cast<const void *>(a0.model()))}}; qute_inline_arg c1 = {const_cast<void *>(static_cast<const void *>(&a1)), {const_cast<void *>(static_cast<const void *>(a1.model()))}}; void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QItemSelectionModel_modelChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QItemSelectionModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::modelChanged, obj, [s](QAbstractItemModel * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QItemSelectionModel::modelChanged, obj, [s](QAbstractItemModel * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QItemSelectionRange
@@ -18274,13 +18285,13 @@ void * qute_QObject_destroyed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QObject *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QObject::destroyed, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QObject::destroyed, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QObject_objectNameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QObject *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QObject::objectNameChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QObject::objectNameChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QObjectCleanupHandler
@@ -18962,37 +18973,37 @@ void * qute_QProcess_started(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProcess *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::started, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::started, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QProcess_finished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProcess *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::finished, obj, [s](int a0, QProcess::ExitStatus a1) { int c0 = static_cast<int>(a0); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::finished, obj, [s](int a0, QProcess::ExitStatus a1) { int c0 = static_cast<int>(a0); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QProcess_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProcess *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::errorOccurred, obj, [s](QProcess::ProcessError a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::errorOccurred, obj, [s](QProcess::ProcessError a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QProcess_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProcess *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::stateChanged, obj, [s](QProcess::ProcessState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::stateChanged, obj, [s](QProcess::ProcessState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QProcess_readyReadStandardOutput(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProcess *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::readyReadStandardOutput, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::readyReadStandardOutput, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QProcess_readyReadStandardError(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QProcess *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::readyReadStandardError, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QProcess::readyReadStandardError, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QProcessUnixProcessParameters
@@ -19748,7 +19759,7 @@ void * qute_QSequentialAnimationGroup_currentAnimationChanged(void *self, uintpt
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSequentialAnimationGroup *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSequentialAnimationGroup::currentAnimationChanged, obj, [s](QAbstractAnimation * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSequentialAnimationGroup::currentAnimationChanged, obj, [s](QAbstractAnimation * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QSettings
@@ -20046,19 +20057,19 @@ void * qute_QSignalMapper_mappedInt(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSignalMapper *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSignalMapper::mappedInt, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSignalMapper::mappedInt, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSignalMapper_mappedString(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSignalMapper *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSignalMapper::mappedString, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSignalMapper::mappedString, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSignalMapper_mappedObject(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSignalMapper *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSignalMapper::mappedObject, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSignalMapper::mappedObject, obj, [s](QObject * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QSocketDescriptor
@@ -20152,7 +20163,7 @@ void * qute_QSocketNotifier_activated(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSocketNotifier *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSocketNotifier::activated, obj, [s](QSocketDescriptor a0, QSocketNotifier::Type a1) { void * c0 = static_cast<void *>(new QSocketDescriptor(a0)); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSocketNotifier::activated, obj, [s](QSocketDescriptor a0, QSocketNotifier::Type a1) { void * c0 = static_cast<void *>(new QSocketDescriptor(a0)); int64_t c1 = static_cast<int64_t>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 
 // ---- QSortFilterProxyModel
@@ -20608,49 +20619,49 @@ void * qute_QSortFilterProxyModel_dynamicSortFilterChanged(void *self, uintptr_t
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::dynamicSortFilterChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::dynamicSortFilterChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_filterCaseSensitivityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::filterCaseSensitivityChanged, obj, [s](Qt::CaseSensitivity a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::filterCaseSensitivityChanged, obj, [s](Qt::CaseSensitivity a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_sortCaseSensitivityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::sortCaseSensitivityChanged, obj, [s](Qt::CaseSensitivity a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::sortCaseSensitivityChanged, obj, [s](Qt::CaseSensitivity a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_sortLocaleAwareChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::sortLocaleAwareChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::sortLocaleAwareChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_sortRoleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::sortRoleChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::sortRoleChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_filterRoleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::filterRoleChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::filterRoleChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_recursiveFilteringEnabledChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::recursiveFilteringEnabledChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::recursiveFilteringEnabledChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QSortFilterProxyModel_autoAcceptChildRowsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSortFilterProxyModel *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::autoAcceptChildRowsChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSortFilterProxyModel::autoAcceptChildRowsChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QStandardPaths
@@ -21584,25 +21595,25 @@ void * qute_QTimeLine_valueChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTimeLine *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::valueChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::valueChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTimeLine_frameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTimeLine *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::frameChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::frameChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTimeLine_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTimeLine *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::stateChanged, obj, [s](QTimeLine::State a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::stateChanged, obj, [s](QTimeLine::State a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QTimeLine_finished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTimeLine *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::finished, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTimeLine::finished, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QTimeZone
@@ -21950,7 +21961,7 @@ void * qute_QTimer_timeout(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QTimer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QTimer::timeout, obj, [s]() {  qute_qtcore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QTimer::timeout, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QTimerEvent
@@ -23495,7 +23506,7 @@ void * qute_QVariantAnimation_valueChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QVariantAnimation *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QVariantAnimation::valueChanged, obj, [s](const QVariant & a0) { void * c0 = static_cast<void *>(new QVariant(a0)); void *args[] = {&c0}; qute_qtcore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QVariantAnimation::valueChanged, obj, [s](const QVariant & a0) { void * c0 = static_cast<void *>(new QVariant(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QVersionNumber

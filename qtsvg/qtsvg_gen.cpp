@@ -21,15 +21,26 @@
 #include <memory>
 
 extern "C" {
-void qute_qtsvg_signal(uintptr_t id, void *args);
+void qute_qtsvg_signal(uintptr_t id, void *args, bool off);
 void qute_qtsvg_release(uintptr_t id);
-bool qute_qtsvg_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtsvg_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);
 void qute_qtsvg_wrong_thread(void);
 void qute_qtsvg_dead(void *key);
-void qute_qtsvg_call(uintptr_t id, void *args, void *ret);
+void qute_qtsvg_call(uintptr_t id, void *args, void *ret, bool off);
 }
 
-static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtsvg_call(id, args, ret); }
+// Every entry into a Go handler (signal, virtual, std::function) must come
+// from the GUI thread. The thread is looked up here, where it is cheap, and
+// passed in: the Go side panics when it is not the GUI thread, without a
+// call back into C++ to ask.
+static inline bool qute_off_gui() {
+	QCoreApplication *app = QCoreApplication::instance();
+	return app && QThread::currentThread() != app->thread();
+}
+
+static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtsvg_call(id, args, ret, qute_off_gui()); }
+static inline void qute_signal(uintptr_t id, void *args) { qute_qtsvg_signal(id, args, qute_off_gui()); }
+static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_qtsvg_virtual(id, idx, args, ret, qute_off_gui()); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
 // It is checked here, in every build (qute_debug builds also name the
@@ -74,7 +85,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtsvg_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -87,7 +98,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtsvg_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -98,7 +109,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtsvg_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -109,7 +120,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtsvg_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -120,7 +131,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtsvg_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -420,7 +431,7 @@ void * qute_QSvgRenderer_repaintNeeded(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSvgRenderer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSvgRenderer::repaintNeeded, obj, [s]() {  qute_qtsvg_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSvgRenderer::repaintNeeded, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 } // extern "C"

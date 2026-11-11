@@ -173,7 +173,7 @@ func (this *QPersistentModelIndex) Parent() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Parent")
 	r := C.qute_QPersistentModelIndex_parent(self)
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Sibling wraps QPersistentModelIndex::sibling.
@@ -187,7 +187,7 @@ func (this *QPersistentModelIndex) Sibling(row int, column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QPersistentModelIndex.Sibling")
 	r := C.qute_QPersistentModelIndex_sibling(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Data wraps QPersistentModelIndex::data.

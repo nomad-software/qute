@@ -14,14 +14,16 @@ import (
 )
 
 //export qute_qtgui_signal
-func qute_qtgui_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallback(uintptr(id), args) }
+func qute_qtgui_signal(id C.uintptr_t, args unsafe.Pointer, off C.bool) {
+	rt.InvokeCallback(uintptr(id), args, bool(off))
+}
 
 //export qute_qtgui_release
 func qute_qtgui_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtgui_virtual
-func qute_qtgui_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
-	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
+func qute_qtgui_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer, off C.bool) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret, bool(off)))
 }
 
 //export qute_qtgui_wrong_thread
@@ -31,7 +33,9 @@ func qute_qtgui_wrong_thread() { rt.WrongThread() }
 func qute_qtgui_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }
 
 //export qute_qtgui_call
-func qute_qtgui_call(id C.uintptr_t, args, ret unsafe.Pointer) { rt.InvokeFunc(uintptr(id), args, ret) }
+func qute_qtgui_call(id C.uintptr_t, args, ret unsafe.Pointer, off C.bool) {
+	rt.InvokeFunc(uintptr(id), args, ret, bool(off))
+}
 
 func checkLayout() string {
 	if p := C.qute_qtgui_check_layout(); p != nil {

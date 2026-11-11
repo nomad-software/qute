@@ -205,9 +205,10 @@ func TestFullForms(t *testing.T) {
 func TestHandlerOffGUIThreadPanics(t *testing.T) {
 	var wg sync.WaitGroup
 	entries := map[string]func(){
-		"signal":   func() { rt.InvokeCallback(0, nil) },
-		"virtual":  func() { rt.Dispatch(0, 0, nil, nil) },
-		"function": func() { rt.InvokeFunc(0, nil, nil) },
+		// off: what the generated C++ reports for a call from another thread
+		"signal":   func() { rt.InvokeCallback(0, nil, true) },
+		"virtual":  func() { rt.Dispatch(0, 0, nil, nil, true) },
+		"function": func() { rt.InvokeFunc(0, nil, nil, true) },
 	}
 	for name, f := range entries {
 		var msg string

@@ -402,6 +402,22 @@ func RegisterDependency(class string, find func(p unsafe.Pointer) *Handle) {
 	deps.Store(class, append(fs[:len(fs):len(fs)], find))
 }
 
+// RegisterDependencyWrap gives, for the dependency of class registered in the
+// same position by RegisterDependency, how a pointer to it becomes its
+// handle. The shim of an override finds the object in C++ and passes it with
+// an inline argument (InlineArg), so Go need not call C++ to ask.
+func RegisterDependencyWrap(class string, wrap func(dep unsafe.Pointer) *Handle) {
+	depMu.Lock()
+	defer depMu.Unlock()
+	var ws []func(unsafe.Pointer) *Handle
+	if v, ok := depWraps.Load(class); ok {
+		ws = v.([]func(unsafe.Pointer) *Handle)
+	}
+	depWraps.Store(class, append(ws[:len(ws):len(ws)], wrap))
+}
+
+var depWraps sync.Map // class name -> []func(unsafe.Pointer) *Handle, as deps
+
 func (h *Handle) attachDependency() {
 	v, ok := deps.Load(h.class)
 	if !ok {
@@ -409,7 +425,7 @@ func (h *Handle) attachDependency() {
 	}
 	for _, find := range v.([]depFinder) {
 		if d := find(h.ptr); d != nil && d != h {
-			h.deps = append(h.deps, d)
+			h.addDep(d)
 		}
 	}
 }

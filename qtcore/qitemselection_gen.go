@@ -126,9 +126,7 @@ func (this *QItemSelection) Indexes() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelection.Indexes")
 	r := C.qute_QItemSelection_indexes(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // Merge wraps QItemSelection::merge.

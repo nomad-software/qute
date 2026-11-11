@@ -15,14 +15,16 @@ import (
 )
 
 //export qute_qtsvg_signal
-func qute_qtsvg_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallback(uintptr(id), args) }
+func qute_qtsvg_signal(id C.uintptr_t, args unsafe.Pointer, off C.bool) {
+	rt.InvokeCallback(uintptr(id), args, bool(off))
+}
 
 //export qute_qtsvg_release
 func qute_qtsvg_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtsvg_virtual
-func qute_qtsvg_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
-	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
+func qute_qtsvg_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer, off C.bool) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret, bool(off)))
 }
 
 //export qute_qtsvg_wrong_thread
@@ -32,7 +34,9 @@ func qute_qtsvg_wrong_thread() { rt.WrongThread() }
 func qute_qtsvg_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }
 
 //export qute_qtsvg_call
-func qute_qtsvg_call(id C.uintptr_t, args, ret unsafe.Pointer) { rt.InvokeFunc(uintptr(id), args, ret) }
+func qute_qtsvg_call(id C.uintptr_t, args, ret unsafe.Pointer, off C.bool) {
+	rt.InvokeFunc(uintptr(id), args, ret, bool(off))
+}
 
 func checkLayout() string {
 	if p := C.qute_qtsvg_check_layout(); p != nil {

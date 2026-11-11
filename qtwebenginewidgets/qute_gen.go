@@ -15,16 +15,16 @@ import (
 )
 
 //export qute_qtwebenginewidgets_signal
-func qute_qtwebenginewidgets_signal(id C.uintptr_t, args unsafe.Pointer) {
-	rt.InvokeCallback(uintptr(id), args)
+func qute_qtwebenginewidgets_signal(id C.uintptr_t, args unsafe.Pointer, off C.bool) {
+	rt.InvokeCallback(uintptr(id), args, bool(off))
 }
 
 //export qute_qtwebenginewidgets_release
 func qute_qtwebenginewidgets_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }
 
 //export qute_qtwebenginewidgets_virtual
-func qute_qtwebenginewidgets_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {
-	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))
+func qute_qtwebenginewidgets_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer, off C.bool) C.bool {
+	return C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret, bool(off)))
 }
 
 //export qute_qtwebenginewidgets_wrong_thread
@@ -34,8 +34,8 @@ func qute_qtwebenginewidgets_wrong_thread() { rt.WrongThread() }
 func qute_qtwebenginewidgets_dead(key unsafe.Pointer) { rt.Destroyed(key, "destroyed by Qt") }
 
 //export qute_qtwebenginewidgets_call
-func qute_qtwebenginewidgets_call(id C.uintptr_t, args, ret unsafe.Pointer) {
-	rt.InvokeFunc(uintptr(id), args, ret)
+func qute_qtwebenginewidgets_call(id C.uintptr_t, args, ret unsafe.Pointer, off C.bool) {
+	rt.InvokeFunc(uintptr(id), args, ret, bool(off))
 }
 
 func checkLayout() string {

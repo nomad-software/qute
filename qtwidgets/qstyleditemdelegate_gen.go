@@ -136,7 +136,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			defer painterH.Expire()
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			option := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			v.(interface {
 				Paint(*qtgui.QPainter, *QStyleOptionViewItem, *qtcore.QModelIndex)
 			}).Paint(painter, option, index)
@@ -150,7 +150,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			option := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			r := v.(interface {
 				SizeHint(*QStyleOptionViewItem, *qtcore.QModelIndex) qtcore.QSize
 			}).SizeHint(option, index)
@@ -166,7 +166,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			parent := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			option := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				CreateEditor(*QWidget, *QStyleOptionViewItem, *qtcore.QModelIndex) *QWidget
 			}).CreateEditor(parent, option, index)
@@ -184,7 +184,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			v.(interface {
 				SetEditorData(*QWidget, *qtcore.QModelIndex)
 			}).SetEditorData(editor, index)
@@ -199,7 +199,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			model := rt.View[qtcore.QAbstractItemModel](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QAbstractItemModel", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			v.(interface {
 				SetModelData(*QWidget, *qtcore.QAbstractItemModel, *qtcore.QModelIndex)
 			}).SetModelData(editor, model, index)
@@ -214,7 +214,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			option := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			v.(interface {
 				UpdateEditorGeometry(*QWidget, *QStyleOptionViewItem, *qtcore.QModelIndex)
 			}).UpdateEditorGeometry(editor, option, index)
@@ -246,7 +246,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			optionH := rt.WrapClass(optionP, "QStyleOptionViewItem", rt.NewScoped)
 			defer optionH.Expire()
 			option := rt.View[QStyleOptionViewItem](optionH, optionP)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			v.(interface {
 				InitStyleOption(*QStyleOptionViewItem, *qtcore.QModelIndex)
 			}).InitStyleOption(option, index)
@@ -283,7 +283,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			model := rt.View[qtcore.QAbstractItemModel](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QAbstractItemModel", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
 			option := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[3], "QModelIndex")
 			r := v.(interface {
 				EditorEvent(*qtcore.QEvent, *qtcore.QAbstractItemModel, *QStyleOptionViewItem, *qtcore.QModelIndex) bool
 			}).EditorEvent(event, model, option, index)
@@ -298,7 +298,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			v.(interface {
 				DestroyEditor(*QWidget, *qtcore.QModelIndex)
 			}).DestroyEditor(editor, index)
@@ -317,7 +317,7 @@ var qStyledItemDelegateVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHelpEvent](eventH, eventP)
 			view := rt.View[QAbstractItemView](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QAbstractItemView", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
 			option := rt.View[QStyleOptionViewItem](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QStyleOptionViewItem", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[3], "QModelIndex")
 			r := v.(interface {
 				HelpEvent(*qtgui.QHelpEvent, *QAbstractItemView, *QStyleOptionViewItem, *qtcore.QModelIndex) bool
 			}).HelpEvent(event, view, option, index)

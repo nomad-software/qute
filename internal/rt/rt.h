@@ -13,8 +13,6 @@ extern "C" {
 void qute_rt_init(void);
 bool qute_rt_is_gui_thread(void);
 bool qute_rt_app_exists(void);
-// True when an application exists and the caller is not on its thread.
-bool qute_rt_off_gui_thread(void);
 // Queue a call to qute_rt_run(id) on the GUI thread. Returns false if there
 // is no application object to post to.
 bool qute_rt_post(uintptr_t id);

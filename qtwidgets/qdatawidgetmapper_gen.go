@@ -166,7 +166,7 @@ func (this *QDataWidgetMapper) RootIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QDataWidgetMapper.RootIndex")
 	r := C.qute_QDataWidgetMapper_rootIndex(self)
 	runtime.KeepAlive(this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // SetOrientation wraps QDataWidgetMapper::setOrientation.

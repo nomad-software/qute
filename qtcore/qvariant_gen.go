@@ -1199,7 +1199,7 @@ func (this *QVariant) ToModelIndex() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToModelIndex")
 	r := C.qute_QVariant_toModelIndex(self)
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // ToPersistentModelIndex wraps QVariant::toPersistentModelIndex.

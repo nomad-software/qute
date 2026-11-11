@@ -154,7 +154,7 @@ func (this *QStandardItemModel) IndexFromItem(item QStandardItemLike) *qtcore.QM
 	r := C.qute_QStandardItemModel_indexFromItem(self, itemPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(item)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // Item wraps QStandardItemModel::item.
@@ -724,7 +724,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				Index(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex
 			}).Index(row, column, parent)
@@ -738,7 +738,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			child := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			child := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Parent(*qtcore.QModelIndex) *qtcore.QModelIndex
 			}).Parent(child)
@@ -747,14 +747,14 @@ var qStandardItemModelVTable = []rt.Virtual{
 	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*qtcore.QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ RowCount(*qtcore.QModelIndex) int }).RowCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*qtcore.QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ ColumnCount(*qtcore.QModelIndex) int }).ColumnCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
@@ -766,7 +766,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				HasChildren(*qtcore.QModelIndex) bool
 			}).HasChildren(parent)
@@ -780,7 +780,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			r := v.(interface {
 				Data(*qtcore.QModelIndex, int) *qtcore.QVariant
@@ -795,7 +795,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			role := int(*(*C.int)(a[2]))
 			r := v.(interface {
@@ -811,7 +811,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				ClearItemData(*qtcore.QModelIndex) bool
 			}).ClearItemData(index)
@@ -860,7 +860,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				InsertRows(int, int, *qtcore.QModelIndex) bool
 			}).InsertRows(row, count, parent)
@@ -876,7 +876,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				InsertColumns(int, int, *qtcore.QModelIndex) bool
 			}).InsertColumns(column, count, parent)
@@ -892,7 +892,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				RemoveRows(int, int, *qtcore.QModelIndex) bool
 			}).RemoveRows(row, count, parent)
@@ -908,7 +908,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				RemoveColumns(int, int, *qtcore.QModelIndex) bool
 			}).RemoveColumns(column, count, parent)
@@ -922,7 +922,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Flags(*qtcore.QModelIndex) qtcore.ItemFlags
 			}).Flags(index)
@@ -942,7 +942,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				ItemData(*qtcore.QModelIndex) map[int]*qtcore.QVariant
 			}).ItemData(index)
@@ -958,7 +958,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *qtcore.QVariant {
 				return rt.View[qtcore.QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 			})
@@ -989,7 +989,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *qtcore.QModelIndex {
-				return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+				return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
 			})
 			r := v.(interface {
 				MimeData([]*qtcore.QModelIndex) *qtcore.QMimeData
@@ -1011,7 +1011,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			action := qtcore.DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[4], "QModelIndex")
 			r := v.(interface {
 				DropMimeData(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool
 			}).DropMimeData(data, action, row, column, parent)
@@ -1027,7 +1027,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			idx := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			idx := rt.InlineArgView[qtcore.QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				Sibling(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex
 			}).Sibling(row, column, idx)
@@ -1045,7 +1045,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 			action := qtcore.DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[4], "QModelIndex")
 			r := v.(interface {
 				CanDropMimeData(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool
 			}).CanDropMimeData(data, action, row, column, parent)
@@ -1065,10 +1065,10 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			sourceRow := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.InlineArgView[qtcore.QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveRows(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool
@@ -1083,10 +1083,10 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			sourceColumn := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.InlineArgView[qtcore.QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveColumns(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool
@@ -1096,7 +1096,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*qtcore.QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			v.(interface{ FetchMore(*qtcore.QModelIndex) }).FetchMore(parent)
 		}},
 	{Name: "CanFetchMore", Has: func(v any) bool {
@@ -1107,7 +1107,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				CanFetchMore(*qtcore.QModelIndex) bool
 			}).CanFetchMore(parent)
@@ -1121,7 +1121,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Buddy(*qtcore.QModelIndex) *qtcore.QModelIndex
 			}).Buddy(index)
@@ -1135,7 +1135,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			start := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			start := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
 			hits := int(*(*C.int)(a[3]))
@@ -1153,7 +1153,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Span(*qtcore.QModelIndex) qtcore.QSize
 			}).Span(index)
@@ -1270,7 +1270,7 @@ func (s *QStandardItemModelSuper) Index(row int, column int, parent *qtcore.QMod
 	r := C.qute_QStandardItemModel_super_1(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QStandardItemModel.Super.Index"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // Parent calls QStandardItemModel::parent.
@@ -1279,7 +1279,7 @@ func (s *QStandardItemModelSuper) Parent(child *qtcore.QModelIndex) *qtcore.QMod
 	r := C.qute_QStandardItemModel_super_2(self, rt.UseArg(unsafe.Pointer(child), "QStandardItemModel.Super.Parent"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(child)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // RowCount calls QStandardItemModel::rowCount.
@@ -1479,7 +1479,7 @@ func (s *QStandardItemModelSuper) Sibling(row int, column int, idx *qtcore.QMode
 	r := C.qute_QStandardItemModel_super_23(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QStandardItemModel.Super.Sibling"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(idx)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // CanDropMimeData calls QAbstractItemModel::canDropMimeData.
@@ -1547,7 +1547,7 @@ func (s *QStandardItemModelSuper) Buddy(index *qtcore.QModelIndex) *qtcore.QMode
 	r := C.qute_QStandardItemModel_super_30(self, rt.UseArg(unsafe.Pointer(index), "QStandardItemModel.Super.Buddy"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // Match calls QAbstractItemModel::match.
@@ -1558,7 +1558,7 @@ func (s *QStandardItemModelSuper) Match(start *qtcore.QModelIndex, role int, val
 	runtime.KeepAlive(start)
 	runtime.KeepAlive(value)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
-		return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
 	})
 }
 
@@ -1666,7 +1666,7 @@ func (b *QStandardItemModelBase) CreateIndex(row int, column int) *qtcore.QModel
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.CreateIndex")
 	r := C.qute_QStandardItemModel_prot_createIndex(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // CreateIndexWithUint64 wraps the protected QAbstractItemModel::createIndex for subclasses.
@@ -1675,7 +1675,7 @@ func (b *QStandardItemModelBase) CreateIndexWithUint64(row int, column int, idAr
 	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.CreateIndexWithUint64")
 	r := C.qute_QStandardItemModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
 	runtime.KeepAlive(this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // EncodeData wraps the protected QAbstractItemModel::encodeData for subclasses.
@@ -1859,7 +1859,7 @@ func (b *QStandardItemModelBase) PersistentIndexList() []*qtcore.QModelIndex {
 	r := C.qute_QStandardItemModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
-		return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
 	})
 }
 

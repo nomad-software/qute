@@ -38,15 +38,26 @@
 #include <memory>
 
 extern "C" {
-void qute_qtopenglwidgets_signal(uintptr_t id, void *args);
+void qute_qtopenglwidgets_signal(uintptr_t id, void *args, bool off);
 void qute_qtopenglwidgets_release(uintptr_t id);
-bool qute_qtopenglwidgets_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtopenglwidgets_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);
 void qute_qtopenglwidgets_wrong_thread(void);
 void qute_qtopenglwidgets_dead(void *key);
-void qute_qtopenglwidgets_call(uintptr_t id, void *args, void *ret);
+void qute_qtopenglwidgets_call(uintptr_t id, void *args, void *ret, bool off);
 }
 
-static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtopenglwidgets_call(id, args, ret); }
+// Every entry into a Go handler (signal, virtual, std::function) must come
+// from the GUI thread. The thread is looked up here, where it is cheap, and
+// passed in: the Go side panics when it is not the GUI thread, without a
+// call back into C++ to ask.
+static inline bool qute_off_gui() {
+	QCoreApplication *app = QCoreApplication::instance();
+	return app && QThread::currentThread() != app->thread();
+}
+
+static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtopenglwidgets_call(id, args, ret, qute_off_gui()); }
+static inline void qute_signal(uintptr_t id, void *args) { qute_qtopenglwidgets_signal(id, args, qute_off_gui()); }
+static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_qtopenglwidgets_virtual(id, idx, args, ret, qute_off_gui()); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
 // It is checked here, in every build (qute_debug builds also name the
@@ -84,7 +95,7 @@ public:
 	using QPaintDevice::getDecodedMetricF;
 	void initializeGL() override {
 		if (qute_has(0)) {
-			if (qute_qtopenglwidgets_virtual(qute_id, 0, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 0, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -96,7 +107,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtopenglwidgets_virtual(qute_id, 1, args, nullptr)) {
+			if (qute_virtual(qute_id, 1, args, nullptr)) {
 				return;
 			}
 		}
@@ -105,7 +116,7 @@ public:
 	void qute_super_1(int a0, int a1) { return QOpenGLWidget::resizeGL(a0, a1); }
 	void paintGL() override {
 		if (qute_has(2)) {
-			if (qute_qtopenglwidgets_virtual(qute_id, 2, nullptr, nullptr)) {
+			if (qute_virtual(qute_id, 2, nullptr, nullptr)) {
 				return;
 			}
 		}
@@ -116,7 +127,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -127,7 +138,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -139,7 +150,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -150,7 +161,7 @@ public:
 		if (qute_has(6)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
 				return;
 			}
 		}
@@ -160,7 +171,7 @@ public:
 	QSize sizeHint() const override {
 		if (qute_has(7)) {
 			qute_size r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -170,7 +181,7 @@ public:
 	QSize minimumSizeHint() const override {
 		if (qute_has(8)) {
 			qute_size r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 8, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
@@ -182,7 +193,7 @@ public:
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
@@ -192,7 +203,7 @@ public:
 	bool hasHeightForWidth() const override {
 		if (qute_has(10)) {
 			bool r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 10, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -203,7 +214,7 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 11, args, nullptr)) {
+			if (qute_virtual(qute_id, 11, args, nullptr)) {
 				return;
 			}
 		}
@@ -214,7 +225,7 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 12, args, nullptr)) {
+			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
 			}
 		}
@@ -225,7 +236,7 @@ public:
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 13, args, nullptr)) {
+			if (qute_virtual(qute_id, 13, args, nullptr)) {
 				return;
 			}
 		}
@@ -236,7 +247,7 @@ public:
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 14, args, nullptr)) {
+			if (qute_virtual(qute_id, 14, args, nullptr)) {
 				return;
 			}
 		}
@@ -247,7 +258,7 @@ public:
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 15, args, nullptr)) {
+			if (qute_virtual(qute_id, 15, args, nullptr)) {
 				return;
 			}
 		}
@@ -258,7 +269,7 @@ public:
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 16, args, nullptr)) {
+			if (qute_virtual(qute_id, 16, args, nullptr)) {
 				return;
 			}
 		}
@@ -269,7 +280,7 @@ public:
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 17, args, nullptr)) {
+			if (qute_virtual(qute_id, 17, args, nullptr)) {
 				return;
 			}
 		}
@@ -280,7 +291,7 @@ public:
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 18, args, nullptr)) {
+			if (qute_virtual(qute_id, 18, args, nullptr)) {
 				return;
 			}
 		}
@@ -291,7 +302,7 @@ public:
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 19, args, nullptr)) {
+			if (qute_virtual(qute_id, 19, args, nullptr)) {
 				return;
 			}
 		}
@@ -302,7 +313,7 @@ public:
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 20, args, nullptr)) {
+			if (qute_virtual(qute_id, 20, args, nullptr)) {
 				return;
 			}
 		}
@@ -313,7 +324,7 @@ public:
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 21, args, nullptr)) {
+			if (qute_virtual(qute_id, 21, args, nullptr)) {
 				return;
 			}
 		}
@@ -324,7 +335,7 @@ public:
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 22, args, nullptr)) {
+			if (qute_virtual(qute_id, 22, args, nullptr)) {
 				return;
 			}
 		}
@@ -335,7 +346,7 @@ public:
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 23, args, nullptr)) {
+			if (qute_virtual(qute_id, 23, args, nullptr)) {
 				return;
 			}
 		}
@@ -346,7 +357,7 @@ public:
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 24, args, nullptr)) {
+			if (qute_virtual(qute_id, 24, args, nullptr)) {
 				return;
 			}
 		}
@@ -357,7 +368,7 @@ public:
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 25, args, nullptr)) {
+			if (qute_virtual(qute_id, 25, args, nullptr)) {
 				return;
 			}
 		}
@@ -368,7 +379,7 @@ public:
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 26, args, nullptr)) {
+			if (qute_virtual(qute_id, 26, args, nullptr)) {
 				return;
 			}
 		}
@@ -379,7 +390,7 @@ public:
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 27, args, nullptr)) {
+			if (qute_virtual(qute_id, 27, args, nullptr)) {
 				return;
 			}
 		}
@@ -390,7 +401,7 @@ public:
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 28, args, nullptr)) {
+			if (qute_virtual(qute_id, 28, args, nullptr)) {
 				return;
 			}
 		}
@@ -401,7 +412,7 @@ public:
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 29, args, nullptr)) {
+			if (qute_virtual(qute_id, 29, args, nullptr)) {
 				return;
 			}
 		}
@@ -412,7 +423,7 @@ public:
 		if (qute_has(30)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 30, args, nullptr)) {
+			if (qute_virtual(qute_id, 30, args, nullptr)) {
 				return;
 			}
 		}
@@ -423,7 +434,7 @@ public:
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 31, args, nullptr)) {
+			if (qute_virtual(qute_id, 31, args, nullptr)) {
 				return;
 			}
 		}
@@ -434,7 +445,7 @@ public:
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 32, args, nullptr)) {
+			if (qute_virtual(qute_id, 32, args, nullptr)) {
 				return;
 			}
 		}
@@ -445,7 +456,7 @@ public:
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 33, args, nullptr)) {
+			if (qute_virtual(qute_id, 33, args, nullptr)) {
 				return;
 			}
 		}
@@ -456,7 +467,7 @@ public:
 		if (qute_has(34)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 34, args, nullptr)) {
+			if (qute_virtual(qute_id, 34, args, nullptr)) {
 				return;
 			}
 		}
@@ -468,7 +479,7 @@ public:
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 35, args, &r)) {
+			if (qute_virtual(qute_id, 35, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -481,7 +492,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtopenglwidgets_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 36, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -492,7 +503,7 @@ public:
 		if (qute_has(37)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 37, args, nullptr)) {
+			if (qute_virtual(qute_id, 37, args, nullptr)) {
 				return;
 			}
 		}
@@ -503,7 +514,7 @@ public:
 		if (qute_has(38)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 38, args, nullptr)) {
+			if (qute_virtual(qute_id, 38, args, nullptr)) {
 				return;
 			}
 		}
@@ -514,7 +525,7 @@ public:
 		if (qute_has(39)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtopenglwidgets_virtual(qute_id, 39, args, nullptr)) {
+			if (qute_virtual(qute_id, 39, args, nullptr)) {
 				return;
 			}
 		}
@@ -819,25 +830,25 @@ void * qute_QOpenGLWidget_aboutToCompose(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QOpenGLWidget *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::aboutToCompose, obj, [s]() {  qute_qtopenglwidgets_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::aboutToCompose, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QOpenGLWidget_frameSwapped(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QOpenGLWidget *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::frameSwapped, obj, [s]() {  qute_qtopenglwidgets_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::frameSwapped, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QOpenGLWidget_aboutToResize(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QOpenGLWidget *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::aboutToResize, obj, [s]() {  qute_qtopenglwidgets_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::aboutToResize, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QOpenGLWidget_resized(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QOpenGLWidget *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::resized, obj, [s]() {  qute_qtopenglwidgets_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QOpenGLWidget::resized, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 } // extern "C"

@@ -526,7 +526,7 @@ func (this *QComboBox) RootModelIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QComboBox.RootModelIndex")
 	r := C.qute_QComboBox_rootModelIndex(self)
 	runtime.KeepAlive(this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // SetRootModelIndex wraps QComboBox::setRootModelIndex.

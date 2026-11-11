@@ -73,14 +73,15 @@ func catchPanic() {
 }
 
 // guiOnlyEntry panics when Qt calls into a Go handler from a thread other
-// than the GUI thread. Handlers use Qt objects, and the runtime's callback
+// than the GUI thread; off is what the generated C++ found when it called
+// (qute_off_gui), so the check costs no call back into C++. Handlers use Qt objects, and the runtime's callback
 // state (InCallback, captured panics) belongs to the GUI thread, so such a
 // call cannot work; the panic names the problem instead of a crash somewhere
 // else. A binding whose callback Qt runs on a worker thread must be
 // hand-written to convert its arguments to plain Go values first (see
 // qtwebenginecore's SetCookieFilter).
-func guiOnlyEntry(what string) {
-	if offGUIThread() {
+func guiOnlyEntry(what string, off bool) {
+	if off {
 		panic("qute: Qt called a Go " + what + " from a thread other than the GUI thread; " +
 			"qute runs Go handlers only on the GUI thread, so this binding cannot be used as generated. " +
 			"Please report it: its callback needs a hand-written binding")
@@ -97,8 +98,8 @@ func NewFunc(fn func(args, ret unsafe.Pointer)) uintptr {
 // the callback panics and the panic is recovered (inside qutetest.Run or
 // PostSync), the result keeps the zero value the shim initialised it with,
 // and the panic is re-raised once control is back in Go.
-func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
-	guiOnlyEntry("std::function callback")
+func InvokeFunc(id uintptr, args, ret unsafe.Pointer, off bool) {
+	guiOnlyEntry("std::function callback", off)
 	fn := cgo.Handle(id &^ funcBit).Value().(func(args, ret unsafe.Pointer))
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
@@ -130,8 +131,8 @@ const funcBit = uintptr(1) << (unsafe.Sizeof(uintptr(0))*8 - 1)
 // InvokeCallback runs the closure stored under id with the shim's argument
 // array. A closure whose object tree GC already collected (its deletion is
 // still queued) is skipped.
-func InvokeCallback(id uintptr, args unsafe.Pointer) {
-	guiOnlyEntry("signal handler")
+func InvokeCallback(id uintptr, args unsafe.Pointer, off bool) {
+	guiOnlyEntry("signal handler", off)
 	var fn func(args unsafe.Pointer)
 	if h := slotHandle(id); h != nil {
 		h.mu.Lock()
@@ -217,8 +218,8 @@ type Virtual struct {
 // (inside qutetest.Run or PostSync): Qt then gets the C++ implementation's
 // result, a sensible value, rather than whatever the override half wrote, and
 // the panic is re-raised once control is back in Go.
-func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) bool {
-	guiOnlyEntry("virtual method override")
+func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer, off bool) bool {
+	guiOnlyEntry("virtual method override", off)
 	h := slotHandle(id)
 	if h == nil {
 		return false

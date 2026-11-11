@@ -321,7 +321,7 @@ func (this *QStyleOptionViewItem) Index() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QStyleOptionViewItem.Index")
 	r := C.qute_QStyleOptionViewItem_get_index(self)
 	runtime.KeepAlive(this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // SetIndex wraps the public field QStyleOptionViewItem::index.

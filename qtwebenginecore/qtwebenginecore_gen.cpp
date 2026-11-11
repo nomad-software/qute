@@ -57,15 +57,26 @@
 #include <memory>
 
 extern "C" {
-void qute_qtwebenginecore_signal(uintptr_t id, void *args);
+void qute_qtwebenginecore_signal(uintptr_t id, void *args, bool off);
 void qute_qtwebenginecore_release(uintptr_t id);
-bool qute_qtwebenginecore_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtwebenginecore_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);
 void qute_qtwebenginecore_wrong_thread(void);
 void qute_qtwebenginecore_dead(void *key);
-void qute_qtwebenginecore_call(uintptr_t id, void *args, void *ret);
+void qute_qtwebenginecore_call(uintptr_t id, void *args, void *ret, bool off);
 }
 
-static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtwebenginecore_call(id, args, ret); }
+// Every entry into a Go handler (signal, virtual, std::function) must come
+// from the GUI thread. The thread is looked up here, where it is cheap, and
+// passed in: the Go side panics when it is not the GUI thread, without a
+// call back into C++ to ask.
+static inline bool qute_off_gui() {
+	QCoreApplication *app = QCoreApplication::instance();
+	return app && QThread::currentThread() != app->thread();
+}
+
+static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtwebenginecore_call(id, args, ret, qute_off_gui()); }
+static inline void qute_signal(uintptr_t id, void *args) { qute_qtwebenginecore_signal(id, args, qute_off_gui()); }
+static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_qtwebenginecore_virtual(id, idx, args, ret, qute_off_gui()); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
 // It is checked here, in every build (qute_debug builds also name the
@@ -100,7 +111,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			bool c1 = static_cast<bool>(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtwebenginecore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -112,7 +123,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -124,7 +135,7 @@ public:
 			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
 			void * r = nullptr;
-			if (qute_qtwebenginecore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<QWebEnginePage *>(r);
 			}
 		}
@@ -138,7 +149,7 @@ public:
 			qute_list c2 = qute_ret_strlist(a2);
 			void *args[] = {&c0, &c1, &c2};
 			qute_list r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 3, args, &r)) {
 				return qute_take_qstrlist(r);
 			}
 		}
@@ -150,7 +161,7 @@ public:
 			void * c0 = static_cast<void *>(new QUrl(a0));
 			qute_str c1 = qute_ret_str(a1);
 			void *args[] = {&c0, &c1};
-			if (qute_qtwebenginecore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -163,7 +174,7 @@ public:
 			qute_str c1 = qute_ret_str(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 5, args, &r)) {
+			if (qute_virtual(qute_id, 5, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -178,7 +189,7 @@ public:
 			qute_str c3{};
 			void *args[] = {&c0, &c1, &c2, a3 ? static_cast<void *>(&c3) : nullptr};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 6, args, &r)) {
+			if (qute_virtual(qute_id, 6, args, &r)) {
 				if (a3) {
 					*a3 = qute_take_qstr(c3);
 				}
@@ -196,7 +207,7 @@ public:
 			int c2 = static_cast<int>(a2);
 			qute_str c3 = qute_ret_str(a3);
 			void *args[] = {&c0, &c1, &c2, &c3};
-			if (qute_qtwebenginecore_virtual(qute_id, 7, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
@@ -210,7 +221,7 @@ public:
 			bool c2 = static_cast<bool>(a2);
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 8, args, &r)) {
+			if (qute_virtual(qute_id, 8, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -223,7 +234,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 9, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -234,7 +245,7 @@ public:
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 10, args, nullptr)) {
+			if (qute_virtual(qute_id, 10, args, nullptr)) {
 				return;
 			}
 		}
@@ -245,7 +256,7 @@ public:
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 11, args, nullptr)) {
+			if (qute_virtual(qute_id, 11, args, nullptr)) {
 				return;
 			}
 		}
@@ -256,7 +267,7 @@ public:
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 12, args, nullptr)) {
+			if (qute_virtual(qute_id, 12, args, nullptr)) {
 				return;
 			}
 		}
@@ -276,7 +287,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -289,7 +300,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -300,7 +311,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -311,7 +322,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -322,7 +333,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -341,7 +352,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = static_cast<void *>(&a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -352,7 +363,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -365,7 +376,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -376,7 +387,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -387,7 +398,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -398,7 +409,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -417,7 +428,7 @@ public:
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 0, args, nullptr)) {
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
 				return;
 			}
 		}
@@ -428,7 +439,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -441,7 +452,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtwebenginecore_virtual(qute_id, 2, args, &r)) {
+			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -452,7 +463,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -463,7 +474,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -474,7 +485,7 @@ public:
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtwebenginecore_virtual(qute_id, 5, args, nullptr)) {
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
 				return;
 			}
 		}
@@ -907,55 +918,55 @@ void * qute_QWebEngineDownloadRequest_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::stateChanged, obj, [s](QWebEngineDownloadRequest::DownloadState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::stateChanged, obj, [s](QWebEngineDownloadRequest::DownloadState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEngineDownloadRequest_savePageFormatChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::savePageFormatChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::savePageFormatChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_receivedBytesChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::receivedBytesChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::receivedBytesChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_totalBytesChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::totalBytesChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::totalBytesChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_interruptReasonChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::interruptReasonChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::interruptReasonChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_isFinishedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::isFinishedChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::isFinishedChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_isPausedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::isPausedChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::isPausedChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_downloadDirectoryChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::downloadDirectoryChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::downloadDirectoryChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEngineDownloadRequest_downloadFileNameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineDownloadRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::downloadFileNameChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineDownloadRequest::downloadFileNameChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QWebEngineExtensionInfo
@@ -1057,25 +1068,25 @@ void * qute_QWebEngineExtensionManager_loadFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineExtensionManager *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::loadFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::loadFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEngineExtensionManager_installFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineExtensionManager *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::installFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::installFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEngineExtensionManager_unloadFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineExtensionManager *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::unloadFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::unloadFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEngineExtensionManager_uninstallFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineExtensionManager *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::uninstallFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineExtensionManager::uninstallFinished, obj, [s](const QWebEngineExtensionInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineExtensionInfo(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QWebEngineFileSystemAccessRequest
@@ -1964,223 +1975,223 @@ void * qute_QWebEnginePage_loadStarted(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadStarted, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadStarted, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEnginePage_loadProgress(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadProgress, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadProgress, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_loadFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadFinished, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadFinished, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_loadingChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadingChanged, obj, [s](const QWebEngineLoadingInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineLoadingInfo(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::loadingChanged, obj, [s](const QWebEngineLoadingInfo & a0) { void * c0 = static_cast<void *>(new QWebEngineLoadingInfo(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_linkHovered(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::linkHovered, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::linkHovered, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_selectionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::selectionChanged, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::selectionChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEnginePage_geometryChangeRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::geometryChangeRequested, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::geometryChangeRequested, obj, [s](const QRect & a0) { qute_rect c0 = qute_from_QRect(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_windowCloseRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::windowCloseRequested, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::windowCloseRequested, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEnginePage_fullScreenRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::fullScreenRequested, obj, [s](QWebEngineFullScreenRequest a0) { void * c0 = static_cast<void *>(new QWebEngineFullScreenRequest(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::fullScreenRequested, obj, [s](QWebEngineFullScreenRequest a0) { void * c0 = static_cast<void *>(new QWebEngineFullScreenRequest(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_permissionRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::permissionRequested, obj, [s](QWebEnginePermission a0) { void * c0 = static_cast<void *>(new QWebEnginePermission(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::permissionRequested, obj, [s](QWebEnginePermission a0) { void * c0 = static_cast<void *>(new QWebEnginePermission(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_registerProtocolHandlerRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::registerProtocolHandlerRequested, obj, [s](QWebEngineRegisterProtocolHandlerRequest a0) { void * c0 = static_cast<void *>(new QWebEngineRegisterProtocolHandlerRequest(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::registerProtocolHandlerRequested, obj, [s](QWebEngineRegisterProtocolHandlerRequest a0) { void * c0 = static_cast<void *>(new QWebEngineRegisterProtocolHandlerRequest(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_fileSystemAccessRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::fileSystemAccessRequested, obj, [s](QWebEngineFileSystemAccessRequest a0) { void * c0 = static_cast<void *>(new QWebEngineFileSystemAccessRequest(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::fileSystemAccessRequested, obj, [s](QWebEngineFileSystemAccessRequest a0) { void * c0 = static_cast<void *>(new QWebEngineFileSystemAccessRequest(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_selectClientCertificate(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::selectClientCertificate, obj, [s](QWebEngineClientCertificateSelection a0) { void * c0 = static_cast<void *>(new QWebEngineClientCertificateSelection(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::selectClientCertificate, obj, [s](QWebEngineClientCertificateSelection a0) { void * c0 = static_cast<void *>(new QWebEngineClientCertificateSelection(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_renderProcessTerminated(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::renderProcessTerminated, obj, [s](QWebEnginePage::RenderProcessTerminationStatus a0, int a1) { int64_t c0 = static_cast<int64_t>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::renderProcessTerminated, obj, [s](QWebEnginePage::RenderProcessTerminationStatus a0, int a1) { int64_t c0 = static_cast<int64_t>(a0); int c1 = static_cast<int>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_desktopMediaRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::desktopMediaRequested, obj, [s](const QWebEngineDesktopMediaRequest & a0) { void * c0 = static_cast<void *>(new QWebEngineDesktopMediaRequest(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::desktopMediaRequested, obj, [s](const QWebEngineDesktopMediaRequest & a0) { void * c0 = static_cast<void *>(new QWebEngineDesktopMediaRequest(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_certificateError(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::certificateError, obj, [s](const QWebEngineCertificateError & a0) { void * c0 = static_cast<void *>(new QWebEngineCertificateError(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::certificateError, obj, [s](const QWebEngineCertificateError & a0) { void * c0 = static_cast<void *>(new QWebEngineCertificateError(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_navigationRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::navigationRequested, obj, [s](QWebEngineNavigationRequest & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::navigationRequested, obj, [s](QWebEngineNavigationRequest & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_newWindowRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::newWindowRequested, obj, [s](QWebEngineNewWindowRequest & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::newWindowRequested, obj, [s](QWebEngineNewWindowRequest & a0) { void * c0 = (void *)(&(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_titleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::titleChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::titleChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_urlChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::urlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::urlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_iconUrlChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::iconUrlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::iconUrlChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_iconChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::iconChanged, obj, [s](const QIcon & a0) { void * c0 = static_cast<void *>(new QIcon(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::iconChanged, obj, [s](const QIcon & a0) { void * c0 = static_cast<void *>(new QIcon(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_zoomFactorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::zoomFactorChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::zoomFactorChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_scrollPositionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::scrollPositionChanged, obj, [s](const QPointF & a0) { qute_pointf c0 = qute_from_QPointF(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::scrollPositionChanged, obj, [s](const QPointF & a0) { qute_pointf c0 = qute_from_QPointF(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_contentsSizeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::contentsSizeChanged, obj, [s](const QSizeF & a0) { qute_sizef c0 = qute_from_QSizeF(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::contentsSizeChanged, obj, [s](const QSizeF & a0) { qute_sizef c0 = qute_from_QSizeF(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_audioMutedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::audioMutedChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::audioMutedChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_recentlyAudibleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::recentlyAudibleChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::recentlyAudibleChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_renderProcessPidChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::renderProcessPidChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::renderProcessPidChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_pdfPrintingFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::pdfPrintingFinished, obj, [s](const QString & a0, bool a1) { qute_str c0 = qute_ret_str(a0); bool c1 = static_cast<bool>(a1); void *args[] = {&c0, &c1}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::pdfPrintingFinished, obj, [s](const QString & a0, bool a1) { qute_str c0 = qute_ret_str(a0); bool c1 = static_cast<bool>(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_printRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::printRequested, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::printRequested, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEnginePage_printRequestedByFrame(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::printRequestedByFrame, obj, [s](QWebEngineFrame a0) { void * c0 = static_cast<void *>(new QWebEngineFrame(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::printRequestedByFrame, obj, [s](QWebEngineFrame a0) { void * c0 = static_cast<void *>(new QWebEngineFrame(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_visibleChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::visibleChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::visibleChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_lifecycleStateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::lifecycleStateChanged, obj, [s](QWebEnginePage::LifecycleState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::lifecycleStateChanged, obj, [s](QWebEnginePage::LifecycleState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_recommendedStateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::recommendedStateChanged, obj, [s](QWebEnginePage::LifecycleState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::recommendedStateChanged, obj, [s](QWebEnginePage::LifecycleState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage_findTextFinished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::findTextFinished, obj, [s](const QWebEngineFindTextResult & a0) { void * c0 = static_cast<void *>(new QWebEngineFindTextResult(a0)); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::findTextFinished, obj, [s](const QWebEngineFindTextResult & a0) { void * c0 = static_cast<void *>(new QWebEngineFindTextResult(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEnginePage__q_aboutToDelete(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::_q_aboutToDelete, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::_q_aboutToDelete, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWebEnginePage_webAuthUxRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEnginePage *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::webAuthUxRequested, obj, [s](QWebEngineWebAuthUxRequest * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEnginePage::webAuthUxRequested, obj, [s](QWebEngineWebAuthUxRequest * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QWebEnginePermission
@@ -2478,13 +2489,13 @@ void * qute_QWebEngineProfile_downloadRequested(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineProfile *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineProfile::downloadRequested, obj, [s](QWebEngineDownloadRequest * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineProfile::downloadRequested, obj, [s](QWebEngineDownloadRequest * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWebEngineProfile_clearHttpCacheCompleted(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineProfile *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineProfile::clearHttpCacheCompleted, obj, [s]() {  qute_qtwebenginecore_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineProfile::clearHttpCacheCompleted, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QWebEngineProfileBuilder
@@ -3042,7 +3053,7 @@ void * qute_QWebEngineWebAuthUxRequest_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWebEngineWebAuthUxRequest *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineWebAuthUxRequest::stateChanged, obj, [s](QWebEngineWebAuthUxRequest::WebAuthUxState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtwebenginecore_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWebEngineWebAuthUxRequest::stateChanged, obj, [s](QWebEngineWebAuthUxRequest::WebAuthUxState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 } // extern "C"

@@ -443,7 +443,7 @@ func (this *QCompleter) CurrentIndex() *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.CurrentIndex")
 	r := C.qute_QCompleter_currentIndex(self)
 	runtime.KeepAlive(this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // CurrentCompletion wraps QCompleter::currentCompletion.
@@ -631,7 +631,7 @@ func (this *QCompleter) OnActivatedIndex(f func(index *qtcore.QModelIndex)) qtco
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnActivatedIndex")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+		index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 		f(index)
 	})
 	return rt.NewConnection(C.qute_QCompleter_activated_1(self, C.uintptr_t(id)))
@@ -665,7 +665,7 @@ func (this *QCompleter) OnHighlightedIndex(f func(index *qtcore.QModelIndex)) qt
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnHighlightedIndex")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+		index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 		f(index)
 	})
 	return rt.NewConnection(C.qute_QCompleter_highlighted_1(self, C.uintptr_t(id)))
@@ -680,7 +680,7 @@ var qCompleterVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				PathFromIndex(*qtcore.QModelIndex) string
 			}).PathFromIndex(index)

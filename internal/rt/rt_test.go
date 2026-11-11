@@ -579,7 +579,7 @@ func TestSelfSlotDroppedWithCollectedHandle(t *testing.T) {
 	if has() {
 		t.Fatal("the id of a collected Go subclass is still in the table")
 	}
-	if Dispatch(id, 0, nil, nil) {
+	if Dispatch(id, 0, nil, nil, false) {
 		t.Fatal("a virtual dispatched to a collected Go value")
 	}
 }
@@ -594,12 +594,12 @@ func TestCallbackSlots(t *testing.T) {
 	if sender.Pins() != 1 {
 		t.Fatalf("connected sender pins = %d, want 1", sender.Pins())
 	}
-	InvokeCallback(id, nil)
+	InvokeCallback(id, nil, false)
 	if ran != 1 {
 		t.Fatalf("callback ran %d times, want 1", ran)
 	}
 	ReleaseCallback(id)
-	InvokeCallback(id, nil) // released: nothing runs
+	InvokeCallback(id, nil, false) // released: nothing runs
 	if ran != 1 || sender.Pins() != 0 || len(sender.x().callbacks) != 0 {
 		t.Fatalf("after release: ran %d, pins %d, %d closures", ran, sender.Pins(), len(sender.x().callbacks))
 	}
@@ -904,5 +904,68 @@ func TestMaskCachedPerType(t *testing.T) {
 	other := []Virtual{{Name: "Paint", Has: has}}
 	if o := Mask(maskPaints{}, other); o[0] != 0b1 {
 		t.Errorf("mask for another table = %b, want 1", o)
+	}
+}
+
+// An override's inline argument takes the objects it depends on from what the
+// shim found in C++ (qute_inline_arg), with no call to ask again.
+func TestInlineArgDependencies(t *testing.T) {
+	RegisterClass("InlineDep", KindValue, func(unsafe.Pointer) { t.Error("an inline argument was deleted through C++") })
+	RegisterInline("InlineDep", 8, func(p unsafe.Pointer) {})
+	model := newPlain("Model")
+	modelPtr := fakePtr(3)
+	RegisterDependency("InlineDep", func(unsafe.Pointer) *Handle {
+		t.Error("the dependency was looked up through C++")
+		return nil
+	})
+	RegisterDependencyWrap("InlineDep", func(d unsafe.Pointer) *Handle {
+		if d != modelPtr {
+			t.Errorf("wrap got %p, want the model the shim passed", d)
+		}
+		return model
+	})
+	v := int64(5)
+	arg := inlineArg{p: unsafe.Pointer(&v)}
+	arg.deps[0] = modelPtr
+	h := InlineArg(unsafe.Pointer(&arg), "InlineDep")
+	if *(*int64)(h.ptr) != 5 || !h.inline {
+		t.Fatal("the argument was not copied")
+	}
+	if len(h.deps) != 1 || h.deps[0] != model {
+		t.Fatalf("deps = %v, want the model", h.deps)
+	}
+	model.markDead("test")
+	if h.Alive() {
+		t.Error("the argument is alive after its model died")
+	}
+}
+
+// An override's inline argument costs two allocations: its bytes, and its
+// handle and wrapper made together (with the first dependency kept inside
+// the handle). A heap copy C++ made for Go is copied and freed at once.
+func TestInlineViews(t *testing.T) {
+	freed := 0
+	RegisterClass("InlineView", KindValue, func(unsafe.Pointer) { freed++ })
+	RegisterInline("InlineView", 8, func(p unsafe.Pointer) {})
+	model := newPlain("Model")
+	RegisterDependency("InlineView", func(unsafe.Pointer) *Handle { return model })
+	RegisterDependencyWrap("InlineView", func(unsafe.Pointer) *Handle { return model })
+	type wrapper struct{ Ref }
+	v := int64(9)
+	arg := inlineArg{p: unsafe.Pointer(&v)}
+	arg.deps[0] = fakePtr(4)
+	w := InlineArgView[wrapper](unsafe.Pointer(&arg), "InlineView")
+	if w.H == nil || *(*int64)(w.P) != 9 || w.P != w.H.ptr || len(w.H.deps) != 1 || w.H.deps[0] != model {
+		t.Fatalf("argument view: %+v", w.Ref)
+	}
+	if View[wrapper](w.H, unsafe.Pointer(&v)) != w {
+		t.Error("View does not return the wrapper made with the handle")
+	}
+	if n := testing.AllocsPerRun(100, func() { InlineArgView[wrapper](unsafe.Pointer(&arg), "InlineView") }); n > 2 {
+		t.Errorf("an inline argument costs %v allocations, want 2", n)
+	}
+	o := InlineOwnedView[wrapper](unsafe.Pointer(&v), "InlineView")
+	if freed != 1 || *(*int64)(o.P) != 9 || o.H.State() != Owned || len(o.H.deps) != 1 {
+		t.Errorf("owned view: freed %d, state %v, deps %d", freed, o.H.State(), len(o.H.deps))
 	}
 }

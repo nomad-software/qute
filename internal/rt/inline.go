@@ -37,12 +37,105 @@ var inlineZero sync.Map // class -> the bytes of a default-constructed value
 
 // newInline returns an Owned handle of a copy of the value at p, in Go memory.
 func newInline(p unsafe.Pointer, class string, size int) *Handle {
+	h := newInlineCopy(p, class, size)
+	h.attachDependency()
+	return h
+}
+
+// newInlineCopy is newInline without its dependencies.
+func newInlineCopy(p unsafe.Pointer, class string, size int) *Handle {
 	buf := make([]uint64, (size+7)/8) // pointer-free and 8-byte aligned
 	dst := unsafe.Pointer(unsafe.SliceData(buf))
 	copy(unsafe.Slice((*byte)(dst), size), unsafe.Slice((*byte)(p), size))
 	h := newHandle(dst, class, KindValue, Owned, nil)
 	h.inline = true
+	return h
+}
+
+// maxInlineDeps is how many dependencies an inline argument carries
+// (qute_inline_arg in the shim).
+const maxInlineDeps = 4
+
+// inlineArg is the shim's qute_inline_arg: an override's or signal's inline
+// argument and the objects it depends on, which C++ found (a QModelIndex's
+// model), in the order of the class's depends-on.
+type inlineArg struct {
+	p    unsafe.Pointer
+	deps [maxInlineDeps]unsafe.Pointer
+}
+
+// inlinePair is an inline value's handle and wrapper in one allocation (its
+// bytes are apart: C++ may only be given memory without Go pointers).
+type inlinePair[T any] struct {
+	h Handle
+	v T
+}
+
+// newInlineView copies the value at p into Go memory and returns its handle
+// and wrapper, made together, with the wrapper cached as View would.
+func newInlineView[T any](p unsafe.Pointer, class string, size int) (*Handle, *T) {
+	buf := make([]uint64, (size+7)/8) // pointer-free and 8-byte aligned
+	dst := unsafe.Pointer(unsafe.SliceData(buf))
+	copy(unsafe.Slice((*byte)(dst), size), unsafe.Slice((*byte)(p), size))
+	x := new(inlinePair[T])
+	h, v := &x.h, &x.v
+	h.init(dst, class, KindValue, Owned, nil)
+	h.inline = true
+	*RefOf(unsafe.Pointer(v)) = Ref{H: h, P: dst}
+	h.cache1[0] = v
+	h.cache = h.cache1[:1]
+	return h, v
+}
+
+// InlineArgView is View(InlineArg(arg, class)) with the handle and wrapper
+// made in one allocation: the shape of an override's index argument, which
+// Qt passes for every row it asks about.
+func InlineArgView[T any](arg unsafe.Pointer, class string) *T {
+	a := (*inlineArg)(arg)
+	h, v := newInlineView[T](a.p, class, InlineSize(class))
+	h.argDeps(a)
+	return v
+}
+
+// InlineOwnedView wraps a heap copy C++ made for Go (a method's result, a
+// list element) as an inline value: its bytes are kept, the copy is freed
+// now, and the handle and wrapper are made in one allocation.
+func InlineOwnedView[T any](p unsafe.Pointer, class string) *T {
+	if p == nil {
+		return nil
+	}
+	v, ok := classes.Load(class)
+	if !ok {
+		panic("qute: class " + class + " is not registered")
+	}
+	ci := v.(classInfo)
+	h, w := newInlineView[T](p, class, ci.inline)
+	ci.deleter(p)
 	h.attachDependency()
+	return w
+}
+
+// argDeps takes h's dependencies from what the shim found (InlineArg).
+func (h *Handle) argDeps(a *inlineArg) {
+	if v, ok := depWraps.Load(h.class); ok {
+		for i, wrap := range v.([]func(unsafe.Pointer) *Handle) {
+			if i >= maxInlineDeps || a.deps[i] == nil {
+				continue
+			}
+			if d := wrap(a.deps[i]); d != nil && d != h {
+				h.addDep(d)
+			}
+		}
+	}
+}
+
+// InlineArg wraps an inline value Qt lent for the call (as CopyInline) from
+// the shim's qute_inline_arg, taking its dependencies from what the shim
+// found rather than asking C++ again.
+func InlineArg(arg unsafe.Pointer, class string) *Handle {
+	a := (*inlineArg)(arg)
+	h := newInlineCopy(a.p, class, InlineSize(class))
+	h.argDeps(a)
 	return h
 }
 

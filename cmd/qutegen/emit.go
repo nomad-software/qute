@@ -328,6 +328,43 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	return out
 }
 
+// depGetter is the bound getter a depends-on entry names. It may be declared
+// on a base (QWidgetItem::widget overrides QLayoutItem's); its shim takes the
+// base pointer, which every primary base shares.
+func depGetter(c *Class, dep depSpec) *Method {
+	for k := c; k != nil; k = k.Base {
+		for _, mm := range k.Methods {
+			if mm.IR.Name == dep.Getter && len(mm.Params) == 0 && mm.Ret != nil && mm.Ret.k == kObj && !mm.Ret.ref {
+				return mm
+			}
+		}
+	}
+	return nil
+}
+
+// inlineArgCpp builds the qute_inline_arg for an inline value argument named
+// name: its address and the objects it depends on, found here in C++ so Go
+// need not ask (rt.InlineArg).
+func (g *Gen) inlineArgCpp(c *Class, name string) string {
+	ptr := func(e string) string { return fmt.Sprintf("const_cast<void *>(static_cast<const void *>(%s))", e) }
+	var deps []string
+	for _, dep := range c.Opts.DependsOn {
+		switch {
+		case dep.Cpp != "":
+			deps = append(deps, ptr(expandCpp(dep.Cpp, "(&"+name+")", nil)))
+		case depGetter(c, dep) != nil:
+			deps = append(deps, ptr(fmt.Sprintf("%s.%s()", name, dep.Getter)))
+		default:
+			deps = append(deps, "nullptr") // warned where the dependency is registered
+		}
+	}
+	if len(deps) > 4 {
+		g.report.warn("%s: an inline value with more than 4 dependencies", c.Name)
+		deps = deps[:4]
+	}
+	return fmt.Sprintf("{%s, {%s}}", ptr("&"+name), strings.Join(deps, ", "))
+}
+
 func primaryCtor(c *Class) *Method {
 	for _, m := range c.Ctors {
 		if m.GoName == "New"+c.Name {
@@ -371,7 +408,7 @@ func (g *Gen) signalCFunc(c *Class, sg *Method) cFunc {
 		lparams = append(lparams, fmt.Sprintf("%s %s", p.T.cpp, p.CName))
 		if inlineVal(p.T) {
 			// lent for the call: Go copies its bytes (rt.CopyInline)
-			conv = append(conv, fmt.Sprintf("void * c%d = const_cast<void *>(static_cast<const void *>(&%s));", i, p.CName))
+			conv = append(conv, fmt.Sprintf("qute_inline_arg c%d = %s;", i, g.inlineArgCpp(p.T.cls, p.CName)))
 		} else {
 			conv = append(conv, fmt.Sprintf("%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName)))
 		}
@@ -384,8 +421,8 @@ func (g *Gen) signalCFunc(c *Class, sg *Method) cFunc {
 		args = "args"
 	}
 	body := fmt.Sprintf("auto s = std::make_shared<GoSlot>(id);\n\tauto obj = static_cast<%s *>(self);\n"+
-		"\treturn new QMetaObject::Connection(QObject::connect(obj, %s, obj, [s](%s) {%s%s qute_%s_signal(s->id, %s); }));",
-		cls, ptr, strings.Join(lparams, ", "), " "+strings.Join(conv, " "), argDecl, c.Module.Pkg, args)
+		"\treturn new QMetaObject::Connection(QObject::connect(obj, %s, obj, [s](%s) {%s%s qute_signal(s->id, %s); }));",
+		cls, ptr, strings.Join(lparams, ", "), " "+strings.Join(conv, " "), argDecl, args)
 	return cFunc{decl: cDecl("void *", sg.CName, []string{"void *self", "uintptr_t id"}), body: body}
 }
 
@@ -472,14 +509,23 @@ func (g *Gen) emitCpp(m *Module, b *buf) {
 func (g *Gen) emitCppBody(m *Module, b *buf) {
 	b.p("\n#include <QtCore/QCoreApplication>\n#include <QtCore/QThread>\n#include <cstring>\n#include <memory>\n")
 	b.p("extern \"C\" {")
-	b.p("void qute_%s_signal(uintptr_t id, void *args);", m.Pkg)
+	b.p("void qute_%s_signal(uintptr_t id, void *args, bool off);", m.Pkg)
 	b.p("void qute_%s_release(uintptr_t id);", m.Pkg)
-	b.p("bool qute_%s_virtual(uintptr_t id, int idx, void *args, void *ret);", m.Pkg)
+	b.p("bool qute_%s_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);", m.Pkg)
 	b.p("void qute_%s_wrong_thread(void);", m.Pkg)
 	b.p("void qute_%s_dead(void *key);", m.Pkg)
-	b.p("void qute_%s_call(uintptr_t id, void *args, void *ret);", m.Pkg)
+	b.p("void qute_%s_call(uintptr_t id, void *args, void *ret, bool off);", m.Pkg)
 	b.p("}\n")
-	b.p("static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_%s_call(id, args, ret); }\n", m.Pkg)
+	b.p("// Every entry into a Go handler (signal, virtual, std::function) must come")
+	b.p("// from the GUI thread. The thread is looked up here, where it is cheap, and")
+	b.p("// passed in: the Go side panics when it is not the GUI thread, without a")
+	b.p("// call back into C++ to ask.")
+	b.p("static inline bool qute_off_gui() {")
+	b.p("\tQCoreApplication *app = QCoreApplication::instance();")
+	b.p("\treturn app && QThread::currentThread() != app->thread();\n}\n")
+	b.p("static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_%s_call(id, args, ret, qute_off_gui()); }", m.Pkg)
+	b.p("static inline void qute_signal(uintptr_t id, void *args) { qute_%s_signal(id, args, qute_off_gui()); }", m.Pkg)
+	b.p("static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_%s_virtual(id, idx, args, ret, qute_off_gui()); }\n", m.Pkg)
 	b.p("// Every Qt call must come from the GUI thread; the Go side panics otherwise.")
 	b.p("// It is checked here, in every build (qute_debug builds also name the")
 	b.p("// method): QCoreApplication::instance() and two thread lookups. Before the")
@@ -587,8 +633,9 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 			case p.View:
 				b.p("\t\t\tvoid * c%d = static_cast<void *>(%s);", i, p.CName)
 			case inlineVal(p.T):
-				// lent for the call: Go copies its bytes (rt.CopyInline)
-				b.p("\t\t\tvoid * c%d = const_cast<void *>(static_cast<const void *>(&%s));", i, p.CName)
+				// lent for the call: Go copies its bytes, and takes the objects
+				// it depends on from here (rt.InlineArg)
+				b.p("\t\t\tqute_inline_arg c%d = %s;", i, g.inlineArgCpp(p.T.cls, p.CName))
 			default:
 				b.p("\t\t\t%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName))
 			}
@@ -606,19 +653,19 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		// false: the Go value is gone (its tree was collected and is about to
 		// be deleted), so the C++ implementation runs instead
 		if v.Ret.k == kVoid {
-			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, nullptr)) {%s\n\t\t\t\treturn;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb)
+			b.p("\t\t\tif (qute_virtual(qute_id, %d, %s, nullptr)) {%s\n\t\t\t\treturn;\n\t\t\t}", v.VIndex, args, wb)
 		} else {
 			if inlineVal(v.Ret) {
 				// Go copies the value it returns into r (rt.CopyValueOut)
 				b.p("\t\t\t%s r{};", v.Ret.cls.Cpp)
-				b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn r;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb)
+				b.p("\t\t\tif (qute_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn r;\n\t\t\t}", v.VIndex, args, wb)
 			} else if v.Ret.k == kValue || v.Ret.k == kObj {
 				b.p("\t\t\t%s r = nullptr;", cType(v.Ret))
 			} else {
 				b.p("\t\t\t%s r{};", cType(v.Ret))
 			}
 			if !inlineVal(v.Ret) {
-				b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn %s;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb, g.cppVirtRet(v.Ret, "r"))
+				b.p("\t\t\tif (qute_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn %s;\n\t\t\t}", v.VIndex, args, wb, g.cppVirtRet(v.Ret, "r"))
 			}
 		}
 		for _, x := range free {
@@ -732,12 +779,12 @@ func (g *Gen) emitHelpers(m *Module) []byte {
 		b.p("type Connection = rt.Connection\n")
 	}
 	pkg := m.Pkg
-	b.p("//export qute_%s_signal\nfunc qute_%s_signal(id C.uintptr_t, args unsafe.Pointer) { rt.InvokeCallback(uintptr(id), args) }\n", pkg, pkg)
+	b.p("//export qute_%s_signal\nfunc qute_%s_signal(id C.uintptr_t, args unsafe.Pointer, off C.bool) {\n\trt.InvokeCallback(uintptr(id), args, bool(off))\n}\n", pkg, pkg)
 	b.p("//export qute_%s_release\nfunc qute_%s_release(id C.uintptr_t) { rt.ReleaseCallback(uintptr(id)) }\n", pkg, pkg)
-	b.p("//export qute_%s_virtual\nfunc qute_%s_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer) C.bool {\n\treturn C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret))\n}\n", pkg, pkg)
+	b.p("//export qute_%s_virtual\nfunc qute_%s_virtual(id C.uintptr_t, idx C.int, args, ret unsafe.Pointer, off C.bool) C.bool {\n\treturn C.bool(rt.Dispatch(uintptr(id), int(idx), args, ret, bool(off)))\n}\n", pkg, pkg)
 	b.p("//export qute_%s_wrong_thread\nfunc qute_%s_wrong_thread() { rt.WrongThread() }\n", pkg, pkg)
 	b.p("//export qute_%s_dead\nfunc qute_%s_dead(key unsafe.Pointer) { rt.Destroyed(key, \"destroyed by Qt\") }\n", pkg, pkg)
-	b.p("//export qute_%s_call\nfunc qute_%s_call(id C.uintptr_t, args, ret unsafe.Pointer) { rt.InvokeFunc(uintptr(id), args, ret) }\n", pkg, pkg)
+	b.p("//export qute_%s_call\nfunc qute_%s_call(id C.uintptr_t, args, ret unsafe.Pointer, off C.bool) {\n\trt.InvokeFunc(uintptr(id), args, ret, bool(off))\n}\n", pkg, pkg)
 	b.p("func checkLayout() string {\n\tif p := C.qute_%s_check_layout(); p != nil {\n\t\treturn C.GoString(p)\n\t}\n\treturn \"\"\n}\n", pkg)
 	b.p("%s", goHelpers)
 	// struct converters
@@ -1078,26 +1125,18 @@ func (g *Gen) emitClass(c *Class) []byte {
 			}
 			b.p("// Every %s holds the %s it belongs to (depends-on, found in C++).", cls, dep.Class)
 			b.p("func init() {\n\trt.RegisterDependency(%q, func(p unsafe.Pointer) *rt.Handle {", cls)
-			b.p("\t\treturn rt.WrapClass(C.qute_%s_dep%d(p), %q, rt.KeepOrBorrow)\n\t})\n}\n", cls, i, dep.Class)
+			b.p("\t\treturn rt.WrapClass(C.qute_%s_dep%d(p), %q, rt.KeepOrBorrow)\n\t})", cls, i, dep.Class)
+			b.p("\trt.RegisterDependencyWrap(%q, func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, %q, rt.KeepOrBorrow) })\n}\n", cls, dep.Class)
 			continue
 		}
-		// the getter may be declared on a base (QWidgetItem::widget overrides
-		// QLayoutItem's); its shim takes the base pointer, which every primary
-		// base shares
-		var getter *Method
-		for k := c; k != nil && getter == nil; k = k.Base {
-			for _, mm := range k.Methods {
-				if mm.IR.Name == dep.Getter && len(mm.Params) == 0 && mm.Ret != nil && mm.Ret.k == kObj && !mm.Ret.ref {
-					getter = mm
-				}
-			}
-		}
+		getter := depGetter(c, dep)
 		if getter == nil {
 			g.report.warn("%s: depends-on %q is not a bound getter returning an object pointer", cls, dep.Getter)
 		} else {
 			b.p("// Every %s holds the %s it belongs to (depends-on: %s).", cls, getter.Ret.cls.Name, dep.Getter)
 			b.p("func init() {\n\trt.RegisterDependency(%q, func(p unsafe.Pointer) *rt.Handle {", cls)
-			b.p("\t\treturn rt.WrapClass(C.%s(p), %q, rt.KeepOrBorrow)\n\t})\n}\n", getter.CName, getter.Ret.cls.Name)
+			b.p("\t\treturn rt.WrapClass(C.%s(p), %q, rt.KeepOrBorrow)\n\t})", getter.CName, getter.Ret.cls.Name)
+			b.p("\trt.RegisterDependencyWrap(%q, func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, %q, rt.KeepOrBorrow) })\n}\n", cls, getter.Ret.cls.Name)
 		}
 	}
 	own := g.qual(core, m, "Ownership")
@@ -1611,7 +1650,7 @@ func (g *Gen) unpackArgs(c *Class, mm *Method, b *buf, indent string) []string {
 			b.p("%sdefer %s.Expire()", indent, hn)
 			b.p("%s%s := rt.View[%s](%s, %sP)", indent, p.GoName, cls, hn, p.GoName)
 		} else if inlineVal(p.T) {
-			b.p("%s%s := %s", indent, p.GoName, g.wrapExpr(p.T.cls, cv, "rt.CopyInline", m, ""))
+			b.p("%s%s := rt.InlineArgView[%s](a[%d], %q)", indent, p.GoName, g.qual(p.T.cls.Module, m, p.T.cls.Name), i, p.T.cls.Name)
 		} else {
 			b.p("%s%s := %s", indent, p.GoName, g.goRet(p.T, cv, "rt.KeepOrBorrow", m))
 		}

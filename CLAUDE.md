@@ -199,7 +199,10 @@ class: <bound class>}` when Qt has no getter; a class may list several
   some objects have (pins, connections, keeps, anchoring, a Go subclass,
   debug call sites) is in a `handleExt` made on first use, and the first
   wrapper is cached without a slice. A value Qt hands an override for every
-  row then costs three small allocations; `bench_test.go` measures it.
+  row costs two allocations, its bytes and its handle and wrapper made
+  together (`rt.InlineArgView`, `InlineOwnedView`), and no call into C++: the
+  shim passes the objects it depends on (`qute_inline_arg`, filled from its
+  `depends-on`; `rt.RegisterDependencyWrap`). `bench_test.go` measures it.
 - **Registry.** Object address to a `weak.Pointer[Handle]` plus a serial.
   Wrapping a pointer twice returns the same handle, and the same Go wrapper
   per type; an upcast of a derived wrapper returns its embedded base, so
@@ -360,7 +363,8 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   (`QWebEngineUrlScheme`) works. The hand-written helpers (`Tree`,
   `Screenshot`, `qutetest.Click`, `Wait`...) call `rt.GUIOnly`.
 - Every entry from Qt into a Go handler (signal, virtual, `std::function`)
-  checks it runs on the GUI thread and panics otherwise: handlers use Qt
+  checks it runs on the GUI thread (the generated C++ looks the thread up,
+  `qute_off_gui`, and passes the answer in, so Go need not call C++ to ask) and panics otherwise: handlers use Qt
   objects, and the callback state (`InCallback`, captured panics) is the GUI
   thread's. A callback Qt runs on a worker thread gets a hand-written binding
   that converts its arguments to plain Go values and skips the runtime

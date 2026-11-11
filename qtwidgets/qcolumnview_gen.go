@@ -204,7 +204,7 @@ func (this *QColumnView) OnUpdatePreviewWidget(f func(index *qtcore.QModelIndex)
 	self := rt.Use(unsafe.Pointer(this), "QColumnView.OnUpdatePreviewWidget")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+		index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 		f(index)
 	})
 	return rt.NewConnection(C.qute_QColumnView_updatePreviewWidget(self, C.uintptr_t(id)))
@@ -233,7 +233,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			hint := QAbstractItemViewScrollHint(*(*C.int64_t)(a[1]))
 			v.(interface {
 				ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
@@ -253,7 +253,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				VisualRect(*qtcore.QModelIndex) qtcore.QRect
 			}).VisualRect(index)
@@ -288,7 +288,7 @@ var qColumnViewVTable = []rt.Virtual{
 	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			v.(interface{ SetRootIndex(*qtcore.QModelIndex) }).SetRootIndex(index)
 		}},
 	{Name: "SelectAll", Has: func(v any) bool { _, ok := v.(interface{ SelectAll() }); return ok },
@@ -304,7 +304,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				IsIndexHidden(*qtcore.QModelIndex) bool
 			}).IsIndexHidden(index)
@@ -382,7 +382,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
 			v.(interface {
@@ -397,8 +397,8 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			current := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
-			previous := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			current := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
+			previous := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			v.(interface {
 				CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
 			}).CurrentChanged(current, previous)
@@ -418,7 +418,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			rootIndex := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			rootIndex := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				CreateColumn(*qtcore.QModelIndex) *QAbstractItemView
 			}).CreateColumn(rootIndex)
@@ -455,7 +455,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
 			}).ItemDelegateForIndex(index)
@@ -479,8 +479,8 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			topLeft := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
-			bottomRight := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			topLeft := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
+			bottomRight := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			roles := quteList(*(*C.qute_list)(a[2]), func(e C.int) int { return int(e) })
 			v.(interface {
 				DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
@@ -494,7 +494,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
 			v.(interface {
@@ -594,7 +594,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			trigger := QAbstractItemViewEditTriggers(*(*C.int64_t)(a[1]))
 			eventP := *(*unsafe.Pointer)(a[2])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
@@ -613,7 +613,7 @@ var qColumnViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
@@ -1022,7 +1022,7 @@ func (s *QColumnViewSuper) IndexAt(point qtcore.QPoint) *qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.IndexAt")
 	r := C.qute_QColumnView_super_0(self, cQPoint(point))
 	runtime.KeepAlive(s.this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // ScrollTo calls QColumnView::scrollTo.
@@ -1103,7 +1103,7 @@ func (s *QColumnViewSuper) MoveCursor(cursorAction QAbstractItemViewCursorAction
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.MoveCursor")
 	r := C.qute_QColumnView_super_9(self, C.int64_t(cursorAction), C.int64_t(modifiers))
 	runtime.KeepAlive(s.this)
-	return rt.View[qtcore.QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[qtcore.QModelIndex](r, "QModelIndex")
 }
 
 // ResizeEvent calls QColumnView::resizeEvent.
@@ -1350,7 +1350,7 @@ func (s *QColumnViewSuper) SelectedIndexes() []*qtcore.QModelIndex {
 	r := C.qute_QColumnView_super_38(self)
 	runtime.KeepAlive(s.this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
-		return rt.View[qtcore.QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
+		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
 	})
 }
 

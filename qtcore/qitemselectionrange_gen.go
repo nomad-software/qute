@@ -227,7 +227,7 @@ func (this *QItemSelectionRange) Parent() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Parent")
 	r := C.qute_QItemSelectionRange_parent(self)
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Model wraps QItemSelectionRange::model.
@@ -331,7 +331,5 @@ func (this *QItemSelectionRange) Indexes() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionRange.Indexes")
 	r := C.qute_QItemSelectionRange_indexes(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }

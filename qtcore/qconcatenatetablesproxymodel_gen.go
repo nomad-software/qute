@@ -146,7 +146,7 @@ func (this *QConcatenateTablesProxyModel) MapFromSource(sourceIndex *QModelIndex
 	r := C.qute_QConcatenateTablesProxyModel_mapFromSource(self, rt.UseArg(unsafe.Pointer(sourceIndex), "QConcatenateTablesProxyModel.MapFromSource"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(sourceIndex)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // MapToSource wraps QConcatenateTablesProxyModel::mapToSource.
@@ -161,7 +161,7 @@ func (this *QConcatenateTablesProxyModel) MapToSource(proxyIndex *QModelIndex) *
 	r := C.qute_QConcatenateTablesProxyModel_mapToSource(self, rt.UseArg(unsafe.Pointer(proxyIndex), "QConcatenateTablesProxyModel.MapToSource"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(proxyIndex)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 var qConcatenateTablesProxyModelVTable = []rt.Virtual{
@@ -173,7 +173,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			r := v.(interface {
 				Data(*QModelIndex, int) *QVariant
@@ -188,7 +188,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			role := int(*(*C.int)(a[2]))
 			r := v.(interface {
@@ -204,7 +204,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			proxyIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			proxyIndex := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				ItemData(*QModelIndex) map[int]*QVariant
 			}).ItemData(proxyIndex)
@@ -220,7 +220,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
 				return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 			})
@@ -232,7 +232,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "Flags", Has: func(v any) bool { _, ok := v.(interface{ Flags(*QModelIndex) ItemFlags }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ Flags(*QModelIndex) ItemFlags }).Flags(index)
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
@@ -246,7 +246,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				Index(int, int, *QModelIndex) *QModelIndex
 			}).Index(row, column, parent)
@@ -260,7 +260,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Parent(*QModelIndex) *QModelIndex
 			}).Parent(index)
@@ -269,7 +269,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ RowCount(*QModelIndex) int }).RowCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
@@ -292,7 +292,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ ColumnCount(*QModelIndex) int }).ColumnCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
@@ -310,9 +310,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *QModelIndex {
-				return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-			})
+			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 			r := v.(interface {
 				MimeData([]*QModelIndex) *QMimeData
 			}).MimeData(indexes)
@@ -333,7 +331,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
+			parent := rt.InlineArgView[QModelIndex](a[4], "QModelIndex")
 			r := v.(interface {
 				CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
 			}).CanDropMimeData(data, action, row, column, parent)
@@ -351,7 +349,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
+			parent := rt.InlineArgView[QModelIndex](a[4], "QModelIndex")
 			r := v.(interface {
 				DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
 			}).DropMimeData(data, action, row, column, parent)
@@ -360,7 +358,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "Span", Has: func(v any) bool { _, ok := v.(interface{ Span(*QModelIndex) QSize }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ Span(*QModelIndex) QSize }).Span(index)
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
@@ -380,7 +378,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			idx := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			idx := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				Sibling(int, int, *QModelIndex) *QModelIndex
 			}).Sibling(row, column, idx)
@@ -389,7 +387,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "HasChildren", Has: func(v any) bool { _, ok := v.(interface{ HasChildren(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ HasChildren(*QModelIndex) bool }).HasChildren(parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -413,7 +411,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "ClearItemData", Has: func(v any) bool { _, ok := v.(interface{ ClearItemData(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ ClearItemData(*QModelIndex) bool }).ClearItemData(index)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -439,7 +437,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				InsertRows(int, int, *QModelIndex) bool
 			}).InsertRows(row, count, parent)
@@ -455,7 +453,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				InsertColumns(int, int, *QModelIndex) bool
 			}).InsertColumns(column, count, parent)
@@ -471,7 +469,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				RemoveRows(int, int, *QModelIndex) bool
 			}).RemoveRows(row, count, parent)
@@ -487,7 +485,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				RemoveColumns(int, int, *QModelIndex) bool
 			}).RemoveColumns(column, count, parent)
@@ -501,10 +499,10 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			sourceRow := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.InlineArgView[QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
@@ -519,10 +517,10 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			sourceColumn := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.InlineArgView[QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
@@ -532,13 +530,13 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			v.(interface{ FetchMore(*QModelIndex) }).FetchMore(parent)
 		}},
 	{Name: "CanFetchMore", Has: func(v any) bool { _, ok := v.(interface{ CanFetchMore(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ CanFetchMore(*QModelIndex) bool }).CanFetchMore(parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -557,7 +555,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Buddy(*QModelIndex) *QModelIndex
 			}).Buddy(index)
@@ -571,7 +569,7 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			start := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			start := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
 			hits := int(*(*C.int)(a[3]))
@@ -734,7 +732,7 @@ func (s *QConcatenateTablesProxyModelSuper) Index(row int, column int, parent *Q
 	r := C.qute_QConcatenateTablesProxyModel_super_5(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QConcatenateTablesProxyModel.Super.Index"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Parent calls QConcatenateTablesProxyModel::parent.
@@ -743,7 +741,7 @@ func (s *QConcatenateTablesProxyModelSuper) Parent(index *QModelIndex) *QModelIn
 	r := C.qute_QConcatenateTablesProxyModel_super_6(self, rt.UseArg(unsafe.Pointer(index), "QConcatenateTablesProxyModel.Super.Parent"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // RowCount calls QConcatenateTablesProxyModel::rowCount.
@@ -841,7 +839,7 @@ func (s *QConcatenateTablesProxyModelSuper) Sibling(row int, column int, idx *QM
 	r := C.qute_QConcatenateTablesProxyModel_super_16(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QConcatenateTablesProxyModel.Super.Sibling"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(idx)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // HasChildren calls QAbstractItemModel::hasChildren.
@@ -973,7 +971,7 @@ func (s *QConcatenateTablesProxyModelSuper) Buddy(index *QModelIndex) *QModelInd
 	r := C.qute_QConcatenateTablesProxyModel_super_31(self, rt.UseArg(unsafe.Pointer(index), "QConcatenateTablesProxyModel.Super.Buddy"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Match calls QAbstractItemModel::match.
@@ -983,9 +981,7 @@ func (s *QConcatenateTablesProxyModelSuper) Match(start *QModelIndex, role int, 
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(start)
 	runtime.KeepAlive(value)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // Submit calls QAbstractItemModel::submit.
@@ -1083,7 +1079,7 @@ func (b *QConcatenateTablesProxyModelBase) CreateIndex(row int, column int) *QMo
 	self := rt.Use(unsafe.Pointer(this), "QConcatenateTablesProxyModel.CreateIndex")
 	r := C.qute_QConcatenateTablesProxyModel_prot_createIndex(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // CreateIndexWithUint64 wraps the protected QAbstractItemModel::createIndex for subclasses.
@@ -1092,7 +1088,7 @@ func (b *QConcatenateTablesProxyModelBase) CreateIndexWithUint64(row int, column
 	self := rt.Use(unsafe.Pointer(this), "QConcatenateTablesProxyModel.CreateIndexWithUint64")
 	r := C.qute_QConcatenateTablesProxyModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // EncodeData wraps the protected QAbstractItemModel::encodeData for subclasses.
@@ -1275,9 +1271,7 @@ func (b *QConcatenateTablesProxyModelBase) PersistentIndexList() []*QModelIndex 
 	self := rt.Use(unsafe.Pointer(this), "QConcatenateTablesProxyModel.PersistentIndexList")
 	r := C.qute_QConcatenateTablesProxyModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // NewQConcatenateTablesProxyModelWith constructs a QConcatenateTablesProxyModel whose virtual methods dispatch to v. The

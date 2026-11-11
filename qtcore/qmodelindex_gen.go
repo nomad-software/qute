@@ -37,6 +37,7 @@ func init() {
 	rt.RegisterDependency("QModelIndex", func(p unsafe.Pointer) *rt.Handle {
 		return rt.WrapClass(C.qute_QModelIndex_model(p), "QAbstractItemModel", rt.KeepOrBorrow)
 	})
+	rt.RegisterDependencyWrap("QModelIndex", func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, "QAbstractItemModel", rt.KeepOrBorrow) })
 }
 
 // QModelIndexFromPtr wraps an existing C++ QModelIndex. This is an unsafe escape hatch: own says
@@ -172,7 +173,7 @@ func (this *QModelIndex) Parent() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Parent")
 	r := C.qute_QModelIndex_parent(self)
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Sibling wraps QModelIndex::sibling.
@@ -186,7 +187,7 @@ func (this *QModelIndex) Sibling(row int, column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.Sibling")
 	r := C.qute_QModelIndex_sibling(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // SiblingAtColumn wraps QModelIndex::siblingAtColumn.
@@ -200,7 +201,7 @@ func (this *QModelIndex) SiblingAtColumn(column int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.SiblingAtColumn")
 	r := C.qute_QModelIndex_siblingAtColumn(self, C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // SiblingAtRow wraps QModelIndex::siblingAtRow.
@@ -214,7 +215,7 @@ func (this *QModelIndex) SiblingAtRow(row int) *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QModelIndex.SiblingAtRow")
 	r := C.qute_QModelIndex_siblingAtRow(self, C.int(row))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Data wraps QModelIndex::data.

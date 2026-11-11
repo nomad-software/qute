@@ -33,6 +33,7 @@ func init() {
 	rt.RegisterDependency("QTextTableCell", func(p unsafe.Pointer) *rt.Handle {
 		return rt.WrapClass(C.qute_QTextTableCell_dep0(p), "QTextTable", rt.KeepOrBorrow)
 	})
+	rt.RegisterDependencyWrap("QTextTableCell", func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, "QTextTable", rt.KeepOrBorrow) })
 }
 
 // Every QTextTableCell holds the QTextDocument it belongs to (depends-on, found in C++).
@@ -40,6 +41,7 @@ func init() {
 	rt.RegisterDependency("QTextTableCell", func(p unsafe.Pointer) *rt.Handle {
 		return rt.WrapClass(C.qute_QTextTableCell_dep1(p), "QTextDocument", rt.KeepOrBorrow)
 	})
+	rt.RegisterDependencyWrap("QTextTableCell", func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, "QTextDocument", rt.KeepOrBorrow) })
 }
 
 // QTextTableCellFromPtr wraps an existing C++ QTextTableCell. This is an unsafe escape hatch: own says

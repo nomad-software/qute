@@ -610,7 +610,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			proxyIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			proxyIndex := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				MapToSource(*QModelIndex) *QModelIndex
 			}).MapToSource(proxyIndex)
@@ -624,7 +624,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			sourceIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceIndex := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				MapFromSource(*QModelIndex) *QModelIndex
 			}).MapFromSource(sourceIndex)
@@ -662,7 +662,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			source_row := int(*(*C.int)(a[0]))
-			source_parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			source_parent := rt.InlineArgView[QModelIndex](a[1], "QModelIndex")
 			r := v.(interface{ FilterAcceptsRow(int, *QModelIndex) bool }).FilterAcceptsRow(source_row, source_parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -670,7 +670,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			source_column := int(*(*C.int)(a[0]))
-			source_parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			source_parent := rt.InlineArgView[QModelIndex](a[1], "QModelIndex")
 			r := v.(interface{ FilterAcceptsColumn(int, *QModelIndex) bool }).FilterAcceptsColumn(source_column, source_parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -682,8 +682,8 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			source_left := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
-			source_right := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+			source_left := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
+			source_right := rt.InlineArgView[QModelIndex](a[1], "QModelIndex")
 			r := v.(interface {
 				LessThan(*QModelIndex, *QModelIndex) bool
 			}).LessThan(source_left, source_right)
@@ -699,7 +699,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				Index(int, int, *QModelIndex) *QModelIndex
 			}).Index(row, column, parent)
@@ -713,7 +713,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			child := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			child := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Parent(*QModelIndex) *QModelIndex
 			}).Parent(child)
@@ -729,7 +729,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			idx := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			idx := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				Sibling(int, int, *QModelIndex) *QModelIndex
 			}).Sibling(row, column, idx)
@@ -738,21 +738,21 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ RowCount(*QModelIndex) int }).RowCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ ColumnCount(*QModelIndex) int }).ColumnCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasChildren", Has: func(v any) bool { _, ok := v.(interface{ HasChildren(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ HasChildren(*QModelIndex) bool }).HasChildren(parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -764,7 +764,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			r := v.(interface {
 				Data(*QModelIndex, int) *QVariant
@@ -779,7 +779,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			role := int(*(*C.int)(a[2]))
 			r := v.(interface {
@@ -828,9 +828,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *QModelIndex {
-				return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-			})
+			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 			r := v.(interface {
 				MimeData([]*QModelIndex) *QMimeData
 			}).MimeData(indexes)
@@ -851,7 +849,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
+			parent := rt.InlineArgView[QModelIndex](a[4], "QModelIndex")
 			r := v.(interface {
 				DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
 			}).DropMimeData(data, action, row, column, parent)
@@ -867,7 +865,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				InsertRows(int, int, *QModelIndex) bool
 			}).InsertRows(row, count, parent)
@@ -883,7 +881,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				InsertColumns(int, int, *QModelIndex) bool
 			}).InsertColumns(column, count, parent)
@@ -899,7 +897,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				RemoveRows(int, int, *QModelIndex) bool
 			}).RemoveRows(row, count, parent)
@@ -915,7 +913,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
+			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
 			r := v.(interface {
 				RemoveColumns(int, int, *QModelIndex) bool
 			}).RemoveColumns(column, count, parent)
@@ -924,20 +922,20 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			v.(interface{ FetchMore(*QModelIndex) }).FetchMore(parent)
 		}},
 	{Name: "CanFetchMore", Has: func(v any) bool { _, ok := v.(interface{ CanFetchMore(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ CanFetchMore(*QModelIndex) bool }).CanFetchMore(parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Flags", Has: func(v any) bool { _, ok := v.(interface{ Flags(*QModelIndex) ItemFlags }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ Flags(*QModelIndex) ItemFlags }).Flags(index)
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
@@ -949,7 +947,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				Buddy(*QModelIndex) *QModelIndex
 			}).Buddy(index)
@@ -963,7 +961,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			start := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			start := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
 			hits := int(*(*C.int)(a[3]))
@@ -976,7 +974,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	{Name: "Span", Has: func(v any) bool { _, ok := v.(interface{ Span(*QModelIndex) QSize }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ Span(*QModelIndex) QSize }).Span(index)
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
@@ -1018,7 +1016,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface {
 				ItemData(*QModelIndex) map[int]*QVariant
 			}).ItemData(index)
@@ -1034,7 +1032,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
 				return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 			})
@@ -1046,7 +1044,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	{Name: "ClearItemData", Has: func(v any) bool { _, ok := v.(interface{ ClearItemData(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			r := v.(interface{ ClearItemData(*QModelIndex) bool }).ClearItemData(index)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -1062,7 +1060,7 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
+			parent := rt.InlineArgView[QModelIndex](a[4], "QModelIndex")
 			r := v.(interface {
 				CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
 			}).CanDropMimeData(data, action, row, column, parent)
@@ -1088,10 +1086,10 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			sourceRow := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.InlineArgView[QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
@@ -1106,10 +1104,10 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			sourceColumn := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.InlineArgView[QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
@@ -1215,7 +1213,7 @@ func (s *QSortFilterProxyModelSuper) MapToSource(proxyIndex *QModelIndex) *QMode
 	r := C.qute_QSortFilterProxyModel_super_1(self, rt.UseArg(unsafe.Pointer(proxyIndex), "QSortFilterProxyModel.Super.MapToSource"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(proxyIndex)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // MapFromSource calls QSortFilterProxyModel::mapFromSource.
@@ -1224,7 +1222,7 @@ func (s *QSortFilterProxyModelSuper) MapFromSource(sourceIndex *QModelIndex) *QM
 	r := C.qute_QSortFilterProxyModel_super_2(self, rt.UseArg(unsafe.Pointer(sourceIndex), "QSortFilterProxyModel.Super.MapFromSource"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(sourceIndex)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // MapSelectionToSource calls QSortFilterProxyModel::mapSelectionToSource.
@@ -1279,7 +1277,7 @@ func (s *QSortFilterProxyModelSuper) Index(row int, column int, parent *QModelIn
 	r := C.qute_QSortFilterProxyModel_super_8(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(parent), "QSortFilterProxyModel.Super.Index"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Parent calls QSortFilterProxyModel::parent.
@@ -1288,7 +1286,7 @@ func (s *QSortFilterProxyModelSuper) Parent(child *QModelIndex) *QModelIndex {
 	r := C.qute_QSortFilterProxyModel_super_9(self, rt.UseArg(unsafe.Pointer(child), "QSortFilterProxyModel.Super.Parent"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(child)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Sibling calls QSortFilterProxyModel::sibling.
@@ -1297,7 +1295,7 @@ func (s *QSortFilterProxyModelSuper) Sibling(row int, column int, idx *QModelInd
 	r := C.qute_QSortFilterProxyModel_super_10(self, C.int(row), C.int(column), rt.UseArg(unsafe.Pointer(idx), "QSortFilterProxyModel.Super.Sibling"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(idx)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // RowCount calls QSortFilterProxyModel::rowCount.
@@ -1455,7 +1453,7 @@ func (s *QSortFilterProxyModelSuper) Buddy(index *QModelIndex) *QModelIndex {
 	r := C.qute_QSortFilterProxyModel_super_27(self, rt.UseArg(unsafe.Pointer(index), "QSortFilterProxyModel.Super.Buddy"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // Match calls QSortFilterProxyModel::match.
@@ -1465,9 +1463,7 @@ func (s *QSortFilterProxyModelSuper) Match(start *QModelIndex, role int, value *
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(start)
 	runtime.KeepAlive(value)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // Span calls QSortFilterProxyModel::span.
@@ -1714,7 +1710,7 @@ func (b *QSortFilterProxyModelBase) CreateSourceIndex(row int, col int, internal
 	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.CreateSourceIndex")
 	r := C.qute_QSortFilterProxyModel_prot_createSourceIndex(self, C.int(row), C.int(col), internalPtr)
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
@@ -1723,7 +1719,7 @@ func (b *QSortFilterProxyModelBase) CreateIndex(row int, column int) *QModelInde
 	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.CreateIndex")
 	r := C.qute_QSortFilterProxyModel_prot_createIndex(self, C.int(row), C.int(column))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // CreateIndexWithUint64 wraps the protected QAbstractItemModel::createIndex for subclasses.
@@ -1732,7 +1728,7 @@ func (b *QSortFilterProxyModelBase) CreateIndexWithUint64(row int, column int, i
 	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.CreateIndexWithUint64")
 	r := C.qute_QSortFilterProxyModel_prot_createIndex_1(self, C.int(row), C.int(column), C.ulonglong(idArg))
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // EncodeData wraps the protected QAbstractItemModel::encodeData for subclasses.
@@ -1915,9 +1911,7 @@ func (b *QSortFilterProxyModelBase) PersistentIndexList() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.PersistentIndexList")
 	r := C.qute_QSortFilterProxyModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // NewQSortFilterProxyModelWith constructs a QSortFilterProxyModel whose virtual methods dispatch to v. The

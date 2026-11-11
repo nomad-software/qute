@@ -57,10 +57,6 @@ func qute_rt_reparent(obj unsafe.Pointer, what C.int) {
 // IsGUIThread reports whether the caller runs on the Qt GUI thread.
 func IsGUIThread() bool { return bool(C.qute_rt_is_gui_thread()) }
 
-// offGUIThread reports whether an application exists and the caller is not
-// on its thread.
-func offGUIThread() bool { return bool(C.qute_rt_off_gui_thread()) }
-
 // AppExists reports whether a Q*Application object exists.
 func AppExists() bool { return bool(C.qute_rt_app_exists()) }
 

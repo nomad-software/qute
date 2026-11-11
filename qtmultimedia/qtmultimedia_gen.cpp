@@ -53,15 +53,26 @@
 #include <memory>
 
 extern "C" {
-void qute_qtmultimedia_signal(uintptr_t id, void *args);
+void qute_qtmultimedia_signal(uintptr_t id, void *args, bool off);
 void qute_qtmultimedia_release(uintptr_t id);
-bool qute_qtmultimedia_virtual(uintptr_t id, int idx, void *args, void *ret);
+bool qute_qtmultimedia_virtual(uintptr_t id, int idx, void *args, void *ret, bool off);
 void qute_qtmultimedia_wrong_thread(void);
 void qute_qtmultimedia_dead(void *key);
-void qute_qtmultimedia_call(uintptr_t id, void *args, void *ret);
+void qute_qtmultimedia_call(uintptr_t id, void *args, void *ret, bool off);
 }
 
-static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtmultimedia_call(id, args, ret); }
+// Every entry into a Go handler (signal, virtual, std::function) must come
+// from the GUI thread. The thread is looked up here, where it is cheap, and
+// passed in: the Go side panics when it is not the GUI thread, without a
+// call back into C++ to ask.
+static inline bool qute_off_gui() {
+	QCoreApplication *app = QCoreApplication::instance();
+	return app && QThread::currentThread() != app->thread();
+}
+
+static inline void qute_call(uintptr_t id, void *args, void *ret) { qute_qtmultimedia_call(id, args, ret, qute_off_gui()); }
+static inline void qute_signal(uintptr_t id, void *args) { qute_qtmultimedia_signal(id, args, qute_off_gui()); }
+static inline bool qute_virtual(uintptr_t id, int idx, void *args, void *ret) { return qute_qtmultimedia_virtual(id, idx, args, ret, qute_off_gui()); }
 
 // Every Qt call must come from the GUI thread; the Go side panics otherwise.
 // It is checked here, in every build (qute_debug builds also name the
@@ -96,7 +107,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -109,7 +120,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -120,7 +131,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -131,7 +142,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -142,7 +153,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -162,7 +173,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -175,7 +186,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -186,7 +197,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -197,7 +208,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -208,7 +219,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -228,7 +239,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -241,7 +252,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -252,7 +263,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -263,7 +274,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -274,7 +285,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -294,7 +305,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -307,7 +318,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -318,7 +329,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -329,7 +340,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -340,7 +351,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -360,7 +371,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -373,7 +384,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -384,7 +395,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -395,7 +406,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -406,7 +417,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -426,7 +437,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -439,7 +450,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -450,7 +461,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -461,7 +472,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -472,7 +483,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -492,7 +503,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -505,7 +516,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -516,7 +527,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -527,7 +538,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -538,7 +549,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -558,7 +569,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -571,7 +582,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -582,7 +593,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -593,7 +604,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -604,7 +615,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -624,7 +635,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -637,7 +648,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -648,7 +659,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -659,7 +670,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -670,7 +681,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -690,7 +701,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -703,7 +714,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -714,7 +725,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -725,7 +736,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -736,7 +747,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -756,7 +767,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -769,7 +780,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -780,7 +791,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -791,7 +802,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -802,7 +813,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -822,7 +833,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -835,7 +846,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -846,7 +857,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -857,7 +868,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -868,7 +879,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -888,7 +899,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -901,7 +912,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -912,7 +923,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -923,7 +934,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -934,7 +945,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -954,7 +965,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -967,7 +978,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -978,7 +989,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -989,7 +1000,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1000,7 +1011,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1020,7 +1031,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1033,7 +1044,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1044,7 +1055,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1055,7 +1066,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1066,7 +1077,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1086,7 +1097,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1099,7 +1110,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1110,7 +1121,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1121,7 +1132,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1132,7 +1143,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1152,7 +1163,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1165,7 +1176,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1176,7 +1187,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1187,7 +1198,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1198,7 +1209,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1218,7 +1229,7 @@ public:
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 0, args, &r)) {
+			if (qute_virtual(qute_id, 0, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1231,7 +1242,7 @@ public:
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_qtmultimedia_virtual(qute_id, 1, args, &r)) {
+			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
@@ -1242,7 +1253,7 @@ public:
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 2, args, nullptr)) {
+			if (qute_virtual(qute_id, 2, args, nullptr)) {
 				return;
 			}
 		}
@@ -1253,7 +1264,7 @@ public:
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 3, args, nullptr)) {
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
 				return;
 			}
 		}
@@ -1264,7 +1275,7 @@ public:
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_qtmultimedia_virtual(qute_id, 4, args, nullptr)) {
+			if (qute_virtual(qute_id, 4, args, nullptr)) {
 				return;
 			}
 		}
@@ -1420,7 +1431,7 @@ void * qute_QAudioBufferInput_readyToSendAudioBuffer(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioBufferInput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioBufferInput::readyToSendAudioBuffer, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioBufferInput::readyToSendAudioBuffer, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QAudioBufferOutput
@@ -1480,7 +1491,7 @@ void * qute_QAudioBufferOutput_audioBufferReceived(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioBufferOutput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioBufferOutput::audioBufferReceived, obj, [s](const QAudioBuffer & a0) { void * c0 = static_cast<void *>(new QAudioBuffer(a0)); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioBufferOutput::audioBufferReceived, obj, [s](const QAudioBuffer & a0) { void * c0 = static_cast<void *>(new QAudioBuffer(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QAudioDecoder
@@ -1624,55 +1635,55 @@ void * qute_QAudioDecoder_bufferAvailableChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::bufferAvailableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::bufferAvailableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioDecoder_bufferReady(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::bufferReady, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::bufferReady, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAudioDecoder_finished(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::finished, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::finished, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAudioDecoder_isDecodingChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::isDecodingChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::isDecodingChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioDecoder_formatChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::formatChanged, obj, [s](const QAudioFormat & a0) { void * c0 = static_cast<void *>(new QAudioFormat(a0)); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::formatChanged, obj, [s](const QAudioFormat & a0) { void * c0 = static_cast<void *>(new QAudioFormat(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioDecoder_error_1(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, static_cast<void (QAudioDecoder::*)(QAudioDecoder::Error)>(&QAudioDecoder::error), obj, [s](QAudioDecoder::Error a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, static_cast<void (QAudioDecoder::*)(QAudioDecoder::Error)>(&QAudioDecoder::error), obj, [s](QAudioDecoder::Error a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioDecoder_sourceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::sourceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::sourceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAudioDecoder_positionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::positionChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::positionChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioDecoder_durationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioDecoder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::durationChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioDecoder::durationChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QAudioDevice
@@ -1912,19 +1923,19 @@ void * qute_QAudioInput_deviceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioInput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioInput::deviceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioInput::deviceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAudioInput_volumeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioInput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioInput::volumeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioInput::volumeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioInput_mutedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioInput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioInput::mutedChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioInput::mutedChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QAudioOutput
@@ -2012,19 +2023,19 @@ void * qute_QAudioOutput_deviceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioOutput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioOutput::deviceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioOutput::deviceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QAudioOutput_volumeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioOutput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioOutput::volumeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioOutput::volumeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QAudioOutput_mutedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioOutput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioOutput::mutedChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioOutput::mutedChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QAudioSink
@@ -2168,7 +2179,7 @@ void * qute_QAudioSink_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioSink *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioSink::stateChanged, obj, [s](QAudio::State a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioSink::stateChanged, obj, [s](QAudio::State a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QAudioSource
@@ -2312,7 +2323,7 @@ void * qute_QAudioSource_stateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QAudioSource *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QAudioSource::stateChanged, obj, [s](QAudio::State a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QAudioSource::stateChanged, obj, [s](QAudio::State a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 
 // ---- QCamera
@@ -2704,169 +2715,169 @@ void * qute_QCamera_activeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::activeChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::activeChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_errorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::errorChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::errorChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::errorOccurred, obj, [s](QCamera::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::errorOccurred, obj, [s](QCamera::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_cameraDeviceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::cameraDeviceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::cameraDeviceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_cameraFormatChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::cameraFormatChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::cameraFormatChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_supportedFeaturesChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::supportedFeaturesChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::supportedFeaturesChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_focusModeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::focusModeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::focusModeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_zoomFactorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::zoomFactorChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::zoomFactorChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_minimumZoomFactorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::minimumZoomFactorChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::minimumZoomFactorChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_maximumZoomFactorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::maximumZoomFactorChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::maximumZoomFactorChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_focusDistanceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::focusDistanceChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::focusDistanceChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_focusPointChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::focusPointChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::focusPointChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_customFocusPointChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::customFocusPointChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::customFocusPointChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_flashReady(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::flashReady, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::flashReady, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_flashModeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::flashModeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::flashModeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_torchModeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::torchModeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::torchModeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_exposureTimeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::exposureTimeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::exposureTimeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_manualExposureTimeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::manualExposureTimeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::manualExposureTimeChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_isoSensitivityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::isoSensitivityChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::isoSensitivityChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_manualIsoSensitivityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::manualIsoSensitivityChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::manualIsoSensitivityChanged, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_exposureCompensationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::exposureCompensationChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::exposureCompensationChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QCamera_exposureModeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::exposureModeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::exposureModeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_whiteBalanceModeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::whiteBalanceModeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::whiteBalanceModeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_colorTemperatureChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::colorTemperatureChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::colorTemperatureChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_brightnessChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::brightnessChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::brightnessChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_contrastChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::contrastChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::contrastChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_saturationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::saturationChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::saturationChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QCamera_hueChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QCamera *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::hueChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QCamera::hueChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QCameraDevice
@@ -3132,73 +3143,73 @@ void * qute_QImageCapture_errorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::errorChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::errorChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QImageCapture_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::errorOccurred, obj, [s](int a0, QImageCapture::Error a1, const QString & a2) { int c0 = static_cast<int>(a0); int64_t c1 = static_cast<int64_t>(a1); qute_str c2 = qute_ret_str(a2); void *args[] = {&c0, &c1, &c2}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::errorOccurred, obj, [s](int a0, QImageCapture::Error a1, const QString & a2) { int c0 = static_cast<int>(a0); int64_t c1 = static_cast<int64_t>(a1); qute_str c2 = qute_ret_str(a2); void *args[] = {&c0, &c1, &c2}; qute_signal(s->id, args); }));
 }
 void * qute_QImageCapture_readyForCaptureChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::readyForCaptureChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::readyForCaptureChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QImageCapture_metaDataChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::metaDataChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::metaDataChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QImageCapture_fileFormatChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::fileFormatChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::fileFormatChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QImageCapture_qualityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::qualityChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::qualityChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QImageCapture_resolutionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::resolutionChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::resolutionChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QImageCapture_imageExposed(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageExposed, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageExposed, obj, [s](int a0) { int c0 = static_cast<int>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QImageCapture_imageCaptured(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageCaptured, obj, [s](int a0, const QImage & a1) { int c0 = static_cast<int>(a0); void * c1 = static_cast<void *>(new QImage(a1)); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageCaptured, obj, [s](int a0, const QImage & a1) { int c0 = static_cast<int>(a0); void * c1 = static_cast<void *>(new QImage(a1)); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QImageCapture_imageMetadataAvailable(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageMetadataAvailable, obj, [s](int a0, const QMediaMetaData & a1) { int c0 = static_cast<int>(a0); void * c1 = static_cast<void *>(new QMediaMetaData(a1)); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageMetadataAvailable, obj, [s](int a0, const QMediaMetaData & a1) { int c0 = static_cast<int>(a0); void * c1 = static_cast<void *>(new QMediaMetaData(a1)); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QImageCapture_imageAvailable(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageAvailable, obj, [s](int a0, const QVideoFrame & a1) { int c0 = static_cast<int>(a0); void * c1 = static_cast<void *>(new QVideoFrame(a1)); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageAvailable, obj, [s](int a0, const QVideoFrame & a1) { int c0 = static_cast<int>(a0); void * c1 = static_cast<void *>(new QVideoFrame(a1)); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QImageCapture_imageSaved(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QImageCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageSaved, obj, [s](int a0, const QString & a1) { int c0 = static_cast<int>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QImageCapture::imageSaved, obj, [s](int a0, const QString & a1) { int c0 = static_cast<int>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 
 // ---- QMediaCaptureSession
@@ -3382,67 +3393,67 @@ void * qute_QMediaCaptureSession_audioInputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::audioInputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::audioInputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_audioBufferInputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::audioBufferInputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::audioBufferInputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_cameraChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::cameraChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::cameraChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_nativeVideoSourceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::nativeVideoSourceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::nativeVideoSourceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_screenCaptureChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::screenCaptureChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::screenCaptureChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_windowCaptureChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::windowCaptureChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::windowCaptureChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_videoFrameInputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::videoFrameInputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::videoFrameInputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_imageCaptureChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::imageCaptureChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::imageCaptureChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_recorderChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::recorderChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::recorderChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_videoOutputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::videoOutputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::videoOutputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaCaptureSession_audioOutputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaCaptureSession *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::audioOutputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaCaptureSession::audioOutputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QMediaDevices
@@ -3522,19 +3533,19 @@ void * qute_QMediaDevices_audioInputsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaDevices *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaDevices::audioInputsChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaDevices::audioInputsChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaDevices_audioOutputsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaDevices *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaDevices::audioOutputsChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaDevices::audioOutputsChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaDevices_videoInputsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaDevices *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaDevices::videoInputsChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaDevices::videoInputsChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QMediaFormat
@@ -3994,133 +4005,133 @@ void * qute_QMediaPlayer_sourceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::sourceChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::sourceChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_playbackStateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playbackStateChanged, obj, [s](QMediaPlayer::PlaybackState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playbackStateChanged, obj, [s](QMediaPlayer::PlaybackState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_mediaStatusChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::mediaStatusChanged, obj, [s](QMediaPlayer::MediaStatus a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::mediaStatusChanged, obj, [s](QMediaPlayer::MediaStatus a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_durationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::durationChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::durationChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_positionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::positionChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::positionChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_hasAudioChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::hasAudioChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::hasAudioChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_hasVideoChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::hasVideoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::hasVideoChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_bufferProgressChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::bufferProgressChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::bufferProgressChanged, obj, [s](float a0) { float c0 = static_cast<float>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_seekableChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::seekableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::seekableChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_playingChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playingChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playingChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_playbackRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playbackRateChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playbackRateChanged, obj, [s](double a0) { double c0 = static_cast<double>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_loopsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::loopsChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::loopsChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_metaDataChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::metaDataChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::metaDataChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_videoOutputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::videoOutputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::videoOutputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_audioOutputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::audioOutputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::audioOutputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_audioBufferOutputChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::audioBufferOutputChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::audioBufferOutputChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_tracksChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::tracksChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::tracksChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_activeTracksChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::activeTracksChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::activeTracksChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_errorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::errorChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::errorChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaPlayer_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::errorOccurred, obj, [s](QMediaPlayer::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::errorOccurred, obj, [s](QMediaPlayer::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_pitchCompensationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::pitchCompensationChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::pitchCompensationChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaPlayer_playbackOptionsChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaPlayer *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playbackOptionsChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaPlayer::playbackOptionsChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QMediaRecorder
@@ -4376,97 +4387,97 @@ void * qute_QMediaRecorder_recorderStateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::recorderStateChanged, obj, [s](QMediaRecorder::RecorderState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::recorderStateChanged, obj, [s](QMediaRecorder::RecorderState a0) { int64_t c0 = static_cast<int64_t>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaRecorder_durationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::durationChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::durationChanged, obj, [s](long long a0) { long long c0 = static_cast<long long>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaRecorder_actualLocationChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::actualLocationChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::actualLocationChanged, obj, [s](const QUrl & a0) { void * c0 = static_cast<void *>(new QUrl(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaRecorder_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::errorOccurred, obj, [s](QMediaRecorder::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::errorOccurred, obj, [s](QMediaRecorder::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QMediaRecorder_errorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::errorChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::errorChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_metaDataChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::metaDataChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::metaDataChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_mediaFormatChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::mediaFormatChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::mediaFormatChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_encodingModeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::encodingModeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::encodingModeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_qualityChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::qualityChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::qualityChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_videoResolutionChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::videoResolutionChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::videoResolutionChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_videoFrameRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::videoFrameRateChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::videoFrameRateChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_videoBitRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::videoBitRateChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::videoBitRateChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_audioBitRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::audioBitRateChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::audioBitRateChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_audioChannelCountChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::audioChannelCountChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::audioChannelCountChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_audioSampleRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::audioSampleRateChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::audioSampleRateChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QMediaRecorder_autoStopChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QMediaRecorder *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::autoStopChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QMediaRecorder::autoStopChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QMediaTimeRange
@@ -4720,31 +4731,31 @@ void * qute_QScreenCapture_activeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreenCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::activeChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::activeChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreenCapture_errorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreenCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::errorChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::errorChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QScreenCapture_screenChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreenCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::screenChanged, obj, [s](QScreen * a0) { void * c0 = (void *)(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QScreenCapture_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreenCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::errorOccurred, obj, [s](QScreenCapture::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::errorOccurred, obj, [s](QScreenCapture::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QScreenCapture_maximumFrameRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QScreenCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::maximumFrameRateChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QScreenCapture::maximumFrameRateChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QSoundEffect
@@ -4900,55 +4911,55 @@ void * qute_QSoundEffect_sourceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::sourceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::sourceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_loopCountChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::loopCountChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::loopCountChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_loopsRemainingChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::loopsRemainingChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::loopsRemainingChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_volumeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::volumeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::volumeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_mutedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::mutedChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::mutedChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_loadedChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::loadedChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::loadedChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_playingChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::playingChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::playingChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_statusChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::statusChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::statusChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QSoundEffect_audioDeviceChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QSoundEffect *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::audioDeviceChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QSoundEffect::audioDeviceChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QVideoFrame
@@ -5336,7 +5347,7 @@ void * qute_QVideoFrameInput_readyToSendVideoFrame(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QVideoFrameInput *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QVideoFrameInput::readyToSendVideoFrame, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QVideoFrameInput::readyToSendVideoFrame, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QVideoSink
@@ -5412,19 +5423,19 @@ void * qute_QVideoSink_videoFrameChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QVideoSink *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QVideoSink::videoFrameChanged, obj, [s](const QVideoFrame & a0) { void * c0 = static_cast<void *>(new QVideoFrame(a0)); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QVideoSink::videoFrameChanged, obj, [s](const QVideoFrame & a0) { void * c0 = static_cast<void *>(new QVideoFrame(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QVideoSink_subtitleTextChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QVideoSink *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QVideoSink::subtitleTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QVideoSink::subtitleTextChanged, obj, [s](const QString & a0) { qute_str c0 = qute_ret_str(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QVideoSink_videoSizeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QVideoSink *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QVideoSink::videoSizeChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QVideoSink::videoSizeChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 // ---- QWindowCapture
@@ -5528,31 +5539,31 @@ void * qute_QWindowCapture_activeChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindowCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::activeChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::activeChanged, obj, [s](bool a0) { bool c0 = static_cast<bool>(a0); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindowCapture_windowChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindowCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::windowChanged, obj, [s](QCapturableWindow a0) { void * c0 = static_cast<void *>(new QCapturableWindow(a0)); void *args[] = {&c0}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::windowChanged, obj, [s](QCapturableWindow a0) { void * c0 = static_cast<void *>(new QCapturableWindow(a0)); void *args[] = {&c0}; qute_signal(s->id, args); }));
 }
 void * qute_QWindowCapture_errorChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindowCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::errorChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::errorChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 void * qute_QWindowCapture_errorOccurred(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindowCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::errorOccurred, obj, [s](QWindowCapture::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_qtmultimedia_signal(s->id, args); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::errorOccurred, obj, [s](QWindowCapture::Error a0, const QString & a1) { int64_t c0 = static_cast<int64_t>(a0); qute_str c1 = qute_ret_str(a1); void *args[] = {&c0, &c1}; qute_signal(s->id, args); }));
 }
 void * qute_QWindowCapture_maximumFrameRateChanged(void *self, uintptr_t id) {
 	qute_gui_only();
 	auto s = std::make_shared<GoSlot>(id);
 	auto obj = static_cast<QWindowCapture *>(self);
-	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::maximumFrameRateChanged, obj, [s]() {  qute_qtmultimedia_signal(s->id, nullptr); }));
+	return new QMetaObject::Connection(QObject::connect(obj, &QWindowCapture::maximumFrameRateChanged, obj, [s]() {  qute_signal(s->id, nullptr); }));
 }
 
 } // extern "C"

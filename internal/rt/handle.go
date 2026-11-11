@@ -82,6 +82,7 @@ type Handle struct {
 	// deps are the objects this one only makes sense with (a QModelIndex's
 	// model); set once at creation, so Use reads them without a lock.
 	deps []*Handle
+	dep1 [1]*Handle // deps' first element, all most values have (addDep)
 
 	ext atomic.Pointer[handleExt]
 }
@@ -309,12 +310,28 @@ func (h *Handle) retake(mode WrapMode) {
 }
 
 func newHandle(key unsafe.Pointer, class string, kind Kind, st State, deleter func(unsafe.Pointer)) *Handle {
-	h := &Handle{ptr: key, class: class, kind: kind, deleter: deleter, serial: serialCounter.Add(1)}
+	h := new(Handle)
+	h.init(key, class, kind, st, deleter)
+	return h
+}
+
+// init sets up a new handle in place (newHandle, and inline values made
+// together with their wrapper).
+func (h *Handle) init(key unsafe.Pointer, class string, kind Kind, st State, deleter func(unsafe.Pointer)) {
+	h.ptr, h.class, h.kind, h.deleter, h.serial = key, class, kind, deleter, serialCounter.Add(1)
 	h.state.Store(uint32(st))
 	if debugEnabled {
 		h.x().created = callSite()
 	}
-	return h
+}
+
+// addDep adds an object h depends on; the first needs no allocation. Only
+// while h is new and not yet shared, as Use reads deps without a lock.
+func (h *Handle) addDep(d *Handle) {
+	if h.deps == nil {
+		h.deps = h.dep1[:0]
+	}
+	h.deps = append(h.deps, d)
 }
 
 // View returns the cached wrapper of type T for (h, p), creating it once.
@@ -921,10 +938,10 @@ func WrapClassFrom(p unsafe.Pointer, class string, mode WrapMode, owner *Handle)
 		return h
 	}
 	// a fresh plain handle, not yet shared: its deps may still be set
-	h.deps = append(h.deps, owner)
+	h.addDep(owner)
 	for _, d := range owner.deps {
 		if d != h {
-			h.deps = append(h.deps, d)
+			h.addDep(d)
 		}
 	}
 	return h

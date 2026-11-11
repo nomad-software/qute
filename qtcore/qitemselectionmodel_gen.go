@@ -125,7 +125,7 @@ func (this *QItemSelectionModel) CurrentIndex() *QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.CurrentIndex")
 	r := C.qute_QItemSelectionModel_currentIndex(self)
 	runtime.KeepAlive(this)
-	return rt.View[QModelIndex](rt.WrapClass(r, "QModelIndex", rt.TakeOwned), r)
+	return rt.InlineOwnedView[QModelIndex](r, "QModelIndex")
 }
 
 // IsSelected wraps QItemSelectionModel::isSelected.
@@ -218,9 +218,7 @@ func (this *QItemSelectionModel) SelectedIndexes() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedIndexes")
 	r := C.qute_QItemSelectionModel_selectedIndexes(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // SelectedRows wraps QItemSelectionModel::selectedRows.
@@ -234,9 +232,7 @@ func (this *QItemSelectionModel) SelectedRows() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedRows")
 	r := C.qute_QItemSelectionModel_selectedRows(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // SelectedColumns wraps QItemSelectionModel::selectedColumns.
@@ -250,9 +246,7 @@ func (this *QItemSelectionModel) SelectedColumns() []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedColumns")
 	r := C.qute_QItemSelectionModel_selectedColumns(self)
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // Selection wraps QItemSelectionModel::selection.
@@ -522,9 +516,7 @@ func (this *QItemSelectionModel) SelectedRowsFull(column int) []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedRowsFull")
 	r := C.qute_QItemSelectionModel_selectedRows_1(self, C.int(column))
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // SelectedColumnsFull wraps QItemSelectionModel::selectedColumns.
@@ -538,9 +530,7 @@ func (this *QItemSelectionModel) SelectedColumnsFull(row int) []*QModelIndex {
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.SelectedColumnsFull")
 	r := C.qute_QItemSelectionModel_selectedColumns_1(self, C.int(row))
 	runtime.KeepAlive(this)
-	return quteList(r, func(e unsafe.Pointer) *QModelIndex {
-		return rt.View[QModelIndex](rt.WrapClass(e, "QModelIndex", rt.TakeOwned), e)
-	})
+	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
 }
 
 // OnSelectionChanged connects f to the selectionChanged signal. The connection ends when the
@@ -572,8 +562,8 @@ func (this *QItemSelectionModel) OnCurrentChanged(f func(current *QModelIndex, p
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnCurrentChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
-		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+		current := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
+		previous := rt.InlineArgView[QModelIndex](a[1], "QModelIndex")
 		f(current, previous)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_currentChanged(self, C.uintptr_t(id)))
@@ -590,8 +580,8 @@ func (this *QItemSelectionModel) OnCurrentRowChanged(f func(current *QModelIndex
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnCurrentRowChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
-		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+		current := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
+		previous := rt.InlineArgView[QModelIndex](a[1], "QModelIndex")
 		f(current, previous)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_currentRowChanged(self, C.uintptr_t(id)))
@@ -608,8 +598,8 @@ func (this *QItemSelectionModel) OnCurrentColumnChanged(f func(current *QModelIn
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnCurrentColumnChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
-		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
+		current := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
+		previous := rt.InlineArgView[QModelIndex](a[1], "QModelIndex")
 		f(current, previous)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_currentColumnChanged(self, C.uintptr_t(id)))
@@ -641,7 +631,7 @@ var qItemSelectionModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
 			v.(interface {
 				SetCurrentIndex(*QModelIndex, QItemSelectionModelSelectionFlags)
@@ -655,7 +645,7 @@ var qItemSelectionModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
 			v.(interface {
 				Select(*QModelIndex, QItemSelectionModelSelectionFlags)

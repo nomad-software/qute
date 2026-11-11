@@ -33,6 +33,7 @@ func init() {
 	rt.RegisterDependency("QTextBlock", func(p unsafe.Pointer) *rt.Handle {
 		return rt.WrapClass(C.qute_QTextBlock_document(p), "QTextDocument", rt.KeepOrBorrow)
 	})
+	rt.RegisterDependencyWrap("QTextBlock", func(d unsafe.Pointer) *rt.Handle { return rt.WrapClass(d, "QTextDocument", rt.KeepOrBorrow) })
 }
 
 // QTextBlockFromPtr wraps an existing C++ QTextBlock. This is an unsafe escape hatch: own says
