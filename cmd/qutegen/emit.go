@@ -1797,6 +1797,12 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 	b.p("\trt.CheckThread(%q)", "New"+cls+"With")
 	b.p("\tbase := v.%sBase()", lower)
 	b.p("\tif base.%s != nil {\n\t\tpanic(%q)\n\t}", cls, "New"+cls+"With: value is already constructed; use a fresh value")
+	for _, v := range c.Virtuals {
+		if v.Overlay != nil && v.Overlay.Required != "" && v.IR.Pure {
+			// checked before the C++ object exists, so a panic leaks nothing
+			b.p("\trt.RequireOverride(v, %s, %q, %q, %q)", vt, "New"+cls+"With", v.GoName, v.Overlay.Required)
+		}
+	}
 	for _, s := range gc.pre {
 		b.p("\t%s", s)
 	}

@@ -1,6 +1,7 @@
 package qtcore_test
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 	"testing"
@@ -62,6 +63,26 @@ func TestXMLStreams(t *testing.T) {
 					if a.Value("id") != "1" || !a.HasAttribute("kind") {
 						t.Errorf("root attributes: id %q", a.Value("id"))
 					}
+					// the list part of QXmlStreamAttributes is hand-written
+					var listed []string
+					for i := range a.Size() {
+						at := a.At(i)
+						if at.Ownership() != qtcore.Owned {
+							t.Errorf("attribute %d: %v, want Owned", i, at.Ownership())
+						}
+						listed = append(listed, at.Name()+"="+at.Value())
+					}
+					if len(listed) != 2 || listed[0] != "id=1" || !strings.HasPrefix(listed[1], "kind=") {
+						t.Errorf("listed attributes %v", listed)
+					}
+					func() {
+						defer func() {
+							if msg := fmt.Sprint(recover()); !strings.Contains(msg, "index 2 out of range") {
+								t.Errorf("At past the end: panic %q", msg)
+							}
+						}()
+						a.At(a.Size())
+					}()
 					ns := r.NamespaceDeclarations()
 					if len(ns) != 1 || ns[0].NamespaceUri() != "urn:x" {
 						t.Errorf("namespaces %v", ns)

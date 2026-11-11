@@ -106,6 +106,10 @@ func (this *QSignalMapper) SetMappingText(sender QObjectLike, text string) {
 //
 //	C++: void QSignalMapper::setMapping(QObject * sender, QObject * object)
 //
+// Ownership: object is borrowed, and the receiver keeps it from being garbage collected while it lives.
+//
+// The mapper does not take ownership of object; it keeps it from being garbage collected while the mapper lives. If the object is destroyed, its senders map to nil.
+//
 // Qt docs: https://doc.qt.io/qt-6/qsignalmapper.html#setMapping
 func (this *QSignalMapper) SetMappingObject(sender QObjectLike, object QObjectLike) {
 	self := rt.Use(unsafe.Pointer(this), "QSignalMapper.SetMappingObject")
@@ -114,13 +118,15 @@ func (this *QSignalMapper) SetMappingObject(sender QObjectLike, object QObjectLi
 		senderPtr = rt.UseArg(unsafe.Pointer(sender.AsQObject()), "QSignalMapper.SetMappingObject")
 	}
 	var objectPtr unsafe.Pointer
+	var objectH *rt.Handle
 	if object != nil {
-		objectPtr = rt.UseArg(unsafe.Pointer(object.AsQObject()), "QSignalMapper.SetMappingObject")
+		objectPtr, objectH = rt.Arg(unsafe.Pointer(object.AsQObject()), "QSignalMapper.SetMappingObject")
 	}
 	C.qute_QSignalMapper_setMapping_2(self, senderPtr, objectPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(sender)
 	runtime.KeepAlive(object)
+	rt.KeepEach(rt.RefOf(unsafe.Pointer(this)).H, objectH, false)
 }
 
 // RemoveMappings wraps QSignalMapper::removeMappings.

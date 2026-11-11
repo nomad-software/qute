@@ -65,3 +65,18 @@ func TestUserDefined(t *testing.T) {
 		}
 	}
 }
+
+// RequireOverride lets a type through that declares the virtual and panics,
+// naming the type, the method and why Qt needs it, for one that does not.
+func TestRequireOverride(t *testing.T) {
+	vt := []Virtual{{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() int }); return ok }}}
+	RequireOverride(&userDirect{}, vt, "NewThingWith", "SizeHint", "it sizes the thing")
+	defer func() {
+		msg, _ := recover().(string)
+		want := "NewThingWith: *rt.userNothing does not define SizeHint, which Qt needs: it sizes the thing; define SizeHint on the type"
+		if msg != want {
+			t.Errorf("panic %q\n want %q", msg, want)
+		}
+	}()
+	RequireOverride(&userNothing{}, vt, "NewThingWith", "SizeHint", "it sizes the thing")
+}

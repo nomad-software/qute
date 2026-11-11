@@ -16,8 +16,8 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 12094 |
-| of which Full forms (every argument, defaults included) | 710 |
+| Bound constructors, methods and functions | 12093 |
+| of which Full forms (every argument, defaults included) | 709 |
 | Plain-object results that depend on their receiver | 100 |
 | Skipped on purpose (with reasons below) | 836 |
 | Classes Go can subclass | 237 |
@@ -175,6 +175,8 @@ These bind once the generator learns the type. Counts by type:
 
 ### QCborStreamReader
 
+- `QCborStreamReader::QCborStreamReader(const char * data, qsizetype len)`: skipped by overlay (use NewQCborStreamReaderWithBytes: the reader would keep reading the caller's memory)
+- `QCborStreamReader::QCborStreamReader(const quint8 * data, qsizetype len)`: skipped by overlay (use NewQCborStreamReaderWithBytes: the reader would keep reading the caller's memory)
 - `QCborStreamReader::QCborStreamReader(const QCborStreamReader &)`: deprecated or variadic
 - `bool QCborStreamReader::isSimpleType(QCborSimpleType st) const`: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
 - `StringResult<QString> QCborStreamReader::readString()`: skipped by overlay (returns a chunk status template; use ReadAllString)
@@ -185,8 +187,6 @@ These bind once the generator learns the type. Counts by type:
 - `QCborNegativeInteger QCborStreamReader::toNegativeInteger() const`: return: on purpose: a global enum the IR does not record; use ToInteger
 - `QCborSimpleType QCborStreamReader::toSimpleType() const`: return: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
 - `qfloat16 QCborStreamReader::toFloat16() const`: return: on purpose: half-precision floats; use the float32 and float64 forms
-- `QCborStreamReader::QCborStreamReader(const quint8 * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
-- `QCborStreamReader::QCborStreamReader(const QByteArray & data)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `void QCborStreamReader::addData(const char * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `void QCborStreamReader::addData(const quint8 * data, qsizetype len)`: on purpose: same Go signature as another overload (often a QStringView twin)
 

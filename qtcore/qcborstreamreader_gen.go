@@ -101,7 +101,9 @@ func NewQCborStreamReader() *QCborStreamReader {
 
 // NewQCborStreamReaderWithBytes wraps the QCborStreamReader constructor.
 //
-//	C++: QCborStreamReader::QCborStreamReader(const char * data, qsizetype len)
+//	C++: QCborStreamReader::QCborStreamReader(const QByteArray & data)
+//
+// The reader works on its own copy of data.
 //
 // Qt docs: https://doc.qt.io/qt-6/qcborstreamreader.html#QCborStreamReader
 func NewQCborStreamReaderWithBytes(data []byte) *QCborStreamReader {

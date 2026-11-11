@@ -142,6 +142,10 @@ type overlay struct {
 	// The default guards when the receiver or the kept argument is not a
 	// QObject, since only QObject-to-QObject references are usually watched.
 	KeptDelete string `yaml:"kept-delete"`
+	// Required marks a pure virtual a Go subclass must define, because Qt
+	// uses its result unchecked (QIconEngine::clone); the text says when Qt
+	// calls it. NewXWith panics for a type that leaves it out.
+	Required string `yaml:"required"`
 }
 
 func (o *overlay) skipped() bool {
@@ -238,6 +242,9 @@ func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) 
 		}
 		if o.KeptDelete != "" {
 			out.KeptDelete = o.KeptDelete
+		}
+		if o.Required != "" {
+			out.Required = o.Required
 		}
 	}
 	if o, ok := entries[m.Name]; ok {

@@ -91,7 +91,7 @@ func (this *QLoggingCategory) Unkeep() {
 //
 //	C++: QLoggingCategory::QLoggingCategory(const char * category, QtMsgType severityLevel = …)
 //
-// Qt keeps the category name for the life of the program, so each new category holds a small copy of it that is never freed; create categories once (package-level), not per call.
+// Qt keeps the category name for the life of the program, so each distinct name is stored once and never freed.
 //
 // Qt docs: https://doc.qt.io/qt-6/qloggingcategory.html#QLoggingCategory
 func NewQLoggingCategoryWithCategory(category string) *QLoggingCategory {

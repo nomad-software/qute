@@ -84,6 +84,11 @@ type Handle struct {
 	release    runtime.Cleanup
 	hasRelease bool
 
+	// scope binding (keep.go), guarded by keepMu
+	scoped bool      // a scoped argument: Dead when its callback returns
+	scope  *Handle   // on a keeper: the scoped argument it must not outlive
+	bound  []*Handle // on a scoped argument: the keepers bound to it, oldest first
+
 	// anchoring (anchor.go), guarded by anchorMu
 	anchorN  int32                // reasons to hold the Go state: connections, Self, keeps
 	placed   bool                 // held by holder, or globally when holder is nil
@@ -189,7 +194,9 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 		return nil
 	}
 	if mode == NewScoped {
-		return newHandle(key, class, KindPlain, Borrowed, deleter)
+		h := newHandle(key, class, KindPlain, Borrowed, deleter)
+		h.scoped = true
+		return h
 	}
 	if kind == KindPlain || kind == KindValue {
 		st := mode.state()
@@ -686,8 +693,12 @@ func deadMessage(h *Handle, method string) string {
 const scopedNote = "scoped argument expired"
 
 // Expire marks a scoped argument handle Dead when its callback returns.
+// Objects Go built on it inside the handler and left alive (a
+// QPainterStateGuard on the handler's painter) end first, while Qt's object
+// is still there for their destructors (see endBound).
 func (h *Handle) Expire() {
 	if h != nil {
+		h.endBound()
 		h.markDead(scopedNote)
 	}
 }

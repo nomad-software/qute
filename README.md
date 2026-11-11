@@ -364,7 +364,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ```
 
 Event arguments are scoped: they are Dead once the handler returns, so copy
-out the values you need. Call `c.Super().PaintEvent(e)` for the base
+out the values you need. A helper you build on one and leave alive (a
+`QPainterStateGuard` on a delegate's painter) is deleted when the handler
+returns, as it would be at the end of its C++ scope. Call `c.Super().PaintEvent(e)` for the base
 implementation. Models work the same way: embed
 `qtcore.QAbstractListModelBase` and define `RowCount` and `Data`.
 
@@ -372,7 +374,8 @@ Every class with virtuals works like this, with no opt-in: embed
 `<Class>Base`, define the virtuals you want, build it with
 `New<Class>With(v, ...)`. Abstract classes (`QGraphicsItem`, `QLayout`,
 `QValidator`, `QSyntaxHighlighter`) are built only that way, and a pure
-virtual you don't define returns its zero value. An override has the same
+virtual you don't define returns its zero value (the one exception is
+`QIconEngine.Clone`, which Qt needs: the constructor panics without it). An override has the same
 Go signature as the method's binding, so in-out parameters are a parameter
 plus a result:
 
@@ -674,17 +677,18 @@ The runtime, the bindings for the eleven modules above and Go subclassing are
 done. No method is waiting for type support, every ownership rule has been
 reviewed, every overload has a proper name, every out-parameter is confirmed
 by a rule, and every rule but `QEvent::clone`,
-`QWebEngineUrlRequestJob::reply` and `QSyntaxHighlighter::setCurrentBlockUserData`
-has a generated test (about 585 in all; the last two are covered by
-hand-written tests, since a job exists only while Qt loads a URL and the user
-data only matters inside `highlightBlock`).
+`QWebEngineUrlRequestJob::reply`, `QSyntaxHighlighter::setCurrentBlockUserData`,
+`QIconEngine::clone` and `QGestureRecognizer::create` has a generated test
+(about 720 in all; the last four are covered by hand-written tests, since a
+job exists only while Qt loads a URL, the user data only matters inside
+`highlightBlock`, and the two abstract classes need a Go override).
 
 Not done yet:
 
-- About 650 methods are skipped on purpose, each with its reason in
+- About 840 methods are skipped on purpose, each with its reason in
   `COVERAGE.md`: C++ move overloads, `QBindable`, iterators, Qt's private
   and platform internals, `QStringView` and plain-number twins, printing page
-  setup, accessibility, Vulkan and types from modules that aren't bound. About 500 operators, conversion
+  setup, accessibility, Vulkan and types from modules that aren't bound. About 620 operators, conversion
   operators and member templates are not in the IR at all; `COVERAGE.md`
   lists them too.
 - `QThread` affinity, QtQuick/QML and the other modules listed under

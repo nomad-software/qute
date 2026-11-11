@@ -233,6 +233,70 @@ func KeepArg(owner *Handle, slot string, arg *Handle, guard bool) {
 	}
 	ks[slot] = arg
 	holdLocked(owner, arg.serial, guard)
+	if guard {
+		bindScopeLocked(owner, arg)
+	}
+}
+
+// A guarded hold says the keeper's C++ object follows a pointer to what it
+// keeps, and Delete() of the kept object panics for that reason. A scoped
+// argument (a handler's QPainter) is not deleted by Go, though: Qt frees it
+// soon after the handler returns, whatever still points at it. A keeper left
+// alive would then run its destructor on freed memory when GC got to it (a
+// QPainterStateGuard restores its painter). So a keeper with a guarded hold
+// on a scoped argument, or on another such keeper, is bound to that argument,
+// which holds it strongly until the handler returns; Expire then ends the
+// bound keepers Go owns, newest first, as their C++ scope would have.
+
+// bindScopeLocked binds keeper to the scoped argument that kept is, or is
+// itself bound to. The caller holds keepMu.
+func bindScopeLocked(keeper, kept *Handle) {
+	root := kept.scope
+	if kept.scoped {
+		root = kept
+	}
+	if root == nil || !root.Alive() || keeper.scope == root {
+		return
+	}
+	keeper.scope = root
+	root.bound = append(root.bound, keeper)
+}
+
+// endBound deletes the keepers bound to the scoped argument h that still
+// use it, directly or through one another. Only plain objects Go owns are
+// deleted; anything else is left to its owner.
+func (h *Handle) endBound() {
+	keepMu.Lock()
+	bound := h.bound
+	h.bound = nil
+	if len(bound) == 0 {
+		keepMu.Unlock()
+		return // nearly every scoped argument: nothing was built on it
+	}
+	ending := map[uint64]bool{h.serial: true}
+	var doomed []*Handle
+	for _, k := range bound {
+		if k.scope == h {
+			k.scope = nil
+		}
+		for _, hd := range holds[k.serial] {
+			if hd.guard && ending[hd.kept] {
+				ending[k.serial] = true
+				doomed = append(doomed, k)
+				break
+			}
+		}
+	}
+	keepMu.Unlock()
+	note := fmt.Sprintf("ended with the handler it was created in, because the %s argument it used expired (rule 6)", h.class)
+	for i := len(doomed) - 1; i >= 0; i-- {
+		k := doomed[i]
+		if k.registeredKind() || k.State() != Owned || k.deleter == nil || guardingKeeper(k.serial) != "" {
+			continue
+		}
+		k.markDead(note)
+		k.deleter(k.ptr)
+	}
 }
 
 // KeepEach makes owner hold arg until owner dies or Release drops it. Unlike

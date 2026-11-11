@@ -387,6 +387,48 @@ func TestGoIconEngine(t *testing.T) {
 	})
 }
 
+type cloneless struct{ qtgui.QIconEngineBase }
+
+func (c *cloneless) Paint(p *qtgui.QPainter, r qtcore.QRect, mode qtgui.QIconMode, state qtgui.QIconState) {
+}
+
+// Qt clones an icon's engine when a copy of the icon is changed and uses the
+// result unchecked, so the zero value a missing pure virtual returns would
+// crash there (it did, in QIcon::addPixmap). A Go engine must define Clone:
+// its constructor says so instead.
+func TestGoIconEngineNeedsClone(t *testing.T) {
+	qutetest.Run(t, func() {
+		defer func() {
+			msg := fmt.Sprint(recover())
+			for _, want := range []string{"NewQIconEngineWith", "cloneless does not define Clone", "define Clone on the type"} {
+				if !strings.Contains(msg, want) {
+					t.Errorf("panic %q, want it to contain %q", msg, want)
+				}
+			}
+		}()
+		qtgui.NewQIconEngineWith(&cloneless{})
+	})
+}
+
+// A copy of an icon with a Go engine that is then changed gets its own
+// engine from Clone, owned by the copy.
+func TestGoIconEngineClonedOnDetach(t *testing.T) {
+	qutetest.Run(t, func() {
+		sw := &swatch{color: qtgui.RGB(1, 2, 3)}
+		icon := qtgui.NewQIconWithIconEngine(qtgui.NewQIconEngineWith(sw))
+		a := qtgui.NewQAction(nil)
+		a.SetIcon(icon)
+		cp := a.Icon() // shares the engine
+		cp.AddPixmap(qtgui.NewQPixmapWithW(4, 4))
+		if sw.clones != 1 {
+			t.Errorf("%d clones after changing a copy, want 1", sw.clones)
+		}
+		cp.Delete()
+		a.Delete()
+		icon.Delete()
+	})
+}
+
 // clickRecognizer turns a mouse press into a finished gesture.
 type clickRecognizer struct {
 	qtwidgets.QGestureRecognizerBase

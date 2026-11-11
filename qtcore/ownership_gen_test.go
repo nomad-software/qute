@@ -151,6 +151,21 @@ func TestOwnership_NewQBuffer(t *testing.T) {
 	})
 }
 
+// QCborStreamReader::QCborStreamReader(const QByteArray & data) (test from the overlay)
+func TestOwnership_QCborStreamReader_NewQCborStreamReaderWithBytes(t *testing.T) {
+	qutetest.Run(t, func() {
+		data := []byte{0x65, 'h', 'e', 'l', 'l', 'o'} // the text string "hello"
+		r := qtcore.NewQCborStreamReaderWithBytes(data)
+		for i := range data {
+			data[i] = 0xff
+		}
+		if got := r.ReadAllString(); got != "hello" {
+			t.Errorf("read %q after the caller changed its slice, want %q", got, "hello")
+		}
+		r.Delete()
+	})
+}
+
 // QCborStreamReader::QCborStreamReader(QIODevice * device): keep rules
 func TestKeep_QCborStreamReader_QCborStreamReaderWithIODevice(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -540,6 +555,22 @@ func TestKeep_QItemSelectionModel_SetModel(t *testing.T) {
 			t.Error("model: not kept by the receiver")
 		}
 		recv.Delete()
+	})
+}
+
+// QLoggingCategory::QLoggingCategory(const char * category, QtMsgType severityLevel = …) (test from the overlay)
+func TestOwnership_QLoggingCategory_NewQLoggingCategoryWithCategory(t *testing.T) {
+	qutetest.Run(t, func() {
+		a := qtcore.NewQLoggingCategoryWithCategory("qute.test.names")
+		b := qtcore.NewQLoggingCategoryWithCategory("qute.test.names")
+		if a.CategoryName() != "qute.test.names" || b.CategoryName() != "qute.test.names" {
+			t.Errorf("category names %q and %q", a.CategoryName(), b.CategoryName())
+		}
+		a.Delete()
+		if b.CategoryName() != "qute.test.names" {
+			t.Errorf("name %q after a category of the same name was deleted", b.CategoryName())
+		}
+		b.Delete()
 	})
 }
 
@@ -1095,6 +1126,29 @@ func TestOwnership_NewQSignalMapper(t *testing.T) {
 	})
 }
 
+// void QSignalMapper::setMapping(QObject * sender, QObject * object) (test from the overlay)
+func TestOwnership_QSignalMapper_SetMappingObject(t *testing.T) {
+	qutetest.Run(t, func() {
+		m := qtcore.NewQSignalMapper(nil)
+		s := qtcore.NewQObject(nil)
+		o := qtcore.NewQObject(nil)
+		m.SetMappingObject(s, o)
+		if !rt.KeepsArg(unsafe.Pointer(m), unsafe.Pointer(o)) {
+			t.Error("mapped object is not kept")
+		}
+		var got []*qtcore.QObject
+		m.OnMappedObject(func(object *qtcore.QObject) { got = append(got, object) })
+		m.MapWithObject(s)
+		o.Delete()
+		m.MapWithObject(s) // Qt would emit the dangling pointer
+		if len(got) != 2 || got[0] != o || got[1] != nil {
+			t.Errorf("mapped %v, want the object and then nil", got)
+		}
+		m.Delete()
+		s.Delete()
+	})
+}
+
 // QSocketNotifier::QSocketNotifier(Type, QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSocketNotifierWithType(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -1322,6 +1376,27 @@ func TestOwnership_NewQTranslator(t *testing.T) {
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// bool QTranslator::load(const uchar * data, int len, const QString & directory = …) (test from the overlay)
+func TestOwnership_QTranslator_LoadBytes(t *testing.T) {
+	qutetest.Run(t, func() {
+		// Demo/"Hello" -> "Bonjour", built by lrelease
+		qm := []byte("\x3c\xb8\x64\x18\xca\xef\x9c\x95\xcd\x21\x1c\xbf\x60\xa1\xbd\xdd\xa7\x00\x00\x00\x05fr_FR" +
+			"\x42\x00\x00\x00\x08\x00\x4e\xc3\x2f\x00\x00\x00\x00\x69\x00\x00\x00\x2c\x03\x00\x00\x00\x0e\x00B\x00o\x00n\x00j\x00o\x00u\x00r" +
+			"\x08\x00\x00\x00\x00\x06\x00\x00\x00\x05Hello\x07\x00\x00\x00\x04Demo\x01\x88\x00\x00\x00\x02\x03\x01")
+		tr := qtcore.NewQTranslator(nil)
+		if !tr.LoadBytes(qm) {
+			t.Error("LoadBytes failed")
+		}
+		for i := range qm {
+			qm[i] = 0xff // Qt reads the data on every lookup
+		}
+		if got := tr.Translate("Demo", "Hello"); got != "Bonjour" {
+			t.Errorf("translation %q after the caller changed its slice, want %q", got, "Bonjour")
+		}
+		tr.Delete()
 	})
 }
 

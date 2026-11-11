@@ -31,11 +31,11 @@ var (
 // takes. The argument is Parented; if Qt did not give it a parent, the
 // container's death hands it back to Go.
 func TransferTo(container, h *Handle) {
-	if h == nil {
-		return
+	if h == nil || h == container {
+		return // a container does not own itself (an anchor layout anchored to its own edges)
 	}
 	h.TransferToCpp()
-	if container == nil || container == h || !container.registeredKind() || !container.Alive() ||
+	if container == nil || !container.registeredKind() || !container.Alive() ||
 		h.kind != KindQObject || h.State() != Parented || HasParent(h.ptr) {
 		return
 	}

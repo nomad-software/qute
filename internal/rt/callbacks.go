@@ -241,3 +241,20 @@ func Mask(self any, vt []Virtual) []uint64 {
 	}
 	return m
 }
+
+// RequireOverride panics unless self defines the virtual called name. A
+// pure virtual Go leaves out returns its zero value, which is fine for most
+// (a layout with no items) but not where Qt uses the result unchecked
+// (QIconEngine::clone); why says when Qt calls it.
+func RequireOverride(self any, vt []Virtual, ctor, name, why string) {
+	for _, v := range vt {
+		if v.Name == name {
+			if v.Has(self) && UserDefined(self, name) {
+				return
+			}
+			break
+		}
+	}
+	panic(fmt.Sprintf("%s: %T does not define %s, which Qt needs: %s; define %s on the type",
+		ctor, self, name, why, name))
+}

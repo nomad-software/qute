@@ -240,6 +240,22 @@ QPropertyAnimation:
 
 QCborStreamReader:
   QCborStreamReader(QIODevice*): { args: { device: keep:device }, reviewed: true }
+  # Qt reads the pointer forms in place (QByteArray::fromRawData), and the Go slice is only pinned for the call
+  QCborStreamReader(const char*, qsizetype): { skip: "use NewQCborStreamReaderWithBytes: the reader would keep reading the caller's memory" }
+  QCborStreamReader(const quint8*, qsizetype): { skip: "use NewQCborStreamReaderWithBytes: the reader would keep reading the caller's memory" }
+  QCborStreamReader(const QByteArray&):
+    name: NewQCborStreamReaderWithBytes
+    doc: "The reader works on its own copy of data."
+    test: |
+      data := []byte{0x65, 'h', 'e', 'l', 'l', 'o'} // the text string "hello"
+      r := qtcore.NewQCborStreamReaderWithBytes(data)
+      for i := range data {
+      	data[i] = 0xff
+      }
+      if got := r.ReadAllString(); got != "hello" {
+      	t.Errorf("read %q after the caller changed its slice, want %q", got, "hello")
+      }
+      r.Delete()
   setDevice: { args: { device: keep:device }, reviewed: true }
   device: { return: borrowed }
   readAndAppendToString: { args: { dst: in-out } }
@@ -308,9 +324,21 @@ QLockFile:
 
 QLoggingCategory:
   QLoggingCategory:
-    # Qt keeps the pointer (it expects a string literal); the Go string's C copy is freed after the call
-    cpp: "new $class(qstrdup($0))"
-    doc: "Qt keeps the category name for the life of the program, so each new category holds a small copy of it that is never freed; create categories once (package-level), not per call."
+    # Qt keeps the pointer (it expects a string literal), and the Go string's C copy is freed after the
+    # call: each distinct name is interned once, for the life of the program
+    cpp: "[&] { static QSet<QByteArray> *names = new QSet<QByteArray>; return new $class(names->insert(QByteArray($0))->constData()); }()"
+    doc: "Qt keeps the category name for the life of the program, so each distinct name is stored once and never freed."
+    test: |
+      a := qtcore.NewQLoggingCategoryWithCategory("qute.test.names")
+      b := qtcore.NewQLoggingCategoryWithCategory("qute.test.names")
+      if a.CategoryName() != "qute.test.names" || b.CategoryName() != "qute.test.names" {
+      	t.Errorf("category names %q and %q", a.CategoryName(), b.CategoryName())
+      }
+      a.Delete()
+      if b.CategoryName() != "qute.test.names" {
+      	t.Errorf("name %q after a category of the same name was deleted", b.CategoryName())
+      }
+      b.Delete()
   defaultCategory: { return: borrowed, reviewed: true, doc: "The default category is a static object that lives as long as the program." }
   isEnabled: { skip: "QtMsgType is a global enum the IR does not record; use IsDebugEnabled, IsInfoEnabled, IsWarningEnabled or IsCriticalEnabled" }
   setEnabled: { skip: "QtMsgType is a global enum the IR does not record; use QLoggingCategorySetFilterRules" }
@@ -368,6 +396,30 @@ QProcess:
 
 QSignalMapper:
   setMapping: { reviewed: true }
+  setMapping(QObject*, QObject*):
+    args: { object: keep-each }
+    reviewed: true
+    # Qt stores the object as a plain pointer and never forgets it: a destroyed one would be emitted by map()
+    cpp: "[&] { $self->setMapping($0, $1); if ($1) QObject::connect($1, &QObject::destroyed, $self, [m = $self](QObject *o) { while (QObject *s = m->mapping(o)) m->setMapping(s, static_cast<QObject *>(nullptr)); }); }()"
+    doc: "The mapper does not take ownership of object; it keeps it from being garbage collected while the mapper lives. If the object is destroyed, its senders map to nil."
+    test: |
+      m := qtcore.NewQSignalMapper(nil)
+      s := qtcore.NewQObject(nil)
+      o := qtcore.NewQObject(nil)
+      m.SetMappingObject(s, o)
+      if !rt.KeepsArg(unsafe.Pointer(m), unsafe.Pointer(o)) {
+      	t.Error("mapped object is not kept")
+      }
+      var got []*qtcore.QObject
+      m.OnMappedObject(func(object *qtcore.QObject) { got = append(got, object) })
+      m.MapWithObject(s)
+      o.Delete()
+      m.MapWithObject(s) // Qt would emit the dangling pointer
+      if len(got) != 2 || got[0] != o || got[1] != nil {
+      	t.Errorf("mapped %v, want the object and then nil", got)
+      }
+      m.Delete()
+      s.Delete()
   removeMappings: { reviewed: true }
   mapping: { return: borrowed, reviewed: true }
   map(QObject*): { reviewed: true }
@@ -402,9 +454,6 @@ QMetaEnum:
 QMetaClassInfo:
   enclosingMetaObject: { return: borrowed }
 
-
-
-
 QChronoTimer:
   QChronoTimer(std::chrono::nanoseconds, QObject*):
     args: { parent: transfer-this }
@@ -422,3 +471,26 @@ QChronoTimer:
 QProcessEnvironment:
   insert(const QString&, const QString&): { name: Insert }
   insert(const QProcessEnvironment&): { name: InsertEnvironment }
+
+QTranslator:
+  load(const uchar*, int, const QString&):
+    # Qt reads the data in place for as long as the translator lives ("the data is not copied"), and the
+    # Go slice is only pinned for the call: the translator keeps a copy, as a dynamic property
+    cpp: "[&] { QByteArray b(reinterpret_cast<const char *>($0), $1); bool ok = $self->load(reinterpret_cast<const uchar *>(b.constData()), int(b.size())); $self->setProperty(\"quteLoadedData\", b); return ok; }()"
+    doc: "The translator works on its own copy of data, which it holds until it loads something else or dies."
+    test: |
+      // Demo/"Hello" -> "Bonjour", built by lrelease
+      qm := []byte("\x3c\xb8\x64\x18\xca\xef\x9c\x95\xcd\x21\x1c\xbf\x60\xa1\xbd\xdd\xa7\x00\x00\x00\x05fr_FR" +
+      	"\x42\x00\x00\x00\x08\x00\x4e\xc3\x2f\x00\x00\x00\x00\x69\x00\x00\x00\x2c\x03\x00\x00\x00\x0e\x00B\x00o\x00n\x00j\x00o\x00u\x00r" +
+      	"\x08\x00\x00\x00\x00\x06\x00\x00\x00\x05Hello\x07\x00\x00\x00\x04Demo\x01\x88\x00\x00\x00\x02\x03\x01")
+      tr := qtcore.NewQTranslator(nil)
+      if !tr.LoadBytes(qm) {
+      	t.Error("LoadBytes failed")
+      }
+      for i := range qm {
+      	qm[i] = 0xff // Qt reads the data on every lookup
+      }
+      if got := tr.Translate("Demo", "Hello"); got != "Bonjour" {
+      	t.Errorf("translation %q after the caller changed its slice, want %q", got, "Bonjour")
+      }
+      tr.Delete()

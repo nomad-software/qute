@@ -3411,7 +3411,6 @@ bool qute_QTranslator_load_2(void *self, const char *a0, ptrdiff_t a0_len);
 qute_str qute_QTranslator_translate_1(void *self, const char * a0, const char * a1, const char *a2, ptrdiff_t a2_len);
 bool qute_QTranslator_load_3(void *self, const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len);
 bool qute_QTranslator_load_4(void *self, void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len, const char *a4, ptrdiff_t a4_len);
-bool qute_QTranslator_load_5(void *self, const char *a0, ptrdiff_t a0_len, const char *a2, ptrdiff_t a2_len);
 
 // QTransposeProxyModel
 void * qute_QTransposeProxyModel_new(void * a0);

@@ -895,10 +895,9 @@ QFileSystemModel:
 QFontMetricsF:
   QFontMetricsF(const QFont&, const QPaintDevice*): { reviewed: true } # the device is read during the call only
 
-
 QIconEngine:
   paint: { reviewed: true }
-  clone: { return: transfer-to-go, doc: "Returns a new engine; the caller owns it. A Go override's result is owned by the C++ caller.", test: "skip: QIconEngine is abstract, and a snippet cannot declare the override; covered by subclass_test.go" }
+  clone: { required: "it clones the engine when a copy of its icon is changed, and uses the result unchecked", return: transfer-to-go, doc: "Returns a new engine; the caller owns it. A Go override's result is owned by the C++ caller.", test: "skip: QIconEngine is abstract, and a snippet cannot declare the override; covered by subclass_test.go" }
   read: { reviewed: true }
   write: { reviewed: true }
 

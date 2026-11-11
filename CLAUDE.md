@@ -100,13 +100,18 @@ Rules (panic messages cite these numbers; keep them stable):
    QObject there panics, in every build.
 6. Scoped arguments (events, `QPainter*` and style options in callbacks) are
    marked Dead when the callback returns. Long-lived arguments stay Borrowed.
+   A plain object Go built on one inside the handler and left alive (a
+   `QPainterStateGuard` on the handler's painter) is deleted first, as its
+   C++ scope would have (see Kept references).
 7. Safety net: GC never deletes a QObject that has a parent, even if a rule
    was missed (it prints a warning naming the class, since the Go state its
    tree anchored was collected), and an Owned QObject that Qt gives a parent
    becomes Parented (the event filter sees the reparenting). In reverse, a `transfer-to-cpp`
    argument that Qt did not parent (a widget in a layout with no widget yet)
    is recorded as adopted by the receiver; if the receiver dies and it is
-   still parentless, it goes back to Owned (`rt.TransferTo`, `adopt.go`).
+   still parentless, it goes back to Owned (`rt.TransferTo`, `adopt.go`). A container passed to its own
+   transfer method (an anchor layout anchored to its own edges) is left as
+   it is.
 
 `SetParent(p)` / `SetParent(nil)` move between Parented and Owned
 (`transfer-this`).
@@ -173,6 +178,14 @@ panics, naming the keeper. The overlay key `kept-delete: allow|guard`
 overrides it per method (`QTextCursor` allows, a page's profile guards), and
 `release-slot: <slot>` empties a slot when a method ends the use
 (`QPainter::end`).
+A scoped argument is not deleted by Go, so the guard cannot protect it: Qt
+frees a handler's painter whatever still points at it, and a keeper left
+alive would run its destructor on freed memory when GC got to it. A keeper
+with a guarded hold on a scoped argument, or on another such keeper, is
+*bound* to that argument (`bindScopeLocked`), which holds it strongly until
+the handler returns; `Expire` then deletes the bound keepers Go owns (Owned,
+not registered), newest first, while Qt's object is still there. Their death
+note names the expired argument.
 A value only valid with another object (`QModelIndex` and its model,
 `QTextBlock` and its document, `QWidgetItem` and its widget) uses the class
 option `depends-on`: each wrapper holds that object, and `rt.Use` panics once
@@ -251,7 +264,10 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
   out-parameters. Anything that writes an array (`QMatrix4x4::copyDataTo`) is
   skipped and, if useful, hand-written;
 - a pointer followed by its count (`const QPoint *, int`, `const uchar *, int`,
-  `char *data, qint64 maxlen`) to one slice, and `QSpan<T>` to a slice;
+  `char *data, qint64 maxlen`) to one slice, and `QSpan<T>` to a slice. The
+  slice is only valid for the call, so where Qt keeps reading the memory
+  instead of copying it, an overlay makes the binding copy
+  (`QTranslator::load`) or picks the copying overload (`QCborStreamReader`);
 - `QMap`/`QHash` with string or int keys to Go maps;
 - `std::chrono::duration` to `time.Duration`, `time_point<system_clock>` to
   `time.Time`, `std::filesystem::path` to `string`, `std::optional<T>` to a
@@ -365,7 +381,9 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   type, built and named once per declaring class (`ownProtected`) with its
   overlay, so their rules get generated tests on a Go subclass; protected
   enums are bound and the shim re-exports them (`using`) for its C
-  functions. Pure virtuals not overridden return their zero value. The Go
+  functions. Pure virtuals not overridden return their zero value, except
+  one an overlay marks `required` because Qt uses its result unchecked
+  (`QIconEngine::clone`): `NewXWith` panics for a type that leaves it out. The Go
   value is anchored like a connection, and `GoValue()` on any non-value
   wrapper returns it (a view's delegate, a block's user data). The id the
   shim dispatches with is dropped by the death notice, or by a cleanup on the
@@ -437,7 +455,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   constructor it builds the object, `$class` naming the class to construct,
   the shim when there is one: `QLoggingCategory` copies the name Qt keeps), `created: true` (the
   result is built by the binding, so it is registered and its death seen),
-  `kept-delete: allow|guard` and `release-slot: <slot>` (see Kept references).
+  `kept-delete: allow|guard` and `release-slot: <slot>` (see Kept references),
+  `required: <when Qt calls it>` (a pure virtual a Go subclass must define).
   `QGraphicsScene::addRect` and friends use `cpp` + `created` to build
   qute's notifying item subclasses instead of Qt's, so those items report
   their death however they die.
@@ -487,7 +506,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `changeEvent` handler; the result depends on `e`, so it is Dead when the
   handler returns, like the event), and hand-written `*_manual.{go,cpp,h}` files the
   generator never touches (`QObject.MetaObject` is one: read-only, because
-  the generator skips the moc virtual `metaObject` everywhere).
+  the generator skips the moc virtual `metaObject` everywhere;
+  `QXmlStreamAttributes.Size` and `At` are two more: the list part of that
+  class is a template base the IR does not record).
 
 ## Errors and ergonomics
 
@@ -561,7 +582,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   override results, and misuse that used to crash: the memory path freeing a
   painter's image first, `Delete()` of a guarded kept object or of a layout
   item in a layout, `Delete()` inside a handler, a transfer-to-go result Qt
-  had parented. The newer modules carry their own lifetime tests:
+  had parented, a state guard left on a handler's scoped painter, a signal
+  mapper's object collected while mapped. The newer modules carry their own lifetime tests:
   `qtsvg/render_test.go`, `qtmultimedia/lifetime_test.go` (kept outputs
   through GC, `QVideoSink` death, frame memory) and
   `qtwebenginewidgets/lifetime_test.go` (a custom-scheme reply device kept
@@ -686,8 +708,8 @@ Layout:
   `subclass_test.go` covers subclassing by default: a view's events and
   protected enums, in-out validator overrides and their Super, map results,
   a Go graphics item, a syntax highlighter's per-block Go state, `GoValue`,
-  an abstract class with no overrides, and overrides reached through an
-  embedded user type).
+  an abstract class with no overrides, a required override left out, and
+  overrides reached through an embedded user type).
 - `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed) and
   `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and

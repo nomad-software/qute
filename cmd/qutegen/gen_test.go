@@ -1003,7 +1003,7 @@ func TestEventCast(t *testing.T) {
 }
 
 // A constructor's cpp overlay builds the object: QLoggingCategory keeps the
-// name pointer it is given, so the binding passes it a copy that lives on.
+// name pointer it is given, so the binding passes it an interned copy that lives on.
 func TestConstructorCpp(t *testing.T) {
 	g := gen(t)
 	var body string
@@ -1012,7 +1012,7 @@ func TestConstructorCpp(t *testing.T) {
 			body = f.body
 		}
 	}
-	if !strings.Contains(body, "new QLoggingCategory(qstrdup(") {
+	if !strings.Contains(body, "new QLoggingCategory(names->insert(QByteArray(") {
 		t.Errorf("QLoggingCategory constructor body: %q", body)
 	}
 }
@@ -1021,4 +1021,20 @@ func TestConstructorCpp(t *testing.T) {
 // its enum are public.
 func TestPlatformSurfaceEventBound(t *testing.T) {
 	method(t, "QPlatformSurfaceEvent", "surfaceEventType()")
+}
+
+// A pure virtual whose result Qt uses unchecked is `required`: the subclass
+// constructor refuses a Go type that leaves it out, before it builds the
+// C++ object. Other pure virtuals keep their zero-value default.
+func TestRequiredVirtual(t *testing.T) {
+	g := gen(t)
+	src := string(g.emitClass(class(t, "QIconEngine")))
+	check := `rt.RequireOverride(v, qIconEngineVTable, "NewQIconEngineWith", "Clone", `
+	i, j := strings.Index(src, check), strings.Index(src, "C.qute_QIconEngine_new_shim(")
+	if i < 0 || j < 0 || i > j {
+		t.Errorf("QIconEngine: the Clone check is missing or comes after the C++ constructor (%d, %d)", i, j)
+	}
+	if strings.Contains(string(g.emitClass(class(t, "QLayout"))), "rt.RequireOverride(") {
+		t.Error("QLayout requires an override, but its pure virtuals default to zero values")
+	}
 }

@@ -11076,7 +11076,7 @@ void * qute_QCborStreamReader_new(void) {
 }
 void * qute_QCborStreamReader_new_1(const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
-	return static_cast<QCborStreamReader *>(new QCborStreamReader(reinterpret_cast<const char *>(a0), a0_len));
+	return static_cast<QCborStreamReader *>(new QCborStreamReader(QByteArray(a0, a0_len)));
 }
 void * qute_QCborStreamReader_new_2(void * a0) {
 	qute_gui_only();
@@ -16927,7 +16927,7 @@ bool qute_QLockFile_tryLock_2(void *self, int64_t a0) {
 // ---- QLoggingCategory
 void * qute_QLoggingCategory_new(const char * a0) {
 	qute_gui_only();
-	return static_cast<QLoggingCategory *>(new QLoggingCategory(qstrdup(a0)));
+	return static_cast<QLoggingCategory *>([&] { static QSet<QByteArray> *names = new QSet<QByteArray>; return new QLoggingCategory(names->insert(QByteArray(a0))->constData()); }());
 }
 void qute_QLoggingCategory_delete(void *self) {
 	qute_gui_only();
@@ -19795,7 +19795,7 @@ void qute_QSignalMapper_setMapping_1(void *self, void * a0, const char *a1, ptrd
 }
 void qute_QSignalMapper_setMapping_2(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<QSignalMapper *>(self)->setMapping(static_cast<QObject *>(a0), static_cast<QObject *>(a1));
+	[&] { static_cast<QSignalMapper *>(self)->setMapping(static_cast<QObject *>(a0), static_cast<QObject *>(a1)); if (static_cast<QObject *>(a1)) QObject::connect(static_cast<QObject *>(a1), &QObject::destroyed, static_cast<QSignalMapper *>(self), [m = static_cast<QSignalMapper *>(self)](QObject *o) { while (QObject *s = m->mapping(o)) m->setMapping(s, static_cast<QObject *>(nullptr)); }); }();
 }
 void qute_QSignalMapper_removeMappings(void *self, void * a0) {
 	qute_gui_only();
@@ -21821,7 +21821,7 @@ bool qute_QTranslator_load_1(void *self, void * a0, const char *a1, ptrdiff_t a1
 }
 bool qute_QTranslator_load_2(void *self, const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<QTranslator *>(self)->load(reinterpret_cast<const unsigned char *>(a0), a0_len));
+	return static_cast<bool>([&] { QByteArray b(reinterpret_cast<const char *>(reinterpret_cast<const unsigned char *>(a0)), a0_len); bool ok = static_cast<QTranslator *>(self)->load(reinterpret_cast<const uchar *>(b.constData()), int(b.size())); static_cast<QTranslator *>(self)->setProperty("quteLoadedData", b); return ok; }());
 }
 qute_str qute_QTranslator_translate_1(void *self, const char * a0, const char * a1, const char *a2, ptrdiff_t a2_len) {
 	qute_gui_only();
@@ -21834,10 +21834,6 @@ bool qute_QTranslator_load_3(void *self, const char *a0, ptrdiff_t a0_len, const
 bool qute_QTranslator_load_4(void *self, void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len, const char *a4, ptrdiff_t a4_len) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<QTranslator *>(self)->load((a0 ? *static_cast<QLocale *>(a0) : QLocale()), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QString::fromUtf8(a3, a3_len), QString::fromUtf8(a4, a4_len)));
-}
-bool qute_QTranslator_load_5(void *self, const char *a0, ptrdiff_t a0_len, const char *a2, ptrdiff_t a2_len) {
-	qute_gui_only();
-	return static_cast<bool>(static_cast<QTranslator *>(self)->load(reinterpret_cast<const unsigned char *>(a0), a0_len, QString::fromUtf8(a2, a2_len)));
 }
 
 // ---- QTransposeProxyModel

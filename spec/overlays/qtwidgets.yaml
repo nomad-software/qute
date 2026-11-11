@@ -1360,7 +1360,6 @@ QTabBar:
 QCommandLinkButton:
   QCommandLinkButton(const QString&, const QString&, QWidget*): { name: NewQCommandLinkButtonWithDescription }
 
-
 QHeaderView:
   "resizeSections()": { name: ResizeSectionsToHints, doc: "Resizes the sections according to their size hints." }
   logicalIndexAt(int, int): { skip: "use the QPoint overload" }
@@ -1588,7 +1587,6 @@ QStyleFactory:
 
 QDialog:
   adjustPosition: { reviewed: true }
-
 
 QGraphicsEffect:
   drawSource: { args: { painter: scoped } }

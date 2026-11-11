@@ -157,7 +157,7 @@ func (this *QTranslator) LoadLocale(locale *QLocale, filename string) bool {
 //
 //	C++: bool QTranslator::load(const uchar * data, int len, const QString & directory = …)
 //
-// Arguments with C++ defaults are left at them; LoadBytesFull takes every argument.
+// The translator works on its own copy of data, which it holds until it loads something else or dies.
 //
 // Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
 func (this *QTranslator) LoadBytes(data []byte) bool {
@@ -211,20 +211,6 @@ func (this *QTranslator) LoadLocaleFull(locale *QLocale, filename string, prefix
 	r := C.qute_QTranslator_load_4(self, rt.UseArg(unsafe.Pointer(locale), "QTranslator.LoadLocaleFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)), (*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)), (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)), (*C.char)(unsafe.Pointer(unsafe.StringData(suffix))), C.ptrdiff_t(len(suffix)))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(locale)
-	return bool(r)
-}
-
-// LoadBytesFull wraps QTranslator::load.
-//
-//	C++: bool QTranslator::load(const uchar * data, int len, const QString & directory = …)
-//
-// LoadBytesFull is LoadBytes with every argument, including those LoadBytes leaves at their C++ defaults.
-//
-// Qt docs: https://doc.qt.io/qt-6/qtranslator.html#load
-func (this *QTranslator) LoadBytesFull(data []byte, directory string) bool {
-	self := rt.Use(unsafe.Pointer(this), "QTranslator.LoadBytesFull")
-	r := C.qute_QTranslator_load_5(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), (*C.char)(unsafe.Pointer(unsafe.StringData(directory))), C.ptrdiff_t(len(directory)))
-	runtime.KeepAlive(this)
 	return bool(r)
 }
 

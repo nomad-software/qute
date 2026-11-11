@@ -1,6 +1,7 @@
 package qute_test
 
 import (
+	"fmt"
 	"runtime"
 	"strings"
 	"testing"
@@ -625,5 +626,81 @@ func TestDeleteCursorDocumentAllowed(t *testing.T) {
 		if !c.IsNull() {
 			t.Error("cursor not null after its document was deleted")
 		}
+	})
+}
+
+type guardedItem struct {
+	qtwidgets.QGraphicsItemBase
+	guard   *qtgui.QPainterStateGuard
+	painter *qtgui.QPainter
+}
+
+func (g *guardedItem) BoundingRect() qtcore.QRectF { return qtcore.QRectF{Width: 20, Height: 20} }
+
+func (g *guardedItem) Paint(p *qtgui.QPainter, _ *qtwidgets.QStyleOptionGraphicsItem, _ *qtwidgets.QWidget) {
+	g.painter = p
+	g.guard = qtgui.NewQPainterStateGuardWithPainter(p) // never deleted
+	p.Translate(5, 5)
+}
+
+// A QPainterStateGuard left alive on a handler's scoped painter ends with
+// the handler, as its C++ scope would: it restores the painter while Qt still
+// has it. It used to live on until GC freed it, and its destructor then
+// called restore() on a painter that was long gone.
+func TestGuardOnScopedPainterEndsWithHandler(t *testing.T) {
+	item := &guardedItem{}
+	qutetest.Run(t, func() {
+		scene := qtwidgets.NewQGraphicsScene(nil)
+		qtwidgets.NewQGraphicsItemWith(item, nil)
+		scene.AddItem(item)
+		img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 30, Height: 30}, qtgui.QImageFormat_ARGB32)
+		p := qtgui.NewQPainterOn(img)
+		scene.Render(p)
+		p.Delete()
+		img.Delete()
+		if item.guard == nil {
+			t.Error("Paint did not run")
+			return
+		}
+		if item.guard.Alive() {
+			t.Error("guard alive after the handler that owned its painter returned")
+		}
+		if item.painter.Alive() {
+			t.Error("scoped painter alive after its handler returned")
+		}
+		defer func() {
+			if msg := fmt.Sprint(recover()); !strings.Contains(msg, "the QPainter argument it used expired") {
+				t.Errorf("use of the ended guard: panic %q", msg)
+			}
+			scene.Delete()
+		}()
+		item.guard.Restore()
+	})
+	item.guard = nil
+	qutetest.CollectGarbage() // nothing left for GC to free on a dead painter
+}
+
+// A QSignalMapper stores a mapped object as a plain pointer: the mapper
+// keeps it from the GC, so Map never emits an object that was collected.
+func TestSignalMapperKeepsMappedObject(t *testing.T) {
+	var m *qtcore.QSignalMapper
+	var s *qtcore.QObject
+	qutetest.Run(t, func() {
+		m = qtcore.NewQSignalMapper(nil)
+		s = qtcore.NewQObject(nil)
+		o := qtcore.NewQObject(nil)
+		o.SetObjectName("mapped")
+		m.SetMappingObject(s, o)
+	})
+	qutetest.CollectGarbage()
+	qutetest.Run(t, func() {
+		name := ""
+		m.OnMappedObject(func(o *qtcore.QObject) { name = o.ObjectName() })
+		m.MapWithObject(s)
+		if name != "mapped" {
+			t.Errorf("mapped object after a GC: name %q, want %q", name, "mapped")
+		}
+		m.Delete()
+		s.Delete()
 	})
 }

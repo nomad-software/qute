@@ -724,3 +724,55 @@ func TestPinUnpinRace(t *testing.T) {
 		t.Fatalf("pins %d but held in the strong set = %v", h.Pins(), held)
 	}
 }
+
+// Keepers Go built on a scoped argument and left alive end when it expires,
+// newest first, while Qt's object is still there for their destructors; a
+// keeper that let go of it, or that Go does not own, is left alone.
+func TestScopedArgumentEndsItsKeepers(t *testing.T) {
+	var order []string
+	plain := func(class string) *Handle {
+		return Wrap(fakePtr(0), class, KindPlain, TakeOwned, func(unsafe.Pointer) { order = append(order, class) })
+	}
+	device := Wrap(fakePtr(0), "Device", KindPlain, NewScoped, nil)
+	painter := plain("Painter") // paints on the scoped device
+	guard := plain("Guard")     // restores that painter
+	ended := plain("Ended")     // let go of the device before the handler returned
+	borrowed := newPlain("Borrowed")
+	other := plain("Other") // keeps something else
+	KeepArg(painter, "device", device, true)
+	KeepArg(guard, "painter", painter, true)
+	KeepArg(ended, "device", device, true)
+	ReleaseSlot(ended, "device")
+	KeepArg(borrowed, "device", device, true)
+	KeepArg(other, "x", newPlain("X"), true)
+
+	device.Expire()
+	if got := strings.Join(order, ","); got != "Guard,Painter" {
+		t.Errorf("deleted %q, want Guard then Painter", got)
+	}
+	if guard.Alive() || painter.Alive() || device.Alive() {
+		t.Errorf("alive after Expire: guard %v, painter %v, device %v", guard.Alive(), painter.Alive(), device.Alive())
+	}
+	if !ended.Alive() || !borrowed.Alive() || !other.Alive() {
+		t.Errorf("ended %v, borrowed %v, other %v; want all alive", ended.Alive(), borrowed.Alive(), other.Alive())
+	}
+	if device.bound != nil || painter.scope != nil {
+		t.Error("scope binding left behind")
+	}
+	if msg := deadMessage(guard, "Guard.Restore"); !strings.Contains(msg, "the Device argument it used expired") {
+		t.Errorf("dead message: %q", msg)
+	}
+	ended.Delete("Ended.Delete")
+	other.Delete("Other.Delete")
+}
+
+// A container passed to its own transfer-to-cpp method (an anchor layout
+// anchored to its own edges) does not come to own itself.
+func TestTransferToSelf(t *testing.T) {
+	lay := Wrap(fakePtr(0), "Layout", KindPlain, TakeOwned, func(unsafe.Pointer) {})
+	TransferTo(lay, lay)
+	if lay.State() != Owned {
+		t.Errorf("layout passed to itself: %v, want Owned", lay.State())
+	}
+	lay.Delete("Layout.Delete")
+}
